@@ -33,6 +33,5 @@ interface Once<T : Any> {
             }
             return result!!
         }
-
     }
 }

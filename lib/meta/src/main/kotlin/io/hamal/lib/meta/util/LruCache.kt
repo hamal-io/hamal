@@ -6,7 +6,7 @@ import io.hamal.lib.meta.orElseThrow
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
-interface LRUCache<KEY : Any, VALUE : Any> {
+interface LruCache<KEY : Any, VALUE : Any> {
 
     fun put(key: KEY, value: VALUE)
 
@@ -22,7 +22,7 @@ interface LRUCache<KEY : Any, VALUE : Any> {
 
     fun size(): Int
 
-    class DefaultImpl<KEY : Any, VALUE : Any>(capacity: Int) : LRUCache<KEY, VALUE> {
+    class DefaultImpl<KEY : Any, VALUE : Any>(capacity: Int) : LruCache<KEY, VALUE> {
         private var store: LinkedHashMap<KEY, VALUE>
         private val lock: ReadWriteLock = ReentrantReadWriteLock()
 

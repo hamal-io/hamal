@@ -4,7 +4,7 @@ import io.hamal.lib.meta.Maybe
 import io.hamal.lib.meta.get
 import io.hamal.lib.meta.isAbsent
 import io.hamal.lib.meta.isPresent
-import io.hamal.lib.meta.util.LRUCache.DefaultImpl
+import io.hamal.lib.meta.util.LruCache.DefaultImpl
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -14,17 +14,10 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @Nested
-class LRUCacheTest {
+class LruCacheTest {
 
     @Nested
     inner class DefaultImplTest {
-
-        private val testInstance: DefaultImpl<Int, Int> = DefaultImpl(20)
-
-        private val someKey = 1
-        private val someValue = 2
-        private val anotherValue = 3
-        private val anotherKey = 4
 
         @Nested
         @DisplayName("put()")
@@ -49,7 +42,7 @@ class LRUCacheTest {
             fun `Evicts data if too may insertions happen`() {
                 `Insert value as value does not there`()
 
-                IntRange(10, 30).forEach { someData: Int -> testInstance.put(someData, someData) }
+                IntRange(10, 30).forEach { testInstance.put(it, it) }
 
                 verifySize(20)
                 verifyAdditionalData()
@@ -79,7 +72,7 @@ class LRUCacheTest {
             fun `Evicts data if too may insertions happen`() {
                 `Inserts value as not value there`()
 
-                IntRange(10, 30).forEach { someData: Int -> testInstance.put(someData, someData) }
+                IntRange(10, 30).forEach { testInstance.put(it, it) }
 
                 verifySize(20)
                 verifyAdditionalData()
@@ -122,7 +115,7 @@ class LRUCacheTest {
             @Test
             @DisplayName("no value there before")
             fun insert() {
-                testInstance.computeIfAbsent(someKey) { ignored -> someValue }
+                testInstance.computeIfAbsent(someKey) { someValue }
                 verifySize(1)
                 verifySomeValue()
             }
@@ -131,7 +124,7 @@ class LRUCacheTest {
             @DisplayName("overwrite already existing value")
             fun overwrite() {
                 insert()
-                testInstance.computeIfAbsent(someKey) { ignored -> anotherValue }
+                testInstance.computeIfAbsent(someKey) { anotherValue }
                 verifySize(1)
                 verifySomeValue()
             }
@@ -154,6 +147,7 @@ class LRUCacheTest {
                     assertThat(size, equalTo(it))
                 }
             }
+
         }
 
         private fun verifySomeValue() {
@@ -180,6 +174,13 @@ class LRUCacheTest {
             }
         }
 
+
+        private val testInstance: DefaultImpl<Int, Int> = DefaultImpl(20)
+
+        private val someKey = 1
+        private val someValue = 2
+        private val anotherValue = 3
+        private val anotherKey = 4
     }
 
 }
