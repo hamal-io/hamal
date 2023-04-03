@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo.validator
 
-import io.hamal.lib.domain.exception.IllegalArgumentException
+import io.hamal.lib.meta.exception.IllegalArgumentException
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*

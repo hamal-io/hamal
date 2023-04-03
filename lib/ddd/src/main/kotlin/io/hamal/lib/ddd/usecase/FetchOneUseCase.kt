@@ -5,13 +5,13 @@ import java.lang.reflect.ParameterizedType
 
 interface FetchOneUseCase
 
-interface FetchOneUseCaseHandler<RESULT, USE_CASE : FetchOneUseCase> {
+interface FetchOneUseCaseHandler<RESULT : Any, USE_CASE : FetchOneUseCase> {
     val resultClass: Class<RESULT>
     val useCaseClass: Class<USE_CASE>
 
     fun handle(useCase: USE_CASE): Maybe<RESULT>
 
-    abstract class BaseImpl<RESULT, USE_CASE : FetchOneUseCase> : FetchOneUseCaseHandler<RESULT, USE_CASE> {
+    abstract class BaseImpl<RESULT : Any, USE_CASE : FetchOneUseCase> : FetchOneUseCaseHandler<RESULT, USE_CASE> {
 
         override val resultClass: Class<RESULT> by lazy {
             val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType

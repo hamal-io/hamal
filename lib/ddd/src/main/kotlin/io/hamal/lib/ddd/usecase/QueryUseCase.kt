@@ -4,13 +4,13 @@ import java.lang.reflect.ParameterizedType
 
 interface QueryUseCase
 
-interface QueryUseCaseHandler<RESULT, USE_CASE : QueryUseCase> {
+interface QueryUseCaseHandler<RESULT : Any, USE_CASE : QueryUseCase> {
     val resultClass: Class<RESULT>
     val useCaseClass: Class<USE_CASE>
 
     fun handle(useCase: USE_CASE): List<RESULT>
 
-    abstract class BaseImpl<RESULT, USE_CASE : QueryUseCase> : QueryUseCaseHandler<RESULT, USE_CASE> {
+    abstract class BaseImpl<RESULT : Any, USE_CASE : QueryUseCase> : QueryUseCaseHandler<RESULT, USE_CASE> {
 
         override val resultClass: Class<RESULT> by lazy {
             val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType

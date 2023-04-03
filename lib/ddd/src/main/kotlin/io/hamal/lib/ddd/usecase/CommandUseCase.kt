@@ -5,13 +5,13 @@ import java.lang.reflect.ParameterizedType
 
 interface CommandUseCase
 
-interface CommandUseCaseHandler<RESULT, USE_CASE : CommandUseCase> {
+interface CommandUseCaseHandler<RESULT : Any, USE_CASE : CommandUseCase> {
     val resultClass: Class<RESULT>
     val useCaseClass: Class<USE_CASE>
 
     fun handle(useCase: USE_CASE): RESULT
 
-    abstract class MaybeImpl<RESULT, USE_CASE : CommandUseCase> : CommandUseCaseHandler<Maybe<RESULT>, USE_CASE> {
+    abstract class MaybeImpl<RESULT : Any, USE_CASE : CommandUseCase> : CommandUseCaseHandler<Maybe<RESULT>, USE_CASE> {
 
         @Suppress("UNCHECKED_CAST")
         override val resultClass: Class<Maybe<RESULT>> = Maybe::class.java as Class<Maybe<RESULT>>

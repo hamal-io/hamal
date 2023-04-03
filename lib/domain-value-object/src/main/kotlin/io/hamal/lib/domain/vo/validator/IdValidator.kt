@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo.validator
 
-import io.hamal.lib.domain.exception.IllegalArgumentException
-import io.hamal.lib.domain.exception.throwIf
+import io.hamal.lib.meta.exception.IllegalArgumentException
+import io.hamal.lib.meta.exception.throwIf
 
 
 internal object IdValidator {
