@@ -13,6 +13,25 @@
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.hamal.module.launchpad</groupId>
+            <artifactId>infra</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.hamal.module.orchestrator</groupId>
+            <artifactId>infra</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.hamal.module.queue</groupId>
+            <artifactId>infra</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.hamal.module.worker</groupId>
+            <artifactId>infra</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>

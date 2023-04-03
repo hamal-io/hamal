@@ -19,6 +19,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.version>0.0.1-SNAPSHOT</project.version>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
@@ -29,6 +30,57 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- LIBS -->
+            <dependency>
+                <groupId>io.hamal.lib</groupId>
+                <artifactId>ddd</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hamal.lib</groupId>
+                <artifactId>domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hamal.lib</groupId>
+                <artifactId>domain-value-object</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hamal.lib</groupId>
+                <artifactId>meta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- MODULES -->
+            <dependency>
+                <groupId>io.hamal.module.launchpad</groupId>
+                <artifactId>infra</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hamal.module.orchestrator</groupId>
+                <artifactId>infra</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hamal.module.queue</groupId>
+                <artifactId>infra</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hamal.module.worker</groupId>
+                <artifactId>infra</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
@@ -59,8 +111,20 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>

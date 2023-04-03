@@ -16,9 +16,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>lib-ddd</module>
-        <module>lib-domain</module>
-        <module>lib-meta</module>
+        <module>ddd</module>
+        <module>domain</module>
+        <module>domain-value-object</module>
+        <module>meta</module>
     </modules>
 
 </project>

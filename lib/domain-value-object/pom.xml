@@ -4,19 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>io.hamal.module.worker</groupId>
-        <artifactId>worker-pom</artifactId>
+        <groupId>io.hamal.lib</groupId>
+        <artifactId>lib-pom</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>application</artifactId>
+    <artifactId>doamin-value-object</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>io.hamal.module.worker</groupId>
-            <artifactId>core</artifactId>
+            <groupId>io.hamal.lib</groupId>
+            <artifactId>ddd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.hamal.lib</groupId>
+            <artifactId>domain</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -45,13 +50,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
-
 </project>
