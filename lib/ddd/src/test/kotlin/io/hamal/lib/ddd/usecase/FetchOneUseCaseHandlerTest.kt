@@ -36,7 +36,7 @@ class FetchOneUseCaseHandlerTest {
 
     private class TestUseCaseHandler : FetchOneUseCaseHandler.BaseImpl<TestResult, TestUseCase>() {
         override fun handle(useCase: TestUseCase): Maybe<TestResult> {
-            return Maybe.empty()
+            return Maybe.none()
         }
     }
 
