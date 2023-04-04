@@ -27,6 +27,13 @@ class KeyedOnceTest {
             assertThat(testInstance("key") { 1212 }, equalTo(2810))
         }
 
+        @Test
+        fun `Different key`() {
+            val testInstance = KeyedOnce.default<String, Int>()
+            testInstance("key") { 2810 }
+
+            assertThat(testInstance("anotherKey") { 1212 }, equalTo(1212))
+        }
     }
 
     @Nested
