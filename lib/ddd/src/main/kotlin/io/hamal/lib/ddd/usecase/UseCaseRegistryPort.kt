@@ -23,3 +23,5 @@ interface GetFetchOneUseCasePort {
         payloadClass: KClass<PAYLOAD>
     ): FetchOneUseCase<RESULT, PAYLOAD>
 }
+
+interface GetUseCasePort : GetCommandUseCasePort, GetQueryUseCasePort, GetFetchOneUseCasePort {}

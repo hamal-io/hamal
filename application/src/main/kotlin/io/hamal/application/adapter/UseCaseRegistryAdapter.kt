@@ -10,8 +10,7 @@ import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import kotlin.reflect.KClass
 
-class DefaultUseCaseRegistryAdapter : GetCommandUseCasePort, GetQueryUseCasePort,
-    GetFetchOneUseCasePort, ApplicationListener<ContextRefreshedEvent> {
+class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         event.applicationContext.getBeansOfType(CommandUseCase::class.java)
@@ -61,7 +60,7 @@ class DefaultUseCaseRegistryAdapter : GetCommandUseCasePort, GetQueryUseCasePort
                 ?: throw NotFoundException("QueryUseCase<" + resultClass.simpleName + "," + payloadClass.simpleName + "> not found")
 
             when (resultClass) {
-                Unit::class -> useCase
+                Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
                 else -> {
                     ensureResultClass(useCase, resultClass)
                     useCase
@@ -80,7 +79,7 @@ class DefaultUseCaseRegistryAdapter : GetCommandUseCasePort, GetQueryUseCasePort
                 ?: throw NotFoundException("FetchOneUseCase<" + resultClass.simpleName + "," + payloadClass.simpleName + "> not found")
 
             when (resultClass) {
-                Unit::class -> useCase
+                Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
                 else -> {
                     ensureResultClass(useCase, resultClass)
                     useCase

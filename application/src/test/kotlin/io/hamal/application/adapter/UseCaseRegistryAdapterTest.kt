@@ -123,10 +123,12 @@ class UseCaseRegistryAdapterTest {
         }
 
         @Test
-        fun `Ignore unit as result class`() {
+        fun `Throws exception if result class is Unit`() {
             val testInstance = testInstanceWithUseCase()
-            val result = testInstance[Unit::class, TestQueryUseCasePayload::class]
-            assertThat(result, equalTo(testQueryUseCase))
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance[Unit::class, TestQueryUseCasePayload::class]
+            }
+            assertThat(exception.message, equalTo("Result class can not be Unit"))
         }
 
         @Test
@@ -192,10 +194,12 @@ class UseCaseRegistryAdapterTest {
         }
 
         @Test
-        fun `Ignore unit as result class`() {
+        fun `Throws exception if result class is Unit`() {
             val testInstance = testInstanceWithUseCase()
-            val result = testInstance[Unit::class, TestFetchOneUseCasePayload::class]
-            assertThat(result, equalTo(testFetchOneUseCase))
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance[Unit::class, TestFetchOneUseCasePayload::class]
+            }
+            assertThat(exception.message, equalTo("Result class can not be Unit"))
         }
 
         @Test
