@@ -1,9 +1,9 @@
 package io.hamal.application.adapter
 
 
+import io.hamal.lib.ddd.usecase.CommandUseCasePayload
 import io.hamal.lib.ddd.usecase.CommandUseCase
-import io.hamal.lib.ddd.usecase.CommandUseCaseHandler
-import io.hamal.lib.ddd.usecase.GetCommandUseCaseHandlerPort
+import io.hamal.lib.ddd.usecase.GetCommandUseCasePort
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,21 +16,21 @@ class TestApplication
 @Configuration
 open class TestUseCaseRegistryConfig {
     @Bean
-    open fun getCommandUseCaseHandlerPort(): GetCommandUseCaseHandlerPort = DefaultUseCaseRegistryAdapter()
+    open fun getCommandUseCasePort(): GetCommandUseCasePort = DefaultUseCaseRegistryAdapter()
 }
 
 @Configuration
 open class TestUseCasesConfig {
 
-    class TestCommandUseCase : CommandUseCase
+    class TestCommandUseCasePayload : CommandUseCasePayload
 
     @Bean
-    open fun commandUseCaseHandler(): CommandUseCaseHandler<String, TestCommandUseCase> {
-        return object : CommandUseCaseHandler.BaseImpl<String, TestCommandUseCase>(
-            String::class, TestCommandUseCase::class
+    open fun commandUseCase(): CommandUseCase<String, TestCommandUseCasePayload> {
+        return object : CommandUseCase.BaseImpl<String, TestCommandUseCasePayload>(
+            String::class, TestCommandUseCasePayload()
         ) {
-            override fun handle(useCase: TestCommandUseCase): List<String> {
-                TODO("Not yet implemented")
+            override operator fun invoke(payload: TestCommandUseCasePayload): List<String> {
+                return emptyList()
             }
         }
     }
@@ -41,7 +41,7 @@ open class TestUseCasesConfig {
     classes = [TestApplication::class, TestUseCaseRegistryConfig::class, TestUseCasesConfig::class],
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
-class UseCaseRegistryAdapterIT {
+class UseCasePayloadRegistryAdapterIT {
 
 //    @Test
 //    fun `fails`() {
@@ -52,7 +52,7 @@ class UseCaseRegistryAdapterIT {
 
     @Test
     fun `ok`() {
-        val x = testInstance?.get(String::class, TestUseCasesConfig.TestCommandUseCase::class)
+        val x = testInstance?.get(String::class, TestUseCasesConfig.TestCommandUseCasePayload::class)
         println(x)
     }
 

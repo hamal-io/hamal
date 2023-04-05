@@ -3,60 +3,54 @@ package io.hamal.lib.ddd.usecase
 import io.hamal.lib.meta.Maybe
 import kotlin.reflect.KClass
 
-interface UseCase
+interface UseCasePayload
 
-interface UseCaseHandler<RESULT : Any, out USE_CASE : UseCase> {
+interface UseCase<RESULT : Any, out PAYLOAD : UseCasePayload> {
     val resultClass: KClass<RESULT>
-    val useCaseClass: KClass<@UnsafeVariance USE_CASE>
+    val payload: PAYLOAD
 
-    abstract class BaseImpl<RESULT : Any, out USE_CASE : UseCase>(
+    abstract class BaseImpl<RESULT : Any, out PAYLOAD : UseCasePayload>(
         override val resultClass: KClass<RESULT>,
-        override val useCaseClass: KClass<@UnsafeVariance USE_CASE>
-    ) : UseCaseHandler<RESULT, USE_CASE>
+        override val payload: PAYLOAD
+    ) : UseCase<RESULT, PAYLOAD>
 }
 
-interface CommandUseCase : UseCase
+interface CommandUseCasePayload : UseCasePayload
 
-interface CommandUseCaseHandler<RESULT : Any, out USE_CASE : CommandUseCase> : UseCaseHandler<RESULT, USE_CASE> {
+interface CommandUseCase<RESULT : Any, out PAYLOAD : CommandUseCasePayload> :
+    UseCase<RESULT, PAYLOAD> {
 
-    fun handle(useCase: @UnsafeVariance USE_CASE): List<RESULT>
+    operator fun invoke(payload: @UnsafeVariance PAYLOAD): List<RESULT>
 
-    abstract class BaseImpl<RESULT : Any, USE_CASE : CommandUseCase>(
+    abstract class BaseImpl<RESULT : Any, PAYLOAD : CommandUseCasePayload>(
         resultClass: KClass<RESULT>,
-        useCaseClass: KClass<@UnsafeVariance USE_CASE>
-    ) : UseCaseHandler.BaseImpl<RESULT, USE_CASE>(
-        resultClass,
-        useCaseClass
-    ), CommandUseCaseHandler<RESULT, USE_CASE>
+        payload: PAYLOAD
+    ) : UseCase.BaseImpl<RESULT, PAYLOAD>(resultClass, payload), CommandUseCase<RESULT, PAYLOAD>
 }
 
 
-interface QueryUseCase : UseCase
+interface QueryUseCasePayload : UseCasePayload
 
-interface QueryUseCaseHandler<RESULT : Any, out USE_CASE : QueryUseCase> : UseCaseHandler<RESULT, USE_CASE> {
+interface QueryUseCase<RESULT : Any, out PAYLOAD : QueryUseCasePayload> :
+    UseCase<RESULT, PAYLOAD> {
 
-    fun handle(useCase: @UnsafeVariance USE_CASE): List<RESULT>
+    operator fun invoke(payload: @UnsafeVariance PAYLOAD): List<RESULT>
 
-    abstract class BaseImpl<RESULT : Any, USE_CASE : QueryUseCase>(
+    abstract class BaseImpl<RESULT : Any, PAYLOAD : QueryUseCasePayload>(
         resultClass: KClass<RESULT>,
-        useCaseClass: KClass<@UnsafeVariance USE_CASE>
-    ) : UseCaseHandler.BaseImpl<RESULT, USE_CASE>(
-        resultClass,
-        useCaseClass
-    ), QueryUseCaseHandler<RESULT, USE_CASE>
+        payload: PAYLOAD
+    ) : UseCase.BaseImpl<RESULT, PAYLOAD>(resultClass, payload), QueryUseCase<RESULT, PAYLOAD>
 }
 
-interface FetchOneUseCase : UseCase
+interface FetchOneUseCasePayload : UseCasePayload
 
-interface FetchOneUseCaseHandler<RESULT : Any, out USE_CASE : FetchOneUseCase> : UseCaseHandler<RESULT, USE_CASE> {
+interface FetchOneUseCase<RESULT : Any, out PAYLOAD : FetchOneUseCasePayload> :
+    UseCase<RESULT, PAYLOAD> {
 
-    fun handle(useCase: @UnsafeVariance USE_CASE): Maybe<RESULT>
+    operator fun invoke(payload: @UnsafeVariance PAYLOAD): Maybe<RESULT>
 
-    abstract class BaseImpl<RESULT : Any, USE_CASE : FetchOneUseCase>(
+    abstract class BaseImpl<RESULT : Any, PAYLOAD : FetchOneUseCasePayload>(
         resultClass: KClass<RESULT>,
-        useCaseClass: KClass<@UnsafeVariance USE_CASE>
-    ) : UseCaseHandler.BaseImpl<RESULT, USE_CASE>(
-        resultClass,
-        useCaseClass
-    ), FetchOneUseCaseHandler<RESULT, USE_CASE>
+        payload: PAYLOAD
+    ) : UseCase.BaseImpl<RESULT, PAYLOAD>(resultClass, payload), FetchOneUseCase<RESULT, PAYLOAD>
 }

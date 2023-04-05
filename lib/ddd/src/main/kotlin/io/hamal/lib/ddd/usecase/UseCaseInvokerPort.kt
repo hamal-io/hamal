@@ -3,36 +3,36 @@ package io.hamal.lib.ddd.usecase
 import io.hamal.lib.meta.Maybe
 
 interface CommandUseCaseInvokerPort {
-    fun <RESULT : Any, USE_CASE : CommandUseCase> maybe(
-        useCase: USE_CASE,
-        resultClass: Class<RESULT>
+    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> maybe(
+        resultClass: Class<RESULT>,
+        payload: PAYLOAD
     ): Maybe<RESULT>
 
-    fun <RESULT : Any, USE_CASE : CommandUseCase?> list(
-        useCase: USE_CASE,
-        resultClass: Class<RESULT>
+    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload?> list(
+        resultClass: Class<RESULT>,
+        payload: PAYLOAD
     ): List<RESULT>
 
-    fun <RESULT : Any, USE_CASE : CommandUseCase?> commands(
-        useCases: Collection<USE_CASE>,
-        resultClass: Class<RESULT>
+    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload?> commands(
+        resultClass: Class<RESULT>,
+        payloads: Collection<PAYLOAD>
     ): List<RESULT>
 
-    fun <USE_CASE : CommandUseCase> noResultCommand(useCase: USE_CASE) {
-        maybe(useCase, Unit::class.java)
+    fun <PAYLOAD : CommandUseCasePayload> noResultCommand(payload: PAYLOAD) {
+        maybe(Unit::class.java, payload)
     }
 }
 
 interface QueryUseCaseInvokerPort {
-    fun <RESULT : Any, USE_CASE : QueryUseCase> query(
-        useCase: USE_CASE,
-        resultClass: Class<RESULT>
+    fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> query(
+        resultClass: Class<RESULT>,
+        payload: PAYLOAD
     ): List<RESULT>
 }
 
 interface FetchOneUseCaseInvokerPort {
-    fun <RESULT : Any, USE_CASE : FetchOneUseCase> fetchOne(
-        useCase: USE_CASE,
-        resultClass: Class<RESULT>
+    fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> fetchOne(
+        resultClass: Class<RESULT>,
+        payload: PAYLOAD
     ): Maybe<RESULT>
 }

@@ -3,23 +3,23 @@ package io.hamal.lib.ddd.usecase
 import kotlin.reflect.KClass
 
 
-interface GetCommandUseCaseHandlerPort {
-    operator fun <RESULT : Any, USE_CASE : CommandUseCase> get(
+interface GetCommandUseCasePort {
+    operator fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> get(
         resultClass: KClass<RESULT>,
-        useCaseClass: KClass<USE_CASE>
-    ): CommandUseCaseHandler<RESULT, USE_CASE>
+        payloadClass: KClass<PAYLOAD>
+    ): CommandUseCase<RESULT, PAYLOAD>
 }
 
-interface GetQueryUseCaseHandlerPort {
-    operator fun <RESULT : Any, USE_CASE : QueryUseCase> get(
+interface GetQueryUseCasePort {
+    operator fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> get(
         resultClass: KClass<RESULT>,
-        useCaseClass: KClass<USE_CASE>
-    ): QueryUseCaseHandler<RESULT, USE_CASE>
+        payloadClass: KClass<PAYLOAD>
+    ): QueryUseCase<RESULT, PAYLOAD>
 }
 
-interface GetFetchOneUseCaseHandlerPort {
-    operator fun <RESULT : Any, USE_CASE : FetchOneUseCase> get(
+interface GetFetchOneUseCasePort {
+    operator fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> get(
         resultClass: KClass<RESULT>,
-        useCaseClass: KClass<USE_CASE>
-    ): FetchOneUseCaseHandler<RESULT, USE_CASE>
+        payloadClass: KClass<PAYLOAD>
+    ): FetchOneUseCase<RESULT, PAYLOAD>
 }

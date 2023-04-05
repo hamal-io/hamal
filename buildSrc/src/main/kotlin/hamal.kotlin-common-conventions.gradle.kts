@@ -16,6 +16,9 @@ configurations[testIntegration.runtimeOnlyConfigurationName].extendsFrom(configu
 
 tasks.test {
     useJUnitPlatform()
+    testLogging {
+        events("passed")
+    }
 }
 
 val testIntegrationTask = tasks.register<Test>("testIntegration") {

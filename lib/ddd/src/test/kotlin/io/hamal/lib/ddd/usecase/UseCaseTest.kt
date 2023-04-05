@@ -14,119 +14,112 @@ class UseCaseTest {
 
     @Nested
     @DisplayName("CommandUseCase")
-    inner class CommandUseCaseTest {
+    inner class CommandUseCasePayloadHandlerTest {
 
         @Nested
-        @DisplayName("CommandUseCaseHandler")
-        inner class CommandUseCaseHandlerTEst {
+        @DisplayName("BaseImpl")
+        inner class BaseImplTest {
 
-            @Nested
-            @DisplayName("BaseImpl")
-            inner class BaseImplTest {
-
-                @Test
-                fun `Returns result class`() {
-                    val testInstance = TestUseCaseHandler()
-                    val result = testInstance.resultClass
-                    assertThat(result, equalTo(TestResult::class))
-                }
-
-                @Test
-                fun `Returns use case class`() {
-                    val testInstance = TestUseCaseHandler()
-                    val result = testInstance.useCaseClass
-                    assertThat(result, equalTo(TestUseCase::class))
-                }
+            @Test
+            fun `Returns result class`() {
+                val testInstance = TestUseCase()
+                val result = testInstance.resultClass
+                assertThat(result, equalTo(TestResult::class))
             }
 
-            private inner class TestResult
-            private inner class TestUseCase : CommandUseCase
-            private inner class TestUseCaseHandler : CommandUseCaseHandler.BaseImpl<TestResult, TestUseCase>(
-                TestResult::class, TestUseCase::class
-            ) {
-                override fun handle(useCase: TestUseCase): List<TestResult> {
-                    return listOf()
-                }
+            @Test
+            fun `Returns use case payload`() {
+                val testInstance = TestUseCase()
+                val result = testInstance.payload
+                assertThat(result, equalTo(testUseCasePayload))
+            }
+        }
+
+        private inner class TestResult
+        private inner class TestUseCasePayload : CommandUseCasePayload
+
+        private val testUseCasePayload = TestUseCasePayload()
+
+        private inner class TestUseCase : CommandUseCase.BaseImpl<TestResult, TestUseCasePayload>(
+            TestResult::class, testUseCasePayload
+        ) {
+            override operator fun invoke(useCase: TestUseCasePayload): List<TestResult> {
+                return listOf()
             }
         }
     }
 
+
     @Nested
-    @DisplayName("QueryUseCase")
-    inner class QueryUseCaseTest {
-
+    @DisplayName("QueryUseCaseTest")
+    inner class QueryUseCasePayloadHandlerTest {
         @Nested
-        @DisplayName("QueryUseCaseHandlerTest")
-        inner class QueryUseCaseHandlerTest {
-            @Nested
-            @DisplayName("BaseImpl")
-            inner class BaseImplTest {
+        @DisplayName("BaseImpl")
+        inner class BaseImplTest {
 
-                @Test
-                fun `Returns result class`() {
-                    val testInstance = TestUseCaseHandler()
-                    val result = testInstance.resultClass
-                    assertThat(result, equalTo(TestResult::class))
-                }
-
-                @Test
-                fun `Returns use case class`() {
-                    val testInstance = TestUseCaseHandler()
-                    val result = testInstance.useCaseClass
-                    assertThat(result, equalTo(TestUseCase::class))
-                }
+            @Test
+            fun `Returns result class`() {
+                val testInstance = TestUseCase()
+                val result = testInstance.resultClass
+                assertThat(result, equalTo(TestResult::class))
             }
 
-            private inner class TestResult
-            private inner class TestUseCase : QueryUseCase
-            private inner class TestUseCaseHandler : QueryUseCaseHandler.BaseImpl<TestResult, TestUseCase>(
-                TestResult::class, TestUseCase::class
-            ) {
-                override fun handle(useCase: TestUseCase): List<TestResult> {
-                    return listOf()
-                }
+            @Test
+            fun `Returns use case payload`() {
+                val testInstance = TestUseCase()
+                val result = testInstance.payload
+                assertThat(result, equalTo(testUseCasePayload))
             }
         }
 
+        private inner class TestResult
+        private inner class TestUseCasePayload : QueryUseCasePayload
+
+        private val testUseCasePayload = TestUseCasePayload()
+
+        private inner class TestUseCase : QueryUseCase.BaseImpl<TestResult, TestUseCasePayload>(
+            TestResult::class, testUseCasePayload
+        ) {
+            override operator fun invoke(useCase: TestUseCasePayload): List<TestResult> {
+                return listOf()
+            }
+        }
     }
 
     @Nested
     @DisplayName("FetchOneUseCase")
-    inner class FetchOneUseCaseTest {
-
+    inner class FetchOneUseCaseTestPayload {
         @Nested
-        @DisplayName("FetchOneUseCaseHandler")
-        inner class FetchOneUseCaseHandlerTest {
-            @Nested
-            @DisplayName("BaseImpl")
-            inner class BaseImplTest {
+        @DisplayName("BaseImpl")
+        inner class BaseImplTest {
 
-                @Test
-                fun `Returns result class`() {
-                    val testInstance = TestUseCaseHandler()
-                    val result = testInstance.resultClass
-                    assertThat(result, equalTo(TestResult::class))
-                }
+            @Test
+            fun `Returns result class`() {
+                val testInstance = TestUseCase()
+                val result = testInstance.resultClass
+                assertThat(result, equalTo(TestResult::class))
+            }
 
-                @Test
-                fun `Returns use case class`() {
-                    val testInstance = TestUseCaseHandler()
-                    val result = testInstance.useCaseClass
-                    assertThat(result, equalTo(TestUseCase::class))
-                }
+            @Test
+            fun `Returns use case payload class`() {
+                val testInstance = TestUseCase()
+                val result = testInstance.payload
+                assertThat(result, equalTo(testUseCasePayload))
             }
 
             private inner class TestResult
+            private inner class TestUseCasePayload : FetchOneUseCasePayload
 
-            private inner class TestUseCase : FetchOneUseCase
+            private val testUseCasePayload = TestUseCasePayload()
 
-            private inner class TestUseCaseHandler : FetchOneUseCaseHandler.BaseImpl<TestResult, TestUseCase>(
-                TestResult::class, TestUseCase::class
+            private inner class TestUseCase : FetchOneUseCase.BaseImpl<TestResult, TestUseCasePayload>(
+                TestResult::class, testUseCasePayload
             ) {
-                override fun handle(useCase: TestUseCase): Maybe<TestResult> {
+                override operator fun invoke(payload: TestUseCasePayload): Maybe<TestResult> {
                     return Maybe.none()
                 }
             }
         }
     }
+
 }
