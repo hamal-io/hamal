@@ -7,50 +7,41 @@ interface UseCasePayload
 
 interface UseCase<RESULT : Any, out PAYLOAD : UseCasePayload> {
     val resultClass: KClass<RESULT>
-    val payload: PAYLOAD
+    val payloadClass: KClass<@UnsafeVariance PAYLOAD>
 
     abstract class BaseImpl<RESULT : Any, out PAYLOAD : UseCasePayload>(
         override val resultClass: KClass<RESULT>,
-        override val payload: PAYLOAD
+        override val payloadClass: KClass<@UnsafeVariance PAYLOAD>
     ) : UseCase<RESULT, PAYLOAD>
 }
 
 interface CommandUseCasePayload : UseCasePayload
 
-interface CommandUseCase<RESULT : Any, out PAYLOAD : CommandUseCasePayload> :
-    UseCase<RESULT, PAYLOAD> {
+abstract class CommandUseCase<RESULT : Any, out PAYLOAD : CommandUseCasePayload>(
+    override val resultClass: KClass<RESULT>,
+    override val payloadClass: KClass<@UnsafeVariance PAYLOAD>
+) : UseCase<RESULT, PAYLOAD> {
 
-    operator fun invoke(payload: @UnsafeVariance PAYLOAD): List<RESULT>
+    abstract operator fun invoke(payload: @UnsafeVariance PAYLOAD): List<RESULT>
 
-    abstract class BaseImpl<RESULT : Any, PAYLOAD : CommandUseCasePayload>(
-        resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ) : UseCase.BaseImpl<RESULT, PAYLOAD>(resultClass, payload), CommandUseCase<RESULT, PAYLOAD>
 }
 
 
 interface QueryUseCasePayload : UseCasePayload
 
-interface QueryUseCase<RESULT : Any, out PAYLOAD : QueryUseCasePayload> :
-    UseCase<RESULT, PAYLOAD> {
-
-    operator fun invoke(payload: @UnsafeVariance PAYLOAD): List<RESULT>
-
-    abstract class BaseImpl<RESULT : Any, PAYLOAD : QueryUseCasePayload>(
-        resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ) : UseCase.BaseImpl<RESULT, PAYLOAD>(resultClass, payload), QueryUseCase<RESULT, PAYLOAD>
+abstract class QueryUseCase<RESULT : Any, out PAYLOAD : QueryUseCasePayload>(
+    override val resultClass: KClass<RESULT>,
+    override val payloadClass: KClass<@UnsafeVariance PAYLOAD>
+) : UseCase<RESULT, PAYLOAD> {
+    abstract operator fun invoke(payload: @UnsafeVariance PAYLOAD): List<RESULT>
 }
 
 interface FetchOneUseCasePayload : UseCasePayload
 
-interface FetchOneUseCase<RESULT : Any, out PAYLOAD : FetchOneUseCasePayload> :
-    UseCase<RESULT, PAYLOAD> {
+abstract class FetchOneUseCase<RESULT : Any, out PAYLOAD : FetchOneUseCasePayload>(
+    override val resultClass: KClass<RESULT>,
+    override val payloadClass: KClass<@UnsafeVariance PAYLOAD>
+) : UseCase<RESULT, PAYLOAD> {
 
-    operator fun invoke(payload: @UnsafeVariance PAYLOAD): Maybe<RESULT>
-
-    abstract class BaseImpl<RESULT : Any, PAYLOAD : FetchOneUseCasePayload>(
-        resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ) : UseCase.BaseImpl<RESULT, PAYLOAD>(resultClass, payload), FetchOneUseCase<RESULT, PAYLOAD>
+    abstract operator fun invoke(payload: @UnsafeVariance PAYLOAD): Maybe<RESULT>
 }

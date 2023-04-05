@@ -30,20 +30,17 @@ class UseCaseTest {
             @Test
             fun `Returns use case payload`() {
                 val testInstance = TestUseCase()
-                val result = testInstance.payload
-                assertThat(result, equalTo(testUseCasePayload))
+                val result = testInstance.payloadClass
+                assertThat(result, equalTo(TestUseCasePayload::class))
             }
         }
 
         private inner class TestResult
         private inner class TestUseCasePayload : CommandUseCasePayload
-
-        private val testUseCasePayload = TestUseCasePayload()
-
-        private inner class TestUseCase : CommandUseCase.BaseImpl<TestResult, TestUseCasePayload>(
-            TestResult::class, testUseCasePayload
+        private inner class TestUseCase : CommandUseCase<TestResult, TestUseCasePayload>(
+            TestResult::class, TestUseCasePayload::class
         ) {
-            override operator fun invoke(useCase: TestUseCasePayload): List<TestResult> {
+            override operator fun invoke(payload: TestUseCasePayload): List<TestResult> {
                 return listOf()
             }
         }
@@ -67,20 +64,17 @@ class UseCaseTest {
             @Test
             fun `Returns use case payload`() {
                 val testInstance = TestUseCase()
-                val result = testInstance.payload
-                assertThat(result, equalTo(testUseCasePayload))
+                val result = testInstance.payloadClass
+                assertThat(result, equalTo(TestUseCasePayload::class))
             }
         }
 
         private inner class TestResult
         private inner class TestUseCasePayload : QueryUseCasePayload
-
-        private val testUseCasePayload = TestUseCasePayload()
-
-        private inner class TestUseCase : QueryUseCase.BaseImpl<TestResult, TestUseCasePayload>(
-            TestResult::class, testUseCasePayload
+        private inner class TestUseCase : QueryUseCase<TestResult, TestUseCasePayload>(
+            TestResult::class, TestUseCasePayload::class
         ) {
-            override operator fun invoke(useCase: TestUseCasePayload): List<TestResult> {
+            override operator fun invoke(payload: TestUseCasePayload): List<TestResult> {
                 return listOf()
             }
         }
@@ -103,17 +97,14 @@ class UseCaseTest {
             @Test
             fun `Returns use case payload class`() {
                 val testInstance = TestUseCase()
-                val result = testInstance.payload
-                assertThat(result, equalTo(testUseCasePayload))
+                val result = testInstance.payloadClass
+                assertThat(result, equalTo(TestUseCasePayload::class))
             }
 
             private inner class TestResult
             private inner class TestUseCasePayload : FetchOneUseCasePayload
-
-            private val testUseCasePayload = TestUseCasePayload()
-
-            private inner class TestUseCase : FetchOneUseCase.BaseImpl<TestResult, TestUseCasePayload>(
-                TestResult::class, testUseCasePayload
+            private inner class TestUseCase : FetchOneUseCase<TestResult, TestUseCasePayload>(
+                TestResult::class, TestUseCasePayload::class
             ) {
                 override operator fun invoke(payload: TestUseCasePayload): Maybe<TestResult> {
                     return Maybe.none()

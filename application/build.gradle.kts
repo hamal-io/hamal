@@ -6,15 +6,18 @@ dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:ddd"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web:3.0.5"){
+    implementation(external.springWeb) {
         exclude(group = "com.fasterxml.jackson.core", module = "jackson-core")
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-json")
         exclude(group = "com.fasterxml.jackson.core", module = "jackson-annotations")
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-json")
     }
 
-    testImplementation(project(mapOf("path" to ":application")))
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.5")
+    testImplementation(project(":application"))
+
+    testImplementation(external.junit)
+    testImplementation(external.hamcrest)
+    testImplementation(external.springTest)
 }
 
 application {

@@ -6,19 +6,12 @@ kotlin{
     jvmToolchain(17)
 }
 
-repositories {
-    mavenCentral()
-}
-
 val testIntegration by sourceSets.creating
 configurations[testIntegration.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
 configurations[testIntegration.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
 
 tasks.test {
     useJUnitPlatform()
-    testLogging {
-        events("passed")
-    }
 }
 
 val testIntegrationTask = tasks.register<Test>("testIntegration") {
@@ -31,17 +24,9 @@ val testIntegrationTask = tasks.register<Test>("testIntegration") {
     shouldRunAfter(tasks.test)
 
     useJUnitPlatform()
-    testLogging {
-        events("passed")
-    }
 }
 
 tasks.check {
     dependsOn(testIntegrationTask)
-}
-
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-    testImplementation("org.hamcrest:hamcrest:2.2")
 }
 

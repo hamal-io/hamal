@@ -16,17 +16,17 @@ class DefaultUseCaseRegistryAdapter : GetCommandUseCasePort, GetQueryUseCasePort
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         event.applicationContext.getBeansOfType(CommandUseCase::class.java)
             .forEach { (_, useCase) ->
-                register(useCase.payload::class, useCase as CommandUseCase<*, CommandUseCasePayload>)
+                register(useCase.payloadClass, useCase as CommandUseCase<*, CommandUseCasePayload>)
             }
 
         event.applicationContext.getBeansOfType(QueryUseCase::class.java)
             .forEach { (_, useCase) ->
-                register(useCase.payload::class, useCase as QueryUseCase<*, QueryUseCasePayload>)
+                register(useCase.payloadClass, useCase as QueryUseCase<*, QueryUseCasePayload>)
             }
 
         event.applicationContext.getBeansOfType(FetchOneUseCase::class.java)
             .forEach { (_, useCase) ->
-                register(useCase.payload::class, useCase as FetchOneUseCase<*, FetchOneUseCasePayload>)
+                register(useCase.payloadClass, useCase as FetchOneUseCase<*, FetchOneUseCasePayload>)
             }
     }
 

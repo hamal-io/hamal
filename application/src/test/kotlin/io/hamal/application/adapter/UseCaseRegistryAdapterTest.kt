@@ -225,8 +225,8 @@ class UseCaseRegistryAdapterTest {
     private class TestCommandUseCasePayload : CommandUseCasePayload
 
     private class TestCommandUseCase :
-        CommandUseCase.BaseImpl<TestResult, TestCommandUseCasePayload>(
-            TestResult::class, TestCommandUseCasePayload()
+        CommandUseCase<TestResult, TestCommandUseCasePayload>(
+            TestResult::class, TestCommandUseCasePayload::class
         ) {
         override operator fun invoke(payload: TestCommandUseCasePayload): List<TestResult> {
             return listOf()
@@ -234,8 +234,8 @@ class UseCaseRegistryAdapterTest {
     }
 
     private interface TestCommandUseCaseInterfacePayload : CommandUseCasePayload {
-        class Handler : CommandUseCase.BaseImpl<TestResult, TestCommandUseCaseInterfacePayload>(
-            TestResult::class, object : TestCommandUseCaseInterfacePayload {}
+        class Handler : CommandUseCase<TestResult, TestCommandUseCaseInterfacePayload>(
+            TestResult::class, TestCommandUseCaseInterfacePayload::class
         ) {
             override operator fun invoke(payload: TestCommandUseCaseInterfacePayload): List<TestResult> {
                 return listOf()
@@ -246,8 +246,8 @@ class UseCaseRegistryAdapterTest {
 
     private class TestQueryUseCasePayload : QueryUseCasePayload
     private class TestQueryUseCase :
-        QueryUseCase.BaseImpl<TestResult, TestQueryUseCasePayload>(
-            TestResult::class, TestQueryUseCasePayload()
+        QueryUseCase<TestResult, TestQueryUseCasePayload>(
+            TestResult::class, TestQueryUseCasePayload::class
         ) {
         override operator fun invoke(payload: TestQueryUseCasePayload): List<TestResult> {
             return listOf()
@@ -255,8 +255,8 @@ class UseCaseRegistryAdapterTest {
     }
 
     private interface TestQueryUseCaseInterfacePayload : QueryUseCasePayload {
-        class Handler : QueryUseCase.BaseImpl<TestResult, TestQueryUseCaseInterfacePayload>(
-            TestResult::class, object : TestQueryUseCaseInterfacePayload {}
+        class Handler : QueryUseCase<TestResult, TestQueryUseCaseInterfacePayload>(
+            TestResult::class, TestQueryUseCaseInterfacePayload::class
         ) {
             override operator fun invoke(payload: TestQueryUseCaseInterfacePayload): List<TestResult> {
                 return listOf()
@@ -266,8 +266,8 @@ class UseCaseRegistryAdapterTest {
 
     private class TestFetchOneUseCasePayload : FetchOneUseCasePayload
     private class TestFetchOneUseCase :
-        FetchOneUseCase.BaseImpl<TestResult, TestFetchOneUseCasePayload>(
-            TestResult::class, TestFetchOneUseCasePayload()
+        FetchOneUseCase<TestResult, TestFetchOneUseCasePayload>(
+            TestResult::class, TestFetchOneUseCasePayload::class
         ) {
         override operator fun invoke(payload: TestFetchOneUseCasePayload): Maybe<TestResult> {
             return Maybe.none()
@@ -275,8 +275,8 @@ class UseCaseRegistryAdapterTest {
     }
 
     private interface TestFetchOneUseCaseInterfacePayload : FetchOneUseCasePayload {
-        class Handler : FetchOneUseCase.BaseImpl<TestResult, TestFetchOneUseCaseInterfacePayload>(
-            TestResult::class, object : TestFetchOneUseCaseInterfacePayload {}
+        class Handler : FetchOneUseCase<TestResult, TestFetchOneUseCaseInterfacePayload>(
+            TestResult::class, TestFetchOneUseCaseInterfacePayload::class
         ) {
             override operator fun invoke(payload: TestFetchOneUseCaseInterfacePayload): Maybe<TestResult> {
                 return Maybe.none()

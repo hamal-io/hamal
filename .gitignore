@@ -13,6 +13,7 @@ target/
 *.ipr
 .idea/
 .gradle/
+**/out/
 
 ### Eclipse ###
 .apt_generated
