@@ -26,7 +26,9 @@ open class TestUseCasesConfig {
 
     @Bean
     open fun commandUseCaseHandler(): CommandUseCaseHandler<String, TestCommandUseCase> {
-        return object : CommandUseCaseHandler.BaseImpl<String, TestCommandUseCase>() {
+        return object : CommandUseCaseHandler.BaseImpl<String, TestCommandUseCase>(
+            String::class, TestCommandUseCase::class
+        ) {
             override fun handle(useCase: TestCommandUseCase): List<String> {
                 TODO("Not yet implemented")
             }
@@ -50,7 +52,7 @@ class UseCaseRegistryAdapterIT {
 
     @Test
     fun `ok`() {
-        val x = testInstance?.get(String::class.java, TestUseCasesConfig.TestCommandUseCase::class.java)
+        val x = testInstance?.get(String::class, TestUseCasesConfig.TestCommandUseCase::class)
         println(x)
     }
 

@@ -25,23 +25,25 @@ class UseCaseTest {
             inner class BaseImplTest {
 
                 @Test
-                fun `Result class gets calculated correctly`() {
+                fun `Returns result class`() {
                     val testInstance = TestUseCaseHandler()
                     val result = testInstance.resultClass
-                    assertThat(result, equalTo(TestResult::class.java))
+                    assertThat(result, equalTo(TestResult::class))
                 }
 
                 @Test
-                fun `Usecase class gets calculated correctly`() {
+                fun `Returns use case class`() {
                     val testInstance = TestUseCaseHandler()
                     val result = testInstance.useCaseClass
-                    assertThat(result, equalTo(TestUseCase::class.java))
+                    assertThat(result, equalTo(TestUseCase::class))
                 }
             }
 
             private inner class TestResult
             private inner class TestUseCase : CommandUseCase
-            private inner class TestUseCaseHandler : CommandUseCaseHandler.BaseImpl<TestResult, TestUseCase>() {
+            private inner class TestUseCaseHandler : CommandUseCaseHandler.BaseImpl<TestResult, TestUseCase>(
+                TestResult::class, TestUseCase::class
+            ) {
                 override fun handle(useCase: TestUseCase): List<TestResult> {
                     return listOf()
                 }
@@ -61,23 +63,25 @@ class UseCaseTest {
             inner class BaseImplTest {
 
                 @Test
-                fun `Result class gets calculated correctly`() {
+                fun `Returns result class`() {
                     val testInstance = TestUseCaseHandler()
                     val result = testInstance.resultClass
-                    assertThat(result, equalTo(TestResult::class.java))
+                    assertThat(result, equalTo(TestResult::class))
                 }
 
                 @Test
-                fun `Usecase class gets calculated correctly`() {
+                fun `Returns use case class`() {
                     val testInstance = TestUseCaseHandler()
                     val result = testInstance.useCaseClass
-                    assertThat(result, equalTo(TestUseCase::class.java))
+                    assertThat(result, equalTo(TestUseCase::class))
                 }
             }
 
             private inner class TestResult
             private inner class TestUseCase : QueryUseCase
-            private inner class TestUseCaseHandler : QueryUseCaseHandler.BaseImpl<TestResult, TestUseCase>() {
+            private inner class TestUseCaseHandler : QueryUseCaseHandler.BaseImpl<TestResult, TestUseCase>(
+                TestResult::class, TestUseCase::class
+            ) {
                 override fun handle(useCase: TestUseCase): List<TestResult> {
                     return listOf()
                 }
@@ -98,17 +102,17 @@ class UseCaseTest {
             inner class BaseImplTest {
 
                 @Test
-                fun `Result class gets calculated correctly`() {
+                fun `Returns result class`() {
                     val testInstance = TestUseCaseHandler()
                     val result = testInstance.resultClass
-                    assertThat(result, equalTo(TestResult::class.java))
+                    assertThat(result, equalTo(TestResult::class))
                 }
 
                 @Test
-                fun `Usecase class gets calculated correctly`() {
+                fun `Returns use case class`() {
                     val testInstance = TestUseCaseHandler()
                     val result = testInstance.useCaseClass
-                    assertThat(result, equalTo(TestUseCase::class.java))
+                    assertThat(result, equalTo(TestUseCase::class))
                 }
             }
 
@@ -116,7 +120,9 @@ class UseCaseTest {
 
             private inner class TestUseCase : FetchOneUseCase
 
-            private inner class TestUseCaseHandler : FetchOneUseCaseHandler.BaseImpl<TestResult, TestUseCase>() {
+            private inner class TestUseCaseHandler : FetchOneUseCaseHandler.BaseImpl<TestResult, TestUseCase>(
+                TestResult::class, TestUseCase::class
+            ) {
                 override fun handle(useCase: TestUseCase): Maybe<TestResult> {
                     return Maybe.none()
                 }
