@@ -12,6 +12,9 @@ dependencies {
         exclude(group = "com.fasterxml.jackson.core", module = "jackson-annotations")
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-json")
     }
+
+    testImplementation(project(mapOf("path" to ":application")))
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.5")
 }
 
 application {
