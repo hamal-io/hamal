@@ -1,0 +1,23 @@
+package io.hamal.module.launchpad.infra
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
+import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+
+@Configuration
+@ComponentScan
+@EnableScheduling
+@EnableAutoConfiguration(exclude = [SpringApplicationAdminJmxAutoConfiguration::class, JmxAutoConfiguration::class])
+open class LaunchpadModuleConfig {
+}
+
+@RestController
+open class HelloWorld {
+    @GetMapping("/v1/hello")
+    fun hello(): String = "hello"
+}

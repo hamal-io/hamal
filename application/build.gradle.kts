@@ -9,17 +9,18 @@ dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:ddd"))
 
-    implementation(external.springWeb) {
-        exclude("com.fasterxml.jackson.core", "jackson-core")
-        exclude("org.springframework.boot", "spring-boot-starter-json")
-        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-        exclude("org.springframework.boot", "spring-boot-starter-json")
-    }
+//    implementation(external.springWeb) {
+//        exclude("com.fasterxml.jackson.core", "jackson-core")
+//        exclude("org.springframework.boot", "spring-boot-starter-json")
+//        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+//        exclude("org.springframework.boot", "spring-boot-starter-json")
+//    }
 
-    implementation(external.springWeb)
-    implementation(external.springDataJdbc)
-    implementation(external.hikari)
-    implementation(external.h2)
+//    implementation(external.springDataJdbc)
+//    implementation(external.hikari)
+//    implementation(external.h2)
+
+    implementation(project(":module:launchpad:infra"))
 
     testImplementation(project(":application"))
 
