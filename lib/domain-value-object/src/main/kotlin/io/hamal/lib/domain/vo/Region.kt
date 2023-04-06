@@ -2,7 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.ddd.base.BaseComparableValueObject
 
-abstract class Region(final override val value: String) : BaseComparableValueObject<String>() {
+class Region(final override val value: String) : BaseComparableValueObject<String>() {
 
     init {
         ReferenceValidator.validate(value)
