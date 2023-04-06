@@ -13,6 +13,7 @@ target/
 *.ipr
 .idea/
 .gradle/
+.run/
 **/out/
 
 ### Eclipse ###
