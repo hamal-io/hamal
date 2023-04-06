@@ -1,8 +1,6 @@
 package io.hamal.application
 
-import io.hamal.lib.ddd.usecase.InvokeQueryUseCasePort
-import io.hamal.lib.ddd.usecase.QueryUseCase
-import io.hamal.lib.ddd.usecase.QueryUseCasePayload
+import io.hamal.lib.ddd.usecase.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -21,12 +19,20 @@ open class HamalApplication
 //Doh font
 
 data class SomePayload(val x: Int, val y: Int) : QueryUseCasePayload
+data class SomeCommandPayload(val x: Int, val y: Int) : CommandUseCasePayload
 
 
 class SomeQueryUseCase : QueryUseCase<Int, SomePayload>(Int::class, SomePayload::class) {
     override fun invoke(payload: SomePayload): List<Int> {
         return listOf(payload.x + payload.y)
     }
+}
+
+class SomeCommandUseCase : CommandUseCase<Int, SomeCommandPayload>(Int::class, SomeCommandPayload::class) {
+    override fun invoke(payload: SomeCommandPayload): List<Int> {
+        return listOf(payload.x * payload.y)
+    }
+
 }
 
 @Configuration
@@ -36,17 +42,23 @@ open class DifferentPlace {
     @Bean
     open fun someUseCase() = SomeQueryUseCase()
 
+
+    @Bean
+    open fun someCommandUseCase() = SomeCommandUseCase()
 }
 
 @RestController
 open class Con {
 
     @Autowired
-    lateinit var usecaseInvoker: InvokeQueryUseCasePort
+    lateinit var queryUsecaseInvoker: InvokeQueryUseCasePort
+
+    @Autowired
+    lateinit var commandUseCaseInvoker: InvokeCommandUseCasePort
 
     @GetMapping("/v1/hello")
     fun hello(): String {
-        val x = usecaseInvoker.query(Int::class, SomePayload(2800, 10))
+        val x = commandUseCaseInvoker.command(Int::class, SomeCommandPayload(10, 100))
         return x.toString()
     }
 }
@@ -71,11 +83,10 @@ open class RunItConfig {
                 val x = usecaseInvoker.query(Int::class, SomePayload(2800, 10))
                 println(x)
 
-                val list = namedOperations.query("SELECT * FROM TASK WHERE ID > 5") { rs, _ ->
-                    rs.getInt(2)
-                };
-
-                println(list)
+//                val list = namedOperations.query("SELECT * FROM TASK WHERE ID > 5") { rs, _ ->
+//                    rs.getInt(2)
+//                };
+//                println(list)
             }
 
         }

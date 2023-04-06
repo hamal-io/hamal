@@ -8,7 +8,6 @@ include(":lib:domain-value-object")
 include(":lib:meta")
 include(":lib:util")
 
-include(":module:launchpad")
 include(":module:launchpad:application")
 include(":module:launchpad:core")
 include(":module:launchpad:infra")
@@ -26,11 +25,12 @@ dependencyResolutionManagement {
             library("junit", "org.junit.jupiter:junit-jupiter:5.9.1")
             library("hamcrest", "org.hamcrest:hamcrest:2.2")
 
-            library("springWeb", "org.springframework.boot:spring-boot-starter-web:3.0.5")
-            library("springTest", "org.springframework.boot:spring-boot-starter-test:3.0.5")
-            library("springDataJdbc", "org.springframework.data:spring-data-jdbc:2.1.6")
-            library("h2", "com.h2database:h2:2.1.214")
-            library("hikari", "com.zaxxer:HikariCP:5.0.1")
+            library("springWeb", "org.springframework.boot", "spring-boot-starter-web").withoutVersion()
+            library("springTest", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
+            library("springDataJdbc", "org.springframework.data", "spring-data-jdbc").withoutVersion()
+            library("springDevTools", "org.springframework.boot", "spring-boot-devtools").withoutVersion()
+            library("h2", "com.h2database", "h2").withoutVersion()
+            library("hikari", "com.zaxxer", "HikariCP").withoutVersion()
         }
     }
 }

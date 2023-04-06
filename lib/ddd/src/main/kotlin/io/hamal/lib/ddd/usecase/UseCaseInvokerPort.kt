@@ -4,24 +4,13 @@ import io.hamal.lib.meta.Maybe
 import kotlin.reflect.KClass
 
 interface InvokeCommandUseCasePort {
-    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> maybe(
-        resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ): Maybe<RESULT>
 
-    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload?> list(
+    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> command(
         resultClass: KClass<RESULT>,
-        payload: PAYLOAD
+        vararg payloads: PAYLOAD
     ): List<RESULT>
 
-    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload?> commands(
-        resultClass: KClass<RESULT>,
-        payloads: Collection<PAYLOAD>
-    ): List<RESULT>
-
-    fun <PAYLOAD : CommandUseCasePayload> noResultCommand(payload: PAYLOAD) {
-        maybe(Unit::class, payload)
-    }
+    fun <PAYLOAD : CommandUseCasePayload> command(vararg payloads: PAYLOAD)
 }
 
 interface InvokeQueryUseCasePort {

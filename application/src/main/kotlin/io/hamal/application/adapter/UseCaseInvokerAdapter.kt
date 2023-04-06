@@ -3,50 +3,31 @@ package io.hamal.application.adapter
 import io.hamal.lib.ddd.usecase.*
 import io.hamal.lib.meta.Maybe
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
-import org.springframework.transaction.support.TransactionOperations
 import kotlin.reflect.KClass
 
-class TransactionalUseCaseInvokerAdapter(
-//    @Autowired internal val transactionOperations: TransactionOperations,
+class DefaultUseCaseInvokerAdapter(
     @Autowired internal val getCommandUseCasePort: GetCommandUseCasePort,
     @Autowired internal val getQueryUseCasePort: GetQueryUseCasePort,
     @Autowired internal val getFetchOneUseCasePort: GetFetchOneUseCasePort
 ) : InvokeUseCasePort {
 
-    override fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> maybe(
+    override fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> command(
         resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ): Maybe<RESULT> {
-        TODO("Not yet implemented")
-    }
+        vararg payloads: PAYLOAD
+    ): List<RESULT> = payloads.flatMap { payload -> getCommandUseCasePort[resultClass, payload::class](payload) }
 
-    override fun <RESULT : Any, PAYLOAD : CommandUseCasePayload?> list(
-        resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ): List<RESULT> {
-        TODO("Not yet implemented")
-    }
+    override fun <PAYLOAD : CommandUseCasePayload> command(
+        vararg payloads: PAYLOAD
+    ) = payloads.forEach { payload -> getCommandUseCasePort[Unit::class, payload::class](payload) }
 
-    override fun <RESULT : Any, PAYLOAD : CommandUseCasePayload?> commands(
-        resultClass: KClass<RESULT>,
-        payloads: Collection<PAYLOAD>
-    ): List<RESULT> {
-        TODO("Not yet implemented")
-    }
 
     override fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> query(
         resultClass: KClass<RESULT>,
         payload: PAYLOAD
-    ): List<RESULT> {
-        val useCase = getQueryUseCasePort[resultClass, payload::class]
-        return useCase(payload)
-    }
+    ): List<RESULT> = getQueryUseCasePort[resultClass, payload::class](payload)
 
     override fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> fetchOne(
         resultClass: KClass<RESULT>,
         payload: PAYLOAD
-    ): Maybe<RESULT> {
-        TODO("Not yet implemented")
-    }
+    ): Maybe<RESULT> = getFetchOneUseCasePort[resultClass, payload::class](payload)
 }
