@@ -11,6 +11,9 @@ class DefaultUseCaseInvokerAdapter(
     @Autowired internal val getFetchOneUseCasePort: GetFetchOneUseCasePort
 ) : InvokeUseCasePort {
 
+    constructor(useCaseRegistry: GetUseCasePort)
+            : this(useCaseRegistry, useCaseRegistry, useCaseRegistry)
+
     override fun <RESULT : Any, USE_CASE : CommandUseCase> command(
         resultClass: KClass<RESULT>,
         vararg useCases: USE_CASE

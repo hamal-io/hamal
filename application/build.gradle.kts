@@ -10,10 +10,10 @@ dependencies {
     implementation(project(":lib:ddd"))
 
     implementation(external.springWeb) {
-        exclude(group = "com.fasterxml.jackson.core", module = "jackson-core")
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-json")
-        exclude(group = "com.fasterxml.jackson.core", module = "jackson-annotations")
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-json")
+        exclude("com.fasterxml.jackson.core", "jackson-core")
+        exclude("org.springframework.boot", "spring-boot-starter-json")
+        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+        exclude("org.springframework.boot", "spring-boot-starter-json")
     }
 
     implementation(external.springWeb)
@@ -25,7 +25,9 @@ dependencies {
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
-    testImplementation(external.springTest)
+    testImplementation(external.springTest) {
+        exclude("org.assertj", "*")
+    }
 
     compileOnly(external.springDevTools)
 }
