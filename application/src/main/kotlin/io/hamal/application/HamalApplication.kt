@@ -18,19 +18,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 open class HamalApplication
 //Doh font
 
-data class SomePayload(val x: Int, val y: Int) : QueryUseCasePayload
-data class SomeCommandPayload(val x: Int, val y: Int) : CommandUseCasePayload
+data class Some(val x: Int, val y: Int) : QueryUseCase
+data class SomeCommand(val x: Int, val y: Int) : CommandUseCase
 
 
-class SomeQueryUseCase : QueryUseCase<Int, SomePayload>(Int::class, SomePayload::class) {
-    override fun invoke(payload: SomePayload): List<Int> {
-        return listOf(payload.x + payload.y)
+class SomeQueryUseCaseOperation : QueryUseCaseOperation<Int, Some>(Int::class, Some::class) {
+    override fun invoke(useCase: Some): List<Int> {
+        return listOf(useCase.x + useCase.y)
     }
 }
 
-class SomeCommandUseCase : CommandUseCase<Int, SomeCommandPayload>(Int::class, SomeCommandPayload::class) {
-    override fun invoke(payload: SomeCommandPayload): List<Int> {
-        return listOf(payload.x * payload.y)
+class SomeCommandUseCaseOperation : CommandUseCaseOperation<Int, SomeCommand>(Int::class, SomeCommand::class) {
+    override fun invoke(useCase: SomeCommand): List<Int> {
+        return listOf(useCase.x * useCase.y)
     }
 
 }
@@ -40,11 +40,11 @@ class SomeCommandUseCase : CommandUseCase<Int, SomeCommandPayload>(Int::class, S
 open class DifferentPlace {
 
     @Bean
-    open fun someUseCase() = SomeQueryUseCase()
+    open fun someUseCase() = SomeQueryUseCaseOperation()
 
 
     @Bean
-    open fun someCommandUseCase() = SomeCommandUseCase()
+    open fun someCommandUseCase() = SomeCommandUseCaseOperation()
 }
 
 @RestController
@@ -58,7 +58,7 @@ open class Con {
 
     @GetMapping("/v1/hello")
     fun hello(): String {
-        val x = commandUseCaseInvoker.command(Int::class, SomeCommandPayload(10, 100))
+        val x = commandUseCaseInvoker.command(Int::class, SomeCommand(10, 100))
         return x.toString()
     }
 }
@@ -80,7 +80,7 @@ open class RunItConfig {
 
             override fun run(vararg args: String?) {
                 println("CALLED")
-                val x = usecaseInvoker.query(Int::class, SomePayload(2800, 10))
+                val x = usecaseInvoker.query(Int::class, Some(2800, 10))
                 println(x)
 
 //                val list = namedOperations.query("SELECT * FROM TASK WHERE ID > 5") { rs, _ ->

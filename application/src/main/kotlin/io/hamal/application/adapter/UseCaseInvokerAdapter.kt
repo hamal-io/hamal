@@ -11,23 +11,23 @@ class DefaultUseCaseInvokerAdapter(
     @Autowired internal val getFetchOneUseCasePort: GetFetchOneUseCasePort
 ) : InvokeUseCasePort {
 
-    override fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> command(
+    override fun <RESULT : Any, USE_CASE : CommandUseCase> command(
         resultClass: KClass<RESULT>,
-        vararg payloads: PAYLOAD
-    ): List<RESULT> = payloads.flatMap { payload -> getCommandUseCasePort[resultClass, payload::class](payload) }
+        vararg useCases: USE_CASE
+    ): List<RESULT> = useCases.flatMap { useCase -> getCommandUseCasePort[resultClass, useCase::class](useCase) }
 
-    override fun <PAYLOAD : CommandUseCasePayload> command(
-        vararg payloads: PAYLOAD
-    ) = payloads.forEach { payload -> getCommandUseCasePort[Unit::class, payload::class](payload) }
+    override fun <USE_CASE : CommandUseCase> command(
+        vararg useCases: USE_CASE
+    ) = useCases.forEach { useCase -> getCommandUseCasePort[Unit::class, useCase::class](useCase) }
 
 
-    override fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> query(
+    override fun <RESULT : Any, USE_CASE : QueryUseCase> query(
         resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ): List<RESULT> = getQueryUseCasePort[resultClass, payload::class](payload)
+        useCase: USE_CASE
+    ): List<RESULT> = getQueryUseCasePort[resultClass, useCase::class](useCase)
 
-    override fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> fetchOne(
+    override fun <RESULT : Any, USE_CASE : FetchOneUseCase> fetchOne(
         resultClass: KClass<RESULT>,
-        payload: PAYLOAD
-    ): Maybe<RESULT> = getFetchOneUseCasePort[resultClass, payload::class](payload)
+        useCase: USE_CASE
+    ): Maybe<RESULT> = getFetchOneUseCasePort[resultClass, useCase::class](useCase)
 }

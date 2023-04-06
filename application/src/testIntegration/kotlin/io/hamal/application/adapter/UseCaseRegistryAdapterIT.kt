@@ -30,13 +30,13 @@ open class TestUseCaseRegistryConfig {
 @Configuration
 open class TestUseCasesConfig {
     @Bean
-    open fun commandUseCase() = testCommandUseCase
+    open fun commandUseCase() = testCommandUseCaseOp
 
     @Bean
-    open fun queryUseCase() = testQueryUseCase
+    open fun queryUseCase() = testQueryUseCaseOp
 
     @Bean
-    open fun fetchOneUseCase() = testFetchOneUseCase
+    open fun fetchOneUseCase() = testFetchOneUseCaseOp
 }
 
 @Nested
@@ -44,57 +44,57 @@ open class TestUseCasesConfig {
     classes = [TestApplication::class, TestUseCaseRegistryConfig::class, TestUseCasesConfig::class],
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
-class UseCasePayloadRegistryAdapterIT(
+class UseCaseOperationPayloadRegistryAdapterIT(
     @Autowired var testInstance: DefaultUseCaseRegistryAdapter
 ) {
 
     @Nested
     @DisplayName("onApplicationEvent()")
-    inner class GetCommandUseCasePortTest {
+    inner class GetCommandUseCasePortTestOperation {
 
         @Test
-        fun `Registers command use case`() {
-            val result = testInstance[String::class, TestCommandUseCasePayload::class]
-            assertThat(result, equalTo(testCommandUseCase))
+        fun `Registers command use case operation`() {
+            val result = testInstance[String::class, TestCommandUseCase::class]
+            assertThat(result, equalTo(testCommandUseCaseOp))
         }
 
         @Test
-        fun `Registers query use case`() {
-            val result = testInstance[String::class, TestQueryUseCasePayload::class]
-            assertThat(result, equalTo(testQueryUseCase))
+        fun `Registers query use case operation`() {
+            val result = testInstance[String::class, TestQueryUseCase::class]
+            assertThat(result, equalTo(testQueryUseCaseOp))
         }
 
         @Test
-        fun `Registers fetchone use case`() {
-            val result = testInstance[String::class, TestFetchOneUseCasePayload::class]
-            assertThat(result, equalTo(testFetchOneUseCase))
+        fun `Registers fetchone use case operation`() {
+            val result = testInstance[String::class, TestFetchOneUseCase::class]
+            assertThat(result, equalTo(testFetchOneUseCaseOp))
         }
     }
 }
 
-class TestCommandUseCasePayload : CommandUseCasePayload
+class TestCommandUseCase : CommandUseCase
 
-private val testCommandUseCase = object : CommandUseCase<String, TestCommandUseCasePayload>(
+private val testCommandUseCaseOp = object : CommandUseCaseOperation<String, TestCommandUseCase>(
     String::class,
-    TestCommandUseCasePayload::class
+    TestCommandUseCase::class
 ) {
-    override operator fun invoke(payload: TestCommandUseCasePayload) = emptyList<String>()
+    override operator fun invoke(useCase: TestCommandUseCase) = emptyList<String>()
 }
 
-class TestQueryUseCasePayload : QueryUseCasePayload
+class TestQueryUseCase : QueryUseCase
 
-private val testQueryUseCase = object : QueryUseCase<String, TestQueryUseCasePayload>(
+private val testQueryUseCaseOp = object : QueryUseCaseOperation<String, TestQueryUseCase>(
     String::class,
-    TestQueryUseCasePayload::class
+    TestQueryUseCase::class
 ) {
-    override fun invoke(payload: TestQueryUseCasePayload) = listOf<String>()
+    override fun invoke(useCase: TestQueryUseCase) = listOf<String>()
 }
 
-class TestFetchOneUseCasePayload : FetchOneUseCasePayload
+class TestFetchOneUseCase : FetchOneUseCase
 
-private val testFetchOneUseCase = object : FetchOneUseCase<String, TestFetchOneUseCasePayload>(
+private val testFetchOneUseCaseOp = object : FetchOneUseCaseOperation<String, TestFetchOneUseCase>(
     String::class,
-    TestFetchOneUseCasePayload::class
+    TestFetchOneUseCase::class
 ) {
-    override fun invoke(payload: TestFetchOneUseCasePayload) = Maybe.none<String>()
+    override fun invoke(useCase: TestFetchOneUseCase) = Maybe.none<String>()
 }

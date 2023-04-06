@@ -13,128 +13,128 @@ import kotlin.reflect.KClass
 class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        event.applicationContext.getBeansOfType(CommandUseCase::class.java)
+        event.applicationContext.getBeansOfType(CommandUseCaseOperation::class.java)
             .forEach { (_, useCase) ->
-                register(useCase.payloadClass, useCase as CommandUseCase<*, CommandUseCasePayload>)
+                register(useCase.useCaseClass, useCase as CommandUseCaseOperation<*, CommandUseCase>)
             }
 
-        event.applicationContext.getBeansOfType(QueryUseCase::class.java)
+        event.applicationContext.getBeansOfType(QueryUseCaseOperation::class.java)
             .forEach { (_, useCase) ->
-                register(useCase.payloadClass, useCase as QueryUseCase<*, QueryUseCasePayload>)
+                register(useCase.useCaseClass, useCase as QueryUseCaseOperation<*, QueryUseCase>)
             }
 
-        event.applicationContext.getBeansOfType(FetchOneUseCase::class.java)
+        event.applicationContext.getBeansOfType(FetchOneUseCaseOperation::class.java)
             .forEach { (_, useCase) ->
-                register(useCase.payloadClass, useCase as FetchOneUseCase<*, FetchOneUseCasePayload>)
+                register(useCase.useCaseClass, useCase as FetchOneUseCaseOperation<*, FetchOneUseCase>)
             }
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> get(
+    override fun <RESULT : Any, USE_CASE : CommandUseCase> get(
         resultClass: KClass<RESULT>,
-        payloadClass: KClass<PAYLOAD>
-    ): CommandUseCase<RESULT, PAYLOAD> =
-        commandOnce.invoke(Tuple2(resultClass, payloadClass)) {
-            val useCase = commandMapping[payloadClass]
-                ?: payloadClass.java.interfaces.asSequence().mapNotNull { commandMapping[it.kotlin] }.firstOrNull()
-                ?: throw NotFoundException("CommandUseCase<" + resultClass.simpleName + "," + payloadClass.simpleName + "> not found")
+        useCaseClass: KClass<USE_CASE>
+    ): CommandUseCaseOperation<RESULT, USE_CASE> =
+        commandOnce.invoke(Tuple2(resultClass, useCaseClass)) {
+            val operation = commandOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().mapNotNull { commandOperations[it.kotlin] }.firstOrNull()
+                ?: throw NotFoundException("CommandUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
 
             when (resultClass) {
-                Unit::class -> useCase
+                Unit::class -> operation
                 else -> {
-                    ensureResultClass(useCase, resultClass)
-                    useCase
+                    ensureResultClass(operation, resultClass)
+                    operation
                 }
             }
-        } as CommandUseCase<RESULT, PAYLOAD>
+        } as CommandUseCaseOperation<RESULT, USE_CASE>
 
 
     @Suppress("UNCHECKED_CAST")
-    override fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> get(
+    override fun <RESULT : Any, USE_CASE : QueryUseCase> get(
         resultClass: KClass<RESULT>,
-        payloadClass: KClass<PAYLOAD>
-    ): QueryUseCase<RESULT, PAYLOAD> =
-        queryOnce.invoke(Tuple2(resultClass, payloadClass)) {
-            val useCase = queryMapping[payloadClass]
-                ?: payloadClass.java.interfaces.asSequence().mapNotNull { queryMapping[it.kotlin] }.firstOrNull()
-                ?: throw NotFoundException("QueryUseCase<" + resultClass.simpleName + "," + payloadClass.simpleName + "> not found")
-
-            when (resultClass) {
-                Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
-                else -> {
-                    ensureResultClass(useCase, resultClass)
-                    useCase
-                }
-            }
-        } as QueryUseCase<RESULT, PAYLOAD>
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> get(
-        resultClass: KClass<RESULT>,
-        payloadClass: KClass<PAYLOAD>
-    ): FetchOneUseCase<RESULT, PAYLOAD> =
-        fetchOneOnce.invoke(Tuple2(resultClass, payloadClass)) {
-            val useCase = fetchOneMapping[payloadClass]
-                ?: payloadClass.java.interfaces.asSequence().mapNotNull { fetchOneMapping[it.kotlin] }.firstOrNull()
-                ?: throw NotFoundException("FetchOneUseCase<" + resultClass.simpleName + "," + payloadClass.simpleName + "> not found")
+        useCaseClass: KClass<USE_CASE>
+    ): QueryUseCaseOperation<RESULT, USE_CASE> =
+        queryOnce.invoke(Tuple2(resultClass, useCaseClass)) {
+            val operation = queryOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().mapNotNull { queryOperations[it.kotlin] }.firstOrNull()
+                ?: throw NotFoundException("QueryUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
 
             when (resultClass) {
                 Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
                 else -> {
-                    ensureResultClass(useCase, resultClass)
-                    useCase
+                    ensureResultClass(operation, resultClass)
+                    operation
                 }
             }
-        } as FetchOneUseCase<RESULT, PAYLOAD>
+        } as QueryUseCaseOperation<RESULT, USE_CASE>
 
-    internal fun <PAYLOAD : CommandUseCasePayload> register(
-        payloadClass: KClass<out PAYLOAD>,
-        useCase: CommandUseCase<*, PAYLOAD>
+    @Suppress("UNCHECKED_CAST")
+    override fun <RESULT : Any, USE_CASE : FetchOneUseCase> get(
+        resultClass: KClass<RESULT>,
+        useCaseClass: KClass<USE_CASE>
+    ): FetchOneUseCaseOperation<RESULT, USE_CASE> =
+        fetchOneOnce.invoke(Tuple2(resultClass, useCaseClass)) {
+            val operation = fetchOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().mapNotNull { fetchOperations[it.kotlin] }.firstOrNull()
+                ?: throw NotFoundException("FetchOneUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
+
+            when (resultClass) {
+                Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
+                else -> {
+                    ensureResultClass(operation, resultClass)
+                    operation
+                }
+            }
+        } as FetchOneUseCaseOperation<RESULT, USE_CASE>
+
+    fun <USE_CASE : CommandUseCase> register(
+        useCaseClass: KClass<out USE_CASE>,
+        operation: CommandUseCaseOperation<*, USE_CASE>
     ) {
-        commandMapping[payloadClass] = useCase
+        commandOperations[useCaseClass] = operation
     }
 
-    internal fun <PAYLOAD : QueryUseCasePayload> register(
-        payloadClass: KClass<out PAYLOAD>,
-        useCase: QueryUseCase<*, PAYLOAD>
+    fun <USE_CASE : QueryUseCase> register(
+        useCaseClass: KClass<out USE_CASE>,
+        operation: QueryUseCaseOperation<*, USE_CASE>
     ) {
-        queryMapping[payloadClass] = useCase
+        queryOperations[useCaseClass] = operation
     }
 
-    internal fun <PAYLOAD : FetchOneUseCasePayload> register(
-        payloadClass: KClass<out PAYLOAD>,
-        useCase: FetchOneUseCase<*, PAYLOAD>
+    fun <USE_CASE : FetchOneUseCase> register(
+        useCaseClass: KClass<out USE_CASE>,
+        operation: FetchOneUseCaseOperation<*, USE_CASE>
     ) {
-        fetchOneMapping[payloadClass] = useCase
+        fetchOperations[useCaseClass] = operation
     }
 
-    private val commandMapping =
-        mutableMapOf<KClass<out CommandUseCasePayload>, CommandUseCase<*, CommandUseCasePayload>>()
-    private val queryMapping =
-        mutableMapOf<KClass<out QueryUseCasePayload>, QueryUseCase<*, QueryUseCasePayload>>()
-    private val fetchOneMapping =
-        mutableMapOf<KClass<out FetchOneUseCasePayload>, FetchOneUseCase<*, FetchOneUseCasePayload>>()
+    private val commandOperations =
+        mutableMapOf<KClass<out CommandUseCase>, CommandUseCaseOperation<*, CommandUseCase>>()
+    private val queryOperations =
+        mutableMapOf<KClass<out QueryUseCase>, QueryUseCaseOperation<*, QueryUseCase>>()
+    private val fetchOperations =
+        mutableMapOf<KClass<out FetchOneUseCase>, FetchOneUseCaseOperation<*, FetchOneUseCase>>()
 
     private val commandOnce: KeyedOnce<
-            Tuple2<KClass<*>, KClass<out CommandUseCasePayload>>,
-            CommandUseCase<*, CommandUseCasePayload>
+            Tuple2<KClass<*>, KClass<out CommandUseCase>>,
+            CommandUseCaseOperation<*, CommandUseCase>
             > = KeyedOnce.default()
 
     private val queryOnce: KeyedOnce<
-            Tuple2<KClass<*>, KClass<out QueryUseCasePayload>>,
-            QueryUseCase<*, QueryUseCasePayload>
+            Tuple2<KClass<*>, KClass<out QueryUseCase>>,
+            QueryUseCaseOperation<*, QueryUseCase>
             > = KeyedOnce.default()
 
     private val fetchOneOnce: KeyedOnce<
-            Tuple2<KClass<*>, KClass<out FetchOneUseCasePayload>>,
-            FetchOneUseCase<*, FetchOneUseCasePayload>
+            Tuple2<KClass<*>, KClass<out FetchOneUseCase>>,
+            FetchOneUseCaseOperation<*, FetchOneUseCase>
             > = KeyedOnce.default()
 }
 
-private fun ensureResultClass(useCase: UseCase<*, *>, resultClass: KClass<*>) {
-    val resultClassesMatch = useCase.resultClass == resultClass
-    val isAssignable = resultClass.java.isAssignableFrom(useCase.resultClass.java)
+private fun ensureResultClass(useCaseOperation: UseCaseOperation<*, *>, resultClass: KClass<*>) {
+    val resultClassesMatch = useCaseOperation.resultClass == resultClass
+    val isAssignable = resultClass.java.isAssignableFrom(useCaseOperation.resultClass.java)
     throwIf(!resultClassesMatch && !isAssignable) {
-        IllegalArgumentException("result class(${resultClass.simpleName}) does not match with use case result class(${useCase.resultClass.simpleName})")
+        IllegalArgumentException("result class(${resultClass.simpleName}) does not match with use case result class(${useCaseOperation.resultClass.simpleName})")
     }
 }

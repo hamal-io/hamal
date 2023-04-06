@@ -5,25 +5,25 @@ import kotlin.reflect.KClass
 
 interface InvokeCommandUseCasePort {
 
-    fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> command(
+    fun <RESULT : Any, USE_CASE : CommandUseCase> command(
         resultClass: KClass<RESULT>,
-        vararg payloads: PAYLOAD
+        vararg useCases: USE_CASE
     ): List<RESULT>
 
-    fun <PAYLOAD : CommandUseCasePayload> command(vararg payloads: PAYLOAD)
+    fun <USE_CASE : CommandUseCase> command(vararg useCases: USE_CASE)
 }
 
 interface InvokeQueryUseCasePort {
-    fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> query(
+    fun <RESULT : Any, USE_CASE : QueryUseCase> query(
         resultClass: KClass<RESULT>,
-        payload: PAYLOAD
+        useCase: USE_CASE
     ): List<RESULT>
 }
 
 interface InvokeFetchOneUseCasePort {
-    fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> fetchOne(
+    fun <RESULT : Any, USE_CASE : FetchOneUseCase> fetchOne(
         resultClass: KClass<RESULT>,
-        payload: PAYLOAD
+        useCase: USE_CASE
     ): Maybe<RESULT>
 }
 

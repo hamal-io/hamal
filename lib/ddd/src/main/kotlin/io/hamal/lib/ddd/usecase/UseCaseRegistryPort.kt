@@ -4,24 +4,24 @@ import kotlin.reflect.KClass
 
 
 interface GetCommandUseCasePort {
-    operator fun <RESULT : Any, PAYLOAD : CommandUseCasePayload> get(
+    operator fun <RESULT : Any, USE_CASE : CommandUseCase> get(
         resultClass: KClass<RESULT>,
-        payloadClass: KClass<PAYLOAD>
-    ): CommandUseCase<RESULT, PAYLOAD>
+        useCaseClass: KClass<USE_CASE>
+    ): CommandUseCaseOperation<RESULT, USE_CASE>
 }
 
 interface GetQueryUseCasePort {
-    operator fun <RESULT : Any, PAYLOAD : QueryUseCasePayload> get(
+    operator fun <RESULT : Any, USE_CASE : QueryUseCase> get(
         resultClass: KClass<RESULT>,
-        payloadClass: KClass<PAYLOAD>
-    ): QueryUseCase<RESULT, PAYLOAD>
+        useCaseClass: KClass<USE_CASE>
+    ): QueryUseCaseOperation<RESULT, USE_CASE>
 }
 
 interface GetFetchOneUseCasePort {
-    operator fun <RESULT : Any, PAYLOAD : FetchOneUseCasePayload> get(
+    operator fun <RESULT : Any, USE_CASE : FetchOneUseCase> get(
         resultClass: KClass<RESULT>,
-        payloadClass: KClass<PAYLOAD>
-    ): FetchOneUseCase<RESULT, PAYLOAD>
+        useCaseClass: KClass<USE_CASE>
+    ): FetchOneUseCaseOperation<RESULT, USE_CASE>
 }
 
 interface GetUseCasePort : GetCommandUseCasePort, GetQueryUseCasePort, GetFetchOneUseCasePort {}

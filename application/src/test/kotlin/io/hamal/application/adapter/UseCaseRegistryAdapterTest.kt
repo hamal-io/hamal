@@ -14,13 +14,13 @@ class UseCaseRegistryAdapterTest {
 
     @Nested
     @DisplayName("GetCommandUseCasePort")
-    inner class GetCommandUseCasePortTestPayload {
+    inner class GetCommandUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestResult::class, TestCommandUseCasePayload::class]
-            assertThat(result, equalTo(testCommandUseCase))
+            val result = testInstance[TestResult::class, TestCommandUseCase::class]
+            assertThat(result, equalTo(testCommandUseCaseOp))
         }
 
         @Test
@@ -28,9 +28,9 @@ class UseCaseRegistryAdapterTest {
             val testInstance = DefaultUseCaseRegistryAdapter()
 
             val exception = assertThrows<NotFoundException> {
-                testInstance[TestResult::class, TestCommandUseCasePayload::class]
+                testInstance[TestResult::class, TestCommandUseCase::class]
             }
-            assertThat(exception.message, equalTo("CommandUseCase<TestResult,TestCommandUseCasePayload> not found"))
+            assertThat(exception.message, equalTo("CommandUseCaseOperation<TestResult,TestCommandUseCase> not found"))
         }
 
         @Test
@@ -38,7 +38,7 @@ class UseCaseRegistryAdapterTest {
             val testInstance = testInstanceWithUseCase()
 
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance[IncompatibleTestResult::class, TestCommandUseCasePayload::class]
+                testInstance[IncompatibleTestResult::class, TestCommandUseCase::class]
             }
             assertThat(
                 exception.message,
@@ -49,47 +49,47 @@ class UseCaseRegistryAdapterTest {
         @Test
         fun `Result class is assignable to interface`() {
             val testInstance = testInstanceWithUseCase()
-            val result = testInstance[TestResultInterface::class, TestCommandUseCasePayload::class]
-            assertThat(result, equalTo(testCommandUseCase))
+            val result = testInstance[TestResultInterface::class, TestCommandUseCase::class]
+            assertThat(result, equalTo(testCommandUseCaseOp))
         }
 
         @Test
         fun `Ignore unit as result class`() {
             val testInstance = testInstanceWithUseCase()
-            val result = testInstance[Unit::class, TestCommandUseCasePayload::class]
-            assertThat(result, equalTo(testCommandUseCase))
+            val result = testInstance[Unit::class, TestCommandUseCase::class]
+            assertThat(result, equalTo(testCommandUseCaseOp))
         }
 
         @Test
         fun `Interface of use case is registered`() {
             val testInstance = DefaultUseCaseRegistryAdapter().apply {
                 register(
-                    TestCommandUseCaseInterfacePayload::class,
-                    testCommandInterfaceUseCase
+                    TestCommandUseCaseInterface::class,
+                    testCommandInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestResult::class, TestCommandUseCaseInterfacePayload::class]
-            assertThat(result, equalTo(testCommandInterfaceUseCase))
+            val result = testInstance[TestResult::class, TestCommandUseCaseInterface::class]
+            assertThat(result, equalTo(testCommandInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = DefaultUseCaseRegistryAdapter().apply {
-            register(TestCommandUseCasePayload::class, testCommandUseCase)
+            register(TestCommandUseCase::class, testCommandUseCaseOp)
         }
 
-        private val testCommandUseCase = TestCommandUseCase()
-        private val testCommandInterfaceUseCase = TestCommandUseCaseInterfacePayload.Handler()
+        private val testCommandUseCaseOp = TestCommandUseCaseOperation()
+        private val testCommandInterfaceUseCaseOp = TestCommandUseCaseInterface.Handler()
 
     }
 
     @Nested
     @DisplayName("GetQueryUseCasePort")
-    inner class GetQueryUseCasePortTestPayload {
+    inner class GetQueryUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestResult::class, TestQueryUseCasePayload::class]
-            assertThat(result, equalTo(testQueryUseCase))
+            val result = testInstance[TestResult::class, TestQueryUseCase::class]
+            assertThat(result, equalTo(testQueryUseCaseOp))
         }
 
         @Test
@@ -97,9 +97,9 @@ class UseCaseRegistryAdapterTest {
             val testInstance = DefaultUseCaseRegistryAdapter()
 
             val exception = assertThrows<NotFoundException> {
-                testInstance[TestResult::class, TestQueryUseCasePayload::class]
+                testInstance[TestResult::class, TestQueryUseCase::class]
             }
-            assertThat(exception.message, equalTo("QueryUseCase<TestResult,TestQueryUseCasePayload> not found"))
+            assertThat(exception.message, equalTo("QueryUseCaseOperation<TestResult,TestQueryUseCase> not found"))
         }
 
         @Test
@@ -107,7 +107,7 @@ class UseCaseRegistryAdapterTest {
             val testInstance = testInstanceWithUseCase()
 
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance[IncompatibleTestResult::class, TestQueryUseCasePayload::class]
+                testInstance[IncompatibleTestResult::class, TestQueryUseCase::class]
             }
             assertThat(
                 exception.message,
@@ -118,15 +118,15 @@ class UseCaseRegistryAdapterTest {
         @Test
         fun `Result class is assignable to interface`() {
             val testInstance = testInstanceWithUseCase()
-            val result = testInstance[TestResultInterface::class, TestQueryUseCasePayload::class]
-            assertThat(result, equalTo(testQueryUseCase))
+            val result = testInstance[TestResultInterface::class, TestQueryUseCase::class]
+            assertThat(result, equalTo(testQueryUseCaseOp))
         }
 
         @Test
         fun `Throws exception if result class is Unit`() {
             val testInstance = testInstanceWithUseCase()
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance[Unit::class, TestQueryUseCasePayload::class]
+                testInstance[Unit::class, TestQueryUseCase::class]
             }
             assertThat(exception.message, equalTo("Result class can not be Unit"))
         }
@@ -135,32 +135,32 @@ class UseCaseRegistryAdapterTest {
         fun `Interface of use case is registered`() {
             val testInstance = DefaultUseCaseRegistryAdapter().apply {
                 register(
-                    TestQueryUseCaseInterfacePayload::class,
-                    testQueryInterfaceUseCase
+                    TestQueryUseCaseInterface::class,
+                    testQueryInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestResult::class, TestQueryUseCaseInterfacePayload::class]
-            assertThat(result, equalTo(testQueryInterfaceUseCase))
+            val result = testInstance[TestResult::class, TestQueryUseCaseInterface::class]
+            assertThat(result, equalTo(testQueryInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = DefaultUseCaseRegistryAdapter().apply {
-            register(TestQueryUseCasePayload::class, testQueryUseCase)
+            register(TestQueryUseCase::class, testQueryUseCaseOp)
         }
 
-        private val testQueryUseCase = TestQueryUseCase()
-        private val testQueryInterfaceUseCase = TestQueryUseCaseInterfacePayload.Handler()
+        private val testQueryUseCaseOp = TestQueryUseCaseOperation()
+        private val testQueryInterfaceUseCaseOp = TestQueryUseCaseInterface.Handler()
 
     }
 
     @Nested
     @DisplayName("GetFetchOneUseCasePort")
-    inner class GetFetchOneUseCasePortTestPayload {
+    inner class GetFetchOneUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestResult::class, TestFetchOneUseCasePayload::class]
-            assertThat(result, equalTo(testFetchOneUseCase))
+            val result = testInstance[TestResult::class, TestFetchOneUseCase::class]
+            assertThat(result, equalTo(testFetchOneUseCaseOp))
         }
 
         @Test
@@ -168,9 +168,9 @@ class UseCaseRegistryAdapterTest {
             val testInstance = DefaultUseCaseRegistryAdapter()
 
             val exception = assertThrows<NotFoundException> {
-                testInstance[TestResult::class, TestFetchOneUseCasePayload::class]
+                testInstance[TestResult::class, TestFetchOneUseCase::class]
             }
-            assertThat(exception.message, equalTo("FetchOneUseCase<TestResult,TestFetchOneUseCasePayload> not found"))
+            assertThat(exception.message, equalTo("FetchOneUseCaseOperation<TestResult,TestFetchOneUseCase> not found"))
         }
 
         @Test
@@ -178,7 +178,7 @@ class UseCaseRegistryAdapterTest {
             val testInstance = testInstanceWithUseCase()
 
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance[IncompatibleTestResult::class, TestFetchOneUseCasePayload::class]
+                testInstance[IncompatibleTestResult::class, TestFetchOneUseCase::class]
             }
             assertThat(
                 exception.message,
@@ -189,15 +189,15 @@ class UseCaseRegistryAdapterTest {
         @Test
         fun `Result class is assignable to interface`() {
             val testInstance = testInstanceWithUseCase()
-            val result = testInstance[TestResultInterface::class, TestFetchOneUseCasePayload::class]
-            assertThat(result, equalTo(testFetchOneUseCase))
+            val result = testInstance[TestResultInterface::class, TestFetchOneUseCase::class]
+            assertThat(result, equalTo(testFetchOneUseCaseOp))
         }
 
         @Test
         fun `Throws exception if result class is Unit`() {
             val testInstance = testInstanceWithUseCase()
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance[Unit::class, TestFetchOneUseCasePayload::class]
+                testInstance[Unit::class, TestFetchOneUseCase::class]
             }
             assertThat(exception.message, equalTo("Result class can not be Unit"))
         }
@@ -206,83 +206,83 @@ class UseCaseRegistryAdapterTest {
         fun `Interface of use case is registered`() {
             val testInstance = DefaultUseCaseRegistryAdapter().apply {
                 register(
-                    TestFetchOneUseCaseInterfacePayload::class,
-                    testFetchOneInterfaceUseCase
+                    TestFetchOneUseCaseInterface::class,
+                    testFetchOneInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestResult::class, TestFetchOneUseCaseInterfacePayload::class]
-            assertThat(result, equalTo(testFetchOneInterfaceUseCase))
+            val result = testInstance[TestResult::class, TestFetchOneUseCaseInterface::class]
+            assertThat(result, equalTo(testFetchOneInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = DefaultUseCaseRegistryAdapter().apply {
-            register(TestFetchOneUseCasePayload::class, testFetchOneUseCase)
+            register(TestFetchOneUseCase::class, testFetchOneUseCaseOp)
         }
 
-        private val testFetchOneUseCase = TestFetchOneUseCase()
-        private val testFetchOneInterfaceUseCase = TestFetchOneUseCaseInterfacePayload.Handler()
+        private val testFetchOneUseCaseOp = TestFetchOneUseCaseOperation()
+        private val testFetchOneInterfaceUseCaseOp = TestFetchOneUseCaseInterface.Handler()
 
     }
 
     private interface TestResultInterface
     private class TestResult : TestResultInterface
     private class IncompatibleTestResult
-    private class TestCommandUseCasePayload : CommandUseCasePayload
+    private class TestCommandUseCase : CommandUseCase
 
-    private class TestCommandUseCase :
-        CommandUseCase<TestResult, TestCommandUseCasePayload>(
-            TestResult::class, TestCommandUseCasePayload::class
+    private class TestCommandUseCaseOperation :
+        CommandUseCaseOperation<TestResult, TestCommandUseCase>(
+            TestResult::class, TestCommandUseCase::class
         ) {
-        override operator fun invoke(payload: TestCommandUseCasePayload): List<TestResult> {
+        override operator fun invoke(useCase: TestCommandUseCase): List<TestResult> {
             return listOf()
         }
     }
 
-    private interface TestCommandUseCaseInterfacePayload : CommandUseCasePayload {
-        class Handler : CommandUseCase<TestResult, TestCommandUseCaseInterfacePayload>(
-            TestResult::class, TestCommandUseCaseInterfacePayload::class
+    private interface TestCommandUseCaseInterface : CommandUseCase {
+        class Handler : CommandUseCaseOperation<TestResult, TestCommandUseCaseInterface>(
+            TestResult::class, TestCommandUseCaseInterface::class
         ) {
-            override operator fun invoke(payload: TestCommandUseCaseInterfacePayload): List<TestResult> {
+            override operator fun invoke(useCase: TestCommandUseCaseInterface): List<TestResult> {
                 return listOf()
             }
         }
     }
 
 
-    private class TestQueryUseCasePayload : QueryUseCasePayload
-    private class TestQueryUseCase :
-        QueryUseCase<TestResult, TestQueryUseCasePayload>(
-            TestResult::class, TestQueryUseCasePayload::class
+    private class TestQueryUseCase : QueryUseCase
+    private class TestQueryUseCaseOperation :
+        QueryUseCaseOperation<TestResult, TestQueryUseCase>(
+            TestResult::class, TestQueryUseCase::class
         ) {
-        override operator fun invoke(payload: TestQueryUseCasePayload): List<TestResult> {
+        override operator fun invoke(useCase: TestQueryUseCase): List<TestResult> {
             return listOf()
         }
     }
 
-    private interface TestQueryUseCaseInterfacePayload : QueryUseCasePayload {
-        class Handler : QueryUseCase<TestResult, TestQueryUseCaseInterfacePayload>(
-            TestResult::class, TestQueryUseCaseInterfacePayload::class
+    private interface TestQueryUseCaseInterface : QueryUseCase {
+        class Handler : QueryUseCaseOperation<TestResult, TestQueryUseCaseInterface>(
+            TestResult::class, TestQueryUseCaseInterface::class
         ) {
-            override operator fun invoke(payload: TestQueryUseCaseInterfacePayload): List<TestResult> {
+            override operator fun invoke(useCase: TestQueryUseCaseInterface): List<TestResult> {
                 return listOf()
             }
         }
     }
 
-    private class TestFetchOneUseCasePayload : FetchOneUseCasePayload
-    private class TestFetchOneUseCase :
-        FetchOneUseCase<TestResult, TestFetchOneUseCasePayload>(
-            TestResult::class, TestFetchOneUseCasePayload::class
+    private class TestFetchOneUseCase : FetchOneUseCase
+    private class TestFetchOneUseCaseOperation :
+        FetchOneUseCaseOperation<TestResult, TestFetchOneUseCase>(
+            TestResult::class, TestFetchOneUseCase::class
         ) {
-        override operator fun invoke(payload: TestFetchOneUseCasePayload): Maybe<TestResult> {
+        override operator fun invoke(useCase: TestFetchOneUseCase): Maybe<TestResult> {
             return Maybe.none()
         }
     }
 
-    private interface TestFetchOneUseCaseInterfacePayload : FetchOneUseCasePayload {
-        class Handler : FetchOneUseCase<TestResult, TestFetchOneUseCaseInterfacePayload>(
-            TestResult::class, TestFetchOneUseCaseInterfacePayload::class
+    private interface TestFetchOneUseCaseInterface : FetchOneUseCase {
+        class Handler : FetchOneUseCaseOperation<TestResult, TestFetchOneUseCaseInterface>(
+            TestResult::class, TestFetchOneUseCaseInterface::class
         ) {
-            override operator fun invoke(payload: TestFetchOneUseCaseInterfacePayload): Maybe<TestResult> {
+            override operator fun invoke(useCase: TestFetchOneUseCaseInterface): Maybe<TestResult> {
                 return Maybe.none()
             }
         }
