@@ -1,9 +1,9 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.ddd.base.BaseComparableValueObject
+import io.hamal.lib.ddd.base.ValueObject
 
 
-abstract class Id(final override val value: String) : BaseComparableValueObject<String>() {
+abstract class Id(value: String) : ValueObject.ComparableImpl<String>(value) {
     init {
         IdValidator.validate(value)
     }

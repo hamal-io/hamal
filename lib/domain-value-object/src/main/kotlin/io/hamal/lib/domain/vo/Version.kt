@@ -1,9 +1,8 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.ddd.base.BaseComparableValueObject
+import io.hamal.lib.ddd.base.ValueObject
 
-
-abstract class Version(final override val value: Int) : BaseComparableValueObject<Int>() {
+abstract class Version(value: Int) : ValueObject.ComparableImpl<Int>(value) {
     init {
         VersionValidator.validate(value)
     }

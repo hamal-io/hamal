@@ -1,8 +1,8 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.ddd.base.BaseComparableValueObject
+import io.hamal.lib.ddd.base.ValueObject
 
-abstract class Reference(final override val value: String) : BaseComparableValueObject<String>() {
+abstract class Reference(value: String) : ValueObject.ComparableImpl<String>(value) {
 
     init {
         ReferenceValidator.validate(value)
