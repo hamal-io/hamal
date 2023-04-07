@@ -20,7 +20,8 @@ data class CreateJobDefinitionUseCase(
         val create: CreateJobDefinitionPort,
         val notifyDomain: NotifyDomainPort<JobDefinitionDomainNotification>
     ) : CommandUseCaseOperation<JobDefinition, CreateJobDefinitionUseCase>(
-        JobDefinition::class, CreateJobDefinitionUseCase::class
+        JobDefinition::class,
+        CreateJobDefinitionUseCase::class
     ) {
         override fun invoke(useCase: CreateJobDefinitionUseCase): List<JobDefinition> {
             val result = create(

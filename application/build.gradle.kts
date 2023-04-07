@@ -1,6 +1,8 @@
 plugins {
     id("hamal.kotlin-application-conventions")
     id("org.springframework.boot").version("3.0.5")
+    kotlin("plugin.spring").version("1.8.20")
+    application
 }
 
 apply(plugin = "io.spring.dependency-management")
@@ -32,9 +34,4 @@ dependencies {
     }
 
     compileOnly(external.springDevTools)
-}
-
-application {
-    // Define the main class for the application.
-    mainClass.set("io.hamal.application.HamalApplication")
 }
