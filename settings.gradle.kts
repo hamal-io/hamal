@@ -5,6 +5,7 @@ include("application")
 include(":lib:ddd")
 include(":lib:domain")
 include(":lib:domain-value-object")
+include(":lib:domain-notification")
 include(":lib:meta")
 include(":lib:util")
 

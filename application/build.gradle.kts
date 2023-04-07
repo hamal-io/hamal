@@ -8,6 +8,7 @@ apply(plugin = "io.spring.dependency-management")
 dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:ddd"))
+    implementation(project(":lib:domain-notification"))
 
 //    implementation(external.springWeb) {
 //        exclude("com.fasterxml.jackson.core", "jackson-core")

@@ -11,6 +11,6 @@ interface CreateJobDefinitionPort {
         val region: Region
     )
 
-    fun createJobDefinition(definitionToCreate: JobDefinitionToCreate): JobDefinition
+    operator fun invoke(definitionToCreate: JobDefinitionToCreate): JobDefinition
 
 }

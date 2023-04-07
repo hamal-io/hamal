@@ -1,5 +1,6 @@
 package io.hamal.application
 
+import io.hamal.application.config.DomainNotificationConfig
 import io.hamal.application.config.LoggerConfig
 import io.hamal.application.config.UseCaseConfig
 import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
@@ -19,6 +20,7 @@ fun main(args: Array<String>) {
         .main(HamalApplication::class.java)
         .parent(
 //            DatabaseConfig::class.java,
+            DomainNotificationConfig::class.java,
             LoggerConfig::class.java,
             UseCaseConfig::class.java
         )
