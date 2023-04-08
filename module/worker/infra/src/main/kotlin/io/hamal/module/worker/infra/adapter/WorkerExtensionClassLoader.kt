@@ -35,9 +35,6 @@ internal class WorkerExtensionClassLoader(
             return loadedClass
         }
 
-        println("BEFORE XXX")
-        val x = urlClassLoader.loadClass("io.hamal.worker.extension.api.WorkerExtensionEntryPoint")
-        println("XXX:" + x)
 
         return if (loadWithParentClassLoader(name)) {
             println("parent")

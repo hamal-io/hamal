@@ -1,6 +1,6 @@
 package io.hamal.module.worker.infra.service
 
-import io.hamal.module.worker.infra.adapter.WorkerExtensionEntryPointLoader
+import io.hamal.module.worker.infra.adapter.WorkerExtensionLoader
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.io.File
@@ -13,12 +13,12 @@ class WorkerService {
     fun run() {
         println("Worker active")
 
-        val entryPointLoader = WorkerExtensionEntryPointLoader.DefaultImpl()
+        val entryPointLoader = WorkerExtensionLoader.DefaultImpl()
         val x =
             entryPointLoader.load(File("/Users/ddymke/repo/hamal/module/worker/extension/impl/starter/build/libs/extension-starter.jar"))
 
-        x.factories()
-            .flatMap { it.load() }
+        x.functionFactories()
+            .map { it() }
             .forEach { it() }
 
         println(x)

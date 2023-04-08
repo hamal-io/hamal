@@ -2,6 +2,7 @@ package io.hamal.worker.extension.api
 
 interface WorkerExtension {
 
-    operator fun invoke()
+    fun functionFactories(): List<WorkerExtensionFunction.Factory>
 
 }
+

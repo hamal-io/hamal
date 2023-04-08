@@ -1,18 +1,18 @@
 package io.hamal.module.worker.infra.adapter
 
-import io.hamal.worker.extension.api.WorkerExtensionEntryPoint
+import io.hamal.worker.extension.api.WorkerExtension
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 
 
-internal interface WorkerExtensionEntryPointLoader {
-    fun load(workerExtensionFile: File): WorkerExtensionEntryPoint
+internal interface WorkerExtensionLoader {
+    fun load(workerExtensionFile: File): WorkerExtension
 
-    class DefaultImpl() : WorkerExtensionEntryPointLoader {
+    class DefaultImpl() : WorkerExtensionLoader {
 
-        override fun load(entryPointFile: File): WorkerExtensionEntryPoint {
+        override fun load(entryPointFile: File): WorkerExtension {
             println("load WorkerExtensionEntryPoint from ${entryPointFile.absolutePath}")
             ensureIsFile(entryPointFile)
             val workerExtensionClassLoader = createWorkerExtensionClassLoader(entryPointFile)
@@ -20,7 +20,7 @@ internal interface WorkerExtensionEntryPointLoader {
             try {
                 Thread.currentThread().contextClassLoader = workerExtensionClassLoader
                 for (entryPoint in ServiceLoader.load(
-                    WorkerExtensionEntryPoint::class.java,
+                    WorkerExtension::class.java,
                     workerExtensionClassLoader
                 )) {
                     return entryPoint
