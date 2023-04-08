@@ -14,6 +14,8 @@ include(":module:launchpad:core")
 include(":module:launchpad:infra")
 
 include(":module:worker:application")
+//include(":module:worker:extension")
+include(":module:worker:extension:api")
 include(":module:worker:core")
 include(":module:worker:infra")
 
@@ -22,8 +24,8 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
     repositories {
+        mavenLocal()
         mavenCentral()
-        maven("https://jitpack.io")
     }
 
     versionCatalogs {
