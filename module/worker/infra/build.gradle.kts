@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
-    id("hamal.kotlin-application-conventions")
+    id("hamal.kotlin-module-conventions")
     id("org.springframework.boot").version("3.0.5")
 }
 
@@ -27,4 +27,8 @@ dependencies {
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
+}
+
+tasks.bootJar {
+    enabled = false
 }

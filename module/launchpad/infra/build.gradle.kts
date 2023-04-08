@@ -1,12 +1,13 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
-    id("hamal.kotlin-application-conventions")
+    id("hamal.kotlin-module-conventions")
     id("org.springframework.boot").version("3.0.5")
 }
 archivesName.set("launchpad-infra")
 
 apply(plugin = "io.spring.dependency-management")
+
 
 dependencies {
     implementation(project(":lib:ddd"))
@@ -28,4 +29,8 @@ dependencies {
 //        exclude("org.assertj", "*")
 //    }
 
+}
+
+tasks.bootJar {
+    enabled = false
 }

@@ -14,8 +14,11 @@ include(":module:launchpad:core")
 include(":module:launchpad:infra")
 
 include(":module:worker:application")
-//include(":module:worker:extension")
 include(":module:worker:extension:api")
+include(":module:worker:extension:impl:starter")
+
+//includeBuild("module/worker/extension/impl")
+
 include(":module:worker:core")
 include(":module:worker:infra")
 

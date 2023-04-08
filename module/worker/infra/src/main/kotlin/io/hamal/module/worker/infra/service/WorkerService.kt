@@ -15,7 +15,7 @@ class WorkerService {
 
         val entryPointLoader = WorkerExtensionEntryPointLoader.DefaultImpl()
         val x =
-            entryPointLoader.load(File("/Users/ddymke/repo/hamal/module/worker/extension/api/build/libs/extension-api-plain.jar"))
+            entryPointLoader.load(File("/Users/ddymke/repo/hamal/module/worker/extension/impl/starter/build/libs/extension-starter.jar"))
 
         x.factories()
             .flatMap { it.load() }

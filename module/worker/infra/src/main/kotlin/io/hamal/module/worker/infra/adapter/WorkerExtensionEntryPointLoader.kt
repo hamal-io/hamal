@@ -18,7 +18,6 @@ internal interface WorkerExtensionEntryPointLoader {
             val workerExtensionClassLoader = createWorkerExtensionClassLoader(entryPointFile)
             val currentClassLoader = Thread.currentThread().contextClassLoader
             try {
-
                 Thread.currentThread().contextClassLoader = workerExtensionClassLoader
                 for (entryPoint in ServiceLoader.load(
                     WorkerExtensionEntryPoint::class.java,
@@ -27,6 +26,7 @@ internal interface WorkerExtensionEntryPointLoader {
                     return entryPoint
                 }
             } catch (t: Throwable) {
+                System.err.println("load error:")
                 t.printStackTrace()
             } finally {
                 Thread.currentThread().contextClassLoader = currentClassLoader
@@ -50,7 +50,10 @@ internal interface WorkerExtensionEntryPointLoader {
 
         private fun toUrl(file: File): URL {
             return try {
-                file.toURI().toURL()
+                val res = file.toURI().toURL()
+                println("FILE: ${res}")
+                println(file.exists())
+                res
             } catch (e: MalformedURLException) {
                 throw Error(e)
             }

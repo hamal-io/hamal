@@ -14,11 +14,12 @@ internal class WorkerExtensionClassLoader(
     constructor(
         urls: Array<URL>, parentClassLoader: ClassLoader
     ) : this(
-        urls, URLClassLoader(urls), parentClassLoader
+        urls, URLClassLoader(urls, parentClassLoader), parentClassLoader
     )
 
     @Throws(ClassNotFoundException::class)
     override fun loadClass(name: String, resolve: Boolean): Class<*> {
+        println("Load Class ${name} $resolve")
         val loadedClass = loadClassByName(name)
         if (resolve) {
             resolveClass(loadedClass)
@@ -29,12 +30,30 @@ internal class WorkerExtensionClassLoader(
     @Throws(ClassNotFoundException::class)
     fun loadClassByName(name: String): Class<*> {
         val loadedClass = findLoadedClass(name)
+        println("loadClassByName $name $loadedClass ")
         if (loadedClass != null) {
             return loadedClass
         }
+
+        println("BEFORE XXX")
+        val x = urlClassLoader.loadClass("io.hamal.worker.extension.api.WorkerExtensionEntryPoint")
+        println("XXX:" + x)
+
         return if (loadWithParentClassLoader(name)) {
-            parentClassLoader.loadClass(name)
-        } else urlClassLoader.loadClass(name)
+            println("parent")
+            val res = parentClassLoader.loadClass(name)
+            println("use parent class loader $name $res")
+            res
+        } else {
+            println("url $name")
+            try {
+                val res = urlClassLoader.loadClass(name)
+                println("use url class loader $name $res")
+                res
+            } catch (t: Throwable) {
+                throw RuntimeException(t)
+            }
+        }
     }
 
     fun loadWithParentClassLoader(name: String): Boolean {
