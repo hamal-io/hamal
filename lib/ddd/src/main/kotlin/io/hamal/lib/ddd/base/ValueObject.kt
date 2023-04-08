@@ -18,6 +18,8 @@ interface ValueObject<VALUE_TYPE : Any> {
         override fun hashCode(): Int {
             return value.hashCode()
         }
+
+        override fun toString() = "${this.javaClass.simpleName}($value)"
     }
 
     abstract class ComparableImpl<VALUE_TYPE : Comparable<VALUE_TYPE>>(value: VALUE_TYPE) : BaseImpl<VALUE_TYPE>(value),

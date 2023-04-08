@@ -4,6 +4,7 @@ import io.hamal.application.config.DomainNotificationConfig
 import io.hamal.application.config.LoggerConfig
 import io.hamal.application.config.UseCaseConfig
 import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
+import io.hamal.module.worker.infra.WorkerModuleConfig
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -66,6 +67,33 @@ fun main(args: Array<String>) {
  |______\__,_|\__,_|_| |_|\___|_| |_| .__/ \__,_|\__,_|
                                     | |                
                                     |_|  
+                """.trimIndent()
+                )
+                out.println("")
+                out.println("")
+            })
+            .run(*args)
+    }
+
+    if (isEnable(ctx, "worker")) {
+        applicationBuilder
+            .parent(parent)
+            .child(
+                WorkerModuleConfig::class.java,
+            )
+            .web(WebApplicationType.NONE)
+            .properties("server.port=8084")
+            .banner(Banner { _: Environment?, _: Class<*>?, out: PrintStream ->
+                out.println("")
+                out.println("")
+                out.println(
+                    """
+ __          __        _             
+ \ \        / /       | |            
+  \ \  /\  / /__  _ __| | _____ _ __ 
+   \ \/  \/ / _ \| '__| |/ / _ \ '__|
+    \  /\  / (_) | |  |   <  __/ |   
+     \/  \/ \___/|_|  |_|\_\___|_|
                 """.trimIndent()
                 )
                 out.println("")

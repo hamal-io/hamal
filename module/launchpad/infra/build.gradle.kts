@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     id("hamal.kotlin-application-conventions")
     id("org.springframework.boot").version("3.0.5")
 }
+archivesName.set("launchpad-infra")
 
 apply(plugin = "io.spring.dependency-management")
 
