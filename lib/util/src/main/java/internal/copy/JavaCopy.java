@@ -31,15 +31,6 @@ public interface JavaCopy {
         throw new NotImplementedYetException();
     }
 
-//    public static <T> T copyFields(Object source, T target) {
-//        return copyFields(source, target, Set.of(
-//                new JavaPrimitiveFieldStrategy(),
-//                new JavaImmutableFieldStrategy(JavaImmutableFieldStrategy.defaultImmutableClasses),
-//                new JavaEnumFieldStrategy()
-////                new ValueObjectFieldStrategy()
-//        ));
-//    }
-
     static <T> T copyFields(Object source, T target, Collection<Strategy> strategies) {
 
         if (source == null || target == null) {
@@ -49,13 +40,15 @@ public interface JavaCopy {
         var sourceClass = source.getClass();
         var targetClass = target.getClass();
 
-        var sourceFields = JavaReflection.Fields.inheritedDeclaredFieldsOf(sourceClass).stream()
+        var sourceFields = JavaReflection.Fields.allFieldsOf(sourceClass).stream()
                 .filter(field -> !Modifier.isStatic(field.getModifiers()))
+                .filter(field -> !field.getName().contains("$"))
                 .peek(field -> field.setAccessible(true))
                 .collect(Collectors.toSet());
 
-        var targetFields = JavaReflection.Fields.inheritedDeclaredFieldsOf(targetClass).stream()
+        var targetFields = JavaReflection.Fields.allFieldsOf(targetClass).stream()
                 .filter(field -> !Modifier.isStatic(field.getModifiers()))
+                .filter(field -> !field.getName().contains("$"))
                 .peek(field -> field.setAccessible(true))
                 .collect(Collectors.toMap(Field::getName, Function.identity()));
 
@@ -69,10 +62,6 @@ public interface JavaCopy {
 
             try {
                 Object sourceValue = sourceField.get(source);
-                if (sourceValue == null) {
-                    continue;
-                }
-
                 var sourceFieldType = sourceField.getType();
                 var targetFieldType = targetField.getType();
 
@@ -116,34 +105,4 @@ public interface JavaCopy {
             }
         }
     }
-
-//
-//    class MultiCopyStrategy implements CopyStrategy {
-//
-//        private final List<CopyStrategy> strategies;
-//
-//        public MultiCopyStrategy(List<CopyStrategy> strategies) {
-//            this.strategies = strategies;
-//        }
-//
-//        @Override
-//        public boolean supports(Class<?> valueClass) {
-//            return strategies.stream()
-//                    .anyMatch(strategy -> strategy.supports(valueClass));
-//        }
-//
-//        @Override
-//        public Object apply(Class<?> valueClass, Object value) {
-//            return strategies.stream()
-//                    .filter(strategy -> strategy.supports(valueClass))
-//                    .map(strategy -> strategy.apply(valueClass, value))
-//                    .findFirst()
-//                    .orElseThrow(() -> new InternalServerException("unable to apply any strategy", null));
-//        }
-//
-//        @Override
-//        public FieldStrategy fieldStrategy() {
-//            throw new NotImplementedYetException();
-//        }
-//    }
 }

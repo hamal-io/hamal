@@ -12,11 +12,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ValueObjectFieldStrategyTest {
+@DisplayName("JavaValueObjectStrategy")
+class JavaValueObjectStrategyTest {
 
     private final JavaValueObjectStrategy testInstance = new JavaValueObjectStrategy(
             new JavaValueObjectStrategy.CopyStrategy(
-               Arrays.<JavaCopy.Strategy>asList(
+                    Arrays.<JavaCopy.Strategy>asList(
                             new JavaPrimitiveStrategy(),
                             new JavaEnumStrategy(),
                             new JavaImmutableStrategy(new HashSet<>(

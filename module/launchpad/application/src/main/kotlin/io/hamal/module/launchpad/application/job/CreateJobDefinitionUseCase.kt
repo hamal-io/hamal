@@ -4,7 +4,7 @@ import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.Region
+import io.hamal.lib.domain.vo.base.Region
 import io.hamal.lib.domain_notification.JobDefinitionDomainNotification
 import io.hamal.lib.domain_notification.JobDefinitionDomainNotification.Created
 import io.hamal.module.launchpad.core.job.model.JobDefinition
