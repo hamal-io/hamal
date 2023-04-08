@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.vo
+package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.ddd.base.ValueObject
 

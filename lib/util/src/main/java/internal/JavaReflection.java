@@ -16,11 +16,11 @@ public interface JavaReflection {
             return field -> !isStatic(field.getModifiers());
         }
 
-        static List<Field> inheritedDeclaredFieldsOf(Class<?> fromClass) {
-            return inheritedDeclaredFieldsOf(fromClass, Object.class);
+        static List<Field> allFieldsOf(Class<?> fromClass) {
+            return allFieldsOf(fromClass, Object.class);
         }
 
-        static List<Field> inheritedDeclaredFieldsOf(Class<?> fromClass, Class<?> stopAtInclusive) {
+        static List<Field> allFieldsOf(Class<?> fromClass, Class<?> stopAtInclusive) {
 
             List<Field> fields = new ArrayList<>();
             List<Class<?>> classes = new ArrayList<>();
@@ -29,8 +29,7 @@ public interface JavaReflection {
                 Class<?> clazz = fromClass;
                 while (true) {
                     classes.add(clazz);
-                    clazz = clazz.getSuperclass();
-                    if (clazz == null) {
+                    if ((clazz = clazz.getSuperclass()) == null) {
                         break;
                     }
                     if (clazz.equals(stopAtInclusive)) {
@@ -41,7 +40,7 @@ public interface JavaReflection {
             }
 
             for (var clazz : classes) {
-                Arrays.asList(clazz.getDeclaredFields()).stream()
+                Arrays.stream(clazz.getDeclaredFields())
                         .filter(filterNotStatic())
                         .filter(field -> !field.getName().contains("__$")) //ignore injected fields by coverage tools
                         .forEach(fields::add);

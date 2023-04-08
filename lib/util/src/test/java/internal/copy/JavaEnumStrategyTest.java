@@ -12,6 +12,7 @@ import static internal.copy.JavaEnumStrategyTest.TestEnum.VALUE_2;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("JavaEnumStrategy")
 class JavaEnumStrategyTest {
 
     private final JavaEnumStrategy testInstance = new JavaEnumStrategy();

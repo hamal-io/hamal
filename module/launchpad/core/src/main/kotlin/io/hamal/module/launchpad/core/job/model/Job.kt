@@ -4,7 +4,7 @@ import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.JobState
 import io.hamal.lib.domain.vo.JobState.*
-import io.hamal.lib.domain.vo.Region
+import io.hamal.lib.domain.vo.base.Region
 
 sealed class Job(
     val id: JobId,

@@ -3,7 +3,6 @@ package internal.copy;
 import internal.JavaReflection;
 import io.hamal.lib.ddd.base.ValueObject;
 import io.hamal.lib.meta.exception.InternalServerException;
-import io.hamal.lib.meta.exception.NotImplementedYetException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -32,95 +31,35 @@ public class JavaValueObjectStrategy extends JavaCopy.Strategy {
 
     @Override
     public boolean supports(Class<?> sourceClass, Class<?> targetClass) {
-        var s = JavaReflection.Interfaces.implementsInterface(sourceClass, ValueObject.class);
-        var t = JavaReflection.Interfaces.implementsInterface(targetClass, ValueObject.class);
+        var sourceIsValueObject = JavaReflection.Interfaces.implementsInterface(sourceClass, ValueObject.class);
+        var targetIsValueObject = JavaReflection.Interfaces.implementsInterface(targetClass, ValueObject.class);
 
-        if (!s && !t) {
+        if (!sourceIsValueObject && !targetIsValueObject) {
             return false;
         }
 
         if (sourceClass.equals(targetClass)) {
-            var gs = ((ParameterizedType) sourceClass.getGenericSuperclass()).getActualTypeArguments()[0];
-            var gt = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments()[0];
-            return copyStrategy.supports(gs.getClass()) && copyStrategy.supports(gt.getClass());
+            return underlyingTypeIsSupported(sourceClass);
         }
 
-        if (s == false && t == true) {
-            var g = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments()[0];
-            return (sourceClass.equals(g) || promotePrimitiveIfPossible(sourceClass).equals(g));
+        if (sourceIsValueObject && targetIsValueObject) {
+            var sourceUnderlyingType = ((ParameterizedType) sourceClass.getGenericSuperclass()).getActualTypeArguments()[0];
+            var targetUnderlyingType = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments()[0];
+            return sourceUnderlyingType.equals(targetUnderlyingType);
         }
 
-        if (s == true && t == false) {
-            var g = ((ParameterizedType) sourceClass.getGenericSuperclass()).getActualTypeArguments()[0];
-            return (targetClass.equals(g) || promotePrimitiveIfPossible(targetClass).equals(g));
+        if (!sourceIsValueObject) {
+            return underlyingTypeIsSupported(targetClass);
         }
 
-        if (s == true && t == true) {
-            var ps = ((ParameterizedType) sourceClass.getGenericSuperclass()).getActualTypeArguments()[0];
-            var pt = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments()[0];
-
-            return ps.equals(pt);
-        }
-
-        var g = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments()[0];
-
-        return copyStrategy.supports(sourceClass) && copyStrategy.supports(targetClass);
+        return underlyingTypeIsSupported(sourceClass);
     }
 
-    static class CopyStrategy implements JavaCopy.CopyStrategy {
-
-        private final List<? extends JavaCopy.Strategy> strategies;
-
-        public CopyStrategy(List<? extends JavaCopy.Strategy> strategies) {
-            this.strategies = strategies;
-        }
-
-        @Override
-        public boolean supports(Class<?> valueClass) {
-            return strategies.stream()
-                    .anyMatch(strategy -> strategy.copyStrategy.supports(valueClass));
-        }
-
-        @Override
-        public Object apply(Class<?> valueClass, Object value) {
-            return strategies.stream()
-                    .filter(strategy -> strategy.copyStrategy.supports(valueClass))
-                    .map(strategy -> strategy.copyStrategy.apply(valueClass, value))
-                    .findFirst()
-                    .orElseThrow(() -> new InternalServerException("unable to apply any strategy", null));
-        }
+    private boolean underlyingTypeIsSupported(Class<?> clazz) {
+        var underlyingClass = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0];
+        return copyStrategy.supports(promotePrimitiveIfPossible((Class<?>) underlyingClass));
     }
 
-    //    @Override
-//    public boolean supports(Class<?> sourceClass, Class<?> targetClass) {
-//        if (isValueObject(sourceClass)) {
-//            return valueObjectSupports(sourceClass, targetClass);
-//        } else if (isValueObject(targetClass)) {
-//            return valueObjectSupports(targetClass, sourceClass);
-//        }
-//        return false;
-//    }
-//
-//    private boolean valueObjectSupports(Class<?> valueObjectClass, Class<?> otherClass) {
-//        if (isValueObject(otherClass)) {
-//            return bothValueObjectsSupported(valueObjectClass, otherClass);
-//        }
-//
-//        var valueType = resolveValueType(valueObjectClass);
-//
-//        var hasMatchingCtor = hasMatchingCtor(valueObjectClass, valueType);
-//
-//        otherClass = promotePrimitiveIfPossible(otherClass);
-//
-//        return valueType.equals(otherClass) && copyStrategy.supports(valueType) && hasMatchingCtor;
-//    }
-//
-//    private boolean bothValueObjectsSupported(Class<?> left, Class<?> right) {
-//        var leftValueType = resolveValueType(left);
-//        var rightValueType = resolveValueType(right);
-//        return leftValueType.equals(rightValueType) && copyStrategy.supports(leftValueType);
-//    }
-//
     @Override
     public boolean apply(Object target, Class<?> sourceClass, Object sourceValue, Class<?> targetClass, Field targetField) {
         try {
@@ -144,15 +83,9 @@ public class JavaValueObjectStrategy extends JavaCopy.Strategy {
                 Class<?> normalizedSourceClass = findEquivalent(sourceClass).orElse(sourceClass);
                 var copiedValue = copyValue(sourceValue, normalizedSourceClass);
 
-                if (hasSingleArgumentCtorWithArgumentClass(targetClass, normalizedSourceClass)) {
-                    var ctor = getAccessibleConstructor(targetClass, normalizedSourceClass);
-                    var instance = ctor.newInstance(copiedValue);
-
-                    targetField.set(target, instance);
-                } else {
-                    throw new NotImplementedYetException();
-                }
-
+                var ctor = getAccessibleConstructor(targetClass, normalizedSourceClass);
+                var instance = ctor.newInstance(copiedValue);
+                targetField.set(target, instance);
             }
             return true;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
@@ -183,38 +116,35 @@ public class JavaValueObjectStrategy extends JavaCopy.Strategy {
                 .orElseThrow(() -> new IllegalStateException("unable to find suitable constructor", null));
     }
 
-    private boolean hasMatchingCtor(Class<?> targetClass, Class<?> argumentClass) {
-        return hasDefaultCtor(targetClass) || hasSingleArgumentCtorWithArgumentClass(targetClass, argumentClass);
-    }
-
-    private boolean hasDefaultCtor(Class<?> targetClass) {
-        return Arrays.stream(targetClass.getDeclaredConstructors())
-                .anyMatch(ctor -> ctor.getParameterCount() == 0);
-    }
-
-    private boolean hasSingleArgumentCtorWithArgumentClass(Class<?> targetClass, Class<?> argumentClass) {
-        return Arrays.stream(targetClass.getDeclaredConstructors())
-                .filter(ctor -> ctor.getParameterCount() == 1)
-                .anyMatch(ctor -> {
-                    var paramType = ctor.getParameterTypes()[0];
-                    return paramType.equals(argumentClass);
-                });
-    }
-
     private boolean isValueObject(Class<?> clazz) {
         return JavaReflection.Interfaces.implementsInterface(clazz, ValueObject.class);
     }
-//
-//    private Class<?> resolveValueType(Class<?> valueObjectClass) {
-//        var inheritedFields = JavaReflection.Fields.inheritedDeclaredFieldsOf(valueObjectClass);
-//
-//        if (inheritedFields.size() != 2) {
-//            throw new IllegalArgumentException("Expected " + valueObjectClass.getSimpleName() + " to have exactly one field");
-//        }
-//        return inheritedFields.get(0).getType();
-//    }
-//
+
     private Class<?> promotePrimitiveIfPossible(Class<?> maybePrimitiveClass) {
         return findEquivalent(maybePrimitiveClass).orElse(maybePrimitiveClass);
+    }
+
+    public static class CopyStrategy implements JavaCopy.CopyStrategy {
+
+        private final List<? extends JavaCopy.Strategy> strategies;
+
+        public CopyStrategy(List<? extends JavaCopy.Strategy> strategies) {
+            this.strategies = strategies;
+        }
+
+        @Override
+        public boolean supports(Class<?> valueClass) {
+            return strategies.stream()
+                    .anyMatch(strategy -> strategy.copyStrategy.supports(valueClass));
+        }
+
+        @Override
+        public Object apply(Class<?> valueClass, Object value) {
+            return strategies.stream()
+                    .filter(strategy -> strategy.copyStrategy.supports(valueClass))
+                    .map(strategy -> strategy.copyStrategy.apply(valueClass, value))
+                    .findFirst()
+                    .orElseThrow(() -> new InternalServerException("Unable to apply any strategy", null));
+        }
     }
 }

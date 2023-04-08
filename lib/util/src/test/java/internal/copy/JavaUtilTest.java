@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("JavaUtil")
 class JavaUtilTest {
 
     static Stream<Class<?>> primitives() {

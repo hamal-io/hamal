@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@DisplayName("JavaPrimitiveStrategy")
 class JavaPrimitiveStrategyTest {
 
     private final JavaPrimitiveStrategy testInstance = new JavaPrimitiveStrategy();

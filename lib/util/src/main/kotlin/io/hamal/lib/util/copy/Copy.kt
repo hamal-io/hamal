@@ -1,6 +1,7 @@
 package io.hamal.lib.util.copy
 
 import internal.copy.*
+import internal.copy.JavaValueObjectStrategy.CopyStrategy
 
 /**
  * To the best of my knowledge this functionality has to be implemented in Java in order to be able to replace
@@ -11,11 +12,11 @@ object Copy {
     operator fun <T> invoke(source: T, target: T): T {
         return JavaCopy.copyFields(
             source, target,
-            setOf<JavaCopy.Strategy>(
+            setOf(
                 primitiveFieldStrategy,
                 immutableFieldStrategy,
                 enumFieldStrategy,
-//                valueObjectStrategy
+                valueObjectStrategy
             )
         );
     }
@@ -25,25 +26,13 @@ object Copy {
     private val primitiveFieldStrategy = JavaPrimitiveStrategy()
     private val immutableFieldStrategy = JavaImmutableStrategy(immutableClasses)
     private val enumFieldStrategy = JavaEnumStrategy()
-//    private val valueObjectStrategy = JavaValueObjectFieldStrategy(
-//        JavaCopy.MultiCopyStrategy(
-//            listOf(
-//                JavaPrimitiveCopyStrategy(),
-//                JavaImmutableCopyStrategy(immutableClasses),
-//                JavaEnumCopyStrategy()
-//            )
-//        )
-//    )
-}
-
-fun main() {
-    data class Test(val value: Int)
-
-    val x = Test(10)
-    val y = Test(20)
-
-    println(y)
-    Copy(x, y)
-    println(y)
-
+    private val valueObjectStrategy = JavaValueObjectStrategy(
+        CopyStrategy(
+            listOf(
+                primitiveFieldStrategy,
+                immutableFieldStrategy,
+                enumFieldStrategy
+            )
+        )
+    )
 }

@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import static internal.JavaReflection.Fields.inheritedDeclaredFieldsOf;
+import static internal.JavaReflection.Fields.allFieldsOf;
 import static internal.JavaReflection.Interfaces.implementsInterface;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +34,7 @@ public class JavaReflectionTest {
             @Test
             @DisplayName("reproduce bug of BigDecimal")
             void BigDecimalBug() {
-                var fields = inheritedDeclaredFieldsOf(BigDecimalTestCase.class);
+                var fields = JavaReflection.Fields.allFieldsOf(BigDecimalTestCase.class);
                 assertThat(fields, hasSize(1));
                 assertThat(fields.get(0).getName(), is("delegate"));
             }
@@ -96,7 +96,7 @@ public class JavaReflectionTest {
             @Test
             @DisplayName("one level of Object -> Level1")
             public void oneLevel() {
-                var fields = inheritedDeclaredFieldsOf(Level1.class);
+                var fields = JavaReflection.Fields.allFieldsOf(Level1.class);
                 assertThat(fields, hasSize(1));
                 assertThat(fields.get(0).getName(), is("level1"));
             }
@@ -104,7 +104,7 @@ public class JavaReflectionTest {
             @Test
             @DisplayName("two level of Object -> Level1 -> Level2")
             public void twoLevel() {
-                var fields = inheritedDeclaredFieldsOf(Level2.class);
+                var fields = JavaReflection.Fields.allFieldsOf(Level2.class);
                 assertThat(fields, hasSize(2));
                 assertThat(fields.get(0).getName(), is("level2"));
                 assertThat(fields.get(1).getName(), is("level1"));
@@ -113,7 +113,7 @@ public class JavaReflectionTest {
             @Test
             @DisplayName("three level of Object -> Level1 -> Level2 -> Level3")
             public void threeLevel() {
-                var fields = inheritedDeclaredFieldsOf(Level3.class);
+                var fields = JavaReflection.Fields.allFieldsOf(Level3.class);
                 assertThat(fields, hasSize(3));
                 assertThat(fields.get(0).getName(), is("level3"));
                 assertThat(fields.get(1).getName(), is("level2"));
@@ -123,7 +123,7 @@ public class JavaReflectionTest {
             @Test
             @DisplayName("provided with 3 level but asked to stop at Level2")
             public void getInheritedDeclaredFields_withThreeLayer_butStopAtLayer2() {
-                var fields = inheritedDeclaredFieldsOf(Level3.class, Level2.class);
+                var fields = allFieldsOf(Level3.class, Level2.class);
                 assertThat(fields, hasSize(2));
                 assertThat(fields.get(0).getName(), is("level3"));
                 assertThat(fields.get(1).getName(), is("level2"));

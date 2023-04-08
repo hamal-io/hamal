@@ -2,7 +2,7 @@ package io.hamal.module.launchpad.infra.web
 
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.Region
+import io.hamal.lib.domain.vo.base.Region
 import io.hamal.module.launchpad.application.job.CreateJobDefinitionUseCase
 import io.hamal.module.launchpad.core.job.model.JobDefinition
 import org.springframework.beans.factory.annotation.Autowired
