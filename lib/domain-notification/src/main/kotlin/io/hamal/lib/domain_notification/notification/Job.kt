@@ -6,13 +6,13 @@ import io.hamal.lib.domain_notification.DomainNotification
 import io.hamal.lib.domain_notification.DomainNotificationTopic
 
 
-sealed class JobDomainNotification : DomainNotification {
+sealed class JobDomainNotification(regionId: RegionId) : DomainNotification(regionId) {
 
     @DomainNotificationTopic("scheduler::job_enqueued")
-    data class Scheduled(
+    class Scheduled(
         val id: JobId,
-        override val regionId: RegionId,
+        regionId: RegionId,
         val inputs: Int
-    ) : JobDomainNotification()
+    ) : JobDomainNotification(regionId)
 
 }

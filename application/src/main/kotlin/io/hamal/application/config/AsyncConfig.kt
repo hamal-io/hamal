@@ -13,23 +13,19 @@ import java.util.concurrent.Executor
 @Async
 @Configuration
 @EnableScheduling
-open class AsyncConfig : SchedulingConfigurer {
+class AsyncConfig : SchedulingConfigurer {
 
     @Bean
-    fun asyncExecutor(): Executor {
+    fun taskScheduler(): Executor {
         val executor = ThreadPoolTaskScheduler()
-//        executor.corePoolSize = 1
-//        executor.maxPoolSize = 1
-//        executor.queueCapacity = 2
-        executor.threadNamePrefix = "MyExecutor-"
+        executor.threadNamePrefix = "h4m41-"
         executor.poolSize = 2
-        
         executor.initialize()
         return executor
     }
 
     override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {
-        taskRegistrar.setScheduler(asyncExecutor());
+        taskRegistrar.setScheduler(taskScheduler());
     }
 
 }

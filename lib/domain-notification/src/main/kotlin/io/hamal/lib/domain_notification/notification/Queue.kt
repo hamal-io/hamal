@@ -5,12 +5,12 @@ import io.hamal.lib.domain.vo.base.RegionId
 import io.hamal.lib.domain_notification.DomainNotification
 import io.hamal.lib.domain_notification.DomainNotificationTopic
 
-sealed class QueueDomainNotification() : DomainNotification {
+sealed class QueueDomainNotification(regionId: RegionId) : DomainNotification(regionId) {
 
     @DomainNotificationTopic("queue:job_enqueued")
-    data class JobEnqueued(
+    class JobEnqueued(
         val id: JobId,
-        override val regionId: RegionId,
-    ) : QueueDomainNotification()
+        regionId: RegionId,
+    ) : QueueDomainNotification(regionId)
 
 }
