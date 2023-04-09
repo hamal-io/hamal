@@ -13,7 +13,7 @@ val queueStore = mutableMapOf<String, LinkedBlockingQueue<DomainNotification>>()
 
 class NotificationConsumer : DomainNotificationConsumer {
     override fun poll(topic: String): DomainNotification? {
-        return queueStore[topic]?.poll(10, TimeUnit.MILLISECONDS)
+        return queueStore[topic]?.poll(1, TimeUnit.MILLISECONDS)
     }
 }
 

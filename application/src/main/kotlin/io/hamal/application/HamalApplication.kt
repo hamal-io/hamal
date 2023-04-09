@@ -1,6 +1,7 @@
 package io.hamal.application
 
 import io.hamal.application.config.*
+import io.hamal.module.bus.infra.BusModuleConfig
 import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
 import io.hamal.module.worker.infra.WorkerModuleConfig
 import io.module.hamal.queue.infra.QueueModuleConfig
@@ -45,6 +46,32 @@ fun main(args: Array<String>) {
 
     val parent: ConfigurableApplicationContext = applicationBuilder.run(*args)
     val ctx: ConfigurableApplicationContext = applicationBuilder.context()
+
+    if (isEnable(ctx, "bus")) {
+        applicationBuilder
+            .parent(parent)
+            .child(
+                BusModuleConfig::class.java,
+            )
+            .web(WebApplicationType.NONE)
+            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
+                out.println("")
+                out.println("")
+                out.println(
+                    """
+  ____            
+ |  _ \           
+ | |_) |_   _ ___ 
+ |  _ <| | | / __|
+ | |_) | |_| \__ \
+ |____/ \__,_|___/
+                """.trimIndent()
+                )
+                out.println("")
+                out.println("")
+            }
+            .run(*args)
+    }
 
     if (isEnable(ctx, "launchpad")) {
         applicationBuilder

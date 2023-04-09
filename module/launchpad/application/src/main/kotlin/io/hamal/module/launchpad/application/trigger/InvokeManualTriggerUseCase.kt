@@ -8,8 +8,9 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.base.RegionId
 import io.hamal.lib.domain_notification.JobDomainNotification
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
-var counter = 0
+var counter = AtomicInteger(0)
 
 data class InvokeManualTriggerUseCase(
     val regionId: RegionId,
@@ -27,7 +28,7 @@ data class InvokeManualTriggerUseCase(
                 JobDomainNotification.Scheduled(
                     id = JobId(UUID.randomUUID().toString()),
                     regionId = useCase.regionId,
-                    inputs = counter++
+                    inputs = counter.incrementAndGet()
                 )
             )
         }
