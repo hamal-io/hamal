@@ -28,6 +28,10 @@ dependencies {
     implementation(project(":module:queue:infra"))
     implementation(project(":module:worker:infra"))
 
+    implementation(project(":module:bus:api"))
+    implementation(project(":module:bus:impl:consumer"))
+    implementation(project(":module:bus:impl:producer"))
+
     testImplementation(project(":application"))
 
     testImplementation(external.junit)

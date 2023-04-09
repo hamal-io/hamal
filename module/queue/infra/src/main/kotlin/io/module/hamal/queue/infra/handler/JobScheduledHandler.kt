@@ -5,6 +5,6 @@ import io.hamal.lib.domain_notification.notification.JobDomainNotification.Sched
 
 class JobScheduledHandler : DomainNotificationHandler<Scheduled> {
     override fun on(notification: Scheduled) {
-        println("${Thread.currentThread().name} QUEUE received ${notification}")
+        println("${Thread.currentThread().name} QUEUE received ${notification.inputs}")
     }
 }

@@ -14,4 +14,8 @@ abstract class DomainNotification(
                 ?: throw IllegalStateException("DomainNotification not annotated with @DomainNotificationTopic")
         topic = (topicAnnotation as DomainNotificationTopic).value
     }
+
+    override fun toString(): String {
+        return "${this::class.qualifiedName}"
+    }
 }

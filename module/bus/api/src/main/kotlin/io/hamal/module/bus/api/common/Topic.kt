@@ -9,7 +9,6 @@ class Topic(
     val id: TopicId,
     val type: Type,
     val name: TopicName
-
 ) {
     enum class Type {
         BusTopic,
@@ -20,6 +19,5 @@ class Topic(
     override fun toString(): String {
         return "Topic($id,$type,$name)"
     }
-
-
+    
 }
