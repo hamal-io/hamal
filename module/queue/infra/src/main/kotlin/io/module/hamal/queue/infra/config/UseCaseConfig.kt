@@ -1,7 +1,6 @@
 package io.module.hamal.queue.infra.config
 
-import io.hamal.lib.ddd.port.NotifyDomainPort
-import io.hamal.lib.domain_notification.QueueDomainNotification
+import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.module.queue.application.DequeueJobUseCase
 import io.hamal.module.queue.application.EnqueueJobUseCase
 import io.module.hamal.queue.infra.adapter.QueueAdapter
@@ -13,7 +12,7 @@ open class UseCaseConfig {
     @Bean
     open fun enqueueJob(
         queueAdapter: QueueAdapter,
-        notifyDomainPort: NotifyDomainPort<QueueDomainNotification>
+        notifyDomainPort: NotifyDomainPort
     ) = EnqueueJobUseCase.Operation(queueAdapter, notifyDomainPort)
 
     @Bean

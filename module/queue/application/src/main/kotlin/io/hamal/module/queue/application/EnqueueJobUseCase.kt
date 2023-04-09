@@ -1,12 +1,11 @@
 package io.hamal.module.queue.application
 
-import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.base.RegionId
-import io.hamal.lib.domain_notification.QueueDomainNotification
-import io.hamal.lib.domain_notification.QueueDomainNotification.JobEnqueued
+import io.hamal.lib.domain_notification.NotifyDomainPort
+import io.hamal.lib.domain_notification.notification.QueueDomainNotification.JobEnqueued
 import io.hamal.module.queue.core.job.EnqueueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort.JobToEnqueue
 import io.hamal.module.queue.core.job.Job
@@ -18,7 +17,7 @@ data class EnqueueJobUseCase(
 ) : CommandUseCase {
     class Operation(
         val enqueueJob: EnqueueJobPort,
-        val notifyDomainPort: NotifyDomainPort<QueueDomainNotification>
+        val notifyDomainPort: NotifyDomainPort
     ) : CommandUseCaseOperation<Job.Enqueued, EnqueueJobUseCase>(
         Job.Enqueued::class, EnqueueJobUseCase::class
     ) {

@@ -1,12 +1,12 @@
 package io.hamal.module.launchpad.application.trigger
 
-import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.base.RegionId
-import io.hamal.lib.domain_notification.JobDomainNotification
+import io.hamal.lib.domain_notification.NotifyDomainPort
+import io.hamal.lib.domain_notification.notification.JobDomainNotification
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -19,7 +19,7 @@ data class InvokeManualTriggerUseCase(
 
 
     class Operation(
-        val notifyDomainPort: NotifyDomainPort<JobDomainNotification>
+        val notifyDomainPort: NotifyDomainPort
     ) : CommandUseCaseOperation.NoResultImpl<InvokeManualTriggerUseCase>(
         InvokeManualTriggerUseCase::class
     ) {
