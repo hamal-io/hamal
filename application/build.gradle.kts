@@ -24,6 +24,7 @@ dependencies {
 //    implementation(external.h2)
 
     implementation(project(":module:launchpad:infra"))
+    implementation(project(":module:queue:infra"))
     implementation(project(":module:worker:infra"))
 
     testImplementation(project(":application"))

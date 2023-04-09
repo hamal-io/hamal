@@ -24,6 +24,18 @@ abstract class CommandUseCaseOperation<RESULT : Any, out USE_CASE : CommandUseCa
 
     abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<RESULT>
 
+    abstract class NoResultImpl<out USE_CASE : CommandUseCase>(useCaseClass: KClass<@UnsafeVariance USE_CASE>) :
+        CommandUseCaseOperation<Unit, USE_CASE>(
+            Unit::class, useCaseClass
+        ) {
+
+        abstract fun noResult(useCase: @UnsafeVariance USE_CASE)
+
+        override operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<Unit> {
+            noResult(useCase)
+            return listOf()
+        }
+    }
 }
 
 interface QueryUseCase : UseCase

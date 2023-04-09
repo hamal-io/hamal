@@ -9,14 +9,10 @@ import internal.copy.JavaValueObjectStrategy.CopyStrategy
  */
 object Copy {
 
-    operator fun <T> invoke(source: T, target: T): T {
+    operator fun invoke(source: Any, target: Any): Any {
         return JavaCopy.copyFields(
-            source, target,
-            setOf(
-                primitiveFieldStrategy,
-                immutableFieldStrategy,
-                enumFieldStrategy,
-                valueObjectStrategy
+            source, target, setOf(
+                primitiveFieldStrategy, immutableFieldStrategy, enumFieldStrategy, valueObjectStrategy
             )
         );
     }
@@ -29,10 +25,10 @@ object Copy {
     private val valueObjectStrategy = JavaValueObjectStrategy(
         CopyStrategy(
             listOf(
-                primitiveFieldStrategy,
-                immutableFieldStrategy,
-                enumFieldStrategy
+                primitiveFieldStrategy, immutableFieldStrategy, enumFieldStrategy
             )
         )
     )
 }
+
+

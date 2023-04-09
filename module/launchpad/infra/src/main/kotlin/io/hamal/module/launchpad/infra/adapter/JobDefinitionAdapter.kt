@@ -12,7 +12,7 @@ class JobDefinitionAdapter : CreateJobDefinitionPort {
     override fun invoke(definitionToCreate: JobDefinitionToCreate): JobDefinition {
         return JobDefinition(
             id = JobDefinitionId(UUID.randomUUID().toString()),
-            region = definitionToCreate.region
+            regionId = definitionToCreate.regionId
         )
     }
 }

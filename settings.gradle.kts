@@ -13,6 +13,10 @@ include(":module:launchpad:application")
 include(":module:launchpad:core")
 include(":module:launchpad:infra")
 
+include(":module:queue:application")
+include(":module:queue:core")
+include(":module:queue:infra")
+
 include(":module:worker:application")
 include(":module:worker:extension:api")
 include(":module:worker:extension:impl:starter")

@@ -91,7 +91,7 @@ class ValidatorTest {
 
     @Nested
     @DisplayName("RegionValidator")
-    inner class RegionValidatorTest {
+    inner class RegionIdValidatorTest {
         @Test
         fun `Does nothing if region is legal`() {
             RegionValidator.validate("1")

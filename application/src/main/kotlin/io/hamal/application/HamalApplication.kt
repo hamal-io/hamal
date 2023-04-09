@@ -1,11 +1,9 @@
 package io.hamal.application
 
-import io.hamal.application.config.DomainNotificationConfig
-import io.hamal.application.config.LoggerConfig
-import io.hamal.application.config.UseCaseConfig
+import io.hamal.application.config.*
 import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
 import io.hamal.module.worker.infra.WorkerModuleConfig
-import org.springframework.boot.Banner
+import io.module.hamal.queue.infra.QueueModuleConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -21,6 +19,8 @@ fun main(args: Array<String>) {
         .main(HamalApplication::class.java)
         .parent(
 //            DatabaseConfig::class.java,
+            AsyncConfig::class.java,
+            NotificationConfig::class.java,
             DomainNotificationConfig::class.java,
             LoggerConfig::class.java,
             UseCaseConfig::class.java
@@ -54,7 +54,7 @@ fun main(args: Array<String>) {
             )
             .web(WebApplicationType.SERVLET)
             .properties("server.port=8084")
-            .banner(Banner { _: Environment?, _: Class<*>?, out: PrintStream ->
+            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
                 out.println("")
                 out.println("")
                 out.println(
@@ -71,7 +71,33 @@ fun main(args: Array<String>) {
                 )
                 out.println("")
                 out.println("")
-            })
+            }
+            .run(*args)
+    }
+
+    if (isEnable(ctx, "queue")) {
+        applicationBuilder
+            .parent(parent)
+            .child(
+                QueueModuleConfig::class.java,
+            )
+            .web(WebApplicationType.NONE)
+            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
+                out.println("")
+                out.println("")
+                out.println(
+                    """
+   ____                        
+  / __ \                       
+ | |  | |_   _  ___ _   _  ___ 
+ | |  | | | | |/ _ \ | | |/ _ \
+ | |__| | |_| |  __/ |_| |  __/
+  \___\_\\__,_|\___|\__,_|\___|
+                """.trimIndent()
+                )
+                out.println("")
+                out.println("")
+            }
             .run(*args)
     }
 
@@ -82,8 +108,7 @@ fun main(args: Array<String>) {
                 WorkerModuleConfig::class.java,
             )
             .web(WebApplicationType.NONE)
-            .properties("server.port=8084")
-            .banner(Banner { _: Environment?, _: Class<*>?, out: PrintStream ->
+            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
                 out.println("")
                 out.println("")
                 out.println(
@@ -98,9 +123,10 @@ fun main(args: Array<String>) {
                 )
                 out.println("")
                 out.println("")
-            })
+            }
             .run(*args)
     }
+
 
 }
 
