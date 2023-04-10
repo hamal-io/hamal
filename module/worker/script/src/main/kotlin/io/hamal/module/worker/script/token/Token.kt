@@ -19,6 +19,12 @@ sealed class Token(
         position: TokenPosition
     ) : Token(EOF, line, position, TokenValue("EOF"))
 
+    class Error(
+        line: TokenLine,
+        position: TokenPosition,
+        errorMessage: TokenValue
+    ) : Token(ERROR, line, position, errorMessage)
+
     class Literal(
         val literalType: Type,
         line: TokenLine,
@@ -63,6 +69,7 @@ sealed class Token(
     enum class Type {
         DELIMITER,
         EOF,
+        ERROR,
         KEYWORD,
         IDENTIFIER,
         LITERAL,

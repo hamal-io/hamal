@@ -1,12 +1,14 @@
-package io.hamal.module.worker.script.lexer
+package io.hamal.module.worker.script.token
 
-internal object LexerUtil {
+internal object TokenizerUtil {
 
     fun isDigit(c: Char) = c.isDigit()
 
     fun isAlpha(c: Char) = (c in 'a'..'z') || (c in 'A'..'Z')
 
     fun isUnderscore(c: Char) = c == '_'
+
+    fun isQuote(c: Char) = c == '\''
 
     fun isWhitespace(c: Char) = c == ' ' || c == '\t' || c == '\n' || c == '\r';
 

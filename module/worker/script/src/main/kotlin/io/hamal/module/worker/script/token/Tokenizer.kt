@@ -1,18 +1,14 @@
-package io.hamal.module.worker.script.lexer
+package io.hamal.module.worker.script.token
 
 import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.lib.meta.exception.throwIf
-import io.hamal.module.worker.script.lexer.Lexer.DefaultImpl
-import io.hamal.module.worker.script.lexer.LexerUtil.isDigit
-import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.Token.Literal
-import io.hamal.module.worker.script.token.Token.Literal.Type.HEX_NUMBER
-import io.hamal.module.worker.script.token.Token.Literal.Type.NUMBER
-import io.hamal.module.worker.script.token.TokenLine
-import io.hamal.module.worker.script.token.TokenPosition
-import io.hamal.module.worker.script.token.TokenValue
+import io.hamal.module.worker.script.token.Token.Literal.Type.*
+import io.hamal.module.worker.script.token.Tokenizer.DefaultImpl
+import io.hamal.module.worker.script.token.TokenizerUtil.isDigit
+import io.hamal.module.worker.script.token.TokenizerUtil.isQuote
 
-interface Lexer {
+interface Tokenizer {
 
     fun nextToken(): Token
 
@@ -22,7 +18,7 @@ interface Lexer {
         internal var line: Int = 1,
         internal var linePosition: Int = 0,
         internal val buffer: StringBuffer = StringBuffer(256)
-    ) : Lexer {
+    ) : Tokenizer {
         override fun nextToken(): Token {
             skipWhitespace()
 
@@ -31,13 +27,21 @@ interface Lexer {
             }
 
             return when {
-                peek() == '0' && peekNext() == 'x' -> nextHexNumber()
-                isDigit(peek()) || peek() == '.' && isDigit(peekNext()) -> nextNumber()
+                isHexNumber() -> nextHexNumber()
+                isNumber() -> nextNumber()
+                isString() -> nextString()
+
                 else -> TODO("Not yet implemented")
             }
         }
     }
 }
+
+private fun DefaultImpl.isHexNumber() = peek() == '0' && peekNext() == 'x'
+
+private fun DefaultImpl.isNumber() = isDigit(peek()) || peek() == '.' && isDigit(peekNext())
+
+private fun DefaultImpl.isString() = isQuote(peek())
 
 private fun DefaultImpl.tokenPosition() = TokenPosition(linePosition - buffer.length + 1)
 
@@ -50,6 +54,12 @@ internal fun DefaultImpl.isAtEnd() = index >= code.length
 internal fun DefaultImpl.peek(): Char {
     throwIf(isAtEnd()) { IllegalStateException("Can not read after end of code") }
     return code[index]
+}
+
+internal fun DefaultImpl.peekPrev(): Char {
+    throwIf(index == 0) { IllegalStateException("Can not read before start of code") }
+    throwIf(index >= code.length) { IllegalStateException("Can not read after end of code") }
+    return code[index - 1]
 }
 
 internal fun DefaultImpl.peekNext(): Char {
@@ -65,7 +75,7 @@ internal fun DefaultImpl.advance(): DefaultImpl {
 }
 
 internal fun DefaultImpl.advanceUntilWhitespace(): DefaultImpl {
-    while (!isAtEnd() && !LexerUtil.isWhitespace(peek())) {
+    while (!isAtEnd() && !TokenizerUtil.isWhitespace(peek())) {
         advance()
     }
     return this
@@ -119,9 +129,32 @@ internal fun DefaultImpl.nextHexNumber(): Token {
     assert(peek() == '0' && peekNext() == 'x')
     advance(); // 0
     advance(); // x
-    while (!isAtEnd() && LexerUtil.isHexChar(peek())) {
+    while (!isAtEnd() && TokenizerUtil.isHexChar(peek())) {
         advance();
     }
 
     return Literal(HEX_NUMBER, tokenLine(), tokenPosition(), tokenValue())
+}
+
+internal fun DefaultImpl.nextString(): Token {
+    assert(isQuote(peek()))
+    advance()
+    var newLineCounter = 0
+    while (true) {
+        if (isAtEnd()) {
+            return Token.Error(tokenLine(), tokenPosition(), TokenValue("Unterminated string"))
+        }
+
+        if (isQuote(peek()) && peekPrev() != '\\') {
+            break
+        }
+
+        if (peek() == '\n') {
+            newLineCounter++
+        }
+
+        advance()
+    }
+
+    return Literal(STRING, tokenLine(), tokenPosition(), TokenValue(buffer.substring(1, buffer.length)))
 }
