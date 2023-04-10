@@ -3,13 +3,15 @@ package io.hamal.lib.domain_notification
 import kotlin.reflect.KClass
 
 interface DomainNotificationConsumer {
-
-    fun <NOTIFICATION : DomainNotification> register(
-        clazz: KClass<NOTIFICATION>,
-        receiver: DomainNotificationHandler<NOTIFICATION>
-    ): DomainNotificationConsumer
+    fun cancel()
 }
 
 interface CreateDomainNotificationConsumerPort {
+
+    fun <NOTIFICATION : DomainNotification> register(
+        clazz: KClass<NOTIFICATION>,
+        handler: DomainNotificationHandler<NOTIFICATION>
+    ): CreateDomainNotificationConsumerPort
+
     fun create(): DomainNotificationConsumer
 }

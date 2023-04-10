@@ -21,7 +21,8 @@ open class QueueModuleConfig {
     @Bean
     open fun domainNotificationConsumer(
         createDomainNotificationConsumerPort: CreateDomainNotificationConsumerPort
-    ) = createDomainNotificationConsumerPort.create()
+    ) = createDomainNotificationConsumerPort
         .register(JobDomainNotification.Scheduled::class, JobScheduledHandler())
+        .create()
 
 }

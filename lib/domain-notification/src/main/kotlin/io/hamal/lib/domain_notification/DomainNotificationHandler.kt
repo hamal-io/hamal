@@ -16,6 +16,8 @@ interface DomainNotificationHandler<out NOTIFICATION : DomainNotification> {
 
         operator fun <NOTIFICATION : DomainNotification> get(clazz: KClass<NOTIFICATION>): List<DomainNotificationHandler<NOTIFICATION>>
 
+        fun topics(): Set<String>;
+
         open class DefaultImpl : Container {
             private val receiverMapping = mutableMapOf<
                     KClass<out DomainNotification>,
@@ -47,6 +49,17 @@ interface DomainNotificationHandler<out NOTIFICATION : DomainNotification> {
                     return receiverMapping[clazz]
                         ?.map { it as DomainNotificationHandler<NOTIFICATION> }
                         ?: listOf()
+                } finally {
+                    lock.readLock().unlock()
+                }
+            }
+
+            override fun topics(): Set<String> {
+                try {
+                    lock.readLock().lock()
+                    return receiverMapping.keys
+                        .map { it.topic() }
+                        .toSet()
                 } finally {
                     lock.readLock().unlock()
                 }

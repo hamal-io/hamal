@@ -1,56 +1,71 @@
 package io.hamal.application.adapter
 
 import io.hamal.lib.domain_notification.*
-import io.hamal.lib.domain_notification.DomainNotificationHandler.Container
+import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.meta.exception.InternalServerException
 import io.hamal.module.bus.api.common.Record
 import io.hamal.module.bus.api.common.TopicId
 import io.hamal.module.bus.impl.consumer.InMemoryConsumer
 import io.hamal.module.bus.impl.producer.InMemoryProducer
+import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration
-import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 
-val queueStore = mutableMapOf<String, LinkedBlockingQueue<DomainNotification>>()
+object TopicResolver {
+    private val counter = AtomicInteger(0)
+    private val topicMapping = KeyedOnce.default<String, TopicId>()
 
+    fun resolve(topic: String): TopicId {
+        return topicMapping.invoke(topic) {
+            TopicId(counter.incrementAndGet())
+        }
+    }
+}
 
-class DomainNotificationAdapter(
-    val scheduledExecutorService: ThreadPoolTaskScheduler
-) : NotifyDomainPort, CreateDomainNotificationConsumerPort {
+class DomainNotificationAdapter() : NotifyDomainPort {
 
     private val producer = InMemoryProducer<String, DomainNotification>()
 
-
     override fun <NOTIFICATION : DomainNotification> invoke(notification: NOTIFICATION) {
-//        queueStore.putIfAbsent(notification.topic, LinkedBlockingQueue())
-//        queueStore[notification.topic]!!.add(notification)
         producer(
             listOf(
                 Record(
-                    "SomeKey", notification, TopicId(1)
+                    "SomeKey", notification, TopicResolver.resolve(notification.topic)
                 )
             )
         )
     }
+}
+
+
+class DomainNotificationConsumerAdapter(
+    val scheduledExecutorService: ThreadPoolTaskScheduler
+) : CreateDomainNotificationConsumerPort {
+
+    private val handlerContainer = DomainNotificationHandler.Container.DefaultImpl()
+
+    override fun <NOTIFICATION : DomainNotification> register(
+        clazz: KClass<NOTIFICATION>,
+        handler: DomainNotificationHandler<NOTIFICATION>
+    ): CreateDomainNotificationConsumerPort {
+        handlerContainer.register(clazz, handler)
+        return this
+    }
 
     override fun create(): DomainNotificationConsumer {
-        return object : DomainNotificationConsumer {
+        return object : DomainNotificationConsumer, DisposableBean {
+            private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
-            val handlerContainer = Container.DefaultImpl()
+            init {
+                val topicIds = handlerContainer.topics()
+                    .map(TopicResolver::resolve)
+                    .toList()
 
-            private val consumer = InMemoryConsumer<String, DomainNotification>(
-                listOf(
-                    TopicId(1)
-                )
-            )
-
-            override fun <NOTIFICATION : DomainNotification> register(
-                clazz: KClass<NOTIFICATION>,
-                receiver: DomainNotificationHandler<NOTIFICATION>
-            ): DomainNotificationConsumer {
-                if (handlerContainer.register(clazz, receiver)) {
-                    val topic = clazz.topic()
+                val consumer = InMemoryConsumer<String, DomainNotification>(topicIds)
+                scheduledTasks.add(
                     scheduledExecutorService.scheduleAtFixedRate(
                         {
                             consumer().forEach { record ->
@@ -65,9 +80,19 @@ class DomainNotificationAdapter(
                             }
                         }, Duration.ofMillis(1)
                     )
+                )
+            }
+
+            override fun cancel() {
+                scheduledTasks.forEach {
+                    it.cancel(false)
                 }
-                return this
+            }
+
+            override fun destroy() {
+                cancel()
             }
         }
     }
+
 }
