@@ -5,8 +5,10 @@ import io.hamal.lib.meta.exception.throwIf
 import io.hamal.module.worker.script.token.Token.Literal
 import io.hamal.module.worker.script.token.Token.Literal.Type.*
 import io.hamal.module.worker.script.token.Tokenizer.DefaultImpl
+import io.hamal.module.worker.script.token.TokenizerUtil.isAlpha
 import io.hamal.module.worker.script.token.TokenizerUtil.isDigit
 import io.hamal.module.worker.script.token.TokenizerUtil.isQuote
+import io.hamal.module.worker.script.token.TokenizerUtil.isUnderscore
 
 interface Tokenizer {
 
@@ -30,8 +32,7 @@ interface Tokenizer {
                 isHexNumber() -> nextHexNumber()
                 isNumber() -> nextNumber()
                 isString() -> nextString()
-
-                else -> TODO("Not yet implemented")
+                else -> nextIdentifierOrKeyword()
             }
         }
     }
@@ -157,4 +158,24 @@ internal fun DefaultImpl.nextString(): Token {
     }
 
     return Literal(STRING, tokenLine(), tokenPosition(), TokenValue(buffer.substring(1, buffer.length)))
+}
+
+internal fun DefaultImpl.nextIdentifier(): Token {
+    TODO()
+}
+
+internal fun DefaultImpl.nextIdentifierOrKeyword(): Token {
+    assert(isAlpha(peek()))
+    while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(peek()))) {
+        advance()
+    }
+    return findKeyword() ?: nextIdentifier()
+}
+
+val keywordMapping = Token.Keyword.Type.values().associateBy { it.value }
+
+private fun DefaultImpl.findKeyword(): Token.Keyword? {
+    val value = buffer.toString()
+    return keywordMapping[value]
+        ?.let { Token.Keyword(it, tokenLine(), tokenPosition(), TokenValue(value)) }
 }

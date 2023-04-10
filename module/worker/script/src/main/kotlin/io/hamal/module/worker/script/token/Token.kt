@@ -41,26 +41,32 @@ sealed class Token(
     }
 
     class Keyword(
-        val keywordType: Keyword.Type,
+        val keywordType: Type,
         line: TokenLine,
         position: TokenPosition,
         value: TokenValue
     ) : Token(KEYWORD, line, position, value) {
 
-        enum class Type(value: String) {
+        enum class Type(val value: String) {
+            AND("and"),
             BREAK("break"),
             DO("do"),
-            ELSE_IF("elseif"),
             ELSE("else"),
+            ELSE_IF("elseif"),
             END("end"),
+            FALSE("false"),
             FOR("for"),
             FUNCTION("function"),
             IF("if"),
             IN("in"),
             LOCAL("local"),
-            RETURN("return"),
+            NIL("nil"),
+            NOT("not"),
+            OR("or"),
             REPEAT("repeat"),
+            RETURN("return"),
             THEN("then"),
+            TRUE("true"),
             UNTIL("until"),
             WHILE("while"),
         }

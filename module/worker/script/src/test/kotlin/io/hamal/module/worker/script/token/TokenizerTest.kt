@@ -2,7 +2,8 @@ package io.hamal.module.worker.script.token
 
 import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.module.worker.script.token.*
-import io.hamal.module.worker.script.token.Token.Literal
+import io.hamal.module.worker.script.token.Token.*
+import io.hamal.module.worker.script.token.Token.Keyword.Type.*
 import io.hamal.module.worker.script.token.Token.Literal.Type.*
 import io.hamal.module.worker.script.token.Token.Type.ERROR
 import io.hamal.module.worker.script.token.Token.Type.LITERAL
@@ -235,7 +236,28 @@ class TokenizerTest {
             private fun arguments() = listOf(
                 Argument("23.45", Literal(NUMBER, TokenLine(1), TokenPosition(1), TokenValue("23.45"))),
                 Argument("0x815", Literal(HEX_NUMBER, TokenLine(1), TokenPosition(1), TokenValue("0x815"))),
-                Argument("'Hello Hamal'", Literal(STRING, TokenLine(1), TokenPosition(1), TokenValue("Hello Hamal")))
+                Argument("'Hello Hamal'", Literal(STRING, TokenLine(1), TokenPosition(1), TokenValue("Hello Hamal"))),
+                Argument("and", Keyword(AND, TokenLine(1), TokenPosition(1), TokenValue("and"))),
+                Argument("break", Keyword(BREAK, TokenLine(1), TokenPosition(1), TokenValue("break"))),
+                Argument("do", Keyword(DO, TokenLine(1), TokenPosition(1), TokenValue("do"))),
+                Argument("else", Keyword(ELSE, TokenLine(1), TokenPosition(1), TokenValue("else"))),
+                Argument("elseif", Keyword(ELSE_IF, TokenLine(1), TokenPosition(1), TokenValue("elseif"))),
+                Argument("end", Keyword(END, TokenLine(1), TokenPosition(1), TokenValue("end"))),
+                Argument("false", Keyword(FALSE, TokenLine(1), TokenPosition(1), TokenValue("false"))),
+                Argument("for", Keyword(FOR, TokenLine(1), TokenPosition(1), TokenValue("for"))),
+                Argument("function", Keyword(FUNCTION, TokenLine(1), TokenPosition(1), TokenValue("function"))),
+                Argument("if", Keyword(IF, TokenLine(1), TokenPosition(1), TokenValue("if"))),
+                Argument("in", Keyword(IN, TokenLine(1), TokenPosition(1), TokenValue("in"))),
+                Argument("local", Keyword(LOCAL, TokenLine(1), TokenPosition(1), TokenValue("local"))),
+                Argument("nil", Keyword(NIL, TokenLine(1), TokenPosition(1), TokenValue("nil"))),
+                Argument("not", Keyword(NOT, TokenLine(1), TokenPosition(1), TokenValue("not"))),
+                Argument("or", Keyword(OR, TokenLine(1), TokenPosition(1), TokenValue("or"))),
+                Argument("repeat", Keyword(REPEAT, TokenLine(1), TokenPosition(1), TokenValue("repeat"))),
+                Argument("return", Keyword(RETURN, TokenLine(1), TokenPosition(1), TokenValue("return"))),
+                Argument("then", Keyword(THEN, TokenLine(1), TokenPosition(1), TokenValue("then"))),
+                Argument("true", Keyword(TRUE, TokenLine(1), TokenPosition(1), TokenValue("true"))),
+                Argument("until", Keyword(UNTIL, TokenLine(1), TokenPosition(1), TokenValue("until"))),
+                Argument("while", Keyword(WHILE, TokenLine(1), TokenPosition(1), TokenValue("while"))),
             )
 
             @ParameterizedTest
@@ -373,7 +395,7 @@ class TokenizerTest {
 
         private fun Token.assertError(line: Int, linePosition: Int, value: String) {
             assertThat(type, equalTo(ERROR))
-            val literalToken = this as Token.Error
+            val literalToken = this as Error
             assertThat("line is not $line", this.line, equalTo(TokenLine(line)))
             assertThat("line position is not $linePosition", this.position, equalTo(TokenPosition(linePosition)))
             assertThat("value is not $value", this.value, equalTo(TokenValue(value)))
