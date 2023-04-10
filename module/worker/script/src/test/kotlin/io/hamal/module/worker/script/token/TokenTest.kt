@@ -97,24 +97,24 @@ class TokenTest {
     }
 
     @Nested
-    @DisplayName("TokenLiteral")
-    inner class TokenLiteralTest {
+    @DisplayName("TokenValue")
+    inner class TokenValueTest {
         @Nested
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    TokenLiteral("h4m4l"),
-                    TokenLiteral("h4m4l")
+                    TokenValue("h4m4l"),
+                    TokenValue("h4m4l")
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    TokenLiteral("h4m4l"),
-                    TokenLiteral("rockz")
+                    TokenValue("h4m4l"),
+                    TokenValue("rockz")
                 )
             }
         }
@@ -125,16 +125,16 @@ class TokenTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    TokenLiteral("h4m4l").hashCode(),
-                    TokenLiteral("h4m4l").hashCode()
+                    TokenValue("h4m4l").hashCode(),
+                    TokenValue("h4m4l").hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    TokenLiteral("h4m4l").hashCode(),
-                    TokenLiteral("rockz").hashCode()
+                    TokenValue("h4m4l").hashCode(),
+                    TokenValue("rockz").hashCode()
                 )
             }
         }

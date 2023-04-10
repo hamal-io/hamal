@@ -1,6 +1,14 @@
 package io.hamal.module.worker.script.lexer
 
 import io.hamal.lib.meta.exception.IllegalStateException
+import io.hamal.module.worker.script.token.Token
+import io.hamal.module.worker.script.token.Token.Literal
+import io.hamal.module.worker.script.token.Token.Literal.Type.HEX_NUMBER
+import io.hamal.module.worker.script.token.Token.Literal.Type.NUMBER
+import io.hamal.module.worker.script.token.Token.Type.LITERAL
+import io.hamal.module.worker.script.token.TokenLine
+import io.hamal.module.worker.script.token.TokenPosition
+import io.hamal.module.worker.script.token.TokenValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
@@ -183,11 +191,85 @@ class LexerTest {
             }
         }
 
+        @Nested
+        @DisplayName("nextNumber()")
+        inner class NextNumberTest {
+            @Test
+            fun `Single digit`() {
+                val testInstance = Lexer.DefaultImpl("2")
+                testInstance.nextNumber().assertNumberLiteral(1, 1, "2")
+            }
+
+            @Test
+            fun `Multiple digits`() {
+                val testInstance = Lexer.DefaultImpl("2345")
+                testInstance.nextNumber().assertNumberLiteral(1, 1, "2345")
+            }
+
+            @Test
+            fun `Floating point number`() {
+                val testInstance = Lexer.DefaultImpl("13.37")
+                testInstance.nextNumber().assertNumberLiteral(1, 1, "13.37")
+            }
+
+            @Test
+            fun `Floating point number ends with dot`() {
+                val testInstance = Lexer.DefaultImpl("13. ")
+                testInstance.nextNumber().assertNumberLiteral(1, 1, "13.")
+            }
+
+            @Test
+            fun `Floating point number starts with dot`() {
+                val testInstance = Lexer.DefaultImpl(".234")
+                testInstance.nextNumber().assertNumberLiteral(1, 1, ".234")
+            }
+        }
+
+        @Nested
+        @DisplayName("nextHexNumber()")
+        inner class NextHexNumberTest {
+            @Test
+            fun `Hexnumber 0x0`() {
+                val testInstance = Lexer.DefaultImpl("0x0")
+                testInstance.nextHexNumber().assertHexNumberLiteral(1, 1, "0x0")
+            }
+
+            @Test
+            fun `Hexnumber 0xBadC0de`() {
+                val testInstance = Lexer.DefaultImpl("0xBadC0de")
+                testInstance.nextHexNumber().assertHexNumberLiteral(1, 1, "0xBadC0de")
+            }
+
+            @Test
+            fun `Hexnumber 0x123456789ABCDEF`() {
+                val testInstance = Lexer.DefaultImpl("0x123456789ABCDEF")
+                testInstance.nextHexNumber().assertHexNumberLiteral(1, 1, "0x123456789ABCDEF")
+            }
+        }
+
         private fun Lexer.DefaultImpl.assert(index: Int, line: Int, linePosition: Int, buffer: String) {
             assertThat("index is not $index", this.index, equalTo(index))
             assertThat("line is not $line", this.line, equalTo(line))
             assertThat("line position is not $linePosition", this.linePosition, equalTo(linePosition))
             assertThat("buffer is not $buffer", this.buffer.toString(), equalTo(buffer))
+        }
+
+        private fun Token.assertNumberLiteral(line: Int, linePosition: Int, value: String) {
+            assertThat(type, equalTo(LITERAL))
+            val literalToken = this as Literal
+            assertThat(literalToken.literalType, equalTo(NUMBER))
+            assertThat("line is not $line", this.line, equalTo(TokenLine(line)))
+            assertThat("line position is not $linePosition", this.position, equalTo(TokenPosition(linePosition)))
+            assertThat("value is not $value", this.value, equalTo(TokenValue(value)))
+        }
+
+        private fun Token.assertHexNumberLiteral(line: Int, linePosition: Int, value: String) {
+            assertThat(type, equalTo(LITERAL))
+            val literalToken = this as Literal
+            assertThat(literalToken.literalType, equalTo(HEX_NUMBER))
+            assertThat("line is not $line", this.line, equalTo(TokenLine(line)))
+            assertThat("line position is not $linePosition", this.position, equalTo(TokenPosition(linePosition)))
+            assertThat("value is not $value", this.value, equalTo(TokenValue(value)))
         }
     }
 }

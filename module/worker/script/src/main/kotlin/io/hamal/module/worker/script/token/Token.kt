@@ -1,31 +1,45 @@
 package io.hamal.module.worker.script.token
 
 import io.hamal.lib.ddd.base.ValueObject
-import io.hamal.module.worker.script.token.Token.Type.EOF
-import io.hamal.module.worker.script.token.Token.Type.KEYWORD
+import io.hamal.module.worker.script.token.Token.Type.*
 
 class TokenLine(value: Int) : ValueObject.BaseImpl<Int>(value)
 class TokenPosition(value: Int) : ValueObject.BaseImpl<Int>(value)
-class TokenLiteral(value: String) : ValueObject.BaseImpl<String>(value)
+class TokenValue(value: String) : ValueObject.BaseImpl<String>(value)
 
 sealed class Token(
     val type: Type,
     val line: TokenLine,
     val position: TokenPosition,
-    val literal: TokenLiteral
+    val value: TokenValue
 ) {
 
     class EOF(
         line: TokenLine,
         position: TokenPosition
-    ) : Token(EOF, line, position, TokenLiteral("EOF"))
+    ) : Token(EOF, line, position, TokenValue("EOF"))
+
+    class Literal(
+        val literalType: Type,
+        line: TokenLine,
+        position: TokenPosition,
+        content: TokenValue
+    ) : Token(LITERAL, line, position, content) {
+        enum class Type {
+            BOOLEAN_FALSE,
+            BOOLEAN_TRUE,
+            HEX_NUMBER,
+            NUMBER,
+            STRING
+        }
+    }
 
     class Keyword(
         val keywordType: Keyword.Type,
         line: TokenLine,
         position: TokenPosition,
-        literal: TokenLiteral
-    ) : Token(KEYWORD, line, position, literal) {
+        value: TokenValue
+    ) : Token(KEYWORD, line, position, value) {
 
         enum class Type(value: String) {
             BREAK("break"),

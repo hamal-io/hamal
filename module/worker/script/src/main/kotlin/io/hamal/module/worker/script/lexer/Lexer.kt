@@ -5,9 +5,12 @@ import io.hamal.lib.meta.exception.throwIf
 import io.hamal.module.worker.script.lexer.Lexer.DefaultImpl
 import io.hamal.module.worker.script.lexer.LexerUtil.isDigit
 import io.hamal.module.worker.script.token.Token
+import io.hamal.module.worker.script.token.Token.Literal
+import io.hamal.module.worker.script.token.Token.Literal.Type.HEX_NUMBER
+import io.hamal.module.worker.script.token.Token.Literal.Type.NUMBER
 import io.hamal.module.worker.script.token.TokenLine
-import io.hamal.module.worker.script.token.TokenLiteral
 import io.hamal.module.worker.script.token.TokenPosition
+import io.hamal.module.worker.script.token.TokenValue
 
 interface Lexer {
 
@@ -16,7 +19,6 @@ interface Lexer {
     class DefaultImpl(
         val code: String,
         internal var index: Int = 0,
-
         internal var line: Int = 1,
         internal var linePosition: Int = 0,
         internal val buffer: StringBuffer = StringBuffer(256)
@@ -29,18 +31,19 @@ interface Lexer {
             }
 
             return when {
-                isDigit(peek()) -> nextNumber()
+                peek() == '0' && peekNext() == 'x' -> nextHexNumber()
+                isDigit(peek()) || peek() == '.' && isDigit(peekNext()) -> nextNumber()
                 else -> TODO("Not yet implemented")
             }
         }
     }
 }
 
-private fun DefaultImpl.tokenPosition() = TokenPosition(linePosition)
+private fun DefaultImpl.tokenPosition() = TokenPosition(linePosition - buffer.length + 1)
 
 private fun DefaultImpl.tokenLine() = TokenLine(line)
 
-private fun DefaultImpl.tokenLiteral() = TokenLiteral(buffer.toString())
+private fun DefaultImpl.tokenValue() = TokenValue(buffer.toString())
 
 internal fun DefaultImpl.isAtEnd() = index >= code.length
 
@@ -99,5 +102,26 @@ internal fun DefaultImpl.skipWhitespace(): DefaultImpl {
 }
 
 internal fun DefaultImpl.nextNumber(): Token {
-    TODO()
+    assert(isDigit(peek()) || peek() == '.' && isDigit(peekNext()))
+    while (!isAtEnd() && isDigit(peek())) {
+        advance()
+    }
+    if (!isAtEnd() && peek() == '.') {
+        advance()
+        while (!isAtEnd() && isDigit(peek())) {
+            advance()
+        }
+    }
+    return Literal(NUMBER, tokenLine(), tokenPosition(), tokenValue())
+}
+
+internal fun DefaultImpl.nextHexNumber(): Token {
+    assert(peek() == '0' && peekNext() == 'x')
+    advance(); // 0
+    advance(); // x
+    while (!isAtEnd() && LexerUtil.isHexChar(peek())) {
+        advance();
+    }
+
+    return Literal(HEX_NUMBER, tokenLine(), tokenPosition(), tokenValue())
 }
