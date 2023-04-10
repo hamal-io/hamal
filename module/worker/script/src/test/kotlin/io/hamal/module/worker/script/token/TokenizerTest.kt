@@ -234,6 +234,7 @@ class TokenizerTest {
             }
 
             private fun arguments() = listOf(
+                Argument("some_variable", Identifier(TokenLine(1), TokenPosition(1), TokenValue("some_variable"))),
                 Argument("23.45", Literal(NUMBER, TokenLine(1), TokenPosition(1), TokenValue("23.45"))),
                 Argument("0x815", Literal(HEX_NUMBER, TokenLine(1), TokenPosition(1), TokenValue("0x815"))),
                 Argument("'Hello Hamal'", Literal(STRING, TokenLine(1), TokenPosition(1), TokenValue("Hello Hamal"))),

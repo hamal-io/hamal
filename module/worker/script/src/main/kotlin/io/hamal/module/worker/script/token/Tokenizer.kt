@@ -2,6 +2,7 @@ package io.hamal.module.worker.script.token
 
 import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.lib.meta.exception.throwIf
+import io.hamal.module.worker.script.token.Token.Identifier
 import io.hamal.module.worker.script.token.Token.Literal
 import io.hamal.module.worker.script.token.Token.Literal.Type.*
 import io.hamal.module.worker.script.token.Tokenizer.DefaultImpl
@@ -160,21 +161,17 @@ internal fun DefaultImpl.nextString(): Token {
     return Literal(STRING, tokenLine(), tokenPosition(), TokenValue(buffer.substring(1, buffer.length)))
 }
 
-internal fun DefaultImpl.nextIdentifier(): Token {
-    TODO()
-}
-
 internal fun DefaultImpl.nextIdentifierOrKeyword(): Token {
     assert(isAlpha(peek()))
     while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(peek()))) {
         advance()
     }
-    return findKeyword() ?: nextIdentifier()
+    return asKeyword() ?: Identifier(tokenLine(), tokenPosition(), tokenValue())
 }
 
 val keywordMapping = Token.Keyword.Type.values().associateBy { it.value }
 
-private fun DefaultImpl.findKeyword(): Token.Keyword? {
+private fun DefaultImpl.asKeyword(): Token.Keyword? {
     val value = buffer.toString()
     return keywordMapping[value]
         ?.let { Token.Keyword(it, tokenLine(), tokenPosition(), TokenValue(value)) }

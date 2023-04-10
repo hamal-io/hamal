@@ -25,12 +25,18 @@ sealed class Token(
         errorMessage: TokenValue
     ) : Token(ERROR, line, position, errorMessage)
 
+    class Identifier(
+        line: TokenLine,
+        position: TokenPosition,
+        value: TokenValue
+    ) : Token(IDENTIFIER, line, position, value)
+
     class Literal(
         val literalType: Type,
         line: TokenLine,
         position: TokenPosition,
-        content: TokenValue
-    ) : Token(LITERAL, line, position, content) {
+        value: TokenValue
+    ) : Token(LITERAL, line, position, value) {
         enum class Type {
             BOOLEAN_FALSE,
             BOOLEAN_TRUE,
