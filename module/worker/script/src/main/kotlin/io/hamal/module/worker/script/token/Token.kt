@@ -46,6 +46,32 @@ sealed class Token(
         }
     }
 
+    class Operator(
+        val operatorType: Type,
+        line: TokenLine,
+        position: TokenPosition,
+        value: TokenValue
+    ) : Token(OPERATOR, line, position, value) {
+
+        enum class Type(val value: String) {
+            ASTERISK("*"),
+            CARAT("^"),
+            COLON(":"),
+            DOT("."),
+            EQUAL("="),
+            HASH("#"),
+            LEFT_ANGLE_BRACKET("<"),
+            LEFT_BRACKET("["),
+            MINUS("-"),
+            PERCENT("%"),
+            PLUS("+"),
+            RIGHT_ANGLE_BRACKET(">"),
+            RIGHT_BRACKET("]"),
+            SLASH("/"),
+            TILDE("~"),
+        }
+    }
+
     class Keyword(
         val keywordType: Type,
         line: TokenLine,
@@ -60,21 +86,21 @@ sealed class Token(
             ELSE("else"),
             ELSE_IF("elseif"),
             END("end"),
-            FALSE("false"),
             FOR("for"),
             FUNCTION("function"),
             IF("if"),
             IN("in"),
             LOCAL("local"),
             NIL("nil"),
+            NOR("nor"),
             NOT("not"),
             OR("or"),
             REPEAT("repeat"),
             RETURN("return"),
             THEN("then"),
-            TRUE("true"),
             UNTIL("until"),
             WHILE("while"),
+            XOR("xor"),
         }
     }
 
