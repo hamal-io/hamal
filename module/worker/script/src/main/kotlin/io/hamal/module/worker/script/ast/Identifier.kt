@@ -1,11 +1,19 @@
 package io.hamal.module.worker.script.ast
 
-import io.hamal.module.worker.script.token.Token.Identifier
+import io.hamal.module.worker.script.token.Token
+import io.hamal.module.worker.script.value.StringValue
 
-class Identifier(
-    override val token: Identifier
-) : Node {
+class Identifier(val value: StringValue) : Node {
     override fun accept(visitor: Visitor) {
-        TODO("Not yet implemented")
+        visitor.visit(this)
+    }
+
+    internal object Parser : NodeParser<Identifier> {
+        override fun invoke(tokens: ArrayDeque<Token>): Identifier {
+            assert(tokens.isNotEmpty())
+            val token = tokens.removeFirst()
+            require(token is Token.Identifier)
+            return Identifier(StringValue(token.value.value))
+        }
     }
 }
