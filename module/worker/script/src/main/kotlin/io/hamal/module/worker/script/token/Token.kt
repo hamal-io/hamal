@@ -42,6 +42,7 @@ sealed class Token(
             BOOLEAN_TRUE,
             HEX_NUMBER,
             NUMBER,
+            NIL,
             STRING
         }
     }
@@ -91,7 +92,6 @@ sealed class Token(
             IF("if"),
             IN("in"),
             LOCAL("local"),
-            NIL("nil"),
             NOR("nor"),
             NOT("not"),
             OR("or"),

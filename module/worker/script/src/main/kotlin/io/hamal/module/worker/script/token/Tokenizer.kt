@@ -34,7 +34,7 @@ interface Tokenizer {
                         while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(peek()))) {
                             advance()
                         }
-                        nextBoolean()
+                        nextLiteral()
                             ?: nextIdentifierOrKeyword()
                     }
                 }
@@ -191,10 +191,11 @@ private fun DefaultImpl.nextOperator(): Operator? {
         ?.let { Operator(it, tokenLine(), tokenPosition(), TokenValue(value)) }
 }
 
-private fun DefaultImpl.nextBoolean(): Literal? {
+private fun DefaultImpl.nextLiteral(): Literal? {
     return when (val value = buffer.toString()) {
         "true" -> Literal(BOOLEAN_TRUE, tokenLine(), tokenPosition(), TokenValue(value))
         "false" -> Literal(BOOLEAN_FALSE, tokenLine(), tokenPosition(), TokenValue(value))
+        "nil" -> Literal(NIL, tokenLine(), tokenPosition(), TokenValue(value))
         else -> null
     }
 }
