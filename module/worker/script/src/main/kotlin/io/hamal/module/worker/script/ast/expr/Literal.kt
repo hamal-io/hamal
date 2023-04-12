@@ -16,7 +16,7 @@ class NumberLiteral(value: NumberValue) : LiteralExpression(value) {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.NumberLiteral)
-            return NumberLiteral(NumberValue(token.value.value))
+            return NumberLiteral(NumberValue(token.value))
         }
     }
 }
@@ -31,7 +31,7 @@ class StringLiteral(value: StringValue) : LiteralExpression(value) {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.StringLiteral)
-            return StringLiteral(StringValue(token.value.value))
+            return StringLiteral(StringValue(token.value))
         }
     }
 }

@@ -37,7 +37,7 @@ interface Tokenizer {
         override fun nextToken(): Token {
             skipWhitespace()
             return when {
-                isAtEnd() -> Token(Type.Eof, tokenLine(), tokenPosition(), TokenValue("EOF"))
+                isAtEnd() -> Token(Type.Eof, tokenLine(), tokenPosition(), "EOF")
                 isHexNumber() -> nextHexNumber()
                 isNumber() -> nextNumber()
                 isString() -> nextString()
@@ -69,11 +69,11 @@ private fun DefaultImpl.isNumber() = isDigit(peek()) ||
 
 private fun DefaultImpl.isString() = isQuote(peek())
 
-private fun DefaultImpl.tokenPosition() = TokenPosition(linePosition - buffer.length + 1)
+private fun DefaultImpl.tokenPosition() = linePosition - buffer.length + 1
 
-private fun DefaultImpl.tokenLine() = TokenLine(line)
+private fun DefaultImpl.tokenLine() = line
 
-private fun DefaultImpl.tokenValue() = TokenValue(buffer.toString())
+private fun DefaultImpl.tokenValue() = buffer.toString()
 
 internal fun DefaultImpl.isAtEnd() = index >= code.length
 
@@ -167,7 +167,7 @@ internal fun DefaultImpl.nextString(): Token {
     var newLineCounter = 0
     while (true) {
         if (isAtEnd()) {
-            return Token(Error, tokenLine(), tokenPosition(), TokenValue("Unterminated string"))
+            return Token(Error, tokenLine(), tokenPosition(), "Unterminated string")
         }
 
         if (isQuote(peek()) && peekPrev() != '\\') {
@@ -181,7 +181,7 @@ internal fun DefaultImpl.nextString(): Token {
         advance()
     }
     advance() // remove last quote
-    return Token(Type.StringLiteral, tokenLine(), tokenPosition(), TokenValue(buffer.substring(1, buffer.length - 1)))
+    return Token(Type.StringLiteral, tokenLine(), tokenPosition(), buffer.substring(1, buffer.length - 1))
 }
 
 internal fun DefaultImpl.nextIdentifierOrKeyword(): Token {
@@ -193,7 +193,7 @@ val keywordMapping = Type.values().filter { it.category == Category.Keyword }.as
 private fun DefaultImpl.asKeyword(): Token? {
     val value = buffer.toString()
     return keywordMapping[value]
-        ?.let { Token(it, tokenLine(), tokenPosition(), TokenValue(value)) }
+        ?.let { Token(it, tokenLine(), tokenPosition(), value) }
 }
 
 val operatorMapping = Type.values().filter { it.category == Category.Operator }.associateBy { it.value }
@@ -201,14 +201,14 @@ val operatorMapping = Type.values().filter { it.category == Category.Operator }.
 private fun DefaultImpl.nextOperator(): Token? {
     val value = buffer.toString()
     return operatorMapping[value]
-        ?.let { Token(it, tokenLine(), tokenPosition(), TokenValue(value)) }
+        ?.let { Token(it, tokenLine(), tokenPosition(), value) }
 }
 
 private fun DefaultImpl.nextLiteral(): Token? {
     return when (val value = buffer.toString()) {
-        "true" -> Token(TrueLiteral, tokenLine(), tokenPosition(), TokenValue(value))
-        "false" -> Token(FalseLiteral, tokenLine(), tokenPosition(), TokenValue(value))
-        "nil" -> Token(NilLiteral, tokenLine(), tokenPosition(), TokenValue(value))
+        "true" -> Token(TrueLiteral, tokenLine(), tokenPosition(), value)
+        "false" -> Token(FalseLiteral, tokenLine(), tokenPosition(), value)
+        "nil" -> Token(NilLiteral, tokenLine(), tokenPosition(), value)
         else -> null
     }
 }

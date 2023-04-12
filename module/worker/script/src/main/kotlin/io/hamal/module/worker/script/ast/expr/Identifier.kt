@@ -15,7 +15,7 @@ class Identifier(val value: String) : Expression {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Identifier)
-            return Identifier(token.value.value)
+            return Identifier(token.value)
         }
     }
 }

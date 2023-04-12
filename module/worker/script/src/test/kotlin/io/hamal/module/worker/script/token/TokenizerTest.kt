@@ -226,57 +226,57 @@ class TokenizerTest {
             private fun arguments() = listOf(
                 Argument(
                     "some_variable",
-                    Token(Type.Identifier, TokenLine(1), TokenPosition(1), TokenValue("some_variable"))
+                    Token(Type.Identifier, 1, 1, "some_variable")
                 ),
-                Argument("23.45", Token(Type.NumberLiteral, TokenLine(1), TokenPosition(1), TokenValue("23.45"))),
-                Argument("0x815", Token(Type.HexNumberLiteral, TokenLine(1), TokenPosition(1), TokenValue("0x815"))),
+                Argument("23.45", Token(Type.NumberLiteral, 1, 1, "23.45")),
+                Argument("0x815", Token(Type.HexNumberLiteral, 1, 1, "0x815")),
                 Argument(
                     "'Hello Hamal'",
-                    Token(Type.StringLiteral, TokenLine(1), TokenPosition(1), TokenValue("Hello Hamal"))
+                    Token(Type.StringLiteral, 1, 1, "Hello Hamal")
                 ),
-                Argument("true", Token(Type.TrueLiteral, TokenLine(1), TokenPosition(1), TokenValue("true"))),
-                Argument("false", Token(Type.FalseLiteral, TokenLine(1), TokenPosition(1), TokenValue("false"))),
-                Argument("nil", Token(Type.NilLiteral, TokenLine(1), TokenPosition(1), TokenValue("nil"))),
-                Argument("break", Token(Type.Break, TokenLine(1), TokenPosition(1), TokenValue("break"))),
-                Argument("and", Token(Type.And, TokenLine(1), TokenPosition(1), TokenValue("and"))),
-                Argument("do", Token(Type.Do, TokenLine(1), TokenPosition(1), TokenValue("do"))),
-                Argument("else", Token(Type.Else, TokenLine(1), TokenPosition(1), TokenValue("else"))),
-                Argument("elseif", Token(Type.ElseIf, TokenLine(1), TokenPosition(1), TokenValue("elseif"))),
-                Argument("end", Token(Type.End, TokenLine(1), TokenPosition(1), TokenValue("end"))),
-                Argument("for", Token(Type.For, TokenLine(1), TokenPosition(1), TokenValue("for"))),
-                Argument("function", Token(Type.Function, TokenLine(1), TokenPosition(1), TokenValue("function"))),
-                Argument("if", Token(Type.If, TokenLine(1), TokenPosition(1), TokenValue("if"))),
-                Argument("in", Token(Type.In, TokenLine(1), TokenPosition(1), TokenValue("in"))),
-                Argument("local", Token(Type.Local, TokenLine(1), TokenPosition(1), TokenValue("local"))),
-                Argument("nor", Token(Type.Nor, TokenLine(1), TokenPosition(1), TokenValue("nor"))),
-                Argument("not", Token(Type.Not, TokenLine(1), TokenPosition(1), TokenValue("not"))),
-                Argument("or", Token(Type.Or, TokenLine(1), TokenPosition(1), TokenValue("or"))),
-                Argument("repeat", Token(Type.Repeat, TokenLine(1), TokenPosition(1), TokenValue("repeat"))),
-                Argument("return", Token(Type.Return, TokenLine(1), TokenPosition(1), TokenValue("return"))),
-                Argument("then", Token(Type.Then, TokenLine(1), TokenPosition(1), TokenValue("then"))),
-                Argument("until", Token(Type.Until, TokenLine(1), TokenPosition(1), TokenValue("until"))),
-                Argument("while", Token(Type.While, TokenLine(1), TokenPosition(1), TokenValue("while"))),
-                Argument("xor", Token(Type.Xor, TokenLine(1), TokenPosition(1), TokenValue("xor"))),
+                Argument("true", Token(Type.TrueLiteral, 1, 1, "true")),
+                Argument("false", Token(Type.FalseLiteral, 1, 1, "false")),
+                Argument("nil", Token(Type.NilLiteral, 1, 1, "nil")),
+                Argument("break", Token(Type.Break, 1, 1, "break")),
+                Argument("and", Token(Type.And, 1, 1, "and")),
+                Argument("do", Token(Type.Do, 1, 1, "do")),
+                Argument("else", Token(Type.Else, 1, 1, "else")),
+                Argument("elseif", Token(Type.ElseIf, 1, 1, "elseif")),
+                Argument("end", Token(Type.End, 1, 1, "end")),
+                Argument("for", Token(Type.For, 1, 1, "for")),
+                Argument("function", Token(Type.Function, 1, 1, "function")),
+                Argument("if", Token(Type.If, 1, 1, "if")),
+                Argument("in", Token(Type.In, 1, 1, "in")),
+                Argument("local", Token(Type.Local, 1, 1, "local")),
+                Argument("nor", Token(Type.Nor, 1, 1, "nor")),
+                Argument("not", Token(Type.Not, 1, 1, "not")),
+                Argument("or", Token(Type.Or, 1, 1, "or")),
+                Argument("repeat", Token(Type.Repeat, 1, 1, "repeat")),
+                Argument("return", Token(Type.Return, 1, 1, "return")),
+                Argument("then", Token(Type.Then, 1, 1, "then")),
+                Argument("until", Token(Type.Until, 1, 1, "until")),
+                Argument("while", Token(Type.While, 1, 1, "while")),
+                Argument("xor", Token(Type.Xor, 1, 1, "xor")),
 
-                Argument("*", Token(Type.Asterisk, TokenLine(1), TokenPosition(1), TokenValue("*"))),
-                Argument("^", Token(Type.Carat, TokenLine(1), TokenPosition(1), TokenValue("^"))),
-                Argument(":", Token(Type.Colon, TokenLine(1), TokenPosition(1), TokenValue(":"))),
-                Argument(".", Token(Type.Dot, TokenLine(1), TokenPosition(1), TokenValue("."))),
-                Argument("=", Token(Type.Equal, TokenLine(1), TokenPosition(1), TokenValue("="))),
-                Argument("#", Token(Type.Hash, TokenLine(1), TokenPosition(1), TokenValue("#"))),
-                Argument("<", Token(Type.LeftAngleBracket, TokenLine(1), TokenPosition(1), TokenValue("<"))),
-                Argument("[", Token(Type.LeftBracket, TokenLine(1), TokenPosition(1), TokenValue("["))),
-                Argument("-", Token(Type.Minus, TokenLine(1), TokenPosition(1), TokenValue("-"))),
-                Argument("%", Token(Type.Percent, TokenLine(1), TokenPosition(1), TokenValue("%"))),
-                Argument("+", Token(Type.Plus, TokenLine(1), TokenPosition(1), TokenValue("+"))),
-                Argument(">", Token(Type.RightAngleBracket, TokenLine(1), TokenPosition(1), TokenValue(">"))),
-                Argument("]", Token(Type.RightBracket, TokenLine(1), TokenPosition(1), TokenValue("]"))),
-                Argument("/", Token(Type.Slash, TokenLine(1), TokenPosition(1), TokenValue("/"))),
-                Argument("~", Token(Type.Tilde, TokenLine(1), TokenPosition(1), TokenValue("~"))),
+                Argument("*", Token(Type.Asterisk, 1, 1, "*")),
+                Argument("^", Token(Type.Carat, 1, 1, "^")),
+                Argument(":", Token(Type.Colon, 1, 1, ":")),
+                Argument(".", Token(Type.Dot, 1, 1, ".")),
+                Argument("=", Token(Type.Equal, 1, 1, "=")),
+                Argument("#", Token(Type.Hash, 1, 1, "#")),
+                Argument("<", Token(Type.LeftAngleBracket, 1, 1, "<")),
+                Argument("[", Token(Type.LeftBracket, 1, 1, "[")),
+                Argument("-", Token(Type.Minus, 1, 1, "-")),
+                Argument("%", Token(Type.Percent, 1, 1, "%")),
+                Argument("+", Token(Type.Plus, 1, 1, "+")),
+                Argument(">", Token(Type.RightAngleBracket, 1, 1, ">")),
+                Argument("]", Token(Type.RightBracket, 1, 1, "]")),
+                Argument("/", Token(Type.Slash, 1, 1, "/")),
+                Argument("~", Token(Type.Tilde, 1, 1, "~")),
 
-                Argument(";", Token(Type.Semicolon, TokenLine(1), TokenPosition(1), TokenValue(";"))),
-                Argument(",", Token(Type.Comma, TokenLine(1), TokenPosition(1), TokenValue(","))),
-                Argument("\n", Token(Type.LineBreak, TokenLine(1), TokenPosition(1), TokenValue("\n"))),
+                Argument(";", Token(Type.Semicolon, 1, 1, ";")),
+                Argument(",", Token(Type.Comma, 1, 1, ",")),
+                Argument("\n", Token(Type.LineBreak, 1, 1, "\n")),
 
                 )
 
@@ -409,16 +409,16 @@ class TokenizerTest {
 
         private fun Token.assertLiteral(type: Type, line: Int, linePosition: Int, value: String) {
             assertThat(this.type, equalTo(type))
-            assertThat("line is not $line", this.line, equalTo(TokenLine(line)))
-            assertThat("line position is not $linePosition", this.position, equalTo(TokenPosition(linePosition)))
-            assertThat("value is not $value", this.value, equalTo(TokenValue(value)))
+            assertThat("line is not $line", this.line, equalTo((line)))
+            assertThat("line position is not $linePosition", this.position, equalTo((linePosition)))
+            assertThat("value is not $value", this.value, equalTo((value)))
         }
 
         private fun Token.assertError(line: Int, linePosition: Int, value: String) {
             assertThat(type, equalTo(Error))
-            assertThat("line is not $line", this.line, equalTo(TokenLine(line)))
-            assertThat("line position is not $linePosition", this.position, equalTo(TokenPosition(linePosition)))
-            assertThat("value is not $value", this.value, equalTo(TokenValue(value)))
+            assertThat("line is not $line", this.line, equalTo((line)))
+            assertThat("line position is not $linePosition", this.position, equalTo((linePosition)))
+            assertThat("value is not $value", this.value, equalTo((value)))
         }
     }
 }

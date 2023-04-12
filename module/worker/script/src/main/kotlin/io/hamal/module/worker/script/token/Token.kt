@@ -1,17 +1,12 @@
 package io.hamal.module.worker.script.token
 
-import io.hamal.lib.ddd.base.ValueObject
 import io.hamal.module.worker.script.token.Token.Type.Category.*
-
-class TokenLine(value: Int) : ValueObject.BaseImpl<Int>(value)
-class TokenPosition(value: Int) : ValueObject.BaseImpl<Int>(value)
-class TokenValue(value: String) : ValueObject.BaseImpl<String>(value)
 
 class Token(
     val type: Type,
-    val line: TokenLine,
-    val position: TokenPosition,
-    val value: TokenValue
+    val line: Int,
+    val position: Int,
+    val value: String
 ) {
 
     override fun toString(): String {
