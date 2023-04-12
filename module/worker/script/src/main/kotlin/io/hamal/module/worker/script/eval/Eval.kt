@@ -1,13 +1,11 @@
 package io.hamal.module.worker.script.eval
 
-import io.hamal.module.worker.script.ast.Expression
-import io.hamal.module.worker.script.ast.LiteralExpression
-import io.hamal.module.worker.script.ast.Statement
-import io.hamal.module.worker.script.ast.StatementExpression
+import io.hamal.module.worker.script.ast.*
 import io.hamal.module.worker.script.ast.expr.FalseLiteral
 import io.hamal.module.worker.script.ast.expr.NumberLiteral
 import io.hamal.module.worker.script.ast.expr.TrueLiteral
 import io.hamal.module.worker.script.value.NilValue
+import io.hamal.module.worker.script.value.NumberValue
 import io.hamal.module.worker.script.value.Value
 
 interface Eval {
@@ -27,7 +25,7 @@ interface Eval {
 
         override fun invoke(statement: Statement, env: Environment): Value {
             return when (statement) {
-                is StatementExpression -> evalExpression(statement.expression)
+                is StatementExpression -> evalExpression(statement.expression, env)
                 else -> TODO()
             }
         }
@@ -35,9 +33,29 @@ interface Eval {
     }
 }
 
-private fun evalExpression(expression: Expression): Value {
+private fun evalExpression(expression: Expression, env: Environment): Value {
     return when (expression) {
+        is InfixExpression -> evalInfix(expression, env)
         is LiteralExpression -> evalLiteral(expression)
+        else -> TODO()
+    }
+}
+
+private fun evalInfix(expression: InfixExpression, env: Environment): Value {
+    //FIXME error handling
+    val lhs = evalExpression(expression.lhs, env)
+    //FIXME error handling
+    val rhs = evalExpression(expression.rhs, env)
+    return eval(expression.operator, lhs, rhs, env)
+}
+
+
+private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): Value {
+    return when (operator.value) {
+        "+" -> {
+            NumberValue((lhs as NumberValue).value.plus((rhs as NumberValue).value))
+        }
+
         else -> TODO()
     }
 }

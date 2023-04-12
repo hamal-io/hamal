@@ -43,13 +43,19 @@ interface Tokenizer {
                 isString() -> nextString()
                 else -> {
                     advance()
-                    nextOperator() ?: run {
-                        while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(peek()))) {
-                            advance()
+                    nextDelimiter()
+                        ?: nextOperator()
+                        ?: run {
+
+                            while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(
+                                    peek()
+                                ))
+                            ) {
+                                advance()
+                            }
+                            nextLiteral()
+                                ?: nextIdentifierOrKeyword()
                         }
-                        nextLiteral()
-                            ?: nextIdentifierOrKeyword()
-                    }
                 }
             }
         }
@@ -114,12 +120,6 @@ internal fun DefaultImpl.skipWhitespace(): DefaultImpl {
                 } else {
                     break
                 }
-            }
-
-            '\n' -> {
-                line++
-                linePosition = 0
-                advance()
             }
 
             ' ', '\r', '\t' -> {
@@ -209,6 +209,21 @@ private fun DefaultImpl.nextLiteral(): Token? {
         "true" -> Token(TrueLiteral, tokenLine(), tokenPosition(), TokenValue(value))
         "false" -> Token(FalseLiteral, tokenLine(), tokenPosition(), TokenValue(value))
         "nil" -> Token(NilLiteral, tokenLine(), tokenPosition(), TokenValue(value))
+        else -> null
+    }
+}
+
+private fun DefaultImpl.nextDelimiter(): Token? {
+    return when (buffer.toString()) {
+        "," -> Token(Comma, tokenLine(), tokenPosition(), tokenValue())
+        ";" -> Token(Semicolon, tokenLine(), tokenPosition(), tokenValue())
+        "\n" -> {
+            val result = Token(LineBreak, tokenLine(), tokenPosition(), tokenValue())
+            line++
+            linePosition = 0
+            result
+        }
+
         else -> null
     }
 }

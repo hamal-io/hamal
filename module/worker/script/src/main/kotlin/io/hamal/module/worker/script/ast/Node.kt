@@ -4,7 +4,7 @@ import io.hamal.module.worker.script.value.Value
 
 interface Node
 
-interface Operator
+data class Operator(val value: String)
 
 interface Expression : Node {
     fun accept(visitor: Visitor)
@@ -21,11 +21,16 @@ abstract class PrefixExpression(
 
 }
 
-abstract class InfixExpression(
+data class InfixExpression(
     val lhs: Expression,
     val operator: Operator,
     val rhs: Expression
-) : Expression
+) : Expression {
+    // FIXME remove visitor
+    override fun accept(visitor: Visitor) {
+        TODO("Not yet implemented")
+    }
+}
 
 interface Statement : Node
 

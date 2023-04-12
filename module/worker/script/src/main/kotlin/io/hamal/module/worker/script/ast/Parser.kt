@@ -1,14 +1,11 @@
 package io.hamal.module.worker.script.ast
 
-import io.hamal.module.worker.script.ast.expr.FalseLiteral.ParseFalseLiteral
-import io.hamal.module.worker.script.ast.expr.Identifier.ParseIdentifier
-import io.hamal.module.worker.script.ast.expr.NilLiteral.ParseNilLiteral
-import io.hamal.module.worker.script.ast.expr.NumberLiteral.ParseNumberLiteral
-import io.hamal.module.worker.script.ast.expr.StringLiteral.ParseStringLiteral
-import io.hamal.module.worker.script.ast.expr.TrueLiteral.ParseTrueLiteral
+import io.hamal.module.worker.script.ast.expr.Precedence
+import io.hamal.module.worker.script.ast.expr.infixFn
+import io.hamal.module.worker.script.ast.expr.nextPrecedence
+import io.hamal.module.worker.script.ast.expr.prefixFn
 import io.hamal.module.worker.script.token.Token
-import io.hamal.module.worker.script.token.Token.Type
-import io.hamal.module.worker.script.token.Token.Type.Plus
+import io.hamal.module.worker.script.token.Token.Type.*
 
 fun parse(tokens: List<Token>): List<Statement> {
     val parser = Parser.DefaultImpl()
@@ -24,7 +21,8 @@ interface Parser {
             val result = mutableListOf<Statement>()
             while (ctx.isNotEmpty()) {
                 result.add(ctx.parseStatement())
-                if (ctx.currentTokenType() == Type.Eof) {
+                ctx.advance()
+                if (ctx.currentTokenType() == Eof) {
                     break
                 }
             }
@@ -33,7 +31,7 @@ interface Parser {
     }
 
     data class Context(val tokens: ArrayDeque<Token>) {
-        fun pop() = tokens.removeFirst()
+        fun advance() = tokens.removeFirst()
 
         fun currentToken() = this.tokens[0]
         fun nextToken() = this.tokens[1]
@@ -45,53 +43,20 @@ interface Parser {
     }
 }
 
-internal interface ParsePrefixExpression<out EXPRESSION : Expression> {
-    operator fun invoke(ctx: Parser.Context): EXPRESSION
-}
-
-internal interface ParseInfixExpression<out EXPRESSION : Expression> {
-    operator fun invoke(ctx: Parser.Context, expression: Expression): EXPRESSION
-}
-
-
-internal enum class Precedence {
-    Lowest,
-    Or,              //  or
-    And,             //  and
-    Comparison,      //  <     >     <=    >=    ~=    ==
-    BitwiseOr,      //  |
-    BitwiseNot,     //  ~
-    BitwiseAnd,     //  &
-    Shift,           // << >>
-    Concat,          //  ..
-    Plus,            //  + -
-    Factor,          //  * / // %
-    Unary,           // not # - ~
-    Carat,           // ^
-    Call             // ()
-}
-
-private val precedenceMapping = mapOf(
-    Plus to Precedence.Plus
-)
 
 private fun Parser.Context.parseStatement(): Statement = StatementExpression(parseExpression())
 
-private val prefixParseFnMapping = mapOf(
-    Type.TrueLiteral to ParseTrueLiteral,
-    Type.FalseLiteral to ParseFalseLiteral,
-    Type.NilLiteral to ParseNilLiteral,
-    Type.StringLiteral to ParseStringLiteral,
-    Type.Identifier to ParseIdentifier,
-    Type.NumberLiteral to ParseNumberLiteral
-)
-
-private fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
-    val currentToken = currentToken()
-    var leftExpression = prefixParseFnMapping[currentTokenType()]!!(this)
-
-    return leftExpression
+internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
+    var lhsExpression = prefixFn(currentTokenType())(this)
+    while (!endOfExpression() && precedence < nextPrecedence()) {
+        val infix = infixFn(nextTokenType()) ?: return lhsExpression
+        advance()
+        lhsExpression = infix(this, lhsExpression)
+    }
+    return lhsExpression
 }
 
-private fun Parser.Context.currentPrecedence() = precedenceMapping[currentTokenType()]
-private fun Parser.Context.nextPrecedence() = precedenceMapping[nextTokenType()]
+private fun Parser.Context.endOfExpression() = when (currentTokenType()) {
+    Semicolon, LineBreak, Eof -> true
+    else -> false
+}

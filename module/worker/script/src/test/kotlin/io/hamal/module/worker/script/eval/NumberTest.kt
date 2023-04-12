@@ -1,7 +1,6 @@
 package io.hamal.module.worker.script.eval
 
 import io.hamal.lib.meta.Tuple2
-import io.hamal.lib.meta.math.Decimal
 import io.hamal.module.worker.script.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -20,7 +19,7 @@ internal class NumberTest : AbstractEvalTest() {
 
     @ParameterizedTest(name = "#{index} - Test expression {0}")
     @MethodSource("testCases")
-    fun test(arg: Tuple2<String, Decimal>) {
+    fun `Parameterized tests`(arg: Tuple2<String, NumberValue>) {
         val result = eval(arg._1)
         val expected = arg._2;
         assertThat(result, equalTo(expected));
@@ -28,9 +27,9 @@ internal class NumberTest : AbstractEvalTest() {
 
     companion object {
         @JvmStatic
-        private fun testCases(): List<Tuple2<String, Decimal>> {
+        private fun testCases(): List<Tuple2<String, NumberValue>> {
             return listOf(
-                Tuple2("5 + 5", Decimal(10)),
+                Tuple2("1 + 2", NumberValue(3)),
             );
         }
     }

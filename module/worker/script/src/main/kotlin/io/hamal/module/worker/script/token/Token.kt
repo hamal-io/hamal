@@ -14,6 +14,10 @@ class Token(
     val value: TokenValue
 ) {
 
+    override fun toString(): String {
+        return "Token($type)"
+    }
+
     enum class Type(val value: kotlin.String, val category: Category) {
         And("and", Keyword),
         Break("break", Keyword),
@@ -49,6 +53,7 @@ class Token(
         Plus("+", Operator),
         RightAngleBracket(">", Operator),
         RightBracket("]", Operator),
+
         Slash("/", Operator),
         Tilde("~", Operator),
 
@@ -61,10 +66,15 @@ class Token(
         NilLiteral("nil", Literal),
         StringLiteral("string", Literal),
 
+        Semicolon(";", Delimiter),
+        Comma(",", Delimiter),
+        LineBreak("\n", Delimiter),
+
         Error("error", Misc),
         Eof("eof", Misc);
 
         enum class Category {
+            Delimiter,
             Keyword,
             Operator,
             Literal,

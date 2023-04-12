@@ -186,7 +186,7 @@ class TokenizerTest {
                     invoke_awesomeness()
                 """.trimIndent()
                 )
-                testInstance.skipWhitespace().assert(41, 2, 1, "")
+                testInstance.skipWhitespace().assert(40, 1, 40, "")
             }
 
             @Test
@@ -195,14 +195,6 @@ class TokenizerTest {
                     """    content"""
                 )
                 testInstance.skipWhitespace().assert(4, 1, 4, "")
-            }
-
-            @Test
-            fun `Skips line breaks`() {
-                val testInstance = Tokenizer.DefaultImpl(
-                    "\n\n\ncontent"
-                )
-                testInstance.skipWhitespace().assert(3, 4, 1, "")
             }
 
             @Test
@@ -281,6 +273,10 @@ class TokenizerTest {
                 Argument("]", Token(Type.RightBracket, TokenLine(1), TokenPosition(1), TokenValue("]"))),
                 Argument("/", Token(Type.Slash, TokenLine(1), TokenPosition(1), TokenValue("/"))),
                 Argument("~", Token(Type.Tilde, TokenLine(1), TokenPosition(1), TokenValue("~"))),
+
+                Argument(";", Token(Type.Semicolon, TokenLine(1), TokenPosition(1), TokenValue(";"))),
+                Argument(",", Token(Type.Comma, TokenLine(1), TokenPosition(1), TokenValue(","))),
+                Argument("\n", Token(Type.LineBreak, TokenLine(1), TokenPosition(1), TokenValue("\n"))),
 
                 )
 
