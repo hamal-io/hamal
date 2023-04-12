@@ -2,13 +2,25 @@ package io.hamal.module.worker.script.token
 
 import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.lib.meta.exception.throwIf
-import io.hamal.module.worker.script.token.Token.*
-import io.hamal.module.worker.script.token.Token.Literal.Type.*
+import io.hamal.module.worker.script.token.Token.Type
+import io.hamal.module.worker.script.token.Token.Type.*
 import io.hamal.module.worker.script.token.Tokenizer.DefaultImpl
 import io.hamal.module.worker.script.token.TokenizerUtil.isAlpha
 import io.hamal.module.worker.script.token.TokenizerUtil.isDigit
 import io.hamal.module.worker.script.token.TokenizerUtil.isQuote
 import io.hamal.module.worker.script.token.TokenizerUtil.isUnderscore
+
+fun tokenize(code: String): List<Token> {
+    val tokenizer = DefaultImpl(code)
+    val result = mutableListOf<Token>()
+    while (true) {
+        val current = tokenizer.nextToken()
+        result.add(current)
+        if (current.type == Eof) {
+            return result
+        }
+    }
+}
 
 interface Tokenizer {
 
@@ -21,10 +33,11 @@ interface Tokenizer {
         internal var linePosition: Int = 0,
         internal val buffer: StringBuffer = StringBuffer(256)
     ) : Tokenizer {
+
         override fun nextToken(): Token {
             skipWhitespace()
             return when {
-                isAtEnd() -> EOF(tokenLine(), tokenPosition())
+                isAtEnd() -> Token(Type.Eof, tokenLine(), tokenPosition(), TokenValue("EOF"))
                 isHexNumber() -> nextHexNumber()
                 isNumber() -> nextNumber()
                 isString() -> nextString()
@@ -135,7 +148,7 @@ internal fun DefaultImpl.nextNumber(): Token {
             advance()
         }
     }
-    return Literal(NUMBER, tokenLine(), tokenPosition(), tokenValue())
+    return Token(NumberLiteral, tokenLine(), tokenPosition(), tokenValue())
 }
 
 internal fun DefaultImpl.nextHexNumber(): Token {
@@ -145,16 +158,16 @@ internal fun DefaultImpl.nextHexNumber(): Token {
     while (!isAtEnd() && TokenizerUtil.isHexChar(peek())) {
         advance();
     }
-    return Literal(HEX_NUMBER, tokenLine(), tokenPosition(), tokenValue())
+    return Token(HexNumberLiteral, tokenLine(), tokenPosition(), tokenValue())
 }
 
 internal fun DefaultImpl.nextString(): Token {
     assert(isQuote(peek()))
-    advance()
+    advance() // remove first quote
     var newLineCounter = 0
     while (true) {
         if (isAtEnd()) {
-            return Error(tokenLine(), tokenPosition(), TokenValue("Unterminated string"))
+            return Token(Error, tokenLine(), tokenPosition(), TokenValue("Unterminated string"))
         }
 
         if (isQuote(peek()) && peekPrev() != '\\') {
@@ -167,35 +180,35 @@ internal fun DefaultImpl.nextString(): Token {
 
         advance()
     }
-
-    return Literal(STRING, tokenLine(), tokenPosition(), TokenValue(buffer.substring(1, buffer.length)))
+    advance() // remove last quote
+    return Token(Type.StringLiteral, tokenLine(), tokenPosition(), TokenValue(buffer.substring(1, buffer.length - 1)))
 }
 
 internal fun DefaultImpl.nextIdentifierOrKeyword(): Token {
-    return asKeyword() ?: Identifier(tokenLine(), tokenPosition(), tokenValue())
+    return asKeyword() ?: Token(Identifier, tokenLine(), tokenPosition(), tokenValue())
 }
 
-val keywordMapping = Keyword.Type.values().associateBy { it.value }
+val keywordMapping = Type.values().filter { it.category == Category.Keyword }.associateBy { it.value }
 
-private fun DefaultImpl.asKeyword(): Keyword? {
+private fun DefaultImpl.asKeyword(): Token? {
     val value = buffer.toString()
     return keywordMapping[value]
-        ?.let { Keyword(it, tokenLine(), tokenPosition(), TokenValue(value)) }
+        ?.let { Token(it, tokenLine(), tokenPosition(), TokenValue(value)) }
 }
 
-val operatorMapping = Operator.Type.values().associateBy { it.value }
+val operatorMapping = Type.values().filter { it.category == Category.Operator }.associateBy { it.value }
 
-private fun DefaultImpl.nextOperator(): Operator? {
+private fun DefaultImpl.nextOperator(): Token? {
     val value = buffer.toString()
     return operatorMapping[value]
-        ?.let { Operator(it, tokenLine(), tokenPosition(), TokenValue(value)) }
+        ?.let { Token(it, tokenLine(), tokenPosition(), TokenValue(value)) }
 }
 
-private fun DefaultImpl.nextLiteral(): Literal? {
+private fun DefaultImpl.nextLiteral(): Token? {
     return when (val value = buffer.toString()) {
-        "true" -> Literal(BOOLEAN_TRUE, tokenLine(), tokenPosition(), TokenValue(value))
-        "false" -> Literal(BOOLEAN_FALSE, tokenLine(), tokenPosition(), TokenValue(value))
-        "nil" -> Literal(NIL, tokenLine(), tokenPosition(), TokenValue(value))
+        "true" -> Token(TrueLiteral, tokenLine(), tokenPosition(), TokenValue(value))
+        "false" -> Token(FalseLiteral, tokenLine(), tokenPosition(), TokenValue(value))
+        "nil" -> Token(NilLiteral, tokenLine(), tokenPosition(), TokenValue(value))
         else -> null
     }
 }

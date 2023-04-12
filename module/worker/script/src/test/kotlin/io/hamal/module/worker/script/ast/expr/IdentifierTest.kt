@@ -1,19 +1,18 @@
-package io.hamal.module.worker.script.ast
+package io.hamal.module.worker.script.ast.expr
 
+import io.hamal.module.worker.script.ast.AbstractAstTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class IdentifierTest : AbstractAstTest() {
-
     @Nested
-    @DisplayName("Identifier.Parser")
+    @DisplayName("Identifier.ParseIdentifier")
     inner class IdentifierParserTest {
         @Test
         fun `Parses identifier`() {
-            val result = parse(Identifier.Parser, "some_variable")
+            val result = parseExpression(Identifier.ParseIdentifier, "some_variable")
             result.verifyPrecedence("(some_variable)")
         }
     }
-
 }

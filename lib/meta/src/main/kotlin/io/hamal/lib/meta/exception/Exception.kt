@@ -1,6 +1,6 @@
 package io.hamal.lib.meta.exception
 
-sealed class HamalException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause) {
+open class HamalException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause) {
     constructor(cause: Throwable) : this(null, cause)
 }
 

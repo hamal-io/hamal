@@ -1,34 +1,36 @@
 package io.hamal.module.worker.script.ast
 
-import io.hamal.module.worker.script.ast.expr.FalseLiteral
-import io.hamal.module.worker.script.ast.expr.NilLiteral
-import io.hamal.module.worker.script.ast.expr.TrueLiteral
-import io.hamal.module.worker.script.ast.stmt.GlobalAssignment
+import io.hamal.module.worker.script.ast.expr.*
 import io.hamal.module.worker.script.value.Value
 
 class PrecedenceTestVisitor : Visitor {
     private val builder = StringBuilder()
 
-    override fun visit(identifier: Identifier) {
-        appendValue(identifier.value)
+    override fun visit(node: Identifier) {
+        appendString(node.value)
     }
 
-    override fun visit(literal: TrueLiteral) {
-        appendValue(literal.value)
+    override fun visit(node: TrueLiteral) {
+        appendValue(node.value)
     }
 
-    override fun visit(literal: FalseLiteral) {
-        appendValue(literal.value)
+    override fun visit(node: FalseLiteral) {
+        appendValue(node.value)
     }
 
-    override fun visit(literal: NilLiteral) {
-        appendValue(literal.value)
+    override fun visit(node: NilLiteral) {
+        appendValue(node.value)
     }
 
-    override fun visit(statement: GlobalAssignment) {
-        TODO("Not yet implemented")
+    override fun visit(node: StringLiteral) {
+        appendValue(node.value)
     }
 
+    private fun appendString(value: String) {
+        builder.append('(')
+        builder.append(value)
+        builder.append(')')
+    }
 
     private fun appendValue(value: Value) {
         builder.append('(')

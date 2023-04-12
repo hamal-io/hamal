@@ -1,117 +1,75 @@
 package io.hamal.module.worker.script.token
 
 import io.hamal.lib.ddd.base.ValueObject
-import io.hamal.module.worker.script.token.Token.Type.*
+import io.hamal.module.worker.script.token.Token.Type.Category.*
 
 class TokenLine(value: Int) : ValueObject.BaseImpl<Int>(value)
 class TokenPosition(value: Int) : ValueObject.BaseImpl<Int>(value)
 class TokenValue(value: String) : ValueObject.BaseImpl<String>(value)
 
-sealed class Token(
+class Token(
     val type: Type,
     val line: TokenLine,
     val position: TokenPosition,
     val value: TokenValue
 ) {
 
-    class EOF(
-        line: TokenLine,
-        position: TokenPosition
-    ) : Token(EOF, line, position, TokenValue("EOF"))
+    enum class Type(val value: kotlin.String, val category: Category) {
+        And("and", Keyword),
+        Break("break", Keyword),
+        Do("do", Keyword),
+        Else("else", Keyword),
+        ElseIf("elseif", Keyword),
+        End("end", Keyword),
+        For("for", Keyword),
+        Function("function", Keyword),
+        If("if", Keyword),
+        In("in", Keyword),
+        Local("local", Keyword),
+        Nor("nor", Keyword),
+        Not("not", Keyword),
+        Or("or", Keyword),
+        Repeat("repeat", Keyword),
+        Return("return", Keyword),
+        Then("then", Keyword),
+        Until("until", Keyword),
+        While("while", Keyword),
+        Xor("xor", Keyword),
 
-    class Error(
-        line: TokenLine,
-        position: TokenPosition,
-        errorMessage: TokenValue
-    ) : Token(ERROR, line, position, errorMessage)
+        Asterisk("*", Operator),
+        Carat("^", Operator),
+        Colon(":", Operator),
+        Dot(".", Operator),
+        Equal("=", Operator),
+        Hash("#", Operator),
+        LeftAngleBracket("<", Operator),
+        LeftBracket("[", Operator),
+        Minus("-", Operator),
+        Percent("%", Operator),
+        Plus("+", Operator),
+        RightAngleBracket(">", Operator),
+        RightBracket("]", Operator),
+        Slash("/", Operator),
+        Tilde("~", Operator),
 
-    class Identifier(
-        line: TokenLine,
-        position: TokenPosition,
-        value: TokenValue
-    ) : Token(IDENTIFIER, line, position, value)
+        Identifier("identifier", Category.Identifier),
 
-    class Literal(
-        val literalType: Type,
-        line: TokenLine,
-        position: TokenPosition,
-        value: TokenValue
-    ) : Token(LITERAL, line, position, value) {
-        enum class Type {
-            BOOLEAN_FALSE,
-            BOOLEAN_TRUE,
-            HEX_NUMBER,
-            NUMBER,
-            NIL,
-            STRING
+        FalseLiteral("false", Literal),
+        TrueLiteral("true", Literal),
+        HexNumberLiteral("hex_number", Literal),
+        NumberLiteral("number", Literal),
+        NilLiteral("nil", Literal),
+        StringLiteral("string", Literal),
+
+        Error("error", Misc),
+        Eof("eof", Misc);
+
+        enum class Category {
+            Keyword,
+            Operator,
+            Literal,
+            Identifier,
+            Misc,
         }
     }
-
-    class Operator(
-        val operatorType: Type,
-        line: TokenLine,
-        position: TokenPosition,
-        value: TokenValue
-    ) : Token(OPERATOR, line, position, value) {
-
-        enum class Type(val value: String) {
-            ASTERISK("*"),
-            CARAT("^"),
-            COLON(":"),
-            DOT("."),
-            EQUAL("="),
-            HASH("#"),
-            LEFT_ANGLE_BRACKET("<"),
-            LEFT_BRACKET("["),
-            MINUS("-"),
-            PERCENT("%"),
-            PLUS("+"),
-            RIGHT_ANGLE_BRACKET(">"),
-            RIGHT_BRACKET("]"),
-            SLASH("/"),
-            TILDE("~"),
-        }
-    }
-
-    class Keyword(
-        val keywordType: Type,
-        line: TokenLine,
-        position: TokenPosition,
-        value: TokenValue
-    ) : Token(KEYWORD, line, position, value) {
-
-        enum class Type(val value: String) {
-            AND("and"),
-            BREAK("break"),
-            DO("do"),
-            ELSE("else"),
-            ELSE_IF("elseif"),
-            END("end"),
-            FOR("for"),
-            FUNCTION("function"),
-            IF("if"),
-            IN("in"),
-            LOCAL("local"),
-            NOR("nor"),
-            NOT("not"),
-            OR("or"),
-            REPEAT("repeat"),
-            RETURN("return"),
-            THEN("then"),
-            UNTIL("until"),
-            WHILE("while"),
-            XOR("xor"),
-        }
-    }
-
-    enum class Type {
-        DELIMITER,
-        EOF,
-        ERROR,
-        KEYWORD,
-        IDENTIFIER,
-        LITERAL,
-        OPERATOR
-    }
-
 }

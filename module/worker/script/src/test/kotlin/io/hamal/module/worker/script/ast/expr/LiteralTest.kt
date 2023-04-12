@@ -8,31 +8,41 @@ import org.junit.jupiter.api.Test
 internal class LiteralTest : AbstractAstTest() {
 
     @Nested
-    @DisplayName("TrueLiteral.Parser")
-    inner class TrueLiteralParserTest {
+    @DisplayName("StringLiteral")
+    inner class StringLiteralTest {
+        @Test
+        fun `Parses string token`() {
+            val result = parseExpression(StringLiteral.ParseStringLiteral, "'hello hamal'")
+            result.verifyPrecedence("('hello hamal')")
+        }
+    }
+
+    @Nested
+    @DisplayName("TrueLiteral")
+    inner class TrueLiteralTest {
         @Test
         fun `Parse true`() {
-            val result = parse(TrueLiteral.Parser, "true")
+            val result = parseExpression(TrueLiteral.ParseTrueLiteral, "true")
             result.verifyPrecedence("(true)")
         }
     }
 
     @Nested
-    @DisplayName("FalseLiteral.Parser")
-    inner class FalseLiteralParserTest {
+    @DisplayName("FalseLiteral")
+    inner class FalseLiteralTest {
         @Test
         fun `Parse false`() {
-            val result = parse(FalseLiteral.Parser, "false")
+            val result = parseExpression(FalseLiteral.ParseFalseLiteral, "false")
             result.verifyPrecedence("(false)")
         }
     }
 
     @Nested
-    @DisplayName("NilLiteral.Parser")
-    inner class NilLiteralParserTest {
+    @DisplayName("NilLiteral")
+    inner class NilLiteralTest {
         @Test
         fun `Parse nil`() {
-            val result = parse(NilLiteral.Parser, "nil")
+            val result = parseExpression(NilLiteral.ParseNilLiteral, "nil")
             result.verifyPrecedence("(nil)")
         }
     }
