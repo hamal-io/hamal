@@ -48,7 +48,6 @@ class Token(
         Plus("+", Operator),
         RightAngleBracket(">", Operator),
         RightBracket("]", Operator),
-
         Slash("/", Operator),
         Tilde("~", Operator),
 

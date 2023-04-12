@@ -13,9 +13,9 @@ internal interface ParseInfixExpression {
 
     object DefaultImpl : ParseInfixExpression {
         override fun invoke(ctx: Parser.Context, lhs: Expression): InfixExpression {
-            val operator = Operator(ctx.currentTokenType().value)
             val precedence = ctx.currentPrecedence()
-            ctx.advance()
+            val operator = ctx.parseOperator()
+
             val rhs = ctx.parseExpression(precedence)
             return InfixExpression(
                 lhs = lhs,
@@ -27,3 +27,9 @@ internal interface ParseInfixExpression {
 }
 
 internal fun Parser.Context.infixFn(type: Token.Type): ParseInfixExpression? = infixParseFnMapping[type]
+
+internal fun Parser.Context.parseOperator(): Operator {
+    val result = Operator.Plus
+    advance()
+    return result
+}

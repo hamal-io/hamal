@@ -1,6 +1,7 @@
 package io.hamal.module.worker.script.eval
 
 import io.hamal.module.worker.script.ast.*
+import io.hamal.module.worker.script.ast.Operator.Plus
 import io.hamal.module.worker.script.ast.expr.FalseLiteral
 import io.hamal.module.worker.script.ast.expr.NumberLiteral
 import io.hamal.module.worker.script.ast.expr.TrueLiteral
@@ -51,8 +52,8 @@ private fun evalInfix(expression: InfixExpression, env: Environment): Value {
 
 
 private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): Value {
-    return when (operator.value) {
-        "+" -> {
+    return when (operator) {
+        Plus -> {
             NumberValue((lhs as NumberValue).value.plus((rhs as NumberValue).value))
         }
 

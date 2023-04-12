@@ -4,7 +4,9 @@ import io.hamal.module.worker.script.value.Value
 
 interface Node
 
-data class Operator(val value: String)
+enum class Operator(val value: String) {
+    Plus("+"),
+}
 
 interface Expression : Node {
     fun accept(visitor: Visitor)
