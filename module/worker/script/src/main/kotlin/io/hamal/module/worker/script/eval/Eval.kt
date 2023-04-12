@@ -5,6 +5,7 @@ import io.hamal.module.worker.script.ast.LiteralExpression
 import io.hamal.module.worker.script.ast.Statement
 import io.hamal.module.worker.script.ast.StatementExpression
 import io.hamal.module.worker.script.ast.expr.FalseLiteral
+import io.hamal.module.worker.script.ast.expr.NumberLiteral
 import io.hamal.module.worker.script.ast.expr.TrueLiteral
 import io.hamal.module.worker.script.value.NilValue
 import io.hamal.module.worker.script.value.Value
@@ -45,6 +46,7 @@ private fun evalLiteral(literal: LiteralExpression): Value {
     return when (literal) {
         is TrueLiteral -> literal.value
         is FalseLiteral -> literal.value
+        is NumberLiteral -> literal.value
         else -> TODO()
     }
 }

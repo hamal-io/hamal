@@ -2,13 +2,25 @@ package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.module.worker.script.ast.LiteralExpression
 import io.hamal.module.worker.script.ast.ParsePrefixExpression
+import io.hamal.module.worker.script.ast.Parser
 import io.hamal.module.worker.script.ast.Visitor
-import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.Token.Type
-import io.hamal.module.worker.script.value.FalseValue
-import io.hamal.module.worker.script.value.NilValue
-import io.hamal.module.worker.script.value.StringValue
-import io.hamal.module.worker.script.value.TrueValue
+import io.hamal.module.worker.script.value.*
+
+class NumberLiteral(value: NumberValue) : LiteralExpression(value) {
+    override fun accept(visitor: Visitor) {
+        visitor.visit(this)
+    }
+
+    internal object ParseNumberLiteral : ParsePrefixExpression<NumberLiteral> {
+        override fun invoke(ctx: Parser.Context): NumberLiteral {
+            assert(ctx.isNotEmpty())
+            val token = ctx.pop()
+            assert(token.type == Type.NumberLiteral)
+            return NumberLiteral(NumberValue(token.value.value))
+        }
+    }
+}
 
 class StringLiteral(value: StringValue) : LiteralExpression(value) {
     override fun accept(visitor: Visitor) {
@@ -16,9 +28,9 @@ class StringLiteral(value: StringValue) : LiteralExpression(value) {
     }
 
     internal object ParseStringLiteral : ParsePrefixExpression<StringLiteral> {
-        override fun invoke(tokens: ArrayDeque<Token>): StringLiteral {
-            assert(tokens.isNotEmpty())
-            val token = tokens.removeFirst()
+        override fun invoke(ctx: Parser.Context): StringLiteral {
+            assert(ctx.isNotEmpty())
+            val token = ctx.pop()
             assert(token.type == Type.StringLiteral)
             return StringLiteral(StringValue(token.value.value))
         }
@@ -31,9 +43,9 @@ class TrueLiteral : LiteralExpression(TrueValue) {
     }
 
     internal object ParseTrueLiteral : ParsePrefixExpression<TrueLiteral> {
-        override fun invoke(tokens: ArrayDeque<Token>): TrueLiteral {
-            assert(tokens.isNotEmpty())
-            val token = tokens.removeFirst()
+        override fun invoke(ctx: Parser.Context): TrueLiteral {
+            assert(ctx.isNotEmpty())
+            val token = ctx.pop()
             assert(token.type == Type.TrueLiteral)
             return TrueLiteral()
         }
@@ -46,9 +58,9 @@ class FalseLiteral : LiteralExpression(FalseValue) {
     }
 
     internal object ParseFalseLiteral : ParsePrefixExpression<FalseLiteral> {
-        override fun invoke(tokens: ArrayDeque<Token>): FalseLiteral {
-            assert(tokens.isNotEmpty())
-            val token = tokens.removeFirst()
+        override fun invoke(ctx: Parser.Context): FalseLiteral {
+            assert(ctx.isNotEmpty())
+            val token = ctx.pop()
             assert(token.type == Type.FalseLiteral)
             return FalseLiteral()
         }
@@ -60,9 +72,9 @@ class NilLiteral : LiteralExpression(NilValue) {
     override fun accept(visitor: Visitor) = visitor.visit(this)
 
     internal object ParseNilLiteral : ParsePrefixExpression<NilLiteral> {
-        override fun invoke(tokens: ArrayDeque<Token>): NilLiteral {
-            assert(tokens.isNotEmpty())
-            val token = tokens.removeFirst()
+        override fun invoke(ctx: Parser.Context): NilLiteral {
+            assert(ctx.isNotEmpty())
+            val token = ctx.pop()
             assert(token.type == Type.NilLiteral)
             return NilLiteral()
         }

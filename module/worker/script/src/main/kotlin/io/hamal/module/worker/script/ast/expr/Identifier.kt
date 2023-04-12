@@ -2,8 +2,8 @@ package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.module.worker.script.ast.Expression
 import io.hamal.module.worker.script.ast.ParsePrefixExpression
+import io.hamal.module.worker.script.ast.Parser
 import io.hamal.module.worker.script.ast.Visitor
-import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.Token.Type
 
 class Identifier(val value: String) : Expression {
@@ -12,9 +12,9 @@ class Identifier(val value: String) : Expression {
     }
 
     internal object ParseIdentifier : ParsePrefixExpression<Identifier> {
-        override fun invoke(tokens: ArrayDeque<Token>): Identifier {
-            assert(tokens.isNotEmpty())
-            val token = tokens.removeFirst()
+        override fun invoke(ctx: Parser.Context): Identifier {
+            assert(ctx.isNotEmpty())
+            val token = ctx.pop()
             assert(token.type == Type.Identifier)
             return Identifier(token.value.value)
         }

@@ -10,6 +10,10 @@ class PrecedenceTestVisitor : Visitor {
         appendString(node.value)
     }
 
+    override fun visit(node: NumberLiteral) {
+        appendValue(node.value)
+    }
+
     override fun visit(node: TrueLiteral) {
         appendValue(node.value)
     }

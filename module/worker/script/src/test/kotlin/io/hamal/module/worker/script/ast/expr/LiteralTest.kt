@@ -8,6 +8,16 @@ import org.junit.jupiter.api.Test
 internal class LiteralTest : AbstractAstTest() {
 
     @Nested
+    @DisplayName("NumberLiteral")
+    inner class NumberLiteralTest {
+        @Test
+        fun `Parse number token`() {
+            val result = parseExpression(NumberLiteral.ParseNumberLiteral, "28.10")
+            result.verifyPrecedence("(28.10)")
+        }
+    }
+
+    @Nested
     @DisplayName("StringLiteral")
     inner class StringLiteralTest {
         @Test

@@ -9,7 +9,7 @@ internal abstract class AbstractAstTest {
 
     fun <EXPRESSION : Expression> parseExpression(parser: ParsePrefixExpression<EXPRESSION>, code: String): EXPRESSION {
         val tokens = ArrayDeque(tokenize(code))
-        val result = parser(tokens)
+        val result = parser(Parser.Context(tokens))
         assertThat("All tokens were consumed except EOF", tokens.size, equalTo(1))
         assertThat("Last token must be EOF", tokens.first().type, equalTo(Token.Type.Eof))
         return result
