@@ -3,7 +3,6 @@ package io.hamal.module.worker.script.ast
 import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.value.Value
 
-
 interface Node {
 }
 

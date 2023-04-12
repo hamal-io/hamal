@@ -1,6 +1,5 @@
 package io.hamal.module.worker.script.ast
 
-import io.hamal.lib.meta.exception.HamalException
 import io.hamal.module.worker.script.ast.expr.FalseLiteral.ParseFalseLiteral
 import io.hamal.module.worker.script.ast.expr.Identifier.ParseIdentifier
 import io.hamal.module.worker.script.ast.expr.NilLiteral.ParseNilLiteral
@@ -32,10 +31,6 @@ interface Parser {
             return result
         }
     }
-}
-
-class ParseException(message: String? = null, cause: Throwable? = null) : HamalException(message, cause) {
-    constructor(cause: Throwable) : this(null, cause)
 }
 
 internal enum class Precedence {
