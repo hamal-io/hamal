@@ -8,9 +8,7 @@ enum class Operator(val value: String) {
     Plus("+"),
 }
 
-interface Expression : Node {
-    fun accept(visitor: Visitor)
-}
+interface Expression : Node
 
 abstract class LiteralExpression(
     val value: Value
@@ -27,12 +25,7 @@ data class InfixExpression(
     val lhs: Expression,
     val operator: Operator,
     val rhs: Expression
-) : Expression {
-    // FIXME remove visitor
-    override fun accept(visitor: Visitor) {
-        TODO("Not yet implemented")
-    }
-}
+) : Expression
 
 interface Statement : Node
 

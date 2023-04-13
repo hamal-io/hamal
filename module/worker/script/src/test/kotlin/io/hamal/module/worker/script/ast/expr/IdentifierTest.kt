@@ -12,7 +12,7 @@ internal class IdentifierTest : AbstractAstTest() {
         @Test
         fun `Parses identifier`() {
             val result = parseExpression(Identifier.ParseIdentifier, "some_variable")
-            result.verifyPrecedence("(some_variable)")
+            result.verifyPrecedence("some_variable")
         }
     }
 }

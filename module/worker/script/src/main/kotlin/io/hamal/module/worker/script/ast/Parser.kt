@@ -8,7 +8,7 @@ import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.Token.Type.*
 
 fun parse(tokens: List<Token>): List<Statement> {
-    val parser = Parser.DefaultImpl()
+    val parser = Parser.DefaultImpl
     return parser.parse(Parser.Context(ArrayDeque(tokens)))
 }
 
@@ -16,7 +16,7 @@ interface Parser {
 
     fun parse(ctx: Context): List<Statement>
 
-    class DefaultImpl : Parser {
+    object DefaultImpl : Parser {
         override fun parse(ctx: Context): List<Statement> {
             val result = mutableListOf<Statement>()
             while (ctx.isNotEmpty()) {

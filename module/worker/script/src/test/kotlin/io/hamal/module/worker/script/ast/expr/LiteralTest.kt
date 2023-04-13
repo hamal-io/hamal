@@ -13,7 +13,7 @@ internal class LiteralTest : AbstractAstTest() {
         @Test
         fun `Parse number token`() {
             val result = parseExpression(NumberLiteral.ParseNumberLiteral, "28.10")
-            result.verifyPrecedence("(28.10)")
+            result.verifyPrecedence("28.10")
         }
     }
 
@@ -23,7 +23,7 @@ internal class LiteralTest : AbstractAstTest() {
         @Test
         fun `Parses string token`() {
             val result = parseExpression(StringLiteral.ParseStringLiteral, "'hello hamal'")
-            result.verifyPrecedence("('hello hamal')")
+            result.verifyPrecedence("'hello hamal'")
         }
     }
 
@@ -33,7 +33,7 @@ internal class LiteralTest : AbstractAstTest() {
         @Test
         fun `Parse true`() {
             val result = parseExpression(TrueLiteral.ParseTrueLiteral, "true")
-            result.verifyPrecedence("(true)")
+            result.verifyPrecedence("true")
         }
     }
 
@@ -43,7 +43,7 @@ internal class LiteralTest : AbstractAstTest() {
         @Test
         fun `Parse false`() {
             val result = parseExpression(FalseLiteral.ParseFalseLiteral, "false")
-            result.verifyPrecedence("(false)")
+            result.verifyPrecedence("false")
         }
     }
 
@@ -53,7 +53,7 @@ internal class LiteralTest : AbstractAstTest() {
         @Test
         fun `Parse nil`() {
             val result = parseExpression(NilLiteral.ParseNilLiteral, "nil")
-            result.verifyPrecedence("(nil)")
+            result.verifyPrecedence("nil")
         }
     }
 }

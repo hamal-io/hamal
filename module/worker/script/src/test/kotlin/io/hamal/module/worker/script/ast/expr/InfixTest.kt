@@ -15,7 +15,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 class InfixTest {
-
     @Nested
     @DisplayName("parseOperator()")
     @TestInstance(Lifecycle.PER_CLASS)

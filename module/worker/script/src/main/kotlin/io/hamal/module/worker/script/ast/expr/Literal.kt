@@ -2,15 +2,10 @@ package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.module.worker.script.ast.LiteralExpression
 import io.hamal.module.worker.script.ast.Parser
-import io.hamal.module.worker.script.ast.Visitor
 import io.hamal.module.worker.script.token.Token.Type
 import io.hamal.module.worker.script.value.*
 
 class NumberLiteral(value: NumberValue) : LiteralExpression(value) {
-    override fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
-
     internal object ParseNumberLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): NumberLiteral {
             assert(ctx.isNotEmpty())
@@ -22,10 +17,6 @@ class NumberLiteral(value: NumberValue) : LiteralExpression(value) {
 }
 
 class StringLiteral(value: StringValue) : LiteralExpression(value) {
-    override fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
-
     internal object ParseStringLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): StringLiteral {
             assert(ctx.isNotEmpty())
@@ -37,10 +28,6 @@ class StringLiteral(value: StringValue) : LiteralExpression(value) {
 }
 
 class TrueLiteral : LiteralExpression(TrueValue) {
-    override fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
-
     internal object ParseTrueLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): TrueLiteral {
             assert(ctx.isNotEmpty())
@@ -52,10 +39,6 @@ class TrueLiteral : LiteralExpression(TrueValue) {
 }
 
 class FalseLiteral : LiteralExpression(FalseValue) {
-    override fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
-
     internal object ParseFalseLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): FalseLiteral {
             assert(ctx.isNotEmpty())
@@ -68,8 +51,6 @@ class FalseLiteral : LiteralExpression(FalseValue) {
 
 
 class NilLiteral : LiteralExpression(NilValue) {
-    override fun accept(visitor: Visitor) = visitor.visit(this)
-
     internal object ParseNilLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): NilLiteral {
             assert(ctx.isNotEmpty())

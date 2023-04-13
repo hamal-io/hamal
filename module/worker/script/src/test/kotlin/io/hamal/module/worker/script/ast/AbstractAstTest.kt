@@ -17,8 +17,6 @@ internal abstract class AbstractAstTest {
     }
 
     fun Expression.verifyPrecedence(expected: String) {
-        val v = PrecedenceTestVisitor()
-        accept(v)
-        assertThat(v.toString(), equalTo(expected))
+        assertThat(PrecedenceString.of(this), equalTo(expected))
     }
 }

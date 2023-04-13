@@ -26,7 +26,7 @@ internal interface ParseInfixExpression {
     }
 }
 
-internal fun Parser.Context.infixFn(type: Token.Type): ParseInfixExpression? = infixParseFnMapping[type]
+internal fun infixFn(type: Token.Type): ParseInfixExpression? = infixParseFnMapping[type]
 
 internal fun Parser.Context.parseOperator(): Operator {
     val result = Operator.Plus

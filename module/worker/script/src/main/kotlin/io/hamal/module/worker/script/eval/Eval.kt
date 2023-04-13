@@ -47,11 +47,14 @@ private fun evalInfix(expression: InfixExpression, env: Environment): Value {
     val lhs = evalExpression(expression.lhs, env)
     //FIXME error handling
     val rhs = evalExpression(expression.rhs, env)
+
     return eval(expression.operator, lhs, rhs, env)
 }
 
 
 private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): Value {
+    //FIXME have an operator registry where operations of operators are specified based on the input --
+    // should be a nice isolation for tests
     return when (operator) {
         Plus -> {
             NumberValue((lhs as NumberValue).value.plus((rhs as NumberValue).value))
