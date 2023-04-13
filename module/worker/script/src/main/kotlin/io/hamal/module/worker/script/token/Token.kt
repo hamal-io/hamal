@@ -64,7 +64,6 @@ class Token(
 
         Semicolon(";", Delimiter),
         Comma(",", Delimiter),
-        LineBreak("\n", Delimiter),
 
         Error("error", Misc),
         Eof("eof", Misc);

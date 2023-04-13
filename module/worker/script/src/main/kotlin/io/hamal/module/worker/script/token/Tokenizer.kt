@@ -122,6 +122,12 @@ internal fun DefaultImpl.skipWhitespace(): DefaultImpl {
                 }
             }
 
+            '\n' -> {
+                line++
+                linePosition = 0
+                advance()
+            }
+
             ' ', '\r', '\t' -> {
                 advance()
             }
@@ -217,13 +223,6 @@ private fun DefaultImpl.nextDelimiter(): Token? {
     return when (buffer.toString()) {
         "," -> Token(Comma, tokenLine(), tokenPosition(), tokenValue())
         ";" -> Token(Semicolon, tokenLine(), tokenPosition(), tokenValue())
-        "\n" -> {
-            val result = Token(LineBreak, tokenLine(), tokenPosition(), tokenValue())
-            line++
-            linePosition = 0
-            result
-        }
-
         else -> null
     }
 }

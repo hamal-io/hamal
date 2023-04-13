@@ -186,7 +186,7 @@ class TokenizerTest {
                     invoke_awesomeness()
                 """.trimIndent()
                 )
-                testInstance.skipWhitespace().assert(40, 1, 40, "")
+                testInstance.skipWhitespace().assert(41, 2, 1, "")
             }
 
             @Test
@@ -278,7 +278,6 @@ class TokenizerTest {
 
                 Argument(";", Token(Type.Semicolon, 1, 1, ";")),
                 Argument(",", Token(Type.Comma, 1, 1, ",")),
-                Argument("\n", Token(Type.LineBreak, 1, 1, "\n")),
 
                 )
 

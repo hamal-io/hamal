@@ -8,6 +8,8 @@ import org.hamcrest.Matchers.equalTo
 
 internal abstract class AbstractAstTest {
 
+    fun parserContextOf(code: String) = Parser.Context(ArrayDeque(tokenize(code)))
+
     fun parseSimpleLiteralExpression(parser: ParsePrefixExpression, code: String): Expression {
         val tokens = ArrayDeque(tokenize(code))
         val result = parser(Parser.Context(tokens))

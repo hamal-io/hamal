@@ -75,7 +75,6 @@ class FunctionLiteral(
     internal object ParseFunctionLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): FunctionLiteral {
             assert(ctx.isNotEmpty())
-
             ctx.expectCurrentTokenTypToBe(Function)
             ctx.advance()
 
