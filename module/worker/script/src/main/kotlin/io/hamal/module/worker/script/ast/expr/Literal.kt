@@ -1,8 +1,11 @@
 package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.lib.meta.math.Decimal
+import io.hamal.module.worker.script.ParseException
 import io.hamal.module.worker.script.ast.LiteralExpression
 import io.hamal.module.worker.script.ast.Parser
+import io.hamal.module.worker.script.ast.Statement
+import io.hamal.module.worker.script.ast.parseStatement
 import io.hamal.module.worker.script.ast.stmt.BlockStatement
 import io.hamal.module.worker.script.token.Token.Type
 import io.hamal.module.worker.script.token.Token.Type.*
@@ -111,14 +114,16 @@ class FunctionLiteral(
         }
 
         private fun Parser.Context.parseFunctionBody(): BlockStatement {
+            val statements = mutableListOf<Statement>()
             while (currentTokenType() != End) {
-                advance()
+                if (currentTokenType() == Eof) {
+                    throw ParseException("Expected end  but reached end of file")
+                }
+                parseStatement()?.let(statements::add)
             }
-
             expectCurrentTokenTypToBe(End)
             advance()
-
-            return BlockStatement(listOf())
+            return BlockStatement(statements)
         }
     }
 }

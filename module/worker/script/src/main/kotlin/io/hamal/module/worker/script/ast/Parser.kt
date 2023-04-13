@@ -20,7 +20,7 @@ interface Parser {
     fun parse(ctx: Context): BlockStatement
 
     object DefaultImpl : Parser {
-        override fun parse(ctx: Context): BlockStatement = ctx.parseBlockStatement()
+        override fun parse(ctx: Context): BlockStatement = ctx.parseGlobalBlock()
     }
 
     data class Context(val tokens: ArrayDeque<Token>) {
@@ -42,10 +42,10 @@ interface Parser {
     }
 }
 
-private fun Parser.Context.parseBlockStatement(): BlockStatement {
+private fun Parser.Context.parseGlobalBlock(): BlockStatement {
     val statements = mutableListOf<Statement>()
     while (isNotEmpty()) {
-        statements.add(parseStatement())
+        parseStatement()?.let(statements::add)
         advance()
         if (currentTokenType() == Eof) {
             break
@@ -54,8 +54,15 @@ private fun Parser.Context.parseBlockStatement(): BlockStatement {
     return BlockStatement(statements)
 }
 
-private fun Parser.Context.parseStatement(): Statement {
-    return ExpressionStatement(parseSimpleLiteralExpression())
+internal fun Parser.Context.parseStatement(): Statement? {
+    return when (currentTokenType()) {
+        LineBreak -> {
+            advance()
+            null
+        }
+
+        else -> ExpressionStatement(parseSimpleLiteralExpression())
+    }
 }
 
 internal fun Parser.Context.parseSimpleLiteralExpression(precedence: Precedence = Precedence.Lowest): Expression {
