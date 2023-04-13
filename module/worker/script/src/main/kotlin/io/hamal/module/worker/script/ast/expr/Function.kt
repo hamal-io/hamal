@@ -1,7 +1,6 @@
 package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.module.worker.script.ParseException
-import io.hamal.module.worker.script.ast.Literal
 import io.hamal.module.worker.script.ast.Parser
 import io.hamal.module.worker.script.ast.Statement
 import io.hamal.module.worker.script.ast.parseStatement
@@ -12,8 +11,8 @@ class Function(
     val identifier: Identifier,
     val parameters: List<Identifier>,
     val block: Block
-) : Literal {
-    internal object Parse : ParsePrefixExpression {
+) : LiteralExpression {
+    internal object Parse : ParseLiteralExpression<Function> {
         override fun invoke(ctx: Parser.Context): Function {
             assert(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Function)

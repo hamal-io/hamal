@@ -1,39 +1,47 @@
 package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.lib.meta.math.Decimal
-import io.hamal.module.worker.script.ast.Literal
+import io.hamal.module.worker.script.ast.Expression
 import io.hamal.module.worker.script.ast.Parser
 import io.hamal.module.worker.script.token.Token.Type
 
-data class Number(val value: Decimal) : Literal {
-    internal object Parse : ParsePrefixExpression {
+interface LiteralExpression : Expression
+
+internal interface ParseLiteralExpression<EXPRESSION : LiteralExpression> {
+    operator fun invoke(ctx: Parser.Context): EXPRESSION
+}
+
+data class Number(val value: Decimal) : LiteralExpression {
+    constructor(value: Int) : this(Decimal(value))
+
+    internal object Parse : ParseLiteralExpression<Number> {
         override fun invoke(ctx: Parser.Context): Number {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Type.NumberLiteral)
+            assert(token.type == Type.Number)
             return Number(Decimal(token.value))
         }
     }
 }
 
-data class String(val value: kotlin.String) : Literal {
-    internal object Parse : ParsePrefixExpression {
+data class String(val value: kotlin.String) : LiteralExpression {
+    internal object Parse : ParseLiteralExpression<String> {
         override fun invoke(ctx: Parser.Context): String {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Type.StringLiteral)
+            assert(token.type == Type.String)
             return String(token.value)
         }
     }
 }
 
-class True : Literal {
+class True : LiteralExpression {
 
-    internal object Parse : ParsePrefixExpression {
+    internal object Parse : ParseLiteralExpression<True> {
         override fun invoke(ctx: Parser.Context): True {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Type.TrueLiteral)
+            assert(token.type == Type.True)
             return True()
         }
     }
@@ -43,12 +51,12 @@ class True : Literal {
     override fun hashCode() = this::class.hashCode()
 }
 
-class False : Literal {
-    internal object Parse : ParsePrefixExpression {
+class False : LiteralExpression {
+    internal object Parse : ParseLiteralExpression<False> {
         override fun invoke(ctx: Parser.Context): False {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Type.FalseLiteral)
+            assert(token.type == Type.False)
             return False()
         }
     }
@@ -59,12 +67,12 @@ class False : Literal {
 }
 
 
-class Nil : Literal {
-    internal object ParseNilLiteral : ParsePrefixExpression {
+class Nil : LiteralExpression {
+    internal object Parse : ParseLiteralExpression<Nil> {
         override fun invoke(ctx: Parser.Context): Nil {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Type.NilLiteral)
+            assert(token.type == Type.Nil)
             return Nil()
         }
     }

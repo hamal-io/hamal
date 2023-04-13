@@ -3,6 +3,7 @@ package io.hamal.module.worker.script.eval
 import io.hamal.module.worker.script.ast.*
 import io.hamal.module.worker.script.ast.Operator.Plus
 import io.hamal.module.worker.script.ast.expr.False
+import io.hamal.module.worker.script.ast.expr.LiteralExpression
 import io.hamal.module.worker.script.ast.expr.Number
 import io.hamal.module.worker.script.ast.expr.True
 import io.hamal.module.worker.script.ast.stmt.Block
@@ -34,7 +35,7 @@ private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: Block, env: Envi
 private fun evalExpression(expression: Expression, env: Environment): Value {
     return when (expression) {
         is InfixExpression -> evalInfix(expression, env)
-        is Literal -> evalLiteral(expression)
+        is LiteralExpression -> evalLiteral(expression)
         else -> TODO()
     }
 }
@@ -61,7 +62,7 @@ private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): 
     }
 }
 
-private fun evalLiteral(literal: Literal): Value {
+private fun evalLiteral(literal: LiteralExpression): Value {
     return when (literal) {
         is True -> TrueValue
         is False -> FalseValue

@@ -13,7 +13,7 @@ class Token(
         return "Token($type)"
     }
 
-    enum class Type(val value: String, val category: Category) {
+    enum class Type(val value: kotlin.String, val category: Category) {
         And("and", Keyword),
         Break("break", Keyword),
         Do("do", Keyword),
@@ -55,12 +55,12 @@ class Token(
 
         Identifier("identifier", Category.Identifier),
 
-        FalseLiteral("false", Literal),
-        TrueLiteral("true", Literal),
-        HexNumberLiteral("hex_number", Literal),
-        NumberLiteral("number", Literal),
-        NilLiteral("nil", Literal),
-        StringLiteral("string", Literal),
+        False("false", Literal),
+        True("true", Literal),
+        HexNumber("hex_number", Literal),
+        Number("number", Literal),
+        Nil("nil", Literal),
+        String("string", Literal),
 
         Semicolon(";", Delimiter),
         Comma(",", Delimiter),

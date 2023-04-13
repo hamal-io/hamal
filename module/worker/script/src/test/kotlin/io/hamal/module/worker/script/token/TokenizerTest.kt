@@ -4,7 +4,7 @@ import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.module.worker.script.token.*
 import io.hamal.module.worker.script.token.Token.*
 import io.hamal.module.worker.script.token.Token.Type.Error
-import io.hamal.module.worker.script.token.Token.Type.HexNumberLiteral
+import io.hamal.module.worker.script.token.Token.Type.HexNumber
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
@@ -228,15 +228,15 @@ class TokenizerTest {
                     "some_variable",
                     Token(Type.Identifier, 1, 1, "some_variable")
                 ),
-                Argument("23.45", Token(Type.NumberLiteral, 1, 1, "23.45")),
-                Argument("0x815", Token(Type.HexNumberLiteral, 1, 1, "0x815")),
+                Argument("23.45", Token(Type.Number, 1, 1, "23.45")),
+                Argument("0x815", Token(Type.HexNumber, 1, 1, "0x815")),
                 Argument(
                     "'Hello Hamal'",
-                    Token(Type.StringLiteral, 1, 1, "Hello Hamal")
+                    Token(Type.String, 1, 1, "Hello Hamal")
                 ),
-                Argument("true", Token(Type.TrueLiteral, 1, 1, "true")),
-                Argument("false", Token(Type.FalseLiteral, 1, 1, "false")),
-                Argument("nil", Token(Type.NilLiteral, 1, 1, "nil")),
+                Argument("true", Token(Type.True, 1, 1, "true")),
+                Argument("false", Token(Type.False, 1, 1, "false")),
+                Argument("nil", Token(Type.Nil, 1, 1, "nil")),
                 Argument("break", Token(Type.Break, 1, 1, "break")),
                 Argument("and", Token(Type.And, 1, 1, "and")),
                 Argument("do", Token(Type.Do, 1, 1, "do")),
@@ -397,15 +397,15 @@ class TokenizerTest {
         }
 
         private fun Token.assertNumberLiteral(line: Int, linePosition: Int, value: String) {
-            assertLiteral(Type.NumberLiteral, line, linePosition, value)
+            assertLiteral(Type.Number, line, linePosition, value)
         }
 
         private fun Token.assertHexNumberLiteral(line: Int, linePosition: Int, value: String) {
-            assertLiteral(HexNumberLiteral, line, linePosition, value)
+            assertLiteral(HexNumber, line, linePosition, value)
         }
 
         private fun Token.assertStringLiteral(line: Int, linePosition: Int, value: String) {
-            assertLiteral(Type.StringLiteral, line, linePosition, value)
+            assertLiteral(Type.String, line, linePosition, value)
         }
 
         private fun Token.assertLiteral(type: Type, line: Int, linePosition: Int, value: String) {

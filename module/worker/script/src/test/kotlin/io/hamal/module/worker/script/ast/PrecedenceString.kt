@@ -14,7 +14,7 @@ object PrecedenceString {
     private fun StringBuilder.appendExpression(expression: Expression) {
         when (expression) {
             is Identifier -> appendString(expression.value)
-            is Literal -> appendLiteral(expression)
+            is LiteralExpression -> appendLiteral(expression)
             is PrefixExpression -> appendPrefixExpression(expression)
             is InfixExpression -> appendInfixExpression(expression)
         }
@@ -47,7 +47,7 @@ object PrecedenceString {
         append(value)
     }
 
-    private fun StringBuilder.appendLiteral(literal: Literal) {
+    private fun StringBuilder.appendLiteral(literal: LiteralExpression) {
         when (literal) {
             is True -> appendValue(TrueValue)
             is False -> appendValue(FalseValue)

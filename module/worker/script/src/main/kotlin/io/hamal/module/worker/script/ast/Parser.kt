@@ -63,7 +63,7 @@ internal fun Parser.Context.parseStatement(): Statement? {
 }
 
 internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
-    var lhsExpression = prefixFn(currentTokenType())(this)
+    var lhsExpression: Expression = prefixFn(currentTokenType())(this)
     while (!endOfExpression() && precedence < nextPrecedence()) {
         val infix = infixFn(nextTokenType()) ?: return lhsExpression
         advance()

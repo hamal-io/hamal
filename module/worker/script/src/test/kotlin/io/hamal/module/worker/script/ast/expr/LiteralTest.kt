@@ -1,11 +1,14 @@
 package io.hamal.module.worker.script.ast.expr
 
-import io.hamal.module.worker.script.ast.AbstractAstTest
+import io.hamal.lib.meta.math.Decimal
+import io.hamal.module.worker.script.token.Token.Type
+import org.hamcrest.MatcherAssert.*
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class LiteralTest : AbstractAstTest() {
+internal class LiteralTest : AbstractExpressionTest() {
     @Test
     fun fail() {
         throw Error("implement test for equals and hashcode")
@@ -19,8 +22,10 @@ internal class LiteralTest : AbstractAstTest() {
         inner class ParseTest {
             @Test
             fun `Parse number token`() {
-                val result = parseSimpleLiteralExpression(Number.Parse, "28.10")
-                result.verifyPrecedence("28.10")
+                runLiteralTest(Number.Parse, "28.10") { result, tokens ->
+                    assertThat(result, equalTo(Number(Decimal("28.10"))))
+                    tokens.inOrder(Type.Number, Type.Eof)
+                }
             }
         }
     }
@@ -33,8 +38,10 @@ internal class LiteralTest : AbstractAstTest() {
         inner class ParseTest {
             @Test
             fun `Parses string token`() {
-                val result = parseSimpleLiteralExpression(String.Parse, "'hello hamal'")
-                result.verifyPrecedence("'hello hamal'")
+                runLiteralTest(String.Parse, "'hello hamal'") { result, tokens ->
+                    assertThat(result, equalTo(String("hello hamal")))
+                    tokens.inOrder(Type.String, Type.Eof)
+                }
             }
         }
     }
@@ -47,8 +54,10 @@ internal class LiteralTest : AbstractAstTest() {
         inner class ParseTest {
             @Test
             fun `Parse true`() {
-                val result = parseSimpleLiteralExpression(True.Parse, "true")
-                result.verifyPrecedence("true")
+                runLiteralTest(True.Parse, "true") { result, tokens ->
+                    assertThat(result, equalTo(True()))
+                    tokens.inOrder(Type.True, Type.Eof)
+                }
             }
         }
     }
@@ -61,8 +70,10 @@ internal class LiteralTest : AbstractAstTest() {
         inner class ParseTest {
             @Test
             fun `Parse false`() {
-                val result = parseSimpleLiteralExpression(False.Parse, "false")
-                result.verifyPrecedence("false")
+                runLiteralTest(False.Parse, "false") { result, tokens ->
+                    assertThat(result, equalTo(False()))
+                    tokens.inOrder(Type.False, Type.Eof)
+                }
             }
         }
     }
@@ -75,8 +86,10 @@ internal class LiteralTest : AbstractAstTest() {
         inner class ParseTest {
             @Test
             fun `Parse nil`() {
-                val result = parseSimpleLiteralExpression(Nil.ParseNilLiteral, "nil")
-                result.verifyPrecedence("nil")
+                runLiteralTest(Nil.Parse, "nil") { result, tokens ->
+                    assertThat(result, equalTo(Nil()))
+                    tokens.inOrder(Type.Nil, Type.Eof)
+                }
             }
         }
     }

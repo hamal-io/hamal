@@ -1,18 +1,22 @@
 package io.hamal.module.worker.script.ast.expr
 
-import io.hamal.module.worker.script.ast.AbstractAstTest
+import io.hamal.module.worker.script.token.Token.Type
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class IdentifierTest : AbstractAstTest() {
+internal class IdentifierTest : AbstractExpressionTest() {
     @Nested
-    @DisplayName("Identifier.ParseIdentifier")
-    inner class IdentifierParserTest {
+    @DisplayName("Parse()")
+    inner class ParseTest {
         @Test
         fun `Parses identifier`() {
-            val result = parseSimpleLiteralExpression(Identifier.Parse, "some_variable")
-            result.verifyPrecedence("some_variable")
+            runLiteralTest(Identifier.Parse, "some_variable") { result, tokens ->
+                assertThat(result, equalTo(Identifier("some_variable")))
+                tokens.inOrder(Type.Identifier, Type.Eof)
+            }
         }
     }
 }

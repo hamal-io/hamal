@@ -11,7 +11,7 @@ internal class DoTest : AbstractStatementTest() {
     fun `do end`() {
         runTest(ParseDo, "do end") { result, tokens ->
             assertThat(result, equalTo(Do(Block.empty)))
-            assertAllTokensConsumed(tokens)
+            tokens.wereConsumed()
         }
     }
 
@@ -19,7 +19,7 @@ internal class DoTest : AbstractStatementTest() {
     fun `do return end`() {
         runTest(ParseDo, "do return end") { result, tokens ->
             assertThat(result, equalTo(Do(Block(Return(Nil())))))
-            assertAllTokensConsumed(tokens)
+            tokens.wereConsumed()
         }
     }
 }

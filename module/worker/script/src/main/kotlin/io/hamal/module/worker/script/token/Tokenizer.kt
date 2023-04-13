@@ -4,6 +4,7 @@ import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.lib.meta.exception.throwIf
 import io.hamal.module.worker.script.token.Token.Type
 import io.hamal.module.worker.script.token.Token.Type.*
+import io.hamal.module.worker.script.token.Token.Type.Number
 import io.hamal.module.worker.script.token.Tokenizer.DefaultImpl
 import io.hamal.module.worker.script.token.TokenizerUtil.isAlpha
 import io.hamal.module.worker.script.token.TokenizerUtil.isDigit
@@ -154,7 +155,7 @@ internal fun DefaultImpl.nextNumber(): Token {
             advance()
         }
     }
-    return Token(NumberLiteral, tokenLine(), tokenPosition(), tokenValue())
+    return Token(Number, tokenLine(), tokenPosition(), tokenValue())
 }
 
 internal fun DefaultImpl.nextHexNumber(): Token {
@@ -164,7 +165,7 @@ internal fun DefaultImpl.nextHexNumber(): Token {
     while (!isAtEnd() && TokenizerUtil.isHexChar(peek())) {
         advance();
     }
-    return Token(HexNumberLiteral, tokenLine(), tokenPosition(), tokenValue())
+    return Token(HexNumber, tokenLine(), tokenPosition(), tokenValue())
 }
 
 internal fun DefaultImpl.nextString(): Token {
@@ -187,7 +188,7 @@ internal fun DefaultImpl.nextString(): Token {
         advance()
     }
     advance() // remove last quote
-    return Token(Type.StringLiteral, tokenLine(), tokenPosition(), buffer.substring(1, buffer.length - 1))
+    return Token(Type.String, tokenLine(), tokenPosition(), buffer.substring(1, buffer.length - 1))
 }
 
 internal fun DefaultImpl.nextIdentifierOrKeyword(): Token {
@@ -212,9 +213,9 @@ private fun DefaultImpl.nextOperator(): Token? {
 
 private fun DefaultImpl.nextLiteral(): Token? {
     return when (val value = buffer.toString()) {
-        "true" -> Token(TrueLiteral, tokenLine(), tokenPosition(), value)
-        "false" -> Token(FalseLiteral, tokenLine(), tokenPosition(), value)
-        "nil" -> Token(NilLiteral, tokenLine(), tokenPosition(), value)
+        "true" -> Token(True, tokenLine(), tokenPosition(), value)
+        "false" -> Token(False, tokenLine(), tokenPosition(), value)
+        "nil" -> Token(Nil, tokenLine(), tokenPosition(), value)
         else -> null
     }
 }
