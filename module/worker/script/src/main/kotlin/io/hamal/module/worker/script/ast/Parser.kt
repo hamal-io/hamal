@@ -1,5 +1,7 @@
 package io.hamal.module.worker.script.ast
 
+import io.hamal.lib.meta.exception.throwIf
+import io.hamal.module.worker.script.ParseException
 import io.hamal.module.worker.script.ast.expr.Precedence
 import io.hamal.module.worker.script.ast.expr.infixFn
 import io.hamal.module.worker.script.ast.expr.nextPrecedence
@@ -18,17 +20,7 @@ interface Parser {
     fun parse(ctx: Context): BlockStatement
 
     object DefaultImpl : Parser {
-        override fun parse(ctx: Context): BlockStatement {
-            val statements = mutableListOf<Statement>()
-            while (ctx.isNotEmpty()) {
-                statements.add(ctx.parseStatement())
-                ctx.advance()
-                if (ctx.currentTokenType() == Eof) {
-                    break
-                }
-            }
-            return BlockStatement(statements)
-        }
+        override fun parse(ctx: Context): BlockStatement = ctx.parseBlockStatement()
     }
 
     data class Context(val tokens: ArrayDeque<Token>) {
@@ -40,14 +32,33 @@ interface Parser {
         fun currentTokenType() = currentToken().type
         fun nextTokenType() = nextToken().type
 
+        fun expectCurrentTokenTypToBe(type: Token.Type) {
+            throwIf(currentTokenType() != type) {
+                ParseException("Expected token to be $type but got ${currentTokenType()}")
+            }
+        }
+
         fun isNotEmpty() = tokens.isNotEmpty()
     }
 }
 
+private fun Parser.Context.parseBlockStatement(): BlockStatement {
+    val statements = mutableListOf<Statement>()
+    while (isNotEmpty()) {
+        statements.add(parseStatement())
+        advance()
+        if (currentTokenType() == Eof) {
+            break
+        }
+    }
+    return BlockStatement(statements)
+}
 
-private fun Parser.Context.parseStatement(): Statement = ExpressionStatement(parseExpression())
+private fun Parser.Context.parseStatement(): Statement {
+    return ExpressionStatement(parseSimpleLiteralExpression())
+}
 
-internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
+internal fun Parser.Context.parseSimpleLiteralExpression(precedence: Precedence = Precedence.Lowest): Expression {
     var lhsExpression = prefixFn(currentTokenType())(this)
     while (!endOfExpression() && precedence < nextPrecedence()) {
         val infix = infixFn(nextTokenType()) ?: return lhsExpression

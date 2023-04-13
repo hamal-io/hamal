@@ -43,11 +43,13 @@ class Token(
         Hash("#", Operator),
         LeftAngleBracket("<", Operator),
         LeftBracket("[", Operator),
+        LeftParenthesis("(", Operator),
         Minus("-", Operator),
         Percent("%", Operator),
         Plus("+", Operator),
         RightAngleBracket(">", Operator),
         RightBracket("]", Operator),
+        RightParenthesis(")", Operator),
         Slash("/", Operator),
         Tilde("~", Operator),
 

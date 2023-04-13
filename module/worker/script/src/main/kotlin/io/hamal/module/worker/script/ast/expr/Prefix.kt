@@ -17,4 +17,4 @@ private val prefixParseFnMapping = mapOf(
     Token.Type.NumberLiteral to NumberLiteral.ParseNumberLiteral
 )
 
-internal fun Parser.Context.prefixFn(type: Token.Type) = prefixParseFnMapping[type]!!
+internal fun prefixFn(type: Token.Type) = prefixParseFnMapping[type]!!

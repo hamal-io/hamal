@@ -1,33 +1,35 @@
 package io.hamal.module.worker.script.ast.expr
 
+import io.hamal.lib.meta.math.Decimal
 import io.hamal.module.worker.script.ast.LiteralExpression
 import io.hamal.module.worker.script.ast.Parser
+import io.hamal.module.worker.script.ast.stmt.BlockStatement
 import io.hamal.module.worker.script.token.Token.Type
-import io.hamal.module.worker.script.value.*
+import io.hamal.module.worker.script.token.Token.Type.*
 
-class NumberLiteral(value: NumberValue) : LiteralExpression(value) {
+data class NumberLiteral(val value: Decimal) : LiteralExpression {
     internal object ParseNumberLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): NumberLiteral {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.NumberLiteral)
-            return NumberLiteral(NumberValue(token.value))
+            return NumberLiteral(Decimal(token.value))
         }
     }
 }
 
-class StringLiteral(value: StringValue) : LiteralExpression(value) {
+data class StringLiteral(val value: String) : LiteralExpression {
     internal object ParseStringLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): StringLiteral {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.StringLiteral)
-            return StringLiteral(StringValue(token.value))
+            return StringLiteral(token.value)
         }
     }
 }
 
-class TrueLiteral : LiteralExpression(TrueValue) {
+class TrueLiteral : LiteralExpression {
     internal object ParseTrueLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): TrueLiteral {
             assert(ctx.isNotEmpty())
@@ -38,7 +40,7 @@ class TrueLiteral : LiteralExpression(TrueValue) {
     }
 }
 
-class FalseLiteral : LiteralExpression(FalseValue) {
+class FalseLiteral : LiteralExpression {
     internal object ParseFalseLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): FalseLiteral {
             assert(ctx.isNotEmpty())
@@ -50,7 +52,7 @@ class FalseLiteral : LiteralExpression(FalseValue) {
 }
 
 
-class NilLiteral : LiteralExpression(NilValue) {
+class NilLiteral : LiteralExpression {
     internal object ParseNilLiteral : ParsePrefixExpression {
         override fun invoke(ctx: Parser.Context): NilLiteral {
             assert(ctx.isNotEmpty())
@@ -61,3 +63,62 @@ class NilLiteral : LiteralExpression(NilValue) {
     }
 }
 
+
+class FunctionLiteral(
+    val identifier: Identifier,
+    val parameters: List<Identifier>,
+    val block: BlockStatement
+) : LiteralExpression {
+    internal object ParseFunctionLiteral : ParsePrefixExpression {
+        override fun invoke(ctx: Parser.Context): FunctionLiteral {
+            assert(ctx.isNotEmpty())
+
+            ctx.expectCurrentTokenTypToBe(Function)
+            ctx.advance()
+
+            val identifier = ctx.parseFunctionIdentifier()
+            ctx.expectCurrentTokenTypToBe(LeftParenthesis)
+            ctx.advance()
+
+            val parameterIdentifiers = ctx.parseFunctionParameters()
+            ctx.expectCurrentTokenTypToBe(RightParenthesis)
+            ctx.advance()
+
+            return FunctionLiteral(
+                identifier,
+                parameterIdentifiers,
+                ctx.parseFunctionBody()
+            )
+        }
+
+        private fun Parser.Context.parseFunctionIdentifier(): Identifier {
+            val result = Identifier.ParseIdentifier(this)
+            advance()
+            return result
+        }
+
+        private fun Parser.Context.parseFunctionParameters(): List<Identifier> {
+            val result = mutableListOf<Identifier>()
+            while (currentTokenType() != RightParenthesis) {
+                expectCurrentTokenTypToBe(Identifier)
+                result.add(Identifier.ParseIdentifier(this))
+                advance()
+                if (currentTokenType() == Comma) {
+                    advance()
+                }
+            }
+            return result
+        }
+
+        private fun Parser.Context.parseFunctionBody(): BlockStatement {
+            while (currentTokenType() != End) {
+                advance()
+            }
+
+            expectCurrentTokenTypToBe(End)
+            advance()
+
+            return BlockStatement(listOf())
+        }
+    }
+}

@@ -266,11 +266,13 @@ class TokenizerTest {
                 Argument("#", Token(Type.Hash, 1, 1, "#")),
                 Argument("<", Token(Type.LeftAngleBracket, 1, 1, "<")),
                 Argument("[", Token(Type.LeftBracket, 1, 1, "[")),
+                Argument("(", Token(Type.LeftParenthesis, 1, 1, "(")),
                 Argument("-", Token(Type.Minus, 1, 1, "-")),
                 Argument("%", Token(Type.Percent, 1, 1, "%")),
                 Argument("+", Token(Type.Plus, 1, 1, "+")),
                 Argument(">", Token(Type.RightAngleBracket, 1, 1, ">")),
                 Argument("]", Token(Type.RightBracket, 1, 1, "]")),
+                Argument(")", Token(Type.RightParenthesis, 1, 1, ")")),
                 Argument("/", Token(Type.Slash, 1, 1, "/")),
                 Argument("~", Token(Type.Tilde, 1, 1, "~")),
 

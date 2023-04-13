@@ -16,7 +16,7 @@ internal interface ParseInfixExpression {
             val precedence = ctx.currentPrecedence()
             val operator = ctx.parseOperator()
 
-            val rhs = ctx.parseExpression(precedence)
+            val rhs = ctx.parseSimpleLiteralExpression(precedence)
             return InfixExpression(
                 lhs = lhs,
                 operator = operator,

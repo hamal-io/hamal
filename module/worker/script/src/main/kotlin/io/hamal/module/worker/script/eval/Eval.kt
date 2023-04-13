@@ -6,9 +6,7 @@ import io.hamal.module.worker.script.ast.expr.FalseLiteral
 import io.hamal.module.worker.script.ast.expr.NumberLiteral
 import io.hamal.module.worker.script.ast.expr.TrueLiteral
 import io.hamal.module.worker.script.ast.stmt.BlockStatement
-import io.hamal.module.worker.script.value.NilValue
-import io.hamal.module.worker.script.value.NumberValue
-import io.hamal.module.worker.script.value.Value
+import io.hamal.module.worker.script.value.*
 
 interface Eval {
 
@@ -65,9 +63,9 @@ private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): 
 
 private fun evalLiteral(literal: LiteralExpression): Value {
     return when (literal) {
-        is TrueLiteral -> literal.value
-        is FalseLiteral -> literal.value
-        is NumberLiteral -> literal.value
+        is TrueLiteral -> TrueValue
+        is FalseLiteral -> FalseValue
+        is NumberLiteral -> NumberValue(literal.value)
         else -> TODO()
     }
 }

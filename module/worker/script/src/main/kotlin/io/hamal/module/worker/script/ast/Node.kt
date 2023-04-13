@@ -1,7 +1,5 @@
 package io.hamal.module.worker.script.ast
 
-import io.hamal.module.worker.script.value.Value
-
 interface Node
 
 enum class Operator(val value: String) {
@@ -10,9 +8,7 @@ enum class Operator(val value: String) {
 
 interface Expression : Node
 
-abstract class LiteralExpression(
-    val value: Value
-) : Expression
+interface LiteralExpression : Expression
 
 abstract class PrefixExpression(
     val operator: Operator,
