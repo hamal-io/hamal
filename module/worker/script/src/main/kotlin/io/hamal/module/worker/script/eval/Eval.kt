@@ -5,33 +5,32 @@ import io.hamal.module.worker.script.ast.Operator.Plus
 import io.hamal.module.worker.script.ast.expr.FalseLiteral
 import io.hamal.module.worker.script.ast.expr.NumberLiteral
 import io.hamal.module.worker.script.ast.expr.TrueLiteral
+import io.hamal.module.worker.script.ast.stmt.BlockStatement
 import io.hamal.module.worker.script.value.NilValue
 import io.hamal.module.worker.script.value.NumberValue
 import io.hamal.module.worker.script.value.Value
 
 interface Eval {
 
-    operator fun invoke(statements: List<Statement>, env: Environment): Value
-
     operator fun invoke(statement: Statement, env: Environment): Value
 
     class DefaultImpl : Eval {
-        override fun invoke(statements: List<Statement>, env: Environment): Value {
-            var result: Value = NilValue
-            for (statement in statements) {
-                result = invoke(statement, env)
-            }
-            return result
-        }
-
         override fun invoke(statement: Statement, env: Environment): Value {
             return when (statement) {
-                is StatementExpression -> evalExpression(statement.expression, env)
+                is BlockStatement -> evalBlockStatement(statement, env)
+                is ExpressionStatement -> evalExpression(statement.expression, env)
                 else -> TODO()
             }
         }
-
     }
+}
+
+private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: BlockStatement, env: Environment): Value {
+    var result: Value = NilValue
+    for (statement in blockStatement.statements) {
+        result = invoke(statement, env)
+    }
+    return result
 }
 
 private fun evalExpression(expression: Expression, env: Environment): Value {

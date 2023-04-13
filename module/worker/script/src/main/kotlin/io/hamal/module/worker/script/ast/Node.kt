@@ -29,5 +29,5 @@ data class InfixExpression(
 
 interface Statement : Node
 
-class StatementExpression(val expression: Expression) : Statement
+class ExpressionStatement(val expression: Expression) : Statement
 

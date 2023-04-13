@@ -15,10 +15,10 @@ internal class OperatorPrecedenceTest : AbstractAstTest() {
     fun `Parameterized tests`(given: String, expected: String) {
         val tokens = tokenize(given)
 
-        val statements = Parser.DefaultImpl.parse(Parser.Context(ArrayDeque(tokens)))
-        assertThat(statements, hasSize(1))
-        val statement = statements.first()
-        require(statement is StatementExpression)
+        val blockStatement = Parser.DefaultImpl.parse(Parser.Context(ArrayDeque(tokens)))
+        assertThat(blockStatement.statements, hasSize(1))
+        val statement = blockStatement.statements.first()
+        require(statement is ExpressionStatement)
 
         val result = PrecedenceString.of(statement.expression)
         assertThat(result, equalTo(expected));
