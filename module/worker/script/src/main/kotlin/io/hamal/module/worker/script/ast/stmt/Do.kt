@@ -3,27 +3,25 @@ package io.hamal.module.worker.script.ast.stmt
 import io.hamal.module.worker.script.ast.Parser
 import io.hamal.module.worker.script.ast.Statement
 import io.hamal.module.worker.script.ast.parseBlockStatement
-import io.hamal.module.worker.script.token.Token.Type.Do
-import io.hamal.module.worker.script.token.Token.Type.End
+import io.hamal.module.worker.script.token.Token
 
-class DoStatement(
-    val blockStatement: BlockStatement
+data class Do(
+    val blockStatement: Block
 ) : Statement {
 
-    internal object ParseDoBlock : ParseStatement {
-        override fun invoke(ctx: Parser.Context): DoStatement {
+    internal object ParseDo : ParseStatement<Do> {
+        override fun invoke(ctx: Parser.Context): Do {
             assert(ctx.isNotEmpty())
-            ctx.expectCurrentTokenTypToBe(Do)
+            ctx.expectCurrentTokenTypToBe(Token.Type.Do)
             ctx.advance()
 
-            if (ctx.currentTokenType() == End) {
+            if (ctx.currentTokenType() == Token.Type.End) {
                 ctx.advance()
-                return DoStatement(BlockStatement.empty)
+                return Do(Block.empty)
             }
 
             val statement = ctx.parseBlockStatement()
-            ctx.advance()
-            return DoStatement(statement)
+            return Do(statement)
         }
 
     }

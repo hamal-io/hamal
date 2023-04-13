@@ -2,10 +2,10 @@ package io.hamal.module.worker.script.eval
 
 import io.hamal.module.worker.script.ast.*
 import io.hamal.module.worker.script.ast.Operator.Plus
-import io.hamal.module.worker.script.ast.expr.FalseLiteral
-import io.hamal.module.worker.script.ast.expr.NumberLiteral
-import io.hamal.module.worker.script.ast.expr.TrueLiteral
-import io.hamal.module.worker.script.ast.stmt.BlockStatement
+import io.hamal.module.worker.script.ast.expr.False
+import io.hamal.module.worker.script.ast.expr.Number
+import io.hamal.module.worker.script.ast.expr.True
+import io.hamal.module.worker.script.ast.stmt.Block
 import io.hamal.module.worker.script.value.*
 
 interface Eval {
@@ -15,7 +15,7 @@ interface Eval {
     class DefaultImpl : Eval {
         override fun invoke(statement: Statement, env: Environment): Value {
             return when (statement) {
-                is BlockStatement -> evalBlockStatement(statement, env)
+                is Block -> evalBlockStatement(statement, env)
                 is ExpressionStatement -> evalExpression(statement.expression, env)
                 else -> TODO()
             }
@@ -23,7 +23,7 @@ interface Eval {
     }
 }
 
-private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: BlockStatement, env: Environment): Value {
+private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: Block, env: Environment): Value {
     var result: Value = NilValue
     for (statement in blockStatement.statements) {
         result = invoke(statement, env)
@@ -34,7 +34,7 @@ private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: BlockStatement, 
 private fun evalExpression(expression: Expression, env: Environment): Value {
     return when (expression) {
         is InfixExpression -> evalInfix(expression, env)
-        is LiteralExpression -> evalLiteral(expression)
+        is Literal -> evalLiteral(expression)
         else -> TODO()
     }
 }
@@ -61,11 +61,11 @@ private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): 
     }
 }
 
-private fun evalLiteral(literal: LiteralExpression): Value {
+private fun evalLiteral(literal: Literal): Value {
     return when (literal) {
-        is TrueLiteral -> TrueValue
-        is FalseLiteral -> FalseValue
-        is NumberLiteral -> NumberValue(literal.value)
+        is True -> TrueValue
+        is False -> FalseValue
+        is Number -> NumberValue(literal.value)
         else -> TODO()
     }
 }

@@ -1,22 +1,25 @@
 package io.hamal.module.worker.script.ast.stmt
 
-import io.hamal.module.worker.script.ast.AbstractAstTest
+import io.hamal.module.worker.script.ast.expr.Nil
+import io.hamal.module.worker.script.ast.stmt.Do.ParseDo
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class DoTest : AbstractAstTest() {
-
+internal class DoTest : AbstractStatementTest() {
     @Test
     fun `do end`() {
-        val result = testInstance("do end")
-        println(result)
+        runTest(ParseDo, "do end") { result, tokens ->
+            assertThat(result, equalTo(Do(Block.empty)))
+            assertAllTokensConsumed(tokens)
+        }
     }
 
     @Test
     fun `do return end`() {
-        val result = testInstance("do return end")
-        println(result)
+        runTest(ParseDo, "do return end") { result, tokens ->
+            assertThat(result, equalTo(Do(Block(Return(Nil())))))
+            assertAllTokensConsumed(tokens)
+        }
     }
-
-    private fun testInstance(code: String) = DoStatement.ParseDoBlock(parserContextOf(code))
-
 }

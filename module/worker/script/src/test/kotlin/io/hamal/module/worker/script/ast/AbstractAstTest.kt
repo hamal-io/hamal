@@ -1,6 +1,7 @@
 package io.hamal.module.worker.script.ast
 
 import io.hamal.module.worker.script.ast.expr.ParsePrefixExpression
+import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.Token.Type.Eof
 import io.hamal.module.worker.script.token.tokenize
 import org.hamcrest.MatcherAssert.assertThat
@@ -28,5 +29,10 @@ internal abstract class AbstractAstTest {
 
     fun Expression.verifyPrecedence(expected: String) {
         assertThat(PrecedenceString.of(this), equalTo(expected))
+    }
+
+    fun assertAllTokensConsumed(tokens: ArrayDeque<Token>) {
+        assertThat("All tokens were consumed except EOF", tokens.size, equalTo(1))
+        assertThat("Last token must be EOF", tokens[0].type, equalTo(Eof))
     }
 }

@@ -8,7 +8,7 @@ enum class Operator(val value: String) {
 
 interface Expression : Node
 
-interface LiteralExpression : Expression
+interface Literal : Expression
 
 abstract class PrefixExpression(
     val operator: Operator,

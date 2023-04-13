@@ -13,7 +13,7 @@ class Token(
         return "Token($type)"
     }
 
-    enum class Type(val value: kotlin.String, val category: Category) {
+    enum class Type(val value: String, val category: Category) {
         And("and", Keyword),
         Break("break", Keyword),
         Do("do", Keyword),

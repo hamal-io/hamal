@@ -11,7 +11,7 @@ internal class IdentifierTest : AbstractAstTest() {
     inner class IdentifierParserTest {
         @Test
         fun `Parses identifier`() {
-            val result = parseSimpleLiteralExpression(Identifier.ParseIdentifier, "some_variable")
+            val result = parseSimpleLiteralExpression(Identifier.Parse, "some_variable")
             result.verifyPrecedence("some_variable")
         }
     }

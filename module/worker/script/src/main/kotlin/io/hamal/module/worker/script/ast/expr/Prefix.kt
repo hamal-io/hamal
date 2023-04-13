@@ -9,12 +9,12 @@ internal interface ParsePrefixExpression {
 }
 
 private val prefixParseFnMapping = mapOf(
-    Token.Type.TrueLiteral to TrueLiteral.ParseTrueLiteral,
-    Token.Type.FalseLiteral to FalseLiteral.ParseFalseLiteral,
-    Token.Type.NilLiteral to NilLiteral.ParseNilLiteral,
-    Token.Type.StringLiteral to StringLiteral.ParseStringLiteral,
-    Token.Type.Identifier to Identifier.ParseIdentifier,
-    Token.Type.NumberLiteral to NumberLiteral.ParseNumberLiteral
+    Token.Type.TrueLiteral to True.Parse,
+    Token.Type.FalseLiteral to False.Parse,
+    Token.Type.NilLiteral to Nil.ParseNilLiteral,
+    Token.Type.StringLiteral to String.Parse,
+    Token.Type.Identifier to Identifier.Parse,
+    Token.Type.NumberLiteral to Number.Parse
 )
 
 internal fun prefixFn(type: Token.Type) = prefixParseFnMapping[type]!!

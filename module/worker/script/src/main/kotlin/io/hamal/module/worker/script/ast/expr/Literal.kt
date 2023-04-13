@@ -1,128 +1,77 @@
 package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.lib.meta.math.Decimal
-import io.hamal.module.worker.script.ParseException
-import io.hamal.module.worker.script.ast.LiteralExpression
+import io.hamal.module.worker.script.ast.Literal
 import io.hamal.module.worker.script.ast.Parser
-import io.hamal.module.worker.script.ast.Statement
-import io.hamal.module.worker.script.ast.parseStatement
-import io.hamal.module.worker.script.ast.stmt.BlockStatement
 import io.hamal.module.worker.script.token.Token.Type
-import io.hamal.module.worker.script.token.Token.Type.*
 
-data class NumberLiteral(val value: Decimal) : LiteralExpression {
-    internal object ParseNumberLiteral : ParsePrefixExpression {
-        override fun invoke(ctx: Parser.Context): NumberLiteral {
+data class Number(val value: Decimal) : Literal {
+    internal object Parse : ParsePrefixExpression {
+        override fun invoke(ctx: Parser.Context): Number {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.NumberLiteral)
-            return NumberLiteral(Decimal(token.value))
+            return Number(Decimal(token.value))
         }
     }
 }
 
-data class StringLiteral(val value: String) : LiteralExpression {
-    internal object ParseStringLiteral : ParsePrefixExpression {
-        override fun invoke(ctx: Parser.Context): StringLiteral {
+data class String(val value: kotlin.String) : Literal {
+    internal object Parse : ParsePrefixExpression {
+        override fun invoke(ctx: Parser.Context): String {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.StringLiteral)
-            return StringLiteral(token.value)
+            return String(token.value)
         }
     }
 }
 
-class TrueLiteral : LiteralExpression {
-    internal object ParseTrueLiteral : ParsePrefixExpression {
-        override fun invoke(ctx: Parser.Context): TrueLiteral {
+class True : Literal {
+
+    internal object Parse : ParsePrefixExpression {
+        override fun invoke(ctx: Parser.Context): True {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.TrueLiteral)
-            return TrueLiteral()
+            return True()
         }
     }
+
+    override fun equals(other: Any?) = other != null && this::class == other::class
+
+    override fun hashCode() = this::class.hashCode()
 }
 
-class FalseLiteral : LiteralExpression {
-    internal object ParseFalseLiteral : ParsePrefixExpression {
-        override fun invoke(ctx: Parser.Context): FalseLiteral {
+class False : Literal {
+    internal object Parse : ParsePrefixExpression {
+        override fun invoke(ctx: Parser.Context): False {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.FalseLiteral)
-            return FalseLiteral()
+            return False()
         }
     }
+
+    override fun equals(other: Any?) = other != null && this::class == other::class
+
+    override fun hashCode() = this::class.hashCode()
 }
 
 
-class NilLiteral : LiteralExpression {
+class Nil : Literal {
     internal object ParseNilLiteral : ParsePrefixExpression {
-        override fun invoke(ctx: Parser.Context): NilLiteral {
+        override fun invoke(ctx: Parser.Context): Nil {
             assert(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.NilLiteral)
-            return NilLiteral()
+            return Nil()
         }
     }
+
+    override fun equals(other: Any?) = other != null && this::class == other::class
+
+    override fun hashCode() = this::class.hashCode()
+
 }
 
-
-class FunctionLiteral(
-    val identifier: Identifier,
-    val parameters: List<Identifier>,
-    val block: BlockStatement
-) : LiteralExpression {
-    internal object ParseFunctionLiteral : ParsePrefixExpression {
-        override fun invoke(ctx: Parser.Context): FunctionLiteral {
-            assert(ctx.isNotEmpty())
-            ctx.expectCurrentTokenTypToBe(Function)
-            ctx.advance()
-
-            val identifier = ctx.parseFunctionIdentifier()
-            ctx.expectCurrentTokenTypToBe(LeftParenthesis)
-            ctx.advance()
-
-            val parameterIdentifiers = ctx.parseFunctionParameters()
-            ctx.expectCurrentTokenTypToBe(RightParenthesis)
-            ctx.advance()
-
-            return FunctionLiteral(
-                identifier,
-                parameterIdentifiers,
-                ctx.parseFunctionBody()
-            )
-        }
-
-        private fun Parser.Context.parseFunctionIdentifier(): Identifier {
-            val result = Identifier.ParseIdentifier(this)
-            advance()
-            return result
-        }
-
-        private fun Parser.Context.parseFunctionParameters(): List<Identifier> {
-            val result = mutableListOf<Identifier>()
-            while (currentTokenType() != RightParenthesis) {
-                expectCurrentTokenTypToBe(Identifier)
-                result.add(Identifier.ParseIdentifier(this))
-                advance()
-                if (currentTokenType() == Comma) {
-                    advance()
-                }
-            }
-            return result
-        }
-
-        private fun Parser.Context.parseFunctionBody(): BlockStatement {
-            val statements = mutableListOf<Statement>()
-            while (currentTokenType() != End) {
-                if (currentTokenType() == Eof) {
-                    throw ParseException("Expected end  but reached end of file")
-                }
-                parseStatement()?.let(statements::add)
-            }
-            expectCurrentTokenTypToBe(End)
-            advance()
-            return BlockStatement(statements)
-        }
-    }
-}

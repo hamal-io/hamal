@@ -6,22 +6,22 @@ import io.hamal.module.worker.script.ast.expr.Precedence
 import io.hamal.module.worker.script.ast.expr.infixFn
 import io.hamal.module.worker.script.ast.expr.nextPrecedence
 import io.hamal.module.worker.script.ast.expr.prefixFn
-import io.hamal.module.worker.script.ast.stmt.BlockStatement
-import io.hamal.module.worker.script.ast.stmt.ReturnStatement.ParseReturnStatement
+import io.hamal.module.worker.script.ast.stmt.Block
+import io.hamal.module.worker.script.ast.stmt.Return.ParseReturn
 import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.Token.Type.*
 
-fun parse(tokens: List<Token>): BlockStatement {
+fun parse(tokens: List<Token>): Block {
     val parser = Parser.DefaultImpl
     return parser.parse(Parser.Context(ArrayDeque(tokens)))
 }
 
 interface Parser {
 
-    fun parse(ctx: Context): BlockStatement
+    fun parse(ctx: Context): Block
 
     object DefaultImpl : Parser {
-        override fun parse(ctx: Context): BlockStatement = ctx.parseBlockStatement()
+        override fun parse(ctx: Context): Block = ctx.parseBlockStatement()
     }
 
     data class Context(val tokens: ArrayDeque<Token>) {
@@ -43,7 +43,7 @@ interface Parser {
     }
 }
 
-internal fun Parser.Context.parseBlockStatement(): BlockStatement {
+internal fun Parser.Context.parseBlockStatement(): Block {
     val statements = mutableListOf<Statement>()
     while (true) {
         if (currentTokenType() == Eof || currentTokenType() == End) {
@@ -52,12 +52,12 @@ internal fun Parser.Context.parseBlockStatement(): BlockStatement {
         parseStatement()?.let(statements::add)
         advance()
     }
-    return BlockStatement(statements)
+    return Block(statements)
 }
 
 internal fun Parser.Context.parseStatement(): Statement? {
     return when (currentTokenType()) {
-        Return -> ParseReturnStatement(this)
+        Return -> ParseReturn(this)
         else -> ExpressionStatement(parseExpression())
     }
 }
