@@ -4,19 +4,57 @@ import io.hamal.lib.meta.math.Decimal
 import io.hamal.module.worker.script.token.Token.Type
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class LiteralTest : AbstractExpressionTest() {
-    @Test
-    fun fail() {
-        throw Error("implement test for equals and hashcode")
-    }
 
     @Nested
     @DisplayName("Number")
     inner class NumberTest {
+
+        @Nested
+        @DisplayName("equals()")
+        inner class EqualsTest {
+            @Test
+            fun `Equals if underlying values are equal`() {
+                assertEquals(
+                    Number(2810),
+                    Number(2810)
+                )
+            }
+
+            @Test
+            fun `Not equals if underlying values are different`() {
+                assertNotEquals(
+                    Number(2810),
+                    Number(1506)
+                )
+            }
+        }
+
+        @Nested
+        @DisplayName("hashCode()")
+        inner class HashCodeTest {
+            @Test
+            fun `Same hashcode if values are equal`() {
+                assertEquals(
+                    Number(2810).hashCode(),
+                    Number(2810).hashCode()
+                )
+            }
+
+            @Test
+            fun `Different hashcode if values are different`() {
+                assertNotEquals(
+                    Number(2810).hashCode(),
+                    Number(1506).hashCode()
+                )
+            }
+        }
+
         @Nested
         @DisplayName("Parse()")
         inner class ParseTest {
@@ -33,6 +71,47 @@ internal class LiteralTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("String")
     inner class StringTest {
+
+        @Nested
+        @DisplayName("equals()")
+        inner class EqualsTest {
+            @Test
+            fun `Equals if underlying values are equal`() {
+                assertEquals(
+                    String("H4M41"),
+                    String("H4M41")
+                )
+            }
+
+            @Test
+            fun `Not equals if underlying values are different`() {
+                assertNotEquals(
+                    String("H4M41"),
+                    String("CRAPPY_WORKFLOW_ENGINE")
+                )
+            }
+        }
+
+        @Nested
+        @DisplayName("hashCode()")
+        inner class HashCodeTest {
+            @Test
+            fun `Same hashcode if values are equal`() {
+                assertEquals(
+                    String("H4M41").hashCode(),
+                    String("H4M41").hashCode()
+                )
+            }
+
+            @Test
+            fun `Different hashcode if values are different`() {
+                assertNotEquals(
+                    String("H4M41").hashCode(),
+                    String("CRAPPY_WORKFLOW_ENGINE").hashCode()
+                )
+            }
+        }
+
         @Nested
         @DisplayName("Parse()")
         inner class ParseTest {
@@ -49,6 +128,47 @@ internal class LiteralTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("True")
     inner class TrueTest {
+
+        @Nested
+        @DisplayName("equals()")
+        inner class EqualsTest {
+            @Test
+            fun `Equals if underlying values are equal`() {
+                assertEquals(
+                    True(),
+                    True()
+                )
+            }
+
+            @Test
+            fun `Not equals if underlying values are different`() {
+                assertNotEquals(
+                    True(),
+                    False()
+                )
+            }
+        }
+
+        @Nested
+        @DisplayName("hashCode()")
+        inner class HashCodeTest {
+            @Test
+            fun `Same hashcode if values are equal`() {
+                assertEquals(
+                    True().hashCode(),
+                    True().hashCode()
+                )
+            }
+
+            @Test
+            fun `Different hashcode if values are different`() {
+                assertNotEquals(
+                    True().hashCode(),
+                    False().hashCode()
+                )
+            }
+        }
+
         @Nested
         @DisplayName("Parse()")
         inner class ParseTest {
@@ -65,6 +185,47 @@ internal class LiteralTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("False")
     inner class FalseTest {
+
+        @Nested
+        @DisplayName("equals()")
+        inner class EqualsTest {
+            @Test
+            fun `Equals if underlying values are equal`() {
+                assertEquals(
+                    False(),
+                    False()
+                )
+            }
+
+            @Test
+            fun `Not equals if underlying values are different`() {
+                assertNotEquals(
+                    False(),
+                    True()
+                )
+            }
+        }
+
+        @Nested
+        @DisplayName("hashCode()")
+        inner class HashCodeTest {
+            @Test
+            fun `Same hashcode if values are equal`() {
+                assertEquals(
+                    False().hashCode(),
+                    False().hashCode()
+                )
+            }
+
+            @Test
+            fun `Different hashcode if values are different`() {
+                assertNotEquals(
+                    False().hashCode(),
+                    True().hashCode()
+                )
+            }
+        }
+
         @Nested
         @DisplayName("Parse()")
         inner class ParseTest {

@@ -6,12 +6,14 @@ import io.hamal.module.worker.script.ast.Statement
 import io.hamal.module.worker.script.ast.parseStatement
 import io.hamal.module.worker.script.ast.stmt.Block
 import io.hamal.module.worker.script.token.Token
+import kotlin.String
 
 class Function(
     val identifier: Identifier,
     val parameters: List<Identifier>,
     val block: Block
 ) : LiteralExpression {
+
     internal object Parse : ParseLiteralExpression<Function> {
         override fun invoke(ctx: Parser.Context): Function {
             assert(ctx.isNotEmpty())
@@ -64,5 +66,25 @@ class Function(
             advance()
             return Block(statements)
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Function
+
+        if (identifier != other.identifier) return false
+        return parameters == other.parameters
+    }
+
+    override fun hashCode(): Int {
+        var result = identifier.hashCode()
+        result = 31 * result + parameters.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "$identifier($parameters)"
     }
 }

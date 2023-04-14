@@ -3,7 +3,7 @@ plugins {
 }
 
 kotlin{
-    jvmToolchain(17)
+    jvmToolchain(19)
 }
 
 val testIntegration by sourceSets.creating

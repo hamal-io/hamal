@@ -19,10 +19,7 @@ data class Do(
                 ctx.advance()
                 return Do(Block.empty)
             }
-
-            val statement = ctx.parseBlockStatement()
-            return Do(statement)
+            return Do(ctx.parseBlockStatement())
         }
-
     }
 }
