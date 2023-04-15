@@ -28,5 +28,4 @@ internal abstract class AbstractExpressionTest : AbstractAstTest() {
         val result = parser.invoke(Parser.Context(tokens))
         assertFn(result, tokens)
     }
-
 }

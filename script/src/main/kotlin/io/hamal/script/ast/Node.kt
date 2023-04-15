@@ -10,11 +10,6 @@ interface Expression : Node
 
 
 
-data class InfixExpression(
-    val lhs: Expression,
-    val operator: Operator,
-    val rhs: Expression
-) : Expression
 
 interface Statement : Node
 

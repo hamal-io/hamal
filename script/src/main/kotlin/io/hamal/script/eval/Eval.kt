@@ -2,7 +2,6 @@ package io.hamal.script.eval
 
 import io.hamal.script.ast.Expression
 import io.hamal.script.ast.ExpressionStatement
-import io.hamal.script.ast.InfixExpression
 import io.hamal.script.ast.Statement
 import io.hamal.script.ast.expr.*
 import io.hamal.script.ast.expr.Function
