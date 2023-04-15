@@ -1,6 +1,7 @@
 rootProject.name = "hamal"
 
 include("application")
+include("script")
 
 include(":lib:ddd")
 include(":lib:domain")
@@ -31,7 +32,6 @@ include(":module:worker:extension:impl:starter")
 
 include(":module:worker:core")
 include(":module:worker:infra")
-include(":module:worker:script")
 
 
 dependencyResolutionManagement {
