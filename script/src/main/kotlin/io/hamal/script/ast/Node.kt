@@ -9,12 +9,6 @@ interface Node
 interface Expression : Node
 
 
-data class PrefixExpression(
-    val operator: Operator,
-    val value: Expression
-) : Expression {
-
-}
 
 data class InfixExpression(
     val lhs: Expression,

@@ -34,7 +34,7 @@ internal enum class Precedence {
     Concat,          //  ..
     Plus,            //  + -
     Factor,          //  * / // %
-    Unary,           // not # - ~
+    Prefix,           // not # - ~
     Carat,           // ^
     Call             // ()
 }

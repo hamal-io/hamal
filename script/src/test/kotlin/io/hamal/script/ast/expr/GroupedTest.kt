@@ -1,7 +1,6 @@
 package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.InfixExpression
-import io.hamal.script.ast.PrefixExpression
 import io.hamal.script.token.Token.Type
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

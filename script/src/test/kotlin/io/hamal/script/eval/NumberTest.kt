@@ -29,7 +29,9 @@ internal class NumberTest : AbstractEvalTest() {
             return listOf(
                 Arguments.of("1 + 2", NumberValue(3)),
                 Arguments.of("2 - 1", NumberValue(1)),
-            );
+                Arguments.of("-2810", NumberValue(-2810)),
+                Arguments.of("-(-1)", NumberValue(1))
+            )
         }
     }
 

@@ -3,7 +3,7 @@ package io.hamal.script.ast.expr
 import io.hamal.script.ast.AbstractAstTest
 import io.hamal.script.ast.ExpressionStatement
 import io.hamal.script.ast.Parser
-import io.hamal.script.ast.PrecedenceString
+import io.hamal.script.PrecedenceString
 import io.hamal.script.token.tokenize
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*

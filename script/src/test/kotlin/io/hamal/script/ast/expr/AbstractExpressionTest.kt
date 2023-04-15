@@ -20,7 +20,7 @@ internal abstract class AbstractExpressionTest : AbstractAstTest() {
     }
 
     fun <EXPRESSION : Expression> runTest(
-        parser: ParsePrefixExpression<EXPRESSION>,
+        parser: ParseExpression<EXPRESSION>,
         code: String,
         assertFn: (EXPRESSION, ArrayDeque<Token>) -> Unit
     ) {

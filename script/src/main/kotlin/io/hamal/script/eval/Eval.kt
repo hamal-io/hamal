@@ -7,6 +7,7 @@ import io.hamal.script.ast.Statement
 import io.hamal.script.ast.expr.*
 import io.hamal.script.ast.expr.Function
 import io.hamal.script.ast.expr.Number
+import io.hamal.script.ast.expr.Operator.Minus
 import io.hamal.script.ast.stmt.Block
 import io.hamal.script.ast.stmt.Return
 import io.hamal.script.value.*
@@ -41,11 +42,21 @@ private fun Eval.DefaultImpl.evalReturnStatement(returnStatement: Return, env: E
 
 private fun Eval.DefaultImpl.evalExpression(expression: Expression, env: Environment): Value {
     return when (expression) {
+        is PrefixExpression -> evalPrefix(expression, env)
         is InfixExpression -> evalInfix(expression, env)
-        is io.hamal.script.ast.expr.LiteralExpression -> evalLiteral(expression)
+        is LiteralExpression -> evalLiteral(expression)
         is GroupedExpression -> evalExpression(expression.expression, env)
         is CallExpression -> evalCallExpression(expression,env)
-        else -> TODO()
+        else -> TODO("$expression not supported yet")
+    }
+}
+
+private fun Eval.DefaultImpl.evalPrefix(expression: PrefixExpression, env: Environment) : Value{
+    val value = evalExpression(expression.value,env)
+    return when(expression.operator){
+        // FIXME this must come from operator repository as well
+        Minus -> NumberValue((value as NumberValue).value.negate())
+        else -> TODO("${expression.operator} not supported")
     }
 }
 
@@ -66,14 +77,14 @@ private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): 
         Operator.Plus -> {
             NumberValue((lhs as NumberValue).value.plus((rhs as NumberValue).value))
         }
-        Operator.Minus ->{
+        Minus ->{
             NumberValue((lhs as NumberValue).value.minus((rhs as NumberValue).value))
         }
         else -> TODO()
     }
 }
 
-private fun evalLiteral(literal: io.hamal.script.ast.expr.LiteralExpression): Value {
+private fun evalLiteral(literal: LiteralExpression): Value {
     return when (literal) {
         is io.hamal.script.ast.expr.Nil -> NilValue
         is io.hamal.script.ast.expr.True -> TrueValue

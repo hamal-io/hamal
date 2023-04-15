@@ -6,7 +6,7 @@ import io.hamal.script.ast.parseExpression
 import io.hamal.script.token.Token
 
 data class GroupedExpression(val expression: Expression) : Expression {
-    internal object Parse : ParsePrefixExpression<GroupedExpression> {
+    internal object Parse : ParseExpression<GroupedExpression> {
         override fun invoke(ctx: Parser.Context): GroupedExpression {
             ctx.expectCurrentTokenTypToBe(Token.Type.LeftParenthesis)
             ctx.advance()

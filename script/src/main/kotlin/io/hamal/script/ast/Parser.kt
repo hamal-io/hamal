@@ -5,7 +5,7 @@ import io.hamal.script.ParseException
 import io.hamal.script.ast.expr.Precedence
 import io.hamal.script.ast.expr.infixFn
 import io.hamal.script.ast.expr.nextPrecedence
-import io.hamal.script.ast.expr.prefixFn
+import io.hamal.script.ast.expr.parseFn
 import io.hamal.script.ast.stmt.Block
 import io.hamal.script.ast.stmt.Return.ParseReturn
 import io.hamal.script.token.Token
@@ -66,7 +66,7 @@ internal fun Parser.Context.parseStatement(): Statement? {
 }
 
 internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
-    var lhsExpression: Expression = prefixFn(currentTokenType())(this)
+    var lhsExpression: Expression = parseFn(currentTokenType())(this)
     while (!endOfExpression() && precedence < nextPrecedence()) {
         val infix = infixFn(nextTokenType()) ?: return lhsExpression
         advance()

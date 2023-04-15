@@ -2,25 +2,42 @@ package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.Expression
 import io.hamal.script.ast.Parser
-import io.hamal.script.token.Token
+import io.hamal.script.ast.parseExpression
+import io.hamal.script.token.Token.Type
 
-internal interface ParsePrefixExpression<EXPRESSION : Expression> {
+internal interface ParseExpression<EXPRESSION : Expression> {
     operator fun invoke(ctx: Parser.Context): EXPRESSION
 }
 
-private val prefixParseFnMapping = mapOf(
-    Token.Type.True to True.Parse,
-    Token.Type.False to False.Parse,
-    Token.Type.Nil to Nil.Parse,
-    Token.Type.String to String.Parse,
-    Token.Type.Identifier to Identifier.Parse,
-    Token.Type.Number to Number.Parse,
-    Token.Type.Function to Function.Parse,
-    Token.Type.LeftParenthesis to GroupedExpression.Parse
+data class PrefixExpression(
+    val operator: Operator,
+    val value: Expression
+) : Expression {
+    internal object Parse : ParseExpression<PrefixExpression>{
+        override fun invoke(ctx: Parser.Context): PrefixExpression {
+            return PrefixExpression(
+                Operator.Parse(ctx),
+                ctx.parseExpression(Precedence.Prefix)
+            )
+        }
+    }
+}
+
+
+private val parseFnMapping = mapOf(
+    Type.True to True.Parse,
+    Type.False to False.Parse,
+    Type.Nil to Nil.Parse,
+    Type.String to String.Parse,
+    Type.Identifier to Identifier.Parse,
+    Type.Number to Number.Parse,
+    Type.Function to Function.Parse,
+    Type.Minus to PrefixExpression.Parse,
+    Type.LeftParenthesis to GroupedExpression.Parse
 )
 
-internal fun prefixFn(type: Token.Type) : ParsePrefixExpression<*> {
-    return prefixParseFnMapping[type]!!
+internal fun parseFn(type: Type) : ParseExpression<*> {
+    return parseFnMapping[type]!!
 }
 
 
