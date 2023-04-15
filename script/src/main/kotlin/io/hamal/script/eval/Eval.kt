@@ -4,7 +4,6 @@ import io.hamal.script.ast.Expression
 import io.hamal.script.ast.ExpressionStatement
 import io.hamal.script.ast.Statement
 import io.hamal.script.ast.expr.*
-import io.hamal.script.ast.expr.Function
 import io.hamal.script.ast.expr.Number
 import io.hamal.script.ast.expr.Operator.Minus
 import io.hamal.script.ast.stmt.Block
@@ -85,11 +84,11 @@ private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): 
 
 private fun evalLiteral(literal: LiteralExpression): Value {
     return when (literal) {
-        is io.hamal.script.ast.expr.Nil -> NilValue
-        is io.hamal.script.ast.expr.True -> TrueValue
-        is io.hamal.script.ast.expr.False -> FalseValue
+        is Nil -> NilValue
+        is True -> TrueValue
+        is False -> FalseValue
         is Number -> NumberValue(literal.value)
-        is Function -> FunctionValue(
+        is Prototype -> PrototypeValue(
             evalIdentifier( literal.identifier),
             literal.parameters.map(::evalIdentifier),
             literal.block
@@ -101,6 +100,6 @@ private fun evalLiteral(literal: LiteralExpression): Value {
 private fun evalIdentifier(identifier: Identifier) = StringValue(identifier.value)
 
 private fun Eval.DefaultImpl.evalCallExpression(expression: CallExpression, env: Environment) : Value {
-    val fn = evalExpression(expression.function, env) as FunctionValue
+    val fn = evalExpression(expression.prototype, env) as PrototypeValue
     return evalBlockStatement(fn.block, env)
 }

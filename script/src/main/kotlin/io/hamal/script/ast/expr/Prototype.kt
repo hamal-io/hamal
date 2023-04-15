@@ -8,40 +8,40 @@ import io.hamal.script.ast.stmt.Block
 import io.hamal.script.token.Token
 import kotlin.String
 
-class Function(
+class Prototype(
     val identifier: Identifier,
     val parameters: List<Identifier>,
     val block: Block
 ) : LiteralExpression {
 
-    internal object Parse : ParseLiteralExpression<Function> {
-        override fun invoke(ctx: Parser.Context): Function {
+    internal object Parse : ParseLiteralExpression<Prototype> {
+        override fun invoke(ctx: Parser.Context): Prototype {
             assert(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Function)
             ctx.advance()
 
-            val identifier = ctx.parseFunctionIdentifier()
+            val identifier = ctx.parseIdentifier()
             ctx.expectCurrentTokenTypToBe(Token.Type.LeftParenthesis)
             ctx.advance()
 
-            val parameterIdentifiers = ctx.parseFunctionParameters()
+            val parameterIdentifiers = ctx.parseParameters()
             ctx.expectCurrentTokenTypToBe(Token.Type.RightParenthesis)
             ctx.advance()
 
-            return Function(
+            return Prototype(
                 identifier,
                 parameterIdentifiers,
-                ctx.parseFunctionBody()
+                ctx.parseBody()
             )
         }
 
-        private fun Parser.Context.parseFunctionIdentifier(): Identifier {
+        private fun Parser.Context.parseIdentifier(): Identifier {
             val result = Identifier.Parse(this)
             advance()
             return result
         }
 
-        private fun Parser.Context.parseFunctionParameters(): List<Identifier> {
+        private fun Parser.Context.parseParameters(): List<Identifier> {
             val result = mutableListOf<Identifier>()
             while (currentTokenType() != Token.Type.RightParenthesis) {
                 expectCurrentTokenTypToBe(Token.Type.Identifier)
@@ -54,7 +54,7 @@ class Function(
             return result
         }
 
-        private fun Parser.Context.parseFunctionBody(): Block {
+        private fun Parser.Context.parseBody(): Block {
             val statements = mutableListOf<Statement>()
             while (currentTokenType() != Token.Type.End) {
                 if (currentTokenType() == Token.Type.Eof) {
@@ -72,7 +72,7 @@ class Function(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Function
+        other as Prototype
 
         if (identifier != other.identifier) return false
         return parameters == other.parameters

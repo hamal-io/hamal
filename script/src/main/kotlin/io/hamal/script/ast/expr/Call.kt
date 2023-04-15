@@ -5,7 +5,7 @@ import io.hamal.script.ast.Parser
 import io.hamal.script.token.Token.Type
 
 class CallExpression(
-    val function: Expression,
+    val prototype: Expression,
     val parameters: List<Expression>
 ) : Expression {
     internal object Parse: ParseInfixExpression {

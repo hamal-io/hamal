@@ -1,13 +1,9 @@
 package io.hamal.script.value
 
 object TrueValue : Value {
-    override fun toString(): String {
-        return "true"
-    }
+    override fun toString() = "true"
 }
 
 object FalseValue : Value {
-    override fun toString(): String {
-        return "false"
-    }
+    override fun toString() = "false"
 }

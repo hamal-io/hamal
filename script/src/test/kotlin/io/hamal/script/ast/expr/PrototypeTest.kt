@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class FunctionTest : AbstractExpressionTest() {
+internal class PrototypeTest : AbstractExpressionTest() {
 
     @Nested
     @DisplayName("equals()")
@@ -17,14 +17,14 @@ internal class FunctionTest : AbstractExpressionTest() {
         @Test
         fun `Equals if identifier and parameters are equal`() {
             assertEquals(
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(True()))
                 ),
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(False()))
                 )
             )
@@ -33,14 +33,14 @@ internal class FunctionTest : AbstractExpressionTest() {
         @Test
         fun `Not equals if identifier is not equal`() {
             assertNotEquals(
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(True()))
                 ),
-                Function(
-                    Identifier("AnotherFunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("AnotherIdentifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(False()))
                 )
             )
@@ -49,14 +49,14 @@ internal class FunctionTest : AbstractExpressionTest() {
         @Test
         fun `Not equals if parameters are not equal`() {
             assertNotEquals(
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(True()))
                 ),
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier"), Identifier("AnotherParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier"), Identifier("AnotherParameterIdentifier")),
                     Block(ExpressionStatement(False()))
                 )
             )
@@ -70,14 +70,14 @@ internal class FunctionTest : AbstractExpressionTest() {
         @Test
         fun `Same hashcode if identifier and parameters hashcode are the same`() {
             assertEquals(
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(True()))
                 ).hashCode(),
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(False()))
                 ).hashCode()
             )
@@ -86,14 +86,14 @@ internal class FunctionTest : AbstractExpressionTest() {
         @Test
         fun `Different hashcode if identifier has different hashcode`() {
             assertNotEquals(
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(True()))
                 ).hashCode(),
-                Function(
-                    Identifier("AnotherFunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("AnotherIdentifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(False()))
                 ).hashCode()
             )
@@ -102,14 +102,14 @@ internal class FunctionTest : AbstractExpressionTest() {
         @Test
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier")),
                     Block(ExpressionStatement(True()))
                 ).hashCode(),
-                Function(
-                    Identifier("FunctionIdentifier"),
-                    listOf(Identifier("FunctionParameterIdentifier"), Identifier("AnotherParameterIdentifier")),
+                Prototype(
+                    Identifier("Identifier"),
+                    listOf(Identifier("ParameterIdentifier"), Identifier("AnotherParameterIdentifier")),
                     Block(ExpressionStatement(False()))
                 ).hashCode()
             )
@@ -120,9 +120,9 @@ internal class FunctionTest : AbstractExpressionTest() {
     @DisplayName("Parse()")
     inner class ParseTest {
         @Test
-        fun `Parse empty function`() {
+        fun `Parse empty `() {
             runLiteralTest(
-                Function.Parse,
+                Prototype.Parse,
                 """
                 function empty() 
                 end
@@ -137,9 +137,9 @@ internal class FunctionTest : AbstractExpressionTest() {
         }
 
         @Test
-        fun `Parse empty function with single argument`() {
+        fun `Parse empty with single argument`() {
             runLiteralTest(
-                Function.Parse,
+                Prototype.Parse,
                 """
                 function empty_with_single_param(param_one) end
                 """.trimIndent()
@@ -153,9 +153,9 @@ internal class FunctionTest : AbstractExpressionTest() {
         }
 
         @Test
-        fun `Parse empty function with multiple arguments`() {
+        fun `Parse empty with multiple arguments`() {
             runLiteralTest(
-                Function.Parse,
+                Prototype.Parse,
                 """
                 function empty_with_params(one,two,three) end
                 """.trimIndent()

@@ -31,7 +31,7 @@ private val parseFnMapping = mapOf(
     Type.String to String.Parse,
     Type.Identifier to Identifier.Parse,
     Type.Number to Number.Parse,
-    Type.Function to Function.Parse,
+    Type.Function to Prototype.Parse,
     Type.Minus to PrefixExpression.Parse,
     Type.LeftParenthesis to GroupedExpression.Parse
 )
