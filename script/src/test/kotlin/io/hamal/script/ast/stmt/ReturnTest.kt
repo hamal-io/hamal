@@ -5,25 +5,30 @@ import io.hamal.script.ast.expr.Number
 import io.hamal.script.token.Token.Type
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class ReturnTest : AbstractStatementTest() {
-
-    @Test
-    fun `Return statement without expression`() {
-        runTest(Return.ParseReturn, "return end") { result, tokens ->
-            assertThat(result, equalTo(Return(Nil())))
-            // its intentional that there is end left
-            tokens.inOrder(Type.End, Type.Eof)
+    @Nested
+    @DisplayName("Parse()")
+    inner class ParseTest {
+        @Test
+        fun `Return statement without expression`() {
+            runTest(Return.Parse, "return end") { result, tokens ->
+                assertThat(result, equalTo(Return(Nil())))
+                // its intentional that there is end left
+                tokens.inOrder(Type.End, Type.Eof)
+            }
         }
-    }
 
-    @Test
-    fun `Return statement with number literal`() {
-        runTest(Return.ParseReturn, "return 1 end") { result, tokens ->
-            assertThat(result, equalTo(Return(Number(1))))
-            // its intentional that there is end left
-            tokens.inOrder(Type.End, Type.Eof)
+        @Test
+        fun `Return statement with number literal`() {
+            runTest(Return.Parse, "return 1 end") { result, tokens ->
+                assertThat(result, equalTo(Return(Number(1))))
+                // its intentional that there is end left
+                tokens.inOrder(Type.End, Type.Eof)
+            }
         }
     }
 }

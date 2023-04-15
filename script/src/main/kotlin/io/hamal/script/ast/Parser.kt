@@ -6,10 +6,11 @@ import io.hamal.script.ast.expr.Precedence
 import io.hamal.script.ast.expr.infixFn
 import io.hamal.script.ast.expr.nextPrecedence
 import io.hamal.script.ast.expr.parseFn
+import io.hamal.script.ast.stmt.Assignment
 import io.hamal.script.ast.stmt.Block
-import io.hamal.script.ast.stmt.Return.ParseReturn
+import io.hamal.script.ast.stmt.Return
 import io.hamal.script.token.Token
-import io.hamal.script.token.Token.Type.*
+import io.hamal.script.token.Token.Type
 
 fun parse(tokens: List<Token>): Block {
     val parser = Parser.DefaultImpl
@@ -33,7 +34,7 @@ interface Parser {
         fun currentTokenType() = currentToken().type
         fun nextTokenType() = nextToken().type
 
-        fun expectCurrentTokenTypToBe(type: Token.Type) {
+        fun expectCurrentTokenTypToBe(type: Type) {
             throwIf(currentTokenType() != type) {
                 ParseException("Expected token to be $type but got ${currentTokenType()}")
             }
@@ -46,12 +47,12 @@ interface Parser {
 internal fun Parser.Context.parseBlockStatement(): Block {
     val statements = mutableListOf<Statement>()
     while (true) {
-        if (currentTokenType() == Eof || currentTokenType() == End) {
+        if (currentTokenType() == Type.Eof || currentTokenType() == Type.End) {
             break
         }
         parseStatement()?.let(statements::add)
 
-        if (currentTokenType() != Eof) {
+        if (currentTokenType() != Type.Eof) {
             advance()
         }
     }
@@ -59,8 +60,11 @@ internal fun Parser.Context.parseBlockStatement(): Block {
 }
 
 internal fun Parser.Context.parseStatement(): Statement? {
-    return when (currentTokenType()) {
-        Return -> ParseReturn(this)
+    val currentType = currentTokenType()
+    return when {
+        currentType == Type.Identifier && nextTokenType() == Type.Equal -> Assignment.Global.Parse(this)
+        currentType == Type.Local -> Assignment.Local.Parse(this)
+        currentType == Type.Return -> Return.Parse(this)
         else -> ExpressionStatement(parseExpression())
     }
 }
@@ -76,6 +80,6 @@ internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.
 }
 
 private fun Parser.Context.endOfExpression() = when (currentTokenType()) {
-    Semicolon, Eof -> true
+    Type.Semicolon, Type.Eof -> true
     else -> false
 }

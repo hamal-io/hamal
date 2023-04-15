@@ -5,7 +5,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class PrototypeTest : AbstractEvalTest() {
+internal class CallTest : AbstractEvalTest() {
 
     @Test
     fun `Function which returns the answer - but what was the question`() {

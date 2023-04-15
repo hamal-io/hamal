@@ -6,6 +6,7 @@ import io.hamal.script.ast.Statement
 import io.hamal.script.ast.expr.*
 import io.hamal.script.ast.expr.Number
 import io.hamal.script.ast.expr.Operator.Minus
+import io.hamal.script.ast.stmt.Assignment
 import io.hamal.script.ast.stmt.Block
 import io.hamal.script.ast.stmt.Return
 import io.hamal.script.value.*
@@ -17,6 +18,7 @@ interface Eval {
     class DefaultImpl : Eval {
         override fun invoke(statement: Statement, env: Environment): Value {
             return when (statement) {
+                is Assignment -> evalAssignment(statement, env)
                 is Block -> evalBlockStatement(statement, env)
                 is Return -> evalReturnStatement(statement, env)
                 is ExpressionStatement -> evalExpression(statement.expression, env)
@@ -31,6 +33,16 @@ private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: Block, env: Envi
     for (statement in blockStatement.statements) {
         result = invoke(statement, env)
     }
+    return result
+}
+
+private fun Eval.DefaultImpl.evalAssignment(assignment: Assignment, env: Environment) : Value{
+    val result = TableValue()
+    //FIXME populate environment
+    assignment.identifiers.zip(assignment.expressions)
+        .forEach{
+            result[StringValue(it.first)] = evalExpression(it.second, env)
+        }
     return result
 }
 

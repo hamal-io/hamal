@@ -9,7 +9,7 @@ data class Do(
     val blockStatement: Block
 ) : Statement {
 
-    internal object ParseDo : ParseStatement<Do> {
+    internal object Parse : ParseStatement<Do> {
         override fun invoke(ctx: Parser.Context): Do {
             assert(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Do)

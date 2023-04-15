@@ -10,7 +10,7 @@ import io.hamal.script.token.Token
 data class Return(
     val returnValue: Expression
 ) : Statement {
-    internal object ParseReturn : ParseStatement<Return> {
+    internal object Parse : ParseStatement<Return> {
         override fun invoke(ctx: Parser.Context): Return {
             assert(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Return)
