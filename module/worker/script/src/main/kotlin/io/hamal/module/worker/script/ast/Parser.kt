@@ -50,7 +50,10 @@ internal fun Parser.Context.parseBlockStatement(): Block {
             break
         }
         parseStatement()?.let(statements::add)
-        advance()
+
+        if (currentTokenType() != Eof) {
+            advance()
+        }
     }
     return Block(statements)
 }

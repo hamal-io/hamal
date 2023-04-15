@@ -7,9 +7,7 @@ import io.hamal.module.worker.script.token.Token.Type
 
 interface LiteralExpression : Expression
 
-internal interface ParseLiteralExpression<EXPRESSION : LiteralExpression> {
-    operator fun invoke(ctx: Parser.Context): EXPRESSION
-}
+internal interface ParseLiteralExpression<EXPRESSION : LiteralExpression> : ParsePrefixExpression<EXPRESSION>
 
 data class Number(val value: Decimal) : LiteralExpression {
     constructor(value: Int) : this(Decimal(value))

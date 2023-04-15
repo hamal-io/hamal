@@ -1,6 +1,5 @@
 package io.hamal.module.worker.script.ast.expr
 
-import io.hamal.lib.meta.math.Decimal
 import io.hamal.module.worker.script.token.Token.Type
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -54,9 +53,8 @@ internal class IdentifierTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("Parse()")
     inner class ParseTest {
-
         @Test
-        fun `Parses identifier`() {
+        fun identifier() {
             runLiteralTest(Identifier.Parse, "some_variable") { result, tokens ->
                 assertThat(result, equalTo(Identifier("some_variable")))
                 tokens.inOrder(Type.Identifier, Type.Eof)

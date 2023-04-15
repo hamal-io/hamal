@@ -1,11 +1,11 @@
 package io.hamal.module.worker.script.eval
 
-import io.hamal.lib.meta.Tuple2
 import io.hamal.module.worker.script.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 internal class NumberTest : AbstractEvalTest() {
@@ -16,20 +16,19 @@ internal class NumberTest : AbstractEvalTest() {
         assertThat(result, equalTo(NumberValue(42)))
     }
 
-
     @ParameterizedTest(name = "#{index} - Test expression {0}")
     @MethodSource("testCases")
-    fun `Parameterized tests`(arg: Tuple2<String, NumberValue>) {
-        val result = eval(arg._1)
-        val expected = arg._2;
+    fun `Parameterized tests`(code : String, expected: NumberValue) {
+        val result = eval(code)
         assertThat(result, equalTo(expected));
     }
 
     companion object {
         @JvmStatic
-        private fun testCases(): List<Tuple2<String, NumberValue>> {
+        private fun testCases(): List<Arguments> {
             return listOf(
-                Tuple2("1 + 2", NumberValue(3)),
+                Arguments.of("1 + 2", NumberValue(3)),
+                Arguments.of("2 - 1", NumberValue(1)),
             );
         }
     }

@@ -17,6 +17,8 @@ object PrecedenceString {
             is LiteralExpression -> appendLiteral(expression)
             is PrefixExpression -> appendPrefixExpression(expression)
             is InfixExpression -> appendInfixExpression(expression)
+            is GroupedExpression -> appendGroupedExpression(expression)
+            else -> TODO("$expression")
         }
     }
 
@@ -24,6 +26,12 @@ object PrecedenceString {
         append('(')
         appendOperator(expression.operator)
         appendExpression(expression)
+        append(')')
+    }
+
+    private fun StringBuilder.appendGroupedExpression(expression: GroupedExpression) {
+        append('(')
+        appendExpression(expression.expression)
         append(')')
     }
 

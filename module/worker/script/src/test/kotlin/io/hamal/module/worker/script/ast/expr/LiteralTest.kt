@@ -59,7 +59,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
-            fun `Parse number token`() {
+            fun number() {
                 runLiteralTest(Number.Parse, "28.10") { result, tokens ->
                     assertThat(result, equalTo(Number(Decimal("28.10"))))
                     tokens.inOrder(Type.Number, Type.Eof)
@@ -116,7 +116,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
-            fun `Parses string token`() {
+            fun string() {
                 runLiteralTest(String.Parse, "'hello hamal'") { result, tokens ->
                     assertThat(result, equalTo(String("hello hamal")))
                     tokens.inOrder(Type.String, Type.Eof)
@@ -173,7 +173,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
-            fun `Parse true`() {
+            fun `true`() {
                 runLiteralTest(True.Parse, "true") { result, tokens ->
                     assertThat(result, equalTo(True()))
                     tokens.inOrder(Type.True, Type.Eof)
@@ -230,7 +230,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
-            fun `Parse false`() {
+            fun `false`() {
                 runLiteralTest(False.Parse, "false") { result, tokens ->
                     assertThat(result, equalTo(False()))
                     tokens.inOrder(Type.False, Type.Eof)
@@ -246,7 +246,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
-            fun `Parse nil`() {
+            fun `nil`() {
                 runLiteralTest(Nil.Parse, "nil") { result, tokens ->
                     assertThat(result, equalTo(Nil()))
                     tokens.inOrder(Type.Nil, Type.Eof)

@@ -1,8 +1,8 @@
 package io.hamal.module.worker.script.ast.expr
 
 import io.hamal.module.worker.script.ast.AbstractAstTest
+import io.hamal.module.worker.script.ast.Expression
 import io.hamal.module.worker.script.ast.Parser
-import io.hamal.module.worker.script.ast.PrefixExpression
 import io.hamal.module.worker.script.token.Token
 import io.hamal.module.worker.script.token.tokenize
 import kotlin.String
@@ -19,7 +19,7 @@ internal abstract class AbstractExpressionTest : AbstractAstTest() {
         assertFn(result, tokens)
     }
 
-    fun <EXPRESSION : PrefixExpression> runTest(
+    fun <EXPRESSION : Expression> runTest(
         parser: ParsePrefixExpression<EXPRESSION>,
         code: String,
         assertFn: (EXPRESSION, ArrayDeque<Token>) -> Unit

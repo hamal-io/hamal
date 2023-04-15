@@ -3,8 +3,7 @@ package io.hamal.module.worker.script.token
 import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.module.worker.script.token.*
 import io.hamal.module.worker.script.token.Token.*
-import io.hamal.module.worker.script.token.Token.Type.Error
-import io.hamal.module.worker.script.token.Token.Type.HexNumber
+import io.hamal.module.worker.script.token.Token.Type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
@@ -292,6 +291,24 @@ class TokenizerTest {
                 assertThat("Position ${expected.position}", result.position, equalTo(expected.position))
                 assertThat("Value ${expected.value}", result.value, equalTo(expected.value))
 
+            }
+
+            @Test
+            fun `Tokenize function call`(){
+                val testInstance = Tokenizer.DefaultImpl("some_function()")
+
+                val identifier = testInstance.nextToken()
+                assertThat(identifier.type, equalTo(Identifier))
+                assertThat(identifier.value, equalTo("some_function"))
+
+                val leftParenthesis = testInstance.nextToken()
+                assertThat(leftParenthesis.type, equalTo(LeftParenthesis))
+
+                val rightParenthesis = testInstance.nextToken()
+                assertThat(rightParenthesis.type, equalTo(RightParenthesis))
+
+                val eof = testInstance.nextToken()
+                assertThat(eof.type, equalTo(Eof))
             }
         }
 

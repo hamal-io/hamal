@@ -14,7 +14,13 @@ private val prefixParseFnMapping = mapOf(
     Token.Type.Nil to Nil.Parse,
     Token.Type.String to String.Parse,
     Token.Type.Identifier to Identifier.Parse,
-    Token.Type.Number to Number.Parse
+    Token.Type.Number to Number.Parse,
+    Token.Type.Function to Function.Parse,
+    Token.Type.LeftParenthesis to GroupedExpression.Parse
 )
 
-internal fun prefixFn(type: Token.Type) = prefixParseFnMapping[type]!!
+internal fun prefixFn(type: Token.Type) : ParsePrefixExpression<*>{
+    return prefixParseFnMapping[type]!!
+}
+
+

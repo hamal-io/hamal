@@ -1,15 +1,15 @@
 package io.hamal.module.worker.script.ast
 
+import io.hamal.module.worker.script.ast.expr.Operator
+
 interface Node
 
-enum class Operator(val value: String) {
-    Plus("+"),
-}
+
 
 interface Expression : Node
 
 
-abstract class PrefixExpression(
+data class PrefixExpression(
     val operator: Operator,
     val value: Expression
 ) : Expression {
