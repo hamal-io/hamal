@@ -1,5 +1,7 @@
 package io.hamal.script.value
 
-class ErrorValue : Value{
+data class ErrorValue(
+    val cause: StringValue
+) : Value{
 
 }

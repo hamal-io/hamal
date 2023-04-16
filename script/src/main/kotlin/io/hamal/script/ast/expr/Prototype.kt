@@ -1,6 +1,6 @@
 package io.hamal.script.ast.expr
 
-import io.hamal.script.ParseException
+import io.hamal.script.ScriptParseException
 import io.hamal.script.ast.Parser
 import io.hamal.script.ast.parseStatement
 import io.hamal.script.ast.stmt.Block
@@ -57,7 +57,7 @@ class PrototypeLiteral(
             val statements = mutableListOf<Statement>()
             while (currentTokenType() != Token.Type.End) {
                 if (currentTokenType() == Token.Type.Eof) {
-                    throw ParseException("Expected end  but reached end of file")
+                    throw ScriptParseException("Expected end  but reached end of file")
                 }
                 parseStatement()?.let(statements::add)
             }

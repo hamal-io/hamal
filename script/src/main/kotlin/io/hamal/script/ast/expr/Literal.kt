@@ -61,6 +61,8 @@ class FalseLiteral : LiteralExpression {
     override fun equals(other: Any?) = other != null && this::class == other::class
 
     override fun hashCode() = this::class.hashCode()
+
+    override fun toString() = "false"
 }
 
 

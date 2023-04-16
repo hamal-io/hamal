@@ -1,5 +1,6 @@
 package io.hamal.script.eval
 
+import io.hamal.script.ScriptEvaluationException
 import io.hamal.script.ast.expr.*
 import io.hamal.script.ast.expr.Operator.Minus
 import io.hamal.script.ast.stmt.*
@@ -42,7 +43,21 @@ private fun Eval.DefaultImpl.evalAssignment(assignment: Assignment, env: Environ
     return result
 }
 
-private fun Eval.DefaultImpl.evalCallStatement(call: Call, env: Environment) : Value{
+fun assert(expressions: List<Expression>, parameters: List<Value>) : Value{
+    val result = parameters.first()
+//    val message = parameters.getOrNull(1) as StringValue? ?: StringValue("assertion violation")
+    val message = StringValue("Assertion violated: '${expressions[0].toString()}'")
+    if(result != TrueValue){
+        throw ScriptEvaluationException(ErrorValue(message))
+    }
+    return NilValue
+}
+
+private fun Eval.DefaultImpl.evalCallStatement(call: Call, env: Environment) : Value {
+    val parameters = call.parameters.map{evalExpression(it, env)}
+    if(call.identifier.value == "assert"){
+        return assert(call.parameters, parameters)
+    }
     //FIXME the same as the expression ?!
     val prototype = env.findLocalPrototype(StringValue(call.identifier))!!
     return evalBlockStatement(prototype.block, env)

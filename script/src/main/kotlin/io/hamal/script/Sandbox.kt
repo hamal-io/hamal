@@ -11,10 +11,21 @@ class Sandbox {
     private val env: Environment = Environment()
     private val eval = Eval.DefaultImpl()
 
+
+//    init {
+//        env.assignLocal("assert", pbke)
+//    }
+
     fun eval(code: String): Value {
         val tokens = tokenize(code)
         val statements = parse(tokens)
-        return eval(statements, env)
+        try {
+            return eval(statements, env)
+        } catch (e: ScriptEvaluationException) {
+            return e.error
+        } catch (t: Throwable) {
+            throw t
+        }
     }
 
 }

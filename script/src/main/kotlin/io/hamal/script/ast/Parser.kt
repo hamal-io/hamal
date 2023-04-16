@@ -1,7 +1,7 @@
 package io.hamal.script.ast
 
 import io.hamal.lib.meta.exception.throwIf
-import io.hamal.script.ParseException
+import io.hamal.script.ScriptParseException
 import io.hamal.script.ast.expr.*
 import io.hamal.script.ast.stmt.*
 import io.hamal.script.token.Token
@@ -30,7 +30,7 @@ interface Parser {
 
         fun expectCurrentTokenTypToBe(type: Type) {
             throwIf(currentTokenType() != type) {
-                ParseException("Expected token to be $type but got ${currentTokenType()}")
+                ScriptParseException("Expected token to be $type but got ${currentTokenType()}")
             }
         }
 
