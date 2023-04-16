@@ -1,4 +1,4 @@
-package io.hamal.script.eval
+package io.hamal.script.evaluation
 
 import io.hamal.script.value.NumberValue
 import org.hamcrest.CoreMatchers.equalTo
@@ -11,10 +11,7 @@ internal class CallTest : AbstractEvalTest() {
     fun `Function which returns the answer - but what was the question`() {
         val result = eval(
             """
-            function answer() 
-                return 42 
-            end
-            
+            function answer() return 42  end
             answer()
         """.trimIndent()
         )

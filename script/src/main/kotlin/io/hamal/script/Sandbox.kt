@@ -1,15 +1,15 @@
 package io.hamal.script
 
 import io.hamal.script.ast.parse
-import io.hamal.script.eval.Environment
-import io.hamal.script.eval.Eval
+import io.hamal.script.interpreter.Environment
+import io.hamal.script.interpreter.Interpreter
 import io.hamal.script.token.tokenize
 import io.hamal.script.value.Value
 
 class Sandbox {
 
     private val env: Environment = Environment()
-    private val eval = Eval.DefaultImpl()
+    private val interpreter = Interpreter.DefaultImpl
 
 
 //    init {
@@ -20,7 +20,7 @@ class Sandbox {
         val tokens = tokenize(code)
         val statements = parse(tokens)
         try {
-            return eval(statements, env)
+            return interpreter.run(statements, env)
         } catch (e: ScriptEvaluationException) {
             return e.error
         } catch (t: Throwable) {

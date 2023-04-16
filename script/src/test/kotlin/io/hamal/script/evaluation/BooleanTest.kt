@@ -1,4 +1,4 @@
-package io.hamal.script.eval
+package io.hamal.script.evaluation
 
 import io.hamal.script.value.FalseValue
 import io.hamal.script.value.TrueValue

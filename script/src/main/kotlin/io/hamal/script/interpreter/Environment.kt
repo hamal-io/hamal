@@ -1,4 +1,4 @@
-package io.hamal.script.eval
+package io.hamal.script.interpreter
 
 import io.hamal.script.value.PrototypeValue
 import io.hamal.script.value.StringValue

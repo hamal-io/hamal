@@ -7,7 +7,7 @@ import io.hamal.script.ast.parseExpression
 import io.hamal.script.token.Token
 
 data class Return(
-    val returnValue: Expression
+    val expression: Expression
 ) : Statement {
     internal object Parse : ParseStatement<Return> {
         override fun invoke(ctx: Parser.Context): Return {
