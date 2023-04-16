@@ -1,7 +1,5 @@
 package io.hamal.script.interpreter
 
-import io.hamal.script.ScriptEvaluationException
-import io.hamal.script.ast.expr.Expression
 import io.hamal.script.ast.stmt.*
 import io.hamal.script.value.*
 
@@ -47,26 +45,9 @@ internal object EvaluateBlock : Evaluate<Block> {
     }
 }
 
-
-fun assert(expressions: List<Expression>, parameters: List<Value>): Value {
-    val result = parameters.first()
-//    val message = parameters.getOrNull(1) as StringValue? ?: StringValue("assertion violation")
-    val message = StringValue("Assertion violated: '${expressions[0].toString()}'")
-    if (result != TrueValue) {
-        throw ScriptEvaluationException(ErrorValue(message))
-    }
-    return NilValue
-}
-
 internal object EvaluateCall : Evaluate<Call> {
     override fun invoke(toEvaluate: Call, env: Environment): Value {
-        val parameters = toEvaluate.parameters.map { Evaluator.evaluate(it, env) }
-        if (toEvaluate.identifier.value == "assert") {
-            return assert(toEvaluate.parameters, parameters)
-        }
-        //FIXME the same as the expression ?!
-        val prototype = env.findLocalPrototype(StringValue(toEvaluate.identifier))!!
-        return Evaluator.evaluate(prototype.block, env)
+        return Evaluator.evaluate(toEvaluate.expression, env)
     }
 }
 

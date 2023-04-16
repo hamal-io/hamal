@@ -9,6 +9,7 @@ import io.hamal.script.token.Token.Type.*
 private val infixParseFnMapping = mapOf(
     Plus to InfixExpression.Parse,
     Minus to InfixExpression.Parse,
+    LeftAngleBracket to InfixExpression.Parse,
     LeftParenthesis to CallExpression.Parse,
 )
 
@@ -31,6 +32,10 @@ data class InfixExpression(
                 lhs = lhs, operator = operator, rhs = rhs
             )
         }
+    }
+
+    override fun toString(): String {
+        return "$lhs $operator $rhs"
     }
 }
 

@@ -1,7 +1,8 @@
 package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.Parser
-import io.hamal.script.token.Token.Type
+import io.hamal.script.ast.parseExpression
+import io.hamal.script.token.Token
 
 class CallExpression(
     val identifier: Identifier,
@@ -9,18 +10,32 @@ class CallExpression(
 ) : Expression {
     internal object Parse : ParseInfixExpression {
         override fun invoke(ctx: Parser.Context, lhs: Expression): CallExpression {
-            return CallExpression(lhs as Identifier, ctx.parseArguments())
+            return CallExpression(
+                lhs as Identifier,
+                ctx.parseParameters()
+            )
         }
 
-        private fun Parser.Context.parseArguments(): List<Expression> {
-            expectCurrentTokenTypToBe(Type.LeftParenthesis)
+        private fun Parser.Context.parseParameters(): List<Expression> {
+            expectCurrentTokenTypToBe(Token.Type.LeftParenthesis)
             advance()
 
-            if (currentTokenType() == Type.RightParenthesis) {
+            if (currentTokenType() == Token.Type.RightParenthesis) {
                 advance()
                 return listOf()
             }
-            TODO()
+
+            val result = mutableListOf<Expression>()
+            while (currentTokenType() != Token.Type.RightParenthesis) {
+                result.add(parseExpression(Precedence.Lowest))
+                advance()
+                if (currentTokenType() == Token.Type.Comma) {
+                    advance()
+                }
+            }
+            advance()
+            return result
         }
+
     }
 }

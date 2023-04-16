@@ -19,6 +19,7 @@ internal class OperatorTest : AbstractAstTest() {
             return listOf(
                 Arguments.of("a + b", "(a + b)"),
                 Arguments.of("a - b", "(a - b)"),
+                Arguments.of("a < b", "(a < b)"),
                 Arguments.of("(a + b)", "((a + b))"),
                 Arguments.of("a + b + c", "((a + b) + c)"),
             );
@@ -29,13 +30,14 @@ internal class OperatorTest : AbstractAstTest() {
             return listOf(
                 Arguments.of("+", Operator.Plus),
                 Arguments.of("-", Operator.Minus),
+                Arguments.of("<", Operator.LessThan)
             )
         }
     }
 
     @ParameterizedTest(name = "#{index} - Precedence of {0}")
     @MethodSource("precedenceTestCases")
-    fun `Operator precedence`(given: kotlin.String, expected: kotlin.String) {
+    fun `Operator precedence`(given: String, expected: String) {
         val tokens = tokenize(given)
 
         val blockStatement = Parser.DefaultImpl.parse(Parser.Context(ArrayDeque(tokens)))
@@ -49,7 +51,7 @@ internal class OperatorTest : AbstractAstTest() {
 
     @ParameterizedTest(name = "#{index} - Parse {0}")
     @MethodSource("operatorParsingTestCases")
-    fun `Operator parsing`(given: kotlin.String, expected: Operator) {
+    fun `Operator parsing`(given: String, expected: Operator) {
         val tokens = ArrayDeque(tokenize(given))
         val result = Operator.Parse(Parser.Context(tokens))
         assertThat(result, equalTo(expected));

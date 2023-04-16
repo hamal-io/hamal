@@ -2,24 +2,30 @@ package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.Parser
 import io.hamal.script.token.Token.Type
-import kotlin.String
 
 interface ParseOperator {
-    operator fun invoke(ctx: Parser.Context) : Operator
+    operator fun invoke(ctx: Parser.Context): Operator
 }
 
 enum class Operator(val value: String) {
     Plus("+"),
+    LessThan("<"),
     Minus("-");
-    internal object Parse: ParseOperator {
+
+    internal object Parse : ParseOperator {
+        //@formatter:off
         override fun invoke(ctx: Parser.Context): Operator {
-            return when(val type = ctx.currentTokenType()){
+            return when (val type = ctx.currentTokenType()) {
                 Type.Plus -> { ctx.advance(); Plus }
                 Type.Minus -> { ctx.advance(); Minus }
+                Type.LeftAngleBracket ->{ ctx.advance(); LessThan }
                 else -> TODO()
             }
         }
+        //@formatter:on
     }
+
+    override fun toString(): String = value
 }
 
 internal enum class Precedence {
@@ -41,10 +47,14 @@ internal enum class Precedence {
 }
 
 private val precedenceMapping = mapOf(
-    Type.Plus to Precedence.Plus,
+    Type.LeftAngleBracket to Precedence.Comparison,
     Type.Minus to Precedence.Plus,
+    Type.Plus to Precedence.Plus,
     Type.LeftParenthesis to Precedence.Call
 )
 
-internal fun Parser.Context.currentPrecedence() = precedenceMapping[currentTokenType()] ?: io.hamal.script.ast.expr.Precedence.Lowest
-internal fun Parser.Context.nextPrecedence() = precedenceMapping[nextTokenType()] ?: io.hamal.script.ast.expr.Precedence.Lowest
+internal fun Parser.Context.currentPrecedence() =
+    precedenceMapping[currentTokenType()] ?: Precedence.Lowest
+
+internal fun Parser.Context.nextPrecedence() =
+    precedenceMapping[nextTokenType()] ?: Precedence.Lowest

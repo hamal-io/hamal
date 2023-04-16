@@ -1,8 +1,26 @@
 package io.hamal.script.interpreter
 
 import io.hamal.script.ast.expr.*
-import io.hamal.script.value.NumberValue
-import io.hamal.script.value.Value
+import io.hamal.script.builtin.ForeignFunction
+import io.hamal.script.value.*
+
+internal object EvaluateCallExpression : Evaluate<CallExpression> {
+    override fun invoke(toEvaluate: CallExpression, env: Environment): Value {
+        val parameters = toEvaluate.parameters.map { Evaluator.evaluate(it, env) }
+
+        env.findForeignFunction(toEvaluate.identifier)
+            ?.let { fn ->
+                return fn(
+                    ForeignFunction.Context(
+                        parameters.zip(toEvaluate.parameters)
+                            .map { ForeignFunction.Parameter(it.first, it.second) }
+                    ))
+            }
+
+        val prototype = env.findPrototype(StringValue(toEvaluate.identifier))!!
+        return Evaluator.evaluate(prototype.block, env)
+    }
+}
 
 internal object EvaluateGroupedExpression : Evaluate<GroupedExpression> {
     override fun invoke(toEvaluate: GroupedExpression, env: Environment) =
@@ -29,6 +47,15 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
                 NumberValue((lhs as NumberValue).value.minus((rhs as NumberValue).value))
             }
 
+            Operator.LessThan -> {
+                if ((lhs as NumberValue).value.isLessThan((rhs as NumberValue).value)) {
+                    return TrueValue
+                } else {
+                    return FalseValue
+                }
+            }
+
+
             else -> TODO()
         }
     }
@@ -37,17 +64,6 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
 internal object EvaluateLiteralExpression : Evaluate<LiteralExpression> {
     override fun invoke(toEvaluate: LiteralExpression, env: Environment) = Evaluator.evaluate(toEvaluate, env)
 }
-
-//
-//        private fun evalPrefix(expression: PrefixExpression, env: Environment): Value {
-//            val value = evalExpression(expression.value, env)
-//            return when (expression.operator) {
-//                // FIXME this must come from operator repository as well
-//                Minus -> NumberValue((value as NumberValue).value.negate())
-//                else -> TODO("${expression.operator} not supported")
-//            }
-//        }
-//
 
 internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
     override fun invoke(toEvaluate: PrefixExpression, env: Environment): Value {

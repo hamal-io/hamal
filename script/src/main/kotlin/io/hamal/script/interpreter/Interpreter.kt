@@ -21,6 +21,7 @@ internal object Evaluator {
         register(PrototypeLiteral::class, EvaluatePrototypeLiteral)
 
         /*EXPRESSION*/
+        register(CallExpression::class, EvaluateCallExpression)
         register(GroupedExpression::class, EvaluateGroupedExpression)
         register(InfixExpression::class, EvaluateInfixExpression)
         register(LiteralExpression::class, EvaluateLiteralExpression)
