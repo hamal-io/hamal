@@ -2,7 +2,6 @@ package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.Parser
 import io.hamal.script.token.Token.Type
-import kotlin.String
 
 data class Identifier(val value: String) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<Identifier> {
@@ -13,4 +12,6 @@ data class Identifier(val value: String) : LiteralExpression {
             return Identifier(token.value)
         }
     }
+
+    override fun toString() = value
 }

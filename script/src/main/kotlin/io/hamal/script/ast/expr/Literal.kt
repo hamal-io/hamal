@@ -19,9 +19,11 @@ data class NumberLiteral(val value: Decimal) : LiteralExpression {
             return NumberLiteral(Decimal(token.value))
         }
     }
+
+    override fun toString() = value.toString()
 }
 
-data class StringLiteral(val value: kotlin.String) : LiteralExpression {
+data class StringLiteral(val value: String) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<StringLiteral> {
         override fun invoke(ctx: Parser.Context): StringLiteral {
             assert(ctx.isNotEmpty())
@@ -30,6 +32,8 @@ data class StringLiteral(val value: kotlin.String) : LiteralExpression {
             return StringLiteral(token.value)
         }
     }
+
+    override fun toString() = "'$value'"
 }
 
 class TrueLiteral : LiteralExpression {
@@ -46,6 +50,8 @@ class TrueLiteral : LiteralExpression {
     override fun equals(other: Any?) = other != null && this::class == other::class
 
     override fun hashCode() = this::class.hashCode()
+
+    override fun toString() = "true"
 }
 
 class FalseLiteral : LiteralExpression {
@@ -80,5 +86,6 @@ class NilLiteral : LiteralExpression {
 
     override fun hashCode() = this::class.hashCode()
 
+    override fun toString() = "false"
 }
 

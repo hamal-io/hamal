@@ -36,6 +36,7 @@ class CallExpression(
             advance()
             return result
         }
-
     }
+
+    override fun toString() = "$identifier(${parameters.joinToString(",") { it.toString() }})"
 }

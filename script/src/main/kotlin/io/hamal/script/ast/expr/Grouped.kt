@@ -10,7 +10,7 @@ data class GroupedExpression(val expression: Expression) : Expression {
             ctx.expectCurrentTokenTypToBe(Token.Type.LeftParenthesis)
             ctx.advance()
 
-            if(ctx.currentTokenType() != Token.Type.RightParenthesis){
+            if (ctx.currentTokenType() != Token.Type.RightParenthesis) {
                 val result = GroupedExpression(ctx.parseExpression(Precedence.Lowest))
                 ctx.advance()
                 return result
@@ -18,4 +18,6 @@ data class GroupedExpression(val expression: Expression) : Expression {
             return GroupedExpression(NilLiteral())
         }
     }
+
+    override fun toString() = "($expression)"
 }

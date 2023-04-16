@@ -15,7 +15,7 @@ enum class Operator(val value: String) {
     internal object Parse : ParseOperator {
         //@formatter:off
         override fun invoke(ctx: Parser.Context): Operator {
-            return when (val type = ctx.currentTokenType()) {
+            return when (ctx.currentTokenType()) {
                 Type.Plus -> { ctx.advance(); Plus }
                 Type.Minus -> { ctx.advance(); Minus }
                 Type.LeftAngleBracket ->{ ctx.advance(); LessThan }

@@ -1,7 +1,6 @@
 package io.hamal.script
 
 import io.hamal.script.ast.expr.*
-import io.hamal.script.ast.expr.NumberLiteral
 import io.hamal.script.value.*
 
 object PrecedenceString {
@@ -60,7 +59,7 @@ object PrecedenceString {
             is TrueLiteral -> appendValue(TrueValue)
             is FalseLiteral -> appendValue(FalseValue)
             is NumberLiteral -> appendValue(NumberValue(literal.value))
-            is io.hamal.script.ast.expr.StringLiteral -> appendValue(StringValue(literal.value))
+            is StringLiteral -> appendValue(StringValue(literal.value))
             is NilLiteral -> appendValue(NilValue)
         }
     }

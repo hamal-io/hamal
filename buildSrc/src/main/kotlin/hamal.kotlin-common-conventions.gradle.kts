@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
 }
 
-kotlin{
+kotlin {
     jvmToolchain(19)
 }
 

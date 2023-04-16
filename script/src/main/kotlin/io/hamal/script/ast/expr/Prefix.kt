@@ -16,6 +16,8 @@ data class PrefixExpression(
             )
         }
     }
+
+    override fun toString() = "$operator$value"
 }
 
 

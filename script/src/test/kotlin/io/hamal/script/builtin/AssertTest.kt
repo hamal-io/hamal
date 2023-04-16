@@ -48,7 +48,7 @@ internal class AssertTest : AbstractBuiltinTest() {
                 assert(2 < 1)
             """.trimIndent()
         )
-        assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: 'false'"))))
+        assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: '2 < 1'"))))
     }
 
     @Test
