@@ -1,6 +1,5 @@
 package io.hamal.script.ast.expr
 
-import io.hamal.script.ast.Expression
 import io.hamal.script.ast.Parser
 import io.hamal.script.ast.parseExpression
 import io.hamal.script.token.Token
@@ -16,7 +15,7 @@ data class GroupedExpression(val expression: Expression) : Expression {
                 ctx.advance()
                 return result
             }
-            return GroupedExpression(Nil())
+            return GroupedExpression(NilLiteral())
         }
     }
 }

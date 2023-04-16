@@ -2,18 +2,12 @@ package io.hamal.script.ast
 
 import io.hamal.lib.meta.exception.throwIf
 import io.hamal.script.ParseException
-import io.hamal.script.ast.expr.Precedence
-import io.hamal.script.ast.expr.infixFn
-import io.hamal.script.ast.expr.nextPrecedence
-import io.hamal.script.ast.expr.parseFn
-import io.hamal.script.ast.stmt.Assignment
-import io.hamal.script.ast.stmt.Block
-import io.hamal.script.ast.stmt.Return
+import io.hamal.script.ast.expr.*
+import io.hamal.script.ast.stmt.*
 import io.hamal.script.token.Token
 import io.hamal.script.token.Token.Type
 
 fun parse(tokens: List<Token>): Block {
-    val parser = Parser.DefaultImpl
     return Parser.DefaultImpl.parse(Parser.Context(ArrayDeque(tokens)))
 }
 
@@ -46,15 +40,8 @@ interface Parser {
 
 internal fun Parser.Context.parseBlockStatement(): Block {
     val statements = mutableListOf<Statement>()
-    while (true) {
-        if (currentTokenType() == Type.Eof || currentTokenType() == Type.End) {
-            break
-        }
+    while(currentTokenType() != Type.Eof && currentTokenType() != Type.End){
         parseStatement()?.let(statements::add)
-
-        if (currentTokenType() != Type.Eof) {
-            advance()
-        }
     }
     return Block(statements)
 }
@@ -63,9 +50,15 @@ internal fun Parser.Context.parseStatement(): Statement? {
     val currentType = currentTokenType()
     return when {
         currentType == Type.Identifier && nextTokenType() == Type.Equal -> Assignment.Global.Parse(this)
+        currentType == Type.Identifier && nextTokenType() == Type.LeftParenthesis -> Call.Parse(this)
         currentType == Type.Local -> Assignment.Local.Parse(this)
+        currentType == Type.Function -> Prototype.Parse(this)
         currentType == Type.Return -> Return.Parse(this)
-        else -> ExpressionStatement(parseExpression())
+        else -> {
+            val result = ExpressionStatement(parseExpression())
+            advance()
+            result
+        }
     }
 }
 

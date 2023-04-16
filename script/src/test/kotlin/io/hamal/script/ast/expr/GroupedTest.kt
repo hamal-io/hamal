@@ -14,7 +14,7 @@ internal class GroupedTest : AbstractExpressionTest() {
         @Test
         fun `empty grouped expression`() {
             runTest(GroupedExpression.Parse, "( )") { result, tokens ->
-                assertThat(result, equalTo(GroupedExpression(Nil())))
+                assertThat(result, equalTo(GroupedExpression(NilLiteral())))
                 tokens.inOrder(Type.RightParenthesis, Type.Eof)
             }
         }
@@ -22,7 +22,7 @@ internal class GroupedTest : AbstractExpressionTest() {
         @Test
         fun `literal grouped expression`() {
             runTest(GroupedExpression.Parse, "(2810)") { result, tokens ->
-                assertThat(result, equalTo(GroupedExpression(Number(2810))))
+                assertThat(result, equalTo(GroupedExpression(NumberLiteral(2810))))
                 tokens.inOrder(Type.RightParenthesis, Type.Eof)
             }
         }
@@ -33,7 +33,7 @@ internal class GroupedTest : AbstractExpressionTest() {
                 assertThat(
                     result, equalTo(
                         GroupedExpression(
-                            PrefixExpression(Operator.Minus, Number(23))
+                            PrefixExpression(Operator.Minus, NumberLiteral(23))
                         )
                     )
                 )
@@ -48,9 +48,9 @@ internal class GroupedTest : AbstractExpressionTest() {
                     result, equalTo(
                         GroupedExpression(
                             InfixExpression(
-                                Number(1),
+                                NumberLiteral(1),
                                 Operator.Plus,
-                                Number(2)
+                                NumberLiteral(2)
                             )
                         )
                     )

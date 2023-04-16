@@ -2,7 +2,6 @@ package io.hamal.script.ast.stmt
 
 import io.hamal.script.ast.AbstractAstTest
 import io.hamal.script.ast.Parser
-import io.hamal.script.ast.Statement
 import io.hamal.script.token.Token
 import io.hamal.script.token.tokenize
 

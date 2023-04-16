@@ -1,7 +1,7 @@
 package io.hamal.script.ast.stmt
 
-import io.hamal.script.ast.expr.Nil
-import io.hamal.script.ast.expr.Number
+import io.hamal.script.ast.expr.NilLiteral
+import io.hamal.script.ast.expr.NumberLiteral
 import io.hamal.script.token.Token.Type
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -16,7 +16,7 @@ internal class ReturnTest : AbstractStatementTest() {
         @Test
         fun `Return statement without expression`() {
             runTest(Return.Parse, "return end") { result, tokens ->
-                assertThat(result, equalTo(Return(Nil())))
+                assertThat(result, equalTo(Return(NilLiteral())))
                 // its intentional that there is end left
                 tokens.inOrder(Type.End, Type.Eof)
             }
@@ -25,7 +25,7 @@ internal class ReturnTest : AbstractStatementTest() {
         @Test
         fun `Return statement with number literal`() {
             runTest(Return.Parse, "return 1 end") { result, tokens ->
-                assertThat(result, equalTo(Return(Number(1))))
+                assertThat(result, equalTo(Return(NumberLiteral(1))))
                 // its intentional that there is end left
                 tokens.inOrder(Type.End, Type.Eof)
             }

@@ -1,6 +1,6 @@
 package io.hamal.script.ast.stmt
 
-import io.hamal.script.ast.expr.Nil
+import io.hamal.script.ast.expr.NilLiteral
 import io.hamal.script.ast.stmt.Do.Parse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -23,7 +23,7 @@ internal class DoTest : AbstractStatementTest() {
         @Test
         fun `do return end`() {
             runTest(Parse, "do return end") { result, tokens ->
-                assertThat(result, equalTo(Do(Block(Return(Nil())))))
+                assertThat(result, equalTo(Do(Block(Return(NilLiteral())))))
                 tokens.wereConsumed()
             }
         }

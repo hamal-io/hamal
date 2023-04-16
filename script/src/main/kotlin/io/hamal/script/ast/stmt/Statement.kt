@@ -1,14 +1,16 @@
 package io.hamal.script.ast.stmt
 
+import io.hamal.script.ast.Node
 import io.hamal.script.ast.Parser
-import io.hamal.script.ast.Statement
+import io.hamal.script.ast.expr.Expression
 
 internal interface ParseStatement<out STATEMENT : Statement> {
     operator fun invoke(ctx: Parser.Context): STATEMENT
 }
 
-interface Statement {
-}
+interface Statement : Node
+
+class ExpressionStatement(val expression: Expression) : Statement
 
 
 data class Block(val statements: List<Statement>, override val size: Int) : Statement, Collection<Statement> {

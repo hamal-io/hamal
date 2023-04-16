@@ -36,13 +36,14 @@ internal enum class Precedence {
     Factor,          //  * / // %
     Prefix,           // not # - ~
     Carat,           // ^
-    Call             // ()
+    Call,             // ()
+    Highest
 }
 
 private val precedenceMapping = mapOf(
     Type.Plus to Precedence.Plus,
     Type.Minus to Precedence.Plus,
-    Type.LeftParenthesis to Precedence.Call,
+    Type.LeftParenthesis to Precedence.Call
 )
 
 internal fun Parser.Context.currentPrecedence() = precedenceMapping[currentTokenType()] ?: io.hamal.script.ast.expr.Precedence.Lowest

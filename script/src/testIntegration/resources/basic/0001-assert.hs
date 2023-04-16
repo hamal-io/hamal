@@ -1,0 +1,1 @@
+assert(true, "should never fail")

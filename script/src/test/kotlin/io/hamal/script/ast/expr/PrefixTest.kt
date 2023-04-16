@@ -15,7 +15,7 @@ internal class PrefixTest : AbstractExpressionTest(){
         @Test
         fun `prefix expression`(){
             runTest(PrefixExpression.Parse, "-123"){ result, tokens ->
-                assertThat(result, equalTo(PrefixExpression(Operator.Minus, Number(123))))
+                assertThat(result, equalTo(PrefixExpression(Operator.Minus, NumberLiteral(123))))
                 tokens.inOrder(Type.Number, Type.Eof)
             }
         }

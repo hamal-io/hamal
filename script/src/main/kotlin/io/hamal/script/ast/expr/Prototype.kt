@@ -2,20 +2,19 @@ package io.hamal.script.ast.expr
 
 import io.hamal.script.ParseException
 import io.hamal.script.ast.Parser
-import io.hamal.script.ast.Statement
 import io.hamal.script.ast.parseStatement
 import io.hamal.script.ast.stmt.Block
+import io.hamal.script.ast.stmt.Statement
 import io.hamal.script.token.Token
-import kotlin.String
 
-class Prototype(
+class PrototypeLiteral(
     val identifier: Identifier,
     val parameters: List<Identifier>,
     val block: Block
 ) : LiteralExpression {
 
-    internal object Parse : ParseLiteralExpression<Prototype> {
-        override fun invoke(ctx: Parser.Context): Prototype {
+    internal object Parse : ParseLiteralExpression<PrototypeLiteral> {
+        override fun invoke(ctx: Parser.Context): PrototypeLiteral {
             assert(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Function)
             ctx.advance()
@@ -28,7 +27,7 @@ class Prototype(
             ctx.expectCurrentTokenTypToBe(Token.Type.RightParenthesis)
             ctx.advance()
 
-            return Prototype(
+            return PrototypeLiteral(
                 identifier,
                 parameterIdentifiers,
                 ctx.parseBody()
@@ -72,7 +71,7 @@ class Prototype(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Prototype
+        other as PrototypeLiteral
 
         if (identifier != other.identifier) return false
         return parameters == other.parameters

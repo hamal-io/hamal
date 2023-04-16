@@ -11,13 +11,29 @@ internal class CallTest : AbstractEvalTest() {
     fun `Function which returns the answer - but what was the question`() {
         val result = eval(
             """
-            function answer()
-                return 42
+            function answer() 
+                return 42 
             end
+            
             answer()
         """.trimIndent()
         )
         assertThat(result, equalTo(NumberValue(42)))
     }
 
+
+    @Test
+    fun `Function which returns the answer twice- but what was the question`() {
+        val result = eval(
+            """
+            function answer()
+                return 42
+            end
+            
+            answer()
+            answer()
+        """.trimIndent()
+        )
+        assertThat(result, equalTo(NumberValue(42)))
+    }
 }

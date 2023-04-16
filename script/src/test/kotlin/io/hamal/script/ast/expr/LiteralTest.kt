@@ -22,16 +22,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    Number(2810),
-                    Number(2810)
+                    NumberLiteral(2810),
+                    NumberLiteral(2810)
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    Number(2810),
-                    Number(1506)
+                    NumberLiteral(2810),
+                    NumberLiteral(1506)
                 )
             }
         }
@@ -42,16 +42,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    Number(2810).hashCode(),
-                    Number(2810).hashCode()
+                    NumberLiteral(2810).hashCode(),
+                    NumberLiteral(2810).hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    Number(2810).hashCode(),
-                    Number(1506).hashCode()
+                    NumberLiteral(2810).hashCode(),
+                    NumberLiteral(1506).hashCode()
                 )
             }
         }
@@ -61,8 +61,8 @@ internal class LiteralTest : AbstractExpressionTest() {
         inner class ParseTest {
             @Test
             fun number() {
-                runLiteralTest(Number.Parse, "28.10") { result, tokens ->
-                    assertThat(result, equalTo(Number(Decimal("28.10"))))
+                runLiteralTest(NumberLiteral.Parse, "28.10") { result, tokens ->
+                    assertThat(result, equalTo(NumberLiteral(Decimal("28.10"))))
                     tokens.inOrder(Type.Number, Type.Eof)
                 }
             }
@@ -79,16 +79,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    String("H4M41"),
-                    String("H4M41")
+                    StringLiteral("H4M41"),
+                    StringLiteral("H4M41")
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    String("H4M41"),
-                    String("CRAPPY_WORKFLOW_ENGINE")
+                    StringLiteral("H4M41"),
+                    StringLiteral("CRAPPY_WORKFLOW_ENGINE")
                 )
             }
         }
@@ -99,16 +99,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    String("H4M41").hashCode(),
-                    String("H4M41").hashCode()
+                    StringLiteral("H4M41").hashCode(),
+                    StringLiteral("H4M41").hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    String("H4M41").hashCode(),
-                    String("CRAPPY_WORKFLOW_ENGINE").hashCode()
+                    StringLiteral("H4M41").hashCode(),
+                    StringLiteral("CRAPPY_WORKFLOW_ENGINE").hashCode()
                 )
             }
         }
@@ -118,8 +118,8 @@ internal class LiteralTest : AbstractExpressionTest() {
         inner class ParseTest {
             @Test
             fun string() {
-                runLiteralTest(String.Parse, "'hello hamal'") { result, tokens ->
-                    assertThat(result, equalTo(String("hello hamal")))
+                runLiteralTest(StringLiteral.Parse, "'hello hamal'") { result, tokens ->
+                    assertThat(result, equalTo(StringLiteral("hello hamal")))
                     tokens.inOrder(Type.String, Type.Eof)
                 }
             }
@@ -136,16 +136,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    True(),
-                    True()
+                    TrueLiteral(),
+                    TrueLiteral()
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    True(),
-                    False()
+                    TrueLiteral(),
+                    FalseLiteral()
                 )
             }
         }
@@ -156,16 +156,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    True().hashCode(),
-                    True().hashCode()
+                    TrueLiteral().hashCode(),
+                    TrueLiteral().hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    True().hashCode(),
-                    False().hashCode()
+                    TrueLiteral().hashCode(),
+                    FalseLiteral().hashCode()
                 )
             }
         }
@@ -175,8 +175,8 @@ internal class LiteralTest : AbstractExpressionTest() {
         inner class ParseTest {
             @Test
             fun `true`() {
-                runLiteralTest(True.Parse, "true") { result, tokens ->
-                    assertThat(result, equalTo(True()))
+                runLiteralTest(TrueLiteral.Parse, "true") { result, tokens ->
+                    assertThat(result, equalTo(TrueLiteral()))
                     tokens.inOrder(Type.True, Type.Eof)
                 }
             }
@@ -193,16 +193,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    False(),
-                    False()
+                    FalseLiteral(),
+                    FalseLiteral()
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    False(),
-                    True()
+                    FalseLiteral(),
+                    TrueLiteral()
                 )
             }
         }
@@ -213,16 +213,16 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    False().hashCode(),
-                    False().hashCode()
+                    FalseLiteral().hashCode(),
+                    FalseLiteral().hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    False().hashCode(),
-                    True().hashCode()
+                    FalseLiteral().hashCode(),
+                    TrueLiteral().hashCode()
                 )
             }
         }
@@ -232,8 +232,8 @@ internal class LiteralTest : AbstractExpressionTest() {
         inner class ParseTest {
             @Test
             fun `false`() {
-                runLiteralTest(False.Parse, "false") { result, tokens ->
-                    assertThat(result, equalTo(False()))
+                runLiteralTest(FalseLiteral.Parse, "false") { result, tokens ->
+                    assertThat(result, equalTo(FalseLiteral()))
                     tokens.inOrder(Type.False, Type.Eof)
                 }
             }
@@ -248,8 +248,8 @@ internal class LiteralTest : AbstractExpressionTest() {
         inner class ParseTest {
             @Test
             fun `nil`() {
-                runLiteralTest(Nil.Parse, "nil") { result, tokens ->
-                    assertThat(result, equalTo(Nil()))
+                runLiteralTest(NilLiteral.Parse, "nil") { result, tokens ->
+                    assertThat(result, equalTo(NilLiteral()))
                     tokens.inOrder(Type.Nil, Type.Eof)
                 }
             }

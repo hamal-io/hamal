@@ -1,6 +1,5 @@
 package io.hamal.script.ast.expr
 
-import io.hamal.script.ast.Expression
 import io.hamal.script.ast.Parser
 import io.hamal.script.ast.expr.Operator.Parse
 import io.hamal.script.ast.parseExpression

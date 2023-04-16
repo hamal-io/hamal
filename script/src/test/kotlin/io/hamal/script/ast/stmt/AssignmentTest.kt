@@ -1,9 +1,9 @@
 package io.hamal.script.ast.stmt
 
-import io.hamal.script.ast.expr.False
+import io.hamal.script.ast.expr.FalseLiteral
 import io.hamal.script.ast.expr.Identifier
-import io.hamal.script.ast.expr.Number
-import io.hamal.script.ast.expr.True
+import io.hamal.script.ast.expr.NumberLiteral
+import io.hamal.script.ast.expr.TrueLiteral
 import io.hamal.script.ast.stmt.Assignment.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -26,13 +26,13 @@ internal class AssignmentTest : AbstractStatementTest() {
                 return listOf(
                     Arguments.of(
                         "some_number=42",
-                        Global(Identifier("some_number"), Number(42))
+                        Global(Identifier("some_number"), NumberLiteral(42))
                     ),
                     Arguments.of(
                         "some_var, another_var = true, false",
                         Global(
                             listOf(Identifier("some_var"), Identifier("another_var")),
-                            listOf(True(), False())
+                            listOf(TrueLiteral(), FalseLiteral())
                         )
                     )
                 );
@@ -61,13 +61,13 @@ internal class AssignmentTest : AbstractStatementTest() {
                 return listOf(
                     Arguments.of(
                         "local some_number=42",
-                        Local(Identifier("some_number"), Number(42))
+                        Local(Identifier("some_number"), NumberLiteral(42))
                     ),
                     Arguments.of(
                         "local some_var, another_var = true, false",
                         Local(
                             listOf(Identifier("some_var"), Identifier("another_var")),
-                            listOf(True(), False())
+                            listOf(TrueLiteral(), FalseLiteral())
                         )
                     )
                 );

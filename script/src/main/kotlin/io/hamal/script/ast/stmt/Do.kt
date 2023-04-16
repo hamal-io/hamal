@@ -1,12 +1,11 @@
 package io.hamal.script.ast.stmt
 
 import io.hamal.script.ast.Parser
-import io.hamal.script.ast.Statement
 import io.hamal.script.ast.parseBlockStatement
 import io.hamal.script.token.Token
 
 data class Do(
-    val blockStatement: Block
+    val block: Block
 ) : Statement {
 
     internal object Parse : ParseStatement<Do> {
@@ -19,7 +18,10 @@ data class Do(
                 ctx.advance()
                 return Do(Block.empty)
             }
-            return Do(ctx.parseBlockStatement())
+
+            val block = ctx.parseBlockStatement()
+            ctx.advance()
+            return Do(block)
         }
     }
 }

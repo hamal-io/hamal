@@ -1,7 +1,7 @@
 package io.hamal.script.ast.expr
 
-import io.hamal.script.ast.ExpressionStatement
 import io.hamal.script.ast.stmt.Block
+import io.hamal.script.ast.stmt.ExpressionStatement
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions.*
@@ -17,15 +17,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Equals if identifier and parameters are equal`() {
             assertEquals(
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(True()))
+                    Block(ExpressionStatement(TrueLiteral()))
                 ),
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(False()))
+                    Block(ExpressionStatement(FalseLiteral()))
                 )
             )
         }
@@ -33,15 +33,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Not equals if identifier is not equal`() {
             assertNotEquals(
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(True()))
+                    Block(ExpressionStatement(TrueLiteral()))
                 ),
-                Prototype(
+                PrototypeLiteral(
                     Identifier("AnotherIdentifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(False()))
+                    Block(ExpressionStatement(FalseLiteral()))
                 )
             )
         }
@@ -49,15 +49,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Not equals if parameters are not equal`() {
             assertNotEquals(
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(True()))
+                    Block(ExpressionStatement(TrueLiteral()))
                 ),
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier"), Identifier("AnotherParameterIdentifier")),
-                    Block(ExpressionStatement(False()))
+                    Block(ExpressionStatement(FalseLiteral()))
                 )
             )
         }
@@ -70,15 +70,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Same hashcode if identifier and parameters hashcode are the same`() {
             assertEquals(
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(True()))
+                    Block(ExpressionStatement(TrueLiteral()))
                 ).hashCode(),
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(False()))
+                    Block(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
             )
         }
@@ -86,15 +86,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Different hashcode if identifier has different hashcode`() {
             assertNotEquals(
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(True()))
+                    Block(ExpressionStatement(TrueLiteral()))
                 ).hashCode(),
-                Prototype(
+                PrototypeLiteral(
                     Identifier("AnotherIdentifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(False()))
+                    Block(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
             )
         }
@@ -102,15 +102,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier")),
-                    Block(ExpressionStatement(True()))
+                    Block(ExpressionStatement(TrueLiteral()))
                 ).hashCode(),
-                Prototype(
+                PrototypeLiteral(
                     Identifier("Identifier"),
                     listOf(Identifier("ParameterIdentifier"), Identifier("AnotherParameterIdentifier")),
-                    Block(ExpressionStatement(False()))
+                    Block(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
             )
         }
@@ -122,7 +122,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Parse empty `() {
             runLiteralTest(
-                Prototype.Parse,
+                PrototypeLiteral.Parse,
                 """
                 function empty() 
                 end
@@ -139,7 +139,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Parse empty with single argument`() {
             runLiteralTest(
-                Prototype.Parse,
+                PrototypeLiteral.Parse,
                 """
                 function empty_with_single_param(param_one) end
                 """.trimIndent()
@@ -155,7 +155,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
         @Test
         fun `Parse empty with multiple arguments`() {
             runLiteralTest(
-                Prototype.Parse,
+                PrototypeLiteral.Parse,
                 """
                 function empty_with_params(one,two,three) end
                 """.trimIndent()

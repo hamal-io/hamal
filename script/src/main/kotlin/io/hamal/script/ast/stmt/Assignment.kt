@@ -1,8 +1,7 @@
 package io.hamal.script.ast.stmt
 
-import io.hamal.script.ast.Expression
 import io.hamal.script.ast.Parser
-import io.hamal.script.ast.Statement
+import io.hamal.script.ast.expr.Expression
 import io.hamal.script.ast.expr.Identifier
 import io.hamal.script.ast.expr.Precedence
 import io.hamal.script.ast.parseExpression

@@ -1,14 +1,8 @@
 package io.hamal.script.eval
 
-import io.hamal.script.ast.Expression
-import io.hamal.script.ast.ExpressionStatement
-import io.hamal.script.ast.Statement
 import io.hamal.script.ast.expr.*
-import io.hamal.script.ast.expr.Number
 import io.hamal.script.ast.expr.Operator.Minus
-import io.hamal.script.ast.stmt.Assignment
-import io.hamal.script.ast.stmt.Block
-import io.hamal.script.ast.stmt.Return
+import io.hamal.script.ast.stmt.*
 import io.hamal.script.value.*
 
 interface Eval {
@@ -20,6 +14,8 @@ interface Eval {
             return when (statement) {
                 is Assignment -> evalAssignment(statement, env)
                 is Block -> evalBlockStatement(statement, env)
+                is Call -> evalCallStatement(statement, env)
+                is Prototype -> evalPrototype(statement, env)
                 is Return -> evalReturnStatement(statement, env)
                 is ExpressionStatement -> evalExpression(statement.expression, env)
                 else -> TODO()
@@ -36,14 +32,28 @@ private fun Eval.DefaultImpl.evalBlockStatement(blockStatement: Block, env: Envi
     return result
 }
 
-private fun Eval.DefaultImpl.evalAssignment(assignment: Assignment, env: Environment) : Value{
+private fun Eval.DefaultImpl.evalAssignment(assignment: Assignment, env: Environment): Value {
     val result = TableValue()
     //FIXME populate environment
     assignment.identifiers.zip(assignment.expressions)
-        .forEach{
+        .forEach {
             result[StringValue(it.first)] = evalExpression(it.second, env)
         }
     return result
+}
+
+private fun Eval.DefaultImpl.evalCallStatement(call: Call, env: Environment) : Value{
+    //FIXME the same as the expression ?!
+    val prototype = env.findLocalPrototype(StringValue(call.identifier))!!
+    return evalBlockStatement(prototype.block, env)
+}
+
+private fun Eval.DefaultImpl.evalPrototype(prototype: Prototype, env: Environment): Value{
+    //FIXME this not local
+    val value = evalExpression(prototype.expression, env) as PrototypeValue
+
+    env.assignLocal(value.identifier, value)
+    return value
 }
 
 private fun Eval.DefaultImpl.evalReturnStatement(returnStatement: Return, env: Environment): Value {
@@ -54,16 +64,16 @@ private fun Eval.DefaultImpl.evalExpression(expression: Expression, env: Environ
     return when (expression) {
         is PrefixExpression -> evalPrefix(expression, env)
         is InfixExpression -> evalInfix(expression, env)
-        is LiteralExpression -> evalLiteral(expression)
+        is LiteralExpression -> evalLiteral(expression, env)
         is GroupedExpression -> evalExpression(expression.expression, env)
-        is CallExpression -> evalCallExpression(expression,env)
+        is CallExpression -> evalCallExpression(expression, env)
         else -> TODO("$expression not supported yet")
     }
 }
 
-private fun Eval.DefaultImpl.evalPrefix(expression: PrefixExpression, env: Environment) : Value{
-    val value = evalExpression(expression.value,env)
-    return when(expression.operator){
+private fun Eval.DefaultImpl.evalPrefix(expression: PrefixExpression, env: Environment): Value {
+    val value = evalExpression(expression.value, env)
+    return when (expression.operator) {
         // FIXME this must come from operator repository as well
         Minus -> NumberValue((value as NumberValue).value.negate())
         else -> TODO("${expression.operator} not supported")
@@ -87,31 +97,35 @@ private fun eval(operator: Operator, lhs: Value, rhs: Value, env: Environment): 
         Operator.Plus -> {
             NumberValue((lhs as NumberValue).value.plus((rhs as NumberValue).value))
         }
-        Minus ->{
+
+        Minus -> {
             NumberValue((lhs as NumberValue).value.minus((rhs as NumberValue).value))
         }
+
         else -> TODO()
     }
 }
 
-private fun evalLiteral(literal: LiteralExpression): Value {
+private fun evalLiteral(literal: LiteralExpression, env: Environment): Value {
     return when (literal) {
-        is Nil -> NilValue
-        is True -> TrueValue
-        is False -> FalseValue
-        is Number -> NumberValue(literal.value)
-        is Prototype -> PrototypeValue(
-            evalIdentifier( literal.identifier),
+        is NilLiteral -> NilValue
+        is TrueLiteral -> TrueValue
+        is FalseLiteral -> FalseValue
+        is NumberLiteral -> NumberValue(literal.value)
+        is PrototypeLiteral -> PrototypeValue(
+            evalIdentifier(literal.identifier),
             literal.parameters.map(::evalIdentifier),
             literal.block
         )
+
         else -> TODO()
     }
 }
 
 private fun evalIdentifier(identifier: Identifier) = StringValue(identifier.value)
 
-private fun Eval.DefaultImpl.evalCallExpression(expression: CallExpression, env: Environment) : Value {
-    val fn = evalExpression(expression.prototype, env) as PrototypeValue
-    return evalBlockStatement(fn.block, env)
+private fun Eval.DefaultImpl.evalCallExpression(expression: CallExpression, env: Environment): Value {
+    //FIXME the same as statement ?!
+    val prototype = env.findLocalPrototype(StringValue(expression.identifier.value))!!
+    return evalBlockStatement(prototype.block, env)
 }

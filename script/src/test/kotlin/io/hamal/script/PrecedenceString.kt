@@ -1,8 +1,7 @@
 package io.hamal.script
 
-import io.hamal.script.ast.Expression
 import io.hamal.script.ast.expr.*
-import io.hamal.script.ast.expr.Number
+import io.hamal.script.ast.expr.NumberLiteral
 import io.hamal.script.value.*
 
 object PrecedenceString {
@@ -58,11 +57,11 @@ object PrecedenceString {
 
     private fun StringBuilder.appendLiteral(literal: LiteralExpression) {
         when (literal) {
-            is True -> appendValue(TrueValue)
-            is False -> appendValue(FalseValue)
-            is Number -> appendValue(NumberValue(literal.value))
-            is io.hamal.script.ast.expr.String -> appendValue(StringValue(literal.value))
-            is Nil -> appendValue(NilValue)
+            is TrueLiteral -> appendValue(TrueValue)
+            is FalseLiteral -> appendValue(FalseValue)
+            is NumberLiteral -> appendValue(NumberValue(literal.value))
+            is io.hamal.script.ast.expr.StringLiteral -> appendValue(StringValue(literal.value))
+            is NilLiteral -> appendValue(NilValue)
         }
     }
 
