@@ -3,7 +3,7 @@ package io.hamal.script.ast.expr
 import io.hamal.script.ast.Parser
 import io.hamal.script.ast.expr.Operator.Parse
 import io.hamal.script.ast.parseExpression
-import io.hamal.script.token.Token.Type
+import io.hamal.script.token.Token
 import io.hamal.script.token.Token.Type.*
 
 private val infixParseFnMapping = mapOf(
@@ -12,6 +12,8 @@ private val infixParseFnMapping = mapOf(
     LeftAngleBracket to InfixExpression.Parse,
     LeftParenthesis to CallExpression.Parse,
 )
+
+internal fun infixFn(type: Token.Type): ParseInfixExpression? = infixParseFnMapping[type]
 
 internal interface ParseInfixExpression {
     operator fun invoke(ctx: Parser.Context, lhs: Expression): Expression
@@ -38,6 +40,4 @@ data class InfixExpression(
         return "$lhs $operator $rhs"
     }
 }
-
-internal fun infixFn(type: Type): ParseInfixExpression? = infixParseFnMapping[type]
 

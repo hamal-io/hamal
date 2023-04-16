@@ -18,7 +18,7 @@ class SandboxIT {
                 DynamicTest.dynamicTest("${file.parent.name}/${file.name}"){
                     val code = String(Files.readAllBytes(file))
                     val result = testInstance.eval(code)
-                    assertTrue(result !is ErrorValue)
+                    assertTrue(result !is ErrorValue, "$result")
                 }
             }
             .toList()

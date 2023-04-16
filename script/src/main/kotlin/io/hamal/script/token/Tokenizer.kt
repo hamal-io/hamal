@@ -207,6 +207,17 @@ val operatorMapping = Type.values().filter { it.category == Category.Operator }.
 
 private fun DefaultImpl.nextOperator(): Token? {
     val value = buffer.toString()
+
+    if (!isAtEnd()) {
+        val temp = StringBuffer(value)
+        temp.append(peek())
+        operatorMapping[temp.toString()]
+            ?.let {
+                advance()
+                return Token(it, tokenLine(), tokenPosition(), temp.toString())
+            }
+    }
+
     return operatorMapping[value]
         ?.let { Token(it, tokenLine(), tokenPosition(), value) }
 }

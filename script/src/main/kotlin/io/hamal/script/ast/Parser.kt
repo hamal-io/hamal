@@ -40,7 +40,7 @@ interface Parser {
 
 internal fun Parser.Context.parseBlockStatement(): Block {
     val statements = mutableListOf<Statement>()
-    while(currentTokenType() != Type.Eof && currentTokenType() != Type.End){
+    while (currentTokenType() != Type.Eof && currentTokenType() != Type.End) {
         parseStatement()?.let(statements::add)
     }
     return Block(statements)

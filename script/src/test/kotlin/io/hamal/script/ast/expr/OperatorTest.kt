@@ -30,7 +30,10 @@ internal class OperatorTest : AbstractAstTest() {
             return listOf(
                 Arguments.of("+", Operator.Plus),
                 Arguments.of("-", Operator.Minus),
-                Arguments.of("<", Operator.LessThan)
+                Arguments.of("(", Operator.Group),
+                Arguments.of("<", Operator.LessThan),
+                Arguments.of("<<", Operator.ShiftLeft),
+                Arguments.of(">>", Operator.ShiftRight)
             )
         }
     }

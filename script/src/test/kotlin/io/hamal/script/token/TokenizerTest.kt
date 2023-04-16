@@ -264,12 +264,14 @@ class TokenizerTest {
                 Argument("=", Token(Equal, 1, 1, "=")),
                 Argument("#", Token(Hash, 1, 1, "#")),
                 Argument("<", Token(LeftAngleBracket, 1, 1, "<")),
+                Argument("<<", Token(LeftAngleBracketLeftAngleBracket, 1, 1, "<<")),
                 Argument("[", Token(LeftBracket, 1, 1, "[")),
                 Argument("(", Token(LeftParenthesis, 1, 1, "(")),
                 Argument("-", Token(Minus, 1, 1, "-")),
                 Argument("%", Token(Percent, 1, 1, "%")),
                 Argument("+", Token(Plus, 1, 1, "+")),
                 Argument(">", Token(RightAngleBracket, 1, 1, ">")),
+                Argument(">>", Token(RightAngleBracketRightAngleBracket, 1, 1, ">>")),
                 Argument("]", Token(RightBracket, 1, 1, "]")),
                 Argument(")", Token(RightParenthesis, 1, 1, ")")),
                 Argument("/", Token(Slash, 1, 1, "/")),
@@ -291,6 +293,7 @@ class TokenizerTest {
                 assertThat("Position ${expected.position}", result.position, equalTo(expected.position))
                 assertThat("Value ${expected.value}", result.value, equalTo(expected.value))
 
+                assertThat(testInstance.nextToken().type, equalTo(Eof))
             }
 
             @Test
