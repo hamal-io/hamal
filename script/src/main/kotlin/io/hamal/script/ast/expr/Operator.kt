@@ -13,12 +13,25 @@ enum class Operator(
     val value: String,
     val tokenType: Type
 ) {
-    Plus("+", Type.Plus),
-    LessThan("<", Type.LeftAngleBracket),
+    And("and", Type.And),
+    Concat("..", Type.Dot_Dot),
+    Divide("/", Type.Slash),
+    Equals("==", Type.Equal_Equal),
+    Exponential("^", Type.Carat),
+    GreaterThan(">", Type.RightAngleBracket),
+    GreaterThanEquals(">=", Type.RightAngleBracket_Equal),
     Group("(", Type.LeftParenthesis),
+    Length("#", Type.Hash),
+    LessThan("<", Type.LeftAngleBracket),
+    LessThanEquals("<=", Type.LeftAngleBracket_Equal),
     Minus("-", Type.Minus),
-    ShiftLeft("<<", Type.LeftAngleBracketLeftAngleBracket),
-    ShiftRight("<<", Type.RightAngleBracketRightAngleBracket),
+    Multiply("*", Type.Asterisk),
+    Not("not", Type.Not),
+    NotEqual("~=", Type.Tilde_Equal),
+    Or("or", Type.Or),
+    Plus("+", Type.Plus),
+    ShiftLeft("<<", Type.LeftAngleBracket_LeftAngleBracket),
+    ShiftRight("<<", Type.RightAngleBracket_RightAngleBracket),
     ;
 
     companion object {
@@ -45,22 +58,19 @@ internal enum class Precedence {
     Or,              //  or
     And,             //  and
     Comparison,      //  <     >     <=    >=    ~=    ==
-    BitwiseOr,      //  |
-    BitwiseNot,     //  ~
-    BitwiseAnd,     //  &
     Shift,           // << >>
     Concat,          //  ..
     Plus,            //  + -
-    Factor,          //  * / // %
-    Prefix,           // not # - ~
+    Factor,          //  * /
+    Prefix,          // not # -
     Carat,           // ^
-    Call,             // ()
+    Group,           // (
     Highest
 }
 
 private val precedenceMapping = mapOf(
     Type.LeftAngleBracket to Precedence.Comparison,
-    Type.LeftParenthesis to Precedence.Call,
+    Type.LeftParenthesis to Precedence.Group,
     Type.Minus to Precedence.Plus,
     Type.Plus to Precedence.Plus
 )

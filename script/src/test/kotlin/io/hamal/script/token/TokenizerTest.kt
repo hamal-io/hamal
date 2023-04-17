@@ -227,6 +227,22 @@ class TokenizerTest {
                     "some_variable",
                     Token(Identifier, 1, 1, "some_variable")
                 ),
+                Argument(
+                    "not_variable",
+                    Token(Identifier, 1, 1, "not_variable")
+                ),
+                Argument(
+                    "and_variable",
+                    Token(Identifier, 1, 1, "and_variable")
+                ),
+                Argument(
+                    "or_variable",
+                    Token(Identifier, 1, 1, "or_variable")
+                ),
+                Argument(
+                    "true_variable",
+                    Token(Identifier, 1, 1, "true_variable")
+                ),
                 Argument("23.45", Token(Number, 1, 1, "23.45")),
                 Argument("0x815", Token(HexNumber, 1, 1, "0x815")),
                 Argument(
@@ -237,7 +253,6 @@ class TokenizerTest {
                 Argument("false", Token(False, 1, 1, "false")),
                 Argument("nil", Token(Nil, 1, 1, "nil")),
                 Argument("break", Token(Break, 1, 1, "break")),
-                Argument("and", Token(And, 1, 1, "and")),
                 Argument("do", Token(Do, 1, 1, "do")),
                 Argument("else", Token(Else, 1, 1, "else")),
                 Argument("elseif", Token(ElseIf, 1, 1, "elseif")),
@@ -247,35 +262,39 @@ class TokenizerTest {
                 Argument("if", Token(If, 1, 1, "if")),
                 Argument("in", Token(In, 1, 1, "in")),
                 Argument("local", Token(Local, 1, 1, "local")),
-                Argument("nor", Token(Nor, 1, 1, "nor")),
-                Argument("not", Token(Not, 1, 1, "not")),
-                Argument("or", Token(Or, 1, 1, "or")),
                 Argument("repeat", Token(Repeat, 1, 1, "repeat")),
                 Argument("return", Token(Return, 1, 1, "return")),
                 Argument("then", Token(Then, 1, 1, "then")),
                 Argument("until", Token(Until, 1, 1, "until")),
                 Argument("while", Token(While, 1, 1, "while")),
-                Argument("xor", Token(Xor, 1, 1, "xor")),
 
+                Argument("and", Token(And, 1, 1, "and")),
                 Argument("*", Token(Asterisk, 1, 1, "*")),
                 Argument("^", Token(Carat, 1, 1, "^")),
                 Argument(":", Token(Colon, 1, 1, ":")),
                 Argument(".", Token(Dot, 1, 1, ".")),
+                Argument("..", Token(Dot_Dot, 1, 1, "..")),
                 Argument("=", Token(Equal, 1, 1, "=")),
+                Argument("==", Token(Equal_Equal, 1, 1, "==")),
                 Argument("#", Token(Hash, 1, 1, "#")),
                 Argument("<", Token(LeftAngleBracket, 1, 1, "<")),
-                Argument("<<", Token(LeftAngleBracketLeftAngleBracket, 1, 1, "<<")),
+                Argument("<=", Token(LeftAngleBracket_Equal, 1, 1, "<=")),
+                Argument("<<", Token(LeftAngleBracket_LeftAngleBracket, 1, 1, "<<")),
                 Argument("[", Token(LeftBracket, 1, 1, "[")),
                 Argument("(", Token(LeftParenthesis, 1, 1, "(")),
                 Argument("-", Token(Minus, 1, 1, "-")),
+                Argument("not", Token(Not, 1, 1, "not")),
+                Argument("or", Token(Or, 1, 1, "or")),
                 Argument("%", Token(Percent, 1, 1, "%")),
                 Argument("+", Token(Plus, 1, 1, "+")),
                 Argument(">", Token(RightAngleBracket, 1, 1, ">")),
-                Argument(">>", Token(RightAngleBracketRightAngleBracket, 1, 1, ">>")),
+                Argument(">=", Token(RightAngleBracket_Equal,1,1,">=")),
+                Argument(">>", Token(RightAngleBracket_RightAngleBracket, 1, 1, ">>")),
                 Argument("]", Token(RightBracket, 1, 1, "]")),
                 Argument(")", Token(RightParenthesis, 1, 1, ")")),
                 Argument("/", Token(Slash, 1, 1, "/")),
                 Argument("~", Token(Tilde, 1, 1, "~")),
+                Argument("~=", Token(Tilde_Equal, 1, 1, "~=")),
 
                 Argument(";", Token(Semicolon, 1, 1, ";")),
                 Argument(",", Token(Comma, 1, 1, ",")),
@@ -297,7 +316,7 @@ class TokenizerTest {
             }
 
             @Test
-            fun `Tokenize function call`() {
+            fun  `Tokenize function call`() {
                 val testInstance = Tokenizer.DefaultImpl("some_function()")
 
                 val identifier = testInstance.nextToken()

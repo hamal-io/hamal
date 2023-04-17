@@ -76,9 +76,9 @@ private fun DefaultImpl.tokenLine() = line
 
 private fun DefaultImpl.tokenValue() = buffer.toString()
 
-internal fun DefaultImpl.isAtEnd() = index >= code.length
+internal fun DefaultImpl.isAtEnd(offset: Int = 0) = index + offset >= code.length
 
-internal fun DefaultImpl.canPeekNext() = index < code.length - 1
+internal fun DefaultImpl.canPeekNext(offset: Int = 1) = index < code.length - offset
 
 internal fun DefaultImpl.peek(): Char {
     throwIf(isAtEnd()) { IllegalStateException("Can not read after end of code") }
@@ -91,9 +91,9 @@ internal fun DefaultImpl.peekPrev(): Char {
     return code[index - 1]
 }
 
-internal fun DefaultImpl.peekNext(): Char {
-    throwIf(index + 1 >= code.length) { IllegalStateException("Can not read after end of code") }
-    return code[index + 1]
+internal fun DefaultImpl.peekNext(offset: Int = 1): Char {
+    throwIf(index + offset >= code.length) { IllegalStateException("Can not read after end of code") }
+    return code[index + offset]
 }
 
 internal fun DefaultImpl.advance(): DefaultImpl {
@@ -206,20 +206,35 @@ private fun DefaultImpl.asKeyword(): Token? {
 val operatorMapping = Type.values().filter { it.category == Category.Operator }.associateBy { it.value }
 
 private fun DefaultImpl.nextOperator(): Token? {
-    val value = buffer.toString()
-
-    if (!isAtEnd()) {
-        val temp = StringBuffer(value)
-        temp.append(peek())
-        operatorMapping[temp.toString()]
-            ?.let {
-                advance()
-                return Token(it, tokenLine(), tokenPosition(), temp.toString())
-            }
+    return nextLookAheadOperator() ?: run {
+        val value = buffer.toString()
+        return operatorMapping[value]?.let { Token(it, tokenLine(), tokenPosition(), value) }
     }
+}
 
-    return operatorMapping[value]
-        ?.let { Token(it, tokenLine(), tokenPosition(), value) }
+private fun DefaultImpl.nextLookAheadOperator(): Token? {
+    val buffer = StringBuffer(buffer)
+
+    for (lookAheadIndex in 0 until 2) {
+        if (!canPeekNext(lookAheadIndex)) {
+            break
+        }
+        buffer.append(peekNext(lookAheadIndex))
+        val candidate = operatorMapping[buffer.toString()]
+        if (candidate != null) {
+            val noMoreCharacters = (canPeekNext(lookAheadIndex + 1) &&
+                    TokenizerUtil.isWhitespace(peekNext(lookAheadIndex + 1)))
+
+            val atEnd = isAtEnd(lookAheadIndex + 1)
+            if (noMoreCharacters || atEnd) {
+                for (i in 0 until lookAheadIndex + 1) {
+                    advance()
+                }
+                return Token(candidate, tokenLine(), tokenPosition(), buffer.toString())
+            }
+        }
+    }
+    return null
 }
 
 private fun DefaultImpl.nextLiteral(): Token? {
