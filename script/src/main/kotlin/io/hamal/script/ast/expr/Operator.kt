@@ -1,6 +1,7 @@
 package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.Parser
+import io.hamal.script.ast.expr.Operator.Companion.operatorMapping
 import io.hamal.script.token.Token.Type
 import io.hamal.script.token.Token.Type.Category
 
@@ -35,7 +36,7 @@ enum class Operator(
     ;
 
     companion object {
-        private val operatorMapping = Operator.values()
+        val operatorMapping = Operator.values()
             .onEach { require(it.tokenType.category == Category.Operator) }
             .associateBy { it.tokenType }
 
@@ -69,14 +70,15 @@ internal enum class Precedence {
 }
 
 private val precedenceMapping = mapOf(
-    Type.LeftAngleBracket to Precedence.Comparison,
-    Type.LeftParenthesis to Precedence.Group,
-    Type.Minus to Precedence.Plus,
-    Type.Plus to Precedence.Plus
+    Operator.LessThan to Precedence.Comparison,
+    Operator.Group to  Precedence.Group,
+    Operator.Minus to Precedence.Plus,
+    Operator.Plus to Precedence.Plus
+
 )
 
 internal fun Parser.Context.currentPrecedence() =
-    precedenceMapping[currentTokenType()] ?: Precedence.Lowest
+    precedenceMapping[operatorMapping[currentTokenType()]] ?: Precedence.Lowest
 
 internal fun Parser.Context.nextPrecedence() =
-    precedenceMapping[nextTokenType()] ?: Precedence.Lowest
+    precedenceMapping[operatorMapping[nextTokenType()]] ?: Precedence.Lowest
