@@ -10,6 +10,7 @@ import io.hamal.script.token.TokenizerUtil.isAlpha
 import io.hamal.script.token.TokenizerUtil.isDigit
 import io.hamal.script.token.TokenizerUtil.isQuote
 import io.hamal.script.token.TokenizerUtil.isUnderscore
+import io.hamal.script.token.TokenizerUtil.isWhitespace
 
 fun tokenize(code: String): List<Token> {
     val tokenizer = DefaultImpl(code)
@@ -104,7 +105,7 @@ internal fun DefaultImpl.advance(): DefaultImpl {
 }
 
 internal fun DefaultImpl.advanceUntilWhitespace(): DefaultImpl {
-    while (!isAtEnd() && !TokenizerUtil.isWhitespace(peek())) {
+    while (!isAtEnd() && !isWhitespace(peek())) {
         advance()
     }
     return this
@@ -215,15 +216,20 @@ private fun DefaultImpl.nextOperator(): Token? {
 private fun DefaultImpl.nextLookAheadOperator(): Token? {
     val buffer = StringBuffer(buffer)
 
-    for (lookAheadIndex in 0 until 2) {
+    for (lookAheadIndex in 0 until 3) {
         if (!canPeekNext(lookAheadIndex)) {
             break
         }
         buffer.append(peekNext(lookAheadIndex))
         val candidate = operatorMapping[buffer.toString()]
         if (candidate != null) {
-            val noMoreCharacters = (canPeekNext(lookAheadIndex + 1) &&
-                    TokenizerUtil.isWhitespace(peekNext(lookAheadIndex + 1)))
+            val noMoreCharacters = (
+                    canPeekNext(lookAheadIndex + 1) &&
+                            (isWhitespace(peekNext(lookAheadIndex + 1)) ||
+                            isAlpha(peekNext(lookAheadIndex + 1)) ||
+                            isDigit(peekNext(lookAheadIndex + 1))
+                            )
+            )
 
             val atEnd = isAtEnd(lookAheadIndex + 1)
             if (noMoreCharacters || atEnd) {
@@ -234,6 +240,7 @@ private fun DefaultImpl.nextLookAheadOperator(): Token? {
             }
         }
     }
+
     return null
 }
 

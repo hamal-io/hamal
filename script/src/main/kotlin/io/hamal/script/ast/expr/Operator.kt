@@ -1,6 +1,7 @@
 package io.hamal.script.ast.expr
 
 import io.hamal.script.ast.Parser
+import io.hamal.script.ast.expr.Operator.*
 import io.hamal.script.ast.expr.Operator.Companion.operatorMapping
 import io.hamal.script.token.Token.Type
 import io.hamal.script.token.Token.Type.Category
@@ -11,28 +12,27 @@ interface ParseOperator {
 
 
 enum class Operator(
-    val value: String,
     val tokenType: Type
 ) {
-    And("and", Type.And),
-    Concat("..", Type.Dot_Dot),
-    Divide("/", Type.Slash),
-    Equals("==", Type.Equal_Equal),
-    Exponential("^", Type.Carat),
-    GreaterThan(">", Type.RightAngleBracket),
-    GreaterThanEquals(">=", Type.RightAngleBracket_Equal),
-    Group("(", Type.LeftParenthesis),
-    Length("#", Type.Hash),
-    LessThan("<", Type.LeftAngleBracket),
-    LessThanEquals("<=", Type.LeftAngleBracket_Equal),
-    Minus("-", Type.Minus),
-    Multiply("*", Type.Asterisk),
-    Not("not", Type.Not),
-    NotEqual("~=", Type.Tilde_Equal),
-    Or("or", Type.Or),
-    Plus("+", Type.Plus),
-    ShiftLeft("<<", Type.LeftAngleBracket_LeftAngleBracket),
-    ShiftRight("<<", Type.RightAngleBracket_RightAngleBracket),
+    And(Type.And),
+    Concat(Type.Dot_Dot),
+    Divide(Type.Slash),
+    Equals(Type.Equal_Equal),
+    Exponential(Type.Carat),
+    GreaterThan(Type.RightAngleBracket),
+    GreaterThanEquals(Type.RightAngleBracket_Equal),
+    Group(Type.LeftParenthesis),
+    Length(Type.Hash),
+    LessThan(Type.LeftAngleBracket),
+    LessThanEquals(Type.LeftAngleBracket_Equal),
+    Minus(Type.Minus),
+    Multiply(Type.Asterisk),
+    Not(Type.Not),
+    NotEqual(Type.Tilde_Equal),
+    Or(Type.Or),
+    Plus(Type.Plus),
+    ShiftLeft(Type.LeftAngleBracket_LeftAngleBracket),
+    ShiftRight(Type.RightAngleBracket_RightAngleBracket),
     ;
 
     companion object {
@@ -51,7 +51,7 @@ enum class Operator(
         }
     }
 
-    override fun toString(): String = value
+    override fun toString(): String = tokenType.toString()
 }
 
 internal enum class Precedence {
@@ -70,12 +70,30 @@ internal enum class Precedence {
 }
 
 private val precedenceMapping = mapOf(
-    Operator.LessThan to Precedence.Comparison,
-    Operator.Group to  Precedence.Group,
-    Operator.Minus to Precedence.Plus,
-    Operator.Plus to Precedence.Plus
-
+    Or to Precedence.Or,
+    And to Precedence.And,
+    Equals to Precedence.Comparison,
+    GreaterThan to Precedence.Comparison,
+    GreaterThanEquals to Precedence.Comparison,
+    LessThan to Precedence.Comparison,
+    LessThanEquals to Precedence.Comparison,
+    ShiftLeft to Precedence.Shift,
+    ShiftRight to Precedence.Shift,
+    Concat to Precedence.Concat,
+    Plus to Precedence.Plus,
+    Minus to Precedence.Plus,
+    Multiply to Precedence.Factor,
+    Divide to Precedence.Factor,
+    Group to Precedence.Group,
+    Exponential to Precedence.Carat,
+    NotEqual to Precedence.Comparison,
 )
+
+internal fun precedenceOf(tokenType: Type) =
+    precedenceOf(operatorMapping[tokenType]!!)
+
+internal fun precedenceOf(op: Operator) =
+    precedenceMapping[op] ?: Precedence.Lowest
 
 internal fun Parser.Context.currentPrecedence() =
     precedenceMapping[operatorMapping[currentTokenType()]] ?: Precedence.Lowest

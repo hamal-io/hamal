@@ -2,7 +2,7 @@ package io.hamal.script.token
 
 import io.hamal.script.token.Token.Type.Category.*
 
-class Token(
+data class Token(
     val type: Type,
     val line: Int,
     val position: Int,
@@ -81,5 +81,7 @@ class Token(
             Identifier,
             Misc,
         }
+
+        override fun toString() = value
     }
 }

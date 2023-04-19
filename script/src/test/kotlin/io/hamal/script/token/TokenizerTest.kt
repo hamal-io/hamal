@@ -288,7 +288,7 @@ class TokenizerTest {
                 Argument("%", Token(Percent, 1, 1, "%")),
                 Argument("+", Token(Plus, 1, 1, "+")),
                 Argument(">", Token(RightAngleBracket, 1, 1, ">")),
-                Argument(">=", Token(RightAngleBracket_Equal,1,1,">=")),
+                Argument(">=", Token(RightAngleBracket_Equal, 1, 1, ">=")),
                 Argument(">>", Token(RightAngleBracket_RightAngleBracket, 1, 1, ">>")),
                 Argument("]", Token(RightBracket, 1, 1, "]")),
                 Argument(")", Token(RightParenthesis, 1, 1, ")")),
@@ -316,7 +316,7 @@ class TokenizerTest {
             }
 
             @Test
-            fun  `Tokenize function call`() {
+            fun `Tokenize function call`() {
                 val testInstance = Tokenizer.DefaultImpl("some_function()")
 
                 val identifier = testInstance.nextToken()
@@ -427,6 +427,52 @@ class TokenizerTest {
             }
 
         }
+
+        @Test
+        fun `a dot dot b`() {
+            val testInstance = Tokenizer.DefaultImpl("a..b")
+            val a = testInstance.nextToken()
+            assertThat(a, equalTo(Token(Identifier, 1, 1, "a")))
+            val op = testInstance.nextToken()
+            assertThat(op, equalTo(Token(Dot_Dot, 1, 2, "..")))
+            val b = testInstance.nextToken()
+            assertThat(b, equalTo(Token(Identifier, 1, 4, "b")))
+
+        }
+
+        @Test
+        fun `some_number=2810`() {
+            val testInstance = Tokenizer.DefaultImpl("some_number=2810")
+            val ident = testInstance.nextToken()
+            assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
+            val equal = testInstance.nextToken()
+            assertThat(equal, equalTo(Token(Equal, 1, 12, "=")))
+            val number = testInstance.nextToken()
+            assertThat(number, equalTo(Token(Number, 1, 13, "2810")))
+        }
+
+        @Test
+        fun `some_number==1212`() {
+            val testInstance = Tokenizer.DefaultImpl("some_number==1212")
+            val ident = testInstance.nextToken()
+            assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
+            val equal = testInstance.nextToken()
+            assertThat(equal, equalTo(Token(Equal_Equal, 1, 12, "==")))
+            val number = testInstance.nextToken()
+            assertThat(number, equalTo(Token(Number, 1, 14, "1212")))
+        }
+
+        @Test
+        fun `some_number==another_number`() {
+            val testInstance = Tokenizer.DefaultImpl("some_number==another_number")
+            val ident = testInstance.nextToken()
+            assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
+            val equal = testInstance.nextToken()
+            assertThat(equal, equalTo(Token(Equal_Equal, 1, 12, "==")))
+            val number = testInstance.nextToken()
+            assertThat(number, equalTo(Token(Identifier, 1, 14, "another_number")))
+        }
+
 
         private fun Tokenizer.DefaultImpl.assert(index: Int, line: Int, linePosition: Int, buffer: String) {
             assertThat("index is not $index", this.index, equalTo(index))

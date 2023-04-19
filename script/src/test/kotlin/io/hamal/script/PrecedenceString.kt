@@ -24,7 +24,7 @@ object PrecedenceString {
     private fun StringBuilder.appendPrefixExpression(expression: PrefixExpression) {
         append('(')
         appendOperator(expression.operator)
-        appendExpression(expression)
+        appendExpression(expression.expression)
         append(')')
     }
 
@@ -46,7 +46,7 @@ object PrecedenceString {
 
     private fun StringBuilder.appendOperator(operator: Operator?) {
         operator?.let {
-            appendString(it.value)
+            appendString(it.toString())
         }
     }
 

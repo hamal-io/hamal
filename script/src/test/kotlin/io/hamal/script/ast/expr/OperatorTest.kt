@@ -20,15 +20,27 @@ internal class OperatorTest : AbstractAstTest() {
                 Arguments.of("a + b", "(a + b)"),
                 Arguments.of("a - b", "(a - b)"),
                 Arguments.of("a < b", "(a < b)"),
+                Arguments.of("a <= b", "(a <= b)"),
+                Arguments.of("a > b", "(a > b)"),
+                Arguments.of("a..b", "(a .. b)"),
+                Arguments.of("a >= b", "(a >= b)"),
+                Arguments.of("a == b", "(a == b)"),
+                Arguments.of("a ~= b", "(a ~= b)"),
                 Arguments.of("(a + b)", "((a + b))"),
                 Arguments.of("a + b + c", "((a + b) + c)"),
                 Arguments.of("1 << 2", "(1 << 2)"),
                 Arguments.of("2 >> 1", "(2 >> 1)"),
-
-                Arguments.of("a+i < b/2+1", "(a+i) < ((b/2)+1)"),
-                Arguments.of("5+x^2*8", "5+((x^2)*8)"),
-                Arguments.of("-x^2", "-(x^2)"),
-                Arguments.of("x^y^z","x^(y^z)")
+                Arguments.of("a and b or c and d", "((a and b) or (c and d))"),
+                Arguments.of("b/2+1", "((b / 2) + 1)"),
+                Arguments.of("b*2-1", "((b * 2) - 1)"),
+                Arguments.of("2^8", "(2 ^ 8)"),
+                Arguments.of("a+i < b/2+1", "((a + i) < ((b / 2) + 1))"),
+                Arguments.of("5+x^2*8", "(5 + ((x ^ 2) * 8))"),
+                Arguments.of("a < y and y <= z ", "((a < y) and (y <= z))"),
+                Arguments.of("-x^2", "(-(x ^ 2))"),
+                Arguments.of("x^y^z", "(x ^ (y ^ z))"),
+                Arguments.of("w^x^y^z", "(w ^ (x ^ (y ^ z)))"),
+                Arguments.of("x..y..z", "(x .. (y .. z))")
             )
         }
 
@@ -42,18 +54,18 @@ internal class OperatorTest : AbstractAstTest() {
                 Arguments.of("^", Operator.Exponential),
                 Arguments.of(">", Operator.GreaterThan),
                 Arguments.of(">=", Operator.GreaterThanEquals),
-                Arguments.of("(",   Operator.Group),
+                Arguments.of("(", Operator.Group),
                 Arguments.of("#", Operator.Length),
-                Arguments.of("<",   Operator.LessThan),
+                Arguments.of("<", Operator.LessThan),
                 Arguments.of("<=", Operator.LessThanEquals),
-                Arguments.of("-",   Operator.Minus),
+                Arguments.of("-", Operator.Minus),
                 Arguments.of("*", Operator.Multiply),
                 Arguments.of("not", Operator.Not),
                 Arguments.of("~=", Operator.NotEqual),
-                Arguments.of("or",  Operator.Or),
-                Arguments.of("+",   Operator.Plus),
-                Arguments.of("<<",  Operator.ShiftLeft),
-                Arguments.of(">>",  Operator.ShiftRight)
+                Arguments.of("or", Operator.Or),
+                Arguments.of("+", Operator.Plus),
+                Arguments.of("<<", Operator.ShiftLeft),
+                Arguments.of(">>", Operator.ShiftRight)
             )
         }
     }

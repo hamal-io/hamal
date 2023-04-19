@@ -28,6 +28,8 @@ interface Parser {
         fun currentTokenType() = currentToken().type
         fun nextTokenType() = nextToken().type
 
+        fun currentOperator() = Operator.from(currentTokenType())
+
         fun expectCurrentTokenTypToBe(type: Type) {
             throwIf(currentTokenType() != type) {
                 ScriptParseException("Expected token to be $type but got ${currentTokenType()}")

@@ -67,7 +67,7 @@ internal object EvaluateLiteralExpression : Evaluate<LiteralExpression> {
 
 internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
     override fun invoke(toEvaluate: PrefixExpression, env: Environment): Value {
-        val value = Evaluator.evaluate(toEvaluate.value, env)
+        val value = Evaluator.evaluate(toEvaluate.expression, env)
         return when (toEvaluate.operator) {
             // FIXME this must come from operator repository as well
             Operator.Minus -> NumberValue((value as NumberValue).value.negate())

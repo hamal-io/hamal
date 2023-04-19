@@ -6,7 +6,7 @@ import io.hamal.script.ast.parseExpression
 
 data class PrefixExpression(
     val operator: Operator,
-    val value: Expression
+    val expression: Expression
 ) : Expression {
     internal object Parse : ParseExpression<PrefixExpression> {
         override fun invoke(ctx: Parser.Context): PrefixExpression {
@@ -17,7 +17,7 @@ data class PrefixExpression(
         }
     }
 
-    override fun toString() = "$operator$value"
+    override fun toString() = "$operator$expression"
 }
 
 
