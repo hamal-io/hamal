@@ -3,7 +3,7 @@ package io.hamal.script.builtin
 import io.hamal.script.ast.expr.Expression
 import io.hamal.script.value.Value
 
-interface ForeignFunction {
+interface BuiltinFunction {
     operator fun invoke(ctx: Context): Value
 
     data class Context(

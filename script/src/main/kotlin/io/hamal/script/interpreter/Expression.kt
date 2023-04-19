@@ -1,7 +1,7 @@
 package io.hamal.script.interpreter
 
 import io.hamal.script.ast.expr.*
-import io.hamal.script.builtin.ForeignFunction
+import io.hamal.script.builtin.BuiltinFunction
 import io.hamal.script.value.*
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
@@ -11,11 +11,13 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
         env.findForeignFunction(toEvaluate.identifier)
             ?.let { fn ->
                 return fn(
-                    ForeignFunction.Context(
+                    BuiltinFunction.Context(
                         parameters.zip(toEvaluate.parameters)
-                            .map { ForeignFunction.Parameter(it.first, it.second) }
+                            .map { BuiltinFunction.Parameter(it.first, it.second) }
                     ))
             }
+
+
 
         val prototype = env.findPrototype(StringValue(toEvaluate.identifier))!!
         return Evaluator.evaluate(prototype.block, env)

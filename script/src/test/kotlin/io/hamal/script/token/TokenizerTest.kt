@@ -473,6 +473,12 @@ class TokenizerTest {
             assertThat(number, equalTo(Token(Identifier, 1, 14, "another_number")))
         }
 
+        @Test
+        fun `some_table dot field`() {
+            val testInstance = Tokenizer.DefaultImpl("some_table.field")
+            val table = testInstance.nextToken()
+            assertThat(table, equalTo(Token(Identifier, 1, 1, "some_table")))
+        }
 
         private fun Tokenizer.DefaultImpl.assert(index: Int, line: Int, linePosition: Int, buffer: String) {
             assertThat("index is not $index", this.index, equalTo(index))

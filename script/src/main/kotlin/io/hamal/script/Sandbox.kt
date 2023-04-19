@@ -6,15 +6,10 @@ import io.hamal.script.interpreter.Interpreter
 import io.hamal.script.token.tokenize
 import io.hamal.script.value.Value
 
-class Sandbox {
+class Sandbox(val env: Environment) {
 
-    private val env: Environment = Environment()
     private val interpreter = Interpreter.DefaultImpl
 
-
-//    init {
-//        env.assignLocal("assert", pbke)
-//    }
 
     fun eval(code: String): Value {
         val tokens = tokenize(code)

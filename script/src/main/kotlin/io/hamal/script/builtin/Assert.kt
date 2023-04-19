@@ -3,8 +3,8 @@ package io.hamal.script.builtin
 import io.hamal.script.ScriptEvaluationException
 import io.hamal.script.value.*
 
-internal object AssertFunction : ForeignFunction {
-    override fun invoke(ctx: ForeignFunction.Context): Value {
+internal object AssertFunction : BuiltinFunction {
+    override fun invoke(ctx: BuiltinFunction.Context): Value {
         val parameters = ctx.parameters
 
         val assertionMessage = parameters.getOrNull(1)
