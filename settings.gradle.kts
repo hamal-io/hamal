@@ -1,7 +1,9 @@
 rootProject.name = "hamal"
 
 include("application")
-include("script")
+
+include(":script:api")
+include(":script:impl")
 
 include(":lib:ddd")
 include(":lib:domain")

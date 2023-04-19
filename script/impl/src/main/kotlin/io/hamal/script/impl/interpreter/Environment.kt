@@ -1,0 +1,44 @@
+package io.hamal.script.impl.interpreter
+
+import io.hamal.script.api.ForeignModule
+import io.hamal.script.api.value.StringValue
+import io.hamal.script.api.value.Value
+import io.hamal.script.impl.ast.expr.Identifier
+import io.hamal.script.impl.builtin.AssertFunction
+import io.hamal.script.impl.builtin.BuiltinFunction
+import io.hamal.script.impl.value.PrototypeValue
+
+class Environment {
+
+    private val parent: Environment? = null
+
+    private val builtins = mutableMapOf<Identifier, BuiltinFunction>(
+        Identifier("assert") to AssertFunction
+    )
+
+    val modules = mutableMapOf<String, ForeignModule>()
+
+    private val prototypes = mutableMapOf<StringValue, PrototypeValue>()
+
+    fun register(foreignModule: ForeignModule) {
+        require(modules[foreignModule.name] == null)
+        modules[foreignModule.name] = foreignModule
+    }
+
+
+    fun assignLocal(identifier: StringValue, value: Value) {
+        when (value) {
+            is PrototypeValue -> prototypes[identifier] = value
+            else -> TODO()
+        }
+    }
+
+    fun findForeignFunction(identifier: Identifier): BuiltinFunction? {
+        return builtins[identifier]
+    }
+
+    fun findPrototype(identifier: StringValue): PrototypeValue? {
+        return prototypes[identifier]
+    }
+
+}
