@@ -3,13 +3,16 @@ package io.hamal.application.adapter
 import io.hamal.lib.domain_notification.*
 import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.meta.exception.InternalServerException
-import io.hamal.module.bus.api.common.Record
+import io.hamal.module.bus.api.common.Message
+import io.hamal.module.bus.api.common.MessageOffset
+import io.hamal.module.bus.api.common.Partition
 import io.hamal.module.bus.api.common.TopicId
 import io.hamal.module.bus.impl.consumer.InMemoryConsumer
 import io.hamal.module.bus.impl.producer.InMemoryProducer
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration
+import java.time.Instant
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
@@ -32,8 +35,17 @@ class DomainNotificationAdapter() : NotifyDomainPort {
     override fun <NOTIFICATION : DomainNotification> invoke(notification: NOTIFICATION) {
         producer(
             listOf(
-                Record(
-                    "SomeKey", notification, TopicResolver.resolve(notification.topic)
+                Message(
+                    Message.Meta(
+                        version = 0x01,
+                        instant = Instant.now(),
+                        topicId = TopicResolver.resolve(notification.topic),
+                        partition = Partition(1),
+                        offset = MessageOffset(0),
+                        crc32 = 32
+                    ),
+                    "SomeKey",
+                    notification
                 )
             )
         )
@@ -68,8 +80,8 @@ class DomainNotificationConsumerAdapter(
                 scheduledTasks.add(
                     scheduledExecutorService.scheduleAtFixedRate(
                         {
-                            consumer().forEach { record ->
-                                val notification = record.value
+                            consumer().forEach { message ->
+                                val notification = message.value
                                 handlerContainer[notification::class].forEach { receiver ->
                                     try {
                                         receiver.on(notification)
