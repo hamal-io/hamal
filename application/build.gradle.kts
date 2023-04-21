@@ -12,25 +12,22 @@ dependencies {
     implementation(project(":lib:ddd"))
     implementation(project(":lib:domain-notification"))
 
-//    implementation(external.springWeb) {
-//        exclude("com.fasterxml.jackson.core", "jackson-core")
-//        exclude("org.springframework.boot", "spring-boot-starter-json")
-//        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-//        exclude("org.springframework.boot", "spring-boot-starter-json")
-//    }
+    implementation(external.springWeb) {
+        exclude("com.fasterxml.jackson.core", "jackson-core")
+        exclude("org.springframework.boot", "spring-boot-starter-json")
+        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+        exclude("org.springframework.boot", "spring-boot-starter-json")
+    }
+
+    implementation("org.xerial:sqlite-jdbc:3.25.2")
 
 //    implementation(external.springDataJdbc)
 //    implementation(external.hikari)
 //    implementation(external.h2)
 
     implementation(project(":module:launchpad:infra"))
-    implementation(project(":module:bus:infra"))
     implementation(project(":module:queue:infra"))
     implementation(project(":module:worker:infra"))
-
-    implementation(project(":module:bus:api"))
-    implementation(project(":module:bus:impl:consumer"))
-    implementation(project(":module:bus:impl:producer"))
 
     testImplementation(project(":application"))
 

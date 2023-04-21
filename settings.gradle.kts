@@ -12,12 +12,6 @@ include(":lib:domain-notification")
 include(":lib:meta")
 include(":lib:util")
 
-include(":module:bus:api")
-include(":module:bus:impl:core")
-include(":module:bus:impl:consumer")
-include(":module:bus:impl:producer")
-include(":module:bus:infra")
-
 include(":module:launchpad:application")
 include(":module:launchpad:core")
 include(":module:launchpad:infra")
@@ -30,7 +24,6 @@ include(":module:worker:application")
 include(":module:worker:extension:api")
 include(":module:worker:extension:impl:starter")
 
-//includeBuild("module/worker/extension/impl")
 
 include(":module:worker:core")
 include(":module:worker:infra")
