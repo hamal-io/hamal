@@ -9,6 +9,7 @@ include(":lib:ddd")
 include(":lib:domain")
 include(":lib:domain-value-object")
 include(":lib:domain-notification")
+include(":lib:log")
 include(":lib:meta")
 include(":lib:util")
 
@@ -46,8 +47,9 @@ dependencyResolutionManagement {
             library("springTest", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
             library("springDataJdbc", "org.springframework.data", "spring-data-jdbc").withoutVersion()
             library("springDevTools", "org.springframework.boot", "spring-boot-devtools").withoutVersion()
-            library("h2", "com.h2database", "h2").withoutVersion()
+            library("h2", "com.h2database", "h2").withoutVersion() //FIXME remove me
             library("hikari", "com.zaxxer", "HikariCP").withoutVersion()
+            library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
         }
     }
 }

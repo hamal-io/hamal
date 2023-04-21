@@ -1,4 +1,4 @@
-package io.hamal.application
+package io.hamal.lib.log
 
 import java.sql.DriverManager
 import java.sql.Statement
@@ -15,9 +15,8 @@ fun main(args: Array<String>) {
     statement.executeUpdate("drop table if exists records")
     statement.executeUpdate("create table records (key integer, value string)")
 
-    statement.execute("PRAGMA journal_mode = WAL;")
-    statement.execute("PRAGMA synchronous = 0;")
-//    statement.execute("PRAGMA synchronous = normal;")
+    statement.execute("PRAGMA journal_mode = wal;")
+    statement.execute("PRAGMA synchronous = off;")
     statement.execute("PRAGMA cache_size = 1000000;")
     statement.execute("PRAGMA locking_mode = EXCLUSIVE;")
     statement.execute("PRAGMA temp_store = MEMORY; ")
