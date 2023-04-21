@@ -206,4 +206,87 @@ class TupleTest {
 
     }
 
+    @Nested
+    @DisplayName("Tuple3")
+    inner class Tuple3Test {
+
+        @Nested
+        @DisplayName("equals()")
+        inner class EqualsTest {
+            @Test
+            fun `Equals if underlying values are equal`() {
+                assertEquals(
+                    Tuple3(true, "2810", 1212),
+                    Tuple3(true, "2810", 1212)
+                )
+            }
+
+            @Test
+            fun `Not equals if underlying values are different`() {
+                assertNotEquals(
+                    Tuple3(true, "2810",1212),
+                    Tuple3(false, "2810",1212)
+                )
+                assertNotEquals(
+                    Tuple3(true, "2810",1212),
+                    Tuple3(true, "1038",1212)
+                )
+                assertNotEquals(
+                    Tuple3(true, "2810", 1212),
+                    Tuple3(true, "2810", 1506)
+                )
+            }
+        }
+
+        @Nested
+        @DisplayName("hashCode()")
+        inner class HashCodeTest {
+            @Test
+            fun `Same hashcode if values are equal`() {
+                assertEquals(
+                    Tuple3(true, "2810",1212).hashCode(),
+                    Tuple3(true, "2810",1212).hashCode()
+                )
+            }
+
+            @Test
+            fun `Different hashcode if values are different`() {
+                assertNotEquals(
+                    Tuple3(true, "2810",1212).hashCode(),
+                    Tuple3(false, "2810",1212).hashCode()
+                )
+                assertNotEquals(
+                    Tuple3(true, "2810",1212).hashCode(),
+                    Tuple3(true, "1038",1212).hashCode()
+                )
+                assertNotEquals(
+                    Tuple3(true, "2810", 1212).hashCode(),
+                    Tuple3(true, "2810", 1506).hashCode()
+                )
+            }
+        }
+
+        @Nested
+        @DisplayName("toString()")
+        inner class ToStringTest {
+            @Test
+            fun ok() {
+                val testInstance = Tuple3("ABC", 43,true)
+                val result = testInstance.toString()
+                assertThat(result, equalTo("(ABC,43,true)"))
+            }
+        }
+
+        @Nested
+        @DisplayName("size()")
+        inner class SizeTest {
+            @Test
+            fun ok() {
+                val testInstance = Tuple3(1, 4, 100)
+                val result = testInstance.size
+                assertThat(result, equalTo(3))
+            }
+        }
+
+    }
 }

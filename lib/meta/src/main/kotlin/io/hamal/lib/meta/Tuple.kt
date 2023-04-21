@@ -29,3 +29,12 @@ data class Tuple2<TYPE_1, TYPE_2>(
     override val size: Int = 2
     override fun toString() = "($_1,$_2)"
 }
+
+data class Tuple3<TYPE_1, TYPE_2, TYPE_3>(
+    val _1: TYPE_1,
+    val _2: TYPE_2,
+    val _3: TYPE_3
+) : Tuple {
+    override val size: Int = 3
+    override fun toString() = "($_1,$_2,$_3)"
+}
