@@ -8,6 +8,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import kotlin.io.path.Path
 
+
 class Segment(
     config: Config
 ) : AutoCloseable {
@@ -15,7 +16,7 @@ class Segment(
     internal val connection: Connection
 
     init {
-        val dbPath = config.path.resolve(Path(format("%020d", config.baseOffset.value.toLong())))
+        val dbPath = config.path.resolve(Path(format("%020d", config.id.value.toLong())))
         connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db")
         setupSchema()
         setupSqlite()
@@ -23,7 +24,7 @@ class Segment(
 
     data class Config(
         val path: Path,
-        val baseOffset: RecordOffset
+        val id: Id
     )
 
     companion object {
@@ -40,6 +41,11 @@ class Segment(
     override fun close() {
         connection.close()
     }
+
+    @JvmInline
+    value class Id(val value: Long) {
+        constructor(value: Int) : this(value.toLong())
+    }
 }
 
 internal fun <T> Segment.executeQuery(sql: String, fn: (ResultSet) -> T) {
@@ -54,7 +60,7 @@ private fun Segment.setupSchema() {
         it.execute(
             """
          CREATE TABLE IF NOT EXISTS records (
-            id BIGINT PRIMARY KEY ,
+            id INTEGER PRIMARY KEY AUTOINCREMENT ,
             key BLOB NOT NULL ,
             value BLOB NOT NULL ,
             instant DATETIME NOT NULL

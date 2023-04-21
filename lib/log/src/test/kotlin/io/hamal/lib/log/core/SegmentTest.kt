@@ -1,6 +1,7 @@
 package io.hamal.lib.log.core
 
 import io.hamal.lib.log.core.Segment.Config
+import io.hamal.lib.log.core.Segment.Id
 import io.hamal.lib.util.Files
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -22,7 +23,7 @@ class SegmentTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "partition-001", "another-path")
-            Segment.open(Config(targetDir, RecordOffset(2810))).use { }
+            Segment.open(Config(targetDir, Id(2810))).use { }
             assertTrue(Files.exists(targetDir))
             assertTrue(Files.exists(Path(targetDir.pathString, "00000000000000002810.db")))
         }
@@ -41,7 +42,7 @@ class SegmentTest {
                 it.connection.createStatement().use { statement ->
                     statement.execute(
                         """
-                        INSERT INTO records (id,key, value,instant) VALUES (1,'key', 'value',unixepoch());
+                        INSERT INTO records (key, value,instant) VALUES ('key', 'value',unixepoch());
                     """.trimIndent()
                     )
                 }
@@ -90,7 +91,7 @@ class SegmentTest {
                 }
         }
 
-        private val testConfig = Config(Path(testDir), RecordOffset(2810))
+        private val testConfig = Config(Path(testDir), Id(2810))
     }
 
     private val testDir = "/tmp/hamal/test/segments"
