@@ -94,5 +94,22 @@ class SegmentTest {
         private val testConfig = Config(Path(testDir), Id(2810))
     }
 
+    @Nested
+    @DisplayName("append()")
+    inner class AppendTest {
+        // empty
+        // single
+        // keys dont have to be unique
+        // values dont have to be unique
+        // instants dont have to be unique
+
+
+        @Test
+        fun `Append multiple`() {
+
+        }
+
+    }
+
     private val testDir = "/tmp/hamal/test/segments"
 }

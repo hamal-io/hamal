@@ -1,17 +1,32 @@
 package io.hamal.lib.log.core
 
+import io.hamal.lib.meta.Tuple3
 import java.lang.String.format
+import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
+import java.time.Instant
 import kotlin.io.path.Path
 
 
 class Segment(
     config: Config
 ) : AutoCloseable {
+
+    companion object {
+        fun open(config: Config): Segment {
+            ensureDirectoryExists(config)
+            return Segment(config)
+        }
+
+        private fun ensureDirectoryExists(config: Config) {
+            Files.createDirectories(config.path)
+        }
+    }
+
 
     internal val connection: Connection
 
@@ -27,16 +42,16 @@ class Segment(
         val id: Id
     )
 
-    companion object {
-        fun open(config: Config): Segment {
-            ensureDirectoryExists(config)
-            return Segment(config)
+    fun append(records: Iterable<Tuple3<ByteBuffer, ByteBuffer, Instant>>): List<Id> {
+
+        executeQuery(""""""){resultSet ->
+            resultSet.next()
+           resultSet.getLong(1)
         }
 
-        private fun ensureDirectoryExists(config: Config) {
-            Files.createDirectories(config.path)
-        }
+        return listOf()
     }
+
 
     override fun close() {
         connection.close()
