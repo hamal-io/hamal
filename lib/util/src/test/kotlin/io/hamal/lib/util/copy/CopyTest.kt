@@ -187,7 +187,7 @@ class CopyTest {
         private val publicDerivedValue: Int
     ) : BaseClass(privateBaseValue, protectedBaseValue, internalBaseValue, publicBaseValue)
 
-    class TestValueObject(value: Int) : ValueObject.ComparableImpl<Int>(value)
+    class TestValueObject(override val value: Int) : ValueObject.ComparableImpl<Int>()
 
     enum class SomeEnum { VALUE_1, VALUE_2, VALUE_3 }
 }

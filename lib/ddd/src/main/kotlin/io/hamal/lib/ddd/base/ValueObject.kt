@@ -2,11 +2,10 @@ package io.hamal.lib.ddd.base
 
 
 interface ValueObject<VALUE_TYPE : Any> {
+
     val value: VALUE_TYPE
 
-    abstract class BaseImpl<VALUE_TYPE : Any>(
-        override val value: VALUE_TYPE,
-    ) : ValueObject<VALUE_TYPE> {
+    abstract class BaseImpl<VALUE_TYPE : Any> : ValueObject<VALUE_TYPE> {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -22,7 +21,7 @@ interface ValueObject<VALUE_TYPE : Any> {
         override fun toString() = "${this.javaClass.simpleName}($value)"
     }
 
-    abstract class ComparableImpl<VALUE_TYPE : Comparable<VALUE_TYPE>>(value: VALUE_TYPE) : BaseImpl<VALUE_TYPE>(value),
+    abstract class ComparableImpl<VALUE_TYPE : Comparable<VALUE_TYPE>> : BaseImpl<VALUE_TYPE>(),
         Comparable<ValueObject<VALUE_TYPE>> {
         override fun compareTo(other: ValueObject<VALUE_TYPE>): Int {
             return value.compareTo(other.value)

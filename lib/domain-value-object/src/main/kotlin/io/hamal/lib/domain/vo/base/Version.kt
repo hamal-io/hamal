@@ -1,20 +1,24 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.ddd.base.ValueObject
+import io.hamal.lib.meta.exception.IllegalArgumentException
+import io.hamal.lib.meta.exception.throwIf
+import kotlinx.serialization.Serializable
 
-abstract class Version(value: Int) : ValueObject.ComparableImpl<Int>(value) {
-    init {
-        VersionValidator.validate(value)
+@Serializable
+abstract class Version : ValueObject.ComparableImpl<Int>() {
+    @Serializable
+    data class Value(val value: Int) : Comparable<Value> {
+        init {
+            VersionValidator.validate(value)
+        }
+
+        override fun compareTo(other: Value) = value.compareTo(other.value)
     }
+}
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        other as Version
-        return value == other.value
-    }
-
-    override fun hashCode(): Int {
-        return value.hashCode()
+internal object VersionValidator {
+    fun validate(value: Int) {
+        throwIf(value <= 0) { IllegalArgumentException("Version('$value') is illegal") }
     }
 }

@@ -20,6 +20,8 @@ dependencyResolutionManagement {
             library("hikari", "com.zaxxer", "HikariCP").withoutVersion()
 
             library("kotlin-cbor", "org.jetbrains.kotlinx", "kotlinx-serialization-cbor").version("1.5.0")
+            library("kotlin-protobuf", "org.jetbrains.kotlinx", "kotlinx-serialization-protobuf").version("1.5.0")
+            library("kotlin-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.8.10")
         }
     }

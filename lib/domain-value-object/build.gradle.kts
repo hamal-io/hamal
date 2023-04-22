@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:ddd"))
 
-    implementation(external.kotlin.cbor)
+    implementation(external.kotlin.protobuf)
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)

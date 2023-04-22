@@ -1,6 +1,7 @@
 package internal.copy;
 
 import io.hamal.lib.ddd.base.ValueObject;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -204,19 +205,40 @@ class JavaValueObjectStrategyTest {
 
     static class SomeUnsafeToCopyValueObject extends ValueObject.BaseImpl<SomeUnsafeClass> {
         public SomeUnsafeToCopyValueObject() {
-            super(new SomeUnsafeClass());
+        }
+
+        @NotNull
+        @Override
+        public SomeUnsafeClass getValue() {
+            return new SomeUnsafeClass();
         }
     }
 
     static class SomeIntValueObject extends ValueObject.ComparableImpl<Integer> {
+        private final Integer value;
+
         SomeIntValueObject(Integer value) {
-            super(value);
+            this.value = value;
+        }
+
+        @NotNull
+        @Override
+        public Integer getValue() {
+            return value;
         }
     }
 
     static class SomeInstantValueObject extends ValueObject.ComparableImpl<Instant> {
+        private final Instant value;
+
         SomeInstantValueObject(Instant value) {
-            super(value);
+            this.value = value;
+        }
+
+        @NotNull
+        @Override
+        public Instant getValue() {
+            return value;
         }
     }
 
@@ -270,8 +292,10 @@ class JavaValueObjectStrategyTest {
             return new SomClassWithStaticFields(value);
         }
 
+        private final Instant value;
+
         private SomClassWithStaticFields(Instant value) {
-            super(value);
+            this.value = value;
         }
 
         @Override
@@ -285,6 +309,12 @@ class JavaValueObjectStrategyTest {
         @Override
         public int hashCode() {
             return Objects.hash(getValue());
+        }
+
+        @NotNull
+        @Override
+        public Instant getValue() {
+            return value;
         }
     }
 
