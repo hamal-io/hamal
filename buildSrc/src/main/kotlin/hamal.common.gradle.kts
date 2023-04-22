@@ -1,6 +1,6 @@
 plugins {
+    `java-library`
     id("org.jetbrains.kotlin.jvm")
-//    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -30,4 +30,3 @@ val testIntegrationTask = tasks.register<Test>("testIntegration") {
 tasks.check {
     dependsOn(testIntegrationTask)
 }
-

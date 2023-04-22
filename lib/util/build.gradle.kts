@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation(project(":lib:ddd"))
     implementation(project(":lib:meta"))
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)

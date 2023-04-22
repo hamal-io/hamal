@@ -3,7 +3,7 @@ plugins {
     application
 
     id("org.springframework.boot").version("3.0.5")
-    kotlin("plugin.spring").version("1.8.20")
+    kotlin("plugin.spring").version("1.8.10")
 }
 
 apply(plugin = "io.spring.dependency-management")

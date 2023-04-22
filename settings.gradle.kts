@@ -36,6 +36,7 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
         mavenCentral()
+
     }
 
     versionCatalogs {
