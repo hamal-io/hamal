@@ -5,15 +5,17 @@ import java.lang.String.format
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
+import java.sql.*
 import java.time.Instant
+import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 import kotlin.io.path.Path
 
 
 class Segment(
-    config: Config
+    config: Config,
+    internal val lock: Lock = ReentrantLock()
 ) : AutoCloseable {
 
     companion object {
@@ -27,14 +29,14 @@ class Segment(
         }
     }
 
-
     internal val connection: Connection
 
     init {
         val dbPath = config.path.resolve(Path(format("%020d", config.id.value.toLong())))
         connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db")
-        setupSchema()
         setupSqlite()
+        connection.autoCommit = false
+        setupSchema()
     }
 
     data class Config(
@@ -42,16 +44,71 @@ class Segment(
         val id: Id
     )
 
-    fun append(records: Iterable<Tuple3<ByteBuffer, ByteBuffer, Instant>>): List<Id> {
-
-        executeQuery(""""""){resultSet ->
-            resultSet.next()
-           resultSet.getLong(1)
+    data class Record(
+        val id: Id,
+        val key: ByteBuffer,
+        val value: ByteBuffer,
+        val instant: Instant
+    ) {
+        @JvmInline
+        value class Id(val value: Long) {
+            constructor(value: Int) : this(value.toLong())
         }
-
-        return listOf()
     }
 
+    fun countRows(): Long = this.executeQuery("SELECT COUNT(*) from records") { it.getLong(1) }
+
+    fun append(vararg records: Tuple3<ByteBuffer, ByteBuffer, Instant>): List<Id> {
+        return append(records.toList())
+    }
+
+    fun append(records: Collection<Tuple3<ByteBuffer, ByteBuffer, Instant>>): List<Id> {
+        if (records.isEmpty()) {
+            return listOf()
+        }
+
+        return lock.withLock {
+            connection.beginRequest()
+            val beforeLastRowId = countRows() + 1
+
+            val stmt = connection.prepareStatement(
+                """INSERT INTO records (key, value,instant) VALUES (?,?,?);""".trimIndent(),
+                Statement.RETURN_GENERATED_KEYS
+            )
+            records.forEach { record ->
+                stmt.setBytes(1, record._1.array())
+                stmt.setBytes(2, record._2.array())
+                stmt.setTimestamp(3, Timestamp.from(record._3))
+                stmt.addBatch()
+            }
+
+            stmt.executeBatch()
+            connection.commit()
+            LongRange(beforeLastRowId, stmt.generatedKeys.getLong(1))
+        }.map { Id(it) }
+    }
+
+    fun read(firstId: Id, limit: Int = 1): List<Record> {
+        if (limit < 1) {
+            return listOf()
+        }
+        return executeQuery(
+            """SELECT id, key, value, instant FROM records WHERE id >= ${firstId.value} LIMIT $limit """.trimIndent()
+        ) {
+            val result = mutableListOf<Record>()
+            while (it.next()) {
+                result.add(
+                    Record(
+                        id = Record.Id(it.getLong("id")),
+                        key = ByteBuffer.wrap(it.getBytes("key")),
+                        value = ByteBuffer.wrap(it.getBytes("value")),
+                        instant = it.getTimestamp("instant").toInstant()
+                    )
+                )
+            }
+            result
+        }
+    }
 
     override fun close() {
         connection.close()
@@ -63,14 +120,26 @@ class Segment(
     }
 }
 
-internal fun <T> Segment.executeQuery(sql: String, fn: (ResultSet) -> T) {
+internal fun <T> Segment.executeQuery(sql: String, fn: (ResultSet) -> T): T {
     require(!connection.isClosed) { "Connection must be open" }
-    connection.createStatement().use { statement ->
+    return connection.createStatement().use { statement ->
         statement.executeQuery(sql).use(fn)
     }
 }
 
+internal fun Segment.clear() {
+    lock.withLock {
+        connection.beginRequest()
+        connection.createStatement().use {
+            it.execute("DELETE FROM records")
+            it.execute("DELETE FROM sqlite_sequence")
+        }
+        connection.commit()
+    }
+}
+
 private fun Segment.setupSchema() {
+    connection.beginRequest()
     connection.createStatement().use {
         it.execute(
             """
@@ -83,6 +152,7 @@ private fun Segment.setupSchema() {
         """.trimIndent()
         )
     }
+    connection.commit()
 }
 
 private fun Segment.setupSqlite() {
