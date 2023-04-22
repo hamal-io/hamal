@@ -3,10 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
 }
 
-kotlin {
-    jvmToolchain(19)
-}
-
 val testIntegration by sourceSets.creating
 configurations[testIntegration.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
 configurations[testIntegration.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
