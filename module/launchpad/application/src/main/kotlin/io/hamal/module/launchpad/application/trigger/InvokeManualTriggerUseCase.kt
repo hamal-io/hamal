@@ -28,6 +28,7 @@ data class InvokeManualTriggerUseCase(
             notifyDomainPort.invoke(
                 Scheduled(
                     id = JobId(UUID.randomUUID().toString()),
+                    regionId = RegionId("abc"),
 //                    regionId = useCase.regionId,
                     inputs = counter.incrementAndGet()
                 )

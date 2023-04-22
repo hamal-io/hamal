@@ -1,8 +1,8 @@
 package io.module.hamal.queue.infra
 
 import io.hamal.lib.domain_notification.CreateDomainNotificationConsumerPort
-//import io.hamal.lib.domain_notification.notification.JobDomainNotification
-//import io.module.hamal.queue.infra.handler.JobScheduledHandler
+import io.hamal.lib.domain_notification.notification.Scheduled
+import io.module.hamal.queue.infra.handler.JobScheduledHandler
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
@@ -22,7 +22,7 @@ open class QueueModuleConfig {
     open fun domainNotificationConsumer(
         createDomainNotificationConsumerPort: CreateDomainNotificationConsumerPort
     ) = createDomainNotificationConsumerPort
-//        .register(JobDomainNotification.Scheduled::class, JobScheduledHandler())
+        .register(Scheduled::class, JobScheduledHandler())
         .create()
 
 }

@@ -1,6 +1,7 @@
 package io.hamal.lib.domain_notification.notification
 
 import io.hamal.lib.domain.vo.JobId
+import io.hamal.lib.domain.vo.base.RegionId
 import io.hamal.lib.domain_notification.DomainNotificationTopic
 import kotlinx.serialization.Serializable
 
@@ -11,8 +12,8 @@ import kotlinx.serialization.Serializable
 @DomainNotificationTopic("scheduler::job_enqueued")
 class Scheduled(
     val id: JobId,
-//    regionId: String,
+    override val regionId: RegionId,
     val inputs: Int
-) : DomainNotification("SomeRegion")
+) : DomainNotification()
 
 //}

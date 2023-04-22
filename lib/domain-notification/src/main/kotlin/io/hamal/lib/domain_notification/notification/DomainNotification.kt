@@ -1,14 +1,13 @@
 package io.hamal.lib.domain_notification.notification
 
+import io.hamal.lib.domain.vo.base.RegionId
 import io.hamal.lib.domain_notification.DomainNotificationTopic
 import io.hamal.lib.meta.exception.IllegalStateException
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class DomainNotification(
-//    val regionId: RegionId
-    val regionId: String
-) {
+sealed class DomainNotification {
+    abstract val regionId: RegionId
     val topic: String
 
     init {
