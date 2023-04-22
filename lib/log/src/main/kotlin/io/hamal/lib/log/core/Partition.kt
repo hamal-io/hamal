@@ -13,7 +13,6 @@ import kotlin.io.path.Path
 
 // fixme the segment.record.id is supposed to be relative to partition.record.id index, as there is only one segment per partition in the mean time its just a passthrough
 class Partition(
-    private val path: Path,
     private val id: Id,
     internal var activeSegment: Segment
 ) : AutoCloseable {
@@ -22,7 +21,6 @@ class Partition(
         fun open(config: Config): Partition {
             val path = ensureDirectoryExists(config)
             return Partition(
-                path = path,
                 id = config.id,
                 activeSegment = Segment.open(
                     Segment.Config(
@@ -34,14 +32,10 @@ class Partition(
         }
 
         private fun ensureDirectoryExists(config: Config): Path {
-            val result = config.path.resolve(Path(String.format("%04d", config.id.value)))
+            val result = config.path.resolve(Path(String.format("partition-%04d", config.id.value)))
             Files.createDirectories(result)
             return result
         }
-    }
-
-    init {
-
     }
 
     @JvmInline

@@ -1,6 +1,6 @@
 package io.hamal.lib.log.core
 
-import io.hamal.lib.log.core.Partition.Record
+import io.hamal.lib.log.core.Topic.*
 import io.hamal.lib.util.Files
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -11,8 +11,8 @@ import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("Partition")
-class PartitionTest {
+@DisplayName("Topic")
+class TopicTest {
 
     @Nested
     @DisplayName("open()")
@@ -24,14 +24,13 @@ class PartitionTest {
         }
 
         @Test
-        fun `Creates a directory if path does not exists yet and populates first segment`() {
+        fun `Creates a directory if path does not exists yet and populates with a partition`() {
             val targetDir = Path(testDir, "another-path", "more-nesting")
-
-            Partition.open(Partition.Config(Partition.Id(23), targetDir)).use { }
+            Topic.open(Config(Id(23), targetDir)).use { }
 
             assertTrue(Files.exists(targetDir))
-            assertTrue(Files.exists(Path(targetDir.pathString, "partition-0023")))
-            assertTrue(Files.exists(Path(targetDir.pathString, "partition-0023", "00000000000000000000.db")))
+            assertTrue(Files.exists(Path(targetDir.pathString, "topic-00023")))
+            assertTrue(Files.exists(Path(targetDir.pathString, "topic-00023", "partition-0001")))
         }
     }
 
@@ -83,6 +82,7 @@ class PartitionTest {
                 val record = it.first()
                 assertThat(record.id, equalTo(Record.Id(1)))
                 assertThat(record.partitionId, equalTo(Partition.Id(1)))
+                assertThat(record.topicId, equalTo(Id(23)))
                 assertThat(record.segmentId, equalTo(Segment.Id(0)))
                 assertThat(record.key, equalTo(ByteBuffer.wrap("KEY_1".toByteArray())))
                 assertThat(record.value, equalTo(ByteBuffer.wrap("VALUE_1".toByteArray())))
@@ -94,15 +94,15 @@ class PartitionTest {
                 val record = it.first()
                 assertThat(record.id, equalTo(Record.Id(3)))
                 assertThat(record.partitionId, equalTo(Partition.Id(1)))
+                assertThat(record.topicId, equalTo(Id(23)))
                 assertThat(record.segmentId, equalTo(Segment.Id(0)))
                 assertThat(record.key, equalTo(ByteBuffer.wrap("KEY_3".toByteArray())))
                 assertThat(record.value, equalTo(ByteBuffer.wrap("VALUE_3".toByteArray())))
                 assertThat(record.instant, equalTo(Instant.ofEpochMilli(3)))
             }
-
         }
 
-        private val testInstance = Partition.open(Partition.Config(Partition.Id(1), Path(testDir)))
+        private val testInstance = Topic.open(Config(Id(23), Path(testDir)))
     }
 
     @Nested
@@ -124,6 +124,7 @@ class PartitionTest {
             assertThat(record.id, equalTo(Record.Id(id)))
             assertThat(record.partitionId, equalTo(Partition.Id(1)))
             assertThat(record.segmentId, equalTo(Segment.Id(0)))
+            assertThat(record.topicId, equalTo(Id(23)))
             assertThat(record.key, equalTo(ByteBuffer.wrap("KEY_$id".toByteArray())))
             assertThat(record.value, equalTo(ByteBuffer.wrap("VALUE_$id".toByteArray())))
             assertThat(record.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
@@ -141,8 +142,9 @@ class PartitionTest {
             )
         }
 
-        private val testInstance = Partition.open(Partition.Config(Partition.Id(1), Path(testDir)))
+        private val testInstance = Topic.open(Config(Id(23), Path(testDir)))
     }
 
-    private val testDir = "/tmp/hamal/test/partitions"
+
+    private val testDir = "/tmp/hamal/test/topics"
 }
