@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":lib:log"))
     implementation(project(":lib:domain-notification"))
 
-    implementation(external.springWeb) {
+    implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
@@ -23,7 +23,7 @@ dependencies {
 
     implementation("org.xerial:sqlite-jdbc:3.25.2")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.5.0")
+    implementation(external.kotlin.cbor)
 //    implementation(external.springDataJdbc)
 //    implementation(external.hikari)
 //    implementation(external.h2)
@@ -36,9 +36,9 @@ dependencies {
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
-    testImplementation(external.springTest) {
+    testImplementation(external.spring.test) {
         exclude("org.assertj", "*")
     }
 
-    compileOnly(external.springDevTools)
+    compileOnly(external.spring.devTools)
 }

@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":module:queue:application"))
     implementation(project(":module:queue:core"))
 
-    implementation(external.springWeb) {
+    implementation(external.spring.web) {
 //        exclude("com.fasterxml.jackson.core", "jackson-core")
 //        exclude("org.springframework.boot", "spring-boot-starter-json")
 //        exclude("com.fasterxml.jackson.core", "jackson-annotations")

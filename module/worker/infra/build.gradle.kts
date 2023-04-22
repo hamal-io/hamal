@@ -18,7 +18,7 @@ dependencies {
 
     implementation(project(":module:worker:extension:api"))
 
-    implementation(external.springWeb) {
+    implementation(external.spring.web) {
 //        exclude("com.fasterxml.jackson.core", "jackson-core")
 //        exclude("org.springframework.boot", "spring-boot-starter-json")
 //        exclude("com.fasterxml.jackson.core", "jackson-annotations")

@@ -1,4 +1,3 @@
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
@@ -13,12 +12,15 @@ dependencyResolutionManagement {
             library("junit", "org.junit.jupiter:junit-jupiter:5.9.1")
             library("hamcrest", "org.hamcrest:hamcrest:2.2")
 
-            library("springWeb", "org.springframework.boot", "spring-boot-starter-web").withoutVersion()
-            library("springTest", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
-            library("springDataJdbc", "org.springframework.data", "spring-data-jdbc").withoutVersion()
-            library("springDevTools", "org.springframework.boot", "spring-boot-devtools").withoutVersion()
+            library("spring-web", "org.springframework.boot", "spring-boot-starter-web").withoutVersion()
+            library("spring-test", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
+            library("spring-jdbc", "org.springframework.data", "spring-data-jdbc").withoutVersion()
+            library("spring-devTools", "org.springframework.boot", "spring-boot-devtools").withoutVersion()
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
             library("hikari", "com.zaxxer", "HikariCP").withoutVersion()
+
+            library("kotlin-cbor", "org.jetbrains.kotlinx", "kotlinx-serialization-cbor").version("1.5.0")
+            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.8.10")
         }
     }
 }

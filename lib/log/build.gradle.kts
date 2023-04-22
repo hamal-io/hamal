@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":lib:util"))
     implementation(external.sqlite)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.5.0")
+    implementation(external.kotlin.cbor)
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
