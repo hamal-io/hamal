@@ -264,7 +264,7 @@ class SegmentTest {
             )
         }
 
-        private val testInstance = Segment(Config(Id(1), Path(testDir)))
+        private val testInstance = Segment.open(Config(Id(1), Path(testDir)))
 
     }
 
@@ -362,7 +362,7 @@ class SegmentTest {
             )
         }
 
-        private val testInstance = Segment(Config(Id(10000), Path(testDir)))
+        private val testInstance = Segment.open(Config(Id(10000), Path(testDir)))
     }
 
     private val testDir = "/tmp/hamal/test/segments"

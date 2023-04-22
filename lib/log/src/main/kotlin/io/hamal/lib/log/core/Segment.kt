@@ -13,26 +13,28 @@ import kotlin.io.path.Path
 
 
 class Segment(
-    config: Config,
-    internal val lock: Lock = ReentrantLock()
+    internal val lock: Lock,
+    internal val baseId: Id,
+    internal val connection: Connection
 ) : AutoCloseable {
 
     companion object {
         fun open(config: Config): Segment {
-            ensureDirectoryExists(config)
-            return Segment(config)
+            val dbPath = ensureDirectoryExists(config)
+            return Segment(
+                lock = ReentrantLock(),
+                baseId = config.id,
+                connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db")
+            )
         }
 
-        private fun ensureDirectoryExists(config: Config) {
-            Files.createDirectories(config.path)
+        private fun ensureDirectoryExists(config: Config): Path {
+            val dbPath = config.path.resolve(Path(format("%020d", config.id.value.toLong())))
+            return Files.createDirectories(dbPath)
         }
     }
 
-    internal val connection: Connection
-
     init {
-        val dbPath = config.path.resolve(Path(format("%020d", config.id.value.toLong())))
-        connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db")
         setupSqlite()
         connection.autoCommit = false
         setupSchema()

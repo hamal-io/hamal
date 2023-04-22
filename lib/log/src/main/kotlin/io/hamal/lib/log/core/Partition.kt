@@ -1,24 +1,47 @@
 package io.hamal.lib.log.core
 
+import java.lang.String
 import java.nio.ByteBuffer
+import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Instant
+import kotlin.io.path.Path
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
+
+// fixme the segment.record.id is supposed to be relative to partition.record.id index, as there is only one segment per partition in the mean time its just a passthrough
 class Partition(
-    private val config: Config,
-    private var activeSegment: Segment
+    private val path: Path,
+    private val id: Id,
+    internal var activeSegment: Segment
 ) : AutoCloseable {
 
-    init {
-        activeSegment = Segment.open(
-            Segment.Config(
-                id = Segment.Id(1),
-                path = config.path
+    companion object {
+        fun open(config: Config): Partition {
+            val path = ensureDirectoryExists(config)
+            return Partition(
+                path = path,
+                id = config.id,
+                activeSegment = Segment.open(
+                    Segment.Config(
+                        id = Segment.Id(0),
+                        path = path
+                    )
+                )
             )
-        )
+        }
+
+        private fun ensureDirectoryExists(config: Config): Path {
+            val result = config.path.resolve(Path(String.format("%04d", config.id.value)))
+            Files.createDirectories(result)
+            return result
+        }
+    }
+
+    init {
+
     }
 
     @JvmInline
@@ -39,10 +62,10 @@ class Partition(
         val value: ByteBuffer,
         val instant: Instant
     ) {
-        data class Id(
-            val partitionId: Partition.Id,
-            val segmentId: Segment.Id
-        )
+        @JvmInline
+        value class Id(val value: Long) {
+            constructor(value: Int) : this(value.toLong())
+        }
     }
 
     fun countRecords() = activeSegment.countRecords()
@@ -51,20 +74,34 @@ class Partition(
     }
 
     fun append(toRecord: Collection<ToRecord>): List<Record.Id> {
-        TODO()
-        //        return activeSegment.append().map { segmentId ->
-//            Record.Id(
-//                partitionId = config.id,
-//                segmentId = segmentId
-//            )
-//        }
+        return activeSegment.append(toRecord).map { segmentId ->
+            //fixme the segment.record.id is relative to partition.record.id index
+            Record.Id(segmentId.value)
+        }
     }
 
     fun read(firstId: Record.Id, limit: Int = 1): List<Record> {
-        TODO()
+        return activeSegment.read(
+            Segment.Id(firstId.value),
+            limit
+        ).map { segmentRecord ->
+            //fixme the segment.record.id is relative to partition.record.id index
+            Record(
+                id = Record.Id(segmentRecord.id.value),
+                segmentId = activeSegment.baseId,
+                partitionId = id,
+                key = segmentRecord.key,
+                value = segmentRecord.value,
+                instant = segmentRecord.instant
+            )
+        }
     }
 
     override fun close() {
         activeSegment.close()
     }
+}
+
+internal fun Partition.clear() {
+    activeSegment.clear()
 }
