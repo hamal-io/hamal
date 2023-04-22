@@ -1,6 +1,5 @@
 package io.hamal.lib.log.core
 
-import io.hamal.lib.meta.Tuple3
 import java.lang.String.format
 import java.nio.ByteBuffer
 import java.nio.file.Files
@@ -39,9 +38,14 @@ class Segment(
         setupSchema()
     }
 
+    @JvmInline
+    value class Id(val value: Long) {
+        constructor(value: Int) : this(value.toLong())
+    }
+
     data class Config(
+        val id: Id,
         val path: Path,
-        val id: Id
     )
 
     data class Record(
@@ -56,29 +60,29 @@ class Segment(
         }
     }
 
-    fun countRows(): Long = this.executeQuery("SELECT COUNT(*) from records") { it.getLong(1) }
+    fun countRecords(): Long = this.executeQuery("SELECT COUNT(*) from records") { it.getLong(1) }
 
-    fun append(vararg records: Tuple3<ByteBuffer, ByteBuffer, Instant>): List<Id> {
-        return append(records.toList())
+    fun append(vararg toRecord: ToRecord): List<Id> {
+        return append(toRecord.toList())
     }
 
-    fun append(records: Collection<Tuple3<ByteBuffer, ByteBuffer, Instant>>): List<Id> {
-        if (records.isEmpty()) {
+    fun append(toRecord: Collection<ToRecord>): List<Id> {
+        if (toRecord.isEmpty()) {
             return listOf()
         }
 
         return lock.withLock {
             connection.beginRequest()
-            val beforeLastRowId = countRows() + 1
+            val beforeLastRowId = countRecords() + 1
 
             val stmt = connection.prepareStatement(
                 """INSERT INTO records (key, value,instant) VALUES (?,?,?);""".trimIndent(),
                 Statement.RETURN_GENERATED_KEYS
             )
-            records.forEach { record ->
-                stmt.setBytes(1, record._1.array())
-                stmt.setBytes(2, record._2.array())
-                stmt.setTimestamp(3, Timestamp.from(record._3))
+            toRecord.forEach { record ->
+                stmt.setBytes(1, record.key.array())
+                stmt.setBytes(2, record.value.array())
+                stmt.setTimestamp(3, Timestamp.from(record.instant))
                 stmt.addBatch()
             }
 
@@ -112,11 +116,6 @@ class Segment(
 
     override fun close() {
         connection.close()
-    }
-
-    @JvmInline
-    value class Id(val value: Long) {
-        constructor(value: Int) : this(value.toLong())
     }
 }
 

@@ -1,7 +1,6 @@
 package io.hamal.lib.log.core
 
 import io.hamal.lib.log.core.Segment.*
-import io.hamal.lib.meta.Tuple3
 import io.hamal.lib.util.Files
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -13,6 +12,7 @@ import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
+@DisplayName("Segment")
 class SegmentTest {
 
     @Nested
@@ -28,7 +28,7 @@ class SegmentTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "partition-001", "another-path")
-            Segment.open(Config(targetDir, Id(2810))).use { }
+            Segment.open(Config(Id(2810), targetDir)).use { }
             assertTrue(Files.exists(targetDir))
             assertTrue(Files.exists(Path(targetDir.pathString, "00000000000000002810.db")))
         }
@@ -98,7 +98,7 @@ class SegmentTest {
                 }
         }
 
-        private val testConfig = Config(Path(testDir), Id(2810))
+        private val testConfig = Config(Id(2810), Path(testDir))
     }
 
     @Nested
@@ -118,13 +118,13 @@ class SegmentTest {
         fun `Nothing to append`() {
             val result = testInstance.append()
             assertThat(result, hasSize(0))
-            assertThat(testInstance.countRows(), equalTo(0))
+            assertThat(testInstance.countRecords(), equalTo(0))
         }
 
         @Test
         fun `Key,Value and Instant do not have to be unique`() {
             testInstance.append(
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("SomeKey".toByteArray()),
                     ByteBuffer.wrap("SomeValue".toByteArray()),
                     Instant.ofEpochMilli(1)
@@ -132,14 +132,14 @@ class SegmentTest {
             )
 
             testInstance.append(
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("SomeKey".toByteArray()),
                     ByteBuffer.wrap("SomeValue".toByteArray()),
                     Instant.ofEpochMilli(1)
                 )
             )
 
-            assertThat(testInstance.countRows(), equalTo(2))
+            assertThat(testInstance.countRecords(), equalTo(2))
 
             testInstance.read(Id(1), 2).let {
                 assertThat(it, hasSize(2))
@@ -153,7 +153,7 @@ class SegmentTest {
         @Test
         fun `Append single record`() {
             val result = testInstance.append(
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY".toByteArray()),
                     ByteBuffer.wrap("VALUE".toByteArray()),
                     Instant.ofEpochMilli(2810)
@@ -161,7 +161,7 @@ class SegmentTest {
             )
             assertThat(result, equalTo(listOf(Id(1))))
 
-            assertThat(testInstance.countRows(), equalTo(1))
+            assertThat(testInstance.countRecords(), equalTo(1))
 
             testInstance.read(Id(1)).let {
                 assertThat(it, hasSize(1))
@@ -176,17 +176,17 @@ class SegmentTest {
         @Test
         fun `Append multiple records to empty segment`() {
             val result = testInstance.append(
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY_1".toByteArray()),
                     ByteBuffer.wrap("VALUE_1".toByteArray()),
                     Instant.ofEpochMilli(1)
                 ),
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY_2".toByteArray()),
                     ByteBuffer.wrap("VALUE_2".toByteArray()),
                     Instant.ofEpochMilli(2)
                 ),
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY_3".toByteArray()),
                     ByteBuffer.wrap("VALUE_3".toByteArray()),
                     Instant.ofEpochMilli(3)
@@ -200,7 +200,7 @@ class SegmentTest {
                     )
                 )
             )
-            assertThat(testInstance.countRows(), equalTo(3))
+            assertThat(testInstance.countRecords(), equalTo(3))
 
 
             testInstance.read(Id(1)).let {
@@ -229,34 +229,34 @@ class SegmentTest {
             val now = Instant.now()
 
             val result = testInstance.append(
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("Hamal".toByteArray()),
                     ByteBuffer.wrap("Rockz".toByteArray()),
                     now
                 ),
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("Hamal".toByteArray()),
                     ByteBuffer.wrap("Rockz".toByteArray()),
                     now
                 )
             )
             assertThat(result, equalTo(listOf(Id(4), Id(5))))
-            assertThat(testInstance.countRows(), equalTo(5))
+            assertThat(testInstance.countRecords(), equalTo(5))
         }
 
         private fun givenThreeRecords() {
             testInstance.append(
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY_1".toByteArray()),
                     ByteBuffer.wrap("VALUE_1".toByteArray()),
                     Instant.ofEpochMilli(1)
                 ),
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY_2".toByteArray()),
                     ByteBuffer.wrap("VALUE_2".toByteArray()),
                     Instant.ofEpochMilli(2)
                 ),
-                Tuple3(
+                ToRecord(
                     ByteBuffer.wrap("KEY_3".toByteArray()),
                     ByteBuffer.wrap("VALUE_3".toByteArray()),
                     Instant.ofEpochMilli(3)
@@ -264,7 +264,7 @@ class SegmentTest {
             )
         }
 
-        private val testInstance = Segment(Config(Path(testDir), Id(1)))
+        private val testInstance = Segment(Config(Id(1), Path(testDir)))
 
     }
 
@@ -353,7 +353,7 @@ class SegmentTest {
         private fun givenOneHundredRecords() {
             testInstance.append(
                 IntRange(1, 100).map {
-                    Tuple3(
+                    ToRecord(
                         ByteBuffer.wrap("KEY_$it".toByteArray()),
                         ByteBuffer.wrap("VALUE_$it".toByteArray()),
                         Instant.ofEpochMilli(it.toLong())
@@ -362,7 +362,7 @@ class SegmentTest {
             )
         }
 
-        private val testInstance = Segment(Config(Path(testDir), Id(10000)))
+        private val testInstance = Segment(Config(Id(10000), Path(testDir)))
     }
 
     private val testDir = "/tmp/hamal/test/segments"
