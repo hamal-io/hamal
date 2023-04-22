@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
-    id("hamal.kotlin-lib-conventions")
+    id("hamal.lib")
 }
 archivesName.set("queue-core")
 

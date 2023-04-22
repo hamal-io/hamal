@@ -1,6 +1,5 @@
 plugins {
-   id("hamal.kotlin-lib-conventions")
-    kotlin("jvm")
+   id("hamal.lib")
     kotlin("plugin.serialization") version "1.8.10"
 }
 

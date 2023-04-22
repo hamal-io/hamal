@@ -1,5 +1,5 @@
 plugins {
-    id("hamal.kotlin-extension-conventions")
+    id("hamal.extension")
 
 }
 

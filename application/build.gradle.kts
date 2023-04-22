@@ -1,10 +1,9 @@
 plugins {
-    id("hamal.kotlin-application-conventions")
+    id("hamal.common")
+    application
+
     id("org.springframework.boot").version("3.0.5")
     kotlin("plugin.spring").version("1.8.20")
-    kotlin("jvm")
-    kotlin("plugin.serialization") version "1.8.10"
-    application
 }
 
 apply(plugin = "io.spring.dependency-management")

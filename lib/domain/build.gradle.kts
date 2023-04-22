@@ -1,3 +1,3 @@
 plugins {
-    id("hamal.kotlin-lib-conventions")
+    id("hamal.lib")
 }

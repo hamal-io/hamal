@@ -1,5 +1,5 @@
 plugins {
-    id("hamal.kotlin-common-conventions")
+    id("hamal.common")
     `java-library`
     distribution
 }
