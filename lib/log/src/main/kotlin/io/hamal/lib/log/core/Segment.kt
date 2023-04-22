@@ -1,6 +1,5 @@
 package io.hamal.lib.log.core
 
-import java.lang.String.format
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
@@ -29,8 +28,8 @@ class Segment(
         }
 
         private fun ensureDirectoryExists(config: Config): Path {
-            val dbPath = config.path.resolve(Path(format("%020d", config.id.value.toLong())))
-            return Files.createDirectories(dbPath)
+            return Files.createDirectories(config.path)
+                .resolve(Path(java.lang.String.format("%020d", config.id.value)))
         }
     }
 

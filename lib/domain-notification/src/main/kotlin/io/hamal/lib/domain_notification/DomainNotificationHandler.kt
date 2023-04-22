@@ -1,5 +1,6 @@
 package io.hamal.lib.domain_notification
 
+import io.hamal.lib.domain_notification.notification.DomainNotification
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 

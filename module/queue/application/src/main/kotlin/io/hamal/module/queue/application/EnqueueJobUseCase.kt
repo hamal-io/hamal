@@ -5,7 +5,6 @@ import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.base.RegionId
 import io.hamal.lib.domain_notification.NotifyDomainPort
-import io.hamal.lib.domain_notification.notification.QueueDomainNotification.JobEnqueued
 import io.hamal.module.queue.core.job.EnqueueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort.JobToEnqueue
 import io.hamal.module.queue.core.job.Job
@@ -28,8 +27,9 @@ data class EnqueueJobUseCase(
                     useCase.jobId, useCase.regionId
                 )
             )
-            notifyDomainPort(JobEnqueued(result.id, result.regionId))
-            return listOf(result)
+//            notifyDomainPort(JobToEnqueueued(result.id, result.regionId))
+//            return listOf(result)
+            TODO()
         }
     }
 }

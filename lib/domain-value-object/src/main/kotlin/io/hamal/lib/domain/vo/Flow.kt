@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.base.Id
+import kotlinx.serialization.Serializable
 
-class FlowId(value: String) : Id(value)
+@Serializable
+class FlowId(override val value: String) : Id()

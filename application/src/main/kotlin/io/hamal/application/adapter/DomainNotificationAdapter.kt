@@ -1,45 +1,67 @@
 package io.hamal.application.adapter
 
 import io.hamal.lib.domain_notification.*
+import io.hamal.lib.domain_notification.notification.DomainNotification
+import io.hamal.lib.log.core.ToRecord
+import io.hamal.lib.log.core.Topic
+import io.hamal.lib.meta.KeyedOnce
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.cbor.Cbor
+import kotlinx.serialization.encodeToByteArray
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import java.nio.ByteBuffer
+import java.time.Instant
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.io.path.Path
 import kotlin.reflect.KClass
 
 object TopicResolver {
     private val counter = AtomicInteger(0)
-//    private val topicMapping = KeyedOnce.default<String, TopicId>()
-//
-//    fun resolve(topic: String): TopicId {
-//        return topicMapping.invoke(topic) {
-//            TopicId(counter.incrementAndGet())
-//        }
-//    }
+    private val topicMapping = KeyedOnce.default<String, Topic.Id>()
+
+    fun resolve(topic: String): Topic.Id {
+        return topicMapping.invoke(topic) {
+            Topic.Id(counter.incrementAndGet())
+        }
+    }
+}
+
+object InMemoryBroker {
+
+    private val topicMapping = KeyedOnce.default<Topic.Id, Topic>()
+
+    fun publish(topicId: Topic.Id, toRecord: ToRecord) {
+        val topic = topicMapping.invoke(topicId) {
+            Topic.open(
+                Topic.Config(
+                    topicId,
+                    Path("/tmp/hamal/topics")
+                )
+            )
+        }
+
+        topic.append(toRecord)
+    }
+
 }
 
 class DomainNotificationAdapter() : NotifyDomainPort {
 
 //    private val producer = InMemoryProducer<String, DomainNotification>()
 
+
+    @OptIn(ExperimentalSerializationApi::class)
     override fun <NOTIFICATION : DomainNotification> invoke(notification: NOTIFICATION) {
-//        producer(
-//            listOf(
-//                Message(
-//                    Message.Meta(
-//                        version = 0x01,
-//                        instant = Instant.now(),
-//                        topicId = TopicResolver.resolve(notification.topic),
-//                        partition = Partition(1),
-//                        offset = MessageOffset(0),
-//                        crc32 = 32
-//                    ),
-//                    "SomeKey",
-//                    notification
-//                )
-//            )
-//        )
-        TODO()
+        InMemoryBroker.publish(
+            Topic.Id(23),
+            ToRecord(
+                key = ByteBuffer.wrap("".toByteArray()),
+                value = ByteBuffer.wrap(Cbor.encodeToByteArray<DomainNotification>(notification)),
+                instant = Instant.now()
+            )
+        )
     }
 }
 

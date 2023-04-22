@@ -6,7 +6,8 @@ import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.base.RegionId
 import io.hamal.lib.domain_notification.NotifyDomainPort
-import io.hamal.lib.domain_notification.notification.JobDomainNotification
+import io.hamal.lib.domain_notification.notification.Scheduled
+//import io.hamal.lib.domain_notification.notification.JobDomainNotification
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -25,9 +26,9 @@ data class InvokeManualTriggerUseCase(
     ) {
         override fun noResult(useCase: InvokeManualTriggerUseCase) {
             notifyDomainPort.invoke(
-                JobDomainNotification.Scheduled(
+                Scheduled(
                     id = JobId(UUID.randomUUID().toString()),
-                    regionId = useCase.regionId,
+//                    regionId = useCase.regionId,
                     inputs = counter.incrementAndGet()
                 )
             )

@@ -2,6 +2,8 @@ plugins {
     id("hamal.kotlin-application-conventions")
     id("org.springframework.boot").version("3.0.5")
     kotlin("plugin.spring").version("1.8.20")
+    kotlin("jvm")
+    kotlin("plugin.serialization") version "1.8.10"
     application
 }
 
@@ -10,6 +12,7 @@ apply(plugin = "io.spring.dependency-management")
 dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:ddd"))
+    implementation(project(":lib:log"))
     implementation(project(":lib:domain-notification"))
 
     implementation(external.springWeb) {
@@ -21,6 +24,7 @@ dependencies {
 
     implementation("org.xerial:sqlite-jdbc:3.25.2")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.5.0")
 //    implementation(external.springDataJdbc)
 //    implementation(external.hikari)
 //    implementation(external.h2)

@@ -7,6 +7,7 @@ import io.hamal.application.config.UseCaseConfig
 import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
 import io.hamal.module.worker.infra.WorkerModuleConfig
 import io.module.hamal.queue.infra.QueueModuleConfig
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -17,6 +18,7 @@ import java.io.PrintStream
 @SpringBootApplication
 class HamalApplication
 
+@OptIn(ExperimentalSerializationApi::class)
 fun main(args: Array<String>) {
     val applicationBuilder = SpringApplicationBuilder()
         .main(HamalApplication::class.java)

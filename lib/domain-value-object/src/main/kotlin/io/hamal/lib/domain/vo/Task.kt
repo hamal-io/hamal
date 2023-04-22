@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.base.Id
+import kotlinx.serialization.Serializable
 
-class TaskId(value: String) : Id(value)
+@Serializable
+class TaskId(override val value: String) : Id()
