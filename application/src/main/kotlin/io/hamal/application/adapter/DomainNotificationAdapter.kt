@@ -5,22 +5,19 @@ import io.hamal.lib.domain_notification.DomainNotificationConsumer
 import io.hamal.lib.domain_notification.DomainNotificationHandler
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.lib.domain_notification.notification.DomainNotification
-import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.broker.DefaultBroker
+import io.hamal.lib.log.producer.Producer
 import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.meta.exception.InternalServerException
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.decodeFromByteArray
-import kotlinx.serialization.encodeToByteArray
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
-import java.nio.ByteBuffer
 import java.time.Duration
-import java.time.Instant
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.io.path.Path
 import kotlin.reflect.KClass
 
 object TopicResolver {
@@ -36,11 +33,12 @@ object TopicResolver {
 
 object InMemoryBroker {
 
-    private val topicMapping = KeyedOnce.default<Topic.Id, Topic>()
+    private val broker = DefaultBroker()
 
-    fun publish(topicId: Topic.Id, toRecord: ToRecord) {
-        val topic = getTopic(topicId)
-        topic.append(toRecord)
+//    private val topicMapping = KeyedOnce.default<Topic.Id, Topic>()
+
+    fun publish(topicId: Topic.Id, record: Producer.Record<*, *>) {
+        broker.append(topicId, record)
     }
 
     val offsets = mutableMapOf<String, Long>()
@@ -57,14 +55,7 @@ object InMemoryBroker {
         return result
     }
 
-    private fun getTopic(topicId: Topic.Id): Topic = topicMapping.invoke(topicId) {
-        Topic.open(
-            Topic.Config(
-                topicId,
-                Path("/tmp/hamal/topics")
-            )
-        )
-    }
+    private fun getTopic(topicId: Topic.Id): Topic = broker.getTopic(topicId)
 
 
 }
@@ -76,13 +67,24 @@ class DomainNotificationAdapter() : NotifyDomainPort {
 
 
     @OptIn(ExperimentalSerializationApi::class)
-    override fun <NOTIFICATION : DomainNotification> invoke(notification: NOTIFICATION) {
+    override fun <NOTIFICATION : DomainNotification> invoke(
+        notification: NOTIFICATION,
+    ) {
+
+        val r = Producer.Record(
+            "KEY",
+            String::class,
+            notification,
+            DomainNotification::class
+        )
+
         InMemoryBroker.publish(
             Topic.Id(23),
-            ToRecord(
-                key = ByteBuffer.wrap("".toByteArray()),
-                value = ByteBuffer.wrap(Cbor.encodeToByteArray<DomainNotification>(notification)),
-                instant = Instant.now()
+            Producer.Record(
+                "KEY",
+                String::class,
+                notification,
+                DomainNotification::class
             )
         )
     }
