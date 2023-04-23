@@ -1,6 +1,7 @@
-package io.hamal.lib.log.core
+package io.hamal.lib.log.segment
 
-import io.hamal.lib.log.core.Segment.*
+import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.segment.Segment.*
 import io.hamal.lib.util.Files
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

@@ -5,8 +5,8 @@ import io.hamal.lib.domain_notification.DomainNotificationConsumer
 import io.hamal.lib.domain_notification.DomainNotificationHandler
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.lib.domain_notification.notification.DomainNotification
-import io.hamal.lib.log.core.ToRecord
-import io.hamal.lib.log.core.Topic
+import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.meta.exception.InternalServerException
 import kotlinx.serialization.ExperimentalSerializationApi

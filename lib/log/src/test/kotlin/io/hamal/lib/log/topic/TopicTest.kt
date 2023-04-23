@@ -1,6 +1,9 @@
-package io.hamal.lib.log.core
+package io.hamal.lib.log.topic
 
-import io.hamal.lib.log.core.Topic.*
+import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.topic.Topic.*
+import io.hamal.lib.log.partition.Partition
+import io.hamal.lib.log.segment.Segment
 import io.hamal.lib.util.Files
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*

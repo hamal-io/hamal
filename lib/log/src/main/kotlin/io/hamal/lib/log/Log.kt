@@ -1,4 +1,4 @@
-package io.hamal.lib.log.core
+package io.hamal.lib.log
 
 import java.nio.ByteBuffer
 import java.time.Instant

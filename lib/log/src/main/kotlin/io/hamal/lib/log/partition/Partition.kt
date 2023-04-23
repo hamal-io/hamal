@@ -1,5 +1,8 @@
-package io.hamal.lib.log.core
+package io.hamal.lib.log.partition
 
+import io.hamal.lib.log.segment.Segment
+import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.segment.clear
 import java.lang.String
 import java.nio.ByteBuffer
 import java.nio.file.Files

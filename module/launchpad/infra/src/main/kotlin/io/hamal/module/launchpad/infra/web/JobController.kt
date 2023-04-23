@@ -19,13 +19,14 @@ open class JobController(
     @PostMapping("/v1/triggers/manual/{triggerId}")
     fun manualTrigger(
         @PathVariable("triggerId") triggerId: String
-    ) {
+    ): String {
         invokeUseCasePort.command(
             InvokeManualTriggerUseCase(
                 regionId = RegionId("this"),
                 triggerId = TriggerId(triggerId)
             )
         )
+        return "Ok"
     }
 
 }

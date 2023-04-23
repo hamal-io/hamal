@@ -1,5 +1,6 @@
-package io.hamal.lib.log.core
+package io.hamal.lib.log.segment
 
+import io.hamal.lib.log.ToRecord
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
