@@ -158,7 +158,7 @@ private fun Segment.setupSchema() {
 private fun Segment.setupSqlite() {
     connection.createStatement().use {
         it.execute("""PRAGMA journal_mode = wal;""")
-//        it.execute("""PRAGMA locking_mode = exclusive;""")
+        it.execute("""PRAGMA locking_mode = exclusive;""")
         it.execute("""PRAGMA temp_store = memory;""")
         it.execute("""PRAGMA synchronous = off;""")
     }

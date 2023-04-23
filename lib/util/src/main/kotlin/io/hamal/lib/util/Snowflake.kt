@@ -1,12 +1,55 @@
 package io.hamal.lib.util
 
+import io.hamal.lib.meta.Tuple2
+import io.hamal.lib.util.Snowflake.ElapsedSource.Elapsed
+import io.hamal.lib.util.Snowflake.PartitionSource.Partition
+import io.hamal.lib.util.Snowflake.SequenceSource.Sequence
 import java.time.Instant
+import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 
 interface Snowflake {
 
-    interface TimeSource {
-        fun elapsed(): Long
+    interface ElapsedSource {
+        fun elapsed(): Elapsed
+
+        @JvmInline
+        value class Elapsed(val value: Long) : Comparable<Elapsed> {
+            override fun compareTo(other: Elapsed) = value.compareTo(other.value)
+        }
+    }
+
+    interface PartitionSource {
+        fun get(): Partition
+
+        @JvmInline
+        value class Partition(val value: Short) {
+            constructor(value: Int) : this(value.toShort())
+
+            init {
+                require(value >= 0) { "Partition must not be negative - [0, 1023]" }
+                require(value <= 1023) { "Partition is limited to 10 bits - [0, 1023]" }
+            }
+        }
+    }
+
+    interface SequenceSource {
+        /**
+         * Blocks if sequence is exhausted until next milliseconds
+         */
+        fun next(elapsedSource: () -> Elapsed): Tuple2<Elapsed, Sequence>
+
+        @JvmInline
+        value class Sequence(val value: Short) {
+            constructor(value: Int) : this(value.toShort())
+
+            init {
+                require(value > 0) { "Sequence must be positive - [1, 4096]" }
+                require(value <= 4096) { "Sequence is limited to 12 bits - [1, 4096]" }
+            }
+        }
     }
 
     interface Generator {
@@ -14,22 +57,116 @@ interface Snowflake {
     }
 
     @JvmInline
-    value class Id(val value: Long)
+    value class Id(val value: Long) : Comparable<Id> {
+        override fun compareTo(other: Id) = value.compareTo(other.value)
+
+        fun partition(): Partition = Partition(
+            Bitwise.extractRange(
+                value = value,
+                startIndex = 53,
+                numberOfBits = 10
+            ).toShort()
+        )
+
+        fun sequence(): Sequence = Sequence(
+            Bitwise.extractRange(
+                value = value,
+                startIndex = 41,
+                numberOfBits = 12
+            ).toShort()
+        )
+
+
+        fun elapsed(): Elapsed = Elapsed(
+            Bitwise.extractRange(
+                value = value,
+                startIndex = 0,
+                numberOfBits = 41
+            )
+        )
+    }
 }
 
-internal object DefaultTimeSource : Snowflake.TimeSource {
-    val epoch = Instant.ofEpochMilli(1682116276624) // 2023-04-22 some when in the morning AEST
-    val startedAt = millis()
-    override fun elapsed() = millis() - startedAt
+class DefaultElapsedSource(
+    val epoch: Instant = Instant.ofEpochMilli(1682116276624) // 2023-04-22 some when in the morning AEST
+) : Snowflake.ElapsedSource {
+    private val startedAt = millis()
+    override fun elapsed() = Elapsed(millis() - startedAt)
+
     private fun millis() = (System.nanoTime() / 1_000_000) - epoch.toEpochMilli()
 }
 
+class DefaultPartitionSource(
+    private val partition: Partition
+) : Snowflake.PartitionSource {
+    constructor(value: Int) : this(Partition(value))
+
+    override fun get() = partition
+}
+
+class DefaultSequenceSource : Snowflake.SequenceSource {
+
+    private var previousCalledAt: Elapsed = Elapsed(0)
+    private var nextSequence = 0
+    private val maxSequence = 4096
+
+    override fun next(elapsedSource: () -> Elapsed): Tuple2<Elapsed, Sequence> {
+        val elapsed = elapsedSource()
+        require(elapsed >= previousCalledAt) { "Elapsed must be monotonic" }
+
+        if (elapsed == previousCalledAt) {
+            if (nextSequence >= maxSequence) {
+                while (true) {
+                    val currentElapsed = elapsedSource()
+                    if (elapsed != currentElapsed) {
+                        nextSequence = 0
+                        previousCalledAt = currentElapsed
+                        break
+                    }
+                }
+            } else {
+                nextSequence
+                previousCalledAt = elapsed
+            }
+
+        } else {
+            previousCalledAt = elapsed
+            nextSequence = 0
+        }
+
+        return Tuple2(previousCalledAt, Sequence(++nextSequence))
+    }
+}
+
+internal class FixedElapsedSource(val value: Long) : Snowflake.ElapsedSource {
+    override fun elapsed() = Elapsed(value)
+}
+
+
 class SnowflakeGenerator(
-    private val timeSource: Snowflake.TimeSource = DefaultTimeSource
+    private val partitionSource: Snowflake.PartitionSource,
+    private val elapsedSource: Snowflake.ElapsedSource = DefaultElapsedSource(),
+    private val sequenceSource: Snowflake.SequenceSource = DefaultSequenceSource(),
+    private val lock: Lock = ReentrantLock()
 ) : Snowflake.Generator {
 
     override fun next(): Snowflake.Id {
-        TODO("Not yet implemented")
+        return lock.withLock {
+            val partition = partitionSource.get()
+            val (elapsed, sequence) = sequenceSource.next(elapsedSource::elapsed)
+            generate(elapsed, partition, sequence)
+        }
     }
 
+    private fun generate(
+        elapsed: Elapsed,
+        partition: Partition,
+        sequence: Sequence
+    ): Snowflake.Id {
+        val partitionValue = partition.value.toLong().shl(53)
+        val sequenceValue = sequence.value.toLong().shl(41)
+        val elapsedValue = elapsed.value
+        val result = partitionValue + sequenceValue + elapsedValue
+        return Snowflake.Id(result)
+    }
 }
