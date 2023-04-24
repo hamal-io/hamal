@@ -246,18 +246,138 @@ class SegmentRepositoryTest {
     @Nested
     @DisplayName("read()")
     inner class ReadTest {
-        @Test
-        fun `implement me`(){
-            TODO()
+        @BeforeEach
+        fun setup() {
+            testInstance.clear()
         }
+
+        @AfterEach
+        fun after() {
+            testInstance.close()
+        }
+
+        @Test
+        fun `Tries to read from empty segment`() {
+            val result = testInstance.read(Chunk.Id(20))
+            assertThat(result, hasSize(0))
+        }
+
+        @Test
+        fun `Tries to read outside of segment range`() {
+            givenOneHundredRecords()
+
+            val result = testInstance.read(Chunk.Id(200), 100)
+            assertThat(result, hasSize(0))
+        }
+
+        @Test
+        fun `Tries to read with a limit of 0`() {
+            givenOneHundredRecords()
+
+            val result = testInstance.read(Chunk.Id(23), 0)
+            assertThat(result, hasSize(0))
+        }
+
+        @Test
+        fun `Tries to read with a negative limit`() {
+            givenOneHundredRecords()
+
+            val result = testInstance.read(Chunk.Id(23), -20)
+            assertThat(result, hasSize(0))
+        }
+
+        @Test
+        fun `Read exactly one record`() {
+            givenOneHundredRecords()
+
+            val result = testInstance.read(Chunk.Id(69))
+            assertThat(result, hasSize(1))
+            assertChunk(result.first(), 69)
+        }
+
+        @Test
+        fun `Reads multiple records`() {
+            givenOneHundredRecords()
+            val result = testInstance.read(Chunk.Id(25), 36)
+            assertThat(result, hasSize(36))
+
+            for (id in 0 until 36) {
+                assertChunk(result[id], 25 + id)
+            }
+        }
+
+        @Test
+        fun `Read is only partially covered by segment`() {
+            givenOneHundredRecords()
+
+            val result = testInstance.read(Chunk.Id(90), 40)
+            assertThat(result, hasSize(11))
+
+            for (id in 0 until 11) {
+                assertChunk(result[id], 90 + id)
+            }
+        }
+
+        private fun assertChunk(chunk: Chunk, id: Int) {
+            assertThat(chunk.id, equalTo(Chunk.Id(id)))
+            assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
+            assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
+        }
+
+        private fun givenOneHundredRecords() {
+            IntRange(1, 100).forEach {
+                withEpochMilli(it.toLong()) {
+                    testInstance.append("VALUE_$it".toByteArray())
+                }
+            }
+        }
+
+        private val testInstance = SegmentRepository.open(
+            Segment(
+                id = Segment.Id(1028),
+                partitionId = Partition.Id(1212),
+                topicId = Topic.Id(1506),
+                path = Path(testDir)
+            )
+        )
+
     }
 
     @Nested
     @DisplayName("close()")
     inner class CloseTest {
         @Test
-        fun `implement me`(){
-             TODO()
+        fun `Close an open repository`() {
+            val testInstance = SegmentRepository.open(
+                Segment(
+                    id = Segment.Id(1028),
+                    partitionId = Partition.Id(1212),
+                    topicId = Topic.Id(1506),
+                    path = Path(testDir)
+                )
+            )
+
+            testInstance.close()
+
+            assertTrue(testInstance.connection.isClosed)
+        }
+
+        @Test
+        fun `Closing an already closed connection is not a problem`() {
+            val testInstance = SegmentRepository.open(
+                Segment(
+                    id = Segment.Id(1028),
+                    partitionId = Partition.Id(1212),
+                    topicId = Topic.Id(1506),
+                    path = Path(testDir)
+                )
+            )
+
+            testInstance.close()
+            testInstance.close()
+            testInstance.close()
+
+            assertTrue(testInstance.connection.isClosed)
         }
     }
 
