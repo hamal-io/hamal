@@ -6,13 +6,12 @@ import io.hamal.lib.domain_notification.DomainNotificationHandler
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.lib.domain_notification.notification.DomainNotification
 import io.hamal.lib.log.broker.DefaultBroker
+import io.hamal.lib.log.consumer.ProtobufConsumer
 import io.hamal.lib.log.producer.Producer
+import io.hamal.lib.log.producer.ProtobufProducer
 import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.meta.exception.InternalServerException
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.cbor.Cbor
-import kotlinx.serialization.decodeFromByteArray
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration
@@ -31,15 +30,12 @@ object TopicResolver {
     }
 }
 
+
+val broker = DefaultBroker()
+
 object InMemoryBroker {
 
-    private val broker = DefaultBroker()
-
 //    private val topicMapping = KeyedOnce.default<Topic.Id, Topic>()
-
-    fun publish(topicId: Topic.Id, record: Producer.Record<*, *>) {
-        broker.append(topicId, record)
-    }
 
     val offsets = mutableMapOf<String, Long>()
 
@@ -63,10 +59,6 @@ object InMemoryBroker {
 
 class DomainNotificationAdapter() : NotifyDomainPort {
 
-//    private val producer = InMemoryProducer<String, DomainNotification>()
-
-
-    @OptIn(ExperimentalSerializationApi::class)
     override fun <NOTIFICATION : DomainNotification> invoke(
         notification: NOTIFICATION,
     ) {
@@ -78,7 +70,7 @@ class DomainNotificationAdapter() : NotifyDomainPort {
             DomainNotification::class
         )
 
-        InMemoryBroker.publish(
+        ProtobufProducer<String, DomainNotification>(broker).produce(
             Topic.Id(23),
             Producer.Record(
                 "KEY",
@@ -114,33 +106,28 @@ class DomainNotificationConsumerAdapter(
                     .map(TopicResolver::resolve)
                     .toList()
 
-//                val consumer = InMemoryConsumer<String, DomainNotification>(topicIds)
+                // FIXME one consumer per topic
+                val consumer = ProtobufConsumer(
+                    Topic.Id(23),
+                    broker,
+                    String::class,
+                    DomainNotification::class
+                )
+
                 scheduledTasks.add(
                     scheduledExecutorService.scheduleAtFixedRate(
                         {
-
-                            InMemoryBroker.read(Topic.Id(23), "abc").forEach { record ->
-                                println("RECORD ${record.instant}")
-                                val notification = Cbor.decodeFromByteArray<DomainNotification>(record.value.array())
-                                handlerContainer[notification::class].forEach { receiver ->
+                            consumer.poll().forEach { record ->
+                                println("RECORD ${record}")
+                                val notification = record.value
+                                handlerContainer[notification::class].forEach { listener ->
                                     try {
-                                        receiver.on(notification)
+                                        listener.on(notification)
                                     } catch (t: Throwable) {
                                         throw InternalServerException(t)
                                     }
                                 }
                             }
-
-//                            consumer().forEach { message ->
-//                                val notification = message.value
-//                                handlerContainer[notification::class].forEach { receiver ->
-//                                    try {
-//                                        receiver.on(notification)
-//                                    } catch (t: Throwable) {
-//                                        throw InternalServerException(t)
-//                                    }
-//                                }
-//                            }
                         }, Duration.ofMillis(1)
                     )
                 )
