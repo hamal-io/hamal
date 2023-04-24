@@ -3,7 +3,7 @@ package io.hamal.lib.log.topic
 import io.hamal.lib.log.ToRecord
 import io.hamal.lib.log.topic.Topic.*
 import io.hamal.lib.log.partition.Partition
-import io.hamal.lib.log.segment.Segment
+import io.hamal.lib.log.segment.DepSegment
 import io.hamal.lib.util.Files
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -86,7 +86,7 @@ class TopicTest {
                 assertThat(record.id, equalTo(Record.Id(1)))
                 assertThat(record.partitionId, equalTo(Partition.Id(1)))
                 assertThat(record.topicId, equalTo(Id(23)))
-                assertThat(record.segmentId, equalTo(Segment.Id(0)))
+                assertThat(record.segmentId, equalTo(DepSegment.Id(0)))
                 assertThat(record.key, equalTo(ByteBuffer.wrap("KEY_1".toByteArray())))
                 assertThat(record.value, equalTo(ByteBuffer.wrap("VALUE_1".toByteArray())))
                 assertThat(record.instant, equalTo(Instant.ofEpochMilli(1)))
@@ -98,7 +98,7 @@ class TopicTest {
                 assertThat(record.id, equalTo(Record.Id(3)))
                 assertThat(record.partitionId, equalTo(Partition.Id(1)))
                 assertThat(record.topicId, equalTo(Id(23)))
-                assertThat(record.segmentId, equalTo(Segment.Id(0)))
+                assertThat(record.segmentId, equalTo(DepSegment.Id(0)))
                 assertThat(record.key, equalTo(ByteBuffer.wrap("KEY_3".toByteArray())))
                 assertThat(record.value, equalTo(ByteBuffer.wrap("VALUE_3".toByteArray())))
                 assertThat(record.instant, equalTo(Instant.ofEpochMilli(3)))
@@ -126,7 +126,7 @@ class TopicTest {
         private fun assertRecord(record: Record, id: Int) {
             assertThat(record.id, equalTo(Record.Id(id)))
             assertThat(record.partitionId, equalTo(Partition.Id(1)))
-            assertThat(record.segmentId, equalTo(Segment.Id(0)))
+            assertThat(record.segmentId, equalTo(DepSegment.Id(0)))
             assertThat(record.topicId, equalTo(Id(23)))
             assertThat(record.key, equalTo(ByteBuffer.wrap("KEY_$id".toByteArray())))
             assertThat(record.value, equalTo(ByteBuffer.wrap("VALUE_$id".toByteArray())))

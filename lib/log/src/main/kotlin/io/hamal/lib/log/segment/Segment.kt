@@ -1,6 +1,8 @@
 package io.hamal.lib.log.segment
 
 import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.partition.Partition
+import io.hamal.lib.log.topic.Topic
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
@@ -11,17 +13,30 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.io.path.Path
 
+data class Segment(
+    val id: Id,
+    val partitionId: Partition.Id,
+    val topicId: Topic.Id,
+    val path: Path
+) {
+    @JvmInline
+    value class Id(val value: ULong){
+        constructor(value: Int): this(value.toULong())
+    }
+}
 
-class Segment(
+
+
+class DepSegment(
     internal val lock: Lock,
     internal val baseId: Id,
     internal val connection: Connection
 ) : AutoCloseable {
 
     companion object {
-        fun open(config: Config): Segment {
+        fun open(config: Config): DepSegment {
             val dbPath = ensureDirectoryExists(config)
-            return Segment(
+            return DepSegment(
                 lock = ReentrantLock(),
                 baseId = config.id,
                 connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db")
@@ -121,14 +136,14 @@ class Segment(
     }
 }
 
-internal fun <T> Segment.executeQuery(sql: String, fn: (ResultSet) -> T): T {
+internal fun <T> DepSegment.executeQuery(sql: String, fn: (ResultSet) -> T): T {
     require(!connection.isClosed) { "Connection must be open" }
     return connection.createStatement().use { statement ->
         statement.executeQuery(sql).use(fn)
     }
 }
 
-internal fun Segment.clear() {
+internal fun DepSegment.clear() {
     lock.withLock {
         connection.beginRequest()
         connection.createStatement().use {
@@ -139,7 +154,7 @@ internal fun Segment.clear() {
     }
 }
 
-private fun Segment.setupSchema() {
+private fun DepSegment.setupSchema() {
     connection.beginRequest()
     connection.createStatement().use {
         it.execute(
@@ -156,7 +171,7 @@ private fun Segment.setupSchema() {
     connection.commit()
 }
 
-private fun Segment.setupSqlite() {
+private fun DepSegment.setupSqlite() {
     connection.createStatement().use {
         it.execute("""PRAGMA journal_mode = wal;""")
         it.execute("""PRAGMA locking_mode = exclusive;""")

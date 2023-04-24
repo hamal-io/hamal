@@ -1,6 +1,6 @@
 package io.hamal.lib.log.partition
 
-import io.hamal.lib.log.segment.Segment
+import io.hamal.lib.log.segment.DepSegment
 import io.hamal.lib.log.ToRecord
 import io.hamal.lib.log.segment.clear
 import java.lang.String
@@ -17,7 +17,7 @@ import kotlin.io.path.Path
 // fixme the segment.record.id is supposed to be relative to partition.record.id index, as there is only one segment per partition in the mean time its just a passthrough
 class Partition(
     private val id: Id,
-    internal var activeSegment: Segment
+    internal var activeSegment: DepSegment
 ) : AutoCloseable {
 
     companion object {
@@ -25,9 +25,9 @@ class Partition(
             val path = ensureDirectoryExists(config)
             return Partition(
                 id = config.id,
-                activeSegment = Segment.open(
-                    Segment.Config(
-                        id = Segment.Id(0),
+                activeSegment = DepSegment.open(
+                    DepSegment.Config(
+                        id = DepSegment.Id(0),
                         path = path
                     )
                 )
@@ -53,7 +53,7 @@ class Partition(
 
     data class Record(
         val id: Id,
-        val segmentId: Segment.Id,
+        val segmentId: DepSegment.Id,
         val partitionId: Partition.Id,
         val key: ByteBuffer,
         val value: ByteBuffer,
@@ -79,7 +79,7 @@ class Partition(
 
     fun read(firstId: Record.Id, limit: Int = 1): List<Record> {
         return activeSegment.read(
-            Segment.Id(firstId.value),
+            DepSegment.Id(firstId.value),
             limit
         ).map { segmentRecord ->
             //fixme the segment.record.id is relative to partition.record.id index

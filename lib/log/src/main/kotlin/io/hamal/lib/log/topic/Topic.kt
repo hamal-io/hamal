@@ -3,13 +3,18 @@ package io.hamal.lib.log.topic
 import io.hamal.lib.log.ToRecord
 import io.hamal.lib.log.partition.Partition
 import io.hamal.lib.log.partition.clear
-import io.hamal.lib.log.segment.Segment
+import io.hamal.lib.log.segment.DepSegment
 import java.lang.String
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Instant
 import kotlin.io.path.Path
+
+//topic(id, name, some meta)
+
+// topic entity
+
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, sharding by key
@@ -56,7 +61,7 @@ class Topic(
 
     data class Record(
         val id: Id,
-        val segmentId: Segment.Id,
+        val segmentId: DepSegment.Id,
         val partitionId: Partition.Id,
         val topicId: Topic.Id,
         val key: ByteBuffer,
