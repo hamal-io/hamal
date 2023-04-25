@@ -4,8 +4,6 @@ import io.hamal.lib.log.broker.Broker
 import io.hamal.lib.log.topic.Topic
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
-import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 interface Consumer<Key : Any, Value : Any> {
@@ -30,19 +28,21 @@ class ProtobufConsumer<Key : Any, Value : Any>(
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun poll(): List<Consumer.Record<Key, Value>> {
-        val topic = broker.getTopic(topicId)
+//        val topic = broker.getTopic(topicId)
 
-        val result = topic.read(Topic.Record.Id(offset), limit = 1)
-            .map { record ->
-                Consumer.Record<Key, Value>(
-                    key = ProtoBuf.decodeFromByteArray(keyClass.serializer(), record.key.array()),
-                    value = ProtoBuf.decodeFromByteArray(valueClass.serializer(), record.value.array())
-                )
-            }
+        TODO()
 
-        offset += result.size
-
-        return result
+//        val result = topic.read(Topic.Record.Id(offset), limit = 1)
+//            .map { record ->
+//                Consumer.Record<Key, Value>(
+//                    key = ProtoBuf.decodeFromByteArray(keyClass.serializer(), record.key.array()),
+//                    value = ProtoBuf.decodeFromByteArray(valueClass.serializer(), record.value.array())
+//                )
+//            }
+//
+//        offset += result.size
+//
+//        return result
     }
 
 }

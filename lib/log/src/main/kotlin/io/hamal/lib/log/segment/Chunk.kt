@@ -4,7 +4,7 @@ import io.hamal.lib.log.partition.Partition
 import io.hamal.lib.log.topic.Topic
 import java.time.Instant
 
-class Chunk(
+data class Chunk(
     val id: Id,
     val segmentId: Segment.Id,
     val partitionId: Partition.Id,

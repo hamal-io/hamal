@@ -1,104 +1,71 @@
 package io.hamal.lib.log.partition
 
-import io.hamal.lib.log.segment.DepSegment
-import io.hamal.lib.log.ToRecord
-import io.hamal.lib.log.segment.clear
-import java.lang.String
-import java.nio.ByteBuffer
-import java.nio.file.Files
+import io.hamal.lib.log.segment.*
+import io.hamal.lib.log.topic.Topic
+import io.hamal.lib.util.Files
 import java.nio.file.Path
-import java.time.Instant
 import kotlin.io.path.Path
+
+data class Partition(
+    val id: Id,
+    val topicId: Topic.Id,
+    val path: Path
+) {
+    @JvmInline
+    value class Id(val value: ULong) {
+        constructor(value: Int) : this(value.toULong())
+    }
+}
+
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
-
-// fixme the segment.record.id is supposed to be relative to partition.record.id index, as there is only one segment per partition in the mean time its just a passthrough
-class Partition(
-    private val id: Id,
-    internal var activeSegment: DepSegment
-) : AutoCloseable {
+class PartitionRepository private constructor(
+    internal val partition: Partition,
+    internal var activeSegment: Segment,
+    internal var activeSegmentRepository: SegmentRepository
+) : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
 
     companion object {
-        fun open(config: Config): Partition {
-            val path = ensureDirectoryExists(config)
-            return Partition(
-                id = config.id,
-                activeSegment = DepSegment.open(
-                    DepSegment.Config(
-                        id = DepSegment.Id(0),
-                        path = path
-                    )
-                )
+        fun open(partition: Partition): PartitionRepository {
+            val path = ensureDirectoryExists(partition)
+            val segment = Segment(
+                Segment.Id(0),
+                path = path,
+                partitionId = partition.id,
+                topicId = partition.topicId
+            )
+
+            return PartitionRepository(
+                partition = partition,
+                activeSegment = segment,
+                activeSegmentRepository = SegmentRepository.open(segment)
             )
         }
 
-        private fun ensureDirectoryExists(config: Config): Path {
-            val result = config.path.resolve(Path(String.format("partition-%04d", config.id.value)))
+        private fun ensureDirectoryExists(partition: Partition): Path {
+            val result = partition.path.resolve(Path(String.format("partition-%04d", partition.id.value.toLong())))
             Files.createDirectories(result)
             return result
         }
     }
 
-    @JvmInline
-    value class Id(val value: Long) {
-        constructor(value: Int) : this(value.toLong())
+    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
+        return activeSegmentRepository.append(*bytes)
     }
 
-    data class Config(
-        val id: Id,
-        val path: Path
-    )
-
-    data class Record(
-        val id: Id,
-        val segmentId: DepSegment.Id,
-        val partitionId: Partition.Id,
-        val key: ByteBuffer,
-        val value: ByteBuffer,
-        val instant: Instant
-    ) {
-        @JvmInline
-        value class Id(val value: Long) {
-            constructor(value: Int) : this(value.toLong())
-        }
+    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
+        return activeSegmentRepository.read(firstId, limit)
     }
 
-    fun countRecords() = activeSegment.countRecords()
-    fun append(vararg toRecord: ToRecord): List<Record.Id> {
-        return append(toRecord.toList())
-    }
-
-    fun append(toRecord: Collection<ToRecord>): List<Record.Id> {
-        return activeSegment.append(toRecord).map { segmentId ->
-            //fixme the segment.record.id is relative to partition.record.id index
-            Record.Id(segmentId.value)
-        }
-    }
-
-    fun read(firstId: Record.Id, limit: Int = 1): List<Record> {
-        return activeSegment.read(
-            DepSegment.Id(firstId.value),
-            limit
-        ).map { segmentRecord ->
-            //fixme the segment.record.id is relative to partition.record.id index
-            Record(
-                id = Record.Id(segmentRecord.id.value),
-                segmentId = activeSegment.baseId,
-                partitionId = id,
-                key = segmentRecord.key,
-                value = segmentRecord.value,
-                instant = segmentRecord.instant
-            )
-        }
-    }
+    override fun count() = activeSegmentRepository.count()
 
     override fun close() {
-        activeSegment.close()
+        activeSegmentRepository.close()
     }
 }
 
-internal fun Partition.clear() {
-    activeSegment.clear()
+internal fun PartitionRepository.clear() {
+    activeSegmentRepository.clear()
 }

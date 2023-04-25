@@ -1,117 +1,80 @@
 package io.hamal.lib.log.topic
 
-import io.hamal.lib.log.ToRecord
+import io.hamal.lib.log.broker.Broker
 import io.hamal.lib.log.partition.Partition
+import io.hamal.lib.log.partition.PartitionRepository
 import io.hamal.lib.log.partition.clear
-import io.hamal.lib.log.segment.DepSegment
-import java.lang.String
-import java.nio.ByteBuffer
+import io.hamal.lib.log.segment.Chunk
+import io.hamal.lib.log.segment.ChunkAppender
+import io.hamal.lib.log.segment.ChunkCounter
+import io.hamal.lib.log.segment.ChunkReader
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.Instant
 import kotlin.io.path.Path
 
-//topic(id, name, some meta)
+data class Topic(
+    val id: Id,
+    val brokerId: Broker.Id,
+    val name: Name,
+    val path: Path
+) {
 
-// topic entity
+    @JvmInline
+    value class Name(val value: String)
+
+    @JvmInline
+    value class Id(val value: ULong) {
+        constructor(value: Int) : this(value.toULong())
+    }
+}
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, sharding by key
 // keeping track of consumer group ids
-
-class Topic(
-    private val id: Id,
-    internal val partitions: List<Partition>
-) : AutoCloseable {
+class TopicRepository private constructor(
+    internal val activePartition: Partition,
+    internal val activePartitionRepository: PartitionRepository
+) : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
 
     companion object {
-        fun open(config: Config): Topic {
-            val path = ensureDirectoryExists(config)
-            return Topic(
-                id = config.id,
-                partitions = listOf(
-                    Partition.open(
-                        Partition.Config(
-                            id = Partition.Id(1),
-                            path = path
-                        )
-                    )
-                )
+        fun open(topic: Topic): TopicRepository {
+            val path = ensureDirectoryExists(topic)
+            val partition = Partition(
+                id = Partition.Id(1),
+                topicId = topic.id,
+                path = path
+            )
+            return TopicRepository(
+                activePartition = partition,
+                activePartitionRepository = PartitionRepository.open(partition)
             )
         }
 
-        private fun ensureDirectoryExists(config: Config): Path {
-            val result = config.path.resolve(Path(String.format("topic-%05d", config.id.value)))
+        private fun ensureDirectoryExists(topic: Topic): Path {
+            val result = topic.path.resolve(Path(String.format("topic-%05d", topic.id.value.toLong())))
             Files.createDirectories(result)
             return result
-        }
-
-    }
-
-    @JvmInline
-    value class Id(val value: Long) {
-        constructor(value: Int) : this(value.toLong())
-    }
-
-    data class Config(
-        val id: Id,
-        val path: Path
-    )
-
-    data class Record(
-        val id: Id,
-        val segmentId: DepSegment.Id,
-        val partitionId: Partition.Id,
-        val topicId: Topic.Id,
-        val key: ByteBuffer,
-        val value: ByteBuffer,
-        val instant: Instant
-    ) {
-        @JvmInline
-        value class Id(val value: Long) {
-            constructor(value: Int) : this(value.toLong())
-        }
-    }
-
-    fun countRecords(): Long = partitions.sumOf { it.countRecords() }
-
-    fun append(vararg toRecord: ToRecord): List<Record.Id> {
-        return append(toRecord.toList())
-    }
-
-    fun append(toRecord: Collection<ToRecord>): List<Record.Id> {
-        return partitions.first().append(toRecord).map { partitionId ->
-            //fixme the partition.record.id is relative to topic.record.id index
-            Record.Id(partitionId.value)
-        }
-    }
-
-    fun read(firstId: Record.Id, limit: Int = 1): List<Record> {
-        return partitions.first().read(
-            Partition.Record.Id(firstId.value),
-            limit
-        ).map { partitionRecord ->
-            //fixme the segment.record.id is relative to partition.record.id index
-            Record(
-                id = Record.Id(partitionRecord.id.value),
-                segmentId = partitionRecord.segmentId,
-                partitionId = partitionRecord.partitionId,
-                topicId = id,
-                key = partitionRecord.key,
-                value = partitionRecord.value,
-                instant = partitionRecord.instant
-            )
         }
     }
 
     override fun close() {
-        partitions.forEach { partition ->
-            partition.close()
-        }
+        activePartitionRepository.close()
+    }
+
+    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
+        return activePartitionRepository.append(*bytes)
+    }
+
+    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
+        return activePartitionRepository.read(firstId, limit)
+    }
+
+    override fun count(): ULong {
+        return activePartitionRepository.count()
     }
 }
 
-internal fun Topic.clear() {
-    partitions.forEach { it.clear() }
+internal fun TopicRepository.clear() {
+    activePartitionRepository.clear()
 }

@@ -1,12 +1,12 @@
 package io.hamal.lib.util
 
 import java.nio.file.Path
+import java.nio.file.attribute.FileAttribute
 
 
 object Files {
-
-    fun createDirectories(path: Path) {
-        java.nio.file.Files.createDirectory(path)
+    fun createDirectories(path: Path, vararg attribs: FileAttribute<*>): Path {
+        return java.nio.file.Files.createDirectories(path, *attribs)
     }
 
     fun exists(path: Path) = java.nio.file.Files.exists(path)

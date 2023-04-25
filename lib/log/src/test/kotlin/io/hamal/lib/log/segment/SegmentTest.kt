@@ -264,7 +264,7 @@ class SegmentRepositoryTest {
 
         @Test
         fun `Tries to read outside of segment range`() {
-            givenOneHundredRecords()
+            givenOneHundredChunks()
 
             val result = testInstance.read(Chunk.Id(200), 100)
             assertThat(result, hasSize(0))
@@ -272,7 +272,7 @@ class SegmentRepositoryTest {
 
         @Test
         fun `Tries to read with a limit of 0`() {
-            givenOneHundredRecords()
+            givenOneHundredChunks()
 
             val result = testInstance.read(Chunk.Id(23), 0)
             assertThat(result, hasSize(0))
@@ -280,15 +280,15 @@ class SegmentRepositoryTest {
 
         @Test
         fun `Tries to read with a negative limit`() {
-            givenOneHundredRecords()
+            givenOneHundredChunks()
 
             val result = testInstance.read(Chunk.Id(23), -20)
             assertThat(result, hasSize(0))
         }
 
         @Test
-        fun `Read exactly one record`() {
-            givenOneHundredRecords()
+        fun `Read exactly one chunk`() {
+            givenOneHundredChunks()
 
             val result = testInstance.read(Chunk.Id(69))
             assertThat(result, hasSize(1))
@@ -296,8 +296,8 @@ class SegmentRepositoryTest {
         }
 
         @Test
-        fun `Reads multiple records`() {
-            givenOneHundredRecords()
+        fun `Reads multiple chunks`() {
+            givenOneHundredChunks()
             val result = testInstance.read(Chunk.Id(25), 36)
             assertThat(result, hasSize(36))
 
@@ -308,7 +308,7 @@ class SegmentRepositoryTest {
 
         @Test
         fun `Read is only partially covered by segment`() {
-            givenOneHundredRecords()
+            givenOneHundredChunks()
 
             val result = testInstance.read(Chunk.Id(90), 40)
             assertThat(result, hasSize(11))
@@ -324,7 +324,7 @@ class SegmentRepositoryTest {
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
 
-        private fun givenOneHundredRecords() {
+        private fun givenOneHundredChunks() {
             IntRange(1, 100).forEach {
                 withEpochMilli(it.toLong()) {
                     testInstance.append("VALUE_$it".toByteArray())
