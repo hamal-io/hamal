@@ -11,7 +11,7 @@ import java.nio.file.Paths
 import kotlin.io.path.name
 
 
-class SandboxImplIT {
+class SandboxIT {
     @TestFactory
     fun generateTestCases(): List<DynamicTest> {
         return collectFiles()

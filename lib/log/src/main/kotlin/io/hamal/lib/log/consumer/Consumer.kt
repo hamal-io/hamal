@@ -28,10 +28,7 @@ class ProtobufConsumer<Value : Any>(
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun consume(limit: Int, fn: (Value) -> Unit) {
         brokerRepository.read(groupId, topic, limit)
-            .onEach { chunk ->
-                val value = ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
-                fn(value)
-            }
+            .onEach { chunk -> fn(ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)) }
             .map { it.id }
             .maxByOrNull { it }
             ?.let { brokerRepository.commit(groupId, topic, it) }

@@ -59,9 +59,7 @@ internal class SegmentRepository private constructor(
         }
 
         val now = TimeUtils.now()
-        return lock.withLock {
-            val beforeLastRowId = count() + 1UL
-
+        val lastId = lock.withLock {
             connection.prepareStatement("""INSERT INTO chunks (bytes,instant) VALUES (?,?);""".trimIndent())
                 .use { stmt ->
                     bytes.forEach { bs ->
@@ -70,13 +68,15 @@ internal class SegmentRepository private constructor(
                         stmt.addBatch()
                     }
                     stmt.executeBatch()
-                    ULongRange(beforeLastRowId, stmt.generatedKeys.getLong(1).toULong())
-                        .map { Chunk.Id(it) }
+                    stmt.generatedKeys.getLong(1)
                 }.let {
                     connection.commit()
                     it
                 }
         }
+
+        return LongRange(lastId - bytes.size + 1, lastId)
+            .map { Chunk.Id(it.toULong()) }
     }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
