@@ -14,8 +14,10 @@ data class Chunk(
 ) {
 
     @JvmInline
-    value class Id(val value: ULong) {
+    value class Id(val value: ULong) : Comparable<Id> {
         constructor(value: Int) : this(value.toULong())
+
+        override fun compareTo(other: Id) = value.compareTo(other.value)
     }
 }
 

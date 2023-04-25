@@ -44,7 +44,6 @@ class BrokerTopicsRepositoryTest {
         @Test
         fun `Does not create topics table if already exists`() {
             BrokerTopicsRepository.open(testBrokerTopics()).use {
-                it.connection.beginRequest()
                 it.connection.createStatement().use { statement ->
                     statement.execute(
                         """

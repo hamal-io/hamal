@@ -46,7 +46,6 @@ class BrokerConsumersRepositoryTest {
         @Test
         fun `Does not create consumers table if already exists`() {
             BrokerConsumersRepository.open(testBrokerConsumers()).use {
-                it.connection.beginRequest()
                 it.connection.createStatement().use { statement ->
                     statement.execute(
                         """
@@ -86,7 +85,6 @@ class BrokerConsumersRepositoryTest {
                 }
             }
         }
-
 
         private fun testBrokerConsumers(path: Path = Path(testDir)) = BrokerConsumers(
             brokerId = Broker.Id(2810),

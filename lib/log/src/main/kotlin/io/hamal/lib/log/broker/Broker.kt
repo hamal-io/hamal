@@ -1,7 +1,11 @@
 package io.hamal.lib.log.broker
 
+import io.hamal.lib.log.consumer.Consumer.GroupId
+import io.hamal.lib.log.segment.Chunk
 import io.hamal.lib.log.topic.Topic
+import io.hamal.lib.log.topic.TopicRepository
 import io.hamal.lib.meta.KeyedOnce
+import io.hamal.lib.util.Files
 import java.nio.file.Path
 
 data class Broker(
@@ -15,50 +19,69 @@ data class Broker(
 }
 
 interface AppendToTopic {
-    fun append(topicId: Topic.Id, vararg bytes: ByteArray)
+    fun append(topic: Topic, vararg bytes: ByteArray)
 }
 
-interface ReadFromTopic {
+interface ConsumeFromTopic {
+    fun read(groupId: GroupId, topic: Topic, limit: Int): List<Chunk>
 
+    fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id)
 }
 
 interface ResolveTopic {
-    fun resolveTopic(topicName: String): Topic
+    fun resolveTopic(topicName: Topic.Name): Topic
 }
 
 class BrokerRepository private constructor(
+    internal val topicsRepository: BrokerTopicsRepository,
+    internal val consumersRepository: BrokerConsumersRepository,
+) : AppendToTopic, ConsumeFromTopic, AutoCloseable, ResolveTopic {
 
-) : AppendToTopic, ReadFromTopic, AutoCloseable, ResolveTopic {
+    private val topicRepositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
 
     companion object {
         fun open(broker: Broker): BrokerRepository {
-            TODO()
+            val path = ensureDirectoryExists(broker)
+            return BrokerRepository(
+                topicsRepository = BrokerTopicsRepository.open(
+                    BrokerTopics(
+                        brokerId = broker.id,
+                        path = path
+                    )
+                ),
+                consumersRepository = BrokerConsumersRepository.open(
+                    BrokerConsumers(
+                        brokerId = broker.id,
+                        path = path
+                    )
+                )
+            )
+        }
+
+        private fun ensureDirectoryExists(broker: Broker): Path {
+            return Files.createDirectories(broker.path)
         }
     }
 
-    override fun resolveTopic(topicName: String): Topic {
-        TODO("Not yet implemented")
-    }
+    override fun resolveTopic(topicName: Topic.Name) = topicsRepository.resolveTopic(topicName)
 
-    override fun append(topicId: Topic.Id, vararg bytes: ByteArray) {
-//        val topic = getTopic(topicId)
-//        topic.append(toRecord)
-        TODO()
+    override fun append(topic: Topic, vararg bytes: ByteArray) {
+        resolveRepository(topic).append(*bytes)
     }
-
-    fun getTopic(topicId: Topic.Id): Topic = topicMapping.invoke(topicId) {
-//        Topic.open(
-//            Topic.Config(
-//                topicId,
-//                Path("/tmp/hamal/topics")
-//            )
-//        )
-        TODO()
-    }
-
-    private val topicMapping = KeyedOnce.default<Topic.Id, Topic>()
 
     override fun close() {
-        TODO("Not yet implemented")
+        topicsRepository.close()
+        consumersRepository.close()
     }
+
+    override fun read(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {
+        val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
+        return resolveRepository(topic).read(nextChunkId, limit)
+    }
+
+    override fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id) {
+        consumersRepository.commit(groupId, topic.id, chunkId)
+    }
+
+    private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) { TopicRepository.open(topic) }
 }

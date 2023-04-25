@@ -47,7 +47,6 @@ class SegmentRepositoryTest {
         @Test
         fun `Does not create chunks table if already exists`() {
             SegmentRepository.open(testSegment()).use {
-                it.connection.beginRequest()
                 it.connection.createStatement().use { statement ->
                     statement.execute(
                         """

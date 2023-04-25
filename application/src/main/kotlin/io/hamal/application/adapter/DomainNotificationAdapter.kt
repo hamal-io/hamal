@@ -5,82 +5,37 @@ import io.hamal.lib.domain_notification.DomainNotificationConsumer
 import io.hamal.lib.domain_notification.DomainNotificationHandler
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.lib.domain_notification.notification.DomainNotification
-import io.hamal.lib.log.producer.Producer
+import io.hamal.lib.log.appender.ProtobufAppender
+import io.hamal.lib.log.broker.BrokerRepository
+import io.hamal.lib.log.consumer.Consumer
+import io.hamal.lib.log.consumer.ProtobufConsumer
 import io.hamal.lib.log.topic.Topic
-import io.hamal.lib.meta.KeyedOnce
+import io.hamal.lib.meta.exception.InternalServerException
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import java.time.Duration
 import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 
-object TopicResolver {
-    private val counter = AtomicInteger(0)
-    private val topicMapping = KeyedOnce.default<String, Topic.Id>()
 
-    fun resolve(topic: String): Topic.Id {
-        return topicMapping.invoke(topic) {
-            Topic.Id(counter.incrementAndGet())
-        }
-    }
-}
+class DomainNotificationAdapter(
+    val brokerRepository: BrokerRepository
+) : NotifyDomainPort {
 
-
-//val broker = BrokerRepository()
-
-//object InMemoryBroker {
-//
-////    private val topicMapping = KeyedOnce.default<Topic.Id, Topic>()
-//
-//    val offsets = mutableMapOf<String, Long>()
-//
-//    fun read(topicId: Topic.Id, consumerId: String): List<Topic.Record> {
-//        offsets.putIfAbsent(consumerId, 0L)
-//        val offset = offsets[consumerId]
-//
-//        val result = getTopic(topicId).read(Topic.Record.Id(offset!!), 1)
-//
-//
-//        offsets.put(consumerId, offset + result.size)
-//
-//        return result
-//    }
-//
-//    private fun getTopic(topicId: Topic.Id): Topic = broker.getTopic(topicId)
-//
-//
-//}
-
-
-class DomainNotificationAdapter() : NotifyDomainPort {
+    private val appender = ProtobufAppender(DomainNotification::class, brokerRepository)
 
     override fun <NOTIFICATION : DomainNotification> invoke(
         notification: NOTIFICATION,
     ) {
-
-        val r = Producer.Record(
-            "KEY",
-            String::class,
-            notification,
-            DomainNotification::class
-        )
-
-//        ProtobufProducer<String, DomainNotification>(broker).produce(
-//            Topic.Id(23),
-//            Producer.Record(
-//                "KEY",
-//                String::class,
-//                notification,
-//                DomainNotification::class
-//            )
-//        )
-        TODO()
+        val topic = brokerRepository.resolveTopic(Topic.Name(notification.topic))
+        appender.append(topic, notification)
     }
 }
 
 
 class DomainNotificationConsumerAdapter(
-    val scheduledExecutorService: ThreadPoolTaskScheduler
+    val scheduledExecutorService: ThreadPoolTaskScheduler,
+    val brokerRepository: BrokerRepository
 ) : CreateDomainNotificationConsumerPort {
 
     private val handlerContainer = DomainNotificationHandler.Container.DefaultImpl()
@@ -95,39 +50,38 @@ class DomainNotificationConsumerAdapter(
 
     override fun create(): DomainNotificationConsumer {
         return object : DomainNotificationConsumer, DisposableBean {
+
             private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
             init {
-//                val topicIds = handlerContainer.topics()
-//                    .map(TopicResolver::resolve)
-//                    .toList()
-//
-//                // FIXME one consumer per topic
-//                val consumer = ProtobufConsumer(
-//                    Topic.Id(23),
-//                    broker,
-//                    String::class,
-//                    DomainNotification::class
-//                )
-//
-//                scheduledTasks.add(
-//                    scheduledExecutorService.scheduleAtFixedRate(
-//                        {
-//                            consumer.poll().forEach { record ->
-//                                println("RECORD ${record}")
-//                                val notification = record.value
-//                                handlerContainer[notification::class].forEach { listener ->
-//                                    try {
-//                                        listener.on(notification)
-//                                    } catch (t: Throwable) {
-//                                        throw InternalServerException(t)
-//                                    }
-//                                }
-//                            }
-//                        }, Duration.ofMillis(1)
-//                    )
-//                )
-                TODO()
+//                create a consumer for each topic
+                val allDomainTopics = listOf(Topic.Name("scheduler::job_enqueued"))
+
+                allDomainTopics.forEach { topicName ->
+                    val topic = brokerRepository.resolveTopic(topicName)
+                    val consumer = ProtobufConsumer<DomainNotification>(
+                        Consumer.GroupId("01"),
+                        topic,
+                        brokerRepository,
+                        DomainNotification::class
+                    )
+
+                    scheduledTasks.add(
+                        scheduledExecutorService.scheduleAtFixedRate(
+                            {
+                                consumer.consume(100) { notification ->
+                                    handlerContainer[notification::class].forEach { listener ->
+                                        try {
+                                            listener.on(notification)
+                                        } catch (t: Throwable) {
+                                            throw InternalServerException(t)
+                                        }
+                                    }
+                                }
+                            }, Duration.ofMillis(10)
+                        )
+                    )
+                }
             }
 
             override fun cancel() {

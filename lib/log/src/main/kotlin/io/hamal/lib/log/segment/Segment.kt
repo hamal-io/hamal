@@ -5,7 +5,10 @@ import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.util.Files
 import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
-import java.sql.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.ResultSet
+import java.sql.Timestamp
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -57,23 +60,23 @@ internal class SegmentRepository private constructor(
 
         val now = TimeUtils.now()
         return lock.withLock {
-            connection.beginRequest()
             val beforeLastRowId = count() + 1UL
 
-            val stmt = connection.prepareStatement(
-                """INSERT INTO chunks (bytes,instant) VALUES (?,?);""".trimIndent(),
-                Statement.RETURN_GENERATED_KEYS
-            )
-            bytes.forEach { bs ->
-                stmt.setBytes(1, bs)
-                stmt.setTimestamp(2, Timestamp.from(now))
-                stmt.addBatch()
-            }
-
-            stmt.executeBatch()
-            connection.commit()
-            ULongRange(beforeLastRowId, stmt.generatedKeys.getLong(1).toULong())
-        }.map { Chunk.Id(it) }
+            connection.prepareStatement("""INSERT INTO chunks (bytes,instant) VALUES (?,?);""".trimIndent())
+                .use { stmt ->
+                    bytes.forEach { bs ->
+                        stmt.setBytes(1, bs)
+                        stmt.setTimestamp(2, Timestamp.from(now))
+                        stmt.addBatch()
+                    }
+                    stmt.executeBatch()
+                    ULongRange(beforeLastRowId, stmt.generatedKeys.getLong(1).toULong())
+                        .map { Chunk.Id(it) }
+                }.let {
+                    connection.commit()
+                    it
+                }
+        }
     }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
@@ -110,7 +113,6 @@ internal class SegmentRepository private constructor(
 
 private fun SegmentRepository.setupSchema() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute(
                 """
@@ -128,7 +130,6 @@ private fun SegmentRepository.setupSchema() {
 
 internal fun SegmentRepository.clear() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute("DELETE FROM chunks")
             it.execute("DELETE FROM sqlite_sequence")

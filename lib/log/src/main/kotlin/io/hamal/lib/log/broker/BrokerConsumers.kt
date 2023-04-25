@@ -79,6 +79,7 @@ internal class BrokerConsumersRepository private constructor(
                 it.setLong(3, chunkId.value.toLong() + 1)
                 it.execute()
             }
+            connection.commit()
         }
     }
 
@@ -99,7 +100,6 @@ internal fun <T> BrokerConsumersRepository.executeQuery(sql: String, fn: (Result
 
 internal fun BrokerConsumersRepository.clear() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute("DELETE FROM consumers")
         }
@@ -109,7 +109,6 @@ internal fun BrokerConsumersRepository.clear() {
 
 private fun BrokerConsumersRepository.setupSchema() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute(
                 """
@@ -128,7 +127,6 @@ private fun BrokerConsumersRepository.setupSchema() {
 
 private fun BrokerConsumersRepository.setupSqlite() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute("""PRAGMA locking_mode = exclusive;""")
             it.execute("""PRAGMA temp_store = memory;""")

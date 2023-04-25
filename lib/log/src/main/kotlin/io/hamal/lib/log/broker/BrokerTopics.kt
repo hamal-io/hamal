@@ -1,10 +1,14 @@
 package io.hamal.lib.log.broker
 
 import io.hamal.lib.log.topic.Topic
+import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.util.Files
 import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
-import java.sql.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.ResultSet
+import java.sql.Timestamp
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -20,6 +24,9 @@ internal class BrokerTopicsRepository private constructor(
     internal val lock: Lock,
     internal val connection: Connection
 ) : AutoCloseable {
+
+    private val topicMapping = KeyedOnce.default<Topic.Name, Topic>()
+
     companion object {
         fun open(brokerTopics: BrokerTopics): BrokerTopicsRepository {
             val dbPath = ensureDirectoryExists(brokerTopics)
@@ -42,16 +49,16 @@ internal class BrokerTopicsRepository private constructor(
     }
 
     fun resolveTopic(name: Topic.Name): Topic {
-        return lock.withLock {
-            connection.beginRequest()
-            val id = findTopicId(name) ?: createTopic(name)
-            connection.commit()
-            Topic(
-                id = id,
-                brokerId = brokerTopics.brokerId,
-                name = name,
-                path = brokerTopics.path
-            )
+        return topicMapping.invoke(name) {
+            lock.withLock {
+                val id = findTopicId(name) ?: createTopic(name)
+                Topic(
+                    id = id,
+                    brokerId = brokerTopics.brokerId,
+                    name = name,
+                    path = brokerTopics.path
+                )
+            }
         }
     }
 
@@ -71,7 +78,6 @@ internal fun <T> BrokerTopicsRepository.executeQuery(sql: String, fn: (ResultSet
 
 internal fun BrokerTopicsRepository.clear() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute("DELETE FROM topics")
             it.execute("DELETE FROM sqlite_sequence")
@@ -82,7 +88,6 @@ internal fun BrokerTopicsRepository.clear() {
 
 private fun BrokerTopicsRepository.setupSchema() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute(
                 """
@@ -101,7 +106,6 @@ private fun BrokerTopicsRepository.setupSchema() {
 
 private fun BrokerTopicsRepository.setupSqlite() {
     lock.withLock {
-        connection.beginRequest()
         connection.createStatement().use {
             it.execute("""PRAGMA locking_mode = exclusive;""")
             it.execute("""PRAGMA temp_store = memory;""")
@@ -112,8 +116,7 @@ private fun BrokerTopicsRepository.setupSqlite() {
 
 private fun BrokerTopicsRepository.findTopicId(name: Topic.Name): Topic.Id? {
     return connection.prepareStatement(
-        """SELECT id FROM topics WHERE name = ?""",
-        Statement.RETURN_GENERATED_KEYS
+        """SELECT id FROM topics WHERE name = ?"""
     ).use {
         it.setString(1, name.value)
         val resultSet = it.executeQuery()
@@ -127,13 +130,14 @@ private fun BrokerTopicsRepository.findTopicId(name: Topic.Name): Topic.Id? {
 
 private fun BrokerTopicsRepository.createTopic(name: Topic.Name): Topic.Id {
     return connection.prepareStatement(
-        """INSERT OR IGNORE INTO topics(name, instant) VALUES(?,?) RETURNING id""",
-        Statement.RETURN_GENERATED_KEYS
+        """INSERT INTO topics(name, instant) VALUES(?,?)""",
     ).use {
         it.setString(1, name.value)
         it.setTimestamp(2, Timestamp.from(TimeUtils.now()))
+        it.execute()
 
-        val resultSet = it.executeQuery()
-        Topic.Id(resultSet.getInt(1))
+        executeQuery("select last_insert_rowid();") { rs ->
+            Topic.Id(rs.getLong(1).toULong())
+        }
     }
 }
