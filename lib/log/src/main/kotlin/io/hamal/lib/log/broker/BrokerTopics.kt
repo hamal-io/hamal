@@ -118,9 +118,10 @@ private fun BrokerTopicsRepository.findTopicId(name: Topic.Name): Topic.Id? {
         it.setString(1, name.value)
         val resultSet = it.executeQuery()
         if (!resultSet.next()) {
-            return null
+            null
+        } else {
+            Topic.Id(resultSet.getInt(1))
         }
-        Topic.Id(resultSet.getInt(1))
     }
 }
 

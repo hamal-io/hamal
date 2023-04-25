@@ -6,9 +6,17 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlin.reflect.KClass
 
-interface Consumer<Key : Any, Value : Any> {
+data class Consumer(
+    val groupId: GroupId
+) {
+    @JvmInline
+    value class GroupId(val value: String)
+}
 
-    fun poll(): List<Consumer.Record<Key, Value>>
+
+interface DepConsumer<Key : Any, Value : Any> {
+
+    fun poll(): List<DepConsumer.Record<Key, Value>>
 
     data class Record<Key : Any, Value : Any>(
         val key: Key,
@@ -16,18 +24,18 @@ interface Consumer<Key : Any, Value : Any> {
     )
 }
 
-class ProtobufConsumer<Key : Any, Value : Any>(
+class DepProtobufConsumer<Key : Any, Value : Any>(
 
     private val topicId: Topic.Id,
     private val broker: Broker,
     private val keyClass: KClass<Key>,
     private val valueClass: KClass<Value>
-) : Consumer<Key, Value> {
+) : DepConsumer<Key, Value> {
 
     private var offset: Long = 0
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-    override fun poll(): List<Consumer.Record<Key, Value>> {
+    override fun poll(): List<DepConsumer.Record<Key, Value>> {
 //        val topic = broker.getTopic(topicId)
 
         TODO()
