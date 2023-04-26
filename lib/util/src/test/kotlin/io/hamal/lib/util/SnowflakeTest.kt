@@ -253,6 +253,37 @@ class SnowflakeTest {
             assertThat(result.sequence(), equalTo(Sequence(2810)))
             assertThat(result.elapsed(), equalTo(Elapsed(315569520000)))
         }
+
+        @Test
+        fun `Id to and from string`() {
+            val testInstance = Snowflake.Id(1159101075524468096)
+            assertThat(testInstance.toString(), equalTo("0x1015f4497968bd80"))
+
+            val result = Snowflake.Id("0x1015f4497968bd80")
+            assertThat(result, equalTo(Snowflake.Id(1159101075524468096)))
+        }
+
+        @Test
+        fun `Id 0 to string`() {
+            val testInstance = Snowflake.Id(0)
+            assertThat(testInstance.toString(), equalTo("0x00"))
+        }
+
+        @Test
+        fun `String does not start with 0x so can not be valid`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                Snowflake.Id("SomeInvalidString---booom")
+            }
+            assertThat(exception.message, equalTo("Id must start with 0x"))
+        }
+
+        @Test
+        fun `String starts with 0x but still invalid`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                Snowflake.Id("0xUHV")
+            }
+            assertThat(exception.message, equalTo("Invalid hex number"))
+        }
     }
 
     @Nested

@@ -58,6 +58,18 @@ interface Snowflake {
 
     @JvmInline
     value class Id(val value: Long) : Comparable<Id> {
+
+        constructor(value: String) : this(ensureRightFormat(value).toLong(16))
+
+        companion object {
+            fun ensureRightFormat(value: String): String {
+                require(value.startsWith("0x")) { "Id must start with 0x" }
+                val result = value.substring(2, value.length)
+                require(Hex.isValidHexNumber(result)) { "Invalid hex number"}
+                return result
+            }
+        }
+
         override fun compareTo(other: Id) = value.compareTo(other.value)
 
         fun partition(): Partition = Partition(
@@ -84,6 +96,10 @@ interface Snowflake {
                 numberOfBits = 41
             )
         )
+
+        override fun toString(): String {
+            return "0x${value.toBigInteger().toByteArray().joinToString("") { "%02x".format(it) }}"
+        }
     }
 }
 
