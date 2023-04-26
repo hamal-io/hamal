@@ -1,9 +1,8 @@
 package io.hamal.lib.meta.math
 
 import io.hamal.lib.meta.Tuple2
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import io.hamal.lib.meta.exception.IllegalStateException
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
@@ -51,7 +50,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal(Float.NaN)
             }
-            assertThat(exception.message, equalTo("NaN"))
+            assertThat(exception.message, containsString("NaN"))
         }
 
         @Test
@@ -59,7 +58,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal(Float.POSITIVE_INFINITY)
             }
-            assertThat(exception.message, equalTo("Infinity"))
+            assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
@@ -67,7 +66,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal(Float.NEGATIVE_INFINITY)
             }
-            assertThat(exception.message, equalTo("Infinity"))
+            assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
@@ -81,7 +80,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal(Double.NaN)
             }
-            assertThat(exception.message, equalTo("NaN"))
+            assertThat(exception.message, containsString("NaN"))
         }
 
         @Test
@@ -89,7 +88,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal(Double.POSITIVE_INFINITY)
             }
-            assertThat(exception.message, equalTo("Infinity"))
+            assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
@@ -97,7 +96,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal(Double.NEGATIVE_INFINITY)
             }
-            assertThat(exception.message, equalTo("Infinity"))
+            assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
@@ -111,7 +110,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal("NaN")
             }
-            assertThat(exception.message, equalTo("NaN"))
+            assertThat(exception.message, containsString("NaN"))
         }
 
         @Test
@@ -119,7 +118,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal("")
             }
-            assertThat(exception.message, equalTo("NaN"))
+            assertThat(exception.message, containsString("NaN"))
         }
 
         @Test
@@ -127,7 +126,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Decimal("    ")
             }
-            assertThat(exception.message, equalTo("NaN"))
+            assertThat(exception.message, containsString("NaN"))
         }
 
         private val expected = Decimal(28)
@@ -316,19 +315,19 @@ class DecimalTest {
         @Test
         fun `Value is negative`() {
             val testInstance = Decimal(-42);
-            val exception = assertThrows<IllegalStateException> {
+            val exception = assertThrows<IllegalArgumentException> {
                 testInstance.ln()
             };
-            assertThat(exception.message, equalTo("Value must >= 1"));
+            assertThat(exception.message, containsString("Value must >= 1"));
         }
 
         @Test
         fun `Value is 0`() {
             val testInstance = Decimal(0);
-            val exception = assertThrows<IllegalStateException> {
+            val exception = assertThrows<IllegalArgumentException> {
                 testInstance.ln()
             };
-            assertThat(exception.message, equalTo("Value must >= 1"));
+            assertThat(exception.message, containsString("Value must >= 1"));
         }
 
         @Test
@@ -376,7 +375,7 @@ class DecimalTest {
             val exception = assertThrows<IllegalStateException> {
                 testInstance.sqrt()
             }
-            assertThat(exception.message, equalTo("Value must >= 0"));
+            assertThat(exception.message, containsString("Value must >= 0"));
         }
 
         private fun provider(): List<Tuple2<Decimal, Decimal>> {

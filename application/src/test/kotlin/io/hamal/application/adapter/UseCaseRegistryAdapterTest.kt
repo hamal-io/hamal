@@ -1,8 +1,7 @@
 package io.hamal.application.adapter
 
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import io.hamal.lib.meta.exception.NotFoundException
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
@@ -26,10 +25,10 @@ class UseCaseRegistryAdapterTest {
         fun `Not found`() {
             val testInstance = DefaultUseCaseRegistryAdapter()
 
-            val exception = assertThrows<NotFoundException> {
+            val exception = assertThrows<IllegalStateException> {
                 testInstance[TestResult::class, TestCommandUseCase::class]
             }
-            assertThat(exception.message, equalTo("CommandUseCaseOperation<TestResult,TestCommandUseCase> not found"))
+            assertThat(exception.message, containsString("CommandUseCaseOperation<TestResult,TestCommandUseCase> not found"))
         }
 
         @Test
@@ -41,7 +40,7 @@ class UseCaseRegistryAdapterTest {
             }
             assertThat(
                 exception.message,
-                equalTo("result class(IncompatibleTestResult) does not match with use case result class(TestResult)")
+                containsString("result class(IncompatibleTestResult) does not match with use case result class(TestResult)")
             )
         }
 
@@ -95,10 +94,10 @@ class UseCaseRegistryAdapterTest {
         fun `Not found`() {
             val testInstance = DefaultUseCaseRegistryAdapter()
 
-            val exception = assertThrows<NotFoundException> {
+            val exception = assertThrows<IllegalStateException> {
                 testInstance[TestResult::class, TestQueryUseCase::class]
             }
-            assertThat(exception.message, equalTo("QueryUseCaseOperation<TestResult,TestQueryUseCase> not found"))
+            assertThat(exception.message, containsString("QueryUseCaseOperation<TestResult,TestQueryUseCase> not found"))
         }
 
         @Test
@@ -110,7 +109,7 @@ class UseCaseRegistryAdapterTest {
             }
             assertThat(
                 exception.message,
-                equalTo("result class(IncompatibleTestResult) does not match with use case result class(TestResult)")
+                containsString("result class(IncompatibleTestResult) does not match with use case result class(TestResult)")
             )
         }
 
@@ -127,7 +126,7 @@ class UseCaseRegistryAdapterTest {
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance[Unit::class, TestQueryUseCase::class]
             }
-            assertThat(exception.message, equalTo("Result class can not be Unit"))
+            assertThat(exception.message, containsString("Result class can not be Unit"))
         }
 
         @Test
@@ -166,10 +165,10 @@ class UseCaseRegistryAdapterTest {
         fun `Not found`() {
             val testInstance = DefaultUseCaseRegistryAdapter()
 
-            val exception = assertThrows<NotFoundException> {
+            val exception = assertThrows<IllegalStateException> {
                 testInstance[TestResult::class, TestFetchOneUseCase::class]
             }
-            assertThat(exception.message, equalTo("FetchOneUseCaseOperation<TestResult,TestFetchOneUseCase> not found"))
+            assertThat(exception.message, containsString("FetchOneUseCaseOperation<TestResult,TestFetchOneUseCase> not found"))
         }
 
         @Test
@@ -181,7 +180,7 @@ class UseCaseRegistryAdapterTest {
             }
             assertThat(
                 exception.message,
-                equalTo("result class(IncompatibleTestResult) does not match with use case result class(TestResult)")
+                containsString("result class(IncompatibleTestResult) does not match with use case result class(TestResult)")
             )
         }
 
@@ -198,7 +197,7 @@ class UseCaseRegistryAdapterTest {
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance[Unit::class, TestFetchOneUseCase::class]
             }
-            assertThat(exception.message, equalTo("Result class can not be Unit"))
+            assertThat(exception.message, containsString("Result class can not be Unit"))
         }
 
         @Test

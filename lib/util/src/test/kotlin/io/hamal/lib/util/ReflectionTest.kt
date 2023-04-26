@@ -1,6 +1,5 @@
 package io.hamal.lib.util
 
-import io.hamal.lib.meta.exception.NotFoundException
 import io.hamal.lib.util.Reflection.declaredProperty
 import io.hamal.lib.util.Reflection.memberProperty
 import org.hamcrest.MatcherAssert.assertThat
@@ -186,20 +185,20 @@ class ReflectionTest {
         @Test
         fun `Field does not exist`() {
             val target = ComposedLevelOne(1506, ComposedRoot(2810))
-            var exception = assertThrows<NotFoundException> {
+            var exception = assertThrows<IllegalArgumentException> {
                 Reflection.getValue(target, "doesNotExists")
             }
-            assertThat(exception.message, equalTo("ComposedLevelOne does have field 'doesNotExists'"))
+            assertThat(exception.message, containsString("ComposedLevelOne does have field 'doesNotExists'"))
 
-            exception = assertThrows<NotFoundException> {
+            exception = assertThrows<IllegalArgumentException> {
                 Reflection.getValue(target, "parent.doesNotExists")
             }
-            assertThat(exception.message, equalTo("ComposedLevelOne does have field 'parent.doesNotExists'"))
+            assertThat(exception.message, containsString("ComposedLevelOne does have field 'parent.doesNotExists'"))
 
-            exception = assertThrows<NotFoundException> {
+            exception = assertThrows<IllegalArgumentException> {
                 Reflection.getValue(target, "doesNotExists.doesNotExists")
             }
-            assertThat(exception.message, equalTo("ComposedLevelOne does have field 'doesNotExists.doesNotExists'"))
+            assertThat(exception.message, containsString("ComposedLevelOne does have field 'doesNotExists.doesNotExists'"))
         }
     }
 

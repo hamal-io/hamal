@@ -1,6 +1,5 @@
 package io.hamal.lib.meta.util
 
-import io.hamal.lib.meta.exception.InternalServerException
 import java.nio.charset.StandardCharsets.UTF_8
 import java.security.MessageDigest
 
@@ -21,7 +20,7 @@ object Hash {
 
             resultBuilder.toString()
         } catch (e: Exception) {
-            throw InternalServerException(e)
+            throw e
         }
     }
 }

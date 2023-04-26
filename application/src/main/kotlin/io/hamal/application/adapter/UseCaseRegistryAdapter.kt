@@ -3,9 +3,6 @@ package io.hamal.application.adapter
 import io.hamal.lib.ddd.usecase.*
 import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.meta.Tuple2
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import io.hamal.lib.meta.exception.NotFoundException
-import io.hamal.lib.meta.exception.throwIf
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import kotlin.reflect.KClass
@@ -37,7 +34,7 @@ class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
         commandOnce.invoke(Tuple2(resultClass, useCaseClass)) {
             val operation = commandOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().mapNotNull { commandOperations[it.kotlin] }.firstOrNull()
-                ?: throw NotFoundException("CommandUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
+                ?: throw IllegalStateException("CommandUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
 
             when (resultClass) {
                 Unit::class -> operation
@@ -57,7 +54,7 @@ class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
         queryOnce.invoke(Tuple2(resultClass, useCaseClass)) {
             val operation = queryOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().mapNotNull { queryOperations[it.kotlin] }.firstOrNull()
-                ?: throw NotFoundException("QueryUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
+                ?: throw IllegalStateException("QueryUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
 
             when (resultClass) {
                 Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
@@ -76,7 +73,7 @@ class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
         fetchOneOnce.invoke(Tuple2(resultClass, useCaseClass)) {
             val operation = fetchOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().mapNotNull { fetchOperations[it.kotlin] }.firstOrNull()
-                ?: throw NotFoundException("FetchOneUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
+                ?: throw IllegalStateException("FetchOneUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
 
             when (resultClass) {
                 Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
@@ -134,7 +131,7 @@ class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
 private fun ensureResultClass(useCaseOperation: UseCaseOperation<*, *>, resultClass: KClass<*>) {
     val resultClassesMatch = useCaseOperation.resultClass == resultClass
     val isAssignable = resultClass.java.isAssignableFrom(useCaseOperation.resultClass.java)
-    throwIf(!resultClassesMatch && !isAssignable) {
+    require(resultClassesMatch || isAssignable) {
         IllegalArgumentException("result class(${resultClass.simpleName}) does not match with use case result class(${useCaseOperation.resultClass.simpleName})")
     }
 }

@@ -18,16 +18,16 @@ class TaskTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    TaskId("410908f7-7e1c-4556-81d9-a29a5e5f42a3"),
-                    TaskId("410908f7-7e1c-4556-81d9-a29a5e5f42a3")
+                    TaskId("0x1337C0DE"),
+                    TaskId("0x1337C0DE")
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    TaskId("410908f7-7e1c-4556-81d9-a29a5e5f42a3"),
-                    TaskId("f19badf6-07eb-4d4a-a637-393ed66965db")
+                    TaskId("0x1337C0DE"),
+                    TaskId("0xC0DEBABEC0DE")
                 )
             }
         }
@@ -38,16 +38,16 @@ class TaskTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    TaskId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode(),
-                    TaskId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode()
+                    TaskId("0x1337C0DE").hashCode(),
+                    TaskId("0x1337C0DE").hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    TaskId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode(),
-                    TaskId("f19badf6-07eb-4d4a-a637-393ed66965db").hashCode()
+                    TaskId("0x1337C0DE").hashCode(),
+                    TaskId("0xC0DEBABEC0DE").hashCode()
                 )
             }
         }

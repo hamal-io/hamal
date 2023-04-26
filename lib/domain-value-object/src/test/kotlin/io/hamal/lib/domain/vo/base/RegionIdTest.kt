@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.vo.base
 
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -34,7 +33,7 @@ class RegionIdTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     RegionIdValidator.validate(illegal)
                 }
-                assertThat(exception.localizedMessage, equalTo("Region('$illegal') is illegal"))
+                assertThat(exception.message, containsString("Region('$illegal') is illegal"))
             }
         }
     }

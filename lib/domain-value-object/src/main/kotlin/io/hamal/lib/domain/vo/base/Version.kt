@@ -1,8 +1,6 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.ddd.base.ValueObject
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import io.hamal.lib.meta.exception.throwIf
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,6 +17,6 @@ abstract class Version : ValueObject.ComparableImpl<Int>() {
 
 internal object VersionValidator {
     fun validate(value: Int) {
-        throwIf(value <= 0) { IllegalArgumentException("Version('$value') is illegal") }
+        require(value > 0) { IllegalArgumentException("Version('$value') is illegal") }
     }
 }

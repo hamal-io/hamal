@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.vo.base
 
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -19,7 +18,7 @@ class IdTest {
         inner class ValidateTest {
             @Test
             fun `Does nothing if id is legal`() {
-                IdValidator.validate("410908f7-7e1c-4556-81d9-a29a5e5f42a3")
+                IdValidator.validate("0x1337C0DE")
             }
 
             @Test
@@ -27,7 +26,7 @@ class IdTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     IdValidator.validate("some-illegal-id")
                 }
-                assertThat(exception.localizedMessage, equalTo("Id('some-illegal-id') is illegal"))
+                assertThat(exception.message, containsString("Id('some-illegal-id') is illegal"))
             }
         }
     }

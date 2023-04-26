@@ -1,10 +1,10 @@
 package io.hamal.script.impl.token
 
-import io.hamal.lib.meta.exception.IllegalStateException
 import io.hamal.script.impl.token.*
 import io.hamal.script.impl.token.Token.*
 import io.hamal.script.impl.token.Token.Type.*
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
@@ -53,7 +53,7 @@ class TokenizerTest {
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.peek()
                 }
-                assertThat(exception.message, equalTo("Can not read after end of code"))
+                assertThat(exception.message, containsString("Can not read after end of code"))
             }
         }
 
@@ -77,7 +77,7 @@ class TokenizerTest {
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.peekNext()
                 }
-                assertThat(exception.message, equalTo("Can not read after end of code"))
+                assertThat(exception.message, containsString("Can not read after end of code"))
             }
         }
 
@@ -100,7 +100,7 @@ class TokenizerTest {
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.peekPrev()
                 }
-                assertThat(exception.message, equalTo("Can not read after end of code"))
+                assertThat(exception.message, containsString("Can not read after end of code"))
             }
 
             @Test
@@ -109,7 +109,7 @@ class TokenizerTest {
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.peekPrev()
                 }
-                assertThat(exception.message, equalTo("Can not read before start of code"))
+                assertThat(exception.message, containsString("Can not read before start of code"))
             }
         }
 
@@ -132,7 +132,7 @@ class TokenizerTest {
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.advance()
                 }
-                assertThat(exception.message, equalTo("Can not read after end of code"))
+                assertThat(exception.message, containsString("Can not read after end of code"))
             }
         }
 

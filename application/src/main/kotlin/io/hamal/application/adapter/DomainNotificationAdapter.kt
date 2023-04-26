@@ -10,7 +10,6 @@ import io.hamal.lib.log.broker.BrokerRepository
 import io.hamal.lib.log.consumer.Consumer
 import io.hamal.lib.log.consumer.ProtobufConsumer
 import io.hamal.lib.log.topic.Topic
-import io.hamal.lib.meta.exception.InternalServerException
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration
@@ -74,7 +73,7 @@ class DomainNotificationConsumerAdapter(
                                         try {
                                             listener.on(notification)
                                         } catch (t: Throwable) {
-                                            throw InternalServerException(t)
+                                            throw Error(t)
                                         }
                                     }
                                 }

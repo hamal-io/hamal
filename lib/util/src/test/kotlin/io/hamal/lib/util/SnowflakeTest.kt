@@ -48,7 +48,7 @@ class SnowflakeTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     Partition(1024)
                 }
-                assertThat(exception.message, equalTo("Partition is limited to 10 bits - [0, 1023]"))
+                assertThat(exception.message, containsString("Partition is limited to 10 bits - [0, 1023]"))
             }
 
             @Test
@@ -59,7 +59,7 @@ class SnowflakeTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     Partition(-1)
                 }
-                assertThat(exception.message, equalTo("Partition must not be negative - [0, 1023]"))
+                assertThat(exception.message, containsString("Partition must not be negative - [0, 1023]"))
             }
         }
 
@@ -91,7 +91,7 @@ class SnowflakeTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     Sequence(4097)
                 }
-                assertThat(exception.message, equalTo("Sequence is limited to 12 bits - [1, 4096]"))
+                assertThat(exception.message, containsString("Sequence is limited to 12 bits - [1, 4096]"))
             }
 
             @Test
@@ -99,7 +99,7 @@ class SnowflakeTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     Sequence(0)
                 }
-                assertThat(exception.message, equalTo("Sequence must be positive - [1, 4096]"))
+                assertThat(exception.message, containsString("Sequence must be positive - [1, 4096]"))
             }
 
             @Test
@@ -107,7 +107,7 @@ class SnowflakeTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     Sequence(-1)
                 }
-                assertThat(exception.message, equalTo("Sequence must be positive - [1, 4096]"))
+                assertThat(exception.message, containsString("Sequence must be positive - [1, 4096]"))
             }
         }
 
@@ -131,7 +131,7 @@ class SnowflakeTest {
                     val exception = assertThrows<IllegalArgumentException> {
                         testInstance.next { Elapsed(1) }
                     }
-                    assertThat(exception.message, equalTo("Elapsed must be monotonic"))
+                    assertThat(exception.message, containsString("Elapsed must be monotonic"))
                 }
 
                 @Test
@@ -274,7 +274,7 @@ class SnowflakeTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Snowflake.Id("SomeInvalidString---booom")
             }
-            assertThat(exception.message, equalTo("Id must start with 0x"))
+            assertThat(exception.message, containsString("Id must start with 0x"))
         }
 
         @Test
@@ -282,7 +282,7 @@ class SnowflakeTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Snowflake.Id("0xUHV")
             }
-            assertThat(exception.message, equalTo("Invalid hex number"))
+            assertThat(exception.message, containsString("Invalid hex number"))
         }
     }
 

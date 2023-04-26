@@ -2,7 +2,6 @@ package internal.copy;
 
 import internal.JavaReflection;
 import io.hamal.lib.ddd.base.ValueObject;
-import io.hamal.lib.meta.exception.InternalServerException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -90,7 +89,7 @@ public class JavaValueObjectStrategy extends JavaCopy.Strategy {
             return true;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
-            throw new InternalServerException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -144,7 +143,7 @@ public class JavaValueObjectStrategy extends JavaCopy.Strategy {
                     .filter(strategy -> strategy.copyStrategy.supports(valueClass))
                     .map(strategy -> strategy.copyStrategy.apply(valueClass, value))
                     .findFirst()
-                    .orElseThrow(() -> new InternalServerException("Unable to apply any strategy", null));
+                    .orElseThrow(() -> new IllegalStateException("Unable to apply any strategy", null));
         }
     }
 }

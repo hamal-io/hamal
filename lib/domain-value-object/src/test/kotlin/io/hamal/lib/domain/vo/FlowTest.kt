@@ -18,16 +18,16 @@ class FlowTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    FlowId("410908f7-7e1c-4556-81d9-a29a5e5f42a3"),
-                    FlowId("410908f7-7e1c-4556-81d9-a29a5e5f42a3")
+                    FlowId("0xbadc0de"),
+                    FlowId("0xbadc0de")
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    FlowId("410908f7-7e1c-4556-81d9-a29a5e5f42a3"),
-                    FlowId("f19badf6-07eb-4d4a-a637-393ed66965db")
+                    FlowId("0xbadc0de"),
+                    FlowId("0x1337C0DE")
                 )
             }
         }
@@ -38,16 +38,16 @@ class FlowTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    FlowId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode(),
-                    FlowId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode()
+                    FlowId("0xbadc0de").hashCode(),
+                    FlowId("0xbadc0de").hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    FlowId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode(),
-                    FlowId("f19badf6-07eb-4d4a-a637-393ed66965db").hashCode()
+                    FlowId("0xbadc0de").hashCode(),
+                    FlowId("0x1337C0DE").hashCode()
                 )
             }
         }

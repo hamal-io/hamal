@@ -1,8 +1,6 @@
 package internal.copy;
 
 import internal.JavaReflection;
-import io.hamal.lib.meta.exception.InternalServerException;
-import io.hamal.lib.meta.exception.NotImplementedYetException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,7 +26,7 @@ public interface JavaCopy {
                 return copyStrategy.apply(sourceClass, source);
             }
         }
-        throw new NotImplementedYetException();
+        throw new IllegalStateException("Not implemented");
     }
 
     static <T> T copyFields(Object source, T target, Collection<Strategy> strategies) {
@@ -74,7 +72,7 @@ public interface JavaCopy {
 
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                throw new InternalServerException(e);
+                throw new RuntimeException(e);
             }
         }
         return target;
@@ -101,7 +99,7 @@ public interface JavaCopy {
                 targetField.set(target, copyStrategy.apply(sourceClass, sourceValue));
                 return true;
             } catch (IllegalAccessException e) {
-                throw new InternalServerException(e);
+                throw new RuntimeException(e);
             }
         }
     }

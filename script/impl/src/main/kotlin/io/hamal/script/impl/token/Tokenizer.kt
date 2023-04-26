@@ -1,7 +1,5 @@
 package io.hamal.script.impl.token
 
-import io.hamal.lib.meta.exception.IllegalStateException
-import io.hamal.lib.meta.exception.throwIf
 import io.hamal.script.impl.token.Token.Type
 import io.hamal.script.impl.token.Token.Type.*
 import io.hamal.script.impl.token.Token.Type.Number
@@ -82,23 +80,23 @@ internal fun DefaultImpl.isAtEnd(offset: Int = 0) = index + offset >= code.lengt
 internal fun DefaultImpl.canPeekNext(offset: Int = 1) = index < code.length - offset
 
 internal fun DefaultImpl.peek(): Char {
-    throwIf(isAtEnd()) { IllegalStateException("Can not read after end of code") }
+    check(!isAtEnd()) { "Can not read after end of code" }
     return code[index]
 }
 
 internal fun DefaultImpl.peekPrev(): Char {
-    throwIf(index == 0) { IllegalStateException("Can not read before start of code") }
-    throwIf(index >= code.length) { IllegalStateException("Can not read after end of code") }
+    check(index > 0) { "Can not read before start of code" }
+    check(index < code.length) { "Can not read after end of code" }
     return code[index - 1]
 }
 
 internal fun DefaultImpl.peekNext(offset: Int = 1): Char {
-    throwIf(index + offset >= code.length) { IllegalStateException("Can not read after end of code") }
+    check(index + offset < code.length) { "Can not read after end of code" }
     return code[index + offset]
 }
 
 internal fun DefaultImpl.advance(): DefaultImpl {
-    throwIf(index + 1 > code.length) { IllegalStateException("Can not read after end of code") }
+    check(index + 1 <= code.length) { "Can not read after end of code" }
     linePosition++
     buffer.append(code[index++])
     return this

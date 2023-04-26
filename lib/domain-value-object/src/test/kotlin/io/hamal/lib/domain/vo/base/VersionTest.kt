@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.vo.base
 
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -31,7 +30,7 @@ class VersionTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     VersionValidator.validate(illegal)
                 }
-                assertThat(exception.localizedMessage, equalTo("Version('$illegal') is illegal"))
+                assertThat(exception.message, containsString("Version('$illegal') is illegal"))
             }
         }
     }

@@ -1,6 +1,5 @@
 package io.hamal.lib.meta.util
 
-import io.hamal.lib.meta.exception.NotFoundException
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.withLock
@@ -14,7 +13,7 @@ interface LruCache<KEY : Any, VALUE : Any> {
     fun find(key: KEY): VALUE?
 
     operator fun get(key: KEY): VALUE {
-        return find(key) ?: throw NotFoundException("$key")
+        return find(key) ?: throw IllegalArgumentException("$key")
     }
 
     fun computeIfAbsent(key: KEY, mapper: (KEY) -> VALUE): VALUE

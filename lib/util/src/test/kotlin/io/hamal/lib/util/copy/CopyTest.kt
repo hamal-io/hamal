@@ -1,7 +1,6 @@
 package io.hamal.lib.util.copy
 
 import io.hamal.lib.ddd.base.ValueObject
-import io.hamal.lib.meta.exception.InternalServerException
 import io.hamal.lib.util.Reflection
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -115,7 +114,7 @@ class CopyTest {
 
             val source = SomeSource(null)
             val target = SomeTarget(42)
-            val exception = assertThrows<InternalServerException> {
+            val exception = assertThrows<RuntimeException> {
                 Copy(source, target)
             }
             assertThat(

@@ -1,8 +1,6 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.ddd.base.ValueObject
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import io.hamal.lib.meta.exception.throwIf
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,6 +18,6 @@ abstract class Reference : ValueObject.ComparableImpl<Reference.Value>() {
 internal object ReferenceValidator {
     private val regex = Regex("^([A-Za-z0-9-_@:.]{1,255})$")
     fun validate(value: String) {
-        throwIf(!regex.matches(value)) { IllegalArgumentException("Reference('$value') is illegal") }
+        require(regex.matches(value)) { IllegalArgumentException("Reference('$value') is illegal") }
     }
 }

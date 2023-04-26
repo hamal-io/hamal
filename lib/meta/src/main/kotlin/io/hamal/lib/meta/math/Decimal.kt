@@ -1,8 +1,5 @@
 package io.hamal.lib.meta.math
 
-import io.hamal.lib.meta.exception.IllegalArgumentException
-import io.hamal.lib.meta.exception.IllegalStateException
-import io.hamal.lib.meta.exception.throwIf
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -23,19 +20,19 @@ data class Decimal constructor(
         operator fun invoke(value: Long): Decimal = Decimal(BigDecimal.valueOf(value))
 
         operator fun invoke(value: Float): Decimal {
-            throwIf(value.isNaN()) { IllegalArgumentException("NaN") }
-            throwIf(value.isInfinite()) { IllegalArgumentException("Infinity") }
+            require(!value.isNaN()) { IllegalArgumentException("NaN") }
+            require(!value.isInfinite()) { IllegalArgumentException("Infinity") }
             return Decimal(BigDecimal.valueOf(value.toDouble()))
         }
 
         operator fun invoke(value: Double): Decimal {
-            throwIf(value.isNaN()) { IllegalArgumentException("NaN") }
-            throwIf(value.isInfinite()) { IllegalArgumentException("Infinity") }
+            require(!value.isNaN()) { IllegalArgumentException("NaN") }
+            require(!value.isInfinite()) { IllegalArgumentException("Infinity") }
             return Decimal(BigDecimal.valueOf(value))
         }
 
         operator fun invoke(value: String): Decimal {
-            throwIf(!value.isNumber()) { IllegalArgumentException("NaN") }
+            require(value.isNumber()) { IllegalArgumentException("NaN") }
             return Decimal(BigDecimal(value.trim(), mathContext))
         }
 
@@ -64,7 +61,7 @@ data class Decimal constructor(
         // Algorithm: http://functions.wolfram.com/ElementaryFunctions/Log/10/
         // https://stackoverflow.com/a/6169691/6444586
         val result: Decimal
-        throwIf(!isPositive()) { IllegalStateException("Value must >= 1") }
+        require(isPositive()) { IllegalStateException("Value must >= 1") }
         if (delegate == BigDecimal.ONE) {
             return Decimal(0)
         } else {
@@ -85,7 +82,7 @@ data class Decimal constructor(
     }
 
     fun sqrt(): Decimal {
-        throwIf(isNegative()) { throw IllegalStateException("Value must >= 0") }
+        require(!isNegative()) { throw IllegalStateException("Value must >= 0") }
         return Decimal(delegate.sqrt(mathContext))
     }
 

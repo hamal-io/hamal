@@ -1,7 +1,6 @@
 package io.hamal.lib.util
 
 import internal.JavaReflection
-import io.hamal.lib.meta.exception.NotFoundException
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -36,7 +35,7 @@ object Reflection {
     fun <TYPE : Any> getValue(obj: TYPE, path: String): Any {
         var currentObj = obj as Any
         fun throwNotFound() {
-            throw NotFoundException("${obj::class.simpleName} does have field '$path'")
+            throw IllegalArgumentException("${obj::class.simpleName} does have field '$path'")
         }
 
         val pathParts = path.split(".")

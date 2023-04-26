@@ -18,16 +18,16 @@ class TriggerTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    TriggerId("410908f7-7e1c-4556-81d9-a29a5e5f42a3"),
-                    TriggerId("410908f7-7e1c-4556-81d9-a29a5e5f42a3")
+                    TriggerId("0x1337C0DE"),
+                    TriggerId("0x1337C0DE")
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    TriggerId("410908f7-7e1c-4556-81d9-a29a5e5f42a3"),
-                    TriggerId("f19badf6-07eb-4d4a-a637-393ed66965db")
+                    TriggerId("0x1337C0DE"),
+                    TriggerId("0xC0DEBABEC0DE")
                 )
             }
         }
@@ -38,16 +38,16 @@ class TriggerTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    TriggerId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode(),
-                    TriggerId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode()
+                    TriggerId("0x1337C0DE").hashCode(),
+                    TriggerId("0x1337C0DE").hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    TriggerId("410908f7-7e1c-4556-81d9-a29a5e5f42a3").hashCode(),
-                    TriggerId("f19badf6-07eb-4d4a-a637-393ed66965db").hashCode()
+                    TriggerId("0x1337C0DE").hashCode(),
+                    TriggerId("0xC0DEBABEC0DE").hashCode()
                 )
             }
         }
