@@ -10,10 +10,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @DomainNotificationTopic("scheduler::job_enqueued")
-class Scheduled(
-    val id: JobId,
+data class Scheduled(
     override val regionId: RegionId,
+    val id: JobId,
     val inputs: Int
 ) : DomainNotification()
 
 //}
+

@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class DomainNotification {
     abstract val regionId: RegionId
+
     val topic: String
 
     init {

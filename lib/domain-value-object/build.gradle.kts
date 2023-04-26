@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":lib:ddd"))
 
     implementation(external.kotlin.protobuf)
+    implementation(external.kotlin.reflect)
 
     testImplementation(external.junit)
     testImplementation(external.hamcrest)

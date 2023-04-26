@@ -8,5 +8,5 @@ dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:domain-value-object"))
     implementation(external.kotlin.reflect)
-    implementation(external.kotlin.cbor)
+    implementation(external.kotlin.protobuf)
 }

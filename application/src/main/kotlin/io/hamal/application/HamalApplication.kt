@@ -1,9 +1,6 @@
 package io.hamal.application
 
-import io.hamal.application.config.AsyncConfig
-import io.hamal.application.config.DomainNotificationConfig
-import io.hamal.application.config.LoggerConfig
-import io.hamal.application.config.UseCaseConfig
+import io.hamal.application.config.*
 import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
 import io.hamal.module.worker.infra.WorkerModuleConfig
 import io.module.hamal.queue.infra.QueueModuleConfig
@@ -27,7 +24,8 @@ fun main(args: Array<String>) {
             AsyncConfig::class.java,
             DomainNotificationConfig::class.java,
             LoggerConfig::class.java,
-            UseCaseConfig::class.java
+            UseCaseConfig::class.java,
+            WebConfig::class.java
         )
         .banner { _: Environment, _: Class<*>, out: PrintStream ->
             out.println("")

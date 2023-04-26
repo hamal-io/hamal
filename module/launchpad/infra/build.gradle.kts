@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     id("hamal.module")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
 }
 archivesName.set("launchpad-infra")
@@ -15,6 +16,8 @@ dependencies {
     implementation(project(":lib:domain-value-object"))
     implementation(project(":module:launchpad:application"))
     implementation(project(":module:launchpad:core"))
+
+    implementation(external.kotlin.json)
 
     implementation(external.spring.web) {
 //        exclude("com.fasterxml.jackson.core", "jackson-core")

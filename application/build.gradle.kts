@@ -1,7 +1,7 @@
 plugins {
     id("hamal.common")
     application
-
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
     kotlin("plugin.spring").version("1.8.10")
 }
@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":lib:ddd"))
     implementation(project(":lib:log"))
     implementation(project(":lib:domain-notification"))
+    implementation(project(":lib:domain-value-object"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
@@ -22,11 +23,8 @@ dependencies {
     }
 
     implementation("org.xerial:sqlite-jdbc:3.25.2")
+    implementation(external.kotlin.json)
 
-    implementation(external.kotlin.cbor)
-//    implementation(external.springDataJdbc)
-//    implementation(external.hikari)
-//    implementation(external.h2)
 
     implementation(project(":module:launchpad:infra"))
     implementation(project(":module:queue:infra"))
