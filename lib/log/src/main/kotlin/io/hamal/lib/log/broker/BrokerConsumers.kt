@@ -31,8 +31,8 @@ internal class BrokerConsumersRepository private constructor(
                 lock = ReentrantLock(),
                 connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
             )
-            result.connection.autoCommit = false
             result.setupSqlite()
+            result.connection.autoCommit = false
             result.setupSchema()
 
             return result
@@ -128,9 +128,10 @@ private fun BrokerConsumersRepository.setupSchema() {
 private fun BrokerConsumersRepository.setupSqlite() {
     lock.withLock {
         connection.createStatement().use {
+            it.execute("""PRAGMA journal_mode = wal;""")
             it.execute("""PRAGMA locking_mode = exclusive;""")
             it.execute("""PRAGMA temp_store = memory;""")
+            it.execute("""PRAGMA synchronous = off;""")
         }
-        connection.commit()
     }
 }

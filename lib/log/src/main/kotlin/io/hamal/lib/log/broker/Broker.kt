@@ -72,6 +72,9 @@ class BrokerRepository private constructor(
     override fun close() {
         topicsRepository.close()
         consumersRepository.close()
+        topicRepositoryMapping.keys().forEach { topic ->
+            resolveRepository(topic).close()
+        }
     }
 
     override fun read(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {

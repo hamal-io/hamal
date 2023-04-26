@@ -1,7 +1,6 @@
 package io.hamal.application.adapter
 
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.meta.Maybe
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.reflect.KClass
 
@@ -32,5 +31,5 @@ class DefaultUseCaseInvokerAdapter(
     override fun <RESULT : Any, USE_CASE : FetchOneUseCase> fetchOne(
         resultClass: KClass<RESULT>,
         useCase: USE_CASE
-    ): Maybe<RESULT> = getFetchOneUseCasePort[resultClass, useCase::class](useCase)
+    ): RESULT? = getFetchOneUseCasePort[resultClass, useCase::class](useCase)
 }

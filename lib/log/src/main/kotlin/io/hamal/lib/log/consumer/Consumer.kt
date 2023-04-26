@@ -11,7 +11,11 @@ import kotlin.reflect.KClass
 interface Consumer<VALUE : Any> {
     val groupId: GroupId
 
-    fun consume(limit: Int, fn: (VALUE) -> Unit)
+    fun consume(limit: Int, fn: (VALUE) -> Unit): Int {
+        return consumeIndexed(limit) { _, value -> fn(value) }
+    }
+
+    fun consumeIndexed(limit: Int, fn: (Int, VALUE) -> Unit): Int
 
     @JvmInline
     value class GroupId(val value: String)
@@ -26,11 +30,19 @@ class ProtobufConsumer<Value : Any>(
 ) : Consumer<Value> {
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-    override fun consume(limit: Int, fn: (Value) -> Unit) {
-        brokerRepository.read(groupId, topic, limit)
-            .onEach { chunk -> fn(ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)) }
+    override fun consumeIndexed(limit: Int, fn: (Int, Value) -> Unit): Int {
+        val chunksToConsume = brokerRepository.read(groupId, topic, limit)
+
+        chunksToConsume.onEachIndexed { index, chunk ->
+            fn(
+                index,
+                ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
+            )
+        }
             .map { it.id }
             .maxByOrNull { it }
             ?.let { brokerRepository.commit(groupId, topic, it) }
+
+        return chunksToConsume.size
     }
 }

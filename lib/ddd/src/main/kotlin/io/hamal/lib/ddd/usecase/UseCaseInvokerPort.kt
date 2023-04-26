@@ -1,6 +1,5 @@
 package io.hamal.lib.ddd.usecase
 
-import io.hamal.lib.meta.Maybe
 import kotlin.reflect.KClass
 
 interface InvokeCommandUseCasePort {
@@ -24,7 +23,7 @@ interface InvokeFetchOneUseCasePort {
     fun <RESULT : Any, USE_CASE : FetchOneUseCase> fetchOne(
         resultClass: KClass<RESULT>,
         useCase: USE_CASE
-    ): Maybe<RESULT>
+    ): RESULT?
 }
 
 interface InvokeUseCasePort : InvokeCommandUseCasePort, InvokeQueryUseCasePort, InvokeFetchOneUseCasePort

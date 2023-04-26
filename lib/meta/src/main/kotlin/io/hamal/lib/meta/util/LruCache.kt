@@ -1,10 +1,9 @@
 package io.hamal.lib.meta.util
 
-import io.hamal.lib.meta.Maybe
 import io.hamal.lib.meta.exception.NotFoundException
-import io.hamal.lib.meta.orElseThrow
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.withLock
 
 interface LruCache<KEY : Any, VALUE : Any> {
 
@@ -12,15 +11,17 @@ interface LruCache<KEY : Any, VALUE : Any> {
 
     fun putIfAbsent(key: KEY, value: VALUE)
 
-    fun find(key: KEY): Maybe<VALUE>
+    fun find(key: KEY): VALUE?
 
     operator fun get(key: KEY): VALUE {
-        return find(key).orElseThrow { NotFoundException("$key") }
+        return find(key) ?: throw NotFoundException("$key")
     }
 
     fun computeIfAbsent(key: KEY, mapper: (KEY) -> VALUE): VALUE
 
     fun size(): Int
+
+    fun keys() : Set<KEY>
 
     class DefaultImpl<KEY : Any, VALUE : Any>(capacity: Int) : LruCache<KEY, VALUE> {
         private var store: LinkedHashMap<KEY, VALUE>
@@ -35,50 +36,39 @@ interface LruCache<KEY : Any, VALUE : Any> {
         }
 
         override fun put(key: KEY, value: VALUE) {
-            lock.writeLock().lock()
-            try {
+            lock.writeLock().withLock {
                 store[key] = value
-            } finally {
-                lock.writeLock().unlock()
             }
         }
 
         override fun putIfAbsent(key: KEY, value: VALUE) {
-            lock.writeLock().lock()
-            try {
+            lock.writeLock().withLock {
                 store.putIfAbsent(key, value)
-            } finally {
-                lock.writeLock().unlock()
             }
         }
 
-        override fun find(key: KEY): Maybe<VALUE> {
-            lock.readLock().lock()
-            return try {
-                Maybe(store[key])
-            } finally {
-                lock.readLock().unlock()
+        override fun find(key: KEY): VALUE? {
+            return lock.readLock().withLock {
+                store[key]
             }
         }
 
         override fun computeIfAbsent(key: KEY, mapper: (KEY) -> VALUE): VALUE {
-            lock.writeLock().lock()
-            try {
-                return store.computeIfAbsent(key, mapper)
-            } finally {
-                lock.writeLock().unlock()
+            return lock.writeLock().withLock {
+                store.computeIfAbsent(key, mapper)
             }
         }
 
 
         override fun size(): Int {
-            lock.readLock().lock()
-            return try {
-                store.size
-            } finally {
-                lock.readLock().unlock()
-            }
+            return lock.readLock()
+                .withLock {
+                    store.size
+                }
+        }
+
+        override fun keys(): Set<KEY> {
+            return lock.readLock().withLock { store.keys }
         }
     }
-
 }

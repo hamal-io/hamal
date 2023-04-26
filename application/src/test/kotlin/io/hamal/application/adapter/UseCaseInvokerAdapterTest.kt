@@ -1,8 +1,8 @@
 package io.hamal.application.adapter
 
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.meta.Maybe
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -112,13 +112,13 @@ class UseCaseInvokerAdapterTest {
                     Int::class,
                     TestUseCase(3)
                 )
-                assertThat(result, equalTo(Maybe(2810)))
+                assertThat(result, equalTo(2810))
             }
 
             @Test
             fun `Applies operation but does not yield result`() {
                 val result = testInstance.fetchOne(Int::class, TestNoResultUseCase())
-                assertThat(result, equalTo(Maybe.none()))
+                assertThat(result, nullValue())
                 assertThat(ref.get(), equalTo(1))
             }
 
@@ -126,17 +126,17 @@ class UseCaseInvokerAdapterTest {
             private inner class TestUseCaseOperation : FetchOneUseCaseOperation<Int, TestUseCase>(
                 Int::class, TestUseCase::class
             ) {
-                override fun invoke(useCase: TestUseCase): Maybe<Int> {
-                    return Maybe(2810)
+                override fun invoke(useCase: TestUseCase): Int? {
+                    return 2810
                 }
             }
 
             private inner class TestNoResultUseCase : FetchOneUseCase
             private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
                 FetchOneUseCaseOperation<Int, TestNoResultUseCase>(Int::class, TestNoResultUseCase::class) {
-                override fun invoke(useCase: TestNoResultUseCase): Maybe<Int> {
+                override fun invoke(useCase: TestNoResultUseCase): Int? {
                     ref.incrementAndGet()
-                    return Maybe.none()
+                    return null
                 }
             }
 

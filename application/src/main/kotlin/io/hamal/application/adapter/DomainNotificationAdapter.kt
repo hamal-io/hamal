@@ -54,11 +54,11 @@ class DomainNotificationConsumerAdapter(
             private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
             init {
-//                create a consumer for each topic
-                val allDomainTopics = listOf(Topic.Name("scheduler::job_enqueued"))
+                val allDomainTopics = handlerContainer.topics()
+                    .map { Topic.Name(it) }
+                    .map(brokerRepository::resolveTopic)
 
-                allDomainTopics.forEach { topicName ->
-                    val topic = brokerRepository.resolveTopic(topicName)
+                allDomainTopics.forEach { topic ->
                     val consumer = ProtobufConsumer<DomainNotification>(
                         Consumer.GroupId("01"),
                         topic,

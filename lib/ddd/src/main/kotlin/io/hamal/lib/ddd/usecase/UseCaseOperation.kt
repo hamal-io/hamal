@@ -1,6 +1,5 @@
 package io.hamal.lib.ddd.usecase
 
-import io.hamal.lib.meta.Maybe
 import kotlin.reflect.KClass
 
 interface UseCase
@@ -54,5 +53,5 @@ abstract class FetchOneUseCaseOperation<RESULT : Any, out USE_CASE : FetchOneUse
     override val useCaseClass: KClass<@UnsafeVariance USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
 
-    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): Maybe<RESULT>
+    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT?
 }

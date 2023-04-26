@@ -69,6 +69,14 @@ class BrokerConsumersRepositoryTest {
         }
 
         @Test
+        fun `Sets journal_mode to wal`() {
+            BrokerConsumersRepository.open(testBrokerConsumers())
+                .executeQuery("""SELECT * FROM pragma_journal_mode""") {
+                    assertThat(it.getString(1), equalTo("wal"))
+                }
+        }
+
+        @Test
         fun `Sets locking_mode to exclusive`() {
             BrokerConsumersRepository.open(testBrokerConsumers()).use {
                 it.executeQuery("""SELECT * FROM pragma_locking_mode""") {
@@ -84,6 +92,14 @@ class BrokerConsumersRepositoryTest {
                     assertThat(it.getString(1), equalTo("2"))
                 }
             }
+        }
+
+        @Test
+        fun `Sets synchronous to off`() {
+            BrokerConsumersRepository.open(testBrokerConsumers())
+                .executeQuery("""SELECT * FROM pragma_synchronous""") {
+                    assertThat(it.getString(1), equalTo("0"))
+                }
         }
 
         private fun testBrokerConsumers(path: Path = Path(testDir)) = BrokerConsumers(

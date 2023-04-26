@@ -1,7 +1,6 @@
 package io.hamal.application.adapter
 
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.meta.Maybe
 import io.hamal.lib.meta.exception.IllegalArgumentException
 import io.hamal.lib.meta.exception.NotFoundException
 import org.hamcrest.CoreMatchers.equalTo
@@ -273,8 +272,8 @@ class UseCaseRegistryAdapterTest {
         FetchOneUseCaseOperation<TestResult, TestFetchOneUseCase>(
             TestResult::class, TestFetchOneUseCase::class
         ) {
-        override operator fun invoke(useCase: TestFetchOneUseCase): Maybe<TestResult> {
-            return Maybe.none()
+        override operator fun invoke(useCase: TestFetchOneUseCase): TestResult? {
+            return null
         }
     }
 
@@ -282,8 +281,8 @@ class UseCaseRegistryAdapterTest {
         class Handler : FetchOneUseCaseOperation<TestResult, TestFetchOneUseCaseInterface>(
             TestResult::class, TestFetchOneUseCaseInterface::class
         ) {
-            override operator fun invoke(useCase: TestFetchOneUseCaseInterface): Maybe<TestResult> {
-                return Maybe.none()
+            override operator fun invoke(useCase: TestFetchOneUseCaseInterface): TestResult? {
+                return null
             }
         }
     }

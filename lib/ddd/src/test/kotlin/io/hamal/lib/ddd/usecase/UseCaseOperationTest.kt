@@ -1,6 +1,5 @@
 package io.hamal.lib.ddd.usecase
 
-import io.hamal.lib.meta.Maybe
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -95,8 +94,8 @@ class UseCaseOperationTest {
         private inner class TestUseCaseOperation : FetchOneUseCaseOperation<TestResult, TestUseCase>(
             TestResult::class, TestUseCase::class
         ) {
-            override operator fun invoke(useCase: TestUseCase): Maybe<TestResult> {
-                return Maybe.none()
+            override operator fun invoke(useCase: TestUseCase): TestResult? {
+                return null
             }
         }
     }

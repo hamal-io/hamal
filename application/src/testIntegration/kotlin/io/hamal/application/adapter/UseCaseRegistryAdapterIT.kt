@@ -2,7 +2,6 @@ package io.hamal.application.adapter
 
 import io.hamal.application.adapter.TestUseCasesConfig.*
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.meta.Maybe
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -96,5 +95,5 @@ private val testFetchOneUseCaseOp = object : FetchOneUseCaseOperation<String, Te
     String::class,
     TestFetchOneUseCase::class
 ) {
-    override fun invoke(useCase: TestFetchOneUseCase) = Maybe.none<String>()
+    override fun invoke(useCase: TestFetchOneUseCase) = null
 }

@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap
 interface KeyedOnce<KEY : Any, VALUE : Any> {
     operator fun invoke(key: KEY, fn: () -> VALUE): VALUE
 
+    fun keys(): Set<KEY>
+
     companion object {
         fun <KEY : Any, VALUE : Any> default(): KeyedOnce<KEY, VALUE> {
             return DefaultImpl()
@@ -23,6 +25,10 @@ interface KeyedOnce<KEY : Any, VALUE : Any> {
             onceStore.putIfAbsent(key, Once.default())
             return onceStore[key]!!.invoke(fn)
         }
+
+        override fun keys(): Set<KEY> {
+            return onceStore.keys
+        }
     }
 
     class LruImpl<KEY : Any, VALUE : Any>(maxCapacity: Int) : KeyedOnce<KEY, VALUE> {
@@ -31,6 +37,10 @@ interface KeyedOnce<KEY : Any, VALUE : Any> {
         override fun invoke(key: KEY, fn: () -> VALUE): VALUE {
             onceStore.putIfAbsent(key, Once.default())
             return onceStore[key].invoke(fn)
+        }
+
+        override fun keys(): Set<KEY> {
+            return onceStore.keys()
         }
     }
 }

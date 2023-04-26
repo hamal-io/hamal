@@ -1,9 +1,5 @@
 package io.hamal.lib.meta.util
 
-import io.hamal.lib.meta.Maybe
-import io.hamal.lib.meta.get
-import io.hamal.lib.meta.isAbsent
-import io.hamal.lib.meta.isPresent
 import io.hamal.lib.meta.util.LruCache.DefaultImpl
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -85,7 +81,7 @@ class LruCacheTest {
             @Test
             fun `Nothing there`() {
                 val maybeResult = testInstance.find(someKey)
-                assertTrue(maybeResult.isAbsent())
+                assertTrue(maybeResult == null)
             }
 
             @Test
@@ -93,7 +89,7 @@ class LruCacheTest {
                 testInstance.put(anotherKey, anotherValue)
 
                 val maybeResult = testInstance.find(someKey)
-                assertTrue(maybeResult.isAbsent())
+                assertTrue(maybeResult == null)
             }
 
             @Test
@@ -103,8 +99,8 @@ class LruCacheTest {
                 testInstance.put(anotherKey, anotherValue)
 
                 val maybeResult = testInstance.find(someKey)
-                assertTrue(maybeResult.isPresent())
-                assertThat(maybeResult, equalTo(Maybe.some(someValue)))
+                assertTrue(maybeResult != null)
+                assertThat(maybeResult, equalTo(someValue))
             }
         }
 
@@ -152,14 +148,12 @@ class LruCacheTest {
 
         private fun verifySomeValue() {
             val maybeResult = testInstance.find(someKey)
-            assertTrue(maybeResult.isPresent())
-            assertThat(maybeResult.get(), equalTo(someValue))
+            assertThat(maybeResult, equalTo(someValue))
         }
 
         private fun verifyAnotherValue() {
             val maybeResult = testInstance.find(someKey)
-            assertTrue(maybeResult.isPresent())
-            assertThat(maybeResult.get(), equalTo(anotherValue))
+            assertThat(maybeResult, equalTo(anotherValue))
         }
 
         private fun verifySize(expectedSize: Int) {
@@ -169,8 +163,7 @@ class LruCacheTest {
         private fun verifyAdditionalData() {
             IntRange(11, 30).forEach { value: Int ->
                 val maybeResult = testInstance.find(value)
-                assertTrue(maybeResult.isPresent())
-                assertThat(maybeResult.get(), equalTo(value))
+                assertThat(maybeResult, equalTo(value))
             }
         }
 

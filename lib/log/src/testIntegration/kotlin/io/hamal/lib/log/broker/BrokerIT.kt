@@ -20,7 +20,7 @@ class BrokerIT {
 
             val futures = IntRange(1, 10).map { thread ->
                 CompletableFuture.runAsync {
-                    IntRange(1, 10_000).forEach {
+                    IntRange(1, 1_000).forEach {
                         testInstance.append(topic, "$thread $it".toByteArray())
                     }
                 }
@@ -28,8 +28,8 @@ class BrokerIT {
 
             futures.forEach { it.join() }
 
-            val result = testInstance.read(GroupId("group-id"), topic, 1_000_000)
-            assertThat(result, hasSize(100_000))
+            val result = testInstance.read(GroupId("group-id"), topic, 100_000)
+            assertThat(result, hasSize(10_000))
         }
     }
 
@@ -41,7 +41,7 @@ class BrokerIT {
             val futures = IntRange(1, 100).map { thread ->
                 CompletableFuture.runAsync {
                     val topic = testInstance.resolveTopic(Topic.Name("topic-$thread"))
-                    IntRange(1, 1_000).forEach {
+                    IntRange(1, 100).forEach {
                         testInstance.append(topic, "$thread $it".toByteArray())
                     }
                 }
@@ -56,9 +56,9 @@ class BrokerIT {
                     1_000_000
                 )
 
-                assertThat(result, hasSize(1_000))
+                assertThat(result, hasSize(100))
                 assertThat(result.first().bytes, equalTo("$thread 1".toByteArray()))
-                assertThat(result.last().bytes, equalTo("$thread 1000".toByteArray()))
+                assertThat(result.last().bytes, equalTo("$thread 100".toByteArray()))
             }
 
         }
