@@ -1,22 +1,21 @@
-package io.hamal.module.launchpad.core.job.model
+package io.hamal.lib.domain
 
 import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.JobState
-import io.hamal.lib.domain.vo.JobState.*
 
 sealed class Job(
     val id: JobId,
     val state: JobState,
     val definitionId: JobDefinitionId
-) {
+) : DomainObject {
 
     class PlannedJob(
         id: JobId,
         definitionId: JobDefinitionId
     ) : Job(
         id = id,
-        state = Planned,
+        state = JobState.Planned,
         definitionId = definitionId
     )
 
@@ -25,7 +24,7 @@ sealed class Job(
         definitionId: JobDefinitionId
     ) : Job(
         id = id,
-        state = Scheduled,
+        state = JobState.Scheduled,
         definitionId = definitionId
     )
 
@@ -34,7 +33,7 @@ sealed class Job(
         definitionId: JobDefinitionId
     ) : Job(
         id = id,
-        state = Started,
+        state = JobState.Started,
         definitionId = definitionId
     )
 
@@ -43,7 +42,7 @@ sealed class Job(
         definitionId: JobDefinitionId
     ) : Job(
         id = id,
-        state = Completed,
+        state = JobState.Completed,
         definitionId = definitionId
     )
 
@@ -52,7 +51,7 @@ sealed class Job(
         definitionId: JobDefinitionId
     ) : Job(
         id = id,
-        state = Failed,
+        state = JobState.Failed,
         definitionId = definitionId
     )
 
@@ -61,7 +60,7 @@ sealed class Job(
         definitionId: JobDefinitionId
     ) : Job(
         id = id,
-        state = TerminalFailed,
+        state = JobState.TerminalFailed,
         definitionId = definitionId
     )
 }

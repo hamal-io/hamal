@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.RegionId
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.module.queue.core.job.EnqueueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort.JobToEnqueue
-import io.hamal.module.queue.core.job.Job
+import io.hamal.lib.domain.QueuedJob
 
 data class EnqueueJobUseCase(
     val jobId: JobId,
@@ -17,10 +17,10 @@ data class EnqueueJobUseCase(
     class Operation(
         val enqueueJob: EnqueueJobPort,
         val notifyDomainPort: NotifyDomainPort
-    ) : CommandUseCaseOperation<Job.Enqueued, EnqueueJobUseCase>(
-        Job.Enqueued::class, EnqueueJobUseCase::class
+    ) : CommandUseCaseOperation<QueuedJob.Enqueued, EnqueueJobUseCase>(
+        QueuedJob.Enqueued::class, EnqueueJobUseCase::class
     ) {
-        override fun invoke(useCase: EnqueueJobUseCase): List<Job.Enqueued> {
+        override fun invoke(useCase: EnqueueJobUseCase): List<QueuedJob.Enqueued> {
             println("Enqueue job")
             val result = enqueueJob(
                 JobToEnqueue(

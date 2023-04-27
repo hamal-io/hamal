@@ -40,6 +40,10 @@ include(":lib:log")
 include(":lib:meta")
 include(":lib:util")
 
+include(":repository:api")
+include(":repository:memory")
+include(":repository:sqlite")
+
 include(":module:launchpad:application")
 include(":module:launchpad:core")
 include(":module:launchpad:infra")

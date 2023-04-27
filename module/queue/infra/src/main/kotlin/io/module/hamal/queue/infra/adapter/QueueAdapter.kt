@@ -4,25 +4,25 @@ import io.hamal.lib.domain.vo.RegionId
 import io.hamal.module.queue.core.job.DequeueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort.JobToEnqueue
-import io.hamal.module.queue.core.job.Job
+import io.hamal.lib.domain.QueuedJob
 import org.springframework.stereotype.Component
 
 @Component
 class QueueAdapter : EnqueueJobPort, DequeueJobPort {
 
-    private val queue = mutableMapOf<RegionId, MutableList<Job.Enqueued>>()
+    private val queue = mutableMapOf<RegionId, MutableList<QueuedJob.Enqueued>>()
 
-    override fun invoke(regionId: RegionId): Job.Dequeued? {
+    override fun invoke(regionId: RegionId): QueuedJob.Dequeued? {
         val enqueued = queue[regionId]?.removeFirst() ?: return null
-        return Job.Dequeued(
+        return QueuedJob.Dequeued(
             enqueued.id,
         )
     }
 
-    override fun invoke(jobToEnqueue: JobToEnqueue): Job.Enqueued {
+    override fun invoke(jobToEnqueue: JobToEnqueue): QueuedJob.Enqueued {
         queue.putIfAbsent(jobToEnqueue.regionId, mutableListOf())
 
-        val result = Job.Enqueued(
+        val result = QueuedJob.Enqueued(
             jobToEnqueue.jobId,
         )
 
