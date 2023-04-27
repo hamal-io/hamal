@@ -1,5 +1,6 @@
 package io.hamal.module.launchpad.infra.config
 
+import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.module.launchpad.application.job.CreateJobDefinitionUseCase
 import io.hamal.module.launchpad.application.trigger.InvokeManualTriggerUseCase
@@ -19,6 +20,7 @@ open class UseCaseConfig {
 
     @Bean
     open fun invokeManualTrigger(
-        notifyDomainPort: NotifyDomainPort
-    ) = InvokeManualTriggerUseCase.Operation(notifyDomainPort)
+        notifyDomainPort: NotifyDomainPort,
+        generateDomainId: GenerateDomainIdPort
+    ) = InvokeManualTriggerUseCase.Operation(notifyDomainPort, generateDomainId)
 }

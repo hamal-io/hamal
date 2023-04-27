@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":lib:log"))
     implementation(project(":lib:domain-notification"))
     implementation(project(":lib:domain-value-object"))
+    implementation(project(":lib:util"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")

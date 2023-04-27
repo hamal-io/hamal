@@ -17,6 +17,6 @@ abstract class Version : ValueObject.ComparableImpl<Int>() {
 
 internal object VersionValidator {
     fun validate(value: Int) {
-        require(value > 0) { IllegalArgumentException("Version('$value') is illegal") }
+        require(value > 0) { "Version('$value') is illegal" }
     }
 }

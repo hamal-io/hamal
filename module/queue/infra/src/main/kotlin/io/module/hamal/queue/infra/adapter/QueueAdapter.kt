@@ -1,6 +1,6 @@
 package io.module.hamal.queue.infra.adapter
 
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.module.queue.core.job.DequeueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort.JobToEnqueue
@@ -16,7 +16,6 @@ class QueueAdapter : EnqueueJobPort, DequeueJobPort {
         val enqueued = queue[regionId]?.removeFirst() ?: return null
         return Job.Dequeued(
             enqueued.id,
-            enqueued.regionId
         )
     }
 
@@ -25,7 +24,6 @@ class QueueAdapter : EnqueueJobPort, DequeueJobPort {
 
         val result = Job.Enqueued(
             jobToEnqueue.jobId,
-            jobToEnqueue.regionId
         )
 
         queue[jobToEnqueue.regionId]!!.plus(result)

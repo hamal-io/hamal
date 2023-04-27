@@ -2,7 +2,7 @@ package io.hamal.module.queue.application
 
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.module.queue.core.job.DequeueJobPort
 import io.hamal.module.queue.core.job.Job
 

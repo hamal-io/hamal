@@ -3,7 +3,7 @@ package io.hamal.module.queue.application
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobId
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.lib.domain_notification.NotifyDomainPort
 import io.hamal.module.queue.core.job.EnqueueJobPort
 import io.hamal.module.queue.core.job.EnqueueJobPort.JobToEnqueue

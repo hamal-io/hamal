@@ -1,25 +1,19 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.JobDefinitionId.JobDefinitionIdSerializer
-import io.hamal.lib.domain.vo.JobId.JobIdSerializer
-import io.hamal.lib.domain.vo.base.Id
-import io.hamal.lib.domain.vo.base.IdSerializer
+import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.domain.vo.base.DomainIdSerializer
 import io.hamal.lib.domain.vo.base.Reference
+import io.hamal.lib.util.Snowflake
 import kotlinx.serialization.Serializable
 
-@Serializable(with = JobIdSerializer::class)
-data class JobId(override val value: Value) : Id() {
-    constructor(value: String) : this(Value(value))
-
-    internal object JobIdSerializer : IdSerializer<JobId>(::JobId)
+@Serializable(with = JobId.Serializer::class)
+data class JobId(override val value: Snowflake.Id) : DomainId() {
+    internal object Serializer : DomainIdSerializer<JobId>(::JobId)
 }
 
-
-@Serializable(with = JobDefinitionIdSerializer::class)
-class JobDefinitionId(override val value: Value) : Id() {
-    constructor(value: String) : this(Value(value))
-
-    internal object JobDefinitionIdSerializer : IdSerializer<JobDefinitionId>(::JobDefinitionId)
+@Serializable(with = JobDefinitionId.Serializer::class)
+class JobDefinitionId(override val value: Snowflake.Id) : DomainId() {
+    internal object Serializer : DomainIdSerializer<JobDefinitionId>(::JobDefinitionId)
 }
 
 

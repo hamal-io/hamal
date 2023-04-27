@@ -2,7 +2,7 @@ package io.hamal.module.launchpad.infra.web
 
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.module.launchpad.application.job.CreateJobDefinitionUseCase
 import io.hamal.module.launchpad.core.job.model.JobDefinition
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ open class JobDefinitionController(
         return invokeUseCasePort.command(
             JobDefinition::class,
             CreateJobDefinitionUseCase(
-                RegionId("this"),
+                RegionId(0),
                 JobReference("some-ref")
             )
         ).firstOrNull()

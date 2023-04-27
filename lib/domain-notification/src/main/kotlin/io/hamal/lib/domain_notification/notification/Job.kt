@@ -1,7 +1,7 @@
 package io.hamal.lib.domain_notification.notification
 
 import io.hamal.lib.domain.vo.JobId
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.lib.domain_notification.DomainNotificationTopic
 import kotlinx.serialization.Serializable
 

@@ -23,6 +23,7 @@ fun main(args: Array<String>) {
 //            DatabaseConfig::class.java,
             AsyncConfig::class.java,
             DomainNotificationConfig::class.java,
+            IdConfig::class.java,
             LoggerConfig::class.java,
             UseCaseConfig::class.java,
             WebConfig::class.java

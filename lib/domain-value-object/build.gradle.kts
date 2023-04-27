@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":lib:util"))
 
     implementation(external.kotlin.protobuf)
+    implementation(external.kotlin.json)
     implementation(external.kotlin.reflect)
 
     testImplementation(external.junit)

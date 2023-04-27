@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":lib:ddd"))
     implementation(project(":lib:domain-notification"))
     implementation(project(":lib:domain-value-object"))
+    implementation(project(":lib:util"))
     implementation(project(":module:launchpad:application"))
     implementation(project(":module:launchpad:core"))
 

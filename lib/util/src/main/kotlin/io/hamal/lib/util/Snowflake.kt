@@ -4,7 +4,13 @@ import io.hamal.lib.meta.Tuple2
 import io.hamal.lib.util.Snowflake.ElapsedSource.Elapsed
 import io.hamal.lib.util.Snowflake.PartitionSource.Partition
 import io.hamal.lib.util.Snowflake.SequenceSource.Sequence
-import java.time.Instant
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -57,18 +63,8 @@ interface Snowflake {
     }
 
     @JvmInline
+    @Serializable(with = Id.Serializer::class)
     value class Id(val value: Long) : Comparable<Id> {
-
-        constructor(value: String) : this(ensureRightFormat(value).toLong(16))
-
-        companion object {
-            fun ensureRightFormat(value: String): String {
-                require(value.startsWith("0x")) { "Id must start with 0x" }
-                val result = value.substring(2, value.length)
-                require(Hex.isValidHexNumber(result)) { "Invalid hex number"}
-                return result
-            }
-        }
 
         override fun compareTo(other: Id) = value.compareTo(other.value)
 
@@ -98,18 +94,28 @@ interface Snowflake {
         )
 
         override fun toString(): String {
-            return "0x${value.toBigInteger().toByteArray().joinToString("") { "%02x".format(it) }}"
+            return "$value"
+        }
+
+        object Serializer : KSerializer<Id> {
+            override val descriptor: SerialDescriptor
+                get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.LONG)
+
+            override fun deserialize(decoder: Decoder) = Id(decoder.decodeLong())
+
+            override fun serialize(encoder: Encoder, value: Id) {
+                encoder.encodeLong(value.value)
+            }
         }
     }
 }
 
 class DefaultElapsedSource(
-    val epoch: Instant = Instant.ofEpochMilli(1682116276624) // 2023-04-22 some when in the morning AEST
+    val epoch: Long = 1682116276624 // 2023-04-22 some when in the morning AEST
 ) : Snowflake.ElapsedSource {
-    private val startedAt = millis()
-    override fun elapsed() = Elapsed(millis() - startedAt)
+    override fun elapsed() = Elapsed(millis())
 
-    private fun millis() = (System.nanoTime() / 1_000_000) - epoch.toEpochMilli()
+    private fun millis() = System.currentTimeMillis() - epoch
 }
 
 class DefaultPartitionSource(
@@ -128,7 +134,7 @@ class DefaultSequenceSource : Snowflake.SequenceSource {
 
     override fun next(elapsedSource: () -> Elapsed): Tuple2<Elapsed, Sequence> {
         val elapsed = elapsedSource()
-        require(elapsed >= previousCalledAt) { "Elapsed must be monotonic" }
+        check(elapsed >= previousCalledAt) { "Elapsed must be monotonic" }
 
         if (elapsed == previousCalledAt) {
             if (nextSequence >= maxSequence) {
@@ -157,7 +163,6 @@ class DefaultSequenceSource : Snowflake.SequenceSource {
 internal class FixedElapsedSource(val value: Long) : Snowflake.ElapsedSource {
     override fun elapsed() = Elapsed(value)
 }
-
 
 class SnowflakeGenerator(
     private val partitionSource: Snowflake.PartitionSource,

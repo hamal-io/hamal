@@ -1,13 +1,17 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.domain.vo.helper.SerializationTestHelper.generateTestCases
+import io.hamal.lib.util.Snowflake
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 @Nested
 class JobTest {
+
     @Nested
     @DisplayName("JobId")
     inner class JobIdTest {
@@ -17,16 +21,16 @@ class JobTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    JobId("0x1337C0DE"),
-                    JobId("0x1337C0DE")
+                    JobId(Snowflake.Id(23)),
+                    JobId(Snowflake.Id(23))
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    JobId("0x1337C0DE"),
-                    JobId("0xC0DEBABEC0DE")
+                    JobId(Snowflake.Id(23)),
+                    JobId(Snowflake.Id(127))
                 )
             }
         }
@@ -37,19 +41,22 @@ class JobTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    JobId("0x1337C0DE").hashCode(),
-                    JobId("0x1337C0DE").hashCode()
+                    JobId(Snowflake.Id(23)).hashCode(),
+                    JobId(Snowflake.Id(23)).hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    JobId("0x1337C0DE").hashCode(),
-                    JobId("0xC0DEBABEC0DE").hashCode()
+                    JobId(Snowflake.Id(23)).hashCode(),
+                    JobId(Snowflake.Id(127)).hashCode()
                 )
             }
         }
+
+        @TestFactory
+        fun Serialization() = generateTestCases(JobId(Snowflake.Id(23)), "23")
     }
 
     @Nested
@@ -61,16 +68,16 @@ class JobTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    JobDefinitionId("0x1337C0DE"),
-                    JobDefinitionId("0x1337C0DE")
+                    JobDefinitionId(Snowflake.Id(23)),
+                    JobDefinitionId(Snowflake.Id(23))
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    JobDefinitionId("0x1337C0DE"),
-                    JobDefinitionId("0xC0DEBABEC0DE")
+                    JobDefinitionId(Snowflake.Id(23)),
+                    JobDefinitionId(Snowflake.Id(127))
                 )
             }
         }
@@ -81,19 +88,21 @@ class JobTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    JobDefinitionId("0x1337C0DE").hashCode(),
-                    JobDefinitionId("0x1337C0DE").hashCode()
+                    JobDefinitionId(Snowflake.Id(23)).hashCode(),
+                    JobDefinitionId(Snowflake.Id(23)).hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    JobDefinitionId("0x1337C0DE").hashCode(),
-                    JobDefinitionId("0xC0DEBABEC0DE").hashCode()
+                    JobDefinitionId(Snowflake.Id(23)).hashCode(),
+                    JobDefinitionId(Snowflake.Id(127)).hashCode()
                 )
             }
         }
+        @TestFactory
+        fun Serialization() = generateTestCases(JobDefinitionId(Snowflake.Id(23)), "23")
     }
 
     @Nested

@@ -1,7 +1,7 @@
 package io.hamal.module.launchpad.core.job.port
 
 import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.module.launchpad.core.job.model.JobDefinition
 
 interface CreateJobDefinitionPort {

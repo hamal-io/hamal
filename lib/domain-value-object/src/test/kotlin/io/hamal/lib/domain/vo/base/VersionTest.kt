@@ -22,11 +22,7 @@ class VersionTest {
 
         @Test
         fun `Throws IllegalArgumentException if version is not legal`() {
-            for (illegal in listOf(
-                0,
-                -1,
-                Int.MIN_VALUE
-            )) {
+            for (illegal in listOf(0, -1, Int.MIN_VALUE)) {
                 val exception = assertThrows<IllegalArgumentException> {
                     VersionValidator.validate(illegal)
                 }

@@ -1,15 +1,20 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package io.hamal.lib.util
 
 import io.hamal.lib.util.Snowflake.ElapsedSource.Elapsed
 import io.hamal.lib.util.Snowflake.PartitionSource.Partition
 import io.hamal.lib.util.Snowflake.SequenceSource.Sequence
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.encodeToByteArray
+import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.time.Instant
 import java.util.concurrent.CompletableFuture.supplyAsync
 import java.util.concurrent.Executors
 
@@ -20,7 +25,7 @@ class SnowflakeTest {
         @Test
         fun `With default epoch`() {
             val testInstance = DefaultElapsedSource()
-            assertThat(testInstance.epoch, equalTo(Instant.ofEpochMilli(1682116276624)))
+            assertThat(testInstance.epoch, equalTo(1682116276624))
         }
 
         @Test
@@ -128,7 +133,7 @@ class SnowflakeTest {
                     testInstance.next { Elapsed(2L) }
                     testInstance.next { Elapsed(3L) }
 
-                    val exception = assertThrows<IllegalArgumentException> {
+                    val exception = assertThrows<IllegalStateException> {
                         testInstance.next { Elapsed(1) }
                     }
                     assertThat(exception.message, containsString("Elapsed must be monotonic"))
@@ -255,34 +260,12 @@ class SnowflakeTest {
         }
 
         @Test
-        fun `Id to and from string`() {
-            val testInstance = Snowflake.Id(1159101075524468096)
-            assertThat(testInstance.toString(), equalTo("0x1015f4497968bd80"))
-
-            val result = Snowflake.Id("0x1015f4497968bd80")
-            assertThat(result, equalTo(Snowflake.Id(1159101075524468096)))
-        }
-
-        @Test
-        fun `Id 0 to string`() {
-            val testInstance = Snowflake.Id(0)
-            assertThat(testInstance.toString(), equalTo("0x00"))
-        }
-
-        @Test
-        fun `String does not start with 0x so can not be valid`() {
-            val exception = assertThrows<IllegalArgumentException> {
-                Snowflake.Id("SomeInvalidString---booom")
-            }
-            assertThat(exception.message, containsString("Id must start with 0x"))
-        }
-
-        @Test
-        fun `String starts with 0x but still invalid`() {
-            val exception = assertThrows<IllegalArgumentException> {
-                Snowflake.Id("0xUHV")
-            }
-            assertThat(exception.message, containsString("Invalid hex number"))
+        fun `Is Serializable`() {
+            val testInstance = Snowflake.Id(12345678)
+            val encoded = ProtoBuf.encodeToByteArray(testInstance)
+            assertThat(encoded.size, equalTo(4))
+            val decoded = ProtoBuf.decodeFromByteArray<Snowflake.Id>(encoded)
+            assertThat(decoded, equalTo(Snowflake.Id(12345678)))
         }
     }
 
@@ -413,15 +396,15 @@ class SnowflakeTest {
     fun `Multiple generators with different partitions create ids - with unique epoch`() {
         val instanceOne = SnowflakeGenerator(
             partitionSource = DefaultPartitionSource(1),
-            elapsedSource = DefaultElapsedSource(Instant.ofEpochMilli(0))
+            elapsedSource = DefaultElapsedSource(0)
         )
         val instanceTwo = SnowflakeGenerator(
             partitionSource = DefaultPartitionSource(2),
-            elapsedSource = DefaultElapsedSource(Instant.ofEpochMilli(0))
+            elapsedSource = DefaultElapsedSource(0)
         )
         val instanceThree = SnowflakeGenerator(
             partitionSource = DefaultPartitionSource(3),
-            elapsedSource = DefaultElapsedSource(Instant.ofEpochMilli(0))
+            elapsedSource = DefaultElapsedSource(0)
         )
 
         val resultOne = supplyAsync { IntRange(1, 500_000).map { instanceOne.next() }.toSet() }
@@ -443,7 +426,7 @@ class SnowflakeTest {
     fun `Is threadsafe`() {
         val instance = SnowflakeGenerator(
             partitionSource = DefaultPartitionSource(1),
-            elapsedSource = DefaultElapsedSource(Instant.ofEpochMilli(0))
+            elapsedSource = DefaultElapsedSource(123456)
         )
 
         val pool = Executors.newFixedThreadPool(12)

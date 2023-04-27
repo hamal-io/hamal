@@ -3,7 +3,7 @@ package io.hamal.module.launchpad.application.job
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.base.RegionId
+import io.hamal.lib.domain.vo.RegionId
 import io.hamal.lib.domain_notification.NotifyDomainPort
 //import io.hamal.lib.domain_notification.notification.JobDefinitionDomainNotification.Created
 import io.hamal.module.launchpad.core.job.model.JobDefinition

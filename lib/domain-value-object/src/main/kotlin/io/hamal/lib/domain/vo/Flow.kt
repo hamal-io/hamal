@@ -1,7 +1,12 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.base.Id
+import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.domain.vo.base.DomainIdSerializer
+import io.hamal.lib.util.Snowflake
+import kotlinx.serialization.Serializable
 
-class FlowId(override val value: Value) : Id() {
-    constructor(value: String) : this(Value(value))
+
+@Serializable(with = FlowId.Serializer::class)
+class FlowId(override val value: Snowflake.Id) : DomainId() {
+    internal object Serializer : DomainIdSerializer<FlowId>(::FlowId)
 }

@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package io.hamal.lib.log.appender
 
 import io.hamal.lib.log.broker.BrokerRepository
 import io.hamal.lib.log.topic.Topic
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer

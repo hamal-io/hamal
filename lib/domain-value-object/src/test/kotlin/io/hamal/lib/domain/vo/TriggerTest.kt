@@ -1,10 +1,13 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.domain.vo.helper.SerializationTestHelper.generateTestCases
+import io.hamal.lib.util.Snowflake
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 @Nested
 class TriggerTest {
@@ -18,16 +21,16 @@ class TriggerTest {
             @Test
             fun `Equals if underlying values are equal`() {
                 assertEquals(
-                    TriggerId("0x1337C0DE"),
-                    TriggerId("0x1337C0DE")
+                    TriggerId(Snowflake.Id(23)),
+                    TriggerId(Snowflake.Id(23))
                 )
             }
 
             @Test
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
-                    TriggerId("0x1337C0DE"),
-                    TriggerId("0xC0DEBABEC0DE")
+                    TriggerId(Snowflake.Id(23)),
+                    TriggerId(Snowflake.Id(127))
                 )
             }
         }
@@ -38,18 +41,21 @@ class TriggerTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    TriggerId("0x1337C0DE").hashCode(),
-                    TriggerId("0x1337C0DE").hashCode()
+                    TriggerId(Snowflake.Id(23)).hashCode(),
+                    TriggerId(Snowflake.Id(23)).hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    TriggerId("0x1337C0DE").hashCode(),
-                    TriggerId("0xC0DEBABEC0DE").hashCode()
+                    TriggerId(Snowflake.Id(23)).hashCode(),
+                    TriggerId(Snowflake.Id(127)).hashCode()
                 )
             }
         }
+
+        @TestFactory
+        fun Serialization() = generateTestCases(TriggerId(Snowflake.Id(23)), "23")
     }
 }
