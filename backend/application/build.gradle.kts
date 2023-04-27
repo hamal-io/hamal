@@ -10,4 +10,8 @@ dependencies {
     implementation(project(":lib:domain-value-object"))
     implementation(project(":lib:util"))
     implementation(project(":backend:core"))
+
+    testImplementation(project(":backend:application"))
+    testImplementation(external.junit)
+    testImplementation(external.hamcrest)
 }

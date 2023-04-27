@@ -13,4 +13,8 @@ dependencies {
 
     implementation(external.kotlin.json)
     implementation(external.kotlin.protobuf)
+
+    testImplementation(project(":backend:core"))
+    testImplementation(external.junit)
+    testImplementation(external.hamcrest)
 }

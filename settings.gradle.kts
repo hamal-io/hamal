@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 }
 
 
-include("application")
+include("bootstrap")
 
 include(":script:api")
 include(":script:impl")
@@ -53,7 +53,6 @@ include(":worker:extension:api")
 include(":worker:extension:impl:starter")
 
 
-
 //include(":repository:api")
 //include(":repository:memory")
 //include(":repository:sqlite")
@@ -72,7 +71,6 @@ include(":worker:extension:impl:starter")
 //
 //include(":worker:core")
 //include(":worker:infra")
-
 
 
 rootProject.name = "hamal"
