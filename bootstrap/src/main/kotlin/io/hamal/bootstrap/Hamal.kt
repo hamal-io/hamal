@@ -3,7 +3,6 @@ package io.hamal.bootstrap
 import io.hamal.backend.infra.BackendConfig
 import io.hamal.bootstrap.config.IdConfig
 import io.hamal.bootstrap.config.LoggerConfig
-import io.hamal.bootstrap.config.UseCaseConfig
 import io.hamal.worker.infra.WorkerModuleConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -21,7 +20,6 @@ fun main(args: Array<String>) {
         .parent(
             IdConfig::class.java,
             LoggerConfig::class.java,
-            UseCaseConfig::class.java,
         )
         .banner { _: Environment, _: Class<*>, out: PrintStream ->
             out.println("")

@@ -1,10 +1,10 @@
-package io.hamal.bootstrap.adapter
+package io.hamal.backend.infra.adapter
 
 import io.hamal.lib.ddd.usecase.*
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.reflect.KClass
 
-class DefaultUseCaseInvokerAdapter(
+class BackendUseCaseInvokerAdapter(
     @Autowired internal val getCommandUseCasePort: GetCommandUseCasePort,
     @Autowired internal val getQueryUseCasePort: GetQueryUseCasePort,
     @Autowired internal val getFetchOneUseCasePort: GetFetchOneUseCasePort

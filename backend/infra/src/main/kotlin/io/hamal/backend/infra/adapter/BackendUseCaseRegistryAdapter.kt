@@ -1,4 +1,4 @@
-package io.hamal.bootstrap.adapter
+package io.hamal.backend.infra.adapter
 
 import io.hamal.lib.ddd.usecase.*
 import io.hamal.lib.meta.KeyedOnce
@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import kotlin.reflect.KClass
 
-class DefaultUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
+class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         event.applicationContext.getBeansOfType(CommandUseCaseOperation::class.java)

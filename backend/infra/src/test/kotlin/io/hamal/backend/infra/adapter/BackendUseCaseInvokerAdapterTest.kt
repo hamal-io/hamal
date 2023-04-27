@@ -1,4 +1,4 @@
-package io.hamal.bootstrap.adapter
+package io.hamal.backend.infra.adapter
 
 import io.hamal.lib.ddd.usecase.*
 import org.hamcrest.CoreMatchers.equalTo
@@ -11,11 +11,11 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.pow
 
 @Nested
-class UseCaseInvokerAdapterTest {
+class BackendUseCaseInvokerAdapterTest {
 
     @Nested
-    @DisplayName("DefaultUseCaseInvokerAdapter")
-    inner class DefaultUseCaseInvokerAdapterTest {
+    @DisplayName("BackendUseCaseInvokerAdapter")
+    inner class BackendUseCaseInvokerAdapterTest {
 
         @Nested
         @DisplayName("command()")
@@ -58,7 +58,7 @@ class UseCaseInvokerAdapterTest {
                 }
             }
 
-            private val testRegistryAdapter = DefaultUseCaseRegistryAdapter()
+            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
             private val ref = AtomicInteger()
 
             init {
@@ -69,7 +69,7 @@ class UseCaseInvokerAdapterTest {
                 )
             }
 
-            private val testInstance = DefaultUseCaseInvokerAdapter(testRegistryAdapter)
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter)
         }
 
         @Nested
@@ -94,13 +94,13 @@ class UseCaseInvokerAdapterTest {
                 }
             }
 
-            private val testRegistryAdapter = DefaultUseCaseRegistryAdapter()
+            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 
             init {
                 testRegistryAdapter.register(TestQueryUseCase::class, TestQueryUseCaseOperation())
             }
 
-            private val testInstance = DefaultUseCaseInvokerAdapter(testRegistryAdapter)
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter)
         }
 
         @Nested
@@ -140,7 +140,7 @@ class UseCaseInvokerAdapterTest {
                 }
             }
 
-            private val testRegistryAdapter = DefaultUseCaseRegistryAdapter()
+            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
             private val ref = AtomicInteger()
 
             init {
@@ -148,7 +148,7 @@ class UseCaseInvokerAdapterTest {
                 testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
             }
 
-            private val testInstance = DefaultUseCaseInvokerAdapter(testRegistryAdapter)
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter)
         }
     }
 

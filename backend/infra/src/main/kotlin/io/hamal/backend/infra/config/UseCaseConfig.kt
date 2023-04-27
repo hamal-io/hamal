@@ -1,7 +1,7 @@
-package io.hamal.bootstrap.config
+package io.hamal.backend.infra.config
 
-import io.hamal.bootstrap.adapter.DefaultUseCaseInvokerAdapter
-import io.hamal.bootstrap.adapter.DefaultUseCaseRegistryAdapter
+import io.hamal.backend.infra.adapter.BackendUseCaseInvokerAdapter
+import io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapter
 import io.hamal.lib.ddd.usecase.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 open class UseCaseConfig {
 
     @Bean
-    open fun getUseCase(): GetUseCasePort = DefaultUseCaseRegistryAdapter()
+    open fun getUseCase(): GetUseCasePort = BackendUseCaseRegistryAdapter()
 
     @Bean
     open fun getCommandUseCase(): GetCommandUseCasePort = getUseCase()
@@ -21,8 +21,8 @@ open class UseCaseConfig {
     @Bean
     open fun getFetchOneUseCase(): GetFetchOneUseCasePort = getUseCase()
 
-    @Bean(autowireCandidate = false)
-    open fun invokeUseCase(): InvokeUseCasePort = DefaultUseCaseInvokerAdapter(
+    @Bean
+    open fun invokeUseCase(): InvokeUseCasePort = BackendUseCaseInvokerAdapter(
         getCommandUseCase(),
         getQueryUseCase(),
         getFetchOneUseCase()
@@ -30,4 +30,5 @@ open class UseCaseConfig {
 
     @Bean
     open fun invokeQueryUseCase(): InvokeQueryUseCasePort = invokeUseCase()
+
 }

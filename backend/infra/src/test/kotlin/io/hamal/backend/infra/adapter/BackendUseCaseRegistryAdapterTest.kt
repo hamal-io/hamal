@@ -1,4 +1,4 @@
-package io.hamal.bootstrap.adapter
+package io.hamal.backend.infra.adapter
 
 import io.hamal.lib.ddd.usecase.*
 import org.hamcrest.CoreMatchers.containsString
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*
 import java.util.*
 
 @Nested
-class UseCaseRegistryAdapterTest {
+class BackendUseCaseRegistryAdapterTest {
 
     @Nested
     @DisplayName("GetCommandUseCasePort")
@@ -23,7 +23,7 @@ class UseCaseRegistryAdapterTest {
 
         @Test
         fun `Not found`() {
-            val testInstance = DefaultUseCaseRegistryAdapter()
+            val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
                 testInstance[TestResult::class, TestCommandUseCase::class]
@@ -60,7 +60,7 @@ class UseCaseRegistryAdapterTest {
 
         @Test
         fun `Interface of use case is registered`() {
-            val testInstance = DefaultUseCaseRegistryAdapter().apply {
+            val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
                     TestCommandUseCaseInterface::class,
                     testCommandInterfaceUseCaseOp
@@ -70,7 +70,7 @@ class UseCaseRegistryAdapterTest {
             assertThat(result, equalTo(testCommandInterfaceUseCaseOp))
         }
 
-        private fun testInstanceWithUseCase() = DefaultUseCaseRegistryAdapter().apply {
+        private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
             register(TestCommandUseCase::class, testCommandUseCaseOp)
         }
 
@@ -92,7 +92,7 @@ class UseCaseRegistryAdapterTest {
 
         @Test
         fun `Not found`() {
-            val testInstance = DefaultUseCaseRegistryAdapter()
+            val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
                 testInstance[TestResult::class, TestQueryUseCase::class]
@@ -131,7 +131,7 @@ class UseCaseRegistryAdapterTest {
 
         @Test
         fun `Interface of use case is registered`() {
-            val testInstance = DefaultUseCaseRegistryAdapter().apply {
+            val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
                     TestQueryUseCaseInterface::class,
                     testQueryInterfaceUseCaseOp
@@ -141,7 +141,7 @@ class UseCaseRegistryAdapterTest {
             assertThat(result, equalTo(testQueryInterfaceUseCaseOp))
         }
 
-        private fun testInstanceWithUseCase() = DefaultUseCaseRegistryAdapter().apply {
+        private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
             register(TestQueryUseCase::class, testQueryUseCaseOp)
         }
 
@@ -163,7 +163,7 @@ class UseCaseRegistryAdapterTest {
 
         @Test
         fun `Not found`() {
-            val testInstance = DefaultUseCaseRegistryAdapter()
+            val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
                 testInstance[TestResult::class, TestFetchOneUseCase::class]
@@ -202,7 +202,7 @@ class UseCaseRegistryAdapterTest {
 
         @Test
         fun `Interface of use case is registered`() {
-            val testInstance = DefaultUseCaseRegistryAdapter().apply {
+            val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
                     TestFetchOneUseCaseInterface::class,
                     testFetchOneInterfaceUseCaseOp
@@ -212,7 +212,7 @@ class UseCaseRegistryAdapterTest {
             assertThat(result, equalTo(testFetchOneInterfaceUseCaseOp))
         }
 
-        private fun testInstanceWithUseCase() = DefaultUseCaseRegistryAdapter().apply {
+        private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
             register(TestFetchOneUseCase::class, testFetchOneUseCaseOp)
         }
 
