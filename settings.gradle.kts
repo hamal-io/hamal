@@ -33,32 +33,46 @@ include(":script:api")
 include(":script:impl")
 
 include(":lib:ddd")
-include(":lib:domain")
 include(":lib:domain-value-object")
 include(":lib:domain-notification")
 include(":lib:log")
 include(":lib:meta")
 include(":lib:util")
 
-include(":repository:api")
-include(":repository:memory")
-include(":repository:sqlite")
+include(":backend")
+include(":backend:application")
+include(":backend:core")
+include(":backend:infra")
+include(":backend:repository:api")
+include(":backend:repository:memory")
+include(":backend:repository:sqlite")
 
-include(":module:launchpad:application")
-include(":module:launchpad:core")
-include(":module:launchpad:infra")
-
-include(":module:queue:application")
-include(":module:queue:core")
-include(":module:queue:infra")
-
-include(":module:worker:application")
-include(":module:worker:extension:api")
-include(":module:worker:extension:impl:starter")
+include(":worker:application")
+include(":worker:core")
+include(":worker:infra")
+include(":worker:extension:api")
+include(":worker:extension:impl:starter")
 
 
-include(":module:worker:core")
-include(":module:worker:infra")
+
+//include(":repository:api")
+//include(":repository:memory")
+//include(":repository:sqlite")
+//
+//include(":module:launchpad:application")
+//include(":module:launchpad:core")
+//include(":module:launchpad:infra")
+//
+//include(":module:queue:application")
+//include(":module:queue:core")
+//include(":module:queue:infra")
+//
+//include(":worker:application")
+//include(":worker:extension:api")
+//include(":worker:extension:impl:starter")
+//
+//include(":worker:core")
+//include(":worker:infra")
 
 
 

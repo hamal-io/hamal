@@ -27,9 +27,8 @@ dependencies {
     implementation(external.kotlin.json)
 
 
-    implementation(project(":module:launchpad:infra"))
-    implementation(project(":module:queue:infra"))
-    implementation(project(":module:worker:infra"))
+    implementation(project(":backend:infra"))
+    implementation(project(":worker:infra"))
 
     testImplementation(project(":application"))
 

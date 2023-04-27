@@ -1,9 +1,8 @@
 package io.hamal.application
 
 import io.hamal.application.config.*
-import io.hamal.module.launchpad.infra.LaunchpadModuleConfig
-import io.hamal.module.worker.infra.WorkerModuleConfig
-import io.module.hamal.queue.infra.QueueModuleConfig
+import io.hamal.backend.infra.BackendConfig
+import io.hamal.worker.infra.WorkerModuleConfig
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -49,38 +48,11 @@ fun main(args: Array<String>) {
     val parent: ConfigurableApplicationContext = applicationBuilder.run(*args)
     val ctx: ConfigurableApplicationContext = applicationBuilder.context()
 
-//    if (isEnable(ctx, "bus")) {
-//        applicationBuilder
-//            .parent(parent)
-//            .child(
-//                BusModuleConfig::class.java,
-//            )
-//            .web(WebApplicationType.NONE)
-//            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
-//                out.println("")
-//                out.println("")
-//                out.println(
-//                    """
-//  ____
-// |  _ \
-// | |_) |_   _ ___
-// |  _ <| | | / __|
-// | |_) | |_| \__ \
-// |____/ \__,_|___/
-//                """.trimIndent()
-//                )
-//                out.println("")
-//                out.println("")
-//            }
-//            .run(*args)
-//    }
 
-    if (isEnable(ctx, "launchpad")) {
+    if (isEnable(ctx, "backend")) {
         applicationBuilder
             .parent(parent)
-            .child(
-                LaunchpadModuleConfig::class.java,
-            )
+            .child(BackendConfig::class.java)
             .web(WebApplicationType.SERVLET)
             .properties("server.port=8084")
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
@@ -88,14 +60,12 @@ fun main(args: Array<String>) {
                 out.println("")
                 out.println(
                     """
-  _                            _                     _ 
- | |                          | |                   | |
- | |     __ _ _   _ _ __   ___| |__  _ __   __ _  __| |
- | |    / _` | | | | '_ \ / __| '_ \| '_ \ / _` |/ _` |
- | |___| (_| | |_| | | | | (__| | | | |_) | (_| | (_| |
- |______\__,_|\__,_|_| |_|\___|_| |_| .__/ \__,_|\__,_|
-                                    | |                
-                                    |_|  
+  ____             _                  _ 
+ |  _ \           | |                | |
+ | |_) | __ _  ___| | _____ _ __   __| |
+ |  _ < / _` |/ __| |/ / _ \ '_ \ / _` |
+ | |_) | (_| | (__|   <  __/ | | | (_| |
+ |____/ \__,_|\___|_|\_\___|_| |_|\__,_|
                 """.trimIndent()
                 )
                 out.println("")
@@ -104,31 +74,6 @@ fun main(args: Array<String>) {
             .run(*args)
     }
 
-    if (isEnable(ctx, "queue")) {
-        applicationBuilder
-            .parent(parent)
-            .child(
-                QueueModuleConfig::class.java,
-            )
-            .web(WebApplicationType.NONE)
-            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
-                out.println("")
-                out.println("")
-                out.println(
-                    """
-   ____                        
-  / __ \                       
- | |  | |_   _  ___ _   _  ___ 
- | |  | | | | |/ _ \ | | |/ _ \
- | |__| | |_| |  __/ |_| |  __/
-  \___\_\\__,_|\___|\__,_|\___|
-                """.trimIndent()
-                )
-                out.println("")
-                out.println("")
-            }
-            .run(*args)
-    }
 
     if (isEnable(ctx, "worker")) {
         applicationBuilder
