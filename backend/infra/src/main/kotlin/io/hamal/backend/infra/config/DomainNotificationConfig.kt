@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.config
 
-import io.hamal.backend.core.domain_notification.CreateDomainNotificationConsumerPort
-import io.hamal.backend.core.domain_notification.NotifyDomainPort
+import io.hamal.backend.infra.adapter.CreateDomainNotificationConsumerPort
+import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.backend.infra.adapter.DomainNotificationAdapter
 import io.hamal.backend.infra.adapter.DomainNotificationConsumerAdapter
 import io.hamal.lib.log.broker.Broker

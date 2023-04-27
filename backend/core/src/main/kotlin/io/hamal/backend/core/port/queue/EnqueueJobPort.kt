@@ -1,6 +1,6 @@
-package io.hamal.backend.core.queue.port
+package io.hamal.backend.core.port.queue
 
-import io.hamal.backend.core.queue.model.QueuedJob
+import io.hamal.backend.core.model.QueuedJob
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.RegionId
 

@@ -1,6 +1,6 @@
-package io.hamal.backend.core.job.port
+package io.hamal.backend.core.port.job
 
-import io.hamal.backend.core.job.model.Job.PlannedJob
+import io.hamal.backend.core.model.Job.PlannedJob
 import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobId
 

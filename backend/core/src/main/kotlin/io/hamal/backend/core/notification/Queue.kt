@@ -1,4 +1,4 @@
-package io.hamal.backend.core.domain_notification.notification
+package io.hamal.backend.core.notification
 
 //sealed class QueueDomainNotification(regionId: RegionId) : DomainNotification(regionId) {
 

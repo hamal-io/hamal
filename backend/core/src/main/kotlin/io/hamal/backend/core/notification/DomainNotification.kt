@@ -1,8 +1,8 @@
-package io.hamal.backend.core.domain_notification.notification
+package io.hamal.backend.core.notification
 
-import io.hamal.backend.core.domain_notification.DomainNotificationTopic
 import io.hamal.lib.domain.vo.RegionId
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 sealed class DomainNotification {
@@ -21,3 +21,13 @@ sealed class DomainNotification {
         return "${this::class.qualifiedName}"
     }
 }
+
+@MustBeDocumented
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DomainNotificationTopic(val value: String)
+
+
+fun <NOTIFICATION : DomainNotification> KClass<NOTIFICATION>.topic() =
+    annotations.find { annotation -> annotation.annotationClass == DomainNotificationTopic::class }
+        .let { it as DomainNotificationTopic }.value

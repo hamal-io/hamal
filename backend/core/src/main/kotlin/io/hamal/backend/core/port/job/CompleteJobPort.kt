@@ -1,6 +1,6 @@
-package io.hamal.backend.core.job.port
+package io.hamal.backend.core.port.job
 
-import io.hamal.backend.core.job.model.Job.CompletedJob
+import io.hamal.backend.core.model.Job.CompletedJob
 import io.hamal.lib.domain.vo.JobId
 
 fun interface CompleteJobPort {

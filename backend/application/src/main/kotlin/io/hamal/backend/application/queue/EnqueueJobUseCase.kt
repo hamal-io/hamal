@@ -1,8 +1,8 @@
 package io.hamal.backend.application.queue
 
-import io.hamal.backend.core.domain_notification.NotifyDomainPort
-import io.hamal.backend.core.queue.model.QueuedJob
-import io.hamal.backend.core.queue.port.EnqueueJobPort
+import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.core.model.QueuedJob
+import io.hamal.backend.core.port.queue.EnqueueJobPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobId

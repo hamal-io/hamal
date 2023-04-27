@@ -1,7 +1,7 @@
 package io.hamal.backend.infra
 
-import io.hamal.backend.core.domain_notification.CreateDomainNotificationConsumerPort
-import io.hamal.backend.core.domain_notification.notification.Scheduled
+import io.hamal.backend.core.notification.Scheduled
+import io.hamal.backend.infra.adapter.CreateDomainNotificationConsumerPort
 import io.hamal.backend.infra.handler.JobScheduledHandler
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration

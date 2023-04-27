@@ -1,10 +1,8 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.core.domain_notification.CreateDomainNotificationConsumerPort
-import io.hamal.backend.core.domain_notification.DomainNotificationConsumer
-import io.hamal.backend.core.domain_notification.DomainNotificationHandler
-import io.hamal.backend.core.domain_notification.NotifyDomainPort
-import io.hamal.backend.core.domain_notification.notification.DomainNotification
+import io.hamal.backend.core.notification.DomainNotification
+import io.hamal.backend.core.port.notification.HandleDomainNotificationPort
+import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.lib.log.appender.ProtobufAppender
 import io.hamal.lib.log.broker.BrokerRepository
 import io.hamal.lib.log.consumer.Consumer
@@ -37,11 +35,11 @@ class DomainNotificationConsumerAdapter(
     val brokerRepository: BrokerRepository
 ) : CreateDomainNotificationConsumerPort {
 
-    private val handlerContainer = DomainNotificationHandler.Container.DefaultImpl()
+    private val handlerContainer = DomainNotificationHandlerContainerAdapter()
 
     override fun <NOTIFICATION : DomainNotification> register(
         clazz: KClass<NOTIFICATION>,
-        handler: DomainNotificationHandler<NOTIFICATION>
+        handler: HandleDomainNotificationPort<NOTIFICATION>
     ): CreateDomainNotificationConsumerPort {
         handlerContainer.register(clazz, handler)
         return this
@@ -71,7 +69,7 @@ class DomainNotificationConsumerAdapter(
                                 consumer.consume(100) { notification ->
                                     handlerContainer[notification::class].forEach { listener ->
                                         try {
-                                            listener.on(notification)
+                                            listener.handle(notification)
                                         } catch (t: Throwable) {
                                             throw Error(t)
                                         }
