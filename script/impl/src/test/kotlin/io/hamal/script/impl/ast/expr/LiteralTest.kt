@@ -1,6 +1,6 @@
 package io.hamal.script.impl.ast.expr
 
-import io.hamal.lib.meta.math.Decimal
+import io.hamal.lib.math.Decimal
 import io.hamal.script.impl.ast.expr.*
 import io.hamal.script.impl.token.Token.Type
 import org.hamcrest.MatcherAssert.*

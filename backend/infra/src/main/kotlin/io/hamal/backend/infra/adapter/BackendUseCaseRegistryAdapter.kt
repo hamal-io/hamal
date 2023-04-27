@@ -1,8 +1,7 @@
 package io.hamal.backend.infra.adapter
 
+import io.hamal.lib.Tuple2
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.meta.KeyedOnce
-import io.hamal.lib.meta.Tuple2
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import kotlin.reflect.KClass
@@ -112,20 +111,20 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
     private val fetchOperations =
         mutableMapOf<KClass<out FetchOneUseCase>, FetchOneUseCaseOperation<*, FetchOneUseCase>>()
 
-    private val commandOnce: KeyedOnce<
+    private val commandOnce: io.hamal.lib.KeyedOnce<
             Tuple2<KClass<*>, KClass<out CommandUseCase>>,
             CommandUseCaseOperation<*, CommandUseCase>
-            > = KeyedOnce.default()
+            > = io.hamal.lib.KeyedOnce.default()
 
-    private val queryOnce: KeyedOnce<
+    private val queryOnce: io.hamal.lib.KeyedOnce<
             Tuple2<KClass<*>, KClass<out QueryUseCase>>,
             QueryUseCaseOperation<*, QueryUseCase>
-            > = KeyedOnce.default()
+            > = io.hamal.lib.KeyedOnce.default()
 
-    private val fetchOneOnce: KeyedOnce<
+    private val fetchOneOnce: io.hamal.lib.KeyedOnce<
             Tuple2<KClass<*>, KClass<out FetchOneUseCase>>,
             FetchOneUseCaseOperation<*, FetchOneUseCase>
-            > = KeyedOnce.default()
+            > = io.hamal.lib.KeyedOnce.default()
 }
 
 private fun ensureResultClass(useCaseOperation: UseCaseOperation<*, *>, resultClass: KClass<*>) {

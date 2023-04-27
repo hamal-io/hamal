@@ -4,10 +4,10 @@ import io.hamal.backend.core.notification.Scheduled
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
-import io.hamal.lib.domain.vo.JobId
-import io.hamal.lib.domain.vo.RegionId
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
+import io.hamal.lib.vo.JobId
+import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.TriggerId
+import io.hamal.lib.vo.port.GenerateDomainIdPort
 import java.util.concurrent.atomic.AtomicInteger
 
 var counter = AtomicInteger(0)

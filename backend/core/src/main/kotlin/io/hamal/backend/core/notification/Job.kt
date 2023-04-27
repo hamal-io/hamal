@@ -1,7 +1,7 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.lib.domain.vo.JobId
-import io.hamal.lib.domain.vo.RegionId
+import io.hamal.lib.vo.JobId
+import io.hamal.lib.vo.RegionId
 import kotlinx.serialization.Serializable
 
 

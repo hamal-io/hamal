@@ -7,6 +7,4 @@ archivesName.set("worker-core")
 
 
 dependencies {
-    implementation(project(":lib:ddd"))
-    implementation(project(":lib:domain-value-object"))
 }

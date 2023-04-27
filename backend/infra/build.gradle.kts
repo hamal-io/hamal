@@ -11,11 +11,8 @@ apply(plugin = "io.spring.dependency-management")
 
 
 dependencies {
-    implementation(project(":lib:ddd"))
-    implementation(project(":lib:domain-value-object"))
-    implementation(project(":lib:meta"))
+    implementation(project(":lib:core"))
     implementation(project(":lib:log"))
-    implementation(project(":lib:util"))
 
     implementation(project(":backend:application"))
     implementation(project(":backend:core"))

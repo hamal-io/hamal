@@ -9,11 +9,8 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 dependencies {
-    implementation(project(":lib:meta"))
-    implementation(project(":lib:ddd"))
+    implementation(project(":lib:core"))
     implementation(project(":lib:log"))
-    implementation(project(":lib:domain-value-object"))
-    implementation(project(":lib:util"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")

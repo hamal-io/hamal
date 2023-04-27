@@ -4,7 +4,6 @@ import io.hamal.lib.log.consumer.Consumer.GroupId
 import io.hamal.lib.log.segment.Chunk
 import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.log.topic.TopicRepository
-import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.util.Files
 import java.nio.file.Path
 
@@ -37,7 +36,7 @@ class BrokerRepository private constructor(
     internal val consumersRepository: BrokerConsumersRepository,
 ) : AppendToTopic, ConsumeFromTopic, AutoCloseable, ResolveTopic {
 
-    private val topicRepositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
+    private val topicRepositoryMapping = io.hamal.lib.KeyedOnce.default<Topic, TopicRepository>()
 
     companion object {
         fun open(broker: Broker): BrokerRepository {

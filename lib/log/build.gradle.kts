@@ -4,8 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":lib:meta"))
-    implementation(project(":lib:util"))
+    implementation(project(":lib:core"))
     implementation(external.sqlite)
 
     implementation(external.kotlin.protobuf)

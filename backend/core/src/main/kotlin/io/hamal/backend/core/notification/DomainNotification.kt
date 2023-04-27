@@ -1,6 +1,6 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.lib.domain.vo.RegionId
+import io.hamal.lib.vo.RegionId
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 

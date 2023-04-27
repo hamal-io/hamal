@@ -1,7 +1,6 @@
 package io.hamal.lib.log.broker
 
 import io.hamal.lib.log.topic.Topic
-import io.hamal.lib.meta.KeyedOnce
 import io.hamal.lib.util.Files
 import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
@@ -25,7 +24,7 @@ internal class BrokerTopicsRepository private constructor(
     internal val connection: Connection
 ) : AutoCloseable {
 
-    private val topicMapping = KeyedOnce.default<Topic.Name, Topic>()
+    private val topicMapping = io.hamal.lib.KeyedOnce.default<Topic.Name, Topic>()
 
     companion object {
         fun open(brokerTopics: BrokerTopics): BrokerTopicsRepository {

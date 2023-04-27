@@ -4,7 +4,7 @@ import io.hamal.backend.core.model.QueuedJob.Dequeued
 import io.hamal.backend.core.port.queue.DequeueJobPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
-import io.hamal.lib.domain.vo.RegionId
+import io.hamal.lib.vo.RegionId
 
 data class DequeueJobUseCase(
     val regionId: RegionId,

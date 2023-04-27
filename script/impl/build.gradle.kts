@@ -6,9 +6,7 @@ plugins {
 archivesName.set("script-impl")
 
 dependencies {
-    implementation(project(":lib:ddd"))
-    implementation(project(":lib:meta"))
-    implementation(project(":lib:util"))
+    implementation(project(":lib:core"))
     implementation(project(":script:api"))
 
     testImplementation(project(":script:api"))

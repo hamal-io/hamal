@@ -32,11 +32,8 @@ include("bootstrap")
 include(":script:api")
 include(":script:impl")
 
-include(":lib:ddd")
-include(":lib:domain-value-object")
 include(":lib:log")
-include(":lib:meta")
-include(":lib:util")
+include(":lib:core")
 
 include(":backend")
 include(":backend:application")

@@ -69,7 +69,7 @@ class BackendUseCaseInvokerAdapterTest {
                 )
             }
 
-            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter)
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) { }
         }
 
         @Nested
@@ -100,7 +100,7 @@ class BackendUseCaseInvokerAdapterTest {
                 testRegistryAdapter.register(TestQueryUseCase::class, TestQueryUseCaseOperation())
             }
 
-            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter)
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
         }
 
         @Nested
@@ -148,7 +148,7 @@ class BackendUseCaseInvokerAdapterTest {
                 testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
             }
 
-            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter)
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
         }
     }
 

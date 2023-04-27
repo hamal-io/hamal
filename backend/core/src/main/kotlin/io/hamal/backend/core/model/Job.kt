@@ -1,9 +1,9 @@
 package io.hamal.backend.core.model
 
 import io.hamal.backend.core.DomainObject
-import io.hamal.lib.domain.vo.JobDefinitionId
-import io.hamal.lib.domain.vo.JobId
-import io.hamal.lib.domain.vo.JobState
+import io.hamal.lib.vo.JobDefinitionId
+import io.hamal.lib.vo.JobId
+import io.hamal.lib.vo.JobState
 
 sealed class Job(
     val id: JobId,

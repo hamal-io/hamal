@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.filter
 
-import io.hamal.lib.domain.vo.RegionId
+import io.hamal.lib.vo.RegionId
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

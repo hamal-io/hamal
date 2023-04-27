@@ -6,9 +6,7 @@ plugins {
 archivesName.set("backend-application")
 
 dependencies {
-    implementation(project(":lib:ddd"))
-    implementation(project(":lib:domain-value-object"))
-    implementation(project(":lib:util"))
+    implementation(project(":lib:core"))
     implementation(project(":backend:core"))
 
     testImplementation(project(":backend:application"))
