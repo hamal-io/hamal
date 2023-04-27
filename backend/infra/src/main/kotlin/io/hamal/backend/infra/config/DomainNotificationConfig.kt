@@ -1,7 +1,8 @@
 package io.hamal.backend.infra.config
 
-import io.hamal.backend.infra.adapter.CreateDomainNotificationConsumerPort
+import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
 import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.infra.adapter.CreateDomainNotificationConsumerPort
 import io.hamal.backend.infra.adapter.DomainNotificationAdapter
 import io.hamal.backend.infra.adapter.DomainNotificationConsumerAdapter
 import io.hamal.lib.log.broker.Broker
@@ -19,11 +20,16 @@ open class DomainNotificationConfig {
         return BrokerRepository.open(Broker(Broker.Id(1), Path("/tmp/hamal")))
     }
 
+    @Bean
+    open fun domainNotificationAdapter() = DomainNotificationAdapter(brokerRepository())
 
     @Bean
     open fun notifyDomainPort(
         brokerRepository: BrokerRepository
-    ): NotifyDomainPort = DomainNotificationAdapter(brokerRepository)
+    ): NotifyDomainPort = domainNotificationAdapter()
+
+    @Bean
+    open fun flushDomainNotificationPort(): FlushDomainNotificationPort = domainNotificationAdapter()
 
     @Bean
     open fun createDomainNotificationConsumerPort(

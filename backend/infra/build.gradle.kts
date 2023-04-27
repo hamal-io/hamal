@@ -32,6 +32,11 @@ dependencies {
     testImplementation(project(":backend:infra"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
+    testImplementation(external.spring.test) {
+        exclude("org.assertj", "*")
+    }
+
+    compileOnly(external.spring.devTools)
 }
 
 tasks.bootJar {

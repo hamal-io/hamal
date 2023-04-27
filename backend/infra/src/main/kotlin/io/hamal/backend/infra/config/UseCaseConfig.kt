@@ -1,5 +1,6 @@
 package io.hamal.backend.infra.config
 
+import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
 import io.hamal.backend.infra.adapter.BackendUseCaseInvokerAdapter
 import io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapter
 import io.hamal.lib.ddd.usecase.*
@@ -22,13 +23,12 @@ open class UseCaseConfig {
     open fun getFetchOneUseCase(): GetFetchOneUseCasePort = getUseCase()
 
     @Bean
-    open fun invokeUseCase(): InvokeUseCasePort = BackendUseCaseInvokerAdapter(
+    open fun invokeUseCase(
+        flushDomainNotificationPort: FlushDomainNotificationPort
+    ): InvokeUseCasePort = BackendUseCaseInvokerAdapter(
         getCommandUseCase(),
         getQueryUseCase(),
-        getFetchOneUseCase()
+        getFetchOneUseCase(),
+        flushDomainNotificationPort
     )
-
-    @Bean
-    open fun invokeQueryUseCase(): InvokeQueryUseCasePort = invokeUseCase()
-
 }

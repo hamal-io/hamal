@@ -1,6 +1,6 @@
-package io.hamal.bootstrap.adapter
+package io.hamal.backend.infra.adapter
 
-import io.hamal.bootstrap.adapter.TestUseCasesConfig.*
+import io.hamal.backend.infra.adapter.TestUseCasesConfig.*
 import io.hamal.lib.ddd.usecase.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,7 +18,7 @@ class TestApplication
 @Configuration
 open class TestUseCaseRegistryConfig {
     @Bean
-    open fun getDefaultUseCaseRegistryAdapter() = DefaultUseCaseRegistryAdapter()
+    open fun getDefaultUseCaseRegistryAdapter() = BackendUseCaseRegistryAdapter()
 }
 
 /**
@@ -43,8 +43,8 @@ open class TestUseCasesConfig {
     classes = [TestApplication::class, TestUseCaseRegistryConfig::class, TestUseCasesConfig::class],
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
-class UseCaseOperationPayloadRegistryAdapterIT(
-    @Autowired var testInstance: DefaultUseCaseRegistryAdapter
+class BackendUseCaseRegistryAdapterIT(
+    @Autowired var testInstance: BackendUseCaseRegistryAdapter
 ) {
 
     @Nested
