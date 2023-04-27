@@ -1,7 +1,7 @@
 //package io.hamal.application.config
 //
-//import io.hamal.lib.domain_notification.notification.DomainNotification
-//import io.hamal.lib.domain_notification.DomainNotificationConsumer
+//import io.hamal.backend.core.domain_notification.notification.DomainNotification
+//import io.hamal.backend.core.domain_notification.DomainNotificationConsumer
 //import org.springframework.context.annotation.Bean
 //import org.springframework.context.annotation.Configuration
 //import java.util.concurrent.LinkedBlockingQueue

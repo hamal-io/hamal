@@ -8,7 +8,6 @@ archivesName.set("worker-application")
 
 dependencies {
     implementation(project(":lib:ddd"))
-    implementation(project(":lib:domain-notification"))
     implementation(project(":lib:domain-value-object"))
 
     implementation(project(":worker:core"))

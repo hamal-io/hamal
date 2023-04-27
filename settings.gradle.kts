@@ -34,7 +34,6 @@ include(":script:impl")
 
 include(":lib:ddd")
 include(":lib:domain-value-object")
-include(":lib:domain-notification")
 include(":lib:log")
 include(":lib:meta")
 include(":lib:util")

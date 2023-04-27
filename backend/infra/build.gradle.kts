@@ -12,9 +12,8 @@ apply(plugin = "io.spring.dependency-management")
 
 dependencies {
     implementation(project(":lib:ddd"))
-    implementation(project(":lib:domain-notification"))
     implementation(project(":lib:domain-value-object"))
-    implementation(project(":lib:util"))
+    implementation(project(":lib:log"))
     implementation(project(":lib:util"))
 
     implementation(project(":backend:application"))

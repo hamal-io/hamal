@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.RegionId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
-import io.hamal.lib.domain_notification.NotifyDomainPort
-import io.hamal.lib.domain_notification.notification.Scheduled
+import io.hamal.backend.core.domain_notification.NotifyDomainPort
+import io.hamal.backend.core.domain_notification.notification.Scheduled
 import java.util.concurrent.atomic.AtomicInteger
 
 var counter = AtomicInteger(0)

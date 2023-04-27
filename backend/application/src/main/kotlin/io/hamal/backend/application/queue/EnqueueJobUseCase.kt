@@ -1,12 +1,12 @@
 package io.hamal.backend.application.queue
 
+import io.hamal.backend.core.domain_notification.NotifyDomainPort
 import io.hamal.backend.core.queue.model.QueuedJob
 import io.hamal.backend.core.queue.port.EnqueueJobPort
 import io.hamal.lib.ddd.usecase.CommandUseCase
 import io.hamal.lib.ddd.usecase.CommandUseCaseOperation
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.RegionId
-import io.hamal.lib.domain_notification.NotifyDomainPort
 
 data class EnqueueJobUseCase(
     val jobId: JobId,

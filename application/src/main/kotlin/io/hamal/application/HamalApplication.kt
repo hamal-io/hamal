@@ -1,6 +1,8 @@
 package io.hamal.application
 
-import io.hamal.application.config.*
+import io.hamal.application.config.IdConfig
+import io.hamal.application.config.LoggerConfig
+import io.hamal.application.config.UseCaseConfig
 import io.hamal.backend.infra.BackendConfig
 import io.hamal.worker.infra.WorkerModuleConfig
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -20,12 +22,12 @@ fun main(args: Array<String>) {
         .main(HamalApplication::class.java)
         .parent(
 //            DatabaseConfig::class.java,
-            AsyncConfig::class.java,
-            DomainNotificationConfig::class.java,
+//            AsyncConfig::class.java,
+//            DomainNotificationConfig::class.java,
             IdConfig::class.java,
             LoggerConfig::class.java,
             UseCaseConfig::class.java,
-            WebConfig::class.java
+//            WebConfig::class.java
         )
         .banner { _: Environment, _: Class<*>, out: PrintStream ->
             out.println("")

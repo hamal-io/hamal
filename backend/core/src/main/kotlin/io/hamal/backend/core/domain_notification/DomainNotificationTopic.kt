@@ -1,6 +1,6 @@
-package io.hamal.lib.domain_notification
+package io.hamal.backend.core.domain_notification
 
-import io.hamal.lib.domain_notification.notification.DomainNotification
+import io.hamal.backend.core.domain_notification.notification.DomainNotification
 import kotlin.reflect.KClass
 
 @MustBeDocumented

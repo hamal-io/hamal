@@ -12,7 +12,6 @@ dependencies {
     implementation(project(":lib:meta"))
     implementation(project(":lib:ddd"))
     implementation(project(":lib:log"))
-    implementation(project(":lib:domain-notification"))
     implementation(project(":lib:domain-value-object"))
     implementation(project(":lib:util"))
 

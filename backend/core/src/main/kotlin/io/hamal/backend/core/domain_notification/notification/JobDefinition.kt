@@ -1,4 +1,4 @@
-package io.hamal.lib.domain_notification.notification
+package io.hamal.backend.core.domain_notification.notification
 
 //sealed class JobDefinitionDomainNotification(regionId: RegionId) : DomainNotification(regionId) {
 //
