@@ -1,5 +1,6 @@
 package io.hamal.backend.infra.adapter
 
+import io.hamal.backend.core.port.NopLogger
 import io.hamal.lib.ddd.usecase.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
@@ -69,7 +70,7 @@ class BackendUseCaseInvokerAdapterTest {
                 )
             }
 
-            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) { }
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{}, {NopLogger})
         }
 
         @Nested
@@ -100,7 +101,7 @@ class BackendUseCaseInvokerAdapterTest {
                 testRegistryAdapter.register(TestQueryUseCase::class, TestQueryUseCaseOperation())
             }
 
-            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})
         }
 
         @Nested
@@ -148,7 +149,7 @@ class BackendUseCaseInvokerAdapterTest {
                 testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
             }
 
-            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
+            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})
         }
     }
 

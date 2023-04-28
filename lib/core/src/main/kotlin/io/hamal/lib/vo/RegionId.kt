@@ -14,6 +14,10 @@ data class RegionId(val value: Int) {
         require(value in 0..1023) { "RegionId must be in interval [0,1023]" }
     }
 
+    override fun toString(): String {
+        return "RegionId($value)"
+    }
+
     object Serializer : KSerializer<RegionId> {
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor("RegionId", PrimitiveKind.LONG)

@@ -2,11 +2,11 @@ package io.hamal.lib.vo
 
 import io.hamal.lib.vo.helper.SerializationTestHelper.generateTestCases
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 
-@Nested
 class RegionIdTest {
     @Nested
     @DisplayName("RegionId()")
@@ -41,4 +41,11 @@ class RegionIdTest {
         @TestFactory
         fun tests() = generateTestCases(RegionId(234), "234")
     }
+
+
+    @Test
+    fun `toString override`() {
+        assertThat(RegionId(123).toString(), equalTo("RegionId(123)"))
+    }
+
 }

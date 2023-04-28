@@ -4,8 +4,10 @@ import io.hamal.lib.Tuple2
 import io.hamal.lib.ddd.usecase.*
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.stereotype.Component
 import kotlin.reflect.KClass
 
+@Component
 class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {

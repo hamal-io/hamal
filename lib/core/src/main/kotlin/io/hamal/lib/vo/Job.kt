@@ -4,10 +4,11 @@ import io.hamal.lib.util.Snowflake
 import io.hamal.lib.vo.base.DomainId
 import io.hamal.lib.vo.base.DomainIdSerializer
 import io.hamal.lib.vo.base.Reference
+import io.hamal.lib.vo.base.ReferenceSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable(with = JobId.Serializer::class)
-data class JobId(override val value: Snowflake.Id) : DomainId() {
+class JobId(override val value: Snowflake.Id) : DomainId() {
     internal object Serializer : DomainIdSerializer<JobId>(::JobId)
 }
 
@@ -17,9 +18,11 @@ class JobDefinitionId(override val value: Snowflake.Id) : DomainId() {
 }
 
 
-@Serializable
+@Serializable(with = JobReference.Serializer::class)
 class JobReference(override val value: Value) : Reference() {
     constructor(value: String) : this(Value(value))
+
+    internal object Serializer : ReferenceSerializer<JobReference>(::JobReference)
 }
 
 

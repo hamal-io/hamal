@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     id("hamal.common")
     application
@@ -35,4 +37,8 @@ dependencies {
     }
 
     compileOnly(external.spring.devTools)
+}
+
+tasks.named<BootJar>("bootJar") {
+    launchScript()
 }

@@ -9,7 +9,11 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>()
+abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>(){
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value.value})"
+    }
+}
 
 abstract class DomainIdSerializer<ID : DomainId>(
     val fn: (Snowflake.Id) -> ID
