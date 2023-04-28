@@ -13,7 +13,6 @@ open class TriggerConfig {
     open fun invokeManualTrigger(
         notifyDomainPort: NotifyDomainPort,
         generateDomainId: GenerateDomainIdPort
-//    ) = InvokeManualTriggerUseCase.Operation(notifyDomainPort, generateDomainId)
-    ) = InvokeManualTriggerUseCase.Operation()
+    ) = InvokeManualTriggerUseCase.Operation(notifyDomainPort, generateDomainId)
 
 }

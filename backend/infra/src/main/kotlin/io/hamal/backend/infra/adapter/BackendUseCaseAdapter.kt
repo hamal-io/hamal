@@ -1,6 +1,5 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.application.trigger.InvokeManualTriggerUseCase
 import io.hamal.backend.core.port.GetLoggerPort
 import io.hamal.backend.core.port.LogPort
 import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
@@ -68,10 +67,10 @@ class BackendUseCaseInvokerAdapter private constructor(
 class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-//        event.applicationContext.getBeansOfType(CommandUseCaseOperation::class.java)
-//            .forEach { (_, operation) ->
-//                register(operation.useCaseClass, operation as CommandUseCaseOperation<*, CommandUseCase<DomainObject>>)
-//            }
+        event.applicationContext.getBeansOfType(CommandUseCaseOperation::class.java)
+            .forEach { (_, operation) ->
+                register(operation.useCaseClass, operation as CommandUseCaseOperation<*, *>)
+            }
 
 //        event.applicationContext.getBeansOfType(QueryUseCaseOperation::class.java)
 //            .forEach { (_, useCase) ->
@@ -84,43 +83,16 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
 //            }
     }
 
-    override fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): CommandUseCaseOperation<RESULT, USE_CASE> {
-        val operation = commandOperations[useCaseClass]
-            ?: useCaseClass.java.interfaces.asSequence().mapNotNull { commandOperations[it.kotlin] }.firstOrNull()
+    @Suppress("UNCHECKED_CAST")
+    override fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): CommandUseCaseOperation<RESULT, USE_CASE> =
+        commandOnce(useCaseClass) {
+            val operation = commandOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().firstOrNull { commandOperations[it.kotlin] != null }
 
-        check(operation != null) { "Unable to find operation" }
+            check(operation != null) { "No operation registered for use case class $useCaseClass" }
 
-        return operation as CommandUseCaseOperation<RESULT, USE_CASE>!!
-    }
-
-//    override fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> get(useCaseClass: KClass<USE_CASE>): CommandUseCaseOperation<RESULT, USE_CASE> {
-//        TODO("Not yet implemented")
-//    }
-
-//    override fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> get(useCaseClass: KClass<USE_CASE>)
-//            : CommandUseCaseOperation<RESULT, USE_CASE> {
-//        val operation = commandOperations[useCaseClass]
-//            ?: useCaseClass.java.interfaces.asSequence().mapNotNull { commandOperations[it.kotlin] }.firstOrNull()
-//
-//        check(operation != null) { "Unable to find operation" }
-//
-//        //FIXME
-//        return operation as CommandUseCaseOperation<RESULT, USE_CASE>
-//    }
-//        commandOnce.invoke(useCaseClass) {
-//            val operation = commandOperations[useCaseClass]
-//                ?: useCaseClass.java.interfaces.asSequence().mapNotNull { commandOperations[it.kotlin] }.firstOrNull()
-//                ?: throw IllegalStateException("CommandUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
-//
-//            when (resultClass) {
-//                Unit::class -> operation
-//                else -> {
-//                    ensureResultClass(operation, resultClass)
-//                    operation
-//                }
-//            }
-//        } as CommandUseCaseOperation<RESULT, USE_CASE>
-
+            operation as CommandUseCaseOperation<*, CommandUseCase<*>>
+        } as CommandUseCaseOperation<RESULT, USE_CASE>
 
     override fun <RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>)
             : QueryUseCaseOperation<RESULT, USE_CASE> = TODO()
@@ -154,14 +126,14 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
 //            }
 //        } as FetchOneUseCaseOperation<RESULT, USE_CASE>
 
-//    fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> register(
-//        useCaseClass: KClass<out CommandUseCase<*>>,
-//        operation: CommandUseCaseOperation<*, USE_CASE>
-//    ) {
-//        commandOperations[useCaseClass] = operation as CommandUseCaseOperation<*, CommandUseCase<*>>
-//    }
+    fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> register(
+        useCaseClass: KClass<out CommandUseCase<*>>,
+        operation: CommandUseCaseOperation<*, USE_CASE>
+    ) {
+        commandOperations[useCaseClass] = operation as CommandUseCaseOperation<*, CommandUseCase<*>>
+    }
 
-    //    fun <USE_CASE : QueryUseCase> register(
+//    fun <USE_CASE : QueryUseCase> register(
 //        useCaseClass: KClass<out USE_CASE>,
 //        operation: QueryUseCaseOperation<*, USE_CASE>
 //    ) {
@@ -179,17 +151,14 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
 //        mutableMapOf<KClass<out CommandUseCase<*>>, CommandUseCaseOperation<*, CommandUseCase<*>>>()
 
     private val commandOperations =
-        mutableMapOf<KClass<out UseCase<*>>, UseCaseOperation<*, UseCase<*>>>(
-            InvokeManualTriggerUseCase::class to InvokeManualTriggerUseCase.Operation() as UseCaseOperation<*, UseCase<*>>
-        )
-
+        mutableMapOf<KClass<out UseCase<*>>, CommandUseCaseOperation<*, CommandUseCase<*>>>()
 //    private val queryOperations =
 //        mutableMapOf<KClass<QueryUseCase<*>>, QueryUseCaseOperation<*, QueryUseCase<*>>>()
 //    private val fetchOperations =
 //        mutableMapOf<KClass<FetchOneUseCase<*>>, FetchOneUseCaseOperation<*, FetchOneUseCase<*>>>()
 
     private val commandOnce: KeyedOnce<
-            KClass<CommandUseCase<*>>,
+            KClass<out CommandUseCase<*>>,
             CommandUseCaseOperation<*, CommandUseCase<*>>
             > = KeyedOnce.default()
 
