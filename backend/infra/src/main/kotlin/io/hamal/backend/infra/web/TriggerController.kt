@@ -1,6 +1,7 @@
 package io.hamal.backend.infra.web
 
 import io.hamal.backend.application.trigger.InvokeManualTriggerUseCase
+import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobId
@@ -33,7 +34,7 @@ open class JobController(
     ): ResponseEntity<SomeTest> {
 
 
-        invokeUseCasePort.command(
+        val invokedTrigger = invokeUseCasePort.command(InvokedTrigger::class,
             InvokeManualTriggerUseCase(
                 regionId = regionId,
                 triggerId = generateDomainId(regionId, ::TriggerId)
