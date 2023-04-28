@@ -3,6 +3,7 @@ package io.hamal.backend.infra.adapter
 import io.hamal.backend.core.port.GetLoggerPort
 import io.hamal.backend.core.port.LogPort
 import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
+import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -30,6 +31,10 @@ class BackendUseCaseInvokerAdapter private constructor(
         flushDomainNotificationPort,
         getLoggerPort(BackendUseCaseInvokerAdapter::class)
     )
+
+    override fun <RESULT : DomainObject, USE_CASE : CommandUseCase> newCommand(vararg useCases: USE_CASE): RESULT {
+        TODO("Not yet implemented")
+    }
 
     override fun <RESULT : Any, USE_CASE : CommandUseCase> command(
         resultClass: KClass<RESULT>,
