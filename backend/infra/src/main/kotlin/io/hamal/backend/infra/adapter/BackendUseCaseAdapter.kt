@@ -4,7 +4,6 @@ import io.hamal.backend.core.port.GetLoggerPort
 import io.hamal.backend.core.port.LogPort
 import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
 import io.hamal.lib.KeyedOnce
-import io.hamal.lib.Tuple2
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +17,7 @@ class BackendUseCaseInvokerAdapter private constructor(
     private val getCommandUseCase: GetCommandUseCasePort,
     private val getQueryUseCase: GetQueryUseCasePort,
     private val getFetchOneUseCase: GetFetchOneUseCasePort,
-    private val flushDomainNotificationPort: FlushDomainNotificationPort,
+    private val flushDomainNotifications: FlushDomainNotificationPort,
     private val log: LogPort
 ) : InvokeUseCasePort {
 
@@ -40,11 +39,10 @@ class BackendUseCaseInvokerAdapter private constructor(
         val operation: CommandUseCaseOperation<RESULT, USE_CASE> = getCommandUseCase[useCase::class]
         logUseCaseInvocation(useCase)
         return operation(useCase).let {
-            flushDomainNotificationPort.flush()
+            flushDomainNotifications()
             it
         }
     }
-
 
     override fun <RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>> query(useCase: USE_CASE): List<RESULT> {
 //        logUseCaseInvocation(useCase)
@@ -72,15 +70,15 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
                 register(operation.useCaseClass, operation as CommandUseCaseOperation<*, *>)
             }
 
-//        event.applicationContext.getBeansOfType(QueryUseCaseOperation::class.java)
-//            .forEach { (_, useCase) ->
-//                register(useCase.useCaseClass, useCase as QueryUseCaseOperation<*, QueryUseCase<*>>)
-//            }
-//
-//        event.applicationContext.getBeansOfType(FetchOneUseCaseOperation::class.java)
-//            .forEach { (_, useCase) ->
-//                register(useCase.useCaseClass, useCase as FetchOneUseCaseOperation<*, FetchOneUseCase<*>>)
-//            }
+        event.applicationContext.getBeansOfType(QueryUseCaseOperation::class.java)
+            .forEach { (_, operation) ->
+                register(operation.useCaseClass, operation as QueryUseCaseOperation<*, *>)
+            }
+
+        event.applicationContext.getBeansOfType(FetchOneUseCaseOperation::class.java)
+            .forEach { (_, operation) ->
+                register(operation.useCaseClass, operation as FetchOneUseCaseOperation<*, *>)
+            }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -89,86 +87,64 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
             val operation = commandOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().firstOrNull { commandOperations[it.kotlin] != null }
 
-            check(operation != null) { "No operation registered for use case class $useCaseClass" }
+            check(operation != null) { "No operation registered for $useCaseClass" }
 
             operation as CommandUseCaseOperation<*, CommandUseCase<*>>
         } as CommandUseCaseOperation<RESULT, USE_CASE>
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>)
-            : QueryUseCaseOperation<RESULT, USE_CASE> = TODO()
-//        queryOnce.invoke(Tuple2(resultClass, useCaseClass)) {
-//            val operation = queryOperations[useCaseClass]
-//                ?: useCaseClass.java.interfaces.asSequence().mapNotNull { queryOperations[it.kotlin] }.firstOrNull()
-//                ?: throw IllegalStateException("QueryUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
-//
-//            when (resultClass) {
-//                Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
-//                else -> {
-//                    ensureResultClass(operation, resultClass)
-//                    operation
-//                }
-//            }
-//        } as QueryUseCaseOperation<RESULT, USE_CASE>
+    override fun <RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryUseCaseOperation<RESULT, USE_CASE> =
+        queryOnce(useCaseClass) {
+            val operation = queryOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().firstOrNull { queryOperations[it.kotlin] != null }
 
-    override fun <RESULT : DomainObject, USE_CASE : FetchOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>)
-            : FetchOneUseCaseOperation<RESULT, USE_CASE> = TODO()
-//        fetchOneOnce.invoke(Tuple2(resultClass, useCaseClass)) {
-//            val operation = fetchOperations[useCaseClass]
-//                ?: useCaseClass.java.interfaces.asSequence().mapNotNull { fetchOperations[it.kotlin] }.firstOrNull()
-//                ?: throw IllegalStateException("FetchOneUseCaseOperation<" + resultClass.simpleName + "," + useCaseClass.simpleName + "> not found")
-//
-//            when (resultClass) {
-//                Unit::class -> throw IllegalArgumentException("Result class can not be ${resultClass.simpleName}")
-//                else -> {
-//                    ensureResultClass(operation, resultClass)
-//                    operation
-//                }
-//            }
-//        } as FetchOneUseCaseOperation<RESULT, USE_CASE>
+            check(operation != null) { "No operation registered for $useCaseClass" }
 
-    fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> register(
-        useCaseClass: KClass<out CommandUseCase<*>>,
-        operation: CommandUseCaseOperation<*, USE_CASE>
+            operation as QueryUseCaseOperation<*, QueryUseCase<*>>
+        } as QueryUseCaseOperation<RESULT, USE_CASE>
+
+    override fun <RESULT : DomainObject, USE_CASE : FetchOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): FetchOneUseCaseOperation<RESULT, USE_CASE> =
+        fetchOneOnce(useCaseClass) {
+            val operation = fetchOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().firstOrNull { fetchOperations[it.kotlin] != null }
+
+            check(operation != null) { "No operation registered for $useCaseClass" }
+
+            operation as FetchOneUseCaseOperation<*, FetchOneUseCase<*>>
+        } as FetchOneUseCaseOperation<RESULT, USE_CASE>
+
+    @Suppress("UNCHECKED_CAST")
+    internal fun register(
+        useCaseClass: KClass<out CommandUseCase<*>>, operation: CommandUseCaseOperation<*, *>
     ) {
+        check(operation.useCaseClass == useCaseClass)
         commandOperations[useCaseClass] = operation as CommandUseCaseOperation<*, CommandUseCase<*>>
     }
 
-//    fun <USE_CASE : QueryUseCase> register(
-//        useCaseClass: KClass<out USE_CASE>,
-//        operation: QueryUseCaseOperation<*, USE_CASE>
-//    ) {
-//        queryOperations[useCaseClass] = operation
-//    }
-//
-//    fun <USE_CASE : FetchOneUseCase> register(
-//        useCaseClass: KClass<out USE_CASE>,
-//        operation: FetchOneUseCaseOperation<*, USE_CASE>
-//    ) {
-//        fetchOperations[useCaseClass] = operation
-//    }
-//
-//    private val commandOperations =
-//        mutableMapOf<KClass<out CommandUseCase<*>>, CommandUseCaseOperation<*, CommandUseCase<*>>>()
+    @Suppress("UNCHECKED_CAST")
+    internal fun register(useCaseClass: KClass<out QueryUseCase<*>>, operation: QueryUseCaseOperation<*, *>) {
+        check(operation.useCaseClass == useCaseClass)
+        queryOperations[useCaseClass] = operation as QueryUseCaseOperation<*, QueryUseCase<*>>
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    internal fun register(useCaseClass: KClass<out FetchOneUseCase<*>>, operation: FetchOneUseCaseOperation<*, *>) {
+        check(operation.useCaseClass == useCaseClass)
+        fetchOperations[useCaseClass] = operation as FetchOneUseCaseOperation<*, FetchOneUseCase<*>>
+    }
+
 
     private val commandOperations =
         mutableMapOf<KClass<out UseCase<*>>, CommandUseCaseOperation<*, CommandUseCase<*>>>()
-//    private val queryOperations =
-//        mutableMapOf<KClass<QueryUseCase<*>>, QueryUseCaseOperation<*, QueryUseCase<*>>>()
-//    private val fetchOperations =
-//        mutableMapOf<KClass<FetchOneUseCase<*>>, FetchOneUseCaseOperation<*, FetchOneUseCase<*>>>()
+    private val queryOperations = mutableMapOf<KClass<out QueryUseCase<*>>, QueryUseCaseOperation<*, QueryUseCase<*>>>()
+    private val fetchOperations =
+        mutableMapOf<KClass<out FetchOneUseCase<*>>, FetchOneUseCaseOperation<*, FetchOneUseCase<*>>>()
 
-    private val commandOnce: KeyedOnce<
-            KClass<out CommandUseCase<*>>,
-            CommandUseCaseOperation<*, CommandUseCase<*>>
-            > = KeyedOnce.default()
+    private val commandOnce: KeyedOnce<KClass<out CommandUseCase<*>>, CommandUseCaseOperation<*, CommandUseCase<*>>> =
+        KeyedOnce.default()
 
-    private val queryOnce: KeyedOnce<
-            Tuple2<KClass<*>, KClass<QueryUseCase<*>>>,
-            QueryUseCaseOperation<*, QueryUseCase<*>>
-            > = KeyedOnce.default()
+    private val queryOnce: KeyedOnce<KClass<out QueryUseCase<*>>, QueryUseCaseOperation<*, QueryUseCase<*>>> =
+        KeyedOnce.default()
 
-    private val fetchOneOnce: KeyedOnce<
-            Tuple2<KClass<*>, KClass<out FetchOneUseCase<*>>>,
-            FetchOneUseCaseOperation<*, FetchOneUseCase<*>>
-            > = KeyedOnce.default()
+    private val fetchOneOnce: KeyedOnce<KClass<out FetchOneUseCase<*>>, FetchOneUseCaseOperation<*, FetchOneUseCase<*>>> =
+        KeyedOnce.default()
 }

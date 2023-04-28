@@ -22,7 +22,7 @@ interface QueryUseCase<RESULT : DomainObject> : UseCase<RESULT>
 abstract class QueryUseCaseOperation<RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>>(
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
-    abstract operator fun invoke(useCase: USE_CASE): List<RESULT>
+    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<RESULT>
 }
 
 interface FetchOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
@@ -31,5 +31,5 @@ abstract class FetchOneUseCaseOperation<RESULT : DomainObject, USE_CASE : FetchO
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
 
-    abstract operator fun invoke(useCase: USE_CASE): RESULT?
+    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT?
 }
