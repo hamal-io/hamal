@@ -1,57 +1,35 @@
 package io.hamal.lib.ddd.usecase
 
+import io.hamal.lib.ddd.base.DomainObject
 import kotlin.reflect.KClass
 
-interface UseCase
+interface UseCase<RESULT : DomainObject>
 
-interface UseCaseOperation<RESULT : Any, out USE_CASE : UseCase> {
-    val resultClass: KClass<RESULT>
-    val useCaseClass: KClass<@UnsafeVariance USE_CASE>
-
-    abstract class BaseImpl<RESULT : Any, out USE_CASE : UseCase>(
-        override val resultClass: KClass<RESULT>,
-        override val useCaseClass: KClass<@UnsafeVariance USE_CASE>
-    ) : UseCaseOperation<RESULT, USE_CASE>
+interface UseCaseOperation<RESULT : DomainObject, USE_CASE : UseCase<RESULT>> {
+    val useCaseClass: KClass<USE_CASE>
 }
 
-interface CommandUseCase : UseCase
+interface CommandUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class CommandUseCaseOperation<RESULT : Any, out USE_CASE : CommandUseCase>(
-    override val resultClass: KClass<RESULT>,
-    override val useCaseClass: KClass<@UnsafeVariance USE_CASE>
+abstract class CommandUseCaseOperation<RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>>(
+    override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
-
-    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<RESULT>
-
-    abstract class NoResultImpl<out USE_CASE : CommandUseCase>(useCaseClass: KClass<@UnsafeVariance USE_CASE>) :
-        CommandUseCaseOperation<Unit, USE_CASE>(
-            Unit::class, useCaseClass
-        ) {
-
-        abstract fun noResult(useCase: @UnsafeVariance USE_CASE)
-
-        override operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<Unit> {
-            noResult(useCase)
-            return listOf()
-        }
-    }
+    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT
 }
 
-interface QueryUseCase : UseCase
+interface QueryUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class QueryUseCaseOperation<RESULT : Any, out USE_CASE : QueryUseCase>(
-    override val resultClass: KClass<RESULT>,
-    override val useCaseClass: KClass<@UnsafeVariance USE_CASE>
+abstract class QueryUseCaseOperation<RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>>(
+    override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
-    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<RESULT>
+    abstract operator fun invoke(useCase: USE_CASE): List<RESULT>
 }
 
-interface FetchOneUseCase : UseCase
+interface FetchOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class FetchOneUseCaseOperation<RESULT : Any, out USE_CASE : FetchOneUseCase>(
-    override val resultClass: KClass<RESULT>,
-    override val useCaseClass: KClass<@UnsafeVariance USE_CASE>
+abstract class FetchOneUseCaseOperation<RESULT : DomainObject, USE_CASE : FetchOneUseCase<RESULT>>(
+    override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
 
-    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT?
+    abstract operator fun invoke(useCase: USE_CASE): RESULT?
 }

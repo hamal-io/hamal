@@ -39,7 +39,8 @@ class DomainNotificationAdapter(
     }
 
     override fun flush() {
-        local.get().forEach { (topic, notification) -> appender.append(topic, notification) }
+        val notificationsToFlush = local.get() ?: listOf()
+        notificationsToFlush.forEach { (topic, notification) -> appender.append(topic, notification) }
         local.remove()
     }
 }
