@@ -1,4 +1,4 @@
-package io.hamal.backend.request.queue
+package io.hamal.backend.usecase.queue
 
 import io.hamal.backend.core.model.QueuedJob
 import io.hamal.backend.core.port.notification.NotifyDomainPort
@@ -6,11 +6,11 @@ import io.hamal.backend.core.port.queue.EnqueueFlowPort
 import io.hamal.lib.ddd.usecase.ExecuteOneUseCase
 import io.hamal.lib.ddd.usecase.ExecuteOneUseCaseOperation
 import io.hamal.lib.vo.FlowId
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 
 data class EnqueueFlowUseCase(
     val flowId: FlowId,
-    val regionId: RegionId,
+    val shard: Shard,
     val inputs: Int
 ) : ExecuteOneUseCase<QueuedJob.Enqueued> {
     class Operation(
@@ -21,10 +21,10 @@ data class EnqueueFlowUseCase(
             println("Enqueue flow")
             val result = enqueueFlow(
                 EnqueueFlowPort.FlowToEnqueue(
-                    useCase.flowId, useCase.regionId
+                    useCase.flowId, useCase.shard
                 )
             )
-//            notifyDomainPort(FlowToEnqueueued(result.id, result.regionId))
+//            notifyDomainPort(FlowToEnqueueued(result.id, result.shard))
 //            return listOf(result)
             TODO()
         }

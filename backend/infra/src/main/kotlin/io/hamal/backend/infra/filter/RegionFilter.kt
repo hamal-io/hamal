@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.filter
 
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -14,7 +14,7 @@ class RegionFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("regionId", RegionId(128))
+        request.setAttribute("shard", Shard(128))
         filterChain.doFilter(request, response)
     }
 

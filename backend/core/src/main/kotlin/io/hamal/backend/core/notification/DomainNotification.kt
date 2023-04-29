@@ -1,12 +1,12 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 @Serializable
 sealed class DomainNotification {
-    abstract val regionId: RegionId
+    abstract val shard: Shard
 
     val topic: String
 

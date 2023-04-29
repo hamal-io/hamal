@@ -1,4 +1,4 @@
-package io.hamal.backend.request.trigger
+package io.hamal.backend.usecase.trigger
 
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.model.Trigger
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger
 var counter = AtomicInteger(0)
 
 data class ManualTriggerInvocation(
-    val regionId: RegionId,
+    val shard: Shard,
     val triggerId: TriggerId
 ) : ExecuteOneUseCase<InvokedTrigger.Manual> {
 
@@ -37,8 +37,8 @@ data class ManualTriggerInvocation(
 
 //            notifyDomainPort.invoke(
 //                Scheduled(
-//                    id = generateDomainId(useCase.regionId, ::FlowId),
-//                    regionId = RegionId(1),
+//                    id = generateDomainId(useCase.shard, ::FlowId),
+//                    shard = Shard(1),
 //                    inputs = counter.incrementAndGet()
 //                )
 //            )
@@ -58,7 +58,7 @@ data class ManualTriggerInvocation(
             notifyDomain(
                 TriggerDomainNotification.Invoked(
                     invokedTrigger = result,
-                    regionId = useCase.regionId,
+                    shard = useCase.shard,
                 )
             )
 

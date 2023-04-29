@@ -2,12 +2,12 @@ package io.hamal.backend.core.port.queue
 
 import io.hamal.backend.core.model.QueuedJob
 import io.hamal.lib.vo.FlowId
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 
 interface EnqueueFlowPort {
     data class FlowToEnqueue(
         val flowId: FlowId,
-        val regionId: RegionId
+        val shard: Shard
     )
 
     operator fun invoke(flowToEnqueue: FlowToEnqueue): QueuedJob.Enqueued

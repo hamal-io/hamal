@@ -1,6 +1,6 @@
 package io.hamal.bootstrap.adapter
 
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 import io.hamal.lib.vo.base.DomainId
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import io.hamal.lib.util.DefaultPartitionSource
@@ -9,11 +9,11 @@ import io.hamal.lib.util.SnowflakeGenerator
 
 object DomainIdGeneratorAdapter : GenerateDomainIdPort {
 
-    private val provideGenerator = io.hamal.lib.KeyedOnce.default<RegionId, Snowflake.Generator>()
-    override fun <ID : DomainId> invoke(regionId: RegionId, ctor: (Snowflake.Id) -> ID): ID {
-        val generator = provideGenerator(regionId) {
+    private val provideGenerator = io.hamal.lib.KeyedOnce.default<Shard, Snowflake.Generator>()
+    override fun <ID : DomainId> invoke(shard: Shard, ctor: (Snowflake.Id) -> ID): ID {
+        val generator = provideGenerator(shard) {
             SnowflakeGenerator(
-                DefaultPartitionSource(regionId.value)
+                DefaultPartitionSource(shard.value)
             )
         }
         return ctor(generator.next())

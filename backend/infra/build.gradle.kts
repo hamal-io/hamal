@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":lib:core"))
     implementation(project(":lib:log"))
 
-    implementation(project(":backend:request"))
+    implementation(project(":backend:usecase"))
     implementation(project(":backend:core"))
 
     implementation(external.kotlin.json)

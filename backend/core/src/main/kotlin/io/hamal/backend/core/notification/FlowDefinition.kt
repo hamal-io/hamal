@@ -1,7 +1,7 @@
 package io.hamal.backend.core.notification
 
 import io.hamal.backend.core.model.FlowDefinition
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 import kotlinx.serialization.Serializable
 
 
@@ -10,6 +10,6 @@ sealed class FlowDefinitionDomainNotification : DomainNotification() {
     @DomainNotificationTopic("flow_definition_created")
     data class Created(
         val flowDefinition: FlowDefinition,
-        override val regionId: RegionId
+        override val shard: Shard
     ) : FlowDefinitionDomainNotification()
 }

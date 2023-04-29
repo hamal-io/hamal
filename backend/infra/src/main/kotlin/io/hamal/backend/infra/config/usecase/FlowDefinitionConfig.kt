@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.request.flow_definition.FlowDefinitionRequest
 import io.hamal.backend.store.impl.DefaultFlowDefinitionStore
+import io.hamal.backend.usecase.flow_definition.CreateFlowDefinitionRequestHandler
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class FlowDefinitionConfig {
     @Bean
-    open fun createFlowDefinition(
+    open fun createFlowDefinitionRequestHandler(
         notifyDomainPort: NotifyDomainPort,
         generateDomainId: GenerateDomainIdPort
-    ) = FlowDefinitionRequest.CreateFlowDefinition.Operation(
+    ) = CreateFlowDefinitionRequestHandler(
         notifyDomainPort,
         generateDomainId,
         DefaultFlowDefinitionStore

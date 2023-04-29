@@ -1,8 +1,8 @@
 package io.hamal.lib.vo.port
 
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 
 
 fun interface ResolveRegionPort {
-    operator fun invoke(): RegionId
+    operator fun invoke(): Shard
 }

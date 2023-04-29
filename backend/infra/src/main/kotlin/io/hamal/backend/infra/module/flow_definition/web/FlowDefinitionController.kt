@@ -1,11 +1,9 @@
 package io.hamal.backend.infra.module.flow_definition.web
 
-import io.hamal.backend.infra.DomainType
-import io.hamal.backend.infra.Request
-import io.hamal.backend.infra.requests
+import io.hamal.backend.core.model.FlowDefinition
+import io.hamal.backend.usecase.flow_definition.FlowDefinitionRequest.*
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
-import io.hamal.lib.vo.FlowDefinitionId
-import io.hamal.lib.vo.RegionId
+import io.hamal.lib.vo.Shard
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,26 +18,12 @@ open class FlowDefinitionController(
 
     @PostMapping("/v1/flow-definitions")
     fun createFlowDefinition(
-        @RequestAttribute regionId: RegionId
-    ): Request<FlowDefinitionId> {
-//        return request(CreateFlowDefinition(regionId))
+        @RequestAttribute shard: Shard
+    ): FlowDefinition {
+//        return request(CreateFlowDefinition(shard))
+        return request(FlowDefinitionCreation(
 
-        val domainId = generateDomainId(regionId, ::FlowDefinitionId)
-        val domainType = DomainType.FlowDefinition
-
-
-        val result = Request<FlowDefinitionId>(
-            id = 10,
-            regionId = regionId,
-            domainId = domainId,
-            domainVersion = 0,
-            domainType = domainType,
-            requestType = "CreateFlowDefinition"
-        )
-
-
-        requests.add(result)
-
-        return result
+            shard
+        ))
     }
 }

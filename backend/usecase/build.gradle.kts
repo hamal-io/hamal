@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":backend:store:api"))
     implementation(project(":backend:store:impl")) // FIXME get rid of this
 
-    testImplementation(project(":backend:request"))
+    testImplementation(project(":backend:usecase"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

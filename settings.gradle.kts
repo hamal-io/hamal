@@ -36,7 +36,7 @@ include(":lib:log")
 include(":lib:core")
 
 include(":backend")
-include(":backend:request")
+include(":backend:usecase")
 include(":backend:core")
 include(":backend:infra")
 include(":backend:store:api")

@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.request.trigger.ManualTriggerInvocation
+import io.hamal.backend.usecase.trigger.ManualTriggerInvocation
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean

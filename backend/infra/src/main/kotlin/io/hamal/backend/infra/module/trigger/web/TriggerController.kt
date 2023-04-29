@@ -2,7 +2,7 @@ package io.hamal.backend.infra.module.trigger.web
 
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.request.trigger.ManualTriggerInvocation
+import io.hamal.backend.usecase.trigger.ManualTriggerInvocation
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.util.Snowflake
 import io.hamal.lib.vo.*
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @Serializable
-class SomeTest(val id: FlowId, val definitionId: FlowDefinitionId, val regionId: RegionId)
+class SomeTest(val id: FlowId, val definitionId: FlowDefinitionId, val shard: Shard)
 
 @RestController
 open class FlowController @Autowired constructor(
@@ -28,7 +28,7 @@ open class FlowController @Autowired constructor(
     @PostMapping("/v1/triggers/manual/{triggerId}")
     fun manualTrigger(
         @PathVariable("triggerId") rawTriggerId: String,
-        @RequestAttribute("regionId") regionId: RegionId
+        @RequestAttribute("shard") shard: Shard
     ): InvokedTrigger {
 
         val triggerId = TriggerId(Snowflake.Id(rawTriggerId.toLong()))
@@ -38,8 +38,8 @@ open class FlowController @Autowired constructor(
 
 //        notifyDomainPort.invoke(
 //            Scheduled(
-//                id = generateDomainId(regionId, ::FlowId),
-//                regionId = RegionId(1),
+//                id = generateDomainId(shard, ::FlowId),
+//                shard = Shard(1),
 //
 //                inputs = counter.incrementAndGet()
 //            )
@@ -58,19 +58,19 @@ open class FlowController @Autowired constructor(
 
 //        val invokedTrigger = invokeUseCasePort.executeOne(
 //            InvokeManualTriggerUseCase(
-//                regionId = regionId,
-//                triggerId = generateDomainId(regionId, ::TriggerId)
+//                shard = shard,
+//                triggerId = generateDomainId(shard, ::TriggerId)
 //            )
 //        )
 //        return ResponseEntity.ok(
 //            SomeTest(
-//                generateDomainId(regionId, ::FlowId),
-//                generateDomainId(regionId, ::FlowDefinitionId),
-//                regionId
+//                generateDomainId(shard, ::FlowId),
+//                generateDomainId(shard, ::FlowDefinitionId),
+//                shard
 //            )
 //        )
 
-        return request(ManualTriggerInvocation(regionId, triggerId))
+        return request(ManualTriggerInvocation(shard, triggerId))
     }
 
 }
