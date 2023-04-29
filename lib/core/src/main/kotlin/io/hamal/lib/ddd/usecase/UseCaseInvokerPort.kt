@@ -2,16 +2,16 @@ package io.hamal.lib.ddd.usecase
 
 import io.hamal.lib.ddd.base.DomainObject
 
-interface InvokeCommandUseCasePort {
-    fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> command(useCase: USE_CASE): RESULT
+interface InvokeExecuteOneUseCasePort {
+    fun <RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>> executeOne(useCase: USE_CASE): RESULT
 }
 
-interface InvokeQueryUseCasePort {
-    fun <RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>> query(useCase: USE_CASE): List<RESULT>
+interface InvokeQueryManyUseCasePort {
+    fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> queryMany(useCase: USE_CASE): List<RESULT>
 }
 
-interface InvokeFetchOneUseCasePort {
-    fun <RESULT : DomainObject, USE_CASE : FetchOneUseCase<RESULT>> fetchOne(useCase: USE_CASE): RESULT?
+interface InvokeQueryOneUseCasePort {
+    fun <RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>> queryOne(useCase: USE_CASE): RESULT?
 }
 
-interface InvokeUseCasePort : InvokeCommandUseCasePort, InvokeQueryUseCasePort, InvokeFetchOneUseCasePort
+interface InvokeUseCasePort : InvokeExecuteOneUseCasePort, InvokeQueryManyUseCasePort, InvokeQueryOneUseCasePort

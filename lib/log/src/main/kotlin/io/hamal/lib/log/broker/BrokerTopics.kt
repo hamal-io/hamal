@@ -61,14 +61,14 @@ internal class BrokerTopicsRepository private constructor(
         }
     }
 
-    fun count() = this.executeQuery("SELECT COUNT(*) from topics") { it.getLong(1).toULong() }
+    fun count() = this.executeQueryMany("SELECT COUNT(*) from topics") { it.getLong(1).toULong() }
 
     override fun close() {
         connection.close()
     }
 }
 
-internal fun <T> BrokerTopicsRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
+internal fun <T> BrokerTopicsRepository.executeQueryMany(sql: String, fn: (ResultSet) -> T): T {
     require(!connection.isClosed) { "Connection must be open" }
     return connection.createStatement().use { statement ->
         statement.executeQuery(sql).use(fn)
@@ -135,7 +135,7 @@ private fun BrokerTopicsRepository.createTopic(name: Topic.Name): Topic.Id {
         it.setTimestamp(2, Timestamp.from(TimeUtils.now()))
         it.execute()
 
-        executeQuery("select last_insert_rowid();") { rs ->
+        executeQueryMany("select last_insert_rowid();") { rs ->
             Topic.Id(rs.getLong(1).toULong())
         }
     }

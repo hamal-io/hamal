@@ -4,16 +4,16 @@ import io.hamal.lib.ddd.base.DomainObject
 import kotlin.reflect.KClass
 
 
-interface GetCommandUseCasePort {
-    operator fun <RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): CommandUseCaseOperation<RESULT, USE_CASE>
+interface GetExecuteOneUseCasePort {
+    operator fun <RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): ExecuteOneUseCaseOperation<RESULT, USE_CASE>
 }
 
-interface GetQueryUseCasePort {
-    operator fun <RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryUseCaseOperation<RESULT, USE_CASE>
+interface GetQueryManyUseCasePort {
+    operator fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryManyUseCaseOperation<RESULT, USE_CASE>
 }
 
-interface GetFetchOneUseCasePort {
-    operator fun <RESULT : DomainObject, USE_CASE : FetchOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): FetchOneUseCaseOperation<RESULT, USE_CASE>
+interface GetQueryOneUseCasePort {
+    operator fun <RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryOneUseCaseOperation<RESULT, USE_CASE>
 }
 
-interface GetUseCasePort : GetCommandUseCasePort, GetQueryUseCasePort, GetFetchOneUseCasePort
+interface GetUseCasePort : GetExecuteOneUseCasePort, GetQueryManyUseCasePort, GetQueryOneUseCasePort

@@ -13,8 +13,8 @@
 //class UseCaseOperationTest {
 //
 //    @Nested
-//    @DisplayName("CommandUseCaseOperation")
-//    inner class CommandUseCaseOperationTest {
+//    @DisplayName("ExecuteOneUseCaseOperation")
+//    inner class ExecuteOneUseCaseOperationTest {
 //
 //        @Test
 //        fun `Returns result class`() {
@@ -32,8 +32,8 @@
 //
 //
 //        private inner class TestResult
-//        private inner class TestUseCase : CommandUseCase
-//        private inner class TestUseCaseOperation : CommandUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCase : ExecuteOneUseCase
+//        private inner class TestUseCaseOperation : ExecuteOneUseCaseOperation<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): List<TestResult> {
@@ -44,8 +44,8 @@
 //
 //
 //    @Nested
-//    @DisplayName("QueryUseCaseOperation")
-//    inner class QueryUseCaseOperationTest {
+//    @DisplayName("QueryManyUseCaseOperation")
+//    inner class QueryManyUseCaseOperationTest {
 //
 //        @Test
 //        fun `Returns result class`() {
@@ -62,8 +62,8 @@
 //        }
 //
 //        private inner class TestResult
-//        private inner class TestUseCase : QueryUseCase
-//        private inner class TestUseCaseOperation : QueryUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCase : QueryManyUseCase
+//        private inner class TestUseCaseOperation : QueryManyUseCaseOperation<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): List<TestResult> {
@@ -73,8 +73,8 @@
 //    }
 //
 //    @Nested
-//    @DisplayName("FetchOneUseCaseOperation")
-//    inner class FetchOneUseCaseOperationTest {
+//    @DisplayName("QueryOneUseCaseOperation")
+//    inner class QueryOneUseCaseOperationTest {
 //
 //        @Test
 //        fun `Returns result class`() {
@@ -91,8 +91,8 @@
 //        }
 //
 //        private inner class TestResult
-//        private inner class TestUseCase : FetchOneUseCase
-//        private inner class TestUseCaseOperation : FetchOneUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCase : QueryOneUseCase
+//        private inner class TestUseCaseOperation : QueryOneUseCaseOperation<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): TestResult? {

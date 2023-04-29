@@ -88,10 +88,10 @@ internal class BrokerConsumersRepository private constructor(
     }
 
 
-    fun count() = this.executeQuery("SELECT COUNT(*) from consumers") { it.getLong(1).toULong() }
+    fun count() = this.executeQueryMany("SELECT COUNT(*) from consumers") { it.getLong(1).toULong() }
 }
 
-internal fun <T> BrokerConsumersRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
+internal fun <T> BrokerConsumersRepository.executeQueryMany(sql: String, fn: (ResultSet) -> T): T {
     require(!connection.isClosed) { "Connection must be open" }
     return connection.createStatement().use { statement ->
         statement.executeQuery(sql).use(fn)

@@ -19,11 +19,11 @@
 //    inner class BackendUseCaseInvokerAdapterTest {
 //
 //        @Nested
-//        @DisplayName("command()")
-//        inner class CommandTest {
+//        @DisplayName("executeOne()")
+//        inner class ExecuteOneTest {
 //            @Test
 //            fun `Applies operation on each usecase`() {
-//                val result = testInstance.command(
+//                val result = testInstance.executeOne(
 //                    Int::class,
 //                    TestUseCase(10),
 //                    TestUseCase(100),
@@ -33,7 +33,7 @@
 //
 //            @Test
 //            fun `Applies operation without yielding result`() {
-//                testInstance.command(
+//                testInstance.executeOne(
 //                    TestNoResultUseCase(),
 //                    TestNoResultUseCase(),
 //                    TestNoResultUseCase(),
@@ -41,8 +41,8 @@
 //                assertThat(ref.get(), equalTo(3))
 //            }
 //
-//            private inner class TestUseCase(val data: Int) : CommandUseCase
-//            private inner class TestUseCaseOperation : CommandUseCaseOperation<Int, TestUseCase>(
+//            private inner class TestUseCase(val data: Int) : ExecuteOneUseCase
+//            private inner class TestUseCaseOperation : ExecuteOneUseCaseOperation<Int, TestUseCase>(
 //                Int::class, TestUseCase::class
 //            ) {
 //                override fun invoke(useCase: TestUseCase): List<Int> {
@@ -50,9 +50,9 @@
 //                }
 //            }
 //
-//            private inner class TestNoResultUseCase : CommandUseCase
+//            private inner class TestNoResultUseCase : ExecuteOneUseCase
 //            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                CommandUseCaseOperation<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
+//                ExecuteOneUseCaseOperation<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
 //                override fun invoke(useCase: TestNoResultUseCase): List<Unit> {
 //                    ref.incrementAndGet()
 //                    return listOf()
@@ -74,22 +74,22 @@
 //        }
 //
 //        @Nested
-//        @DisplayName("query()")
-//        inner class QueryTest {
+//        @DisplayName("queryMany()")
+//        inner class QueryManyTest {
 //            @Test
 //            fun `Applies operation on each usecase`() {
-//                val result = testInstance.query(
+//                val result = testInstance.queryMany(
 //                    Int::class,
-//                    TestQueryUseCase(3)
+//                    TestQueryManyUseCase(3)
 //                )
 //                assertThat(result, equalTo(listOf(10, 100, 1000)))
 //            }
 //
-//            private inner class TestQueryUseCase(val data: Int) : QueryUseCase
-//            private inner class TestQueryUseCaseOperation : QueryUseCaseOperation<Int, TestQueryUseCase>(
-//                Int::class, TestQueryUseCase::class
+//            private inner class TestQueryManyUseCase(val data: Int) : QueryManyUseCase
+//            private inner class TestQueryManyUseCaseOperation : QueryManyUseCaseOperation<Int, TestQueryManyUseCase>(
+//                Int::class, TestQueryManyUseCase::class
 //            ) {
-//                override fun invoke(useCase: TestQueryUseCase): List<Int> {
+//                override fun invoke(useCase: TestQueryManyUseCase): List<Int> {
 //                    return IntRange(1, useCase.data)
 //                        .map { 10.0.pow(it.toDouble()).toInt() }
 //                }
@@ -98,18 +98,18 @@
 //            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 //
 //            init {
-//                testRegistryAdapter.register(TestQueryUseCase::class, TestQueryUseCaseOperation())
+//                testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseOperation())
 //            }
 //
 //            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})
 //        }
 //
 //        @Nested
-//        @DisplayName("fetchOne()")
-//        inner class FetchOneTest {
+//        @DisplayName("queryOne()")
+//        inner class QueryOneTest {
 //            @Test
 //            fun `Applies operation and yields result`() {
-//                val result = testInstance.fetchOne(
+//                val result = testInstance.queryOne(
 //                    Int::class,
 //                    TestUseCase(3)
 //                )
@@ -118,13 +118,13 @@
 //
 //            @Test
 //            fun `Applies operation but does not yield result`() {
-//                val result = testInstance.fetchOne(Int::class, TestNoResultUseCase())
+//                val result = testInstance.queryOne(Int::class, TestNoResultUseCase())
 //                assertThat(result, nullValue())
 //                assertThat(ref.get(), equalTo(1))
 //            }
 //
-//            private inner class TestUseCase(val data: Int) : FetchOneUseCase
-//            private inner class TestUseCaseOperation : FetchOneUseCaseOperation<Int, TestUseCase>(
+//            private inner class TestUseCase(val data: Int) : QueryOneUseCase
+//            private inner class TestUseCaseOperation : QueryOneUseCaseOperation<Int, TestUseCase>(
 //                Int::class, TestUseCase::class
 //            ) {
 //                override fun invoke(useCase: TestUseCase): Int? {
@@ -132,9 +132,9 @@
 //                }
 //            }
 //
-//            private inner class TestNoResultUseCase : FetchOneUseCase
+//            private inner class TestNoResultUseCase : QueryOneUseCase
 //            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                FetchOneUseCaseOperation<Int, TestNoResultUseCase>(Int::class, TestNoResultUseCase::class) {
+//                QueryOneUseCaseOperation<Int, TestNoResultUseCase>(Int::class, TestNoResultUseCase::class) {
 //                override fun invoke(useCase: TestNoResultUseCase): Int? {
 //                    ref.incrementAndGet()
 //                    return null

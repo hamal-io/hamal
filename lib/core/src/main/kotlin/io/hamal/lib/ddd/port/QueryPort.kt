@@ -1,10 +1,10 @@
 package io.hamal.lib.ddd.port
 
-import io.hamal.lib.ddd.base.Query
+import io.hamal.lib.ddd.base.QueryMany
 
-interface QueryPort<RESULT : Any, SUPER_QUERY : Query> {
-    fun <QUERY : SUPER_QUERY?> query(query: QUERY): List<RESULT>
-    fun <QUERY : SUPER_QUERY?> findOne(query: QUERY): RESULT? {
-        return query(query).firstOrNull()
+interface QueryManyPort<RESULT : Any, SUPER_QUERYMANY : QueryMany> {
+    fun <QUERYMANY : SUPER_QUERYMANY?> queryMany(queryMany: QUERYMANY): List<RESULT>
+    fun <QUERYMANY : SUPER_QUERYMANY?> findOne(queryMany: QUERYMANY): RESULT? {
+        return queryMany(queryMany).firstOrNull()
     }
 }

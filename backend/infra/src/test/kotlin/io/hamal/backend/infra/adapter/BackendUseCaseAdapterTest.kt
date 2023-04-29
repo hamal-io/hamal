@@ -3,23 +3,24 @@ package io.hamal.backend.infra.adapter
 import io.hamal.backend.core.port.NopLogger
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
-import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.pow
 
 class BackendUseCaseRegistryAdapterTest {
 
     @Nested
-    @DisplayName("GetCommandUseCasePort")
-    inner class GetCommandUseCasePortTestPayloadOperation {
+    @DisplayName("GetExecuteOneUseCasePort")
+    inner class GetExecuteOneUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestCommandUseCase::class]
-            assertThat(result, equalTo(testCommandUseCaseOp))
+            val result = testInstance[TestExecuteOneUseCase::class]
+            assertThat(result, equalTo(testExecuteOneUseCaseOp))
         }
 
         @Test
@@ -27,11 +28,11 @@ class BackendUseCaseRegistryAdapterTest {
             val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
-                testInstance[TestCommandUseCase::class]
+                testInstance[TestExecuteOneUseCase::class]
             }
             assertThat(
                 exception.message,
-                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestCommandUseCase")
+                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestExecuteOneUseCase")
             )
         }
 
@@ -39,32 +40,32 @@ class BackendUseCaseRegistryAdapterTest {
         fun `Interface of use case is registered`() {
             val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
-                    TestCommandUseCaseInterface::class,
-                    testCommandInterfaceUseCaseOp
+                    TestExecuteOneUseCaseInterface::class,
+                    testExecuteOneInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestCommandUseCaseInterface::class]
-            assertThat(result, equalTo(testCommandInterfaceUseCaseOp))
+            val result = testInstance[TestExecuteOneUseCaseInterface::class]
+            assertThat(result, equalTo(testExecuteOneInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
-            register(TestCommandUseCase::class, testCommandUseCaseOp)
+            register(TestExecuteOneUseCase::class, testExecuteOneUseCaseOp)
         }
 
-        private val testCommandUseCaseOp = TestCommandUseCaseOperation()
-        private val testCommandInterfaceUseCaseOp = TestCommandUseCaseInterface.Operation()
+        private val testExecuteOneUseCaseOp = TestExecuteOneUseCaseOperation()
+        private val testExecuteOneInterfaceUseCaseOp = TestExecuteOneUseCaseInterface.Operation()
 
     }
 
     @Nested
-    @DisplayName("GetQueryUseCasePort")
-    inner class GetQueryUseCasePortTestPayloadOperation {
+    @DisplayName("GetQueryManyUseCasePort")
+    inner class GetQueryManyUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestQueryUseCase::class]
-            assertThat(result, equalTo(testQueryUseCaseOp))
+            val result = testInstance[TestQueryManyUseCase::class]
+            assertThat(result, equalTo(testQueryManyUseCaseOp))
         }
 
         @Test
@@ -72,11 +73,11 @@ class BackendUseCaseRegistryAdapterTest {
             val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
-                testInstance[TestQueryUseCase::class]
+                testInstance[TestQueryManyUseCase::class]
             }
             assertThat(
                 exception.message,
-                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestQueryUseCase")
+                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestQueryManyUseCase")
             )
         }
 
@@ -84,32 +85,32 @@ class BackendUseCaseRegistryAdapterTest {
         fun `Interface of use case is registered`() {
             val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
-                    TestQueryUseCaseInterface::class,
-                    testQueryInterfaceUseCaseOp
+                    TestQueryManyUseCaseInterface::class,
+                    testQueryManyInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestQueryUseCaseInterface::class]
-            assertThat(result, equalTo(testQueryInterfaceUseCaseOp))
+            val result = testInstance[TestQueryManyUseCaseInterface::class]
+            assertThat(result, equalTo(testQueryManyInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
-            register(TestQueryUseCase::class, testQueryUseCaseOp)
+            register(TestQueryManyUseCase::class, testQueryManyUseCaseOp)
         }
 
-        private val testQueryUseCaseOp = TestQueryUseCaseOperation()
-        private val testQueryInterfaceUseCaseOp = TestQueryUseCaseInterface.Handler()
+        private val testQueryManyUseCaseOp = TestQueryManyUseCaseOperation()
+        private val testQueryManyInterfaceUseCaseOp = TestQueryManyUseCaseInterface.Handler()
 
     }
 
     @Nested
-    @DisplayName("GetFetchOneUseCasePort")
-    inner class GetFetchOneUseCasePortTestPayloadOperation {
+    @DisplayName("GetQueryOneUseCasePort")
+    inner class GetQueryOneUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestFetchOneUseCase::class]
-            assertThat(result, equalTo(testFetchOneUseCaseOp))
+            val result = testInstance[TestQueryOneUseCase::class]
+            assertThat(result, equalTo(testQueryOneUseCaseOp))
         }
 
         @Test
@@ -117,11 +118,11 @@ class BackendUseCaseRegistryAdapterTest {
             val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
-                testInstance[TestFetchOneUseCase::class]
+                testInstance[TestQueryOneUseCase::class]
             }
             assertThat(
                 exception.message,
-                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestFetchOneUseCase")
+                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestQueryOneUseCase")
             )
         }
 
@@ -129,73 +130,74 @@ class BackendUseCaseRegistryAdapterTest {
         fun `Interface of use case is registered`() {
             val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
-                    TestFetchOneUseCaseInterface::class,
-                    testFetchOneInterfaceUseCaseOp
+                    TestQueryOneUseCaseInterface::class,
+                    testQueryOneInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestFetchOneUseCaseInterface::class]
-            assertThat(result, equalTo(testFetchOneInterfaceUseCaseOp))
+            val result = testInstance[TestQueryOneUseCaseInterface::class]
+            assertThat(result, equalTo(testQueryOneInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
-            register(TestFetchOneUseCase::class, testFetchOneUseCaseOp)
+            register(TestQueryOneUseCase::class, testQueryOneUseCaseOp)
         }
 
-        private val testFetchOneUseCaseOp = TestFetchOneUseCaseOperation()
-        private val testFetchOneInterfaceUseCaseOp = TestFetchOneUseCaseInterface.Handler()
+        private val testQueryOneUseCaseOp = TestQueryOneUseCaseOperation()
+        private val testQueryOneInterfaceUseCaseOp = TestQueryOneUseCaseInterface.Handler()
 
     }
 
     private interface TestResultInterface : DomainObject
     private class TestResult : TestResultInterface
     private class IncompatibleTestResult
-    private class TestCommandUseCase : CommandUseCase<TestResult>
+    private class TestExecuteOneUseCase : ExecuteOneUseCase<TestResult>
 
-    private class TestCommandUseCaseOperation :
-        CommandUseCaseOperation<TestResult, TestCommandUseCase>(TestCommandUseCase::class) {
-        override operator fun invoke(useCase: TestCommandUseCase): TestResult {
+    private class TestExecuteOneUseCaseOperation :
+        ExecuteOneUseCaseOperation<TestResult, TestExecuteOneUseCase>(TestExecuteOneUseCase::class) {
+        override operator fun invoke(useCase: TestExecuteOneUseCase): TestResult {
             return TestResult()
         }
     }
 
-    private interface TestCommandUseCaseInterface : CommandUseCase<TestResult> {
+    private interface TestExecuteOneUseCaseInterface : ExecuteOneUseCase<TestResult> {
         class Operation :
-            CommandUseCaseOperation<TestResult, TestCommandUseCaseInterface>(TestCommandUseCaseInterface::class) {
-            override operator fun invoke(useCase: TestCommandUseCaseInterface): TestResult {
+            ExecuteOneUseCaseOperation<TestResult, TestExecuteOneUseCaseInterface>(TestExecuteOneUseCaseInterface::class) {
+            override operator fun invoke(useCase: TestExecuteOneUseCaseInterface): TestResult {
                 return TestResult()
             }
         }
     }
 
 
-    private class TestQueryUseCase : QueryUseCase<TestResult>
-    private class TestQueryUseCaseOperation :
-        QueryUseCaseOperation<TestResult, TestQueryUseCase>(TestQueryUseCase::class) {
-        override operator fun invoke(useCase: TestQueryUseCase): List<TestResult> {
+    private class TestQueryManyUseCase : QueryManyUseCase<TestResult>
+    private class TestQueryManyUseCaseOperation :
+        QueryManyUseCaseOperation<TestResult, TestQueryManyUseCase>(TestQueryManyUseCase::class) {
+        override operator fun invoke(useCase: TestQueryManyUseCase): List<TestResult> {
             return listOf()
         }
     }
 
-    private interface TestQueryUseCaseInterface : QueryUseCase<TestResult> {
-        class Handler : QueryUseCaseOperation<TestResult, TestQueryUseCaseInterface>(TestQueryUseCaseInterface::class) {
-            override operator fun invoke(useCase: TestQueryUseCaseInterface): List<TestResult> {
+    private interface TestQueryManyUseCaseInterface : QueryManyUseCase<TestResult> {
+        class Handler :
+            QueryManyUseCaseOperation<TestResult, TestQueryManyUseCaseInterface>(TestQueryManyUseCaseInterface::class) {
+            override operator fun invoke(useCase: TestQueryManyUseCaseInterface): List<TestResult> {
                 return listOf()
             }
         }
     }
 
-    private class TestFetchOneUseCase : FetchOneUseCase<TestResult>
-    private class TestFetchOneUseCaseOperation :
-        FetchOneUseCaseOperation<TestResult, TestFetchOneUseCase>(TestFetchOneUseCase::class) {
-        override operator fun invoke(useCase: TestFetchOneUseCase): TestResult? {
+    private class TestQueryOneUseCase : QueryOneUseCase<TestResult>
+    private class TestQueryOneUseCaseOperation :
+        QueryOneUseCaseOperation<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
+        override operator fun invoke(useCase: TestQueryOneUseCase): TestResult? {
             return null
         }
     }
 
-    private interface TestFetchOneUseCaseInterface : FetchOneUseCase<TestResult> {
+    private interface TestQueryOneUseCaseInterface : QueryOneUseCase<TestResult> {
         class Handler :
-            FetchOneUseCaseOperation<TestResult, TestFetchOneUseCaseInterface>(TestFetchOneUseCaseInterface::class) {
-            override operator fun invoke(useCase: TestFetchOneUseCaseInterface): TestResult? {
+            QueryOneUseCaseOperation<TestResult, TestQueryOneUseCaseInterface>(TestQueryOneUseCaseInterface::class) {
+            override operator fun invoke(useCase: TestQueryOneUseCaseInterface): TestResult? {
                 return null
             }
         }
@@ -206,49 +208,25 @@ class BackendUseCaseRegistryAdapterTest {
 @DisplayName("BackendUseCaseInvokerAdapter")
 class BackendUseCaseInvokerAdapterTest {
     @Nested
-    @DisplayName("command()")
-    inner class CommandTest {
+    @DisplayName("executeOne()")
+    inner class ExecuteOneTest {
+
         @Test
         fun `Applies operation on use case`() {
-            val result = testInstance.command(TestUseCase(100))
+            val result = testInstance.executeOne(TestUseCase(100))
             assertThat(result, equalTo(TestResult(200)))
         }
 
-//            @Test
-//            fun `Applies operation without yielding result`() {
-//                testInstance.command(
-//                    TestNoResultUseCase(),
-//                    TestNoResultUseCase(),
-//                    TestNoResultUseCase(),
-//                )
-//                assertThat(ref.get(), equalTo(3))
-//            }
-
-        private inner class TestResult(val data: Int) : DomainObject {
-            override fun equals(other: Any?) = data == (other as TestResult).data
-            override fun hashCode() = data
-        }
-
-        private inner class TestUseCase(val data: Int) : CommandUseCase<TestResult>
+        private inner class TestUseCase(val data: Int) : ExecuteOneUseCase<TestResult>
         private inner class TestUseCaseOperation :
-            CommandUseCaseOperation<TestResult, TestUseCase>(TestUseCase::class) {
+            ExecuteOneUseCaseOperation<TestResult, TestUseCase>(TestUseCase::class) {
             override fun invoke(useCase: TestUseCase): TestResult {
                 return TestResult(useCase.data * 2)
             }
         }
 
-        //            private inner class TestNoResultUseCase : CommandUseCase
-//            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                CommandUseCaseOperation<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
-//                override fun invoke(useCase: TestNoResultUseCase): List<Unit> {
-//                    ref.incrementAndGet()
-//                    return listOf()
-//                }
-//            }
-//
         private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 
-        //            private val ref = AtomicInteger()
         init {
             testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
         }
@@ -256,83 +234,83 @@ class BackendUseCaseInvokerAdapterTest {
         private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
     }
 
-//        @Nested
-//        @DisplayName("query()")
-//        inner class QueryTest {
-//            @Test
-//            fun `Applies operation on each usecase`() {
-//                val result = testInstance.query(
-//                    Int::class,
-//                    TestQueryUseCase(3)
-//                )
-//                assertThat(result, equalTo(listOf(10, 100, 1000)))
-//            }
-//
-//            private inner class TestQueryUseCase(val data: Int) : QueryUseCase
-//            private inner class TestQueryUseCaseOperation : QueryUseCaseOperation<Int, TestQueryUseCase>(
-//                Int::class, TestQueryUseCase::class
-//            ) {
-//                override fun invoke(useCase: TestQueryUseCase): List<Int> {
-//                    return IntRange(1, useCase.data)
-//                        .map { 10.0.pow(it.toDouble()).toInt() }
-//                }
-//            }
-//
-//            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
-//
-//            init {
-//                testRegistryAdapter.register(TestQueryUseCase::class, TestQueryUseCaseOperation())
-//            }
-//
-//            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})
-//        }
-//
-//        @Nested
-//        @DisplayName("fetchOne()")
-//        inner class FetchOneTest {
-//            @Test
-//            fun `Applies operation and yields result`() {
-//                val result = testInstance.fetchOne(
-//                    Int::class,
-//                    TestUseCase(3)
-//                )
-//                assertThat(result, equalTo(2810))
-//            }
-//
-//            @Test
-//            fun `Applies operation but does not yield result`() {
-//                val result = testInstance.fetchOne(Int::class, TestNoResultUseCase())
-//                assertThat(result, nullValue())
-//                assertThat(ref.get(), equalTo(1))
-//            }
-//
-//            private inner class TestUseCase(val data: Int) : FetchOneUseCase
-//            private inner class TestUseCaseOperation : FetchOneUseCaseOperation<Int, TestUseCase>(
-//                Int::class, TestUseCase::class
-//            ) {
-//                override fun invoke(useCase: TestUseCase): Int? {
-//                    return 2810
-//                }
-//            }
-//
-//            private inner class TestNoResultUseCase : FetchOneUseCase
-//            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                FetchOneUseCaseOperation<Int, TestNoResultUseCase>(Int::class, TestNoResultUseCase::class) {
-//                override fun invoke(useCase: TestNoResultUseCase): Int? {
-//                    ref.incrementAndGet()
-//                    return null
-//                }
-//            }
-//
-//            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
-//            private val ref = AtomicInteger()
-//
-//            init {
-//                testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
-//                testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
-//            }
-//
-//            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})
-//        }
+    @Nested
+    @DisplayName("queryMany()")
+    inner class QueryManyTest {
+        @Test
+        fun `Applies operation on use case`() {
+            val result = testInstance.queryMany(TestQueryManyUseCase(3))
+            assertThat(result, equalTo(listOf(TestResult(10), TestResult(100), TestResult(1000))))
+        }
+
+        private inner class TestQueryManyUseCase(val data: Int) : QueryManyUseCase<TestResult>
+        private inner class TestQueryManyUseCaseOperation : QueryManyUseCaseOperation<TestResult, TestQueryManyUseCase>(
+            TestQueryManyUseCase::class
+        ) {
+            override fun invoke(useCase: TestQueryManyUseCase): List<TestResult> {
+                return IntRange(1, useCase.data)
+                    .map { TestResult(10.0.pow(it.toDouble()).toInt()) }
+            }
+        }
+
+        private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
+
+        init {
+            testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseOperation())
+        }
+
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
+    }
+
+    @Nested
+    @DisplayName("queryOne()")
+    inner class QueryOneTest {
+        @Test
+        fun `Applies operation on use case`() {
+            val result = testInstance.queryOne(TestUseCase(3))
+            assertThat(result, equalTo(TestResult(2810)))
+        }
+
+        @Test
+        fun `Applies operation but does not yield result`() {
+            val result = testInstance.queryOne(TestNoResultUseCase())
+            assertThat(result, nullValue())
+            assertThat(ref.get(), equalTo(1))
+        }
+
+        private inner class TestUseCase(val data: Int) : QueryOneUseCase<TestResult>
+        private inner class TestUseCaseOperation : QueryOneUseCaseOperation<TestResult, TestUseCase>(
+            TestUseCase::class
+        ) {
+            override fun invoke(useCase: TestUseCase): TestResult? {
+                return TestResult(2810)
+            }
+        }
+
+        private inner class TestNoResultUseCase : QueryOneUseCase<TestResult>
+        private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
+            QueryOneUseCaseOperation<TestResult, TestNoResultUseCase>(TestNoResultUseCase::class) {
+            override fun invoke(useCase: TestNoResultUseCase): TestResult? {
+                ref.incrementAndGet()
+                return null
+            }
+        }
+
+        private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
+        private val ref = AtomicInteger()
+
+        init {
+            testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
+            testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
+        }
+
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
+    }
+
+    private inner class TestResult(val data: Int) : DomainObject {
+        override fun equals(other: Any?) = data == (other as TestResult).data
+        override fun hashCode() = data
+    }
+
 }
 

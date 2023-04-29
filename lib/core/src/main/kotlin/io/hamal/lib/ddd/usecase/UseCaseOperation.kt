@@ -9,25 +9,25 @@ interface UseCaseOperation<RESULT : DomainObject, USE_CASE : UseCase<RESULT>> {
     val useCaseClass: KClass<USE_CASE>
 }
 
-interface CommandUseCase<RESULT : DomainObject> : UseCase<RESULT>
+interface ExecuteOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class CommandUseCaseOperation<RESULT : DomainObject, USE_CASE : CommandUseCase<RESULT>>(
+abstract class ExecuteOneUseCaseOperation<RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>>(
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
     abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT
 }
 
-interface QueryUseCase<RESULT : DomainObject> : UseCase<RESULT>
+interface QueryManyUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class QueryUseCaseOperation<RESULT : DomainObject, USE_CASE : QueryUseCase<RESULT>>(
+abstract class QueryManyUseCaseOperation<RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>>(
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
     abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): List<RESULT>
 }
 
-interface FetchOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
+interface QueryOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class FetchOneUseCaseOperation<RESULT : DomainObject, USE_CASE : FetchOneUseCase<RESULT>>(
+abstract class QueryOneUseCaseOperation<RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>>(
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
 

@@ -17,19 +17,19 @@ import java.util.*
 class SomeTest(val id: JobId, val definitionId: JobDefinitionId, val regionId: RegionId)
 
 @RestController
-open class JobController(
-    @Autowired val invokeUseCasePort: InvokeUseCasePort,
-    @Autowired val generateDomainId: GenerateDomainIdPort
+
+open class JobController @Autowired constructor(
+    val invokeUseCasePort: InvokeUseCasePort,
+    val generateDomainId: GenerateDomainIdPort
 ) {
 
-    //FIXME must operate on manual trigger instead of job def hack
     @PostMapping("/v1/triggers/manual/{triggerId}")
     fun manualTrigger(
         @PathVariable("triggerId") triggerId: String,
         @RequestAttribute("regionId") regionId: RegionId
     ): ResponseEntity<SomeTest> {
 
-        val invokedTrigger = invokeUseCasePort.command(
+        val invokedTrigger = invokeUseCasePort.executeOne(
             InvokeManualTriggerUseCase(
                 regionId = regionId,
                 triggerId = generateDomainId(regionId, ::TriggerId)

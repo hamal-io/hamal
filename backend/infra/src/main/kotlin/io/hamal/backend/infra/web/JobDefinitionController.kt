@@ -9,7 +9,7 @@ open class JobDefinitionController(
 
 //    @PostMapping("/v1/job-definitions")
 //    fun createJobDefinition(): JobDefinition? {
-//        return invokeUseCasePort.command(
+//        return invokeUseCasePort.executeOne(
 //            JobDefinition::class,
 //            CreateJobDefinitionUseCase(
 //                RegionId(0),
