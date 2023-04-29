@@ -1,13 +1,13 @@
-package io.hamal.backend.core.port.job
+package io.hamal.backend.core.port.flow
 
-import io.hamal.backend.core.model.Job.PlannedJob
-import io.hamal.lib.vo.JobDefinitionId
-import io.hamal.lib.vo.JobId
+import io.hamal.backend.core.model.Flow.PlannedFlow
+import io.hamal.lib.vo.FlowDefinitionId
+import io.hamal.lib.vo.FlowId
 
-fun interface PlanJobPort {
-    fun planJob(jobToPlan: JobToPlan): PlannedJob
-    data class JobToPlan(
-        val jobId: JobId,
-        val definitionId: JobDefinitionId
+fun interface PlanFlowPort {
+    fun planFlow(flowToPlan: FlowToPlan): PlannedFlow
+    data class FlowToPlan(
+        val flowId: FlowId,
+        val definitionId: FlowDefinitionId
     )
 }

@@ -1,15 +1,6 @@
 package io.hamal.backend.infra
 
-import io.hamal.backend.core.notification.JobDefinitionDomainNotification
-import io.hamal.backend.core.notification.Scheduled
-import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
-import io.hamal.backend.infra.module.job.handler.JobScheduledHandler
-import io.hamal.backend.infra.module.job_definition.handler.JobDefinitionCreatedHandler
-import io.hamal.backend.infra.module.trigger.handler.TriggerCreatedHandler
-import io.hamal.backend.infra.module.trigger.handler.TriggerInvokedHandler
-import io.hamal.backend.store.impl.DefaultJobDefinitionStore
-import io.hamal.backend.store.impl.DefaultTriggerStore
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
@@ -30,13 +21,13 @@ open class BackendConfig {
     open fun domainNotificationConsumer(
         createDomainNotificationConsumerPort: CreateDomainNotificationProcessorPort
     ) = createDomainNotificationConsumerPort
-        .register(Scheduled::class, JobScheduledHandler())
-        .register(
-            JobDefinitionDomainNotification.Created::class,
-            JobDefinitionCreatedHandler(DefaultJobDefinitionStore)
-        )
-        .register(TriggerDomainNotification.Created::class, TriggerCreatedHandler(DefaultTriggerStore))
-        .register(TriggerDomainNotification.Invoked::class, TriggerInvokedHandler())
+//        .register(Scheduled::class, FlowScheduledHandler())
+//        .register(
+//            FlowDefinitionDomainNotification.Created::class,
+//            FlowDefinitionCreatedHandler(DefaultFlowDefinitionStore)
+//        )
+//        .register(TriggerDomainNotification.Created::class, TriggerCreatedHandler(DefaultTriggerStore))
+//        .register(TriggerDomainNotification.Invoked::class, TriggerInvokedHandler())
         .create()
 
 

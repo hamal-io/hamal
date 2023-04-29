@@ -10,7 +10,7 @@ class TriggerInvokedHandler : HandleDomainNotificationPort<TriggerDomainNotifica
     }
 
     override fun handle(notification: TriggerDomainNotification.Invoked) {
-        log.info("A trigger was invoked its time to create a job and to have some scheduling fun")
+        log.info("A trigger was invoked its time to create a flow and to have some scheduling fun")
         log.info("$notification")
     }
 }

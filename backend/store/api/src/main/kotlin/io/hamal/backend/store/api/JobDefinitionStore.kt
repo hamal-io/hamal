@@ -1,7 +1,7 @@
 package io.hamal.backend.store.api
 
-import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.core.model.FlowDefinition
 
-interface JobDefinitionStore {
-    fun store(definition: JobDefinition)
+interface FlowDefinitionStore {
+    fun create(definition: FlowDefinition)
 }

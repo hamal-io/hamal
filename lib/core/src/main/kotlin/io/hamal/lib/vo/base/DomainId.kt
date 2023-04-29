@@ -3,13 +3,16 @@ package io.hamal.lib.vo.base
 import io.hamal.lib.ddd.base.ValueObject
 import io.hamal.lib.util.Snowflake
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>(){
+
+@Serializable
+abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>() {
     fun partition() = value.partition()
     fun sequence() = value.sequence()
     fun elapsed() = value.elapsed()

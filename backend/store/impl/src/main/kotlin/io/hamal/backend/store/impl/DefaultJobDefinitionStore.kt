@@ -1,14 +1,14 @@
 package io.hamal.backend.store.impl
 
-import io.hamal.backend.core.model.JobDefinition
-import io.hamal.backend.store.api.JobDefinitionStore
-import io.hamal.lib.vo.JobDefinitionId
+import io.hamal.backend.core.model.FlowDefinition
+import io.hamal.backend.store.api.FlowDefinitionStore
+import io.hamal.lib.vo.FlowDefinitionId
 
-object DefaultJobDefinitionStore : JobDefinitionStore {
+object DefaultFlowDefinitionStore : FlowDefinitionStore {
 
-    val jobDefinitions = mutableMapOf<JobDefinitionId, JobDefinition>()
-    override fun store(definition: JobDefinition) {
-        jobDefinitions[definition.id] = definition
+    val flowDefinitions = mutableMapOf<FlowDefinitionId, FlowDefinition>()
+    override fun create(definition: FlowDefinition) {
+        flowDefinitions[definition.id] = definition
     }
 
 

@@ -40,10 +40,10 @@ class BrokerRepositoryTest {
     inner class ResolveTopicTest {
         @Test
         fun `Bug - Able to resolve real topic`() {
-            val result = testInstance.resolveTopic(Topic.Name("scheduler::job_enqueued"))
+            val result = testInstance.resolveTopic(Topic.Name("scheduler::flow_enqueued"))
             assertThat(result.id, equalTo(Topic.Id(1)))
             assertThat(result.brokerId, equalTo(Broker.Id(456)))
-            assertThat(result.name, equalTo(Topic.Name("scheduler::job_enqueued")))
+            assertThat(result.name, equalTo(Topic.Name("scheduler::flow_enqueued")))
             assertThat(result.path, equalTo(Path(testDir)))
         }
 

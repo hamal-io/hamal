@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.module.trigger.web
 
-import io.hamal.backend.application.trigger.InvokeManualTriggerUseCase
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.request.trigger.ManualTriggerInvocation
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.util.Snowflake
 import io.hamal.lib.vo.*
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @Serializable
-class SomeTest(val id: JobId, val definitionId: JobDefinitionId, val regionId: RegionId)
+class SomeTest(val id: FlowId, val definitionId: FlowDefinitionId, val regionId: RegionId)
 
 @RestController
-open class JobController @Autowired constructor(
-    val invoke: InvokeUseCasePort,
+open class FlowController @Autowired constructor(
+    val request: InvokeUseCasePort,
     val generateDomainId: GenerateDomainIdPort,
     val notifyDomainPort: NotifyDomainPort,
 ) {
@@ -34,11 +34,11 @@ open class JobController @Autowired constructor(
         val triggerId = TriggerId(Snowflake.Id(rawTriggerId.toLong()))
 
 //        val trigger = invoke(GetTriggerUseCase(triggerId))
-//        val definition = invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId))
+//        val definition = invoke(GetFlowDefinitionUseCase(trigger.flowDefinitionId))
 
 //        notifyDomainPort.invoke(
 //            Scheduled(
-//                id = generateDomainId(regionId, ::JobId),
+//                id = generateDomainId(regionId, ::FlowId),
 //                regionId = RegionId(1),
 //
 //                inputs = counter.incrementAndGet()
@@ -50,7 +50,7 @@ open class JobController @Autowired constructor(
 //            trigger = Trigger.ManualTrigger(
 //                id = TriggerId(Snowflake.Id(2)),
 //                reference = TriggerReference("some-ref"),
-//                jobDefinitionId = definition.id,
+//                flowDefinitionId = definition.id,
 //            ),
 //            invokedAt = InvokedAt(TimeUtils.now()),
 //            invokedBy = AccountId(Snowflake.Id(123))
@@ -64,13 +64,13 @@ open class JobController @Autowired constructor(
 //        )
 //        return ResponseEntity.ok(
 //            SomeTest(
-//                generateDomainId(regionId, ::JobId),
-//                generateDomainId(regionId, ::JobDefinitionId),
+//                generateDomainId(regionId, ::FlowId),
+//                generateDomainId(regionId, ::FlowDefinitionId),
 //                regionId
 //            )
 //        )
 
-        return invoke(InvokeManualTriggerUseCase(regionId, triggerId))
+        return request(ManualTriggerInvocation(regionId, triggerId))
     }
 
 }

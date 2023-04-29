@@ -1,10 +1,11 @@
-package io.hamal.backend.application.trigger
+package io.hamal.backend.request.trigger
 
-import io.hamal.backend.application.job_definition.GetJobDefinitionUseCase
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.model.Trigger
 import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.store.impl.DefaultFlowDefinitionStore
+import io.hamal.backend.store.impl.DefaultTriggerStore
 import io.hamal.lib.ddd.usecase.ExecuteOneUseCase
 import io.hamal.lib.ddd.usecase.ExecuteOneUseCaseOperation
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
@@ -16,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 var counter = AtomicInteger(0)
 
-data class InvokeManualTriggerUseCase(
+data class ManualTriggerInvocation(
     val regionId: RegionId,
     val triggerId: TriggerId
 ) : ExecuteOneUseCase<InvokedTrigger.Manual> {
@@ -25,16 +26,18 @@ data class InvokeManualTriggerUseCase(
         private val invoke: InvokeUseCasePort,
         private val notifyDomain: NotifyDomainPort,
         private val generateDomainId: GenerateDomainIdPort,
-    ) : ExecuteOneUseCaseOperation<InvokedTrigger.Manual, InvokeManualTriggerUseCase>(InvokeManualTriggerUseCase::class) {
+    ) : ExecuteOneUseCaseOperation<InvokedTrigger.Manual, ManualTriggerInvocation>(ManualTriggerInvocation::class) {
 
-        override fun invoke(useCase: InvokeManualTriggerUseCase): InvokedTrigger.Manual {
-            val trigger = invoke(GetTriggerUseCase(useCase.triggerId))
-            val definition =
-                invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId)) // required later to get inputs/secrets
+        override fun invoke(useCase: ManualTriggerInvocation): InvokedTrigger.Manual {
+//            val trigger = invoke(GetTriggerUseCase(useCase.triggerId))
+//            val definition =
+//                invoke(GetFlowDefinitionUseCase(trigger.flowDefinitionId)) // required later to get inputs/secrets
+            val trigger = DefaultTriggerStore.triggers[useCase.triggerId]!!
+            val definition = DefaultFlowDefinitionStore.flowDefinitions[trigger.flowDefinitionId]!!
 
 //            notifyDomainPort.invoke(
 //                Scheduled(
-//                    id = generateDomainId(useCase.regionId, ::JobId),
+//                    id = generateDomainId(useCase.regionId, ::FlowId),
 //                    regionId = RegionId(1),
 //                    inputs = counter.incrementAndGet()
 //                )
@@ -46,7 +49,7 @@ data class InvokeManualTriggerUseCase(
                 trigger = Trigger.ManualTrigger(
                     id = TriggerId(Snowflake.Id(2)),
                     reference = TriggerReference("some-ref"),
-                    jobDefinitionId = definition.id,
+                    flowDefinitionId = definition.id,
                 ),
                 invokedAt = InvokedAt(TimeUtils.now()),
                 invokedBy = AccountId(Snowflake.Id(123))
