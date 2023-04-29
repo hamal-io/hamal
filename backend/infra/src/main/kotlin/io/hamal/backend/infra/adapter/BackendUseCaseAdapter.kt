@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 
 @Component
 class BackendUseCaseInvokerAdapter private constructor(
-    private val getExecuteOneUseCase: GetExecuteOneUseCasePort,
+    private val getRequestOneUseCase: GetRequestOneUseCasePort,
     private val getQueryManyUseCase: GetQueryManyUseCasePort,
     private val getQueryOneUseCase: GetQueryOneUseCasePort,
     private val flushDomainNotifications: FlushDomainNotificationPort,
@@ -34,8 +34,8 @@ class BackendUseCaseInvokerAdapter private constructor(
         getLoggerPort(BackendUseCaseInvokerAdapter::class)
     )
 
-    override fun <RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
-        val operation = getExecuteOneUseCase[useCase::class]
+    override fun <RESULT : DomainObject, USE_CASE : RequestOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
+        val operation = getRequestOneUseCase[useCase::class]
         logUseCaseInvocation(useCase)
         return operation(useCase).let {
             flushDomainNotifications()
@@ -62,9 +62,9 @@ class BackendUseCaseInvokerAdapter private constructor(
 class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        event.applicationContext.getBeansOfType(ExecuteOneUseCaseOperation::class.java)
+        event.applicationContext.getBeansOfType(RequestOneUseCaseOperation::class.java)
             .forEach { (_, operation) ->
-                register(operation.useCaseClass, operation as ExecuteOneUseCaseOperation<*, *>)
+                register(operation.useCaseClass, operation as RequestOneUseCaseOperation<*, *>)
             }
 
         event.applicationContext.getBeansOfType(QueryManyUseCaseOperation::class.java)
@@ -79,15 +79,15 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): ExecuteOneUseCaseOperation<RESULT, USE_CASE> =
-        executeOneOnce(useCaseClass) {
-            val operation = executeOneOperations[useCaseClass]
-                ?: useCaseClass.java.interfaces.asSequence().firstOrNull { executeOneOperations[it.kotlin] != null }
+    override fun <RESULT : DomainObject, USE_CASE : RequestOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): RequestOneUseCaseOperation<RESULT, USE_CASE> =
+        requestOneOnce(useCaseClass) {
+            val operation = requestOneOperations[useCaseClass]
+                ?: useCaseClass.java.interfaces.asSequence().firstOrNull { requestOneOperations[it.kotlin] != null }
 
             check(operation != null) { "No operation registered for $useCaseClass" }
 
-            operation as ExecuteOneUseCaseOperation<*, ExecuteOneUseCase<*>>
-        } as ExecuteOneUseCaseOperation<RESULT, USE_CASE>
+            operation as RequestOneUseCaseOperation<*, RequestOneUseCase<*>>
+        } as RequestOneUseCaseOperation<RESULT, USE_CASE>
 
     override fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryManyUseCaseOperation<RESULT, USE_CASE> =
         queryManyOnce(useCaseClass) {
@@ -111,10 +111,10 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
 
     @Suppress("UNCHECKED_CAST")
     internal fun register(
-        useCaseClass: KClass<out ExecuteOneUseCase<*>>, operation: ExecuteOneUseCaseOperation<*, *>
+        useCaseClass: KClass<out RequestOneUseCase<*>>, operation: RequestOneUseCaseOperation<*, *>
     ) {
         check(operation.useCaseClass == useCaseClass)
-        executeOneOperations[useCaseClass] = operation as ExecuteOneUseCaseOperation<*, ExecuteOneUseCase<*>>
+        requestOneOperations[useCaseClass] = operation as RequestOneUseCaseOperation<*, RequestOneUseCase<*>>
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -130,14 +130,14 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
     }
 
 
-    private val executeOneOperations =
-        mutableMapOf<KClass<out UseCase<*>>, ExecuteOneUseCaseOperation<*, ExecuteOneUseCase<*>>>()
+    private val requestOneOperations =
+        mutableMapOf<KClass<out UseCase<*>>, RequestOneUseCaseOperation<*, RequestOneUseCase<*>>>()
     private val queryManyOperations =
         mutableMapOf<KClass<out QueryManyUseCase<*>>, QueryManyUseCaseOperation<*, QueryManyUseCase<*>>>()
     private val fetchOperations =
         mutableMapOf<KClass<out QueryOneUseCase<*>>, QueryOneUseCaseOperation<*, QueryOneUseCase<*>>>()
 
-    private val executeOneOnce: KeyedOnce<KClass<out ExecuteOneUseCase<*>>, ExecuteOneUseCaseOperation<*, ExecuteOneUseCase<*>>> =
+    private val requestOneOnce: KeyedOnce<KClass<out RequestOneUseCase<*>>, RequestOneUseCaseOperation<*, RequestOneUseCase<*>>> =
         KeyedOnce.default()
 
     private val queryManyOnce: KeyedOnce<KClass<out QueryManyUseCase<*>>, QueryManyUseCaseOperation<*, QueryManyUseCase<*>>> =

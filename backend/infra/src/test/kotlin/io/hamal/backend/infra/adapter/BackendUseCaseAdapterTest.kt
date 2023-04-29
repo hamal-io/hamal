@@ -12,14 +12,14 @@ import kotlin.math.pow
 class BackendUseCaseRegistryAdapterTest {
 
     @Nested
-    @DisplayName("GetExecuteOneUseCasePort")
-    inner class GetExecuteOneUseCasePortTestPayloadOperation {
+    @DisplayName("GetRequestOneUseCasePort")
+    inner class GetRequestOneUseCasePortTestPayloadOperation {
         @Test
         fun `Exists`() {
             val testInstance = testInstanceWithUseCase()
 
-            val result = testInstance[TestExecuteOneUseCase::class]
-            assertThat(result, equalTo(testExecuteOneUseCaseOp))
+            val result = testInstance[TestRequestOneUseCase::class]
+            assertThat(result, equalTo(testRequestOneUseCaseOp))
         }
 
         @Test
@@ -27,11 +27,11 @@ class BackendUseCaseRegistryAdapterTest {
             val testInstance = BackendUseCaseRegistryAdapter()
 
             val exception = assertThrows<IllegalStateException> {
-                testInstance[TestExecuteOneUseCase::class]
+                testInstance[TestRequestOneUseCase::class]
             }
             assertThat(
                 exception.message,
-                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestExecuteOneUseCase")
+                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestRequestOneUseCase")
             )
         }
 
@@ -39,20 +39,20 @@ class BackendUseCaseRegistryAdapterTest {
         fun `Interface of use case is registered`() {
             val testInstance = BackendUseCaseRegistryAdapter().apply {
                 register(
-                    TestExecuteOneUseCaseInterface::class,
-                    testExecuteOneInterfaceUseCaseOp
+                    TestRequestOneUseCaseInterface::class,
+                    testRequestOneInterfaceUseCaseOp
                 )
             }
-            val result = testInstance[TestExecuteOneUseCaseInterface::class]
-            assertThat(result, equalTo(testExecuteOneInterfaceUseCaseOp))
+            val result = testInstance[TestRequestOneUseCaseInterface::class]
+            assertThat(result, equalTo(testRequestOneInterfaceUseCaseOp))
         }
 
         private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
-            register(TestExecuteOneUseCase::class, testExecuteOneUseCaseOp)
+            register(TestRequestOneUseCase::class, testRequestOneUseCaseOp)
         }
 
-        private val testExecuteOneUseCaseOp = TestExecuteOneUseCaseOperation()
-        private val testExecuteOneInterfaceUseCaseOp = TestExecuteOneUseCaseInterface.Operation()
+        private val testRequestOneUseCaseOp = TestRequestOneUseCaseOperation()
+        private val testRequestOneInterfaceUseCaseOp = TestRequestOneUseCaseInterface.Operation()
 
     }
 
@@ -149,19 +149,19 @@ class BackendUseCaseRegistryAdapterTest {
     private interface TestResultInterface : DomainObject
     private class TestResult : TestResultInterface
     private class IncompatibleTestResult
-    private class TestExecuteOneUseCase : ExecuteOneUseCase<TestResult>
+    private class TestRequestOneUseCase : RequestOneUseCase<TestResult>
 
-    private class TestExecuteOneUseCaseOperation :
-        ExecuteOneUseCaseOperation<TestResult, TestExecuteOneUseCase>(TestExecuteOneUseCase::class) {
-        override operator fun invoke(useCase: TestExecuteOneUseCase): TestResult {
+    private class TestRequestOneUseCaseOperation :
+        RequestOneUseCaseOperation<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
+        override operator fun invoke(useCase: TestRequestOneUseCase): TestResult {
             return TestResult()
         }
     }
 
-    private interface TestExecuteOneUseCaseInterface : ExecuteOneUseCase<TestResult> {
+    private interface TestRequestOneUseCaseInterface : RequestOneUseCase<TestResult> {
         class Operation :
-            ExecuteOneUseCaseOperation<TestResult, TestExecuteOneUseCaseInterface>(TestExecuteOneUseCaseInterface::class) {
-            override operator fun invoke(useCase: TestExecuteOneUseCaseInterface): TestResult {
+            RequestOneUseCaseOperation<TestResult, TestRequestOneUseCaseInterface>(TestRequestOneUseCaseInterface::class) {
+            override operator fun invoke(useCase: TestRequestOneUseCaseInterface): TestResult {
                 return TestResult()
             }
         }
@@ -207,8 +207,8 @@ class BackendUseCaseRegistryAdapterTest {
 @DisplayName("BackendUseCaseInvokerAdapter")
 class BackendUseCaseInvokerAdapterTest {
     @Nested
-    @DisplayName("invoke<ExecuteOne>()")
-    inner class ExecuteOneTest {
+    @DisplayName("invoke<RequestOne>()")
+    inner class RequestOneTest {
 
         @Test
         fun `Applies operation on use case`() {
@@ -216,9 +216,9 @@ class BackendUseCaseInvokerAdapterTest {
             assertThat(result, equalTo(TestResult(200)))
         }
 
-        private inner class TestUseCase(val data: Int) : ExecuteOneUseCase<TestResult>
+        private inner class TestUseCase(val data: Int) : RequestOneUseCase<TestResult>
         private inner class TestUseCaseOperation :
-            ExecuteOneUseCaseOperation<TestResult, TestUseCase>(TestUseCase::class) {
+            RequestOneUseCaseOperation<TestResult, TestUseCase>(TestUseCase::class) {
             override fun invoke(useCase: TestUseCase): TestResult {
                 return TestResult(useCase.data * 2)
             }

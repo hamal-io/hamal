@@ -6,7 +6,7 @@ import io.hamal.backend.core.notification.FlowDefinitionDomainNotification
 import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.backend.store.api.FlowDefinitionStore
-import io.hamal.lib.ddd.usecase.ExecuteOneUseCaseOperation
+import io.hamal.lib.ddd.usecase.RequestOneUseCaseOperation
 import io.hamal.lib.vo.FlowDefinitionId
 import io.hamal.lib.vo.TriggerId
 import io.hamal.lib.vo.TriggerReference
@@ -16,7 +16,7 @@ class CreateFlowDefinitionRequestHandler(
     val notifyDomain: NotifyDomainPort,
     val generateDomainId: GenerateDomainIdPort,
     val flowDefinitionStore: FlowDefinitionStore
-) : ExecuteOneUseCaseOperation<FlowDefinition, FlowDefinitionRequest.FlowDefinitionCreation>(FlowDefinitionRequest.FlowDefinitionCreation::class) {
+) : RequestOneUseCaseOperation<FlowDefinition, FlowDefinitionRequest.FlowDefinitionCreation>(FlowDefinitionRequest.FlowDefinitionCreation::class) {
 
     override fun invoke(useCase: FlowDefinitionRequest.FlowDefinitionCreation): FlowDefinition {
         val resultId = generateDomainId(useCase.shard, ::FlowDefinitionId)

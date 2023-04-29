@@ -56,7 +56,7 @@ open class FlowController @Autowired constructor(
 //            invokedBy = AccountId(Snowflake.Id(123))
 //        )
 
-//        val invokedTrigger = invokeUseCasePort.executeOne(
+//        val invokedTrigger = invokeUseCasePort.requestOne(
 //            InvokeManualTriggerUseCase(
 //                shard = shard,
 //                triggerId = generateDomainId(shard, ::TriggerId)

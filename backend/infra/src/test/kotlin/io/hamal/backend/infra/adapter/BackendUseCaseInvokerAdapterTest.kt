@@ -19,11 +19,11 @@
 //    inner class BackendUseCaseInvokerAdapterTest {
 //
 //        @Nested
-//        @DisplayName("executeOne()")
-//        inner class ExecuteOneTest {
+//        @DisplayName("requestOne()")
+//        inner class RequestOneTest {
 //            @Test
 //            fun `Applies operation on each usecase`() {
-//                val result = testInstance.executeOne(
+//                val result = testInstance.requestOne(
 //                    Int::class,
 //                    TestUseCase(10),
 //                    TestUseCase(100),
@@ -33,7 +33,7 @@
 //
 //            @Test
 //            fun `Applies operation without yielding result`() {
-//                testInstance.executeOne(
+//                testInstance.requestOne(
 //                    TestNoResultUseCase(),
 //                    TestNoResultUseCase(),
 //                    TestNoResultUseCase(),
@@ -41,8 +41,8 @@
 //                assertThat(ref.get(), equalTo(3))
 //            }
 //
-//            private inner class TestUseCase(val data: Int) : ExecuteOneUseCase
-//            private inner class TestUseCaseOperation : ExecuteOneUseCaseOperation<Int, TestUseCase>(
+//            private inner class TestUseCase(val data: Int) : RequestOneUseCase
+//            private inner class TestUseCaseOperation : RequestOneUseCaseOperation<Int, TestUseCase>(
 //                Int::class, TestUseCase::class
 //            ) {
 //                override fun invoke(useCase: TestUseCase): List<Int> {
@@ -50,9 +50,9 @@
 //                }
 //            }
 //
-//            private inner class TestNoResultUseCase : ExecuteOneUseCase
+//            private inner class TestNoResultUseCase : RequestOneUseCase
 //            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                ExecuteOneUseCaseOperation<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
+//                RequestOneUseCaseOperation<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
 //                override fun invoke(useCase: TestNoResultUseCase): List<Unit> {
 //                    ref.incrementAndGet()
 //                    return listOf()

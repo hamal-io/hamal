@@ -13,8 +13,8 @@
 //class UseCaseOperationTest {
 //
 //    @Nested
-//    @DisplayName("ExecuteOneUseCaseOperation")
-//    inner class ExecuteOneUseCaseOperationTest {
+//    @DisplayName("RequestOneUseCaseOperation")
+//    inner class RequestOneUseCaseOperationTest {
 //
 //        @Test
 //        fun `Returns result class`() {
@@ -32,8 +32,8 @@
 //
 //
 //        private inner class TestResult
-//        private inner class TestUseCase : ExecuteOneUseCase
-//        private inner class TestUseCaseOperation : ExecuteOneUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCase : RequestOneUseCase
+//        private inner class TestUseCaseOperation : RequestOneUseCaseOperation<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): List<TestResult> {

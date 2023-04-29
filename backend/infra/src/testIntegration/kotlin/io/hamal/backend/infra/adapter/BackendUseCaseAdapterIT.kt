@@ -23,14 +23,14 @@ open class TestUseCaseRegistryConfig {
 }
 
 /**
- * Registers testExecuteOneUseCase, testQueryManyUseCase, testQueryOneUseCase so that the use case registry can pick up
+ * Registers testRequestOneUseCase, testQueryManyUseCase, testQueryOneUseCase so that the use case registry can pick up
  * those beans
  */
 
 @Configuration
 open class TestUseCasesConfig {
     @Bean
-    open fun executeOneUseCase() = testExecuteOneUseCaseOp
+    open fun requestOneUseCase() = testRequestOneUseCaseOp
 
     @Bean
     open fun queryManyUseCase() = testQueryManyUseCaseOp
@@ -50,11 +50,11 @@ class BackendUseCaseRegistryAdapterIT(
 
     @Nested
     @DisplayName("onApplicationEvent()")
-    inner class GetExecuteOneUseCasePortTestOperation {
+    inner class GetRequestOneUseCasePortTestOperation {
         @Test
-        fun `Registers executeOne use case operation`() {
-            val result = testInstance[TestExecuteOneUseCase::class]
-            assertThat(result, equalTo(testExecuteOneUseCaseOp))
+        fun `Registers requestOne use case operation`() {
+            val result = testInstance[TestRequestOneUseCase::class]
+            assertThat(result, equalTo(testRequestOneUseCaseOp))
         }
 
         @Test
@@ -73,11 +73,11 @@ class BackendUseCaseRegistryAdapterIT(
 
 data class TestResult(val value: Int) : DomainObject
 
-class TestExecuteOneUseCase : ExecuteOneUseCase<TestResult>
+class TestRequestOneUseCase : RequestOneUseCase<TestResult>
 
-private val testExecuteOneUseCaseOp =
-    object : ExecuteOneUseCaseOperation<TestResult, TestExecuteOneUseCase>(TestExecuteOneUseCase::class) {
-        override operator fun invoke(useCase: TestExecuteOneUseCase) = TestResult(42)
+private val testRequestOneUseCaseOp =
+    object : RequestOneUseCaseOperation<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
+        override operator fun invoke(useCase: TestRequestOneUseCase) = TestResult(42)
     }
 
 class TestQueryManyUseCase : QueryManyUseCase<TestResult>

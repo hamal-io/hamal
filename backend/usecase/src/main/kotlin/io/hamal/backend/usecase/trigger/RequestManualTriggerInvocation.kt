@@ -6,8 +6,8 @@ import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.backend.store.impl.DefaultFlowDefinitionStore
 import io.hamal.backend.store.impl.DefaultTriggerStore
-import io.hamal.lib.ddd.usecase.ExecuteOneUseCase
-import io.hamal.lib.ddd.usecase.ExecuteOneUseCaseOperation
+import io.hamal.lib.ddd.usecase.RequestOneUseCase
+import io.hamal.lib.ddd.usecase.RequestOneUseCaseOperation
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.util.Snowflake
 import io.hamal.lib.util.TimeUtils
@@ -20,13 +20,13 @@ var counter = AtomicInteger(0)
 data class ManualTriggerInvocation(
     val shard: Shard,
     val triggerId: TriggerId
-) : ExecuteOneUseCase<InvokedTrigger.Manual> {
+) : RequestOneUseCase<InvokedTrigger.Manual> {
 
     class Operation(
         private val invoke: InvokeUseCasePort,
         private val notifyDomain: NotifyDomainPort,
         private val generateDomainId: GenerateDomainIdPort,
-    ) : ExecuteOneUseCaseOperation<InvokedTrigger.Manual, ManualTriggerInvocation>(ManualTriggerInvocation::class) {
+    ) : RequestOneUseCaseOperation<InvokedTrigger.Manual, ManualTriggerInvocation>(ManualTriggerInvocation::class) {
 
         override fun invoke(useCase: ManualTriggerInvocation): InvokedTrigger.Manual {
 //            val trigger = invoke(GetTriggerUseCase(useCase.triggerId))

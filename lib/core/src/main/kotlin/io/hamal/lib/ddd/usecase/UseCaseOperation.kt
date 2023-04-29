@@ -9,9 +9,9 @@ interface UseCaseOperation<RESULT : DomainObject, USE_CASE : UseCase<RESULT>> {
     val useCaseClass: KClass<USE_CASE>
 }
 
-interface ExecuteOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
+interface RequestOneUseCase<RESULT : DomainObject> : UseCase<RESULT>
 
-abstract class ExecuteOneUseCaseOperation<RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>>(
+abstract class RequestOneUseCaseOperation<RESULT : DomainObject, USE_CASE : RequestOneUseCase<RESULT>>(
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
     abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT
