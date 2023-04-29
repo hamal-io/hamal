@@ -91,5 +91,5 @@ class TestQueryOneUseCase : QueryOneUseCase<TestResult>
 
 private val testQueryOneUseCaseOp =
     object : QueryOneUseCaseOperation<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
-        override fun invoke(useCase: TestQueryOneUseCase) = null
+        override fun invoke(useCase: TestQueryOneUseCase) =  TestResult(0)
     }

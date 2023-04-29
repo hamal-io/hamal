@@ -29,17 +29,26 @@ class ConsumerIT {
 
                 val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, value ->
-                    assertThat("${index + 1}", equalTo(value))
+                    CompletableFuture.runAsync {
+                        assertThat("${index + 1}", equalTo(value))
+                    }
                 }
 
                 val counter = AtomicInteger(0)
-                testInstance.consume(10) { _ -> counter.incrementAndGet() }
+                testInstance.consume(10) { _ ->
+                    CompletableFuture.runAsync {
+                        counter.incrementAndGet()
+                    }
+                }
+
                 assertThat(counter.get(), equalTo(0))
 
                 appender.append(topic, "1337")
                 testInstance.consume(10) { value ->
-                    assertThat(value, equalTo("1337"))
-                    counter.incrementAndGet()
+                    CompletableFuture.runAsync {
+                        assertThat(value, equalTo("1337"))
+                        counter.incrementAndGet()
+                    }
                 }
                 assertThat(counter.get(), equalTo(1))
             }
@@ -59,7 +68,9 @@ class ConsumerIT {
                 val topic = brokerRepository.resolveTopic(Topic.Name("topic"))
                 val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, value ->
-                    assertThat("${index + 1}", equalTo(value))
+                    CompletableFuture.runAsync {
+                        assertThat("${index + 1}", equalTo(value))
+                    }
                 }
             }
         }
@@ -75,7 +86,13 @@ class ConsumerIT {
                 val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 val collected = mutableListOf<String>()
                 val consumerFuture = CompletableFuture.runAsync {
-                    while (collected.size < 1_000) { testInstance.consume(1, collected::add) }
+                    while (collected.size < 1_000) {
+                        testInstance.consume(1) {
+                            CompletableFuture.runAsync {
+                                collected.add(it)
+                            }
+                        }
+                    }
                 }
 
                 IntRange(1, 10).forEach { _ ->

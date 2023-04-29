@@ -7,7 +7,6 @@ import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.pow
 
 class BackendUseCaseRegistryAdapterTest {
@@ -189,16 +188,16 @@ class BackendUseCaseRegistryAdapterTest {
     private class TestQueryOneUseCase : QueryOneUseCase<TestResult>
     private class TestQueryOneUseCaseOperation :
         QueryOneUseCaseOperation<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
-        override operator fun invoke(useCase: TestQueryOneUseCase): TestResult? {
-            return null
+        override operator fun invoke(useCase: TestQueryOneUseCase): TestResult {
+            return TestResult()
         }
     }
 
     private interface TestQueryOneUseCaseInterface : QueryOneUseCase<TestResult> {
         class Handler :
             QueryOneUseCaseOperation<TestResult, TestQueryOneUseCaseInterface>(TestQueryOneUseCaseInterface::class) {
-            override operator fun invoke(useCase: TestQueryOneUseCaseInterface): TestResult? {
-                return null
+            override operator fun invoke(useCase: TestQueryOneUseCaseInterface): TestResult {
+                return TestResult()
             }
         }
     }
@@ -208,12 +207,12 @@ class BackendUseCaseRegistryAdapterTest {
 @DisplayName("BackendUseCaseInvokerAdapter")
 class BackendUseCaseInvokerAdapterTest {
     @Nested
-    @DisplayName("executeOne()")
+    @DisplayName("invoke<ExecuteOne>()")
     inner class ExecuteOneTest {
 
         @Test
         fun `Applies operation on use case`() {
-            val result = testInstance.executeOne(TestUseCase(100))
+            val result = testInstance(TestUseCase(100))
             assertThat(result, equalTo(TestResult(200)))
         }
 
@@ -235,11 +234,11 @@ class BackendUseCaseInvokerAdapterTest {
     }
 
     @Nested
-    @DisplayName("queryMany()")
+    @DisplayName("invoke<QueryMany>()")
     inner class QueryManyTest {
         @Test
         fun `Applies operation on use case`() {
-            val result = testInstance.queryMany(TestQueryManyUseCase(3))
+            val result = testInstance.invoke(TestQueryManyUseCase(3))
             assertThat(result, equalTo(listOf(TestResult(10), TestResult(100), TestResult(1000))))
         }
 
@@ -263,45 +262,27 @@ class BackendUseCaseInvokerAdapterTest {
     }
 
     @Nested
-    @DisplayName("queryOne()")
+    @DisplayName("invoke<QueryOne>()")
     inner class QueryOneTest {
         @Test
         fun `Applies operation on use case`() {
-            val result = testInstance.queryOne(TestUseCase(3))
+            val result = testInstance(TestUseCase(3))
             assertThat(result, equalTo(TestResult(2810)))
-        }
-
-        @Test
-        fun `Applies operation but does not yield result`() {
-            val result = testInstance.queryOne(TestNoResultUseCase())
-            assertThat(result, nullValue())
-            assertThat(ref.get(), equalTo(1))
         }
 
         private inner class TestUseCase(val data: Int) : QueryOneUseCase<TestResult>
         private inner class TestUseCaseOperation : QueryOneUseCaseOperation<TestResult, TestUseCase>(
             TestUseCase::class
         ) {
-            override fun invoke(useCase: TestUseCase): TestResult? {
+            override fun invoke(useCase: TestUseCase): TestResult {
                 return TestResult(2810)
             }
         }
 
-        private inner class TestNoResultUseCase : QueryOneUseCase<TestResult>
-        private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-            QueryOneUseCaseOperation<TestResult, TestNoResultUseCase>(TestNoResultUseCase::class) {
-            override fun invoke(useCase: TestNoResultUseCase): TestResult? {
-                ref.incrementAndGet()
-                return null
-            }
-        }
-
         private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
-        private val ref = AtomicInteger()
 
         init {
             testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
-            testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
         }
 
         private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })

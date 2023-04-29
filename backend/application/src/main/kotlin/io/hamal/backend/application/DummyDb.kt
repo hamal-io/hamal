@@ -1,4 +1,4 @@
-package io.hamal.backend.infra
+package io.hamal.backend.application
 
 import io.hamal.backend.core.model.JobDefinition
 import io.hamal.backend.core.model.Trigger

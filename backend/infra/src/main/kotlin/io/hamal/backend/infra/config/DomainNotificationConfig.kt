@@ -2,9 +2,9 @@ package io.hamal.backend.infra.config
 
 import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.infra.adapter.CreateDomainNotificationConsumerPort
+import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
 import io.hamal.backend.infra.adapter.DomainNotificationAdapter
-import io.hamal.backend.infra.adapter.DomainNotificationConsumerAdapter
+import io.hamal.backend.infra.adapter.DefaultDomainNotificationProcessor
 import io.hamal.lib.log.broker.Broker
 import io.hamal.lib.log.broker.BrokerRepository
 import org.springframework.context.annotation.Bean
@@ -35,7 +35,7 @@ open class DomainNotificationConfig {
     open fun createDomainNotificationConsumerPort(
         taskScheduler: ThreadPoolTaskScheduler,
         brokerRepository: BrokerRepository
-    ): CreateDomainNotificationConsumerPort = DomainNotificationConsumerAdapter(
+    ): CreateDomainNotificationProcessorPort = DefaultDomainNotificationProcessor(
         taskScheduler,
         brokerRepository
     )

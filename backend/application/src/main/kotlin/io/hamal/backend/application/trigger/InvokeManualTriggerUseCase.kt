@@ -1,11 +1,13 @@
 package io.hamal.backend.application.trigger
 
+import io.hamal.backend.application.job.GetJobDefinitionUseCase
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.model.Trigger
-import io.hamal.backend.core.notification.Scheduled
+import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.ExecuteOneUseCase
 import io.hamal.lib.ddd.usecase.ExecuteOneUseCaseOperation
+import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.util.Snowflake
 import io.hamal.lib.util.TimeUtils
 import io.hamal.lib.vo.*
@@ -20,29 +22,44 @@ data class InvokeManualTriggerUseCase(
 ) : ExecuteOneUseCase<InvokedTrigger.Manual> {
 
     class Operation(
-        private val notifyDomainPort: NotifyDomainPort,
+        private val invoke: InvokeUseCasePort,
+        private val notifyDomain: NotifyDomainPort,
         private val generateDomainId: GenerateDomainIdPort,
     ) : ExecuteOneUseCaseOperation<InvokedTrigger.Manual, InvokeManualTriggerUseCase>(InvokeManualTriggerUseCase::class) {
 
         override fun invoke(useCase: InvokeManualTriggerUseCase): InvokedTrigger.Manual {
-            notifyDomainPort.invoke(
-                Scheduled(
-                    id = generateDomainId(useCase.regionId, ::JobId),
-                    regionId = RegionId(1),
-                    inputs = counter.incrementAndGet()
-                )
-            )
+            val trigger = invoke(GetTriggerUseCase(useCase.triggerId))
+            val definition =
+                invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId)) // required later to get inputs/secrets
 
-            return InvokedTrigger.Manual(
+//            notifyDomainPort.invoke(
+//                Scheduled(
+//                    id = generateDomainId(useCase.regionId, ::JobId),
+//                    regionId = RegionId(1),
+//                    inputs = counter.incrementAndGet()
+//                )
+//            )
+
+
+            val result = InvokedTrigger.Manual(
                 id = InvokedTriggerId(Snowflake.Id(1)),
                 trigger = Trigger.ManualTrigger(
                     id = TriggerId(Snowflake.Id(2)),
                     reference = TriggerReference("some-ref"),
-                    jobDefinitionId = JobDefinitionId(Snowflake.Id(3)),
+                    jobDefinitionId = definition.id,
                 ),
                 invokedAt = InvokedAt(TimeUtils.now()),
                 invokedBy = AccountId(Snowflake.Id(123))
             )
+
+            notifyDomain(
+                TriggerDomainNotification.Invoked(
+                    invokedTrigger = result,
+                    regionId = useCase.regionId,
+                )
+            )
+
+            return result
         }
     }
 }

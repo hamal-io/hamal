@@ -17,11 +17,11 @@ open class AsyncConfig : SchedulingConfigurer {
 
     @Bean
     open fun taskScheduler(): Executor {
-        val executor = ThreadPoolTaskScheduler()
-        executor.threadNamePrefix = "h4m41-"
-        executor.poolSize = 2
-        executor.initialize()
-        return executor
+        val result = ThreadPoolTaskScheduler()
+        result.threadNamePrefix = "h4m41-"
+        result.poolSize = 2
+        result.initialize()
+        return result
     }
 
     override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {

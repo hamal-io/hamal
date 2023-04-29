@@ -1,4 +1,4 @@
-package io.hamal.backend.infra.web
+package io.hamal.backend.infra.module.job_definition.web
 
 import io.hamal.backend.application.job.CreateJobDefinitionUseCase
 import io.hamal.backend.core.model.JobDefinition
@@ -18,7 +18,7 @@ open class JobDefinitionController(
     fun createJobDefinition(
         @RequestAttribute regionId: RegionId
     ): JobDefinition {
-        return invokeUseCase.executeOne(
+        return invokeUseCase(
             CreateJobDefinitionUseCase(regionId)
         )
     }

@@ -31,5 +31,5 @@ abstract class QueryOneUseCaseOperation<RESULT : DomainObject, USE_CASE : QueryO
     override val useCaseClass: KClass<USE_CASE>
 ) : UseCaseOperation<RESULT, USE_CASE> {
 
-    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT?
+    abstract operator fun invoke(useCase: @UnsafeVariance USE_CASE): RESULT
 }

@@ -5,16 +5,17 @@ import io.hamal.lib.log.topic.Topic
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer
+import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 interface Consumer<VALUE : Any> {
     val groupId: GroupId
 
-    fun consume(limit: Int, fn: (VALUE) -> Unit): Int {
+    fun consume(limit: Int, fn: (VALUE) -> CompletableFuture<*>): Int {
         return consumeIndexed(limit) { _, value -> fn(value) }
     }
 
-    fun consumeIndexed(limit: Int, fn: (Int, VALUE) -> Unit): Int
+    fun consumeIndexed(limit: Int, fn: (Int, VALUE) -> CompletableFuture<*>): Int
 
     @JvmInline
     value class GroupId(val value: String)
@@ -29,16 +30,18 @@ class ProtobufConsumer<Value : Any>(
 ) : Consumer<Value> {
 
     @OptIn(InternalSerializationApi::class)
-    override fun consumeIndexed(limit: Int, fn: (Int, Value) -> Unit): Int {
+    override fun consumeIndexed(limit: Int, fn: (Int, Value) -> CompletableFuture<*>): Int {
         val chunksToConsume = brokerRepository.read(groupId, topic, limit)
 
-        chunksToConsume.onEachIndexed { index, chunk ->
-            fn(
+        chunksToConsume.mapIndexed { index, chunk ->
+            val future = fn(
                 index,
                 ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
             )
+            Pair(chunk.id, future)
         }
-            .map { it.id }
+            .onEach { it.second.join() }
+            .map { it.first }
             .maxByOrNull { it }
             ?.let { brokerRepository.commit(groupId, topic, it) }
 

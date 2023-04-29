@@ -1,4 +1,4 @@
-package io.hamal.backend.infra.handler
+package io.hamal.backend.infra.module.job.handler
 
 import io.hamal.backend.core.notification.Scheduled
 import io.hamal.backend.core.port.notification.HandleDomainNotificationPort

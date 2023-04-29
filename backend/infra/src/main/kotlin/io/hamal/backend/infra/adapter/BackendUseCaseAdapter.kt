@@ -34,7 +34,7 @@ class BackendUseCaseInvokerAdapter private constructor(
         getLoggerPort(BackendUseCaseInvokerAdapter::class)
     )
 
-    override fun <RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>> executeOne(useCase: USE_CASE): RESULT {
+    override fun <RESULT : DomainObject, USE_CASE : ExecuteOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
         val operation = getExecuteOneUseCase[useCase::class]
         logUseCaseInvocation(useCase)
         return operation(useCase).let {
@@ -43,12 +43,12 @@ class BackendUseCaseInvokerAdapter private constructor(
         }
     }
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> queryMany(useCase: USE_CASE): List<RESULT> {
+    override fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> invoke(useCase: USE_CASE): List<RESULT> {
         logUseCaseInvocation(useCase)
         return getQueryManyUseCase[useCase::class](useCase)
     }
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>> queryOne(useCase: USE_CASE): RESULT? {
+    override fun <RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
         logUseCaseInvocation(useCase)
         return getQueryOneUseCase[useCase::class](useCase)
     }

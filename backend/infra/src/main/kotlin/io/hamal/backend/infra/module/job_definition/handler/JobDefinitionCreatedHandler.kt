@@ -1,8 +1,8 @@
-package io.hamal.backend.infra.handler
+package io.hamal.backend.infra.module.job_definition.handler
 
 import io.hamal.backend.core.notification.JobDefinitionDomainNotification.Created
 import io.hamal.backend.core.port.notification.HandleDomainNotificationPort
-import io.hamal.backend.infra.DummyDb
+import io.hamal.backend.application.DummyDb
 import io.hamal.backend.infra.adapter.BackendLoggingFactory
 
 class JobDefinitionCreatedHandler : HandleDomainNotificationPort<Created> {

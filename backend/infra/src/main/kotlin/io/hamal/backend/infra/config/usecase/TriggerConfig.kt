@@ -1,7 +1,9 @@
 package io.hamal.backend.infra.config.usecase
 
+import io.hamal.backend.application.trigger.GetTriggerUseCase
 import io.hamal.backend.application.trigger.InvokeManualTriggerUseCase
 import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,8 +13,13 @@ open class TriggerConfig {
 
     @Bean
     open fun invokeManualTrigger(
+
+        invokeUseCasePort: InvokeUseCasePort,
         notifyDomainPort: NotifyDomainPort,
         generateDomainId: GenerateDomainIdPort
-    ) = InvokeManualTriggerUseCase.Operation(notifyDomainPort, generateDomainId)
+    ) = InvokeManualTriggerUseCase.Operation(invokeUseCasePort, notifyDomainPort, generateDomainId)
+
+    @Bean
+    open fun getTrigger() = GetTriggerUseCase.Operation()
 
 }

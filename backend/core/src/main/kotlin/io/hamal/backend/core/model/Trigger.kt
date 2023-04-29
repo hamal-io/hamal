@@ -13,7 +13,7 @@ sealed class Trigger : DomainObject {
     abstract val jobDefinitionId: JobDefinitionId
 
     @Serializable
-    class ManualTrigger(
+    data class ManualTrigger(
         override val id: TriggerId,
         override val reference: TriggerReference,
         override val jobDefinitionId: JobDefinitionId
@@ -28,7 +28,7 @@ sealed class InvokedTrigger : DomainObject {
     abstract val invokedBy: AccountId
 
     @Serializable
-    class Manual(
+    data class Manual(
         override val id: InvokedTriggerId,
         val trigger: ManualTrigger,
         override val invokedAt: InvokedAt,
