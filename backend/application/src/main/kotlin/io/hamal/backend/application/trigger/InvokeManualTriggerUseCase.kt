@@ -1,6 +1,6 @@
 package io.hamal.backend.application.trigger
 
-import io.hamal.backend.application.job.GetJobDefinitionUseCase
+import io.hamal.backend.application.job_definition.GetJobDefinitionUseCase
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.model.Trigger
 import io.hamal.backend.core.notification.TriggerDomainNotification

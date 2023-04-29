@@ -33,7 +33,9 @@ dependencies {
         exclude("org.assertj", "*")
     }
 
-    implementation("org.awaitility:awaitility-kotlin:4.2.0")
+
+    implementation(project(":backend:store:api"))
+    implementation(project(":backend:store:impl"))
 
     compileOnly(external.spring.devTools)
 }

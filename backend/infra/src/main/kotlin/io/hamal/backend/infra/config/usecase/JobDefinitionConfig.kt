@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.config.usecase
 
-import io.hamal.backend.application.job.CreateJobDefinitionUseCase
-import io.hamal.backend.application.job.GetJobDefinitionUseCase
+import io.hamal.backend.application.job_definition.CreateJobDefinitionUseCase
+import io.hamal.backend.application.job_definition.GetJobDefinitionUseCase
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean

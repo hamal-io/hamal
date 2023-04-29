@@ -1,7 +1,7 @@
 package io.hamal.backend.application.trigger
 
-import io.hamal.backend.application.DummyDb
 import io.hamal.backend.core.model.Trigger
+import io.hamal.backend.store.impl.DefaultTriggerStore
 import io.hamal.lib.ddd.usecase.QueryOneUseCase
 import io.hamal.lib.ddd.usecase.QueryOneUseCaseOperation
 import io.hamal.lib.vo.TriggerId
@@ -16,7 +16,7 @@ data class GetTriggerUseCase(
 //                .atMost(3.seconds.toJavaDuration())
 //                .untilNotNull { DummyDb.triggers[useCase.id] }
 
-            return DummyDb.triggers[useCase.id]!!
+            return DefaultTriggerStore.triggers[useCase.id]!!
         }
     }
 

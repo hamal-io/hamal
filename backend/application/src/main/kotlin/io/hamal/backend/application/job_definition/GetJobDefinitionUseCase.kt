@@ -1,7 +1,7 @@
-package io.hamal.backend.application.job
+package io.hamal.backend.application.job_definition
 
-import io.hamal.backend.application.DummyDb
 import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.store.impl.DefaultJobDefinitionStore
 import io.hamal.lib.ddd.usecase.QueryOneUseCase
 import io.hamal.lib.ddd.usecase.QueryOneUseCaseOperation
 import io.hamal.lib.vo.JobDefinitionId
@@ -15,7 +15,7 @@ data class GetJobDefinitionUseCase(
 //            return await
 //                .atMost(3.seconds.toJavaDuration())
 //                .untilNotNull { DummyDb.jobDefinitions[useCase.id] }
-            return DummyDb.jobDefinitions[useCase.id]!!
+            return DefaultJobDefinitionStore.jobDefinitions[useCase.id]!!
         }
     }
 
