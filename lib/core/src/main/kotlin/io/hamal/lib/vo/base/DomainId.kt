@@ -10,6 +10,9 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>(){
+    fun partition() = value.partition()
+    fun sequence() = value.sequence()
+    fun elapsed() = value.elapsed()
     override fun toString(): String {
         return "${this::class.simpleName}(${value.value})"
     }

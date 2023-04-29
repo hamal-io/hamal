@@ -1,11 +1,15 @@
 package io.hamal.backend.core.notification
 
-//sealed class JobDefinitionDomainNotification(regionId: RegionId) : DomainNotification(regionId) {
-//
-//    @DomainNotificationTopic("launchpad::job_enqueued")
-//    class Created(
-//        val id: JobDefinitionId,
-//        regionId: RegionId,
-//    ) : JobDefinitionDomainNotification(regionId)
-//
-//}
+import io.hamal.backend.core.model.JobDefinition
+import io.hamal.lib.vo.RegionId
+import kotlinx.serialization.Serializable
+
+
+sealed class JobDefinitionDomainNotification : DomainNotification() {
+    @Serializable
+    @DomainNotificationTopic("job_definition_created")
+    data class Created(
+        val jobDefinition: JobDefinition,
+        override val regionId: RegionId
+    ) : JobDefinitionDomainNotification()
+}

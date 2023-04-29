@@ -1,41 +1,38 @@
 package io.hamal.backend.core.model
 
 import io.hamal.backend.core.model.Trigger.ManualTrigger
-import io.hamal.backend.core.model.Trigger.Type.Manual
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.vo.*
+import kotlinx.serialization.Serializable
 
-sealed class Trigger(
-    val type: Type,
-    val id: TriggerId,
-    val reference: TriggerReference,
-    val jobDefinitionId: JobDefinitionId
-) : DomainObject {
+@Serializable
+sealed class Trigger : DomainObject {
 
-    enum class Type {
-        Manual
-    }
+    abstract val id: TriggerId
+    abstract val reference: TriggerReference
+    abstract val jobDefinitionId: JobDefinitionId
 
+    @Serializable
     class ManualTrigger(
-        id: TriggerId,
-        reference: TriggerReference,
-        jobDefinitionId: JobDefinitionId
-    ) : Trigger(Manual, id, reference, jobDefinitionId)
+        override val id: TriggerId,
+        override val reference: TriggerReference,
+        override val jobDefinitionId: JobDefinitionId
+    ) : Trigger()
 
 }
 
-sealed class InvokedTrigger<TRIGGER : Trigger>(
-    val id: InvokedTriggerId,
-    val trigger: TRIGGER,
-    val invokedAt: InvokedAt,
-    val invokedBy: AccountId
-) : DomainObject {
+@Serializable
+sealed class InvokedTrigger : DomainObject {
+    abstract val id: InvokedTriggerId
+    abstract val invokedAt: InvokedAt
+    abstract val invokedBy: AccountId
 
+    @Serializable
     class Manual(
-        id: InvokedTriggerId,
-        trigger: ManualTrigger,
-        invokedAt: InvokedAt,
-        invokedBy: AccountId
-    ) : InvokedTrigger<ManualTrigger>(id, trigger, invokedAt, invokedBy)
+        override val id: InvokedTriggerId,
+        val trigger: ManualTrigger,
+        override val invokedAt: InvokedAt,
+        override val invokedBy: AccountId
+    ) : InvokedTrigger()
 
 }

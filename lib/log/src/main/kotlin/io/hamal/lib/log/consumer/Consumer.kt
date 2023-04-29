@@ -2,7 +2,6 @@ package io.hamal.lib.log.consumer
 
 import io.hamal.lib.log.broker.BrokerRepository
 import io.hamal.lib.log.topic.Topic
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer
@@ -29,7 +28,7 @@ class ProtobufConsumer<Value : Any>(
     private val valueClass: KClass<Value>
 ) : Consumer<Value> {
 
-    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+    @OptIn(InternalSerializationApi::class)
     override fun consumeIndexed(limit: Int, fn: (Int, Value) -> Unit): Int {
         val chunksToConsume = brokerRepository.read(groupId, topic, limit)
 

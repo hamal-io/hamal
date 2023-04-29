@@ -1,8 +1,12 @@
 package io.hamal.backend.infra
 
+import io.hamal.backend.core.notification.JobDefinitionDomainNotification
 import io.hamal.backend.core.notification.Scheduled
+import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.infra.adapter.CreateDomainNotificationConsumerPort
+import io.hamal.backend.infra.handler.JobDefinitionCreatedHandler
 import io.hamal.backend.infra.handler.JobScheduledHandler
+import io.hamal.backend.infra.handler.TriggerCreatedHandler
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
@@ -24,6 +28,8 @@ open class BackendConfig {
         createDomainNotificationConsumerPort: CreateDomainNotificationConsumerPort
     ) = createDomainNotificationConsumerPort
         .register(Scheduled::class, JobScheduledHandler())
+        .register(JobDefinitionDomainNotification.Created::class, JobDefinitionCreatedHandler())
+        .register(TriggerDomainNotification.Created::class, TriggerCreatedHandler())
         .create()
 
 

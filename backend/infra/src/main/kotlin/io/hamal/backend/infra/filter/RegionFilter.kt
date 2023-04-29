@@ -14,7 +14,7 @@ class RegionFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("regionId", RegionId(1))
+        request.setAttribute("regionId", RegionId(128))
         filterChain.doFilter(request, response)
     }
 
