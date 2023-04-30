@@ -5,7 +5,7 @@ import io.hamal.backend.core.model.Trigger
 import io.hamal.backend.core.notification.FlowDefinitionDomainNotification
 import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.store.api.FlowDefinitionStore
+import io.hamal.backend.store.api.DefinitionStore
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
 import io.hamal.lib.vo.FlowDefinitionId
 import io.hamal.lib.vo.TriggerId
@@ -15,17 +15,23 @@ import io.hamal.lib.vo.port.GenerateDomainIdPort
 class CreateFlowDefinitionRequestHandler(
     val notifyDomain: NotifyDomainPort,
     val generateDomainId: GenerateDomainIdPort,
-    val flowDefinitionStore: FlowDefinitionStore
+    val flowDefinitionStore: DefinitionStore
 ) : RequestOneUseCaseHandler<FlowDefinition, FlowDefinitionRequest.FlowDefinitionCreation>(FlowDefinitionRequest.FlowDefinitionCreation::class) {
 
     override fun invoke(useCase: FlowDefinitionRequest.FlowDefinitionCreation): FlowDefinition {
         val resultId = generateDomainId(useCase.shard, ::FlowDefinitionId)
 
-
-        //  val commands = store.newCommands()
-        // val definitionId = commands.insertFlowDefinition(definiton props..)
-        // val triggerOneId = commands.insertTrigger(definitionId, trigger props..)
+        //  val commands = store.request(){
+        //     val definitionId = commands.insertFlowDefinition(definiton props..)
+        //     val triggerOneId = commands.addTrigger(definitionId, trigger props..)
+        //     commands.removeTrigger(definitionId, trigger props..)
+        // }
         // store(commands)
+
+        // store.request(){
+        //      job.
+        //}
+
 
         // fixme should create trigger in separate use case
         val result = FlowDefinition(

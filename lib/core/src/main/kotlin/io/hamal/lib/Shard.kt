@@ -1,4 +1,4 @@
-package io.hamal.lib.vo
+package io.hamal.lib
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

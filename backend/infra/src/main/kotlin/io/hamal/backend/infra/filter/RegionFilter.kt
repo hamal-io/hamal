@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.filter
 
-import io.hamal.lib.vo.Shard
+import io.hamal.lib.Shard
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

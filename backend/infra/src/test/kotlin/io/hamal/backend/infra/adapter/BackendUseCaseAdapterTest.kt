@@ -1,9 +1,10 @@
 package io.hamal.backend.infra.adapter
 
 import io.hamal.backend.core.port.NopLogger
+import io.hamal.lib.RequestId
+import io.hamal.lib.Shard
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.vo.Shard
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
@@ -150,8 +151,8 @@ class BackendUseCaseRegistryAdapterTest {
     private interface TestResultInterface : DomainObject
     private class TestResult : TestResultInterface
     private class IncompatibleTestResult
-    private class TestRequestOneUseCase : RequestOneUseCase<TestResult>{
-        override val requestId= RequestId(123)
+    private class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
+        override val requestId = RequestId(123)
         override val shard = Shard(23)
     }
 
@@ -220,10 +221,11 @@ class BackendUseCaseInvokerAdapterTest {
             assertThat(result, equalTo(TestResult(200)))
         }
 
-        private inner class TestUseCase(val data: Int) : RequestOneUseCase<TestResult>{
-            override val requestId= RequestId(123)
+        private inner class TestUseCase(val data: Int) : RequestOneUseCase<TestResult> {
+            override val requestId = RequestId(123)
             override val shard = Shard(23)
         }
+
         private inner class TestUseCaseHandler :
             RequestOneUseCaseHandler<TestResult, TestUseCase>(TestUseCase::class) {
             override fun invoke(useCase: TestUseCase): TestResult {

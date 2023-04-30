@@ -1,7 +1,7 @@
 package io.hamal.lib.vo.port
 
 import io.hamal.lib.util.Snowflake
-import io.hamal.lib.vo.Shard
+import io.hamal.lib.Shard
 import io.hamal.lib.vo.base.DomainId
 
 interface GenerateDomainIdPort {

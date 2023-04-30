@@ -1,8 +1,8 @@
 package io.hamal.lib.ddd.usecase
 
+import io.hamal.lib.RequestId
+import io.hamal.lib.Shard
 import io.hamal.lib.ddd.base.DomainObject
-import io.hamal.lib.vo.Shard
-import java.math.BigInteger
 import kotlin.reflect.KClass
 
 interface UseCase<RESULT : DomainObject>
@@ -11,11 +11,6 @@ interface UseCaseHandler<RESULT : DomainObject, USE_CASE : UseCase<RESULT>> {
     val useCaseClass: KClass<USE_CASE>
 }
 
-@JvmInline
-value class RequestId(val value: BigInteger) {
-    constructor(value: ByteArray) : this(BigInteger(value))
-    constructor(value: Int) : this(value.toBigInteger())
-}
 
 interface RequestOneUseCase<RESULT : DomainObject> : UseCase<RESULT> {
     val requestId: RequestId

@@ -1,4 +1,4 @@
-package io.hamal.lib.vo
+package io.hamal.lib
 
 import io.hamal.lib.vo.helper.SerializationTestHelper.generateTestCases
 import org.hamcrest.CoreMatchers.containsString

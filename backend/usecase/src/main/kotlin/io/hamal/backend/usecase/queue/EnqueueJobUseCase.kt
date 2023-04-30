@@ -3,11 +3,11 @@ package io.hamal.backend.usecase.queue
 import io.hamal.backend.core.model.QueuedJob
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.backend.core.port.queue.EnqueueFlowPort
-import io.hamal.lib.ddd.usecase.RequestId
+import io.hamal.lib.RequestId
 import io.hamal.lib.ddd.usecase.RequestOneUseCase
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
 import io.hamal.lib.vo.FlowId
-import io.hamal.lib.vo.Shard
+import io.hamal.lib.Shard
 
 data class EnqueueFlowUseCase(
     override val requestId: RequestId,

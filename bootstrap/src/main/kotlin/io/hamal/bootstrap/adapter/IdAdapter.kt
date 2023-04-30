@@ -1,6 +1,6 @@
 package io.hamal.bootstrap.adapter
 
-import io.hamal.lib.vo.Shard
+import io.hamal.lib.Shard
 import io.hamal.lib.vo.base.DomainId
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import io.hamal.lib.util.DefaultPartitionSource

@@ -2,7 +2,7 @@ package io.hamal.backend.core.notification
 
 import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.model.Trigger
-import io.hamal.lib.vo.Shard
+import io.hamal.lib.Shard
 import kotlinx.serialization.Serializable
 
 sealed class TriggerDomainNotification : DomainNotification() {

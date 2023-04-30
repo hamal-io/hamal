@@ -1,9 +1,10 @@
 package io.hamal.backend.infra.adapter
 
 import io.hamal.backend.infra.adapter.TestUseCasesConfig.*
+import io.hamal.lib.RequestId
+import io.hamal.lib.Shard
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
-import io.hamal.lib.vo.Shard
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -74,8 +75,8 @@ class BackendUseCaseRegistryAdapterIT(
 
 data class TestResult(val value: Int) : DomainObject
 
-class TestRequestOneUseCase : RequestOneUseCase<TestResult>{
-    override val requestId= RequestId(123)
+class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
+    override val requestId = RequestId(123)
     override val shard = Shard(23)
 }
 
@@ -95,5 +96,5 @@ class TestQueryOneUseCase : QueryOneUseCase<TestResult>
 
 private val testQueryOneUseCaseOp =
     object : QueryOneUseCaseHandler<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
-        override fun invoke(useCase: TestQueryOneUseCase) =  TestResult(0)
+        override fun invoke(useCase: TestQueryOneUseCase) = TestResult(0)
     }
