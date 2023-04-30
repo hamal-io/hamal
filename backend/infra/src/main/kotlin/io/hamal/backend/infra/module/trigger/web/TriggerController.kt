@@ -4,6 +4,7 @@ import io.hamal.backend.core.model.InvokedTrigger
 import io.hamal.backend.core.port.notification.NotifyDomainPort
 import io.hamal.backend.usecase.trigger.ManualTriggerInvocation
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
+import io.hamal.lib.ddd.usecase.RequestId
 import io.hamal.lib.util.Snowflake
 import io.hamal.lib.vo.*
 import io.hamal.lib.vo.port.GenerateDomainIdPort
@@ -70,7 +71,7 @@ open class FlowController @Autowired constructor(
 //            )
 //        )
 
-        return request(ManualTriggerInvocation(shard, triggerId))
+        return request(ManualTriggerInvocation(RequestId(10), shard, triggerId))
     }
 
 }

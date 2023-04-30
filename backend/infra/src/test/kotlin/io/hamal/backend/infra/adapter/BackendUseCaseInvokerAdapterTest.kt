@@ -42,7 +42,7 @@
 //            }
 //
 //            private inner class TestUseCase(val data: Int) : RequestOneUseCase
-//            private inner class TestUseCaseOperation : RequestOneUseCaseOperation<Int, TestUseCase>(
+//            private inner class TestUseCaseHandler : RequestOneUseCaseHandler<Int, TestUseCase>(
 //                Int::class, TestUseCase::class
 //            ) {
 //                override fun invoke(useCase: TestUseCase): List<Int> {
@@ -51,8 +51,8 @@
 //            }
 //
 //            private inner class TestNoResultUseCase : RequestOneUseCase
-//            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                RequestOneUseCaseOperation<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
+//            private inner class TestNoResultUseCaseHandler(val ref: AtomicInteger) :
+//                RequestOneUseCaseHandler<Unit, TestNoResultUseCase>(Unit::class, TestNoResultUseCase::class) {
 //                override fun invoke(useCase: TestNoResultUseCase): List<Unit> {
 //                    ref.incrementAndGet()
 //                    return listOf()
@@ -63,10 +63,10 @@
 //            private val ref = AtomicInteger()
 //
 //            init {
-//                testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
+//                testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
 //                testRegistryAdapter.register(
 //                    TestNoResultUseCase::class,
-//                    TestNoResultUseCaseOperation(ref)
+//                    TestNoResultUseCaseHandler(ref)
 //                )
 //            }
 //
@@ -86,7 +86,7 @@
 //            }
 //
 //            private inner class TestQueryManyUseCase(val data: Int) : QueryManyUseCase
-//            private inner class TestQueryManyUseCaseOperation : QueryManyUseCaseOperation<Int, TestQueryManyUseCase>(
+//            private inner class TestQueryManyUseCaseHandler : QueryManyUseCaseHandler<Int, TestQueryManyUseCase>(
 //                Int::class, TestQueryManyUseCase::class
 //            ) {
 //                override fun invoke(useCase: TestQueryManyUseCase): List<Int> {
@@ -98,7 +98,7 @@
 //            private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 //
 //            init {
-//                testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseOperation())
+//                testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseHandler())
 //            }
 //
 //            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})
@@ -124,7 +124,7 @@
 //            }
 //
 //            private inner class TestUseCase(val data: Int) : QueryOneUseCase
-//            private inner class TestUseCaseOperation : QueryOneUseCaseOperation<Int, TestUseCase>(
+//            private inner class TestUseCaseHandler : QueryOneUseCaseHandler<Int, TestUseCase>(
 //                Int::class, TestUseCase::class
 //            ) {
 //                override fun invoke(useCase: TestUseCase): Int? {
@@ -133,8 +133,8 @@
 //            }
 //
 //            private inner class TestNoResultUseCase : QueryOneUseCase
-//            private inner class TestNoResultUseCaseOperation(val ref: AtomicInteger) :
-//                QueryOneUseCaseOperation<Int, TestNoResultUseCase>(Int::class, TestNoResultUseCase::class) {
+//            private inner class TestNoResultUseCaseHandler(val ref: AtomicInteger) :
+//                QueryOneUseCaseHandler<Int, TestNoResultUseCase>(Int::class, TestNoResultUseCase::class) {
 //                override fun invoke(useCase: TestNoResultUseCase): Int? {
 //                    ref.incrementAndGet()
 //                    return null
@@ -145,8 +145,8 @@
 //            private val ref = AtomicInteger()
 //
 //            init {
-//                testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
-//                testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseOperation(ref))
+//                testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
+//                testRegistryAdapter.register(TestNoResultUseCase::class, TestNoResultUseCaseHandler(ref))
 //            }
 //
 //            private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter,{},{NopLogger})

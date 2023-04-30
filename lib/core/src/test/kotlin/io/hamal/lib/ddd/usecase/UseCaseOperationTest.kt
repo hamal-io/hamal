@@ -10,22 +10,22 @@
 //import java.util.*
 //
 //@Nested
-//class UseCaseOperationTest {
+//class UseCaseHandlerTest {
 //
 //    @Nested
-//    @DisplayName("RequestOneUseCaseOperation")
-//    inner class RequestOneUseCaseOperationTest {
+//    @DisplayName("RequestOneUseCaseHandler")
+//    inner class RequestOneUseCaseHandlerTest {
 //
 //        @Test
 //        fun `Returns result class`() {
-//            val testInstance = TestUseCaseOperation()
+//            val testInstance = TestUseCaseHandler()
 //            val result = testInstance.resultClass
 //            assertThat(result, equalTo(TestResult::class))
 //        }
 //
 //        @Test
 //        fun `Returns use case useCase`() {
-//            val testInstance = TestUseCaseOperation()
+//            val testInstance = TestUseCaseHandler()
 //            val result = testInstance.useCaseClass
 //            assertThat(result, equalTo(TestUseCase::class))
 //        }
@@ -33,7 +33,7 @@
 //
 //        private inner class TestResult
 //        private inner class TestUseCase : RequestOneUseCase
-//        private inner class TestUseCaseOperation : RequestOneUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCaseHandler : RequestOneUseCaseHandler<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): List<TestResult> {
@@ -44,26 +44,26 @@
 //
 //
 //    @Nested
-//    @DisplayName("QueryManyUseCaseOperation")
-//    inner class QueryManyUseCaseOperationTest {
+//    @DisplayName("QueryManyUseCaseHandler")
+//    inner class QueryManyUseCaseHandlerTest {
 //
 //        @Test
 //        fun `Returns result class`() {
-//            val testInstance = TestUseCaseOperation()
+//            val testInstance = TestUseCaseHandler()
 //            val result = testInstance.resultClass
 //            assertThat(result, equalTo(TestResult::class))
 //        }
 //
 //        @Test
 //        fun `Returns use case useCase`() {
-//            val testInstance = TestUseCaseOperation()
+//            val testInstance = TestUseCaseHandler()
 //            val result = testInstance.useCaseClass
 //            assertThat(result, equalTo(TestUseCase::class))
 //        }
 //
 //        private inner class TestResult
 //        private inner class TestUseCase : QueryManyUseCase
-//        private inner class TestUseCaseOperation : QueryManyUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCaseHandler : QueryManyUseCaseHandler<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): List<TestResult> {
@@ -73,26 +73,26 @@
 //    }
 //
 //    @Nested
-//    @DisplayName("QueryOneUseCaseOperation")
-//    inner class QueryOneUseCaseOperationTest {
+//    @DisplayName("QueryOneUseCaseHandler")
+//    inner class QueryOneUseCaseHandlerTest {
 //
 //        @Test
 //        fun `Returns result class`() {
-//            val testInstance = TestUseCaseOperation()
+//            val testInstance = TestUseCaseHandler()
 //            val result = testInstance.resultClass
 //            assertThat(result, equalTo(TestResult::class))
 //        }
 //
 //        @Test
 //        fun `Returns use case useCase class`() {
-//            val testInstance = TestUseCaseOperation()
+//            val testInstance = TestUseCaseHandler()
 //            val result = testInstance.useCaseClass
 //            assertThat(result, equalTo(TestUseCase::class))
 //        }
 //
 //        private inner class TestResult
 //        private inner class TestUseCase : QueryOneUseCase
-//        private inner class TestUseCaseOperation : QueryOneUseCaseOperation<TestResult, TestUseCase>(
+//        private inner class TestUseCaseHandler : QueryOneUseCaseHandler<TestResult, TestUseCase>(
 //            TestResult::class, TestUseCase::class
 //        ) {
 //            override operator fun invoke(useCase: TestUseCase): TestResult? {

@@ -51,7 +51,7 @@ class BackendUseCaseRegistryAdapterTest {
             register(TestRequestOneUseCase::class, testRequestOneUseCaseOp)
         }
 
-        private val testRequestOneUseCaseOp = TestRequestOneUseCaseOperation()
+        private val testRequestOneUseCaseOp = TestRequestOneUseCaseHandler()
         private val testRequestOneInterfaceUseCaseOp = TestRequestOneUseCaseInterface.Operation()
 
     }
@@ -96,7 +96,7 @@ class BackendUseCaseRegistryAdapterTest {
             register(TestQueryManyUseCase::class, testQueryManyUseCaseOp)
         }
 
-        private val testQueryManyUseCaseOp = TestQueryManyUseCaseOperation()
+        private val testQueryManyUseCaseOp = TestQueryManyUseCaseHandler()
         private val testQueryManyInterfaceUseCaseOp = TestQueryManyUseCaseInterface.Handler()
 
     }
@@ -141,7 +141,7 @@ class BackendUseCaseRegistryAdapterTest {
             register(TestQueryOneUseCase::class, testQueryOneUseCaseOp)
         }
 
-        private val testQueryOneUseCaseOp = TestQueryOneUseCaseOperation()
+        private val testQueryOneUseCaseOp = TestQueryOneUseCaseHandler()
         private val testQueryOneInterfaceUseCaseOp = TestQueryOneUseCaseInterface.Handler()
 
     }
@@ -149,10 +149,12 @@ class BackendUseCaseRegistryAdapterTest {
     private interface TestResultInterface : DomainObject
     private class TestResult : TestResultInterface
     private class IncompatibleTestResult
-    private class TestRequestOneUseCase : RequestOneUseCase<TestResult>
+    private class TestRequestOneUseCase : RequestOneUseCase<TestResult>{
+        override val requestId= RequestId(123)
+    }
 
-    private class TestRequestOneUseCaseOperation :
-        RequestOneUseCaseOperation<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
+    private class TestRequestOneUseCaseHandler :
+        RequestOneUseCaseHandler<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
         override operator fun invoke(useCase: TestRequestOneUseCase): TestResult {
             return TestResult()
         }
@@ -160,7 +162,7 @@ class BackendUseCaseRegistryAdapterTest {
 
     private interface TestRequestOneUseCaseInterface : RequestOneUseCase<TestResult> {
         class Operation :
-            RequestOneUseCaseOperation<TestResult, TestRequestOneUseCaseInterface>(TestRequestOneUseCaseInterface::class) {
+            RequestOneUseCaseHandler<TestResult, TestRequestOneUseCaseInterface>(TestRequestOneUseCaseInterface::class) {
             override operator fun invoke(useCase: TestRequestOneUseCaseInterface): TestResult {
                 return TestResult()
             }
@@ -169,8 +171,8 @@ class BackendUseCaseRegistryAdapterTest {
 
 
     private class TestQueryManyUseCase : QueryManyUseCase<TestResult>
-    private class TestQueryManyUseCaseOperation :
-        QueryManyUseCaseOperation<TestResult, TestQueryManyUseCase>(TestQueryManyUseCase::class) {
+    private class TestQueryManyUseCaseHandler :
+        QueryManyUseCaseHandler<TestResult, TestQueryManyUseCase>(TestQueryManyUseCase::class) {
         override operator fun invoke(useCase: TestQueryManyUseCase): List<TestResult> {
             return listOf()
         }
@@ -178,7 +180,7 @@ class BackendUseCaseRegistryAdapterTest {
 
     private interface TestQueryManyUseCaseInterface : QueryManyUseCase<TestResult> {
         class Handler :
-            QueryManyUseCaseOperation<TestResult, TestQueryManyUseCaseInterface>(TestQueryManyUseCaseInterface::class) {
+            QueryManyUseCaseHandler<TestResult, TestQueryManyUseCaseInterface>(TestQueryManyUseCaseInterface::class) {
             override operator fun invoke(useCase: TestQueryManyUseCaseInterface): List<TestResult> {
                 return listOf()
             }
@@ -186,8 +188,8 @@ class BackendUseCaseRegistryAdapterTest {
     }
 
     private class TestQueryOneUseCase : QueryOneUseCase<TestResult>
-    private class TestQueryOneUseCaseOperation :
-        QueryOneUseCaseOperation<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
+    private class TestQueryOneUseCaseHandler :
+        QueryOneUseCaseHandler<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
         override operator fun invoke(useCase: TestQueryOneUseCase): TestResult {
             return TestResult()
         }
@@ -195,7 +197,7 @@ class BackendUseCaseRegistryAdapterTest {
 
     private interface TestQueryOneUseCaseInterface : QueryOneUseCase<TestResult> {
         class Handler :
-            QueryOneUseCaseOperation<TestResult, TestQueryOneUseCaseInterface>(TestQueryOneUseCaseInterface::class) {
+            QueryOneUseCaseHandler<TestResult, TestQueryOneUseCaseInterface>(TestQueryOneUseCaseInterface::class) {
             override operator fun invoke(useCase: TestQueryOneUseCaseInterface): TestResult {
                 return TestResult()
             }
@@ -216,9 +218,11 @@ class BackendUseCaseInvokerAdapterTest {
             assertThat(result, equalTo(TestResult(200)))
         }
 
-        private inner class TestUseCase(val data: Int) : RequestOneUseCase<TestResult>
-        private inner class TestUseCaseOperation :
-            RequestOneUseCaseOperation<TestResult, TestUseCase>(TestUseCase::class) {
+        private inner class TestUseCase(val data: Int) : RequestOneUseCase<TestResult>{
+            override val requestId= RequestId(123)
+        }
+        private inner class TestUseCaseHandler :
+            RequestOneUseCaseHandler<TestResult, TestUseCase>(TestUseCase::class) {
             override fun invoke(useCase: TestUseCase): TestResult {
                 return TestResult(useCase.data * 2)
             }
@@ -227,7 +231,7 @@ class BackendUseCaseInvokerAdapterTest {
         private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 
         init {
-            testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
+            testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
         }
 
         private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
@@ -243,7 +247,7 @@ class BackendUseCaseInvokerAdapterTest {
         }
 
         private inner class TestQueryManyUseCase(val data: Int) : QueryManyUseCase<TestResult>
-        private inner class TestQueryManyUseCaseOperation : QueryManyUseCaseOperation<TestResult, TestQueryManyUseCase>(
+        private inner class TestQueryManyUseCaseHandler : QueryManyUseCaseHandler<TestResult, TestQueryManyUseCase>(
             TestQueryManyUseCase::class
         ) {
             override fun invoke(useCase: TestQueryManyUseCase): List<TestResult> {
@@ -255,7 +259,7 @@ class BackendUseCaseInvokerAdapterTest {
         private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 
         init {
-            testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseOperation())
+            testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseHandler())
         }
 
         private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
@@ -271,7 +275,7 @@ class BackendUseCaseInvokerAdapterTest {
         }
 
         private inner class TestUseCase(val data: Int) : QueryOneUseCase<TestResult>
-        private inner class TestUseCaseOperation : QueryOneUseCaseOperation<TestResult, TestUseCase>(
+        private inner class TestUseCaseHandler : QueryOneUseCaseHandler<TestResult, TestUseCase>(
             TestUseCase::class
         ) {
             override fun invoke(useCase: TestUseCase): TestResult {
@@ -282,7 +286,7 @@ class BackendUseCaseInvokerAdapterTest {
         private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
 
         init {
-            testRegistryAdapter.register(TestUseCase::class, TestUseCaseOperation())
+            testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
         }
 
         private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })

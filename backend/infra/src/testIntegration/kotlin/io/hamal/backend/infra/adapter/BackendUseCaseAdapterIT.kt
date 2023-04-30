@@ -73,23 +73,25 @@ class BackendUseCaseRegistryAdapterIT(
 
 data class TestResult(val value: Int) : DomainObject
 
-class TestRequestOneUseCase : RequestOneUseCase<TestResult>
+class TestRequestOneUseCase : RequestOneUseCase<TestResult>{
+    override val requestId= RequestId(123)
+}
 
 private val testRequestOneUseCaseOp =
-    object : RequestOneUseCaseOperation<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
+    object : RequestOneUseCaseHandler<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
         override operator fun invoke(useCase: TestRequestOneUseCase) = TestResult(42)
     }
 
 class TestQueryManyUseCase : QueryManyUseCase<TestResult>
 
 private val testQueryManyUseCaseOp =
-    object : QueryManyUseCaseOperation<TestResult, TestQueryManyUseCase>(TestQueryManyUseCase::class) {
+    object : QueryManyUseCaseHandler<TestResult, TestQueryManyUseCase>(TestQueryManyUseCase::class) {
         override fun invoke(useCase: TestQueryManyUseCase) = listOf<TestResult>()
     }
 
 class TestQueryOneUseCase : QueryOneUseCase<TestResult>
 
 private val testQueryOneUseCaseOp =
-    object : QueryOneUseCaseOperation<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
+    object : QueryOneUseCaseHandler<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
         override fun invoke(useCase: TestQueryOneUseCase) =  TestResult(0)
     }
