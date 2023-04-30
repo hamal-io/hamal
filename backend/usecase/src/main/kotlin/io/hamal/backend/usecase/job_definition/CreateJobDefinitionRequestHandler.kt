@@ -1,28 +1,29 @@
-package io.hamal.backend.usecase.flow_definition
+package io.hamal.backend.usecase.job_definition
 
-import io.hamal.backend.core.model.FlowDefinition
+import io.hamal.backend.core.model.JobDefinition
 import io.hamal.backend.core.model.Trigger
-import io.hamal.backend.core.notification.FlowDefinitionDomainNotification
+import io.hamal.backend.core.notification.JobDefinitionDomainNotification
 import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.store.api.DefinitionStore
+import io.hamal.backend.store.api.JobDefinitionStore
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
-import io.hamal.lib.vo.FlowDefinitionId
+import io.hamal.lib.vo.JobDefinitionId
+import io.hamal.lib.vo.JobReference
 import io.hamal.lib.vo.TriggerId
 import io.hamal.lib.vo.TriggerReference
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 
-class CreateFlowDefinitionRequestHandler(
+class CreateJobDefinitionRequestHandler(
     val notifyDomain: NotifyDomainPort,
     val generateDomainId: GenerateDomainIdPort,
-    val flowDefinitionStore: DefinitionStore
-) : RequestOneUseCaseHandler<FlowDefinition, FlowDefinitionRequest.FlowDefinitionCreation>(FlowDefinitionRequest.FlowDefinitionCreation::class) {
+    val jobDefinitionStore: JobDefinitionStore
+) : RequestOneUseCaseHandler<JobDefinition, JobDefinitionRequest.JobDefinitionCreation>(JobDefinitionRequest.JobDefinitionCreation::class) {
 
-    override fun invoke(useCase: FlowDefinitionRequest.FlowDefinitionCreation): FlowDefinition {
-        val resultId = generateDomainId(useCase.shard, ::FlowDefinitionId)
+    override fun invoke(useCase: JobDefinitionRequest.JobDefinitionCreation): JobDefinition {
+        val resultId = generateDomainId(useCase.shard, ::JobDefinitionId)
 
         //  val commands = store.request(){
-        //     val definitionId = commands.insertFlowDefinition(definiton props..)
+        //     val definitionId = commands.insertJobDefinition(definiton props..)
         //     val triggerOneId = commands.addTrigger(definitionId, trigger props..)
         //     commands.removeTrigger(definitionId, trigger props..)
         // }
@@ -34,45 +35,46 @@ class CreateFlowDefinitionRequestHandler(
 
 
         // fixme should create trigger in separate use case
-        val result = FlowDefinition(
+        val result = JobDefinition(
             id = resultId,
+            reference = JobReference("ABC"),
             triggers = listOf(
                 Trigger.ManualTrigger(
                     id = generateDomainId(useCase.shard, ::TriggerId),
                     reference = TriggerReference("1234"),
-                    flowDefinitionId = resultId
+                    jobDefinitionId = resultId
                 ),
                 Trigger.ManualTrigger(
                     id = generateDomainId(useCase.shard, ::TriggerId),
                     reference = TriggerReference("345"),
-                    flowDefinitionId = resultId
+                    jobDefinitionId = resultId
                 ),
                 Trigger.ManualTrigger(
                     id = generateDomainId(useCase.shard, ::TriggerId),
                     reference = TriggerReference("345"),
-                    flowDefinitionId = resultId
+                    jobDefinitionId = resultId
                 ),
                 Trigger.ManualTrigger(
                     id = generateDomainId(useCase.shard, ::TriggerId),
                     reference = TriggerReference("345"),
-                    flowDefinitionId = resultId
+                    jobDefinitionId = resultId
                 )
             )
         )
 
-        flowDefinitionStore.create(result)
+//        jobDefinitionStore.create(result)
 
         // add trigger use case
         // can be atomic
-        //flowDefinitionStore.update(flowDefinitionId){ definition ->
+        //jobDefinitionStore.update(jobDefinitionId){ definition ->
         //      triggers = triggers.plus(newTrigger)
         //}
         //  notify new trigger was created
-        // notify  flow definition updated
+        // notify  job definition updated
 
         notifyDomain(
-            FlowDefinitionDomainNotification.Created(
-                flowDefinition = result,
+            JobDefinitionDomainNotification.Created(
+                jobDefinition = result,
                 shard = useCase.shard
             )
         )

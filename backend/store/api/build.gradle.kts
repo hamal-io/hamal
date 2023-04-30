@@ -8,4 +8,7 @@ archivesName.set("backend-repository-api")
 dependencies {
     implementation(project(":lib:core"))
     implementation(project(":backend:core"))
+
+    testImplementation(external.hamcrest)
+    testImplementation(external.junit)
 }

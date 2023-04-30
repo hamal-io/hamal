@@ -3,17 +3,17 @@ package io.hamal.backend.infra.config.usecase
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class FlowDefinitionConfig {
+open class JobDefinitionConfig {
 //    @Bean
-//    open fun createFlowDefinitionRequestHandler(
+//    open fun createJobDefinitionRequestHandler(
 //        notifyDomainPort: NotifyDomainPort,
 //        generateDomainId: GenerateDomainIdPort
-//    ) = CreateFlowDefinitionRequestHandler(
+//    ) = CreateJobDefinitionRequestHandler(
 //        notifyDomainPort,
 //        generateDomainId,
 //        DepDefaultDefinitionStore
 //    )
 
 //    @Bean
-//    open fun getFlowDefinition() = GetFlowDefinitionUseCase.Operation()
+//    open fun getJobDefinition() = GetJobDefinitionUseCase.Operation()
 }

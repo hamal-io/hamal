@@ -1,69 +1,93 @@
 package io.hamal.backend.store.api
 
-import io.hamal.backend.core.model.FlowDefinition
+import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.store.api.JobDefinitionStore.Command.JobDefinitionToInsert
+import io.hamal.backend.store.api.JobDefinitionStore.Command.ManualTriggerToInsert
 import io.hamal.lib.RequestId
-import io.hamal.lib.util.Snowflake
-import io.hamal.lib.vo.FlowDefinitionId
+import io.hamal.lib.Shard
+import io.hamal.lib.vo.JobDefinitionId
+import io.hamal.lib.vo.JobReference
 import io.hamal.lib.vo.TriggerId
+import io.hamal.lib.vo.TriggerReference
+import io.hamal.lib.vo.base.referenceFromId
+import io.hamal.lib.vo.port.FixedTimeIdGeneratorAdapter
+import io.hamal.lib.vo.port.GenerateDomainIdPort
 
+abstract class JobDefinitionStore {
 
-interface DefinitionStore {
-    fun create(definition: FlowDefinition)
+    abstract fun execute(requestId: RequestId, commands: List<JobDefinitionStore.Command>): List<JobDefinition>
 
-    fun request(requestId: RequestId): FlowDefinition
-
-}
-
-interface Command {
-
-    class InsertFD : Command {}
-    class InsertTrigger : Command {}
-
-}
-
-class Recorder {
-    fun insertFlowDefinition(): FlowDefinitionId {
-        println("InsertFD")
-        return FlowDefinitionId(Snowflake.Id(10))
-    }
-
-    fun insertTrigger(flowDefinitionId: FlowDefinitionId): TriggerId {
-        println("InsertTrigger")
-        return TriggerId(Snowflake.Id(23))
-    }
-
-    internal fun commands(): List<Command> {
-        return listOf()
-    }
-
-
-}
-
-object TestStore {
-
-    fun request(requestId: RequestId, record: (Recorder) -> Unit): FlowDefinition {
-        val recorder = Recorder()
+    // jobDefinitionRequest
+    fun request(requestId: RequestId, record: (Recorder) -> Unit): List<JobDefinition> {
+        val recorder = Recorder(FixedTimeIdGeneratorAdapter()) //FIXME
         record(recorder)
-        val commands = recorder.commands()
+        return execute(requestId, recorder.commands)
+    }
 
-        // insert fds
-        // insert triggers
-        // update ...
-        // remove ...
+    interface Command {
 
-        return FlowDefinition(
-            id = FlowDefinitionId(Snowflake.Id(0)),
-            triggers = listOf()
-        )
+        enum class Order {
+            InsertPrimary,
+            InsertSecondary,
+            Update,
+            Delete
+        }
+
+        val jobDefinitionId: JobDefinitionId
+        val order: Order
+//        val requestId: RequestId
+
+        data class JobDefinitionToInsert(
+//            override val requestId: RequestId,
+            override val jobDefinitionId: JobDefinitionId,
+            var reference: JobReference
+        ) : Command {
+            override val order = Order.InsertPrimary
+        }
+
+
+        data class ManualTriggerToInsert(
+            override val jobDefinitionId: JobDefinitionId,
+            val reference: TriggerReference,
+            //inputs
+            //secrets
+        ) : Command {
+            override val order = Order.InsertSecondary
+        }
+    }
+
+    class Recorder(
+        val generateDomainId: GenerateDomainIdPort
+    ) {
+
+        internal val commands = mutableListOf<Command>()
+        fun commands(): List<Command> {
+            return commands.toList()
+        }
     }
 }
 
+fun JobDefinitionStore.Recorder.insertJobDefinition(block: JobDefinitionToInsert.() -> Unit): JobDefinitionId {
+    val result = generateDomainId(Shard(0), ::JobDefinitionId)
+    commands.add(
+        JobDefinitionToInsert(
+            jobDefinitionId = result,
+            reference = referenceFromId(result, ::JobReference)
+        ).apply(block)
+    )
+    return result
+}
 
-fun main() {
-
-    TestStore.request(RequestId(123)) {
-        val id = it.insertFlowDefinition()
-        it.insertTrigger(id)
-        it.insertTrigger(id)
-    }
+fun JobDefinitionStore.Recorder.insertManualTrigger(
+    jobDefinitionId: JobDefinitionId,
+    block: ManualTriggerToInsert.() -> Unit
+): TriggerId {
+    val result = generateDomainId(Shard(0), ::TriggerId)
+    commands.add(
+        ManualTriggerToInsert(
+            jobDefinitionId = jobDefinitionId,
+            reference = referenceFromId(result, ::TriggerReference)
+        ).apply(block)
+    )
+    return result
 }

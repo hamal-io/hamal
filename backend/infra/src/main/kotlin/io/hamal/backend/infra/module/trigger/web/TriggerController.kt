@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @Serializable
-class SomeTest(val id: FlowId, val definitionId: FlowDefinitionId, val shard: Shard)
+class SomeTest(val id: JobId, val definitionId: JobDefinitionId, val shard: Shard)
 
 @RestController
-open class FlowController @Autowired constructor(
+open class JobController @Autowired constructor(
     val request: InvokeUseCasePort,
     val generateDomainId: GenerateDomainIdPort,
     val notifyDomainPort: NotifyDomainPort,
@@ -36,11 +36,11 @@ open class FlowController @Autowired constructor(
         val triggerId = TriggerId(Snowflake.Id(rawTriggerId.toLong()))
 
 //        val trigger = invoke(GetTriggerUseCase(triggerId))
-//        val definition = invoke(GetFlowDefinitionUseCase(trigger.flowDefinitionId))
+//        val definition = invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId))
 
 //        notifyDomainPort.invoke(
 //            Scheduled(
-//                id = generateDomainId(shard, ::FlowId),
+//                id = generateDomainId(shard, ::JobId),
 //                shard = Shard(1),
 //
 //                inputs = counter.incrementAndGet()
@@ -52,7 +52,7 @@ open class FlowController @Autowired constructor(
 //            trigger = Trigger.ManualTrigger(
 //                id = TriggerId(Snowflake.Id(2)),
 //                reference = TriggerReference("some-ref"),
-//                flowDefinitionId = definition.id,
+//                jobDefinitionId = definition.id,
 //            ),
 //            invokedAt = InvokedAt(TimeUtils.now()),
 //            invokedBy = AccountId(Snowflake.Id(123))
@@ -66,8 +66,8 @@ open class FlowController @Autowired constructor(
 //        )
 //        return ResponseEntity.ok(
 //            SomeTest(
-//                generateDomainId(shard, ::FlowId),
-//                generateDomainId(shard, ::FlowDefinitionId),
+//                generateDomainId(shard, ::JobId),
+//                generateDomainId(shard, ::JobDefinitionId),
 //                shard
 //            )
 //        )

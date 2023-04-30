@@ -1,8 +1,8 @@
-package io.hamal.backend.core.port.flow
+package io.hamal.backend.core.port.job
 
-import io.hamal.backend.core.model.Flow.CompletedFlow
-import io.hamal.lib.vo.FlowId
+import io.hamal.backend.core.model.Job.CompletedJob
+import io.hamal.lib.vo.JobId
 
-fun interface CompleteFlowPort {
-    fun completeFlow(flowId: FlowId): CompletedFlow
+fun interface CompleteJobPort {
+    fun completeJob(jobId: JobId): CompletedJob
 }

@@ -11,8 +11,8 @@
 ////    @Scheduled(initialDelay = 100, fixedRate = 1, timeUnit = TimeUnit.MILLISECONDS)
 ////    fun run() {
 //////            println("Worker active")
-////        val notification = consumer.poll(QueueDomainNotification.FlowEnqueued::class.java.name)
-////        if (notification is QueueDomainNotification.FlowEnqueued) {
+////        val notification = consumer.poll(QueueDomainNotification.JobEnqueued::class.java.name)
+////        if (notification is QueueDomainNotification.JobEnqueued) {
 ////            println("worker polled some work - $notification")
 ////            println(Thread.currentThread().name)
 ////        }

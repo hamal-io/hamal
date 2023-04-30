@@ -3,9 +3,9 @@ package io.hamal.backend.core.notification
 //sealed class QueueDomainNotification(shard: Shard) : DomainNotification(shard) {
 
 
-//    @DomainNotificationTopic("queue:flow_enqueued")
-//    class FlowEnqueued(
-//        val id: FlowId,
+//    @DomainNotificationTopic("queue:job_enqueued")
+//    class JobEnqueued(
+//        val id: JobId,
 //        shard: String,
 //    ) : DomainNotification(shard)
 

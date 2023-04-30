@@ -1,7 +1,7 @@
-package io.hamal.backend.infra.module.flow_definition.web
+package io.hamal.backend.infra.module.job_definition.web
 
-import io.hamal.backend.core.model.FlowDefinition
-import io.hamal.backend.usecase.flow_definition.FlowDefinitionRequest.*
+import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.usecase.job_definition.JobDefinitionRequest.*
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class FlowDefinitionController(
+open class JobDefinitionController(
     @Autowired val request: InvokeUseCasePort,
     @Autowired val generateDomainId: GenerateDomainIdPort
 ) {
 
-    @PostMapping("/v1/flow-definitions")
-    fun createFlowDefinition(
+    @PostMapping("/v1/job-definitions")
+    fun createJobDefinition(
         @RequestAttribute shard: Shard
-    ): FlowDefinition {
-//        return request(CreateFlowDefinition(shard))
+    ): JobDefinition {
+//        return request(CreateJobDefinition(shard))
         return request(
-            FlowDefinitionCreation(
+            JobDefinitionCreation(
                 RequestId(10),
                 shard
             )

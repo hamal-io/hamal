@@ -1,9 +1,9 @@
-package io.hamal.backend.infra.module.flow.handler
+package io.hamal.backend.infra.module.job.handler
 
 import io.hamal.backend.core.notification.Scheduled
 import io.hamal.backend.core.port.notification.HandleDomainNotificationPort
 
-class FlowScheduledHandler : HandleDomainNotificationPort<Scheduled> {
+class JobScheduledHandler : HandleDomainNotificationPort<Scheduled> {
     override fun handle(notification: Scheduled) {
         println("${Thread.currentThread().name} QUEUE received ${notification.inputs}")
     }

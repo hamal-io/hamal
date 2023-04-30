@@ -10,13 +10,13 @@ sealed class Trigger : DomainObject {
 
     abstract val id: TriggerId
     abstract val reference: TriggerReference
-    abstract val flowDefinitionId: FlowDefinitionId
+    abstract val jobDefinitionId: JobDefinitionId
 
     @Serializable
     data class ManualTrigger(
         override val id: TriggerId,
         override val reference: TriggerReference,
-        override val flowDefinitionId: FlowDefinitionId
+        override val jobDefinitionId: JobDefinitionId
     ) : Trigger()
 
 }

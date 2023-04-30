@@ -21,10 +21,10 @@ open class BackendConfig {
     open fun domainNotificationConsumer(
         createDomainNotificationConsumerPort: CreateDomainNotificationProcessorPort
     ) = createDomainNotificationConsumerPort
-//        .register(Scheduled::class, FlowScheduledHandler())
+//        .register(Scheduled::class, JobScheduledHandler())
 //        .register(
-//            FlowDefinitionDomainNotification.Created::class,
-//            FlowDefinitionCreatedHandler(DefaultFlowDefinitionStore)
+//            JobDefinitionDomainNotification.Created::class,
+//            JobDefinitionCreatedHandler(DefaultJobDefinitionStore)
 //        )
 //        .register(TriggerDomainNotification.Created::class, TriggerCreatedHandler(DefaultTriggerStore))
 //        .register(TriggerDomainNotification.Invoked::class, TriggerInvokedHandler())

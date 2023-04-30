@@ -1,14 +1,14 @@
 package io.hamal.backend.core.model
 
 import io.hamal.lib.ddd.base.DomainObject
-import io.hamal.lib.vo.FlowId
+import io.hamal.lib.vo.JobId
 
 sealed class QueuedJob(
-    val id: FlowId,
+    val id: JobId,
     //queueId
 ) : DomainObject {
     class Enqueued(
-        id: FlowId,
+        id: JobId,
     ) : QueuedJob(id) {
         companion object {
         }
@@ -16,6 +16,6 @@ sealed class QueuedJob(
 
 
     class Dequeued(
-        id: FlowId
+        id: JobId
     ) : QueuedJob(id)
 }

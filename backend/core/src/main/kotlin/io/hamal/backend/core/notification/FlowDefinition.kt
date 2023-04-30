@@ -1,15 +1,15 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.backend.core.model.FlowDefinition
+import io.hamal.backend.core.model.JobDefinition
 import io.hamal.lib.Shard
 import kotlinx.serialization.Serializable
 
 
-sealed class FlowDefinitionDomainNotification : DomainNotification() {
+sealed class JobDefinitionDomainNotification : DomainNotification() {
     @Serializable
-    @DomainNotificationTopic("flow_definition_created")
+    @DomainNotificationTopic("job_definition_created")
     data class Created(
-        val flowDefinition: FlowDefinition,
+        val jobDefinition: JobDefinition,
         override val shard: Shard
-    ) : FlowDefinitionDomainNotification()
+    ) : JobDefinitionDomainNotification()
 }

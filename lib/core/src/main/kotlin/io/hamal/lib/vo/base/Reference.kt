@@ -9,6 +9,10 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
+fun <ID : DomainId, REFERENCE : Reference> referenceFromId(id: ID, ctor: (String) -> REFERENCE): REFERENCE {
+    return ctor("${id.value.toString()}-ref")
+}
+
 abstract class Reference : ValueObject.ComparableImpl<Reference.Value>() {
     @Serializable
     data class Value(val value: String) : Comparable<Value> {

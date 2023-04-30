@@ -29,13 +29,13 @@ data class ManualTriggerInvocation(
             TODO()
 //            val trigger = invoke(GetTriggerUseCase(useCase.triggerId))
 //            val definition =
-//                invoke(GetFlowDefinitionUseCase(trigger.flowDefinitionId)) // required later to get inputs/secrets
+//                invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId)) // required later to get inputs/secrets
 //            val trigger = DefaultTriggerStore.triggers[useCase.triggerId]!!
-//            val definition = DefaultDefinitionStore.flowDefinitions[trigger.flowDefinitionId]!!
+//            val definition = DefaultDefinitionStore.jobDefinitions[trigger.jobDefinitionId]!!
 //
 ////            notifyDomainPort.invoke(
 ////                Scheduled(
-////                    id = generateDomainId(useCase.shard, ::FlowId),
+////                    id = generateDomainId(useCase.shard, ::JobId),
 ////                    shard = Shard(1),
 ////                    inputs = counter.incrementAndGet()
 ////                )
@@ -47,7 +47,7 @@ data class ManualTriggerInvocation(
 //                trigger = Trigger.ManualTrigger(
 //                    id = TriggerId(Snowflake.Id(2)),
 //                    reference = TriggerReference("some-ref"),
-//                    flowDefinitionId = definition.id,
+//                    jobDefinitionId = definition.id,
 //                ),
 //                invokedAt = InvokedAt(TimeUtils.now()),
 //                invokedBy = AccountId(Snowflake.Id(123))

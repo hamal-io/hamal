@@ -59,7 +59,7 @@ data class Decimal constructor(
 
     fun ln(): Decimal {
         // Algorithm: http://functions.wolfram.com/ElementaryFunctions/Log/10/
-        // https://stackoverflow.com/a/6169691/6444586
+        // https://stackoverjob.com/a/6169691/6444586
         val result: Decimal
         require(isPositive()) { IllegalStateException("Value must >= 1") }
         if (delegate == BigDecimal.ONE) {

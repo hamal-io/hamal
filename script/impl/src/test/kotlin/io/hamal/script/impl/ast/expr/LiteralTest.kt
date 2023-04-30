@@ -88,7 +88,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `Not equals if underlying values are different`() {
                 assertNotEquals(
                     StringLiteral("H4M41"),
-                    StringLiteral("CRAPPY_WORKFLOW_ENGINE")
+                    StringLiteral("CRAPPY_WORKJOB_ENGINE")
                 )
             }
         }
@@ -108,7 +108,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
                     StringLiteral("H4M41").hashCode(),
-                    StringLiteral("CRAPPY_WORKFLOW_ENGINE").hashCode()
+                    StringLiteral("CRAPPY_WORKJOB_ENGINE").hashCode()
                 )
             }
         }

@@ -8,17 +8,22 @@ import java.time.Instant
 
 @Serializable(with = TriggerId.Serializer::class)
 class TriggerId(override val value: Snowflake.Id) : DomainId() {
+    constructor(value: Int) : this(Snowflake.Id(value.toLong()))
+
     internal object Serializer : DomainIdSerializer<TriggerId>(::TriggerId)
 }
 
 @Serializable(with = TriggerReference.Serializer::class)
 class TriggerReference(override val value: Value) : Reference() {
     constructor(value: String) : this(Value(value))
+
     internal object Serializer : ReferenceSerializer<TriggerReference>(::TriggerReference)
 }
 
 @Serializable(with = InvokedTriggerId.Serializer::class)
 class InvokedTriggerId(override val value: Snowflake.Id) : DomainId() {
+    constructor(value: Int) : this(Snowflake.Id(value.toLong()))
+
     internal object Serializer : DomainIdSerializer<InvokedTriggerId>(::InvokedTriggerId)
 }
 

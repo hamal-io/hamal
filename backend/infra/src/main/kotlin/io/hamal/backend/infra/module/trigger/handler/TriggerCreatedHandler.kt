@@ -17,8 +17,8 @@ class TriggerCreatedHandler: HandleDomainNotificationPort<TriggerDomainNotificat
 //            .withPollDelay(10.milliseconds.toJavaDuration())
 //            .atMost(3.seconds.toJavaDuration())
 //            .untilNotNull {
-//                println("try to access flow definition")
-//                DummyDb.flowDefinitions[notification.trigger.flowDefinitionId]!!
+//                println("try to access job definition")
+//                DummyDb.jobDefinitions[notification.trigger.jobDefinitionId]!!
 //            }
 //
 //        println(definition)

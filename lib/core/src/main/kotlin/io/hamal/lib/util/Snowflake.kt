@@ -160,7 +160,7 @@ class DefaultSequenceSource : Snowflake.SequenceSource {
     }
 }
 
-internal class FixedElapsedSource(val value: Long) : Snowflake.ElapsedSource {
+class FixedElapsedSource(val value: Long) : Snowflake.ElapsedSource {
     override fun elapsed() = Elapsed(value)
 }
 

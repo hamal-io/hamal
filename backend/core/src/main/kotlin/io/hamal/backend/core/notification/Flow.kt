@@ -1,15 +1,15 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.lib.vo.FlowId
+import io.hamal.lib.vo.JobId
 import io.hamal.lib.Shard
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-@DomainNotificationTopic("scheduler::flow_enqueued")
+@DomainNotificationTopic("scheduler::job_enqueued")
 data class Scheduled(
     override val shard: Shard,
-    val id: FlowId,
+    val id: JobId,
     val inputs: Int
 ) : DomainNotification()
 
