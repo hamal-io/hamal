@@ -35,7 +35,7 @@ class BrokerTopicsRepositoryTest {
         @Test
         fun `Creates topics table`() {
             BrokerTopicsRepository.open(testBrokerTopics()).use {
-                it.executeQueryMany("SELECT COUNT(*) FROM sqlite_master WHERE name = 'topics' AND type = 'table'") { resultSet ->
+                it.executeQuery("SELECT COUNT(*) FROM sqlite_master WHERE name = 'topics' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt(1), equalTo(1))
                 }
             }
@@ -60,7 +60,7 @@ class BrokerTopicsRepositoryTest {
             BrokerTopicsRepository.open(testBrokerTopics()).use { }
 
             BrokerTopicsRepository.open(testBrokerTopics()).use {
-                it.executeQueryMany("SELECT COUNT(*) FROM topics") {
+                it.executeQuery("SELECT COUNT(*) FROM topics") {
                     assertThat(it.getInt(1), equalTo(1))
                 }
             }
@@ -69,7 +69,7 @@ class BrokerTopicsRepositoryTest {
         @Test
         fun `Sets locking_mode to exclusive`() {
             BrokerTopicsRepository.open(testBrokerTopics()).use {
-                it.executeQueryMany("""SELECT * FROM pragma_locking_mode""") {
+                it.executeQuery("""SELECT * FROM pragma_locking_mode""") {
                     assertThat(it.getString(1), equalTo("exclusive"))
                 }
             }
@@ -78,7 +78,7 @@ class BrokerTopicsRepositoryTest {
         @Test
         fun `Sets temp_store to memory`() {
             BrokerTopicsRepository.open(testBrokerTopics()).use {
-                it.executeQueryMany("""SELECT * FROM pragma_temp_store""") {
+                it.executeQuery("""SELECT * FROM pragma_temp_store""") {
                     assertThat(it.getString(1), equalTo("2"))
                 }
             }

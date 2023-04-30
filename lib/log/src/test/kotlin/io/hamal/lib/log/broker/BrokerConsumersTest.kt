@@ -37,7 +37,7 @@ class BrokerConsumersRepositoryTest {
         @Test
         fun `Creates consumers table`() {
             BrokerConsumersRepository.open(testBrokerConsumers()).use {
-                it.executeQueryMany("SELECT COUNT(*) FROM sqlite_master WHERE name = 'consumers' AND type = 'table'") { resultSet ->
+                it.executeQuery("SELECT COUNT(*) FROM sqlite_master WHERE name = 'consumers' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt(1), equalTo(1))
                 }
             }
@@ -62,7 +62,7 @@ class BrokerConsumersRepositoryTest {
             BrokerConsumersRepository.open(testBrokerConsumers()).use { }
 
             BrokerConsumersRepository.open(testBrokerConsumers()).use {
-                it.executeQueryMany("SELECT COUNT(*) FROM consumers") {
+                it.executeQuery("SELECT COUNT(*) FROM consumers") {
                     assertThat(it.getInt(1), equalTo(1))
                 }
             }
@@ -71,7 +71,7 @@ class BrokerConsumersRepositoryTest {
         @Test
         fun `Sets journal_mode to wal`() {
             BrokerConsumersRepository.open(testBrokerConsumers())
-                .executeQueryMany("""SELECT * FROM pragma_journal_mode""") {
+                .executeQuery("""SELECT * FROM pragma_journal_mode""") {
                     assertThat(it.getString(1), equalTo("wal"))
                 }
         }
@@ -79,7 +79,7 @@ class BrokerConsumersRepositoryTest {
         @Test
         fun `Sets locking_mode to exclusive`() {
             BrokerConsumersRepository.open(testBrokerConsumers()).use {
-                it.executeQueryMany("""SELECT * FROM pragma_locking_mode""") {
+                it.executeQuery("""SELECT * FROM pragma_locking_mode""") {
                     assertThat(it.getString(1), equalTo("exclusive"))
                 }
             }
@@ -88,7 +88,7 @@ class BrokerConsumersRepositoryTest {
         @Test
         fun `Sets temp_store to memory`() {
             BrokerConsumersRepository.open(testBrokerConsumers()).use {
-                it.executeQueryMany("""SELECT * FROM pragma_temp_store""") {
+                it.executeQuery("""SELECT * FROM pragma_temp_store""") {
                     assertThat(it.getString(1), equalTo("2"))
                 }
             }
@@ -97,7 +97,7 @@ class BrokerConsumersRepositoryTest {
         @Test
         fun `Sets synchronous to off`() {
             BrokerConsumersRepository.open(testBrokerConsumers())
-                .executeQueryMany("""SELECT * FROM pragma_synchronous""") {
+                .executeQuery("""SELECT * FROM pragma_synchronous""") {
                     assertThat(it.getString(1), equalTo("0"))
                 }
         }
@@ -181,7 +181,7 @@ class BrokerConsumersRepositoryTest {
             testInstance.commit(Consumer.GroupId("some-group"), Topic.Id(123), Chunk.Id(23))
             assertThat(testInstance.count(), equalTo(1UL))
 
-            testInstance.executeQueryMany("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
+            testInstance.executeQuery("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
                 assertThat(resultSet.getString("group_id"), equalTo("some-group"))
                 assertThat(resultSet.getLong("topic_id"), equalTo(123L))
                 assertThat(resultSet.getLong("next_chunk_id"), equalTo(24))
@@ -195,7 +195,7 @@ class BrokerConsumersRepositoryTest {
             testInstance.commit(Consumer.GroupId("some-group"), Topic.Id(123), Chunk.Id(1337))
             assertThat(testInstance.count(), equalTo(1UL))
 
-            testInstance.executeQueryMany("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
+            testInstance.executeQuery("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
                 assertThat(resultSet.getString("group_id"), equalTo("some-group"))
                 assertThat(resultSet.getLong("topic_id"), equalTo(123L))
                 assertThat(resultSet.getLong("next_chunk_id"), equalTo(1338))
@@ -208,7 +208,7 @@ class BrokerConsumersRepositoryTest {
             testInstance.commit(Consumer.GroupId("some-group"), Topic.Id(34), Chunk.Id(2))
 
             assertThat(testInstance.count(), equalTo(2UL))
-            testInstance.executeQueryMany("SELECT group_id FROM consumers") { resultSet ->
+            testInstance.executeQuery("SELECT group_id FROM consumers") { resultSet ->
                 assertThat(resultSet.getString("group_id"), equalTo("some-group"))
             }
         }
@@ -219,7 +219,7 @@ class BrokerConsumersRepositoryTest {
             testInstance.commit(Consumer.GroupId("another-group"), Topic.Id(23), Chunk.Id(2))
 
             assertThat(testInstance.count(), equalTo(2UL))
-            testInstance.executeQueryMany("SELECT topic_id FROM consumers") { resultSet ->
+            testInstance.executeQuery("SELECT topic_id FROM consumers") { resultSet ->
                 assertThat(resultSet.getLong("topic_id"), equalTo(23L))
             }
         }

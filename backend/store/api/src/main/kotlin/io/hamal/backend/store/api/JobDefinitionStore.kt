@@ -13,7 +13,10 @@ import io.hamal.lib.vo.base.referenceFromId
 import io.hamal.lib.vo.port.FixedTimeIdGeneratorAdapter
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 
+
 abstract class JobDefinitionStore {
+
+    abstract fun get(id: JobDefinitionId): JobDefinition
 
     abstract fun execute(requestId: RequestId, commands: List<JobDefinitionStore.Command>): List<JobDefinition>
 

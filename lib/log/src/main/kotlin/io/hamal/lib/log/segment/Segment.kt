@@ -83,7 +83,7 @@ internal class SegmentRepository private constructor(
         if (limit < 1) {
             return listOf()
         }
-        return executeQueryMany(
+        return executeQuery(
             """SELECT id, bytes, instant FROM chunks WHERE id >= ${firstId.value} LIMIT $limit """.trimIndent()
         ) {
             val result = mutableListOf<Chunk>()
@@ -107,7 +107,7 @@ internal class SegmentRepository private constructor(
         connection.close()
     }
 
-    override fun count() = this.executeQueryMany("SELECT COUNT(*) from chunks") { it.getLong(1).toULong() }
+    override fun count() = this.executeQuery("SELECT COUNT(*) from chunks") { it.getLong(1).toULong() }
 
 }
 
@@ -148,7 +148,7 @@ private fun SegmentRepository.setupSqlite() {
     }
 }
 
-internal fun <T> SegmentRepository.executeQueryMany(sql: String, fn: (ResultSet) -> T): T {
+internal fun <T> SegmentRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
     require(!connection.isClosed) { "Connection must be open" }
     return connection.createStatement().use { statement ->
         statement.executeQuery(sql).use(fn)

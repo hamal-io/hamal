@@ -11,5 +11,7 @@ dependencies {
     implementation(project(":backend:core"))
     implementation(project(":backend:store:api"))
 
+    implementation(external.spring.jdbc)
     implementation(external.sqlite)
 }
+

@@ -25,30 +25,32 @@ internal fun DefaultJobDefinitionStore.clear() {
 internal fun DefaultJobDefinitionStore.setupSchema() {
     lock.withLock {
         connection.createStatement().use {
+            it.execute("""DROP TABLE IF EXISTS job_definitions;""")
+            it.execute("""DROP TABLE IF EXISTS triggers;""")
+            it.execute(
+                """        
+            CREATE TABLE IF NOT EXISTS job_definitions (
+                id          INTEGER PRIMARY KEY,
+                version     INTEGER NOT NULL ,
+                request_id  BIGINT  NOT NULL,
+                reference   TEXT NOT NULL ,
+                inputs      BLOB,
+                secrets     BLOB,
+                instant     DATETIME NOT NULL,
+                UNIQUE (request_id)
+            );
+        """.trimIndent()
+            )
             it.execute(
                 """
-        DROP TABLE IF EXISTS job_definitions;
-        DROP TABLE IF EXISTS triggers;
-        
-        CREATE TABLE IF NOT EXISTS job_definitions (
-            id          INTEGER PRIMARY KEY,
-            version     INTEGER NOT NULL ,
-            request_id  BIGINT  NOT NULL,
-            inputs      BLOB,
-            secrets     BLOB,
-            instant     DATETIME NOT NULL,
-            UNIQUE (request_id)
-        );
-        
-        CREATE TABLE IF NOT EXISTS triggers(
-            id INTEGER PRIMARY KEY,
-            job_definition_id INTEGER NOT NULL,
-            type INTEGER NOT NULL,
-            inputs BLOB,
-            secrets BLOB,
-            data BLOB
-        );
-        """.trimIndent()
+           CREATE TABLE IF NOT EXISTS triggers(
+                id INTEGER PRIMARY KEY,
+                job_definition_id INTEGER NOT NULL,
+                type INTEGER NOT NULL,
+                inputs BLOB,
+                secrets BLOB,
+                data BLOB
+            );""".trimIndent()
             )
         }
     }

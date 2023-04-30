@@ -39,7 +39,7 @@ class SegmentRepositoryTest {
         @Test
         fun `Creates chunks table`() {
             SegmentRepository.open(testSegment())
-                .executeQueryMany("SELECT COUNT(*) FROM sqlite_master WHERE name = 'chunks' AND type = 'table'") { resultSet ->
+                .executeQuery("SELECT COUNT(*) FROM sqlite_master WHERE name = 'chunks' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt(1), equalTo(1))
                 }
         }
@@ -63,7 +63,7 @@ class SegmentRepositoryTest {
             SegmentRepository.open(testSegment()).use { }
 
             SegmentRepository.open(testSegment())
-                .executeQueryMany("SELECT COUNT(*) FROM chunks") {
+                .executeQuery("SELECT COUNT(*) FROM chunks") {
                     assertThat(it.getInt(1), equalTo(1))
                 }
         }
@@ -71,7 +71,7 @@ class SegmentRepositoryTest {
         @Test
         fun `Sets journal_mode to wal`() {
             SegmentRepository.open(testSegment())
-                .executeQueryMany("""SELECT * FROM pragma_journal_mode""") {
+                .executeQuery("""SELECT * FROM pragma_journal_mode""") {
                     assertThat(it.getString(1), equalTo("wal"))
                 }
         }
@@ -79,7 +79,7 @@ class SegmentRepositoryTest {
         @Test
         fun `Sets locking_mode to exclusive`() {
             SegmentRepository.open(testSegment())
-                .executeQueryMany("""SELECT * FROM pragma_locking_mode""") {
+                .executeQuery("""SELECT * FROM pragma_locking_mode""") {
                     assertThat(it.getString(1), equalTo("exclusive"))
                 }
         }
@@ -87,7 +87,7 @@ class SegmentRepositoryTest {
         @Test
         fun `Sets temp_store to memory`() {
             SegmentRepository.open(testSegment())
-                .executeQueryMany("""SELECT * FROM pragma_temp_store""") {
+                .executeQuery("""SELECT * FROM pragma_temp_store""") {
                     assertThat(it.getString(1), equalTo("2"))
                 }
         }
@@ -95,7 +95,7 @@ class SegmentRepositoryTest {
         @Test
         fun `Sets synchronous to off`() {
             SegmentRepository.open(testSegment())
-                .executeQueryMany("""SELECT * FROM pragma_synchronous""") {
+                .executeQuery("""SELECT * FROM pragma_synchronous""") {
                     assertThat(it.getString(1), equalTo("0"))
                 }
         }

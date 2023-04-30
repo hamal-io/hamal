@@ -4,16 +4,23 @@ import io.hamal.backend.core.model.JobDefinition
 import io.hamal.backend.store.api.JobDefinitionStore
 import io.hamal.backend.store.api.JobDefinitionStore.Command.JobDefinitionToInsert
 import io.hamal.backend.store.api.JobDefinitionStore.Command.ManualTriggerToInsert
-import io.hamal.backend.store.api.insertJobDefinition
-import io.hamal.backend.store.api.insertManualTrigger
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
+import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.TimeUtils
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.datasource.DataSourceTransactionManager
+import org.springframework.jdbc.datasource.DriverManagerDataSource
+import org.springframework.transaction.TransactionDefinition
+import org.springframework.transaction.support.TransactionTemplate
+import java.math.BigDecimal
 import java.nio.file.Path
 import java.sql.Connection
-import java.sql.DriverManager
+import java.sql.Timestamp
+import java.time.Instant
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.io.path.Path
@@ -21,7 +28,8 @@ import kotlin.io.path.Path
 
 class DefaultJobDefinitionStore private constructor(
     internal val lock: Lock,
-    internal val connection: Connection
+    internal val connection: Connection,
+    internal val template: NamedParameterJdbcTemplate
 ) : JobDefinitionStore(), AutoCloseable {
     data class Config(
         val path: Path,
@@ -31,9 +39,18 @@ class DefaultJobDefinitionStore private constructor(
     companion object {
         fun open(segment: Config): DefaultJobDefinitionStore {
             val dbPath = ensureDirectoryExists(segment)
+
+            val dataSource = DriverManagerDataSource()
+            dataSource.setDriverClassName("org.sqlite.JDBC")
+            dataSource.setUrl("jdbc:sqlite:$dbPath.db")
+
+            val template = NamedParameterJdbcTemplate(dataSource)
+
             val result = DefaultJobDefinitionStore(
                 lock = ReentrantLock(),
-                connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db")
+//                connection = DriverManager.getConnection("jdbc:sqlite:$dbPath.db"),
+                connection = template.jdbcTemplate.dataSource.connection,
+                template = template
             )
 
             result.setupSqlite()
@@ -48,28 +65,63 @@ class DefaultJobDefinitionStore private constructor(
         }
     }
 
+    override fun get(id: JobDefinitionId): JobDefinition {
+
+        return template.queryForObject(
+            """SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id""",
+            mapOf("id" to id.value)
+        ) { resultSet, idx ->
+            JobDefinition(
+                id = JobDefinitionId(Snowflake.Id(resultSet.getLong("id"))),
+                reference = JobReference(resultSet.getString("reference")),
+                triggers = listOf()
+            )
+        }!!
+
+
+//        return connection.prepareStatement(
+//            """SELECT id, version, request_id, reference FROM job_definitions WHERE id = ?"""
+//        ).use {
+//            it.setLong(1, id.value.value)
+//            val resultSet = it.executeQuery()
+//            JobDefinition(
+//                id = JobDefinitionId(Snowflake.Id(resultSet.getLong("id"))),
+//                reference = JobReference(resultSet.getString("reference")),
+//                triggers = listOf()
+//            )
+//        }
+    }
+
     override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
         val toProcess = commands.groupBy { it.jobDefinitionId }
 
-        connection.beginRequest()
-        // start transaction
-        toProcess.forEach { (_, commands) ->
-            commands.sortedBy { it.order }.forEach { command ->
-                when (command) {
-                    is JobDefinitionToInsert -> println("Insert Definition: $command")
-                    is ManualTriggerToInsert -> println("Insert Trigger: $command")
-                    else -> TODO("Command not supported yet $command")
-                }
-            }
-        }
-        // stop transaction
-        connection.endRequest()
+        try {
+            connection.autoCommit = false
+            connection.beginRequest()
 
-        // select toProccess.keys
+            toProcess.forEach { (id, commands) ->
+                commands.sortedBy { it.order }.forEach { command ->
+                    when (command) {
+                        is JobDefinitionToInsert -> insertJobDefinition(requestId, command)
+                        is ManualTriggerToInsert -> println("Insert Trigger: $command")
+                        else -> TODO("Command not supported yet $command")
+                    }
+                }
+                updateVersion(id)
+            }
+
+            connection.commit()
+        } catch (t: Throwable) {
+            connection.rollback()
+            throw t
+        } finally {
+            connection.endRequest()
+            connection.autoCommit = true
+        }
 
         return listOf(
             JobDefinition(
-                id = JobDefinitionId(10),
+                id = toProcess.keys.first(),
                 reference = JobReference("das"),
                 triggers = listOf()
             )
@@ -81,31 +133,142 @@ class DefaultJobDefinitionStore private constructor(
     }
 }
 
-
+internal fun DefaultJobDefinitionStore.insertJobDefinition(requestId: RequestId, toInsert: JobDefinitionToInsert) {
+    return connection.prepareStatement(
+        """INSERT INTO job_definitions(id, version, request_id,reference, instant) VALUES(?,?,?,?,?)""",
+    ).use {
+        it.setLong(1, toInsert.jobDefinitionId.value.value)
+        it.setInt(2, 0)
+        it.setBigDecimal(3, requestId.value.toBigDecimal())
+        it.setString(4, toInsert.reference.value.value)
+        it.setTimestamp(5, Timestamp.from(TimeUtils.now()))
+        it.execute()
+    }
+}
 
 internal fun DefaultJobDefinitionStore.updateVersion(id: JobDefinitionId) {
-
+    return connection.prepareStatement(
+        """UPDATE job_definitions SET version = version + 1 WHERE id = ?""",
+    ).use {
+        it.setLong(1, id.value.value)
+        it.execute()
+    }
 }
 
 fun main() {
 
-    val store = DefaultJobDefinitionStore.open(
-        DefaultJobDefinitionStore.Config(
-            path = Path("/tmp/hamal"),
-            shard = Shard(0)
+//    val store = DefaultJobDefinitionStore.open(
+//        DefaultJobDefinitionStore.Config(
+//            path = Path("/tmp/hamal"),
+//            shard = Shard(0)
+//        )
+//    )
+
+//    val jobDefinition = store.request(RequestId(1)) {
+//        val jobDefinitionId = it.insertJobDefinition {
+//            this.reference = JobReference("abc")
+//        }
+//
+//        it.insertManualTrigger(jobDefinitionId) {}
+//        it.insertManualTrigger(jobDefinitionId) {}
+//    }
+
+//    println(store.get(jobDefinition.first().id))
+//    println(store.get(JobDefinitionId(Snowflake.Id(2199023255552))))
+
+    val dataSource = DriverManagerDataSource()
+    dataSource.setDriverClassName("org.sqlite.JDBC")
+    dataSource.setUrl("jdbc:sqlite:/tmp/test.sqlite")
+
+    val transactionManager = DataSourceTransactionManager(dataSource);
+    val transactionTemplate = TransactionTemplate(transactionManager);
+    transactionTemplate.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
+
+    val template = NamedParameterJdbcTemplate(dataSource)
+
+
+    val id = JobDefinitionId(Snowflake.Id(2199023255552))
+
+    transactionTemplate.execute {
+
+        template.jdbcTemplate.execute("""DROP TABLE IF EXISTS job_definitions;""")
+        template.jdbcTemplate.execute("""DROP TABLE IF EXISTS triggers;""")
+//        template.update("""DROP TABLE IF EXISTS request_log;""", mapOf<String, Any>())
+//        template.update(
+//            """
+//            CREATE TABLE IF NOT EXISTS request_log (
+//                id          BIGINT PRIMARY KEY,
+//                instant     DATETIME NOT NULL
+//            );
+//        """.trimIndent(), mapOf<String, Any>()
+//        )
+        template.jdbcTemplate.execute(
+            """        
+            CREATE TABLE IF NOT EXISTS job_definitions (
+                id          INTEGER PRIMARY KEY,
+                version     INTEGER NOT NULL ,
+                reference   TEXT NOT NULL ,
+                inputs      BLOB,
+                secrets     BLOB,
+                instant     DATETIME NOT NULL
+            );
+        """.trimIndent()
         )
-    )
-
-    val jobDefinition = store.request(RequestId(1)) {
-        val jobDefinitionId = it.insertJobDefinition {
-            this.reference = JobReference("abc")
-        }
-
-        it.insertManualTrigger(jobDefinitionId) {}
-        it.insertManualTrigger(jobDefinitionId) {}
+        template.jdbcTemplate.execute(
+            """
+           CREATE TABLE IF NOT EXISTS triggers(
+                id INTEGER PRIMARY KEY,
+                job_definition_id INTEGER NOT NULL,
+                type INTEGER NOT NULL,
+                inputs BLOB,
+                secrets BLOB,
+                data BLOB
+            );""".trimIndent()
+        )
     }
 
 
-    println(jobDefinition)
-}
+    try {
+        val r = transactionTemplate.execute {
 
+            template.update(
+                "INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())",
+                mapOf("id" to BigDecimal("123"))
+            )
+
+            template.query(
+                """INSERT INTO job_definitions(id, version, reference, instant) VALUES(:id,:version,:reference,:instant)     RETURNING *""",
+                mapOf(
+                    "id" to id.value.value,
+                    "version" to 0,
+                    "reference" to "abc",
+                    "instant" to Timestamp.from(Instant.now())
+                )
+            ) {
+                println(it.getLong("id"))
+                println(it.getString("reference"))
+            }
+
+
+            template.query(
+                """SELECT id, version, reference FROM job_definitions WHERE id = :id""",
+                mapOf("id" to id.value.value)
+            ) { resultSet, idx ->
+                println(resultSet.fetchSize)
+                JobDefinition(
+                    id = JobDefinitionId(Snowflake.Id(resultSet.getLong("id"))),
+                    reference = JobReference(resultSet.getString("reference")),
+                    triggers = listOf()
+                )
+            }
+        }
+        println(r)
+
+    } catch (t: Throwable) {
+        // thre request was already handled - get job definition and proceed with processing
+        if (t.localizedMessage.contains("UNIQUE constraint failed: request_log.id")) {
+            return
+        }
+        println(t.localizedMessage)
+    }
+}

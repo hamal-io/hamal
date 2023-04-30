@@ -14,7 +14,7 @@ dependencyResolutionManagement {
 
             library("spring-web", "org.springframework.boot", "spring-boot-starter-web").withoutVersion()
             library("spring-test", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
-            library("spring-jdbc", "org.springframework.data", "spring-data-jdbc").withoutVersion()
+            library("spring-jdbc", "org.springframework.data", "spring-data-jdbc").version("3.0.5")
             library("spring-devTools", "org.springframework.boot", "spring-boot-devtools").withoutVersion()
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
             library("hikari", "com.zaxxer", "HikariCP").withoutVersion()
