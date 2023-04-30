@@ -14,7 +14,7 @@ import io.hamal.lib.vo.port.FixedTimeIdGeneratorAdapter
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 
 
-abstract class JobDefinitionStore {
+interface JobDefinitionStore {
 
     abstract fun get(id: JobDefinitionId): JobDefinition
 
