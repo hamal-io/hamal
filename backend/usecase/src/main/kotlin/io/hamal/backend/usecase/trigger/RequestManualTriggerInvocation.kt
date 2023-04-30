@@ -20,7 +20,7 @@ var counter = AtomicInteger(0)
 
 data class ManualTriggerInvocation(
     override val requestId: RequestId,
-    val shard: Shard,
+    override val shard: Shard,
     val triggerId: TriggerId
 ) : RequestOneUseCase<InvokedTrigger.Manual> {
 

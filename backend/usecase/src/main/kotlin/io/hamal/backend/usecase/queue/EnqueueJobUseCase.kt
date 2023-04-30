@@ -11,8 +11,8 @@ import io.hamal.lib.vo.Shard
 
 data class EnqueueFlowUseCase(
     override val requestId: RequestId,
+    override val shard: Shard,
     val flowId: FlowId,
-    val shard: Shard,
     val inputs: Int
 ) : RequestOneUseCase<QueuedJob.Enqueued> {
     class Operation(

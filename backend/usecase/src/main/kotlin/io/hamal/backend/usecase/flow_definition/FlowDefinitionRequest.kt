@@ -8,6 +8,6 @@ import io.hamal.lib.vo.Shard
 sealed class FlowDefinitionRequest {
     data class FlowDefinitionCreation(
         override val requestId: RequestId,
-        val shard: Shard,
+        override val shard: Shard,
     ) : RequestOneUseCase<FlowDefinition>
 }

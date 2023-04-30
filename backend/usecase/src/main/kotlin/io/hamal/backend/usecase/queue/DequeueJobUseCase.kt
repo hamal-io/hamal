@@ -10,7 +10,7 @@ import io.hamal.lib.vo.Shard
 
 data class DequeueFlowUseCase(
     override val requestId: RequestId,
-    val shard: Shard,
+    override val shard: Shard,
 ) : RequestOneUseCase<QueuedJob.Dequeued> {
     class Operation(
         val dequeueFlow: DequeueFlowPort

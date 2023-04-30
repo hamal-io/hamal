@@ -3,6 +3,7 @@ package io.hamal.backend.infra.adapter
 import io.hamal.backend.infra.adapter.TestUseCasesConfig.*
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
+import io.hamal.lib.vo.Shard
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -75,6 +76,7 @@ data class TestResult(val value: Int) : DomainObject
 
 class TestRequestOneUseCase : RequestOneUseCase<TestResult>{
     override val requestId= RequestId(123)
+    override val shard = Shard(23)
 }
 
 private val testRequestOneUseCaseOp =
