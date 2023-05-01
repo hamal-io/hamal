@@ -5,19 +5,12 @@ import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.jdbc.datasource.DataSourceTransactionManager
-import org.springframework.jdbc.datasource.DriverManagerDataSource
-import org.springframework.transaction.TransactionDefinition
-import org.springframework.transaction.TransactionStatus
-import org.springframework.transaction.support.TransactionOperations
-import org.springframework.transaction.support.TransactionTemplate
 import java.nio.file.Path
+import java.sql.Connection
+import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Timestamp
 import java.time.Instant
-import javax.sql.DataSource
 import kotlin.io.path.Path
 
 class NamedParameters() {
@@ -39,8 +32,9 @@ class ResultSet(result: ResultSet) {
 }
 
 class TxOperations(
-    private val jdbcOperations: NamedParameterJdbcOperations,
-    private val transactionStatus: TransactionStatus
+//    private val jdbcOperations: NamedParameterJdbcOperations,
+//    private val transactionStatus: TransactionStatus
+    private val connection: Connection
 ) {
 
     fun execute(query: String) {
@@ -48,8 +42,8 @@ class TxOperations(
     }
 
     fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
-        val parameters = block(NamedParameters())
-        jdbcOperations.update(query, parameters.mapping)
+//        val parameters = block(NamedParameters())
+//        jdbcOperations.update(query, parameters.mapping)
     }
 
     fun abort() {
@@ -58,14 +52,10 @@ class TxOperations(
 }
 
 
-class RxOperations(
-    private val jdbcOperations: NamedParameterJdbcOperations,
-    private val transactionStatus: TransactionStatus
-) {
-}
 
 class Operations(
-    private val jdbcOperations: NamedParameterJdbcOperations
+//    private val jdbcOperations: NamedParameterJdbcOperations
+    private val connection: Connection
 ) {
     fun execute(query: String) {
         execute(query) { NamedParameters() }
@@ -73,28 +63,37 @@ class Operations(
 
     fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
         val parameters = block(NamedParameters())
-        jdbcOperations.update(query, parameters.mapping)
+        connection.prepareStatement(query).use {
+            it.setBoolean(1, parameters.mapping["true_value"] as Boolean)
+            it.setBoolean(2, parameters.mapping["false_value"] as Boolean)
+            it.execute()
+        }
+//        jdbcOperations.update(query, parameters.mapping)
     }
 }
 
 
 abstract class BaseStore(config: Config) : AutoCloseable {
-    protected val dataSource: DataSource
-    protected val txOperations: TransactionOperations
-    protected val jdbcOperations: NamedParameterJdbcOperations
+//    protected val dataSource: DataSource
+//    protected val txOperations: TransactionOperations
+//    protected val jdbcOperations: NamedParameterJdbcOperations
+    val connection: Connection
 
     init {
-        dataSource = DriverManagerDataSource()
-        dataSource.setDriverClassName("org.sqlite.JDBC")
-        dataSource.url = "jdbc:sqlite:${ensureFilePath(config)}"
-
-        txOperations = TransactionTemplate(DataSourceTransactionManager(dataSource))
-        txOperations.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW
-
-        jdbcOperations = NamedParameterJdbcTemplate(dataSource)
-
-        setupConnection(jdbcOperations)
-        setupSchema(jdbcOperations)
+//        dataSource = DriverManagerDataSource()
+//        dataSource.setDriverClassName("org.sqlite.JDBC")
+//        dataSource.url = "jdbc:sqlite:${ensureFilePath(config)}"
+        connection = DriverManager.getConnection("jdbc:sqlite:${ensureFilePath(config)}")
+//
+//        txOperations = TransactionTemplate(DataSourceTransactionManager(dataSource))
+//        txOperations.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRED
+//
+//        jdbcOperations = NamedParameterJdbcTemplate(dataSource)
+//
+//        setupConnection(jdbcOperations)
+        setupConnection(connection)
+//        setupSchema(jdbcOperations)
+        setupConnection(connection)
     }
 
 
@@ -104,17 +103,19 @@ abstract class BaseStore(config: Config) : AutoCloseable {
         val shard: Shard
     }
 
-    abstract fun setupConnection(operations: NamedParameterJdbcOperations)
-    abstract fun setupSchema(operations: NamedParameterJdbcOperations)
+    abstract fun setupConnection(connection: Connection)
+    abstract fun setupSchema(connection: Connection)
     abstract fun drop()
     fun <T> inTx(block: TxOperations.() -> T): T? {
-        return txOperations.execute { status ->
-            block(TxOperations(jdbcOperations, status))
-        }
+//        return txOperations.execute { status ->
+//            block(TxOperations(jdbcOperations, status))
+//        }
+        return block(TxOperations(connection))
     }
 
     fun <T> withoutTx(block: Operations.() -> T): T? {
-        return block(Operations(jdbcOperations))
+//        return block(Operations(jdbcOperations))
+        return block(Operations(connection))
     }
 
 //    fun <T> inRx(fn: Operations.() -> T): T? {
@@ -127,7 +128,8 @@ abstract class BaseStore(config: Config) : AutoCloseable {
 
 
     override fun close() {
-        dataSource.connection.close()
+//        dataSource.connection.close()
+        connection.close()
     }
 }
 

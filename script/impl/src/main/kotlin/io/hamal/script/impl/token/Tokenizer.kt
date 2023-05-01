@@ -1,14 +1,15 @@
 package io.hamal.script.impl.token
 
+import io.hamal.lib.util.TokenizerUtil
 import io.hamal.script.impl.token.Token.Type
 import io.hamal.script.impl.token.Token.Type.*
 import io.hamal.script.impl.token.Token.Type.Number
 import io.hamal.script.impl.token.Tokenizer.DefaultImpl
-import io.hamal.script.impl.token.TokenizerUtil.isAlpha
-import io.hamal.script.impl.token.TokenizerUtil.isDigit
-import io.hamal.script.impl.token.TokenizerUtil.isQuote
-import io.hamal.script.impl.token.TokenizerUtil.isUnderscore
-import io.hamal.script.impl.token.TokenizerUtil.isWhitespace
+import io.hamal.lib.util.TokenizerUtil.isAlpha
+import io.hamal.lib.util.TokenizerUtil.isDigit
+import io.hamal.lib.util.TokenizerUtil.isQuote
+import io.hamal.lib.util.TokenizerUtil.isUnderscore
+import io.hamal.lib.util.TokenizerUtil.isWhitespace
 
 fun tokenize(code: String): List<Token> {
     val tokenizer = DefaultImpl(code)

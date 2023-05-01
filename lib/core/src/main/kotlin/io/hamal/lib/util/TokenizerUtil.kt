@@ -1,6 +1,6 @@
-package io.hamal.script.impl.token
+package io.hamal.lib.util
 
-internal object TokenizerUtil {
+object TokenizerUtil {
 
     fun isDigit(c: Char) = c.isDigit()
 

@@ -8,8 +8,8 @@ import io.hamal.backend.store.impl.BaseStore
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import java.nio.file.Path
+import java.sql.Connection
 import kotlin.io.path.Path
 
 
@@ -138,14 +138,16 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
         TODO()
     }
 
-    override fun setupConnection(operations: NamedParameterJdbcOperations) {
+//    override fun setupConnection(operations: NamedParameterJdbcOperations) {
+    override fun setupConnection(connection: Connection) {
 //        NamedParameters {
 //            set("abc", 123)
 //        }
 //        TODO("Not yet implemented")
     }
 
-    override fun setupSchema(operations: NamedParameterJdbcOperations) {
+//    override fun setupSchema(operations: NamedParameterJdbcOperations) {
+    override fun setupSchema(connection: Connection) {
         inTx {
             execute(
                 """

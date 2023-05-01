@@ -1,4 +1,4 @@
-package io.hamal.script.impl.token
+package io.hamal.lib.util
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
