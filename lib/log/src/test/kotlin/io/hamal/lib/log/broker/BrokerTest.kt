@@ -33,6 +33,8 @@ class BrokerRepositoryTest {
             id = Broker.Id(2810),
             path = path
         )
+
+        private val testDir = "/tmp/hamal/test/broker"
     }
 
     @Nested
@@ -40,16 +42,15 @@ class BrokerRepositoryTest {
     inner class ResolveTopicTest {
         @Test
         fun `Bug - Able to resolve real topic`() {
+            val testPath = java.nio.file.Files.createTempDirectory("testDir")
+            val testInstance = BrokerRepository.open(Broker(Broker.Id(456), testPath))
+
             val result = testInstance.resolveTopic(Topic.Name("scheduler::flow_enqueued"))
-            assertThat(result.id, equalTo(Topic.Id(2)))
+            assertThat(result.id, equalTo(Topic.Id(1)))
             assertThat(result.brokerId, equalTo(Broker.Id(456)))
             assertThat(result.name, equalTo(Topic.Name("scheduler::flow_enqueued")))
-            assertThat(result.path, equalTo(Path(testDir)))
+            assertThat(result.path, equalTo(testPath))
         }
-
-        private val testInstance = BrokerRepository.open(Broker(Broker.Id(456), Path(testDir)))
-
     }
 
-    private val testDir = "/tmp/hamal/test/broker"
 }

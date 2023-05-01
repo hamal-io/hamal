@@ -13,5 +13,9 @@ dependencies {
 
     implementation(external.spring.jdbc)
     implementation(external.sqlite)
+
+    testImplementation(project(":backend:store:impl"))
+    testImplementation(external.junit)
+    testImplementation(external.hamcrest)
 }
 

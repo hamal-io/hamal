@@ -21,7 +21,6 @@ import javax.sql.DataSource
 import kotlin.io.path.Path
 
 class NamedParameters() {
-    constructor(block: NamedParameters.() -> Unit) : this()
 
     internal var mapping = mutableMapOf<String, Any>()
 
@@ -39,7 +38,7 @@ class ResultSet(result: ResultSet) {
 
 }
 
-class Operations(
+class TxOperations(
     private val jdbcOperations: NamedParameterJdbcOperations,
     private val transactionStatus: TransactionStatus
 ) {
@@ -58,10 +57,21 @@ class Operations(
     }
 }
 
+
+class RxOperations(
+    private val jdbcOperations: NamedParameterJdbcOperations,
+    private val transactionStatus: TransactionStatus
+) {
+}
+class Operations() {
+
+}
+
+
 abstract class BaseStore(config: Config) : AutoCloseable {
-    private val dataSource: DataSource
-    private val txOperations: TransactionOperations
-    private val jdbcOperations: NamedParameterJdbcOperations
+    protected val dataSource: DataSource
+    protected val txOperations: TransactionOperations
+    protected val jdbcOperations: NamedParameterJdbcOperations
 
     init {
         dataSource = DriverManagerDataSource()
@@ -87,11 +97,20 @@ abstract class BaseStore(config: Config) : AutoCloseable {
     abstract fun setupConnection(operations: NamedParameterJdbcOperations)
     abstract fun setupSchema(operations: NamedParameterJdbcOperations)
     abstract fun drop()
-    fun <T> inTx(fn: Operations.() -> T): T? {
+    fun <T> inTx(fn: TxOperations.() -> T): T? {
         return txOperations.execute { status ->
-            fn(Operations(jdbcOperations, status))
+            fn(TxOperations(jdbcOperations, status))
         }
     }
+
+//    fun <T> inRx(fn: Operations.() -> T): T? {
+//        return txOperations.execute { status ->
+//            fn(Operations(jdbcOperations, status))
+//        }
+//    }
+
+    // operations without any tx
+
 
     override fun close() {
         dataSource.connection.close()
