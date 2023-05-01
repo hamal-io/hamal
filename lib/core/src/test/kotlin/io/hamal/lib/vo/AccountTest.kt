@@ -1,6 +1,6 @@
 package io.hamal.lib.vo
 
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.helper.SerializationTestHelper.generateTestCases
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
@@ -19,16 +19,16 @@ class AccountIdTest {
         @Test
         fun `Equals if underlying values are equal`() {
             assertEquals(
-                AccountId(Snowflake.Id(23)),
-                AccountId(Snowflake.Id(23))
+                AccountId(SnowflakeId(23)),
+                AccountId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not equals if underlying values are different`() {
             assertNotEquals(
-                AccountId(Snowflake.Id(23)),
-                AccountId(Snowflake.Id(127))
+                AccountId(SnowflakeId(23)),
+                AccountId(SnowflakeId(127))
             )
         }
     }
@@ -39,25 +39,25 @@ class AccountIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                AccountId(Snowflake.Id(23)).hashCode(),
-                AccountId(Snowflake.Id(23)).hashCode()
+                AccountId(SnowflakeId(23)).hashCode(),
+                AccountId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                AccountId(Snowflake.Id(23)).hashCode(),
-                AccountId(Snowflake.Id(127)).hashCode()
+                AccountId(SnowflakeId(23)).hashCode(),
+                AccountId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(AccountId(Snowflake.Id(123)).toString(), equalTo("AccountId(123)"))
+        assertThat(AccountId(SnowflakeId(123)).toString(), equalTo("AccountId(123)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(AccountId(Snowflake.Id(23)), "23")
+    fun Serialization() = generateTestCases(AccountId(SnowflakeId(23)), "23")
 }

@@ -1,9 +1,10 @@
 package io.hamal.lib.util
 
 import io.hamal.lib.Tuple2
-import io.hamal.lib.util.Snowflake.ElapsedSource.Elapsed
-import io.hamal.lib.util.Snowflake.PartitionSource.Partition
-import io.hamal.lib.util.Snowflake.SequenceSource.Sequence
+import io.hamal.lib.util.SnowflakeId.ElapsedSource.Elapsed
+import io.hamal.lib.util.SnowflakeId.PartitionSource.Partition
+import io.hamal.lib.util.SnowflakeId.SequenceSource
+import io.hamal.lib.util.SnowflakeId.SequenceSource.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -16,7 +17,9 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-interface Snowflake {
+@JvmInline
+@Serializable(with = SnowflakeId.Serializer::class)
+value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 
     interface ElapsedSource {
         fun elapsed(): Elapsed
@@ -59,60 +62,56 @@ interface Snowflake {
     }
 
     interface Generator {
-        fun next(): Id
+        fun next(): SnowflakeId
     }
 
-    @JvmInline
-    @Serializable(with = Id.Serializer::class)
-    value class Id(val value: Long) : Comparable<Id> {
+    override fun compareTo(other: SnowflakeId) = value.compareTo(other.value)
 
-        override fun compareTo(other: Id) = value.compareTo(other.value)
+    fun partition(): Partition = Partition(
+        Bitwise.extractRange(
+            value = value,
+            startIndex = 53,
+            numberOfBits = 10
+        ).toShort()
+    )
 
-        fun partition(): Partition = Partition(
-            Bitwise.extractRange(
-                value = value,
-                startIndex = 53,
-                numberOfBits = 10
-            ).toShort()
+    fun sequence(): Sequence = Sequence(
+        Bitwise.extractRange(
+            value = value,
+            startIndex = 41,
+            numberOfBits = 12
+        ).toShort()
+    )
+
+
+    fun elapsed(): Elapsed = Elapsed(
+        Bitwise.extractRange(
+            value = value,
+            startIndex = 0,
+            numberOfBits = 41
         )
+    )
 
-        fun sequence(): Sequence = Sequence(
-            Bitwise.extractRange(
-                value = value,
-                startIndex = 41,
-                numberOfBits = 12
-            ).toShort()
-        )
+    override fun toString(): String {
+        return "$value"
+    }
 
+    object Serializer : KSerializer<SnowflakeId> {
+        override val descriptor: SerialDescriptor
+            get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.LONG)
 
-        fun elapsed(): Elapsed = Elapsed(
-            Bitwise.extractRange(
-                value = value,
-                startIndex = 0,
-                numberOfBits = 41
-            )
-        )
+        override fun deserialize(decoder: Decoder) = SnowflakeId(decoder.decodeLong())
 
-        override fun toString(): String {
-            return "$value"
-        }
-
-        object Serializer : KSerializer<Id> {
-            override val descriptor: SerialDescriptor
-                get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.LONG)
-
-            override fun deserialize(decoder: Decoder) = Id(decoder.decodeLong())
-
-            override fun serialize(encoder: Encoder, value: Id) {
-                encoder.encodeLong(value.value)
-            }
+        override fun serialize(encoder: Encoder, value: SnowflakeId) {
+            encoder.encodeLong(value.value)
         }
     }
 }
 
+
 class DefaultElapsedSource(
     val epoch: Long = 1682116276624 // 2023-04-22 some when in the morning AEST
-) : Snowflake.ElapsedSource {
+) : SnowflakeId.ElapsedSource {
     override fun elapsed() = Elapsed(millis())
 
     private fun millis() = System.currentTimeMillis() - epoch
@@ -120,13 +119,13 @@ class DefaultElapsedSource(
 
 class DefaultPartitionSource(
     private val partition: Partition
-) : Snowflake.PartitionSource {
+) : SnowflakeId.PartitionSource {
     constructor(value: Int) : this(Partition(value))
 
     override fun get() = partition
 }
 
-class DefaultSequenceSource : Snowflake.SequenceSource {
+class DefaultSequenceSource : SequenceSource {
 
     private var previousCalledAt: Elapsed = Elapsed(0)
     private var nextSequence = 0
@@ -160,18 +159,18 @@ class DefaultSequenceSource : Snowflake.SequenceSource {
     }
 }
 
-class FixedElapsedSource(val value: Long) : Snowflake.ElapsedSource {
+class FixedElapsedSource(val value: Long) : SnowflakeId.ElapsedSource {
     override fun elapsed() = Elapsed(value)
 }
 
 class SnowflakeGenerator(
-    private val partitionSource: Snowflake.PartitionSource,
-    private val elapsedSource: Snowflake.ElapsedSource = DefaultElapsedSource(),
-    private val sequenceSource: Snowflake.SequenceSource = DefaultSequenceSource(),
+    private val partitionSource: SnowflakeId.PartitionSource,
+    private val elapsedSource: SnowflakeId.ElapsedSource = DefaultElapsedSource(),
+    private val sequenceSource: SnowflakeId.SequenceSource = DefaultSequenceSource(),
     private val lock: Lock = ReentrantLock()
-) : Snowflake.Generator {
+) : SnowflakeId.Generator {
 
-    override fun next(): Snowflake.Id {
+    override fun next(): SnowflakeId {
         return lock.withLock {
             val partition = partitionSource.get()
             val (elapsed, sequence) = sequenceSource.next(elapsedSource::elapsed)
@@ -183,11 +182,11 @@ class SnowflakeGenerator(
         elapsed: Elapsed,
         partition: Partition,
         sequence: Sequence
-    ): Snowflake.Id {
+    ): SnowflakeId {
         val partitionValue = partition.value.toLong().shl(53)
         val sequenceValue = sequence.value.toLong().shl(41)
         val elapsedValue = elapsed.value
         val result = partitionValue + sequenceValue + elapsedValue
-        return Snowflake.Id(result)
+        return SnowflakeId(result)
     }
 }

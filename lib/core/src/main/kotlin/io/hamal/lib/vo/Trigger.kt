@@ -1,14 +1,14 @@
 package io.hamal.lib.vo
 
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.*
 import kotlinx.serialization.Serializable
 import java.time.Instant
 
 
 @Serializable(with = TriggerId.Serializer::class)
-class TriggerId(override val value: Snowflake.Id) : DomainId() {
-    constructor(value: Int) : this(Snowflake.Id(value.toLong()))
+class TriggerId(override val value: SnowflakeId) : DomainId() {
+    constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
     internal object Serializer : DomainIdSerializer<TriggerId>(::TriggerId)
 }
@@ -21,8 +21,8 @@ class TriggerReference(override val value: Value) : Reference() {
 }
 
 @Serializable(with = InvokedTriggerId.Serializer::class)
-class InvokedTriggerId(override val value: Snowflake.Id) : DomainId() {
-    constructor(value: Int) : this(Snowflake.Id(value.toLong()))
+class InvokedTriggerId(override val value: SnowflakeId) : DomainId() {
+    constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
     internal object Serializer : DomainIdSerializer<InvokedTriggerId>(::InvokedTriggerId)
 }

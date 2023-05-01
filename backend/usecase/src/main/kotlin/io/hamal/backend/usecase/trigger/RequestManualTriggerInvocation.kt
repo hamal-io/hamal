@@ -43,14 +43,14 @@ data class ManualTriggerInvocation(
 //
 //
 //            val result = InvokedTrigger.Manual(
-//                id = InvokedTriggerId(Snowflake.Id(1)),
+//                id = InvokedTriggerId(SnowflakeId(1)),
 //                trigger = Trigger.ManualTrigger(
-//                    id = TriggerId(Snowflake.Id(2)),
+//                    id = TriggerId(SnowflakeId(2)),
 //                    reference = TriggerReference("some-ref"),
 //                    jobDefinitionId = definition.id,
 //                ),
 //                invokedAt = InvokedAt(TimeUtils.now()),
-//                invokedBy = AccountId(Snowflake.Id(123))
+//                invokedBy = AccountId(SnowflakeId(123))
 //            )
 //
 //            notifyDomain(

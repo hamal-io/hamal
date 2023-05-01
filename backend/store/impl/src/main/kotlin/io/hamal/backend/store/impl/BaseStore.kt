@@ -3,7 +3,7 @@ package io.hamal.backend.store.impl
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -29,7 +29,7 @@ class NamedParameters() {
     fun set(name: String, value: Long) = apply { this.mapping[name] = value }
     fun set(name: String, value: String) = apply { this.mapping[name] = value }
     fun set(name: String, value: Instant) = apply { this.mapping[name] = Timestamp.from(value) }
-    fun set(name: String, value: Snowflake.Id) = apply { this.mapping[name] = value.value }
+    fun set(name: String, value: SnowflakeId) = apply { this.mapping[name] = value.value }
     fun <ID : DomainId> set(name: String, value: ID) = set(name, value.value)
     fun set(name: String, value: RequestId) = apply { this.mapping[name] = value.value }
 }
@@ -63,8 +63,18 @@ class RxOperations(
     private val transactionStatus: TransactionStatus
 ) {
 }
-class Operations() {
 
+class Operations(
+    private val jdbcOperations: NamedParameterJdbcOperations
+) {
+    fun execute(query: String) {
+        execute(query) { NamedParameters() }
+    }
+
+    fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
+        val parameters = block(NamedParameters())
+        jdbcOperations.update(query, parameters.mapping)
+    }
 }
 
 
@@ -97,10 +107,14 @@ abstract class BaseStore(config: Config) : AutoCloseable {
     abstract fun setupConnection(operations: NamedParameterJdbcOperations)
     abstract fun setupSchema(operations: NamedParameterJdbcOperations)
     abstract fun drop()
-    fun <T> inTx(fn: TxOperations.() -> T): T? {
+    fun <T> inTx(block: TxOperations.() -> T): T? {
         return txOperations.execute { status ->
-            fn(TxOperations(jdbcOperations, status))
+            block(TxOperations(jdbcOperations, status))
         }
+    }
+
+    fun <T> withoutTx(block: Operations.() -> T): T? {
+        return block(Operations(jdbcOperations))
     }
 
 //    fun <T> inRx(fn: Operations.() -> T): T? {

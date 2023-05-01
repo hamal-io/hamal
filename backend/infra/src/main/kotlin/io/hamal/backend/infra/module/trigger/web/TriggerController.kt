@@ -6,7 +6,7 @@ import io.hamal.backend.usecase.trigger.ManualTriggerInvocation
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.*
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 import kotlinx.serialization.Serializable
@@ -33,7 +33,7 @@ open class JobController @Autowired constructor(
         @RequestAttribute("shard") shard: Shard
     ): InvokedTrigger {
 
-        val triggerId = TriggerId(Snowflake.Id(rawTriggerId.toLong()))
+        val triggerId = TriggerId(SnowflakeId(rawTriggerId.toLong()))
 
 //        val trigger = invoke(GetTriggerUseCase(triggerId))
 //        val definition = invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId))
@@ -48,14 +48,14 @@ open class JobController @Autowired constructor(
 //        )
 //
 //        val invokedTrigger = InvokedTrigger.Manual(
-//            id = InvokedTriggerId(Snowflake.Id(1)),
+//            id = InvokedTriggerId(SnowflakeId(1)),
 //            trigger = Trigger.ManualTrigger(
-//                id = TriggerId(Snowflake.Id(2)),
+//                id = TriggerId(SnowflakeId(2)),
 //                reference = TriggerReference("some-ref"),
 //                jobDefinitionId = definition.id,
 //            ),
 //            invokedAt = InvokedAt(TimeUtils.now()),
-//            invokedBy = AccountId(Snowflake.Id(123))
+//            invokedBy = AccountId(SnowflakeId(123))
 //        )
 
 //        val invokedTrigger = invokeUseCasePort.requestOne(

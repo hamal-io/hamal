@@ -63,7 +63,7 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
 //            mapOf("id" to id.value)
 //        ) { resultSet, idx ->
 //            JobDefinition(
-//                id = JobDefinitionId(Snowflake.Id(resultSet.getLong("id"))),
+//                id = JobDefinitionId(SnowflakeId(resultSet.getLong("id"))),
 //                reference = JobReference(resultSet.getString("reference")),
 //                triggers = listOf()
 //            )
@@ -236,7 +236,7 @@ fun main() {
 //    val template = NamedParameterJdbcTemplate(dataSource)
 //
 //
-//    val id = JobDefinitionId(Snowflake.Id(2199023255552))
+//    val id = JobDefinitionId(SnowflakeId(2199023255552))
 //
 ////    transactionTemplate.execute {
 //    template.execute("PRAGMA journal_mode = wal;") {}
@@ -314,7 +314,7 @@ fun main() {
 //            ) { resultSet, idx ->
 //                println(resultSet.fetchSize)
 //                JobDefinition(
-//                    id = JobDefinitionId(Snowflake.Id(resultSet.getLong("id"))),
+//                    id = JobDefinitionId(SnowflakeId(resultSet.getLong("id"))),
 //                    reference = JobReference(resultSet.getString("reference")),
 //                    triggers = listOf()
 //                )

@@ -3,9 +3,9 @@
 package io.hamal.lib.util
 
 import io.hamal.lib.util.*
-import io.hamal.lib.util.Snowflake.ElapsedSource.Elapsed
-import io.hamal.lib.util.Snowflake.PartitionSource.Partition
-import io.hamal.lib.util.Snowflake.SequenceSource.Sequence
+import io.hamal.lib.util.SnowflakeId.ElapsedSource.Elapsed
+import io.hamal.lib.util.SnowflakeId.PartitionSource.Partition
+import io.hamal.lib.util.SnowflakeId.SequenceSource.Sequence
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
@@ -143,7 +143,7 @@ class SnowflakeTest {
                 @Test
                 fun `Blocks if sequence is exhausted`() {
                     val testInstance = DefaultSequenceSource()
-                    val elapsedSource = object : Snowflake.ElapsedSource {
+                    val elapsedSource = object : SnowflakeId.ElapsedSource {
                         var counter = 0
                         var blockingCounter = 0
 
@@ -185,7 +185,7 @@ class SnowflakeTest {
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(Snowflake.Id(90074191570665472)))
+            assertThat(result, equalTo(SnowflakeId(90074191570665472)))
 
             assertThat(result.partition(), equalTo(Partition(10)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -200,7 +200,7 @@ class SnowflakeTest {
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(Snowflake.Id(378304567722500672)))
+            assertThat(result, equalTo(SnowflakeId(378304567722500672)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -216,7 +216,7 @@ class SnowflakeTest {
 
 
             val result = testInstance.next()
-            assertThat(result, equalTo(Snowflake.Id(378305667234004992)))
+            assertThat(result, equalTo(SnowflakeId(378305667234004992)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -233,7 +233,7 @@ class SnowflakeTest {
 
 
             val result = testInstance.next()
-            assertThat(result, equalTo(Snowflake.Id(378306766745632766)))
+            assertThat(result, equalTo(SnowflakeId(378306766745632766)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -253,7 +253,7 @@ class SnowflakeTest {
             }
 
             val result = testInstance.next()
-            assertThat(result, equalTo(Snowflake.Id(1159101075524468096)))
+            assertThat(result, equalTo(SnowflakeId(1159101075524468096)))
 
             assertThat(result.partition(), equalTo(Partition(128)))
             assertThat(result.sequence(), equalTo(Sequence(2810)))
@@ -262,11 +262,11 @@ class SnowflakeTest {
 
         @Test
         fun `Is Serializable`() {
-            val testInstance = Snowflake.Id(12345678)
+            val testInstance = SnowflakeId(12345678)
             val encoded = ProtoBuf.encodeToByteArray(testInstance)
             assertThat(encoded.size, equalTo(4))
-            val decoded = ProtoBuf.decodeFromByteArray<Snowflake.Id>(encoded)
-            assertThat(decoded, equalTo(Snowflake.Id(12345678)))
+            val decoded = ProtoBuf.decodeFromByteArray<SnowflakeId>(encoded)
+            assertThat(decoded, equalTo(SnowflakeId(12345678)))
         }
     }
 
@@ -281,7 +281,7 @@ class SnowflakeTest {
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(Snowflake.Id(2199023255552)))
+            assertThat(result, equalTo(SnowflakeId(2199023255552)))
 
             assertThat(result.partition(), equalTo(Partition(0)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -294,7 +294,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(1),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(2199023255553)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255553)))
         }
 
         @Test
@@ -303,7 +303,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(10),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(2199023255562)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255562)))
         }
 
         @Test
@@ -312,10 +312,10 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(10),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(2199023255562)))
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(4398046511114)))
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(6597069766666)))
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(8796093022218)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255562)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(4398046511114)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(6597069766666)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(8796093022218)))
         }
 
         @Test
@@ -324,7 +324,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(100),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(2199023255652)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255652)))
         }
 
         @Test
@@ -333,7 +333,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(0),
                 partitionSource = DefaultPartitionSource(1)
             )
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(9009398277996544)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(9009398277996544)))
         }
 
         @Test
@@ -342,7 +342,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(0),
                 partitionSource = DefaultPartitionSource(2)
             )
-            assertThat(testInstance.next(), equalTo(Snowflake.Id(18016597532737536)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(18016597532737536)))
         }
 
         @Test
@@ -355,7 +355,7 @@ class SnowflakeTest {
             for (i in 1 until 4096) {
                 val expectedNext = (i).toLong().shl(63 - 22)
                 val result = testInstance.next()
-                assertThat(result, equalTo(Snowflake.Id(expectedNext)))
+                assertThat(result, equalTo(SnowflakeId(expectedNext)))
 
                 assertThat(result.sequence(), equalTo(Sequence(i)))
             }
@@ -432,7 +432,7 @@ class SnowflakeTest {
 
         val pool = Executors.newFixedThreadPool(12)
         val result = IntRange(1, 100_000).map {
-            pool.submit<Snowflake.Id> { instance.next() }
+            pool.submit<SnowflakeId> { instance.next() }
         }.map { it.get() }.toSet()
 
         assertThat(result, hasSize(100_000))

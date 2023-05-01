@@ -2,7 +2,7 @@ package io.hamal.backend.store.api
 
 import io.hamal.backend.store.api.JobDefinitionStore.Command.*
 import io.hamal.backend.store.api.JobDefinitionStore.Recorder
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference
 import io.hamal.lib.vo.port.FixedTimeIdGeneratorAdapter
@@ -23,14 +23,14 @@ class RecorderTest {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
             val id = testInstance.insertJobDefinition {}
-            assertThat(id, equalTo(JobDefinitionId(Snowflake.Id(2199023255552))))
+            assertThat(id, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
                 commands, equalTo(
                     listOf(
                         JobDefinitionToInsert(
-                            jobDefinitionId = JobDefinitionId(Snowflake.Id(2199023255552)),
+                            jobDefinitionId = JobDefinitionId(SnowflakeId(2199023255552)),
                             reference = JobReference("2199023255552-ref")
                         )
                     )
@@ -45,14 +45,14 @@ class RecorderTest {
             val id = testInstance.insertJobDefinition {
                 reference = JobReference("some-job-ref")
             }
-            assertThat(id, equalTo(JobDefinitionId(Snowflake.Id(2199023255552))))
+            assertThat(id, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
                 commands, equalTo(
                     listOf(
                         JobDefinitionToInsert(
-                            jobDefinitionId = JobDefinitionId(Snowflake.Id(2199023255552)),
+                            jobDefinitionId = JobDefinitionId(SnowflakeId(2199023255552)),
                             reference = JobReference("some-job-ref")
                         )
                     )

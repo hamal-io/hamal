@@ -1,6 +1,6 @@
 package io.hamal.lib.vo
 
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.helper.SerializationTestHelper.generateTestCases
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
@@ -19,16 +19,16 @@ class JobIdTest {
         @Test
         fun `Equals if underlying values are equal`() {
             assertEquals(
-                JobId(Snowflake.Id(23)),
-                JobId(Snowflake.Id(23))
+                JobId(SnowflakeId(23)),
+                JobId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not equals if underlying values are different`() {
             assertNotEquals(
-                JobId(Snowflake.Id(23)),
-                JobId(Snowflake.Id(127))
+                JobId(SnowflakeId(23)),
+                JobId(SnowflakeId(127))
             )
         }
     }
@@ -39,28 +39,28 @@ class JobIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                JobId(Snowflake.Id(23)).hashCode(),
-                JobId(Snowflake.Id(23)).hashCode()
+                JobId(SnowflakeId(23)).hashCode(),
+                JobId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                JobId(Snowflake.Id(23)).hashCode(),
-                JobId(Snowflake.Id(127)).hashCode()
+                JobId(SnowflakeId(23)).hashCode(),
+                JobId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(JobId(Snowflake.Id(123)).toString(), equalTo("JobId(123)"))
+        assertThat(JobId(SnowflakeId(123)).toString(), equalTo("JobId(123)"))
     }
 
 
     @TestFactory
-    fun Serialization() = generateTestCases(JobId(Snowflake.Id(23)), "23")
+    fun Serialization() = generateTestCases(JobId(SnowflakeId(23)), "23")
 }
 
 @DisplayName("JobDefinitionId")
@@ -71,16 +71,16 @@ class JobDefinitionIdTest {
         @Test
         fun `Equals if underlying values are equal`() {
             assertEquals(
-                JobDefinitionId(Snowflake.Id(23)),
-                JobDefinitionId(Snowflake.Id(23))
+                JobDefinitionId(SnowflakeId(23)),
+                JobDefinitionId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not equals if underlying values are different`() {
             assertNotEquals(
-                JobDefinitionId(Snowflake.Id(23)),
-                JobDefinitionId(Snowflake.Id(127))
+                JobDefinitionId(SnowflakeId(23)),
+                JobDefinitionId(SnowflakeId(127))
             )
         }
     }
@@ -91,28 +91,28 @@ class JobDefinitionIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                JobDefinitionId(Snowflake.Id(23)).hashCode(),
-                JobDefinitionId(Snowflake.Id(23)).hashCode()
+                JobDefinitionId(SnowflakeId(23)).hashCode(),
+                JobDefinitionId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                JobDefinitionId(Snowflake.Id(23)).hashCode(),
-                JobDefinitionId(Snowflake.Id(127)).hashCode()
+                JobDefinitionId(SnowflakeId(23)).hashCode(),
+                JobDefinitionId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(JobDefinitionId(Snowflake.Id(123)).toString(), equalTo("JobDefinitionId(123)"))
+        assertThat(JobDefinitionId(SnowflakeId(123)).toString(), equalTo("JobDefinitionId(123)"))
     }
 
 
     @TestFactory
-    fun Serialization() = generateTestCases(JobDefinitionId(Snowflake.Id(23)), "23")
+    fun Serialization() = generateTestCases(JobDefinitionId(SnowflakeId(23)), "23")
 }
 
 @DisplayName("JobReference")

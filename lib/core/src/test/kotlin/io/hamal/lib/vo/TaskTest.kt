@@ -1,6 +1,6 @@
 package io.hamal.lib.vo
 
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.helper.SerializationTestHelper.generateTestCases
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
@@ -19,16 +19,16 @@ class TaskIdTest {
         @Test
         fun `Equals if underlying values are equal`() {
             assertEquals(
-                TaskId(Snowflake.Id(23)),
-                TaskId(Snowflake.Id(23))
+                TaskId(SnowflakeId(23)),
+                TaskId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not equals if underlying values are different`() {
             assertNotEquals(
-                TaskId(Snowflake.Id(23)),
-                TaskId(Snowflake.Id(127))
+                TaskId(SnowflakeId(23)),
+                TaskId(SnowflakeId(127))
             )
         }
     }
@@ -39,25 +39,25 @@ class TaskIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                TaskId(Snowflake.Id(23)).hashCode(),
-                TaskId(Snowflake.Id(23)).hashCode()
+                TaskId(SnowflakeId(23)).hashCode(),
+                TaskId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                TaskId(Snowflake.Id(23)).hashCode(),
-                TaskId(Snowflake.Id(127)).hashCode()
+                TaskId(SnowflakeId(23)).hashCode(),
+                TaskId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(TaskId(Snowflake.Id(123)).toString(), equalTo("TaskId(123)"))
+        assertThat(TaskId(SnowflakeId(123)).toString(), equalTo("TaskId(123)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TaskId(Snowflake.Id(23)), "23")
+    fun Serialization() = generateTestCases(TaskId(SnowflakeId(23)), "23")
 }

@@ -1,7 +1,7 @@
 package io.hamal.lib.vo.base
 
 import io.hamal.lib.ddd.base.ValueObject
-import io.hamal.lib.util.Snowflake
+import io.hamal.lib.util.SnowflakeId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -12,7 +12,7 @@ import kotlinx.serialization.encoding.Encoder
 
 
 @Serializable
-abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>() {
+abstract class DomainId : ValueObject.ComparableImpl<SnowflakeId>() {
     fun partition() = value.partition()
     fun sequence() = value.sequence()
     fun elapsed() = value.elapsed()
@@ -22,13 +22,13 @@ abstract class DomainId : ValueObject.ComparableImpl<Snowflake.Id>() {
 }
 
 abstract class DomainIdSerializer<ID : DomainId>(
-    val fn: (Snowflake.Id) -> ID
+    val fn: (SnowflakeId) -> ID
 ) : KSerializer<ID> {
     override val descriptor: SerialDescriptor
         get() = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): ID {
-        return fn(Snowflake.Id(decoder.decodeLong()))
+        return fn(SnowflakeId(decoder.decodeLong()))
     }
 
     override fun serialize(encoder: Encoder, value: ID) {
