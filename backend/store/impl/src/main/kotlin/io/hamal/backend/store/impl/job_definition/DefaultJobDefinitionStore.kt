@@ -89,9 +89,9 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
 
 
         inTx {
-            execute("INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())") {
-                set("id", requestId)
-            }
+//            execute("INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())") {
+//                set("id", requestId)
+//            }
         }
 
 //        val operations = Operations()
@@ -148,50 +148,50 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
 
 //    override fun setupSchema(operations: NamedParameterJdbcOperations) {
     override fun setupSchema(connection: Connection) {
-        inTx {
-            execute(
-                """
-            CREATE TABLE IF NOT EXISTS request_log (
-                id          BIGINT PRIMARY KEY,
-                instant     DATETIME NOT NULL
-            );
-            """.trimIndent()
-            )
-
-            execute(
-                """
-            CREATE TABLE IF NOT EXISTS job_definitions (
-                id          INTEGER PRIMARY KEY,
-                version     INTEGER NOT NULL ,
-                reference   TEXT NOT NULL ,
-                inputs      BLOB,
-                secrets     BLOB,
-                instant     DATETIME NOT NULL
-            );
-            """.trimIndent()
-            )
-
-            execute(
-                """
-           CREATE TABLE IF NOT EXISTS triggers(
-                id INTEGER PRIMARY KEY,
-                job_definition_id INTEGER NOT NULL,
-                type INTEGER NOT NULL,
-                inputs BLOB,
-                secrets BLOB,
-                data BLOB
-            );
-            """.trimIndent()
-            )
-        }
+//        inTx {
+//            execute(
+//                """
+//            CREATE TABLE IF NOT EXISTS request_log (
+//                id          BIGINT PRIMARY KEY,
+//                instant     DATETIME NOT NULL
+//            );
+//            """.trimIndent()
+//            )
+//
+//            execute(
+//                """
+//            CREATE TABLE IF NOT EXISTS job_definitions (
+//                id          INTEGER PRIMARY KEY,
+//                version     INTEGER NOT NULL ,
+//                reference   TEXT NOT NULL ,
+//                inputs      BLOB,
+//                secrets     BLOB,
+//                instant     DATETIME NOT NULL
+//            );
+//            """.trimIndent()
+//            )
+//
+//            execute(
+//                """
+//           CREATE TABLE IF NOT EXISTS triggers(
+//                id INTEGER PRIMARY KEY,
+//                job_definition_id INTEGER NOT NULL,
+//                type INTEGER NOT NULL,
+//                inputs BLOB,
+//                secrets BLOB,
+//                data BLOB
+//            );
+//            """.trimIndent()
+//            )
+//        }
     }
 
     override fun drop() {
-        inTx {
-            execute("""DROP TABLE IF EXISTS job_definitions;""")
-            execute("""DROP TABLE IF EXISTS triggers;""")
-            execute("""DROP TABLE IF EXISTS request_log;""")
-        }
+//        inTx {
+//            execute("""DROP TABLE IF EXISTS job_definitions;""")
+//            execute("""DROP TABLE IF EXISTS triggers;""")
+//            execute("""DROP TABLE IF EXISTS request_log;""")
+//        }
     }
 
 }

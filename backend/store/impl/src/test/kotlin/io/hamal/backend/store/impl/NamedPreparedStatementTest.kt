@@ -90,9 +90,13 @@ class ParseTest {
             val result = Parser().parse(
                 """ "execute :me and :me2" """
             )
-            assertThat(result.sql, equalTo("""
+            assertThat(
+                result.sql, equalTo(
+                    """
                 "execute :me and :me2"
-            """.trimIndent()))
+            """.trimIndent()
+                )
+            )
             assertThat(result.orderedParameters, empty())
         }
 
@@ -110,6 +114,19 @@ class ParseTest {
             assertThat(result.orderedParameters, equalTo(listOf("param1", "param2", "param2")))
         }
 
+        @Test
+        fun `Insert query`() {
+            val result = Parser().parse(
+                """
+                    INSERT INTO string_table(value, another_value) VALUES(:some_value, :another_value)
+                """.trimIndent()
+            )
+            assertThat(
+                result.sql,
+                equalTo("INSERT INTO string_table(value, another_value) VALUES( ? , ? )")
+            )
+            assertThat(result.orderedParameters, equalTo(listOf("some_value", "another_value")))
+        }
 
         @Test
         fun `Single line comment with named parameter - which should be ignored`() {

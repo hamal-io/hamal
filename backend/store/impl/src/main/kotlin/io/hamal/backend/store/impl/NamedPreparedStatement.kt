@@ -3,12 +3,109 @@ package io.hamal.backend.store.impl
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
 import io.hamal.backend.store.impl.NamedPreparedStatement.ParseResult
+import io.hamal.lib.RequestId
+import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.util.TokenizerUtil
+import io.hamal.lib.vo.base.DomainId
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.Timestamp
+import java.time.Instant
 
 
-interface NamedPreparedStatement {
-    fun setString(parameter: String, value: String)
+interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
+    operator fun set(parameter: String, value: Boolean): STATEMENT
+    operator fun set(parameter: String, value: Int): STATEMENT
+    operator fun set(parameter: String, value: Long): STATEMENT
+    operator fun set(parameter: String, value: Instant): STATEMENT
+    operator fun set(parameter: String, value: String): STATEMENT
+    operator fun set(parameter: String, value: SnowflakeId): STATEMENT
+    operator fun set(parameter: String, value: RequestId): STATEMENT
+    operator fun set(parameter: String, value: DomainId): STATEMENT
+    fun clearParameter()
+    fun execute(): Boolean
+    fun executeUpdate(): Int
+    fun executeQuery(): ResultSet
     class ParseResult(val sql: String, val orderedParameters: List<String>)
+}
+
+
+class DefaultNamedPreparedStatement(
+    private val delegate: PreparedStatement,
+    private val parseResult: ParseResult
+) : NamedPreparedStatement<DefaultNamedPreparedStatement> {
+
+    companion object {
+        fun Connection.prepare(query: String): NamedPreparedStatement<DefaultNamedPreparedStatement> {
+            val parseResult = Parser().parse(query)
+            return DefaultNamedPreparedStatement(
+                prepareStatement(parseResult.sql),
+                parseResult
+            )
+        }
+    }
+
+    override fun set(parameter: String, value: Boolean): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setBoolean(it, value) }
+        return this
+    }
+
+    override fun set(parameter: String, value: Int): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setInt(it, value) }
+        return this
+    }
+
+    override fun set(parameter: String, value: Long): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value) }
+        return this
+    }
+
+    override fun set(parameter: String, value: Instant): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setTimestamp(it, Timestamp.from(value)) }
+        return this
+    }
+
+    override fun set(parameter: String, value: SnowflakeId): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value) }
+        return this
+    }
+
+    override fun set(parameter: String, value: RequestId): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setBigDecimal(it, value.value.toBigDecimal()) }
+        return this
+    }
+
+    override fun set(parameter: String, value: DomainId): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value.value) }
+        return this
+    }
+
+    override fun clearParameter() = delegate.clearParameters()
+
+    override fun set(parameter: String, value: String): DefaultNamedPreparedStatement {
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value) }
+        return this
+    }
+
+    override fun execute() = delegate.execute()
+    override fun executeUpdate() = delegate.executeUpdate()
+    override fun executeQuery(): ResultSet = delegate.executeQuery()
+    override fun close() {
+        delegate.close()
+    }
+
+    private fun ParseResult.parameterIndexesOf(parameter: String): Iterable<Int> {
+        val result = orderedParameters.mapIndexedNotNull { index, orderedParameter ->
+            if (parameter == orderedParameter) {
+                index + 1
+            } else {
+                null
+            }
+        }
+        require(result.isNotEmpty()) { "Statement does not contain parameter $parameter" }
+        return result
+    }
 }
 
 internal class Parser {
@@ -31,7 +128,6 @@ internal class Parser {
                 current == ':' && peekNext() != ':' -> {
                     skip()
                     orderedParameters.add(parseParameter())
-                    resultBuffer.removeRange(resultBuffer.length, resultBuffer.length)
                     resultBuffer.append(" ? ")
                 }
 
@@ -85,7 +181,7 @@ internal class Parser {
         val resultBuilder = StringBuilder()
         while (!isAtEnd()) {
             val current = peek()
-            if (TokenizerUtil.isWhitespace(current) || current == ';') {
+            if (TokenizerUtil.isWhitespace(current) || current == ';' || current == ',' || current == ')') {
                 return resultBuilder.toString()
             } else {
                 resultBuilder.append(skip())
@@ -137,11 +233,4 @@ internal class Parser {
 
     private fun isAtEnd() = query.length - 1 < position
 
-}
-
-class DefaultNamedPreparedStatement : NamedPreparedStatement {
-    private val orderedParameters = mutableListOf<String>()
-    override fun setString(parameter: String, value: String) {
-        TODO("Not yet implemented")
-    }
 }

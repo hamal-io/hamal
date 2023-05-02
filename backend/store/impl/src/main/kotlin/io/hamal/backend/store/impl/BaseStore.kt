@@ -1,31 +1,12 @@
 package io.hamal.backend.store.impl
 
-import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
-import io.hamal.lib.util.SnowflakeId
-import io.hamal.lib.vo.base.DomainId
 import java.nio.file.Path
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
-import java.sql.Timestamp
-import java.time.Instant
 import kotlin.io.path.Path
-
-class NamedParameters() {
-
-    internal var mapping = mutableMapOf<String, Any>()
-
-    fun set(name: String, value: Boolean) = apply { this.mapping[name] = value }
-    fun set(name: String, value: Int) = apply { this.mapping[name] = value }
-    fun set(name: String, value: Long) = apply { this.mapping[name] = value }
-    fun set(name: String, value: String) = apply { this.mapping[name] = value }
-    fun set(name: String, value: Instant) = apply { this.mapping[name] = Timestamp.from(value) }
-    fun set(name: String, value: SnowflakeId) = apply { this.mapping[name] = value.value }
-    fun <ID : DomainId> set(name: String, value: ID) = set(name, value.value)
-    fun set(name: String, value: RequestId) = apply { this.mapping[name] = value.value }
-}
 
 class ResultSet(result: ResultSet) {
 
@@ -37,14 +18,14 @@ class TxOperations(
     private val connection: Connection
 ) {
 
-    fun execute(query: String) {
-        execute(query) { NamedParameters() }
-    }
+//    fun execute(query: String) {
+//        execute(query) { NamedParameters() }
+//    }
 
-    fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
-//        val parameters = block(NamedParameters())
-//        jdbcOperations.update(query, parameters.mapping)
-    }
+//    fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
+////        val parameters = block(NamedParameters())
+////        jdbcOperations.update(query, parameters.mapping)
+//    }
 
     fun abort() {
         println("Aborting by throwing an expceted exception")
@@ -52,29 +33,28 @@ class TxOperations(
 }
 
 
-
 class Operations(
 //    private val jdbcOperations: NamedParameterJdbcOperations
     private val connection: Connection
 ) {
-    fun execute(query: String) {
-        execute(query) { NamedParameters() }
-    }
 
-    fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
-        val parameters = block(NamedParameters())
-        connection.prepareStatement(query).use {
-            it.setBoolean(1, parameters.mapping["true_value"] as Boolean)
-            it.setBoolean(2, parameters.mapping["false_value"] as Boolean)
-            it.execute()
-        }
-//        jdbcOperations.update(query, parameters.mapping)
-    }
+//    fun execute(query: String, block: NamedParameters.() -> NamedParameters) {
+//        val parameters = block(NamedParameters())
+//        connection.prepare(query).use {
+//            parameters.mapping.forEach { parameter, value ->
+//
+//            }
+//            it.set("true_value", parameters.mapping["true_value"] as Boolean)
+//            it.set("false_value", parameters.mapping["false_value"] as Boolean)
+//            it.execute()
+//        }
+////        jdbcOperations.update(query, parameters.mapping)
+//    }
 }
 
 
 abstract class BaseStore(config: Config) : AutoCloseable {
-//    protected val dataSource: DataSource
+    //    protected val dataSource: DataSource
 //    protected val txOperations: TransactionOperations
 //    protected val jdbcOperations: NamedParameterJdbcOperations
     val connection: Connection
