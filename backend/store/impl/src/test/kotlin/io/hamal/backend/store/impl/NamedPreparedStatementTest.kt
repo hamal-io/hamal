@@ -1,11 +1,16 @@
 package io.hamal.backend.store.impl
 
+import io.hamal.backend.store.impl.DefaultNamedPreparedStatement.Companion.prepare
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.sql.Connection
+import java.sql.DriverManager
 
 class ParseTest {
 
@@ -147,6 +152,70 @@ class ParseTest {
             )
             assertThat(result.sql, equalTo(""))
             assertThat(result.orderedParameters, empty())
+        }
+    }
+}
+
+@DisplayName("DefaultNamedPreparedStatement")
+class DefaultNamedPreparedStatementTest {
+
+    companion object {
+        val connection: Connection = DriverManager.getConnection("jdbc:sqlite::memory:")
+
+        init {
+            connection.createStatement().use {
+                it.execute("""CREATE TABLE fantasy_table(id INT, value_1 INT, value_2 INT)""")
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("ensureAllParametersSet()")
+    inner class EnsureAllParametersSetTest {
+        @Test
+        fun `All parameters set`() {
+            val testInstance = connection.prepare(
+                "INSERT INTO fantasy_table(id, value_1,value_2) VALUES(:paramOne, :paramTwo, :paramThree)"
+            ) as DefaultNamedPreparedStatement
+
+            testInstance["paramOne"] = 1
+            testInstance["paramTwo"] = 2
+            testInstance["paramThree"] = 3
+
+            testInstance.ensureAllParametersSet()
+        }
+
+        @Test
+        fun `Parameters are set partially`() {
+            val testInstance = connection.prepare(
+                "INSERT INTO fantasy_table(id, value_1,value_2) VALUES(:paramOne, :paramTwo, :paramThree)"
+            ) as DefaultNamedPreparedStatement
+
+            testInstance["paramOne"] = false
+            testInstance["paramThree"] = true
+
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance.ensureAllParametersSet()
+            }
+
+            assertThat(
+                exception.message,
+                containsString("Expected all named parameters to be set, but [paramTwo] are missing")
+            )
+        }
+
+        @Test
+        fun `None of the parameters set`() {
+            val testInstance = connection.prepare(
+                "INSERT INTO fantasy_table(id, value_1,value_2) VALUES(:paramOne, :paramTwo, :paramThree)"
+            ) as DefaultNamedPreparedStatement
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance.ensureAllParametersSet()
+            }
+            assertThat(
+                exception.message,
+                containsString("Expected all named parameters to be set, but [paramOne, paramTwo, paramThree] are missing")
+            )
         }
     }
 }

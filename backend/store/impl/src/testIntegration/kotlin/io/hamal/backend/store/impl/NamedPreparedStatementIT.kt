@@ -4,11 +4,12 @@ import io.hamal.backend.store.impl.DefaultNamedPreparedStatement.Companion.prepa
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Files
 import java.sql.Connection
 import java.sql.DriverManager
@@ -38,16 +39,136 @@ class NamedPreparedStatementIT {
                 it.execute("""CREATE TABLE snowflake_id_table(value INT NOT NULL, another_value INT)""")
                 it.execute("""CREATE TABLE domain_id_table(value INT NOT NULL, another_value INT)""")
                 it.execute("""CREATE TABLE request_id_table(value INT NOT NULL, another_value INT)""")
+                it.execute("""CREATE TABLE nullable_table(value INT , another_value INT)""")
+                it.execute("""CREATE TABLE unique_number(value INT PRIMARY KEY )""")
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("execute()")
+    inner class ExecuteTest {
+        @Test
+        fun `Statement yields result set`() {
+            connection.prepare("INSERT INTO nullable_table(value, another_value) VALUES(:some_value,:another_value) RETURNING *")
+                .use {
+                    it["some_value"] = 23
+                    it["another_value"] = 42
+                    assertTrue(it.execute())
+                }
+        }
+
+        @Test
+        fun `Statement does not yield result set`() {
+            connection.prepare("INSERT INTO nullable_table(value, another_value) VALUES(:some_value,:another_value)")
+                .use {
+                    it["some_value"] = 23
+                    it["another_value"] = 42
+                    assertFalse(it.execute())
+                }
+        }
+
+        @Test
+        fun `None of the named parameters were set`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                connection.prepare("INSERT INTO nullable_table(value, another_value) VALUES(:some_value,:another_value)")
+                    .use {
+                        it.execute()
+                    }
+            }
+            assertThat(
+                exception.message,
+                containsString("Expected all named parameters to be set, but [some_value, another_value] are missing")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("executeUpdate()")
+    inner class ExecuteUpdate {
+        @Test
+        fun `Statement inserts one row`() {
+            connection.prepare("INSERT INTO unique_number(value) VALUES(:some_value)")
+                .use {
+                    it["some_value"] = 23
+                    assertThat(it.executeUpdate(), equalTo(1))
+                }
+        }
+
+        @Test
+        fun `Statement does not insert row, because it already exists`() {
+            connection.prepare("INSERT OR IGNORE  INTO unique_number(value) VALUES(:some_value)")
+                .use {
+                    it["some_value"] = 42
+                    assertThat(it.executeUpdate(), equalTo(1))
+                }
+            connection.prepare("INSERT OR IGNORE  INTO unique_number(value) VALUES(:some_value)")
+                .use {
+                    it["some_value"] = 42
+                    assertThat(it.executeUpdate(), equalTo(0))
+                }
+        }
+
+        @Test
+        fun `None of the named parameters were set`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                connection.prepare("INSERT INTO nullable_table(value, another_value) VALUES(:some_value,:another_value)")
+                    .use {
+                        it.executeUpdate()
+                    }
+            }
+            assertThat(
+                exception.message,
+                containsString("Expected all named parameters to be set, but [some_value, another_value] are missing")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("executeQuery()")
+    inner class ExecuteQuery {
+        @Test
+        fun `Query does not return any value`() {
+            connection.prepare("SELECT * FROM unique_number WHERE value = :some_value")
+                .use {
+                    it["some_value"] = 4411
+                    val result = it.executeQuery()
+                    assertFalse(result.next())
+                }
+        }
+
+        @Test
+        fun `Query returns value`() {
+            connection.prepare("INSERT OR IGNORE  INTO unique_number(value) VALUES(:some_value)")
+                .use { it["some_value"] = 1133; it.execute() }
+
+            connection.prepare("SELECT * FROM unique_number WHERE value = :some_value")
+                .use {
+                    it["some_value"] = 1133
+                    val result = it.executeQuery()
+                    assertTrue(result.next())
+                    assertThat(result.getInt(1), equalTo(1133))
+                }
+        }
+
+        @Test
+        fun `None of the named parameters were set`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                connection.prepare("SELECT * FROM unique_number WHERE value = :some_value")
+                    .use {
+                        it.executeQuery()
+                    }
+            }
+            assertThat(
+                exception.message,
+                containsString("Expected all named parameters to be set, but [some_value] are missing")
+            )
         }
     }
 
     @Nested
     @DisplayName("set()")
     inner class SetTest {
-        // FIXME add test for not all parameter are set
-        // FIXME add test for non of the parameter is set
-        // FIXME add test for parameter name appears multiple times
 
         @Test
         fun `Sets named parameter of type boolean`() {

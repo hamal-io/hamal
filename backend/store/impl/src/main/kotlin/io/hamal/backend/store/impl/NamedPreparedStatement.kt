@@ -32,9 +32,11 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
 
 
 class DefaultNamedPreparedStatement(
-    private val delegate: PreparedStatement,
-    private val parseResult: ParseResult
+    internal val delegate: PreparedStatement,
+    internal val parseResult: ParseResult
 ) : NamedPreparedStatement<DefaultNamedPreparedStatement> {
+
+    internal val parametersSet = mutableSetOf<String>()
 
     companion object {
         fun Connection.prepare(query: String): NamedPreparedStatement<DefaultNamedPreparedStatement> {
@@ -47,50 +49,74 @@ class DefaultNamedPreparedStatement(
     }
 
     override fun set(parameter: String, value: Boolean): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setBoolean(it, value) }
         return this
     }
 
     override fun set(parameter: String, value: Int): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setInt(it, value) }
         return this
     }
 
     override fun set(parameter: String, value: Long): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value) }
         return this
     }
 
     override fun set(parameter: String, value: Instant): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setTimestamp(it, Timestamp.from(value)) }
         return this
     }
 
     override fun set(parameter: String, value: SnowflakeId): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value) }
         return this
     }
 
     override fun set(parameter: String, value: RequestId): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setBigDecimal(it, value.value.toBigDecimal()) }
         return this
     }
 
     override fun set(parameter: String, value: DomainId): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value.value) }
         return this
     }
 
-    override fun clearParameter() = delegate.clearParameters()
-
     override fun set(parameter: String, value: String): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
+        parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value) }
         return this
     }
 
-    override fun execute() = delegate.execute()
-    override fun executeUpdate() = delegate.executeUpdate()
-    override fun executeQuery(): ResultSet = delegate.executeQuery()
+    override fun clearParameter() {
+        parametersSet.clear()
+        delegate.clearParameters()
+    }
+
+    override fun execute(): Boolean {
+        ensureAllParametersSet()
+        return delegate.execute()
+    }
+
+    override fun executeUpdate(): Int {
+        ensureAllParametersSet()
+        return delegate.executeUpdate()
+    }
+
+    override fun executeQuery(): ResultSet {
+        ensureAllParametersSet()
+        return delegate.executeQuery()
+    }
+
     override fun close() {
         delegate.close()
     }
@@ -106,6 +132,12 @@ class DefaultNamedPreparedStatement(
         require(result.isNotEmpty()) { "Statement does not contain parameter $parameter" }
         return result
     }
+}
+
+internal fun DefaultNamedPreparedStatement.ensureAllParametersSet() {
+    val diff = this.parseResult.orderedParameters.toSet()
+        .subtract(parametersSet)
+    require(diff.isEmpty()) { "Expected all named parameters to be set, but $diff are missing" }
 }
 
 internal class Parser {
