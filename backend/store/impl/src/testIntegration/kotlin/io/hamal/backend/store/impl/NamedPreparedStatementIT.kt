@@ -19,7 +19,7 @@ import java.time.Instant
 class NamedPreparedStatementIT {
     companion object {
         val connection: Connection = DriverManager.getConnection(
-            "jdbc:sqlite:${Files.createTempDirectory("named-parameter-test")}/test.dbs"
+            "jdbc:sqlite:${Files.createTempDirectory("named-parameter-test")}/test.db"
         )
 
         init {
