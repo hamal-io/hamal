@@ -279,14 +279,24 @@ class DefaultConnectionIT {
     @DisplayName("executeQuery")
     inner class ExecuteQueryTest {
 
-//        fun `With named parameter and result set of type int`() {
-//            testInstance.executeQuery<Int>("") {
-//                this[""] = 123
-//                returns {
-//                    123
-//                }
-//            }
-//        }
+        @Test
+        fun `With named parameter and result set of type boolean`() {
+            testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
+            data class BooleanResult(val value: Boolean)
+
+            val result = testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = :some_value") {
+                with {
+                    set("some_value", true)
+                }
+                map {
+                    BooleanResult(
+                        value = it.getBoolean("value")
+                    )
+                }
+            }
+
+            assertThat(result, equalTo(listOf(BooleanResult(true))))
+        }
 
         private val testInstance =
             DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("executeUpdate")}/db.sqlite")

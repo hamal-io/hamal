@@ -53,6 +53,30 @@ class NamedPreparedStatementDelegate(
 
 }
 
+class NamedPreparedStatementResultSetDelegate<RESULT : Any>(
+    internal val delegate: NamedPreparedStatementDelegate
+) {
+
+    private var mapping: ((NamedResultSet<RESULT>) -> RESULT)? = null
+
+    fun with(
+        block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
+    ): NamedPreparedStatementResultSetDelegate<RESULT> {
+        block(delegate)
+        return this
+    }
+
+    fun map(mapper: (NamedResultSet<RESULT>) -> RESULT): NamedPreparedStatementResultSetDelegate<RESULT> {
+        this.mapping = mapper
+        return this
+    }
+
+    internal fun apply(namedResultSet: NamedResultSet<RESULT>): List<RESULT> {
+        val fn = mapping ?: return listOf()
+        return namedResultSet.map(fn)
+    }
+}
+
 
 interface Connection : AutoCloseable {
     val isOpen: Boolean
@@ -63,11 +87,10 @@ interface Connection : AutoCloseable {
     fun executeUpdate(sql: String): Int
     fun executeUpdate(sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate): Int
 
-    //executeQuery
-//    fun <T : Any> executeQuery(
-//        sql: String,
-//        block: NamedPreparedStatementResultSetDelegate.() -> NamedPreparedStatementResultSetDelegate
-//    ): T
+    fun <T : Any> executeQuery(
+        sql: String,
+        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+    ): List<T>
 }
 
 class DefaultConnection(url: String) : Connection {
@@ -82,6 +105,7 @@ class DefaultConnection(url: String) : Connection {
 
     override val isOpen: Boolean get() = !delegate.isClosed
     override val isClosed: Boolean get() = delegate.isClosed
+
     override fun prepare(sql: String): NamedPreparedStatement<*> {
         return statements(sql) {
             delegate.prepare(sql)
@@ -122,12 +146,16 @@ class DefaultConnection(url: String) : Connection {
         }
     }
 
-//    override fun <T : Any> executeQuery(
-//        sql: String,
-//        block: NamedPreparedStatementResultSetDelegate.() -> NamedPreparedStatementResultSetDelegate
-//    ): T {
-//        TODO("Not yet implemented")
-//    }
+    override fun <T : Any> executeQuery(
+        sql: String,
+        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+    ): List<T> {
+        return prepare(sql).use {
+            val delegate = NamedPreparedStatementResultSetDelegate<T>(NamedPreparedStatementDelegate(it))
+            block(delegate)
+            delegate.apply(DefaultNamedResultSet(it.executeQuery()))
+        }
+    }
 
     override fun close() {
         delegate.close()
