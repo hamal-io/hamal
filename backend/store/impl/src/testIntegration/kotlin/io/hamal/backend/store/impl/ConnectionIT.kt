@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.nio.file.Files
 import java.time.Instant
+import java.util.concurrent.atomic.AtomicInteger
 
 class DefaultConnectionIT {
 
@@ -248,7 +249,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance =
-            DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("executeUpdate")}/db.sqlite")
+            DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("execute-update")}/db.sqlite")
 
         init {
             testInstance.execute("""PRAGMA journal_mode = wal;""")
@@ -327,7 +328,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance =
-            DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("executeUpdate")}/db.sqlite")
+            DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("execute-query")}/db.sqlite")
 
         init {
             testInstance.execute("""PRAGMA journal_mode = wal;""")
@@ -345,6 +346,92 @@ class DefaultConnectionIT {
             testInstance.execute("""CREATE TABLE request_id_table(value INT NOT NULL)""")
         }
     }
+
+    @Nested
+    @DisplayName("tx()")
+    inner class TxTest {
+        @Test
+        fun `Successful transaction automatically commits and returns result`() {
+            val result = testInstance.tx {
+                execute("INSERT INTO some_table(value) VALUES(1234)")
+                execute("INSERT INTO another_table(value) VALUES (321)")
+                executeQuery("SELECT * FROM another_table") {
+                    map { it.getInt("value") }
+                }
+            }
+            assertThat(result, equalTo(listOf(321)))
+
+            verifyIsOne("SELECT COUNT(*) as count FROM some_table")
+            verifyIsOne("SELECT COUNT(*) as count FROM another_table")
+        }
+
+        @Test
+        fun `Exception rolls transaction back`() {
+            val exception = assertThrows<RuntimeException> {
+                testInstance.tx {
+                    execute("INSERT INTO some_table(value) VALUES( 123)")
+                    execute("INSERT INTO another_table(value) VALUES (321)")
+                    throw RuntimeException("Oops")
+                }
+            }
+            assertThat(exception.message, equalTo("Oops"))
+
+            verifyIsZero("SELECT COUNT(*) as count FROM some_table")
+            verifyIsZero("SELECT COUNT(*) as count FROM another_table")
+        }
+
+        @Test
+        fun `abort() stops execution and rolls transaction back`() {
+            val counter = AtomicInteger(0)
+            val result = testInstance.tx {
+                counter.incrementAndGet()
+                execute("INSERT INTO some_table(value) VALUES( 123)")
+                counter.incrementAndGet()
+
+
+                abort()
+                execute("INSERT INTO another_table(value) VALUES (321)")
+                counter.incrementAndGet()
+
+                throw RuntimeException("Oops")
+            }
+            assertThat(result, nullValue())
+            assertThat(counter.get(), equalTo(2))
+
+            verifyIsZero("SELECT COUNT(*) as count FROM some_table")
+            verifyIsZero("SELECT COUNT(*) as count FROM another_table")
+        }
+
+        private fun verifyIsZero(query: String) {
+            val count = testInstance.executeQuery(query) {
+                map { it.getInt("count") }
+            }
+            assertThat(count, equalTo(listOf(0)))
+        }
+
+        private fun verifyIsOne(query: String) {
+            val count = testInstance.executeQuery(query) {
+                map { it.getInt("count") }
+            }
+            assertThat(count, equalTo(listOf(1)))
+        }
+
+        private val testInstance = DefaultConnection(
+            "jdbc:sqlite:${Files.createTempDirectory("tx")}/db.sqlite"
+        )
+
+        init {
+            testInstance.execute("""PRAGMA journal_mode = wal;""")
+            testInstance.execute("""PRAGMA locking_mode = exclusive;""")
+            testInstance.execute("""PRAGMA temp_store = memory;""")
+            testInstance.execute("""PRAGMA synchronous = off;""")
+
+            testInstance.execute("""CREATE TABLE some_table(value INT NOT NULL)""")
+            testInstance.execute("""CREATE TABLE another_table(value INT NOT NULL)""")
+        }
+
+    }
+
 
     @Nested
     @DisplayName("close()")

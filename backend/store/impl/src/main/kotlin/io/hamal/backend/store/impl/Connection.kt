@@ -86,11 +86,12 @@ interface Connection : AutoCloseable {
     fun execute(sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate)
     fun executeUpdate(sql: String): Int
     fun executeUpdate(sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate): Int
-
     fun <T : Any> executeQuery(
         sql: String,
         block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): List<T>
+
+    fun <T : Any> tx(block: Transaction.() -> T): T?
 }
 
 class DefaultConnection(url: String) : Connection {
@@ -154,6 +155,23 @@ class DefaultConnection(url: String) : Connection {
             val delegate = NamedPreparedStatementResultSetDelegate<T>(NamedPreparedStatementDelegate(it))
             block(delegate)
             delegate.apply(DefaultNamedResultSet(it.executeQuery()))
+        }
+    }
+
+    override fun <T : Any> tx(block: Transaction.() -> T): T? {
+        delegate.autoCommit = false
+        return try {
+            val result = block(DefaultTransaction(this))
+            delegate.commit()
+            result
+        } catch (a: Transaction.AbortException) {
+            delegate.rollback()
+            null
+        } catch (t: Throwable) {
+            delegate.rollback()
+            throw t
+        } finally {
+            delegate.autoCommit = true
         }
     }
 
