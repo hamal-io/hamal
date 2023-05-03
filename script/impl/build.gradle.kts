@@ -8,6 +8,7 @@ archivesName.set("script-impl")
 dependencies {
     implementation(project(":lib:core"))
     implementation(project(":script:api"))
+    implementation(external.spring.logging)
 
     testImplementation(project(":script:api"))
     testImplementation(project(":script:impl"))

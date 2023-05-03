@@ -1,6 +1,5 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.core.port.NopLogger
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.base.DomainObject
@@ -239,7 +238,7 @@ class BackendUseCaseInvokerAdapterTest {
             testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
         }
 
-        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
     }
 
     @Nested
@@ -267,7 +266,7 @@ class BackendUseCaseInvokerAdapterTest {
             testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseHandler())
         }
 
-        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
     }
 
     @Nested
@@ -294,7 +293,7 @@ class BackendUseCaseInvokerAdapterTest {
             testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
         }
 
-        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter, {}, { NopLogger })
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
     }
 
     private inner class TestResult(val data: Int) : DomainObject {

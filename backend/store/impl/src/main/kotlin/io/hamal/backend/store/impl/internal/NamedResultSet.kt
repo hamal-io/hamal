@@ -13,7 +13,7 @@ interface NamedResultSet : AutoCloseable {
     fun getString(parameter: String): String
     fun getInstant(parameter: String): Instant
     fun getSnowflakeId(parameter: String): SnowflakeId
-    fun <DOMAIN_ID : DomainId> getDomainId(parameter: String, ctor: (SnowflakeId) -> DOMAIN_ID): DomainId
+    fun <DOMAIN_ID : DomainId> getDomainId(parameter: String, ctor: (SnowflakeId) -> DOMAIN_ID): DOMAIN_ID
     fun getRequestId(parameter: String): RequestId
 
     fun <T : Any> map(mapper: (NamedResultSet) -> T): List<T>
@@ -53,7 +53,7 @@ class DefaultNamedResultSet(
         return SnowflakeId(delegate.getLong(parameter))
     }
 
-    override fun <DOMAIN_ID : DomainId> getDomainId(parameter: String, ctor: (SnowflakeId) -> DOMAIN_ID): DomainId {
+    override fun <DOMAIN_ID : DomainId> getDomainId(parameter: String, ctor: (SnowflakeId) -> DOMAIN_ID): DOMAIN_ID {
         ensureParameterExists(parameter)
         return ctor(getSnowflakeId(parameter))
     }

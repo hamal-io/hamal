@@ -4,7 +4,6 @@ import io.hamal.backend.core.model.JobDefinition
 import io.hamal.backend.store.api.JobDefinitionStore
 import io.hamal.backend.store.api.JobDefinitionStore.Command
 import io.hamal.backend.store.api.JobDefinitionStore.Command.JobDefinitionToInsert
-import io.hamal.backend.store.impl.internal.BaseStore
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
@@ -56,17 +55,18 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
 //    }
 
     override fun get(id: JobDefinitionId): JobDefinition {
-        TODO()
-//        return operations.queryForObject(
-//            """SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id""",
-//            mapOf("id" to id.value)
-//        ) { resultSet, idx ->
-//            JobDefinition(
-//                id = JobDefinitionId(SnowflakeId(resultSet.getLong("id"))),
-//                reference = JobReference(resultSet.getString("reference")),
-//                triggers = listOf()
-//            )
-//        }!!
+        return connection.executeQueryOne<JobDefinition>("SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id") {
+            with {
+                set("id", id)
+            }
+            map {
+                JobDefinition(
+                    id = it.getDomainId("id", ::JobDefinitionId),
+                    reference = io.hamal.lib.vo.JobReference(it.getString("reference")),
+                    triggers = listOf()
+                )
+            }
+        } ?: throw IllegalArgumentException("No job definition found for $id")
     }
 
     override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
@@ -194,11 +194,42 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
 //    }
 
     override fun setupConnection() {
-        TODO("Not yet implemented")
+        connection.execute("""PRAGMA journal_mode = wal;""")
+        connection.execute("""PRAGMA locking_mode = exclusive;""")
+        connection.execute("""PRAGMA temp_store = memory;""")
+        connection.execute("""PRAGMA synchronous = off;""")
     }
 
     override fun setupSchema() {
-        TODO("Not yet implemented")
+
+        connection.execute("""DROP TABLE IF EXISTS job_definitions;""")
+        connection.execute("""DROP TABLE IF EXISTS triggers;""")
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS job_definitions (
+                id          INTEGER PRIMARY KEY,
+                version     INTEGER NOT NULL ,
+                request_id  BIGINT  NOT NULL,
+                reference   TEXT NOT NULL ,
+                inputs      BLOB,
+                secrets     BLOB,
+                instant     DATETIME NOT NULL,
+                UNIQUE (request_id)
+            );
+        """.trimIndent()
+        )
+
+        connection.execute(
+            """
+           CREATE TABLE IF NOT EXISTS triggers(
+                id INTEGER PRIMARY KEY,
+                job_definition_id INTEGER NOT NULL,
+                type INTEGER NOT NULL,
+                inputs BLOB,
+                secrets BLOB,
+                data BLOB
+            );""".trimIndent()
+        )
     }
 
 }

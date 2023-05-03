@@ -37,7 +37,10 @@ class DefaultConnectionIT {
                 }
         }
 
-        private val testInstance = DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite")
+        private val testInstance = DefaultConnection(
+            "ConnectionIT",
+            "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
+        )
 
         init {
             testInstance.execute("""PRAGMA journal_mode = wal;""")
@@ -131,7 +134,10 @@ class DefaultConnectionIT {
             verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
         }
 
-        private val testInstance = DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite")
+        private val testInstance = DefaultConnection(
+            "ConnectionIT",
+            "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
+        )
 
         init {
             testInstance.execute("""PRAGMA journal_mode = wal;""")
@@ -249,7 +255,10 @@ class DefaultConnectionIT {
         }
 
         private val testInstance =
-            DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("execute-update")}/db.sqlite")
+            DefaultConnection(
+                "ConnectionIT",
+                "jdbc:sqlite:${Files.createTempDirectory("execute-update")}/db.sqlite"
+            )
 
         init {
             testInstance.execute("""PRAGMA journal_mode = wal;""")
@@ -327,8 +336,10 @@ class DefaultConnectionIT {
             assertThat(result, equalTo(listOf(BooleanResult(true))))
         }
 
-        private val testInstance =
-            DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("execute-query")}/db.sqlite")
+        private val testInstance = DefaultConnection(
+            "ConnectionIT",
+            "jdbc:sqlite:${Files.createTempDirectory("execute-query")}/db.sqlite"
+        )
 
         init {
             testInstance.execute("""PRAGMA journal_mode = wal;""")
@@ -417,6 +428,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance = DefaultConnection(
+            "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("tx")}/db.sqlite"
         )
 
@@ -462,7 +474,10 @@ class DefaultConnectionIT {
             assertTrue(testInstance.isClosed)
         }
 
-        private val testInstance = DefaultConnection("jdbc:sqlite:${Files.createTempDirectory("connection")}/db.sqlite")
+        private val testInstance = DefaultConnection(
+            "ConnectionIT",
+            "jdbc:sqlite:${Files.createTempDirectory("connection")}/db.sqlite"
+        )
     }
 
 }

@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":lib:core"))
     implementation(external.kotlin.json)
     implementation(external.kotlin.protobuf)
+    implementation(external.spring.logging)
 
     testImplementation(project(":backend:core"))
     testImplementation(external.junit)

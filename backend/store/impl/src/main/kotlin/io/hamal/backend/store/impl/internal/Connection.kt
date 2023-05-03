@@ -1,5 +1,6 @@
 package io.hamal.backend.store.impl.internal
 
+import io.hamal.backend.core.port.logger
 import io.hamal.backend.store.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.KeyedOnce
 import io.hamal.lib.RequestId
@@ -91,17 +92,24 @@ interface Connection : AutoCloseable {
         block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): List<T>
 
+    fun <T : Any> executeQueryOne(
+        sql: String,
+        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+    ): T? = executeQuery(sql, block).firstOrNull()
+
     fun <T : Any> tx(block: Transaction.() -> T): T?
 }
 
-class DefaultConnection(url: String) : Connection {
+class DefaultConnection(name: String, url: String) : Connection {
 
     val delegate: java.sql.Connection
+    private val log = logger(name)
 
     val statements = KeyedOnce.default<String, NamedPreparedStatement<*>>()
 
     init {
         delegate = DriverManager.getConnection(url)
+        log.trace("Open sqlite connection with url: $url")
     }
 
     override val isOpen: Boolean get() = !delegate.isClosed
@@ -109,7 +117,9 @@ class DefaultConnection(url: String) : Connection {
 
     override fun prepare(sql: String): NamedPreparedStatement<*> {
         return statements(sql) {
-            delegate.prepare(sql)
+            val result = delegate.prepare(sql)
+            log.trace("Prepared statement: ${result.sql}")
+            result
         }.apply {
             this.clearParameter()
         }
@@ -117,6 +127,7 @@ class DefaultConnection(url: String) : Connection {
 
     override fun execute(sql: String) {
         prepare(sql).use {
+            log.trace("Execute: ${it.sql}")
             it.execute()
         }
     }
@@ -127,12 +138,14 @@ class DefaultConnection(url: String) : Connection {
     ) {
         prepare(sql).use {
             block(NamedPreparedStatementDelegate(it))
+            log.trace("Execute: ${it.sql}")
             it.execute()
         }
     }
 
     override fun executeUpdate(sql: String): Int {
         return prepare(sql).use {
+            log.trace("Execute update: ${it.sql}")
             it.executeUpdate()
         }
     }
@@ -143,6 +156,7 @@ class DefaultConnection(url: String) : Connection {
     ): Int {
         return prepare(sql).use {
             block(NamedPreparedStatementDelegate(it))
+            log.trace("Execute update: ${it.sql}")
             it.executeUpdate()
         }
     }
@@ -154,6 +168,7 @@ class DefaultConnection(url: String) : Connection {
         return prepare(sql).use {
             val delegate = NamedPreparedStatementResultSetDelegate<T>(NamedPreparedStatementDelegate(it))
             block(delegate)
+            log.trace("Execute query: ${it.sql}")
             delegate.apply(DefaultNamedResultSet(it.executeQuery()))
         }
     }
@@ -161,16 +176,21 @@ class DefaultConnection(url: String) : Connection {
     override fun <T : Any> tx(block: Transaction.() -> T): T? {
         delegate.autoCommit = false
         return try {
+            log.trace("Transaction started")
             val result = block(DefaultTransaction(this))
             delegate.commit()
+            log.trace("Transaction committed")
             result
         } catch (a: Transaction.AbortException) {
+            log.info("Transaction aborted")
             delegate.rollback()
             null
         } catch (t: Throwable) {
+            log.warn("Transaction rolled back due to $t")
             delegate.rollback()
             throw t
         } finally {
+            log.trace("Transaction completed")
             delegate.autoCommit = true
         }
     }

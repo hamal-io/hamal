@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":backend:store:api"))
 
     implementation(external.sqlite)
+    implementation(external.spring.logging)
 
     testImplementation(project(":backend:store:impl"))
     testImplementation(external.junit)

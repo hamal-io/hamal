@@ -15,6 +15,8 @@ import java.time.Instant
 
 
 interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
+    val sql: String
+    val orderedParameters: List<String>
     operator fun set(parameter: String, value: Boolean): STATEMENT
     operator fun set(parameter: String, value: Int): STATEMENT
     operator fun set(parameter: String, value: Long): STATEMENT
@@ -47,6 +49,9 @@ class DefaultNamedPreparedStatement(
             )
         }
     }
+
+    override val sql: String get() = parseResult.sql
+    override val orderedParameters: List<String> get() = parseResult.orderedParameters
 
     override fun set(parameter: String, value: Boolean): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)

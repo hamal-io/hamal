@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.core.port.GetLoggerPort
-import io.hamal.backend.core.port.LogPort
+import io.hamal.backend.core.port.HamalLogger
+import io.hamal.backend.core.port.logger
 import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
 import io.hamal.lib.KeyedOnce
 import io.hamal.lib.ddd.base.DomainObject
@@ -18,20 +18,18 @@ class BackendUseCaseInvokerAdapter private constructor(
     private val getQueryManyUseCase: GetQueryManyUseCasePort,
     private val getQueryOneUseCase: GetQueryOneUseCasePort,
     private val flushDomainNotifications: FlushDomainNotificationPort,
-    private val log: LogPort
+    private val log: HamalLogger = logger(BackendUseCaseRegistryAdapter::class)
 ) : InvokeUseCasePort {
 
     @Autowired
     constructor(
         useCaseRegistry: GetUseCasePort,
         flushDomainNotificationPort: FlushDomainNotificationPort,
-        getLoggerPort: GetLoggerPort
     ) : this(
         useCaseRegistry,
         useCaseRegistry,
         useCaseRegistry,
-        flushDomainNotificationPort,
-        getLoggerPort(BackendUseCaseInvokerAdapter::class)
+        flushDomainNotificationPort
     )
 
     override fun <RESULT : DomainObject, USE_CASE : RequestOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
