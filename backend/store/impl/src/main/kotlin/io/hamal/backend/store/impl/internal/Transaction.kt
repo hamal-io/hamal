@@ -1,4 +1,4 @@
-package io.hamal.backend.store.impl
+package io.hamal.backend.store.impl.internal
 
 interface Transaction {
     fun execute(sql: String)

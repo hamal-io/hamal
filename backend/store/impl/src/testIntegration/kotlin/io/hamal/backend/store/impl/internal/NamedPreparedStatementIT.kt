@@ -1,6 +1,6 @@
-package io.hamal.backend.store.impl
+package io.hamal.backend.store.impl.internal
 
-import io.hamal.backend.store.impl.DefaultNamedPreparedStatement.Companion.prepare
+import io.hamal.backend.store.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId

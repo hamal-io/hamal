@@ -1,4 +1,4 @@
-package io.hamal.backend.store.impl
+package io.hamal.backend.store.impl.internal
 
 import io.hamal.backend.core.model.Trigger
 import io.hamal.backend.store.api.TriggerStore

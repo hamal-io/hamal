@@ -1,8 +1,8 @@
-package io.hamal.backend.store.impl
+package io.hamal.backend.store.impl.internal
 
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
-import io.hamal.backend.store.impl.NamedPreparedStatement.ParseResult
+import io.hamal.backend.store.impl.internal.NamedPreparedStatement.ParseResult
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.util.TokenizerUtil

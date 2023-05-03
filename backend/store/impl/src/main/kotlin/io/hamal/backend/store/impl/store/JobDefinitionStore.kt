@@ -1,15 +1,14 @@
-package io.hamal.backend.store.impl.job_definition
+package io.hamal.backend.store.impl.store
 
 import io.hamal.backend.core.model.JobDefinition
 import io.hamal.backend.store.api.JobDefinitionStore
 import io.hamal.backend.store.api.JobDefinitionStore.Command
 import io.hamal.backend.store.api.JobDefinitionStore.Command.JobDefinitionToInsert
-import io.hamal.backend.store.impl.BaseStore
+import io.hamal.backend.store.impl.internal.BaseStore
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
 import java.nio.file.Path
-import java.sql.Connection
 import kotlin.io.path.Path
 
 
@@ -88,11 +87,11 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
 //        }
 
 
-        inTx {
-//            execute("INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())") {
-//                set("id", requestId)
-//            }
-        }
+//        inTx {
+////            execute("INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())") {
+////                set("id", requestId)
+////            }
+//        }
 
 //        val operations = Operations()
 //        operations.execute("""select *""") {
@@ -139,59 +138,67 @@ class DefaultJobDefinitionStore(config: Config) : BaseStore(config), JobDefiniti
     }
 
 //    override fun setupConnection(operations: NamedParameterJdbcOperations) {
-    override fun setupConnection(connection: Connection) {
-//        NamedParameters {
-//            set("abc", 123)
-//        }
-//        TODO("Not yet implemented")
+//    override fun setupConnection(connection: Connection) {
+////        NamedParameters {
+////            set("abc", 123)
+////        }
+////        TODO("Not yet implemented")
+//    }
+//
+////    override fun setupSchema(operations: NamedParameterJdbcOperations) {
+//    override fun setupSchema(connection: Connection) {
+////        inTx {
+////            execute(
+////                """
+////            CREATE TABLE IF NOT EXISTS request_log (
+////                id          BIGINT PRIMARY KEY,
+////                instant     DATETIME NOT NULL
+////            );
+////            """.trimIndent()
+////            )
+////
+////            execute(
+////                """
+////            CREATE TABLE IF NOT EXISTS job_definitions (
+////                id          INTEGER PRIMARY KEY,
+////                version     INTEGER NOT NULL ,
+////                reference   TEXT NOT NULL ,
+////                inputs      BLOB,
+////                secrets     BLOB,
+////                instant     DATETIME NOT NULL
+////            );
+////            """.trimIndent()
+////            )
+////
+////            execute(
+////                """
+////           CREATE TABLE IF NOT EXISTS triggers(
+////                id INTEGER PRIMARY KEY,
+////                job_definition_id INTEGER NOT NULL,
+////                type INTEGER NOT NULL,
+////                inputs BLOB,
+////                secrets BLOB,
+////                data BLOB
+////            );
+////            """.trimIndent()
+////            )
+////        }
+//    }
+
+//    override fun drop() {
+////        inTx {
+////            execute("""DROP TABLE IF EXISTS job_definitions;""")
+////            execute("""DROP TABLE IF EXISTS triggers;""")
+////            execute("""DROP TABLE IF EXISTS request_log;""")
+////        }
+//    }
+
+    override fun setupConnection() {
+        TODO("Not yet implemented")
     }
 
-//    override fun setupSchema(operations: NamedParameterJdbcOperations) {
-    override fun setupSchema(connection: Connection) {
-//        inTx {
-//            execute(
-//                """
-//            CREATE TABLE IF NOT EXISTS request_log (
-//                id          BIGINT PRIMARY KEY,
-//                instant     DATETIME NOT NULL
-//            );
-//            """.trimIndent()
-//            )
-//
-//            execute(
-//                """
-//            CREATE TABLE IF NOT EXISTS job_definitions (
-//                id          INTEGER PRIMARY KEY,
-//                version     INTEGER NOT NULL ,
-//                reference   TEXT NOT NULL ,
-//                inputs      BLOB,
-//                secrets     BLOB,
-//                instant     DATETIME NOT NULL
-//            );
-//            """.trimIndent()
-//            )
-//
-//            execute(
-//                """
-//           CREATE TABLE IF NOT EXISTS triggers(
-//                id INTEGER PRIMARY KEY,
-//                job_definition_id INTEGER NOT NULL,
-//                type INTEGER NOT NULL,
-//                inputs BLOB,
-//                secrets BLOB,
-//                data BLOB
-//            );
-//            """.trimIndent()
-//            )
-//        }
-    }
-
-    override fun drop() {
-//        inTx {
-//            execute("""DROP TABLE IF EXISTS job_definitions;""")
-//            execute("""DROP TABLE IF EXISTS triggers;""")
-//            execute("""DROP TABLE IF EXISTS request_log;""")
-//        }
+    override fun setupSchema() {
+        TODO("Not yet implemented")
     }
 
 }

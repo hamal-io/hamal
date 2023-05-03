@@ -1,4 +1,4 @@
-package io.hamal.backend.store.impl
+package io.hamal.backend.store.impl.internal
 
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId

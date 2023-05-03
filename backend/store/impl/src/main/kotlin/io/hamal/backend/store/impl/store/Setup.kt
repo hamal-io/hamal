@@ -1,4 +1,4 @@
-package io.hamal.backend.store.impl.job_definition
+package io.hamal.backend.store.impl.store
 
 //internal fun DefaultJobDefinitionStore.setupSqlite() {
 //    connection.createStatement().use {
