@@ -280,7 +280,35 @@ class DefaultConnectionIT {
     inner class ExecuteQueryTest {
 
         @Test
-        fun `With named parameter and result set of type boolean`() {
+        fun `Named parameter does not exists in query`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = :some_value") {
+                    with {
+                        set("does_not_exists", false)
+                    }
+                    map { }
+                }
+            }
+            assertThat(exception.message, equalTo("Statement does not contain parameter does_not_exists"))
+        }
+
+        @Test
+        fun `Named parameter does not in result set`() {
+            testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
+
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = :some_value") {
+                    with {
+                        set("some_value", true)
+                    }
+                    map { it.getBoolean("does_not_exists") }
+                }
+            }
+            assertThat(exception.message, equalTo("Parameter 'does_not_exists' does not exist in result set"))
+        }
+
+        @Test
+        fun `With single named parameter`() {
             testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
             data class BooleanResult(val value: Boolean)
 

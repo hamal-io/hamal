@@ -23,18 +23,54 @@ interface NamedResultSet : AutoCloseable {
 class DefaultNamedResultSet(
     internal val delegate: ResultSet
 ) : NamedResultSet {
-    override fun getBoolean(parameter: String) = delegate.getBoolean(parameter)
-    override fun getInt(parameter: String) = delegate.getInt(parameter)
-    override fun getLong(parameter: String) = delegate.getLong(parameter)
-    override fun getString(parameter: String): String = delegate.getString(parameter)
-    override fun getInstant(parameter: String): Instant = delegate.getTimestamp(parameter).toInstant()
-    override fun getSnowflakeId(parameter: String): SnowflakeId = SnowflakeId(delegate.getLong(parameter))
+    override fun getBoolean(parameter: String): Boolean {
+        ensureParameterExists(parameter)
+        return delegate.getBoolean(parameter)
+    }
+
+    override fun getInt(parameter: String): Int {
+        ensureParameterExists(parameter)
+        return delegate.getInt(parameter)
+    }
+
+    override fun getLong(parameter: String): Long {
+        ensureParameterExists(parameter)
+        return delegate.getLong(parameter)
+    }
+
+    override fun getString(parameter: String): String {
+        ensureParameterExists(parameter)
+        return delegate.getString(parameter)
+    }
+
+    override fun getInstant(parameter: String): Instant {
+        ensureParameterExists(parameter)
+        return delegate.getTimestamp(parameter).toInstant()
+    }
+
+    override fun getSnowflakeId(parameter: String): SnowflakeId {
+        ensureParameterExists(parameter)
+        return SnowflakeId(delegate.getLong(parameter))
+    }
+
     override fun <DOMAIN_ID : DomainId> getDomainId(parameter: String, ctor: (SnowflakeId) -> DOMAIN_ID): DomainId {
+        ensureParameterExists(parameter)
         return ctor(getSnowflakeId(parameter))
     }
 
     override fun getRequestId(parameter: String): RequestId {
+        ensureParameterExists(parameter)
         return RequestId(delegate.getBigDecimal(parameter).toBigInteger())
+    }
+
+    private fun ensureParameterExists(parameter: String) {
+        val meta = delegate.metaData
+        for (colIdx in 1..meta.columnCount) {
+            if (meta.getColumnName(colIdx) == parameter) {
+                return
+            }
+        }
+        throw IllegalArgumentException("Parameter '$parameter' does not exist in result set")
     }
 
     override fun <T : Any> map(mapper: (NamedResultSet) -> T): List<T> {
