@@ -5,7 +5,7 @@ import io.hamal.backend.core.model.Trigger
 import io.hamal.backend.core.notification.JobDefinitionDomainNotification
 import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.store.api.JobDefinitionStore
+import io.hamal.backend.repository.api.JobDefinitionStore
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference

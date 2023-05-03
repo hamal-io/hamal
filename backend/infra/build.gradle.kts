@@ -34,8 +34,8 @@ dependencies {
     }
 
 
-    implementation(project(":backend:store:api"))
-    implementation(project(":backend:store:impl"))
+    implementation(project(":backend:repository:api"))
+    implementation(project(":backend:repository:impl"))
 
     compileOnly(external.spring.devTools)
 }

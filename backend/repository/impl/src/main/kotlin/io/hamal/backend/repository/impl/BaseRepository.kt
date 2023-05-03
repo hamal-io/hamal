@@ -1,0 +1,44 @@
+package io.hamal.backend.repository.impl
+
+import io.hamal.backend.core.port.logger
+import io.hamal.lib.Shard
+import io.hamal.lib.util.Files
+import java.nio.file.Path
+import kotlin.io.path.Path
+
+abstract class BaseRepository(config: Config) : AutoCloseable {
+
+    protected val log = logger(config.name)
+
+    protected val connection: _root_ide_package_.io.hamal.backend.repository.impl.internal.Connection by lazy {
+        val result = _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+            config.name,
+            "jdbc:sqlite:${ensureFilePath(config)}"
+        )
+        log.debug("Setup connection")
+        setupConnection()
+        log.debug("Setup schema")
+        setupSchema()
+        result
+    }
+
+    interface Config {
+        val path: Path
+        val name: String
+        val shard: Shard
+    }
+
+    abstract fun setupConnection()
+    abstract fun setupSchema()
+
+    override fun close() {
+        if (connection.isOpen) {
+            connection.close()
+        }
+    }
+}
+
+private fun ensureFilePath(config: BaseRepository.Config): Path {
+    return Files.createDirectories(config.path)
+        .resolve(Path(String.format("${config.name}-%04d.db", config.shard.value.toLong())))
+}
