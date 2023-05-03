@@ -57,7 +57,7 @@ class NamedPreparedStatementResultSetDelegate<RESULT : Any>(
     internal val delegate: NamedPreparedStatementDelegate
 ) {
 
-    private var mapping: ((NamedResultSet<RESULT>) -> RESULT)? = null
+    private var mapping: ((NamedResultSet) -> RESULT)? = null
 
     fun with(
         block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
@@ -66,12 +66,12 @@ class NamedPreparedStatementResultSetDelegate<RESULT : Any>(
         return this
     }
 
-    fun map(mapper: (NamedResultSet<RESULT>) -> RESULT): NamedPreparedStatementResultSetDelegate<RESULT> {
+    fun map(mapper: (NamedResultSet) -> RESULT): NamedPreparedStatementResultSetDelegate<RESULT> {
         this.mapping = mapper
         return this
     }
 
-    internal fun apply(namedResultSet: NamedResultSet<RESULT>): List<RESULT> {
+    internal fun apply(namedResultSet: NamedResultSet): List<RESULT> {
         val fn = mapping ?: return listOf()
         return namedResultSet.map(fn)
     }

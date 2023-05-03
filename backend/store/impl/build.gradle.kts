@@ -4,7 +4,7 @@ plugins {
     id("hamal.backend")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
-archivesName.set("backend-repository-api")
+archivesName.set("backend-repository-impl")
 
 dependencies {
     implementation(project(":lib:core"))
