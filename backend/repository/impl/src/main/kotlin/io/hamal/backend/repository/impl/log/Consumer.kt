@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.Topic
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer

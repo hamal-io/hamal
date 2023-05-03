@@ -1,18 +1,12 @@
 package io.hamal.backend.repository.impl.log
 
-import io.hamal.backend.store.impl.log.Consumer.GroupId
+import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.Chunk
+import io.hamal.backend.repository.api.log.Topic
+import io.hamal.backend.repository.impl.log.Consumer.GroupId
 import io.hamal.lib.util.Files
 import java.nio.file.Path
 
-data class Broker(
-    val id: Id,
-    val path: Path
-) {
-    @JvmInline
-    value class Id(val value: ULong) {
-        constructor(value: Int) : this(value.toULong())
-    }
-}
 
 interface AppendToTopic {
     fun append(topic: Topic, vararg bytes: ByteArray)

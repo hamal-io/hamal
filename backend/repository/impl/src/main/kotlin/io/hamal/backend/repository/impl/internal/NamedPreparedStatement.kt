@@ -2,14 +2,13 @@ package io.hamal.backend.repository.impl.internal
 
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
-import io.hamal.backend.store.impl.internal.NamedPreparedStatement.ParseResult
+import io.hamal.backend.repository.impl.internal.NamedPreparedStatement.ParseResult
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.util.TokenizerUtil
 import io.hamal.lib.vo.base.DomainId
 import java.sql.Connection
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.Timestamp
 import java.time.Instant
 
@@ -28,7 +27,7 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     fun clearParameter()
     fun execute(): Boolean
     fun executeUpdate(): Int
-    fun executeQuery(): ResultSet
+    fun executeQuery(): NamedResultSet
     class ParseResult(val sql: String, val orderedParameters: List<String>)
 }
 
@@ -117,9 +116,9 @@ class DefaultNamedPreparedStatement(
         return delegate.executeUpdate()
     }
 
-    override fun executeQuery(): ResultSet {
+    override fun executeQuery(): NamedResultSet {
         ensureAllParametersSet()
-        return delegate.executeQuery()
+        return DefaultNamedResultSet(delegate.executeQuery())
     }
 
     override fun close() {

@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.impl.log
+package io.hamal.backend.repository.api.log
 
 import java.time.Instant
 

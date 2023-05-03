@@ -1,5 +1,8 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.Topic
+import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
 import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
@@ -54,7 +57,8 @@ internal class BrokerTopicsRepository private constructor(
                     id = id,
                     brokerId = brokerTopics.brokerId,
                     name = name,
-                    path = brokerTopics.path
+                    path = brokerTopics.path,
+                    shard = Shard(24) //FIXME
                 )
             }
         }

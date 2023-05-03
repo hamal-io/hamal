@@ -1,19 +1,9 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.util.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
-
-data class Partition(
-    val id: Id,
-    val topicId: Topic.Id,
-    val path: Path
-) {
-    @JvmInline
-    value class Id(val value: ULong) {
-        constructor(value: Int) : this(value.toULong())
-    }
-}
 
 
 // FIXME just a pass through for now - replace with proper implementation,
@@ -27,19 +17,21 @@ class PartitionRepository private constructor(
 
     companion object {
         fun open(partition: Partition): PartitionRepository {
-            val path = ensureDirectoryExists(partition)
-            val segment = Segment(
-                Segment.Id(0),
-                path = path,
-                partitionId = partition.id,
-                topicId = partition.topicId
-            )
-
-            return PartitionRepository(
-                partition = partition,
-                activeSegment = segment,
-                activeSegmentRepository = SegmentRepository.open(segment)
-            )
+            TODO()
+//            val path = ensureDirectoryExists(partition)
+//            val segment = Segment(
+//                Segment.Id(0),
+//                path = path,
+//                partitionId = partition.id,
+//                topicId = partition.topicId,
+//                shard = partition.shard
+//            )
+//
+//            return PartitionRepository(
+//                partition = partition,
+//                activeSegment = segment,
+//                activeSegmentRepository = SegmentRepository.open(segment)
+//            )
         }
 
         private fun ensureDirectoryExists(partition: Partition): Path {
@@ -50,20 +42,27 @@ class PartitionRepository private constructor(
     }
 
     override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
-        return activeSegmentRepository.append(*bytes)
+        TODO()
+//        return activeSegmentRepository.append(*bytes)
     }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
-        return activeSegmentRepository.read(firstId, limit)
+        TODO()
+//        return activeSegmentRepository.read(firstId, limit)
     }
 
-    override fun count() = activeSegmentRepository.count()
+    override fun count(): ULong {
+        TODO()
+//        activeSegmentRepository.count()
+    }
 
     override fun close() {
-        activeSegmentRepository.close()
+        TODO()
+//        activeSegmentRepository.close()
     }
 }
 
 internal fun PartitionRepository.clear() {
-    activeSegmentRepository.clear()
+    TODO()
+//    activeSegmentRepository.clear()
 }

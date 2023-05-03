@@ -1,5 +1,8 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.Chunk
+import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.util.Files
 import java.nio.file.Path
 import java.sql.Connection

@@ -37,7 +37,7 @@ class DefaultConnectionIT {
                 }
         }
 
-        private val testInstance = _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+        private val testInstance = DefaultConnection(
             "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
         )
@@ -134,7 +134,7 @@ class DefaultConnectionIT {
             verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
         }
 
-        private val testInstance = _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+        private val testInstance = DefaultConnection(
             "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
         )
@@ -255,7 +255,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance =
-            _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+            DefaultConnection(
                 "ConnectionIT",
                 "jdbc:sqlite:${Files.createTempDirectory("execute-update")}/db.sqlite"
             )
@@ -336,7 +336,7 @@ class DefaultConnectionIT {
             assertThat(result, equalTo(listOf(BooleanResult(true))))
         }
 
-        private val testInstance = _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+        private val testInstance = DefaultConnection(
             "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("execute-query")}/db.sqlite"
         )
@@ -427,7 +427,7 @@ class DefaultConnectionIT {
             assertThat(count, equalTo(listOf(1)))
         }
 
-        private val testInstance = _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+        private val testInstance = DefaultConnection(
             "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("tx")}/db.sqlite"
         )
@@ -474,7 +474,7 @@ class DefaultConnectionIT {
             assertTrue(testInstance.isClosed)
         }
 
-        private val testInstance = _root_ide_package_.io.hamal.backend.repository.impl.internal.DefaultConnection(
+        private val testInstance = DefaultConnection(
             "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("connection")}/db.sqlite"
         )

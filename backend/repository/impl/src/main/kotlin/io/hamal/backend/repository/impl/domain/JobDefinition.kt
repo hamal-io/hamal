@@ -23,7 +23,7 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
         override val path: Path,
         override val shard: Shard
     ) : BaseRepository.Config {
-        override val name = "job_definitions"
+        override val filename = "job_definitions"
     }
 
 //    companion object {

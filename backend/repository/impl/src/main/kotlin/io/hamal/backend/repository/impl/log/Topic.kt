@@ -1,24 +1,9 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.*
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
-
-data class Topic(
-    val id: Id,
-    val brokerId: Broker.Id,
-    val name: Name,
-    val path: Path
-) {
-
-    @JvmInline
-    value class Name(val value: String)
-
-    @JvmInline
-    value class Id(val value: ULong) {
-        constructor(value: Int) : this(value.toULong())
-    }
-}
 
 
 // FIXME just a pass through for now - replace with proper implementation,
@@ -35,7 +20,8 @@ class TopicRepository private constructor(
             val partition = Partition(
                 id = Partition.Id(1),
                 topicId = topic.id,
-                path = path
+                path = path,
+                shard = topic.shard
             )
             return TopicRepository(
                 activePartition = partition,

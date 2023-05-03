@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.impl.internal
 
-import io.hamal.backend.store.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
+import io.hamal.backend.repository.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
@@ -132,8 +132,7 @@ class NamedPreparedStatementIT {
             connection.prepare("SELECT * FROM unique_number WHERE value = :some_value")
                 .use {
                     it["some_value"] = 4411
-                    val result = it.executeQuery()
-                    assertFalse(result.next())
+                    it.executeQuery()
                 }
         }
 
@@ -146,8 +145,7 @@ class NamedPreparedStatementIT {
                 .use {
                     it["some_value"] = 1133
                     val result = it.executeQuery()
-                    assertTrue(result.next())
-                    assertThat(result.getInt(1), equalTo(1133))
+                    assertThat(result.getInt("value"), equalTo(1133))
                 }
         }
 

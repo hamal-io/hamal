@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.impl.internal
 
-import io.hamal.backend.store.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
+import io.hamal.backend.repository.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
