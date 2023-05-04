@@ -14,3 +14,5 @@ data class Partition(
         constructor(value: Int) : this(value.toULong())
     }
 }
+
+interface PartitionRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable

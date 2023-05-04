@@ -21,8 +21,8 @@ import kotlin.io.path.pathString
 class DefaultSegmentRepositoryTest {
 
     @Nested
-    @DisplayName("open()")
-    inner class OpenTest {
+    @DisplayName("constructor()")
+    inner class ConstructorTest {
 
         @BeforeEach
         fun setup() {

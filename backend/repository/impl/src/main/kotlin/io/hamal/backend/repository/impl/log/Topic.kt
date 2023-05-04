@@ -25,7 +25,8 @@ class TopicRepository private constructor(
             )
             return TopicRepository(
                 activePartition = partition,
-                activePartitionRepository = PartitionRepository.open(partition)
+                activePartitionRepository = TODO()
+//                activePartitionRepository = PartitionRepository.open(partition)
             )
         }
 
@@ -58,5 +59,6 @@ class TopicRepository private constructor(
 }
 
 internal fun TopicRepository.clear() {
-    activePartitionRepository.clear()
+//    activePartitionRepository.clear()
+    TODO()
 }

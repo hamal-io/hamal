@@ -1,72 +1,59 @@
 package io.hamal.backend.repository.impl.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.lib.util.Files
+import io.hamal.backend.repository.impl.BaseRepository
+import io.hamal.backend.repository.impl.internal.Connection
+import io.hamal.lib.Shard
 import java.nio.file.Path
-import kotlin.io.path.Path
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
-class PartitionRepository private constructor(
-    internal val partition: Partition,
-    internal var activeSegment: Segment,
+class DefaultPartitionRepository(
+    internal val partition: Partition
+) : BaseRepository(object : Config {
+    override val path: Path get() = partition.path
+    override val filename: String get() = String.format("partition-%04d", partition.id.value.toLong())
+    override val shard: Shard get() = partition.shard
+
+}), PartitionRepository {
+
+    internal var activeSegment: Segment
     internal var activeSegmentRepository: SegmentRepository
-) : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
 
-    companion object {
-        fun open(partition: Partition): PartitionRepository {
-            TODO()
-//            val path = ensureDirectoryExists(partition)
-//            val segment = Segment(
-//                Segment.Id(0),
-//                path = path,
-//                partitionId = partition.id,
-//                topicId = partition.topicId,
-//                shard = partition.shard
-//            )
-//
-//            return PartitionRepository(
-//                partition = partition,
-//                activeSegment = segment,
-//                activeSegmentRepository = SegmentRepository.open(segment)
-//            )
-        }
-
-        private fun ensureDirectoryExists(partition: Partition): Path {
-            val result = partition.path.resolve(Path(String.format("partition-%04d", partition.id.value.toLong())))
-            Files.createDirectories(result)
-            return result
-        }
-    }
-
-//    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
-//        TODO()
-//        return activeSegmentRepository.append(*bytes)
-//    }
-
-    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
-        TODO()
-//        return activeSegmentRepository.read(firstId, limit)
-    }
-
-    override fun count(): ULong {
-        TODO()
-//        activeSegmentRepository.count()
-    }
-
-    override fun close() {
-        TODO()
-//        activeSegmentRepository.close()
+    init {
+        activeSegment = Segment(
+            Segment.Id(0),
+            path = partition.path.resolve(config.filename),
+            partitionId = partition.id,
+            topicId = partition.topicId,
+            shard = partition.shard
+        )
+        activeSegmentRepository = DefaultSegmentRepository(activeSegment)
     }
 
     override fun append(bytes: ByteArray): Chunk.Id {
-        TODO("Not yet implemented")
+        return activeSegmentRepository.append(bytes)
     }
-}
 
-internal fun PartitionRepository.clear() {
-    TODO()
-//    activeSegmentRepository.clear()
+    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
+        return activeSegmentRepository.read(firstId, limit)
+    }
+
+    override fun count(): ULong {
+        return activeSegmentRepository.count()
+    }
+
+    override fun setupConnection(connection: Connection) {}
+
+    override fun setupSchema(connection: Connection) {}
+
+    override fun clear() {
+        activeSegmentRepository.clear()
+    }
+
+    override fun close() {
+        activeSegmentRepository.close()
+    }
 }

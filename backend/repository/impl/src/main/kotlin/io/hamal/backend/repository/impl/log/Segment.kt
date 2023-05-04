@@ -59,7 +59,6 @@ internal class DefaultSegmentRepository(
         }
     }
 
-
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")

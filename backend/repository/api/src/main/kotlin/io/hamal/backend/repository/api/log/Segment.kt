@@ -17,4 +17,6 @@ data class Segment(
 }
 
 
-interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable
+interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+    fun clear()
+}
