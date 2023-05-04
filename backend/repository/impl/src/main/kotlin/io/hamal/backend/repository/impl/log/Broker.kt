@@ -1,9 +1,6 @@
 package io.hamal.backend.repository.impl.log
 
-import io.hamal.backend.repository.api.log.Broker
-import io.hamal.backend.repository.api.log.Chunk
-import io.hamal.backend.repository.api.log.Topic
-import io.hamal.backend.repository.api.log.TopicRepository
+import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.impl.log.Consumer.GroupId
 import io.hamal.lib.util.Files
 import java.nio.file.Path
@@ -33,20 +30,21 @@ class BrokerRepository private constructor(
     companion object {
         fun open(broker: Broker): BrokerRepository {
             val path = ensureDirectoryExists(broker)
-            return BrokerRepository(
-                topicsRepository = BrokerTopicsRepository.open(
-                    BrokerTopics(
-                        brokerId = broker.id,
-                        path = path
-                    )
-                ),
-                consumersRepository = BrokerConsumersRepository.open(
-                    BrokerConsumers(
-                        brokerId = broker.id,
-                        path = path
-                    )
-                )
-            )
+            TODO()
+//            return BrokerRepository(
+//                topicsRepository = BrokerTopicsRepository.open(
+//                    BrokerTopics(
+//                        brokerId = broker.id,
+//                        path = path
+//                    )
+//                ),
+//                consumersRepository = BrokerConsumersRepository.open(
+//                    BrokerConsumers(
+//                        brokerId = broker.id,
+//                        path = path
+//                    )
+//                )
+//            )
         }
 
         private fun ensureDirectoryExists(broker: Broker): Path {

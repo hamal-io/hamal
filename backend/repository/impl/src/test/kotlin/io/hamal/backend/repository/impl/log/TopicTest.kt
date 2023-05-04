@@ -12,8 +12,8 @@ import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("TopicRepository")
-class TopicRepositoryTest {
+@DisplayName("DefaultTopicRepository")
+class DefaultTopicRepositoryTest {
 
     @Nested
     @DisplayName("constructor()")
