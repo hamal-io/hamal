@@ -15,7 +15,7 @@ interface NamedResultSet : AutoCloseable {
     fun getSnowflakeId(parameter: String): SnowflakeId
     fun <DOMAIN_ID : DomainId> getDomainId(parameter: String, ctor: (SnowflakeId) -> DOMAIN_ID): DOMAIN_ID
     fun getRequestId(parameter: String): RequestId
-
+    fun getBytes(parameter: String): ByteArray
     fun <T : Any> map(mapper: (NamedResultSet) -> T): List<T>
 }
 
@@ -61,6 +61,11 @@ class DefaultNamedResultSet(
     override fun getRequestId(parameter: String): RequestId {
         ensureParameterExists(parameter)
         return RequestId(delegate.getBigDecimal(parameter).toBigInteger())
+    }
+
+    override fun getBytes(parameter: String): ByteArray {
+        ensureParameterExists(parameter)
+        return delegate.getBytes(parameter)
     }
 
     private fun ensureParameterExists(parameter: String) {

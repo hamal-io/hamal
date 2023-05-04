@@ -4,9 +4,12 @@ import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Segment
 import io.hamal.backend.repository.api.log.SegmentRepository
 import io.hamal.backend.repository.impl.BaseRepository
+import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.lib.Shard
+import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
-import java.sql.ResultSet
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 
 internal class DefaultSegmentRepository(
@@ -15,73 +18,87 @@ internal class DefaultSegmentRepository(
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
     override val shard: Shard get() = segment.shard
-
 }), SegmentRepository {
 
-    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
-        TODO()
-//        if (bytes.isEmpty()) {
-//            return listOf()
-//        }
-//
-//        val now = TimeUtils.now()
-//        val lastId = lock.withLock {
-//            connection.prepareStatement("""INSERT INTO chunks (bytes,instant) VALUES (?,?);""".trimIndent())
-//                .use { stmt ->
-//                    bytes.forEach { bs ->
-//                        stmt.setBytes(1, bs)
-//                        stmt.setTimestamp(2, Timestamp.from(now))
-//                        stmt.addBatch()
-//                    }
-//                    stmt.executeBatch()
-//                    stmt.generatedKeys.getLong(1)
-//                }.let {
-//                    connection.commit()
-//                    it
-//                }
-//        }
-//
-//        return LongRange(lastId - bytes.size + 1, lastId)
-//            .map { Chunk.Id(it.toULong()) }
+    private val lock = ReentrantLock()
+
+    override fun append(bytes: ByteArray): Chunk.Id {
+        return lock.withLock {
+            connection.execute<Chunk.Id>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
+                with {
+                    set("bytes", bytes)
+                    set("now", TimeUtils.now())
+                }
+                map { Chunk.Id(it.getInt("id")) }
+            }!!
+        }
     }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
-        TODO()
-//        if (limit < 1) {
-//            return listOf()
-//        }
-//        return executeQuery(
-//            """SELECT id, bytes, instant FROM chunks WHERE id >= ${firstId.value} LIMIT $limit """.trimIndent()
-//        ) {
-//            val result = mutableListOf<Chunk>()
-//            while (it.next()) {
-//                result.add(
-//                    Chunk(
-//                        id = Chunk.Id(it.getLong("id").toULong()),
-//                        segmentId = segment.id,
-//                        partitionId = segment.partitionId,
-//                        topicId = segment.topicId,
-//                        bytes = it.getBytes("bytes"),
-//                        instant = it.getTimestamp("instant").toInstant()
-//                    )
-//                )
-//            }
-//            result
-//        }
+        if (limit < 1) {
+            return listOf()
+        }
+        return connection.executeQuery<Chunk>(
+            """SELECT id, bytes, instant FROM chunks WHERE id >= :firstId LIMIT :limit """.trimIndent()
+        ) {
+            with {
+                set("firstId", firstId)
+                set("limit", limit)
+            }
+            map {
+                Chunk(
+                    id = it.getDomainId("id", Chunk::Id),
+                    segmentId = segment.id,
+                    partitionId = segment.partitionId,
+                    topicId = segment.topicId,
+                    bytes = it.getBytes("bytes"),
+                    instant = it.getInstant("instant"),
+                    shard = segment.shard
+                )
+            }
+        }
     }
 
-    override fun setupConnection() {
+
+    override fun setupConnection(connection: Connection) {
+        connection.execute("""PRAGMA journal_mode = wal;""")
+        connection.execute("""PRAGMA locking_mode = exclusive;""")
+        connection.execute("""PRAGMA temp_store = memory;""")
+        connection.execute("""PRAGMA synchronous = off;""")
     }
 
-    override fun setupSchema() {
+    override fun setupSchema(connection: Connection) {
+        connection.tx {
+            execute(
+                """
+             CREATE TABLE IF NOT EXISTS chunks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT ,
+                bytes BLOB NOT NULL ,
+                instant DATETIME NOT NULL
+            );
+        """.trimIndent()
+            )
+        }
+    }
+
+    override fun clear() {
+        lock.withLock {
+            connection.tx {
+                execute("DELETE FROM chunks")
+                execute("DELETE FROM sqlite_sequence")
+            }
+        }
     }
 
     override fun close() {
         connection.close()
     }
 
-    override fun count() = this.executeQuery("SELECT COUNT(*) from chunks") { it.getLong(1).toULong() }
-
+    override fun count() = connection.executeQueryOne<ULong>("SELECT COUNT(*) as count from chunks") {
+        map {
+            it.getLong("count").toULong()
+        }
+    } ?: 0UL
 }
 
 private fun DefaultSegmentRepository.setupSchema() {
@@ -102,32 +119,21 @@ private fun DefaultSegmentRepository.setupSchema() {
     TODO()
 }
 
-internal fun DefaultSegmentRepository.clear() {
-//    lock.withLock {
-//        connection.createStatement().use {
-//            it.execute("DELETE FROM chunks")
-//            it.execute("DELETE FROM sqlite_sequence")
-//        }
-//        connection.commit()
-//    }
-    TODO()
-}
 
-
-private fun DefaultSegmentRepository.setupSqlite() {
-//    connection.createStatement().use {
-//        it.execute("""PRAGMA journal_mode = wal;""")
-//        it.execute("""PRAGMA locking_mode = exclusive;""")
-//        it.execute("""PRAGMA temp_store = memory;""")
-//        it.execute("""PRAGMA synchronous = off;""")
-//    }
-    TODO()
-}
-
-internal fun <T> DefaultSegmentRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
-//    require(!connection.isClosed) { "Connection must be open" }
-//    return connection.createStatement().use { statement ->
-//        statement.executeQuery(sql).use(fn)
-//    }
-    TODO()
-}
+//private fun DefaultSegmentRepository.setupSqlite() {
+////    connection.createStatement().use {
+////        it.execute("""PRAGMA journal_mode = wal;""")
+////        it.execute("""PRAGMA locking_mode = exclusive;""")
+////        it.execute("""PRAGMA temp_store = memory;""")
+////        it.execute("""PRAGMA synchronous = off;""")
+////    }
+//    TODO()
+//}
+//
+//internal fun <T> DefaultSegmentRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
+////    require(!connection.isClosed) { "Connection must be open" }
+////    return connection.createStatement().use { statement ->
+////        statement.executeQuery(sql).use(fn)
+////    }
+//    TODO()
+//}

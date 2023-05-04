@@ -56,7 +56,8 @@ class BrokerRepository private constructor(
     override fun resolveTopic(topicName: Topic.Name) = topicsRepository.resolveTopic(topicName)
 
     override fun append(topic: Topic, vararg bytes: ByteArray) {
-        resolveRepository(topic).append(*bytes)
+        TODO()
+//        resolveRepository(topic).append(*bytes)
     }
 
     override fun close() {

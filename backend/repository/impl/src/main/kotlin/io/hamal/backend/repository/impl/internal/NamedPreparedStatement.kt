@@ -3,6 +3,7 @@ package io.hamal.backend.repository.impl.internal
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
 import io.hamal.backend.repository.impl.internal.NamedPreparedStatement.ParseResult
+import io.hamal.lib.KeyedOnce
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.util.TokenizerUtil
@@ -24,8 +25,8 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     operator fun set(parameter: String, value: SnowflakeId): STATEMENT
     operator fun set(parameter: String, value: RequestId): STATEMENT
     operator fun set(parameter: String, value: DomainId): STATEMENT
-    fun clearParameter()
-    fun execute(): Boolean
+    operator fun set(parameter: String, value: ByteArray): STATEMENT
+    fun execute(): NamedResultSet?
     fun executeUpdate(): Int
     fun executeQuery(): NamedResultSet
     class ParseResult(val sql: String, val orderedParameters: List<String>)
@@ -38,16 +39,19 @@ class DefaultNamedPreparedStatement(
 ) : NamedPreparedStatement<DefaultNamedPreparedStatement> {
 
     internal val parametersSet = mutableSetOf<String>()
-
     companion object {
+        private val cachedSql = KeyedOnce.default<String, ParseResult>()
         fun Connection.prepare(query: String): NamedPreparedStatement<DefaultNamedPreparedStatement> {
-            val parseResult = Parser().parse(query)
-            return DefaultNamedPreparedStatement(
-                prepareStatement(parseResult.sql),
-                parseResult
-            )
+            return cachedSql(query) { Parser().parse(query) }
+                .let {
+                    DefaultNamedPreparedStatement(
+                        prepareStatement(it.sql),
+                        it
+                    )
+                }
         }
     }
+
 
     override val sql: String get() = parseResult.sql
     override val orderedParameters: List<String> get() = parseResult.orderedParameters
@@ -94,6 +98,12 @@ class DefaultNamedPreparedStatement(
         return this
     }
 
+    override fun set(parameter: String, value: ByteArray): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setBytes(it, value) }
+        return this
+    }
+
     override fun set(parameter: String, value: String): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
         parametersSet.add(parameter)
@@ -101,14 +111,11 @@ class DefaultNamedPreparedStatement(
         return this
     }
 
-    override fun clearParameter() {
-        parametersSet.clear()
-        delegate.clearParameters()
-    }
-
-    override fun execute(): Boolean {
+    override fun execute(): NamedResultSet? {
         ensureAllParametersSet()
-        return delegate.execute()
+        delegate.execute()
+        val rs = delegate.resultSet ?: return null
+        return DefaultNamedResultSet(rs)
     }
 
     override fun executeUpdate(): Int {

@@ -1,15 +1,18 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Partition
 import io.hamal.backend.repository.api.log.Segment
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
+import io.hamal.lib.util.TimeUtils.withInstant
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
@@ -108,67 +111,63 @@ class DefaultSegmentRepositoryTest {
         )
     }
 
-//    @Nested
-//    @DisplayName("append()")
-//    inner class AppendTest {
-//        @BeforeEach
-//        fun setup() {
-//            testInstance.clear()
-//        }
-//
-//        @AfterEach
-//        fun after() {
-//            testInstance.close()
-//        }
-//
-//        @Test
-//        fun `Nothing to append`() {
-//            val result = testInstance.append()
-//            assertThat(result, hasSize(0))
-//            assertThat(testInstance.count(), equalTo(0UL))
-//        }
-//
-//        @Test
-//        fun `Bytes, Instant does not have to be unique`() {
-//            withInstant(Instant.ofEpochMilli(1)) {
-//                testInstance.append("SomeBytes".toByteArray())
-//                testInstance.append("SomeBytes".toByteArray())
-//            }
-//            assertThat(testInstance.count(), equalTo(2UL))
-//
-//            testInstance.read(Chunk.Id(1), 2).let {
-//                assertThat(it, hasSize(2))
-//
-//                val chunk = it.first()
-//                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-//                assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
-//                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
-//                assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
-//                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
-//            }
-//        }
-//
-//        @Test
-//        fun `Append single chunk`() {
-//            withInstant(Instant.ofEpochMilli(2810)) {
-//                val result = testInstance.append("VALUE".toByteArray())
-//                assertThat(result, equalTo(listOf(Chunk.Id(1))))
-//            }
-//
-//            assertThat(testInstance.count(), equalTo(1UL))
-//
-//            testInstance.read(Chunk.Id(1)).let {
-//                assertThat(it, hasSize(1))
-//                val chunk = it.first()
-//                assertThat(chunk.id, equalTo(Chunk.Id(1)))
-//                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-//                assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
-//                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
-//                assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
-//                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
-//            }
-//        }
-//
+    @Nested
+    @DisplayName("append()")
+    inner class AppendTest {
+        @BeforeEach
+        fun setup() {
+            testInstance.clear()
+        }
+
+        @AfterEach
+        fun after() {
+            testInstance.close()
+        }
+
+        @Test
+        fun `Bytes, Instant does not have to be unique`() {
+            withInstant(Instant.ofEpochMilli(1)) {
+                testInstance.append("SomeBytes".toByteArray())
+                testInstance.append("SomeBytes".toByteArray())
+            }
+
+            assertThat(testInstance.count(), equalTo(2UL))
+
+            testInstance.read(Chunk.Id(1), 2).let {
+                assertThat(it, hasSize(2))
+
+                val chunk = it.first()
+                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
+                assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
+                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
+                assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
+                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
+                assertThat(chunk.shard, equalTo(Shard(42)))
+            }
+        }
+
+        @Test
+        fun `Append single chunk`() {
+            withInstant(Instant.ofEpochMilli(2810)) {
+                val result = testInstance.append("VALUE".toByteArray())
+                assertThat(result, equalTo(Chunk.Id(1)))
+            }
+
+            assertThat(testInstance.count(), equalTo(1UL))
+
+            testInstance.read(Chunk.Id(1)).let {
+                assertThat(it, hasSize(1))
+                val chunk = it.first()
+                assertThat(chunk.id, equalTo(Chunk.Id(1)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
+                assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
+                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
+                assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
+                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
+            }
+        }
+
+        //
 //        @Test
 //        fun `Append multiple chunks to empty segment`() {
 //            withEpochMilli(123456) {
@@ -232,15 +231,16 @@ class DefaultSegmentRepositoryTest {
 //            )
 //        }
 //
-//        private val testInstance = SegmentRepository.open(
-//            Segment(
-//                id = Segment.Id(2810),
-//                partitionId = Partition.Id(1212),
-//                topicId = Topic.Id(1506),
-//                path = Path(testDir)
-//            )
-//        )
-//    }
+        private val testInstance = DefaultSegmentRepository(
+            Segment(
+                id = Segment.Id(2810),
+                partitionId = Partition.Id(1212),
+                topicId = Topic.Id(1506),
+                path = Path(testDir),
+                shard = Shard(42)
+            )
+        )
+    }
 //
 //    @Nested
 //    @DisplayName("read()")

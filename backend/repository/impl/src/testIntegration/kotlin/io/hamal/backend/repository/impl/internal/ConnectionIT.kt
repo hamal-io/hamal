@@ -20,7 +20,7 @@ class DefaultConnectionIT {
     @DisplayName("prepare()")
     inner class PrepareTest {
         @Test
-        fun `Statement gets cached and can be prepared multiple time`() {
+        fun `Statement are not getting cached`() {
             val result = testInstance.prepare("INSERT INTO some_table(value) VALUES (:some_value)")
             result["some_value"] = 1234
             result.execute()
@@ -29,7 +29,7 @@ class DefaultConnectionIT {
             anotherResult["some_value"] = 5432
             anotherResult.execute()
 
-            assertSame(result, anotherResult)
+            assertNotSame(result, anotherResult)
 
             testInstance.prepare("SELECT COUNT(*) as count FROM some_table").executeQuery()
                 .use {
@@ -134,6 +134,43 @@ class DefaultConnectionIT {
             verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
         }
 
+        @Test
+        fun `Execute returns result set`() {
+            val result = testInstance.execute<Int>(
+                "INSERT INTO string_table(id, value) VALUES(:some_id, :some_value) RETURNING id"
+            ) {
+                with {
+                    set("some_id", 1337)
+                    set("some_value", "ThisHamalConnectionRockz")
+                }
+                map {
+                    it.getInt("id")
+                }
+            }
+            assertThat(result, equalTo(1337))
+            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
+        }
+
+        @Test
+        fun `Execute with result mapper but query does return result`() {
+            `Execute returns result set`()
+
+            val result = testInstance.execute<Int>(
+                "INSERT OR IGNORE INTO string_table(id, value) VALUES(:some_id, :some_value) RETURNING id"
+            ) {
+                with {
+                    set("some_id", 1337)
+                    set("some_value", "ThisHamalConnectionRockz")
+                }
+                map {
+                    it.getInt("id")
+                }
+            }
+            assertThat(result, nullValue())
+            verifyIsOne("SELECT COUNT(*) FROM string_table")
+        }
+
+
         private val testInstance = DefaultConnection(
             "ConnectionIT",
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
@@ -148,7 +185,7 @@ class DefaultConnectionIT {
             testInstance.execute("""CREATE TABLE boolean_table(value BOOLEAN NOT NULL)""")
             testInstance.execute("""CREATE TABLE int_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE long_table(value INT NOT NULL)""")
-            testInstance.execute("""CREATE TABLE string_table(value TEXT NOT NULL)""")
+            testInstance.execute("""CREATE TABLE string_table(id INT PRIMARY KEY, value TEXT NOT NULL)""")
             testInstance.execute("""CREATE TABLE instant_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE snowflake_id_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE domain_id_table(value INT NOT NULL)""")
@@ -269,7 +306,7 @@ class DefaultConnectionIT {
             testInstance.execute("""CREATE TABLE boolean_table(value BOOLEAN NOT NULL)""")
             testInstance.execute("""CREATE TABLE int_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE long_table(value INT NOT NULL)""")
-            testInstance.execute("""CREATE TABLE string_table(value TEXT NOT NULL)""")
+            testInstance.execute("""CREATE TABLE string_table(id INT PRIMARY KEY, value TEXT NOT NULL)""")
             testInstance.execute("""CREATE TABLE instant_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE snowflake_id_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE domain_id_table(value INT NOT NULL)""")

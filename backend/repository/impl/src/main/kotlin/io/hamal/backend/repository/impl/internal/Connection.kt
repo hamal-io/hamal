@@ -2,7 +2,6 @@ package io.hamal.backend.repository.impl.internal
 
 import io.hamal.backend.core.port.logger
 import io.hamal.backend.repository.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
-import io.hamal.lib.KeyedOnce
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
@@ -70,6 +69,14 @@ class NamedPreparedStatementDelegate(
 
     operator fun set(
         param: String,
+        value: ByteArray
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value
+        return this
+    }
+
+    operator fun set(
+        param: String,
         value: String
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
@@ -113,6 +120,11 @@ interface Connection : AutoCloseable {
         block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
     )
 
+    fun <T : Any> execute(
+        sql: String,
+        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+    ): T?
+
     fun executeUpdate(sql: String): Int
     fun executeUpdate(
         sql: String,
@@ -140,8 +152,6 @@ class DefaultConnection(
     val delegate: java.sql.Connection
     private val log = logger(name)
 
-    val statements = KeyedOnce.default<String, NamedPreparedStatement<*>>()
-
     init {
         delegate = DriverManager.getConnection(url)
         log.trace("Open sqlite connection with url: $url")
@@ -151,13 +161,9 @@ class DefaultConnection(
     override val isClosed: Boolean get() = delegate.isClosed
 
     override fun prepare(sql: String): NamedPreparedStatement<*> {
-        return statements(sql) {
-            val result = delegate.prepare(sql)
-            log.trace("Prepared statement: ${result.sql}")
-            result
-        }.apply {
-            this.clearParameter()
-        }
+        val result = delegate.prepare(sql)
+        log.trace("Prepared statement: ${result.sql}")
+        return result
     }
 
     override fun execute(sql: String) {
@@ -176,6 +182,19 @@ class DefaultConnection(
             log.trace("Execute: ${it.sql}")
             it.execute()
         }
+    }
+
+    override fun <T : Any> execute(
+        sql: String,
+        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+    ): T? {
+        val it = prepare(sql)
+        val delegate = NamedPreparedStatementResultSetDelegate<T>(
+            NamedPreparedStatementDelegate(it)
+        )
+        block(delegate)
+        log.trace("Execute : ${it.sql}")
+        return it.execute()?.let(delegate::apply)?.firstOrNull()
     }
 
     override fun executeUpdate(sql: String): Int {

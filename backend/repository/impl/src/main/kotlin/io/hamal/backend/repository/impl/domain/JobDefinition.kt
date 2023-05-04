@@ -5,6 +5,7 @@ import io.hamal.backend.repository.api.JobDefinitionStore
 import io.hamal.backend.repository.api.JobDefinitionStore.Command
 import io.hamal.backend.repository.api.JobDefinitionStore.Command.JobDefinitionToInsert
 import io.hamal.backend.repository.impl.BaseRepository
+import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
@@ -194,43 +195,55 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
 ////        }
 //    }
 
-    override fun setupConnection() {
-        connection.execute("""PRAGMA journal_mode = wal;""")
-        connection.execute("""PRAGMA locking_mode = exclusive;""")
-        connection.execute("""PRAGMA temp_store = memory;""")
-        connection.execute("""PRAGMA synchronous = off;""")
+//    override fun setupConnection() {
+//        connection.execute("""PRAGMA journal_mode = wal;""")
+//        connection.execute("""PRAGMA locking_mode = exclusive;""")
+//        connection.execute("""PRAGMA temp_store = memory;""")
+//        connection.execute("""PRAGMA synchronous = off;""")
+//    }
+//
+//    override fun setupSchema() {
+//
+//        connection.execute("""DROP TABLE IF EXISTS job_definitions;""")
+//        connection.execute("""DROP TABLE IF EXISTS triggers;""")
+//        connection.execute(
+//            """
+//            CREATE TABLE IF NOT EXISTS job_definitions (
+//                id          INTEGER PRIMARY KEY,
+//                version     INTEGER NOT NULL ,
+//                request_id  BIGINT  NOT NULL,
+//                reference   TEXT NOT NULL ,
+//                inputs      BLOB,
+//                secrets     BLOB,
+//                instant     DATETIME NOT NULL,
+//                UNIQUE (request_id)
+//            );
+//        """.trimIndent()
+//        )
+//
+//        connection.execute(
+//            """
+//           CREATE TABLE IF NOT EXISTS triggers(
+//                id INTEGER PRIMARY KEY,
+//                job_definition_id INTEGER NOT NULL,
+//                type INTEGER NOT NULL,
+//                inputs BLOB,
+//                secrets BLOB,
+//                data BLOB
+//            );""".trimIndent()
+//        )
+//    }
+
+    override fun setupConnection(connection: Connection) {
+        TODO("Not yet implemented")
     }
 
-    override fun setupSchema() {
+    override fun setupSchema(connection: Connection) {
+        TODO("Not yet implemented")
+    }
 
-        connection.execute("""DROP TABLE IF EXISTS job_definitions;""")
-        connection.execute("""DROP TABLE IF EXISTS triggers;""")
-        connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS job_definitions (
-                id          INTEGER PRIMARY KEY,
-                version     INTEGER NOT NULL ,
-                request_id  BIGINT  NOT NULL,
-                reference   TEXT NOT NULL ,
-                inputs      BLOB,
-                secrets     BLOB,
-                instant     DATETIME NOT NULL,
-                UNIQUE (request_id)
-            );
-        """.trimIndent()
-        )
-
-        connection.execute(
-            """
-           CREATE TABLE IF NOT EXISTS triggers(
-                id INTEGER PRIMARY KEY,
-                job_definition_id INTEGER NOT NULL,
-                type INTEGER NOT NULL,
-                inputs BLOB,
-                secrets BLOB,
-                data BLOB
-            );""".trimIndent()
-        )
+    override fun clear() {
+        TODO("Not yet implemented")
     }
 
 }

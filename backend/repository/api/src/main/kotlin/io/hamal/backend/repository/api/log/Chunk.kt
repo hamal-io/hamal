@@ -1,5 +1,8 @@
 package io.hamal.backend.repository.api.log
 
+import io.hamal.lib.Shard
+import io.hamal.lib.util.SnowflakeId
+import io.hamal.lib.vo.base.DomainId
 import java.time.Instant
 
 data class Chunk(
@@ -7,21 +10,18 @@ data class Chunk(
     val segmentId: Segment.Id,
     val partitionId: Partition.Id,
     val topicId: Topic.Id,
+    val shard: Shard,
     val bytes: ByteArray,
     val instant: Instant
 ) {
-
-    @JvmInline
-    value class Id(val value: ULong) : Comparable<Id> {
-        constructor(value: Int) : this(value.toULong())
-
-        override fun compareTo(other: Id) = value.compareTo(other.value)
+    data class Id(override val value: SnowflakeId) : DomainId() {
+        constructor(value: Int) : this(SnowflakeId(value.toLong()))
     }
 }
 
 
 interface ChunkAppender {
-    fun append(vararg bytes: ByteArray): List<Chunk.Id>
+    fun append(bytes: ByteArray): Chunk.Id
 }
 
 interface ChunkReader {

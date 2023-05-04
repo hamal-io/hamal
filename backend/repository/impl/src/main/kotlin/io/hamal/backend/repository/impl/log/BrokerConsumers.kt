@@ -75,8 +75,9 @@ internal class BrokerConsumersRepository private constructor(
                     """.trimIndent(),
             ).use {
                 it.setString(1, groupId.value)
-                it.setLong(2, topicId.value.toLong())
-                it.setLong(3, chunkId.value.toLong() + 1)
+//                it.setLong(2, topicId.value.toLong())
+//                it.setLong(3, chunkId.value.toLong() + 1)
+                TODO()
                 it.execute()
             }
             connection.commit()

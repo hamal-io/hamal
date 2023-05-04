@@ -40,9 +40,9 @@ class TopicRepository private constructor(
         activePartitionRepository.close()
     }
 
-    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
-        return activePartitionRepository.append(*bytes)
-    }
+//    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
+//        return activePartitionRepository.append(*bytes)
+//    }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
         return activePartitionRepository.read(firstId, limit)
@@ -50,6 +50,10 @@ class TopicRepository private constructor(
 
     override fun count(): ULong {
         return activePartitionRepository.count()
+    }
+
+    override fun append(bytes: ByteArray): Chunk.Id {
+        TODO("Not yet implemented")
     }
 }
 

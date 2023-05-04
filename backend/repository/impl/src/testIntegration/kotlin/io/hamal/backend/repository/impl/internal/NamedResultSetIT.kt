@@ -36,7 +36,8 @@ class DefaultNamedResultSetIT {
                     |domain_id_value INT,
                     |request_id_value INT,
                     |null_value INT,
-                    |string_value TEXT
+                    |string_value TEXT,
+                    |blob_value BLOB
                     |)""".trimMargin()
                 )
 
@@ -96,7 +97,6 @@ class DefaultNamedResultSetIT {
         assertThat(testInstance.getRequestId("request_id_value"), equalTo(RequestId(1234567890)))
     }
 
-
     @Test
     fun getDomainId() {
         data class TestDomainId(override val value: SnowflakeId) : DomainId() {
@@ -107,6 +107,15 @@ class DefaultNamedResultSetIT {
             "SELECT domain_id_value FROM some_table WHERE domain_id_value is not null"
         )
         assertThat(testInstance.getDomainId("domain_id_value", ::TestDomainId), equalTo(TestDomainId(54321)))
+    }
+
+    @Test
+    fun getBytes() {
+        connection.createStatement().use { it.execute("INSERT INTO some_table (blob_value) VALUES ('some_blob')") }
+        val testInstance = testInstance(
+            "SELECT blob_value FROM some_table WHERE blob_value is not null"
+        )
+        assertThat(testInstance.getBytes("blob_value"), equalTo("some_blob".toByteArray()))
     }
 
     private fun testInstance(query: String): DefaultNamedResultSet {

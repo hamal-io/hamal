@@ -4,12 +4,9 @@ import io.hamal.backend.repository.impl.internal.DefaultNamedPreparedStatement.C
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
-import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Files
 import java.sql.Connection
 import java.sql.DriverManager
@@ -41,6 +38,7 @@ class NamedPreparedStatementIT {
                 it.execute("""CREATE TABLE request_id_table(value INT NOT NULL, another_value INT)""")
                 it.execute("""CREATE TABLE nullable_table(value INT , another_value INT)""")
                 it.execute("""CREATE TABLE unique_number(value INT PRIMARY KEY )""")
+                it.execute("""CREATE TABLE blob_table(value BLOB NOT NULL, another_value BLOB)""")
             }
         }
     }
@@ -54,7 +52,7 @@ class NamedPreparedStatementIT {
                 .use {
                     it["some_value"] = 23
                     it["another_value"] = 42
-                    assertTrue(it.execute())
+                    assertThat(it.execute(), notNullValue())
                 }
         }
 
@@ -64,7 +62,7 @@ class NamedPreparedStatementIT {
                 .use {
                     it["some_value"] = 23
                     it["another_value"] = 42
-                    assertFalse(it.execute())
+                    assertThat(it.execute(), nullValue())
                 }
         }
 
@@ -293,6 +291,21 @@ class NamedPreparedStatementIT {
 
             verifyIsOne("SELECT COUNT(*) FROM request_id_table WHERE another_value = 0")
             verifyIsZero("SELECT COUNT(*) FROM request_id_table WHERE another_value = 2810")
+        }
+
+        @Test
+        fun `Sets named parameter of type bytes`() {
+            connection.prepare("INSERT INTO blob_table(value, another_value) VALUES(:some_value, :another_value)")
+                .use {
+                    it["some_value"] = "HamalRocks".toByteArray()
+                    it["another_value"] = ByteArray(0)
+                    it.execute()
+                }
+            verifyIsOne("SELECT COUNT(*) FROM blob_table WHERE value like 'HamalRocks'")
+            verifyIsZero("SELECT COUNT(*) FROM blob_table WHERE value like''")
+
+            verifyIsOne("SELECT COUNT(*) FROM blob_table WHERE another_value like ''")
+            verifyIsZero("SELECT COUNT(*) FROM blob_table WHERE another_value like 'HamalRocks'")
         }
 
         private fun verifyIsOne(query: String) {

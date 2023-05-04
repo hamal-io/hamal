@@ -41,10 +41,10 @@ class PartitionRepository private constructor(
         }
     }
 
-    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
-        TODO()
+//    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
+//        TODO()
 //        return activeSegmentRepository.append(*bytes)
-    }
+//    }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
         TODO()
@@ -59,6 +59,10 @@ class PartitionRepository private constructor(
     override fun close() {
         TODO()
 //        activeSegmentRepository.close()
+    }
+
+    override fun append(bytes: ByteArray): Chunk.Id {
+        TODO("Not yet implemented")
     }
 }
 
