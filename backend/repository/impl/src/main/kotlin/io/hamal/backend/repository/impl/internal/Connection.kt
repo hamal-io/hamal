@@ -136,6 +136,11 @@ interface Connection : AutoCloseable {
         block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): List<T>
 
+    fun executeQuery(
+        sql: String,
+        block: (NamedResultSet) -> Unit
+    )
+
     fun <T : Any> executeQueryOne(
         sql: String,
         block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
@@ -227,6 +232,13 @@ class DefaultConnection(
             block(delegate)
             log.trace("Execute query: ${it.sql}")
             delegate.apply(it.executeQuery())
+        }
+    }
+
+    override fun executeQuery(sql: String, block: (NamedResultSet) -> Unit) {
+        return prepare(sql).use {
+            log.trace("Execute query: ${it.sql}")
+            block(it.executeQuery())
         }
     }
 

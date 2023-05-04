@@ -329,11 +329,11 @@ class DefaultConnectionIT {
         @Test
         fun `Named parameter does not exists in query`() {
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = :some_value") {
+                testInstance.executeQuery<Boolean>("SELECT value FROM boolean_table WHERE value = :some_value") {
                     with {
                         set("does_not_exists", false)
                     }
-                    map { }
+                    map { it.getBoolean("value") }
                 }
             }
             assertThat(exception.message, equalTo("Statement does not contain parameter does_not_exists"))
@@ -344,7 +344,7 @@ class DefaultConnectionIT {
             testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
 
             val exception = assertThrows<IllegalArgumentException> {
-                testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = :some_value") {
+                testInstance.executeQuery<Boolean>("SELECT value FROM boolean_table WHERE value = :some_value") {
                     with {
                         set("some_value", true)
                     }
@@ -355,20 +355,30 @@ class DefaultConnectionIT {
         }
 
         @Test
+        fun `ExecuteQuery provided with consumer`() {
+            testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
+
+            testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = true") {
+                assertThat(it.getBoolean("value"), equalTo(true))
+            }
+        }
+
+        @Test
         fun `With single named parameter`() {
             testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
             data class BooleanResult(val value: Boolean)
 
-            val result = testInstance.executeQuery("SELECT value FROM boolean_table WHERE value = :some_value") {
-                with {
-                    set("some_value", true)
+            val result =
+                testInstance.executeQuery<BooleanResult>("SELECT value FROM boolean_table WHERE value = :some_value") {
+                    with {
+                        set("some_value", true)
+                    }
+                    map {
+                        BooleanResult(
+                            value = it.getBoolean("value")
+                        )
+                    }
                 }
-                map {
-                    BooleanResult(
-                        value = it.getBoolean("value")
-                    )
-                }
-            }
 
             assertThat(result, equalTo(listOf(BooleanResult(true))))
         }
@@ -451,14 +461,14 @@ class DefaultConnectionIT {
         }
 
         private fun verifyIsZero(query: String) {
-            val count = testInstance.executeQuery(query) {
+            val count = testInstance.executeQuery<Int>(query) {
                 map { it.getInt("count") }
             }
             assertThat(count, equalTo(listOf(0)))
         }
 
         private fun verifyIsOne(query: String) {
-            val count = testInstance.executeQuery(query) {
+            val count = testInstance.executeQuery<Int>(query) {
                 map { it.getInt("count") }
             }
             assertThat(count, equalTo(listOf(1)))
