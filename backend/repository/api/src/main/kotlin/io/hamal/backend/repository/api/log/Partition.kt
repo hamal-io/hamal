@@ -15,4 +15,6 @@ data class Partition(
     }
 }
 
-interface PartitionRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable
+interface PartitionRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+    fun clear()
+}

@@ -3,6 +3,7 @@ package io.hamal.backend.repository.impl.log
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Topic
+import io.hamal.backend.repository.api.log.TopicRepository
 import io.hamal.backend.repository.impl.log.Consumer.GroupId
 import io.hamal.lib.util.Files
 import java.nio.file.Path
@@ -77,5 +78,5 @@ class BrokerRepository private constructor(
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
-    private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) { TopicRepository.open(topic) }
+    private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) { DefaultTopicRepository(topic) }
 }

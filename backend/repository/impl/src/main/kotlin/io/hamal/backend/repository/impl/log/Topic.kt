@@ -1,49 +1,46 @@
 package io.hamal.backend.repository.impl.log
 
 import io.hamal.backend.repository.api.log.*
-import java.nio.file.Files
+import io.hamal.backend.repository.impl.BaseRepository
+import io.hamal.backend.repository.impl.internal.Connection
+import io.hamal.lib.Shard
 import java.nio.file.Path
-import kotlin.io.path.Path
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, sharding by key
 // keeping track of consumer group ids
-class TopicRepository private constructor(
-    internal val activePartition: Partition,
-    internal val activePartitionRepository: PartitionRepository
-) : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+class DefaultTopicRepository(
+    internal val topic: Topic
+) : BaseRepository(
+    object : Config {
+        override val path: Path get() = topic.path
+        override val filename: String get() = String.format("topic-%05d", topic.id.value.toLong())
+        override val shard: Shard get() = topic.shard
 
-    companion object {
-        fun open(topic: Topic): TopicRepository {
-            val path = ensureDirectoryExists(topic)
-            val partition = Partition(
-                id = Partition.Id(1),
-                topicId = topic.id,
-                path = path,
-                shard = topic.shard
-            )
-            return TopicRepository(
-                activePartition = partition,
-                activePartitionRepository = TODO()
-//                activePartitionRepository = PartitionRepository.open(partition)
-            )
-        }
+    }
+), TopicRepository {
 
-        private fun ensureDirectoryExists(topic: Topic): Path {
-            val result = topic.path.resolve(Path(String.format("topic-%05d", topic.id.value.toLong())))
-            Files.createDirectories(result)
-            return result
-        }
+    internal var activePartition: Partition
+    internal var activePartitionRepository: PartitionRepository
+
+    init {
+        activePartition = Partition(
+            id = Partition.Id(1),
+            topicId = topic.id,
+            path = topic.path.resolve(config.filename),
+            shard = topic.shard
+        )
+        activePartitionRepository = DefaultPartitionRepository(activePartition)
     }
 
-    override fun close() {
-        activePartitionRepository.close()
-    }
+    override fun setupConnection(connection: Connection) {}
 
-//    override fun append(vararg bytes: ByteArray): List<Chunk.Id> {
-//        return activePartitionRepository.append(*bytes)
-//    }
+    override fun setupSchema(connection: Connection) {}
+
+    override fun append(bytes: ByteArray): Chunk.Id {
+        return activePartitionRepository.append(bytes)
+    }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
         return activePartitionRepository.read(firstId, limit)
@@ -53,12 +50,12 @@ class TopicRepository private constructor(
         return activePartitionRepository.count()
     }
 
-    override fun append(bytes: ByteArray): Chunk.Id {
-        TODO("Not yet implemented")
+    override fun clear() {
+        activePartitionRepository.clear()
     }
-}
 
-internal fun TopicRepository.clear() {
-//    activePartitionRepository.clear()
-    TODO()
+    override fun close() {
+        activePartitionRepository.close()
+    }
+
 }

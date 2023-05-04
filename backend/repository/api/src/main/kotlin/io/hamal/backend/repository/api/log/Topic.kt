@@ -19,3 +19,7 @@ data class Topic(
         constructor(value: Int) : this(value.toULong())
     }
 }
+
+interface TopicRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+    fun clear()
+}
