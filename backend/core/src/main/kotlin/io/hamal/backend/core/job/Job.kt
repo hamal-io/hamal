@@ -11,42 +11,42 @@ interface Job : DomainObject {
     val state: JobState
     val definitionId: JobDefinitionId
 
-    class PlannedJob(
+    class Planned(
         override val id: JobId,
         override val definitionId: JobDefinitionId
     ) : Job {
         override val state = JobState.Planned
     }
 
-    class ScheduledJob(
+    class Scheduled(
         override val id: JobId,
         override val definitionId: JobDefinitionId
     ) : Job {
         override val state = JobState.Scheduled
     }
 
-    class StartedJob(
+    class Started(
         override val id: JobId,
         override val definitionId: JobDefinitionId
     ) : Job {
         override val state = JobState.Started
     }
 
-    class CompletedJob(
+    class Completed(
         override val id: JobId,
         override val definitionId: JobDefinitionId
     ) : Job {
         override val state = JobState.Completed
     }
 
-    class FailedJob(
+    class Failed(
         override val id: JobId,
         override val definitionId: JobDefinitionId
     ) : Job {
         override val state = JobState.Failed
     }
 
-    class TerminalFailedJob(
+    class TerminalFailed(
         override val id: JobId,
         override val definitionId: JobDefinitionId
     ) : Job {

@@ -1,6 +1,7 @@
 package io.hamal.backend.infra.module.job_definition.web
 
 import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.tenant.Tenant
 import io.hamal.backend.usecase.job_definition.JobDefinitionRequest.*
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
@@ -19,7 +20,8 @@ open class JobDefinitionController(
 
     @PostMapping("/v1/job-definitions")
     fun createJobDefinition(
-        @RequestAttribute shard: Shard
+        @RequestAttribute shard: Shard,
+        @RequestAttribute tenant: Tenant,
     ): JobDefinition {
         return request(
             JobDefinitionCreation(

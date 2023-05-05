@@ -25,14 +25,14 @@ sealed class Trigger : DomainObject {
 sealed class InvokedTrigger : DomainObject {
     abstract val id: InvokedTriggerId
     abstract val invokedAt: InvokedAt
-    abstract val invokedBy: AccountId
+    abstract val invokedBy: TenantId
 
     @Serializable
     data class Manual(
         override val id: InvokedTriggerId,
         val trigger: ManualTrigger,
         override val invokedAt: InvokedAt,
-        override val invokedBy: AccountId
+        override val invokedBy: TenantId
     ) : InvokedTrigger()
 
 }
