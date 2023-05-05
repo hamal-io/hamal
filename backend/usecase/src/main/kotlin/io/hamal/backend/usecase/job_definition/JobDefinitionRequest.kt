@@ -1,6 +1,6 @@
 package io.hamal.backend.usecase.job_definition
 
-import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.lib.RequestId
 import io.hamal.lib.ddd.usecase.RequestOneUseCase
 import io.hamal.lib.Shard

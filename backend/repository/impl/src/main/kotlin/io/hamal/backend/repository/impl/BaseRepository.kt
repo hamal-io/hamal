@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.impl
 
-import io.hamal.backend.core.port.logger
+import io.hamal.backend.core.logger
 import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.backend.repository.impl.internal.DefaultConnection
 import io.hamal.lib.Once

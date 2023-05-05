@@ -1,6 +1,6 @@
-package io.hamal.backend.core.port.queue
+package io.hamal.backend.core.queue.port
 
-import io.hamal.backend.core.model.QueuedJob
+import io.hamal.backend.core.queue.QueuedJob
 import io.hamal.lib.Shard
 
 interface DequeueJobPort {

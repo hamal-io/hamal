@@ -1,11 +1,11 @@
 package io.hamal.backend.usecase.job_definition
 
-import io.hamal.backend.core.model.JobDefinition
-import io.hamal.backend.core.model.Trigger
-import io.hamal.backend.core.notification.JobDefinitionDomainNotification
-import io.hamal.backend.core.notification.TriggerDomainNotification
-import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.job_definition.JobDefinitionCreatedNotification
+import io.hamal.backend.core.trigger.Trigger
+import io.hamal.backend.core.trigger.ManualTriggerCreatedNotification
 import io.hamal.backend.repository.api.JobDefinitionRepository
+import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference
@@ -73,14 +73,19 @@ class CreateJobDefinitionRequestHandler(
         // notify  job definition updated
 
         notifyDomain(
-            JobDefinitionDomainNotification.Created(
-                jobDefinition = result,
-                shard = useCase.shard
+            JobDefinitionCreatedNotification(
+                shard = useCase.shard,
+                id = resultId
             )
         )
 
         result.triggers.forEach { trigger ->
-            notifyDomain.invoke(TriggerDomainNotification.Created(trigger, useCase.shard))
+            notifyDomain.invoke(
+                ManualTriggerCreatedNotification(
+                    shard = useCase.shard,
+                    id = trigger.id
+                )
+            )
         }
 
         return result

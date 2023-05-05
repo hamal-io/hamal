@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.model.Trigger
+import io.hamal.backend.core.trigger.Trigger
 
 interface Trigger {
     fun store(trigger: Trigger)

@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.core.port.HamalLogger
-import io.hamal.backend.core.port.logger
-import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
+import io.hamal.backend.core.HamalLogger
+import io.hamal.backend.core.logger
+import io.hamal.lib.ddd.port.FlushDomainNotificationPort
 import io.hamal.lib.KeyedOnce
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*

@@ -11,7 +11,9 @@ open class JobDefinitionConfig {
 //    ) = CreateJobDefinitionRequestHandler(
 //        notifyDomainPort,
 //        generateDomainId,
-//        DepDefaultDefinitionStore
+//        DefaultJobDefinitionRepository(DefaultJobDefinitionRepository.Config(
+//
+//        ))
 //    )
 
 //    @Bean

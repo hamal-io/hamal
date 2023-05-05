@@ -1,4 +1,4 @@
-package io.hamal.backend.core.port
+package io.hamal.backend.core
 
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass

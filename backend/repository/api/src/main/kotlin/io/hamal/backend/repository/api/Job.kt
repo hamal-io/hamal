@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToInsert
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToInsert
 import io.hamal.lib.RequestId

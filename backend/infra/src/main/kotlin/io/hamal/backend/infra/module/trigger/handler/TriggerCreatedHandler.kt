@@ -1,15 +1,15 @@
 package io.hamal.backend.infra.module.trigger.handler
 
-import io.hamal.backend.core.notification.TriggerDomainNotification
-import io.hamal.backend.core.port.notification.HandleDomainNotificationPort
+import io.hamal.backend.core.trigger.ManualTriggerCreatedNotification
+import io.hamal.lib.ddd.port.HandleDomainNotificationPort
 
-class TriggerCreatedHandler: HandleDomainNotificationPort<TriggerDomainNotification.Created> {
-    override fun handle(notification: TriggerDomainNotification.Created) {
+class TriggerCreatedHandler: HandleDomainNotificationPort<ManualTriggerCreatedNotification> {
+    override fun handle(notification: ManualTriggerCreatedNotification) {
         println("==================================")
         println(notification)
-        println(notification.trigger.id.partition())
-        println(notification.trigger.id.sequence())
-        println(notification.trigger.id.elapsed())
+        println(notification.id.partition())
+        println(notification.id.sequence())
+        println(notification.id.elapsed())
 
 
 

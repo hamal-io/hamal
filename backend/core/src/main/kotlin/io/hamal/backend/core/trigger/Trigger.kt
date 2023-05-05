@@ -1,6 +1,6 @@
-package io.hamal.backend.core.model
+package io.hamal.backend.core.trigger
 
-import io.hamal.backend.core.model.Trigger.ManualTrigger
+import io.hamal.backend.core.trigger.Trigger.ManualTrigger
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.vo.*
 import kotlinx.serialization.Serializable

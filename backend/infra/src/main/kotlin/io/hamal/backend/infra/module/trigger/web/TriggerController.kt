@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.module.trigger.web
 
-import io.hamal.backend.core.model.InvokedTrigger
-import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.backend.usecase.trigger.ManualTriggerInvocation
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard

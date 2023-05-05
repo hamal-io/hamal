@@ -1,25 +1,19 @@
-package io.hamal.backend.core.notification
+package io.hamal.lib.ddd.base
 
 import io.hamal.lib.Shard
-import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-@Serializable
-sealed class DomainNotification {
+abstract class DomainNotification {
+
     abstract val shard: Shard
 
-    val topic: String
-
-    init {
+    val topic: String by lazy {
         val topicAnnotation =
             this::class.annotations.find { annotation -> annotation.annotationClass == DomainNotificationTopic::class }
                 ?: throw IllegalStateException("DomainNotification not annotated with @DomainNotificationTopic")
-        topic = (topicAnnotation as DomainNotificationTopic).value
+        (topicAnnotation as DomainNotificationTopic).value
     }
 
-    override fun toString(): String {
-        return "${this::class.qualifiedName}"
-    }
 }
 
 @MustBeDocumented

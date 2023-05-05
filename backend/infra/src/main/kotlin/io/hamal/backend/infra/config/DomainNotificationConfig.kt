@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.config
 
-import io.hamal.backend.core.port.notification.FlushDomainNotificationPort
-import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.lib.ddd.port.FlushDomainNotificationPort
+import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
 import io.hamal.backend.infra.adapter.DefaultDomainNotificationProcessor
 import io.hamal.backend.infra.adapter.DomainNotificationAdapter

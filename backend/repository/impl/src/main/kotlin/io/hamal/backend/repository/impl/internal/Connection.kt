@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.impl.internal
 
-import io.hamal.backend.core.port.logger
+import io.hamal.backend.core.logger
 import io.hamal.backend.repository.impl.internal.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.RequestId
 import io.hamal.lib.util.SnowflakeId

@@ -1,4 +1,4 @@
-package io.hamal.backend.core.model
+package io.hamal.backend.core.job
 
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.vo.JobDefinitionId

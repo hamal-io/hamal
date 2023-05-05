@@ -1,8 +1,8 @@
 package io.hamal.backend.usecase.queue
 
-import io.hamal.backend.core.model.QueuedJob
-import io.hamal.backend.core.model.QueuedJob.Dequeued
-import io.hamal.backend.core.port.queue.DequeueJobPort
+import io.hamal.backend.core.queue.QueuedJob
+import io.hamal.backend.core.queue.QueuedJob.Dequeued
+import io.hamal.backend.core.queue.port.DequeueJobPort
 import io.hamal.lib.RequestId
 import io.hamal.lib.ddd.usecase.RequestOneUseCase
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler

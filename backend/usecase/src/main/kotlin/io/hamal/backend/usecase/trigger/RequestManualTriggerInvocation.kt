@@ -1,7 +1,7 @@
 package io.hamal.backend.usecase.trigger
 
-import io.hamal.backend.core.model.InvokedTrigger
-import io.hamal.backend.core.port.notification.NotifyDomainPort
+import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.lib.ddd.port.NotifyDomainPort
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort

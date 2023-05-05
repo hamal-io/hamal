@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.impl.domain
 
-import io.hamal.backend.core.model.JobDefinition
+import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToInsert
@@ -9,6 +9,7 @@ import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
+import io.hamal.lib.vo.JobReference
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -62,7 +63,7 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
             map {
                 JobDefinition(
                     id = it.getDomainId("id", ::JobDefinitionId),
-                    reference = io.hamal.lib.vo.JobReference(it.getString("reference")),
+                    reference = JobReference(it.getString("reference")),
                     triggers = listOf()
                 )
             }
