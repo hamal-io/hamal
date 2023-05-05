@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.impl.domain
 
 import io.hamal.backend.core.model.JobDefinition
-import io.hamal.backend.repository.api.JobDefinitionStore
-import io.hamal.backend.repository.api.JobDefinitionStore.Command
-import io.hamal.backend.repository.api.JobDefinitionStore.Command.JobDefinitionToInsert
+import io.hamal.backend.repository.api.JobDefinitionRepository
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToInsert
 import io.hamal.backend.repository.impl.BaseRepository
 import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.lib.RequestId
@@ -13,7 +13,7 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 
 
-class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), JobDefinitionStore {
+class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), JobDefinitionRepository {
 
 //    internal val lock: Lock
 //    internal val connection: Connection
@@ -58,9 +58,7 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
 
     override fun get(id: JobDefinitionId): JobDefinition {
         return connection.executeQueryOne<JobDefinition>("SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id") {
-            with {
-                set("id", id)
-            }
+            with { set("id", id) }
             map {
                 JobDefinition(
                     id = it.getDomainId("id", ::JobDefinitionId),

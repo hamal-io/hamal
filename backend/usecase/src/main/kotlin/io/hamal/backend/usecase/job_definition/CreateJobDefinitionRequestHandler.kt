@@ -5,7 +5,7 @@ import io.hamal.backend.core.model.Trigger
 import io.hamal.backend.core.notification.JobDefinitionDomainNotification
 import io.hamal.backend.core.notification.TriggerDomainNotification
 import io.hamal.backend.core.port.notification.NotifyDomainPort
-import io.hamal.backend.repository.api.JobDefinitionStore
+import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference
@@ -16,7 +16,7 @@ import io.hamal.lib.vo.port.GenerateDomainIdPort
 class CreateJobDefinitionRequestHandler(
     val notifyDomain: NotifyDomainPort,
     val generateDomainId: GenerateDomainIdPort,
-    val jobDefinitionStore: JobDefinitionStore
+    val jobDefinitionStore: JobDefinitionRepository
 ) : RequestOneUseCaseHandler<JobDefinition, JobDefinitionRequest.JobDefinitionCreation>(JobDefinitionRequest.JobDefinitionCreation::class) {
 
     override fun invoke(useCase: JobDefinitionRequest.JobDefinitionCreation): JobDefinition {

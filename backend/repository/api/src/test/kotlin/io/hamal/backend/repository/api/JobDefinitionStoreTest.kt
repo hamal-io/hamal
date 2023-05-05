@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.JobDefinitionStore.Command.*
-import io.hamal.backend.repository.api.JobDefinitionStore.Recorder
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.*
+import io.hamal.backend.repository.api.JobDefinitionRepository.Recorder
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference

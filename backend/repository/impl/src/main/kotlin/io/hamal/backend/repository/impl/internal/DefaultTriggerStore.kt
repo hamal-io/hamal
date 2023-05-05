@@ -1,13 +1,11 @@
 package io.hamal.backend.repository.impl.internal
 
-import io.hamal.backend.core.model.Trigger
-import io.hamal.backend.repository.api.TriggerStore
 import io.hamal.lib.vo.TriggerId
 
-object DefaultTriggerStore : TriggerStore {
+object DefaultTriggerStore : io.hamal.backend.repository.api.Trigger {
 
-    val triggers = mutableMapOf<TriggerId, Trigger>()
-    override fun store(trigger: Trigger) {
+    val triggers = mutableMapOf<TriggerId, io.hamal.backend.core.model.Trigger>()
+    override fun store(trigger: io.hamal.backend.core.model.Trigger) {
         triggers[trigger.id] = trigger
     }
 }

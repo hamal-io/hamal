@@ -5,63 +5,51 @@ import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobId
 import io.hamal.lib.vo.JobState
 
-sealed class Job(
-    val id: JobId,
-    val state: JobState,
+interface Job : DomainObject {
+
+    val id: JobId
+    val state: JobState
     val definitionId: JobDefinitionId
-) : DomainObject {
 
     class PlannedJob(
-        id: JobId,
-        definitionId: JobDefinitionId
-    ) : Job(
-        id = id,
-        state = JobState.Planned,
-        definitionId = definitionId
-    )
+        override val id: JobId,
+        override val definitionId: JobDefinitionId
+    ) : Job {
+        override val state = JobState.Planned
+    }
 
     class ScheduledJob(
-        id: JobId,
-        definitionId: JobDefinitionId
-    ) : Job(
-        id = id,
-        state = JobState.Scheduled,
-        definitionId = definitionId
-    )
+        override val id: JobId,
+        override val definitionId: JobDefinitionId
+    ) : Job {
+        override val state = JobState.Scheduled
+    }
 
     class StartedJob(
-        id: JobId,
-        definitionId: JobDefinitionId
-    ) : Job(
-        id = id,
-        state = JobState.Started,
-        definitionId = definitionId
-    )
+        override val id: JobId,
+        override val definitionId: JobDefinitionId
+    ) : Job {
+        override val state = JobState.Started
+    }
 
     class CompletedJob(
-        id: JobId,
-        definitionId: JobDefinitionId
-    ) : Job(
-        id = id,
-        state = JobState.Completed,
-        definitionId = definitionId
-    )
+        override val id: JobId,
+        override val definitionId: JobDefinitionId
+    ) : Job {
+        override val state = JobState.Completed
+    }
 
     class FailedJob(
-        id: JobId,
-        definitionId: JobDefinitionId
-    ) : Job(
-        id = id,
-        state = JobState.Failed,
-        definitionId = definitionId
-    )
+        override val id: JobId,
+        override val definitionId: JobDefinitionId
+    ) : Job {
+        override val state = JobState.Failed
+    }
 
     class TerminalFailedJob(
-        id: JobId,
-        definitionId: JobDefinitionId
-    ) : Job(
-        id = id,
-        state = JobState.TerminalFailed,
-        definitionId = definitionId
-    )
+        override val id: JobId,
+        override val definitionId: JobDefinitionId
+    ) : Job {
+        override val state = JobState.TerminalFailed
+    }
 }

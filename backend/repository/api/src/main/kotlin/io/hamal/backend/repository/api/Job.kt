@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.model.JobDefinition
-import io.hamal.backend.repository.api.JobDefinitionStore.Command.JobDefinitionToInsert
-import io.hamal.backend.repository.api.JobDefinitionStore.Command.ManualTriggerToInsert
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToInsert
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToInsert
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
@@ -14,11 +14,11 @@ import io.hamal.lib.vo.port.FixedTimeIdGeneratorAdapter
 import io.hamal.lib.vo.port.GenerateDomainIdPort
 
 
-interface JobDefinitionStore {
+interface JobDefinitionRepository {
 
-    abstract fun get(id: JobDefinitionId): JobDefinition
+    fun get(id: JobDefinitionId): JobDefinition
 
-    abstract fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition>
+    fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition>
 
     // jobDefinitionRequest
     fun request(requestId: RequestId, record: (Recorder) -> Unit): List<JobDefinition> {
@@ -70,7 +70,7 @@ interface JobDefinitionStore {
     }
 }
 
-fun JobDefinitionStore.Recorder.insertJobDefinition(block: JobDefinitionToInsert.() -> Unit): JobDefinitionId {
+fun JobDefinitionRepository.Recorder.insertJobDefinition(block: JobDefinitionToInsert.() -> Unit): JobDefinitionId {
     val result = generateDomainId(Shard(0), ::JobDefinitionId)
     commands.add(
         JobDefinitionToInsert(
@@ -81,7 +81,7 @@ fun JobDefinitionStore.Recorder.insertJobDefinition(block: JobDefinitionToInsert
     return result
 }
 
-fun JobDefinitionStore.Recorder.insertManualTrigger(
+fun JobDefinitionRepository.Recorder.insertManualTrigger(
     jobDefinitionId: JobDefinitionId,
     block: ManualTriggerToInsert.() -> Unit
 ): TriggerId {
