@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.backend.repository.api.log.Consumer.GroupId
+import java.io.Closeable
 import java.nio.file.Path
 
 data class Broker(
@@ -26,3 +27,5 @@ interface ConsumeFromTopic {
 interface ResolveTopic {
     fun resolveTopic(topicName: Topic.Name): Topic
 }
+
+interface BrokerRepository : AppendToTopic, ConsumeFromTopic, ResolveTopic, Closeable

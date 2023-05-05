@@ -61,9 +61,18 @@ class DefaultBrokerTopicsRepositoryTest {
         }
 
         @Test
+        fun `Sets journal_mode to wal`() {
+            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+                it.connection.executeQuery("""SELECT * FROM pragma_journal_mode""") { resultSet ->
+                    assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
+                }
+            }
+        }
+
+        @Test
         fun `Sets locking_mode to exclusive`() {
             DefaultBrokerTopicsRepository(testBrokerTopics()).use {
-                it.connection.executeQuery("""SELECT locking_mode FROM pragma_locking_mode""") { resultSet ->
+                it.connection.executeQuery("""SELECT * FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
             }
@@ -72,8 +81,17 @@ class DefaultBrokerTopicsRepositoryTest {
         @Test
         fun `Sets temp_store to memory`() {
             DefaultBrokerTopicsRepository(testBrokerTopics()).use {
-                it.connection.executeQuery("""SELECT temp_store FROM pragma_temp_store""") { resultSet ->
+                it.connection.executeQuery("""SELECT * FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
+                }
+            }
+        }
+
+        @Test
+        fun `Sets synchronous to off`() {
+            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+                it.connection.executeQuery("""SELECT * FROM pragma_synchronous""") { resultSet ->
+                    assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }

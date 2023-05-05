@@ -3,12 +3,11 @@ package io.hamal.backend.repository.impl.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.lib.KeyedOnce
-import java.io.Closeable
 
 
 class DefaultBrokerRepository(
     private val broker: Broker
-) : AppendToTopic, ConsumeFromTopic, Closeable, ResolveTopic {
+) : BrokerRepository {
 
     internal val consumersRepository: BrokerConsumersRepository
     internal val topicsRepository: BrokerTopicsRepository
