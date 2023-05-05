@@ -7,7 +7,7 @@ plugins {
 archivesName.set("backend-repository-impl")
 
 dependencies {
-    implementation(project(":lib:core"))
+    implementation(project(":lib"))
     implementation(project(":backend:core"))
     implementation(project(":backend:repository:api"))
 
