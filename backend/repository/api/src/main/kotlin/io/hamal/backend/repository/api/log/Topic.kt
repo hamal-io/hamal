@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.Shard
+import java.io.Closeable
 import java.nio.file.Path
 
 data class Topic(
@@ -18,6 +19,6 @@ data class Topic(
     value class Id(val value: Int)
 }
 
-interface TopicRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+interface TopicRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
     fun clear()
 }

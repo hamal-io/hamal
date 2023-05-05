@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.Shard
+import java.io.Closeable
 import java.nio.file.Path
 
 data class Segment(
@@ -17,6 +18,6 @@ data class Segment(
 }
 
 
-interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
     fun clear()
 }

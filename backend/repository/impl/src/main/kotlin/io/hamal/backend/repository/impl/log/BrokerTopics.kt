@@ -29,8 +29,10 @@ class DefaultBrokerTopicsRepository(
     private val topicMapping = KeyedOnce.default<Topic.Name, Topic>()
     private val lock = ReentrantLock()
     override fun setupConnection(connection: Connection) {
+        connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
         connection.execute("""PRAGMA temp_store = memory;""")
+        connection.execute("""PRAGMA synchronous = off;""")
     }
 
     override fun setupSchema(connection: Connection) {
@@ -51,14 +53,16 @@ class DefaultBrokerTopicsRepository(
     override fun resolveTopic(name: Topic.Name): Topic {
         return topicMapping.invoke(name) {
             lock.withLock {
-                val id = findTopicId(name) ?: createTopic(name)
-                Topic(
-                    id = id,
-                    brokerId = brokerTopics.brokerId,
-                    name = name,
-                    path = brokerTopics.path,
-                    shard = Shard(0)
-                )
+                connection.tx {
+                    val id = findTopicId(name) ?: createTopic(name)
+                    Topic(
+                        id = id,
+                        brokerId = brokerTopics.brokerId,
+                        name = name,
+                        path = brokerTopics.path,
+                        shard = Shard(0)
+                    )
+                }!!
             }
         }
     }

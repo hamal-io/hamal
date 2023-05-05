@@ -7,6 +7,8 @@ import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.base.DomainId
 import java.sql.DriverManager
 import java.time.Instant
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 class NamedPreparedStatementDelegate(
     internal val delegate: NamedPreparedStatement<*>
@@ -156,6 +158,7 @@ class DefaultConnection(
 
     val delegate: java.sql.Connection
     private val log = logger(name)
+    private val lock = ReentrantLock()
 
     init {
         delegate = DriverManager.getConnection(url)
@@ -243,24 +246,26 @@ class DefaultConnection(
     }
 
     override fun <T : Any> tx(block: Transaction.() -> T): T? {
-        delegate.autoCommit = false
-        return try {
-            log.trace("Transaction started")
-            val result = block(DefaultTransaction(this))
-            delegate.commit()
-            log.trace("Transaction committed")
-            result
-        } catch (a: Transaction.AbortException) {
-            log.info("Transaction aborted")
-            delegate.rollback()
-            null
-        } catch (t: Throwable) {
-            log.warn("Transaction rolled back due to $t")
-            delegate.rollback()
-            throw t
-        } finally {
-            log.trace("Transaction completed")
-            delegate.autoCommit = true
+        return lock.withLock {
+            delegate.autoCommit = false
+            try {
+                log.trace("Transaction started")
+                val result = block(DefaultTransaction(this))
+                delegate.commit()
+                log.trace("Transaction committed")
+                result
+            } catch (a: Transaction.AbortException) {
+                log.info("Transaction aborted")
+                delegate.rollback()
+                null
+            } catch (t: Throwable) {
+                log.warn("Transaction rolled back due to $t")
+                delegate.rollback()
+                throw t
+            } finally {
+                log.trace("Transaction completed")
+                delegate.autoCommit = true
+            }
         }
     }
 

@@ -6,12 +6,13 @@ import io.hamal.backend.repository.impl.internal.DefaultConnection
 import io.hamal.lib.Once
 import io.hamal.lib.Shard
 import io.hamal.lib.util.Files
+import java.io.Closeable
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 abstract class BaseRepository(
     val config: Config
-) : AutoCloseable {
+) : Closeable {
 
     protected val log = logger("${this::class.simpleName}-${config.shard}")
 

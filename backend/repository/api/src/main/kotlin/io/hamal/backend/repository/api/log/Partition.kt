@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.Shard
+import java.io.Closeable
 import java.nio.file.Path
 
 data class Partition(
@@ -15,6 +16,6 @@ data class Partition(
     }
 }
 
-interface PartitionRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {
+interface PartitionRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
     fun clear()
 }

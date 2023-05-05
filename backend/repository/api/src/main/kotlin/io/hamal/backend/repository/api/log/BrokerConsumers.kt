@@ -1,6 +1,8 @@
 package io.hamal.backend.repository.api.log
 
-interface BrokerConsumersRepository : AutoCloseable {
+import java.io.Closeable
+
+interface BrokerConsumersRepository : Closeable {
     fun nextChunkId(groupId: Consumer.GroupId, topicId: Topic.Id): Chunk.Id
     fun commit(groupId: Consumer.GroupId, topicId: Topic.Id, chunkId: Chunk.Id)
 }
