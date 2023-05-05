@@ -1,6 +1,6 @@
 package io.hamal.lib.log.broker
 
-import io.hamal.lib.log.consumer.Consumer
+import io.hamal.lib.log.consumer.DepConsumer
 import io.hamal.lib.log.segment.Chunk
 import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.util.Files
@@ -13,20 +13,20 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.io.path.Path
 
-data class BrokerConsumers(
+data class DepBrokerConsumers(
     val brokerId: Broker.Id,
     val path: Path
 )
 
-internal class BrokerConsumersRepository private constructor(
-    internal val brokerConsumers: BrokerConsumers,
+internal class DepBrokerConsumersRepository private constructor(
+    internal val brokerConsumers: DepBrokerConsumers,
     internal val lock: Lock,
     internal val connection: Connection
 ) : AutoCloseable {
     companion object {
-        fun open(brokerConsumers: BrokerConsumers): BrokerConsumersRepository {
+        fun open(brokerConsumers: DepBrokerConsumers): DepBrokerConsumersRepository {
             val dbPath = ensureDirectoryExists(brokerConsumers)
-            val result = BrokerConsumersRepository(
+            val result = DepBrokerConsumersRepository(
                 brokerConsumers = brokerConsumers,
                 lock = ReentrantLock(),
                 connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
@@ -38,13 +38,13 @@ internal class BrokerConsumersRepository private constructor(
             return result
         }
 
-        private fun ensureDirectoryExists(brokerConsumers: BrokerConsumers): Path {
+        private fun ensureDirectoryExists(brokerConsumers: DepBrokerConsumers): Path {
             return Files.createDirectories(brokerConsumers.path)
                 .resolve(Path("consumers.db"))
         }
     }
 
-    fun nextChunkId(groupId: Consumer.GroupId, topicId: Topic.Id): Chunk.Id {
+    fun nextChunkId(groupId: DepConsumer.GroupId, topicId: Topic.Id): Chunk.Id {
         return lock.withLock {
             connection.prepareStatement(
                 """SELECT next_chunk_id FROM consumers WHERE group_id = ? and topic_id = ?""",
@@ -61,7 +61,7 @@ internal class BrokerConsumersRepository private constructor(
         }
     }
 
-    fun commit(groupId: Consumer.GroupId, topicId: Topic.Id, chunkId: Chunk.Id) {
+    fun commit(groupId: DepConsumer.GroupId, topicId: Topic.Id, chunkId: Chunk.Id) {
         return lock.withLock {
             connection.prepareStatement(
                 """
@@ -91,14 +91,14 @@ internal class BrokerConsumersRepository private constructor(
     fun count() = this.executeQuery("SELECT COUNT(*) from consumers") { it.getLong(1).toULong() }
 }
 
-internal fun <T> BrokerConsumersRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
+internal fun <T> DepBrokerConsumersRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
     require(!connection.isClosed) { "Connection must be open" }
     return connection.createStatement().use { statement ->
         statement.executeQuery(sql).use(fn)
     }
 }
 
-internal fun BrokerConsumersRepository.clear() {
+internal fun DepBrokerConsumersRepository.clear() {
     lock.withLock {
         connection.createStatement().use {
             it.execute("DELETE FROM consumers")
@@ -107,7 +107,7 @@ internal fun BrokerConsumersRepository.clear() {
     }
 }
 
-private fun BrokerConsumersRepository.setupSchema() {
+private fun DepBrokerConsumersRepository.setupSchema() {
     lock.withLock {
         connection.createStatement().use {
             it.execute(
@@ -125,7 +125,7 @@ private fun BrokerConsumersRepository.setupSchema() {
     }
 }
 
-private fun BrokerConsumersRepository.setupSqlite() {
+private fun DepBrokerConsumersRepository.setupSqlite() {
     lock.withLock {
         connection.createStatement().use {
             it.execute("""PRAGMA journal_mode = wal;""")

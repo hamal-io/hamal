@@ -1,138 +1,97 @@
 package io.hamal.backend.repository.impl.log
 
 import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.BrokerConsumersRepository
 import io.hamal.backend.repository.api.log.Chunk
+import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.backend.repository.api.log.Topic
-import io.hamal.lib.util.Files
+import io.hamal.backend.repository.impl.BaseRepository
+import io.hamal.backend.repository.impl.internal.Connection
+import io.hamal.lib.Shard
 import java.nio.file.Path
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
-import kotlin.io.path.Path
 
 data class BrokerConsumers(
     val brokerId: Broker.Id,
     val path: Path
 )
 
-internal class BrokerConsumersRepository private constructor(
+class DefaultBrokerConsumersRepository(
     internal val brokerConsumers: BrokerConsumers,
-    internal val lock: Lock,
-    internal val connection: Connection
-) : AutoCloseable {
-    companion object {
-        fun open(brokerConsumers: BrokerConsumers): BrokerConsumersRepository {
-            val dbPath = ensureDirectoryExists(brokerConsumers)
-            val result = BrokerConsumersRepository(
-                brokerConsumers = brokerConsumers,
-                lock = ReentrantLock(),
-                connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
-            )
-            result.setupSqlite()
-            result.connection.autoCommit = false
-            result.setupSchema()
+) : BaseRepository(
+    object : Config {
+        override val path: Path get() = brokerConsumers.path
+        override val filename: String get() = "consumers.db"
+        override val shard: Shard get() = Shard(0)
 
-            return result
-        }
+    }
+), BrokerConsumersRepository {
 
-        private fun ensureDirectoryExists(brokerConsumers: BrokerConsumers): Path {
-            return Files.createDirectories(brokerConsumers.path)
-                .resolve(Path("consumers.db"))
-        }
+    override fun setupConnection(connection: Connection) {
+        connection.execute("""PRAGMA journal_mode = wal;""")
+        connection.execute("""PRAGMA locking_mode = exclusive;""")
+        connection.execute("""PRAGMA temp_store = memory;""")
+        connection.execute("""PRAGMA synchronous = off;""")
     }
 
-    fun nextChunkId(groupId: Consumer.GroupId, topicId: Topic.Id): Chunk.Id {
-        return lock.withLock {
-            connection.prepareStatement(
-                """SELECT next_chunk_id FROM consumers WHERE group_id = ? and topic_id = ?""",
-            ).use {
-                it.setString(1, groupId.value)
-                it.setLong(2, topicId.value.toLong())
-                val resultSet = it.executeQuery()
-                if (!resultSet.next()) {
-                    Chunk.Id(0)
-                } else {
-                    Chunk.Id(resultSet.getInt(1))
-                }
-            }
-        }
-    }
-
-    fun commit(groupId: Consumer.GroupId, topicId: Topic.Id, chunkId: Chunk.Id) {
-        return lock.withLock {
-            connection.prepareStatement(
+    override fun setupSchema(connection: Connection) {
+        connection.tx {
+            execute(
                 """
+                CREATE TABLE IF NOT EXISTS consumers (
+                   group_id TEXT NOT NULL ,
+                   topic_id INTEGER NOT NULL ,
+                   next_chunk_id INTEGER NOT NULL ,
+                   PRIMARY KEY (topic_id,group_id)
+               )
+            """.trimIndent()
+            )
+        }
+    }
+
+    override fun nextChunkId(groupId: GroupId, topicId: Topic.Id): Chunk.Id {
+        return connection.executeQueryOne(
+            """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
+        ) {
+            with {
+                set("groupId", groupId.value)
+                set("topicId", topicId.value)
+            }
+            map {
+                Chunk.Id(it.getSnowflakeId("next_chunk_id"))
+            }
+        } ?: Chunk.Id(0)
+    }
+
+    override fun commit(groupId: GroupId, topicId: Topic.Id, chunkId: Chunk.Id) {
+        connection.execute(
+            """
             INSERT INTO consumers(group_id, topic_id, next_chunk_id)
-                  VALUES(?, ?, ?)
+                  VALUES(:groupId, :topicId, :nextChunkId)
                      ON CONFLICT(group_id, topic_id) DO UPDATE SET
                         next_chunk_id=excluded.next_chunk_id
-                        WHERE 
+                        WHERE
                             excluded.group_id  == consumers.group_id AND
                             excluded.topic_id  == consumers.topic_id;
                     """.trimIndent(),
-            ).use {
-                it.setString(1, groupId.value)
-//                it.setLong(2, topicId.value.toLong())
-//                it.setLong(3, chunkId.value.toLong() + 1)
-                TODO()
-                it.execute()
-            }
-            connection.commit()
+        ) {
+            set("groupId", groupId.value)
+            set("topicId", topicId.value)
+            set("nextChunkId", chunkId.value.value + 1)
         }
     }
+
+    override fun clear() {
+        connection.execute("DELETE FROM consumers")
+    }
+
 
     override fun close() {
         connection.close()
     }
-
-
-    fun count() = this.executeQuery("SELECT COUNT(*) from consumers") { it.getLong(1).toULong() }
 }
 
-internal fun <T> BrokerConsumersRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
-    require(!connection.isClosed) { "Connection must be open" }
-    return connection.createStatement().use { statement ->
-        statement.executeQuery(sql).use(fn)
+fun DefaultBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
+    map {
+        it.getLong("count").toULong()
     }
-}
-
-internal fun BrokerConsumersRepository.clear() {
-    lock.withLock {
-        connection.createStatement().use {
-            it.execute("DELETE FROM consumers")
-        }
-        connection.commit()
-    }
-}
-
-private fun BrokerConsumersRepository.setupSchema() {
-    lock.withLock {
-        connection.createStatement().use {
-            it.execute(
-                """
-         CREATE TABLE IF NOT EXISTS consumers (
-            group_id TEXT NOT NULL ,
-            topic_id INTEGER NOT NULL ,
-            next_chunk_id INTEGER NOT NULL ,
-            PRIMARY KEY (topic_id,group_id)
-        );
-        """.trimIndent()
-            )
-        }
-        connection.commit()
-    }
-}
-
-private fun BrokerConsumersRepository.setupSqlite() {
-    lock.withLock {
-        connection.createStatement().use {
-            it.execute("""PRAGMA journal_mode = wal;""")
-            it.execute("""PRAGMA locking_mode = exclusive;""")
-            it.execute("""PRAGMA temp_store = memory;""")
-            it.execute("""PRAGMA synchronous = off;""")
-        }
-    }
-}
+} ?: 0UL

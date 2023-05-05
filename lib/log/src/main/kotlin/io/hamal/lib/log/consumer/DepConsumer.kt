@@ -8,7 +8,7 @@ import kotlinx.serialization.serializer
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
-interface Consumer<VALUE : Any> {
+interface DepConsumer<VALUE : Any> {
     val groupId: GroupId
 
     fun consume(limit: Int, fn: (VALUE) -> CompletableFuture<*>): Int {
@@ -23,11 +23,11 @@ interface Consumer<VALUE : Any> {
 
 
 class ProtobufConsumer<Value : Any>(
-    override val groupId: Consumer.GroupId,
+    override val groupId: DepConsumer.GroupId,
     private val topic: Topic,
     private val brokerRepository: BrokerRepository,
     private val valueClass: KClass<Value>
-) : Consumer<Value> {
+) : DepConsumer<Value> {
 
     @OptIn(InternalSerializationApi::class)
     override fun consumeIndexed(limit: Int, fn: (Int, Value) -> CompletableFuture<*>): Int {

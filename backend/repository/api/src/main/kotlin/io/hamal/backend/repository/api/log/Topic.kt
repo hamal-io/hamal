@@ -15,9 +15,7 @@ data class Topic(
     value class Name(val value: String)
 
     @JvmInline
-    value class Id(val value: ULong) {
-        constructor(value: Int) : this(value.toULong())
-    }
+    value class Id(val value: Int)
 }
 
 interface TopicRepository : ChunkAppender, ChunkReader, ChunkCounter, AutoCloseable {

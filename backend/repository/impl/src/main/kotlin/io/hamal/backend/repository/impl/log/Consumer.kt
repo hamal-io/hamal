@@ -1,24 +1,12 @@
 package io.hamal.backend.repository.impl.log
 
+import io.hamal.backend.repository.api.log.Consumer
 import io.hamal.backend.repository.api.log.Topic
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
-
-interface Consumer<VALUE : Any> {
-    val groupId: GroupId
-
-    fun consume(limit: Int, fn: (VALUE) -> CompletableFuture<*>): Int {
-        return consumeIndexed(limit) { _, value -> fn(value) }
-    }
-
-    fun consumeIndexed(limit: Int, fn: (Int, VALUE) -> CompletableFuture<*>): Int
-
-    @JvmInline
-    value class GroupId(val value: String)
-}
 
 
 class ProtobufConsumer<Value : Any>(

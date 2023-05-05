@@ -3,7 +3,7 @@ package io.hamal.backend.infra.adapter
 import io.hamal.backend.core.notification.DomainNotification
 import io.hamal.backend.core.port.notification.HandleDomainNotificationPort
 import io.hamal.lib.log.broker.BrokerRepository
-import io.hamal.lib.log.consumer.Consumer
+import io.hamal.lib.log.consumer.DepConsumer
 import io.hamal.lib.log.consumer.ProtobufConsumer
 import io.hamal.lib.log.topic.Topic
 import org.springframework.beans.factory.DisposableBean
@@ -54,7 +54,7 @@ class DefaultDomainNotificationProcessor(
 
                 allDomainTopics.forEach { topic ->
                     val consumer = ProtobufConsumer(
-                        Consumer.GroupId("domain-notification-processor"),
+                        DepConsumer.GroupId("domain-notification-processor"),
                         topic,
                         brokerRepository,
                         DomainNotification::class

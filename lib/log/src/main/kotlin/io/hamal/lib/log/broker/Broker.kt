@@ -1,6 +1,6 @@
 package io.hamal.lib.log.broker
 
-import io.hamal.lib.log.consumer.Consumer.GroupId
+import io.hamal.lib.log.consumer.DepConsumer.GroupId
 import io.hamal.lib.log.segment.Chunk
 import io.hamal.lib.log.topic.Topic
 import io.hamal.lib.log.topic.TopicRepository
@@ -33,7 +33,7 @@ interface ResolveTopic {
 
 class BrokerRepository private constructor(
     internal val topicsRepository: BrokerTopicsRepository,
-    internal val consumersRepository: BrokerConsumersRepository,
+    internal val consumersRepository: DepBrokerConsumersRepository,
 ) : AppendToTopic, ConsumeFromTopic, AutoCloseable, ResolveTopic {
 
     private val topicRepositoryMapping = io.hamal.lib.KeyedOnce.default<Topic, TopicRepository>()
@@ -48,8 +48,8 @@ class BrokerRepository private constructor(
                         path = path
                     )
                 ),
-                consumersRepository = BrokerConsumersRepository.open(
-                    BrokerConsumers(
+                consumersRepository = DepBrokerConsumersRepository.open(
+                    DepBrokerConsumers(
                         brokerId = broker.id,
                         path = path
                     )

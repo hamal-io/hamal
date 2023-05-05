@@ -1,6 +1,6 @@
 package io.hamal.lib.log.broker
 
-import io.hamal.lib.log.consumer.Consumer.GroupId
+import io.hamal.lib.log.consumer.DepConsumer.GroupId
 import io.hamal.lib.log.topic.Topic
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.impl.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.backend.repository.impl.log.Consumer.GroupId
+import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.lib.util.Files
 import java.nio.file.Path
 
@@ -68,12 +68,14 @@ class BrokerRepository private constructor(
     }
 
     override fun read(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {
-        val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
-        return resolveRepository(topic).read(nextChunkId, limit)
+//        val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
+//        return resolveRepository(topic).read(nextChunkId, limit)
+        TODO()
     }
 
     override fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id) {
-        consumersRepository.commit(groupId, topic.id, chunkId)
+//        consumersRepository.commit(groupId, topic.id, chunkId)
+        TODO()
     }
 
     private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) { DefaultTopicRepository(topic) }

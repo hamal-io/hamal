@@ -34,8 +34,9 @@ class DefaultBrokerTopicsRepository(
     }
 
     override fun setupSchema(connection: Connection) {
-        connection.execute(
-            """
+        connection.tx {
+            execute(
+                """
          CREATE TABLE IF NOT EXISTS topics (
             id INTEGER PRIMARY KEY AUTOINCREMENT ,
             name TEXT NOT NULL ,
@@ -43,7 +44,8 @@ class DefaultBrokerTopicsRepository(
             UNIQUE(name)
         );
         """
-        )
+            )
+        }
     }
 
     override fun resolveTopic(name: Topic.Name): Topic {
@@ -61,13 +63,6 @@ class DefaultBrokerTopicsRepository(
         }
     }
 
-    override fun count() = connection.executeQueryOne<ULong>("SELECT COUNT(*) as count from topics") {
-        map {
-            it.getLong("count").toULong()
-        }
-    } ?: 0UL
-
-
     override fun clear() {
         connection.tx {
             execute("DELETE FROM topics")
@@ -79,6 +74,12 @@ class DefaultBrokerTopicsRepository(
         connection.close()
     }
 }
+
+fun DefaultBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
+    map {
+        it.getLong("count").toULong()
+    }
+} ?: 0UL
 
 private fun DefaultBrokerTopicsRepository.findTopicId(name: Topic.Name): Topic.Id? {
     return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {
