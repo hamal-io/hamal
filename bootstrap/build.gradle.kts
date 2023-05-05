@@ -12,7 +12,6 @@ apply(plugin = "io.spring.dependency-management")
 
 dependencies {
     implementation(project(":lib:core"))
-    implementation(project(":lib:log"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")

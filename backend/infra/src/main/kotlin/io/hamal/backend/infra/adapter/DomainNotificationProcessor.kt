@@ -2,10 +2,10 @@ package io.hamal.backend.infra.adapter
 
 import io.hamal.backend.core.notification.DomainNotification
 import io.hamal.backend.core.port.notification.HandleDomainNotificationPort
-import io.hamal.lib.log.broker.BrokerRepository
-import io.hamal.lib.log.consumer.DepConsumer
-import io.hamal.lib.log.consumer.ProtobufConsumer
-import io.hamal.lib.log.topic.Topic
+import io.hamal.backend.repository.api.log.BrokerRepository
+import io.hamal.backend.repository.api.log.Consumer
+import io.hamal.backend.repository.api.log.Topic
+import io.hamal.backend.repository.impl.log.ProtobufConsumer
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration
@@ -54,7 +54,7 @@ class DefaultDomainNotificationProcessor(
 
                 allDomainTopics.forEach { topic ->
                     val consumer = ProtobufConsumer(
-                        DepConsumer.GroupId("domain-notification-processor"),
+                        Consumer.GroupId("domain-notification-processor"),
                         topic,
                         brokerRepository,
                         DomainNotification::class

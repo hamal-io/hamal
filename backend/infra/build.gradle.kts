@@ -12,7 +12,6 @@ apply(plugin = "io.spring.dependency-management")
 
 dependencies {
     implementation(project(":lib:core"))
-    implementation(project(":lib:log"))
 
     implementation(project(":backend:usecase"))
     implementation(project(":backend:core"))

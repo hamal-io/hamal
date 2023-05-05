@@ -32,7 +32,6 @@ include("bootstrap")
 include(":script:api")
 include(":script:impl")
 
-include(":lib:log")
 include(":lib:core")
 
 include(":backend")
