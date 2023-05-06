@@ -1,4 +1,4 @@
-package io.hamal.backend.infra.module.trigger.handler
+package io.hamal.backend.infra.module.orchestrator.handler
 
 import io.hamal.backend.core.logger
 import io.hamal.backend.notification.ManualTriggerInvokedNotification

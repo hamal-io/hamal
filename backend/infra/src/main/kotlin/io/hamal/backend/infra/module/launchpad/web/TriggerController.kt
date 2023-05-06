@@ -1,4 +1,4 @@
-package io.hamal.backend.infra.module.trigger.web
+package io.hamal.backend.infra.module.launchpad.web
 
 import io.hamal.backend.core.tenant.Tenant
 import io.hamal.backend.core.trigger.InvokedTrigger
