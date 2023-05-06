@@ -5,7 +5,7 @@ import io.hamal.backend.notification.port.HandleDomainNotificationPort
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Consumer
 import io.hamal.backend.repository.api.log.Topic
-import io.hamal.backend.repository.impl.log.ProtobufConsumer
+import io.hamal.backend.repository.sqlite.log.ProtobufConsumer
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration

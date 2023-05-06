@@ -5,7 +5,7 @@ import io.hamal.backend.notification.port.FlushDomainNotificationPort
 import io.hamal.backend.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Topic
-import io.hamal.backend.repository.impl.log.ProtobufAppender
+import io.hamal.backend.repository.sqlite.log.ProtobufAppender
 
 
 class DomainNotificationAdapter(

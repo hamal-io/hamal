@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":backend:usecase"))
     implementation(project(":backend:core"))
     implementation(project(":backend:repository:api"))
-    implementation(project(":backend:repository:impl"))
+    implementation(project(":backend:repository:sqlite"))
 
     implementation(external.kotlin.json)
 

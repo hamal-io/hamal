@@ -39,7 +39,7 @@ include(":backend:usecase")
 include(":backend:core")
 include(":backend:infra")
 include(":backend:repository:api")
-include(":backend:repository:impl")
+include(":backend:repository:sqlite")
 
 include(":worker:application")
 include(":worker:core")
