@@ -20,7 +20,6 @@ dependencies {
         exclude("org.springframework.boot", "spring-boot-starter-json")
     }
 
-    implementation("org.xerial:sqlite-jdbc:3.25.2")
     implementation(external.kotlin.json)
 
 

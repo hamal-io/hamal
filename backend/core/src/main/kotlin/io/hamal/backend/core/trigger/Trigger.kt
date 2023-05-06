@@ -6,9 +6,8 @@ import io.hamal.lib.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Trigger : DomainObject {
+sealed class Trigger : DomainObject<TriggerId> {
 
-    abstract val id: TriggerId
     abstract val reference: TriggerReference
     abstract val jobDefinitionId: JobDefinitionId
 
@@ -22,8 +21,7 @@ sealed class Trigger : DomainObject {
 }
 
 @Serializable
-sealed class InvokedTrigger : DomainObject {
-    abstract val id: InvokedTriggerId
+sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {
     abstract val invokedAt: InvokedAt
     abstract val invokedBy: TenantId
 

@@ -9,6 +9,7 @@ import java.sql.DriverManager
 import java.time.Instant
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
+import kotlin.reflect.KClass
 
 class NamedPreparedStatementDelegate(
     internal val delegate: NamedPreparedStatement<*>
@@ -148,16 +149,16 @@ interface Connection : AutoCloseable {
         block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): T? = executeQuery(sql, block).firstOrNull()
 
-    fun <T : Any> tx(block: Transaction.() -> T): T?
+    fun <T : Any> tx(block: Transaction.() -> T?): T?
 }
 
 class DefaultConnection(
-    name: String,
+    owningClass: KClass<*>,
     url: String
 ) : Connection {
 
     val delegate: java.sql.Connection
-    private val log = logger(name)
+    private val log = logger(owningClass)
     private val lock = ReentrantLock()
 
     init {
@@ -169,6 +170,7 @@ class DefaultConnection(
     override val isClosed: Boolean get() = delegate.isClosed
 
     override fun prepare(sql: String): NamedPreparedStatement<*> {
+        log.trace("Prepare statement: $sql")
         val result = delegate.prepare(sql)
         log.trace("Prepared statement: ${result.sql}")
         return result
@@ -176,7 +178,7 @@ class DefaultConnection(
 
     override fun execute(sql: String) {
         prepare(sql).use {
-            log.trace("Execute: ${it.sql}")
+            log.debug("Execute: ${it.sql}")
             it.execute()
         }
     }
@@ -187,7 +189,7 @@ class DefaultConnection(
     ) {
         prepare(sql).use {
             block(NamedPreparedStatementDelegate(it))
-            log.trace("Execute: ${it.sql}")
+            log.debug("Execute: ${it.sql}")
             it.execute()
         }
     }
@@ -201,13 +203,13 @@ class DefaultConnection(
             NamedPreparedStatementDelegate(it)
         )
         block(delegate)
-        log.trace("Execute : ${it.sql}")
+        log.debug("Execute : ${it.sql}")
         return it.execute()?.let(delegate::apply)?.firstOrNull()
     }
 
     override fun executeUpdate(sql: String): Int {
         return prepare(sql).use {
-            log.trace("Execute update: ${it.sql}")
+            log.debug("Execute update: ${it.sql}")
             it.executeUpdate()
         }
     }
@@ -218,7 +220,7 @@ class DefaultConnection(
     ): Int {
         return prepare(sql).use {
             block(NamedPreparedStatementDelegate(it))
-            log.trace("Execute update: ${it.sql}")
+            log.debug("Execute update: ${it.sql}")
             it.executeUpdate()
         }
     }
@@ -233,19 +235,19 @@ class DefaultConnection(
                     NamedPreparedStatementDelegate(it)
                 )
             block(delegate)
-            log.trace("Execute query: ${it.sql}")
+            log.debug("Execute query: ${it.sql}")
             delegate.apply(it.executeQuery())
         }
     }
 
     override fun executeQuery(sql: String, block: (NamedResultSet) -> Unit) {
         return prepare(sql).use {
-            log.trace("Execute query: ${it.sql}")
+            log.debug("Execute query: ${it.sql}")
             block(it.executeQuery())
         }
     }
 
-    override fun <T : Any> tx(block: Transaction.() -> T): T? {
+    override fun <T : Any> tx(block: Transaction.() -> T?): T? {
         return lock.withLock {
             delegate.autoCommit = false
             try {

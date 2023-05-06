@@ -14,14 +14,14 @@ abstract class BaseRepository(
     val config: Config
 ) : Closeable {
 
-    protected val log = logger("${this::class.simpleName}-${config.shard}")
+    protected val log = logger(this::class)
 
     private val connectionOnce = Once.default<Connection>()
 
     internal val connection: Connection
         get() = connectionOnce {
             val result = DefaultConnection(
-                "${this::class.simpleName}-${config.shard}",
+                this::class,
                 "jdbc:sqlite:${ensureFilePath(config)}"
             )
             log.debug("Setup connection")

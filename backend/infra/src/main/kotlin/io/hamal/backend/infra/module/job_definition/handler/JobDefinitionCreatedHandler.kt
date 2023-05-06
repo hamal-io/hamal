@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.module.job_definition.handler
 
-import io.hamal.backend.core.job_definition.JobDefinitionCreatedNotification
+import io.hamal.backend.notification.JobDefinitionCreatedNotification
 import io.hamal.backend.core.logger
-import io.hamal.lib.ddd.port.HandleDomainNotificationPort
+import io.hamal.backend.notification.port.HandleDomainNotificationPort
 
 class JobDefinitionCreatedHandler : HandleDomainNotificationPort<JobDefinitionCreatedNotification> {
     private val log = logger(JobDefinitionCreatedHandler::class)

@@ -1,8 +1,6 @@
 package io.hamal.bootstrap
 
 import io.hamal.backend.infra.BackendConfig
-import io.hamal.bootstrap.config.IdConfig
-import io.hamal.bootstrap.config.LoggerConfig
 import io.hamal.worker.infra.WorkerModuleConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -16,11 +14,7 @@ class HamalApplication
 
 fun main(args: Array<String>) {
     val applicationBuilder = SpringApplicationBuilder()
-        .main(HamalApplication::class.java)
-        .parent(
-            IdConfig::class.java,
-            LoggerConfig::class.java,
-        )
+        .parent(HamalApplication::class.java)
         .banner { _: Environment, _: Class<*>, out: PrintStream ->
             out.println("")
             out.println("")

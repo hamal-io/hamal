@@ -167,7 +167,6 @@ class DefaultSegmentRepositoryTest {
             }
         }
 
-        //
         @Test
         fun `Append multiple chunks to empty segment`() {
             withEpochMilli(123456) {

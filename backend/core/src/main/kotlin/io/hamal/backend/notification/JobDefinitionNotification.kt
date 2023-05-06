@@ -1,8 +1,6 @@
-package io.hamal.backend.core.job_definition
+package io.hamal.backend.notification
 
 import io.hamal.lib.Shard
-import io.hamal.lib.ddd.base.DomainNotification
-import io.hamal.lib.ddd.base.DomainNotificationTopic
 import io.hamal.lib.vo.JobDefinitionId
 import kotlinx.serialization.Serializable
 

@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class JobDefinition(
-    val id: JobDefinitionId,
+    override val id: JobDefinitionId,
     val reference: JobReference,
     val triggers: List<Trigger>
-) : DomainObject
+) : DomainObject<JobDefinitionId>

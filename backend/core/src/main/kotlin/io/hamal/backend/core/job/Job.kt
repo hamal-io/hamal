@@ -5,9 +5,9 @@ import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobId
 import io.hamal.lib.vo.JobState
 
-interface Job : DomainObject {
+interface Job : DomainObject<JobId> {
 
-    val id: JobId
+    override val id: JobId
     val state: JobState
     val definitionId: JobDefinitionId
 

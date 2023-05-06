@@ -22,14 +22,14 @@ class RecorderTest {
         fun `Records insertion of JobDefinition with default parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
-            val id = testInstance.insertJobDefinition {}
+            val id = testInstance.createJobDefinition {}
             assertThat(id, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
                 commands, equalTo(
                     listOf(
-                        JobDefinitionToInsert(
+                        JobDefinitionToCreate(
                             jobDefinitionId = JobDefinitionId(SnowflakeId(2199023255552)),
                             reference = JobReference("2199023255552-ref")
                         )
@@ -42,7 +42,7 @@ class RecorderTest {
         fun `Records insertion of JobDefinition with overwritten parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
-            val id = testInstance.insertJobDefinition {
+            val id = testInstance.createJobDefinition {
                 reference = JobReference("some-job-ref")
             }
             assertThat(id, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
@@ -51,7 +51,7 @@ class RecorderTest {
             assertThat(
                 commands, equalTo(
                     listOf(
-                        JobDefinitionToInsert(
+                        JobDefinitionToCreate(
                             jobDefinitionId = JobDefinitionId(SnowflakeId(2199023255552)),
                             reference = JobReference("some-job-ref")
                         )

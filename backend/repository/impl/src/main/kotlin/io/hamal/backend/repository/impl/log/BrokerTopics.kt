@@ -9,8 +9,6 @@ import io.hamal.lib.KeyedOnce
 import io.hamal.lib.Shard
 import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 data class BrokerTopics(
     val brokerId: Broker.Id,
@@ -27,7 +25,6 @@ class DefaultBrokerTopicsRepository(
 }), BrokerTopicsRepository {
 
     private val topicMapping = KeyedOnce.default<Topic.Name, Topic>()
-    private val lock = ReentrantLock()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -52,18 +49,16 @@ class DefaultBrokerTopicsRepository(
 
     override fun resolveTopic(name: Topic.Name): Topic {
         return topicMapping.invoke(name) {
-            lock.withLock {
-                connection.tx {
-                    val id = findTopicId(name) ?: createTopic(name)
-                    Topic(
-                        id = id,
-                        brokerId = brokerTopics.brokerId,
-                        name = name,
-                        path = brokerTopics.path,
-                        shard = Shard(0)
-                    )
-                }!!
-            }
+            connection.tx {
+                val id = findTopicId(name) ?: createTopic(name)
+                Topic(
+                    id = id,
+                    brokerId = brokerTopics.brokerId,
+                    name = name,
+                    path = brokerTopics.path,
+                    shard = Shard(0)
+                )
+            }!!
         }
     }
 

@@ -17,13 +17,13 @@ fun <T : Any> logger(forClass: KClass<T>): HamalLogger {
 }
 
 fun logger(name: String): HamalLogger {
-    return DefaultHamalLogger(
+    return DefaultBackendLogger(
         LoggerFactory.getLogger(name)
     )
 }
 
 
-class DefaultHamalLogger(
+class DefaultBackendLogger(
     private val delegate: org.slf4j.Logger
 ) : HamalLogger {
     override fun trace(msg: String) {

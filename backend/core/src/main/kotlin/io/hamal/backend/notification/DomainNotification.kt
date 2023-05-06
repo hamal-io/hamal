@@ -1,10 +1,11 @@
-package io.hamal.lib.ddd.base
+package io.hamal.backend.notification
 
 import io.hamal.lib.Shard
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-abstract class DomainNotification {
-
+@Serializable
+sealed class DomainNotification {
     abstract val shard: Shard
 
     val topic: String by lazy {
@@ -13,8 +14,8 @@ abstract class DomainNotification {
                 ?: throw IllegalStateException("DomainNotification not annotated with @DomainNotificationTopic")
         (topicAnnotation as DomainNotificationTopic).value
     }
-
 }
+
 
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)

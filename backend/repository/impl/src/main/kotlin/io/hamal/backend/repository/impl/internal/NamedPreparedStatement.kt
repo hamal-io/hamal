@@ -39,15 +39,14 @@ class DefaultNamedPreparedStatement(
 ) : NamedPreparedStatement<DefaultNamedPreparedStatement> {
 
     internal val parametersSet = mutableSetOf<String>()
+
     companion object {
         private val cachedSql = KeyedOnce.default<String, ParseResult>()
         fun Connection.prepare(query: String): NamedPreparedStatement<DefaultNamedPreparedStatement> {
             return cachedSql(query) { Parser().parse(query) }
                 .let {
-                    DefaultNamedPreparedStatement(
-                        prepareStatement(it.sql),
-                        it
-                    )
+                    val stmt = prepareStatement(it.sql)
+                    DefaultNamedPreparedStatement(stmt, it)
                 }
         }
     }

@@ -1,9 +1,9 @@
-package io.hamal.backend.usecase.job_definition
+package io.hamal.backend.usecase.request
 
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.lib.RequestId
-import io.hamal.lib.ddd.usecase.RequestOneUseCase
 import io.hamal.lib.Shard
+import io.hamal.lib.ddd.usecase.RequestOneUseCase
 
 sealed class JobDefinitionRequest {
     data class JobDefinitionCreation(

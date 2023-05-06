@@ -3,7 +3,7 @@ package io.hamal.backend.repository.impl.domain
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToInsert
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
 import io.hamal.backend.repository.impl.BaseRepository
 import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.lib.RequestId
@@ -71,14 +71,15 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
     }
 
     override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
-//        val toProcess = commands.groupBy { it.jobDefinitionId }
+
+        val toProcess = commands.groupBy { it.jobDefinitionId }
 
         //            template.update(
 //                "INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())",
 //                mapOf("id" to BigDecimal("123"))
 //            )
 
-        this.apply { }
+//        this.apply { }
 
 //        inTx { operations ->
 //            operations.execute("INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())") {
@@ -128,14 +129,13 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
 //            connection.autoCommit = true
 //        }
 //
-//        return listOf(
-//            JobDefinition(
-//                id = toProcess.keys.first(),
-//                reference = JobReference("das"),
-//                triggers = listOf()
-//            )
-//        )
-        TODO()
+        return listOf(
+            JobDefinition(
+                id = toProcess.keys.first(),
+                reference = JobReference("das"),
+                triggers = listOf()
+            )
+        )
     }
 
 //    override fun setupConnection(operations: NamedParameterJdbcOperations) {
@@ -247,7 +247,7 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
 
 }
 
-internal fun DefaultJobDefinitionRepository.insertJobDefinition(requestId: RequestId, toInsert: JobDefinitionToInsert) {
+internal fun DefaultJobDefinitionRepository.insertJobDefinition(requestId: RequestId, toInsert: JobDefinitionToCreate) {
 //    return connection.prepareStatement(
 //        """INSERT INTO job_definitions(id, version, request_id,reference, instant) VALUES(?,?,?,?,?)""",
 //    ).use {

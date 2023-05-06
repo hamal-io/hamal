@@ -2,7 +2,7 @@ package io.hamal.backend.infra.adapter
 
 import io.hamal.backend.core.HamalLogger
 import io.hamal.backend.core.logger
-import io.hamal.lib.ddd.port.FlushDomainNotificationPort
+import io.hamal.backend.notification.port.FlushDomainNotificationPort
 import io.hamal.lib.KeyedOnce
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
@@ -32,7 +32,7 @@ class BackendUseCaseInvokerAdapter private constructor(
         flushDomainNotificationPort
     )
 
-    override fun <RESULT : DomainObject, USE_CASE : RequestOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
+    override fun <RESULT : DomainObject<*>, USE_CASE : RequestOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
         val operation = getRequestOneUseCase[useCase::class]
         logUseCaseInvocation(useCase)
         return operation(useCase).let {
@@ -41,18 +41,18 @@ class BackendUseCaseInvokerAdapter private constructor(
         }
     }
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> invoke(useCase: USE_CASE): List<RESULT> {
+    override fun <RESULT : DomainObject<*>, USE_CASE : QueryManyUseCase<RESULT>> invoke(useCase: USE_CASE): List<RESULT> {
         logUseCaseInvocation(useCase)
         return getQueryManyUseCase[useCase::class](useCase)
     }
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
+    override fun <RESULT : DomainObject<*>, USE_CASE : QueryOneUseCase<RESULT>> invoke(useCase: USE_CASE): RESULT {
         logUseCaseInvocation(useCase)
         return getQueryOneUseCase[useCase::class](useCase)
     }
 
     private fun logUseCaseInvocation(useCase: UseCase<*>) {
-        log.trace("Invoking use case $useCase")
+        log.debug("Invoking use case $useCase")
     }
 }
 
@@ -77,7 +77,7 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <RESULT : DomainObject, USE_CASE : RequestOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): RequestOneUseCaseHandler<RESULT, USE_CASE> =
+    override fun <RESULT : DomainObject<*>, USE_CASE : RequestOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): RequestOneUseCaseHandler<RESULT, USE_CASE> =
         requestOneOnce(useCaseClass) {
             val operation = requestOneOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().firstOrNull { requestOneOperations[it.kotlin] != null }
@@ -87,7 +87,7 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
             operation as RequestOneUseCaseHandler<*, RequestOneUseCase<*>>
         } as RequestOneUseCaseHandler<RESULT, USE_CASE>
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryManyUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryManyUseCaseHandler<RESULT, USE_CASE> =
+    override fun <RESULT : DomainObject<*>, USE_CASE : QueryManyUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryManyUseCaseHandler<RESULT, USE_CASE> =
         queryManyOnce(useCaseClass) {
             val operation = queryManyOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().firstOrNull { queryManyOperations[it.kotlin] != null }
@@ -97,7 +97,7 @@ class BackendUseCaseRegistryAdapter : GetUseCasePort, ApplicationListener<Contex
             operation as QueryManyUseCaseHandler<*, QueryManyUseCase<*>>
         } as QueryManyUseCaseHandler<RESULT, USE_CASE>
 
-    override fun <RESULT : DomainObject, USE_CASE : QueryOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryOneUseCaseHandler<RESULT, USE_CASE> =
+    override fun <RESULT : DomainObject<*>, USE_CASE : QueryOneUseCase<RESULT>> get(useCaseClass: KClass<out USE_CASE>): QueryOneUseCaseHandler<RESULT, USE_CASE> =
         queryOneOnce(useCaseClass) {
             val operation = fetchOperations[useCaseClass]
                 ?: useCaseClass.java.interfaces.asSequence().firstOrNull { fetchOperations[it.kotlin] != null }

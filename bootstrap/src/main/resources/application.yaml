@@ -1,4 +1,7 @@
 logging:
   level:
     root: INFO
-    io.hamal: TRACE
+    io.hamal: DEBUG
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC

@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.lib.ddd.base.DomainNotification
-import io.hamal.lib.ddd.base.topic
-import io.hamal.lib.ddd.port.HandleDomainNotificationPort
+import io.hamal.backend.notification.DomainNotification
+import io.hamal.backend.notification.port.HandleDomainNotificationPort
+import io.hamal.backend.notification.topic
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 

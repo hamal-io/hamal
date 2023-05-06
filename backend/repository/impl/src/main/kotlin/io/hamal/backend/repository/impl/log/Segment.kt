@@ -8,8 +8,6 @@ import io.hamal.backend.repository.impl.internal.Connection
 import io.hamal.lib.Shard
 import io.hamal.lib.util.TimeUtils
 import java.nio.file.Path
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 
 internal class DefaultSegmentRepository(
@@ -20,18 +18,16 @@ internal class DefaultSegmentRepository(
     override val shard: Shard get() = segment.shard
 }), SegmentRepository {
 
-    private val lock = ReentrantLock()
-
     override fun append(bytes: ByteArray): Chunk.Id {
-        return lock.withLock {
-            connection.execute<Chunk.Id>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
+        return connection.tx {
+            execute<Chunk.Id>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
                 with {
                     set("bytes", bytes)
                     set("now", TimeUtils.now())
                 }
                 map { Chunk.Id(it.getInt("id")) }
-            }!!
-        }
+            }
+        }!!
     }
 
     override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
@@ -81,11 +77,9 @@ internal class DefaultSegmentRepository(
     }
 
     override fun clear() {
-        lock.withLock {
-            connection.tx {
-                execute("DELETE FROM chunks")
-                execute("DELETE FROM sqlite_sequence")
-            }
+        connection.tx {
+            execute("DELETE FROM chunks")
+            execute("DELETE FROM sqlite_sequence")
         }
     }
 
@@ -93,46 +87,9 @@ internal class DefaultSegmentRepository(
         connection.close()
     }
 
-    override fun count() = connection.executeQueryOne<ULong>("SELECT COUNT(*) as count from chunks") {
+    override fun count() = connection.executeQueryOne("SELECT COUNT(*) as count from chunks") {
         map {
             it.getLong("count").toULong()
         }
     } ?: 0UL
 }
-
-private fun DefaultSegmentRepository.setupSchema() {
-//    lock.withLock {
-//        connection.createStatement().use {
-//            it.execute(
-//                """
-//         CREATE TABLE IF NOT EXISTS chunks (
-//            id INTEGER PRIMARY KEY AUTOINCREMENT ,
-//            bytes BLOB NOT NULL ,
-//            instant DATETIME NOT NULL
-//        );
-//        """.trimIndent()
-//            )
-//        }
-//        connection.commit()
-//    }
-    TODO()
-}
-
-
-//private fun DefaultSegmentRepository.setupSqlite() {
-////    connection.createStatement().use {
-////        it.execute("""PRAGMA journal_mode = wal;""")
-////        it.execute("""PRAGMA locking_mode = exclusive;""")
-////        it.execute("""PRAGMA temp_store = memory;""")
-////        it.execute("""PRAGMA synchronous = off;""")
-////    }
-//    TODO()
-//}
-//
-//internal fun <T> DefaultSegmentRepository.executeQuery(sql: String, fn: (ResultSet) -> T): T {
-////    require(!connection.isClosed) { "Connection must be open" }
-////    return connection.createStatement().use { statement ->
-////        statement.executeQuery(sql).use(fn)
-////    }
-//    TODO()
-//}

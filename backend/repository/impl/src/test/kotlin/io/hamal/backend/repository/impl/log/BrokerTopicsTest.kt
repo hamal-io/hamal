@@ -127,6 +127,19 @@ class DefaultBrokerTopicsRepositoryTest {
         }
 
         @Test
+        fun `Bug - able to create realistic topic name`() {
+            testInstance.resolveTopic(Name("very-first-topic"))
+
+            val result = testInstance.resolveTopic(Name("job_definition::created"))
+            assertThat(result.id, equalTo(Topic.Id(2)))
+            assertThat(result.brokerId, equalTo(Broker.Id(345)))
+            assertThat(result.name, equalTo(Name("job_definition::created")))
+            assertThat(result.path, equalTo(Path(testDir)))
+
+            assertThat(testInstance.count(), equalTo(2UL))
+        }
+
+        @Test
         fun `Does not creat a new entry if topic already exists`() {
             testInstance.resolveTopic(Name("yet-another-topic"))
             testInstance.resolveTopic(Name("another-topic"))

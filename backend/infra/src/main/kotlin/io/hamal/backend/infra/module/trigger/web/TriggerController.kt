@@ -1,10 +1,8 @@
 package io.hamal.backend.infra.module.trigger.web
 
 import io.hamal.backend.core.trigger.InvokedTrigger
-import io.hamal.lib.ddd.port.NotifyDomainPort
-import io.hamal.backend.usecase.trigger.ManualTriggerInvocation
-import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
+import io.hamal.backend.notification.port.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
 import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.*
@@ -72,7 +70,8 @@ open class JobController @Autowired constructor(
 //            )
 //        )
 
-        return request(ManualTriggerInvocation(RequestId(10), shard, triggerId))
+//        return request(ManualTriggerInvocation(RequestId(10), shard, triggerId))
+        TODO()
     }
 
 }

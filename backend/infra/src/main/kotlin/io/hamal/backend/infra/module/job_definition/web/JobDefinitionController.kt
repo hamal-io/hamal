@@ -2,7 +2,7 @@ package io.hamal.backend.infra.module.job_definition.web
 
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.tenant.Tenant
-import io.hamal.backend.usecase.job_definition.JobDefinitionRequest.*
+import io.hamal.backend.usecase.request.JobDefinitionRequest.*
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort

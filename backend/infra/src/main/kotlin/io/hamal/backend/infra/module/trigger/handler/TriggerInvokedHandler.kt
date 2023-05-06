@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.module.trigger.handler
 
 import io.hamal.backend.core.logger
-import io.hamal.backend.core.trigger.ManualTriggerInvokedNotification
-import io.hamal.lib.ddd.port.HandleDomainNotificationPort
+import io.hamal.backend.notification.ManualTriggerInvokedNotification
+import io.hamal.backend.notification.port.HandleDomainNotificationPort
 
 class TriggerInvokedHandler : HandleDomainNotificationPort<ManualTriggerInvokedNotification> {
     private val log = logger(TriggerInvokedHandler::class)

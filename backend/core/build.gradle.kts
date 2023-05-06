@@ -8,9 +8,11 @@ archivesName.set("backend-core")
 
 dependencies {
     implementation(project(":lib"))
+    implementation(external.kotlin.reflect)
     implementation(external.kotlin.json)
     implementation(external.kotlin.protobuf)
     implementation(external.spring.logging)
+
 
     testImplementation(project(":backend:core"))
     testImplementation(external.junit)

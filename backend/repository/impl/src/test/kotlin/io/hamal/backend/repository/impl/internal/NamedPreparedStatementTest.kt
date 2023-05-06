@@ -82,6 +82,17 @@ class ParseTest {
         }
 
         @Test
+        fun `Insert statement returning id`() {
+            val result = Parser().parse(
+                """
+                    INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id
+                """.trimIndent()
+            )
+            assertThat(result.sql, equalTo("INSERT INTO chunks (bytes,instant) VALUES ( ? , ? ) RETURNING id"))
+            assertThat(result.orderedParameters, equalTo(listOf("bytes", "now")))
+        }
+
+        @Test
         fun `Parsing single quote`() {
             val result = Parser().parse(
                 """ 'execute :me and :me2' """

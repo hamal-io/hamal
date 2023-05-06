@@ -15,6 +15,8 @@ dependencies {
 
     implementation(project(":backend:usecase"))
     implementation(project(":backend:core"))
+    implementation(project(":backend:repository:api"))
+    implementation(project(":backend:repository:impl"))
 
     implementation(external.kotlin.json)
 
@@ -33,10 +35,9 @@ dependencies {
     }
 
 
-    implementation(project(":backend:repository:api"))
-    implementation(project(":backend:repository:impl"))
 
-    compileOnly(external.spring.devTools)
+
+//    compileOnly(external.spring.devTools)
 }
 
 tasks.bootJar {

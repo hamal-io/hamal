@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.lib.ddd.base.DomainNotification
-import io.hamal.lib.ddd.port.FlushDomainNotificationPort
-import io.hamal.lib.ddd.port.NotifyDomainPort
+import io.hamal.backend.notification.DomainNotification
+import io.hamal.backend.notification.port.FlushDomainNotificationPort
+import io.hamal.backend.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.impl.log.ProtobufAppender

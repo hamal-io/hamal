@@ -38,7 +38,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance = DefaultConnection(
-            "ConnectionIT",
+            PrepareTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
         )
 
@@ -172,7 +172,7 @@ class DefaultConnectionIT {
 
 
         private val testInstance = DefaultConnection(
-            "ConnectionIT",
+            ExecuteTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
         )
 
@@ -293,7 +293,7 @@ class DefaultConnectionIT {
 
         private val testInstance =
             DefaultConnection(
-                "ConnectionIT",
+                ExecuteUpdateTest::class,
                 "jdbc:sqlite:${Files.createTempDirectory("execute-update")}/db.sqlite"
             )
 
@@ -384,7 +384,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance = DefaultConnection(
-            "ConnectionIT",
+            ExecuteQueryTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("execute-query")}/db.sqlite"
         )
 
@@ -475,7 +475,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance = DefaultConnection(
-            "ConnectionIT",
+            TxTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("tx")}/db.sqlite"
         )
 
@@ -522,7 +522,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance = DefaultConnection(
-            "ConnectionIT",
+            CloseTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("connection")}/db.sqlite"
         )
     }

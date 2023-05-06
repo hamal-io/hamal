@@ -4,6 +4,8 @@ import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.ddd.usecase.*
+import io.hamal.lib.util.SnowflakeId
+import io.hamal.lib.vo.base.DomainId
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
@@ -147,8 +149,9 @@ class BackendUseCaseRegistryAdapterTest {
 
     }
 
-    private interface TestResultInterface : DomainObject
-    private class TestResult : TestResultInterface
+
+    private interface TestResultInterface : DomainObject<TestId>
+    private class TestResult(override val id: TestId) : TestResultInterface
     private class IncompatibleTestResult
     private class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
         override val requestId = RequestId(123)
@@ -158,7 +161,7 @@ class BackendUseCaseRegistryAdapterTest {
     private class TestRequestOneUseCaseHandler :
         RequestOneUseCaseHandler<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
         override operator fun invoke(useCase: TestRequestOneUseCase): TestResult {
-            return TestResult()
+            return TestResult(TestId(0))
         }
     }
 
@@ -166,7 +169,7 @@ class BackendUseCaseRegistryAdapterTest {
         class Operation :
             RequestOneUseCaseHandler<TestResult, TestRequestOneUseCaseInterface>(TestRequestOneUseCaseInterface::class) {
             override operator fun invoke(useCase: TestRequestOneUseCaseInterface): TestResult {
-                return TestResult()
+                return TestResult(TestId(0))
             }
         }
     }
@@ -193,7 +196,7 @@ class BackendUseCaseRegistryAdapterTest {
     private class TestQueryOneUseCaseHandler :
         QueryOneUseCaseHandler<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
         override operator fun invoke(useCase: TestQueryOneUseCase): TestResult {
-            return TestResult()
+            return TestResult(TestId(0))
         }
     }
 
@@ -201,7 +204,7 @@ class BackendUseCaseRegistryAdapterTest {
         class Handler :
             QueryOneUseCaseHandler<TestResult, TestQueryOneUseCaseInterface>(TestQueryOneUseCaseInterface::class) {
             override operator fun invoke(useCase: TestQueryOneUseCaseInterface): TestResult {
-                return TestResult()
+                return TestResult(TestId(0))
             }
         }
     }
@@ -238,7 +241,7 @@ class BackendUseCaseInvokerAdapterTest {
             testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
         }
 
-        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) {}
     }
 
     @Nested
@@ -266,7 +269,7 @@ class BackendUseCaseInvokerAdapterTest {
             testRegistryAdapter.register(TestQueryManyUseCase::class, TestQueryManyUseCaseHandler())
         }
 
-        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) {}
     }
 
     @Nested
@@ -293,13 +296,18 @@ class BackendUseCaseInvokerAdapterTest {
             testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
         }
 
-        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter){}
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) {}
     }
 
-    private inner class TestResult(val data: Int) : DomainObject {
-        override fun equals(other: Any?) = data == (other as TestResult).data
-        override fun hashCode() = data
+    private inner class TestResult(override val id: TestId) : DomainObject<TestId> {
+        constructor(id: Int) : this(TestId(id))
+
+        override fun equals(other: Any?) = id == (other as TestResult).id
+        override fun hashCode() = id.hashCode()
     }
 
 }
 
+class TestId(override val value: SnowflakeId) : DomainId() {
+    constructor(value: Int) : this(SnowflakeId(value.toLong()))
+}
