@@ -6,8 +6,11 @@ import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.RequestOneUseCase
 import io.hamal.lib.vo.TriggerId
 
-data class ManualTriggerInvocation(
-    override val requestId: RequestId,
-    override val shard: Shard,
-    val triggerId: TriggerId
-) : RequestOneUseCase<InvokedTrigger.Manual>
+object TriggerRequest {
+    data class ManualTriggerInvocation(
+        override val requestId: RequestId,
+        override val shard: Shard,
+        val triggerId: TriggerId
+    ) : RequestOneUseCase<InvokedTrigger.Manual>
+
+}

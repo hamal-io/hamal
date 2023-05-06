@@ -1,6 +1,7 @@
 package io.hamal.backend.core.trigger
 
 import io.hamal.backend.core.trigger.Trigger.ManualTrigger
+import io.hamal.lib.Requester
 import io.hamal.lib.ddd.base.DomainObject
 import io.hamal.lib.vo.*
 import kotlinx.serialization.Serializable
@@ -23,14 +24,14 @@ sealed class Trigger : DomainObject<TriggerId> {
 @Serializable
 sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {
     abstract val invokedAt: InvokedAt
-    abstract val invokedBy: TenantId
+    abstract val invokedBy: Requester<TenantId>
 
     @Serializable
     data class Manual(
         override val id: InvokedTriggerId,
         val trigger: ManualTrigger,
         override val invokedAt: InvokedAt,
-        override val invokedBy: TenantId
+        override val invokedBy: Requester<TenantId>
     ) : InvokedTrigger()
 
 }

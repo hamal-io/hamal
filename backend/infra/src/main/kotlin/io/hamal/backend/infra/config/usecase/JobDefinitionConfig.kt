@@ -1,9 +1,8 @@
 package io.hamal.backend.infra.config.usecase
 
-import io.hamal.backend.repository.sqlite.domain.DefaultJobDefinitionRepository
-import io.hamal.backend.usecase.request.job_definition.CreateJobDefinitionRequestHandler
 import io.hamal.backend.notification.port.NotifyDomainPort
-import io.hamal.lib.vo.port.GenerateDomainIdPort
+import io.hamal.backend.repository.api.JobDefinitionRepository
+import io.hamal.backend.usecase.request.job_definition.CreateJobDefinitionRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -12,14 +11,10 @@ open class JobDefinitionConfig {
     @Bean
     open fun createJobDefinitionRequestHandler(
         notifyDomainPort: NotifyDomainPort,
-        generateDomainId: GenerateDomainIdPort,
-        jobDefinitionRepository: DefaultJobDefinitionRepository
+        jobDefinitionRepository: JobDefinitionRepository
     ) = CreateJobDefinitionRequestHandler(
         notifyDomainPort,
-        generateDomainId,
         jobDefinitionRepository
     )
 
-//    @Bean
-//    open fun getJobDefinition() = GetJobDefinitionUseCase.Operation()
 }

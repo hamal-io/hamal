@@ -5,9 +5,12 @@ import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.RequestOneUseCase
 
-sealed class JobDefinitionRequest {
+object JobDefinitionRequest {
+
     data class JobDefinitionCreation(
         override val requestId: RequestId,
         override val shard: Shard,
-    ) : RequestOneUseCase<JobDefinition>
+
+        ) : RequestOneUseCase<JobDefinition>
+
 }

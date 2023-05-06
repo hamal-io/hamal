@@ -4,18 +4,17 @@ plugins {
     id("hamal.backend")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
-archivesName.set("backend-repository-sqlite")
+archivesName.set("backend-repository-memory")
 
 dependencies {
     implementation(project(":lib"))
     implementation(project(":backend:core"))
     implementation(project(":backend:repository:api"))
 
-    implementation(external.sqlite)
     implementation(external.spring.logging)
     implementation(external.kotlin.protobuf)
 
-    testImplementation(project(":backend:repository:sqlite"))
+    testImplementation(project(":backend:repository:memory"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

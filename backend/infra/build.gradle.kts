@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":backend:usecase"))
     implementation(project(":backend:core"))
     implementation(project(":backend:repository:api"))
+    implementation(project(":backend:repository:memory"))
     implementation(project(":backend:repository:sqlite"))
 
     implementation(external.kotlin.json)
@@ -33,8 +34,6 @@ dependencies {
     testImplementation(external.spring.test) {
         exclude("org.assertj", "*")
     }
-
-
 
 
 //    compileOnly(external.spring.devTools)

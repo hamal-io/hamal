@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.domain
 
 import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
@@ -10,11 +11,12 @@ import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobReference
+import io.hamal.lib.vo.TriggerId
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 
-class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), JobDefinitionRepository {
+class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), JobDefinitionRepository {
 
 //    internal val lock: Lock
 //    internal val connection: Connection
@@ -58,7 +60,7 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
 //    }
 
     override fun get(id: JobDefinitionId): JobDefinition {
-        return connection.executeQueryOne<JobDefinition>("SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id") {
+        return connection.executeQueryOne("SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id") {
             with { set("id", id) }
             map {
                 JobDefinition(
@@ -68,6 +70,10 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
                 )
             }
         } ?: throw IllegalArgumentException("No job definition found for $id")
+    }
+
+    override fun getTrigger(id: TriggerId): Trigger {
+        TODO()
     }
 
     override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
@@ -247,7 +253,7 @@ class DefaultJobDefinitionRepository(config: Config) : BaseRepository(config), J
 
 }
 
-internal fun DefaultJobDefinitionRepository.insertJobDefinition(requestId: RequestId, toInsert: JobDefinitionToCreate) {
+internal fun SqliteJobDefinitionRepository.insertJobDefinition(requestId: RequestId, toInsert: JobDefinitionToCreate) {
 //    return connection.prepareStatement(
 //        """INSERT INTO job_definitions(id, version, request_id,reference, instant) VALUES(?,?,?,?,?)""",
 //    ).use {
@@ -260,7 +266,7 @@ internal fun DefaultJobDefinitionRepository.insertJobDefinition(requestId: Reque
 //    }
 }
 
-internal fun DefaultJobDefinitionRepository.updateVersion(id: JobDefinitionId) {
+internal fun SqliteJobDefinitionRepository.updateVersion(id: JobDefinitionId) {
 //    return connection.prepareStatement(
 //        """UPDATE job_definitions SET version = version + 1 WHERE id = ?""",
 //    ).use {
@@ -270,8 +276,8 @@ internal fun DefaultJobDefinitionRepository.updateVersion(id: JobDefinitionId) {
 }
 
 fun main() {
-    val store = DefaultJobDefinitionRepository(
-        DefaultJobDefinitionRepository.Config(
+    val store = SqliteJobDefinitionRepository(
+        SqliteJobDefinitionRepository.Config(
             path = Path("/tmp/db0815"),
             shard = Shard(0)
         )

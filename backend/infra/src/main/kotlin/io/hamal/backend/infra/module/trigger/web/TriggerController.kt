@@ -1,12 +1,12 @@
 package io.hamal.backend.infra.module.trigger.web
 
+import io.hamal.backend.core.tenant.Tenant
 import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.usecase.request.TriggerRequest
+import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
-import io.hamal.backend.notification.port.NotifyDomainPort
 import io.hamal.lib.ddd.usecase.InvokeUseCasePort
-import io.hamal.lib.util.SnowflakeId
 import io.hamal.lib.vo.*
-import io.hamal.lib.vo.port.GenerateDomainIdPort
 import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,57 +21,34 @@ class SomeTest(val id: JobId, val definitionId: JobDefinitionId, val shard: Shar
 @RestController
 open class JobController @Autowired constructor(
     val request: InvokeUseCasePort,
-    val generateDomainId: GenerateDomainIdPort,
-    val notifyDomainPort: NotifyDomainPort,
 ) {
 
     @PostMapping("/v1/triggers/manual/{triggerId}")
     fun manualTrigger(
-        @PathVariable("triggerId") rawTriggerId: String,
-        @RequestAttribute("shard") shard: Shard
+        @PathVariable("triggerId") triggerId: TriggerId,
+        @RequestAttribute("shard") shard: Shard,
+        @RequestAttribute("tenant") tenant: Tenant,
+        @RequestAttribute("requestId") requestId: RequestId
     ): InvokedTrigger {
 
-        val triggerId = TriggerId(SnowflakeId(rawTriggerId.toLong()))
-
-//        val trigger = invoke(GetTriggerUseCase(triggerId))
-//        val definition = invoke(GetJobDefinitionUseCase(trigger.jobDefinitionId))
-
-//        notifyDomainPort.invoke(
-//            Scheduled(
-//                id = generateDomainId(shard, ::JobId),
-//                shard = Shard(1),
-//
-//                inputs = counter.incrementAndGet()
-//            )
-//        )
-//
-//        val invokedTrigger = InvokedTrigger.Manual(
-//            id = InvokedTriggerId(SnowflakeId(1)),
+//        val triggerId = TriggerId(SnowflakeId(rawTriggerId.toLong()))
+//        return InvokedTrigger.Manual(
+//            id = InvokedTriggerId(123),
 //            trigger = Trigger.ManualTrigger(
-//                id = TriggerId(SnowflakeId(2)),
-//                reference = TriggerReference("some-ref"),
-//                jobDefinitionId = definition.id,
+//                id = triggerId,
+//                reference = TriggerReference("some_ref"),
+//                jobDefinitionId = JobDefinitionId(0)
 //            ),
-//            invokedAt = InvokedAt(TimeUtils.now()),
-//            invokedBy = AccountId(SnowflakeId(123))
+//            invokedBy = tenant.id,
+//            invokedAt = InvokedAt.now()
 //        )
+        return request(
+            TriggerRequest.ManualTriggerInvocation(
+                requestId = requestId,
+                shard = shard,
+                triggerId = triggerId
+            )
+        )
 
-//        val invokedTrigger = invokeUseCasePort.requestOne(
-//            InvokeManualTriggerUseCase(
-//                shard = shard,
-//                triggerId = generateDomainId(shard, ::TriggerId)
-//            )
-//        )
-//        return ResponseEntity.ok(
-//            SomeTest(
-//                generateDomainId(shard, ::JobId),
-//                generateDomainId(shard, ::JobDefinitionId),
-//                shard
-//            )
-//        )
-
-//        return request(ManualTriggerInvocation(RequestId(10), shard, triggerId))
-        TODO()
     }
-
 }

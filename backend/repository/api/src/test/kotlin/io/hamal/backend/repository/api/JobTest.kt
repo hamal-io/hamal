@@ -15,15 +15,15 @@ import org.junit.jupiter.api.Test
 class RecorderTest {
 
     @Nested
-    @DisplayName("insertJobDefinition()")
-    inner class InsertJobDefinitionTest {
+    @DisplayName("createJobDefinition()")
+    inner class CreateJobDefinitionTest {
 
         @Test
-        fun `Records insertion of JobDefinition with default parameters`() {
+        fun `Records creation of JobDefinition with default parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
-            val id = testInstance.createJobDefinition {}
-            assertThat(id, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
+            val resultId = testInstance.createJobDefinition {}
+            assertThat(resultId, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
@@ -39,13 +39,13 @@ class RecorderTest {
         }
 
         @Test
-        fun `Records insertion of JobDefinition with overwritten parameters`() {
+        fun `Records creation of JobDefinition with overwritten parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
-            val id = testInstance.createJobDefinition {
+            val resultId = testInstance.createJobDefinition {
                 reference = JobReference("some-job-ref")
             }
-            assertThat(id, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
+            assertThat(resultId, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
@@ -59,9 +59,6 @@ class RecorderTest {
                 )
             )
         }
-
-
-//        private val testInstance = Recorder()
     }
 
 }

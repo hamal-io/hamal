@@ -2,6 +2,7 @@ logging:
   level:
     root: INFO
     io.hamal: DEBUG
+    io.hamal.backend.repository.sqlite.log: INFO
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC

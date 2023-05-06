@@ -1,8 +1,9 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToInsert
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToCreate
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId
@@ -17,6 +18,8 @@ import io.hamal.lib.vo.port.GenerateDomainIdPort
 interface JobDefinitionRepository {
 
     fun get(id: JobDefinitionId): JobDefinition
+
+    fun getTrigger(id: TriggerId): Trigger
 
     fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition>
 
@@ -47,7 +50,8 @@ interface JobDefinitionRepository {
         }
 
 
-        data class ManualTriggerToInsert(
+        data class ManualTriggerToCreate(
+            val id: TriggerId,
             override val jobDefinitionId: JobDefinitionId,
             var reference: TriggerReference,
             //inputs
@@ -81,11 +85,12 @@ fun JobDefinitionRepository.Recorder.createJobDefinition(block: JobDefinitionToC
 
 fun JobDefinitionRepository.Recorder.createManualTrigger(
     jobDefinitionId: JobDefinitionId,
-    block: ManualTriggerToInsert.() -> Unit
+    block: ManualTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)
     commands.add(
-        ManualTriggerToInsert(
+        ManualTriggerToCreate(
+            id = result,
             jobDefinitionId = jobDefinitionId,
             reference = referenceFromId(result, ::TriggerReference)
         ).apply(block)
