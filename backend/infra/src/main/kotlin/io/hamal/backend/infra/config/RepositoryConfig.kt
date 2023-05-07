@@ -1,9 +1,11 @@
 package io.hamal.backend.infra.config
 
 import io.hamal.backend.repository.api.JobDefinitionRepository
+import io.hamal.backend.repository.api.JobRepository
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.memory.domain.MemoryJobDefinitionRepository
+import io.hamal.backend.repository.memory.domain.MemoryJobRepository
 import io.hamal.backend.repository.sqlite.log.DefaultBrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,4 +28,6 @@ open class RepositoryConfig {
     @Bean
     open fun jobDefinitionRepository(): JobDefinitionRepository = MemoryJobDefinitionRepository
 
+    @Bean
+    open fun jobRepository() : JobRepository = MemoryJobRepository
 }

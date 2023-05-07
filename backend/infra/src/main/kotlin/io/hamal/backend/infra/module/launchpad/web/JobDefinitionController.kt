@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 open class JobDefinitionController(
     @Autowired val request: InvokeUseCasePort,
 ) {
-
     @PostMapping("/v1/job-definitions")
     fun createJobDefinition(
         @RequestAttribute shard: Shard,

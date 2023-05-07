@@ -1,26 +1,23 @@
 package io.hamal.backend.infra.module.orchestrator.handler
 
 import io.hamal.backend.core.logger
-import io.hamal.backend.notification.ManualTriggerInvokedNotification
+import io.hamal.backend.notification.JobPlannedNotification
 import io.hamal.backend.notification.port.HandleDomainNotificationPort
 import io.hamal.backend.usecase.request.JobRequest
 import io.hamal.lib.RequestId
 import io.hamal.lib.ddd.usecase.InvokeRequestOneUseCasePort
 
-class TriggerInvokedHandler(
+class JobPlannedHandler(
     val request: InvokeRequestOneUseCasePort
-) : HandleDomainNotificationPort<ManualTriggerInvokedNotification> {
-
+) : HandleDomainNotificationPort<JobPlannedNotification> {
     private val log = logger(this::class)
-
-    override fun handle(notification: ManualTriggerInvokedNotification) {
+    override fun handle(notification: JobPlannedNotification) {
         log.debug("Handle: $notification")
         request(
-            JobRequest.PlanJob(
-                requestId = RequestId(123),
+            JobRequest.SchedulePlannedJob(
                 shard = notification.shard,
-                jobDefinition = notification.invokedTrigger.jobDefinition,
-                trigger = notification.invokedTrigger.trigger,
+                requestId = RequestId(124),
+                plannedJob = notification.plannedJob
             )
         )
     }

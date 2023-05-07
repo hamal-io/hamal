@@ -10,7 +10,6 @@ dependencies {
     implementation(project(":backend:core"))
 
     implementation(project(":backend:repository:api"))
-    implementation(project(":backend:repository:sqlite")) // FIXME get rid of this
 
     testImplementation(project(":backend:usecase"))
     testImplementation(external.junit)

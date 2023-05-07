@@ -1,10 +1,11 @@
 package io.hamal.lib.vo
 
 import io.hamal.lib.util.SnowflakeId
-import io.hamal.lib.util.TimeUtils
-import io.hamal.lib.vo.base.*
+import io.hamal.lib.vo.base.DomainId
+import io.hamal.lib.vo.base.DomainIdSerializer
+import io.hamal.lib.vo.base.Reference
+import io.hamal.lib.vo.base.ReferenceSerializer
 import kotlinx.serialization.Serializable
-import java.time.Instant
 
 
 @Serializable(with = TriggerId.Serializer::class)
@@ -29,12 +30,3 @@ class InvokedTriggerId(override val value: SnowflakeId) : DomainId() {
     internal object Serializer : DomainIdSerializer<InvokedTriggerId>(::InvokedTriggerId)
 }
 
-@Serializable(with = InvokedAt.Serializer::class)
-class InvokedAt(override val value: Instant) : DomainAt() {
-    companion object {
-        @JvmStatic
-        fun now(): InvokedAt = InvokedAt(TimeUtils.now())
-    }
-
-    internal object Serializer : DomainAtSerializer<InvokedAt>(::InvokedAt)
-}

@@ -33,8 +33,10 @@ class JobReference(override val value: Value) : Reference() {
 enum class JobState {
     Planned,
     Scheduled,
+    Queued,
     Started,
     Completed,
     Failed,
     TerminalFailed
 }
+

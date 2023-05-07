@@ -1,55 +1,81 @@
 package io.hamal.backend.core.job
 
+import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.trigger.Trigger
 import io.hamal.lib.ddd.base.DomainObject
-import io.hamal.lib.vo.JobDefinitionId
 import io.hamal.lib.vo.JobId
 import io.hamal.lib.vo.JobState
+import io.hamal.lib.vo.QueuedAt
+import io.hamal.lib.vo.ScheduledAt
+import kotlinx.serialization.Serializable
 
-interface Job : DomainObject<JobId> {
+@Serializable
+sealed interface Job : DomainObject<JobId> {
 
     override val id: JobId
     val state: JobState
-    val definitionId: JobDefinitionId
+    val definition: JobDefinition
+    val trigger: Trigger
+}
 
-    class Planned(
-        override val id: JobId,
-        override val definitionId: JobDefinitionId
-    ) : Job {
-        override val state = JobState.Planned
-    }
+@Serializable
+class PlannedJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger
+) : Job {
+    override val state = JobState.Planned
+}
 
-    class Scheduled(
-        override val id: JobId,
-        override val definitionId: JobDefinitionId
-    ) : Job {
-        override val state = JobState.Scheduled
-    }
+@Serializable
+class ScheduledJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger,
+    val scheduledAt: ScheduledAt
+) : Job {
+    override val state = JobState.Scheduled
+}
 
-    class Started(
-        override val id: JobId,
-        override val definitionId: JobDefinitionId
-    ) : Job {
-        override val state = JobState.Started
-    }
+@Serializable
+class QueuedJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger,
+    val queuedAt: QueuedAt
+) : Job {
+    override val state = JobState.Queued
+}
 
-    class Completed(
-        override val id: JobId,
-        override val definitionId: JobDefinitionId
-    ) : Job {
-        override val state = JobState.Completed
-    }
 
-    class Failed(
-        override val id: JobId,
-        override val definitionId: JobDefinitionId
-    ) : Job {
-        override val state = JobState.Failed
-    }
+class StartedJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger
+) : Job {
+    override val state = JobState.Started
+}
 
-    class TerminalFailed(
-        override val id: JobId,
-        override val definitionId: JobDefinitionId
-    ) : Job {
-        override val state = JobState.TerminalFailed
-    }
+class CompletedJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger
+) : Job {
+    override val state = JobState.Completed
+}
+
+class FailedJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger
+) : Job {
+    override val state = JobState.Failed
+}
+
+class TerminalFailedJob(
+    override val id: JobId,
+    override val definition: JobDefinition,
+    override val trigger: Trigger
+) : Job {
+    override val state = JobState.TerminalFailed
 }

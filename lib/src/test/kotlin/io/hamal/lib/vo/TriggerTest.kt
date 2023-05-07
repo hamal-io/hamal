@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
-import java.time.Instant
 
 @DisplayName("TriggerId")
 class TriggerIdTest {
@@ -165,53 +164,3 @@ class InvokedTriggerIdTest {
     fun Serialization() = generateTestCases(InvokedTriggerId(SnowflakeId(23)), "23")
 }
 
-@DisplayName("InvokedAt")
-class InvokedAtTest {
-    @Nested
-    @DisplayName("equals()")
-    inner class EqualsTest {
-        @Test
-        fun `Equals if underlying values are equal`() {
-            assertEquals(
-                InvokedAt(Instant.ofEpochMilli(123456)),
-                InvokedAt(Instant.ofEpochMilli(123456))
-            )
-        }
-
-        @Test
-        fun `Not equals if underlying values are different`() {
-            assertNotEquals(
-                InvokedAt(Instant.ofEpochMilli(123456)),
-                InvokedAt(Instant.ofEpochMilli(654321))
-            )
-        }
-    }
-
-    @Nested
-    @DisplayName("hashCode()")
-    inner class HashCodeTest {
-        @Test
-        fun `Same hashcode if values are equal`() {
-            assertEquals(
-                InvokedAt(Instant.ofEpochMilli(123456)).hashCode(),
-                InvokedAt(Instant.ofEpochMilli(123456)).hashCode()
-            )
-        }
-
-        @Test
-        fun `Different hashcode if values are different`() {
-            assertNotEquals(
-                InvokedAt(Instant.ofEpochMilli(123456)).hashCode(),
-                InvokedAt(Instant.ofEpochMilli(654321)).hashCode()
-            )
-        }
-    }
-
-    @Test
-    fun `toString override`() {
-        assertThat(InvokedAt(Instant.ofEpochMilli(123456)).toString(), equalTo("InvokedAt(1970-01-01T00:02:03.456Z)"))
-    }
-
-    @TestFactory
-    fun Serialization() = generateTestCases(InvokedAt(Instant.ofEpochMilli(123456)), "123456")
-}

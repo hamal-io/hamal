@@ -25,6 +25,7 @@ class ManualTriggerInvocationRequestHandler(
 
         val result = Manual(
             id = InvokedTriggerId(123),
+            jobDefinition = jobDefinitionRepository.get(trigger.jobDefinitionId),
             trigger = trigger,
             invokedAt = InvokedAt.now(),
             invokedBy = Requester.tenant(TenantId(12))

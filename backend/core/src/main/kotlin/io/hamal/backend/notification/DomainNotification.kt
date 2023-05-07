@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 sealed class DomainNotification {
     abstract val shard: Shard
 
-
     val topic: String by lazy {
         val topicAnnotation =
             this::class.annotations.find { annotation -> annotation.annotationClass == DomainNotificationTopic::class }

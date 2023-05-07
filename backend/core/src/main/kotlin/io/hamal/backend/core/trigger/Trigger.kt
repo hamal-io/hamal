@@ -1,5 +1,6 @@
 package io.hamal.backend.core.trigger
 
+import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger.ManualTrigger
 import io.hamal.lib.Requester
 import io.hamal.lib.ddd.base.DomainObject
@@ -23,12 +24,14 @@ sealed class Trigger : DomainObject<TriggerId> {
 
 @Serializable
 sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {
+    abstract val jobDefinition: JobDefinition
     abstract val invokedAt: InvokedAt
     abstract val invokedBy: Requester<TenantId>
 
     @Serializable
     data class Manual(
         override val id: InvokedTriggerId,
+        override val jobDefinition: JobDefinition,
         val trigger: ManualTrigger,
         override val invokedAt: InvokedAt,
         override val invokedBy: Requester<TenantId>

@@ -3,7 +3,7 @@ package io.hamal.backend.core
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 
-interface HamalLogger {
+interface BackendLogger {
     fun trace(msg: String)
     fun debug(msg: String)
     fun info(msg: String)
@@ -12,11 +12,11 @@ interface HamalLogger {
     fun error(msg: String, throwable: Throwable)
 }
 
-fun <T : Any> logger(forClass: KClass<T>): HamalLogger {
+fun <T : Any> logger(forClass: KClass<T>): BackendLogger {
     return logger(forClass.java.name)
 }
 
-fun logger(name: String): HamalLogger {
+fun logger(name: String): BackendLogger {
     return DefaultBackendLogger(
         LoggerFactory.getLogger(name)
     )
@@ -25,7 +25,7 @@ fun logger(name: String): HamalLogger {
 
 class DefaultBackendLogger(
     private val delegate: org.slf4j.Logger
-) : HamalLogger {
+) : BackendLogger {
     override fun trace(msg: String) {
         delegate.trace(msg)
     }
@@ -52,7 +52,7 @@ class DefaultBackendLogger(
     }
 }
 
-object NopLogger : HamalLogger {
+object NopLogger : BackendLogger {
     override fun trace(msg: String) {}
 
     override fun debug(msg: String) {}

@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.core.HamalLogger
+import io.hamal.backend.core.BackendLogger
 import io.hamal.backend.core.logger
 import io.hamal.backend.notification.port.FlushDomainNotificationPort
 import io.hamal.lib.KeyedOnce
@@ -18,7 +18,7 @@ class BackendUseCaseInvokerAdapter private constructor(
     private val getQueryManyUseCase: GetQueryManyUseCasePort,
     private val getQueryOneUseCase: GetQueryOneUseCasePort,
     private val flushDomainNotifications: FlushDomainNotificationPort,
-    private val log: HamalLogger = logger(BackendUseCaseRegistryAdapter::class)
+    private val log: BackendLogger = logger(BackendUseCaseRegistryAdapter::class)
 ) : InvokeUseCasePort {
 
     @Autowired
