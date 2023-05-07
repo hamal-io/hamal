@@ -48,6 +48,7 @@ class QueuedJob(
 }
 
 
+@Serializable
 class StartedJob(
     override val id: JobId,
     override val definition: JobDefinition,
@@ -56,6 +57,7 @@ class StartedJob(
     override val state = JobState.Started
 }
 
+@Serializable
 class CompletedJob(
     override val id: JobId,
     override val definition: JobDefinition,
@@ -64,6 +66,7 @@ class CompletedJob(
     override val state = JobState.Completed
 }
 
+@Serializable
 class FailedJob(
     override val id: JobId,
     override val definition: JobDefinition,
@@ -72,6 +75,7 @@ class FailedJob(
     override val state = JobState.Failed
 }
 
+@Serializable
 class TerminalFailedJob(
     override val id: JobId,
     override val definition: JobDefinition,

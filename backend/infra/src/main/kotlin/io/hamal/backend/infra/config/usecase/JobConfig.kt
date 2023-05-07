@@ -2,6 +2,7 @@ package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobRepository
+import io.hamal.backend.usecase.request.job.DequeueJobRequestHandler
 import io.hamal.backend.usecase.request.job.PlanJobRequestHandler
 import io.hamal.backend.usecase.request.job.QueueScheduledJobRequestHandler
 import io.hamal.backend.usecase.request.job.SchedulePlannedJobRequestHandler
@@ -36,6 +37,15 @@ open class JobConfig {
         notifyDomainPort: NotifyDomainPort,
         jobRepository: JobRepository
     ) = QueueScheduledJobRequestHandler(
+        notifyDomainPort,
+        jobRepository
+    )
+
+    @Bean
+    open fun dequeueJobRequestHandler(
+        notifyDomainPort: NotifyDomainPort,
+        jobRepository: JobRepository
+    ) = DequeueJobRequestHandler(
         notifyDomainPort,
         jobRepository
     )

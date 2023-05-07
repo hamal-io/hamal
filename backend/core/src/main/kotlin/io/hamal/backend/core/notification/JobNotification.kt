@@ -3,6 +3,7 @@ package io.hamal.backend.core.notification
 import io.hamal.backend.core.job.PlannedJob
 import io.hamal.backend.core.job.QueuedJob
 import io.hamal.backend.core.job.ScheduledJob
+import io.hamal.backend.core.job.StartedJob
 import io.hamal.lib.Shard
 import kotlinx.serialization.Serializable
 
@@ -26,4 +27,11 @@ data class JobScheduledNotification(
 data class JobQueuedNotification(
     override val shard: Shard,
     val queuedJob: QueuedJob
+) : DomainNotification()
+
+@Serializable
+@DomainNotificationTopic("job::started")
+data class JobStartedNotification(
+    override val shard: Shard,
+    val startedJob: StartedJob
 ) : DomainNotification()

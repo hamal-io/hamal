@@ -34,13 +34,16 @@ open class TestUseCaseRegistryConfig {
 @Configuration
 open class TestUseCasesConfig {
     @Bean
-    open fun requestOneUseCase() = testRequestOneUseCaseOp
+    open fun requestOneUseCase() = testRequestOneUseCaseHandler
 
     @Bean
-    open fun queryManyUseCase() = testQueryManyUseCaseOp
+    open fun requestManyUseCase() = testRequestManyUseCaseHandler
 
     @Bean
-    open fun queryOneUseCase() = testQueryOneUseCaseOp
+    open fun queryManyUseCase() = testQueryManyUseCaseHandler
+
+    @Bean
+    open fun queryOneUseCase() = testQueryOneUseCaseHandler
 }
 
 @Nested
@@ -56,21 +59,28 @@ class BackendUseCaseRegistryAdapterIT(
     @DisplayName("onApplicationEvent()")
     inner class GetRequestOneUseCasePortTestOperation {
         @Test
-        fun `Registers requestOne use case operation`() {
+        fun `Registers request one use case handler`() {
             val result = testInstance[TestRequestOneUseCase::class]
-            assertThat(result, equalTo(testRequestOneUseCaseOp))
+            assertThat(result, equalTo(testRequestOneUseCaseHandler))
         }
 
         @Test
-        fun `Registers queryMany use case operation`() {
+        fun `Registers request many use case handler`() {
+            val result = testInstance[TestRequestManyUseCase::class]
+            assertThat(result, equalTo(testRequestManyUseCaseHandler))
+        }
+
+
+        @Test
+        fun `Registers query many use case handler`() {
             val result = testInstance[TestQueryManyUseCase::class]
-            assertThat(result, equalTo(testQueryManyUseCaseOp))
+            assertThat(result, equalTo(testQueryManyUseCaseHandler))
         }
 
         @Test
-        fun `Registers queryOne use case operation`() {
+        fun `Registers query one use case handler`() {
             val result = testInstance[TestQueryOneUseCase::class]
-            assertThat(result, equalTo(testQueryOneUseCaseOp))
+            assertThat(result, equalTo(testQueryOneUseCaseHandler))
         }
     }
 }
@@ -87,21 +97,31 @@ class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
     override val shard = Shard(23)
 }
 
-private val testRequestOneUseCaseOp =
+private val testRequestOneUseCaseHandler =
     object : RequestOneUseCaseHandler<TestResult, TestRequestOneUseCase>(TestRequestOneUseCase::class) {
         override operator fun invoke(useCase: TestRequestOneUseCase) = TestResult(TestId(42))
     }
 
+class TestRequestManyUseCase : RequestManyUseCase<TestResult> {
+    override val requestId = RequestId(123)
+    override val shard = Shard(23)
+}
+
+private val testRequestManyUseCaseHandler =
+    object : RequestManyUseCaseHandler<TestResult, TestRequestManyUseCase>(TestRequestManyUseCase::class) {
+        override operator fun invoke(useCase: TestRequestManyUseCase) = listOf(TestResult(TestId(4242)))
+    }
+
 class TestQueryManyUseCase : QueryManyUseCase<TestResult>
 
-private val testQueryManyUseCaseOp =
+private val testQueryManyUseCaseHandler =
     object : QueryManyUseCaseHandler<TestResult, TestQueryManyUseCase>(TestQueryManyUseCase::class) {
         override fun invoke(useCase: TestQueryManyUseCase) = listOf<TestResult>()
     }
 
 class TestQueryOneUseCase : QueryOneUseCase<TestResult>
 
-private val testQueryOneUseCaseOp =
+private val testQueryOneUseCaseHandler =
     object : QueryOneUseCaseHandler<TestResult, TestQueryOneUseCase>(TestQueryOneUseCase::class) {
         override fun invoke(useCase: TestQueryOneUseCase) = TestResult(TestId(0))
     }

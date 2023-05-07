@@ -3,6 +3,7 @@ package io.hamal.backend.repository.api
 import io.hamal.backend.core.job.PlannedJob
 import io.hamal.backend.core.job.QueuedJob
 import io.hamal.backend.core.job.ScheduledJob
+import io.hamal.backend.core.job.StartedJob
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.lib.RequestId
@@ -13,6 +14,7 @@ interface JobRepository {
     fun planJob(jobToPlan: JobToPlan): PlannedJob
     fun schedule(planedJob: PlannedJob): ScheduledJob
     fun queue(scheduledJob: ScheduledJob): QueuedJob
+    fun dequeue(): List<StartedJob>
 
     data class JobToPlan(
         val shard: Shard,

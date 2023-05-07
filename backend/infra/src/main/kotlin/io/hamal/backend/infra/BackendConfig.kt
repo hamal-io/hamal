@@ -1,15 +1,16 @@
 package io.hamal.backend.infra
 
-import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
-import io.hamal.backend.infra.handler.JobPlannedHandler
-import io.hamal.backend.infra.handler.TriggerInvokedHandler
-import io.hamal.backend.infra.handler.JobQueuedHandler
-import io.hamal.backend.infra.handler.JobScheduledHandler
 import io.hamal.backend.core.notification.JobPlannedNotification
 import io.hamal.backend.core.notification.JobQueuedNotification
 import io.hamal.backend.core.notification.JobScheduledNotification
 import io.hamal.backend.core.notification.ManualTriggerInvokedNotification
+import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
+import io.hamal.backend.infra.handler.JobPlannedHandler
+import io.hamal.backend.infra.handler.JobQueuedHandler
+import io.hamal.backend.infra.handler.JobScheduledHandler
+import io.hamal.backend.infra.handler.TriggerInvokedHandler
 import io.hamal.backend.usecase.request.JobDefinitionRequest
+import io.hamal.backend.usecase.request.TriggerRequest.ManualTriggerInvocation
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.ddd.usecase.InvokeRequestOneUseCasePort
@@ -63,6 +64,27 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
             JobDefinitionRequest.JobDefinitionCreation(
                 requestId = RequestId(10000),
                 shard = Shard(0)
+            )
+        )
+        request(
+            ManualTriggerInvocation(
+                requestId = RequestId(1000),
+                shard = Shard(0),
+                triggerId = jobDef.triggers.first().id
+            )
+        )
+        request(
+            ManualTriggerInvocation(
+                requestId = RequestId(1001),
+                shard = Shard(0),
+                triggerId = jobDef.triggers.first().id
+            )
+        )
+        request(
+            ManualTriggerInvocation(
+                requestId = RequestId(1002),
+                shard = Shard(0),
+                triggerId = jobDef.triggers.first().id
             )
         )
         println(jobDef)

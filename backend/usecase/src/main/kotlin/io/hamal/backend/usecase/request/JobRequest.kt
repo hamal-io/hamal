@@ -3,10 +3,12 @@ package io.hamal.backend.usecase.request
 import io.hamal.backend.core.job.PlannedJob
 import io.hamal.backend.core.job.QueuedJob
 import io.hamal.backend.core.job.ScheduledJob
+import io.hamal.backend.core.job.StartedJob
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
+import io.hamal.lib.ddd.usecase.RequestManyUseCase
 import io.hamal.lib.ddd.usecase.RequestOneUseCase
 
 object JobRequest {
@@ -29,4 +31,8 @@ object JobRequest {
         val scheduledJob: ScheduledJob
     ) : RequestOneUseCase<QueuedJob>
 
+    data class DequeueJob(
+        override val requestId: RequestId,
+        override val shard: Shard,
+    ) : RequestManyUseCase<StartedJob>
 }

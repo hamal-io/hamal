@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*
 import java.util.*
 import kotlin.math.pow
 
+@DisplayName("BackendUseCaseRegistryAdapter")
 class BackendUseCaseRegistryAdapterTest {
 
     @Nested
@@ -58,6 +59,52 @@ class BackendUseCaseRegistryAdapterTest {
         private val testRequestOneInterfaceUseCaseOp = TestRequestOneUseCaseInterface.Operation()
 
     }
+
+    @Nested
+    @DisplayName("GetRequestManyUseCasePort")
+    inner class GetRequestManyUseCasePortTestPayloadOperation {
+        @Test
+        fun `Exists`() {
+            val testInstance = testInstanceWithUseCase()
+
+            val result = testInstance[TestRequestManyUseCase::class]
+            assertThat(result, equalTo(testRequestManyUseCaseOp))
+        }
+
+        @Test
+        fun `Not found`() {
+            val testInstance = BackendUseCaseRegistryAdapter()
+
+            val exception = assertThrows<IllegalStateException> {
+                testInstance[TestRequestManyUseCase::class]
+            }
+            assertThat(
+                exception.message,
+                containsString("No operation registered for class io.hamal.backend.infra.adapter.BackendUseCaseRegistryAdapterTest\$TestRequestManyUseCase")
+            )
+        }
+
+        @Test
+        fun `Interface of use case is registered`() {
+            val testInstance = BackendUseCaseRegistryAdapter().apply {
+                register(
+                    TestRequestManyUseCaseInterface::class,
+                    testRequestManyInterfaceUseCaseOp
+                )
+            }
+            val result = testInstance[TestRequestManyUseCaseInterface::class]
+            assertThat(result, equalTo(testRequestManyInterfaceUseCaseOp))
+        }
+
+        private fun testInstanceWithUseCase() = BackendUseCaseRegistryAdapter().apply {
+            register(TestRequestManyUseCase::class, testRequestManyUseCaseOp)
+        }
+
+        private val testRequestManyUseCaseOp = TestRequestManyUseCaseHandler()
+        private val testRequestManyInterfaceUseCaseOp = TestRequestManyUseCaseInterface.Operation()
+
+    }
+
 
     @Nested
     @DisplayName("GetQueryManyUseCasePort")
@@ -152,7 +199,6 @@ class BackendUseCaseRegistryAdapterTest {
 
     private interface TestResultInterface : DomainObject<TestId>
     private class TestResult(override val id: TestId) : TestResultInterface
-    private class IncompatibleTestResult
     private class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
         override val requestId = RequestId(123)
         override val shard = Shard(23)
@@ -174,6 +220,26 @@ class BackendUseCaseRegistryAdapterTest {
         }
     }
 
+    private class TestRequestManyUseCase : RequestManyUseCase<TestResult> {
+        override val requestId = RequestId(123)
+        override val shard = Shard(23)
+    }
+
+    private class TestRequestManyUseCaseHandler :
+        RequestManyUseCaseHandler<TestResult, TestRequestManyUseCase>(TestRequestManyUseCase::class) {
+        override operator fun invoke(useCase: TestRequestManyUseCase): List<TestResult> {
+            return listOf(TestResult(TestId(0)))
+        }
+    }
+
+    private interface TestRequestManyUseCaseInterface : RequestManyUseCase<TestResult> {
+        class Operation :
+            RequestManyUseCaseHandler<TestResult, TestRequestManyUseCaseInterface>(TestRequestManyUseCaseInterface::class) {
+            override operator fun invoke(useCase: TestRequestManyUseCaseInterface): List<TestResult> {
+                return listOf(TestResult(TestId(0)))
+            }
+        }
+    }
 
     private class TestQueryManyUseCase : QueryManyUseCase<TestResult>
     private class TestQueryManyUseCaseHandler :
@@ -210,7 +276,6 @@ class BackendUseCaseRegistryAdapterTest {
     }
 }
 
-@Nested
 @DisplayName("BackendUseCaseInvokerAdapter")
 class BackendUseCaseInvokerAdapterTest {
     @Nested
@@ -243,6 +308,48 @@ class BackendUseCaseInvokerAdapterTest {
 
         private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) {}
     }
+
+    @Nested
+    @DisplayName("invoke<RequestMany>()")
+    inner class RequestManyTest {
+
+        @Test
+        fun `Applies operation on use case`() {
+            val result = testInstance(TestUseCase(100))
+            assertThat(
+                result, equalTo(
+                    listOf(
+                        TestResult(200),
+                        TestResult(400)
+                    )
+                )
+            )
+        }
+
+        private inner class TestUseCase(val data: Int) : RequestManyUseCase<TestResult> {
+            override val requestId = RequestId(123)
+            override val shard = Shard(23)
+        }
+
+        private inner class TestUseCaseHandler :
+            RequestManyUseCaseHandler<TestResult, TestUseCase>(TestUseCase::class) {
+            override fun invoke(useCase: TestUseCase): List<TestResult> {
+                return listOf(
+                    TestResult(useCase.data * 2),
+                    TestResult(useCase.data * 4)
+                )
+            }
+        }
+
+        private val testRegistryAdapter = BackendUseCaseRegistryAdapter()
+
+        init {
+            testRegistryAdapter.register(TestUseCase::class, TestUseCaseHandler())
+        }
+
+        private val testInstance = BackendUseCaseInvokerAdapter(testRegistryAdapter) {}
+    }
+
 
     @Nested
     @DisplayName("invoke<QueryMany>()")
