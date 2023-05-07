@@ -9,3 +9,8 @@ data class ApiWorkerJob(
     val id: JobId,
     val reference: JobReference
 )
+
+@Serializable
+data class ApiWorkerJobs(
+    val jobs: List<ApiWorkerJob>
+)

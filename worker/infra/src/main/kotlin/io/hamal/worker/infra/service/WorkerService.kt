@@ -1,35 +1,31 @@
-//package io.hamal.module.worker.infra.service
-//
-//import org.springframework.stereotype.Service
-//
-//@Service
-//class WorkerService {
-//
-////    @Autowired
-////    lateinit var consumer: DomainNotificationConsumer
-////
-////    @Scheduled(initialDelay = 100, fixedRate = 1, timeUnit = TimeUnit.MILLISECONDS)
-////    fun run() {
-//////            println("Worker active")
-////        val notification = consumer.poll(QueueDomainNotification.JobEnqueued::class.java.name)
-////        if (notification is QueueDomainNotification.JobEnqueued) {
-////            println("worker polled some work - $notification")
-////            println(Thread.currentThread().name)
-////        }
-////
-//////    @Scheduled(initialDelay = 100, fixedDelay = 1000, timeUnit = TimeUnit.MILLISECONDS)
-//////    fun run() {
-////////        println("Worker active")
-////////
-////////        val entryPointLoader = WorkerExtensionLoader.DefaultImpl()
-////////        val x =
-////////            entryPointLoader.load(File("/Users/ddymke/repo/hamal/module/worker/extension/impl/starter/build/libs/extension-starter.jar"))
-////////
-////////        x.functionFactories()
-////////            .map { it() }
-////////            .forEach { it() }
-////////
-////////        println(x)
-////    }
-//
-//}
+package io.hamal.worker.infra.service
+
+import io.hamal.lib.api.ApiWorkerJobs
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.postForEntity
+import java.util.concurrent.TimeUnit
+
+@Service
+class WorkerService
+@Autowired constructor(
+    val restTemplate: RestTemplate
+) {
+
+
+    data class Test(
+        val id: String
+    )
+
+    @Scheduled(initialDelay = 1, fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
+    fun run() {
+
+        val response: ResponseEntity<ApiWorkerJobs> =
+            restTemplate.postForEntity<ApiWorkerJobs>("http://localhost:8084/v1/dequeue")
+        println(response.body?.jobs)
+    }
+
+}

@@ -4,6 +4,7 @@ import io.hamal.backend.usecase.request.JobRequest
 import io.hamal.lib.RequestId
 import io.hamal.lib.Shard
 import io.hamal.lib.api.ApiWorkerJob
+import io.hamal.lib.api.ApiWorkerJobs
 import io.hamal.lib.ddd.usecase.InvokeRequestManyUseCasePort
 import io.hamal.lib.vo.JobId
 import io.hamal.lib.vo.JobReference
@@ -18,7 +19,8 @@ class QueueController
     val requestMany: InvokeRequestManyUseCasePort
 ) {
     @PostMapping("/v1/dequeue")
-    fun dequeueJob(): List<ApiWorkerJob> {
+    fun dequeueJob(): ApiWorkerJobs {
+//    fun dequeueJob(): ApiWorkerJob {
 
         val result = requestMany.invoke(
             JobRequest.DequeueJob(
@@ -27,11 +29,12 @@ class QueueController
             )
         )
 
-        return result.map {
-            ApiWorkerJob(
-                id = JobId(1),
-                reference = JobReference("ref")
-            )
-        }
+        return ApiWorkerJobs(
+            jobs = result.map {
+                ApiWorkerJob(
+                    id = JobId(1),
+                    reference = JobReference("ref")
+                )
+            })
     }
 }

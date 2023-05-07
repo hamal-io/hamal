@@ -29,10 +29,9 @@ dependencyResolutionManagement {
 
 include("bootstrap")
 
-include(":script:api")
-include(":script:impl")
-
-include(":lib")
+include(":lib:core")
+include(":lib:script:api")
+include(":lib:script:impl")
 
 include(":backend")
 include(":backend:usecase")

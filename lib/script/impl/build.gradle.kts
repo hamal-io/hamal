@@ -6,12 +6,12 @@ plugins {
 archivesName.set("script-impl")
 
 dependencies {
-    implementation(project(":lib"))
-    implementation(project(":script:api"))
+    implementation(project(":lib:core"))
+    implementation(project(":lib:script:api"))
     implementation(external.spring.logging)
 
-    testImplementation(project(":script:api"))
-    testImplementation(project(":script:impl"))
+    testImplementation(project(":lib:script:api"))
+    testImplementation(project(":lib:script:impl"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

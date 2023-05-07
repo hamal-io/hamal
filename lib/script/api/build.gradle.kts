@@ -6,9 +6,9 @@ plugins {
 archivesName.set("script-api")
 
 dependencies {
-    implementation(project(":lib"))
+    implementation(project(":lib:core"))
 
-    testImplementation(project(":script:api"))
+    testImplementation(project(":lib:script:api"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

@@ -11,7 +11,7 @@ apply(plugin = "io.spring.dependency-management")
 
 
 dependencies {
-    implementation(project(":lib"))
+    implementation(project(":lib:core"))
 
     implementation(project(":backend:usecase"))
     implementation(project(":backend:core"))
@@ -20,12 +20,12 @@ dependencies {
     implementation(project(":backend:repository:sqlite"))
 
     implementation(external.kotlin.json)
+    implementation(external.kotlin.protobuf)
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
-        exclude("org.springframework.boot", "spring-boot-starter-json")
     }
 
     testImplementation(project(":backend:infra"))
@@ -34,9 +34,7 @@ dependencies {
     testImplementation(external.spring.test) {
         exclude("org.assertj", "*")
     }
-
-
-//    compileOnly(external.spring.devTools)
+    compileOnly(external.spring.devTools)
 }
 
 tasks.bootJar {
