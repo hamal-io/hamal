@@ -26,6 +26,12 @@ class WorkerService
         val response: ResponseEntity<ApiWorkerJobs> =
             restTemplate.postForEntity<ApiWorkerJobs>("http://localhost:8084/v1/dequeue")
         println(response.body?.jobs)
+
+        val jobs = response.body?.jobs ?: listOf()
+        if (jobs.isNotEmpty()) {
+            val job = jobs.first()
+            restTemplate.postForEntity<Any>("http://localhost:8084/v1/jobs/${job.id}/complete")
+        }
     }
 
 }

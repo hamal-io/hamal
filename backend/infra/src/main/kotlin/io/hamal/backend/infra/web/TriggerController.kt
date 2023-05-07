@@ -19,7 +19,7 @@ import java.util.*
 class SomeTest(val id: JobId, val definitionId: JobDefinitionId, val shard: Shard)
 
 @RestController
-open class JobController @Autowired constructor(
+open class TriggerController @Autowired constructor(
     val request: InvokeUseCasePort,
 ) {
 
