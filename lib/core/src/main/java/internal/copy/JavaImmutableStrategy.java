@@ -1,6 +1,6 @@
 package internal.copy;
 
-import io.hamal.lib.ddd.base.ValueObject;
+import io.hamal.lib.core.ddd.base.ValueObject;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

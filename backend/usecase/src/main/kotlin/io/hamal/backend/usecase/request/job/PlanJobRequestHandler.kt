@@ -6,9 +6,9 @@ import io.hamal.backend.core.notification.JobPlannedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobRepository
 import io.hamal.backend.usecase.request.JobRequest.PlanJob
-import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
-import io.hamal.lib.vo.JobId
-import io.hamal.lib.vo.port.GenerateDomainIdPort
+import io.hamal.lib.core.ddd.usecase.RequestOneUseCaseHandler
+import io.hamal.lib.core.vo.JobId
+import io.hamal.lib.core.vo.port.GenerateDomainIdPort
 
 class PlanJobRequestHandler(
     val generateDomainId: GenerateDomainIdPort,

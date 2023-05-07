@@ -3,9 +3,9 @@ package io.hamal.backend.infra.adapter
 import io.hamal.backend.core.BackendLogger
 import io.hamal.backend.core.logger
 import io.hamal.backend.core.notification.port.FlushDomainNotificationPort
-import io.hamal.lib.KeyedOnce
-import io.hamal.lib.ddd.base.DomainObject
-import io.hamal.lib.ddd.usecase.*
+import io.hamal.lib.core.KeyedOnce
+import io.hamal.lib.core.ddd.usecase.*
+import io.hamal.lib.core.ddd.base.DomainObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent

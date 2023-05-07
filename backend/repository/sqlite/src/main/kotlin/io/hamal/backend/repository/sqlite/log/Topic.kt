@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.Shard
+import io.hamal.lib.core.Shard
 import java.nio.file.Path
 
 

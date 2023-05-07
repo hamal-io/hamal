@@ -1,8 +1,8 @@
 package io.hamal.backend.core.queue.port
 
 import io.hamal.backend.core.queue.QueuedJob
-import io.hamal.lib.vo.JobId
-import io.hamal.lib.Shard
+import io.hamal.lib.core.vo.JobId
+import io.hamal.lib.core.Shard
 
 interface EnqueueJobPort {
     data class JobToEnqueue(

@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.Shard
+import io.hamal.lib.core.Shard
 import java.nio.file.Path
 
 data class BrokerConsumers(

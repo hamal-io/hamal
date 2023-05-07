@@ -1,8 +1,6 @@
 package internal.copy;
 
-import internal.copy.JavaCopy;
-import internal.copy.JavaPrimitiveStrategy;
-import io.hamal.lib.Tuple2;
+import io.hamal.lib.core.Tuple2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

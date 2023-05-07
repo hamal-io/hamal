@@ -6,11 +6,11 @@ import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToCreate
-import io.hamal.lib.RequestId
-import io.hamal.lib.vo.JobDefinitionId
-import io.hamal.lib.vo.JobReference
-import io.hamal.lib.vo.TriggerId
-import io.hamal.lib.vo.TriggerReference
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.vo.JobDefinitionId
+import io.hamal.lib.core.vo.JobReference
+import io.hamal.lib.core.vo.TriggerId
+import io.hamal.lib.core.vo.TriggerReference
 
 object MemoryJobDefinitionRepository : JobDefinitionRepository {
 

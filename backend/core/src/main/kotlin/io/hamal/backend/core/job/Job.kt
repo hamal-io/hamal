@@ -2,11 +2,11 @@ package io.hamal.backend.core.job
 
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.lib.ddd.base.DomainObject
-import io.hamal.lib.vo.JobId
-import io.hamal.lib.vo.JobState
-import io.hamal.lib.vo.QueuedAt
-import io.hamal.lib.vo.ScheduledAt
+import io.hamal.lib.core.ddd.base.DomainObject
+import io.hamal.lib.core.vo.JobId
+import io.hamal.lib.core.vo.JobState
+import io.hamal.lib.core.vo.QueuedAt
+import io.hamal.lib.core.vo.ScheduledAt
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -3,9 +3,9 @@ package io.hamal.backend.infra.web
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.tenant.Tenant
 import io.hamal.backend.usecase.request.JobDefinitionRequest
-import io.hamal.lib.RequestId
-import io.hamal.lib.Shard
-import io.hamal.lib.ddd.usecase.InvokeUseCasePort
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.ddd.usecase.InvokeUseCasePort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestAttribute

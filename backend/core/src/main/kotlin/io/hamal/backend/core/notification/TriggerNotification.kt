@@ -1,8 +1,8 @@
 package io.hamal.backend.core.notification
 
 import io.hamal.backend.core.trigger.InvokedTrigger
-import io.hamal.lib.Shard
-import io.hamal.lib.vo.TriggerId
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.vo.TriggerId
 import kotlinx.serialization.Serializable
 
 @Serializable

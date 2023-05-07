@@ -6,7 +6,7 @@ import io.hamal.backend.core.notification.JobQueuedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobRepository
 import io.hamal.backend.usecase.request.JobRequest
-import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
+import io.hamal.lib.core.ddd.usecase.RequestOneUseCaseHandler
 
 class QueueScheduledJobRequestHandler(
     val notifyDomain: NotifyDomainPort,

@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.filter
 
 import io.hamal.backend.core.tenant.Tenant.Active
-import io.hamal.lib.vo.TenantId
+import io.hamal.lib.core.vo.TenantId
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

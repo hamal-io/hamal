@@ -8,9 +8,9 @@ import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.createJobDefinition
 import io.hamal.backend.repository.api.createManualTrigger
 import io.hamal.backend.usecase.request.JobDefinitionRequest.JobDefinitionCreation
-import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
-import io.hamal.lib.vo.JobReference
-import io.hamal.lib.vo.TriggerReference
+import io.hamal.lib.core.ddd.usecase.RequestOneUseCaseHandler
+import io.hamal.lib.core.vo.JobReference
+import io.hamal.lib.core.vo.TriggerReference
 
 class CreateJobDefinitionRequestHandler(
     internal val notifyDomain: NotifyDomainPort,

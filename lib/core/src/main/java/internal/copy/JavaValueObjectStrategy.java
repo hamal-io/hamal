@@ -1,7 +1,7 @@
 package internal.copy;
 
 import internal.JavaReflection;
-import io.hamal.lib.ddd.base.ValueObject;
+import io.hamal.lib.core.ddd.base.ValueObject;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

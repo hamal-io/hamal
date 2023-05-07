@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.sqlite.internal
 
-import io.hamal.lib.RequestId
-import io.hamal.lib.util.SnowflakeId
-import io.hamal.lib.vo.base.DomainId
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.util.SnowflakeId
+import io.hamal.lib.core.vo.base.DomainId
 import java.sql.ResultSet
 import java.time.Instant
 

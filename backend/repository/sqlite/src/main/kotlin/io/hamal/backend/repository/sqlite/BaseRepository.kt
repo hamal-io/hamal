@@ -3,9 +3,9 @@ package io.hamal.backend.repository.sqlite
 import io.hamal.backend.core.logger
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.internal.DefaultConnection
-import io.hamal.lib.Once
-import io.hamal.lib.Shard
-import io.hamal.lib.util.Files
+import io.hamal.lib.core.Once
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.util.Files
 import java.io.Closeable
 import java.nio.file.Path
 import kotlin.io.path.Path

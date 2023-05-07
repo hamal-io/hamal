@@ -5,8 +5,8 @@ import io.hamal.backend.core.job.QueuedJob
 import io.hamal.backend.core.job.ScheduledJob
 import io.hamal.backend.core.job.StartedJob
 import io.hamal.backend.repository.api.JobRepository
-import io.hamal.lib.vo.QueuedAt
-import io.hamal.lib.vo.ScheduledAt
+import io.hamal.lib.core.vo.QueuedAt
+import io.hamal.lib.core.vo.ScheduledAt
 
 object MemoryJobRepository : JobRepository {
 

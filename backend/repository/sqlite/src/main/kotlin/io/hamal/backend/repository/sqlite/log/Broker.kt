@@ -2,7 +2,7 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.api.log.Consumer.GroupId
-import io.hamal.lib.KeyedOnce
+import io.hamal.lib.core.KeyedOnce
 
 
 class DefaultBrokerRepository(

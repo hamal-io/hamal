@@ -1,8 +1,6 @@
 package internal.copy;
 
-import internal.copy.JavaCopy;
-import internal.copy.JavaImmutableStrategy;
-import io.hamal.lib.ddd.base.ValueObject;
+import io.hamal.lib.core.ddd.base.ValueObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.Shard
-import io.hamal.lib.util.SnowflakeId
-import io.hamal.lib.vo.base.DomainId
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.util.SnowflakeId
+import io.hamal.lib.core.vo.base.DomainId
 import java.time.Instant
 
 data class Chunk(

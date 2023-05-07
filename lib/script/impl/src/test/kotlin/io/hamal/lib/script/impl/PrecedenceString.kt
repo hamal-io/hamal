@@ -1,9 +1,7 @@
 package io.hamal.lib.script.impl
 
 import io.hamal.lib.script.api.value.*
-import io.hamal.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.impl.value.*
 
 object PrecedenceString {
     fun of(expression: Expression): String {

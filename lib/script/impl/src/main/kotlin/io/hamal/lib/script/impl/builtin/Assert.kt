@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.builtin
 
 import io.hamal.lib.script.api.value.*
-import io.hamal.script.api.value.*
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.value.*
 
 internal object AssertFunction : BuiltinFunction {

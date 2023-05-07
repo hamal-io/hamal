@@ -4,8 +4,8 @@ import io.hamal.backend.core.logger
 import io.hamal.backend.core.notification.JobPlannedNotification
 import io.hamal.backend.core.notification.port.HandleDomainNotificationPort
 import io.hamal.backend.usecase.request.JobRequest
-import io.hamal.lib.RequestId
-import io.hamal.lib.ddd.usecase.InvokeRequestOneUseCasePort
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.ddd.usecase.InvokeRequestOneUseCasePort
 
 class JobPlannedHandler(
     val request: InvokeRequestOneUseCasePort

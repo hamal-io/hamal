@@ -5,9 +5,9 @@ import io.hamal.backend.repository.api.log.BrokerTopicsRepository
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.KeyedOnce
-import io.hamal.lib.Shard
-import io.hamal.lib.util.TimeUtils
+import io.hamal.lib.core.KeyedOnce
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.util.TimeUtils
 import java.nio.file.Path
 
 data class BrokerTopics(

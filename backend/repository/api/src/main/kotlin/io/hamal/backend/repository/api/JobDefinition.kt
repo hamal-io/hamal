@@ -4,15 +4,15 @@ import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToCreate
-import io.hamal.lib.RequestId
-import io.hamal.lib.Shard
-import io.hamal.lib.vo.JobDefinitionId
-import io.hamal.lib.vo.JobReference
-import io.hamal.lib.vo.TriggerId
-import io.hamal.lib.vo.TriggerReference
-import io.hamal.lib.vo.base.referenceFromId
-import io.hamal.lib.vo.port.DomainIdGeneratorAdapter
-import io.hamal.lib.vo.port.GenerateDomainIdPort
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.vo.JobDefinitionId
+import io.hamal.lib.core.vo.JobReference
+import io.hamal.lib.core.vo.TriggerId
+import io.hamal.lib.core.vo.TriggerReference
+import io.hamal.lib.core.vo.base.referenceFromId
+import io.hamal.lib.core.vo.port.DomainIdGeneratorAdapter
+import io.hamal.lib.core.vo.port.GenerateDomainIdPort
 
 
 interface JobDefinitionRepository {

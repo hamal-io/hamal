@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.value.*
-import io.hamal.script.api.value.*
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.builtin.BuiltinFunction
 

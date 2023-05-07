@@ -6,9 +6,9 @@ import io.hamal.backend.core.job.ScheduledJob
 import io.hamal.backend.core.job.StartedJob
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.lib.RequestId
-import io.hamal.lib.Shard
-import io.hamal.lib.vo.JobId
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.Shard
+import io.hamal.lib.core.vo.JobId
 
 interface JobRepository {
     fun planJob(jobToPlan: JobToPlan): PlannedJob

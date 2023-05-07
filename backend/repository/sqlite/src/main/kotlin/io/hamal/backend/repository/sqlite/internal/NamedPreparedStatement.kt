@@ -3,11 +3,11 @@ package io.hamal.backend.repository.sqlite.internal
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
 import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatement.ParseResult
-import io.hamal.lib.KeyedOnce
-import io.hamal.lib.RequestId
-import io.hamal.lib.util.SnowflakeId
-import io.hamal.lib.util.TokenizerUtil
-import io.hamal.lib.vo.base.DomainId
+import io.hamal.lib.core.KeyedOnce
+import io.hamal.lib.core.RequestId
+import io.hamal.lib.core.util.SnowflakeId
+import io.hamal.lib.core.util.TokenizerUtil
+import io.hamal.lib.core.vo.base.DomainId
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.Timestamp
