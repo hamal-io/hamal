@@ -1,8 +1,8 @@
-package io.hamal.backend.infra.module.queue.handler
+package io.hamal.backend.infra.handler
 
 import io.hamal.backend.core.logger
-import io.hamal.backend.notification.JobQueuedNotification
-import io.hamal.backend.notification.port.HandleDomainNotificationPort
+import io.hamal.backend.core.notification.JobQueuedNotification
+import io.hamal.backend.core.notification.port.HandleDomainNotificationPort
 
 class JobQueuedHandler : HandleDomainNotificationPort<JobQueuedNotification> {
     private val log = logger(JobQueuedHandler::class)

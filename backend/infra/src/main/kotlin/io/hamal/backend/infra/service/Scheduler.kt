@@ -1,4 +1,4 @@
-package io.hamal.backend.infra.module.orchestrator.service
+package io.hamal.backend.infra.service
 
 import io.hamal.backend.core.logger
 import org.springframework.stereotype.Service

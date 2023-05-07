@@ -2,8 +2,8 @@ package io.hamal.backend.usecase.request.trigger
 
 import io.hamal.backend.core.trigger.InvokedTrigger.Manual
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.notification.ManualTriggerInvokedNotification
-import io.hamal.backend.notification.port.NotifyDomainPort
+import io.hamal.backend.core.notification.ManualTriggerInvokedNotification
+import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.usecase.request.TriggerRequest
 import io.hamal.lib.Requester

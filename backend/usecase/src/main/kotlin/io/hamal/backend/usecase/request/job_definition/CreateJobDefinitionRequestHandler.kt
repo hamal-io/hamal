@@ -1,9 +1,9 @@
 package io.hamal.backend.usecase.request.job_definition
 
 import io.hamal.backend.core.job_definition.JobDefinition
-import io.hamal.backend.notification.JobDefinitionCreatedNotification
-import io.hamal.backend.notification.ManualTriggerCreatedNotification
-import io.hamal.backend.notification.port.NotifyDomainPort
+import io.hamal.backend.core.notification.JobDefinitionCreatedNotification
+import io.hamal.backend.core.notification.ManualTriggerCreatedNotification
+import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.createJobDefinition
 import io.hamal.backend.repository.api.createManualTrigger

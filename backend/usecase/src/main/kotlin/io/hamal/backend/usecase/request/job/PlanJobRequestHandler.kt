@@ -2,10 +2,10 @@ package io.hamal.backend.usecase.request.job
 
 import io.hamal.backend.core.job.PlannedJob
 import io.hamal.backend.core.logger
-import io.hamal.backend.notification.JobPlannedNotification
-import io.hamal.backend.notification.port.NotifyDomainPort
+import io.hamal.backend.core.notification.JobPlannedNotification
+import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobRepository
-import io.hamal.backend.usecase.request.JobRequest
+import io.hamal.backend.usecase.request.JobRequest.PlanJob
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler
 import io.hamal.lib.vo.JobId
 import io.hamal.lib.vo.port.GenerateDomainIdPort
@@ -14,9 +14,9 @@ class PlanJobRequestHandler(
     val generateDomainId: GenerateDomainIdPort,
     val jobRepository: JobRepository,
     val notifyDomain: NotifyDomainPort
-) : RequestOneUseCaseHandler<PlannedJob, JobRequest.PlanJob>(JobRequest.PlanJob::class) {
+) : RequestOneUseCaseHandler<PlannedJob, PlanJob>(PlanJob::class) {
     val log = logger(PlanJobRequestHandler::class)
-    override fun invoke(useCase: JobRequest.PlanJob): PlannedJob {
+    override fun invoke(useCase: PlanJob): PlannedJob {
         log.debug("Create a new job for ${useCase.jobDefinition}")
 
         val result = jobRepository.planJob(

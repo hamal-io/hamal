@@ -1,4 +1,4 @@
-package io.hamal.backend.notification
+package io.hamal.backend.core.notification
 
 import io.hamal.lib.Shard
 import io.hamal.lib.vo.JobDefinitionId

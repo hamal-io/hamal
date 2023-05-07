@@ -11,5 +11,5 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @ComponentScan
 @EnableScheduling
 @EnableAutoConfiguration(exclude = [SpringApplicationAdminJmxAutoConfiguration::class, JmxAutoConfiguration::class])
-open class WorkerModuleConfig {
+open class WorkerConfig {
 }

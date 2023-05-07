@@ -1,7 +1,7 @@
 package io.hamal.bootstrap
 
 import io.hamal.backend.infra.BackendConfig
-import io.hamal.worker.infra.WorkerModuleConfig
+import io.hamal.worker.infra.WorkerConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -67,7 +67,7 @@ fun main(args: Array<String>) {
         applicationBuilder
             .parent(parent)
             .child(
-                WorkerModuleConfig::class.java,
+                WorkerConfig::class.java,
             )
             .web(WebApplicationType.NONE)
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->

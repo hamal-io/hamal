@@ -2,8 +2,8 @@ package io.hamal.backend.usecase.request.job
 
 import io.hamal.backend.core.job.QueuedJob
 import io.hamal.backend.core.logger
-import io.hamal.backend.notification.JobQueuedNotification
-import io.hamal.backend.notification.port.NotifyDomainPort
+import io.hamal.backend.core.notification.JobQueuedNotification
+import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobRepository
 import io.hamal.backend.usecase.request.JobRequest
 import io.hamal.lib.ddd.usecase.RequestOneUseCaseHandler

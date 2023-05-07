@@ -1,8 +1,8 @@
-package io.hamal.backend.infra.module.queue.handler
+package io.hamal.backend.infra.handler
 
 import io.hamal.backend.core.logger
-import io.hamal.backend.notification.JobScheduledNotification
-import io.hamal.backend.notification.port.HandleDomainNotificationPort
+import io.hamal.backend.core.notification.JobScheduledNotification
+import io.hamal.backend.core.notification.port.HandleDomainNotificationPort
 import io.hamal.backend.usecase.request.JobRequest
 import io.hamal.lib.RequestId
 import io.hamal.lib.ddd.usecase.InvokeRequestOneUseCasePort

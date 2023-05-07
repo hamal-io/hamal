@@ -1,4 +1,4 @@
-package io.hamal.backend.notification.port
+package io.hamal.backend.core.notification.port
 
 fun interface FlushDomainNotificationPort {
     operator fun invoke()
