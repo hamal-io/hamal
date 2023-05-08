@@ -22,6 +22,10 @@ dependencyResolutionManagement {
             library("kotlin-protobuf", "org.jetbrains.kotlinx", "kotlinx-serialization-protobuf").version("1.5.0")
             library("kotlin-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.8.10")
+
+
+            library("apache-http-client", "org.apache.httpcomponents", "httpclient").version("4.5.13")
+            library("apache-http-mime", "org.apache.httpcomponents", "httpmime").version("4.5.13")
         }
     }
 }
@@ -30,6 +34,7 @@ dependencyResolutionManagement {
 include("bootstrap")
 
 include(":lib:core")
+include(":lib:http")
 include(":lib:script:api")
 include(":lib:script:impl")
 
