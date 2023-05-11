@@ -30,4 +30,8 @@ fun main() {
 
 
     println(r)
+
+    r.data.forEach {
+        println(it)
+    }
 }

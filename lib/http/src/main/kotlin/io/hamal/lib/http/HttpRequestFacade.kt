@@ -15,8 +15,7 @@ internal interface HttpRequestFacade {
 internal sealed class HttpBaseRequestFacade(
     protected val url: String,
     protected val parameters: List<HttpParam<*>>,
-    protected val errorDeserializer: HttpErrorDeserializer,
-    protected val contentDeserializer: HttpContentDeserializer,
+    protected val serdeFactory: HttpSerdeFactory,
     protected val client: HttpClient
 ) : HttpRequestFacade {
 
@@ -44,18 +43,18 @@ internal sealed class HttpBaseRequestFacade(
 //            }
 //        }
 
-
-        response = if (result.statusLine.statusCode >= 400) {
+        val statusCode = HttpStatusCode.of(result.statusLine.statusCode)
+        response = if (statusCode >= HttpStatusCode.BadRequest) {
             ErrorHttpResponse(
-                statusCode = HttpStatusCode.Ok, // FIXME
+                statusCode = statusCode,
                 inputStream = result.entity.content ?: InputStream.nullInputStream(),
-                errorDeserializer = errorDeserializer
+                errorDeserializer = serdeFactory.errorDeserializer
             )
         } else {
             SuccessHttpResponse(
-                statusCode = HttpStatusCode.Ok, //FIXME
+                statusCode = statusCode,
                 inputStream = result.entity.content ?: InputStream.nullInputStream(),
-                contentDeserializer = contentDeserializer
+                contentDeserializer = serdeFactory.contentDeserializer
             )
         }
 
@@ -103,14 +102,12 @@ internal sealed class HttpBaseRequestFacade(
 internal class HttpGetRequestFacade(
     url: String,
     parameters: List<HttpParam<*>>,
-    errorDeserializer: HttpErrorDeserializer,
-    contentDeserializer: HttpContentDeserializer,
+    serdeFactory: HttpSerdeFactory,
     client: HttpClient
 ) : HttpBaseRequestFacade(
     url = url,
     parameters = parameters,
-    errorDeserializer = errorDeserializer,
-    contentDeserializer = contentDeserializer,
+    serdeFactory = serdeFactory,
     client = client
 ) {
     override fun buildRequest(): HttpRequestBase {

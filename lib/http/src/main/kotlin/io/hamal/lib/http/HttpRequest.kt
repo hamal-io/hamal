@@ -6,11 +6,11 @@ import kotlin.reflect.KClass
 interface HttpRequest {
     val url: String
     val method: HttpMethod
-    val errorDeserializer: HttpErrorDeserializer
-    val contentDeserializer: HttpContentDeserializer
+    val serdeFactory: HttpSerdeFactory
     val client: org.apache.http.client.HttpClient
 
     fun param(key: String, value: String): HttpRequest
+    fun param(key: String, value: Number): HttpRequest
 
     fun execute(): HttpResponse
 
@@ -30,12 +30,17 @@ interface HttpRequest {
 class DefaultHttpRequest(
     override val url: String,
     override val method: HttpRequest.HttpMethod,
-    override val errorDeserializer: HttpErrorDeserializer,
-    override val contentDeserializer: HttpContentDeserializer,
+    override val serdeFactory: HttpSerdeFactory,
     override val client: org.apache.http.client.HttpClient
 ) : HttpRequest {
 
+    private val parameter = mutableListOf<HttpParam<*>>()
+
     override fun param(key: String, value: String): HttpRequest {
+        TODO("Not yet implemented")
+    }
+
+    override fun param(key: String, value: Number): HttpRequest {
         TODO("Not yet implemented")
     }
 
@@ -46,8 +51,7 @@ class DefaultHttpRequest(
             Get -> HttpGetRequestFacade(
                 url = preparedUrl,
                 parameters = listOf(),
-                errorDeserializer = errorDeserializer,
-                contentDeserializer = contentDeserializer,
+                serdeFactory = serdeFactory,
                 client = client
             )
 
