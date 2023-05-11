@@ -1,4 +1,3 @@
 package io.hamal.lib.http
 
-interface HttpError {
-}
+class HttpError(message: String) : Error(message)

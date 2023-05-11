@@ -4,22 +4,23 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpRequestBase
 import java.io.InputStream
-import java.util.*
 
 internal interface HttpRequestFacade {
     fun execute()
 
-    fun response(): HttpResponseFacade
+    fun response(): HttpResponse
 }
+
 
 internal sealed class HttpBaseRequestFacade(
     protected val url: String,
     protected val parameters: List<HttpParam<*>>,
-    protected val httpClient: HttpClient
+    protected val errorDeserializer: HttpErrorDeserializer,
+    protected val contentDeserializer: HttpContentDeserializer,
+    protected val client: HttpClient
 ) : HttpRequestFacade {
 
-    private var inputStream: InputStream? = null
-    private lateinit var response: HttpResponseFacade
+    private lateinit var response: HttpResponse
 
     protected abstract fun buildRequest(): HttpRequestBase
 
@@ -33,35 +34,42 @@ internal sealed class HttpBaseRequestFacade(
 //            request.config = requestConfig
 //        }
 
-        val result: org.apache.http.HttpResponse = httpClient.execute(request)
-        if (result.entity != null) {
-            inputStream = result.entity.content
+        val result: org.apache.http.HttpResponse = client.execute(request)
+
+//        val allHeaders = result.allHeaders
+//        val headerMap: MutableMap<String, String> = HashMap()
+//        if (allHeaders != null) {
+//            for (header in allHeaders) {
+//                headerMap[header.name] = header.value
+//            }
+//        }
+
+
+        response = if (result.statusLine.statusCode >= 400) {
+            ErrorHttpResponse(
+                statusCode = HttpStatusCode.Ok, // FIXME
+                inputStream = result.entity.content ?: InputStream.nullInputStream(),
+                errorDeserializer = errorDeserializer
+            )
+        } else {
+            SuccessHttpResponse(
+                statusCode = HttpStatusCode.Ok, //FIXME
+                inputStream = result.entity.content ?: InputStream.nullInputStream(),
+                contentDeserializer = contentDeserializer
+            )
         }
 
-        val allHeaders = result.allHeaders
-        val headerMap: MutableMap<String, String> = HashMap()
-        if (allHeaders != null) {
-            for (header in allHeaders) {
-                headerMap[header.name] = header.value
-            }
-        }
 
-
-        response = HttpResponseSuccessFacade(
-            statusCode = result.statusLine.statusCode,
-            content = inputStream ?: InputStream.nullInputStream()
-        )
-
-        val httpStatusCode = result.statusLine.statusCode
-        if (httpStatusCode >= 400) {
-            TODO()
+//        val httpStatusCode = result.statusLine.statusCode
+//        if (httpStatusCode >= 400) {
+//        TODO()
 //            try {
 //                val error: Unit = errorConverter.convert(httpStatusCode, inputStream)
 //                response = HttpResponse.withError(httpStatusCode, error, headerMap)
 //            } catch (t: Throwable) {
 //                throw HttpRuntimeError(StringError(t))
 //            }
-        } else {
+//        } else {
 //            if (interceptor is HttpResponse.ResponseInterceptor.NoInterceptor<ERROR?>) {
 //                try {
 //                    response = HttpResponse.of(httpStatusCode, converter.convert(inputStream), headerMap)
@@ -85,21 +93,25 @@ internal sealed class HttpBaseRequestFacade(
 //                }
 //            }
 //            TODO()
-        }
+//        }
         request.releaseConnection()
     }
 
-    override fun response(): HttpResponseFacade = response
+    override fun response(): HttpResponse = response
 }
 
 internal class HttpGetRequestFacade(
     url: String,
     parameters: List<HttpParam<*>>,
+    errorDeserializer: HttpErrorDeserializer,
+    contentDeserializer: HttpContentDeserializer,
     client: HttpClient
 ) : HttpBaseRequestFacade(
     url = url,
     parameters = parameters,
-    httpClient = client
+    errorDeserializer = errorDeserializer,
+    contentDeserializer = contentDeserializer,
+    client = client
 ) {
     override fun buildRequest(): HttpRequestBase {
         return HttpGet("${url}${parameters.toQueryString()}")

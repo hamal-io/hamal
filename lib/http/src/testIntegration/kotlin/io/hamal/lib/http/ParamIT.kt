@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 data class TestResponse(val value: String)
 
 @RestController
-open class TestController {
+open class TestParamController {
     @GetMapping("/v1/get")
     fun get(
         @RequestParam("result") resultValue: String
