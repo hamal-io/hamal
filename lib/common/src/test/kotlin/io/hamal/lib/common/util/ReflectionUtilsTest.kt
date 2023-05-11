@@ -1,7 +1,7 @@
 package io.hamal.lib.common.util
 
-import io.hamal.lib.common.util.Reflection.declaredProperty
-import io.hamal.lib.common.util.Reflection.memberProperty
+import io.hamal.lib.common.util.ReflectionUtils.declaredProperty
+import io.hamal.lib.common.util.ReflectionUtils.memberProperty
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions.*
@@ -12,8 +12,7 @@ import org.junit.jupiter.api.assertThrows
 import java.lang.reflect.Field
 
 @Nested
-@DisplayName("Reflection")
-class ReflectionTest {
+class ReflectionUtilsTest {
 
     @Nested
     @DisplayName("memberPropertiesOf()")
@@ -21,13 +20,13 @@ class ReflectionTest {
 
         @Test
         fun `Properties of class without props`() {
-            val result = Reflection.memberPropertiesOf(Empty::class)
+            val result = ReflectionUtils.memberPropertiesOf(Empty::class)
             assertThat(result, hasSize(0))
         }
 
         @Test
         fun `Properties of base class`() {
-            val result = Reflection.memberPropertiesOf(Root::class)
+            val result = ReflectionUtils.memberPropertiesOf(Root::class)
             assertThat(result, hasSize(1))
             assertThat(result.first().name, equalTo("root"))
             assertThat(result.first().returnType.classifier, equalTo(Int::class))
@@ -35,7 +34,7 @@ class ReflectionTest {
 
         @Test
         fun `Properties of nested class`() {
-            val result = Reflection.memberPropertiesOf(LevelTwo::class)
+            val result = ReflectionUtils.memberPropertiesOf(LevelTwo::class)
             assertThat(result, hasSize(3))
 
             val levelTwo = result[0]
@@ -85,13 +84,13 @@ class ReflectionTest {
 
         @Test
         fun `Properties of class without props`() {
-            val result = Reflection.declaredPropertiesOf(Empty::class)
+            val result = ReflectionUtils.declaredPropertiesOf(Empty::class)
             assertThat(result, hasSize(0))
         }
 
         @Test
         fun `Properties of base class`() {
-            val result = Reflection.declaredPropertiesOf(Root::class)
+            val result = ReflectionUtils.declaredPropertiesOf(Root::class)
             assertThat(result, hasSize(1))
             assertThat(result.first().name, equalTo("root"))
             assertThat(result.first().returnType.classifier, equalTo(Int::class))
@@ -99,7 +98,7 @@ class ReflectionTest {
 
         @Test
         fun `Properties of nested class`() {
-            val result = Reflection.declaredPropertiesOf(LevelTwo::class)
+            val result = ReflectionUtils.declaredPropertiesOf(LevelTwo::class)
             assertThat(result, hasSize(1))
 
             val levelTwo = result[0]
@@ -147,58 +146,61 @@ class ReflectionTest {
                 9, 10, 11, 12
             )
 
-            assertThat(Reflection.getValue(target, "privateBaseValue"), equalTo(1))
-            assertThat(Reflection.getValue(target, "protectedBaseValue"), equalTo(2))
-            assertThat(Reflection.getValue(target, "internalBaseValue"), equalTo(3))
-            assertThat(Reflection.getValue(target, "publicBaseValue"), equalTo(4))
-            assertThat(Reflection.getValue(target, "privateDerivedValue"), equalTo(5))
-            assertThat(Reflection.getValue(target, "protectedDerivedValue"), equalTo(6))
-            assertThat(Reflection.getValue(target, "internalDerivedValue"), equalTo(7))
-            assertThat(Reflection.getValue(target, "publicDerivedValue"), equalTo(8))
-            assertThat(Reflection.getValue(target, "privateDerivedDerivedValue"), equalTo(9))
-            assertThat(Reflection.getValue(target, "protectedDerivedDerivedValue"), equalTo(10))
-            assertThat(Reflection.getValue(target, "internalDerivedDerivedValue"), equalTo(11))
-            assertThat(Reflection.getValue(target, "publicDerivedDerivedValue"), equalTo(12))
+            assertThat(ReflectionUtils.getValue(target, "privateBaseValue"), equalTo(1))
+            assertThat(ReflectionUtils.getValue(target, "protectedBaseValue"), equalTo(2))
+            assertThat(ReflectionUtils.getValue(target, "internalBaseValue"), equalTo(3))
+            assertThat(ReflectionUtils.getValue(target, "publicBaseValue"), equalTo(4))
+            assertThat(ReflectionUtils.getValue(target, "privateDerivedValue"), equalTo(5))
+            assertThat(ReflectionUtils.getValue(target, "protectedDerivedValue"), equalTo(6))
+            assertThat(ReflectionUtils.getValue(target, "internalDerivedValue"), equalTo(7))
+            assertThat(ReflectionUtils.getValue(target, "publicDerivedValue"), equalTo(8))
+            assertThat(ReflectionUtils.getValue(target, "privateDerivedDerivedValue"), equalTo(9))
+            assertThat(ReflectionUtils.getValue(target, "protectedDerivedDerivedValue"), equalTo(10))
+            assertThat(ReflectionUtils.getValue(target, "internalDerivedDerivedValue"), equalTo(11))
+            assertThat(ReflectionUtils.getValue(target, "publicDerivedDerivedValue"), equalTo(12))
         }
 
         @Test
         fun `Able to get value from root path`() {
             val target = ComposedRoot(2810)
-            assertThat(Reflection.getValue(target, "rootValue"), equalTo(2810))
+            assertThat(ReflectionUtils.getValue(target, "rootValue"), equalTo(2810))
         }
 
         @Test
         fun `Able to get values from simple nesting`() {
             val target = ComposedLevelOne(1506, ComposedRoot(2810))
-            assertThat(Reflection.getValue(target, "levelOneValue"), equalTo(1506))
-            assertThat(Reflection.getValue(target, "parent.rootValue"), equalTo(2810))
+            assertThat(ReflectionUtils.getValue(target, "levelOneValue"), equalTo(1506))
+            assertThat(ReflectionUtils.getValue(target, "parent.rootValue"), equalTo(2810))
         }
 
         @Test
         fun `Able to get values from multiple nesting`() {
             val target = ComposedLevelTwo(1212, ComposedLevelOne(1506, ComposedRoot(2810)))
-            assertThat(Reflection.getValue(target, "levelTwoValue"), equalTo(1212))
-            assertThat(Reflection.getValue(target, "parent.levelOneValue"), equalTo(1506))
-            assertThat(Reflection.getValue(target, "parent.parent.rootValue"), equalTo(2810))
+            assertThat(ReflectionUtils.getValue(target, "levelTwoValue"), equalTo(1212))
+            assertThat(ReflectionUtils.getValue(target, "parent.levelOneValue"), equalTo(1506))
+            assertThat(ReflectionUtils.getValue(target, "parent.parent.rootValue"), equalTo(2810))
         }
 
         @Test
         fun `Field does not exist`() {
             val target = ComposedLevelOne(1506, ComposedRoot(2810))
             var exception = assertThrows<IllegalArgumentException> {
-                Reflection.getValue(target, "doesNotExists")
+                ReflectionUtils.getValue(target, "doesNotExists")
             }
             assertThat(exception.message, containsString("ComposedLevelOne does have field 'doesNotExists'"))
 
             exception = assertThrows<IllegalArgumentException> {
-                Reflection.getValue(target, "parent.doesNotExists")
+                ReflectionUtils.getValue(target, "parent.doesNotExists")
             }
             assertThat(exception.message, containsString("ComposedLevelOne does have field 'parent.doesNotExists'"))
 
             exception = assertThrows<IllegalArgumentException> {
-                Reflection.getValue(target, "doesNotExists.doesNotExists")
+                ReflectionUtils.getValue(target, "doesNotExists.doesNotExists")
             }
-            assertThat(exception.message, containsString("ComposedLevelOne does have field 'doesNotExists.doesNotExists'"))
+            assertThat(
+                exception.message,
+                containsString("ComposedLevelOne does have field 'doesNotExists.doesNotExists'")
+            )
         }
     }
 
@@ -212,7 +214,7 @@ class ReflectionTest {
                 5, 6, 7, 8,
                 9, 10, 11, 12
             )
-            assertResult(Reflection.allFields(target))
+            assertResult(ReflectionUtils.allFields(target))
         }
 
         @Test
@@ -222,7 +224,7 @@ class ReflectionTest {
                 5, 6, 7, 8,
                 9, 10, 11, 12
             )
-            assertResult(Reflection.allFields(target::class))
+            assertResult(ReflectionUtils.allFields(target::class))
         }
 
         @Test
@@ -232,7 +234,7 @@ class ReflectionTest {
                 5, 6, 7, 8,
                 9, 10, 11, 12
             )
-            assertResult(Reflection.allFields(target::class.java))
+            assertResult(ReflectionUtils.allFields(target::class.java))
         }
 
         private fun assertResult(fields: List<Field>) {

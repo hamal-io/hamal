@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.log.Partition
 import io.hamal.backend.repository.api.log.Segment
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
 import org.hamcrest.MatcherAssert.*
@@ -26,8 +26,8 @@ class DefaultSegmentRepositoryTest {
 
         @BeforeEach
         fun setup() {
-            Files.delete(Path(testDir))
-            Files.createDirectories(Path(testDir))
+            FileUtils.delete(Path(testDir))
+            FileUtils.createDirectories(Path(testDir))
         }
 
         @Test
@@ -35,8 +35,8 @@ class DefaultSegmentRepositoryTest {
             val targetDir = Path(testDir, "partition-001", "another-path")
             DefaultSegmentRepository(testSegment(targetDir)).use { }
 
-            assertTrue(Files.exists(targetDir))
-            assertTrue(Files.exists(Path(targetDir.pathString, "00000000000000002810.db")))
+            assertTrue(FileUtils.exists(targetDir))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "00000000000000002810.db")))
         }
 
         @Test

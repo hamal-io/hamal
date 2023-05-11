@@ -1,6 +1,6 @@
-package io.hamal.lib.common.util
+package io.hamal.lib.common
 
-import io.hamal.lib.common.util.LruCache.DefaultImpl
+import io.hamal.lib.common.LruCache.DefaultImpl
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*

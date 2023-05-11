@@ -5,7 +5,7 @@ import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.internal.DefaultConnection
 import io.hamal.lib.domain.Once
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.FileUtils
 import java.io.Closeable
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -49,6 +49,6 @@ abstract class BaseRepository(
 }
 
 private fun ensureFilePath(config: BaseRepository.Config): Path {
-    return Files.createDirectories(config.path)
+    return FileUtils.createDirectories(config.path)
         .resolve(Path(config.filename))
 }

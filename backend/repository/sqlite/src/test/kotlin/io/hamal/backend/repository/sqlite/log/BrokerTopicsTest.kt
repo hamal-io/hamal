@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.api.log.Topic.Name
-import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.FileUtils
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -20,8 +20,8 @@ class DefaultBrokerTopicsRepositoryTest {
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
-            Files.delete(Path(testDir))
-            Files.createDirectories(Path(testDir))
+            FileUtils.delete(Path(testDir))
+            FileUtils.createDirectories(Path(testDir))
         }
 
         @Test
@@ -29,8 +29,8 @@ class DefaultBrokerTopicsRepositoryTest {
             val targetDir = Path(testDir, "some-path", "another-path")
             DefaultBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
 
-            assertTrue(Files.exists(targetDir))
-            assertTrue(Files.exists(Path(targetDir.pathString, "topics.db")))
+            assertTrue(FileUtils.exists(targetDir))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics.db")))
         }
 
         @Test

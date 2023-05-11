@@ -2,7 +2,7 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -20,8 +20,8 @@ class DefaultTopicRepositoryTest {
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
-            Files.delete(Path(testDir))
-            Files.createDirectories(Path(testDir))
+            FileUtils.delete(Path(testDir))
+            FileUtils.createDirectories(Path(testDir))
         }
 
         @Test
@@ -38,9 +38,9 @@ class DefaultTopicRepositoryTest {
                 )
             ).use { }
 
-            assertTrue(Files.exists(targetDir))
-            assertTrue(Files.exists(Path(targetDir.pathString, "topic-00023")))
-            assertTrue(Files.exists(Path(targetDir.pathString, "topic-00023", "partition-0001")))
+            assertTrue(FileUtils.exists(targetDir))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00023")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00023", "partition-0001")))
         }
     }
 

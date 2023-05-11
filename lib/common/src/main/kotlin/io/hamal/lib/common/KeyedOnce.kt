@@ -1,7 +1,6 @@
 package io.hamal.lib.common
 
 import io.hamal.lib.domain.Once
-import io.hamal.lib.common.util.LruCache
 import java.util.concurrent.ConcurrentHashMap
 
 interface KeyedOnce<KEY : Any, VALUE : Any> {

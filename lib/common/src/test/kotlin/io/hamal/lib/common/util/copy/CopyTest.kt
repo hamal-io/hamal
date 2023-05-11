@@ -1,7 +1,7 @@
 package io.hamal.lib.common.util.copy
 
 import io.hamal.lib.common.ddd.ValueObject
-import io.hamal.lib.common.util.Reflection
+import io.hamal.lib.common.util.ReflectionUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DisplayName
@@ -32,10 +32,10 @@ class CopyTest {
             val target = BaseClass(0, 0, 0, 0)
             Copy(source, target)
 
-            assertThat(Reflection.getValue(target, "privateBaseValue"), equalTo(1))
-            assertThat(Reflection.getValue(target, "protectedBaseValue"), equalTo(2))
-            assertThat(Reflection.getValue(target, "internalBaseValue"), equalTo(3))
-            assertThat(Reflection.getValue(target, "publicBaseValue"), equalTo(4))
+            assertThat(ReflectionUtils.getValue(target, "privateBaseValue"), equalTo(1))
+            assertThat(ReflectionUtils.getValue(target, "protectedBaseValue"), equalTo(2))
+            assertThat(ReflectionUtils.getValue(target, "internalBaseValue"), equalTo(3))
+            assertThat(ReflectionUtils.getValue(target, "publicBaseValue"), equalTo(4))
         }
 
         @Test
@@ -50,14 +50,14 @@ class CopyTest {
             )
 
             Copy(source, target)
-            assertThat(Reflection.getValue(target, "privateBaseValue"), equalTo(1))
-            assertThat(Reflection.getValue(target, "protectedBaseValue"), equalTo(2))
-            assertThat(Reflection.getValue(target, "internalBaseValue"), equalTo(3))
-            assertThat(Reflection.getValue(target, "publicBaseValue"), equalTo(4))
-            assertThat(Reflection.getValue(target, "privateDerivedValue"), equalTo(5))
-            assertThat(Reflection.getValue(target, "protectedDerivedValue"), equalTo(6))
-            assertThat(Reflection.getValue(target, "internalDerivedValue"), equalTo(7))
-            assertThat(Reflection.getValue(target, "publicDerivedValue"), equalTo(8))
+            assertThat(ReflectionUtils.getValue(target, "privateBaseValue"), equalTo(1))
+            assertThat(ReflectionUtils.getValue(target, "protectedBaseValue"), equalTo(2))
+            assertThat(ReflectionUtils.getValue(target, "internalBaseValue"), equalTo(3))
+            assertThat(ReflectionUtils.getValue(target, "publicBaseValue"), equalTo(4))
+            assertThat(ReflectionUtils.getValue(target, "privateDerivedValue"), equalTo(5))
+            assertThat(ReflectionUtils.getValue(target, "protectedDerivedValue"), equalTo(6))
+            assertThat(ReflectionUtils.getValue(target, "internalDerivedValue"), equalTo(7))
+            assertThat(ReflectionUtils.getValue(target, "publicDerivedValue"), equalTo(8))
         }
 
         @Test

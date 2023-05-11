@@ -4,7 +4,7 @@ import io.hamal.lib.common.SnowflakeId.ElapsedSource.Elapsed
 import io.hamal.lib.common.SnowflakeId.PartitionSource.Partition
 import io.hamal.lib.common.SnowflakeId.SequenceSource
 import io.hamal.lib.common.SnowflakeId.SequenceSource.*
-import io.hamal.lib.common.util.Bitwise
+import io.hamal.lib.common.util.BitUtils
 import io.hamal.lib.domain.Tuple2
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -69,7 +69,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     override fun compareTo(other: SnowflakeId) = value.compareTo(other.value)
 
     fun partition(): Partition = Partition(
-        Bitwise.extractRange(
+        BitUtils.extractRange(
             value = value,
             startIndex = 53,
             numberOfBits = 10
@@ -77,7 +77,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     )
 
     fun sequence(): Sequence = Sequence(
-        Bitwise.extractRange(
+        BitUtils.extractRange(
             value = value,
             startIndex = 41,
             numberOfBits = 12
@@ -86,7 +86,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 
 
     fun elapsed(): Elapsed = Elapsed(
-        Bitwise.extractRange(
+        BitUtils.extractRange(
             value = value,
             startIndex = 0,
             numberOfBits = 41

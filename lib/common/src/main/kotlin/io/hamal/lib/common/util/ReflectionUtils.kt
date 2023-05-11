@@ -1,13 +1,12 @@
 package io.hamal.lib.common.util
 
-import internal.JavaReflection
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 
-object Reflection {
+object ReflectionUtils {
 
     fun declaredProperty(obj: Any, name: String): KProperty<*>? {
         return declaredPropertiesOf(obj::class)

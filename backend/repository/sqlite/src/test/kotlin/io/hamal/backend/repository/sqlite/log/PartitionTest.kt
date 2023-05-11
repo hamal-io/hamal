@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.log.Partition
 import io.hamal.backend.repository.api.log.Segment
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -23,8 +23,8 @@ class DefaultPartitionRepositoryTest {
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
-            Files.delete(Path(testDir))
-            Files.createDirectories(Path(testDir))
+            FileUtils.delete(Path(testDir))
+            FileUtils.createDirectories(Path(testDir))
         }
 
         @Test
@@ -40,9 +40,9 @@ class DefaultPartitionRepositoryTest {
                 )
             ).use { }
 
-            assertTrue(Files.exists(targetDir))
-            assertTrue(Files.exists(Path(targetDir.pathString, "partition-0023")))
-            assertTrue(Files.exists(Path(targetDir.pathString, "partition-0023", "00000000000000000000.db")))
+            assertTrue(FileUtils.exists(targetDir))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "partition-0023")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "partition-0023", "00000000000000000000.db")))
         }
     }
 

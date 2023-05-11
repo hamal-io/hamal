@@ -4,12 +4,12 @@ import io.hamal.lib.script.impl.token.Token.Type
 import io.hamal.lib.script.impl.token.Token.Type.*
 import io.hamal.lib.script.impl.token.Token.Type.Number
 import io.hamal.lib.script.impl.token.Tokenizer.DefaultImpl
-import io.hamal.lib.common.util.TokenizerUtil
-import io.hamal.lib.common.util.TokenizerUtil.isAlpha
-import io.hamal.lib.common.util.TokenizerUtil.isDigit
-import io.hamal.lib.common.util.TokenizerUtil.isQuote
-import io.hamal.lib.common.util.TokenizerUtil.isUnderscore
-import io.hamal.lib.common.util.TokenizerUtil.isWhitespace
+import io.hamal.lib.common.util.TokenizerUtils
+import io.hamal.lib.common.util.TokenizerUtils.isAlpha
+import io.hamal.lib.common.util.TokenizerUtils.isDigit
+import io.hamal.lib.common.util.TokenizerUtils.isQuote
+import io.hamal.lib.common.util.TokenizerUtils.isUnderscore
+import io.hamal.lib.common.util.TokenizerUtils.isWhitespace
 
 fun tokenize(code: String): List<Token> {
     val tokenizer = DefaultImpl(code)
@@ -162,7 +162,7 @@ internal fun DefaultImpl.nextHexNumber(): Token {
     assert(peek() == '0' && peekNext() == 'x')
     advance(); // 0
     advance(); // x
-    while (!isAtEnd() && TokenizerUtil.isHexChar(peek())) {
+    while (!isAtEnd() && TokenizerUtils.isHexChar(peek())) {
         advance();
     }
     return Token(HexNumber, tokenLine(), tokenPosition(), tokenValue())

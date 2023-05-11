@@ -1,6 +1,5 @@
 package io.hamal.lib.common.util
 
-import io.hamal.lib.common.util.TimeUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.assertThrows
 import java.time.Instant
 
 @Nested
-@DisplayName("TimeUtils")
 class TimeUtilsTest {
 
     @Nested

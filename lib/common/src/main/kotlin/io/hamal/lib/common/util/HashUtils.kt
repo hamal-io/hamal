@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets.UTF_8
 import java.security.MessageDigest
 
 
-object Hash {
+object HashUtils {
     fun sha256(value: String): String {
         return try {
             val digest = MessageDigest.getInstance("SHA-256")

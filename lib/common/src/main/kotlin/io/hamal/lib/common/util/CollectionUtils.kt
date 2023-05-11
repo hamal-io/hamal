@@ -1,6 +1,4 @@
-package io.hamal.lib.http
-
-import io.hamal.lib.http.CollectionUtils.cross
+package io.hamal.lib.common.util
 
 object CollectionUtils {
     fun <T, U> Array<T>.cross(other: Array<U>): Sequence<Pair<T, U>> {

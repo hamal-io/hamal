@@ -1,16 +1,13 @@
 package io.hamal.lib.http
 
-import io.hamal.lib.http.CollectionUtils.cross
+import io.hamal.lib.common.util.CollectionUtils.cross
 import io.hamal.lib.http.HttpRequest.HttpMethod.Get
 import io.hamal.lib.http.fixture.TestWebConfig
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
-import org.junit.jupiter.params.provider.Arguments
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus

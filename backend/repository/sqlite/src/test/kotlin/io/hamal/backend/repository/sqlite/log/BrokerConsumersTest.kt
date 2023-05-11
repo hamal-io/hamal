@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Consumer.*
 import io.hamal.backend.repository.api.log.Topic
-import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.FileUtils
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -22,8 +22,8 @@ class DefaultBrokerConsumersRepositoryTest {
 
         @BeforeEach
         fun setup() {
-            Files.delete(Path(testDir))
-            Files.createDirectories(Path(testDir))
+            FileUtils.delete(Path(testDir))
+            FileUtils.createDirectories(Path(testDir))
         }
 
         @Test
@@ -31,8 +31,8 @@ class DefaultBrokerConsumersRepositoryTest {
             val targetDir = Path(testDir, "some-path", "another-path")
             DefaultBrokerConsumersRepository(testBrokerConsumers(targetDir)).use { }
 
-            assertTrue(Files.exists(targetDir))
-            assertTrue(Files.exists(Path(targetDir.pathString, "consumers.db")))
+            assertTrue(FileUtils.exists(targetDir))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "consumers.db")))
         }
 
         @Test

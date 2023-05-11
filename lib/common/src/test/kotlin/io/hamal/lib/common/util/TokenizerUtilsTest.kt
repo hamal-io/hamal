@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class TokenizerUtilTest {
+class TokenizerUtilsTest {
 
     @Nested
     @DisplayName("isDigit()")
@@ -14,18 +14,18 @@ class TokenizerUtilTest {
         @Test
         fun `Is digit`() {
             for (i in 0..9) {
-                assertTrue(TokenizerUtil.isDigit(Char(i + 48)))
+                assertTrue(TokenizerUtils.isDigit(Char(i + 48)))
             }
         }
 
         @Test
         fun `Not digit`() {
             for (i in 0..47) {
-                assertFalse(TokenizerUtil.isDigit(Char(i)))
+                assertFalse(TokenizerUtils.isDigit(Char(i)))
             }
 
             for (i in 58..254) {
-                assertFalse(TokenizerUtil.isDigit(Char(i)))
+                assertFalse(TokenizerUtils.isDigit(Char(i)))
             }
         }
     }
@@ -36,23 +36,23 @@ class TokenizerUtilTest {
         @Test
         fun `Is alpha`() {
             for (i in 65..90) {
-                assertTrue(TokenizerUtil.isAlpha(Char(i)))
+                assertTrue(TokenizerUtils.isAlpha(Char(i)))
             }
             for (i in 97..122) {
-                assertTrue(TokenizerUtil.isAlpha(Char(i)))
+                assertTrue(TokenizerUtils.isAlpha(Char(i)))
             }
         }
 
         @Test
         fun `Not alpha`() {
             for (i in 0..64) {
-                assertFalse(TokenizerUtil.isAlpha(Char(i)))
+                assertFalse(TokenizerUtils.isAlpha(Char(i)))
             }
             for (i in 91..96) {
-                assertFalse(TokenizerUtil.isAlpha(Char(i)))
+                assertFalse(TokenizerUtils.isAlpha(Char(i)))
             }
             for (i in 123..255) {
-                assertFalse(TokenizerUtil.isAlpha(Char(i)))
+                assertFalse(TokenizerUtils.isAlpha(Char(i)))
             }
         }
     }
@@ -62,16 +62,16 @@ class TokenizerUtilTest {
     inner class IsUnderscoreTest {
         @Test
         fun `Is underscore`() {
-            assertTrue(TokenizerUtil.isUnderscore('_'))
+            assertTrue(TokenizerUtils.isUnderscore('_'))
         }
 
         @Test
         fun `Not underscore`() {
             for (i in 0..94) {
-                assertFalse(TokenizerUtil.isUnderscore(Char(i)))
+                assertFalse(TokenizerUtils.isUnderscore(Char(i)))
             }
             for (i in 96..255) {
-                assertFalse(TokenizerUtil.isUnderscore(Char(i)))
+                assertFalse(TokenizerUtils.isUnderscore(Char(i)))
             }
         }
     }
@@ -81,16 +81,16 @@ class TokenizerUtilTest {
     inner class IsQuoteTest {
         @Test
         fun `Is quote`() {
-            assertTrue(TokenizerUtil.isQuote('\''))
+            assertTrue(TokenizerUtils.isQuote('\''))
         }
 
         @Test
         fun `Not quote`() {
             for (i in 0..38) {
-                assertFalse(TokenizerUtil.isQuote(Char(i)))
+                assertFalse(TokenizerUtils.isQuote(Char(i)))
             }
             for (i in 50..255) {
-                assertFalse(TokenizerUtil.isQuote(Char(i)))
+                assertFalse(TokenizerUtils.isQuote(Char(i)))
             }
         }
     }
@@ -101,10 +101,10 @@ class TokenizerUtilTest {
     inner class IsWhitespaceTest {
         @Test
         fun `Is whitespace`() {
-            assertTrue(TokenizerUtil.isWhitespace(' '))
-            assertTrue(TokenizerUtil.isWhitespace('\t'))
-            assertTrue(TokenizerUtil.isWhitespace('\n'))
-            assertTrue(TokenizerUtil.isWhitespace('\r'))
+            assertTrue(TokenizerUtils.isWhitespace(' '))
+            assertTrue(TokenizerUtils.isWhitespace('\t'))
+            assertTrue(TokenizerUtils.isWhitespace('\n'))
+            assertTrue(TokenizerUtils.isWhitespace('\r'))
         }
 
         @Test
@@ -113,7 +113,7 @@ class TokenizerUtilTest {
                 if (i in intArrayOf(9, 10, 13, 32)) {
                     continue
                 }
-                assertFalse(TokenizerUtil.isWhitespace(Char(i)))
+                assertFalse(TokenizerUtils.isWhitespace(Char(i)))
             }
         }
     }
@@ -124,29 +124,29 @@ class TokenizerUtilTest {
         @Test
         fun `Is hex char`() {
             for (i in 48..57) {
-                assertTrue(TokenizerUtil.isHexChar(Char(i)))
+                assertTrue(TokenizerUtils.isHexChar(Char(i)))
             }
             for (i in 65..70) {
-                assertTrue(TokenizerUtil.isHexChar(Char(i)))
+                assertTrue(TokenizerUtils.isHexChar(Char(i)))
             }
             for (i in 97..102) {
-                assertTrue(TokenizerUtil.isHexChar(Char(i)))
+                assertTrue(TokenizerUtils.isHexChar(Char(i)))
             }
         }
 
         @Test
         fun `Not hex char`() {
             for (i in 0..47) {
-                assertFalse(TokenizerUtil.isHexChar(Char(i)))
+                assertFalse(TokenizerUtils.isHexChar(Char(i)))
             }
             for (i in 58..64) {
-                assertFalse(TokenizerUtil.isHexChar(Char(i)))
+                assertFalse(TokenizerUtils.isHexChar(Char(i)))
             }
             for (i in 71..96) {
-                assertFalse(TokenizerUtil.isHexChar(Char(i)))
+                assertFalse(TokenizerUtils.isHexChar(Char(i)))
             }
             for (i in 103..255) {
-                assertFalse(TokenizerUtil.isHexChar(Char(i)))
+                assertFalse(TokenizerUtils.isHexChar(Char(i)))
             }
         }
     }

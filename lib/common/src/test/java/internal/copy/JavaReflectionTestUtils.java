@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Nested
 @DisplayName("JavaReflection")
-public class JavaReflectionTest {
+public class JavaReflectionTestUtils {
 
     @Nested
     @DisplayName("Fields")

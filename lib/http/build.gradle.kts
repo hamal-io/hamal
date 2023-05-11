@@ -7,7 +7,7 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
+    implementation(project(":lib:common"))
     implementation(external.kotlin.protobuf)
     implementation(external.kotlin.json)
     implementation(external.apache.http.client)

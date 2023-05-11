@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.attribute.FileAttribute
 
 
-object Files {
+object FileUtils {
     fun createDirectories(path: Path, vararg attribs: FileAttribute<*>): Path {
         return java.nio.file.Files.createDirectories(path, *attribs)
     }

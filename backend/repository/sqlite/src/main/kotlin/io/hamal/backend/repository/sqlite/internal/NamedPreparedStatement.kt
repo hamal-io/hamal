@@ -5,7 +5,7 @@ package io.hamal.backend.repository.sqlite.internal
 import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatement.ParseResult
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.common.util.TokenizerUtil
+import io.hamal.lib.common.util.TokenizerUtils
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.vo.base.DomainId
 import java.sql.Connection
@@ -223,7 +223,7 @@ internal class Parser {
         val resultBuilder = StringBuilder()
         while (!isAtEnd()) {
             val current = peek()
-            if (TokenizerUtil.isWhitespace(current) || current == ';' || current == ',' || current == ')') {
+            if (TokenizerUtils.isWhitespace(current) || current == ';' || current == ',' || current == ')') {
                 return resultBuilder.toString()
             } else {
                 resultBuilder.append(skip())

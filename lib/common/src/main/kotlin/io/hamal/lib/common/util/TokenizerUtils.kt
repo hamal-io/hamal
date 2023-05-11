@@ -1,6 +1,6 @@
 package io.hamal.lib.common.util
 
-object TokenizerUtil {
+object TokenizerUtils {
 
     fun isDigit(c: Char) = c.isDigit()
 

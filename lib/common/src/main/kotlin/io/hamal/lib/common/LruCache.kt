@@ -1,4 +1,4 @@
-package io.hamal.lib.common.util
+package io.hamal.lib.common
 
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
