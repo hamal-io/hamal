@@ -23,14 +23,26 @@ data class Person(
 
 @OptIn(ExperimentalSerializationApi::class)
 fun main() {
-    val client = HttpClientBuilder.create()
-        .build()
+//    val client = HttpClientBuilder.create()
+//        .build()
+//
+//    val get = HttpGet("https://reqres.in/api/users?page=2")
+//    val response = client.execute(get)
+//    val r = Json {
+//        ignoreUnknownKeys = true
+//    }.decodeFromStream<Result>(response.entity.content)
+//
+//    println(r)
 
-    val get = HttpGet("https://reqres.in/api/users?page=2")
-    val response = client.execute(get)
-    val r = Json {
-        ignoreUnknownKeys = true
-    }.decodeFromStream<Result>(response.entity.content)
+    val client = DefaultHttpClient()
 
+    val response = client.get("https://reqres.in/api/users?page=2")
+        .execute()
+
+    val serde = KotlinJsonSerde
+    val r = serde.deserialize(response.content, Result::class)
+
+
+    println(response)
     println(r)
 }
