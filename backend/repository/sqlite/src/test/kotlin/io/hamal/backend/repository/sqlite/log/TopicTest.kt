@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.lib.core.Shard
-import io.hamal.lib.core.util.Files
-import io.hamal.lib.core.util.TimeUtils.withEpochMilli
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.util.Files
+import io.hamal.lib.domain.util.TimeUtils.withEpochMilli
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*

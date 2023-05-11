@@ -6,10 +6,10 @@ import io.hamal.backend.core.job.ScheduledJob
 import io.hamal.backend.core.job.StartedJob
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.lib.core.RequestId
-import io.hamal.lib.core.Shard
-import io.hamal.lib.core.ddd.usecase.RequestManyUseCase
-import io.hamal.lib.core.ddd.usecase.RequestOneUseCase
+import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.ddd.usecase.RequestManyUseCase
+import io.hamal.lib.domain.ddd.usecase.RequestOneUseCase
 
 object JobRequest {
     data class PlanJob(

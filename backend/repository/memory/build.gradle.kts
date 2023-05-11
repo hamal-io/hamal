@@ -7,7 +7,7 @@ plugins {
 archivesName.set("backend-repository-memory")
 
 dependencies {
-    implementation(project(":lib:core"))
+    implementation(project(":lib:domain"))
     implementation(project(":backend:core"))
     implementation(project(":backend:repository:api"))
 

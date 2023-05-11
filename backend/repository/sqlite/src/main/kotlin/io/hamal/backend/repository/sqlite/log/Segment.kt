@@ -5,8 +5,8 @@ import io.hamal.backend.repository.api.log.Segment
 import io.hamal.backend.repository.api.log.SegmentRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.core.Shard
-import io.hamal.lib.core.util.TimeUtils
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.util.TimeUtils
 import java.nio.file.Path
 
 

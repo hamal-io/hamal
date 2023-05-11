@@ -34,7 +34,7 @@ dependencyResolutionManagement {
 
 include("bootstrap")
 
-include(":lib:core")
+include(":lib:domain")
 include(":lib:http")
 include(":lib:script:api")
 include(":lib:script:impl")

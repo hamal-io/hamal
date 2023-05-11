@@ -1,6 +1,6 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.core.math.Decimal
+import io.hamal.lib.domain.math.Decimal
 
 data class NumberValue(val value: Decimal) : Value {
     constructor(value: String) : this(Decimal(value))

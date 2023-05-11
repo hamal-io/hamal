@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.core.Shard
+import io.hamal.lib.domain.Shard
 import java.io.Closeable
 import java.nio.file.Path
 

@@ -1,7 +1,7 @@
 package io.hamal.backend.core.queue
 
-import io.hamal.lib.core.ddd.base.DomainObject
-import io.hamal.lib.core.vo.JobId
+import io.hamal.lib.domain.ddd.base.DomainObject
+import io.hamal.lib.domain.vo.JobId
 
 interface QueuedJob : DomainObject<JobId> {
     override val id: JobId

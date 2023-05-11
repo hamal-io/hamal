@@ -6,7 +6,7 @@ import io.hamal.backend.usecase.request.job.DequeueJobRequestHandler
 import io.hamal.backend.usecase.request.job.PlanJobRequestHandler
 import io.hamal.backend.usecase.request.job.QueueScheduledJobRequestHandler
 import io.hamal.backend.usecase.request.job.SchedulePlannedJobRequestHandler
-import io.hamal.lib.core.vo.port.GenerateDomainIdPort
+import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

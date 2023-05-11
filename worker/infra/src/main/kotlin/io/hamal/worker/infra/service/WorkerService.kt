@@ -1,6 +1,6 @@
 package io.hamal.worker.infra.service
 
-import io.hamal.lib.core.api.ApiWorkerJobs
+import io.hamal.lib.domain.api.ApiWorkerJobs
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.scheduling.annotation.Scheduled

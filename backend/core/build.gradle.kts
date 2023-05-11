@@ -7,7 +7,7 @@ plugins {
 archivesName.set("backend-core")
 
 dependencies {
-    implementation(project(":lib:core"))
+    implementation(project(":lib:domain"))
     implementation(external.kotlin.reflect)
     implementation(external.kotlin.json)
     implementation(external.kotlin.protobuf)

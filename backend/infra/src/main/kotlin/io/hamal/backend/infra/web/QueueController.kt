@@ -1,13 +1,13 @@
 package io.hamal.backend.infra.web
 
 import io.hamal.backend.usecase.request.JobRequest
-import io.hamal.lib.core.RequestId
-import io.hamal.lib.core.Shard
-import io.hamal.lib.core.api.ApiWorkerJob
-import io.hamal.lib.core.api.ApiWorkerJobs
-import io.hamal.lib.core.ddd.usecase.InvokeRequestManyUseCasePort
-import io.hamal.lib.core.vo.JobId
-import io.hamal.lib.core.vo.JobReference
+import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.api.ApiWorkerJob
+import io.hamal.lib.domain.api.ApiWorkerJobs
+import io.hamal.lib.domain.ddd.usecase.InvokeRequestManyUseCasePort
+import io.hamal.lib.domain.vo.JobId
+import io.hamal.lib.domain.vo.JobReference
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController

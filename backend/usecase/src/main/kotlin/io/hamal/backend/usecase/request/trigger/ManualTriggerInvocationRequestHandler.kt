@@ -6,11 +6,11 @@ import io.hamal.backend.core.notification.ManualTriggerInvokedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.usecase.request.TriggerRequest
-import io.hamal.lib.core.Requester
-import io.hamal.lib.core.ddd.usecase.RequestOneUseCaseHandler
-import io.hamal.lib.core.vo.InvokedAt
-import io.hamal.lib.core.vo.InvokedTriggerId
-import io.hamal.lib.core.vo.TenantId
+import io.hamal.lib.domain.Requester
+import io.hamal.lib.domain.ddd.usecase.RequestOneUseCaseHandler
+import io.hamal.lib.domain.vo.InvokedAt
+import io.hamal.lib.domain.vo.InvokedTriggerId
+import io.hamal.lib.domain.vo.TenantId
 
 class ManualTriggerInvocationRequestHandler(
     internal val notifyDomain: NotifyDomainPort,

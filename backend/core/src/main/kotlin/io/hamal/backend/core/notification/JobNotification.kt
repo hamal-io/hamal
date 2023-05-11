@@ -4,7 +4,7 @@ import io.hamal.backend.core.job.PlannedJob
 import io.hamal.backend.core.job.QueuedJob
 import io.hamal.backend.core.job.ScheduledJob
 import io.hamal.backend.core.job.StartedJob
-import io.hamal.lib.core.Shard
+import io.hamal.lib.domain.Shard
 import kotlinx.serialization.Serializable
 
 

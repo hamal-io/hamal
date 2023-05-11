@@ -2,9 +2,9 @@ package io.hamal.backend.core.trigger
 
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger.ManualTrigger
-import io.hamal.lib.core.Requester
-import io.hamal.lib.core.ddd.base.DomainObject
-import io.hamal.lib.core.vo.*
+import io.hamal.lib.domain.Requester
+import io.hamal.lib.domain.ddd.base.DomainObject
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable

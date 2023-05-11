@@ -1,12 +1,12 @@
 package io.hamal.backend.infra.adapter
 
 import io.hamal.backend.infra.adapter.TestUseCasesConfig.*
-import io.hamal.lib.core.RequestId
-import io.hamal.lib.core.Shard
-import io.hamal.lib.core.ddd.usecase.*
-import io.hamal.lib.core.ddd.base.DomainObject
-import io.hamal.lib.core.util.SnowflakeId
-import io.hamal.lib.core.vo.base.DomainId
+import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.ddd.base.DomainObject
+import io.hamal.lib.domain.ddd.usecase.*
+import io.hamal.lib.domain.util.SnowflakeId
+import io.hamal.lib.domain.vo.base.DomainId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName

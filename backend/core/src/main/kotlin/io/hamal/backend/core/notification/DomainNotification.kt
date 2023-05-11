@@ -1,6 +1,6 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.lib.core.Shard
+import io.hamal.lib.domain.Shard
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 

@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.core.math.Decimal
+import io.hamal.lib.domain.math.Decimal
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.token.Token.Type
 
