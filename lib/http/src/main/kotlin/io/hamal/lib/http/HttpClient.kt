@@ -8,13 +8,14 @@ interface HttpClient {
 }
 
 class DefaultHttpClient(
+    private var baseUrl: String = "",
     private var errorDeserializer: HttpErrorDeserializer = DefaultErrorDeserializer,
     private var contentDeserializer: HttpContentDeserializer = KotlinJsonHttpContentDeserializer
 ) : HttpClient {
     override fun get(url: String): HttpRequest {
         return DefaultHttpRequest(
             method = Get,
-            url = url,
+            url = baseUrl + url,
             errorDeserializer = errorDeserializer,
             contentDeserializer = contentDeserializer,
             client = HttpClientBuilder.create().build() // FIXME replace with factory

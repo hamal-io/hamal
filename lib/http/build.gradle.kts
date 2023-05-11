@@ -14,6 +14,7 @@ dependencies {
     implementation(external.apache.http.mime)
     implementation(external.apache.commons.logging)
 
+    testImplementation(project(":lib:http"))
     testImplementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")
