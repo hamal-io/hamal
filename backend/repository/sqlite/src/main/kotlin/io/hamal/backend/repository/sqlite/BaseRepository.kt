@@ -5,7 +5,7 @@ import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.internal.DefaultConnection
 import io.hamal.lib.domain.Once
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.util.Files
+import io.hamal.lib.common.util.Files
 import java.io.Closeable
 import java.nio.file.Path
 import kotlin.io.path.Path

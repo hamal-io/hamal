@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api.log
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.util.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainId
 import java.time.Instant
 

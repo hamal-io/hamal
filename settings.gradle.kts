@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 
             library("apache-http-client", "org.apache.httpcomponents", "httpclient").version("4.5.13")
             library("apache-http-mime", "org.apache.httpcomponents", "httpmime").version("4.5.13")
-            library("apache-commons-logging","commons-logging", "commons-logging").version("1.2")
+            library("apache-commons-logging", "commons-logging", "commons-logging").version("1.2")
         }
     }
 }
@@ -34,6 +34,7 @@ dependencyResolutionManagement {
 
 include("bootstrap")
 
+include(":lib:common")
 include(":lib:domain")
 include(":lib:http")
 include(":lib:script:api")

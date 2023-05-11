@@ -5,9 +5,9 @@ import io.hamal.backend.repository.api.log.Partition
 import io.hamal.backend.repository.api.log.Segment
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.util.Files
-import io.hamal.lib.domain.util.TimeUtils.withEpochMilli
-import io.hamal.lib.domain.util.TimeUtils.withInstant
+import io.hamal.lib.common.util.Files
+import io.hamal.lib.common.util.TimeUtils.withEpochMilli
+import io.hamal.lib.common.util.TimeUtils.withInstant
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*

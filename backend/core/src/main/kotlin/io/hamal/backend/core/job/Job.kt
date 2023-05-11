@@ -2,7 +2,7 @@ package io.hamal.backend.core.job
 
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.lib.domain.ddd.base.DomainObject
+import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.JobState
 import io.hamal.lib.domain.vo.QueuedAt

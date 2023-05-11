@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Consumer.*
 import io.hamal.backend.repository.api.log.Topic
-import io.hamal.lib.domain.util.Files
+import io.hamal.lib.common.util.Files
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*

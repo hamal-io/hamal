@@ -11,6 +11,7 @@ apply(plugin = "io.spring.dependency-management")
 
 
 dependencies {
+    implementation(project(":lib:common"))
     implementation(project(":lib:domain"))
 
     implementation(project(":backend:usecase"))

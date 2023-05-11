@@ -6,7 +6,7 @@ import io.hamal.backend.core.notification.JobPlannedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobRepository
 import io.hamal.backend.usecase.request.JobRequest.PlanJob
-import io.hamal.lib.domain.ddd.usecase.RequestOneUseCaseHandler
+import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 

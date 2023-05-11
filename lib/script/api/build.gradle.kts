@@ -6,6 +6,7 @@ plugins {
 archivesName.set("script-api")
 
 dependencies {
+    implementation(project(":lib:common"))
     implementation(project(":lib:domain"))
 
     testImplementation(project(":lib:script:api"))

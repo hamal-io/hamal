@@ -7,6 +7,7 @@ plugins {
 archivesName.set("backend-repository-sqlite")
 
 dependencies {
+    implementation(project(":lib:common"))
     implementation(project(":lib:domain"))
     implementation(project(":backend:core"))
     implementation(project(":backend:repository:api"))

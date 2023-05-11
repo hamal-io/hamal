@@ -5,7 +5,7 @@ import io.hamal.backend.core.tenant.Tenant
 import io.hamal.backend.usecase.request.JobDefinitionRequest
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.usecase.InvokeUseCasePort
+import io.hamal.lib.domain.ddd.InvokeUseCasePort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestAttribute
@@ -23,8 +23,7 @@ open class JobDefinitionController(
     ): JobDefinition {
         return request(
             JobDefinitionRequest.JobDefinitionCreation(
-                requestId,
-                shard
+                requestId, shard
             )
         )
     }

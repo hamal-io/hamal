@@ -6,6 +6,7 @@ plugins {
 archivesName.set("backend-application")
 
 dependencies {
+    implementation(project(":lib:common"))
     implementation(project(":lib:domain"))
     implementation(project(":backend:core"))
 

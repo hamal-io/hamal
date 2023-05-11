@@ -6,6 +6,7 @@ plugins {
 archivesName.set("script-impl")
 
 dependencies {
+    implementation(project(":lib:common"))
     implementation(project(":lib:domain"))
     implementation(project(":lib:script:api"))
     implementation(external.spring.logging)

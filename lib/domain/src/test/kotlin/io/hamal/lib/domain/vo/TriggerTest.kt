@@ -1,9 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.util.SnowflakeId
-import io.hamal.lib.domain.vo.InvokedTriggerId
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.TriggerReference
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.helper.SerializationTestHelper.generateTestCases
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*

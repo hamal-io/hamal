@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.log.SegmentRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.util.TimeUtils
+import io.hamal.lib.common.util.TimeUtils
 import java.nio.file.Path
 
 

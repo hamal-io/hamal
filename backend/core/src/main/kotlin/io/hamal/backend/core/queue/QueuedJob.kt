@@ -1,6 +1,6 @@
 package io.hamal.backend.core.queue
 
-import io.hamal.lib.domain.ddd.base.DomainObject
+import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.JobId
 
 interface QueuedJob : DomainObject<JobId> {

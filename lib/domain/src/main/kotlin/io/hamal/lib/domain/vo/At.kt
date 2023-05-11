@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.util.TimeUtils
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.DomainAt
 import io.hamal.lib.domain.vo.base.DomainAtSerializer
 import kotlinx.serialization.Serializable

@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo.base
 
-import io.hamal.lib.domain.ddd.base.ValueObject
+import io.hamal.lib.common.ddd.ValueObject
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind

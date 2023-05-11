@@ -2,7 +2,7 @@ package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command.*
 import io.hamal.backend.repository.api.JobDefinitionRepository.Recorder
-import io.hamal.lib.domain.util.SnowflakeId
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobReference
 import io.hamal.lib.domain.vo.port.FixedTimeIdGeneratorAdapter

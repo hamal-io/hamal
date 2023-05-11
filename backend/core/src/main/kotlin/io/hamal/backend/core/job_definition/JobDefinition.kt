@@ -1,7 +1,7 @@
 package io.hamal.backend.core.job_definition
 
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.lib.domain.ddd.base.DomainObject
+import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobReference
 import kotlinx.serialization.Serializable

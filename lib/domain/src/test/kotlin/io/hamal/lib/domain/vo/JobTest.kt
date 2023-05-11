@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.util.SnowflakeId
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.JobReference

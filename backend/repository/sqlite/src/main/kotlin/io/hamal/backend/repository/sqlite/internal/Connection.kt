@@ -2,8 +2,8 @@ package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.backend.core.logger
 import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement.Companion.prepare
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.RequestId
-import io.hamal.lib.domain.util.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainId
 import java.sql.DriverManager
 import java.time.Instant

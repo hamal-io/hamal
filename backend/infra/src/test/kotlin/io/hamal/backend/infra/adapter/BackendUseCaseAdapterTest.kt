@@ -1,10 +1,10 @@
 package io.hamal.backend.infra.adapter
 
+import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.base.DomainObject
-import io.hamal.lib.domain.ddd.usecase.*
-import io.hamal.lib.domain.util.SnowflakeId
+import io.hamal.lib.domain.ddd.*
 import io.hamal.lib.domain.vo.base.DomainId
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat

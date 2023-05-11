@@ -2,9 +2,14 @@
 
 package io.hamal.lib.domain.util
 
-import io.hamal.lib.domain.util.SnowflakeId.ElapsedSource.Elapsed
-import io.hamal.lib.domain.util.SnowflakeId.PartitionSource.Partition
-import io.hamal.lib.domain.util.SnowflakeId.SequenceSource.Sequence
+import io.hamal.lib.common.*
+import io.hamal.lib.common.DefaultPartitionSource
+import io.hamal.lib.common.DefaultSequenceSource
+import io.hamal.lib.common.SnowflakeGenerator
+import io.hamal.lib.common.SnowflakeId.ElapsedSource
+import io.hamal.lib.common.SnowflakeId.ElapsedSource.Elapsed
+import io.hamal.lib.common.SnowflakeId.PartitionSource.Partition
+import io.hamal.lib.common.SnowflakeId.SequenceSource.Sequence
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
@@ -24,13 +29,13 @@ class SnowflakeTest {
     inner class DefaultElapsedSourceTest {
         @Test
         fun `With default epoch`() {
-            val testInstance = io.hamal.lib.domain.util.DefaultElapsedSource()
+            val testInstance = DefaultElapsedSource()
             assertThat(testInstance.epoch, equalTo(1682116276624))
         }
 
         @Test
         fun `Is monotonic`() {
-            val testInstance = io.hamal.lib.domain.util.DefaultElapsedSource()
+            val testInstance = DefaultElapsedSource()
             var prev = testInstance.elapsed()
             for (i in (0..1_000_000)) {
                 val current = testInstance.elapsed()
@@ -73,7 +78,7 @@ class SnowflakeTest {
         inner class DefaultsPartitionSourceTest {
             @Test
             fun `Simple pass through`() {
-                val testInstance = io.hamal.lib.domain.util.DefaultPartitionSource(137)
+                val testInstance = DefaultPartitionSource(137)
                 assertThat(testInstance.get(), equalTo(Partition(137)))
                 assertThat(testInstance.get(), equalTo(Partition(137)))
                 assertThat(testInstance.get(), equalTo(Partition(137)))
@@ -126,7 +131,7 @@ class SnowflakeTest {
 
                 @Test
                 fun `Requires ElapsedSource to return monotonic time`() {
-                    val testInstance = io.hamal.lib.domain.util.DefaultSequenceSource()
+                    val testInstance = DefaultSequenceSource()
 
                     testInstance.next { Elapsed(0L) }
                     testInstance.next { Elapsed(1L) }
@@ -141,8 +146,8 @@ class SnowflakeTest {
 
                 @Test
                 fun `Blocks if sequence is exhausted`() {
-                    val testInstance = io.hamal.lib.domain.util.DefaultSequenceSource()
-                    val elapsedSource = object : io.hamal.lib.domain.util.SnowflakeId.ElapsedSource {
+                    val testInstance = DefaultSequenceSource()
+                    val elapsedSource = object : ElapsedSource {
                         var counter = 0
                         var blockingCounter = 0
 
@@ -178,13 +183,13 @@ class SnowflakeTest {
     inner class IdTest {
         @Test
         fun `Genesis - never called`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(0),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(10)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(10)
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(90074191570665472)))
+            assertThat(result, equalTo(SnowflakeId(90074191570665472)))
 
             assertThat(result.partition(), equalTo(Partition(10)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -193,13 +198,13 @@ class SnowflakeTest {
 
         @Test
         fun `123456 milli seconds after epoch`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(123456),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(42)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(123456),
+                partitionSource = DefaultPartitionSource(42)
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(378304567722500672)))
+            assertThat(result, equalTo(SnowflakeId(378304567722500672)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -208,14 +213,14 @@ class SnowflakeTest {
 
         @Test
         fun `Around 39 years after epoch`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(1099511627776),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(42)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(1099511627776),
+                partitionSource = DefaultPartitionSource(42)
             )
 
 
             val result = testInstance.next()
-            assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(378305667234004992)))
+            assertThat(result, equalTo(SnowflakeId(378305667234004992)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -225,14 +230,14 @@ class SnowflakeTest {
 
         @Test
         fun `Around 69 years after epoch`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(2199023255550),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(42)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(2199023255550),
+                partitionSource = DefaultPartitionSource(42)
             )
 
 
             val result = testInstance.next()
-            assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(378306766745632766)))
+            assertThat(result, equalTo(SnowflakeId(378306766745632766)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -241,9 +246,9 @@ class SnowflakeTest {
 
         @Test
         fun `10 years after epoch on Partition 128 and a couple of sequences`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(315569520000),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(128)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(315569520000),
+                partitionSource = DefaultPartitionSource(128)
             )
 
 
@@ -252,7 +257,7 @@ class SnowflakeTest {
             }
 
             val result = testInstance.next()
-            assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(1159101075524468096)))
+            assertThat(result, equalTo(SnowflakeId(1159101075524468096)))
 
             assertThat(result.partition(), equalTo(Partition(128)))
             assertThat(result.sequence(), equalTo(Sequence(2810)))
@@ -261,11 +266,11 @@ class SnowflakeTest {
 
         @Test
         fun `Is Serializable`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeId(12345678)
+            val testInstance = SnowflakeId(12345678)
             val encoded = ProtoBuf.encodeToByteArray(testInstance)
             assertThat(encoded.size, equalTo(4))
-            val decoded = ProtoBuf.decodeFromByteArray<io.hamal.lib.domain.util.SnowflakeId>(encoded)
-            assertThat(decoded, equalTo(io.hamal.lib.domain.util.SnowflakeId(12345678)))
+            val decoded = ProtoBuf.decodeFromByteArray<SnowflakeId>(encoded)
+            assertThat(decoded, equalTo(SnowflakeId(12345678)))
         }
     }
 
@@ -274,13 +279,13 @@ class SnowflakeTest {
     inner class SnowflakeGeneratorTest {
         @Test
         fun `T-0 Partition 0 - first call in this sequence`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(0),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(0)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(0)
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(2199023255552)))
+            assertThat(result, equalTo(SnowflakeId(2199023255552)))
 
             assertThat(result.partition(), equalTo(Partition(0)))
             assertThat(result.sequence(), equalTo(Sequence(1)))
@@ -289,72 +294,72 @@ class SnowflakeTest {
 
         @Test
         fun `T-1 Partition 0 - first call in this sequence`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(1),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(0)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(1),
+                partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(2199023255553)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255553)))
         }
 
         @Test
         fun `T-10 Partition 0 - first call in this sequence`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(10),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(0)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(10),
+                partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(2199023255562)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255562)))
         }
 
         @Test
         fun `T-10 Partition 0`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(10),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(0)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(10),
+                partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(2199023255562)))
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(4398046511114)))
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(6597069766666)))
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(8796093022218)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255562)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(4398046511114)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(6597069766666)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(8796093022218)))
         }
 
         @Test
         fun `T-100 Partition 0 - first call in this sequence`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(100),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(0)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(100),
+                partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(2199023255652)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255652)))
         }
 
         @Test
         fun `T-0 Partition 1 - first call in this sequence`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(0),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(1)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(1)
             )
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(9009398277996544)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(9009398277996544)))
         }
 
         @Test
         fun `T-0 Partition 2 - first call in this sequence`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(0),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(2)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(2)
             )
-            assertThat(testInstance.next(), equalTo(io.hamal.lib.domain.util.SnowflakeId(18016597532737536)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(18016597532737536)))
         }
 
         @Test
         fun `T-0 Partition 0 - until exhaustion`() {
-            val testInstance = io.hamal.lib.domain.util.SnowflakeGenerator(
-                elapsedSource = io.hamal.lib.domain.util.FixedElapsedSource(0),
-                partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(0)
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(0)
             )
 
             for (i in 1 until 4096) {
                 val expectedNext = (i).toLong().shl(63 - 22)
                 val result = testInstance.next()
-                assertThat(result, equalTo(io.hamal.lib.domain.util.SnowflakeId(expectedNext)))
+                assertThat(result, equalTo(SnowflakeId(expectedNext)))
 
                 assertThat(result.sequence(), equalTo(Sequence(i)))
             }
@@ -364,11 +369,11 @@ class SnowflakeTest {
         @Test
         fun `Multiple generators with different partitions create ids`() {
             val instanceOne =
-                io.hamal.lib.domain.util.SnowflakeGenerator(io.hamal.lib.domain.util.DefaultPartitionSource(1))
+                SnowflakeGenerator(DefaultPartitionSource(1))
             val instanceTwo =
-                io.hamal.lib.domain.util.SnowflakeGenerator(io.hamal.lib.domain.util.DefaultPartitionSource(2))
+                SnowflakeGenerator(DefaultPartitionSource(2))
             val instanceThree =
-                io.hamal.lib.domain.util.SnowflakeGenerator(io.hamal.lib.domain.util.DefaultPartitionSource(3))
+                SnowflakeGenerator(DefaultPartitionSource(3))
 
             val resultOne = supplyAsync { IntRange(1, 500_000).map { instanceOne.next() }.toSet() }
             val resultTwo = supplyAsync { IntRange(1, 500_000).map { instanceTwo.next() }.toSet() }
@@ -397,17 +402,17 @@ class SnowflakeTest {
 
     @Test
     fun `Multiple generators with different partitions create ids - with unique epoch`() {
-        val instanceOne = io.hamal.lib.domain.util.SnowflakeGenerator(
-            partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(1),
-            elapsedSource = io.hamal.lib.domain.util.DefaultElapsedSource(0)
+        val instanceOne = SnowflakeGenerator(
+            partitionSource = DefaultPartitionSource(1),
+            elapsedSource = DefaultElapsedSource(0)
         )
-        val instanceTwo = io.hamal.lib.domain.util.SnowflakeGenerator(
-            partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(2),
-            elapsedSource = io.hamal.lib.domain.util.DefaultElapsedSource(0)
+        val instanceTwo = SnowflakeGenerator(
+            partitionSource = DefaultPartitionSource(2),
+            elapsedSource = DefaultElapsedSource(0)
         )
-        val instanceThree = io.hamal.lib.domain.util.SnowflakeGenerator(
-            partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(3),
-            elapsedSource = io.hamal.lib.domain.util.DefaultElapsedSource(0)
+        val instanceThree = SnowflakeGenerator(
+            partitionSource = DefaultPartitionSource(3),
+            elapsedSource = DefaultElapsedSource(0)
         )
 
         val resultOne = supplyAsync { IntRange(1, 500_000).map { instanceOne.next() }.toSet() }
@@ -427,14 +432,14 @@ class SnowflakeTest {
 
     @Test
     fun `Is threadsafe`() {
-        val instance = io.hamal.lib.domain.util.SnowflakeGenerator(
-            partitionSource = io.hamal.lib.domain.util.DefaultPartitionSource(1),
-            elapsedSource = io.hamal.lib.domain.util.DefaultElapsedSource(123456)
+        val instance = SnowflakeGenerator(
+            partitionSource = DefaultPartitionSource(1),
+            elapsedSource = DefaultElapsedSource(123456)
         )
 
         val pool = Executors.newFixedThreadPool(12)
         val result = IntRange(1, 100_000).map {
-            pool.submit<io.hamal.lib.domain.util.SnowflakeId> { instance.next() }
+            pool.submit<SnowflakeId> { instance.next() }
         }.map { it.get() }.toSet()
 
         assertThat(result, hasSize(100_000))

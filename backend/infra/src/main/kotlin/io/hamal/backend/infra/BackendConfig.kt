@@ -13,8 +13,8 @@ import io.hamal.backend.usecase.request.JobDefinitionRequest
 import io.hamal.backend.usecase.request.TriggerRequest.ManualTriggerInvocation
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.usecase.InvokeRequestOneUseCasePort
-import io.hamal.lib.domain.ddd.usecase.InvokeUseCasePort
+import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
+import io.hamal.lib.domain.ddd.InvokeUseCasePort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
