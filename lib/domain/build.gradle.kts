@@ -13,6 +13,6 @@ dependencies {
 }
 
 
-tasks.withType<Jar>() {
+tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
