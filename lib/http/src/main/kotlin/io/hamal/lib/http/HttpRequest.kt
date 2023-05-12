@@ -7,6 +7,7 @@ interface HttpRequest {
     val url: String
     val method: HttpMethod
     val serdeFactory: HttpSerdeFactory
+    val headers: HttpMutableHeaders
     val client: org.apache.http.client.HttpClient
     fun header(key: String, value: String): HttpRequest
     fun parameter(key: String, value: String): HttpRequest
@@ -31,13 +32,13 @@ class DefaultHttpRequest(
     override val url: String,
     override val method: HttpRequest.HttpMethod,
     override val serdeFactory: HttpSerdeFactory,
+    override val headers: HttpMutableHeaders,
     override val client: org.apache.http.client.HttpClient
 ) : HttpRequest, HttpRequestWithBody {
 
-    private val headers = HttpMutableHeaders()
     private val parameters = mutableListOf<HttpParameter>()
     override fun header(key: String, value: String): HttpRequest {
-        headers.add(key, value)
+        headers[key] = value
         return this
     }
 

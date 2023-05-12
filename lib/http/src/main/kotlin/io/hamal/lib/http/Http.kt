@@ -2,6 +2,7 @@ package io.hamal.lib.http
 
 import io.hamal.lib.http.HttpRequest.HttpMethod
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
+import org.apache.http.impl.client.HttpClientBuilder
 
 interface HttpOperations {
     fun delete(url: String): HttpRequest
@@ -13,8 +14,9 @@ interface HttpOperations {
 
 class HttpTemplate(
     private var baseUrl: String = "",
-    private var serdeFactory: HttpSerdeFactory = DefaultHttpSerdeFactory,
-    private var httpClientFactory: HttpClientFactory = DefaultHttpClientFactory
+    private val headerFactory: HttpMutableHeaders.() -> Unit = {},
+    private var serdeFactory: HttpSerdeFactory.() -> Unit = {},
+    private var httpClientFactory: HttpClientBuilder.() -> Unit = {}
 ) : HttpOperations {
     override fun delete(url: String): HttpRequest = requestWith(Delete, url)
     override fun get(url: String): HttpRequest = requestWith(Get, url)
@@ -25,9 +27,9 @@ class HttpTemplate(
         return DefaultHttpRequest(
             method = method,
             url = baseUrl + url,
-            serdeFactory = serdeFactory,
-            client = httpClientFactory.get()
+            headers = HttpMutableHeaders().apply(headerFactory),
+            serdeFactory = DefaultHttpSerdeFactory.apply(serdeFactory),
+            client = HttpClientBuilder.create().apply(httpClientFactory).build()
         )
     }
-
 }

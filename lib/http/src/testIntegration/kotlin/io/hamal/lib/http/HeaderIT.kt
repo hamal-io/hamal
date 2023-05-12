@@ -38,14 +38,50 @@ open class TestHeaderController {
 class HeaderIT(
     @LocalServerPort var localServerPort: Int
 ) {
-
     @TestFactory
-    fun `Single Header set on request`(): List<DynamicTest> =
+    fun `Header set on template`(): List<DynamicTest> =
         HttpMethod.values()
             .map { method ->
                 dynamicTest("$method request") {
 
-                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplate(
+                        baseUrl = "http://localhost:$localServerPort",
+                        headerFactory = {
+                            this["x-template-header"] = "x-template-header-value"
+                        }
+                    )
+
+                    val request = when (method) {
+                        Delete -> testInstance.delete("/v1/headers")
+                        Get -> testInstance.get("/v1/headers")
+                        Patch -> testInstance.patch("/v1/headers")
+                        Post -> testInstance.post("/v1/headers")
+                        Put -> testInstance.put("/v1/headers")
+                    }
+
+                    val response = request.execute()
+
+                    require(response is NoContentHttpResponse)
+                    assertThat(response.statusCode, equalTo(NoContent))
+
+                    val headers = response.headers
+                    assertThat(headers["x-template-header"], equalTo("x-template-header-value"))
+                }
+            }
+            .toList()
+
+    @TestFactory
+    fun `Header set on request`(): List<DynamicTest> =
+        HttpMethod.values()
+            .map { method ->
+                dynamicTest("$method request") {
+
+                    val testInstance = HttpTemplate(
+                        baseUrl = "http://localhost:$localServerPort",
+                        headerFactory = {
+                            this["x-request-header"] = "x-request-header-value"
+                        }
+                    )
 
                     val request = when (method) {
                         Delete -> testInstance.delete("/v1/headers")
@@ -64,6 +100,75 @@ class HeaderIT(
 
                     val headers = response.headers
                     assertThat(headers["x-request-header"], equalTo("x-request-header-value"))
+                }
+            }
+            .toList()
+
+    @TestFactory
+    fun `Header set on request overwrites header set on template`(): List<DynamicTest> =
+        HttpMethod.values()
+            .map { method ->
+                dynamicTest("$method request") {
+
+                    val testInstance = HttpTemplate(
+                        baseUrl = "http://localhost:$localServerPort",
+                        headerFactory = {
+                            this["x-header"] = "x-template-value"
+                        }
+                    )
+
+                    val request = when (method) {
+                        Delete -> testInstance.delete("/v1/headers")
+                        Get -> testInstance.get("/v1/headers")
+                        Patch -> testInstance.patch("/v1/headers")
+                        Post -> testInstance.post("/v1/headers")
+                        Put -> testInstance.put("/v1/headers")
+                    }
+
+                    val response = request
+                        .header("x-header", "x-request-value")
+                        .execute()
+
+                    require(response is NoContentHttpResponse)
+                    assertThat(response.statusCode, equalTo(NoContent))
+
+                    val headers = response.headers
+                    assertThat(headers["x-header"], equalTo("x-request-value"))
+                }
+            }
+            .toList()
+
+    @TestFactory
+    fun `Different header can be set on request and template template at the same time`(): List<DynamicTest> =
+        HttpMethod.values()
+            .map { method ->
+                dynamicTest("$method request") {
+
+                    val testInstance = HttpTemplate(
+                        baseUrl = "http://localhost:$localServerPort",
+                        headerFactory = {
+                            this["x-template-header"] = "x-template-value"
+                        }
+                    )
+
+                    val request = when (method) {
+                        Delete -> testInstance.delete("/v1/headers")
+                        Get -> testInstance.get("/v1/headers")
+                        Patch -> testInstance.patch("/v1/headers")
+                        Post -> testInstance.post("/v1/headers")
+                        Put -> testInstance.put("/v1/headers")
+                    }
+
+                    val response = request
+                        .header("x-request-header", "x-request-value")
+                        .execute()
+
+                    require(response is NoContentHttpResponse)
+                    assertThat(response.statusCode, equalTo(NoContent))
+
+                    val headers = response.headers
+                    assertThat(headers["x-template-header"], equalTo("x-template-value"))
+                    assertThat(headers["x-request-header"], equalTo("x-request-value"))
                 }
             }
             .toList()

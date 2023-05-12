@@ -13,7 +13,8 @@ data class HttpMutableHeaders(
 ) {
     fun toHttpHeaders() = HttpHeaders(mapping)
 
-    fun add(key: String, value: String) {
+    operator fun set(key: String, value: String): HttpMutableHeaders {
         mapping[key] = value
+        return this
     }
 }

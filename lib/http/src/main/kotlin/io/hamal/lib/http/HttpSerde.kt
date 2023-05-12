@@ -11,13 +11,13 @@ import java.io.InputStream
 import kotlin.reflect.KClass
 
 interface HttpSerdeFactory {
-    val errorDeserializer: HttpErrorDeserializer
-    val contentDeserializer: HttpContentDeserializer
+    var errorDeserializer: HttpErrorDeserializer
+    var contentDeserializer: HttpContentDeserializer
 }
 
 object DefaultHttpSerdeFactory : HttpSerdeFactory {
-    override val errorDeserializer: HttpErrorDeserializer get() = DefaultErrorDeserializer
-    override val contentDeserializer: HttpContentDeserializer get() = KotlinJsonHttpContentDeserializer
+    override var errorDeserializer: HttpErrorDeserializer = DefaultErrorDeserializer
+    override var contentDeserializer: HttpContentDeserializer = KotlinJsonHttpContentDeserializer
 
 }
 
