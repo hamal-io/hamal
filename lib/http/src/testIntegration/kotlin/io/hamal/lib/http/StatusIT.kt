@@ -14,20 +14,28 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
 @RestController
 open class TestStatusController {
     @RequestMapping("/v1/status")
-    fun execute(@RequestParam("code") code: Int): ResponseEntity<String> {
-        return HttpStatus.valueOf(code).let {
-            ResponseEntity<String>(
-                it.toString(),
-                it
-            )
+    fun execute(
+        @RequestParam("code") code: Int?,
+        @RequestBody(required = false) body: MultiValueMap<String, String>?
+    ): ResponseEntity<String> {
+        val status = if (code != null) {
+            HttpStatus.valueOf(code)
+        } else {
+            HttpStatus.valueOf(body!!.getFirst("code")!!.toInt())
         }
+        return ResponseEntity<String>(
+            status.toString(),
+            status
+        )
     }
 }
+
 
 @Nested
 @SpringBootTest(

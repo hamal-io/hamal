@@ -39,6 +39,7 @@ include(":lib:domain")
 include(":lib:http")
 include(":lib:script:api")
 include(":lib:script:impl")
+include(":lib:sdk")
 
 include(":backend")
 include(":backend:usecase")

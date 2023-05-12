@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.api
+package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.JobReference

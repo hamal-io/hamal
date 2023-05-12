@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":worker:application"))
     implementation(project(":worker:core"))
     implementation(project(":lib:common"))
-    implementation(project(":lib:domain"))
+    implementation(project(":lib:sdk"))
 
     implementation(project(":worker:extension:api"))
     implementation(external.kotlin.json)

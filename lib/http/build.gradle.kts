@@ -27,11 +27,6 @@ dependencies {
     testImplementation(external.hamcrest)
 }
 
-
-tasks.withType<Jar>() {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
 tasks.bootJar {
     enabled = false
 }

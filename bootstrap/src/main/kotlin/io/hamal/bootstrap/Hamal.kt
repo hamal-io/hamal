@@ -10,11 +10,11 @@ import org.springframework.core.env.Environment
 import java.io.PrintStream
 
 @SpringBootApplication
-class HamalApplication
+class Hamal
 
 fun main(args: Array<String>) {
     val applicationBuilder = SpringApplicationBuilder()
-        .parent(HamalApplication::class.java)
+        .parent(Hamal::class.java)
         .banner { _: Environment, _: Class<*>, out: PrintStream ->
             out.println("")
             out.println("")
