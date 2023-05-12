@@ -36,11 +36,13 @@ enum class HttpStatusCode(val value: Int) {
 
 sealed interface HttpResponse {
     val statusCode: HttpStatusCode
+    val headers: HttpHeaders
 }
 
 
 data class SuccessHttpResponse(
     override val statusCode: HttpStatusCode,
+    override val headers: HttpHeaders,
     val inputStream: InputStream,
     val contentDeserializer: HttpContentDeserializer
 ) : HttpResponse {
@@ -51,11 +53,13 @@ data class SuccessHttpResponse(
 
 data class NoContentHttpResponse(
     override val statusCode: HttpStatusCode,
+    override val headers: HttpHeaders
 ) : HttpResponse
 
 
 data class ErrorHttpResponse(
     override val statusCode: HttpStatusCode,
+    override val headers: HttpHeaders,
     val inputStream: InputStream,
     val errorDeserializer: HttpErrorDeserializer
 ) : HttpResponse {

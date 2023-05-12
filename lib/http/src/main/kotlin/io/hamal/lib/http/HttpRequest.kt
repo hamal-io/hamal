@@ -8,12 +8,12 @@ interface HttpRequest {
     val method: HttpMethod
     val serdeFactory: HttpSerdeFactory
     val client: org.apache.http.client.HttpClient
+    fun header(key: String, value: String): HttpRequest
     fun parameter(key: String, value: String): HttpRequest
     fun parameter(key: String, value: Number): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
-    fun executeWithoutResult()
     enum class HttpMethod {
         Delete,
         Get,
@@ -34,7 +34,12 @@ class DefaultHttpRequest(
     override val client: org.apache.http.client.HttpClient
 ) : HttpRequest, HttpRequestWithBody {
 
+    private val headers = HttpMutableHeaders()
     private val parameters = mutableListOf<HttpParameter>()
+    override fun header(key: String, value: String): HttpRequest {
+        headers.add(key, value)
+        return this
+    }
 
     override fun parameter(key: String, value: String): HttpRequest {
         parameters.add(HttpParameter(key, value))
@@ -57,6 +62,7 @@ class DefaultHttpRequest(
         val requestFacade = when (method) {
             Delete -> HttpDeleteRequestFacade(
                 url = preparedUrl,
+                headers = headers.toHttpHeaders(),
                 parameters = parameters,
                 serdeFactory = serdeFactory,
                 client = client
@@ -64,6 +70,7 @@ class DefaultHttpRequest(
 
             Get -> HttpGetRequestFacade(
                 url = preparedUrl,
+                headers = headers.toHttpHeaders(),
                 parameters = parameters,
                 serdeFactory = serdeFactory,
                 client = client
@@ -71,6 +78,7 @@ class DefaultHttpRequest(
 
             Patch -> HttpPatchRequestFacade(
                 url = preparedUrl,
+                headers = headers.toHttpHeaders(),
                 parameters = parameters,
                 serdeFactory = serdeFactory,
                 client = client
@@ -78,6 +86,7 @@ class DefaultHttpRequest(
 
             Post -> HttpPostRequestFacade(
                 url = preparedUrl,
+                headers = headers.toHttpHeaders(),
                 parameters = parameters,
                 serdeFactory = serdeFactory,
                 client = client
@@ -85,6 +94,7 @@ class DefaultHttpRequest(
 
             Put -> HttpPutRequestFacade(
                 url = preparedUrl,
+                headers = headers.toHttpHeaders(),
                 parameters = parameters,
                 serdeFactory = serdeFactory,
                 client = client
@@ -102,9 +112,4 @@ class DefaultHttpRequest(
             is ErrorHttpResponse -> throw response.error()
         }
     }
-
-    override fun executeWithoutResult() {
-        TODO("Not yet implemented")
-    }
-
 }
