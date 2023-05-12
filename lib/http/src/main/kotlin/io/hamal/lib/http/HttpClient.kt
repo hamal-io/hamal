@@ -22,9 +22,7 @@ class DefaultHttpClient(
     }
 
     override fun get(url: String): HttpRequest = requestWith(Get, url)
-
     override fun patch(url: String): HttpRequestWithBody = requestWith(Patch, url)
-
     override fun post(url: String): HttpRequestWithBody = requestWith(Post, url)
     override fun put(url: String): HttpRequestWithBody = requestWith(Put, url)
 

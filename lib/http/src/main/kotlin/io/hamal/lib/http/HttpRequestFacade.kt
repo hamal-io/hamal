@@ -25,23 +25,8 @@ internal sealed class HttpBaseRequestFacade(
 
     override fun execute() {
         val request: HttpRequestBase = buildRequest()
-//        for (header in headers) {
-//            request.addHeader(header)
-//        }
-//
-//        if (requestConfig != null) {
-//            request.config = requestConfig
-//        }
 
         val result: org.apache.http.HttpResponse = client.execute(request)
-
-//        val allHeaders = result.allHeaders
-//        val headerMap: MutableMap<String, String> = HashMap()
-//        if (allHeaders != null) {
-//            for (header in allHeaders) {
-//                headerMap[header.name] = header.value
-//            }
-//        }
 
         val statusCode = HttpStatusCode.of(result.statusLine.statusCode)
         response = when (statusCode) {
@@ -59,40 +44,6 @@ internal sealed class HttpBaseRequestFacade(
             )
         }
 
-//        val httpStatusCode = result.statusLine.statusCode
-//        if (httpStatusCode >= 400) {
-//        TODO()
-//            try {
-//                val error: Unit = errorConverter.convert(httpStatusCode, inputStream)
-//                response = HttpResponse.withError(httpStatusCode, error, headerMap)
-//            } catch (t: Throwable) {
-//                throw HttpRuntimeError(StringError(t))
-//            }
-//        } else {
-//            if (interceptor is HttpResponse.ResponseInterceptor.NoInterceptor<ERROR?>) {
-//                try {
-//                    response = HttpResponse.of(httpStatusCode, converter.convert(inputStream), headerMap)
-//                } catch (t: Throwable) {
-//                    throw InternalServerError(t)
-//                }
-//            } else {
-//            val copiedStream = HttpUtil.copyStream(inputStream)
-//                val maybeInterceptedError: Unit = interceptor.intercept(httpStatusCode, copiedStream, errorConverter)
-//                if (maybeInterceptedError.isPresent()) {
-//                    val error: Unit = maybeInterceptedError.get()
-//                    response = HttpResponse.withError(httpStatusCode, error, headerMap)
-//                } else {
-//                    try {
-//                        copiedStream.reset()
-//                        response = HttpResponse.of(httpStatusCode, converter.convert(copiedStream), headerMap)
-//
-//                    } catch (t: Throwable) {
-//                        throw InternalServerError(t)
-//                    }
-//                }
-//            }
-//            TODO()
-//        }
         request.releaseConnection()
     }
 
