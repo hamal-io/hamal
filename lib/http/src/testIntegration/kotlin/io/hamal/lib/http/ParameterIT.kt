@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
 @Serializable
@@ -33,11 +34,22 @@ open class TestParameterController {
         @RequestParam("str", required = false) str: String?,
         @RequestParam("num", required = false) num: Int?,
         @RequestParam("boo", required = false) boo: Boolean?,
+        @RequestBody(required = false) parameters: MultiValueMap<String, String>?
     ): ResponseEntity<ParameterResponse> {
-        if (str == null && num == null && boo == null) {
+        if (str == null && num == null && boo == null && parameters == null) {
             return ResponseEntity.ok(NoParameterResponse(result = "NoContent"))
         }
-        return ResponseEntity.ok(MultiParameterResponse(str!!, num!!, boo!!))
+        if (parameters == null) {
+            return ResponseEntity.ok(MultiParameterResponse(str!!, num!!, boo!!))
+        }
+
+        return ResponseEntity.ok(
+            MultiParameterResponse(
+                parameters.getFirst("str")!!,
+                parameters.getFirst("num")!!.toInt(),
+                parameters.getFirst("boo")!!.toBoolean()
+            )
+        )
     }
 }
 

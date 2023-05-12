@@ -1,10 +1,16 @@
 package io.hamal.lib.http
 
 import io.hamal.lib.http.HttpStatusCode.*
+import org.apache.http.HttpEntity
 import org.apache.http.client.HttpClient
+import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.*
+import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.entity.ContentType
 import org.apache.http.message.BasicHeader
+import org.apache.http.message.BasicNameValuePair
 import java.io.InputStream
+import java.nio.charset.Charset
 
 internal interface HttpRequestFacade {
     fun execute()
@@ -101,6 +107,7 @@ internal sealed class HttpRequestWithBodyFacade(
     url: String,
     headers: HttpHeaders,
     parameters: List<HttpParameter>,
+    val bodies: List<HttpBody>,
     serdeFactory: HttpSerdeFactory,
     client: HttpClient
 ) : HttpBaseRequestFacade(
@@ -109,24 +116,44 @@ internal sealed class HttpRequestWithBodyFacade(
     parameters = parameters,
     serdeFactory = serdeFactory,
     client = client
-)
+) {
+    protected fun createEntity(): HttpEntity {
+        return when (bodies.size) {
+            0 -> UrlEncodedFormEntity(
+                parameters.map { BasicNameValuePair(it.key, it.value) },
+                Charset.forName(
+                    "UTF-8"
+                )
+            )
+
+            1 -> when (val body = bodies.first()) {
+                is HttpStringBody -> ByteArrayEntity(body.content.toByteArray(), ContentType.create(body.contentType))
+                else -> TODO()
+            }
+
+            else -> TODO()
+        }
+    }
+}
 
 
 internal class HttpPatchRequestFacade(
     url: String,
     headers: HttpHeaders,
     parameters: List<HttpParameter>,
+    bodies: List<HttpBody>,
     serdeFactory: HttpSerdeFactory,
     client: HttpClient
 ) : HttpRequestWithBodyFacade(
     url = url,
     headers = headers,
     parameters = parameters,
+    bodies = bodies,
     serdeFactory = serdeFactory,
     client = client
 ) {
     override fun buildRequest(): HttpRequestBase {
-        return HttpPatch("${url}${parameters.toQueryString()}")
+        return HttpPatch(url).apply { entity = createEntity() }
     }
 }
 
@@ -135,17 +162,19 @@ internal class HttpPostRequestFacade(
     url: String,
     headers: HttpHeaders,
     parameters: List<HttpParameter>,
+    bodies: List<HttpBody>,
     serdeFactory: HttpSerdeFactory,
     client: HttpClient
 ) : HttpRequestWithBodyFacade(
     url = url,
     headers = headers,
     parameters = parameters,
+    bodies = bodies,
     serdeFactory = serdeFactory,
     client = client
 ) {
     override fun buildRequest(): HttpRequestBase {
-        return HttpPost("${url}${parameters.toQueryString()}")
+        return HttpPost(url).apply { entity = createEntity() }
     }
 }
 
@@ -153,17 +182,19 @@ internal class HttpPutRequestFacade(
     url: String,
     headers: HttpHeaders,
     parameters: List<HttpParameter>,
+    bodies: List<HttpBody>,
     serdeFactory: HttpSerdeFactory,
     client: HttpClient
 ) : HttpRequestWithBodyFacade(
     url = url,
     headers = headers,
     parameters = parameters,
+    bodies = bodies,
     serdeFactory = serdeFactory,
     client = client
 ) {
     override fun buildRequest(): HttpRequestBase {
-        return HttpPut("${url}${parameters.toQueryString()}")
+        return HttpPut(url).apply { entity = createEntity() }
     }
 }
 

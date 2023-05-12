@@ -25,8 +25,11 @@ interface HttpRequest {
 }
 
 interface HttpRequestWithBody : HttpRequest {
-
+    fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): HttpRequestWithBody
 }
+
+inline fun <reified BODY_TYPE : Any> HttpRequestWithBody.body(body: BODY_TYPE): HttpRequestWithBody =
+    body(body, BODY_TYPE::class)
 
 class DefaultHttpRequest(
     override val url: String,
@@ -37,22 +40,35 @@ class DefaultHttpRequest(
 ) : HttpRequest, HttpRequestWithBody {
 
     private val parameters = mutableListOf<HttpParameter>()
-    override fun header(key: String, value: String): HttpRequest {
+    private val bodies = mutableListOf<HttpBody>()
+    override fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): DefaultHttpRequest {
+        val serializer = serdeFactory.contentSerializer
+        bodies.add(
+            HttpStringBody(
+                name = "cmd",
+                content = serializer.serialize(body, clazz),
+                contentType = "application/json"
+            )
+        )
+        return this
+    }
+
+    override fun header(key: String, value: String): DefaultHttpRequest {
         headers[key] = value
         return this
     }
 
-    override fun parameter(key: String, value: String): HttpRequest {
+    override fun parameter(key: String, value: String): DefaultHttpRequest {
         parameters.add(HttpParameter(key, value))
         return this
     }
 
-    override fun parameter(key: String, value: Number): HttpRequest {
+    override fun parameter(key: String, value: Number): DefaultHttpRequest {
         parameters.add(HttpParameter(key, value))
         return this
     }
 
-    override fun parameter(key: String, value: Boolean): HttpRequest {
+    override fun parameter(key: String, value: Boolean): DefaultHttpRequest {
         parameters.add(HttpParameter(key, value))
         return this
     }
@@ -81,6 +97,7 @@ class DefaultHttpRequest(
                 url = preparedUrl,
                 headers = headers.toHttpHeaders(),
                 parameters = parameters,
+                bodies = bodies,
                 serdeFactory = serdeFactory,
                 client = client
             )
@@ -89,6 +106,7 @@ class DefaultHttpRequest(
                 url = preparedUrl,
                 headers = headers.toHttpHeaders(),
                 parameters = parameters,
+                bodies = bodies,
                 serdeFactory = serdeFactory,
                 client = client
             )
@@ -97,6 +115,7 @@ class DefaultHttpRequest(
                 url = preparedUrl,
                 headers = headers.toHttpHeaders(),
                 parameters = parameters,
+                bodies = bodies,
                 serdeFactory = serdeFactory,
                 client = client
             )

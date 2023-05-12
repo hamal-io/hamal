@@ -13,12 +13,13 @@ import kotlin.reflect.KClass
 interface HttpSerdeFactory {
     var errorDeserializer: HttpErrorDeserializer
     var contentDeserializer: HttpContentDeserializer
+    var contentSerializer: HttpContentSerializer
 }
 
 object DefaultHttpSerdeFactory : HttpSerdeFactory {
     override var errorDeserializer: HttpErrorDeserializer = DefaultErrorDeserializer
     override var contentDeserializer: HttpContentDeserializer = KotlinJsonHttpContentDeserializer
-
+    override var contentSerializer: HttpContentSerializer = KotlinJsonHttpContentSerializer
 }
 
 interface HttpErrorDeserializer {
@@ -46,6 +47,19 @@ object KotlinJsonHttpContentDeserializer : HttpContentDeserializer {
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
         return delegate.decodeFromStream(clazz.serializer(), inputStream)
+    }
+
+    private val delegate = Json { ignoreUnknownKeys = true }
+}
+
+interface HttpContentSerializer {
+    fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String
+}
+
+object KotlinJsonHttpContentSerializer : HttpContentSerializer {
+    @OptIn(InternalSerializationApi::class)
+    override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
+        return delegate.encodeToString(clazz.serializer(), value)
     }
 
     private val delegate = Json { ignoreUnknownKeys = true }

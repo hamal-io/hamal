@@ -1,6 +1,6 @@
 package io.hamal.lib.http
 
-class HttpParameter(
+data class HttpParameter(
     val key: String,
     val value: String
 ) {
