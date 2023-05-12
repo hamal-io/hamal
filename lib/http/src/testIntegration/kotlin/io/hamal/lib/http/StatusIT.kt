@@ -44,7 +44,7 @@ class StatusIT(
         HttpStatusCode.values().cross(HttpMethod.values())
             .map { (statusCode, method) ->
                 dynamicTest("$method request returns $statusCode") {
-                    val testInstance = DefaultHttpClient("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
 
                     val request = when (method) {
                         Delete -> testInstance.delete("/v1/status")

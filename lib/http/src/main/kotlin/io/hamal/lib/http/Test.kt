@@ -17,7 +17,7 @@ data class Person(
 )
 
 fun main() {
-    val client = DefaultHttpClient()
+    val client = HttpTemplate()
 
     val r = client.get("https://reqres.in/api/users")
         .execute(Result::class)
