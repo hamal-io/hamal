@@ -1,17 +1,15 @@
 package io.hamal.lib.http
 
-import io.hamal.lib.http.HttpRequest.HttpMethod.Get
+import io.hamal.lib.http.HttpRequest.HttpMethod
+import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import org.apache.http.impl.client.HttpClientBuilder
 
 interface HttpClient {
     fun delete(url: String): HttpRequest
     fun get(url: String): HttpRequest
-
-    fun patch(url: String): HttpRequest
-
-    fun post(url: String): HttpRequest
-
-    fun put(url: String): HttpRequest
+    fun patch(url: String): HttpRequestWithBody
+    fun post(url: String): HttpRequestWithBody
+    fun put(url: String): HttpRequestWithBody
 }
 
 class DefaultHttpClient(
@@ -20,28 +18,23 @@ class DefaultHttpClient(
 ) : HttpClient {
 
     override fun delete(url: String): HttpRequest {
-        TODO("Not yet implemented")
+        return requestWith(Delete, url)
     }
 
-    override fun get(url: String): HttpRequest {
+    override fun get(url: String): HttpRequest = requestWith(Get, url)
+
+    override fun patch(url: String): HttpRequestWithBody = requestWith(Patch, url)
+
+    override fun post(url: String): HttpRequestWithBody = requestWith(Post, url)
+    override fun put(url: String): HttpRequestWithBody = requestWith(Put, url)
+
+    private fun requestWith(method: HttpMethod, url: String): DefaultHttpRequest {
         return DefaultHttpRequest(
-            method = Get,
+            method = method,
             url = baseUrl + url,
             serdeFactory = serdeFactory,
             client = HttpClientBuilder.create().build() // FIXME replace with factory
         )
-    }
-
-    override fun patch(url: String): HttpRequest {
-        TODO("Not yet implemented")
-    }
-
-    override fun post(url: String): HttpRequest {
-        TODO("Not yet implemented")
-    }
-
-    override fun put(url: String): HttpRequest {
-        TODO("Not yet implemented")
     }
 
 }

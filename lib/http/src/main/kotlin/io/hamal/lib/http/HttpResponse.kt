@@ -36,13 +36,12 @@ enum class HttpStatusCode(val value: Int) {
 
 sealed interface HttpResponse {
     val statusCode: HttpStatusCode
-    val inputStream: InputStream
 }
 
 
 data class SuccessHttpResponse(
     override val statusCode: HttpStatusCode,
-    override val inputStream: InputStream,
+    val inputStream: InputStream,
     val contentDeserializer: HttpContentDeserializer
 ) : HttpResponse {
     fun <RESULT : Any> result(clazz: KClass<RESULT>): RESULT {
@@ -50,9 +49,14 @@ data class SuccessHttpResponse(
     }
 }
 
+data class NoContentHttpResponse(
+    override val statusCode: HttpStatusCode,
+) : HttpResponse
+
+
 data class ErrorHttpResponse(
     override val statusCode: HttpStatusCode,
-    override val inputStream: InputStream,
+    val inputStream: InputStream,
     val errorDeserializer: HttpErrorDeserializer
 ) : HttpResponse {
 

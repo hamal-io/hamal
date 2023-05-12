@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class TestStatusController {
+
     @DeleteMapping("/v1/status")
     fun delete(@RequestParam("code") code: Int) = execute(code)
 
@@ -68,7 +69,7 @@ class StatusIT(
                         Put -> testInstance.put("/v1/status")
                     }
 
-                    val response = request.param("code", statusCode.value).execute()
+                    val response = request.parameter("code", statusCode.value).execute()
                     assertThat(response.statusCode, equalTo(statusCode))
                 }
             }

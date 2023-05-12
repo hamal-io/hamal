@@ -1,8 +1,8 @@
 package io.hamal.lib.http
 
+import io.hamal.lib.http.HttpStatusCode.*
 import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpRequestBase
+import org.apache.http.client.methods.*
 import java.io.InputStream
 
 internal interface HttpRequestFacade {
@@ -14,7 +14,7 @@ internal interface HttpRequestFacade {
 
 internal sealed class HttpBaseRequestFacade(
     protected val url: String,
-    protected val parameters: List<HttpParam<*>>,
+    protected val parameters: List<HttpParameter>,
     protected val serdeFactory: HttpSerdeFactory,
     protected val client: HttpClient
 ) : HttpRequestFacade {
@@ -44,20 +44,20 @@ internal sealed class HttpBaseRequestFacade(
 //        }
 
         val statusCode = HttpStatusCode.of(result.statusLine.statusCode)
-        response = if (statusCode >= HttpStatusCode.BadRequest) {
-            ErrorHttpResponse(
-                statusCode = statusCode,
-                inputStream = result.entity.content ?: InputStream.nullInputStream(),
-                errorDeserializer = serdeFactory.errorDeserializer
-            )
-        } else {
-            SuccessHttpResponse(
+        response = when (statusCode) {
+            Ok, Created, Accepted -> SuccessHttpResponse(
                 statusCode = statusCode,
                 inputStream = result.entity.content ?: InputStream.nullInputStream(),
                 contentDeserializer = serdeFactory.contentDeserializer
             )
-        }
 
+            NoContent -> NoContentHttpResponse(statusCode)
+            else -> ErrorHttpResponse(
+                statusCode = statusCode,
+                inputStream = result.entity.content ?: InputStream.nullInputStream(),
+                errorDeserializer = serdeFactory.errorDeserializer
+            )
+        }
 
 //        val httpStatusCode = result.statusLine.statusCode
 //        if (httpStatusCode >= 400) {
@@ -99,9 +99,25 @@ internal sealed class HttpBaseRequestFacade(
     override fun response(): HttpResponse = response
 }
 
+internal class HttpDeleteRequestFacade(
+    url: String,
+    parameters: List<HttpParameter>,
+    serdeFactory: HttpSerdeFactory,
+    client: HttpClient
+) : HttpBaseRequestFacade(
+    url = url,
+    parameters = parameters,
+    serdeFactory = serdeFactory,
+    client = client
+) {
+    override fun buildRequest(): HttpRequestBase {
+        return HttpDelete("${url}${parameters.toQueryString()}")
+    }
+}
+
 internal class HttpGetRequestFacade(
     url: String,
-    parameters: List<HttpParam<*>>,
+    parameters: List<HttpParameter>,
     serdeFactory: HttpSerdeFactory,
     client: HttpClient
 ) : HttpBaseRequestFacade(
@@ -116,20 +132,64 @@ internal class HttpGetRequestFacade(
 }
 
 
-internal fun List<HttpParam<*>>.toQueryString(): String {
-    if (isEmpty()) {
-        return ""
+internal sealed class HttpRequestWithBodyFacade(
+    url: String,
+    parameters: List<HttpParameter>,
+    serdeFactory: HttpSerdeFactory,
+    client: HttpClient
+) : HttpBaseRequestFacade(
+    url = url,
+    parameters = parameters,
+    serdeFactory = serdeFactory,
+    client = client
+)
+
+
+internal class HttpPatchRequestFacade(
+    url: String,
+    parameters: List<HttpParameter>,
+    serdeFactory: HttpSerdeFactory,
+    client: HttpClient
+) : HttpRequestWithBodyFacade(
+    url = url,
+    parameters = parameters,
+    serdeFactory = serdeFactory,
+    client = client
+) {
+    override fun buildRequest(): HttpRequestBase {
+        return HttpPatch("${url}${parameters.toQueryString()}")
     }
-    val builder = StringBuilder()
-    builder.append("?")
-    forEach { param ->
-        builder.append(param.name)
-        builder.append("=")
-        builder.append(param.toQueryString())
-        builder.append(",")
-        builder.deleteCharAt(builder.length - 1)
-        builder.append("&")
+}
+
+
+internal class HttpPostRequestFacade(
+    url: String,
+    parameters: List<HttpParameter>,
+    serdeFactory: HttpSerdeFactory,
+    client: HttpClient
+) : HttpRequestWithBodyFacade(
+    url = url,
+    parameters = parameters,
+    serdeFactory = serdeFactory,
+    client = client
+) {
+    override fun buildRequest(): HttpRequestBase {
+        return HttpPost("${url}${parameters.toQueryString()}")
     }
-    builder.deleteCharAt(builder.length - 1)
-    return builder.toString()
+}
+
+internal class HttpPutRequestFacade(
+    url: String,
+    parameters: List<HttpParameter>,
+    serdeFactory: HttpSerdeFactory,
+    client: HttpClient
+) : HttpRequestWithBodyFacade(
+    url = url,
+    parameters = parameters,
+    serdeFactory = serdeFactory,
+    client = client
+) {
+    override fun buildRequest(): HttpRequestBase {
+        return HttpPut("${url}${parameters.toQueryString()}")
+    }
 }

@@ -1,19 +1,31 @@
 package io.hamal.lib.http
 
-sealed class HttpParam<VALUE : Any>(
-    val name: String,
-    val value: VALUE,
-    val contentType: String
+class HttpParameter(
+    val key: String,
+    val value: String
 ) {
-    abstract fun toQueryString(): String
-}
 
-class HttpStringParameter(name: String, value: String) : HttpParam<String>(
-    name = name,
-    value = value,
-    contentType = "application/text"
-) {
-    override fun toQueryString(): String {
+    constructor(name: String, value: Number) : this(name, value.toString())
+
+    fun toQueryString(): String {
         return value
     }
+}
+
+fun List<HttpParameter>.toQueryString(): String {
+    if (isEmpty()) {
+        return ""
+    }
+    val builder = StringBuilder()
+    builder.append("?")
+    forEach { param ->
+        builder.append(param.key)
+        builder.append("=")
+        builder.append(param.toQueryString())
+        builder.append(",")
+        builder.deleteCharAt(builder.length - 1)
+        builder.append("&")
+    }
+    builder.deleteCharAt(builder.length - 1)
+    return builder.toString()
 }
