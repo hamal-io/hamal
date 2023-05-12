@@ -6,6 +6,7 @@ class HttpParameter(
 ) {
 
     constructor(name: String, value: Number) : this(name, value.toString())
+    constructor(name: String, value: Boolean) : this(name, value.toString())
 
     fun toQueryString(): String {
         return value

@@ -10,6 +10,7 @@ interface HttpRequest {
     val client: org.apache.http.client.HttpClient
     fun parameter(key: String, value: String): HttpRequest
     fun parameter(key: String, value: Number): HttpRequest
+    fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
     fun executeWithoutResult()
@@ -36,10 +37,16 @@ class DefaultHttpRequest(
     private val parameters = mutableListOf<HttpParameter>()
 
     override fun parameter(key: String, value: String): HttpRequest {
-        TODO("Not yet implemented")
+        parameters.add(HttpParameter(key, value))
+        return this
     }
 
     override fun parameter(key: String, value: Number): HttpRequest {
+        parameters.add(HttpParameter(key, value))
+        return this
+    }
+
+    override fun parameter(key: String, value: Boolean): HttpRequest {
         parameters.add(HttpParameter(key, value))
         return this
     }

@@ -18,24 +18,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class TestStatusController {
-
-    @DeleteMapping("/v1/status")
-    fun delete(@RequestParam("code") code: Int) = execute(code)
-
-    @GetMapping("/v1/status")
-    fun get(@RequestParam("code") code: Int) = execute(code)
-
-    @PostMapping("/v1/status")
-    fun post(@RequestParam("code") code: Int) = execute(code)
-
-    @PatchMapping("/v1/status")
-    fun patch(@RequestParam("code") code: Int) = execute(code)
-
-    @PutMapping("/v1/status")
-    fun put(@RequestParam("code") code: Int) = execute(code)
-
-    private fun execute(statusCode: Int): ResponseEntity<String> {
-        return HttpStatus.valueOf(statusCode).let {
+    @RequestMapping("/v1/status")
+    fun execute(@RequestParam("code") code: Int): ResponseEntity<String> {
+        return HttpStatus.valueOf(code).let {
             ResponseEntity<String>(
                 it.toString(),
                 it

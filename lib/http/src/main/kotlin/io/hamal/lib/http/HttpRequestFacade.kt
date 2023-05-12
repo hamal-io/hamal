@@ -47,14 +47,14 @@ internal sealed class HttpBaseRequestFacade(
         response = when (statusCode) {
             Ok, Created, Accepted -> SuccessHttpResponse(
                 statusCode = statusCode,
-                inputStream = result.entity.content ?: InputStream.nullInputStream(),
+                inputStream = result.entity.content?.let(HttpUtils::copyStream) ?: InputStream.nullInputStream(),
                 contentDeserializer = serdeFactory.contentDeserializer
             )
 
             NoContent -> NoContentHttpResponse(statusCode)
             else -> ErrorHttpResponse(
                 statusCode = statusCode,
-                inputStream = result.entity.content ?: InputStream.nullInputStream(),
+                inputStream = result.entity.content?.let(HttpUtils::copyStream) ?: InputStream.nullInputStream(),
                 errorDeserializer = serdeFactory.errorDeserializer
             )
         }
