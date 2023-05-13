@@ -1,8 +1,5 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.InvokedAt
-import io.hamal.lib.domain.vo.QueuedAt
-import io.hamal.lib.domain.vo.ScheduledAt
 import io.hamal.lib.domain.vo.helper.SerializationTestHelper
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -170,4 +167,58 @@ class QueuedAtTest {
 
     @TestFactory
     fun Serialization() = SerializationTestHelper.generateTestCases(QueuedAt(Instant.ofEpochMilli(123456)), "123456")
+}
+
+@DisplayName("CompletedAt")
+class CompletedAtTest {
+    @Nested
+    @DisplayName("equals()")
+    inner class EqualsTest {
+        @Test
+        fun `Equals if underlying values are equal`() {
+            Assertions.assertEquals(
+                CompletedAt(Instant.ofEpochMilli(123456)),
+                CompletedAt(Instant.ofEpochMilli(123456))
+            )
+        }
+
+        @Test
+        fun `Not equals if underlying values are different`() {
+            Assertions.assertNotEquals(
+                CompletedAt(Instant.ofEpochMilli(123456)),
+                CompletedAt(Instant.ofEpochMilli(654321))
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("hashCode()")
+    inner class HashCodeTest {
+        @Test
+        fun `Same hashcode if values are equal`() {
+            Assertions.assertEquals(
+                CompletedAt(Instant.ofEpochMilli(123456)).hashCode(),
+                CompletedAt(Instant.ofEpochMilli(123456)).hashCode()
+            )
+        }
+
+        @Test
+        fun `Different hashcode if values are different`() {
+            Assertions.assertNotEquals(
+                CompletedAt(Instant.ofEpochMilli(123456)).hashCode(),
+                CompletedAt(Instant.ofEpochMilli(654321)).hashCode()
+            )
+        }
+    }
+
+    @Test
+    fun `toString override`() {
+        MatcherAssert.assertThat(
+            CompletedAt(Instant.ofEpochMilli(123456)).toString(),
+            CoreMatchers.equalTo("CompletedAt(1970-01-01T00:02:03.456Z)")
+        )
+    }
+
+    @TestFactory
+    fun Serialization() = SerializationTestHelper.generateTestCases(CompletedAt(Instant.ofEpochMilli(123456)), "123456")
 }

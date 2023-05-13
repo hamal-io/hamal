@@ -1,52 +1,70 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.repository.api.JobRepository
-import io.hamal.backend.usecase.request.job.DequeueJobRequestHandler
-import io.hamal.backend.usecase.request.job.PlanJobRequestHandler
-import io.hamal.backend.usecase.request.job.QueueScheduledJobRequestHandler
-import io.hamal.backend.usecase.request.job.SchedulePlannedJobRequestHandler
+import io.hamal.backend.repository.api.JobQueryRepository
+import io.hamal.backend.repository.api.JobRequestRepository
+import io.hamal.backend.usecase.query.job.GetStartedJobUseCaseHandler
+import io.hamal.backend.usecase.request.job.*
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class JobConfig {
+open class RequestJobConfig {
     @Bean
     open fun planJobRequestHandler(
         generateDomainIdPort: GenerateDomainIdPort,
-        jobRepository: JobRepository,
+        jobRequestRepository: JobRequestRepository,
         notifyDomainPort: NotifyDomainPort
     ) = PlanJobRequestHandler(
         generateDomainIdPort,
-        jobRepository,
+        jobRequestRepository,
         notifyDomainPort
     )
 
     @Bean
     open fun schedulePlannedJobRequestHandler(
         notifyDomainPort: NotifyDomainPort,
-        jobRepository: JobRepository
+        jobRequestRepository: JobRequestRepository
     ) = SchedulePlannedJobRequestHandler(
         notifyDomainPort,
-        jobRepository
+        jobRequestRepository
     )
 
     @Bean
     open fun queueScheduledJobRequestHandler(
         notifyDomainPort: NotifyDomainPort,
-        jobRepository: JobRepository
+        jobRequestRepository: JobRequestRepository
     ) = QueueScheduledJobRequestHandler(
         notifyDomainPort,
-        jobRepository
+        jobRequestRepository
     )
 
     @Bean
     open fun dequeueJobRequestHandler(
         notifyDomainPort: NotifyDomainPort,
-        jobRepository: JobRepository
+        jobRequestRepository: JobRequestRepository
     ) = DequeueJobRequestHandler(
         notifyDomainPort,
-        jobRepository
+        jobRequestRepository
+    )
+
+    @Bean
+    open fun completeJobRequestHandler(
+        notifyDomainPort: NotifyDomainPort,
+        jobRequestRepository: JobRequestRepository
+    ) = CompleteStartedJobRequestHandler(
+        notifyDomainPort,
+        jobRequestRepository
+    )
+}
+
+@Configuration
+open class QueryJobConfig {
+    @Bean
+    open fun getStartedJobUseCaseHandler(
+        jobQueryRepository: JobQueryRepository
+    ) = GetStartedJobUseCaseHandler(
+        jobQueryRepository
     )
 }

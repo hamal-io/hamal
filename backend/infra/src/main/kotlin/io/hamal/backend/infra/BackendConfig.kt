@@ -1,14 +1,8 @@
 package io.hamal.backend.infra
 
-import io.hamal.backend.core.notification.JobPlannedNotification
-import io.hamal.backend.core.notification.JobQueuedNotification
-import io.hamal.backend.core.notification.JobScheduledNotification
-import io.hamal.backend.core.notification.ManualTriggerInvokedNotification
+import io.hamal.backend.core.notification.*
 import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
-import io.hamal.backend.infra.handler.JobPlannedHandler
-import io.hamal.backend.infra.handler.JobQueuedHandler
-import io.hamal.backend.infra.handler.JobScheduledHandler
-import io.hamal.backend.infra.handler.TriggerInvokedHandler
+import io.hamal.backend.infra.handler.*
 import io.hamal.backend.usecase.request.JobDefinitionRequest
 import io.hamal.backend.usecase.request.TriggerRequest.ManualTriggerInvocation
 import io.hamal.lib.domain.RequestId
@@ -54,6 +48,8 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(JobPlannedNotification::class, JobPlannedHandler(invokeUseCasePort))
         .register(JobScheduledNotification::class, JobScheduledHandler(invokeUseCasePort))
         .register(JobQueuedNotification::class, JobQueuedHandler())
+        .register(JobCompletedNotification::class, JobCompletedHandler())
+        .register(JobFailedNotification::class, JobFailedHandler())
         .create()
 
     @Autowired

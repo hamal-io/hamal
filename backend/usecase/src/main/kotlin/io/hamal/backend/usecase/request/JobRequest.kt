@@ -1,9 +1,6 @@
 package io.hamal.backend.usecase.request
 
-import io.hamal.backend.core.job.PlannedJob
-import io.hamal.backend.core.job.QueuedJob
-import io.hamal.backend.core.job.ScheduledJob
-import io.hamal.backend.core.job.StartedJob
+import io.hamal.backend.core.job.*
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.lib.domain.RequestId
@@ -35,4 +32,10 @@ object JobRequest {
         override val requestId: RequestId,
         override val shard: Shard,
     ) : RequestManyUseCase<StartedJob>
+
+    data class CompleteStartedJob(
+        override val requestId: RequestId,
+        override val shard: Shard,
+        val startedJob: StartedJob
+    ) : RequestOneUseCase<CompletedJob>
 }

@@ -1,27 +1,29 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.job.PlannedJob
-import io.hamal.backend.core.job.QueuedJob
-import io.hamal.backend.core.job.ScheduledJob
-import io.hamal.backend.core.job.StartedJob
+import io.hamal.backend.core.job.*
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.JobId
 
-interface JobRepository {
-    fun planJob(jobToPlan: JobToPlan): PlannedJob
-    fun schedule(planedJob: PlannedJob): ScheduledJob
-    fun queue(scheduledJob: ScheduledJob): QueuedJob
+interface JobRequestRepository {
+
+    fun planJob(requestId: RequestId, jobToPlan: JobToPlan): PlannedJob
+    fun schedule(requestId: RequestId, planedJob: PlannedJob): ScheduledJob
+    fun queue(requestId: RequestId, scheduledJob: ScheduledJob): QueuedJob
+    fun complete(requestId: RequestId, startedJob: StartedJob): CompletedJob
     fun dequeue(): List<StartedJob>
 
     data class JobToPlan(
         val shard: Shard,
-        val requestId: RequestId,
         val id: JobId,
         val definition: JobDefinition,
         val trigger: Trigger
     )
 
+}
+
+interface JobQueryRepository {
+    fun findStartedJob(jobId: JobId): StartedJob?
 }
