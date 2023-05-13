@@ -28,11 +28,12 @@ class SandboxIT {
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }
 
     private val environment = Environment()
+
     init {
         environment.register(TestForeignLogModule)
     }
 
-    private val testInstance = io.hamal.lib.script.impl.SandboxImpl(environment)
+    private val testInstance = DefaultSandbox(environment)
 
     private val testPath = Paths.get("src", "testIntegration", "resources")
 }

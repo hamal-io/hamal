@@ -10,6 +10,7 @@ import io.hamal.backend.repository.api.createManualTrigger
 import io.hamal.backend.repository.api.createScriptTask
 import io.hamal.backend.usecase.request.JobDefinitionRequest.JobDefinitionCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
+import io.hamal.lib.domain.vo.HamalScriptCode
 import io.hamal.lib.domain.vo.JobReference
 import io.hamal.lib.domain.vo.TriggerReference
 
@@ -30,9 +31,14 @@ internal fun CreateJobDefinitionRequestHandler.createJobDefinition(useCase: JobD
         val jobDefinitionId = createJobDefinition {
             reference = JobReference("jobRef")
         }
-        createScriptTask(jobDefinitionId) {}
-        createScriptTask(jobDefinitionId) {}
-        createScriptTask(jobDefinitionId) {}
+        createScriptTask(jobDefinitionId) {
+            code = HamalScriptCode(
+                """
+                |assert( 1<1 )
+                |42
+            """.trimMargin()
+            )
+        }
         createManualTrigger(jobDefinitionId) {
             reference = TriggerReference("manual")
         }

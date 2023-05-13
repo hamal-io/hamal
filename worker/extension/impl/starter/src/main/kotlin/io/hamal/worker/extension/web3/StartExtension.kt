@@ -1,4 +1,4 @@
-package io.hamal.worker.extension.starter
+package io.hamal.worker.extension.web3
 
 import io.hamal.worker.extension.api.WorkerExtension
 import io.hamal.worker.extension.api.WorkerExtensionFunction

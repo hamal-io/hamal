@@ -3,7 +3,8 @@ package io.hamal.backend.repository.memory.domain
 import io.hamal.backend.core.job_definition.JobDefinition
 import io.hamal.backend.core.task.ScriptTask
 import io.hamal.backend.core.task.Task
-import io.hamal.backend.core.task.Task.Type.Script
+import io.hamal.backend.core.task.TaskType
+import io.hamal.backend.core.task.TaskType.Script
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command
@@ -71,8 +72,9 @@ internal fun MemoryJobDefinitionRepository.createManualTrigger(toCreate: ManualT
 internal fun MemoryJobDefinitionRepository.createScriptTask(toCreate: ScriptTaskToCreate) {
     tasks[toCreate.id] = TaskEntity(
         id = toCreate.id,
-        type = Script,
+        taskType = Script,
         jobDefinitionId = toCreate.jobDefinitionId,
+        code = toCreate.code
     )
     jobDefinitions[toCreate.jobDefinitionId]!!.tasks.add(toCreate.id)
 }
@@ -97,10 +99,11 @@ internal data class JobDefinitionEntity(
 internal data class TaskEntity(
     val id: TaskId,
     val jobDefinitionId: JobDefinitionId,
-    val type: Task.Type
+    val taskType: TaskType,
+    val code: Code
 ) {
     fun toModel(): Task {
-        return ScriptTask(id)
+        return ScriptTask(id, code)
     }
 }
 

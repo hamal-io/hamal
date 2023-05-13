@@ -50,7 +50,8 @@ interface JobDefinitionRepository {
 
         data class ScriptTaskToCreate(
             val id: TaskId,
-            override val jobDefinitionId: JobDefinitionId
+            override val jobDefinitionId: JobDefinitionId,
+            var code: Code
         ) : Command {
             override val order = Order.InsertSecondary
         }
@@ -111,7 +112,8 @@ fun JobDefinitionRepository.Recorder.createScriptTask(
     commands.add(
         ScriptTaskToCreate(
             id = result,
-            jobDefinitionId = jobDefinitionId
+            jobDefinitionId = jobDefinitionId,
+            code = HamalScriptCode("")
         ).apply(block)
     )
     return result

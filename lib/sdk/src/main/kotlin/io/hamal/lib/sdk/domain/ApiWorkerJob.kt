@@ -1,5 +1,6 @@
 package io.hamal.lib.sdk.domain
 
+import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.JobId
 import io.hamal.lib.domain.vo.JobReference
 import io.hamal.lib.domain.vo.TaskId
@@ -12,7 +13,8 @@ sealed interface ApiWorkerTask {
 
 @Serializable
 data class ApiWorkerScriptTask(
-    override val taskId: TaskId
+    override val taskId: TaskId,
+    val code: Code
 ) : ApiWorkerTask
 
 @Serializable

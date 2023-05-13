@@ -17,6 +17,9 @@ dependencies {
     implementation(project(":lib:sdk"))
     implementation(project(":lib:domain"))
 
+    implementation(project(":lib:script:api"))
+    implementation(project(":lib:script:impl"))
+
     implementation(project(":worker:extension:api"))
     implementation(external.kotlin.json)
     implementation(external.kotlin.protobuf)

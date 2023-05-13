@@ -1,23 +1,26 @@
 package io.hamal.backend.core.task
 
-import io.hamal.backend.core.task.Task.Type
-import io.hamal.backend.core.task.Task.Type.Script
+import io.hamal.backend.core.task.TaskType.Script
+import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.TaskId
 import kotlinx.serialization.Serializable
+
+enum class TaskType {
+    Script
+}
 
 @Serializable
 sealed interface Task {
     val id: TaskId
-    val type: Type
+    val taskType: TaskType
 
-    enum class Type {
-        Script
-    }
+
 }
 
 @Serializable
 data class ScriptTask(
-    override val id: TaskId
+    override val id: TaskId,
+    val code: Code
 ) : Task {
-    override val type: Type = Script
+    override val taskType: TaskType = Script
 }

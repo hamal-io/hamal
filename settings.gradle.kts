@@ -40,6 +40,7 @@ include(":lib:http")
 include(":lib:script:api")
 include(":lib:script:impl")
 include(":lib:sdk")
+include(":lib:web3")
 
 include(":backend")
 include(":backend:usecase")
@@ -54,6 +55,7 @@ include(":worker:core")
 include(":worker:infra")
 include(":worker:extension:api")
 include(":worker:extension:impl:starter")
+include(":worker:extension:impl:web3")
 
 rootProject.name = "hamal"
 

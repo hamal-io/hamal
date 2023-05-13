@@ -1,5 +1,6 @@
 package io.hamal.backend.infra.web
 
+import io.hamal.backend.core.task.ScriptTask
 import io.hamal.backend.usecase.request.JobRequest
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
@@ -33,7 +34,10 @@ class QueueController
                 ApiWorkerJob(
                     id = it.id,
                     reference = JobReference("ref"),
-                    tasks = it.definition.tasks.map { task -> ApiWorkerScriptTask(task.id) }
+                    tasks = it.definition.tasks.map { task ->
+                        require(task is ScriptTask)
+                        ApiWorkerScriptTask(task.id, task.code)
+                    }
                 )
             })
     }
