@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.domain
 
 import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.task.Task
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.JobDefinitionRepository.Command
@@ -11,6 +12,7 @@ import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.JobDefinitionId
 import io.hamal.lib.domain.vo.JobReference
+import io.hamal.lib.domain.vo.TaskId
 import io.hamal.lib.domain.vo.TriggerId
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -66,6 +68,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
                 JobDefinition(
                     id = it.getDomainId("id", ::JobDefinitionId),
                     reference = JobReference(it.getString("reference")),
+                    tasks = listOf(),
                     triggers = listOf()
                 )
             }
@@ -74,6 +77,10 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 
     override fun getTrigger(id: TriggerId): Trigger {
         TODO()
+    }
+
+    override fun getTask(id: TaskId): Task {
+        TODO("Not yet implemented")
     }
 
     override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
@@ -139,6 +146,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
             JobDefinition(
                 id = toProcess.keys.first(),
                 reference = JobReference("das"),
+                tasks = listOf(),
                 triggers = listOf()
             )
         )

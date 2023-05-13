@@ -20,7 +20,7 @@ class TriggerInvokedHandler(
                 requestId = RequestId(123),
                 shard = notification.shard,
                 jobDefinition = notification.invokedTrigger.jobDefinition,
-                trigger = notification.invokedTrigger.trigger,
+                trigger = notification.invokedTrigger,
             )
         )
     }

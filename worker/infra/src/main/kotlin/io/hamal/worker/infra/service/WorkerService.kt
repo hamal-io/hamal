@@ -13,7 +13,10 @@ class WorkerService {
         val jobs = DefaultHamalSdk.jobService().poll()
         jobs.jobs.forEach { job ->
             println("Processing job $job")
-
+            job.tasks.forEach { task ->
+                println("Start executing task $task")
+                println("Finish executing task $task")
+            }
             DefaultHamalSdk.jobService().complete(job.id)
         }
     }

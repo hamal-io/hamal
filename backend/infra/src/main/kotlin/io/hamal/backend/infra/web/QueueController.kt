@@ -7,6 +7,7 @@ import io.hamal.lib.domain.ddd.InvokeRequestManyUseCasePort
 import io.hamal.lib.domain.vo.JobReference
 import io.hamal.lib.sdk.domain.ApiWorkerJob
 import io.hamal.lib.sdk.domain.ApiWorkerJobs
+import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -31,7 +32,8 @@ class QueueController
             jobs = result.map {
                 ApiWorkerJob(
                     id = it.id,
-                    reference = JobReference("ref")
+                    reference = JobReference("ref"),
+                    tasks = it.definition.tasks.map { task -> ApiWorkerScriptTask(task.id) }
                 )
             })
     }

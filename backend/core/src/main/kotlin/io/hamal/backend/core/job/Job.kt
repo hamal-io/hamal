@@ -1,25 +1,24 @@
 package io.hamal.backend.core.job
 
 import io.hamal.backend.core.job_definition.JobDefinition
-import io.hamal.backend.core.trigger.Trigger
+import io.hamal.backend.core.trigger.InvokedTrigger
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Job : DomainObject<JobId> {
-
     override val id: JobId
     val state: JobState
     val definition: JobDefinition
-    val trigger: Trigger
+    val trigger: InvokedTrigger
 }
 
 @Serializable
 class PlannedJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger
+    override val trigger: InvokedTrigger
 ) : Job {
     override val state = JobState.Planned
     override fun toString(): String {
@@ -32,7 +31,7 @@ class PlannedJob(
 class ScheduledJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger,
+    override val trigger: InvokedTrigger,
     val scheduledAt: ScheduledAt
 ) : Job {
     override val state = JobState.Scheduled
@@ -46,7 +45,7 @@ class ScheduledJob(
 class QueuedJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger,
+    override val trigger: InvokedTrigger,
     val queuedAt: QueuedAt
 ) : Job {
     override val state = JobState.Queued
@@ -60,7 +59,7 @@ class QueuedJob(
 class StartedJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger
+    override val trigger: InvokedTrigger
 ) : Job {
     override val state = JobState.Started
     override fun toString(): String {
@@ -73,7 +72,7 @@ class StartedJob(
 class CompletedJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger,
+    override val trigger: InvokedTrigger,
     val completedAt: CompletedAt
 ) : Job {
     override val state = JobState.Completed
@@ -86,7 +85,7 @@ class CompletedJob(
 class FailedJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger
+    override val trigger: InvokedTrigger
 ) : Job {
     override val state = JobState.Failed
     override fun toString(): String {
@@ -99,7 +98,7 @@ class FailedJob(
 class TerminalFailedJob(
     override val id: JobId,
     override val definition: JobDefinition,
-    override val trigger: Trigger
+    override val trigger: InvokedTrigger
 ) : Job {
     override val state = JobState.TerminalFailed
     override fun toString(): String {

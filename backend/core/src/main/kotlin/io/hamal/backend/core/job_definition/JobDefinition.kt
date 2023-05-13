@@ -1,5 +1,6 @@
 package io.hamal.backend.core.job_definition
 
+import io.hamal.backend.core.task.Task
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.JobDefinitionId
@@ -10,5 +11,6 @@ import kotlinx.serialization.Serializable
 data class JobDefinition(
     override val id: JobDefinitionId,
     val reference: JobReference,
+    val tasks: List<Task>,
     val triggers: List<Trigger>
 ) : DomainObject<JobDefinitionId>

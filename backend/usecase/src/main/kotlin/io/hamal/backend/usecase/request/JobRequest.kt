@@ -2,7 +2,7 @@ package io.hamal.backend.usecase.request
 
 import io.hamal.backend.core.job.*
 import io.hamal.backend.core.job_definition.JobDefinition
-import io.hamal.backend.core.trigger.Trigger
+import io.hamal.backend.core.trigger.InvokedTrigger
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.RequestManyUseCase
@@ -13,7 +13,7 @@ object JobRequest {
         override val requestId: RequestId,
         override val shard: Shard,
         val jobDefinition: JobDefinition,
-        val trigger: Trigger
+        val trigger: InvokedTrigger
     ) : RequestOneUseCase<PlannedJob>
 
     data class SchedulePlannedJob(

@@ -7,6 +7,7 @@ import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.JobDefinitionRepository
 import io.hamal.backend.repository.api.createJobDefinition
 import io.hamal.backend.repository.api.createManualTrigger
+import io.hamal.backend.repository.api.createScriptTask
 import io.hamal.backend.usecase.request.JobDefinitionRequest.JobDefinitionCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 import io.hamal.lib.domain.vo.JobReference
@@ -29,6 +30,9 @@ internal fun CreateJobDefinitionRequestHandler.createJobDefinition(useCase: JobD
         val jobDefinitionId = createJobDefinition {
             reference = JobReference("jobRef")
         }
+        createScriptTask(jobDefinitionId) {}
+        createScriptTask(jobDefinitionId) {}
+        createScriptTask(jobDefinitionId) {}
         createManualTrigger(jobDefinitionId) {
             reference = TriggerReference("manual")
         }

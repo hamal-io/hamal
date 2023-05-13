@@ -1,15 +1,12 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.task.Task
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.ManualTriggerToCreate
+import io.hamal.backend.repository.api.JobDefinitionRepository.Command.*
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.JobDefinitionId
-import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.TriggerReference
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.base.referenceFromId
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
@@ -20,6 +17,8 @@ interface JobDefinitionRepository {
     fun get(id: JobDefinitionId): JobDefinition
 
     fun getTrigger(id: TriggerId): Trigger
+
+    fun getTask(id: TaskId): Task
 
     fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition>
 
@@ -49,6 +48,12 @@ interface JobDefinitionRepository {
             override val order = Order.InsertPrimary
         }
 
+        data class ScriptTaskToCreate(
+            val id: TaskId,
+            override val jobDefinitionId: JobDefinitionId
+        ) : Command {
+            override val order = Order.InsertSecondary
+        }
 
         data class ManualTriggerToCreate(
             val id: TriggerId,
@@ -93,6 +98,20 @@ fun JobDefinitionRepository.Recorder.createManualTrigger(
             id = result,
             jobDefinitionId = jobDefinitionId,
             reference = referenceFromId(result, ::TriggerReference)
+        ).apply(block)
+    )
+    return result
+}
+
+fun JobDefinitionRepository.Recorder.createScriptTask(
+    jobDefinitionId: JobDefinitionId,
+    block: ScriptTaskToCreate.() -> Unit
+): TaskId {
+    val result = generateDomainId(Shard(0), ::TaskId)
+    commands.add(
+        ScriptTaskToCreate(
+            id = result,
+            jobDefinitionId = jobDefinitionId
         ).apply(block)
     )
     return result
