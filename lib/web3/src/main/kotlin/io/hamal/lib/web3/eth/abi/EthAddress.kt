@@ -8,7 +8,12 @@ import java.lang.Character.isUpperCase
 import java.math.BigInteger
 import java.util.*
 
-class EthAddress(value: BigInteger) : EthUint160(value) {
+class EthAddress(
+    override val value: EthUint160
+) : EthType<EthUint160> {
+
+    constructor(value: BigInteger) : this(EthUint160(value))
+
     companion object {
         @JvmStatic
         val Zero: EthAddress = EthAddress(BigInteger.ZERO)
@@ -35,6 +40,8 @@ class EthAddress(value: BigInteger) : EthUint160(value) {
             )
         }
     }
+
+    override fun toByteArray(): ByteArray = toPrefixedHexString().toByteArray()
 
     override fun toByteWindow(): ByteWindow = toPrefixedHexString().toByteWindow()
 

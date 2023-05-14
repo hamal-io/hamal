@@ -13,7 +13,7 @@ class AddressTest {
     @Test
     fun `Zero constant`() {
         val result = EthAddress.Zero
-        assertThat(result.value, equalTo(BigInteger.ZERO))
+        assertThat(result.value, equalTo(EthUint160(BigInteger.ZERO)))
         assertThat(
             result.toPrefixedHexString(),
             equalTo(EthPrefixedHexString("0x0000000000000000000000000000000000000000"))
@@ -23,7 +23,7 @@ class AddressTest {
     @Test
     fun `Null constant`() {
         val result = EthAddress.Null
-        assertThat(result.value, equalTo(BigInteger("1158896792795502070752211396329834747757200325310")))
+        assertThat(result.value, equalTo(EthUint160(BigInteger("1158896792795502070752211396329834747757200325310"))))
         assertThat(
             result.toPrefixedHexString(),
             equalTo(EthPrefixedHexString("0x0000000000000000000000000000000000000000"))
@@ -36,7 +36,7 @@ class AddressTest {
         @DisplayName("ok")
         fun ok() {
             val testInstance = EthAddress(BigInteger.valueOf(42))
-            assertThat(testInstance.value, equalTo(BigInteger.valueOf(42)))
+            assertThat(testInstance.value, equalTo(EthUint160(BigInteger.valueOf(42))))
         }
     }
 
@@ -47,7 +47,7 @@ class AddressTest {
             val testInstance = EthAddress.of(
                 EthHexString("0000000000000000000000000000000000000002")
             )
-            assertThat(testInstance.value, equalTo(BigInteger.valueOf(2)))
+            assertThat(testInstance.value, equalTo(EthUint160(BigInteger.valueOf(2))))
         }
 
         @Test
@@ -55,7 +55,7 @@ class AddressTest {
             val testInstance = EthAddress.of(
                 EthPrefixedHexString("0x0000000000000000000000000000000000000002")
             )
-            assertThat(testInstance.value, equalTo(BigInteger.valueOf(2)))
+            assertThat(testInstance.value, equalTo(EthUint160(BigInteger.valueOf(2))))
         }
 
         @Test
@@ -133,10 +133,10 @@ class EnsureValidAddressTest {
         EthHexString("00be5422d15f39373eb0a97ff8c10fbd0e40e29338"),
         EthHexString("161A48A5c229bF3e66BEcA46A50B01d36F201CD4"),
         EthHexString("161a48a5C229Bf3E66beCa46a50b01D36f201cd4"),
-    ).map { invalidAddress ->
-        dynamicTest("$invalidAddress") {
+    ).map { validAddress ->
+        dynamicTest("$validAddress") {
             assertThrows<IllegalArgumentException> {
-                ValidateAddress(invalidAddress)
+                ValidateAddress(validAddress)
             }
         }
     }

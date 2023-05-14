@@ -14,6 +14,7 @@ dependencies {
 
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
 
+    testImplementation(project(":lib:web3"))
     testImplementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")
