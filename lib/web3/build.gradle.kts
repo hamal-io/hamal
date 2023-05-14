@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":lib:http"))
 
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+    implementation(external.kotlin.json)
 
     testImplementation(project(":lib:web3"))
     testImplementation(external.spring.web) {
