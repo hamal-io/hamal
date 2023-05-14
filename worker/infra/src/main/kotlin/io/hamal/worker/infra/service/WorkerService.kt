@@ -4,6 +4,7 @@ import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.interpreter.Environment
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
+import io.hamal.worker.extension.api.DefaultContext
 import io.hamal.worker.infra.adapter.WorkerExtensionLoader
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
@@ -25,7 +26,7 @@ class WorkerService {
 
         x.functionFactories()
             .map { it.create() }
-            .forEach { it() }
+            .forEach { it(DefaultContext()) }
 
 
     }

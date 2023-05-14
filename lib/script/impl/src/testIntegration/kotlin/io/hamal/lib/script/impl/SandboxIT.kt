@@ -29,10 +29,6 @@ class SandboxIT {
 
     private val environment = Environment()
 
-    init {
-        environment.register(TestForeignLogModule)
-    }
-
     private val testInstance = DefaultSandbox(environment)
 
     private val testPath = Paths.get("src", "testIntegration", "resources")

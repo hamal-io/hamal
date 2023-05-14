@@ -1,9 +1,9 @@
-package io.hamal.lib.script.impl.builtin
+package io.hamal.lib.script.api
 
-import io.hamal.lib.script.impl.ast.expr.Expression
 import io.hamal.lib.script.api.value.Value
 
-interface BuiltinFunction {
+interface NativeFunction {
+
     operator fun invoke(ctx: Context): Value
 
     data class Context(

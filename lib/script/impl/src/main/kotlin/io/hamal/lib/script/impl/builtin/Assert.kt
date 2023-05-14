@@ -1,11 +1,11 @@
 package io.hamal.lib.script.impl.builtin
 
+import io.hamal.lib.script.api.NativeFunction
 import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.impl.value.*
+import io.hamal.lib.script.impl.ScriptEvaluationException
 
-internal object AssertFunction : BuiltinFunction {
-    override fun invoke(ctx: BuiltinFunction.Context): Value {
+internal object AssertFunction : NativeFunction {
+    override fun invoke(ctx: NativeFunction.Context): Value {
         val parameters = ctx.parameters
 
         val assertionMessage = parameters.getOrNull(1)
@@ -16,9 +16,9 @@ internal object AssertFunction : BuiltinFunction {
         val result = parameters.firstOrNull()?.value
         if (result != TrueValue) {
             if (result != FalseValue) {
-                throw io.hamal.lib.script.impl.ScriptEvaluationException(ErrorValue("Assertion of non boolean value is always false"))
+                throw ScriptEvaluationException(ErrorValue("Assertion of non boolean value is always false"))
             }
-            throw io.hamal.lib.script.impl.ScriptEvaluationException(ErrorValue("Assertion violated: $assertionMessage"))
+            throw ScriptEvaluationException(ErrorValue("Assertion violated: $assertionMessage"))
         }
         return NilValue
     }

@@ -1,10 +1,11 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.api.Expression
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.token.Token
 import io.hamal.lib.script.impl.token.Token.Type.Category
 
-interface Expression : io.hamal.lib.script.impl.ast.Node
+
 internal interface ParseExpression<EXPRESSION : Expression> {
     operator fun invoke(ctx: Parser.Context): EXPRESSION
 }

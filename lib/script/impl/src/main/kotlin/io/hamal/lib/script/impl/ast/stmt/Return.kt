@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.ast.stmt
 
+import io.hamal.lib.script.api.Expression
 import io.hamal.lib.script.impl.ast.Parser.Context
-import io.hamal.lib.script.impl.ast.expr.Expression
 import io.hamal.lib.script.impl.ast.expr.NilLiteral
 import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token

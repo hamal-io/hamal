@@ -1,9 +1,8 @@
 package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.impl.builtin.BuiltinFunction
+import io.hamal.lib.script.api.NativeFunction
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
     override fun invoke(toEvaluate: CallExpression, env: Environment): Value {
@@ -12,9 +11,9 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
         env.findForeignFunction(toEvaluate.identifier)
             ?.let { fn ->
                 return fn(
-                    BuiltinFunction.Context(
+                    NativeFunction.Context(
                         parameters.zip(toEvaluate.parameters)
-                            .map { BuiltinFunction.Parameter(it.first, it.second) }
+                            .map { NativeFunction.Parameter(it.first, it.second) }
                     ))
             }
 
