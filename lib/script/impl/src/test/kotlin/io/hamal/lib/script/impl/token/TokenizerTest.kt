@@ -16,14 +16,14 @@ class TokenizerTest {
 
     @Nested
     @DisplayName("DefaultImpl")
-    inner class DefaultImplTest {
+    inner class DefaultTokenizerTest {
 
         @Nested
         @DisplayName("isAtEnd()")
         inner class IsAtEndTest {
             @Test
             fun `Advances until reaches end`() {
-                val testInstance = Tokenizer.DefaultImpl("num")
+                val testInstance = DefaultTokenizer("num")
                 assertFalse(testInstance.isAtEnd())
                 testInstance.advance()
                 assertFalse(testInstance.isAtEnd())
@@ -39,7 +39,7 @@ class TokenizerTest {
         inner class PeekTest {
             @Test
             fun `Returns the character of the current position`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal")
+                val testInstance = DefaultTokenizer("hamal")
                 assertThat(testInstance.peek(), equalTo('h'))
                 testInstance.advance()
                 assertThat(testInstance.peek(), equalTo('a'))
@@ -47,7 +47,7 @@ class TokenizerTest {
 
             @Test
             fun `Throws exception if there is nothing to peek anymore`() {
-                val testInstance = Tokenizer.DefaultImpl("h")
+                val testInstance = DefaultTokenizer("h")
                 assertThat(testInstance.peek(), equalTo('h'))
                 testInstance.advance()
                 val exception = assertThrows<IllegalStateException> {
@@ -62,7 +62,7 @@ class TokenizerTest {
         inner class PeekNextTest {
             @Test
             fun `Return the next character`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal")
+                val testInstance = DefaultTokenizer("hamal")
                 assertThat(testInstance.peekNext(), equalTo('a'))
                 testInstance.advance()
                 assertThat(testInstance.peekNext(), equalTo('m'))
@@ -70,7 +70,7 @@ class TokenizerTest {
 
             @Test
             fun `Throws exception if there is nothing to peek anymore`() {
-                val testInstance = Tokenizer.DefaultImpl("42")
+                val testInstance = DefaultTokenizer("42")
                 assertThat(testInstance.peekNext(), equalTo('2'))
                 testInstance.advance()
 
@@ -86,7 +86,7 @@ class TokenizerTest {
         inner class PeekPrevTest {
             @Test
             fun `Returns the previous character`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal")
+                val testInstance = DefaultTokenizer("hamal")
                 testInstance.advance()
                 assertThat(testInstance.peekPrev(), equalTo('h'))
                 testInstance.advance()
@@ -95,7 +95,7 @@ class TokenizerTest {
 
             @Test
             fun `Throws exception if there is nothing to peek anymore`() {
-                val testInstance = Tokenizer.DefaultImpl("h")
+                val testInstance = DefaultTokenizer("h")
                 testInstance.index = 2
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.peekPrev()
@@ -105,7 +105,7 @@ class TokenizerTest {
 
             @Test
             fun `Throws exception if Tokenizer never advanced before`() {
-                val testInstance = Tokenizer.DefaultImpl("hm")
+                val testInstance = DefaultTokenizer("hm")
                 val exception = assertThrows<IllegalStateException> {
                     testInstance.peekPrev()
                 }
@@ -118,7 +118,7 @@ class TokenizerTest {
         inner class AdvanceTest() {
             @Test
             fun `Advances read position and fills buffer`() {
-                val testInstance = Tokenizer.DefaultImpl("num = 42")
+                val testInstance = DefaultTokenizer("num = 42")
                 testInstance.advance().assert(1, 1, 1, "n")
                 testInstance.advance().assert(2, 1, 2, "nu")
                 testInstance.advance().assert(3, 1, 3, "num")
@@ -126,7 +126,7 @@ class TokenizerTest {
 
             @Test
             fun `Throws exception if there is nothing to read anymore`() {
-                val testInstance = Tokenizer.DefaultImpl("n")
+                val testInstance = DefaultTokenizer("n")
                 testInstance.advance().assert(1, 1, 1, "n")
 
                 val exception = assertThrows<IllegalStateException> {
@@ -141,28 +141,28 @@ class TokenizerTest {
         inner class AdvanceUntilWhitespaceTest {
             @Test
             fun `Advances until hits whitespace`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal rockz")
+                val testInstance = DefaultTokenizer("hamal rockz")
                 testInstance.advanceUntilWhitespace()
                 testInstance.assert(5, 1, 5, "hamal")
             }
 
             @Test
             fun `Advances until hits new line`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal\nrockz")
+                val testInstance = DefaultTokenizer("hamal\nrockz")
                 testInstance.advanceUntilWhitespace()
                 testInstance.assert(5, 1, 5, "hamal")
             }
 
             @Test
             fun `Advances until hits tabulator`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal\trockz")
+                val testInstance = DefaultTokenizer("hamal\trockz")
                 testInstance.advanceUntilWhitespace()
                 testInstance.assert(5, 1, 5, "hamal")
             }
 
             @Test
             fun `Advances until hits carriage return`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal\rrockz")
+                val testInstance = DefaultTokenizer("hamal\rrockz")
                 testInstance.advanceUntilWhitespace()
                 testInstance.assert(5, 1, 5, "hamal")
             }
@@ -173,13 +173,13 @@ class TokenizerTest {
         inner class SkipWhitespaceTest {
             @Test
             fun `Does nothing if not a whitespace`() {
-                val testInstance = Tokenizer.DefaultImpl("hamal")
+                val testInstance = DefaultTokenizer("hamal")
                 testInstance.skipWhitespace().assert(0, 1, 0, "")
             }
 
             @Test
             fun `Skips comment`() {
-                val testInstance = Tokenizer.DefaultImpl(
+                val testInstance = DefaultTokenizer(
                     """
                     --- some comment on how awesome hamal is
                     invoke_awesomeness()
@@ -190,7 +190,7 @@ class TokenizerTest {
 
             @Test
             fun `Skips whitespaces`() {
-                val testInstance = Tokenizer.DefaultImpl(
+                val testInstance = DefaultTokenizer(
                     """    content"""
                 )
                 testInstance.skipWhitespace().assert(4, 1, 4, "")
@@ -198,7 +198,7 @@ class TokenizerTest {
 
             @Test
             fun `Skips tabulators breaks`() {
-                val testInstance = Tokenizer.DefaultImpl(
+                val testInstance = DefaultTokenizer(
                     "\t\t\tcontent"
                 )
                 testInstance.skipWhitespace().assert(3, 1, 3, "")
@@ -206,7 +206,7 @@ class TokenizerTest {
 
             @Test
             fun `Skips carriage return breaks`() {
-                val testInstance = Tokenizer.DefaultImpl(
+                val testInstance = DefaultTokenizer(
                     "\r\rcontent"
                 )
                 testInstance.skipWhitespace().assert(2, 1, 2, "")
@@ -263,6 +263,7 @@ class TokenizerTest {
                 Argument("in", Token(In, 1, 1, "in")),
                 Argument("local", Token(Local, 1, 1, "local")),
                 Argument("repeat", Token(Repeat, 1, 1, "repeat")),
+                Argument("require", Token(Require, 1, 1, "require")),
                 Argument("return", Token(Return, 1, 1, "return")),
                 Argument("then", Token(Then, 1, 1, "then")),
                 Argument("until", Token(Until, 1, 1, "until")),
@@ -305,7 +306,7 @@ class TokenizerTest {
             @MethodSource("arguments")
             fun test(argument: Argument) {
                 val expected = argument.expectedToken
-                val testInstance = Tokenizer.DefaultImpl(argument.input)
+                val testInstance = DefaultTokenizer(argument.input)
                 val result = testInstance.nextToken()
                 assertThat("Of type ${expected.type}", result.type, equalTo(expected.type))
                 assertThat("Line ${expected.line}", result.line, equalTo(expected.line))
@@ -317,7 +318,7 @@ class TokenizerTest {
 
             @Test
             fun `Tokenize function call`() {
-                val testInstance = Tokenizer.DefaultImpl("some_function()")
+                val testInstance = DefaultTokenizer("some_function()")
 
                 val identifier = testInstance.nextToken()
                 assertThat(identifier.type, equalTo(Identifier))
@@ -339,31 +340,31 @@ class TokenizerTest {
         inner class NextNumberTest {
             @Test
             fun `Single digit`() {
-                val testInstance = Tokenizer.DefaultImpl("2")
+                val testInstance = DefaultTokenizer("2")
                 testInstance.nextNumber().assertNumberLiteral(1, 1, "2")
             }
 
             @Test
             fun `Multiple digits`() {
-                val testInstance = Tokenizer.DefaultImpl("2345")
+                val testInstance = DefaultTokenizer("2345")
                 testInstance.nextNumber().assertNumberLiteral(1, 1, "2345")
             }
 
             @Test
             fun `Floating point number`() {
-                val testInstance = Tokenizer.DefaultImpl("13.37")
+                val testInstance = DefaultTokenizer("13.37")
                 testInstance.nextNumber().assertNumberLiteral(1, 1, "13.37")
             }
 
             @Test
             fun `Floating point number ends with dot`() {
-                val testInstance = Tokenizer.DefaultImpl("13. ")
+                val testInstance = DefaultTokenizer("13. ")
                 testInstance.nextNumber().assertNumberLiteral(1, 1, "13.")
             }
 
             @Test
             fun `Floating point number starts with dot`() {
-                val testInstance = Tokenizer.DefaultImpl(".234")
+                val testInstance = DefaultTokenizer(".234")
                 testInstance.nextNumber().assertNumberLiteral(1, 1, ".234")
             }
         }
@@ -373,19 +374,19 @@ class TokenizerTest {
         inner class NextHexNumberTest {
             @Test
             fun `Hexnumber 0x0`() {
-                val testInstance = Tokenizer.DefaultImpl("0x0")
+                val testInstance = DefaultTokenizer("0x0")
                 testInstance.nextHexNumber().assertHexNumberLiteral(1, 1, "0x0")
             }
 
             @Test
             fun `Hexnumber 0xBadC0de`() {
-                val testInstance = Tokenizer.DefaultImpl("0xBadC0de")
+                val testInstance = DefaultTokenizer("0xBadC0de")
                 testInstance.nextHexNumber().assertHexNumberLiteral(1, 1, "0xBadC0de")
             }
 
             @Test
             fun `Hexnumber 0x123456789ABCDEF`() {
-                val testInstance = Tokenizer.DefaultImpl("0x123456789ABCDEF")
+                val testInstance = DefaultTokenizer("0x123456789ABCDEF")
                 testInstance.nextHexNumber().assertHexNumberLiteral(1, 1, "0x123456789ABCDEF")
             }
         }
@@ -395,7 +396,7 @@ class TokenizerTest {
         inner class NextStringTest {
             @Test
             fun `Simple string`() {
-                val testInstance = Tokenizer.DefaultImpl("'Hamal'")
+                val testInstance = DefaultTokenizer("'Hamal'")
                 testInstance.nextString().assertStringLiteral(1, 1, "Hamal")
 
                 val eof = testInstance.nextToken()
@@ -404,25 +405,25 @@ class TokenizerTest {
 
             @Test
             fun `String contains whitespaces`() {
-                val testInstance = Tokenizer.DefaultImpl("'Hamal\nh4m41 hamal\t cool'")
+                val testInstance = DefaultTokenizer("'Hamal\nh4m41 hamal\t cool'")
                 testInstance.nextString().assertStringLiteral(1, 1, "Hamal\nh4m41 hamal\t cool")
             }
 
             @Test
             fun `String with inner quotes`() {
-                val testInstance = Tokenizer.DefaultImpl("'hamal\\'hamal'")
+                val testInstance = DefaultTokenizer("'hamal\\'hamal'")
                 testInstance.nextString().assertStringLiteral(1, 1, "hamal\\'hamal")
             }
 
             @Test
             fun `String contains inner double quotes`() {
-                val testInstance = Tokenizer.DefaultImpl("'hamal\"hamal'")
+                val testInstance = DefaultTokenizer("'hamal\"hamal'")
                 testInstance.nextString().assertStringLiteral(1, 1, "hamal\"hamal")
             }
 
             @Test
             fun `String is not terminated`() {
-                val testInstance = Tokenizer.DefaultImpl("'hamal")
+                val testInstance = DefaultTokenizer("'hamal")
                 testInstance.nextString().assertError(1, 1, "Unterminated string")
             }
 
@@ -430,7 +431,7 @@ class TokenizerTest {
 
         @Test
         fun `a dot dot b`() {
-            val testInstance = Tokenizer.DefaultImpl("a..b")
+            val testInstance = DefaultTokenizer("a..b")
             val a = testInstance.nextToken()
             assertThat(a, equalTo(Token(Identifier, 1, 1, "a")))
             val op = testInstance.nextToken()
@@ -442,7 +443,7 @@ class TokenizerTest {
 
         @Test
         fun `some_number=2810`() {
-            val testInstance = Tokenizer.DefaultImpl("some_number=2810")
+            val testInstance = DefaultTokenizer("some_number=2810")
             val ident = testInstance.nextToken()
             assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
             val equal = testInstance.nextToken()
@@ -453,7 +454,7 @@ class TokenizerTest {
 
         @Test
         fun `some_number==1212`() {
-            val testInstance = Tokenizer.DefaultImpl("some_number==1212")
+            val testInstance = DefaultTokenizer("some_number==1212")
             val ident = testInstance.nextToken()
             assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
             val equal = testInstance.nextToken()
@@ -464,7 +465,7 @@ class TokenizerTest {
 
         @Test
         fun `some_number==another_number`() {
-            val testInstance = Tokenizer.DefaultImpl("some_number==another_number")
+            val testInstance = DefaultTokenizer("some_number==another_number")
             val ident = testInstance.nextToken()
             assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
             val equal = testInstance.nextToken()
@@ -475,12 +476,24 @@ class TokenizerTest {
 
         @Test
         fun `some_table dot field`() {
-            val testInstance = Tokenizer.DefaultImpl("some_table.field")
+            val testInstance = DefaultTokenizer("some_table.field")
             val table = testInstance.nextToken()
             assertThat(table, equalTo(Token(Identifier, 1, 1, "some_table")))
         }
 
-        private fun Tokenizer.DefaultImpl.assert(index: Int, line: Int, linePosition: Int, buffer: String) {
+        @Test
+        fun `local web3 = require('web3')`() {
+            val testInstance = DefaultTokenizer("local eth = require('web3')")
+            assertThat(testInstance.nextToken(), equalTo(Token(Local, 1, 1, "local")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 7, "eth")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Equal, 1, 11, "=")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Require, 1, 13, "require")))
+            assertThat(testInstance.nextToken(), equalTo(Token(LeftParenthesis, 1, 20, "(")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Type.String, 1, 21, "web3")))
+            assertThat(testInstance.nextToken(), equalTo(Token(RightParenthesis, 1, 27, ")")))
+        }
+
+        private fun DefaultTokenizer.assert(index: Int, line: Int, linePosition: Int, buffer: String) {
             assertThat("index is not $index", this.index, equalTo(index))
             assertThat("line is not $line", this.line, equalTo(line))
             assertThat("line position is not $linePosition", this.linePosition, equalTo(linePosition))

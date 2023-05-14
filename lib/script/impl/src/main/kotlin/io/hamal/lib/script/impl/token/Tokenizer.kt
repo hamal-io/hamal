@@ -1,18 +1,17 @@
 package io.hamal.lib.script.impl.token
 
-import io.hamal.lib.script.impl.token.Token.Type
-import io.hamal.lib.script.impl.token.Token.Type.*
-import io.hamal.lib.script.impl.token.Token.Type.Number
-import io.hamal.lib.script.impl.token.Tokenizer.DefaultImpl
 import io.hamal.lib.common.util.TokenizerUtils
 import io.hamal.lib.common.util.TokenizerUtils.isAlpha
 import io.hamal.lib.common.util.TokenizerUtils.isDigit
 import io.hamal.lib.common.util.TokenizerUtils.isQuote
 import io.hamal.lib.common.util.TokenizerUtils.isUnderscore
 import io.hamal.lib.common.util.TokenizerUtils.isWhitespace
+import io.hamal.lib.script.impl.token.Token.Type
+import io.hamal.lib.script.impl.token.Token.Type.*
+import io.hamal.lib.script.impl.token.Token.Type.Number
 
 fun tokenize(code: String): List<Token> {
-    val tokenizer = DefaultImpl(code)
+    val tokenizer = DefaultTokenizer(code)
     val result = mutableListOf<Token>()
     while (true) {
         val current = tokenizer.nextToken()
@@ -26,91 +25,91 @@ fun tokenize(code: String): List<Token> {
 interface Tokenizer {
 
     fun nextToken(): Token
+}
 
-    class DefaultImpl(
-        val code: String,
-        internal var index: Int = 0,
-        internal var line: Int = 1,
-        internal var linePosition: Int = 0,
-        internal val buffer: StringBuffer = StringBuffer(256)
-    ) : Tokenizer {
+class DefaultTokenizer(
+    val code: String,
+    internal var index: Int = 0,
+    internal var line: Int = 1,
+    internal var linePosition: Int = 0,
+    internal val buffer: StringBuffer = StringBuffer(256)
+) : Tokenizer {
 
-        override fun nextToken(): Token {
-            skipWhitespace()
-            return when {
-                isAtEnd() -> Token(Eof, tokenLine(), tokenPosition(), "EOF")
-                isHexNumber() -> nextHexNumber()
-                isNumber() -> nextNumber()
-                isString() -> nextString()
-                else -> {
-                    advance()
-                    nextDelimiter()
-                        ?: nextOperator()
-                        ?: run {
+    override fun nextToken(): Token {
+        skipWhitespace()
+        return when {
+            isAtEnd() -> Token(Eof, tokenLine(), tokenPosition(), "EOF")
+            isHexNumber() -> nextHexNumber()
+            isNumber() -> nextNumber()
+            isString() -> nextString()
+            else -> {
+                advance()
+                nextDelimiter()
+                    ?: nextOperator()
+                    ?: run {
 
-                            while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(
-                                    peek()
-                                ))
-                            ) {
-                                advance()
-                            }
-                            nextLiteral()
-                                ?: nextIdentifierOrKeyword()
+                        while (!isAtEnd() && peek() != '(' && (isAlpha(peek()) || isDigit(peek()) || isUnderscore(
+                                peek()
+                            ))
+                        ) {
+                            advance()
                         }
-                }
+                        nextLiteral()
+                            ?: nextIdentifierOrKeyword()
+                    }
             }
         }
     }
 }
 
-private fun DefaultImpl.isHexNumber() = peek() == '0' && peekNext() == 'x'
+private fun DefaultTokenizer.isHexNumber() = peek() == '0' && peekNext() == 'x'
 
-private fun DefaultImpl.isNumber() = isDigit(peek()) ||
+private fun DefaultTokenizer.isNumber() = isDigit(peek()) ||
         (canPeekNext() && peek() == '.' && isDigit(peekNext()))
 
-private fun DefaultImpl.isString() = isQuote(peek())
+private fun DefaultTokenizer.isString() = isQuote(peek())
 
-private fun DefaultImpl.tokenPosition() = linePosition - buffer.length + 1
+private fun DefaultTokenizer.tokenPosition() = linePosition - buffer.length + 1
 
-private fun DefaultImpl.tokenLine() = line
+private fun DefaultTokenizer.tokenLine() = line
 
-private fun DefaultImpl.tokenValue() = buffer.toString()
+private fun DefaultTokenizer.tokenValue() = buffer.toString()
 
-internal fun DefaultImpl.isAtEnd(offset: Int = 0) = index + offset >= code.length
+internal fun DefaultTokenizer.isAtEnd(offset: Int = 0) = index + offset >= code.length
 
-internal fun DefaultImpl.canPeekNext(offset: Int = 1) = index < code.length - offset
+internal fun DefaultTokenizer.canPeekNext(offset: Int = 1) = index < code.length - offset
 
-internal fun DefaultImpl.peek(): Char {
+internal fun DefaultTokenizer.peek(): Char {
     check(!isAtEnd()) { "Can not read after end of code" }
     return code[index]
 }
 
-internal fun DefaultImpl.peekPrev(): Char {
+internal fun DefaultTokenizer.peekPrev(): Char {
     check(index > 0) { "Can not read before start of code" }
     check(index < code.length) { "Can not read after end of code" }
     return code[index - 1]
 }
 
-internal fun DefaultImpl.peekNext(offset: Int = 1): Char {
+internal fun DefaultTokenizer.peekNext(offset: Int = 1): Char {
     check(index + offset < code.length) { "Can not read after end of code" }
     return code[index + offset]
 }
 
-internal fun DefaultImpl.advance(): DefaultImpl {
+internal fun DefaultTokenizer.advance(): DefaultTokenizer {
     check(index + 1 <= code.length) { "Can not read after end of code" }
     linePosition++
     buffer.append(code[index++])
     return this
 }
 
-internal fun DefaultImpl.advanceUntilWhitespace(): DefaultImpl {
+internal fun DefaultTokenizer.advanceUntilWhitespace(): DefaultTokenizer {
     while (!isAtEnd() && !isWhitespace(peek())) {
         advance()
     }
     return this
 }
 
-internal fun DefaultImpl.skipWhitespace(): DefaultImpl {
+internal fun DefaultTokenizer.skipWhitespace(): DefaultTokenizer {
     while (!isAtEnd()) {
         when (peek()) {
             '-' -> {
@@ -141,7 +140,7 @@ internal fun DefaultImpl.skipWhitespace(): DefaultImpl {
 }
 
 
-internal fun DefaultImpl.nextNumber(): Token {
+internal fun DefaultTokenizer.nextNumber(): Token {
     assert(
         isDigit(peek()) ||
                 (canPeekNext() && peek() == '.' && isDigit(peekNext()))
@@ -158,7 +157,7 @@ internal fun DefaultImpl.nextNumber(): Token {
     return Token(Number, tokenLine(), tokenPosition(), tokenValue())
 }
 
-internal fun DefaultImpl.nextHexNumber(): Token {
+internal fun DefaultTokenizer.nextHexNumber(): Token {
     assert(peek() == '0' && peekNext() == 'x')
     advance(); // 0
     advance(); // x
@@ -168,7 +167,7 @@ internal fun DefaultImpl.nextHexNumber(): Token {
     return Token(HexNumber, tokenLine(), tokenPosition(), tokenValue())
 }
 
-internal fun DefaultImpl.nextString(): Token {
+internal fun DefaultTokenizer.nextString(): Token {
     assert(isQuote(peek()))
     advance() // remove first quote
     var newLineCounter = 0
@@ -191,13 +190,13 @@ internal fun DefaultImpl.nextString(): Token {
     return Token(Type.String, tokenLine(), tokenPosition(), buffer.substring(1, buffer.length - 1))
 }
 
-internal fun DefaultImpl.nextIdentifierOrKeyword(): Token {
+internal fun DefaultTokenizer.nextIdentifierOrKeyword(): Token {
     return asKeyword() ?: Token(Identifier, tokenLine(), tokenPosition(), tokenValue())
 }
 
 val keywordMapping = Type.values().filter { it.category == Category.Keyword }.associateBy { it.value }
 
-private fun DefaultImpl.asKeyword(): Token? {
+private fun DefaultTokenizer.asKeyword(): Token? {
     val value = buffer.toString()
     return keywordMapping[value]
         ?.let { Token(it, tokenLine(), tokenPosition(), value) }
@@ -205,14 +204,14 @@ private fun DefaultImpl.asKeyword(): Token? {
 
 val operatorMapping = Type.values().filter { it.category == Category.Operator }.associateBy { it.value }
 
-private fun DefaultImpl.nextOperator(): Token? {
+private fun DefaultTokenizer.nextOperator(): Token? {
     return nextLookAheadOperator() ?: run {
         val value = buffer.toString()
         return operatorMapping[value]?.let { Token(it, tokenLine(), tokenPosition(), value) }
     }
 }
 
-private fun DefaultImpl.nextLookAheadOperator(): Token? {
+private fun DefaultTokenizer.nextLookAheadOperator(): Token? {
     val buffer = StringBuffer(buffer)
 
     for (lookAheadIndex in 0 until 3) {
@@ -243,7 +242,7 @@ private fun DefaultImpl.nextLookAheadOperator(): Token? {
     return null
 }
 
-private fun DefaultImpl.nextLiteral(): Token? {
+private fun DefaultTokenizer.nextLiteral(): Token? {
     return when (val value = buffer.toString()) {
         "true" -> Token(True, tokenLine(), tokenPosition(), value)
         "false" -> Token(False, tokenLine(), tokenPosition(), value)
@@ -252,7 +251,7 @@ private fun DefaultImpl.nextLiteral(): Token? {
     }
 }
 
-private fun DefaultImpl.nextDelimiter(): Token? {
+private fun DefaultTokenizer.nextDelimiter(): Token? {
     return when (buffer.toString()) {
         "," -> Token(Comma, tokenLine(), tokenPosition(), tokenValue())
         ";" -> Token(Semicolon, tokenLine(), tokenPosition(), tokenValue())

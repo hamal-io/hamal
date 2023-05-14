@@ -1,6 +1,6 @@
 package io.hamal.worker.extension.api
 
-import io.hamal.lib.script.api.natives.NativeFunction
+import io.hamal.lib.script.api.native_.NativeFunction
 
 interface WorkerExtension {
     fun functionFactories(): List<NativeFunction>

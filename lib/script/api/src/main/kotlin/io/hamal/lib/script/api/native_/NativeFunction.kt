@@ -1,4 +1,4 @@
-package io.hamal.lib.script.api.natives
+package io.hamal.lib.script.api.native_
 
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.api.ast.Identifier

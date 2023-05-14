@@ -1,6 +1,6 @@
 package io.hamal.worker.infra.service
 
-import io.hamal.lib.script.api.natives.NativeFunction
+import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.interpreter.Environment
 import io.hamal.lib.sdk.DefaultHamalSdk

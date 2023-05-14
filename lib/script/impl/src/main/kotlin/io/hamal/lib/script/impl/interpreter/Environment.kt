@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.interpreter
 
-import io.hamal.lib.script.api.natives.NativeFunction
+import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.IdentifierExpression

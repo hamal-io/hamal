@@ -25,6 +25,7 @@ data class Token(
         In("in", Keyword),
         Local("local", Keyword),
         Repeat("repeat", Keyword),
+        Require("require", Keyword),
         Return("return", Keyword),
         Then("then", Keyword),
         Until("until", Keyword),
