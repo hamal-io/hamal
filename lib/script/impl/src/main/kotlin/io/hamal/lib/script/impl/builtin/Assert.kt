@@ -1,10 +1,14 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.NativeFunction
+import io.hamal.lib.script.api.natives.NativeFunction
+import io.hamal.lib.script.api.ast.Identifier
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
+import io.hamal.lib.script.impl.ast.expr.IdentifierExpression
 
 internal object AssertFunction : NativeFunction {
+    override val identifier: Identifier = IdentifierExpression("assert")
+
     override fun invoke(ctx: NativeFunction.Context): Value {
         val parameters = ctx.parameters
 

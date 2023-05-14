@@ -7,7 +7,7 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 dependencies {
-    implementation(project(":lib:common"))
+    api(project(":lib:common"))
     implementation(external.kotlin.protobuf)
     implementation(external.kotlin.json)
     implementation(external.apache.http.client)

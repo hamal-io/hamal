@@ -5,7 +5,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-starter.jar")
+    archiveFileName.set("extension-web3.jar")
 }
 
 distributions {
@@ -29,5 +29,6 @@ distributions {
 dependencies {
     implementation(project(":worker:extension:api"))
     implementation(project(":lib:script:api"))
-    implementation(project(":lib:http"))
+    implementation(project(":lib:common"))
+    api(project(":lib:web3"))
 }

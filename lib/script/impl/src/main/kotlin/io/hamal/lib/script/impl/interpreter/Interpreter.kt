@@ -12,7 +12,7 @@ internal object Evaluator {
 
     init {
         /*LITERAL*/
-        register(Identifier::class, EvaluateIdentifier)
+        register(IdentifierExpression::class, EvaluateIdentifier)
         register(NumberLiteral::class, EvaluateNumberLiteral)
         register(StringLiteral::class, EvaluateStringLiteral)
         register(FalseLiteral::class, EvaluateFalseLiteral)

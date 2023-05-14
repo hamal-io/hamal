@@ -17,6 +17,10 @@ dependencies {
     implementation(project(":lib:sdk"))
     implementation(project(":lib:domain"))
 
+    implementation(project(":lib:web3"))
+
+
+
     implementation(project(":lib:script:api"))
     implementation(project(":lib:script:impl"))
 

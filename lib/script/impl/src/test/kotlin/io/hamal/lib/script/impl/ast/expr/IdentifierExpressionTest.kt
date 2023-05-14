@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class IdentifierTest : AbstractExpressionTest() {
+internal class IdentifierExpressionTest : AbstractExpressionTest() {
 
     @Nested
     @DisplayName("equals()")
@@ -16,16 +16,16 @@ internal class IdentifierTest : AbstractExpressionTest() {
         @Test
         fun `Equals if underlying values are equal`() {
             Assertions.assertEquals(
-                Identifier("SomeIdentifier"),
-                Identifier("SomeIdentifier")
+                IdentifierExpression("SomeIdentifier"),
+                IdentifierExpression("SomeIdentifier")
             )
         }
 
         @Test
         fun `Not equals if underlying values are different`() {
             Assertions.assertNotEquals(
-                Identifier("SomeIdentifier"),
-                Identifier("AnotherIdentifier")
+                IdentifierExpression("SomeIdentifier"),
+                IdentifierExpression("AnotherIdentifier")
             )
         }
     }
@@ -36,16 +36,16 @@ internal class IdentifierTest : AbstractExpressionTest() {
         @Test
         fun `Same hashcode if values are equal`() {
             Assertions.assertEquals(
-                Identifier("SomeIdentifier").hashCode(),
-                Identifier("SomeIdentifier").hashCode()
+                IdentifierExpression("SomeIdentifier").hashCode(),
+                IdentifierExpression("SomeIdentifier").hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             Assertions.assertNotEquals(
-                Identifier("SomeIdentifier").hashCode(),
-                Identifier("AnotherIdentifier").hashCode()
+                IdentifierExpression("SomeIdentifier").hashCode(),
+                IdentifierExpression("AnotherIdentifier").hashCode()
             )
         }
     }
@@ -55,8 +55,8 @@ internal class IdentifierTest : AbstractExpressionTest() {
     inner class ParseTest {
         @Test
         fun identifier() {
-            runLiteralTest(Identifier.Parse, "some_variable") { result, tokens ->
-                assertThat(result, equalTo(Identifier("some_variable")))
+            runLiteralTest(IdentifierExpression.Parse, "some_variable") { result, tokens ->
+                assertThat(result, equalTo(IdentifierExpression("some_variable")))
                 tokens.inOrder(Type.Identifier, Type.Eof)
             }
         }

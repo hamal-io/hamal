@@ -4,9 +4,9 @@ plugins {
 }
 
 dependencies {
-    implementation(external.kotlin.reflect)
-    implementation(external.kotlin.protobuf)
-    implementation(external.kotlin.json)
+    api(external.kotlin.reflect)
+    api(external.kotlin.protobuf)
+    api(external.kotlin.json)
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.ast.stmt
 
 import io.hamal.lib.script.impl.ast.expr.FalseLiteral
-import io.hamal.lib.script.impl.ast.expr.Identifier
+import io.hamal.lib.script.impl.ast.expr.IdentifierExpression
 import io.hamal.lib.script.impl.ast.expr.NumberLiteral
 import io.hamal.lib.script.impl.ast.expr.TrueLiteral
 import io.hamal.lib.script.impl.ast.stmt.Assignment.*
@@ -26,12 +26,12 @@ internal class AssignmentTest : AbstractStatementTest() {
                 return listOf(
                     Arguments.of(
                         "some_number=42",
-                        Global(Identifier("some_number"), NumberLiteral(42))
+                        Global(IdentifierExpression("some_number"), NumberLiteral(42))
                     ),
                     Arguments.of(
                         "some_var, another_var = true, false",
                         Global(
-                            listOf(Identifier("some_var"), Identifier("another_var")),
+                            listOf(IdentifierExpression("some_var"), IdentifierExpression("another_var")),
                             listOf(TrueLiteral(), FalseLiteral())
                         )
                     )
@@ -61,12 +61,12 @@ internal class AssignmentTest : AbstractStatementTest() {
                 return listOf(
                     Arguments.of(
                         "local some_number=42",
-                        Local(Identifier("some_number"), NumberLiteral(42))
+                        Local(IdentifierExpression("some_number"), NumberLiteral(42))
                     ),
                     Arguments.of(
                         "local some_var, another_var = true, false",
                         Local(
-                            listOf(Identifier("some_var"), Identifier("another_var")),
+                            listOf(IdentifierExpression("some_var"), IdentifierExpression("another_var")),
                             listOf(TrueLiteral(), FalseLiteral())
                         )
                     )

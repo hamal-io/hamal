@@ -9,8 +9,7 @@ apply(plugin = "io.spring.dependency-management")
 
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation(project(":lib:http"))
+    api(project(":lib:http"))
 
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     implementation(external.kotlin.json)

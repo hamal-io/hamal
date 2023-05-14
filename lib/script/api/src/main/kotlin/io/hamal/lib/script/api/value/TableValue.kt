@@ -1,11 +1,16 @@
 package io.hamal.lib.script.api.value
 
-class TableValue : Value, Collection<TableValue.TableEntry> {
-    constructor(vararg entries: TableEntry) {
-        entries.forEach { store[it.key] = it.value }
+typealias TableEntry = Pair<Value, Value>
+
+class TableValue : Value, Collection<TableEntry> {
+
+    constructor(vararg entries: Pair<Value, Value>) {
+        entries.forEach { store[it.first] = it.second }
     }
 
-    data class TableEntry(val key: Value, val value: Value)
+
+//    data class TableEntry(val key: Value, val value: Value)
+
 
     private val store = mutableMapOf<Value, Value>()
 
@@ -37,7 +42,7 @@ class TableValue : Value, Collection<TableValue.TableEntry> {
     }
 
     override fun containsAll(elements: Collection<TableEntry>) = elements.all(::contains)
-    override fun contains(element: TableEntry) = store.containsKey(element.key)
+    override fun contains(element: TableEntry) = store.containsKey(element.first)
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

@@ -34,8 +34,7 @@ internal fun CreateJobDefinitionRequestHandler.createJobDefinition(useCase: JobD
         createScriptTask(jobDefinitionId) {
             code = HamalScriptCode(
                 """
-                |assert( 1<1 )
-                |42
+                |getBlock(1)
             """.trimMargin()
             )
         }

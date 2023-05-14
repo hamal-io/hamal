@@ -1,10 +1,10 @@
 package io.hamal.worker.infra.service
 
+import io.hamal.lib.script.api.natives.NativeFunction
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.interpreter.Environment
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
-import io.hamal.worker.extension.api.DefaultContext
 import io.hamal.worker.infra.adapter.WorkerExtensionLoader
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
@@ -15,18 +15,32 @@ import java.util.concurrent.TimeUnit
 @Service
 class WorkerService {
 
+    private val nativeFunctions = mutableListOf<NativeFunction>()
+
     @PostConstruct
     fun postConstruct() {
 
         println("Worker active")
 
         val entryPointLoader = WorkerExtensionLoader.DefaultImpl()
-        val x =
-            entryPointLoader.load(File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-starter.jar"))
 
-        x.functionFactories()
-            .map { it.create() }
-            .forEach { it(DefaultContext()) }
+        val s =
+            entryPointLoader.load(
+                File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-starter.jar")
+            )
+        nativeFunctions.addAll(s.functionFactories())
+
+        val x =
+            entryPointLoader.load(
+                File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-web3.jar")
+            )
+
+        nativeFunctions.addAll(x.functionFactories())
+
+//        x.functionFactories()
+
+//            .map { it.create() }
+//            .forEach { it(DefaultContext()) }
 
 
     }
@@ -41,7 +55,13 @@ class WorkerService {
 
                 require(task is ApiWorkerScriptTask)
                 println("Executing hamal script: ${task.code}")
-                val sandbox = DefaultSandbox(Environment())
+                val env = Environment()
+
+                nativeFunctions.forEach { nativeFunction ->
+                    env.register(nativeFunction)
+                }
+
+                val sandbox = DefaultSandbox(env)
                 val result = sandbox.eval(task.code.value)
                 println("RESULT: $result")
 

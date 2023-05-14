@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.script.api.Expression
+import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
@@ -13,7 +13,7 @@ object PrecedenceString {
 
     private fun StringBuilder.appendExpression(expression: Expression) {
         when (expression) {
-            is Identifier -> appendString(expression.value)
+            is IdentifierExpression -> appendString(expression.value)
             is LiteralExpression -> appendLiteral(expression)
             is PrefixExpression -> appendPrefixExpression(expression)
             is InfixExpression -> appendInfixExpression(expression)

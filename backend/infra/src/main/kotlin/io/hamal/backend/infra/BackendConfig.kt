@@ -69,20 +69,6 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
                 triggerId = jobDef.triggers.first().id
             )
         )
-        request(
-            ManualTriggerInvocation(
-                requestId = RequestId(1001),
-                shard = Shard(0),
-                triggerId = jobDef.triggers.first().id
-            )
-        )
-        request(
-            ManualTriggerInvocation(
-                requestId = RequestId(1002),
-                shard = Shard(0),
-                triggerId = jobDef.triggers.first().id
-            )
-        )
         println(jobDef)
     }
 

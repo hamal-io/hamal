@@ -1,14 +1,14 @@
 package io.hamal.lib.script.impl.interpreter
 
+import io.hamal.lib.script.api.natives.NativeFunction
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.api.NativeFunction
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
     override fun invoke(toEvaluate: CallExpression, env: Environment): Value {
         val parameters = toEvaluate.parameters.map { Evaluator.evaluate(it, env) }
 
-        env.findForeignFunction(toEvaluate.identifier)
+        env.findNativeFunction(toEvaluate.identifier)
             ?.let { fn ->
                 return fn(
                     NativeFunction.Context(

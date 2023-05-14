@@ -1,21 +1,24 @@
 package io.hamal.lib.script.impl.ast.stmt
 
-import io.hamal.lib.script.api.Expression
+import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.impl.ast.Parser.Context
-import io.hamal.lib.script.impl.ast.expr.Identifier
+import io.hamal.lib.script.impl.ast.expr.IdentifierExpression
 import io.hamal.lib.script.impl.ast.expr.Precedence
 import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token.Type
 
 interface Assignment : Statement {
-    val identifiers: List<Identifier>
+    val identifiers: List<IdentifierExpression>
     val expressions: List<Expression>
 
     data class Global(
-        override val identifiers: List<Identifier>,
+        override val identifiers: List<IdentifierExpression>,
         override val expressions: List<Expression>
     ) : Assignment {
-        constructor(identifier: Identifier, expression: Expression) : this(listOf(identifier), listOf(expression))
+        constructor(identifier: IdentifierExpression, expression: Expression) : this(
+            listOf(identifier),
+            listOf(expression)
+        )
 
         init {
             assert(identifiers.isNotEmpty())
@@ -35,10 +38,13 @@ interface Assignment : Statement {
     }
 
     data class Local(
-        override val identifiers: List<Identifier>,
+        override val identifiers: List<IdentifierExpression>,
         override val expressions: List<Expression>
     ) : Assignment {
-        constructor(identifier: Identifier, expression: Expression) : this(listOf(identifier), listOf(expression))
+        constructor(identifier: IdentifierExpression, expression: Expression) : this(
+            listOf(identifier),
+            listOf(expression)
+        )
 
         init {
             assert(identifiers.isNotEmpty())
@@ -60,13 +66,13 @@ interface Assignment : Statement {
 }
 
 
-private fun Context.parseIdentifiers(): List<Identifier> {
-    val result = mutableListOf<Identifier>()
+private fun Context.parseIdentifiers(): List<IdentifierExpression> {
+    val result = mutableListOf<IdentifierExpression>()
     do {
         if (currentTokenType() == Type.Comma) {
             advance()
         }
-        result.add(Identifier.Parse(this))
+        result.add(IdentifierExpression.Parse(this))
         advance()
     } while (currentTokenType() == Type.Comma)
     return result

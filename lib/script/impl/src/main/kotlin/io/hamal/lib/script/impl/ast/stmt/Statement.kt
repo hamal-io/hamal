@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.ast.stmt
 
-import io.hamal.lib.script.api.Expression
-import io.hamal.lib.script.api.Node
+import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.impl.ast.Parser.Context
 
 internal interface ParseStatement<out STATEMENT : Statement> {

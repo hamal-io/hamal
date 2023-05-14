@@ -1,8 +1,11 @@
-package io.hamal.lib.script.api
+package io.hamal.lib.script.api.natives
 
+import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Identifier
 import io.hamal.lib.script.api.value.Value
 
 interface NativeFunction {
+    val identifier: Identifier //FIXME a signature might come handy here (name, parameter definition plus return)
 
     operator fun invoke(ctx: Context): Value
 

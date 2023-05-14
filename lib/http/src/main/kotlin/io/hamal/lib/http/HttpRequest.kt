@@ -26,6 +26,7 @@ interface HttpRequest {
 
 interface HttpRequestWithBody : HttpRequest {
     fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): HttpRequestWithBody
+    fun body(json: String): HttpRequestWithBody
 }
 
 inline fun <reified BODY_TYPE : Any> HttpRequestWithBody.body(body: BODY_TYPE): HttpRequestWithBody =
@@ -47,6 +48,17 @@ class DefaultHttpRequest(
             HttpStringBody(
                 name = "cmd",
                 content = serializer.serialize(body, clazz),
+                contentType = "application/json"
+            )
+        )
+        return this
+    }
+
+    override fun body(json: String): HttpRequestWithBody {
+        bodies.add(
+            HttpStringBody(
+                name = "cmd",
+                content = json,
                 contentType = "application/json"
             )
         )
