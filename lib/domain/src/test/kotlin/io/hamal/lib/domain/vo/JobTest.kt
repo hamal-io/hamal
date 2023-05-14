@@ -20,7 +20,7 @@ class JobIdTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 JobId(SnowflakeId(23)),
                 JobId(SnowflakeId(23))
@@ -28,7 +28,7 @@ class JobIdTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 JobId(SnowflakeId(23)),
                 JobId(SnowflakeId(127))
@@ -72,7 +72,7 @@ class JobDefinitionIdTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 JobDefinitionId(SnowflakeId(23)),
                 JobDefinitionId(SnowflakeId(23))
@@ -80,7 +80,7 @@ class JobDefinitionIdTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 JobDefinitionId(SnowflakeId(23)),
                 JobDefinitionId(SnowflakeId(127))
@@ -124,7 +124,7 @@ class JobReferenceTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 JobReference("some-ref"),
                 JobReference("some-ref")
@@ -132,7 +132,7 @@ class JobReferenceTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 JobReference("some-ref"),
                 JobReference("another-ref")

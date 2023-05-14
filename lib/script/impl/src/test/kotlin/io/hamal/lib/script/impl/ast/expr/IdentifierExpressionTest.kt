@@ -14,7 +14,7 @@ internal class IdentifierExpressionTest : AbstractExpressionTest() {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             Assertions.assertEquals(
                 IdentifierExpression("SomeIdentifier"),
                 IdentifierExpression("SomeIdentifier")
@@ -22,7 +22,7 @@ internal class IdentifierExpressionTest : AbstractExpressionTest() {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             Assertions.assertNotEquals(
                 IdentifierExpression("SomeIdentifier"),
                 IdentifierExpression("AnotherIdentifier")

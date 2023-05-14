@@ -15,7 +15,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if identifier and parameters are equal`() {
+        fun `Equal if identifier and parameters are equal`() {
             assertEquals(
                 PrototypeLiteral(
                     IdentifierExpression("Identifier"),
@@ -31,7 +31,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
         }
 
         @Test
-        fun `Not equals if identifier is not equal`() {
+        fun `Not Equal if identifiers are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
                     IdentifierExpression("Identifier"),
@@ -47,7 +47,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
         }
 
         @Test
-        fun `Not equals if parameters are not equal`() {
+        fun `Not Equal if parameters are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
                     IdentifierExpression("Identifier"),
@@ -56,7 +56,10 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 ),
                 PrototypeLiteral(
                     IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"), IdentifierExpression("AnotherParameterIdentifier")),
+                    listOf(
+                        IdentifierExpression("ParameterIdentifier"),
+                        IdentifierExpression("AnotherParameterIdentifier")
+                    ),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 )
             )
@@ -109,7 +112,10 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 ).hashCode(),
                 PrototypeLiteral(
                     IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"), IdentifierExpression("AnotherParameterIdentifier")),
+                    listOf(
+                        IdentifierExpression("ParameterIdentifier"),
+                        IdentifierExpression("AnotherParameterIdentifier")
+                    ),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
             )

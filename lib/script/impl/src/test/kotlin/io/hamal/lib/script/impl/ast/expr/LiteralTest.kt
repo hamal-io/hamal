@@ -20,7 +20,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     NumberLiteral(2810),
                     NumberLiteral(2810)
@@ -28,7 +28,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     NumberLiteral(2810),
                     NumberLiteral(1506)
@@ -77,7 +77,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     StringLiteral("H4M41"),
                     StringLiteral("H4M41")
@@ -85,7 +85,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     StringLiteral("H4M41"),
                     StringLiteral("CRAPPY_WORKJOB_ENGINE")
@@ -134,7 +134,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     TrueLiteral(),
                     TrueLiteral()
@@ -142,7 +142,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     TrueLiteral(),
                     FalseLiteral()
@@ -191,7 +191,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     FalseLiteral(),
                     FalseLiteral()
@@ -199,7 +199,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     FalseLiteral(),
                     TrueLiteral()

@@ -11,7 +11,7 @@ data class Return(
 ) : Statement {
     internal object Parse : ParseStatement<Return> {
         override fun invoke(ctx: Context): Return {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Return)
             ctx.advance()
 

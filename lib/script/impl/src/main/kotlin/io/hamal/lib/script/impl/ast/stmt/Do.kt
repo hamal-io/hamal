@@ -10,7 +10,7 @@ data class Do(
 
     internal object Parse : ParseStatement<Do> {
         override fun invoke(ctx: Context): Do {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Do)
             ctx.advance()
 

@@ -74,7 +74,7 @@ class TupleTest {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     Tuple1(true),
                     Tuple1(true)
@@ -82,7 +82,7 @@ class TupleTest {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     Tuple1(true),
                     Tuple1(false)
@@ -142,7 +142,7 @@ class TupleTest {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     Tuple2(true, "2810"),
                     Tuple2(true, "2810")
@@ -150,7 +150,7 @@ class TupleTest {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     Tuple2(true, "2810"),
                     Tuple2(false, "2810")
@@ -218,7 +218,7 @@ class TupleTest {
         @DisplayName("equals()")
         inner class EqualsTest {
             @Test
-            fun `Equals if underlying values are equal`() {
+            fun `Equal if underlying values are equal`() {
                 assertEquals(
                     Tuple3(true, "2810", 1212),
                     Tuple3(true, "2810", 1212)
@@ -226,7 +226,7 @@ class TupleTest {
             }
 
             @Test
-            fun `Not equals if underlying values are different`() {
+            fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
                     Tuple3(true, "2810",1212),
                     Tuple3(false, "2810",1212)

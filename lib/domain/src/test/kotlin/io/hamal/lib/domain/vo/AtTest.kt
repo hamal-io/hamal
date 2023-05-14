@@ -13,7 +13,7 @@ class InvokedAtTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             Assertions.assertEquals(
                 InvokedAt(Instant.ofEpochMilli(123456)),
                 InvokedAt(Instant.ofEpochMilli(123456))
@@ -21,7 +21,7 @@ class InvokedAtTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             Assertions.assertNotEquals(
                 InvokedAt(Instant.ofEpochMilli(123456)),
                 InvokedAt(Instant.ofEpochMilli(654321))
@@ -67,7 +67,7 @@ class ScheduledAtTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             Assertions.assertEquals(
                 ScheduledAt(Instant.ofEpochMilli(123456)),
                 ScheduledAt(Instant.ofEpochMilli(123456))
@@ -75,7 +75,7 @@ class ScheduledAtTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             Assertions.assertNotEquals(
                 ScheduledAt(Instant.ofEpochMilli(123456)),
                 ScheduledAt(Instant.ofEpochMilli(654321))
@@ -121,7 +121,7 @@ class QueuedAtTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             Assertions.assertEquals(
                 QueuedAt(Instant.ofEpochMilli(123456)),
                 QueuedAt(Instant.ofEpochMilli(123456))
@@ -129,7 +129,7 @@ class QueuedAtTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             Assertions.assertNotEquals(
                 QueuedAt(Instant.ofEpochMilli(123456)),
                 QueuedAt(Instant.ofEpochMilli(654321))
@@ -175,7 +175,7 @@ class CompletedAtTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             Assertions.assertEquals(
                 CompletedAt(Instant.ofEpochMilli(123456)),
                 CompletedAt(Instant.ofEpochMilli(123456))
@@ -183,7 +183,7 @@ class CompletedAtTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             Assertions.assertNotEquals(
                 CompletedAt(Instant.ofEpochMilli(123456)),
                 CompletedAt(Instant.ofEpochMilli(654321))

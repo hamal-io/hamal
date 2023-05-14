@@ -1,1 +1,1 @@
-require('fake/time')
+require('test_module')

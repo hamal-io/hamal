@@ -263,7 +263,6 @@ class TokenizerTest {
                 Argument("in", Token(In, 1, 1, "in")),
                 Argument("local", Token(Local, 1, 1, "local")),
                 Argument("repeat", Token(Repeat, 1, 1, "repeat")),
-                Argument("require", Token(Require, 1, 1, "require")),
                 Argument("return", Token(Return, 1, 1, "return")),
                 Argument("then", Token(Then, 1, 1, "then")),
                 Argument("until", Token(Until, 1, 1, "until")),
@@ -487,7 +486,7 @@ class TokenizerTest {
             assertThat(testInstance.nextToken(), equalTo(Token(Local, 1, 1, "local")))
             assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 7, "eth")))
             assertThat(testInstance.nextToken(), equalTo(Token(Equal, 1, 11, "=")))
-            assertThat(testInstance.nextToken(), equalTo(Token(Require, 1, 13, "require")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 13, "require")))
             assertThat(testInstance.nextToken(), equalTo(Token(LeftParenthesis, 1, 20, "(")))
             assertThat(testInstance.nextToken(), equalTo(Token(Type.String, 1, 21, "web3")))
             assertThat(testInstance.nextToken(), equalTo(Token(RightParenthesis, 1, 27, ")")))

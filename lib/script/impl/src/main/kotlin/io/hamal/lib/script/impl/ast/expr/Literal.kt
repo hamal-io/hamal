@@ -14,7 +14,7 @@ data class NumberLiteral(val value: Decimal) : LiteralExpression {
 
     internal object Parse : ParseLiteralExpression<NumberLiteral> {
         override fun invoke(ctx: Context): NumberLiteral {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Number)
             return NumberLiteral(Decimal(token.value))
@@ -27,7 +27,7 @@ data class NumberLiteral(val value: Decimal) : LiteralExpression {
 data class StringLiteral(val value: String) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<StringLiteral> {
         override fun invoke(ctx: Context): StringLiteral {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.String)
             return StringLiteral(token.value)
@@ -41,7 +41,7 @@ class TrueLiteral : LiteralExpression {
 
     internal object Parse : ParseLiteralExpression<TrueLiteral> {
         override fun invoke(ctx: Context): TrueLiteral {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.True)
             return TrueLiteral()
@@ -58,7 +58,7 @@ class TrueLiteral : LiteralExpression {
 class FalseLiteral : LiteralExpression {
     internal object Parse : ParseLiteralExpression<FalseLiteral> {
         override fun invoke(ctx: Context): FalseLiteral {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.False)
             return FalseLiteral()
@@ -76,7 +76,7 @@ class FalseLiteral : LiteralExpression {
 class NilLiteral : LiteralExpression {
     internal object Parse : ParseLiteralExpression<NilLiteral> {
         override fun invoke(ctx: Context): NilLiteral {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Nil)
             return NilLiteral()

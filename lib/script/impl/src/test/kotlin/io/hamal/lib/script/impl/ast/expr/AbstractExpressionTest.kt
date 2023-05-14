@@ -27,4 +27,16 @@ internal abstract class AbstractExpressionTest : AbstractAstTest() {
         val result = parser.invoke(Context(tokens))
         assertFn(result, tokens)
     }
+
+    fun runInfixTest(
+        parser: ParseInfixExpression,
+        lhs: Expression,
+        code: String,
+        assertFn: (Expression, ArrayDeque<Token>) -> Unit
+    ) {
+        val tokens = ArrayDeque(tokenize(code))
+        val result = parser.invoke(Context(tokens), lhs)
+        assertFn(result, tokens)
+    }
+
 }

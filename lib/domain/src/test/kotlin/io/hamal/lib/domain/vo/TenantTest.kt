@@ -17,7 +17,7 @@ class TenantIdTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 TenantId(SnowflakeId(23)),
                 TenantId(SnowflakeId(23))
@@ -25,7 +25,7 @@ class TenantIdTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 TenantId(SnowflakeId(23)),
                 TenantId(SnowflakeId(127))

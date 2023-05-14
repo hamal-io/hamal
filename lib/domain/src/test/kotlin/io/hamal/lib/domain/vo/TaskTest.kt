@@ -18,7 +18,7 @@ class TaskIdTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 TaskId(SnowflakeId(23)),
                 TaskId(SnowflakeId(23))
@@ -26,7 +26,7 @@ class TaskIdTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 TaskId(SnowflakeId(23)),
                 TaskId(SnowflakeId(127))

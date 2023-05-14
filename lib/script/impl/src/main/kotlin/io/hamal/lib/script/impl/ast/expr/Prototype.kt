@@ -14,7 +14,7 @@ class PrototypeLiteral(
 
     internal object Parse : ParseLiteralExpression<PrototypeLiteral> {
         override fun invoke(ctx: Context): PrototypeLiteral {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(Token.Type.Function)
             ctx.advance()
 
@@ -58,7 +58,7 @@ class PrototypeLiteral(
                 if (currentTokenType() == Token.Type.Eof) {
                     throw io.hamal.lib.script.impl.ScriptParseException("Expected end  but reached end of file")
                 }
-                parseStatement()?.let(statements::add)
+                parseStatement().let(statements::add)
             }
             expectCurrentTokenTypToBe(Token.Type.End)
             advance()

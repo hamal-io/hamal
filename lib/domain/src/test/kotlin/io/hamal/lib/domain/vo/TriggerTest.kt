@@ -17,7 +17,7 @@ class TriggerIdTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 TriggerId(SnowflakeId(23)),
                 TriggerId(SnowflakeId(23))
@@ -25,7 +25,7 @@ class TriggerIdTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 TriggerId(SnowflakeId(23)),
                 TriggerId(SnowflakeId(127))
@@ -68,7 +68,7 @@ class TriggerReferenceTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 TriggerReference("some-ref"),
                 TriggerReference("some-ref")
@@ -76,7 +76,7 @@ class TriggerReferenceTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 TriggerReference("some-ref"),
                 TriggerReference("another-ref")
@@ -119,7 +119,7 @@ class InvokedTriggerIdTest {
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
-        fun `Equals if underlying values are equal`() {
+        fun `Equal if underlying values are equal`() {
             assertEquals(
                 InvokedTriggerId(SnowflakeId(23)),
                 InvokedTriggerId(SnowflakeId(23))
@@ -127,7 +127,7 @@ class InvokedTriggerIdTest {
         }
 
         @Test
-        fun `Not equals if underlying values are different`() {
+        fun `Not Equal if underlying values are different`() {
             assertNotEquals(
                 InvokedTriggerId(SnowflakeId(23)),
                 InvokedTriggerId(SnowflakeId(127))

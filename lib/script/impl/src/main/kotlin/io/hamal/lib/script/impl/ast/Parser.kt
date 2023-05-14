@@ -47,12 +47,12 @@ interface Parser {
 internal fun Parser.Context.parseBlockStatement(): BlockStatement {
     val statements = mutableListOf<Statement>()
     while (currentTokenType() != Type.Eof && currentTokenType() != Type.End) {
-        parseStatement()?.let(statements::add)
+        parseStatement().let(statements::add)
     }
     return BlockStatement(statements)
 }
 
-internal fun Parser.Context.parseStatement(): Statement? {
+internal fun Parser.Context.parseStatement(): Statement {
     val currentType = currentTokenType()
     return when {
         currentType == Type.Identifier && nextTokenType() == Type.Equal -> Assignment.Global.Parse(this)

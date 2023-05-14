@@ -9,7 +9,7 @@ data class IdentifierExpression(
 ) : Identifier, LiteralExpression {
     internal object Parse : ParseLiteralExpression<IdentifierExpression> {
         override fun invoke(ctx: Context): IdentifierExpression {
-            assert(ctx.isNotEmpty())
+            require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Identifier)
             return IdentifierExpression(token.value)
