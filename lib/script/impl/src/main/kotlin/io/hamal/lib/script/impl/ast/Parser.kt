@@ -7,7 +7,7 @@ import io.hamal.lib.script.impl.ast.stmt.*
 import io.hamal.lib.script.impl.token.Token
 import io.hamal.lib.script.impl.token.Token.Type
 
-fun parse(tokens: List<Token>): Block {
+fun parse(tokens: List<Token>): BlockStatement {
     return Parser.DefaultImpl.parse(
         Parser.Context(
             ArrayDeque(tokens)
@@ -17,10 +17,10 @@ fun parse(tokens: List<Token>): Block {
 
 interface Parser {
 
-    fun parse(ctx: Context): Block
+    fun parse(ctx: Context): BlockStatement
 
     object DefaultImpl : Parser {
-        override fun parse(ctx: Context): Block = ctx.parseBlockStatement()
+        override fun parse(ctx: Context): BlockStatement = ctx.parseBlockStatement()
     }
 
     data class Context(val tokens: ArrayDeque<Token>) {
@@ -44,12 +44,12 @@ interface Parser {
     }
 }
 
-internal fun Parser.Context.parseBlockStatement(): Block {
+internal fun Parser.Context.parseBlockStatement(): BlockStatement {
     val statements = mutableListOf<Statement>()
     while (currentTokenType() != Type.Eof && currentTokenType() != Type.End) {
         parseStatement()?.let(statements::add)
     }
-    return Block(statements)
+    return BlockStatement(statements)
 }
 
 internal fun Parser.Context.parseStatement(): Statement? {

@@ -13,12 +13,12 @@ interface Statement : Node
 class ExpressionStatement(val expression: Expression) : Statement
 
 
-data class Block(val statements: List<Statement>, override val size: Int) : Statement, Collection<Statement> {
+data class BlockStatement(val statements: List<Statement>, override val size: Int) : Statement, Collection<Statement> {
     constructor(vararg statements: Statement) : this(statements.toList())
     constructor(statements: List<Statement>) : this(statements, statements.size)
 
     companion object {
-        val empty = Block(listOf())
+        val empty = BlockStatement(listOf())
     }
 
     override fun contains(element: Statement) = statements.contains(element)

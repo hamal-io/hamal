@@ -4,26 +4,24 @@ import io.hamal.lib.script.impl.ast.expr.NilLiteral
 import io.hamal.lib.script.impl.ast.stmt.Do.Parse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
 
 internal class DoTest : AbstractStatementTest() {
-    @Nested
-    @DisplayName("Parse()")
-    inner class ParseTest {
-        @Test
-        fun `do end`() {
-            runTest(Parse, "do end") { result, tokens ->
-                assertThat(result, equalTo(Do(Block.empty)))
-                tokens.wereConsumed()
-            }
-        }
-
-        @Test
-        fun `do return end`() {
-            runTest(Parse, "do return end") { result, tokens ->
-                assertThat(result, equalTo(Do(Block(Return(NilLiteral())))))
+    @TestFactory
+    fun parse() = listOf(
+        Pair(
+            "do end",
+            Do(BlockStatement.empty)
+        ),
+        Pair(
+            "do return end",
+            Do(BlockStatement(Return(NilLiteral())))
+        )
+    ).map { (code, expected) ->
+        DynamicTest.dynamicTest(code) {
+            runTest(Parse, code) { result, tokens ->
+                assertThat(result, equalTo(expected))
                 tokens.wereConsumed()
             }
         }

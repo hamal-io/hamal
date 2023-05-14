@@ -39,8 +39,8 @@ internal object EvaluateLocalAssignment : Evaluate<Assignment.Local> {
 }
 
 
-internal object EvaluateBlock : Evaluate<Block> {
-    override fun invoke(toEvaluate: Block, env: Environment): Value {
+internal object EvaluateBlock : Evaluate<BlockStatement> {
+    override fun invoke(toEvaluate: BlockStatement, env: Environment): Value {
         var result: Value = NilValue
         for (statement in toEvaluate.statements) {
             result = Evaluator.evaluate(statement, env)

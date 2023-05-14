@@ -31,7 +31,7 @@ internal object Evaluator {
         register(Statement::class, EvaluateStatement)
         register(Assignment.Global::class, EvaluateGlobalAssignment)
         register(Assignment.Local::class, EvaluateLocalAssignment)
-        register(Block::class, EvaluateBlock)
+        register(BlockStatement::class, EvaluateBlock)
         register(Call::class, EvaluateCall)
         register(ExpressionStatement::class, EvaluateExpressionStatement)
         register(Prototype::class, EvaluatePrototype)

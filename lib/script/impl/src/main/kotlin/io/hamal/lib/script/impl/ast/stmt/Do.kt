@@ -5,7 +5,7 @@ import io.hamal.lib.script.impl.ast.parseBlockStatement
 import io.hamal.lib.script.impl.token.Token
 
 data class Do(
-    val block: Block
+    val block: BlockStatement
 ) : Statement {
 
     internal object Parse : ParseStatement<Do> {
@@ -16,7 +16,7 @@ data class Do(
 
             if (ctx.currentTokenType() == Token.Type.End) {
                 ctx.advance()
-                return Do(Block.empty)
+                return Do(BlockStatement.empty)
             }
 
             val block = ctx.parseBlockStatement()
