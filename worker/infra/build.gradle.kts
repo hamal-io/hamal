@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
-    id("hamal.module")
+   id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
 }

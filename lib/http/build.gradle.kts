@@ -1,5 +1,5 @@
 plugins {
-    id("hamal.lib")
+    id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
 }
