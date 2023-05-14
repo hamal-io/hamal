@@ -2,6 +2,10 @@ plugins {
     id("hamal.common")
 }
 
+dependencies{
+    implementation(project(":lib:script:api"))
+}
+
 //
 //distributions {
 //    main {

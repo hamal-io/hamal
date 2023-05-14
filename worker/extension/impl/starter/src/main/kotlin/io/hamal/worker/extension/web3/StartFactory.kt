@@ -3,5 +3,5 @@ package io.hamal.worker.extension.web3
 import io.hamal.worker.extension.api.WorkerExtensionFunction
 
 class StartFactory : WorkerExtensionFunction.Factory {
-    override fun invoke(): WorkerExtensionFunction = StartFunction()
+    override fun create(): WorkerExtensionFunction = StartFunction()
 }

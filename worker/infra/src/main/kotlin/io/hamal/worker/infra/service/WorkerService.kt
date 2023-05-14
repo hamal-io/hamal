@@ -24,7 +24,7 @@ class WorkerService {
             entryPointLoader.load(File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-starter.jar"))
 
         x.functionFactories()
-            .map { it() }
+            .map { it.create() }
             .forEach { it() }
 
 

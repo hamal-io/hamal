@@ -1,10 +1,15 @@
 package io.hamal.worker.extension.api
 
-interface WorkerExtensionFunction {
+import io.hamal.lib.script.api.value.Value
 
-    operator fun invoke()
+interface WorkerExtensionFunction {
+    operator fun invoke(ctx: Context) : Value
 
     interface Factory {
-        operator fun invoke(): WorkerExtensionFunction
+        fun create(): WorkerExtensionFunction
     }
+
+    interface Context
 }
+
+class DefaultContext : WorkerExtensionFunction.Context
