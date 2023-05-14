@@ -11,18 +11,11 @@ apply(plugin = "io.spring.dependency-management")
 
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation(project(":lib:domain"))
     implementation(project(":lib:sdk"))
 
     implementation(project(":backend:usecase"))
-    implementation(project(":backend:core"))
-    implementation(project(":backend:repository:api"))
     implementation(project(":backend:repository:memory"))
     implementation(project(":backend:repository:sqlite"))
-
-    implementation(external.kotlin.json)
-    implementation(external.kotlin.protobuf)
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")

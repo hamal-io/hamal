@@ -28,7 +28,6 @@ distributions {
 
 dependencies {
     implementation(project(":worker:extension:api"))
-    implementation(project(":lib:script:api"))
     implementation(project(":lib:common"))
-    api(project(":lib:web3"))
+    implementation(project(":lib:web3"))
 }

@@ -5,12 +5,8 @@ plugins {
 
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation(project(":lib:domain"))
-    implementation(project(":lib:http"))
-
-    implementation(external.kotlin.json)
-
+    api(project(":lib:http"))
+    api(project(":lib:domain"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

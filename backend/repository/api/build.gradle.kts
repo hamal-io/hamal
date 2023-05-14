@@ -6,9 +6,7 @@ plugins {
 archivesName.set("backend-repository-api")
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation(project(":lib:domain"))
-    implementation(project(":backend:core"))
+    api(project(":backend:core"))
 
     testImplementation(external.hamcrest)
     testImplementation(external.junit)

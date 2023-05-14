@@ -7,13 +7,7 @@ plugins {
 archivesName.set("backend-repository-memory")
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation(project(":lib:domain"))
-    implementation(project(":backend:core"))
-    implementation(project(":backend:repository:api"))
-
-    implementation(external.spring.logging)
-    implementation(external.kotlin.protobuf)
+    api(project(":backend:repository:api"))
 
     testImplementation(project(":backend:repository:memory"))
     testImplementation(external.junit)

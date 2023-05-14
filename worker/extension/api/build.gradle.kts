@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies{
-    implementation(project(":lib:script:api"))
+    api(project(":lib:script:api"))
 }
 
 //

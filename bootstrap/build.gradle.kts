@@ -11,30 +11,23 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 dependencies {
-    implementation(project(":lib:common"))
     implementation(project(":lib:domain"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
-        exclude("org.springframework.boot", "spring-boot-starter-json")
     }
-
-    implementation(external.kotlin.json)
-
 
     implementation(project(":backend:infra"))
     implementation(project(":worker:infra"))
 
     testImplementation(project(":bootstrap"))
-
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
     testImplementation(external.spring.test) {
         exclude("org.assertj", "*")
     }
-
     compileOnly(external.spring.devTools)
 }
 

@@ -6,11 +6,8 @@ plugins {
 archivesName.set("backend-application")
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation(project(":lib:domain"))
-    implementation(project(":backend:core"))
-
-    implementation(project(":backend:repository:api"))
+    api(project(":backend:core"))
+    api(project(":backend:repository:api"))
 
     testImplementation(project(":backend:usecase"))
     testImplementation(external.junit)

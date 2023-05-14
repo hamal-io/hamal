@@ -8,8 +8,6 @@ apply(plugin = "io.spring.dependency-management")
 
 dependencies {
     api(project(":lib:common"))
-    implementation(external.kotlin.protobuf)
-    implementation(external.kotlin.json)
     implementation(external.apache.http.client)
     implementation(external.apache.http.mime)
     implementation(external.apache.commons.logging)

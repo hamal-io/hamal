@@ -4,10 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":lib:common"))
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
-    implementation(external.kotlin.protobuf)
-    implementation(external.kotlin.json)
+    api(project(":lib:common"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
