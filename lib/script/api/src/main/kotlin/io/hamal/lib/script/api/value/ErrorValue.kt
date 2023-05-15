@@ -5,5 +5,5 @@ data class ErrorValue(
 ) : Value {
     constructor(cause: String) : this(StringValue(cause))
 
-    override fun toString() = cause.value
+    override fun toString() = "Error: $cause"
 }

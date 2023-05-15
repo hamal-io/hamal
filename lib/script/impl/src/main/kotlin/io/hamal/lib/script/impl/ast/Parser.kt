@@ -1,7 +1,6 @@
 package io.hamal.lib.script.impl.ast
 
 import io.hamal.lib.script.api.ast.Expression
-import io.hamal.lib.script.impl.ScriptParseException
 import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.ast.stmt.*
 import io.hamal.lib.script.impl.token.Token
@@ -36,7 +35,7 @@ interface Parser {
 
         fun expectCurrentTokenTypToBe(type: Type) {
             require(currentTokenType() == type) {
-                ScriptParseException("Expected token to be $type but got ${currentTokenType()}")
+                "Expected token to be $type but got ${currentTokenType()}"
             }
         }
 
@@ -53,13 +52,12 @@ internal fun Parser.Context.parseBlockStatement(): BlockStatement {
 }
 
 internal fun Parser.Context.parseStatement(): Statement {
-    val currentType = currentTokenType()
     return when {
-        currentType == Type.Identifier && nextTokenType() == Type.Equal -> Assignment.Global.Parse(this)
-        currentType == Type.Identifier && nextTokenType() == Type.LeftParenthesis -> Call.Parse(this)
-        currentType == Type.Local -> Assignment.Local.Parse(this)
-        currentType == Type.Function -> Prototype.Parse(this)
-        currentType == Type.Return -> Return.Parse(this)
+        isGlobalAssignment() -> Assignment.Global.Parse(this)
+        isCallExpression() -> Call.Parse(this)
+        isLocalAssignment() -> Assignment.Local.Parse(this)
+        isFunction() -> Prototype.Parse(this)
+        isReturn() -> Return.Parse(this)
         else -> {
             val result = ExpressionStatement(parseExpression())
             advance()
@@ -67,6 +65,19 @@ internal fun Parser.Context.parseStatement(): Statement {
         }
     }
 }
+
+private fun Parser.Context.isCallExpression() =
+    currentTokenType() == Type.Identifier && nextTokenType() == Type.LeftParenthesis
+
+private fun Parser.Context.isGlobalAssignment(): Boolean {
+    return currentTokenType() == Type.Identifier && nextTokenType() == Type.Equal || nextTokenType() == Type.Comma
+}
+
+private fun Parser.Context.isLocalAssignment() = currentTokenType() == Type.Local
+
+private fun Parser.Context.isFunction() = currentTokenType() == Type.Function
+
+private fun Parser.Context.isReturn() = currentTokenType() == Type.Return
 
 internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
     var lhsExpression: Expression = parseFn(currentTokenType())(this)

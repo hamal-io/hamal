@@ -2,7 +2,7 @@ package io.hamal.lib.script.api.native_
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.ast.Expression
-import io.hamal.lib.script.api.ast.Identifier
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.Value
 
 interface NativeFunction : Value {

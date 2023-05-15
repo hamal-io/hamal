@@ -64,11 +64,11 @@ class WorkerService {
                 val env = RootEnvironment()
 
                 nativeFunctions.forEach { nativeFunction ->
-                    env.register(nativeFunction)
+                    env.add(nativeFunction)
                 }
 
                 extensionEnvironments.forEach { environment ->
-                    env.register(environment)
+                    env.add(environment)
                 }
 
                 val sandbox = DefaultSandbox(env)

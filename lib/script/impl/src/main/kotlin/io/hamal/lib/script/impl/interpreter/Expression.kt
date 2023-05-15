@@ -14,7 +14,7 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 
         require(env is RootEnvironment)
 
-        env.findNativeFunction(toEvaluate.identifier)
+        env.findNativeFunction(Evaluator.evaluateAsIdentifier(toEvaluate.identifier, env))
             ?.let { fn ->
                 return fn(
                     NativeFunction.Context(
@@ -25,7 +25,8 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
                 )
             }
 
-        val prototype = env.findPrototype(toEvaluate.identifier)!!
+        val identifier = Evaluator.evaluateAsIdentifier(toEvaluate.identifier, env)
+        val prototype = env.findPrototype(identifier)!!
         return Evaluator.evaluate(prototype.block, env)
     }
 }
@@ -56,6 +57,7 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
             }
 
             Operator.LessThan -> {
+                println(lhs)
                 if ((lhs as NumberValue).value.isLessThan((rhs as NumberValue).value)) {
                     return TrueValue
                 } else {
@@ -67,10 +69,6 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
             else -> TODO()
         }
     }
-}
-
-internal object EvaluateLiteralExpression : Evaluate<LiteralExpression> {
-    override fun invoke(toEvaluate: LiteralExpression, env: Environment) = Evaluator.evaluate(toEvaluate, env)
 }
 
 internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {

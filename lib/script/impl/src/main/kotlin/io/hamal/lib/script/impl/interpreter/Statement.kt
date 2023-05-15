@@ -2,8 +2,6 @@ package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.NilValue
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.stmt.*
 import io.hamal.lib.script.impl.value.PrototypeValue
@@ -17,25 +15,23 @@ internal object EvaluateStatement : Evaluate<Statement> {
 
 internal object EvaluateGlobalAssignment : Evaluate<Assignment.Global> {
     override fun invoke(toEvaluate: Assignment.Global, env: Environment): Value {
-        val result = TableValue()
-        //FIXME populate environment
-        toEvaluate.identifiers.zip(toEvaluate.expressions)
-            .forEach {
-                result[StringValue(it.first.value)] = Evaluator.evaluate(it.second, env)
-            }
-        return result
+        val identifiers = toEvaluate.identifiers.map { identifier -> Evaluator.evaluateAsIdentifier(identifier, env) }
+        val values = toEvaluate.expressions.map { expr -> Evaluator.evaluate(expr, env) }
+        require(identifiers.size == values.size)
+
+        identifiers.zip(values).forEach { (identifier, value) -> env.addGlobal(identifier, value) }
+        return NilValue
     }
 }
 
 internal object EvaluateLocalAssignment : Evaluate<Assignment.Local> {
     override fun invoke(toEvaluate: Assignment.Local, env: Environment): Value {
-        val result = TableValue()
-        //FIXME populate environment
-        toEvaluate.identifiers.zip(toEvaluate.expressions)
-            .forEach {
-                result[StringValue(it.first.value)] = Evaluator.evaluate(it.second, env)
-            }
-        return result
+        val identifiers = toEvaluate.identifiers.map { identifier -> Evaluator.evaluateAsIdentifier(identifier, env) }
+        val values = toEvaluate.expressions.map { expr -> Evaluator.evaluate(expr, env) }
+        require(identifiers.size == values.size)
+
+        identifiers.zip(values).forEach { (identifier, value) -> env.addLocal(identifier, value) }
+        return NilValue
     }
 }
 
@@ -64,7 +60,7 @@ internal object EvaluateExpressionStatement : Evaluate<ExpressionStatement> {
 internal object EvaluatePrototype : Evaluate<Prototype> {
     override fun invoke(toEvaluate: Prototype, env: Environment): Value {
         val value = Evaluator.evaluate(toEvaluate.expression, env) as PrototypeValue
-        env.assignLocal(value.identifier, value)
+        env.addLocal(value.identifier, value)
         return value
     }
 }

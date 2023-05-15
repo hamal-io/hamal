@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.Environment
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
@@ -25,7 +26,7 @@ internal object Evaluator {
         register(CallExpression::class, EvaluateCallExpression)
         register(GroupedExpression::class, EvaluateGroupedExpression)
         register(InfixExpression::class, EvaluateInfixExpression)
-        register(LiteralExpression::class, EvaluateLiteralExpression)
+//        register(LiteralExpression::class, EvaluateLiteralExpression)
         register(PrefixExpression::class, EvaluatePrefixExpression)
 
         /*STATEMENT*/
@@ -47,6 +48,12 @@ internal object Evaluator {
     fun <TYPE : Any> evaluateAsString(toEvaluate: TYPE, env: Environment): StringValue {
         val result = evaluate(toEvaluate, env)
         require(result is StringValue)
+        return result
+    }
+
+    fun <TYPE : Any> evaluateAsIdentifier(toEvaluate: TYPE, env: Environment): Identifier {
+        val result = evaluate(toEvaluate, env)
+        require(result is Identifier)
         return result
     }
 

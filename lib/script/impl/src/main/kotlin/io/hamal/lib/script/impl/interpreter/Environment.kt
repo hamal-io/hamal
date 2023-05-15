@@ -1,10 +1,11 @@
 package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.ast.Identifier
 import io.hamal.lib.script.api.native_.NativeFunction
+import io.hamal.lib.script.api.value.Identifier
+import io.hamal.lib.script.api.value.NilValue
+import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.api.value.Value
-import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.script.impl.value.PrototypeValue
@@ -22,35 +23,55 @@ class RootEnvironment : Environment {
 
     private val prototypes = mutableMapOf<Identifier, PrototypeValue>()
 
-    fun register(nativeFunction: NativeFunction) {
-        nativeFunctions[IdentifierLiteral("getBlock")] = nativeFunction
+    // FIXME local and global should be one map - entry indicates whether this is local or global
+    private val locals = mutableMapOf<Identifier, Value>()
+    private val globals = mutableMapOf<Identifier, Value>()
+
+    fun add(nativeFunction: NativeFunction) {
+        nativeFunctions[Identifier("getBlock")] = nativeFunction
     }
 
     override val identifier: Identifier
-        get() = IdentifierLiteral("root")
+        get() = Identifier("root")
 
     override fun findNativeFunction(identifier: Identifier): NativeFunction? {
-        TODO("Not yet implemented")
+        return nativeFunctions[identifier]
     }
 
     override fun findEnvironment(identifier: Identifier): Environment? {
         return extensions[identifier]
     }
 
-    fun register(environment: Environment) {
+    fun add(environment: Environment) {
         extensions[environment.identifier] = environment
     }
 
-    override fun assignLocal(identifier: Identifier, value: Value) {
+    override fun addLocal(identifier: Identifier, value: Value) {
         when (value) {
             is PrototypeValue -> prototypes[identifier] = value
+            is NilValue -> locals[identifier] = value
+            is NumberValue -> locals[identifier] = value
             else -> TODO()
         }
     }
 
-    fun findNativeFunction(identifier: IdentifierLiteral): NativeFunction? {
-        return nativeFunctions[identifier]
+    override fun addGlobal(identifier: Identifier, value: Value) {
+        globals[identifier] = value
     }
+
+
+    override fun get(identifier: Identifier): Value {
+        return requireNotNull(locals[identifier] ?: globals[identifier])
+    }
+
+    override fun get(identifier: String): Value {
+        return this[Identifier(identifier)]
+    }
+
+
+//    fun findNativeFunction(identifier: Identifier): NativeFunction? {
+//        return nativeFunctions[identifier]
+//    }
 
     fun findPrototype(identifier: Identifier): PrototypeValue? {
         return prototypes[identifier]

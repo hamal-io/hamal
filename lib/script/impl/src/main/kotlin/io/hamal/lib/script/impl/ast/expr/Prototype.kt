@@ -55,8 +55,8 @@ class PrototypeLiteral(
         private fun Context.parseBody(): BlockStatement {
             val statements = mutableListOf<Statement>()
             while (currentTokenType() != Token.Type.End) {
-                if (currentTokenType() == Token.Type.Eof) {
-                    throw io.hamal.lib.script.impl.ScriptParseException("Expected end  but reached end of file")
+                require(currentTokenType() != Token.Type.Eof) {
+                    "Expected end  but reached end of file"
                 }
                 parseStatement().let(statements::add)
             }

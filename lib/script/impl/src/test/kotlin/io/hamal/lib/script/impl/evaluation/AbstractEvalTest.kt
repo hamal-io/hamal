@@ -9,13 +9,13 @@ import io.hamal.lib.script.impl.token.tokenize
 
 internal abstract class AbstractEvalTest {
 
-    protected val env: Environment = RootEnvironment()
-    protected val interpreter = Interpreter.DefaultImpl
+    protected val testEnvironment: Environment = RootEnvironment()
+    protected val testInterpreter = Interpreter.DefaultImpl
 
     fun eval(code: String): Value {
         val tokens = tokenize(code)
         val statements = parse(tokens)
-        return interpreter.run(statements, env)
+        return testInterpreter.run(statements, testEnvironment)
     }
 
 }

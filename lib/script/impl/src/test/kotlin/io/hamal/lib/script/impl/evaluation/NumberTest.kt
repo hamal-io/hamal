@@ -3,10 +3,9 @@ package io.hamal.lib.script.impl.evaluation
 import io.hamal.lib.script.api.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.TestFactory
 
 internal class NumberTest : AbstractEvalTest() {
 
@@ -16,23 +15,16 @@ internal class NumberTest : AbstractEvalTest() {
         assertThat(result, equalTo(NumberValue(42)))
     }
 
-    @ParameterizedTest(name = "#{index} - Test expression {0}")
-    @MethodSource("testCases")
-    fun `Parameterized tests`(code: String, expected: NumberValue) {
-        val result = eval(code)
-        assertThat(result, equalTo(expected));
-    }
-
-    companion object {
-        @JvmStatic
-        private fun testCases(): List<Arguments> {
-            return listOf(
-                Arguments.of("1 + 2", NumberValue(3)),
-                Arguments.of("2 - 1", NumberValue(1)),
-                Arguments.of("-2810", NumberValue(-2810)),
-                Arguments.of("-(-1)", NumberValue(1))
-            )
+    @TestFactory
+    fun numberTests() = listOf(
+        Pair("1 + 2", NumberValue(3)),
+        Pair("2 - 1", NumberValue(1)),
+        Pair("-2810", NumberValue(-2810)),
+        Pair("-(-1)", NumberValue(1))
+    ).map { (code, expected) ->
+        dynamicTest("Test expression $code") {
+            val result = eval(code)
+            assertThat(result, equalTo(expected))
         }
     }
-
 }

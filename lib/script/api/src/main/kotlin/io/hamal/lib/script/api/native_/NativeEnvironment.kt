@@ -1,14 +1,27 @@
 package io.hamal.lib.script.api.native_
 
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.ast.Identifier
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.Value
 
+//FIXME maybe native environment should be readonly
 class NativeEnvironment(
     override val identifier: Identifier,
     private val nativeFunctions: Map<Identifier, NativeFunction>
 ) : Environment {
-    override fun assignLocal(identifier: Identifier, value: Value) {
+    override fun addLocal(identifier: Identifier, value: Value) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addGlobal(identifier: Identifier, value: Value) {
+        TODO("Not yet implemented")
+    }
+
+    override fun get(identifier: Identifier): Value {
+        TODO("Not yet implemented")
+    }
+
+    override fun get(identifier: String): Value {
         TODO("Not yet implemented")
     }
 

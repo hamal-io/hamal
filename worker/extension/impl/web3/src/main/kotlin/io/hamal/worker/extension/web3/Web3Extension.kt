@@ -3,7 +3,7 @@ package io.hamal.worker.extension.web3
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeEnvironment
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.native_.NativeIdentifier
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.script.api.value.Value
@@ -20,16 +20,16 @@ class Web3Extension : WorkerExtension {
     override fun environments(): List<Environment> {
         return listOf(
             NativeEnvironment(
-                NativeIdentifier("eth"),
+                Identifier("eth"),
                 mapOf(
-                    NativeIdentifier("getBlock") to fn
+                    Identifier("getBlock") to fn
                 )
             )
         )
     }
 
     val fn = object : NativeFunction {
-        override val identifier = NativeIdentifier("getBlock")
+        override val identifier = Identifier("getBlock")
 
         override fun invoke(ctx: NativeFunction.Context): Value {
             println("Getting block")
