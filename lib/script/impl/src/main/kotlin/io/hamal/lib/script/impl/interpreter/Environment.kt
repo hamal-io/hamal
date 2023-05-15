@@ -15,8 +15,7 @@ class RootEnvironment : Environment {
     private val parent: Environment? = null
 
     private val nativeFunctions = mutableMapOf<Identifier, NativeFunction>(
-        AssertFunction.identifier to AssertFunction,
-        RequireFunction.identifier to RequireFunction
+        AssertFunction.identifier to AssertFunction, RequireFunction.identifier to RequireFunction
     )
 
     private val extensions = mutableMapOf<Identifier, Environment>()
@@ -67,11 +66,6 @@ class RootEnvironment : Environment {
     override fun get(identifier: String): Value {
         return this[Identifier(identifier)]
     }
-
-
-//    fun findNativeFunction(identifier: Identifier): NativeFunction? {
-//        return nativeFunctions[identifier]
-//    }
 
     fun findPrototype(identifier: Identifier): PrototypeValue? {
         return prototypes[identifier]

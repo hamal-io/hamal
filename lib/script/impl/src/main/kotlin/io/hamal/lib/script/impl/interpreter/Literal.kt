@@ -30,12 +30,10 @@ internal object EvaluateStringLiteral : Evaluate<StringLiteral> {
 
 internal object EvaluatePrototypeLiteral : Evaluate<PrototypeLiteral> {
     override fun invoke(ctx: EvaluationContext<PrototypeLiteral>): PrototypeValue {
-        val (toEvaluate, env) = ctx
         return PrototypeValue(
-            Evaluator.evaluateAsIdentifier(EvaluationContext(toEvaluate.identifier, env)),
-            toEvaluate.parameters.map { Evaluator.evaluateAsString(EvaluationContext(it, env)) },
-            toEvaluate.block
-
+            ctx.evaluateAsIdentifier { identifier },
+            ctx.toEvaluate.parameters.map { ctx.evaluateAsString(it) },
+            ctx.toEvaluate.block
         )
     }
 }
