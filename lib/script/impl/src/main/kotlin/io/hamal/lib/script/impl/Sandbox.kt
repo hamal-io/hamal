@@ -1,9 +1,9 @@
 package io.hamal.lib.script.impl
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.Sandbox
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.parse
-import io.hamal.lib.script.impl.interpreter.Environment
 import io.hamal.lib.script.impl.interpreter.Interpreter
 import io.hamal.lib.script.impl.token.tokenize
 

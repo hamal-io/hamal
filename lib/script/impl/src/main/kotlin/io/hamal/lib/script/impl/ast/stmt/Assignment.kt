@@ -2,20 +2,20 @@ package io.hamal.lib.script.impl.ast.stmt
 
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.impl.ast.Parser.Context
-import io.hamal.lib.script.impl.ast.expr.IdentifierExpression
+import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
 import io.hamal.lib.script.impl.ast.expr.Precedence
 import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token.Type
 
 interface Assignment : Statement {
-    val identifiers: List<IdentifierExpression>
+    val identifiers: List<IdentifierLiteral>
     val expressions: List<Expression>
 
     data class Global(
-        override val identifiers: List<IdentifierExpression>,
+        override val identifiers: List<IdentifierLiteral>,
         override val expressions: List<Expression>
     ) : Assignment {
-        constructor(identifier: IdentifierExpression, expression: Expression) : this(
+        constructor(identifier: IdentifierLiteral, expression: Expression) : this(
             listOf(identifier),
             listOf(expression)
         )
@@ -38,10 +38,10 @@ interface Assignment : Statement {
     }
 
     data class Local(
-        override val identifiers: List<IdentifierExpression>,
+        override val identifiers: List<IdentifierLiteral>,
         override val expressions: List<Expression>
     ) : Assignment {
-        constructor(identifier: IdentifierExpression, expression: Expression) : this(
+        constructor(identifier: IdentifierLiteral, expression: Expression) : this(
             listOf(identifier),
             listOf(expression)
         )
@@ -66,13 +66,13 @@ interface Assignment : Statement {
 }
 
 
-private fun Context.parseIdentifiers(): List<IdentifierExpression> {
-    val result = mutableListOf<IdentifierExpression>()
+private fun Context.parseIdentifiers(): List<IdentifierLiteral> {
+    val result = mutableListOf<IdentifierLiteral>()
     do {
         if (currentTokenType() == Type.Comma) {
             advance()
         }
-        result.add(IdentifierExpression.Parse(this))
+        result.add(IdentifierLiteral.Parse(this))
         advance()
     } while (currentTokenType() == Type.Comma)
     return result

@@ -7,8 +7,8 @@ import io.hamal.lib.script.impl.ast.stmt.Statement
 import io.hamal.lib.script.impl.token.Token
 
 class PrototypeLiteral(
-    val identifier: IdentifierExpression,
-    val parameters: List<IdentifierExpression>,
+    val identifier: IdentifierLiteral,
+    val parameters: List<IdentifierLiteral>,
     val block: BlockStatement
 ) : LiteralExpression {
 
@@ -33,17 +33,17 @@ class PrototypeLiteral(
             )
         }
 
-        private fun Context.parseIdentifier(): IdentifierExpression {
-            val result = IdentifierExpression.Parse(this)
+        private fun Context.parseIdentifier(): IdentifierLiteral {
+            val result = IdentifierLiteral.Parse(this)
             advance()
             return result
         }
 
-        private fun Context.parseParameters(): List<IdentifierExpression> {
-            val result = mutableListOf<IdentifierExpression>()
+        private fun Context.parseParameters(): List<IdentifierLiteral> {
+            val result = mutableListOf<IdentifierLiteral>()
             while (currentTokenType() != Token.Type.RightParenthesis) {
                 expectCurrentTokenTypToBe(Token.Type.Identifier)
-                result.add(IdentifierExpression.Parse(this))
+                result.add(IdentifierLiteral.Parse(this))
                 advance()
                 if (currentTokenType() == Token.Type.Comma) {
                     advance()

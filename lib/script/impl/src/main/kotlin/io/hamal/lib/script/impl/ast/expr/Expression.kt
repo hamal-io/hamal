@@ -15,7 +15,7 @@ private val tokenMapping = mapOf(
     Token.Type.False to FalseLiteral.Parse,
     Token.Type.Nil to NilLiteral.Parse,
     Token.Type.String to StringLiteral.Parse,
-    Token.Type.Identifier to IdentifierExpression.Parse,
+    Token.Type.Identifier to IdentifierLiteral.Parse,
     Token.Type.Number to NumberLiteral.Parse,
     Token.Type.Function to PrototypeLiteral.Parse,
 )

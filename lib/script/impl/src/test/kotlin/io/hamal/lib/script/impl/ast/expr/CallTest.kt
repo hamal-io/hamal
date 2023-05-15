@@ -16,12 +16,12 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Equal if identifier and parameters are equal`() {
             assertEquals(
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ),
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 )
             )
         }
@@ -30,12 +30,12 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Not Equal if identifiers are not equal`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ),
                 CallExpression(
-                    IdentifierExpression("AnotherIdentifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("AnotherIdentifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 )
             )
         }
@@ -44,14 +44,14 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Not Equal if parameters are not equal`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ),
                 CallExpression(
-                    IdentifierExpression("Identifier"),
+                    IdentifierLiteral("Identifier"),
                     listOf(
-                        IdentifierExpression("ParameterIdentifier"),
-                        IdentifierExpression("AnotherParameterIdentifier")
+                        IdentifierLiteral("ParameterIdentifier"),
+                        IdentifierLiteral("AnotherParameterIdentifier")
                     )
                 )
             )
@@ -66,12 +66,12 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Same hashcode if identifier and parameters hashcode are the same`() {
             assertEquals(
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ).hashCode(),
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                 ).hashCode()
             )
         }
@@ -80,12 +80,12 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Different hashcode if identifier has different hashcode`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ).hashCode(),
                 CallExpression(
-                    IdentifierExpression("AnotherIdentifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("AnotherIdentifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ).hashCode()
             )
         }
@@ -94,14 +94,14 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier"))
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier"))
                 ).hashCode(),
                 CallExpression(
-                    IdentifierExpression("Identifier"),
+                    IdentifierLiteral("Identifier"),
                     listOf(
-                        IdentifierExpression("ParameterIdentifier"),
-                        IdentifierExpression("AnotherParameterIdentifier")
+                        IdentifierLiteral("ParameterIdentifier"),
+                        IdentifierLiteral("AnotherParameterIdentifier")
                     )
                 ).hashCode()
             )
@@ -115,13 +115,13 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Parse empty `() {
             runInfixTest(
                 CallExpression.Parse,
-                IdentifierExpression("some_fn"),
+                IdentifierLiteral("some_fn"),
                 """
                 ()
                 """.trimIndent()
             ) { result, tokens ->
                 require(result is CallExpression)
-                assertThat(result.identifier, equalTo(IdentifierExpression("some_fn")))
+                assertThat(result.identifier, equalTo(IdentifierLiteral("some_fn")))
                 assertThat(result.parameters, empty())
 
                 tokens.wereConsumed()
@@ -132,13 +132,13 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Parse single argument`() {
             runInfixTest(
                 CallExpression.Parse,
-                IdentifierExpression("some_fn"),
+                IdentifierLiteral("some_fn"),
                 """
                 ('parameter_one')
                 """.trimIndent()
             ) { result, tokens ->
                 require(result is CallExpression)
-                assertThat(result.identifier, equalTo(IdentifierExpression("some_fn")))
+                assertThat(result.identifier, equalTo(IdentifierLiteral("some_fn")))
                 assertThat(result.parameters, equalTo(listOf(StringLiteral("parameter_one"))))
 
                 tokens.wereConsumed()
@@ -149,13 +149,13 @@ internal class CallTest : AbstractExpressionTest() {
         fun `Parse multiple arguments`() {
             runInfixTest(
                 CallExpression.Parse,
-                IdentifierExpression("some_fn"),
+                IdentifierLiteral("some_fn"),
                 """
                 ('parameter_one',1337)
                 """.trimIndent()
             ) { result, tokens ->
                 require(result is CallExpression)
-                assertThat(result.identifier, equalTo(IdentifierExpression("some_fn")))
+                assertThat(result.identifier, equalTo(IdentifierLiteral("some_fn")))
                 assertThat(
                     result.parameters, equalTo(
                         listOf(

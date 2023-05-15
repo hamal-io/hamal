@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl
 
 import io.hamal.lib.script.api.value.ErrorValue
-import io.hamal.lib.script.impl.interpreter.Environment
+import io.hamal.lib.script.impl.interpreter.RootEnvironment
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -28,9 +28,9 @@ class SandboxIT {
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }
 
-    private val environment = Environment()
+    private val env = RootEnvironment()
 
-    private val testInstance = DefaultSandbox(environment)
+    private val testInstance = DefaultSandbox(env)
 
     private val testPath = Paths.get("src", "testIntegration", "resources")
 }

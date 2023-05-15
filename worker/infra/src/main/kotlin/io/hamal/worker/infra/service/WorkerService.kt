@@ -1,8 +1,9 @@
 package io.hamal.worker.infra.service
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.impl.DefaultSandbox
-import io.hamal.lib.script.impl.interpreter.Environment
+import io.hamal.lib.script.impl.interpreter.RootEnvironment
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
 import io.hamal.worker.infra.adapter.WorkerExtensionLoader
@@ -17,6 +18,9 @@ class WorkerService {
 
     private val nativeFunctions = mutableListOf<NativeFunction>()
 
+    //FIXME introduce WorkerExtensionEnvironment as a wrapper around native env
+    private val extensionEnvironments = mutableListOf<Environment>()
+
     @PostConstruct
     fun postConstruct() {
 
@@ -24,11 +28,11 @@ class WorkerService {
 
         val entryPointLoader = WorkerExtensionLoader.DefaultImpl()
 
-        val s =
-            entryPointLoader.load(
-                File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-starter.jar")
-            )
-        nativeFunctions.addAll(s.functionFactories())
+//        val s =
+//            entryPointLoader.load(
+//                File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-starter.jar")
+//            )
+//        nativeFunctions.addAll(s.functionFactories())
 
         val x =
             entryPointLoader.load(
@@ -36,6 +40,8 @@ class WorkerService {
             )
 
         nativeFunctions.addAll(x.functionFactories())
+
+        extensionEnvironments.addAll(x.environments())
 
 //        x.functionFactories()
 
@@ -55,10 +61,14 @@ class WorkerService {
 
                 require(task is ApiWorkerScriptTask)
                 println("Executing hamal script: ${task.code}")
-                val env = Environment()
+                val env = RootEnvironment()
 
                 nativeFunctions.forEach { nativeFunction ->
                     env.register(nativeFunction)
+                }
+
+                extensionEnvironments.forEach { environment ->
+                    env.register(environment)
                 }
 
                 val sandbox = DefaultSandbox(env)

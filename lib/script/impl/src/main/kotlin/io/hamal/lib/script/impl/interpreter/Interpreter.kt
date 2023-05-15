@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.interpreter
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
@@ -12,7 +13,7 @@ internal object Evaluator {
 
     init {
         /*LITERAL*/
-        register(IdentifierExpression::class, EvaluateIdentifier)
+        register(IdentifierLiteral::class, EvaluateIdentifier)
         register(NumberLiteral::class, EvaluateNumberLiteral)
         register(StringLiteral::class, EvaluateStringLiteral)
         register(FalseLiteral::class, EvaluateFalseLiteral)

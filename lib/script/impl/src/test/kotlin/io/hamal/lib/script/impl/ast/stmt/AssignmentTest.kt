@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.ast.stmt
 
 import io.hamal.lib.script.impl.ast.expr.FalseLiteral
-import io.hamal.lib.script.impl.ast.expr.IdentifierExpression
+import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
 import io.hamal.lib.script.impl.ast.expr.NumberLiteral
 import io.hamal.lib.script.impl.ast.expr.TrueLiteral
 import io.hamal.lib.script.impl.ast.stmt.Assignment.*
@@ -18,12 +18,12 @@ internal class AssignmentTest : AbstractStatementTest() {
         fun parse() = listOf(
             Pair(
                 "some_number=42",
-                Global(IdentifierExpression("some_number"), NumberLiteral(42))
+                Global(IdentifierLiteral("some_number"), NumberLiteral(42))
             ),
             Pair(
                 "some_var, another_var = true, false",
                 Global(
-                    listOf(IdentifierExpression("some_var"), IdentifierExpression("another_var")),
+                    listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
                     listOf(TrueLiteral(), FalseLiteral())
                 )
             )
@@ -45,12 +45,12 @@ internal class AssignmentTest : AbstractStatementTest() {
         fun parse() = listOf(
             Pair(
                 "local some_number=42",
-                Local(IdentifierExpression("some_number"), NumberLiteral(42))
+                Local(IdentifierLiteral("some_number"), NumberLiteral(42))
             ),
             Pair(
                 "local some_var, another_var = true, false",
                 Local(
-                    listOf(IdentifierExpression("some_var"), IdentifierExpression("another_var")),
+                    listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
                     listOf(TrueLiteral(), FalseLiteral())
                 )
             )

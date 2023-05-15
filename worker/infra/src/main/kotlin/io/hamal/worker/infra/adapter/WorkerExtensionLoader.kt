@@ -36,7 +36,7 @@ internal interface WorkerExtensionLoader {
 
         private fun ensureIsFile(file: File) {
             if (!file.isFile) {
-                throw Error("%s must be a file")
+                throw Error("$file must be a file")
             }
         }
 

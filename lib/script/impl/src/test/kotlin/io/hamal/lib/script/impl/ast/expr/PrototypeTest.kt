@@ -18,13 +18,13 @@ internal class PrototypeTest : AbstractExpressionTest() {
         fun `Equal if identifier and parameters are equal`() {
             assertEquals(
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(TrueLiteral()))
                 ),
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 )
             )
@@ -34,13 +34,13 @@ internal class PrototypeTest : AbstractExpressionTest() {
         fun `Not Equal if identifiers are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(TrueLiteral()))
                 ),
                 PrototypeLiteral(
-                    IdentifierExpression("AnotherIdentifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("AnotherIdentifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 )
             )
@@ -50,15 +50,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         fun `Not Equal if parameters are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(TrueLiteral()))
                 ),
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
+                    IdentifierLiteral("Identifier"),
                     listOf(
-                        IdentifierExpression("ParameterIdentifier"),
-                        IdentifierExpression("AnotherParameterIdentifier")
+                        IdentifierLiteral("ParameterIdentifier"),
+                        IdentifierLiteral("AnotherParameterIdentifier")
                     ),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 )
@@ -74,13 +74,13 @@ internal class PrototypeTest : AbstractExpressionTest() {
         fun `Same hashcode if identifier and parameters hashcode are the same`() {
             assertEquals(
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(TrueLiteral()))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
             )
@@ -90,13 +90,13 @@ internal class PrototypeTest : AbstractExpressionTest() {
         fun `Different hashcode if identifier has different hashcode`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(TrueLiteral()))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierExpression("AnotherIdentifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("AnotherIdentifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
             )
@@ -106,15 +106,15 @@ internal class PrototypeTest : AbstractExpressionTest() {
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
-                    listOf(IdentifierExpression("ParameterIdentifier")),
+                    IdentifierLiteral("Identifier"),
+                    listOf(IdentifierLiteral("ParameterIdentifier")),
                     BlockStatement(ExpressionStatement(TrueLiteral()))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierExpression("Identifier"),
+                    IdentifierLiteral("Identifier"),
                     listOf(
-                        IdentifierExpression("ParameterIdentifier"),
-                        IdentifierExpression("AnotherParameterIdentifier")
+                        IdentifierLiteral("ParameterIdentifier"),
+                        IdentifierLiteral("AnotherParameterIdentifier")
                     ),
                     BlockStatement(ExpressionStatement(FalseLiteral()))
                 ).hashCode()
@@ -134,7 +134,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierExpression("empty")))
+                assertThat(result.identifier, equalTo(IdentifierLiteral("empty")))
                 assertThat(result.parameters, hasSize(0))
                 assertThat(result.block, hasSize(0))
 
@@ -150,8 +150,8 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 function empty_with_single_param(param_one) end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierExpression("empty_with_single_param")))
-                assertThat(result.parameters, equalTo(listOf(IdentifierExpression("param_one"))))
+                assertThat(result.identifier, equalTo(IdentifierLiteral("empty_with_single_param")))
+                assertThat(result.parameters, equalTo(listOf(IdentifierLiteral("param_one"))))
                 assertThat(result.block, hasSize(0))
 
                 tokens.wereConsumed()
@@ -166,13 +166,13 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 function empty_with_params(one,two,three) end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierExpression("empty_with_params")))
+                assertThat(result.identifier, equalTo(IdentifierLiteral("empty_with_params")))
                 assertThat(
                     result.parameters, equalTo(
                         listOf(
-                            IdentifierExpression("one"),
-                            IdentifierExpression("two"),
-                            IdentifierExpression("three")
+                            IdentifierLiteral("one"),
+                            IdentifierLiteral("two"),
+                            IdentifierLiteral("three")
                         )
                     )
                 )

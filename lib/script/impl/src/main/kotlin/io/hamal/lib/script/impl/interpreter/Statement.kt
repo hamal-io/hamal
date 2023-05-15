@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.interpreter
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.NilValue
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
@@ -63,8 +64,9 @@ internal object EvaluateExpressionStatement : Evaluate<ExpressionStatement> {
 internal object EvaluatePrototype : Evaluate<Prototype> {
     override fun invoke(toEvaluate: Prototype, env: Environment): Value {
         val value = Evaluator.evaluate(toEvaluate.expression, env) as PrototypeValue
-        env.assignLocal(value.identifier, value)
-        return value
+//        env.assignLocal(value.identifier, value)
+//        return value
+        TODO()
     }
 }
 

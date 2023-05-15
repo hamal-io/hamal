@@ -1,5 +1,7 @@
 package io.hamal.worker.extension.web3
 
+import io.hamal.lib.script.api.Environment
+import io.hamal.lib.script.api.native_.NativeEnvironment
 import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.api.native_.NativeIdentifier
 import io.hamal.lib.script.api.value.StringValue
@@ -11,11 +13,26 @@ import io.hamal.worker.extension.api.WorkerExtension
 class Web3Extension : WorkerExtension {
     override fun functionFactories(): List<NativeFunction> {
         return listOf(
-            object : NativeFunction {
-                override val identifier = NativeIdentifier("getBlock")
+            fn
+        )
+    }
 
-                override fun invoke(ctx: NativeFunction.Context): Value {
-                    println("Getting block")
+    override fun environments(): List<Environment> {
+        return listOf(
+            NativeEnvironment(
+                NativeIdentifier("eth"),
+                mapOf(
+                    NativeIdentifier("getBlock") to fn
+                )
+            )
+        )
+    }
+
+    val fn = object : NativeFunction {
+        override val identifier = NativeIdentifier("getBlock")
+
+        override fun invoke(ctx: NativeFunction.Context): Value {
+            println("Getting block")
 //                    val bs = EthHttpBatchService()
 //                    bs.getBlock(req = EthBatchService.GetBlockByHashRequest(EthHash(EthBytes32(ByteArray(32)))))
 //                    val result = bs.execute()
@@ -34,13 +51,11 @@ class Web3Extension : WorkerExtension {
 //                        StringValue("parentHash") to StringValue(block.parentHash.toString())
 //                    )
 
-                    val response = DefaultEthService.getBlock()
+            val response = DefaultEthService.getBlock()
 
-                    return TableValue(
-                        StringValue("hash") to StringValue(response.result.hash)
-                    )
-                }
-            }
-        )
+            return TableValue(
+                StringValue("hash") to StringValue(response.result.hash)
+            )
+        }
     }
 }

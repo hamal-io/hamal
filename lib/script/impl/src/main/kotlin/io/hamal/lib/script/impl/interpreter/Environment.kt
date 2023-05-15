@@ -1,15 +1,16 @@
 package io.hamal.lib.script.impl.interpreter
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.ast.Identifier
 import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
-import io.hamal.lib.script.impl.ast.expr.IdentifierExpression
+import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.script.impl.value.PrototypeValue
 
-class Environment {
+class RootEnvironment : Environment {
 
     private val parent: Environment? = null
 
@@ -18,10 +19,27 @@ class Environment {
         RequireFunction.identifier to RequireFunction
     )
 
+    private val extensions = mutableMapOf<Identifier, Environment>()
+
     private val prototypes = mutableMapOf<StringValue, PrototypeValue>()
 
     fun register(nativeFunction: NativeFunction) {
-        nativeFunctions[IdentifierExpression("getBlock")] = nativeFunction
+        nativeFunctions[IdentifierLiteral("getBlock")] = nativeFunction
+    }
+
+    override val identifier: Identifier
+        get() = IdentifierLiteral("root")
+
+    override fun findNativeFunction(identifier: Identifier): NativeFunction? {
+        TODO("Not yet implemented")
+    }
+
+    override fun findEnvironment(identifier: Identifier): Environment? {
+        return extensions[identifier]
+    }
+
+    fun register(environment: Environment) {
+        extensions[environment.identifier] = environment
     }
 
     fun assignLocal(identifier: StringValue, value: Value) {
@@ -31,7 +49,7 @@ class Environment {
         }
     }
 
-    fun findNativeFunction(identifier: IdentifierExpression): NativeFunction? {
+    fun findNativeFunction(identifier: IdentifierLiteral): NativeFunction? {
         return nativeFunctions[identifier]
     }
 

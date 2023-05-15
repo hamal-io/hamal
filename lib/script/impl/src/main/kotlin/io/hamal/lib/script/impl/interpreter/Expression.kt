@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.interpreter
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
@@ -8,16 +9,18 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
     override fun invoke(toEvaluate: CallExpression, env: Environment): Value {
         val parameters = toEvaluate.parameters.map { Evaluator.evaluate(it, env) }
 
+        require(env is RootEnvironment)
+
         env.findNativeFunction(toEvaluate.identifier)
             ?.let { fn ->
                 return fn(
                     NativeFunction.Context(
-                        parameters.zip(toEvaluate.parameters)
-                            .map { NativeFunction.Parameter(it.first, it.second) }
-                    ))
+                        parameters = parameters.zip(toEvaluate.parameters)
+                            .map { NativeFunction.Parameter(it.first, it.second) },
+                        env = env
+                    )
+                )
             }
-
-
 
         val prototype = env.findPrototype(StringValue(toEvaluate.identifier.value))!!
         return Evaluator.evaluate(prototype.block, env)

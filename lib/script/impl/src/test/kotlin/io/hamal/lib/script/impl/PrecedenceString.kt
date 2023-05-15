@@ -13,7 +13,7 @@ object PrecedenceString {
 
     private fun StringBuilder.appendExpression(expression: Expression) {
         when (expression) {
-            is IdentifierExpression -> appendString(expression.value)
+            is IdentifierLiteral -> appendString(expression.value)
             is LiteralExpression -> appendLiteral(expression)
             is PrefixExpression -> appendPrefixExpression(expression)
             is InfixExpression -> appendInfixExpression(expression)
