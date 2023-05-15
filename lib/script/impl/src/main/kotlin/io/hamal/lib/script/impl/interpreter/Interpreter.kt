@@ -40,19 +40,19 @@ internal object Evaluator {
         register(Return::class, EvaluateReturn)
     }
 
-    fun <TYPE : Any> evaluate(toEvaluate: TYPE, env: Environment): Value {
-        val evaluate = resolve(toEvaluate::class)
-        return evaluate.invoke(toEvaluate, env)
+    fun <TYPE : Any> evaluate(ctx: EvaluationContext<TYPE>): Value {
+        val evaluate = resolve(ctx.toEvaluate::class)
+        return evaluate.invoke(ctx)
     }
 
-    fun <TYPE : Any> evaluateAsString(toEvaluate: TYPE, env: Environment): StringValue {
-        val result = evaluate(toEvaluate, env)
+    fun <TYPE : Any> evaluateAsString(ctx: EvaluationContext<TYPE>): StringValue {
+        val result = evaluate(ctx)
         require(result is StringValue)
         return result
     }
 
-    fun <TYPE : Any> evaluateAsIdentifier(toEvaluate: TYPE, env: Environment): Identifier {
-        val result = evaluate(toEvaluate, env)
+    fun <TYPE : Any> evaluateAsIdentifier(ctx: EvaluationContext<TYPE>): Identifier {
+        val result = evaluate(ctx)
         require(result is Identifier)
         return result
     }
@@ -72,10 +72,16 @@ interface Interpreter {
     fun run(toEvaluate: Statement, env: Environment): Value
 
     object DefaultImpl : Interpreter {
-        override fun run(toEvaluate: Statement, env: Environment) = Evaluator.evaluate(toEvaluate, env)
+        override fun run(toEvaluate: Statement, env: Environment) =
+            Evaluator.evaluate(EvaluationContext(toEvaluate, env))
     }
 }
 
 internal interface Evaluate<TYPE : Any> {
-    operator fun invoke(toEvaluate: TYPE, env: Environment): Value
+    operator fun invoke(ctx: EvaluationContext<TYPE>): Value
 }
+
+data class EvaluationContext<TYPE : Any>(
+    val toEvaluate: TYPE,
+    val env: Environment
+)

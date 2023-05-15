@@ -9,12 +9,15 @@ import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
-    override fun invoke(toEvaluate: CallExpression, env: Environment): Value {
-        val parameters = toEvaluate.parameters.map { Evaluator.evaluate(it, env) }
+    override fun invoke(ctx: EvaluationContext<CallExpression>): Value {
+        val toEvaluate = ctx.toEvaluate
+        val env = ctx.env
+
+        val parameters = toEvaluate.parameters.map { Evaluator.evaluate(EvaluationContext(it, env)) }
 
         require(env is RootEnvironment)
 
-        env.findNativeFunction(Evaluator.evaluateAsIdentifier(toEvaluate.identifier, env))
+        env.findNativeFunction(Evaluator.evaluateAsIdentifier(EvaluationContext(toEvaluate.identifier, env)))
             ?.let { fn ->
                 return fn(
                     NativeFunction.Context(
@@ -25,22 +28,23 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
                 )
             }
 
-        val identifier = Evaluator.evaluateAsIdentifier(toEvaluate.identifier, env)
+        val identifier = Evaluator.evaluateAsIdentifier(EvaluationContext(toEvaluate.identifier, env))
         val prototype = env.findPrototype(identifier)!!
-        return Evaluator.evaluate(prototype.block, env)
+        return Evaluator.evaluate(EvaluationContext(prototype.block, env))
     }
 }
 
 internal object EvaluateGroupedExpression : Evaluate<GroupedExpression> {
-    override fun invoke(toEvaluate: GroupedExpression, env: Environment) =
-        Evaluator.evaluate(toEvaluate.expression, env)
+    override fun invoke(ctx: EvaluationContext<GroupedExpression>) =
+        Evaluator.evaluate(EvaluationContext(ctx.toEvaluate.expression, ctx.env))
 
 }
 
 internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
-    override fun invoke(toEvaluate: InfixExpression, env: Environment): Value {
-        val lhs = Evaluator.evaluate(toEvaluate.lhs, env)
-        val rhs = Evaluator.evaluate(toEvaluate.rhs, env)
+    override fun invoke(ctx: EvaluationContext<InfixExpression>): Value {
+        val (toEvaluate, env) = ctx
+        val lhs = Evaluator.evaluate(EvaluationContext(toEvaluate.lhs, env))
+        val rhs = Evaluator.evaluate(EvaluationContext(toEvaluate.rhs, env))
         return eval(toEvaluate.operator, lhs, rhs, env)
     }
 
@@ -72,8 +76,9 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
 }
 
 internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
-    override fun invoke(toEvaluate: PrefixExpression, env: Environment): Value {
-        val value = Evaluator.evaluate(toEvaluate.expression, env)
+    override fun invoke(ctx: EvaluationContext<PrefixExpression>): Value {
+        val (toEvaluate, env) = ctx
+        val value = Evaluator.evaluate(EvaluationContext(toEvaluate.expression, env))
         return when (toEvaluate.operator) {
             // FIXME this must come from operator repository as well
             Operator.Minus -> NumberValue((value as NumberValue).value.negate())
