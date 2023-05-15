@@ -18,5 +18,10 @@ interface NativeFunction : Value {
     data class Parameter(
         val value: Value,
         val expression: Expression
-    )
+    ) {
+        fun asIdentifier(): Identifier {
+            require(value is Identifier)
+            return value
+        }
+    }
 }

@@ -2,7 +2,10 @@ package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.*
+import io.hamal.lib.script.api.value.FalseValue
+import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.TrueValue
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
@@ -22,7 +25,7 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
                 )
             }
 
-        val prototype = env.findPrototype(StringValue(toEvaluate.identifier.value))!!
+        val prototype = env.findPrototype(toEvaluate.identifier)!!
         return Evaluator.evaluate(prototype.block, env)
     }
 }

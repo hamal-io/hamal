@@ -3,7 +3,6 @@ package io.hamal.lib.script.impl.interpreter
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.ast.Identifier
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
 import io.hamal.lib.script.impl.builtin.AssertFunction
@@ -21,7 +20,7 @@ class RootEnvironment : Environment {
 
     private val extensions = mutableMapOf<Identifier, Environment>()
 
-    private val prototypes = mutableMapOf<StringValue, PrototypeValue>()
+    private val prototypes = mutableMapOf<Identifier, PrototypeValue>()
 
     fun register(nativeFunction: NativeFunction) {
         nativeFunctions[IdentifierLiteral("getBlock")] = nativeFunction
@@ -42,7 +41,7 @@ class RootEnvironment : Environment {
         extensions[environment.identifier] = environment
     }
 
-    fun assignLocal(identifier: StringValue, value: Value) {
+    override fun assignLocal(identifier: Identifier, value: Value) {
         when (value) {
             is PrototypeValue -> prototypes[identifier] = value
             else -> TODO()
@@ -53,7 +52,7 @@ class RootEnvironment : Environment {
         return nativeFunctions[identifier]
     }
 
-    fun findPrototype(identifier: StringValue): PrototypeValue? {
+    fun findPrototype(identifier: Identifier): PrototypeValue? {
         return prototypes[identifier]
     }
 

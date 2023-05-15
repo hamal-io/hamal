@@ -3,7 +3,7 @@ package io.hamal.lib.script.impl.interpreter
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.impl.value.*
+import io.hamal.lib.script.impl.value.PrototypeValue
 
 internal object EvaluateIdentifier : Evaluate<IdentifierLiteral> {
     override fun invoke(toEvaluate: IdentifierLiteral, env: Environment) = StringValue(toEvaluate.value)
@@ -31,7 +31,7 @@ internal object EvaluateStringLiteral : Evaluate<StringLiteral> {
 
 internal object EvaluatePrototypeLiteral : Evaluate<PrototypeLiteral> {
     override fun invoke(toEvaluate: PrototypeLiteral, env: Environment) = PrototypeValue(
-        Evaluator.evaluateAsString(toEvaluate.identifier, env),
+        toEvaluate.identifier,
         toEvaluate.parameters.map { Evaluator.evaluateAsString(it, env) },
         toEvaluate.block
     )

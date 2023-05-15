@@ -64,9 +64,8 @@ internal object EvaluateExpressionStatement : Evaluate<ExpressionStatement> {
 internal object EvaluatePrototype : Evaluate<Prototype> {
     override fun invoke(toEvaluate: Prototype, env: Environment): Value {
         val value = Evaluator.evaluate(toEvaluate.expression, env) as PrototypeValue
-//        env.assignLocal(value.identifier, value)
-//        return value
-        TODO()
+        env.assignLocal(value.identifier, value)
+        return value
     }
 }
 
