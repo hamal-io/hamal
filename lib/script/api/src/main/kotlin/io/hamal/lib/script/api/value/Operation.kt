@@ -9,6 +9,10 @@ sealed interface ValueOperation {
     }
 }
 
+interface PrefixValueOperation : ValueOperation {
+    val selfType: String
+    operator fun invoke(self: Value): Value
+}
 
 interface InfixValueOperation : ValueOperation {
     val selfType: String

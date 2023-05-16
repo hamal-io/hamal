@@ -18,9 +18,10 @@ data class NumberValue(
 
 object DefaultNumberMetaTable : MetaTable {
     override val type = "number"
-    override val operations = listOf<ValueOperation>(
+    override val operations = listOf(
         NumberAddNumber,
-        NumberSubNumber
+        NumberSubNumber,
+        SubNumber
     )
 }
 
@@ -46,5 +47,13 @@ private object NumberSubNumber : InfixValueOperation {
         require(other is NumberValue)
         return NumberValue(self.value.minus(other.value), self.metaTable)
     }
+}
 
+private object SubNumber : PrefixValueOperation {
+    override val operationType = Sub
+    override val selfType = "number"
+    override operator fun invoke(self: Value): Value {
+        require(self is NumberValue)
+        return NumberValue(self.value.negate(), self.metaTable)
+    }
 }

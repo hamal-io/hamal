@@ -87,8 +87,23 @@ internal data class EvaluationContext<TYPE : Node>(
         other: OTHER
     ): Value {
         val operationType = resolveOperationType(operator)
-        val operation = self.findInfixOperation(operationType, other.type())!!
+
+        val operation = requireNotNull(self.findInfixOperation(operationType, other.type())) {
+            "No infix operation specified for: ${self.type()} $operator ${other.type()}"
+        }
+
         return operation(self, other)
+    }
+
+    fun <SELF : Value> evaluatePrefix(
+        operator: Operator,
+        self: SELF,
+    ): Value {
+        val operationType = resolveOperationType(operator)
+        val operation = requireNotNull(self.findPrefixOperation(operationType)) {
+            "No prefix operation specified for: $operationType ${self.type()}"
+        }
+        return operation(self)
     }
 }
 

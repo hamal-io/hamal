@@ -1,7 +1,6 @@
 package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 
@@ -37,20 +36,16 @@ internal object EvaluateGroupedExpression : Evaluate<GroupedExpression> {
 
 internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
     override fun invoke(ctx: EvaluationContext<InfixExpression>): Value {
-        val lhs = ctx.evaluate { lhs }
-        val rhs = ctx.evaluate { rhs }
-        return ctx.evaluateInfix(ctx.toEvaluate.operator, lhs, rhs)
+        val self = ctx.evaluate { lhs }
+        val other = ctx.evaluate { rhs }
+        return ctx.evaluateInfix(ctx.toEvaluate.operator, self, other)
     }
 }
 
 internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
     override fun invoke(ctx: EvaluationContext<PrefixExpression>): Value {
         val value = ctx.evaluate { expression }
-        return when (val operator = ctx.toEvaluate.operator) {
-            // FIXME this must come from operator repository as well
-            Operator.Minus -> NumberValue((value as NumberValue).value.negate())
-            else -> TODO("Evaluation of operator $operator not supported")
-        }
+        return ctx.evaluatePrefix(ctx.toEvaluate.operator, value)
     }
 
 }

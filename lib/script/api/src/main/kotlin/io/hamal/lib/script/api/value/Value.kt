@@ -9,4 +9,10 @@ interface Value {
             .filterIsInstance<InfixValueOperation>()
             .find { it.operationType == type && it.otherType == otherType }
     }
+
+    fun findPrefixOperation(type: ValueOperation.Type): PrefixValueOperation? {
+        return metaTable.operations
+            .filterIsInstance<PrefixValueOperation>()
+            .find { it.operationType == type }
+    }
 }
