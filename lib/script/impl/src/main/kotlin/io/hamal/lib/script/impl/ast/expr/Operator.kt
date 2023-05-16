@@ -26,6 +26,7 @@ enum class Operator(
     LessThan(Type.LeftAngleBracket),
     LessThanEquals(Type.LeftAngleBracket_Equal),
     Minus(Type.Minus),
+    Modulo(Type.Percent),
     Multiply(Type.Asterisk),
     Not(Type.Not),
     NotEqual(Type.Tilde_Equal),
@@ -62,7 +63,7 @@ internal enum class Precedence {
     Shift,           // << >>
     Concat,          //  ..
     Plus,            //  + -
-    Factor,          //  * /
+    Factor,          //  * /  %
     Prefix,          // not # -
     Carat,           // ^
     Group,           // (
@@ -84,6 +85,7 @@ private val precedenceMapping = mapOf(
     Minus to Precedence.Plus,
     Multiply to Precedence.Factor,
     Divide to Precedence.Factor,
+    Modulo to Precedence.Factor,
     Group to Precedence.Group,
     Exponential to Precedence.Carat,
     NotEqual to Precedence.Comparison,

@@ -4,8 +4,17 @@ sealed interface ValueOperation {
     val operationType: Type
 
     enum class Type(identifier: String) {
-        Add("__add"),
-        Sub("__sub")
+        Add("__add"),       // self + other
+        Div("__div"),       // self / other
+        GT("__gt"),         // self > other
+        GTE("__gte"),       // self >= other
+        LT("__lt"),         // self < other
+        LTE("__lte"),       // self <= other
+        Mod("__mod"),       // self % other
+        Mul("__mul"),       // self * other
+        Negate("__unm"),    // - self
+        Pow("__pow"),       // self ^ other
+        Sub("__sub"),       // self - other
     }
 }
 

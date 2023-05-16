@@ -6,8 +6,7 @@ import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.api.value.ValueOperation
-import io.hamal.lib.script.api.value.ValueOperation.Type.Add
-import io.hamal.lib.script.api.value.ValueOperation.Type.Sub
+import io.hamal.lib.script.api.value.ValueOperation.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
 import io.hamal.lib.script.impl.value.PrototypeValue
 
@@ -86,7 +85,7 @@ internal data class EvaluationContext<TYPE : Node>(
         self: SELF,
         other: OTHER
     ): Value {
-        val operationType = resolveOperationType(operator)
+        val operationType = resolveInfixOperationType(operator)
 
         val operation = requireNotNull(self.findInfixOperation(operationType, other.type())) {
             "No infix operation specified for: ${self.type()} $operator ${other.type()}"
@@ -99,7 +98,7 @@ internal data class EvaluationContext<TYPE : Node>(
         operator: Operator,
         self: SELF,
     ): Value {
-        val operationType = resolveOperationType(operator)
+        val operationType = resolvePrefixOperationType(operator)
         val operation = requireNotNull(self.findPrefixOperation(operationType)) {
             "No prefix operation specified for: $operationType ${self.type()}"
         }
@@ -107,10 +106,25 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 }
 
-private fun resolveOperationType(operator: Operator): ValueOperation.Type {
+private fun resolveInfixOperationType(operator: Operator): ValueOperation.Type {
     return when {
-        operator == Operator.Plus -> Add
+        operator == Operator.Divide -> Div
+        operator == Operator.Exponential -> Pow
+        operator == Operator.GreaterThan -> GT
+        operator == Operator.GreaterThanEquals -> GTE
+        operator == Operator.LessThan -> LT
+        operator == Operator.LessThanEquals -> LTE
         operator == Operator.Minus -> Sub
+        operator == Operator.Modulo -> Mod
+        operator == Operator.Multiply -> Mul
+        operator == Operator.Plus -> Add
+        else -> TODO()
+    }
+}
+
+private fun resolvePrefixOperationType(operator: Operator): ValueOperation.Type {
+    return when {
+        operator == Operator.Minus -> Negate
         else -> TODO()
     }
 }

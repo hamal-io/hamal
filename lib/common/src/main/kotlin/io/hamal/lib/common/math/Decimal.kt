@@ -51,6 +51,8 @@ data class Decimal constructor(
 
     fun divide(other: Decimal) = Decimal(delegate.divide(other.delegate, mathContext))
 
+    fun pow(other: Decimal) = Decimal(delegate.pow(other.delegate.toInt(), mathContext))
+
     fun remainder(other: Decimal) = Decimal(delegate.remainder(other.delegate, mathContext))
 
     fun floor() = Decimal(delegate.setScale(0, RoundingMode.FLOOR))

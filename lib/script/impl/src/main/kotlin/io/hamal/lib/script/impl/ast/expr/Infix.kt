@@ -18,6 +18,7 @@ private val infixParseFnMapping = mapOf(
     Operator.LessThan to InfixExpression.Parse,
     Operator.LessThanEquals to InfixExpression.Parse,
     Operator.Minus to InfixExpression.Parse,
+    Operator.Modulo to InfixExpression.Parse,
     Operator.Multiply to InfixExpression.Parse,
     Operator.NotEqual to InfixExpression.Parse,
     Operator.Or to InfixExpression.Parse,

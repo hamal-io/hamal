@@ -213,6 +213,22 @@ class DecimalTest {
     }
 
     @Nested
+    @DisplayName("pow()")
+    inner class PowTest {
+        @Test
+        fun ok() {
+            val testInstance = Decimal("10");
+            val exponent = Decimal("2");
+            val result = testInstance.pow(exponent);
+
+            assertThat(result, equalTo(Decimal("100")));
+
+            assertThat(testInstance, equalTo(Decimal("10")));
+            assertThat(exponent, equalTo(Decimal("2")));
+        }
+    }
+
+    @Nested
     @DisplayName("negate()")
     inner class NegateTest {
         @Test
