@@ -1,8 +1,7 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.script.api.value.Value
-
 object NilValue : Value {
+    override val metaTable = MetaTableNotImplementedYet
     override fun toString(): String {
         return "nil"
     }

@@ -3,10 +3,7 @@ package io.hamal.worker.extension.web3
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeEnvironment
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 import io.hamal.worker.extension.api.WorkerExtension
 
@@ -29,6 +26,8 @@ class Web3Extension : WorkerExtension {
     }
 
     val fn = object : NativeFunction {
+        override val metaTable = MetaTableNotImplementedYet
+
         override val identifier = Identifier("getBlock")
 
         override fun invoke(ctx: NativeFunction.Context): Value {

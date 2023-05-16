@@ -1,9 +1,7 @@
 package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.FalseValue
 import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.TrueValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 
@@ -41,26 +39,7 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
     override fun invoke(ctx: EvaluationContext<InfixExpression>): Value {
         val lhs = ctx.evaluate { lhs }
         val rhs = ctx.evaluate { rhs }
-        return when (ctx.toEvaluate.operator) {
-            Operator.Plus -> {
-                NumberValue((lhs as NumberValue).value.plus((rhs as NumberValue).value))
-            }
-
-            Operator.Minus -> {
-                NumberValue((lhs as NumberValue).value.minus((rhs as NumberValue).value))
-            }
-
-            Operator.LessThan -> {
-                println(lhs)
-                if ((lhs as NumberValue).value.isLessThan((rhs as NumberValue).value)) {
-                    return TrueValue
-                } else {
-                    return FalseValue
-                }
-            }
-
-            else -> TODO()
-        }
+        return ctx.evaluateInfix(ctx.toEvaluate.operator, lhs, rhs)
     }
 }
 

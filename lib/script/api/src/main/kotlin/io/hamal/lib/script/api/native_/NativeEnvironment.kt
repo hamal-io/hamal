@@ -2,6 +2,7 @@ package io.hamal.lib.script.api.native_
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.Identifier
+import io.hamal.lib.script.api.value.MetaTableNotImplementedYet
 import io.hamal.lib.script.api.value.Value
 
 //FIXME maybe native environment should be readonly
@@ -9,6 +10,8 @@ class NativeEnvironment(
     override val identifier: Identifier,
     private val nativeFunctions: Map<Identifier, NativeFunction>
 ) : Environment {
+    override val metaTable = MetaTableNotImplementedYet
+
     override fun addLocal(identifier: Identifier, value: Value) {
         TODO("Not yet implemented")
     }

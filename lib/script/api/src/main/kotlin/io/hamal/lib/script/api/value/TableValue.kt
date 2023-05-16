@@ -3,6 +3,7 @@ package io.hamal.lib.script.api.value
 typealias TableEntry = Pair<Value, Value>
 
 class TableValue : Value, Collection<TableEntry> {
+    override val metaTable = MetaTableNotImplementedYet
 
     constructor(vararg entries: Pair<Value, Value>) {
         entries.forEach { store[it.first] = it.second }

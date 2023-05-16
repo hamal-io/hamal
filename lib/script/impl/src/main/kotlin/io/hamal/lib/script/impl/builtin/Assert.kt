@@ -6,6 +6,8 @@ import io.hamal.lib.script.impl.ScriptEvaluationException
 
 internal object AssertFunction : NativeFunction {
     override val identifier: Identifier = Identifier("assert")
+    override val metaTable = MetaTableNotImplementedYet
+
 
     override fun invoke(ctx: NativeFunction.Context): Value {
         val parameters = ctx.parameters

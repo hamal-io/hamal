@@ -1,89 +1,15 @@
 package io.hamal.lib.script.impl.interpreter
 
-import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.ast.Node
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.ast.stmt.*
-import io.hamal.lib.script.impl.value.PrototypeValue
 import kotlin.reflect.KClass
 
 internal interface Evaluate<TYPE : Node> {
     operator fun invoke(ctx: EvaluationContext<TYPE>): Value
 }
 
-internal data class EvaluationContext<TYPE : Node>(
-    val toEvaluate: TYPE,
-    val env: Environment,
-    val evaluator: Evaluator
-) {
-
-    fun <NEW_TYPE : Node> evaluate(
-        env: Environment = this.env,
-        block: TYPE.() -> NEW_TYPE
-    ): Value {
-        return evaluate(block(toEvaluate), env)
-    }
-
-    fun <TYPE : Node> evaluate(
-        toEvaluate: TYPE,
-        env: Environment = this.env
-    ): Value {
-        return evaluator.evaluate(
-            EvaluationContext(toEvaluate, env, evaluator)
-        )
-    }
-
-    fun <NEW_TYPE : Node> evaluateAsIdentifier(
-        env: Environment = this.env,
-        block: TYPE.() -> NEW_TYPE
-    ): Identifier {
-        return evaluateAsIdentifier(block(toEvaluate), env)
-    }
-
-    fun <TYPE : Node> evaluateAsIdentifier(
-        toEvaluate: TYPE,
-        env: Environment = this.env
-    ): Identifier {
-        val result = evaluate(toEvaluate, env)
-        require(result is Identifier)
-        return result
-    }
-
-    fun <NEW_TYPE : Node> evaluateAsPrototype(
-        env: Environment = this.env,
-        block: TYPE.() -> NEW_TYPE
-    ): PrototypeValue {
-        return evaluateAsPrototype(block(toEvaluate), env)
-    }
-
-    fun <TYPE : Node> evaluateAsPrototype(
-        toEvaluate: TYPE,
-        env: Environment = this.env
-    ): PrototypeValue {
-        val result = evaluate(toEvaluate, env)
-        require(result is PrototypeValue)
-        return result
-    }
-
-    fun <NEW_TYPE : Node> evaluateAsString(
-        env: Environment = this.env,
-        block: TYPE.() -> NEW_TYPE
-    ): StringValue {
-        return evaluateAsString(block(toEvaluate), env)
-    }
-
-    fun <TYPE : Node> evaluateAsString(
-        toEvaluate: TYPE,
-        env: Environment = this.env
-    ): StringValue {
-        val result = evaluate(toEvaluate, env)
-        require(result is StringValue)
-        return result
-    }
-}
 
 internal interface Evaluator {
     fun <TYPE : Node> evaluate(ctx: EvaluationContext<TYPE>): Value

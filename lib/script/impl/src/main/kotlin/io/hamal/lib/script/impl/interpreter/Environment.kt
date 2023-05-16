@@ -2,15 +2,13 @@ package io.hamal.lib.script.impl.interpreter
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.NilValue
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.script.impl.value.PrototypeValue
 
 class RootEnvironment : Environment {
+    override val metaTable = MetaTableNotImplementedYet
 
     private val parent: Environment? = null
 
@@ -18,8 +16,11 @@ class RootEnvironment : Environment {
         AssertFunction.identifier to AssertFunction, RequireFunction.identifier to RequireFunction
     )
 
-    private val extensions = mutableMapOf<Identifier, Environment>()
 
+//    private val metaTable
+//    numberMetaTable --
+
+    private val extensions = mutableMapOf<Identifier, Environment>()
     private val prototypes = mutableMapOf<Identifier, PrototypeValue>()
 
     // FIXME local and global should be one map - entry indicates whether this is local or global
