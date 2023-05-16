@@ -20,6 +20,7 @@ object DefaultNumberMetaTable : MetaTable {
     override val operations = listOf(
         numberInfix(Add) { self, other -> NumberValue(self.value.plus(other.value), self.metaTable) },
         numberInfix(Div) { self, other -> NumberValue(self.value.divide(other.value), self.metaTable) },
+        numberInfix(EQ) { self, other -> booleanOf(self.value == other.value) },
         numberInfix(GT) { self, other -> booleanOf(self.value.isGreaterThan(other.value)) },
         numberInfix(GTE) { self, other -> booleanOf(self.value.isGreaterThanEqual(other.value)) },
         numberInfix(LT) { self, other -> booleanOf(self.value.isLessThan(other.value)) },

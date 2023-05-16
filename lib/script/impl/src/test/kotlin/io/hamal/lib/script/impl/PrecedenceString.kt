@@ -18,6 +18,7 @@ object PrecedenceString {
             is PrefixExpression -> appendPrefixExpression(expression)
             is InfixExpression -> appendInfixExpression(expression)
             is GroupedExpression -> appendGroupedExpression(expression)
+            is CallExpression -> appendCallExpression(expression)
             else -> TODO("$expression")
         }
     }
@@ -34,6 +35,19 @@ object PrecedenceString {
         appendExpression(expression.expression)
         append(')')
     }
+
+    private fun StringBuilder.appendCallExpression(expression: CallExpression) {
+        appendExpression(expression.identifier)
+        append('(')
+        expression.parameters.forEachIndexed { idx, expr ->
+            if (idx != 0) {
+                append(',')
+            }
+            appendExpression(expr)
+        }
+        append(')')
+    }
+
 
     private fun StringBuilder.appendInfixExpression(expression: InfixExpression) {
         append('(')

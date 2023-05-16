@@ -1,11 +1,13 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.impl.PrecedenceString
+import io.hamal.lib.script.impl.ast.Parser
+import io.hamal.lib.script.impl.ast.stmt.Call
+import io.hamal.lib.script.impl.token.tokenize
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 
 internal class CallTest : AbstractExpressionTest() {
 
@@ -168,5 +170,37 @@ internal class CallTest : AbstractExpressionTest() {
                 tokens.wereConsumed()
             }
         }
+
+        @TestFactory
+        fun `Call functions with expressions`() = listOf(
+            "fn(1)" to "fn(1)",
+            "fn(1,2)" to "fn(1,2)",
+            "fn(1 + 2)" to "fn((1 + 2))",
+            "fn(1 + 2 - 3)" to "fn(((1 + 2) - 3))",
+            "fn(1 + 2 - 3 == 1 + 2 - 3)" to "fn((((1 + 2) - 3) == ((1 + 2) - 3)))",
+            "fn(1 ^ 2)" to "fn((1 ^ 2))",
+            "fn(1 .. 2)" to "fn((1 .. 2))",
+            "fn(1 ^ 2 == 1 ^ 2)" to "fn(((1 ^ 2) == (1 ^ 2)))",
+            "fn(1 .. 2 == 1 .. 2)" to "fn(((1 .. 2) == (1 .. 2)))",
+            "fn(1 ^ 2 ^ 3)" to "fn((1 ^ (2 ^ 3)))",
+            "fn(1 .. 2 .. 3)" to "fn((1 .. (2 .. 3)))",
+            "fn(1 ^ 2 ^ 3== 1 ^ 2 ^ 3)" to "fn(((1 ^ (2 ^ 3)) == (1 ^ (2 ^ 3))))",
+            "fn(1 .. 2 .. 3== 1 .. 2 .. 3)" to "fn(((1 .. (2 .. 3)) == (1 .. (2 .. 3))))",
+            "fn(1 == 3)" to "fn((1 == 3))",
+            "fn(1 ~= 3)" to "fn((1 ~= 3))",
+        ).map { (code, expected) ->
+            DynamicTest.dynamicTest(code) {
+                val tokens = tokenize(code)
+
+                val blockStatement = Parser.DefaultImpl.parse(Parser.Context(ArrayDeque(tokens)))
+                assertThat(blockStatement.statements, hasSize(1))
+                val statement = blockStatement.statements.first()
+                require(statement is Call)
+
+                val result = PrecedenceString.of(statement.expression)
+                assertThat(result, equalTo(expected));
+            }
+        }
+
     }
 }

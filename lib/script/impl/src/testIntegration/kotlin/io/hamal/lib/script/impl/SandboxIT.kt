@@ -2,7 +2,6 @@ package io.hamal.lib.script.impl
 
 import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.script.impl.interpreter.RootEnvironment
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -20,7 +19,9 @@ class SandboxIT {
                 dynamicTest("${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
                     val result = testInstance.eval(code)
-                    assertTrue(result !is ErrorValue, "$result")
+                    if (result is ErrorValue) {
+                        org.junit.jupiter.api.fail { result.toString() }
+                    }
                 }
             }
             .toList()

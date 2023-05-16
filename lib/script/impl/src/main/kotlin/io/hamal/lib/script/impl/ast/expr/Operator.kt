@@ -65,9 +65,9 @@ internal enum class Precedence {
     Plus,            //  + -
     Factor,          //  * /  %
     Prefix,          // not # -
-    Carat,           // ^
+    Pow,             // ^
     Group,           // (
-    Highest
+    Highest;
 }
 
 private val precedenceMapping = mapOf(
@@ -78,6 +78,7 @@ private val precedenceMapping = mapOf(
     GreaterThanEquals to Precedence.Comparison,
     LessThan to Precedence.Comparison,
     LessThanEquals to Precedence.Comparison,
+    NotEqual to Precedence.Comparison,
     ShiftLeft to Precedence.Shift,
     ShiftRight to Precedence.Shift,
     Concat to Precedence.Concat,
@@ -87,8 +88,7 @@ private val precedenceMapping = mapOf(
     Divide to Precedence.Factor,
     Modulo to Precedence.Factor,
     Group to Precedence.Group,
-    Exponential to Precedence.Carat,
-    NotEqual to Precedence.Comparison,
+    Exponential to Precedence.Pow,
 )
 
 internal fun precedenceOf(tokenType: Type) =

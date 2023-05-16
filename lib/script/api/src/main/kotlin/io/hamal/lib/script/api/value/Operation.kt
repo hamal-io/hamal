@@ -6,6 +6,7 @@ sealed interface ValueOperation {
     enum class Type(identifier: String) {
         Add("__add"),       // self + other
         Div("__div"),       // self / other
+        EQ("__eq"),         // self == other
         GT("__gt"),         // self > other
         GTE("__gte"),       // self >= other
         LT("__lt"),         // self < other

@@ -109,6 +109,7 @@ internal data class EvaluationContext<TYPE : Node>(
 private fun resolveInfixOperationType(operator: Operator): ValueOperation.Type {
     return when {
         operator == Operator.Divide -> Div
+        operator == Operator.Equals -> EQ
         operator == Operator.Exponential -> Pow
         operator == Operator.GreaterThan -> GT
         operator == Operator.GreaterThanEquals -> GTE

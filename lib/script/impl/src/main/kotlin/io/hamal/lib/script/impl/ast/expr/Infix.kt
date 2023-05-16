@@ -2,15 +2,15 @@ package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.impl.ast.Parser.Context
-import io.hamal.lib.script.impl.ast.expr.Operator.Parse
+import io.hamal.lib.script.impl.ast.expr.Operator.*
 import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token
 
 private val infixParseFnMapping = mapOf(
     Operator.And to InfixExpression.Parse,
-    Operator.Concat to InfixExpression.Parse,
+    Concat to InfixExpression.Parse,
     Operator.Equals to InfixExpression.Parse,
-    Operator.Exponential to InfixExpression.Parse,
+    Exponential to InfixExpression.Parse,
     Operator.Divide to InfixExpression.Parse,
     Operator.Group to CallExpression.Parse,
     Operator.GreaterThan to InfixExpression.Parse,
@@ -38,28 +38,40 @@ internal interface ParseInfixExpression {
 data class InfixExpression(
     val lhs: Expression,
     val operator: Operator,
-    val rhs: Expression
+    var rhs: Expression
 ) : Expression {
     internal object Parse : ParseInfixExpression {
         override fun invoke(ctx: Context, lhs: Expression): Expression {
             val precedence = ctx.currentPrecedence()
-            return when (val operator = Parse(ctx)) {
-                Operator.Exponential, Operator.Concat -> ctx.parseRightAssociative(operator, lhs)
-                else -> InfixExpression(lhs = lhs, operator = operator, rhs = ctx.parseExpression(precedence))
+            val operator = Parse(ctx)
+            val rhs = ctx.parseExpression(precedence)
+
+            if (operator.rightAssociative() && lhs is InfixExpression) {
+                return injectRightAssociativeExpression(lhs, operator, rhs)
             }
+            return InfixExpression(lhs = lhs, operator = operator, rhs)
         }
 
-        private fun Context.parseRightAssociative(operator: Operator, lhs: Expression): Expression {
-            val rhs = parseExpression(precedenceOf(operator))
-            if (this.nextTokenType() == Token.Type.Eof) {
-                return InfixExpression(lhs, operator, rhs)
+        private fun Operator.rightAssociative(): Boolean = this == Exponential || this == Concat
+
+        private fun injectRightAssociativeExpression(
+            lhs: InfixExpression,
+            operator: Operator,
+            rhs: Expression
+        ): InfixExpression {
+            var nodeToInject: InfixExpression = lhs
+            while (nodeToInject.rhs is InfixExpression) {
+                nodeToInject = nodeToInject.rhs as InfixExpression
             }
-            if (nextPrecedence() < precedenceOf(operator)) {
-                advance()
-                return Parse(this, InfixExpression(lhs = lhs, operator = Operator.Exponential, rhs = rhs))
-            }
-            return InfixExpression(lhs, operator, parseExpression(currentPrecedence()))
+            val newRhs = InfixExpression(
+                lhs = nodeToInject.rhs,
+                operator = operator,
+                rhs = rhs
+            )
+            nodeToInject.rhs = newRhs
+            return lhs
         }
+
     }
 
     override fun toString(): String {

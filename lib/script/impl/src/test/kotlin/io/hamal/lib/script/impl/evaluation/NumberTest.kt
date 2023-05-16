@@ -44,7 +44,11 @@ internal class NumberTest : AbstractEvalTest() {
         "1 >= 2" to FalseValue,
 
         "10 % 5" to NumberValue(0),
-        "2 ^ 10" to NumberValue(1024),
+        "2^10" to NumberValue(1024),
+
+        "1 == 2" to FalseValue,
+        "2 == 2" to TrueValue,
+        "2 == 1" to FalseValue,
 
         "-2810" to NumberValue(-2810),
         "-(-1)" to NumberValue(1)
