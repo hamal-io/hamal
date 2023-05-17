@@ -59,9 +59,7 @@ internal fun Parser.Context.parseStatement(): Statement {
         isFunction() -> Prototype.Parse(this)
         isReturn() -> Return.Parse(this)
         else -> {
-            val result = ExpressionStatement(parseExpression())
-            advance()
-            result
+            ExpressionStatement(parseExpression())
         }
     }
 }
@@ -81,9 +79,9 @@ private fun Parser.Context.isReturn() = currentTokenType() == Type.Return
 
 internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
     var lhsExpression: Expression = parseFn(currentTokenType())(this)
-    while (!endOfExpression() && precedence < nextPrecedence()) {
-        val infix = infixFn(nextTokenType()) ?: return lhsExpression
-        advance()
+    while (!endOfExpression() && precedence < currentPrecedence()) {
+        val infix = infixFn(currentTokenType()) ?: return lhsExpression
+//        advance()
         lhsExpression = infix(this, lhsExpression)
     }
     return lhsExpression

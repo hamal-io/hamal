@@ -1,6 +1,5 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.script.impl.token.Token.Type
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DisplayName
@@ -15,7 +14,7 @@ internal class GroupedTest : AbstractExpressionTest() {
         fun `empty grouped expression`() {
             runTest(GroupedExpression.Parse, "( )") { result, tokens ->
                 assertThat(result, equalTo(GroupedExpression(NilLiteral())))
-                tokens.inOrder(Type.RightParenthesis, Type.Eof)
+                tokens.wereConsumed()
             }
         }
 
@@ -23,7 +22,7 @@ internal class GroupedTest : AbstractExpressionTest() {
         fun `literal grouped expression`() {
             runTest(GroupedExpression.Parse, "(2810)") { result, tokens ->
                 assertThat(result, equalTo(GroupedExpression(NumberLiteral(2810))))
-                tokens.inOrder(Type.RightParenthesis, Type.Eof)
+                tokens.wereConsumed()
             }
         }
 
@@ -37,7 +36,7 @@ internal class GroupedTest : AbstractExpressionTest() {
                         )
                     )
                 )
-                tokens.inOrder(Type.RightParenthesis, Type.Eof)
+                tokens.wereConsumed()
             }
         }
 
@@ -55,7 +54,7 @@ internal class GroupedTest : AbstractExpressionTest() {
                         )
                     )
                 )
-                tokens.inOrder(Type.RightParenthesis, Type.Eof)
+                tokens.wereConsumed()
             }
         }
     }

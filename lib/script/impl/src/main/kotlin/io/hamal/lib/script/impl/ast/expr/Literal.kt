@@ -17,6 +17,7 @@ data class NumberLiteral(val value: Decimal) : LiteralExpression {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Number)
+            ctx.advance()
             return NumberLiteral(Decimal(token.value))
         }
     }
@@ -30,6 +31,7 @@ data class StringLiteral(val value: String) : LiteralExpression {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.String)
+            ctx.advance()
             return StringLiteral(token.value)
         }
     }
@@ -44,6 +46,7 @@ class TrueLiteral : LiteralExpression {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.True)
+            ctx.advance()
             return TrueLiteral()
         }
     }
@@ -61,6 +64,7 @@ class FalseLiteral : LiteralExpression {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.False)
+            ctx.advance()
             return FalseLiteral()
         }
     }
@@ -79,6 +83,7 @@ class NilLiteral : LiteralExpression {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Nil)
+            ctx.advance()
             return NilLiteral()
         }
     }

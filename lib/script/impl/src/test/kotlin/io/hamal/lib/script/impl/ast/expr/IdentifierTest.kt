@@ -1,6 +1,5 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.script.impl.token.Token.Type
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions
@@ -8,7 +7,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class IdentifierLiteralTest : AbstractExpressionTest() {
+internal class IdentifierTest : AbstractExpressionTest() {
 
     @Nested
     @DisplayName("equals()")
@@ -57,7 +56,7 @@ internal class IdentifierLiteralTest : AbstractExpressionTest() {
         fun identifier() {
             runLiteralTest(IdentifierLiteral.Parse, "some_variable") { result, tokens ->
                 assertThat(result, equalTo(IdentifierLiteral("some_variable")))
-                tokens.inOrder(Type.Identifier, Type.Eof)
+                tokens.wereConsumed()
             }
         }
     }

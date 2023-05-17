@@ -2,7 +2,6 @@ package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.common.math.Decimal
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.impl.token.Token.Type
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions.*
@@ -63,7 +62,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun number() {
                 runLiteralTest(NumberLiteral.Parse, "28.10") { result, tokens ->
                     assertThat(result, equalTo(NumberLiteral(Decimal("28.10"))))
-                    tokens.inOrder(Type.Number, Type.Eof)
+                    tokens.wereConsumed()
                 }
             }
         }
@@ -120,7 +119,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun string() {
                 runLiteralTest(StringLiteral.Parse, "'hello hamal'") { result, tokens ->
                     assertThat(result, equalTo(StringLiteral("hello hamal")))
-                    tokens.inOrder(Type.String, Type.Eof)
+                    tokens.wereConsumed()
                 }
             }
         }
@@ -177,7 +176,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `true`() {
                 runLiteralTest(TrueLiteral.Parse, "true") { result, tokens ->
                     assertThat(result, equalTo(TrueLiteral()))
-                    tokens.inOrder(Type.True, Type.Eof)
+                    tokens.wereConsumed()
                 }
             }
         }
@@ -234,7 +233,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `false`() {
                 runLiteralTest(FalseLiteral.Parse, "false") { result, tokens ->
                     assertThat(result, equalTo(FalseLiteral()))
-                    tokens.inOrder(Type.False, Type.Eof)
+                    tokens.wereConsumed()
                 }
             }
         }
@@ -250,7 +249,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `nil`() {
                 runLiteralTest(NilLiteral.Parse, "nil") { result, tokens ->
                     assertThat(result, equalTo(NilLiteral()))
-                    tokens.inOrder(Type.Nil, Type.Eof)
+                    tokens.wereConsumed()
                 }
             }
         }
