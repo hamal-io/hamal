@@ -1,4 +1,4 @@
-package io.hamal.lib.script.impl.interpreter
+package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.ast.Node

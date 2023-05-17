@@ -8,7 +8,7 @@ import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.MetaTable
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.DefaultSandbox
-import io.hamal.lib.script.impl.interpreter.RootEnvironment
+import io.hamal.lib.script.impl.eval.RootEnvironment
 import org.junit.jupiter.api.fail
 
 internal abstract class AbstractBuiltinTest {
@@ -27,6 +27,14 @@ internal abstract class AbstractBuiltinTest {
             fail { result.cause.toString() }
         }
         return result
+    }
+
+    fun expectError(code: String): ErrorValue {
+        val result = sandbox.eval(code)
+        if (result is ErrorValue) {
+            return result
+        }
+        fail { "An error was expected - but none was thrown" }
     }
 }
 

@@ -1,4 +1,4 @@
-package io.hamal.lib.script.impl.evaluation
+package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.FalseValue
 import io.hamal.lib.script.api.value.NumberValue
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class NumberTest : AbstractEvalTest() {
+internal class EvalNumberTest : AbstractEvalTest() {
 
     @Test
     fun `The universal answer`() {

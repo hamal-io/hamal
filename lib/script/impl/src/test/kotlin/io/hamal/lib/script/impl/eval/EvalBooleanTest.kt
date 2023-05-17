@@ -1,4 +1,4 @@
-package io.hamal.lib.script.impl.evaluation
+package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.FalseValue
 import io.hamal.lib.script.api.value.TrueValue
@@ -6,7 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class BooleanTest : AbstractEvalTest() {
+internal class EvalBooleanTest : AbstractEvalTest() {
     @Test
     fun `true`() {
         val result = eval("true")

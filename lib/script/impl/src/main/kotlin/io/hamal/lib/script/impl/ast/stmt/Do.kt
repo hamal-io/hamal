@@ -15,13 +15,10 @@ data class Do(
             ctx.advance()
 
             if (ctx.currentTokenType() == Token.Type.End) {
-                ctx.advance()
                 return Do(BlockStatement.empty)
             }
 
-            val block = ctx.parseBlockStatement()
-            ctx.advance()
-            return Do(block)
+            return Do(ctx.parseBlockStatement())
         }
     }
 }

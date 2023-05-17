@@ -1,1 +1,1 @@
-require('test_module')
+require('test-env')

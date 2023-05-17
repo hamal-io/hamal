@@ -3,7 +3,7 @@ package io.hamal.worker.infra.service
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.impl.DefaultSandbox
-import io.hamal.lib.script.impl.interpreter.RootEnvironment
+import io.hamal.lib.script.impl.eval.RootEnvironment
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
 import io.hamal.worker.infra.adapter.WorkerExtensionLoader

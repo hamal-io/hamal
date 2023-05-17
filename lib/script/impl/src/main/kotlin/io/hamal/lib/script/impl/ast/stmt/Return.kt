@@ -20,7 +20,6 @@ data class Return(
             var result = Return(NilLiteral())
             if (ctx.currentTokenType() != Token.Type.End) {
                 result = Return(ctx.parseExpression())
-                ctx.advance()
             }
             ctx.expectCurrentTokenTypToBe(Token.Type.End)
             return result

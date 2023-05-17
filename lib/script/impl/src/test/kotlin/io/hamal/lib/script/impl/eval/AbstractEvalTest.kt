@@ -1,10 +1,9 @@
-package io.hamal.lib.script.impl.evaluation
+package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.impl.DefaultInterpreter
 import io.hamal.lib.script.impl.ast.parse
-import io.hamal.lib.script.impl.interpreter.DefaultInterpreter
-import io.hamal.lib.script.impl.interpreter.RootEnvironment
 import io.hamal.lib.script.impl.token.tokenize
 
 internal abstract class AbstractEvalTest {

@@ -1,11 +1,11 @@
-package io.hamal.lib.script.impl.evaluation
+package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.NumberValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class CallTest : AbstractEvalTest() {
+internal class EvalCallTest : AbstractEvalTest() {
 
     @Test
     fun `Function which returns the answer - but what was the question`() {

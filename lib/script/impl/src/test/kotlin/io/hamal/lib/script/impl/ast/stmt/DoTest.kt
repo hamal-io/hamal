@@ -2,6 +2,8 @@ package io.hamal.lib.script.impl.ast.stmt
 
 import io.hamal.lib.script.impl.ast.expr.NilLiteral
 import io.hamal.lib.script.impl.ast.stmt.Do.Parse
+import io.hamal.lib.script.impl.token.Token.Type.End
+import io.hamal.lib.script.impl.token.Token.Type.Eof
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
@@ -22,7 +24,7 @@ internal class DoTest : AbstractStatementTest() {
         DynamicTest.dynamicTest(code) {
             runTest(Parse, code) { result, tokens ->
                 assertThat(result, equalTo(expected))
-                tokens.wereConsumed()
+                tokens.inOrder(End, Eof)
             }
         }
     }

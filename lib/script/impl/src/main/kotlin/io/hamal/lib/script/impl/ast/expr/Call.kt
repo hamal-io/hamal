@@ -29,7 +29,6 @@ data class CallExpression(
             val result = mutableListOf<Expression>()
             while (currentTokenType() != Token.Type.RightParenthesis) {
                 result.add(parseExpression(Precedence.Lowest))
-                advance()
                 if (currentTokenType() == Token.Type.Comma) {
                     advance()
                 }

@@ -10,7 +10,6 @@ class Call(
     internal object Parse : ParseStatement<Call> {
         override fun invoke(ctx: Context): Call {
             val identifier = IdentifierLiteral.Parse(ctx)
-            ctx.advance()
             return Call(CallExpression.Parse(ctx, identifier))
         }
     }

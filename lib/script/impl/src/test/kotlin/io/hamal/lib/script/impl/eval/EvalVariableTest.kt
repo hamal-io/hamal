@@ -1,4 +1,4 @@
-package io.hamal.lib.script.impl.evaluation
+package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.NilValue
 import io.hamal.lib.script.api.value.NumberValue
@@ -6,7 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class VariableTest : AbstractEvalTest() {
+internal class EvalVariableTest : AbstractEvalTest() {
     @Test
     fun `Assign number to global variable`() {
         val result = eval("""some_number=2810""")

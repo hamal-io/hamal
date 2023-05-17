@@ -34,17 +34,14 @@ class PrototypeLiteral(
         }
 
         private fun Context.parseIdentifier(): IdentifierLiteral {
-            val result = IdentifierLiteral.Parse(this)
-            advance()
-            return result
+            return IdentifierLiteral.Parse(this)
         }
 
         private fun Context.parseParameters(): List<IdentifierLiteral> {
             val result = mutableListOf<IdentifierLiteral>()
             while (currentTokenType() != Token.Type.RightParenthesis) {
                 expectCurrentTokenTypToBe(Token.Type.Identifier)
-                result.add(IdentifierLiteral.Parse(this))
-                advance()
+                result.add(parseIdentifier())
                 if (currentTokenType() == Token.Type.Comma) {
                     advance()
                 }
