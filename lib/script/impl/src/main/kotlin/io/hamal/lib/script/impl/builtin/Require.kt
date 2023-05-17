@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.builtin
 
+import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.script.api.value.Identifier
@@ -17,7 +18,16 @@ internal object RequireFunction : NativeFunction {
             ?: throw ScriptEvaluationException(ErrorValue("require needs one environment identifier"))
 
         val identifier = firstParameter.asIdentifier()
-        return ctx.env.findEnvironment(identifier)
-            ?: throw ScriptEvaluationException(ErrorValue("Environment '${identifier.value}' not found"))
+
+        var result: Environment = ctx.env
+        val splits = identifier.value.split("/")
+        splits.forEach { envIdent ->
+            result = result.findEnvironment(Identifier(envIdent))
+                ?: throw ScriptEvaluationException(ErrorValue("Environment '${identifier.value}' not found"))
+        }
+
+
+        return result
+
     }
 }

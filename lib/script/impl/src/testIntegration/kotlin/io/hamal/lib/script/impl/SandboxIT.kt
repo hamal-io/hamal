@@ -46,7 +46,12 @@ class SandboxIT {
     private val testPath = Paths.get("src", "testIntegration", "resources")
 
     object TestEnv : Environment {
+
         override val identifier = Identifier("test-env")
+
+        private val values = mutableMapOf<Identifier, Value>(
+            Identifier("nested-env") to NestedTestEnv
+        )
 
         override fun addLocal(identifier: Identifier, value: Value) {
             TODO("Not yet implemented")
@@ -57,10 +62,34 @@ class SandboxIT {
         }
 
         override fun get(identifier: Identifier): Value {
+            return requireNotNull(values[identifier])
+        }
+
+
+        override fun findNativeFunction(identifier: Identifier): NativeFunction? {
             TODO("Not yet implemented")
         }
 
-        override fun get(identifier: String): Value {
+        override fun findEnvironment(identifier: Identifier): Environment? {
+            TODO("Not yet implemented")
+        }
+
+        override val metaTable: MetaTable
+            get() = TODO("Not yet implemented")
+    }
+
+    object NestedTestEnv : Environment {
+        override val identifier = Identifier("nested-env")
+
+        override fun addLocal(identifier: Identifier, value: Value) {
+            TODO("Not yet implemented")
+        }
+
+        override fun addGlobal(identifier: Identifier, value: Value) {
+            TODO("Not yet implemented")
+        }
+
+        override fun get(identifier: Identifier): Value {
             TODO("Not yet implemented")
         }
 

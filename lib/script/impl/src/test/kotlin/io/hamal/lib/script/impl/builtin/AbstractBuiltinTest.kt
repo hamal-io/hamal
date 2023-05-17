@@ -13,12 +13,12 @@ import org.junit.jupiter.api.fail
 
 internal abstract class AbstractBuiltinTest {
 
-    private val rootEnv = RootEnvironment()
-    private val sandbox: Sandbox
+    protected val env = RootEnvironment()
+    protected val sandbox: Sandbox
 
     init {
-        rootEnv.add(TestEnv)
-        sandbox = DefaultSandbox(rootEnv)
+        env.add(TestEnv)
+        sandbox = DefaultSandbox(env)
     }
 
     fun eval(code: String): Value {
@@ -38,8 +38,14 @@ internal abstract class AbstractBuiltinTest {
     }
 }
 
-internal object TestEnv : Environment {
+object TestEnv : Environment {
+
     override val identifier = Identifier("test-env")
+
+    private val values = mutableMapOf<Identifier, Value>(
+        Identifier("nested-env") to NestedTestEnv
+    )
+
     override fun addLocal(identifier: Identifier, value: Value) {
         TODO("Not yet implemented")
     }
@@ -49,10 +55,34 @@ internal object TestEnv : Environment {
     }
 
     override fun get(identifier: Identifier): Value {
+        return requireNotNull(values[identifier])
+    }
+
+
+    override fun findNativeFunction(identifier: Identifier): NativeFunction? {
         TODO("Not yet implemented")
     }
 
-    override fun get(identifier: String): Value {
+    override fun findEnvironment(identifier: Identifier): Environment? {
+        return values[identifier]?.let { it as Environment }
+    }
+
+    override val metaTable: MetaTable
+        get() = TODO("Not yet implemented")
+}
+
+object NestedTestEnv : Environment {
+    override val identifier = Identifier("nested-env")
+
+    override fun addLocal(identifier: Identifier, value: Value) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addGlobal(identifier: Identifier, value: Value) {
+        TODO("Not yet implemented")
+    }
+
+    override fun get(identifier: Identifier): Value {
         TODO("Not yet implemented")
     }
 

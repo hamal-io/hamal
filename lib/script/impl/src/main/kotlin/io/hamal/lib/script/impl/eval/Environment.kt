@@ -62,7 +62,7 @@ class RootEnvironment : Environment {
 
 
     override fun get(identifier: Identifier): Value {
-        return requireNotNull(locals[identifier] ?: globals[identifier])
+        return requireNotNull(locals[identifier] ?: globals[identifier] ?: extensions[identifier])
     }
 
     override fun get(identifier: String): Value {

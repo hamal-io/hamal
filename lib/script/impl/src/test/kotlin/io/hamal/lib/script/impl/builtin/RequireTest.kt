@@ -9,21 +9,22 @@ import org.junit.jupiter.api.Test
 @DisplayName("require()")
 internal class RequireTest : AbstractBuiltinTest() {
     @Test
-    fun `Requires test-env environment`() {
+    fun `Requires environment`() {
         val result = eval("""require('test-env')""")
         assertThat(result, equalTo(TestEnv))
     }
 
     @Test
-    fun `Requires test-env environment and assigns it to local variable`() {
+    fun `Requires environment and assigns it to local variable`() {
         val result = eval("""local e = require('test-env')""")
         assertThat(result, equalTo(NilValue))
-
+        assertThat(env["e"], equalTo(TestEnv))
     }
 
-//    @Test
-//    fun `Requires test-env environment and assigns it to local variable and returns `() {
-//        val result = eval("""local e = require('test-env'); e""")
-//        assertThat(result, equalTo(TestEnv))
-//    }
+    @Test
+    fun `Requires nested environment and assigns it to local variable and returns `() {
+        val result = eval("""local e = require('test-env/nested-env')""")
+        assertThat(result, equalTo(NilValue))
+        assertThat(env["e"], equalTo(NestedTestEnv))
+    }
 }

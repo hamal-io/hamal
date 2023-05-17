@@ -9,7 +9,7 @@ interface Environment : Value {
     fun addLocal(identifier: Identifier, value: Value)
     fun addGlobal(identifier: Identifier, value: Value)
     operator fun get(identifier: Identifier): Value
-    operator fun get(identifier: String): Value
+    operator fun get(identifier: String) = get(Identifier(identifier))
 
     fun findNativeFunction(identifier: Identifier): NativeFunction?
     fun findEnvironment(identifier: Identifier): Environment?
