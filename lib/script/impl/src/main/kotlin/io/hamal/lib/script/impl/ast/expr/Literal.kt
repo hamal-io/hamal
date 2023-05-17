@@ -39,7 +39,7 @@ data class StringLiteral(val value: String) : LiteralExpression {
     override fun toString() = "'$value'"
 }
 
-class TrueLiteral : LiteralExpression {
+object TrueLiteral : LiteralExpression {
 
     internal object Parse : ParseLiteralExpression<TrueLiteral> {
         override fun invoke(ctx: Context): TrueLiteral {
@@ -47,7 +47,7 @@ class TrueLiteral : LiteralExpression {
             val token = ctx.currentToken()
             assert(token.type == Type.True)
             ctx.advance()
-            return TrueLiteral()
+            return TrueLiteral
         }
     }
 
@@ -58,14 +58,14 @@ class TrueLiteral : LiteralExpression {
     override fun toString() = "true"
 }
 
-class FalseLiteral : LiteralExpression {
+object FalseLiteral : LiteralExpression {
     internal object Parse : ParseLiteralExpression<FalseLiteral> {
         override fun invoke(ctx: Context): FalseLiteral {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.False)
             ctx.advance()
-            return FalseLiteral()
+            return FalseLiteral
         }
     }
 
@@ -77,14 +77,14 @@ class FalseLiteral : LiteralExpression {
 }
 
 
-class NilLiteral : LiteralExpression {
+object NilLiteral : LiteralExpression {
     internal object Parse : ParseLiteralExpression<NilLiteral> {
         override fun invoke(ctx: Context): NilLiteral {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
             assert(token.type == Type.Nil)
             ctx.advance()
-            return NilLiteral()
+            return NilLiteral
         }
     }
 

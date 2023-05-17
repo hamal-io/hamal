@@ -21,7 +21,7 @@ internal class AssignmentTest : AbstractStatementTest() {
                 "some_var, another_var = true, false",
                 Global(
                     listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
-                    listOf(TrueLiteral(), FalseLiteral())
+                    listOf(TrueLiteral, FalseLiteral)
                 )
             )
         ).map { (code, expected) ->
@@ -48,7 +48,7 @@ internal class AssignmentTest : AbstractStatementTest() {
                 "local some_var, another_var = true, false",
                 Local(
                     listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
-                    listOf(TrueLiteral(), FalseLiteral())
+                    listOf(TrueLiteral, FalseLiteral)
                 )
             ),
             Pair(

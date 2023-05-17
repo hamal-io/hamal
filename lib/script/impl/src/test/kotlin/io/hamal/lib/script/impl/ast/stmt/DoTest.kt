@@ -18,7 +18,7 @@ internal class DoTest : AbstractStatementTest() {
         ),
         Pair(
             "do return end",
-            Do(BlockStatement(Return(NilLiteral())))
+            Do(BlockStatement(Return(NilLiteral)))
         )
     ).map { (code, expected) ->
         DynamicTest.dynamicTest(code) {

@@ -14,7 +14,7 @@ internal class ReturnTest : AbstractStatementTest() {
     fun parse() = listOf(
         Pair(
             "return end",
-            Return(NilLiteral())
+            Return(NilLiteral)
         ),
         Pair(
             "return 1 end",

@@ -128,54 +128,13 @@ internal class LiteralTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("True")
     inner class TrueTest {
-
-        @Nested
-        @DisplayName("equals()")
-        inner class EqualsTest {
-            @Test
-            fun `Equal if underlying values are equal`() {
-                assertEquals(
-                    TrueLiteral(),
-                    TrueLiteral()
-                )
-            }
-
-            @Test
-            fun `Not Equal if underlying values are different`() {
-                assertNotEquals(
-                    TrueLiteral(),
-                    FalseLiteral()
-                )
-            }
-        }
-
-        @Nested
-        @DisplayName("hashCode()")
-        inner class HashCodeTest {
-            @Test
-            fun `Same hashcode if values are equal`() {
-                assertEquals(
-                    TrueLiteral().hashCode(),
-                    TrueLiteral().hashCode()
-                )
-            }
-
-            @Test
-            fun `Different hashcode if values are different`() {
-                assertNotEquals(
-                    TrueLiteral().hashCode(),
-                    FalseLiteral().hashCode()
-                )
-            }
-        }
-
         @Nested
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
             fun `true`() {
                 runLiteralTest(TrueLiteral.Parse, "true") { result, tokens ->
-                    assertThat(result, equalTo(TrueLiteral()))
+                    assertThat(result, equalTo(TrueLiteral))
                     tokens.wereConsumed()
                 }
             }
@@ -185,54 +144,13 @@ internal class LiteralTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("False")
     inner class FalseTest {
-
-        @Nested
-        @DisplayName("equals()")
-        inner class EqualsTest {
-            @Test
-            fun `Equal if underlying values are equal`() {
-                assertEquals(
-                    FalseLiteral(),
-                    FalseLiteral()
-                )
-            }
-
-            @Test
-            fun `Not Equal if underlying values are different`() {
-                assertNotEquals(
-                    FalseLiteral(),
-                    TrueLiteral()
-                )
-            }
-        }
-
-        @Nested
-        @DisplayName("hashCode()")
-        inner class HashCodeTest {
-            @Test
-            fun `Same hashcode if values are equal`() {
-                assertEquals(
-                    FalseLiteral().hashCode(),
-                    FalseLiteral().hashCode()
-                )
-            }
-
-            @Test
-            fun `Different hashcode if values are different`() {
-                assertNotEquals(
-                    FalseLiteral().hashCode(),
-                    TrueLiteral().hashCode()
-                )
-            }
-        }
-
         @Nested
         @DisplayName("Parse()")
         inner class ParseTest {
             @Test
             fun `false`() {
                 runLiteralTest(FalseLiteral.Parse, "false") { result, tokens ->
-                    assertThat(result, equalTo(FalseLiteral()))
+                    assertThat(result, equalTo(FalseLiteral))
                     tokens.wereConsumed()
                 }
             }
@@ -248,7 +166,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun `nil`() {
                 runLiteralTest(NilLiteral.Parse, "nil") { result, tokens ->
-                    assertThat(result, equalTo(NilLiteral()))
+                    assertThat(result, equalTo(NilLiteral))
                     tokens.wereConsumed()
                 }
             }

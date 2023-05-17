@@ -20,12 +20,12 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(TrueLiteral()))
+                    BlockStatement(ExpressionStatement(TrueLiteral))
                 ),
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(FalseLiteral()))
+                    BlockStatement(ExpressionStatement(FalseLiteral))
                 )
             )
         }
@@ -36,12 +36,12 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(TrueLiteral()))
+                    BlockStatement(ExpressionStatement(TrueLiteral))
                 ),
                 PrototypeLiteral(
                     IdentifierLiteral("AnotherIdentifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(FalseLiteral()))
+                    BlockStatement(ExpressionStatement(FalseLiteral))
                 )
             )
         }
@@ -52,7 +52,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(TrueLiteral()))
+                    BlockStatement(ExpressionStatement(TrueLiteral))
                 ),
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
@@ -60,7 +60,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
                         IdentifierLiteral("ParameterIdentifier"),
                         IdentifierLiteral("AnotherParameterIdentifier")
                     ),
-                    BlockStatement(ExpressionStatement(FalseLiteral()))
+                    BlockStatement(ExpressionStatement(FalseLiteral))
                 )
             )
         }
@@ -76,12 +76,12 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(TrueLiteral()))
+                    BlockStatement(ExpressionStatement(TrueLiteral))
                 ).hashCode(),
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(FalseLiteral()))
+                    BlockStatement(ExpressionStatement(FalseLiteral))
                 ).hashCode()
             )
         }
@@ -92,12 +92,12 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(TrueLiteral()))
+                    BlockStatement(ExpressionStatement(TrueLiteral))
                 ).hashCode(),
                 PrototypeLiteral(
                     IdentifierLiteral("AnotherIdentifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(FalseLiteral()))
+                    BlockStatement(ExpressionStatement(FalseLiteral))
                 ).hashCode()
             )
         }
@@ -108,7 +108,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
-                    BlockStatement(ExpressionStatement(TrueLiteral()))
+                    BlockStatement(ExpressionStatement(TrueLiteral))
                 ).hashCode(),
                 PrototypeLiteral(
                     IdentifierLiteral("Identifier"),
@@ -116,7 +116,7 @@ internal class PrototypeTest : AbstractExpressionTest() {
                         IdentifierLiteral("ParameterIdentifier"),
                         IdentifierLiteral("AnotherParameterIdentifier")
                     ),
-                    BlockStatement(ExpressionStatement(FalseLiteral()))
+                    BlockStatement(ExpressionStatement(FalseLiteral))
                 ).hashCode()
             )
         }

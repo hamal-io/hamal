@@ -4,7 +4,8 @@ import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.parseStatement
 import io.hamal.lib.script.impl.ast.stmt.BlockStatement
 import io.hamal.lib.script.impl.ast.stmt.Statement
-import io.hamal.lib.script.impl.token.Token
+import io.hamal.lib.script.impl.token.Token.Type.*
+import io.hamal.lib.script.impl.token.Token.Type.Function
 
 class PrototypeLiteral(
     val identifier: IdentifierLiteral,
@@ -15,15 +16,15 @@ class PrototypeLiteral(
     internal object Parse : ParseLiteralExpression<PrototypeLiteral> {
         override fun invoke(ctx: Context): PrototypeLiteral {
             require(ctx.isNotEmpty())
-            ctx.expectCurrentTokenTypToBe(Token.Type.Function)
+            ctx.expectCurrentTokenTypToBe(Function)
             ctx.advance()
 
             val identifier = ctx.parseIdentifier()
-            ctx.expectCurrentTokenTypToBe(Token.Type.LeftParenthesis)
+            ctx.expectCurrentTokenTypToBe( LeftParenthesis)
             ctx.advance()
 
             val parameterIdentifiers = ctx.parseParameters()
-            ctx.expectCurrentTokenTypToBe(Token.Type.RightParenthesis)
+            ctx.expectCurrentTokenTypToBe(RightParenthesis)
             ctx.advance()
 
             return PrototypeLiteral(
@@ -39,10 +40,10 @@ class PrototypeLiteral(
 
         private fun Context.parseParameters(): List<IdentifierLiteral> {
             val result = mutableListOf<IdentifierLiteral>()
-            while (currentTokenType() != Token.Type.RightParenthesis) {
-                expectCurrentTokenTypToBe(Token.Type.Identifier)
+            while (currentTokenType() != RightParenthesis) {
+                expectCurrentTokenTypToBe(Identifier)
                 result.add(parseIdentifier())
-                if (currentTokenType() == Token.Type.Comma) {
+                if (currentTokenType() == Comma) {
                     advance()
                 }
             }
@@ -51,13 +52,13 @@ class PrototypeLiteral(
 
         private fun Context.parseBody(): BlockStatement {
             val statements = mutableListOf<Statement>()
-            while (currentTokenType() != Token.Type.End) {
-                require(currentTokenType() != Token.Type.Eof) {
+            while (currentTokenType() != End) {
+                require(currentTokenType() != Eof) {
                     "Expected end  but reached end of file"
                 }
                 parseStatement().let(statements::add)
             }
-            expectCurrentTokenTypToBe(Token.Type.End)
+            expectCurrentTokenTypToBe(End)
             advance()
             return BlockStatement(statements)
         }

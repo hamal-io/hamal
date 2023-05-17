@@ -14,7 +14,7 @@ data class GroupedExpression(val expression: Expression) : Expression {
 
             if (ctx.currentTokenType() == RightParenthesis) {
                 ctx.advance()
-                return GroupedExpression(NilLiteral())
+                return GroupedExpression(NilLiteral)
             }
 
             val result = GroupedExpression(ctx.parseExpression(Precedence.Lowest))

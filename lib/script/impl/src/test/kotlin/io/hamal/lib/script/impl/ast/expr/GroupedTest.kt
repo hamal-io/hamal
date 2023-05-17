@@ -13,7 +13,7 @@ internal class GroupedTest : AbstractExpressionTest() {
         @Test
         fun `empty grouped expression`() {
             runTest(GroupedExpression.Parse, "( )") { result, tokens ->
-                assertThat(result, equalTo(GroupedExpression(NilLiteral())))
+                assertThat(result, equalTo(GroupedExpression(NilLiteral)))
                 tokens.wereConsumed()
             }
         }

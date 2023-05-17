@@ -17,7 +17,7 @@ data class Return(
 
             //return token must be followed by end
             //see: https://www.lua.org/pil/4.4.html
-            var result = Return(NilLiteral())
+            var result = Return(NilLiteral)
             if (ctx.currentTokenType() != Token.Type.End) {
                 result = Return(ctx.parseExpression())
             }
