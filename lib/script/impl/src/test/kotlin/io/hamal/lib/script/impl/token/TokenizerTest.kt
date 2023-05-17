@@ -8,8 +8,7 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.DynamicTest.*
 
 
 class TokenizerTest {
@@ -215,104 +214,82 @@ class TokenizerTest {
 
         @Nested
         @DisplayName("nextToken()")
-        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
         inner class NextTokenTest {
 
-            inner class Argument(val input: String, val expectedToken: Token) {
-                override fun toString() = "Expect $input to be ${expectedToken.type}"
-            }
+            @TestFactory
+            fun tokens() = listOf(
+                "some_variable" to Token(Identifier, 1, 1, "some_variable"),
+                "not_variable" to Token(Identifier, 1, 1, "not_variable"),
+                "and_variable" to Token(Identifier, 1, 1, "and_variable"),
+                "or_variable" to Token(Identifier, 1, 1, "or_variable"),
+                "true_variable" to Token(Identifier, 1, 1, "true_variable"),
+                "23.45" to Token(Number, 1, 1, "23.45"),
+                "0x815" to Token(HexNumber, 1, 1, "0x815"),
 
-            private fun arguments() = listOf(
-                Argument(
-                    "some_variable",
-                    Token(Identifier, 1, 1, "some_variable")
-                ),
-                Argument(
-                    "not_variable",
-                    Token(Identifier, 1, 1, "not_variable")
-                ),
-                Argument(
-                    "and_variable",
-                    Token(Identifier, 1, 1, "and_variable")
-                ),
-                Argument(
-                    "or_variable",
-                    Token(Identifier, 1, 1, "or_variable")
-                ),
-                Argument(
-                    "true_variable",
-                    Token(Identifier, 1, 1, "true_variable")
-                ),
-                Argument("23.45", Token(Number, 1, 1, "23.45")),
-                Argument("0x815", Token(HexNumber, 1, 1, "0x815")),
-                Argument(
-                    "'Hello Hamal'",
-                    Token(Type.String, 1, 1, "Hello Hamal")
-                ),
-                Argument("true", Token(True, 1, 1, "true")),
-                Argument("false", Token(False, 1, 1, "false")),
-                Argument("nil", Token(Nil, 1, 1, "nil")),
-                Argument("break", Token(Break, 1, 1, "break")),
-                Argument("do", Token(Do, 1, 1, "do")),
-                Argument("else", Token(Else, 1, 1, "else")),
-                Argument("elseif", Token(ElseIf, 1, 1, "elseif")),
-                Argument("end", Token(End, 1, 1, "end")),
-                Argument("for", Token(For, 1, 1, "for")),
-                Argument("function", Token(Function, 1, 1, "function")),
-                Argument("if", Token(If, 1, 1, "if")),
-                Argument("in", Token(In, 1, 1, "in")),
-                Argument("local", Token(Local, 1, 1, "local")),
-                Argument("repeat", Token(Repeat, 1, 1, "repeat")),
-                Argument("return", Token(Return, 1, 1, "return")),
-                Argument("then", Token(Then, 1, 1, "then")),
-                Argument("until", Token(Until, 1, 1, "until")),
-                Argument("while", Token(While, 1, 1, "while")),
+                "'Hello Hamal'" to Token(Type.String, 1, 1, "Hello Hamal"),
+                "true" to Token(True, 1, 1, "true"),
+                "false" to Token(False, 1, 1, "false"),
+                "nil" to Token(Nil, 1, 1, "nil"),
+                "break" to Token(Break, 1, 1, "break"),
+                "do" to Token(Do, 1, 1, "do"),
+                "else" to Token(Else, 1, 1, "else"),
+                "elseif" to Token(ElseIf, 1, 1, "elseif"),
+                "end" to Token(End, 1, 1, "end"),
+                "for" to Token(For, 1, 1, "for"),
+                "function" to Token(Function, 1, 1, "function"),
+                "if" to Token(If, 1, 1, "if"),
+                "in" to Token(In, 1, 1, "in"),
+                "local" to Token(Local, 1, 1, "local"),
+                "repeat" to Token(Repeat, 1, 1, "repeat"),
+                "return" to Token(Return, 1, 1, "return"),
+                "then" to Token(Then, 1, 1, "then"),
+                "until" to Token(Until, 1, 1, "until"),
+                "while" to Token(While, 1, 1, "while"),
 
-                Argument("and", Token(And, 1, 1, "and")),
-                Argument("*", Token(Asterisk, 1, 1, "*")),
-                Argument("^", Token(Carat, 1, 1, "^")),
-                Argument(":", Token(Colon, 1, 1, ":")),
-                Argument(".", Token(Dot, 1, 1, ".")),
-                Argument("..", Token(Dot_Dot, 1, 1, "..")),
-                Argument("=", Token(Equal, 1, 1, "=")),
-                Argument("==", Token(Equal_Equal, 1, 1, "==")),
-                Argument("#", Token(Hash, 1, 1, "#")),
-                Argument("<", Token(LeftAngleBracket, 1, 1, "<")),
-                Argument("<=", Token(LeftAngleBracket_Equal, 1, 1, "<=")),
-                Argument("<<", Token(LeftAngleBracket_LeftAngleBracket, 1, 1, "<<")),
-                Argument("[", Token(LeftBracket, 1, 1, "[")),
-                Argument("(", Token(LeftParenthesis, 1, 1, "(")),
-                Argument("-", Token(Minus, 1, 1, "-")),
-                Argument("not", Token(Not, 1, 1, "not")),
-                Argument("or", Token(Or, 1, 1, "or")),
-                Argument("%", Token(Percent, 1, 1, "%")),
-                Argument("+", Token(Plus, 1, 1, "+")),
-                Argument(">", Token(RightAngleBracket, 1, 1, ">")),
-                Argument(">=", Token(RightAngleBracket_Equal, 1, 1, ">=")),
-                Argument(">>", Token(RightAngleBracket_RightAngleBracket, 1, 1, ">>")),
-                Argument("]", Token(RightBracket, 1, 1, "]")),
-                Argument(")", Token(RightParenthesis, 1, 1, ")")),
-                Argument("/", Token(Slash, 1, 1, "/")),
-                Argument("~", Token(Tilde, 1, 1, "~")),
-                Argument("~=", Token(Tilde_Equal, 1, 1, "~=")),
+                "and" to Token(And, 1, 1, "and"),
+                "*" to Token(Asterisk, 1, 1, "*"),
+                "^" to Token(Carat, 1, 1, "^"),
+                ":" to Token(Colon, 1, 1, ":"),
+                "." to Token(Dot, 1, 1, "."),
+                ".." to Token(Dot_Dot, 1, 1, ".."),
+                "=" to Token(Equal, 1, 1, "="),
+                "==" to Token(Equal_Equal, 1, 1, "=="),
+                "#" to Token(Hash, 1, 1, "#"),
+                "<" to Token(LeftAngleBracket, 1, 1, "<"),
+                "<=" to Token(LeftAngleBracket_Equal, 1, 1, "<="),
+                "<<" to Token(LeftAngleBracket_LeftAngleBracket, 1, 1, "<<"),
+                "[" to Token(LeftBracket, 1, 1, "["),
+                "{" to Token(LeftCurlyBracket, 1, 1, "{"),
 
-                Argument(";", Token(Semicolon, 1, 1, ";")),
-                Argument(",", Token(Comma, 1, 1, ",")),
+                "(" to Token(LeftParenthesis, 1, 1, "("),
+                "-" to Token(Minus, 1, 1, "-"),
+                "not" to Token(Not, 1, 1, "not"),
+                "or" to Token(Or, 1, 1, "or"),
+                "%" to Token(Percent, 1, 1, "%"),
+                "+" to Token(Plus, 1, 1, "+"),
+                ">" to Token(RightAngleBracket, 1, 1, ">"),
+                ">=" to Token(RightAngleBracket_Equal, 1, 1, ">="),
+                ">>" to Token(RightAngleBracket_RightAngleBracket, 1, 1, ">>"),
+                "]" to Token(RightBracket, 1, 1, "]"),
+                "}" to Token(RightCurlyBracket, 1, 1, "}"),
+                ")" to Token(RightParenthesis, 1, 1, ")"),
+                "/" to Token(Slash, 1, 1, "/"),
+                "~" to Token(Tilde, 1, 1, "~"),
+                "~=" to Token(Tilde_Equal, 1, 1, "~="),
 
-                )
+                ";" to Token(Semicolon, 1, 1, ";"),
+                "," to Token(Comma, 1, 1, ","),
+            ).map { (code, expected) ->
+                dynamicTest(code) {
+                    val testInstance = DefaultTokenizer(code)
+                    val result = testInstance.nextToken()
+                    assertThat("Of type ${expected.type}", result.type, equalTo(expected.type))
+                    assertThat("Line ${expected.line}", result.line, equalTo(expected.line))
+                    assertThat("Position ${expected.position}", result.position, equalTo(expected.position))
+                    assertThat("Value ${expected.value}", result.value, equalTo(expected.value))
 
-            @ParameterizedTest
-            @MethodSource("arguments")
-            fun test(argument: Argument) {
-                val expected = argument.expectedToken
-                val testInstance = DefaultTokenizer(argument.input)
-                val result = testInstance.nextToken()
-                assertThat("Of type ${expected.type}", result.type, equalTo(expected.type))
-                assertThat("Line ${expected.line}", result.line, equalTo(expected.line))
-                assertThat("Position ${expected.position}", result.position, equalTo(expected.position))
-                assertThat("Value ${expected.value}", result.value, equalTo(expected.value))
-
-                assertThat(testInstance.nextToken().type, equalTo(Eof))
+                    assertThat(testInstance.nextToken().type, equalTo(Eof))
+                }
             }
 
             @Test
@@ -331,6 +308,56 @@ class TokenizerTest {
 
                 val eof = testInstance.nextToken()
                 assertThat(eof.type, equalTo(Eof))
+            }
+
+            @Test
+            fun `Tokenize a = {x=0, y=0}`() {
+                val testInstance = DefaultTokenizer("a = {x=0, y=0}")
+
+                var identifier = testInstance.nextToken()
+                assertThat(identifier.type, equalTo(Identifier))
+                assertThat(identifier.value, equalTo("a"))
+
+                var equal = testInstance.nextToken()
+                assertThat(equal.type, equalTo(Equal))
+                assertThat(equal.value, equalTo("="))
+
+                val leftCurly = testInstance.nextToken()
+                assertThat(leftCurly.type, equalTo(LeftCurlyBracket))
+                assertThat(leftCurly.value, equalTo("{"))
+
+                identifier = testInstance.nextToken()
+                assertThat(identifier.type, equalTo(Identifier))
+                assertThat(identifier.value, equalTo("x"))
+
+                equal = testInstance.nextToken()
+                assertThat(equal.type, equalTo(Equal))
+                assertThat(equal.value, equalTo("="))
+
+                var number = testInstance.nextToken()
+                assertThat(number.type, equalTo(Number))
+                assertThat(number.value, equalTo("0"))
+
+                val comma = testInstance.nextToken()
+                assertThat(comma.type, equalTo(Comma))
+                assertThat(comma.value, equalTo(","))
+
+                identifier = testInstance.nextToken()
+                assertThat(identifier.type, equalTo(Identifier))
+                assertThat(identifier.value, equalTo("y"))
+
+                equal = testInstance.nextToken()
+                assertThat(equal.type, equalTo(Equal))
+                assertThat(equal.value, equalTo("="))
+
+                number = testInstance.nextToken()
+                assertThat(number.type, equalTo(Number))
+                assertThat(number.value, equalTo("0"))
+
+                val rightCurly = testInstance.nextToken()
+                assertThat(rightCurly.type, equalTo(RightCurlyBracket))
+                assertThat(rightCurly.value, equalTo("}"))
+
             }
         }
 
