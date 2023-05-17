@@ -51,6 +51,7 @@ class RootEnvironment : Environment {
             is PrototypeValue -> prototypes[identifier] = value
             is NilValue -> locals[identifier] = value
             is NumberValue -> locals[identifier] = value
+            is Environment -> locals[identifier] = value
             else -> TODO()
         }
     }

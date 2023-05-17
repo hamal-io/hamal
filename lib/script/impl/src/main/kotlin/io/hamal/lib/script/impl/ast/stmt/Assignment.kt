@@ -80,13 +80,7 @@ private fun Context.parseIdentifiers(): List<IdentifierLiteral> {
 
 private fun Context.parseExpressions(): List<Expression> {
     val result = mutableListOf<Expression>()
-    do {
-        if (currentTokenType() == Type.Comma) {
-            advance()
-        }
-        result.add(parseExpression(Precedence.Lowest))
-        advance()
-    } while (currentTokenType() == Type.Comma)
+    result.add(parseExpression(Precedence.Lowest))
     return result
 }
 

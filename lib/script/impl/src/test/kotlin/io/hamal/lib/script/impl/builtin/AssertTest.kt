@@ -8,43 +8,43 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("BuiltinAssert")
+@DisplayName("assert()")
 internal class AssertTest : AbstractBuiltinTest() {
 
     @Test
     fun `Always true`() {
-        val result = eval("""assert(true)""".trimIndent())
+        val result = eval("""assert(true)""")
         assertThat(result, equalTo(NilValue))
     }
 
     @Test
     fun `Evaluates expression to true`() {
-        val result = eval("""assert(1 < 2)""".trimIndent())
+        val result = eval("""assert(1 < 2)""")
         assertThat(result, equalTo(NilValue))
     }
 
     @Test
     fun `Always false`() {
-        val result = eval("""assert(false)""".trimIndent())
+        val result = eval("""assert(false)""")
         assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: 'false'"))))
     }
 
     @Test
     fun `Evaluates expression to false`() {
-        val result = eval("""assert(2 < 1)""".trimIndent())
+        val result = eval("""assert(2 < 1)""")
         assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: '2 < 1'"))))
     }
 
     @Test
     fun `Shows custom error message on assertion violation`() {
-        val result = eval("""assert(false,'some deep and meaningful message')""".trimIndent())
+        val result = eval("""assert(false,'some deep and meaningful message')""")
         assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: 'some deep and meaningful message'"))))
     }
 
 
     @Test
     fun `Evaluate not to boolean`() {
-        val result = eval("""assert(2810)""".trimIndent())
+        val result = eval("""assert(2810)""")
         assertThat(result, equalTo(ErrorValue(StringValue("Assertion of non boolean value is always false"))))
     }
 

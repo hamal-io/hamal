@@ -1,7 +1,10 @@
 package io.hamal.lib.script.impl.builtin
 
 import io.hamal.lib.script.api.native_.NativeFunction
-import io.hamal.lib.script.api.value.*
+import io.hamal.lib.script.api.value.ErrorValue
+import io.hamal.lib.script.api.value.Identifier
+import io.hamal.lib.script.api.value.MetaTableNotImplementedYet
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
 internal object RequireFunction : NativeFunction {
@@ -10,9 +13,11 @@ internal object RequireFunction : NativeFunction {
 
 
     override fun invoke(ctx: NativeFunction.Context): Value {
-        val identifier = ctx.parameters.firstOrNull()
+        val firstParameter = ctx.parameters.firstOrNull()
             ?: throw ScriptEvaluationException(ErrorValue("require needs one environment identifier"))
 
-        return ctx.env.findEnvironment(Identifier("eth")) ?: NilValue
+        val identifier = firstParameter.asIdentifier()
+        return ctx.env.findEnvironment(identifier)
+            ?: throw ScriptEvaluationException(ErrorValue("Environment '${identifier.value}' not found"))
     }
 }

@@ -1,9 +1,6 @@
 package io.hamal.lib.script.impl.ast.stmt
 
-import io.hamal.lib.script.impl.ast.expr.FalseLiteral
-import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
-import io.hamal.lib.script.impl.ast.expr.NumberLiteral
-import io.hamal.lib.script.impl.ast.expr.TrueLiteral
+import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.ast.stmt.Assignment.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -53,7 +50,15 @@ internal class AssignmentTest : AbstractStatementTest() {
                     listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
                     listOf(TrueLiteral(), FalseLiteral())
                 )
+            ),
+            Pair(
+                "local x = some_fn('y')",
+                Local(
+                    listOf(IdentifierLiteral("x")),
+                    listOf(CallExpression(IdentifierLiteral("some_fn"), listOf(StringLiteral("y"))))
+                )
             )
+
         ).map { (code, expected) ->
             dynamicTest(code) {
                 runTest(Local.Parse, code) { result, tokens ->
