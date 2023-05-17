@@ -2,7 +2,7 @@ package io.hamal.lib.script.impl
 
 import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.Sandbox
-import io.hamal.lib.script.api.native_.NativeFunction
+import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.MetaTable
@@ -66,7 +66,7 @@ class SandboxIT {
         }
 
 
-        override fun findNativeFunction(identifier: Identifier): NativeFunction? {
+        override fun findNativeFunction(identifier: Identifier): FunctionValue? {
             TODO("Not yet implemented")
         }
 
@@ -93,7 +93,7 @@ class SandboxIT {
             TODO("Not yet implemented")
         }
 
-        override fun findNativeFunction(identifier: Identifier): NativeFunction? {
+        override fun findNativeFunction(identifier: Identifier): FunctionValue? {
             TODO("Not yet implemented")
         }
 

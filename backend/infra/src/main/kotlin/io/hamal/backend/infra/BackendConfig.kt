@@ -3,10 +3,6 @@ package io.hamal.backend.infra
 import io.hamal.backend.core.notification.*
 import io.hamal.backend.infra.adapter.CreateDomainNotificationProcessorPort
 import io.hamal.backend.infra.handler.*
-import io.hamal.backend.usecase.request.JobDefinitionRequest
-import io.hamal.backend.usecase.request.TriggerRequest.ManualTriggerInvocation
-import io.hamal.lib.domain.RequestId
-import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.ddd.InvokeUseCasePort
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,20 +53,20 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     private lateinit var request: InvokeRequestOneUseCasePort
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        val jobDef = request(
-            JobDefinitionRequest.JobDefinitionCreation(
-                requestId = RequestId(10000),
-                shard = Shard(0)
-            )
-        )
-        request(
-            ManualTriggerInvocation(
-                requestId = RequestId(1000),
-                shard = Shard(0),
-                triggerId = jobDef.triggers.first().id
-            )
-        )
-        println(jobDef)
+//        val jobDef = request(
+//            JobDefinitionRequest.JobDefinitionCreation(
+//                requestId = RequestId(10000),
+//                shard = Shard(0)
+//            )
+//        )
+//        request(
+//            ManualTriggerInvocation(
+//                requestId = RequestId(1000),
+//                shard = Shard(0),
+//                triggerId = jobDef.triggers.first().id
+//            )
+//        )
+//        println(jobDef)
     }
 
 }

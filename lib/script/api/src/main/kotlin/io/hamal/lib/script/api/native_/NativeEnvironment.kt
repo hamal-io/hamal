@@ -8,7 +8,7 @@ import io.hamal.lib.script.api.value.Value
 //FIXME maybe native environment should be readonly
 class NativeEnvironment(
     override val identifier: Identifier,
-    private val nativeFunctions: Map<Identifier, NativeFunction>
+    private val values: Map<Identifier, Value>
 ) : Environment {
     override val metaTable = MetaTableNotImplementedYet
 
@@ -21,16 +21,18 @@ class NativeEnvironment(
     }
 
     override fun get(identifier: Identifier): Value {
-        TODO("Not yet implemented")
+        return requireNotNull(values[identifier])
     }
 
-    override fun get(identifier: String): Value {
-        TODO("Not yet implemented")
-    }
+    override fun findNativeFunction(identifier: Identifier): FunctionValue? =
+        values[identifier]?.let { it as FunctionValue }
 
-    override fun findNativeFunction(identifier: Identifier): NativeFunction? = nativeFunctions[identifier]
     override fun findEnvironment(identifier: Identifier): Environment? {
-        TODO("Not yet implemented")
+        return values[identifier]?.let { it as Environment }
+    }
+
+    override fun toString(): String {
+        return "$identifier{$values}"
     }
 
 }

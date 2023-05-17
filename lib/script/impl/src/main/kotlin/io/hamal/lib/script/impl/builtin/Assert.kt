@@ -1,15 +1,15 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.native_.NativeFunction
+import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
-internal object AssertFunction : NativeFunction {
+internal object AssertFunction : FunctionValue {
     override val identifier: Identifier = Identifier("assert")
     override val metaTable = MetaTableNotImplementedYet
 
 
-    override fun invoke(ctx: NativeFunction.Context): Value {
+    override fun invoke(ctx: FunctionValue.Context): Value {
         val parameters = ctx.parameters
 
         val assertionMessage = parameters.getOrNull(1)

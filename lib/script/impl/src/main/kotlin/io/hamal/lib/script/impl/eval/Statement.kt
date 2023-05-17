@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.NilValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.stmt.*
@@ -42,6 +43,10 @@ internal object EvaluateBlock : Evaluate<BlockStatement> {
         var result: Value = NilValue
         for (statement in toEvaluate.statements) {
             result = ctx.evaluate(statement)
+        }
+
+        if (result is Identifier) {
+            return ctx.env[result]
         }
         return result
     }

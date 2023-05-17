@@ -1,7 +1,7 @@
 package io.hamal.worker.infra.service
 
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.native_.NativeFunction
+import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.eval.RootEnvironment
 import io.hamal.lib.sdk.DefaultHamalSdk
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 @Service
 class WorkerService {
 
-    private val nativeFunctions = mutableListOf<NativeFunction>()
+    private val functionValues = mutableListOf<FunctionValue>()
 
     //FIXME introduce WorkerExtensionEnvironment as a wrapper around native env
     private val extensionEnvironments = mutableListOf<Environment>()
@@ -39,7 +39,7 @@ class WorkerService {
                 File("/home/ddymke/Repo/hamal/worker/extension/impl/web3/build/libs/extension-web3.jar")
             )
 
-        nativeFunctions.addAll(x.functionFactories())
+        functionValues.addAll(x.functionFactories())
 
         extensionEnvironments.addAll(x.environments())
 
@@ -63,7 +63,7 @@ class WorkerService {
                 println("Executing hamal script: ${task.code}")
                 val env = RootEnvironment()
 
-                nativeFunctions.forEach { nativeFunction ->
+                functionValues.forEach { nativeFunction ->
                     env.add(nativeFunction)
                 }
 

@@ -1,8 +1,11 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.native_.NativeFunction
+import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.lib.script.api.value.Value
-import io.hamal.lib.script.impl.ast.expr.*
+import io.hamal.lib.script.impl.ast.expr.CallExpression
+import io.hamal.lib.script.impl.ast.expr.GroupedExpression
+import io.hamal.lib.script.impl.ast.expr.InfixExpression
+import io.hamal.lib.script.impl.ast.expr.PrefixExpression
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
     override fun invoke(ctx: EvaluationContext<CallExpression>): Value {
@@ -17,9 +20,9 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
         env.findNativeFunction(identifier)
             ?.let { fn ->
                 return fn(
-                    NativeFunction.Context(
+                    FunctionValue.Context(
                         parameters = parameters.zip(toEvaluate.parameters)
-                            .map { NativeFunction.Parameter(it.first, it.second) },
+                            .map { FunctionValue.Parameter(it.first, it.second) },
                         env = env
                     )
                 )

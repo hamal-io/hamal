@@ -1,6 +1,6 @@
 package io.hamal.lib.script.api
 
-import io.hamal.lib.script.api.native_.NativeFunction
+import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.Value
 
@@ -11,7 +11,7 @@ interface Environment : Value {
     operator fun get(identifier: Identifier): Value
     operator fun get(identifier: String) = get(Identifier(identifier))
 
-    fun findNativeFunction(identifier: Identifier): NativeFunction?
+    fun findNativeFunction(identifier: Identifier): FunctionValue?
     fun findEnvironment(identifier: Identifier): Environment?
 
 }

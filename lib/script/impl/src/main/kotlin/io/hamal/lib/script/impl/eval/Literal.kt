@@ -4,9 +4,7 @@ import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.value.PrototypeValue
 
-internal object EvaluateIdentifier : Evaluate<IdentifierLiteral> {
-    override fun invoke(ctx: EvaluationContext<IdentifierLiteral>) = Identifier(ctx.toEvaluate.value)
-}
+
 
 internal object EvaluateNilLiteral : Evaluate<NilLiteral> {
     override fun invoke(ctx: EvaluationContext<NilLiteral>) = NilValue

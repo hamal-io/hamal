@@ -1,14 +1,14 @@
 package io.hamal.worker.extension.web3
 
 import io.hamal.lib.script.api.Environment
+import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.lib.script.api.native_.NativeEnvironment
-import io.hamal.lib.script.api.native_.NativeFunction
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 import io.hamal.worker.extension.api.WorkerExtension
 
 class Web3Extension : WorkerExtension {
-    override fun functionFactories(): List<NativeFunction> {
+    override fun functionFactories(): List<FunctionValue> {
         return listOf(
             fn
         )
@@ -16,21 +16,16 @@ class Web3Extension : WorkerExtension {
 
     override fun environments(): List<Environment> {
         return listOf(
-            NativeEnvironment(
-                Identifier("eth"),
-                mapOf(
-                    Identifier("getBlock") to fn
-                )
-            )
+            web3Environment
         )
     }
 
-    val fn = object : NativeFunction {
+    val fn = object : FunctionValue {
         override val metaTable = MetaTableNotImplementedYet
 
         override val identifier = Identifier("getBlock")
 
-        override fun invoke(ctx: NativeFunction.Context): Value {
+        override fun invoke(ctx: FunctionValue.Context): Value {
             println("Getting block")
 //                    val bs = EthHttpBatchService()
 //                    bs.getBlock(req = EthBatchService.GetBlockByHashRequest(EthHash(EthBytes32(ByteArray(32)))))
@@ -57,4 +52,18 @@ class Web3Extension : WorkerExtension {
             )
         }
     }
+
+    val ethEnvironment = NativeEnvironment(
+        identifier = Identifier("eth"),
+        values = mapOf(
+            Identifier("getBlock") to fn
+        )
+    )
+
+    val web3Environment = NativeEnvironment(
+        identifier = Identifier("web3"),
+        values = mapOf(
+            Identifier("eth") to ethEnvironment
+        )
+    )
 }
