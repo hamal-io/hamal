@@ -1,7 +1,7 @@
 logging:
   level:
     root: INFO
-    io.hamal: DEBUG
+    io.hamal: INFO
     io.hamal.backend.repository.sqlite.log: INFO
 spring:
   datasource:

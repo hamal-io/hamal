@@ -20,6 +20,12 @@ sealed class Trigger : DomainObject<TriggerId> {
         override val jobDefinitionId: JobDefinitionId
     ) : Trigger()
 
+    @Serializable
+    data class AdhocTrigger(
+        override val id: TriggerId,
+        override val reference: TriggerReference,
+        override val jobDefinitionId: JobDefinitionId
+    ) : Trigger()
 }
 
 @Serializable
@@ -37,4 +43,12 @@ sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {
         override val invokedBy: Requester<TenantId>
     ) : InvokedTrigger()
 
+    @Serializable
+    data class Adhoc(
+        override val id: InvokedTriggerId,
+        override val jobDefinition: JobDefinition,
+        val trigger: Trigger.AdhocTrigger,
+        override val invokedAt: InvokedAt,
+        override val invokedBy: Requester<TenantId>
+    ): InvokedTrigger()
 }

@@ -18,3 +18,10 @@ data class ManualTriggerInvokedNotification(
     override val shard: Shard,
     val invokedTrigger: InvokedTrigger.Manual
 ) : DomainNotification()
+
+@Serializable
+@DomainNotificationTopic("adhoc_trigger::invoked")
+data class AdhocTriggerInvokedNotification(
+    override val shard: Shard,
+    val invokedTrigger: InvokedTrigger.Adhoc
+) : DomainNotification()

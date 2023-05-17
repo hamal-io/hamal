@@ -7,7 +7,7 @@ import io.hamal.backend.usecase.request.JobRequest
 import io.hamal.lib.domain.RequestId
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 
-class TriggerInvokedHandler(
+class ManualTriggerInvokedHandler(
     val request: InvokeRequestOneUseCasePort
 ) : HandleDomainNotificationPort<ManualTriggerInvokedNotification> {
 

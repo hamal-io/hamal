@@ -44,7 +44,8 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         createDomainNotificationConsumerPort: CreateDomainNotificationProcessorPort,
         invokeUseCasePort: InvokeUseCasePort
     ) = createDomainNotificationConsumerPort
-        .register(ManualTriggerInvokedNotification::class, TriggerInvokedHandler(invokeUseCasePort))
+        .register(AdhocTriggerInvokedNotification::class, AdhocTriggerInvokedHandler(invokeUseCasePort))
+        .register(ManualTriggerInvokedNotification::class, ManualTriggerInvokedHandler(invokeUseCasePort))
         .register(JobPlannedNotification::class, JobPlannedHandler(invokeUseCasePort))
         .register(JobScheduledNotification::class, JobScheduledHandler(invokeUseCasePort))
         .register(JobQueuedNotification::class, JobQueuedHandler())
