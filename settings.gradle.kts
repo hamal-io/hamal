@@ -50,10 +50,10 @@ include(":backend:repository:api")
 include(":backend:repository:memory")
 include(":backend:repository:sqlite")
 
-include(":worker:infra")
-include(":worker:extension:api")
-include(":worker:extension:impl:starter")
-include(":worker:extension:impl:web3")
+include(":agent:infra")
+include(":agent:extension:api")
+include(":agent:extension:impl:starter")
+include(":agent:extension:impl:web3")
 
 rootProject.name = "hamal"
 

@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.TaskId
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface ApiWorkerTask {
+sealed interface ApiInvokedFunction {
     val taskId: TaskId
 }
 
@@ -15,13 +15,13 @@ sealed interface ApiWorkerTask {
 data class ApiWorkerScriptTask(
     override val taskId: TaskId,
     val code: Code
-) : ApiWorkerTask
+) : ApiInvokedFunction
 
 @Serializable
 data class ApiWorkerJob(
     val id: JobId,
     val reference: JobReference,
-    val tasks: List<ApiWorkerTask>
+    val tasks: List<ApiInvokedFunction>
 )
 
 @Serializable

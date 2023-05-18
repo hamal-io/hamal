@@ -22,7 +22,7 @@ class SandboxIT {
     fun generateTestCases(): List<DynamicTest> {
         return collectFiles()
             .map { file ->
-                dynamicTest("${file.parent.name}/${file.name}") {
+                dynamicTest("${file.parent.parent.name}/${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
                     val result = testInstance.eval(code)
                     if (result is ErrorValue) {

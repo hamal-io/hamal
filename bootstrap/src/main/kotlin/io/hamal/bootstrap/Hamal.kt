@@ -1,7 +1,7 @@
 package io.hamal.bootstrap
 
+import io.hamal.agent.infra.AgentConfig
 import io.hamal.backend.infra.BackendConfig
-import io.hamal.worker.infra.WorkerConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -63,11 +63,11 @@ fun main(args: Array<String>) {
     }
 
 
-    if (isEnable(ctx, "worker")) {
+    if (isEnable(ctx, "agent")) {
         applicationBuilder
             .parent(parent)
             .child(
-                WorkerConfig::class.java,
+                AgentConfig::class.java,
             )
             .web(WebApplicationType.NONE)
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
