@@ -26,8 +26,6 @@ data class TableIndexLiteral(val value: Int) : LiteralExpression {
             return TableIndexLiteral(token.value.toInt())
         }
     }
-
-    override fun toString() = value.toString()
 }
 
 data class IndexFieldExpression(
@@ -44,6 +42,22 @@ data class IndexFieldExpression(
 
     override fun hashCode(): Int {
         return index.hashCode()
+    }
+}
+
+data class TableKeyLiteral(val value: String) : LiteralExpression {
+    init {
+        require(value.trim().isNotEmpty()) { "Identifier can not be empty" }
+    }
+
+    internal object Parse : ParseLiteralExpression<TableKeyLiteral> {
+        override fun invoke(ctx: Parser.Context): TableKeyLiteral {
+            require(ctx.isNotEmpty())
+            val token = ctx.currentToken()
+            assert(token.type == Token.Type.Identifier || token.type == Token.Type.String)
+            ctx.advance()
+            return TableKeyLiteral(token.value)
+        }
     }
 }
 
@@ -72,7 +86,6 @@ class TableConstructorExpression(
             require(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(LeftCurlyBracket)
             ctx.advance()
-
 
             var index = 1
             val fieldExpressions = mutableListOf<FieldExpression>()
@@ -128,9 +141,9 @@ class TableAccessExpression(
         }
 
         private fun Parser.Context.parseParameter(): Expression {
-            return when (currentTokenType()) {
-                LeftBracket -> parseIndex()
-                else -> TODO()
+            return when {
+                currentTokenType() == LeftBracket && nextTokenType() == Number -> parseIndex()
+                else -> parseKey()
             }
         }
 
@@ -144,5 +157,19 @@ class TableAccessExpression(
             return result
         }
 
+        private fun Parser.Context.parseKey(): Expression {
+            if (currentTokenType() == Token.Type.Dot) {
+                advance()
+                expectCurrentTokenTypToBe(Identifier)
+                return TableKeyLiteral.Parse(this)
+            }
+            expectCurrentTokenTypToBe(LeftBracket)
+            advance()
+            expectCurrentTokenTypToBe(Token.Type.String)
+            val result = TableKeyLiteral.Parse(this)
+            expectCurrentTokenTypToBe(RightBracket)
+            advance()
+            return result
+        }
     }
 }

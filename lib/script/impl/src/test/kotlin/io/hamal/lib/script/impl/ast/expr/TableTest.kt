@@ -347,4 +347,24 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
             tokens.wereConsumed()
         }
     }
+
+    @Test
+    fun `Parse table access by identifier`() {
+        runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """.some_field""") { result, tokens ->
+            require(result is TableAccessExpression)
+            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
+            tokens.wereConsumed()
+        }
+    }
+
+    @Test
+    fun `Parse table access by string`() {
+        runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """['some_field']""") { result, tokens ->
+            require(result is TableAccessExpression)
+            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
+            tokens.wereConsumed()
+        }
+    }
 }
