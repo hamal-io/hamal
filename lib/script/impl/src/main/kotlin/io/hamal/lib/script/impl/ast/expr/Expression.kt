@@ -22,7 +22,8 @@ private val tokenMapping = mapOf(
 
 private val operatorMapping = mapOf(
     Operator.Minus to PrefixExpression.Parse,
-    Operator.Call to GroupedExpression.Parse
+    Operator.Call to GroupedExpression.Parse,
+    Operator.TableConstructor to TableConstructorExpression.Parse
 )
 
 internal fun parseFn(type: Token.Type): ParseExpression<*> {

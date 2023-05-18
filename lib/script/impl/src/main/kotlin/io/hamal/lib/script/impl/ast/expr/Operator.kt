@@ -14,15 +14,16 @@ interface ParseOperator {
 enum class Operator(
     val tokenType: Type
 ) {
-    Access(Type.LeftBracket),
     And(Type.And),
+    Call(Type.LeftParenthesis),
     Concat(Type.Dot_Dot),
     Divide(Type.Slash),
     Equals(Type.Equal_Equal),
     Exponential(Type.Carat),
     GreaterThan(Type.RightAngleBracket),
     GreaterThanEquals(Type.RightAngleBracket_Equal),
-    Call(Type.LeftParenthesis),
+    IndexBasedAccess(Type.LeftBracket),
+    KeyBasedAccess(Type.Dot),
     Length(Type.Hash),
     LessThan(Type.LeftAngleBracket),
     LessThanEquals(Type.LeftAngleBracket_Equal),
@@ -35,6 +36,7 @@ enum class Operator(
     Plus(Type.Plus),
     ShiftLeft(Type.LeftAngleBracket_LeftAngleBracket),
     ShiftRight(Type.RightAngleBracket_RightAngleBracket),
+    TableConstructor(Type.LeftCurlyBracket)
     ;
 
     companion object {
@@ -88,6 +90,8 @@ private val precedenceMapping = mapOf(
     Multiply to Precedence.Factor,
     Divide to Precedence.Factor,
     Modulo to Precedence.Factor,
+    KeyBasedAccess to Precedence.Factor,
+    IndexBasedAccess to Precedence.Factor,
     Call to Precedence.Group,
     Exponential to Precedence.Pow,
 )

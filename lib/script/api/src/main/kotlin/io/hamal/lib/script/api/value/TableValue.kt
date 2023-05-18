@@ -5,6 +5,10 @@ typealias TableEntry = Pair<Value, Value>
 class TableValue : Value, Collection<TableEntry> {
     override val metaTable = MetaTableNotImplementedYet
 
+    constructor(entries: Map<Value, Value>) {
+        entries.forEach { store[it.key] = it.value }
+    }
+
     constructor(vararg entries: Pair<Value, Value>) {
         entries.forEach { store[it.first] = it.second }
     }

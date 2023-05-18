@@ -6,12 +6,11 @@ import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token
 
 data class CallExpression(
-    val identifier: IdentifierLiteral,
+    val identifier: Expression,
     val parameters: List<Expression>
 ) : Expression {
     internal object Parse : ParseInfixExpression {
         override fun invoke(ctx: Context, lhs: Expression): CallExpression {
-            require(lhs is IdentifierLiteral)
             return CallExpression(
                 lhs,
                 ctx.parseParameters()

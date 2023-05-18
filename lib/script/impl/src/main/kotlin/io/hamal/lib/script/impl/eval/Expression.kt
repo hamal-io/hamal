@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.native_.FunctionValue
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.CallExpression
 import io.hamal.lib.script.impl.ast.expr.GroupedExpression
@@ -16,20 +17,33 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 
         require(env is RootEnvironment) //FIXME REMOVE ME
 
-        val identifier = ctx.evaluateAsIdentifier { identifier }
-        env.findNativeFunction(identifier)
-            ?.let { fn ->
-                return fn(
-                    FunctionValue.Context(
-                        parameters = parameters.zip(toEvaluate.parameters)
-                            .map { FunctionValue.Parameter(it.first, it.second) },
-                        env = env
-                    )
-                )
-            }
+        val target = ctx.evaluate { identifier }
 
-        val prototype = env.findPrototype(identifier)!!
-        return ctx.evaluate(prototype.block)
+        if (target is Identifier) {
+
+            val identifier = ctx.evaluateAsIdentifier { identifier }
+            env.findNativeFunction(identifier)
+                ?.let { fn ->
+                    return fn(
+                        FunctionValue.Context(
+                            parameters = parameters.zip(toEvaluate.parameters)
+                                .map { FunctionValue.Parameter(it.first, it.second) },
+                            env = env
+                        )
+                    )
+                }
+
+            val prototype = env.findPrototype(identifier)!!
+            return ctx.evaluate(prototype.block)
+        } else {
+            require(target is FunctionValue)
+            return target(
+                FunctionValue.Context(
+                    listOf(),
+                    ctx.env
+                )
+            )
+        }
     }
 }
 

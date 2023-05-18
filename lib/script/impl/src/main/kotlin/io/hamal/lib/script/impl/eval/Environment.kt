@@ -55,6 +55,7 @@ class RootEnvironment : Environment {
             is StringValue -> locals[identifier] = value
             is TrueValue -> locals[identifier] = value
             is FalseValue -> locals[identifier] = value
+            is TableValue -> locals[identifier] = value
             else -> TODO()
         }
     }

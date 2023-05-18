@@ -51,7 +51,7 @@ class WorkerService {
 
     }
 
-    @Scheduled(initialDelay = 1, fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(initialDelay = 100, fixedDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
         val jobs = DefaultHamalSdk.jobService().poll()
         jobs.jobs.forEach { job ->

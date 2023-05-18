@@ -38,6 +38,9 @@ internal class DefaultEvaluator : Evaluator {
         register(GroupedExpression::class, EvaluateGroupedExpression)
         register(InfixExpression::class, EvaluateInfixExpression)
         register(PrefixExpression::class, EvaluatePrefixExpression)
+        register(TableAccessExpression::class, EvaluateTableAccess)
+        register(TableConstructorExpression::class, EvaluateTableConstructor)
+
 
         /*STATEMENT*/
         register(Statement::class, EvaluateStatement)
@@ -52,7 +55,7 @@ internal class DefaultEvaluator : Evaluator {
 
     private fun <TYPE : Node> resolve(targetClass: KClass<out TYPE>): Evaluate<TYPE> {
         @Suppress("UNCHECKED_CAST")
-        return store[targetClass] as Evaluate<TYPE>
+        return store[targetClass]!! as Evaluate<TYPE>
     }
 
     private fun <TYPE : Node> register(targetClazz: KClass<TYPE>, evaluate: Evaluate<TYPE>) {

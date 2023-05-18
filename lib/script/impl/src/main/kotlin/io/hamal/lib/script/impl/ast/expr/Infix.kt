@@ -7,7 +7,8 @@ import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token
 
 private val infixParseFnMapping = mapOf(
-    Access to TableAccessExpression.Parse,
+    IndexBasedAccess to TableAccessExpression.Parse,
+    KeyBasedAccess to TableAccessExpression.Parse,
     Call to CallExpression.Parse,
 
     And to InfixExpression.Parse,

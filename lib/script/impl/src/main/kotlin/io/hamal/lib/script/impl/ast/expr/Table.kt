@@ -8,7 +8,7 @@ import io.hamal.lib.script.impl.token.Token.Type.*
 import io.hamal.lib.script.impl.token.Token.Type.Number
 
 sealed interface FieldExpression {
-    val valueExpression: Expression
+    val value: Expression
 }
 
 
@@ -30,7 +30,7 @@ data class TableIndexLiteral(val value: Int) : LiteralExpression {
 
 data class IndexFieldExpression(
     val index: TableIndexLiteral,
-    override val valueExpression: Expression
+    override val value: Expression
 ) : FieldExpression {
 
     override fun equals(other: Any?): Boolean {
@@ -63,7 +63,7 @@ data class TableKeyLiteral(val value: String) : LiteralExpression {
 
 data class KeyFieldExpression(
     val key: String,
-    override val valueExpression: Expression
+    override val value: Expression
 ) : FieldExpression {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -96,7 +96,7 @@ class TableConstructorExpression(
                     fieldExpressions.add(
                         IndexFieldExpression(
                             index = TableIndexLiteral(index++),
-                            valueExpression = expression
+                            value = expression
                         )
                     )
                 } else {
@@ -109,7 +109,7 @@ class TableConstructorExpression(
                     fieldExpressions.add(
                         KeyFieldExpression(
                             key = expression.value,
-                            valueExpression = valueExpression
+                            value = valueExpression
                         )
                     )
                 }
