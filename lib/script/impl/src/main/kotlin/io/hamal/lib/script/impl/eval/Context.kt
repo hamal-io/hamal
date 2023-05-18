@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.Environment
+import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.StringValue
@@ -8,16 +8,16 @@ import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.api.value.ValueOperation
 import io.hamal.lib.script.api.value.ValueOperation.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
-import io.hamal.lib.script.impl.value.PrototypeValue
+import io.hamal.lib.script.api.value.PrototypeValue
 
 internal data class EvaluationContext<TYPE : Node>(
     val toEvaluate: TYPE,
-    val env: Environment,
+    val env: EnvironmentValue,
     val evaluator: Evaluator
 ) {
 
     fun <NEW_TYPE : Node> evaluate(
-        env: Environment = this.env,
+        env: EnvironmentValue = this.env,
         block: TYPE.() -> NEW_TYPE
     ): Value {
         return evaluate(block(toEvaluate), env)
@@ -25,7 +25,7 @@ internal data class EvaluationContext<TYPE : Node>(
 
     fun <TYPE : Node> evaluate(
         toEvaluate: TYPE,
-        env: Environment = this.env
+        env: EnvironmentValue = this.env
     ): Value {
         return evaluator.evaluate(
             EvaluationContext(toEvaluate, env, evaluator)
@@ -33,7 +33,7 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 
     fun <NEW_TYPE : Node> evaluateAsIdentifier(
-        env: Environment = this.env,
+        env: EnvironmentValue = this.env,
         block: TYPE.() -> NEW_TYPE
     ): Identifier {
         return evaluateAsIdentifier(block(toEvaluate), env)
@@ -41,7 +41,7 @@ internal data class EvaluationContext<TYPE : Node>(
 
     fun <TYPE : Node> evaluateAsIdentifier(
         toEvaluate: TYPE,
-        env: Environment = this.env
+        env: EnvironmentValue = this.env
     ): Identifier {
         val result = evaluate(toEvaluate, env)
         require(result is Identifier)
@@ -49,7 +49,7 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 
     fun <NEW_TYPE : Node> evaluateAsPrototype(
-        env: Environment = this.env,
+        env: EnvironmentValue = this.env,
         block: TYPE.() -> NEW_TYPE
     ): PrototypeValue {
         return evaluateAsPrototype(block(toEvaluate), env)
@@ -57,7 +57,7 @@ internal data class EvaluationContext<TYPE : Node>(
 
     fun <TYPE : Node> evaluateAsPrototype(
         toEvaluate: TYPE,
-        env: Environment = this.env
+        env: EnvironmentValue = this.env
     ): PrototypeValue {
         val result = evaluate(toEvaluate, env)
         require(result is PrototypeValue)
@@ -65,7 +65,7 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 
     fun <NEW_TYPE : Node> evaluateAsString(
-        env: Environment = this.env,
+        env: EnvironmentValue = this.env,
         block: TYPE.() -> NEW_TYPE
     ): StringValue {
         return evaluateAsString(block(toEvaluate), env)
@@ -73,7 +73,7 @@ internal data class EvaluationContext<TYPE : Node>(
 
     fun <TYPE : Node> evaluateAsString(
         toEvaluate: TYPE,
-        env: Environment = this.env
+        env: EnvironmentValue = this.env
     ): StringValue {
         val result = evaluate(toEvaluate, env)
         require(result is StringValue)

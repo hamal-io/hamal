@@ -1,10 +1,10 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.FunctionValue
+import io.hamal.lib.script.api.value.FunctionValue
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
-internal object AssertFunction : FunctionValue {
+object AssertFunction : FunctionValue {
     override val identifier: Identifier = Identifier("assert")
     override val metaTable = MetaTableNotImplementedYet
 

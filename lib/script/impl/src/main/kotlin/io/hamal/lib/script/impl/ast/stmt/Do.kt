@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.ast.stmt
 
+import io.hamal.lib.script.api.ast.Statement
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.parseBlockStatement
 import io.hamal.lib.script.impl.token.Token

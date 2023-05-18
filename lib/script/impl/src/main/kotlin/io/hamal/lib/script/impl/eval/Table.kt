@@ -1,10 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.NativeEnvironment
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.TableValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateTableConstructor : Evaluate<TableConstructorExpression> {
@@ -26,9 +22,9 @@ internal object EvaluateTableAccess : Evaluate<TableAccessExpression> {
         val tableIdentifier = ctx.toEvaluate.identifier
 
         val target = ctx.env[tableIdentifier.value]
-        if (target is NativeEnvironment) {
+        if (target is EnvironmentValue) {
             require(ctx.toEvaluate.parameter is TableKeyLiteral)
-            return target.get(Identifier(ctx.toEvaluate.parameter.value))
+            return target[Identifier(ctx.toEvaluate.parameter.value)]
         }
 
         val table = ctx.env[tableIdentifier.value] as TableValue

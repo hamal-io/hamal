@@ -1,10 +1,10 @@
 package io.hamal.agent.infra.service
 
 import io.hamal.agent.infra.adapter.ExtensionLoader
-import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.FunctionValue
+import io.hamal.lib.script.api.value.EnvironmentValue
+import io.hamal.lib.script.api.value.FunctionValue
+import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.impl.DefaultSandbox
-import io.hamal.lib.script.impl.eval.RootEnvironment
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
 import jakarta.annotation.PostConstruct
@@ -19,7 +19,7 @@ class AgentService {
     private val functionValues = mutableListOf<FunctionValue>()
 
     //FIXME introduce WorkerExtensionEnvironment as a wrapper around native env
-    private val extensionEnvironments = mutableListOf<Environment>()
+    private val extensionEnvironments = mutableListOf<EnvironmentValue>()
 
     @PostConstruct
     fun postConstruct() {
@@ -60,14 +60,14 @@ class AgentService {
 
                 require(task is ApiWorkerScriptTask)
                 println("Executing hamal script: ${task.code}")
-                val env = RootEnvironment()
+                val env = EnvironmentValue(Identifier("_G"))
 
-                functionValues.forEach { nativeFunction ->
-                    env.add(nativeFunction)
-                }
+//                functionValues.forEach { nativeFunction ->
+//                    env.addGlobal(nativeFunction)
+//                }
 
                 extensionEnvironments.forEach { environment ->
-                    env.add(environment)
+                    env.addGlobal(environment.identifier, environment)
                 }
 
                 val sandbox = DefaultSandbox(env)

@@ -1,9 +1,6 @@
-package io.hamal.lib.script.api
+package io.hamal.lib.script.api.value
 
 import io.hamal.lib.script.api.ast.Expression
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.Value
 
 interface FunctionValue : Value {
     val identifier: Identifier //FIXME a signature might come handy here (name, parameter definition plus return)
@@ -12,7 +9,7 @@ interface FunctionValue : Value {
 
     data class Context(
         val parameters: List<Parameter>,
-        val env: Environment
+        val env: EnvironmentValue
     )
 
     data class Parameter(

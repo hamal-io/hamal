@@ -1,22 +1,19 @@
 package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.FunctionValue
-import io.hamal.lib.script.api.NativeEnvironment
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 
 class Web3Extension : Extension {
-    override fun create(): Environment {
-        val ethEnvironment = NativeEnvironment(
+    override fun create(): EnvironmentValue {
+        val ethEnvironment = EnvironmentValue(
             identifier = Identifier("eth"),
             values = mapOf(
                 Identifier("getBlock") to fn
             )
         )
 
-        return NativeEnvironment(
+        return EnvironmentValue(
             identifier = Identifier("web3"),
             values = mapOf(
                 Identifier("eth") to ethEnvironment

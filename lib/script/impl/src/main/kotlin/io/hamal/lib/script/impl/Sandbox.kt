@@ -1,13 +1,13 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.Sandbox
+import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.parse
 import io.hamal.lib.script.impl.token.tokenize
 
 class DefaultSandbox(
-    private val env: Environment
+    private val env: EnvironmentValue
 ) : Sandbox {
 
     private val interpreter = DefaultInterpreter

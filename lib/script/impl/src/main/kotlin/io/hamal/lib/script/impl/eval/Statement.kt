@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.script.api.ast.Statement
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.NilValue
 import io.hamal.lib.script.api.value.Value

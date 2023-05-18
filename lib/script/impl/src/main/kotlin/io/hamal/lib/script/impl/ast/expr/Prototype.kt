@@ -1,9 +1,9 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.api.ast.Statement
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.parseStatement
 import io.hamal.lib.script.impl.ast.stmt.BlockStatement
-import io.hamal.lib.script.impl.ast.stmt.Statement
 import io.hamal.lib.script.impl.token.Token.Type.*
 import io.hamal.lib.script.impl.token.Token.Type.Function
 
@@ -20,7 +20,7 @@ class PrototypeLiteral(
             ctx.advance()
 
             val identifier = ctx.parseIdentifier()
-            ctx.expectCurrentTokenTypToBe( LeftParenthesis)
+            ctx.expectCurrentTokenTypToBe(LeftParenthesis)
             ctx.advance()
 
             val parameterIdentifiers = ctx.parseParameters()

@@ -2,7 +2,7 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.impl.value.PrototypeValue
+import io.hamal.lib.script.api.value.PrototypeValue
 
 
 

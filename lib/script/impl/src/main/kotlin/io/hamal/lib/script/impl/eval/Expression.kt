@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.FunctionValue
+import io.hamal.lib.script.api.value.FunctionValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.CallExpression
@@ -15,14 +15,13 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 
         val parameters = toEvaluate.parameters.map { ctx.evaluate(it) }
 
-        require(env is RootEnvironment) //FIXME REMOVE ME
 
         val target = ctx.evaluate { identifier }
 
         if (target is Identifier) {
 
             val identifier = ctx.evaluateAsIdentifier { identifier }
-            env.findNativeFunction(identifier)
+            env.findFunctionValue(identifier)
                 ?.let { fn ->
                     return fn(
                         FunctionValue.Context(
@@ -33,7 +32,7 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
                     )
                 }
 
-            val prototype = env.findPrototype(identifier)!!
+            val prototype = env.findProtoTypeValue(identifier)!!
             return ctx.evaluate(prototype.block)
         } else {
             require(target is FunctionValue)
