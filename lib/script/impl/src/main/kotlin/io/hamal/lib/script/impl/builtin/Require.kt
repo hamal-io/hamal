@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.builtin
 
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.native_.FunctionValue
+import io.hamal.lib.script.api.FunctionValue
 import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.MetaTableNotImplementedYet

@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.native_.FunctionValue
+import io.hamal.lib.script.api.FunctionValue
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 

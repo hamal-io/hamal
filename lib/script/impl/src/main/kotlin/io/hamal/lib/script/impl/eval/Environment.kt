@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.native_.FunctionValue
+import io.hamal.lib.script.api.FunctionValue
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction

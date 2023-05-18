@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.native_.NativeEnvironment
+import io.hamal.lib.script.api.NativeEnvironment
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.api.value.TableValue

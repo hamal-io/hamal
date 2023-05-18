@@ -1,6 +1,5 @@
-package io.hamal.lib.script.api.native_
+package io.hamal.lib.script.api
 
-import io.hamal.lib.script.api.Environment
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.MetaTableNotImplementedYet
 import io.hamal.lib.script.api.value.Value

@@ -1,15 +1,15 @@
 package io.hamal.agent.extension.web3
 
-import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.native_.FunctionValue
 import io.hamal.agent.extension.api.Extension
+import io.hamal.lib.script.api.Environment
+import io.hamal.lib.script.api.NativeEnvironment
+import io.hamal.lib.script.api.value.Identifier
 
 class StartExtension : Extension {
-    override fun functionFactories(): List<FunctionValue> {
-        return listOf()
-    }
-
-    override fun environments(): List<Environment> {
-        return listOf()
+    override fun create(): Environment {
+        return NativeEnvironment(
+            Identifier("Starter"),
+            mapOf()
+        )
     }
 }

@@ -2,21 +2,25 @@ package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.native_.FunctionValue
-import io.hamal.lib.script.api.native_.NativeEnvironment
+import io.hamal.lib.script.api.FunctionValue
+import io.hamal.lib.script.api.NativeEnvironment
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 
 class Web3Extension : Extension {
-    override fun functionFactories(): List<FunctionValue> {
-        return listOf(
-            fn
+    override fun create(): Environment {
+        val ethEnvironment = NativeEnvironment(
+            identifier = Identifier("eth"),
+            values = mapOf(
+                Identifier("getBlock") to fn
+            )
         )
-    }
 
-    override fun environments(): List<Environment> {
-        return listOf(
-            web3Environment
+        return NativeEnvironment(
+            identifier = Identifier("web3"),
+            values = mapOf(
+                Identifier("eth") to ethEnvironment
+            )
         )
     }
 
@@ -53,17 +57,5 @@ class Web3Extension : Extension {
         }
     }
 
-    val ethEnvironment = NativeEnvironment(
-        identifier = Identifier("eth"),
-        values = mapOf(
-            Identifier("getBlock") to fn
-        )
-    )
 
-    val web3Environment = NativeEnvironment(
-        identifier = Identifier("web3"),
-        values = mapOf(
-            Identifier("eth") to ethEnvironment
-        )
-    )
 }

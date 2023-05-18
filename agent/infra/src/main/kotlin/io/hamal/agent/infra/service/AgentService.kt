@@ -2,7 +2,7 @@ package io.hamal.agent.infra.service
 
 import io.hamal.agent.infra.adapter.ExtensionLoader
 import io.hamal.lib.script.api.Environment
-import io.hamal.lib.script.api.native_.FunctionValue
+import io.hamal.lib.script.api.FunctionValue
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.eval.RootEnvironment
 import io.hamal.lib.sdk.DefaultHamalSdk
@@ -39,9 +39,8 @@ class AgentService {
                 File("/home/ddymke/Repo/hamal/agent/extension/impl/web3/build/libs/extension-web3.jar")
             )
 
-        functionValues.addAll(x.functionFactories())
 
-        extensionEnvironments.addAll(x.environments())
+        extensionEnvironments.add(x.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
 //        x.functionFactories()
 
