@@ -11,8 +11,9 @@ data class CallExpression(
 ) : Expression {
     internal object Parse : ParseInfixExpression {
         override fun invoke(ctx: Context, lhs: Expression): CallExpression {
+            require(lhs is IdentifierLiteral)
             return CallExpression(
-                lhs as IdentifierLiteral,
+                lhs,
                 ctx.parseParameters()
             )
         }

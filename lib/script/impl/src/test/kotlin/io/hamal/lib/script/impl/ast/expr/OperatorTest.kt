@@ -65,7 +65,7 @@ internal class OperatorTest : AbstractAstTest() {
         "^" to Operator.Exponential,
         ">" to Operator.GreaterThan,
         ">=" to Operator.GreaterThanEquals,
-        "(" to Operator.Group,
+        "(" to Operator.Call,
         "#" to Operator.Length,
         "<" to Operator.LessThan,
         "<=" to Operator.LessThanEquals,

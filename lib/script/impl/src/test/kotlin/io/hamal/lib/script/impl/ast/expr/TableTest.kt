@@ -10,23 +10,24 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class IndexFieldExpressionTest {
+
+internal class TableIndexLiteralTest {
     @Nested
     @DisplayName("constructor()")
     inner class ConstructorTest {
 
         @Test
         fun ok() {
-            IndexFieldExpression(1, TrueLiteral)
-            IndexFieldExpression(10, TrueLiteral)
-            IndexFieldExpression(100, TrueLiteral)
-            IndexFieldExpression(1000000, TrueLiteral)
+            IndexFieldExpression(TableIndexLiteral(1), TrueLiteral)
+            IndexFieldExpression(TableIndexLiteral(10), TrueLiteral)
+            IndexFieldExpression(TableIndexLiteral(100), TrueLiteral)
+            IndexFieldExpression(TableIndexLiteral(1000000), TrueLiteral)
         }
 
         @Test
         fun `Index can not be 0`() {
             val exception = assertThrows<IllegalArgumentException> {
-                IndexFieldExpression(0, TrueLiteral)
+                IndexFieldExpression(TableIndexLiteral(0), TrueLiteral)
             }
             assertThat(exception.message, equalTo("First element starts with index 1"))
         }
@@ -34,11 +35,15 @@ internal class IndexFieldExpressionTest {
         @Test
         fun `Index can not be negative`() {
             val exception = assertThrows<IllegalArgumentException> {
-                IndexFieldExpression(-42, TrueLiteral)
+                IndexFieldExpression(TableIndexLiteral(-42), TrueLiteral)
             }
             assertThat(exception.message, equalTo("First element starts with index 1"))
         }
     }
+
+}
+
+internal class IndexFieldExpressionTest {
 
     @Nested
     @DisplayName("equals()")
@@ -46,26 +51,26 @@ internal class IndexFieldExpressionTest {
         @Test
         fun `Equal if index is equal`() {
             assertEquals(
-                IndexFieldExpression(1, TrueLiteral),
-                IndexFieldExpression(1, TrueLiteral),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral),
             )
 
             assertEquals(
-                IndexFieldExpression(1, TrueLiteral),
-                IndexFieldExpression(1, FalseLiteral),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral),
+                IndexFieldExpression(TableIndexLiteral(1), FalseLiteral),
             )
         }
 
         @Test
         fun `Not Equal if index is not equal`() {
             assertNotEquals(
-                IndexFieldExpression(1, TrueLiteral),
-                IndexFieldExpression(2, TrueLiteral),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral),
+                IndexFieldExpression(TableIndexLiteral(2), TrueLiteral),
             )
 
             assertNotEquals(
-                IndexFieldExpression(1, TrueLiteral),
-                IndexFieldExpression(2, FalseLiteral),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral),
+                IndexFieldExpression(TableIndexLiteral(2), FalseLiteral),
             )
         }
 
@@ -77,26 +82,26 @@ internal class IndexFieldExpressionTest {
         @Test
         fun `Same hashcode if index has same hashcode`() {
             assertEquals(
-                IndexFieldExpression(1, TrueLiteral).hashCode(),
-                IndexFieldExpression(1, TrueLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral).hashCode(),
             )
 
             assertEquals(
-                IndexFieldExpression(1, TrueLiteral).hashCode(),
-                IndexFieldExpression(1, FalseLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(1), FalseLiteral).hashCode(),
             )
         }
 
         @Test
         fun `Different hashcode if index has different hashcode`() {
             assertNotEquals(
-                IndexFieldExpression(1, TrueLiteral).hashCode(),
-                IndexFieldExpression(2, TrueLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(2), TrueLiteral).hashCode(),
             )
 
             assertNotEquals(
-                IndexFieldExpression(1, TrueLiteral).hashCode(),
-                IndexFieldExpression(2, FalseLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(1), TrueLiteral).hashCode(),
+                IndexFieldExpression(TableIndexLiteral(2), FalseLiteral).hashCode(),
             )
         }
     }
@@ -165,7 +170,7 @@ internal class KeyFieldExpressionTest {
     }
 }
 
-internal class TableConstructorTest : AbstractExpressionTest() {
+internal class TableConstructorExpressionTest : AbstractExpressionTest() {
 
     @Nested
     @DisplayName("Parse()")
@@ -173,7 +178,7 @@ internal class TableConstructorTest : AbstractExpressionTest() {
         @Test
         fun `Parse empty table constructor`() {
             runTest(
-                TableConstructor.Parse,
+                TableConstructorExpression.Parse,
                 """
                     {}
                 """.trimIndent()
@@ -188,12 +193,15 @@ internal class TableConstructorTest : AbstractExpressionTest() {
             @Test
             fun `Parse array with single number`() {
                 runTest(
-                    TableConstructor.Parse,
+                    TableConstructorExpression.Parse,
                     """
                     {1}
                 """.trimIndent()
                 ) { result, tokens ->
-                    assertThat(result.fieldExpressions, equalTo(listOf(IndexFieldExpression(1, NumberLiteral(1)))))
+                    assertThat(
+                        result.fieldExpressions,
+                        equalTo(listOf(IndexFieldExpression(TableIndexLiteral(1), NumberLiteral(1))))
+                    )
                     tokens.wereConsumed()
                 }
             }
@@ -201,7 +209,7 @@ internal class TableConstructorTest : AbstractExpressionTest() {
             @Test
             fun `Parse array with multiple numbers`() {
                 runTest(
-                    TableConstructor.Parse,
+                    TableConstructorExpression.Parse,
                     """
                     {3,2,1}
                 """.trimIndent()
@@ -209,9 +217,9 @@ internal class TableConstructorTest : AbstractExpressionTest() {
                     assertThat(
                         result.fieldExpressions, equalTo(
                             listOf(
-                                IndexFieldExpression(1, NumberLiteral(3)),
-                                IndexFieldExpression(2, NumberLiteral(2)),
-                                IndexFieldExpression(3, NumberLiteral(1)),
+                                IndexFieldExpression(TableIndexLiteral(1), NumberLiteral(3)),
+                                IndexFieldExpression(TableIndexLiteral(2), NumberLiteral(2)),
+                                IndexFieldExpression(TableIndexLiteral(3), NumberLiteral(1)),
                             )
                         )
                     )
@@ -222,7 +230,7 @@ internal class TableConstructorTest : AbstractExpressionTest() {
             @Test
             fun `Parse array consisting of number, boolean and string`() {
                 runTest(
-                    TableConstructor.Parse,
+                    TableConstructorExpression.Parse,
                     """
                     {'hamal', 1337, true}
                 """.trimIndent()
@@ -230,9 +238,9 @@ internal class TableConstructorTest : AbstractExpressionTest() {
                     assertThat(
                         result.fieldExpressions, equalTo(
                             listOf(
-                                IndexFieldExpression(1, StringLiteral("hamal")),
-                                IndexFieldExpression(2, NumberLiteral(1337)),
-                                IndexFieldExpression(3, TrueLiteral),
+                                IndexFieldExpression(TableIndexLiteral(1), StringLiteral("hamal")),
+                                IndexFieldExpression(TableIndexLiteral(2), NumberLiteral(1337)),
+                                IndexFieldExpression(TableIndexLiteral(3), TrueLiteral),
                             )
                         )
                     )
@@ -246,7 +254,7 @@ internal class TableConstructorTest : AbstractExpressionTest() {
             @Test
             fun `Parse map with single key-value pair`() {
                 runTest(
-                    TableConstructor.Parse,
+                    TableConstructorExpression.Parse,
                     """
                     {key = 'value'}
                 """.trimIndent()
@@ -265,7 +273,7 @@ internal class TableConstructorTest : AbstractExpressionTest() {
             @Test
             fun `Parse map with multiple key-value pairs`() {
                 runTest(
-                    TableConstructor.Parse,
+                    TableConstructorExpression.Parse,
                     """
                     {
                         key_one = 'value_one',
@@ -290,7 +298,7 @@ internal class TableConstructorTest : AbstractExpressionTest() {
         @Test
         fun `Parse map mixed constructor`() {
             runTest(
-                TableConstructor.Parse,
+                TableConstructorExpression.Parse,
                 """
                     {
                         'value-1',
@@ -304,11 +312,11 @@ internal class TableConstructorTest : AbstractExpressionTest() {
                 assertThat(
                     result.fieldExpressions, equalTo(
                         listOf(
-                            IndexFieldExpression(1, StringLiteral("value-1")),
+                            IndexFieldExpression(TableIndexLiteral(1), StringLiteral("value-1")),
                             KeyFieldExpression("key_one", StringLiteral("value_one")),
-                            IndexFieldExpression(2, StringLiteral("value-2")),
+                            IndexFieldExpression(TableIndexLiteral(2), StringLiteral("value-2")),
                             KeyFieldExpression("key_two", StringLiteral("value_two")),
-                            IndexFieldExpression(3, StringLiteral("value-3"))
+                            IndexFieldExpression(TableIndexLiteral(3), StringLiteral("value-3"))
                         )
                     )
                 )
@@ -316,5 +324,27 @@ internal class TableConstructorTest : AbstractExpressionTest() {
             }
         }
 
+    }
+}
+
+internal class TableAccessExpressionTest : AbstractExpressionTest() {
+    @Test
+    fun `Parse table access by index`() {
+        runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """[1]""") { result, tokens ->
+            require(result is TableAccessExpression)
+            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.parameter, equalTo(TableIndexLiteral(1)))
+            tokens.wereConsumed()
+        }
+    }
+
+    @Test
+    fun `Parse table access by multi digit index`() {
+        runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """[123456789]""") { result, tokens ->
+            require(result is TableAccessExpression)
+            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.parameter, equalTo(TableIndexLiteral(123456789)))
+            tokens.wereConsumed()
+        }
     }
 }

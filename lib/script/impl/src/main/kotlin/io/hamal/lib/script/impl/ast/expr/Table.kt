@@ -3,20 +3,37 @@ package io.hamal.lib.script.impl.ast.expr
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.ast.parseExpression
+import io.hamal.lib.script.impl.token.Token
 import io.hamal.lib.script.impl.token.Token.Type.*
+import io.hamal.lib.script.impl.token.Token.Type.Number
 
 sealed interface FieldExpression {
     val valueExpression: Expression
 }
 
+
+data class TableIndexLiteral(val value: Int) : LiteralExpression {
+    init {
+        require(value > 0) { "First element starts with index 1" }
+    }
+
+    internal object Parse : ParseLiteralExpression<TableIndexLiteral> {
+        override fun invoke(ctx: Parser.Context): TableIndexLiteral {
+            require(ctx.isNotEmpty())
+            val token = ctx.currentToken()
+            assert(token.type == Token.Type.Number)
+            ctx.advance()
+            return TableIndexLiteral(token.value.toInt())
+        }
+    }
+
+    override fun toString() = value.toString()
+}
+
 data class IndexFieldExpression(
-    val index: Int,
+    val index: TableIndexLiteral,
     override val valueExpression: Expression
 ) : FieldExpression {
-
-    init {
-        require(index > 0) { "First element starts with index 1" }
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -26,7 +43,7 @@ data class IndexFieldExpression(
     }
 
     override fun hashCode(): Int {
-        return index
+        return index.hashCode()
     }
 }
 
@@ -46,12 +63,12 @@ data class KeyFieldExpression(
     }
 }
 
-class TableConstructor(
+class TableConstructorExpression(
     val fieldExpressions: List<FieldExpression>
 ) : Expression {
 
-    internal object Parse : ParseExpression<TableConstructor> {
-        override fun invoke(ctx: Parser.Context): TableConstructor {
+    internal object Parse : ParseExpression<TableConstructorExpression> {
+        override fun invoke(ctx: Parser.Context): TableConstructorExpression {
             require(ctx.isNotEmpty())
             ctx.expectCurrentTokenTypToBe(LeftCurlyBracket)
             ctx.advance()
@@ -65,7 +82,7 @@ class TableConstructor(
                 if (ctx.currentTokenType() != Equal) {
                     fieldExpressions.add(
                         IndexFieldExpression(
-                            index = index++,
+                            index = TableIndexLiteral(index++),
                             valueExpression = expression
                         )
                     )
@@ -90,8 +107,42 @@ class TableConstructor(
             }
             ctx.expectCurrentTokenTypToBe(RightCurlyBracket)
             ctx.advance()
-            return TableConstructor(fieldExpressions)
+            return TableConstructorExpression(fieldExpressions)
         }
     }
 
+}
+
+class TableAccessExpression(
+    val identifier: IdentifierLiteral,
+    val parameter: Expression
+) : Expression {
+
+    object Parse : ParseInfixExpression {
+        override fun invoke(ctx: Parser.Context, lhs: Expression): Expression {
+            require(lhs is IdentifierLiteral)
+            return TableAccessExpression(
+                identifier = lhs,
+                parameter = ctx.parseParameter()
+            )
+        }
+
+        private fun Parser.Context.parseParameter(): Expression {
+            return when (currentTokenType()) {
+                LeftBracket -> parseIndex()
+                else -> TODO()
+            }
+        }
+
+        private fun Parser.Context.parseIndex(): Expression {
+            expectCurrentTokenTypToBe(LeftBracket)
+            advance()
+            expectCurrentTokenTypToBe(Number)
+            val result = TableIndexLiteral.Parse(this)
+            expectCurrentTokenTypToBe(RightBracket)
+            advance()
+            return result
+        }
+
+    }
 }

@@ -22,7 +22,7 @@ private val tokenMapping = mapOf(
 
 private val operatorMapping = mapOf(
     Operator.Minus to PrefixExpression.Parse,
-    Operator.Group to GroupedExpression.Parse
+    Operator.Call to GroupedExpression.Parse
 )
 
 internal fun parseFn(type: Token.Type): ParseExpression<*> {

@@ -81,7 +81,6 @@ internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.
     var lhsExpression: Expression = parseFn(currentTokenType())(this)
     while (!endOfExpression() && precedence < currentPrecedence()) {
         val infix = infixFn(currentTokenType()) ?: return lhsExpression
-//        advance()
         lhsExpression = infix(this, lhsExpression)
     }
     return lhsExpression
