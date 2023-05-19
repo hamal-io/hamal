@@ -5,6 +5,8 @@ import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.value.FunctionValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.impl.DefaultSandbox
+import io.hamal.lib.script.impl.builtin.AssertFunction
+import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
 import jakarta.annotation.PostConstruct
@@ -60,11 +62,14 @@ class AgentService {
 
                 require(task is ApiWorkerScriptTask)
                 println("Executing hamal script: ${task.code}")
-                val env = EnvironmentValue(Identifier("_G"))
+                val env = EnvironmentValue(
+                    identifier = Identifier("_G"),
+                    values = mapOf(
+                        AssertFunction.identifier to AssertFunction,
+                        RequireFunction.identifier to RequireFunction
+                    )
+                )
 
-//                functionValues.forEach { nativeFunction ->
-//                    env.addGlobal(nativeFunction)
-//                }
 
                 extensionEnvironments.forEach { environment ->
                     env.addGlobal(environment.identifier, environment)
