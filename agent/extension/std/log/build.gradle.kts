@@ -27,5 +27,4 @@ distributions {
 
 dependencies {
     implementation(project(":agent:extension:std:api"))
-    implementation(external.spring.logging)
 }

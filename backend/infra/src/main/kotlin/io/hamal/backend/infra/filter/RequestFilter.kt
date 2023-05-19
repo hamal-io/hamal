@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.filter
 
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -18,7 +18,7 @@ class RequestFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("requestId", RequestId(counter.incrementAndGet().toBigInteger()))
+        request.setAttribute("requestId", ReqId(counter.incrementAndGet().toBigInteger()))
         filterChain.doFilter(request, response)
     }
 

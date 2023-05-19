@@ -8,7 +8,6 @@ import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -44,7 +43,8 @@ class AgentService {
 //
 //        extensionEnvironments.add(x.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
-        val log = entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/log/build/libs/extension-std-log.jar"))
+        val log =
+            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/log/build/libs/extension-std-log.jar"))
         extensionEnvironments.add(log.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
 
@@ -58,14 +58,11 @@ class AgentService {
 
     @Scheduled(initialDelay = 100, fixedDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
-        val jobs = DefaultHamalSdk.jobService().poll()
-        jobs.jobs.forEach { job ->
-            println("Processing job $job")
-            job.tasks.forEach { task ->
-                println("Start executing task $task")
-
-                require(task is ApiWorkerScriptTask)
-                println("Executing hamal script: ${task.code}")
+        DefaultHamalSdk.execService()
+            .poll()
+            .executions.forEach { execution ->
+                println("$execution")
+                println("Executing hamal script: ${execution.code}")
                 val env = EnvironmentValue(
                     identifier = Identifier("_G"),
                     values = mapOf(
@@ -80,13 +77,14 @@ class AgentService {
                 }
 
                 val sandbox = DefaultSandbox(env)
-                val result = sandbox.eval(task.code.value)
+                val result = sandbox.eval(execution.code.value)
                 println("RESULT: $result")
 
-                println("Finish executing task $task")
+                println("Finish executing task $execution")
+
+                DefaultHamalSdk.execService().complete(execution.id)
+
             }
-            DefaultHamalSdk.jobService().complete(job.id)
-        }
     }
 
 }

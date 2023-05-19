@@ -1,6 +1,6 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.domain.vo.helper.SerializationTestHelper.generateTestCases
+import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

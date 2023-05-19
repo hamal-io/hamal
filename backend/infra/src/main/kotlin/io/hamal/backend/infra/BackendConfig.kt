@@ -42,11 +42,11 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     ) = createDomainNotificationConsumerPort
         .register(AdhocTriggerInvokedNotification::class, AdhocTriggerInvokedHandler(invokeUseCasePort))
         .register(ManualTriggerInvokedNotification::class, ManualTriggerInvokedHandler(invokeUseCasePort))
-        .register(JobPlannedNotification::class, JobPlannedHandler(invokeUseCasePort))
-        .register(JobScheduledNotification::class, JobScheduledHandler(invokeUseCasePort))
-        .register(JobQueuedNotification::class, JobQueuedHandler())
-        .register(JobCompletedNotification::class, JobCompletedHandler())
-        .register(JobFailedNotification::class, JobFailedHandler())
+        .register(ExecPlannedNotification::class, ExecPlannedHandler(invokeUseCasePort))
+        .register(ExecScheduledNotification::class, ExecScheduledHandler(invokeUseCasePort))
+        .register(ExecutionQueuedNotification::class, ExecQueuedHandler())
+        .register(ExecutionCompletedNotification::class, ExecCompletedHandler())
+        .register(ExecutionFailedNotification::class, ExecFailedHandler())
         .create()
 
     @Autowired

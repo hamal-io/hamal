@@ -13,7 +13,7 @@ package io.hamal.backend.repository.sqlite.domain
 ////    lock.withLock {
 //        connection.createStatement().use {
 //            it.execute("DELETE FROM triggers")
-//            it.execute("DELETE FROM job_definitions")
+//            it.execute("DELETE FROM funcs")
 //            it.execute("DELETE FROM sqlite_sequence")
 //        }
 //        connection.commit()
@@ -23,11 +23,11 @@ package io.hamal.backend.repository.sqlite.domain
 //internal fun DefaultJobDefinitionStore.setupSchema() {
 //    lock.withLock {
 //        connection.createStatement().use {
-//            it.execute("""DROP TABLE IF EXISTS job_definitions;""")
+//            it.execute("""DROP TABLE IF EXISTS funcs;""")
 //            it.execute("""DROP TABLE IF EXISTS triggers;""")
 //            it.execute(
 //                """
-//            CREATE TABLE IF NOT EXISTS job_definitions (
+//            CREATE TABLE IF NOT EXISTS funcs (
 //                id          INTEGER PRIMARY KEY,
 //                version     INTEGER NOT NULL ,
 //                request_id  BIGINT  NOT NULL,
@@ -43,7 +43,7 @@ package io.hamal.backend.repository.sqlite.domain
 //                """
 //           CREATE TABLE IF NOT EXISTS triggers(
 //                id INTEGER PRIMARY KEY,
-//                job_definition_id INTEGER NOT NULL,
+//                func_id INTEGER NOT NULL,
 //                type INTEGER NOT NULL,
 //                inputs BLOB,
 //                secrets BLOB,

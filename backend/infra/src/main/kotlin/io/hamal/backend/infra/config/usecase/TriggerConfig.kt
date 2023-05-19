@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.repository.api.JobDefinitionRepository
+import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.usecase.request.trigger.ManualTriggerInvocationRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,10 +12,10 @@ open class TriggerConfig {
     @Bean
     open fun invokeManualTrigger(
         notifyDomainPort: NotifyDomainPort,
-        jobDefinitionRepository: JobDefinitionRepository
+        funcRepository: FuncRepository
     ) = ManualTriggerInvocationRequestHandler(
         notifyDomainPort,
-        jobDefinitionRepository
+        funcRepository
     )
 
 //    @Bean

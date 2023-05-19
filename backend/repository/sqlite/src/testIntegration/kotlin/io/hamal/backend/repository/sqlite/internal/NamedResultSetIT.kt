@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.base.DomainId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -94,7 +94,7 @@ class DefaultNamedResultSetIT {
         val testInstance = testInstance(
             "SELECT request_id_value FROM some_table WHERE request_id_value is not null"
         )
-        assertThat(testInstance.getRequestId("request_id_value"), equalTo(RequestId(1234567890)))
+        assertThat(testInstance.getRequestId("request_id_value"), equalTo(ReqId(1234567890)))
     }
 
     @Test

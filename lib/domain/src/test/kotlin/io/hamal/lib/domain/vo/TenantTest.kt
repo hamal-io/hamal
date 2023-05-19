@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.vo.helper.SerializationTestHelper.generateTestCases
+import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
 import org.junit.jupiter.api.Assertions.assertEquals

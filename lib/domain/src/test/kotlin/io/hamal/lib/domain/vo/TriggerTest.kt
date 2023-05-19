@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.vo.helper.SerializationTestHelper.generateTestCases
+import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -63,23 +63,23 @@ class TriggerIdTest {
 }
 
 @DisplayName("TriggerReference")
-class TriggerReferenceTest {
+class TriggerRefTest {
     @Nested
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
             assertEquals(
-                TriggerReference("some-ref"),
-                TriggerReference("some-ref")
+                TriggerRef("some-ref"),
+                TriggerRef("some-ref")
             )
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
             assertNotEquals(
-                TriggerReference("some-ref"),
-                TriggerReference("another-ref")
+                TriggerRef("some-ref"),
+                TriggerRef("another-ref")
             )
         }
     }
@@ -90,27 +90,27 @@ class TriggerReferenceTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                TriggerReference("some-ref").hashCode(),
-                TriggerReference("some-ref").hashCode()
+                TriggerRef("some-ref").hashCode(),
+                TriggerRef("some-ref").hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                TriggerReference("some-ref").hashCode(),
-                TriggerReference("another-ref").hashCode()
+                TriggerRef("some-ref").hashCode(),
+                TriggerRef("another-ref").hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(TriggerReference("some-ref").toString(), equalTo("TriggerReference(some-ref)"))
+        assertThat(TriggerRef("some-ref").toString(), equalTo("TriggerRef(some-ref)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TriggerReference("some-ref"), "\"some-ref\"")
+    fun Serialization() = generateTestCases(TriggerRef("some-ref"), "\"some-ref\"")
 }
 
 @DisplayName("InvokedTriggerId")

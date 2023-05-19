@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.ddd
 
 import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import kotlin.reflect.KClass
 
@@ -12,7 +12,7 @@ interface UseCaseHandler<RESULT : DomainObject<*>, USE_CASE : UseCase<RESULT>> {
 }
 
 interface RequestOneUseCase<RESULT : DomainObject<*>> : UseCase<RESULT> {
-    val requestId: RequestId
+    val reqId: ReqId
     val shard: Shard
 }
 
@@ -23,7 +23,7 @@ abstract class RequestOneUseCaseHandler<RESULT : DomainObject<*>, USE_CASE : Req
 }
 
 interface RequestManyUseCase<RESULT : DomainObject<*>> : UseCase<RESULT> {
-    val requestId: RequestId
+    val reqId: ReqId
     val shard: Shard
 }
 

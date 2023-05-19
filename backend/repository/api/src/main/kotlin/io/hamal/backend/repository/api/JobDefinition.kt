@@ -1,10 +1,10 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.job_definition.JobDefinition
-import io.hamal.backend.core.task.Task
+import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.*
-import io.hamal.lib.domain.RequestId
+import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.FuncRepository.Command.ManualTriggerToCreate
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.base.referenceFromId
@@ -12,21 +12,18 @@ import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
 
-interface JobDefinitionRepository {
+interface FuncRepository {
 
-    fun get(id: JobDefinitionId): JobDefinition
+    fun get(id: FuncId): Func
 
     fun getTrigger(id: TriggerId): Trigger
 
-    fun getTask(id: TaskId): Task
+    fun execute(reqId: ReqId, commands: List<Command>): List<Func>
 
-    fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition>
-
-    // jobDefinitionRequest
-    fun request(requestId: RequestId, record: Recorder.() -> Unit): List<JobDefinition> {
+    fun request(reqId: ReqId, record: Recorder.() -> Unit): List<Func> {
         val recorder = Recorder(DomainIdGeneratorAdapter) //FIXME
         record(recorder)
-        return execute(requestId, recorder.commands)
+        return execute(reqId, recorder.commands)
     }
 
     interface Command {
@@ -39,27 +36,20 @@ interface JobDefinitionRepository {
         }
 
         val order: Order
-        val jobDefinitionId: JobDefinitionId
+        val funcId: FuncId
 
-        data class JobDefinitionToCreate(
-            override val jobDefinitionId: JobDefinitionId,
-            var reference: JobReference
+        data class FuncToCreate(
+            override val funcId: FuncId,
+            var ref: FuncRef,
+            var code: Code
         ) : Command {
             override val order = Order.InsertPrimary
         }
 
-        data class ScriptTaskToCreate(
-            val id: TaskId,
-            override val jobDefinitionId: JobDefinitionId,
-            var code: Code
-        ) : Command {
-            override val order = Order.InsertSecondary
-        }
-
         data class ManualTriggerToCreate(
             val id: TriggerId,
-            override val jobDefinitionId: JobDefinitionId,
-            var reference: TriggerReference,
+            override val funcId: FuncId,
+            var reference: TriggerRef,
             //inputs
             //secrets
         ) : Command {
@@ -78,42 +68,28 @@ interface JobDefinitionRepository {
     }
 }
 
-fun JobDefinitionRepository.Recorder.createJobDefinition(block: JobDefinitionToCreate.() -> Unit): JobDefinitionId {
-    val result = generateDomainId(Shard(0), ::JobDefinitionId)
+fun FuncRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): FuncId {
+    val result = generateDomainId(Shard(0), ::FuncId)
     commands.add(
-        JobDefinitionToCreate(
-            jobDefinitionId = result,
-            reference = referenceFromId(result, ::JobReference)
+        FuncToCreate(
+            funcId = result,
+            ref = referenceFromId(result, ::FuncRef),
+            code = Code("")
         ).apply(block)
     )
     return result
 }
 
-fun JobDefinitionRepository.Recorder.createManualTrigger(
-    jobDefinitionId: JobDefinitionId,
+fun FuncRepository.Recorder.createManualTrigger(
+    funcId: FuncId,
     block: ManualTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)
     commands.add(
         ManualTriggerToCreate(
             id = result,
-            jobDefinitionId = jobDefinitionId,
-            reference = referenceFromId(result, ::TriggerReference)
-        ).apply(block)
-    )
-    return result
-}
-
-fun JobDefinitionRepository.Recorder.createScriptTask(
-    jobDefinitionId: JobDefinitionId,
-    block: ScriptTaskToCreate.() -> Unit
-): TaskId {
-    val result = generateDomainId(Shard(0), ::TaskId)
-    commands.add(
-        ScriptTaskToCreate(
-            id = result,
-            jobDefinitionId = jobDefinitionId,
-            code = HamalScriptCode("")
+            funcId = funcId,
+            reference = referenceFromId(result, ::TriggerRef)
         ).apply(block)
     )
     return result

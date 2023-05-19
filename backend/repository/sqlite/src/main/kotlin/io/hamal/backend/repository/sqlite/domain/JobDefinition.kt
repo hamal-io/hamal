@@ -1,24 +1,23 @@
 package io.hamal.backend.repository.sqlite.domain
 
-import io.hamal.backend.core.job_definition.JobDefinition
-import io.hamal.backend.core.task.Task
+import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.JobDefinitionRepository
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.JobDefinitionToCreate
+import io.hamal.backend.repository.api.FuncRepository
+import io.hamal.backend.repository.api.FuncRepository.Command
+import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.JobDefinitionId
-import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.domain.vo.TaskId
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncRef
 import io.hamal.lib.domain.vo.TriggerId
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 
-class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), JobDefinitionRepository {
+class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncRepository {
 
 //    internal val lock: Lock
 //    internal val connection: Connection
@@ -29,7 +28,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
         override val path: Path,
         override val shard: Shard
     ) : BaseRepository.Config {
-        override val filename = "job_definitions"
+        override val filename = "funcs"
     }
 
 //    companion object {
@@ -61,15 +60,15 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 //        }
 //    }
 
-    override fun get(id: JobDefinitionId): JobDefinition {
-        return connection.executeQueryOne("SELECT id, version, request_id, reference FROM job_definitions WHERE id = :id") {
+    override fun get(id: FuncId): Func {
+        return connection.executeQueryOne("SELECT id, version, request_id, reference FROM funcs WHERE id = :id") {
             with { set("id", id) }
             map {
-                JobDefinition(
-                    id = it.getDomainId("id", ::JobDefinitionId),
-                    reference = JobReference(it.getString("reference")),
-                    tasks = listOf(),
-                    triggers = listOf()
+                Func(
+                    id = it.getDomainId("id", ::FuncId),
+                    reference = FuncRef(it.getString("reference")),
+                    triggers = listOf(),
+                    code = Code("")
                 )
             }
         } ?: throw IllegalArgumentException("No job definition found for $id")
@@ -79,13 +78,10 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
         TODO()
     }
 
-    override fun getTask(id: TaskId): Task {
-        TODO("Not yet implemented")
-    }
 
-    override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
+    override fun execute(reqId: ReqId, commands: List<Command>): List<Func> {
 
-        val toProcess = commands.groupBy { it.jobDefinitionId }
+        val toProcess = commands.groupBy { it.funcId }
 
         //            template.update(
 //                "INSERT INTO request_log(id, instant) VALUES (:id, unixepoch())",
@@ -143,11 +139,11 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 //        }
 //
         return listOf(
-            JobDefinition(
+            Func(
                 id = toProcess.keys.first(),
-                reference = JobReference("das"),
-                tasks = listOf(),
-                triggers = listOf()
+                reference = FuncRef("das"),
+                triggers = listOf(),
+                Code("")
             )
         )
     }
@@ -174,7 +170,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 ////
 ////            execute(
 ////                """
-////            CREATE TABLE IF NOT EXISTS job_definitions (
+////            CREATE TABLE IF NOT EXISTS funcs (
 ////                id          INTEGER PRIMARY KEY,
 ////                version     INTEGER NOT NULL ,
 ////                reference   TEXT NOT NULL ,
@@ -189,7 +185,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 ////                """
 ////           CREATE TABLE IF NOT EXISTS triggers(
 ////                id INTEGER PRIMARY KEY,
-////                job_definition_id INTEGER NOT NULL,
+////                func_id INTEGER NOT NULL,
 ////                type INTEGER NOT NULL,
 ////                inputs BLOB,
 ////                secrets BLOB,
@@ -202,7 +198,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 
 //    override fun drop() {
 ////        inTx {
-////            execute("""DROP TABLE IF EXISTS job_definitions;""")
+////            execute("""DROP TABLE IF EXISTS funcs;""")
 ////            execute("""DROP TABLE IF EXISTS triggers;""")
 ////            execute("""DROP TABLE IF EXISTS request_log;""")
 ////        }
@@ -217,11 +213,11 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 //
 //    override fun setupSchema() {
 //
-//        connection.execute("""DROP TABLE IF EXISTS job_definitions;""")
+//        connection.execute("""DROP TABLE IF EXISTS funcs;""")
 //        connection.execute("""DROP TABLE IF EXISTS triggers;""")
 //        connection.execute(
 //            """
-//            CREATE TABLE IF NOT EXISTS job_definitions (
+//            CREATE TABLE IF NOT EXISTS funcs (
 //                id          INTEGER PRIMARY KEY,
 //                version     INTEGER NOT NULL ,
 //                request_id  BIGINT  NOT NULL,
@@ -238,7 +234,7 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 //            """
 //           CREATE TABLE IF NOT EXISTS triggers(
 //                id INTEGER PRIMARY KEY,
-//                job_definition_id INTEGER NOT NULL,
+//                func_id INTEGER NOT NULL,
 //                type INTEGER NOT NULL,
 //                inputs BLOB,
 //                secrets BLOB,
@@ -261,9 +257,9 @@ class SqliteJobDefinitionRepository(config: Config) : BaseRepository(config), Jo
 
 }
 
-internal fun SqliteJobDefinitionRepository.insertJobDefinition(requestId: RequestId, toInsert: JobDefinitionToCreate) {
+internal fun SqliteFuncRepository.insertFunc(reqId: ReqId, toInsert: FuncToCreate) {
 //    return connection.prepareStatement(
-//        """INSERT INTO job_definitions(id, version, request_id,reference, instant) VALUES(?,?,?,?,?)""",
+//        """INSERT INTO funcs(id, version, request_id,reference, instant) VALUES(?,?,?,?,?)""",
 //    ).use {
 //        it.setLong(1, toInsert.jobDefinitionId.value.value)
 //        it.setInt(2, 0)
@@ -274,9 +270,9 @@ internal fun SqliteJobDefinitionRepository.insertJobDefinition(requestId: Reques
 //    }
 }
 
-internal fun SqliteJobDefinitionRepository.updateVersion(id: JobDefinitionId) {
+internal fun SqliteFuncRepository.updateVersion(id: FuncId) {
 //    return connection.prepareStatement(
-//        """UPDATE job_definitions SET version = version + 1 WHERE id = ?""",
+//        """UPDATE funcs SET version = version + 1 WHERE id = ?""",
 //    ).use {
 //        it.setLong(1, id.value.value)
 //        it.execute()
@@ -284,8 +280,8 @@ internal fun SqliteJobDefinitionRepository.updateVersion(id: JobDefinitionId) {
 }
 
 fun main() {
-    val store = SqliteJobDefinitionRepository(
-        SqliteJobDefinitionRepository.Config(
+    val store = SqliteFuncRepository(
+        SqliteFuncRepository.Config(
             path = Path("/tmp/db0815"),
             shard = Shard(0)
         )
@@ -314,7 +310,7 @@ fun main() {
 //
 //    transactionTemplate.execute {
 //
-//        template.jdbcTemplate.execute("""DROP TABLE IF EXISTS job_definitions;""")
+//        template.jdbcTemplate.execute("""DROP TABLE IF EXISTS funcs;""")
 //        template.jdbcTemplate.execute("""DROP TABLE IF EXISTS triggers;""")
 //        template.update("""DROP TABLE IF EXISTS request_log;""", mapOf<String, Any>())
 //        template.update(
@@ -327,7 +323,7 @@ fun main() {
 //        )
 //        template.jdbcTemplate.execute(
 //            """
-//            CREATE TABLE IF NOT EXISTS job_definitions (
+//            CREATE TABLE IF NOT EXISTS funcs (
 //                id          INTEGER PRIMARY KEY,
 //                version     INTEGER NOT NULL ,
 //                reference   TEXT NOT NULL ,
@@ -341,7 +337,7 @@ fun main() {
 //            """
 //           CREATE TABLE IF NOT EXISTS triggers(
 //                id INTEGER PRIMARY KEY,
-//                job_definition_id INTEGER NOT NULL,
+//                func_id INTEGER NOT NULL,
 //                type INTEGER NOT NULL,
 //                inputs BLOB,
 //                secrets BLOB,
@@ -360,7 +356,7 @@ fun main() {
 //            )
 //
 //            template.query(
-//                """INSERT INTO job_definitions(id, version, reference, instant)
+//                """INSERT INTO funcs(id, version, reference, instant)
 //                    |    VALUES (:id,:version,:reference,:instant)
 //                    |    RETURNING *""".trimMargin(),
 //                mapOf(
@@ -376,7 +372,7 @@ fun main() {
 //
 //
 //            template.query(
-//                """SELECT id, version, reference FROM job_definitions WHERE id = :id""",
+//                """SELECT id, version, reference FROM funcs WHERE id = :id""",
 //                mapOf("id" to id.value.value)
 //            ) { resultSet, idx ->
 //                println(resultSet.fetchSize)

@@ -1,10 +1,11 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.*
-import io.hamal.backend.repository.api.JobDefinitionRepository.Recorder
+import io.hamal.backend.repository.api.FuncRepository.Command.*
+import io.hamal.backend.repository.api.FuncRepository.Recorder
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.vo.JobDefinitionId
-import io.hamal.lib.domain.vo.JobReference
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncRef
 import io.hamal.lib.domain.vo.port.FixedTimeIdGeneratorAdapter
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -15,23 +16,24 @@ import org.junit.jupiter.api.Test
 class RecorderTest {
 
     @Nested
-    @DisplayName("createJobDefinition()")
-    inner class CreateJobDefinitionTest {
+    @DisplayName("createFunc()")
+    inner class CreateFuncTest {
 
         @Test
-        fun `Records creation of JobDefinition with default parameters`() {
+        fun `Records creation of ExecDefinition with default parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
-            val resultId = testInstance.createJobDefinition {}
-            assertThat(resultId, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
+            val resultId = testInstance.createFunc {}
+            assertThat(resultId, equalTo(FuncId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
                 commands, equalTo(
                     listOf(
-                        JobDefinitionToCreate(
-                            jobDefinitionId = JobDefinitionId(SnowflakeId(2199023255552)),
-                            reference = JobReference("2199023255552-ref")
+                        FuncToCreate(
+                            funcId = FuncId(SnowflakeId(2199023255552)),
+                            ref = FuncRef("2199023255552-ref"),
+                            code = Code("")
                         )
                     )
                 )
@@ -39,21 +41,23 @@ class RecorderTest {
         }
 
         @Test
-        fun `Records creation of JobDefinition with overwritten parameters`() {
+        fun `Records creation of func with overwritten parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
-            val resultId = testInstance.createJobDefinition {
-                reference = JobReference("some-job-ref")
+            val resultId = testInstance.createFunc {
+                ref = FuncRef("some-func-ref")
+                code = Code("local hamal_rocks = true")
             }
-            assertThat(resultId, equalTo(JobDefinitionId(SnowflakeId(2199023255552))))
+            assertThat(resultId, equalTo(FuncId(SnowflakeId(2199023255552))))
 
             val commands = testInstance.commands()
             assertThat(
                 commands, equalTo(
                     listOf(
-                        JobDefinitionToCreate(
-                            jobDefinitionId = JobDefinitionId(SnowflakeId(2199023255552)),
-                            reference = JobReference("some-job-ref")
+                        FuncToCreate(
+                            funcId = FuncId(SnowflakeId(2199023255552)),
+                            ref = FuncRef("some-func-ref"),
+                            Code("local hamal_rocks = true")
                         )
                     )
                 )

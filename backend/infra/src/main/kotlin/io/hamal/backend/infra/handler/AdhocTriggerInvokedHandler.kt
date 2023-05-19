@@ -3,8 +3,8 @@ package io.hamal.backend.infra.handler
 import io.hamal.backend.core.logger
 import io.hamal.backend.core.notification.AdhocTriggerInvokedNotification
 import io.hamal.backend.core.notification.port.HandleDomainNotificationPort
-import io.hamal.backend.usecase.request.JobRequest
-import io.hamal.lib.domain.RequestId
+import io.hamal.backend.usecase.request.ExecRequest
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 
 class AdhocTriggerInvokedHandler(
@@ -16,10 +16,10 @@ class AdhocTriggerInvokedHandler(
     override fun handle(notification: AdhocTriggerInvokedNotification) {
         log.debug("Handle: $notification")
         request(
-            JobRequest.PlanJob(
-                requestId = RequestId(123),
+            ExecRequest.PlanExec(
+                reqId = ReqId(123),
                 shard = notification.shard,
-                jobDefinition = notification.invokedTrigger.jobDefinition,
+                func = notification.invokedTrigger.func,
                 trigger = notification.invokedTrigger,
             )
         )

@@ -3,7 +3,6 @@ package io.hamal.agent.extension.std.log
 import io.hamal.agent.extension.api.Extension
 import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
-import org.slf4j.LoggerFactory
 
 class StdLogExtension : Extension {
     override fun create(): EnvironmentValue {
@@ -38,8 +37,8 @@ class LogInfo : FunctionValue {
     override val identifier = Identifier("info")
     override val metaTable: MetaTable get() = TODO("Not yet implemented")
     override fun invoke(ctx: Context): Value {
-        val log = LoggerFactory.getLogger("some-instance")
-        log.info("INFO: ${ctx.parameters.first().value}")
+        println("INFO: ${ctx.parameters.first().value}")
+
 //        println("INFO: ${ctx.parameters.first().value}")
         return NilValue
     }

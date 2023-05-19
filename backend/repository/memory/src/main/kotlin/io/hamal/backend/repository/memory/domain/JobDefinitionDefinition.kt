@@ -1,47 +1,38 @@
 package io.hamal.backend.repository.memory.domain
 
-import io.hamal.backend.core.job_definition.JobDefinition
-import io.hamal.backend.core.task.ScriptTask
-import io.hamal.backend.core.task.Task
-import io.hamal.backend.core.task.TaskType
-import io.hamal.backend.core.task.TaskType.Script
+import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.JobDefinitionRepository
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command
-import io.hamal.backend.repository.api.JobDefinitionRepository.Command.*
-import io.hamal.lib.domain.RequestId
+import io.hamal.backend.repository.api.FuncRepository
+import io.hamal.backend.repository.api.FuncRepository.Command
+import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.FuncRepository.Command.ManualTriggerToCreate
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
 
-object MemoryJobDefinitionRepository : JobDefinitionRepository {
+object MemoryFuncRepository : FuncRepository {
 
-    internal val jobDefinitions = mutableMapOf<JobDefinitionId, JobDefinitionEntity>()
-    internal val tasks = mutableMapOf<TaskId, TaskEntity>()
+    internal val funcs = mutableMapOf<FuncId, FuncEntity>()
     internal val triggers = mutableMapOf<TriggerId, TriggerEntity>()
 
-    internal val requestIds = mutableSetOf<RequestId>()
+    internal val reqIds = mutableSetOf<ReqId>()
 
-    override fun get(id: JobDefinitionId): JobDefinition {
-        return jobDefinitions[id]?.let(JobDefinitionEntity::toModel)
-            ?: throw IllegalArgumentException("No job definition found with $id")
+    override fun get(id: FuncId): Func {
+        return funcs[id]?.let(FuncEntity::toModel)
+            ?: throw IllegalArgumentException("No func found with $id")
     }
 
     override fun getTrigger(id: TriggerId): Trigger {
         return requireNotNull(triggers[id]?.let(TriggerEntity::toModel)) { "No trigger found with $id" }
     }
 
-    override fun getTask(id: TaskId): Task {
-        return requireNotNull(tasks[id]?.let(TaskEntity::toModel)) { "No task found with $id" }
-    }
-
-    override fun execute(requestId: RequestId, commands: List<Command>): List<JobDefinition> {
-        check(requestIds.add(requestId)) { "Request $requestId was already executed" }
-        val groupedCommands = commands.groupBy { it.jobDefinitionId }
+    override fun execute(reqId: ReqId, commands: List<Command>): List<Func> {
+        check(reqIds.add(reqId)) { "Request $reqId was already executed" }
+        val groupedCommands = commands.groupBy { it.funcId }
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->
                 when (cmd) {
-                    is JobDefinitionToCreate -> createJobDefinition(cmd)
+                    is FuncToCreate -> createFunc(cmd)
                     is ManualTriggerToCreate -> createManualTrigger(cmd)
-                    is ScriptTaskToCreate -> createScriptTask(cmd)
                     else -> TODO("$cmd not supported")
                 }
             }
@@ -51,72 +42,51 @@ object MemoryJobDefinitionRepository : JobDefinitionRepository {
     }
 }
 
-internal fun MemoryJobDefinitionRepository.createJobDefinition(toCreate: JobDefinitionToCreate) {
-    jobDefinitions[toCreate.jobDefinitionId] = JobDefinitionEntity(
-        id = toCreate.jobDefinitionId,
-        reference = toCreate.reference,
-        tasks = mutableListOf(),
-        triggers = mutableListOf()
+internal fun MemoryFuncRepository.createFunc(toCreate: FuncToCreate) {
+    funcs[toCreate.funcId] = FuncEntity(
+        id = toCreate.funcId,
+        reference = toCreate.ref,
+        triggers = mutableListOf(),
+        code = toCreate.code
     )
 }
 
-internal fun MemoryJobDefinitionRepository.createManualTrigger(toCreate: ManualTriggerToCreate) {
+internal fun MemoryFuncRepository.createManualTrigger(toCreate: ManualTriggerToCreate) {
     triggers[toCreate.id] = TriggerEntity(
         id = toCreate.id,
         reference = toCreate.reference,
-        jobDefinitionId = toCreate.jobDefinitionId
+        funcId = toCreate.funcId
     )
-    jobDefinitions[toCreate.jobDefinitionId]!!.triggers.add(toCreate.id)
+    funcs[toCreate.funcId]!!.triggers.add(toCreate.id)
 }
 
-internal fun MemoryJobDefinitionRepository.createScriptTask(toCreate: ScriptTaskToCreate) {
-    tasks[toCreate.id] = TaskEntity(
-        id = toCreate.id,
-        taskType = Script,
-        jobDefinitionId = toCreate.jobDefinitionId,
-        code = toCreate.code
-    )
-    jobDefinitions[toCreate.jobDefinitionId]!!.tasks.add(toCreate.id)
-}
-
-internal data class JobDefinitionEntity(
-    val id: JobDefinitionId,
-    val reference: JobReference,
-    val tasks: MutableList<TaskId>,
-    val triggers: MutableList<TriggerId>
+internal data class FuncEntity(
+    val id: FuncId,
+    val reference: FuncRef,
+    val triggers: MutableList<TriggerId>,
+    val code: Code
 ) {
-    fun toModel(): JobDefinition {
-        return JobDefinition(
+    fun toModel(): Func {
+        return Func(
             id = this.id,
             reference = this.reference,
-            tasks = this.tasks.map(MemoryJobDefinitionRepository::getTask),
-            triggers = this.triggers.map(MemoryJobDefinitionRepository::getTrigger)
+            triggers = this.triggers.map(MemoryFuncRepository::getTrigger),
+            code = this.code
         )
     }
 }
 
 
-internal data class TaskEntity(
-    val id: TaskId,
-    val jobDefinitionId: JobDefinitionId,
-    val taskType: TaskType,
-    val code: Code
-) {
-    fun toModel(): Task {
-        return ScriptTask(id, code)
-    }
-}
-
 internal data class TriggerEntity(
     val id: TriggerId,
-    val jobDefinitionId: JobDefinitionId,
-    var reference: TriggerReference
+    val funcId: FuncId,
+    var reference: TriggerRef
 ) {
     fun toModel(): Trigger {
         return Trigger.ManualTrigger(
             id = this.id,
             reference = this.reference,
-            jobDefinitionId = this.jobDefinitionId
+            funcId = this.funcId
         )
     }
 }

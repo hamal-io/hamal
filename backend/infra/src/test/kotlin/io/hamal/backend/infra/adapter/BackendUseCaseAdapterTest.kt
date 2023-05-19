@@ -2,7 +2,7 @@ package io.hamal.backend.infra.adapter
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.*
 import io.hamal.lib.domain.vo.base.DomainId
@@ -200,7 +200,7 @@ class BackendUseCaseRegistryAdapterTest {
     private interface TestResultInterface : DomainObject<TestId>
     private class TestResult(override val id: TestId) : TestResultInterface
     private class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
-        override val requestId = RequestId(123)
+        override val reqId = ReqId(123)
         override val shard = Shard(23)
     }
 
@@ -221,7 +221,7 @@ class BackendUseCaseRegistryAdapterTest {
     }
 
     private class TestRequestManyUseCase : RequestManyUseCase<TestResult> {
-        override val requestId = RequestId(123)
+        override val reqId = ReqId(123)
         override val shard = Shard(23)
     }
 
@@ -289,7 +289,7 @@ class BackendUseCaseInvokerAdapterTest {
         }
 
         private inner class TestUseCase(val data: Int) : RequestOneUseCase<TestResult> {
-            override val requestId = RequestId(123)
+            override val reqId = ReqId(123)
             override val shard = Shard(23)
         }
 
@@ -327,7 +327,7 @@ class BackendUseCaseInvokerAdapterTest {
         }
 
         private inner class TestUseCase(val data: Int) : RequestManyUseCase<TestResult> {
-            override val requestId = RequestId(123)
+            override val reqId = ReqId(123)
             override val shard = Shard(23)
         }
 

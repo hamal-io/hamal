@@ -1,14 +1,12 @@
 package io.hamal.backend.infra.web
 
-import io.hamal.backend.core.task.ScriptTask
-import io.hamal.backend.usecase.request.JobRequest
-import io.hamal.lib.domain.RequestId
+import io.hamal.backend.usecase.request.ExecRequest
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestManyUseCasePort
-import io.hamal.lib.domain.vo.JobReference
-import io.hamal.lib.sdk.domain.ApiWorkerJob
-import io.hamal.lib.sdk.domain.ApiWorkerJobs
-import io.hamal.lib.sdk.domain.ApiWorkerScriptTask
+import io.hamal.lib.domain.vo.FuncRef
+import io.hamal.lib.sdk.domain.ApiExecution
+import io.hamal.lib.sdk.domain.ApiExecutions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -20,24 +18,21 @@ class QueueController
     val requestMany: InvokeRequestManyUseCasePort
 ) {
     @PostMapping("/v1/dequeue")
-    fun dequeueJob(): ApiWorkerJobs {
+    fun dequeueExec(): ApiExecutions {
 
         val result = requestMany.invoke(
-            JobRequest.DequeueJob(
-                requestId = RequestId(1111),
+            ExecRequest.DequeueExec(
+                reqId = ReqId(1111),
                 shard = Shard(0)
             )
         )
 
-        return ApiWorkerJobs(
-            jobs = result.map {
-                ApiWorkerJob(
+        return ApiExecutions(
+            executions = result.map {
+                ApiExecution(
                     id = it.id,
-                    reference = JobReference("ref"),
-                    tasks = it.definition.tasks.map { task ->
-                        require(task is ScriptTask)
-                        ApiWorkerScriptTask(task.id, task.code)
-                    }
+                    reference = FuncRef("ref"),
+                    code = it.trigger.func.code
                 )
             })
     }

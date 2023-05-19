@@ -1,78 +1,78 @@
 package io.hamal.backend.repository.memory.domain
 
-import io.hamal.backend.core.job.*
-import io.hamal.backend.repository.api.JobQueryRepository
-import io.hamal.backend.repository.api.JobRequestRepository
-import io.hamal.lib.domain.RequestId
+import io.hamal.backend.core.exec.*
+import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.backend.repository.api.ExecRequestRepository
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.CompletedAt
-import io.hamal.lib.domain.vo.JobId
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.QueuedAt
 import io.hamal.lib.domain.vo.ScheduledAt
 
-object MemoryJobRepository : JobRequestRepository, JobQueryRepository {
+object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
 
-    private val queue = mutableListOf<QueuedJob>()
-    private val startedJobs = mutableListOf<StartedJob>()
+    private val queue = mutableListOf<QueuedExec>()
+    private val startedExecs = mutableListOf<StartedExec>()
 
-    override fun planJob(requestId: RequestId, jobToPlan: JobRequestRepository.JobToPlan): PlannedJob {
+    override fun plan(reqId: ReqId, execToPlan: ExecRequestRepository.ExecToPlan): PlannedExec {
 
-        return PlannedJob(
-            id = jobToPlan.id,
-            definition = jobToPlan.definition,
-            trigger = jobToPlan.trigger
+        return PlannedExec(
+            id = execToPlan.id,
+            func = execToPlan.definition,
+            trigger = execToPlan.trigger
         )
     }
 
-    override fun schedule(requestId: RequestId, planedJob: PlannedJob): ScheduledJob {
-        return ScheduledJob(
-            id = planedJob.id,
-            definition = planedJob.definition,
-            trigger = planedJob.trigger,
+    override fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec {
+        return ScheduledExec(
+            id = planedExec.id,
+            func = planedExec.func,
+            trigger = planedExec.trigger,
             scheduledAt = ScheduledAt.now()
         )
     }
 
-    override fun queue(requestId: RequestId, scheduledJob: ScheduledJob): QueuedJob {
-        val result = QueuedJob(
-            id = scheduledJob.id,
-            definition = scheduledJob.definition,
-            trigger = scheduledJob.trigger,
+    override fun queue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
+        val result = QueuedExec(
+            id = scheduledExec.id,
+            func = scheduledExec.func,
+            trigger = scheduledExec.trigger,
             queuedAt = QueuedAt.now()
         )
         queue.add(result)
         return result
     }
 
-    override fun complete(requestId: RequestId, startedJob: StartedJob): CompletedJob {
-        startedJobs.removeIf { it.id == startedJob.id }
-        return CompletedJob(
-            id = startedJob.id,
-            definition = startedJob.definition,
-            trigger = startedJob.trigger,
+    override fun complete(reqId: ReqId, startedExec: StartedExec): CompleteExec {
+        startedExecs.removeIf { it.id == startedExec.id }
+        return CompleteExec(
+            id = startedExec.id,
+            func = startedExec.func,
+            trigger = startedExec.trigger,
             completedAt = CompletedAt.now()
         )
     }
 
 
-    override fun dequeue(): List<StartedJob> {
+    override fun dequeue(): List<StartedExec> {
         if (queue.isEmpty()) {
             return listOf()
         }
 
-        val startedJob = queue.removeFirst().let {
-            StartedJob(
+        val startedExec = queue.removeFirst().let {
+            StartedExec(
                 id = it.id,
-                definition = it.definition,
+                func = it.func,
                 trigger = it.trigger,
             )
         }
 
-        startedJobs.add(startedJob)
+        startedExecs.add(startedExec)
 
-        return listOf(startedJob)
+        return listOf(startedExec)
     }
 
-    override fun findStartedJob(jobId: JobId): StartedJob? {
-        return startedJobs.find { it.id == jobId }
+    override fun findStartedExec(execId: ExecId): StartedExec? {
+        return startedExecs.find { it.id == execId }
     }
 }

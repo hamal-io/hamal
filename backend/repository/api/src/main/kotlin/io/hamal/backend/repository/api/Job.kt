@@ -1,29 +1,29 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.job.*
-import io.hamal.backend.core.job_definition.JobDefinition
+import io.hamal.backend.core.exec.*
+import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.trigger.InvokedTrigger
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.JobId
+import io.hamal.lib.domain.vo.ExecId
 
-interface JobRequestRepository {
+interface ExecRequestRepository {
 
-    fun planJob(requestId: RequestId, jobToPlan: JobToPlan): PlannedJob
-    fun schedule(requestId: RequestId, planedJob: PlannedJob): ScheduledJob
-    fun queue(requestId: RequestId, scheduledJob: ScheduledJob): QueuedJob
-    fun complete(requestId: RequestId, startedJob: StartedJob): CompletedJob
-    fun dequeue(): List<StartedJob>
+    fun plan(reqId: ReqId, execToPlan: ExecToPlan): PlannedExec
+    fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec
+    fun queue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec
+    fun complete(reqId: ReqId, startedExec: StartedExec): CompleteExec
+    fun dequeue(): List<StartedExec>
 
-    data class JobToPlan(
+    data class ExecToPlan(
         val shard: Shard,
-        val id: JobId,
-        val definition: JobDefinition,
+        val id: ExecId,
+        val definition: Func,
         val trigger: InvokedTrigger
     )
 
 }
 
-interface JobQueryRepository {
-    fun findStartedJob(jobId: JobId): StartedJob?
+interface ExecQueryRepository {
+    fun findStartedExec(execId: ExecId): StartedExec?
 }

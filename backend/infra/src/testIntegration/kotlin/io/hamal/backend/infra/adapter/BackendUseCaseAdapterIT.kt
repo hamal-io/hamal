@@ -3,7 +3,7 @@ package io.hamal.backend.infra.adapter
 import io.hamal.backend.infra.adapter.TestUseCasesConfig.*
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.RequestId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.*
 import io.hamal.lib.domain.vo.base.DomainId
@@ -93,7 +93,7 @@ class TestId(override val value: SnowflakeId) : DomainId() {
 data class TestResult(override val id: TestId) : DomainObject<TestId>
 
 class TestRequestOneUseCase : RequestOneUseCase<TestResult> {
-    override val requestId = RequestId(123)
+    override val reqId = ReqId(123)
     override val shard = Shard(23)
 }
 
@@ -103,7 +103,7 @@ private val testRequestOneUseCaseHandler =
     }
 
 class TestRequestManyUseCase : RequestManyUseCase<TestResult> {
-    override val requestId = RequestId(123)
+    override val reqId = ReqId(123)
     override val shard = Shard(23)
 }
 

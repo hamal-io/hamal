@@ -1,15 +1,15 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.sdk.service.DefaultJobService
-import io.hamal.lib.sdk.service.JobService
+import io.hamal.lib.sdk.service.DefaultExecService
+import io.hamal.lib.sdk.service.ExecService
 
 interface HamalSdk {
-    fun jobService(): JobService
+    fun execService(): ExecService
 }
 
 object DefaultHamalSdk : HamalSdk {
-    override fun jobService(): JobService {
-        return DefaultJobService()
+    override fun execService(): ExecService {
+        return DefaultExecService()
     }
 
 }

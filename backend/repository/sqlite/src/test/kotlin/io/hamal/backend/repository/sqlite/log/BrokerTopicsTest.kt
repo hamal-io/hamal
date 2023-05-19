@@ -130,10 +130,10 @@ class DefaultBrokerTopicsRepositoryTest {
         fun `Bug - able to create realistic topic name`() {
             testInstance.resolveTopic(Name("very-first-topic"))
 
-            val result = testInstance.resolveTopic(Name("job_definition::created"))
+            val result = testInstance.resolveTopic(Name("func::created"))
             assertThat(result.id, equalTo(Topic.Id(2)))
             assertThat(result.brokerId, equalTo(Broker.Id(345)))
-            assertThat(result.name, equalTo(Name("job_definition::created")))
+            assertThat(result.name, equalTo(Name("func::created")))
             assertThat(result.path, equalTo(Path(testDir)))
 
             assertThat(testInstance.count(), equalTo(2UL))
