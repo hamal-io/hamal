@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.builtin
 
+import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
@@ -8,7 +9,7 @@ object RequireFunction : FunctionValue {
     override val metaTable = MetaTableNotImplementedYet
 
 
-    override fun invoke(ctx: FunctionValue.Context): Value {
+    override fun invoke(ctx: Context): Value {
         val firstParameter = ctx.parameters.firstOrNull()
             ?: throw ScriptEvaluationException(ErrorValue("require needs one environment identifier"))
 

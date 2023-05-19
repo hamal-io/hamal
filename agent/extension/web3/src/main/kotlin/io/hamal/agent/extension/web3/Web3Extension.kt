@@ -1,6 +1,7 @@
 package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
+import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 
@@ -26,7 +27,7 @@ class Web3Extension : Extension {
 
         override val identifier = Identifier("getBlock")
 
-        override fun invoke(ctx: FunctionValue.Context): Value {
+        override fun invoke(ctx: Context): Value {
             println("Getting block")
 //                    val bs = EthHttpBatchService()
 //                    bs.getBlock(req = EthBatchService.GetBlockByHashRequest(EthHash(EthBytes32(ByteArray(32)))))

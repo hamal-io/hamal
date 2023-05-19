@@ -1,5 +1,7 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.script.api.Context
+import io.hamal.lib.script.api.Parameter
 import io.hamal.lib.script.api.value.FunctionValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.api.value.Value
@@ -24,9 +26,9 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
             env.findFunctionValue(identifier)
                 ?.let { fn ->
                     return fn(
-                        FunctionValue.Context(
+                        Context(
                             parameters = parameters.zip(toEvaluate.parameters)
-                                .map { FunctionValue.Parameter(it.first, it.second) },
+                                .map { Parameter(it.first, it.second) },
                             env = env
                         )
                     )
@@ -37,8 +39,13 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
         } else {
             require(target is FunctionValue)
             return target(
-                FunctionValue.Context(
-                    listOf(),
+                Context(
+                    parameters.map {
+                        Parameter(
+                            value = it,
+                            expression = toEvaluate.parameters.first() //FIXME
+                        )
+                    },
                     ctx.env
                 )
             )

@@ -52,8 +52,10 @@ include(":backend:repository:sqlite")
 
 include(":agent:infra")
 include(":agent:extension:api")
-include(":agent:extension:impl:starter")
-include(":agent:extension:impl:web3")
+include(":agent:extension:std:api")
+include(":agent:extension:std:log")
+include(":agent:extension:starter")
+include(":agent:extension:web3")
 
 rootProject.name = "hamal"
 

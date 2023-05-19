@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.value.FunctionValue
+import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
@@ -9,7 +9,7 @@ object AssertFunction : FunctionValue {
     override val metaTable = MetaTableNotImplementedYet
 
 
-    override fun invoke(ctx: FunctionValue.Context): Value {
+    override fun invoke(ctx: Context): Value {
         val parameters = ctx.parameters
 
         val assertionMessage = parameters.getOrNull(1)

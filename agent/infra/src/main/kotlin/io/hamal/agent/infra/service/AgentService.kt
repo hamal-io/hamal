@@ -36,13 +36,17 @@ class AgentService {
 //            )
 //        nativeFunctions.addAll(s.functionFactories())
 
-        val x =
-            entryPointLoader.load(
-                File("/home/ddymke/Repo/hamal/agent/extension/impl/web3/build/libs/extension-web3.jar")
-            )
+//        val x =
+//            entryPointLoader.load(
+//                File("/home/ddymke/Repo/hamal/agent/extension/impl/web3/build/libs/extension-web3.jar")
+//            )
+//
+//
+//        extensionEnvironments.add(x.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
+        val log = entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/log/build/libs/extension-std-log.jar"))
+        extensionEnvironments.add(log.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
-        extensionEnvironments.add(x.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
 //        x.functionFactories()
 
