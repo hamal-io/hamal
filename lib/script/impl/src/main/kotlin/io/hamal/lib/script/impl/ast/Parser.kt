@@ -49,7 +49,8 @@ internal fun Parser.Context.parseBlockStatement(): BlockStatement {
     while (
         currentTokenType() != Type.Eof &&
         currentTokenType() != Type.End &&
-        currentTokenType() != Type.Else
+        currentTokenType() != Type.Else &&
+        currentTokenType() != Type.ElseIf
     ) {
         parseStatement().let(statements::add)
         if (currentTokenType() == Type.Semicolon) {

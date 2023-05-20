@@ -39,7 +39,15 @@ internal class EvalConditionTest : AbstractEvalTest() {
         },
         """if true then true else false end""" to { result, _ ->
             assertThat(result, equalTo(TrueValue))
+        },
+        """if false then 1 elseif true then 2 end""" to { result, _ ->
+            assertThat(result, equalTo(NumberValue(2)))
+        },
+        """if false then 1 elseif false then 2 else 3 end""" to { result, _ ->
+            assertThat(result, equalTo(NumberValue(3)))
+        },
+        """if false then 1 elseif false then 2 end""" to { result, _ ->
+            assertThat(result, equalTo(NilValue))
         }
     ))
-
 }

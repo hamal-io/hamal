@@ -23,7 +23,7 @@ data class IfExpression(
             ctx.advance()
 
             conditionals.add(ctx.parseIf())
-
+            conditionals.addAll(ctx.parseElseIf())
             ctx.parseElse()?.let(conditionals::add)
 
             ctx.expectCurrentTokenTypToBe(End)
@@ -40,6 +40,23 @@ data class IfExpression(
                 condition = condition,
                 body = parseBlockStatement()
             )
+        }
+
+        private fun Parser.Context.parseElseIf(): List<ConditionalExpression> {
+            val result = mutableListOf<ConditionalExpression>()
+            while (currentTokenType() == ElseIf) {
+                advance()
+                val condition = parseExpression(Precedence.Lowest)
+                expectCurrentTokenTypToBe(Then)
+                advance()
+                result.add(
+                    ConditionalExpression(
+                        condition = condition,
+                        body = parseBlockStatement()
+                    )
+                )
+            }
+            return result
         }
 
         private fun Parser.Context.parseElse(): ConditionalExpression? {

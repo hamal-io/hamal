@@ -66,14 +66,10 @@ internal class ConditionalExpressionTest {
                 ).hashCode()
             )
         }
-
     }
-
-
 }
 
 internal class IfExpressionTest : AbstractExpressionTest() {
-
     @TestFactory
     fun parse() = listOf(
         "if true then 13 end" to IfExpression(
@@ -89,6 +85,22 @@ internal class IfExpressionTest : AbstractExpressionTest() {
                 ConditionalExpression(
                     FalseLiteral,
                     BlockStatement(ExpressionStatement(NumberLiteral(13)))
+                ),
+                ConditionalExpression(
+                    TrueLiteral,
+                    BlockStatement(ExpressionStatement(NumberLiteral(26)))
+                )
+            )
+        ),
+        "if false then 13 elseif true then 23 else 26 end" to IfExpression(
+            listOf(
+                ConditionalExpression(
+                    FalseLiteral,
+                    BlockStatement(ExpressionStatement(NumberLiteral(13)))
+                ),
+                ConditionalExpression(
+                    TrueLiteral,
+                    BlockStatement(ExpressionStatement(NumberLiteral(23)))
                 ),
                 ConditionalExpression(
                     TrueLiteral,
