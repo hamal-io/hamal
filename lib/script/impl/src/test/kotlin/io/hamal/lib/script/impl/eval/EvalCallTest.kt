@@ -3,34 +3,24 @@ package io.hamal.lib.script.impl.eval
 import io.hamal.lib.script.api.value.NumberValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 internal class EvalCallTest : AbstractEvalTest() {
 
-    @Test
-    fun `Function which returns the answer - but what was the question`() {
-        val result = eval(
+    @TestFactory
+    fun evalCallTests() = prepareTests(
+        listOf(
             """
             function answer() return 42  end
             answer()
-        """.trimIndent()
-        )
-        assertThat(result, equalTo(NumberValue(42)))
-    }
+        """ to { result, _ -> assertThat(result, equalTo(NumberValue(42))) },
 
-
-    @Test
-    fun `Function which returns the answer twice- but what was the question`() {
-        val result = eval(
             """
-            function answer()
-                return 42
-            end
-            
+            function answer() return 42  end
             answer()
             answer()
-        """.trimIndent()
+            answer()
+        """ to { result, _ -> assertThat(result, equalTo(NumberValue(42))) },
         )
-        assertThat(result, equalTo(NumberValue(42)))
-    }
+    )
 }

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class ConditionExpressionTest {
+internal class ConditionalStatementTest {
 
     @Nested
     @DisplayName("equals()")
@@ -18,21 +18,21 @@ internal class ConditionExpressionTest {
         @Test
         fun `Equal if condition and block statement are equal`() {
             assertEquals(
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))),
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42))))
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))),
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42))))
             )
         }
 
         @Test
         fun `Not Equal if condition or block statement are not equal`() {
             assertNotEquals(
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))),
-                ConditionExpression(FalseLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42))))
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))),
+                ConditionalStatement(FalseLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42))))
             )
 
             assertNotEquals(
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))),
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(StringLiteral("Something else"))))
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))),
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(StringLiteral("Something else"))))
             )
         }
 
@@ -45,21 +45,21 @@ internal class ConditionExpressionTest {
         @Test
         fun `Same hashcode if condition and block statement hashcode are same`() {
             assertEquals(
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode(),
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode()
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode(),
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if condition or block statement has different hashcode`() {
             assertNotEquals(
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode(),
-                ConditionExpression(FalseLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode()
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode(),
+                ConditionalStatement(FalseLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode()
             )
 
             assertNotEquals(
-                ConditionExpression(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode(),
-                ConditionExpression(
+                ConditionalStatement(TrueLiteral, BlockStatement(ExpressionStatement(NumberLiteral(42)))).hashCode(),
+                ConditionalStatement(
                     TrueLiteral,
                     BlockStatement(ExpressionStatement(StringLiteral("Something else")))
                 ).hashCode()
@@ -84,7 +84,7 @@ internal class IfExpressionTest : AbstractExpressionTest() {
                     result, equalTo(
                         IfExpression(
                             listOf(
-                                ConditionExpression(
+                                ConditionalStatement(
                                     InfixExpression(IdentifierLiteral("a"), Operator.LessThan, NumberLiteral(0)),
                                     BlockStatement(Assignment.Global(IdentifierLiteral("a"), NumberLiteral(0)))
                                 )

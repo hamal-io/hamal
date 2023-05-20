@@ -4,48 +4,35 @@ import io.hamal.lib.script.api.value.NilValue
 import io.hamal.lib.script.api.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 internal class EvalVariableTest : AbstractEvalTest() {
-    @Test
-    fun `Assign number to global variable`() {
-        val result = eval("""some_number=2810""")
-        assertThat(result, equalTo(NilValue))
-        assertThat(testEnvironment["some_number"], equalTo(NumberValue(2810)))
-    }
+    @TestFactory
+    fun evalVariableTest() = prepareTests(listOf(
+        """some_number=2810""" to { result, env ->
+            assertThat(result, equalTo(NilValue))
+            assertThat(env["some_number"], equalTo(NumberValue(2810)))
+        },
+        """x,y,z = 1,2,3""" to { result, env ->
+            assertThat(result, equalTo(NilValue))
+            assertThat(env["x"], equalTo(NumberValue(1)))
+            assertThat(env["y"], equalTo(NumberValue(2)))
+            assertThat(env["z"], equalTo(NumberValue(3)))
+        },
+        """local x = nil""" to { result, env ->
+            assertThat(result, equalTo(NilValue))
+            assertThat(env["x"], equalTo(NilValue))
+        },
+        """local some_local_number = 1212""" to { result, env ->
+            assertThat(result, equalTo(NilValue))
+            assertThat(env["some_local_number"], equalTo(NumberValue(1212)))
+        },
+        """local x,y,z = 1,2,3""" to { result, env ->
+            assertThat(result, equalTo(NilValue))
+            assertThat(env["x"], equalTo(NumberValue(1)))
+            assertThat(env["y"], equalTo(NumberValue(2)))
+            assertThat(env["z"], equalTo(NumberValue(3)))
 
-    @Test
-    fun `Assign multiple values to multiple global variables at once`() {
-        val result = eval("""x,y,z = 1,2,3""")
-
-        assertThat(result, equalTo(NilValue))
-        assertThat(testEnvironment["x"], equalTo(NumberValue(1)))
-        assertThat(testEnvironment["y"], equalTo(NumberValue(2)))
-        assertThat(testEnvironment["z"], equalTo(NumberValue(3)))
-    }
-
-    @Test
-    fun `Assign nil to local variable`() {
-        val result = eval("""local x = nil""")
-        assertThat(result, equalTo(NilValue))
-        assertThat(testEnvironment["x"], equalTo(NilValue))
-    }
-
-    @Test
-    fun `Assign number to local variable`() {
-        val result = eval("""local some_local_number = 1212""")
-
-        assertThat(result, equalTo(NilValue))
-        assertThat(testEnvironment["some_local_number"], equalTo(NumberValue(1212)))
-    }
-
-    @Test
-    fun `Assign multiple values to multiple local variables at once`() {
-        val result = eval("""local x,y,z = 1,2,3""")
-
-        assertThat(result, equalTo(NilValue))
-        assertThat(testEnvironment["x"], equalTo(NumberValue(1)))
-        assertThat(testEnvironment["y"], equalTo(NumberValue(2)))
-        assertThat(testEnvironment["z"], equalTo(NumberValue(3)))
-    }
+        }
+    ))
 }

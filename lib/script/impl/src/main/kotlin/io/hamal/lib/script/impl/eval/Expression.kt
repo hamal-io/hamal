@@ -2,13 +2,8 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.Parameter
-import io.hamal.lib.script.api.value.FunctionValue
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.Value
-import io.hamal.lib.script.impl.ast.expr.CallExpression
-import io.hamal.lib.script.impl.ast.expr.GroupedExpression
-import io.hamal.lib.script.impl.ast.expr.InfixExpression
-import io.hamal.lib.script.impl.ast.expr.PrefixExpression
+import io.hamal.lib.script.api.value.*
+import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
     override fun invoke(ctx: EvaluationContext<CallExpression>): Value {
@@ -69,6 +64,21 @@ internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
     override fun invoke(ctx: EvaluationContext<PrefixExpression>): Value {
         val value = ctx.evaluate { expression }
         return ctx.evaluatePrefix(ctx.toEvaluate.operator, value)
+    }
+
+}
+
+internal object EvaluateIfExpression : Evaluate<IfExpression> {
+    override fun invoke(ctx: EvaluationContext<IfExpression>): Value {
+        for (conditionalStatement in ctx.toEvaluate.conditionalStatement) {
+            val conditionValue = ctx.evaluate(conditionalStatement.condition)
+            return when (conditionValue) {
+                FalseValue -> continue
+                TrueValue -> ctx.evaluate(conditionalStatement.body)
+                else -> ErrorValue("Expression expected to yield a boolean value")
+            }
+        }
+        return NilValue
     }
 
 }

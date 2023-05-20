@@ -7,13 +7,13 @@ import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.ast.stmt.BlockStatement
 import io.hamal.lib.script.impl.token.Token.Type.*
 
-data class ConditionExpression(
+data class ConditionalStatement(
     val condition: Expression,
     val body: BlockStatement
 )
 
 data class IfExpression(
-    val conditionExpressions: List<ConditionExpression>
+    val conditionalStatement: List<ConditionalStatement>
 ) : Expression {
 
     internal object Parse : ParseExpression<IfExpression> {
@@ -26,7 +26,7 @@ data class IfExpression(
             val statement = ctx.parseBlockStatement()
             ctx.expectCurrentTokenTypToBe(End)
             ctx.advance()
-            return IfExpression(listOf(ConditionExpression(condition, statement)))
+            return IfExpression(listOf(ConditionalStatement(condition, statement)))
         }
     }
 

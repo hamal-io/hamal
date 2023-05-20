@@ -41,6 +41,7 @@ internal class DefaultEvaluator : Evaluator {
         register(PrefixExpression::class, EvaluatePrefixExpression)
         register(TableAccessExpression::class, EvaluateTableAccess)
         register(TableConstructorExpression::class, EvaluateTableConstructor)
+        register(IfExpression::class, EvaluateIfExpression)
 
 
         /*STATEMENT*/
