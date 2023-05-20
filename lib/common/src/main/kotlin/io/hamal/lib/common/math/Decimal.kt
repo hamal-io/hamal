@@ -10,8 +10,8 @@ data class Decimal constructor(
 ) : Number(), Comparable<Decimal> {
 
     companion object {
-        val ZERO = Decimal(0)
-        val ONE = Decimal(1)
+        val Zero = Decimal(0)
+        val One = Decimal(1)
         val mathContext = MathContext.DECIMAL64
 
         operator fun invoke(value: Byte): Decimal = Decimal(BigDecimal.valueOf(value.toLong()))

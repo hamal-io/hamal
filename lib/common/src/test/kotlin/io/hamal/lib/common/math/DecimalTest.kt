@@ -530,7 +530,7 @@ class DecimalTest {
 
         @Test
         fun `Zero`() {
-            val testInstance = Decimal.ZERO
+            val testInstance = Decimal.Zero
             assertFalse(testInstance.isNegative())
         }
 
@@ -552,7 +552,7 @@ class DecimalTest {
 
         @Test
         fun `Zero`() {
-            val testInstance = Decimal.ZERO
+            val testInstance = Decimal.Zero
             assertFalse(testInstance.isPositive())
         }
 
@@ -574,7 +574,7 @@ class DecimalTest {
 
         @Test
         fun `Zero`() {
-            val testInstance = Decimal.ZERO
+            val testInstance = Decimal.Zero
             assertTrue(testInstance.isZero())
         }
 

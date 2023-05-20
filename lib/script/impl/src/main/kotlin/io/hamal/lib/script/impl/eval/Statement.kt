@@ -20,7 +20,11 @@ internal object EvaluateGlobalAssignment : Evaluate<Assignment.Global> {
         val identifiers = ctx.toEvaluate.identifiers.map(ctx::evaluateAsIdentifier)
         val values = ctx.toEvaluate.expressions.map(ctx::evaluate)
         identifiers.zip(values).forEach { (identifier, value) ->
-            ctx.env.addGlobal(identifier, value)
+            if (value is Identifier) {
+                ctx.env.addGlobal(identifier, ctx.env[value]) //FIXME create a copy if needed - like value is a table
+            } else {
+                ctx.env.addGlobal(identifier, value)
+            }
         }
         return NilValue
     }
@@ -31,15 +35,25 @@ internal object EvaluateLocalAssignment : Evaluate<Assignment.Local> {
         val identifiers = ctx.toEvaluate.identifiers.map(ctx::evaluateAsIdentifier)
         val values = ctx.toEvaluate.expressions.map(ctx::evaluate)
         identifiers.zip(values).forEach { (identifier, value) ->
-            ctx.env.addLocal(identifier, value)
+            if (value is Identifier) {
+                ctx.env.addLocal(identifier, ctx.env[value]) //FIXME create a copy if needed - like value is a table
+            } else {
+                ctx.env.addLocal(identifier, value)
+            }
         }
         return NilValue
     }
 }
 
 
-internal object EvaluateBlock : Evaluate<BlockStatement> {
-    override fun invoke(ctx: EvaluationContext<BlockStatement>): Value {
+internal object EvaluateDo : Evaluate<DoStmt> {
+    override fun invoke(ctx: EvaluationContext<DoStmt>): Value {
+        return ctx.evaluate { block }
+    }
+}
+
+internal object EvaluateBlock : Evaluate<Block> {
+    override fun invoke(ctx: EvaluationContext<Block>): Value {
         val (toEvaluate, env) = ctx
         var result: Value = NilValue
         for (statement in toEvaluate.statements) {

@@ -7,7 +7,7 @@ import io.hamal.lib.script.impl.ast.stmt.*
 import io.hamal.lib.script.impl.token.Token
 import io.hamal.lib.script.impl.token.Token.Type
 
-fun parse(tokens: List<Token>): BlockStatement {
+fun parse(tokens: List<Token>): Block {
     return Parser.DefaultImpl.parse(
         Parser.Context(
             ArrayDeque(tokens)
@@ -17,10 +17,10 @@ fun parse(tokens: List<Token>): BlockStatement {
 
 interface Parser {
 
-    fun parse(ctx: Context): BlockStatement
+    fun parse(ctx: Context): Block
 
     object DefaultImpl : Parser {
-        override fun parse(ctx: Context): BlockStatement = ctx.parseBlockStatement()
+        override fun parse(ctx: Context): Block = ctx.parseBlockStatement()
     }
 
     data class Context(val tokens: ArrayDeque<Token>) {
@@ -44,7 +44,7 @@ interface Parser {
     }
 }
 
-internal fun Parser.Context.parseBlockStatement(): BlockStatement {
+internal fun Parser.Context.parseBlockStatement(): Block {
     val statements = mutableListOf<Statement>()
     while (
         currentTokenType() != Type.Eof &&
@@ -57,7 +57,7 @@ internal fun Parser.Context.parseBlockStatement(): BlockStatement {
             advance()
         }
     }
-    return BlockStatement(statements)
+    return Block(statements)
 }
 
 internal fun Parser.Context.parseStatement(): Statement {
@@ -67,6 +67,7 @@ internal fun Parser.Context.parseStatement(): Statement {
         isLocalAssignment() -> Assignment.Local.Parse(this)
         isFunction() -> Prototype.Parse(this)
         isReturn() -> Return.Parse(this)
+        isBlock() -> DoStmt.Parse(this)
         else -> {
             ExpressionStatement(parseExpression())
         }
@@ -85,6 +86,7 @@ private fun Parser.Context.isLocalAssignment() = currentTokenType() == Type.Loca
 private fun Parser.Context.isFunction() = currentTokenType() == Type.Function
 
 private fun Parser.Context.isReturn() = currentTokenType() == Type.Return
+private fun Parser.Context.isBlock() = currentTokenType() == Type.Do
 
 internal fun Parser.Context.parseExpression(precedence: Precedence = Precedence.Lowest): Expression {
     var lhsExpression: Expression = parseFn(currentTokenType())(this)

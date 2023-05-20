@@ -20,7 +20,8 @@ private val tokenMapping = mapOf(
     Identifier to IdentifierLiteral.Parse,
     Number to NumberLiteral.Parse,
     Function to PrototypeLiteral.Parse,
-    If to IfExpression.Parse
+    If to IfExpression.Parse,
+    For to ForLoopExpression.Parse
 )
 
 private val operatorMapping = mapOf(

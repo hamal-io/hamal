@@ -67,7 +67,12 @@ class LogInfo : FunctionValue {
     override val identifier = Identifier("info")
     override val metaTable: MetaTable get() = TODO("Not yet implemented")
     override fun invoke(ctx: Context): Value {
-        println("INFO: ${ctx.parameters.first().value}")
+        val first = ctx.parameters.first().value
+        if (first is Identifier) {
+            println("INFO: ${ctx.env[first]}")
+        } else {
+            println("INFO: ${first}")
+        }
 
 //        println("INFO: ${ctx.parameters.first().value}")
         return NilValue

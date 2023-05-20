@@ -42,14 +42,16 @@ internal class DefaultEvaluator : Evaluator {
         register(TableAccessExpression::class, EvaluateTableAccess)
         register(TableConstructorExpression::class, EvaluateTableConstructor)
         register(IfExpression::class, EvaluateIfExpression)
+        register(ForLoopExpression::class, EvaluateForLoopExpression)
 
 
         /*STATEMENT*/
         register(Statement::class, EvaluateStatement)
         register(Assignment.Global::class, EvaluateGlobalAssignment)
         register(Assignment.Local::class, EvaluateLocalAssignment)
-        register(BlockStatement::class, EvaluateBlock)
+        register(Block::class, EvaluateBlock)
         register(Call::class, EvaluateCall)
+        register(DoStmt::class, EvaluateDo)
         register(ExpressionStatement::class, EvaluateExpressionStatement)
         register(Prototype::class, EvaluatePrototype)
         register(Return::class, EvaluateReturn)

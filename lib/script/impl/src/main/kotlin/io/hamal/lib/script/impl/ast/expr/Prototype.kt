@@ -3,14 +3,14 @@ package io.hamal.lib.script.impl.ast.expr
 import io.hamal.lib.script.api.ast.Statement
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.parseStatement
-import io.hamal.lib.script.impl.ast.stmt.BlockStatement
+import io.hamal.lib.script.impl.ast.stmt.Block
 import io.hamal.lib.script.impl.token.Token.Type.*
 import io.hamal.lib.script.impl.token.Token.Type.Function
 
 class PrototypeLiteral(
     val identifier: IdentifierLiteral,
     val parameters: List<IdentifierLiteral>,
-    val block: BlockStatement
+    val block: Block
 ) : LiteralExpression {
 
     internal object Parse : ParseLiteralExpression<PrototypeLiteral> {
@@ -34,9 +34,7 @@ class PrototypeLiteral(
             )
         }
 
-        private fun Context.parseIdentifier(): IdentifierLiteral {
-            return IdentifierLiteral.Parse(this)
-        }
+
 
         private fun Context.parseParameters(): List<IdentifierLiteral> {
             val result = mutableListOf<IdentifierLiteral>()
@@ -50,7 +48,7 @@ class PrototypeLiteral(
             return result
         }
 
-        private fun Context.parseBody(): BlockStatement {
+        private fun Context.parseBody(): Block {
             val statements = mutableListOf<Statement>()
             while (currentTokenType() != End) {
                 require(currentTokenType() != Eof) {
@@ -60,7 +58,7 @@ class PrototypeLiteral(
             }
             expectCurrentTokenTypToBe(End)
             advance()
-            return BlockStatement(statements)
+            return Block(statements)
         }
     }
 

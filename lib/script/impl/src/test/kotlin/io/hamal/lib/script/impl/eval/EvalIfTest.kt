@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
 
-internal class EvalConditionTest : AbstractEvalTest() {
+internal class EvalIfTest : AbstractEvalTest() {
 
     @TestFactory
     fun tests() = prepareTests(listOf(
@@ -51,3 +51,4 @@ internal class EvalConditionTest : AbstractEvalTest() {
         }
     ))
 }
+

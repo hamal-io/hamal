@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.common.math.Decimal
 import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.Parameter
 import io.hamal.lib.script.api.value.*
@@ -74,11 +75,54 @@ internal object EvaluateIfExpression : Evaluate<IfExpression> {
             val conditionValue = ctx.evaluate(conditionalStatement.condition)
             return when (conditionValue) {
                 FalseValue -> continue
-                TrueValue -> ctx.evaluate(conditionalStatement.body)
+                TrueValue -> ctx.evaluate(conditionalStatement.block)
                 else -> ErrorValue("Expression expected to yield a boolean value")
             }
         }
         return NilValue
     }
 
+}
+
+internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
+    override fun invoke(ctx: EvaluationContext<ForLoopExpression>): Value {
+        val identifier = ctx.evaluateAsIdentifier { identifier }
+        var currentValue: NumberValue = ctx.evaluate { startExpression } as NumberValue
+
+        val endValue = ctx.evaluate { endExpression } as NumberValue
+        val stepValue = ctx.evaluate { stepExpression } as NumberValue
+
+        val hasNext = if (stepValue.value.isGreaterThanEqual(Decimal.Zero)) {
+            HasNext.Forward
+        } else {
+            HasNext.Backwards
+        }
+
+        while (true) {
+            ctx.env.addLocal(identifier, currentValue)
+            ctx.evaluate { block }
+            val nextValue = NumberValue(currentValue.value.plus(stepValue.value))
+            if (hasNext(nextValue, endValue)) {
+                currentValue = nextValue
+            } else {
+                break
+            }
+        }
+        return currentValue
+    }
+
+    private enum class HasNext {
+        Forward {
+            override fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean {
+                return nextValue.value.isLessThanEqual(endValue.value)
+            }
+        },
+        Backwards {
+            override fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean {
+                return nextValue.value.isGreaterThanEqual(endValue.value)
+            }
+        };
+
+        abstract operator fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean
+    }
 }

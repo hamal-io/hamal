@@ -2,20 +2,21 @@ package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.impl.ast.Parser
+import io.hamal.lib.script.impl.ast.expr.Precedence.Lowest
 import io.hamal.lib.script.impl.ast.parseBlockStatement
 import io.hamal.lib.script.impl.ast.parseExpression
-import io.hamal.lib.script.impl.ast.stmt.BlockStatement
+import io.hamal.lib.script.impl.ast.stmt.Block
+import io.hamal.lib.script.impl.ast.stmt.DoStmt
 import io.hamal.lib.script.impl.token.Token.Type.*
 
 data class ConditionalExpression(
     val condition: Expression,
-    val body: BlockStatement
+    val block: Block
 )
 
 data class IfExpression(
     val conditionalExpression: List<ConditionalExpression>
 ) : Expression {
-
     internal object Parse : ParseExpression<IfExpression> {
         override fun invoke(ctx: Parser.Context): IfExpression {
             val conditionals = mutableListOf<ConditionalExpression>()
@@ -33,12 +34,12 @@ data class IfExpression(
 
 
         private fun Parser.Context.parseIf(): ConditionalExpression {
-            val condition = parseExpression(Precedence.Lowest)
+            val condition = parseExpression(Lowest)
             expectCurrentTokenTypToBe(Then)
             advance()
             return ConditionalExpression(
                 condition = condition,
-                body = parseBlockStatement()
+                block = parseBlockStatement()
             )
         }
 
@@ -46,13 +47,13 @@ data class IfExpression(
             val result = mutableListOf<ConditionalExpression>()
             while (currentTokenType() == ElseIf) {
                 advance()
-                val condition = parseExpression(Precedence.Lowest)
+                val condition = parseExpression(Lowest)
                 expectCurrentTokenTypToBe(Then)
                 advance()
                 result.add(
                     ConditionalExpression(
                         condition = condition,
-                        body = parseBlockStatement()
+                        block = parseBlockStatement()
                     )
                 )
             }
@@ -66,8 +67,48 @@ data class IfExpression(
             advance()
             return ConditionalExpression(
                 condition = TrueLiteral,
-                body = parseBlockStatement()
+                block = parseBlockStatement()
             )
+        }
+    }
+}
+
+data class ForLoopExpression(
+    val identifier: IdentifierLiteral,
+    val startExpression: Expression,
+    val endExpression: Expression,
+    val stepExpression: Expression,
+    val block: DoStmt
+) : Expression {
+    internal object Parse : ParseExpression<ForLoopExpression> {
+        override fun invoke(ctx: Parser.Context): ForLoopExpression {
+            ctx.expectCurrentTokenTypToBe(For)
+            ctx.advance()
+
+            val identifier = ctx.parseIdentifier()
+            ctx.expectCurrentTokenTypToBe(Equal)
+            ctx.advance()
+            val startExpression = ctx.parseExpression(Lowest)
+            ctx.expectCurrentTokenTypToBe(Comma)
+            ctx.advance()
+            val endExpression = ctx.parseExpression(Lowest)
+
+
+            val stepExpression = if (ctx.currentTokenType() == Comma) {
+                ctx.advance()
+                ctx.parseExpression(Lowest)
+            } else {
+                NumberLiteral(1)
+            }
+
+            return ForLoopExpression(
+                identifier = identifier,
+                startExpression = startExpression,
+                endExpression = endExpression,
+                stepExpression = stepExpression,
+                block = DoStmt.Parse(ctx)
+            )
+
         }
     }
 }

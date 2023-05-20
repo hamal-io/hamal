@@ -19,3 +19,7 @@ data class IdentifierLiteral(
 
     override fun toString() = value
 }
+
+internal fun Context.parseIdentifier(): IdentifierLiteral {
+    return IdentifierLiteral.Parse(this)
+}
