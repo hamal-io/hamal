@@ -13,16 +13,10 @@ internal class AssignmentTest : AbstractStatementTest() {
     inner class GlobalTest {
         @TestFactory
         fun parse() = listOf(
-            Pair(
-                "some_number=42",
-                Global(IdentifierLiteral("some_number"), NumberLiteral(42))
-            ),
-            Pair(
-                "some_var, another_var = true, false",
-                Global(
-                    listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
-                    listOf(TrueLiteral, FalseLiteral)
-                )
+            "some_number=42" to Global(IdentifierLiteral("some_number"), NumberLiteral(42)),
+            "some_var, another_var = true, false" to Global(
+                listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
+                listOf(TrueLiteral, FalseLiteral)
             )
         ).map { (code, expected) ->
             dynamicTest(code) {
@@ -40,25 +34,15 @@ internal class AssignmentTest : AbstractStatementTest() {
 
         @TestFactory
         fun parse() = listOf(
-            Pair(
-                "local some_number=42",
-                Local(IdentifierLiteral("some_number"), NumberLiteral(42))
+            "local some_number=42" to Local(IdentifierLiteral("some_number"), NumberLiteral(42)),
+            "local some_var, another_var = true, false" to Local(
+                listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
+                listOf(TrueLiteral, FalseLiteral)
             ),
-            Pair(
-                "local some_var, another_var = true, false",
-                Local(
-                    listOf(IdentifierLiteral("some_var"), IdentifierLiteral("another_var")),
-                    listOf(TrueLiteral, FalseLiteral)
-                )
-            ),
-            Pair(
-                "local x = some_fn('y')",
-                Local(
-                    listOf(IdentifierLiteral("x")),
-                    listOf(CallExpression(IdentifierLiteral("some_fn"), listOf(StringLiteral("y"))))
-                )
+            "local x = some_fn('y')" to Local(
+                listOf(IdentifierLiteral("x")),
+                listOf(CallExpression(IdentifierLiteral("some_fn"), listOf(StringLiteral("y"))))
             )
-
         ).map { (code, expected) ->
             dynamicTest(code) {
                 runTest(Local.Parse, code) { result, tokens ->

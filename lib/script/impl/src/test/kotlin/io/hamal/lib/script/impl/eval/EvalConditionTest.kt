@@ -1,7 +1,9 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.script.api.value.FalseValue
 import io.hamal.lib.script.api.value.NilValue
 import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.TrueValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -31,6 +33,12 @@ internal class EvalConditionTest : AbstractEvalTest() {
         """if 1 > 1 then a = 42 end""" to { result, env ->
             assertThat(result, equalTo(NilValue))
             assertThat(env["a"], equalTo(NilValue))
+        },
+        """if false then true else false end""" to { result, _ ->
+            assertThat(result, equalTo(FalseValue))
+        },
+        """if true then true else false end""" to { result, _ ->
+            assertThat(result, equalTo(TrueValue))
         }
     ))
 

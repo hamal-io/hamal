@@ -46,7 +46,11 @@ interface Parser {
 
 internal fun Parser.Context.parseBlockStatement(): BlockStatement {
     val statements = mutableListOf<Statement>()
-    while (currentTokenType() != Type.Eof && currentTokenType() != Type.End) {
+    while (
+        currentTokenType() != Type.Eof &&
+        currentTokenType() != Type.End &&
+        currentTokenType() != Type.Else
+    ) {
         parseStatement().let(statements::add)
         if (currentTokenType() == Type.Semicolon) {
             advance()

@@ -70,7 +70,7 @@ internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
 
 internal object EvaluateIfExpression : Evaluate<IfExpression> {
     override fun invoke(ctx: EvaluationContext<IfExpression>): Value {
-        for (conditionalStatement in ctx.toEvaluate.conditionalStatement) {
+        for (conditionalStatement in ctx.toEvaluate.conditionalExpression) {
             val conditionValue = ctx.evaluate(conditionalStatement.condition)
             return when (conditionValue) {
                 FalseValue -> continue
