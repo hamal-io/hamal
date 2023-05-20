@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class GroupedTest : AbstractExpressionTest() {
+internal class GroupedExpressionTest : AbstractExpressionTest() {
     @Nested
     @DisplayName("Parse")
     inner class ParseTest {

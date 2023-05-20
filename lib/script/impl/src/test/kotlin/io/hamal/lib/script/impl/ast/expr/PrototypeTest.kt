@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class PrototypeTest : AbstractExpressionTest() {
+internal class PrototypeLiteralTest : AbstractExpressionTest() {
 
     @Nested
     @DisplayName("equals()")

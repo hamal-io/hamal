@@ -8,8 +8,9 @@ import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-internal class CallTest : AbstractExpressionTest() {
+internal class CallExpressionTest : AbstractExpressionTest() {
 
     @Nested
     @DisplayName("equals()")
@@ -189,7 +190,7 @@ internal class CallTest : AbstractExpressionTest() {
             "fn(1 == 3)" to "fn((1 == 3))",
             "fn(1 ~= 3)" to "fn((1 ~= 3))",
         ).map { (code, expected) ->
-            DynamicTest.dynamicTest(code) {
+            dynamicTest(code) {
                 val tokens = tokenize(code)
 
                 val blockStatement = Parser.DefaultImpl.parse(Parser.Context(ArrayDeque(tokens)))

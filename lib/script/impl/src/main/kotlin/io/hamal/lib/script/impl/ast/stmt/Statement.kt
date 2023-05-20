@@ -9,7 +9,7 @@ internal interface ParseStatement<out STATEMENT : Statement> {
 }
 
 
-class ExpressionStatement(val expression: Expression) : Statement
+data class ExpressionStatement(val expression: Expression) : Statement
 
 
 data class BlockStatement(val statements: List<Statement>, override val size: Int) : Statement, Collection<Statement> {

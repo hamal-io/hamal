@@ -2,8 +2,10 @@ package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.impl.ast.Parser
-import io.hamal.lib.script.impl.token.Token
-import io.hamal.lib.script.impl.token.Token.Type.Category
+import io.hamal.lib.script.impl.token.Token.Type
+import io.hamal.lib.script.impl.token.Token.Type.*
+import io.hamal.lib.script.impl.token.Token.Type.Function
+import io.hamal.lib.script.impl.token.Token.Type.Number
 
 
 internal interface ParseExpression<EXPRESSION : Expression> {
@@ -11,13 +13,14 @@ internal interface ParseExpression<EXPRESSION : Expression> {
 }
 
 private val tokenMapping = mapOf(
-    Token.Type.True to TrueLiteral.Parse,
-    Token.Type.False to FalseLiteral.Parse,
-    Token.Type.Nil to NilLiteral.Parse,
-    Token.Type.String to StringLiteral.Parse,
-    Token.Type.Identifier to IdentifierLiteral.Parse,
-    Token.Type.Number to NumberLiteral.Parse,
-    Token.Type.Function to PrototypeLiteral.Parse,
+    True to TrueLiteral.Parse,
+    False to FalseLiteral.Parse,
+    Nil to NilLiteral.Parse,
+    Type.String to StringLiteral.Parse,
+    Identifier to IdentifierLiteral.Parse,
+    Number to NumberLiteral.Parse,
+    Function to PrototypeLiteral.Parse,
+    If to IfExpression.Parse
 )
 
 private val operatorMapping = mapOf(
@@ -26,7 +29,7 @@ private val operatorMapping = mapOf(
     Operator.TableConstructor to TableConstructorExpression.Parse
 )
 
-internal fun parseFn(type: Token.Type): ParseExpression<*> {
+internal fun parseFn(type: Type): ParseExpression<*> {
     return when (type.category) {
         Category.Operator -> operatorMapping[Operator.from(type)]!!
         else -> tokenMapping[type]!!

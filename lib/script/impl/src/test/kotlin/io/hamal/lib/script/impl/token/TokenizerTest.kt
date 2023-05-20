@@ -519,6 +519,21 @@ class TokenizerTest {
             assertThat(testInstance.nextToken(), equalTo(Token(RightParenthesis, 1, 27, ")")))
         }
 
+        @Test
+        @DisplayName("if a<0 then a = 0 end")
+        fun ifStatement() {
+            val testInstance = DefaultTokenizer("if a<0 then a = 0 end")
+            assertThat(testInstance.nextToken(), equalTo(Token(If, 1, 1, "if")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 4, "a")))
+            assertThat(testInstance.nextToken(), equalTo(Token(LeftAngleBracket, 1, 5, "<")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Number, 1, 6, "0")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Then, 1, 8, "then")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 13, "a")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Equal, 1, 15, "=")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Number, 1, 17, "0")))
+            assertThat(testInstance.nextToken(), equalTo(Token(End, 1, 19, "end")))
+        }
+
         private fun DefaultTokenizer.assert(index: Int, line: Int, linePosition: Int, buffer: String) {
             assertThat("index is not $index", this.index, equalTo(index))
             assertThat("line is not $line", this.line, equalTo(line))
