@@ -1,6 +1,5 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.script.api.Sandbox
 import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.script.api.value.Identifier
@@ -22,7 +21,21 @@ class SandboxIT {
             .map { file ->
                 dynamicTest("${file.parent.parent.name}/${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
+
+                    val env = EnvironmentValue(
+                        identifier = Identifier("_G"),
+                        values = mapOf(
+                            AssertFunction.identifier to AssertFunction,
+                            RequireFunction.identifier to RequireFunction
+                        )
+                    )
+
+                    subEnv.addLocal(Identifier("nested-sub-env"), nestedSubEnv)
+                    env.addLocal(subEnv.identifier, subEnv)
+                    val testInstance = DefaultSandbox(env)
+
                     val result = testInstance.eval(code)
+
                     if (result is ErrorValue) {
                         org.junit.jupiter.api.fail { result.toString() }
                     }
@@ -33,30 +46,15 @@ class SandboxIT {
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }
 
-    private val env = EnvironmentValue(
-        identifier = Identifier("_G"),
-        values = mapOf(
-            AssertFunction.identifier to AssertFunction,
-            RequireFunction.identifier to RequireFunction
-        )
-    )
-    private val testInstance: Sandbox
 
-
-    val testEnv = EnvironmentValue(
-        identifier = Identifier("test-env")
+    val subEnv = EnvironmentValue(
+        identifier = Identifier("sub-env")
     )
 
-    val nestedTestEnv = EnvironmentValue(
-        identifier = Identifier("nested-env")
+    val nestedSubEnv = EnvironmentValue(
+        identifier = Identifier("nested-sub-env")
     )
 
-
-    init {
-        testEnv.addLocal(Identifier("nested-env"), nestedTestEnv)
-        env.addLocal(testEnv.identifier, testEnv)
-        testInstance = DefaultSandbox(env)
-    }
 
     private val testPath = Paths.get("src", "testIntegration", "resources")
 }

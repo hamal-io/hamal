@@ -48,7 +48,10 @@ internal object EvaluateLocalAssignment : Evaluate<Assignment.Local> {
 
 internal object EvaluateDo : Evaluate<DoStmt> {
     override fun invoke(ctx: EvaluationContext<DoStmt>): Value {
-        return ctx.evaluate { block }
+        ctx.enterScope()
+        val result = ctx.evaluate { block }
+        ctx.leaveScope()
+        return result
     }
 }
 
@@ -59,7 +62,6 @@ internal object EvaluateBlock : Evaluate<Block> {
         for (statement in toEvaluate.statements) {
             result = ctx.evaluate(statement)
         }
-
         if (result is Identifier) {
             return ctx.env[result]
         }

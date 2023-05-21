@@ -3,14 +3,15 @@ package io.hamal.lib.script.api.value
 sealed interface ValueOperation {
     val operationType: Type
 
-    enum class Type(identifier: String) {
+    enum class Type(val identifier: String) {
         Add("__add"),       // self + other
         Div("__div"),       // self / other
-        EQ("__eq"),         // self == other
-        GT("__gt"),         // self > other
-        GTE("__gte"),       // self >= other
-        LT("__lt"),         // self < other
-        LTE("__lte"),       // self <= other
+        Eq("__eq"),         // self == other
+        Gt("__gt"),         // self > other
+        Gte("__gte"),       // self >= other
+        Lt("__lt"),         // self < other
+        Lte("__lte"),       // self <= other
+        Neq("__neq"),       // self ~= other
         Mod("__mod"),       // self % other
         Mul("__mul"),       // self * other
         Negate("__unm"),    // - self

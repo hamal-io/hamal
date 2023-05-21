@@ -1,20 +1,24 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.ast.Node
-import io.hamal.lib.script.api.value.Identifier
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.Value
-import io.hamal.lib.script.api.value.ValueOperation
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.api.value.ValueOperation.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
-import io.hamal.lib.script.api.value.PrototypeValue
 
 internal data class EvaluationContext<TYPE : Node>(
     val toEvaluate: TYPE,
-    val env: EnvironmentValue,
+    var env: EnvironmentValue,
     val evaluator: Evaluator
 ) {
+
+    fun enterScope() {
+        env = env.enterScope()
+    }
+
+    fun leaveScope() {
+        env = env.leaveScope()
+    }
+
 
     fun <NEW_TYPE : Node> evaluate(
         env: EnvironmentValue = this.env,
@@ -87,11 +91,23 @@ internal data class EvaluationContext<TYPE : Node>(
     ): Value {
         val operationType = resolveInfixOperationType(operator)
 
-        val operation = requireNotNull(self.findInfixOperation(operationType, other.type())) {
-            "No infix operation specified for: ${self.type()} $operator ${other.type()}"
+        val selfValue = if (self is Identifier) {
+            env[self]
+        } else {
+            self
         }
 
-        return operation(self, other)
+        val otherValue = if (other is Identifier) {
+            env[other]
+        } else {
+            other
+        }
+
+        val operation = requireNotNull(selfValue.findInfixOperation(operationType, otherValue.type())) {
+            "No infix operation specified for: ${selfValue.type()} $operator ${otherValue.type()}"
+        }
+
+        return operation(selfValue, otherValue)
     }
 
     fun <SELF : Value> evaluatePrefix(
@@ -109,15 +125,16 @@ internal data class EvaluationContext<TYPE : Node>(
 private fun resolveInfixOperationType(operator: Operator): ValueOperation.Type {
     return when {
         operator == Operator.Divide -> Div
-        operator == Operator.Equals -> EQ
+        operator == Operator.Equals -> Eq
         operator == Operator.Exponential -> Pow
-        operator == Operator.GreaterThan -> GT
-        operator == Operator.GreaterThanEquals -> GTE
-        operator == Operator.LessThan -> LT
-        operator == Operator.LessThanEquals -> LTE
+        operator == Operator.GreaterThan -> Gt
+        operator == Operator.GreaterThanEquals -> Gte
+        operator == Operator.LessThan -> Lt
+        operator == Operator.LessThanEquals -> Lte
         operator == Operator.Minus -> Sub
         operator == Operator.Modulo -> Mod
         operator == Operator.Multiply -> Mul
+        operator == Operator.NotEqual -> Neq
         operator == Operator.Plus -> Add
         else -> TODO()
     }

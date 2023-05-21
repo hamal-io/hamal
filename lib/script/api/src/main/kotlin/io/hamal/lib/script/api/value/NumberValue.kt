@@ -20,17 +20,33 @@ object DefaultNumberMetaTable : MetaTable {
     override val operations = listOf(
         numberInfix(Add) { self, other -> NumberValue(self.value.plus(other.value), self.metaTable) },
         numberInfix(Div) { self, other -> NumberValue(self.value.divide(other.value), self.metaTable) },
-        numberInfix(EQ) { self, other -> booleanOf(self.value == other.value) },
-        numberInfix(GT) { self, other -> booleanOf(self.value.isGreaterThan(other.value)) },
-        numberInfix(GTE) { self, other -> booleanOf(self.value.isGreaterThanEqual(other.value)) },
-        numberInfix(LT) { self, other -> booleanOf(self.value.isLessThan(other.value)) },
-        numberInfix(LTE) { self, other -> booleanOf(self.value.isLessThanEqual(other.value)) },
+        numberInfix(Eq) { self, other -> booleanOf(self.value == other.value) },
+        numberInfix(Gt) { self, other -> booleanOf(self.value.isGreaterThan(other.value)) },
+        numberInfix(Gte) { self, other -> booleanOf(self.value.isGreaterThanEqual(other.value)) },
+        numberInfix(Lt) { self, other -> booleanOf(self.value.isLessThan(other.value)) },
+        numberInfix(Lte) { self, other -> booleanOf(self.value.isLessThanEqual(other.value)) },
         numberInfix(Mod) { self, other -> NumberValue(self.value.remainder(other.value), self.metaTable) },
         numberInfix(Mul) { self, other -> NumberValue(self.value.multiply(other.value), self.metaTable) },
         numberPrefix(Negate) { self -> NumberValue(self.value.negate(), self.metaTable) },
         numberInfix(Pow) { self, other -> NumberValue(self.value.pow(other.value), self.metaTable) },
-        numberInfix(Sub) { self, other -> NumberValue(self.value.minus(other.value), self.metaTable) }
-    )
+        numberInfix(Sub) { self, other -> NumberValue(self.value.minus(other.value), self.metaTable) },
+
+
+        object : InfixValueOperation {
+            override val selfType = "number"
+            override val otherType = "nil"
+            override val operationType = Eq
+            override fun invoke(self: Value, other: Value) = FalseValue
+        },
+
+        object : InfixValueOperation {
+            override val selfType = "number"
+            override val otherType = "nil"
+            override val operationType = Neq
+            override fun invoke(self: Value, other: Value) = TrueValue
+        },
+
+        )
 }
 
 private fun numberInfix(

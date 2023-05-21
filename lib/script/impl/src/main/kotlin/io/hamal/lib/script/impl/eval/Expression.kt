@@ -75,7 +75,13 @@ internal object EvaluateIfExpression : Evaluate<IfExpression> {
             val conditionValue = ctx.evaluate(conditionalStatement.condition)
             return when (conditionValue) {
                 FalseValue -> continue
-                TrueValue -> ctx.evaluate(conditionalStatement.block)
+                TrueValue -> {
+                    ctx.enterScope()
+                    val result = ctx.evaluate(conditionalStatement.block)
+                    ctx.leaveScope()
+                    result
+                }
+
                 else -> ErrorValue("Expression expected to yield a boolean value")
             }
         }

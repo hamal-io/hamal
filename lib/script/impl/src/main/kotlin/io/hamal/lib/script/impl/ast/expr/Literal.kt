@@ -92,6 +92,6 @@ object NilLiteral : LiteralExpression {
 
     override fun hashCode() = this::class.hashCode()
 
-    override fun toString() = "false"
+    override fun toString() = "nil"
 }
 

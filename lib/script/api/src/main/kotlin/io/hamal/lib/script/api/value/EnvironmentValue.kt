@@ -20,6 +20,20 @@ class EnvironmentValue(
         values?.let(this.values::putAll)
     }
 
+    fun enterScope(): EnvironmentValue {
+        return EnvironmentValue(
+            identifier = identifier,
+            values = mutableMapOf(),
+            global = this.global,
+            parent = this
+        )
+    }
+
+    fun leaveScope(): EnvironmentValue {
+        return parent
+    }
+
+
     fun addLocal(identifier: Identifier, value: Value) {
         values[identifier] = value
     }
