@@ -12,7 +12,7 @@ class ExecId(override val value: SnowflakeId) : DomainId() {
     internal object Serializer : DomainIdSerializer<ExecId>(::ExecId)
 }
 
-enum class ExecutionState {
+enum class ExecState {
     Planned,
     Scheduled,
     Queued,

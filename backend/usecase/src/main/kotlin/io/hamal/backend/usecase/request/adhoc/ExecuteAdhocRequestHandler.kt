@@ -3,7 +3,7 @@ package io.hamal.backend.usecase.request.adhoc
 import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.notification.AdhocTriggerInvokedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.core.trigger.Cause
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.repository.api.createFunc
@@ -23,8 +23,8 @@ class ExecuteAdhocRequestHandler(
         notifyDomain(
             AdhocTriggerInvokedNotification(
                 shard = useCase.shard,
-                invokedTrigger = InvokedTrigger.Adhoc(
-                    id = InvokedTriggerId(0),
+                cause = Cause.Adhoc(
+                    id = CauseId(0),
                     func = result,
                     trigger = Trigger.AdhocTrigger(
                         id = TriggerId(1),

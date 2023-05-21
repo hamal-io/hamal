@@ -1,6 +1,6 @@
 package io.hamal.backend.usecase.request
 
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.core.trigger.Cause
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.RequestOneUseCase
@@ -11,6 +11,6 @@ object TriggerRequest {
         override val reqId: ReqId,
         override val shard: Shard,
         val triggerId: TriggerId
-    ) : RequestOneUseCase<InvokedTrigger.Manual>
+    ) : RequestOneUseCase<Cause.Manual>
 
 }

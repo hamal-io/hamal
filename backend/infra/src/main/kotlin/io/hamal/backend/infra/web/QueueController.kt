@@ -5,8 +5,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestManyUseCasePort
 import io.hamal.lib.domain.vo.FuncRef
-import io.hamal.lib.sdk.domain.ApiExecution
-import io.hamal.lib.sdk.domain.ApiExecutions
+import io.hamal.lib.sdk.domain.ApiAgentRequests
+import io.hamal.lib.sdk.domain.ApiAgentRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -18,7 +18,7 @@ class QueueController
     val requestMany: InvokeRequestManyUseCasePort
 ) {
     @PostMapping("/v1/dequeue")
-    fun dequeueExec(): ApiExecutions {
+    fun dequeueExec(): ApiAgentRequests {
 
         val result = requestMany.invoke(
             ExecRequest.DequeueExec(
@@ -27,12 +27,12 @@ class QueueController
             )
         )
 
-        return ApiExecutions(
-            executions = result.map {
-                ApiExecution(
+        return ApiAgentRequests(
+            requests = result.map {
+                ApiAgentRequest(
                     id = it.id,
                     reference = FuncRef("ref"),
-                    code = it.trigger.func.code
+                    code = it.cause.func.code
                 )
             })
     }

@@ -2,7 +2,7 @@ package io.hamal.backend.usecase.request
 
 import io.hamal.backend.core.exec.*
 import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.core.trigger.Cause
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.RequestManyUseCase
@@ -13,7 +13,7 @@ object ExecRequest {
         override val reqId: ReqId,
         override val shard: Shard,
         val func: Func,
-        val trigger: InvokedTrigger
+        val trigger: Cause
     ) : RequestOneUseCase<PlannedExec>
 
     data class SchedulePlannedExec(

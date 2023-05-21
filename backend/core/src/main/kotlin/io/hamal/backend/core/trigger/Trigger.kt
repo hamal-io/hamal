@@ -29,26 +29,26 @@ sealed class Trigger : DomainObject<TriggerId> {
 }
 
 @Serializable
-sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {
+sealed class Cause : DomainObject<CauseId> {
     abstract val func: Func
     abstract val invokedAt: InvokedAt
     abstract val invokedBy: Requester<TenantId>
 
     @Serializable
     data class Manual(
-        override val id: InvokedTriggerId,
+        override val id: CauseId,
         override val func: Func,
         val trigger: ManualTrigger,
         override val invokedAt: InvokedAt,
         override val invokedBy: Requester<TenantId>
-    ) : InvokedTrigger()
+    ) : Cause()
 
     @Serializable
     data class Adhoc(
-        override val id: InvokedTriggerId,
+        override val id: CauseId,
         override val func: Func,
         val trigger: Trigger.AdhocTrigger,
         override val invokedAt: InvokedAt,
         override val invokedBy: Requester<TenantId>
-    ): InvokedTrigger()
+    ): Cause()
 }

@@ -1,6 +1,6 @@
 package io.hamal.backend.core.notification
 
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.core.trigger.Cause
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.TriggerId
 import kotlinx.serialization.Serializable
@@ -16,12 +16,12 @@ data class ManualTriggerCreatedNotification(
 @DomainNotificationTopic("manual_trigger::invoked")
 data class ManualTriggerInvokedNotification(
     override val shard: Shard,
-    val invokedTrigger: InvokedTrigger.Manual
+    val cause: Cause.Manual
 ) : DomainNotification()
 
 @Serializable
 @DomainNotificationTopic("adhoc_trigger::invoked")
 data class AdhocTriggerInvokedNotification(
     override val shard: Shard,
-    val invokedTrigger: InvokedTrigger.Adhoc
+    val cause: Cause.Adhoc
 ) : DomainNotification()

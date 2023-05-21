@@ -2,7 +2,7 @@ package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.exec.*
 import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.core.trigger.Cause
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.ExecId
@@ -19,11 +19,13 @@ interface ExecRequestRepository {
         val shard: Shard,
         val id: ExecId,
         val definition: Func,
-        val trigger: InvokedTrigger
+        val trigger: Cause
     )
 
 }
 
 interface ExecQueryRepository {
-    fun findStartedExec(execId: ExecId): StartedExec?
+    fun find(execId: ExecId): Exec?
+
+    fun list(limit: Int): List<Exec>
 }

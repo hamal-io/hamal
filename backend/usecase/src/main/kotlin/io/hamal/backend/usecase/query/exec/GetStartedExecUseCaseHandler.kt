@@ -9,6 +9,7 @@ class GetStartedExecUseCaseHandler(
     val execQueryRepository: ExecQueryRepository
 ) : QueryOneUseCaseHandler<StartedExec, GetStartedExec>(GetStartedExec::class) {
     override fun invoke(useCase: GetStartedExec): StartedExec {
-        return execQueryRepository.findStartedExec(useCase.execId) ?: TODO() // FIXME
+        return execQueryRepository.find(useCase.execId)?.let { require(it is StartedExec); return it }
+            ?: TODO() // FIXME
     }
 }

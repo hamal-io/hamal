@@ -60,9 +60,9 @@ class AgentService {
     fun run() {
         DefaultHamalSdk.execService()
             .poll()
-            .executions.forEach { execution ->
-                println("$execution")
-                println("Execute: ${execution.id}")
+            .requests.forEach { request ->
+                println("$request")
+                println("Execute: ${request.id}")
                 val env = EnvironmentValue(
                     identifier = Identifier("_G"),
                     values = mapOf(
@@ -77,12 +77,12 @@ class AgentService {
                 }
 
                 val sandbox = DefaultSandbox(env)
-                val result = sandbox.eval(execution.code.value)
+                val result = sandbox.eval(request.code.value)
                 println("RESULT: $result")
 
-                println("Finish executing task ${execution.id}")
+                println("Finish executing task ${request.id}")
 
-                DefaultHamalSdk.execService().complete(execution.id)
+                DefaultHamalSdk.execService().complete(request.id)
 
             }
     }

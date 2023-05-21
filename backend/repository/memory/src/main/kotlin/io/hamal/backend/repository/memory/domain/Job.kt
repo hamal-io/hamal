@@ -11,34 +11,35 @@ import io.hamal.lib.domain.vo.ScheduledAt
 
 object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
 
+    private val execs = mutableMapOf<ExecId, Exec>()
+
     private val queue = mutableListOf<QueuedExec>()
     private val startedExecs = mutableListOf<StartedExec>()
 
     override fun plan(reqId: ReqId, execToPlan: ExecRequestRepository.ExecToPlan): PlannedExec {
-
         return PlannedExec(
             id = execToPlan.id,
             func = execToPlan.definition,
-            trigger = execToPlan.trigger
-        )
+            cause = execToPlan.trigger
+        ).also { execs[it.id] = it }
     }
 
     override fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec {
         return ScheduledExec(
             id = planedExec.id,
             func = planedExec.func,
-            trigger = planedExec.trigger,
+            cause = planedExec.cause,
             scheduledAt = ScheduledAt.now()
-        )
+        ).also { execs[it.id] = it }
     }
 
     override fun queue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
         val result = QueuedExec(
             id = scheduledExec.id,
             func = scheduledExec.func,
-            trigger = scheduledExec.trigger,
+            cause = scheduledExec.cause,
             queuedAt = QueuedAt.now()
-        )
+        ).also { execs[it.id] = it }
         queue.add(result)
         return result
     }
@@ -48,9 +49,9 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
         return CompleteExec(
             id = startedExec.id,
             func = startedExec.func,
-            trigger = startedExec.trigger,
+            cause = startedExec.cause,
             completedAt = CompletedAt.now()
-        )
+        ).also { execs[it.id] = it }
     }
 
 
@@ -63,8 +64,8 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
             StartedExec(
                 id = it.id,
                 func = it.func,
-                trigger = it.trigger,
-            )
+                cause = it.cause,
+            ).also { execs[it.id] = it }
         }
 
         startedExecs.add(startedExec)
@@ -72,7 +73,11 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
         return listOf(startedExec)
     }
 
-    override fun findStartedExec(execId: ExecId): StartedExec? {
-        return startedExecs.find { it.id == execId }
+    override fun find(execId: ExecId): Exec? {
+        return execs[execId]
+    }
+
+    override fun list(limit: Int): List<Exec> {
+        return execs.keys.take(10).map { execs.get(it)!! }
     }
 }

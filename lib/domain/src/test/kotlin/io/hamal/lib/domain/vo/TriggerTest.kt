@@ -113,24 +113,24 @@ class TriggerRefTest {
     fun Serialization() = generateTestCases(TriggerRef("some-ref"), "\"some-ref\"")
 }
 
-@DisplayName("InvokedTriggerId")
-class InvokedTriggerIdTest {
+@DisplayName("CauseId")
+class CauseIdTest {
     @Nested
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
             assertEquals(
-                InvokedTriggerId(SnowflakeId(23)),
-                InvokedTriggerId(SnowflakeId(23))
+                CauseId(SnowflakeId(23)),
+                CauseId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
             assertNotEquals(
-                InvokedTriggerId(SnowflakeId(23)),
-                InvokedTriggerId(SnowflakeId(127))
+                CauseId(SnowflakeId(23)),
+                CauseId(SnowflakeId(127))
             )
         }
     }
@@ -141,26 +141,26 @@ class InvokedTriggerIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                InvokedTriggerId(SnowflakeId(23)).hashCode(),
-                InvokedTriggerId(SnowflakeId(23)).hashCode()
+                CauseId(SnowflakeId(23)).hashCode(),
+                CauseId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                InvokedTriggerId(SnowflakeId(23)).hashCode(),
-                InvokedTriggerId(SnowflakeId(127)).hashCode()
+                CauseId(SnowflakeId(23)).hashCode(),
+                CauseId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(InvokedTriggerId(SnowflakeId(123)).toString(), equalTo("InvokedTriggerId(123)"))
+        assertThat(CauseId(SnowflakeId(123)).toString(), equalTo("CauseId(123)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(InvokedTriggerId(SnowflakeId(23)), "23")
+    fun Serialization() = generateTestCases(CauseId(SnowflakeId(23)), "23")
 }
 

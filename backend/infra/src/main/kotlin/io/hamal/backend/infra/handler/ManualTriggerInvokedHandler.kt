@@ -19,8 +19,8 @@ class ManualTriggerInvokedHandler(
             ExecRequest.PlanExec(
                 reqId = ReqId(123),
                 shard = notification.shard,
-                func = notification.invokedTrigger.func,
-                trigger = notification.invokedTrigger,
+                func = notification.cause.func,
+                trigger = notification.cause,
             )
         )
     }

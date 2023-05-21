@@ -23,10 +23,10 @@ class TriggerRef(override val value: Value) : Ref() {
     internal object Serializer : RefSerializer<TriggerRef>(::TriggerRef)
 }
 
-@Serializable(with = InvokedTriggerId.Serializer::class)
-class InvokedTriggerId(override val value: SnowflakeId) : DomainId() {
+@Serializable(with = CauseId.Serializer::class)
+class CauseId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
-    internal object Serializer : DomainIdSerializer<InvokedTriggerId>(::InvokedTriggerId)
+    internal object Serializer : DomainIdSerializer<CauseId>(::CauseId)
 }
 
