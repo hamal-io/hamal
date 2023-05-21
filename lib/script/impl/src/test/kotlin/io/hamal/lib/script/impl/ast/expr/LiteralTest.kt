@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.common.math.Decimal
+import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.impl.ast.expr.*
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -61,7 +61,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun number() {
                 runLiteralTest(NumberLiteral.Parse, "28.10") { result, tokens ->
-                    assertThat(result, equalTo(NumberLiteral(Decimal("28.10"))))
+                    assertThat(result, equalTo(NumberLiteral(NumberValue("28.10"))))
                     tokens.wereConsumed()
                 }
             }

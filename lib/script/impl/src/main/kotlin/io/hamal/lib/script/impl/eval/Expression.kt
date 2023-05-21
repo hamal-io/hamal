@@ -1,6 +1,5 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.common.math.Decimal
 import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.Parameter
 import io.hamal.lib.script.api.value.*
@@ -98,7 +97,7 @@ internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
         val endValue = ctx.evaluate { endExpression } as NumberValue
         val stepValue = ctx.evaluate { stepExpression } as NumberValue
 
-        val hasNext = if (stepValue.value.isGreaterThanEqual(Decimal.Zero)) {
+        val hasNext = if (stepValue.isGreaterThanEqual(NumberValue.Zero)) {
             HasNext.Forward
         } else {
             HasNext.Backwards
@@ -107,7 +106,7 @@ internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
         while (true) {
             ctx.env.addLocal(identifier, currentValue)
             ctx.evaluate { block }
-            val nextValue = NumberValue(currentValue.value.plus(stepValue.value))
+            val nextValue = currentValue.plus(stepValue)
             if (hasNext(nextValue, endValue)) {
                 currentValue = nextValue
             } else {
@@ -120,12 +119,12 @@ internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
     private enum class HasNext {
         Forward {
             override fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean {
-                return nextValue.value.isLessThanEqual(endValue.value)
+                return nextValue.isLessThanEqual(endValue)
             }
         },
         Backwards {
             override fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean {
-                return nextValue.value.isGreaterThanEqual(endValue.value)
+                return nextValue.isGreaterThanEqual(endValue)
             }
         };
 

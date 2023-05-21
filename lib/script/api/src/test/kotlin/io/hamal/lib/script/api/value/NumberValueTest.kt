@@ -1,15 +1,13 @@
-package io.hamal.lib.common.math
+package io.hamal.lib.script.api.value
 
-import io.hamal.lib.domain.Tuple2
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-class DecimalTest {
+class NumberValueTest {
 
     @Nested
     @DisplayName("invoke()")
@@ -17,38 +15,38 @@ class DecimalTest {
 
         @Test
         fun `Byte input`() {
-            val result = Decimal(28.toByte())
+            val result = NumberValue(28.toByte())
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Short input`() {
-            val result = Decimal(28.toShort())
+            val result = NumberValue(28.toShort())
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Int input`() {
-            val resul = Decimal(28)
+            val resul = NumberValue(28)
             assertThat(resul, equalTo(expected))
         }
 
         @Test
         fun `Long input`() {
-            val result = Decimal(28)
+            val result = NumberValue(28)
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Float input`() {
-            val result = Decimal(28)
+            val result = NumberValue(28)
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Float nan input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal(Float.NaN)
+                NumberValue(Float.NaN)
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -56,7 +54,7 @@ class DecimalTest {
         @Test
         fun `Float positive infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal(Float.POSITIVE_INFINITY)
+                NumberValue(Float.POSITIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
@@ -64,21 +62,21 @@ class DecimalTest {
         @Test
         fun `Float negative infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal(Float.NEGATIVE_INFINITY)
+                NumberValue(Float.NEGATIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
         fun `Double input`() {
-            val result = Decimal(28)
+            val result = NumberValue(28)
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Double nan input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal(Double.NaN)
+                NumberValue(Double.NaN)
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -86,7 +84,7 @@ class DecimalTest {
         @Test
         fun `Double positive infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal(Double.POSITIVE_INFINITY)
+                NumberValue(Double.POSITIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
@@ -94,21 +92,21 @@ class DecimalTest {
         @Test
         fun `Double negative infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal(Double.NEGATIVE_INFINITY)
+                NumberValue(Double.NEGATIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
         fun `String input`() {
-            val result = Decimal("28")
+            val result = NumberValue("28")
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `String nan input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal("NaN")
+                NumberValue("NaN")
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -116,7 +114,7 @@ class DecimalTest {
         @Test
         fun `String empty input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal("")
+                NumberValue("")
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -124,12 +122,12 @@ class DecimalTest {
         @Test
         fun `String whitespaces input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                Decimal("    ")
+                NumberValue("    ")
             }
             assertThat(exception.message, containsString("NaN"))
         }
 
-        private val expected = Decimal(28)
+        private val expected = NumberValue(28)
     }
 
     @Nested
@@ -137,14 +135,14 @@ class DecimalTest {
     inner class PlusTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(28)
+            val otherInstance = NumberValue(10)
 
             val result = testInstance.plus(otherInstance)
-            assertThat(result, equalTo(Decimal(38)))
+            assertThat(result, equalTo(NumberValue(38)))
 
-            assertThat(testInstance, equalTo(Decimal(28)))
-            assertThat(otherInstance, equalTo(Decimal(10)))
+            assertThat(testInstance, equalTo(NumberValue(28)))
+            assertThat(otherInstance, equalTo(NumberValue(10)))
         }
     }
 
@@ -153,14 +151,14 @@ class DecimalTest {
     inner class MinusTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(28)
+            val otherInstance = NumberValue(10)
 
             val result = testInstance.minus(otherInstance)
-            assertThat(result, equalTo(Decimal(18)))
+            assertThat(result, equalTo(NumberValue(18)))
 
-            assertThat(testInstance, equalTo(Decimal(28)))
-            assertThat(otherInstance, equalTo(Decimal(10)))
+            assertThat(testInstance, equalTo(NumberValue(28)))
+            assertThat(otherInstance, equalTo(NumberValue(10)))
         }
     }
 
@@ -169,14 +167,14 @@ class DecimalTest {
     inner class MultiplyTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(28)
+            val otherInstance = NumberValue(10)
 
             val result = testInstance.multiply(otherInstance)
-            assertThat(result, equalTo(Decimal(280)))
+            assertThat(result, equalTo(NumberValue(280)))
 
-            assertThat(testInstance, equalTo(Decimal(28)))
-            assertThat(otherInstance, equalTo(Decimal(10)))
+            assertThat(testInstance, equalTo(NumberValue(28)))
+            assertThat(otherInstance, equalTo(NumberValue(10)))
         }
     }
 
@@ -185,14 +183,14 @@ class DecimalTest {
     inner class DivideTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(280)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(280)
+            val otherInstance = NumberValue(10)
 
             val result = testInstance.divide(otherInstance)
-            assertThat(result, equalTo(Decimal(28)))
+            assertThat(result, equalTo(NumberValue(28)))
 
-            assertThat(testInstance, equalTo(Decimal(280)))
-            assertThat(otherInstance, equalTo(Decimal(10)))
+            assertThat(testInstance, equalTo(NumberValue(280)))
+            assertThat(otherInstance, equalTo(NumberValue(10)))
         }
     }
 
@@ -201,14 +199,14 @@ class DecimalTest {
     inner class RemainderTest {
         @Test
         fun ok() {
-            val testInstance = Decimal("42.0021224");
-            val divisor = Decimal("3.14152");
+            val testInstance = NumberValue("42.0021224");
+            val divisor = NumberValue("3.14152");
             val result = testInstance.remainder(divisor);
 
-            assertThat(result, equalTo(Decimal("1.1623624")));
+            assertThat(result, equalTo(NumberValue("1.1623624")));
 
-            assertThat(testInstance, equalTo(Decimal("42.0021224")));
-            assertThat(divisor, equalTo(Decimal("3.14152")));
+            assertThat(testInstance, equalTo(NumberValue("42.0021224")));
+            assertThat(divisor, equalTo(NumberValue("3.14152")));
         }
     }
 
@@ -217,14 +215,14 @@ class DecimalTest {
     inner class PowTest {
         @Test
         fun ok() {
-            val testInstance = Decimal("10");
-            val exponent = Decimal("2");
+            val testInstance = NumberValue("10");
+            val exponent = NumberValue("2");
             val result = testInstance.pow(exponent);
 
-            assertThat(result, equalTo(Decimal("100")));
+            assertThat(result, equalTo(NumberValue("100")));
 
-            assertThat(testInstance, equalTo(Decimal("10")));
-            assertThat(exponent, equalTo(Decimal("2")));
+            assertThat(testInstance, equalTo(NumberValue("10")));
+            assertThat(exponent, equalTo(NumberValue("2")));
         }
     }
 
@@ -233,22 +231,22 @@ class DecimalTest {
     inner class NegateTest {
         @Test
         fun `Negative value`() {
-            val testInstance = Decimal(-28)
+            val testInstance = NumberValue(-28)
 
             val result = testInstance.negate()
-            assertThat(result, equalTo(Decimal(28)))
+            assertThat(result, equalTo(NumberValue(28)))
 
-            assertThat(testInstance, equalTo(Decimal(-28)))
+            assertThat(testInstance, equalTo(NumberValue(-28)))
         }
 
         @Test
         fun `Positive value`() {
-            val testInstance = Decimal(28)
+            val testInstance = NumberValue(28)
 
             val result = testInstance.negate()
-            assertThat(result, equalTo(Decimal(-28)))
+            assertThat(result, equalTo(NumberValue(-28)))
 
-            assertThat(testInstance, equalTo(Decimal(28)))
+            assertThat(testInstance, equalTo(NumberValue(28)))
         }
     }
 
@@ -257,80 +255,55 @@ class DecimalTest {
     inner class AbsTest {
         @Test
         fun `Negative value`() {
-            val testInstance = Decimal(-28)
+            val testInstance = NumberValue(-28)
 
             val result = testInstance.abs()
-            assertThat(result, equalTo(Decimal(28)))
+            assertThat(result, equalTo(NumberValue(28)))
 
-            assertThat(testInstance, equalTo(Decimal(-28)))
+            assertThat(testInstance, equalTo(NumberValue(-28)))
         }
 
         @Test
         fun `Positive value`() {
-            val testInstance = Decimal(28)
+            val testInstance = NumberValue(28)
 
             val result = testInstance.abs()
-            assertThat(result, equalTo(Decimal(28)))
+            assertThat(result, equalTo(NumberValue(28)))
 
-            assertThat(testInstance, equalTo(Decimal(28)))
+            assertThat(testInstance, equalTo(NumberValue(28)))
         }
     }
 
-    @Nested
-    @DisplayName("floor()")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    inner class FloorTest {
-        private fun provider(): List<Tuple2<Decimal, Decimal>> {
-            return listOf(
-                Tuple2(Decimal(0), Decimal("0")),
-                Tuple2(Decimal("3.14152"), Decimal("3")),
-                Tuple2(Decimal("42.999999999"), Decimal("42"))
-            );
-        }
-
-        @ParameterizedTest(name = "#{index} - Test {0}")
-        @MethodSource("provider")
-        fun test(arg: Tuple2<Decimal, Decimal>) {
-            val testInstance = arg._1;
-            val expected = arg._2;
+    @TestFactory
+    fun floor() = listOf(
+        NumberValue(0) to NumberValue("0"),
+        NumberValue("3.14152") to NumberValue("3"),
+        NumberValue("42.999999999") to NumberValue("42")
+    ).map { (testInstance, expected) ->
+        dynamicTest("floor of $testInstance") {
             val result = testInstance.floor();
-
             assertThat(result, equalTo(expected));
         }
     }
 
-    @Nested
-    @DisplayName("ceil()")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    inner class CeilTest {
-
-        private fun provider(): List<Tuple2<Decimal, Decimal>> {
-            return listOf(
-                Tuple2(Decimal(0), Decimal("0")),
-                Tuple2(Decimal("3.14152"), Decimal("4")),
-                Tuple2(Decimal("42.999999999"), Decimal("43"))
-            );
-        }
-
-        @ParameterizedTest(name = "#{index} - Test {0}")
-        @MethodSource("provider")
-        fun test(arg: Tuple2<Decimal, Decimal>) {
-            val testInstance = arg._1;
-            val expected = arg._2;
+    @TestFactory
+    fun ceil() = listOf(
+        NumberValue(0) to NumberValue("0"),
+        NumberValue("3.14152") to NumberValue("4"),
+        NumberValue("42.999999999") to NumberValue("43")
+    ).map { (testInstance, expected) ->
+        dynamicTest("ceil of $testInstance") {
             val result = testInstance.ceil();
-
             assertThat(result, equalTo(expected));
         }
     }
 
     @Nested
     @DisplayName("ln()")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class LnTest {
-
         @Test
         fun `Value is negative`() {
-            val testInstance = Decimal(-42);
+            val testInstance = NumberValue(-42);
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.ln()
             };
@@ -339,7 +312,7 @@ class DecimalTest {
 
         @Test
         fun `Value is 0`() {
-            val testInstance = Decimal(0);
+            val testInstance = NumberValue(0);
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.ln()
             };
@@ -349,34 +322,28 @@ class DecimalTest {
         @Test
         @DisplayName("value is one")
         fun `Value is 1`() {
-            val testInstance = Decimal(1);
+            val testInstance = NumberValue(1);
 
             val result = testInstance.ln();
-            assertThat(result, equalTo(Decimal(0)));
+            assertThat(result, equalTo(NumberValue(0)));
 
-            assertThat(testInstance, equalTo(Decimal(1)));
+            assertThat(testInstance, equalTo(NumberValue(1)));
         }
 
-        private fun provider(): List<Tuple2<Decimal, Decimal>> {
-            return listOf(
-                Tuple2(Decimal(2), Decimal("0.6931471805599450")),
-                Tuple2(Decimal("1234"), Decimal("7.118016204465331")),
-                Tuple2(Decimal("1234.09901234123"), Decimal("7.118096438151894")),
-                Tuple2(Decimal("987654"), Decimal("13.80308771296568")),
-                Tuple2(Decimal("9876543"), Decimal("16.10567236153747")),
-                Tuple2(Decimal("100000"), Decimal("11.51292546497022")),
-                Tuple2(Decimal("1000000"), Decimal("13.8155105579642741"))
-            );
-        }
-
-        @ParameterizedTest(name = "#{index} - Test {0}")
-        @MethodSource("provider")
-        fun test(arg: Tuple2<Decimal, Decimal>) {
-            val testInstance = arg._1;
-            val expected = arg._2
-            val result = testInstance.ln();
-
-            assertThat(result, equalTo(expected));
+        @TestFactory
+        fun test() = listOf(
+            NumberValue(2) to NumberValue("0.6931471805599453094172321214581766"),
+            NumberValue("1234") to NumberValue("7.118016204465333123414803800068370"),
+            NumberValue("1234.09901234123") to NumberValue("7.118096438151897579984386821678212"),
+            NumberValue("987654") to NumberValue("13.80308771296566413828433949825021"),
+            NumberValue("9876543") to NumberValue("16.10567236153744431962426738978479"),
+            NumberValue("100000") to NumberValue("11.51292546497022842008995727342182"),
+            NumberValue("1000000") to NumberValue("13.81551055796427410410675612270492")
+        ).map { (testInstance, expected) ->
+            dynamicTest("ln of $testInstance") {
+                val result = testInstance.ln();
+                assertThat(result, equalTo(expected));
+            }
         }
     }
 
@@ -387,36 +354,29 @@ class DecimalTest {
 
         @Test
         fun `Value is negative`() {
-            val testInstance = Decimal(-42);
+            val testInstance = NumberValue(-42);
             val exception = assertThrows<IllegalStateException> {
                 testInstance.sqrt()
             }
             assertThat(exception.message, containsString("Value must >= 0"));
         }
 
-        private fun provider(): List<Tuple2<Decimal, Decimal>> {
-            return listOf(
-                Tuple2(Decimal(0), Decimal("0")),
-                Tuple2(Decimal(1), Decimal("1")),
-                Tuple2(Decimal(2), Decimal("1.414213562373095")),
-                Tuple2(Decimal("1234.09901234123"), Decimal("35.1297454067237726")),
-                Tuple2(Decimal("987654"), Decimal("993.807828506095")),
-                Tuple2(Decimal("9876543"), Decimal("3142.69677188239082")),
-                Tuple2(Decimal("100000"), Decimal("316.227766016837933")),
-                Tuple2(Decimal("1000000"), Decimal("1000"))
-            );
+        @TestFactory
+        fun sqrt() = listOf(
+            NumberValue(0) to NumberValue("0"),
+            NumberValue(1) to NumberValue("1"),
+            NumberValue(2) to NumberValue("1.414213562373095048801688724209698"),
+            NumberValue("1234.09901234123") to NumberValue("35.12974540672377261172508927243486"),
+            NumberValue("987654") to NumberValue("993.8078285060950353793489213512089"),
+            NumberValue("9876543") to NumberValue("3142.696771882390819470725583679575"),
+            NumberValue("100000") to NumberValue("316.2277660168379331998893544432719"),
+            NumberValue("1000000") to NumberValue("1000")
+        ).map { (testInstance, expected) ->
+            dynamicTest("sqrt of $testInstance") {
+                val result = testInstance.sqrt();
+                assertThat(result, equalTo(expected));
+            }
         }
-
-        @ParameterizedTest(name = "#{index} - Test {0}")
-        @MethodSource("provider")
-        fun test(arg: Tuple2<Decimal, Decimal>) {
-            val testInstance = arg._1;
-            val expected = arg._2;
-            val result = testInstance.sqrt();
-
-            assertThat(result, equalTo(expected));
-        }
-
     }
 
     @Nested
@@ -424,22 +384,22 @@ class DecimalTest {
     inner class IsLessThanTest {
         @Test
         fun `Less Than`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(10)
             assertTrue(testInstance.isLessThan(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(5)
             assertFalse(testInstance.isLessThan(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = Decimal(10)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(10)
+            val otherInstance = NumberValue(5)
             assertFalse(testInstance.isLessThan(otherInstance))
         }
     }
@@ -449,22 +409,22 @@ class DecimalTest {
     inner class IsLessThanEqualTest {
         @Test
         fun `Less Than`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(10)
             assertTrue(testInstance.isLessThanEqual(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(5)
             assertTrue(testInstance.isLessThanEqual(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = Decimal(10)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(10)
+            val otherInstance = NumberValue(5)
             assertFalse(testInstance.isLessThanEqual(otherInstance))
         }
     }
@@ -474,22 +434,22 @@ class DecimalTest {
     inner class IsGreaterThanTest {
         @Test
         fun `Less Than`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(10)
             assertFalse(testInstance.isGreaterThan(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(5)
             assertFalse(testInstance.isGreaterThan(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = Decimal(10)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(10)
+            val otherInstance = NumberValue(5)
             assertTrue(testInstance.isGreaterThan(otherInstance))
         }
     }
@@ -499,22 +459,22 @@ class DecimalTest {
     inner class IsGreaterThanEqualTest {
         @Test
         fun `Less Than`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(10)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(10)
             assertFalse(testInstance.isGreaterThanEqual(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = Decimal(5)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(5)
+            val otherInstance = NumberValue(5)
             assertTrue(testInstance.isGreaterThanEqual(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = Decimal(10)
-            val otherInstance = Decimal(5)
+            val testInstance = NumberValue(10)
+            val otherInstance = NumberValue(5)
             assertTrue(testInstance.isGreaterThanEqual(otherInstance))
         }
     }
@@ -524,19 +484,19 @@ class DecimalTest {
     inner class IsNegativeTest {
         @Test
         fun `Negative number`() {
-            val testInstance = Decimal(-10)
+            val testInstance = NumberValue(-10)
             assertTrue(testInstance.isNegative())
         }
 
         @Test
         fun `Zero`() {
-            val testInstance = Decimal.Zero
+            val testInstance = NumberValue.Zero
             assertFalse(testInstance.isNegative())
         }
 
         @Test
         fun `Positive number`() {
-            val testInstance = Decimal(10)
+            val testInstance = NumberValue(10)
             assertFalse(testInstance.isNegative())
         }
     }
@@ -546,19 +506,19 @@ class DecimalTest {
     inner class IsPositiveTest {
         @Test
         fun `Negative number`() {
-            val testInstance = Decimal(-10)
+            val testInstance = NumberValue(-10)
             assertFalse(testInstance.isPositive())
         }
 
         @Test
         fun `Zero`() {
-            val testInstance = Decimal.Zero
+            val testInstance = NumberValue.Zero
             assertFalse(testInstance.isPositive())
         }
 
         @Test
         fun `Positive number`() {
-            val testInstance = Decimal(10)
+            val testInstance = NumberValue(10)
             assertTrue(testInstance.isPositive())
         }
     }
@@ -568,19 +528,19 @@ class DecimalTest {
     inner class IsZeroTest {
         @Test
         fun `Negative number`() {
-            val testInstance = Decimal(-10)
+            val testInstance = NumberValue(-10)
             assertFalse(testInstance.isZero())
         }
 
         @Test
         fun `Zero`() {
-            val testInstance = Decimal.Zero
+            val testInstance = NumberValue.Zero
             assertTrue(testInstance.isZero())
         }
 
         @Test
         fun `Positive number`() {
-            val testInstance = Decimal(10)
+            val testInstance = NumberValue(10)
             assertFalse(testInstance.isZero())
         }
     }
@@ -590,7 +550,7 @@ class DecimalTest {
     inner class ToByteTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
+            val testInstance = NumberValue(28)
             assertThat(testInstance.toByte(), equalTo(28))
         }
     }
@@ -600,7 +560,7 @@ class DecimalTest {
     inner class ToShortTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
+            val testInstance = NumberValue(28)
             assertThat(testInstance.toShort(), equalTo(28))
         }
     }
@@ -610,7 +570,7 @@ class DecimalTest {
     inner class ToIntTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
+            val testInstance = NumberValue(28)
             assertThat(testInstance.toInt(), equalTo(28))
         }
     }
@@ -620,7 +580,7 @@ class DecimalTest {
     inner class ToLongTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28)
+            val testInstance = NumberValue(28)
             assertThat(testInstance.toLong(), equalTo(28))
         }
     }
@@ -630,7 +590,7 @@ class DecimalTest {
     inner class ToFloatTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28.10)
+            val testInstance = NumberValue(28.10)
             assertThat(testInstance.toFloat(), equalTo(28.10f))
         }
     }
@@ -640,7 +600,7 @@ class DecimalTest {
     inner class ToDoubleTest {
         @Test
         fun ok() {
-            val testInstance = Decimal(28.10)
+            val testInstance = NumberValue(28.10)
             assertThat(testInstance.toDouble(), equalTo(28.10.toDouble()))
         }
     }

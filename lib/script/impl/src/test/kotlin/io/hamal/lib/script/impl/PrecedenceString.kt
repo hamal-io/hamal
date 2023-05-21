@@ -73,7 +73,7 @@ object PrecedenceString {
         when (literal) {
             is TrueLiteral -> appendValue(TrueValue)
             is FalseLiteral -> appendValue(FalseValue)
-            is NumberLiteral -> appendValue(NumberValue(literal.value))
+            is NumberLiteral -> appendValue(literal.value)
             is StringLiteral -> appendValue(StringValue(literal.value))
             is NilLiteral -> appendValue(NilValue)
         }

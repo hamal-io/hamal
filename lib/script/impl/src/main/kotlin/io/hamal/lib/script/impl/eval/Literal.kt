@@ -2,8 +2,6 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.api.value.PrototypeValue
-
 
 
 internal object EvaluateNilLiteral : Evaluate<NilLiteral> {
@@ -19,7 +17,7 @@ internal object EvaluateTrueLiteral : Evaluate<TrueLiteral> {
 }
 
 internal object EvaluateNumberLiteral : Evaluate<NumberLiteral> {
-    override fun invoke(ctx: EvaluationContext<NumberLiteral>) = NumberValue(ctx.toEvaluate.value)
+    override fun invoke(ctx: EvaluationContext<NumberLiteral>) = ctx.toEvaluate.value
 }
 
 internal object EvaluateStringLiteral : Evaluate<StringLiteral> {

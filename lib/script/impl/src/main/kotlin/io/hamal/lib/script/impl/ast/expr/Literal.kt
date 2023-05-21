@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.common.math.Decimal
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.token.Token.Type
 
@@ -9,8 +9,8 @@ interface LiteralExpression : Expression
 
 internal interface ParseLiteralExpression<EXPRESSION : LiteralExpression> : ParseExpression<EXPRESSION>
 
-data class NumberLiteral(val value: Decimal) : LiteralExpression {
-    constructor(value: Int) : this(Decimal(value))
+data class NumberLiteral(val value: NumberValue) : LiteralExpression {
+    constructor(value: Int) : this(NumberValue(value))
 
     internal object Parse : ParseLiteralExpression<NumberLiteral> {
         override fun invoke(ctx: Context): NumberLiteral {
@@ -18,7 +18,7 @@ data class NumberLiteral(val value: Decimal) : LiteralExpression {
             val token = ctx.currentToken()
             assert(token.type == Type.Number)
             ctx.advance()
-            return NumberLiteral(Decimal(token.value))
+            return NumberLiteral(NumberValue(token.value))
         }
     }
 
