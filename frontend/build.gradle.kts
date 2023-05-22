@@ -16,7 +16,7 @@ node {
 
 archivesName.set("frontend")
 
-apply(plugin = "io.spring.dependency-management")
+
 
 dependencies {
     implementation(external.spring.web)
@@ -39,7 +39,7 @@ tasks.register<YarnTask>("yarnInstall") {
     yarnCommand.set(listOf("install"))
 }
 
-tasks.register<YarnTask>("yarnClean") {
+val yarnClean = tasks.register<YarnTask>("yarnClean") {
     description = "Installs dependencies"
     group = "Yarn"
     yarnCommand.set(listOf("cache", "clean"))
@@ -53,6 +53,12 @@ tasks.register<YarnTask>("yarnDev") {
     yarnCommand.set(listOf("run", "dev"))
 }
 
-tasks.build {
+tasks.compileKotlin {
     dependsOn(yarnBuild)
 }
+
+tasks.clean{
+    dependsOn(yarnClean)
+}
+
+apply(plugin = "io.spring.dependency-management")
