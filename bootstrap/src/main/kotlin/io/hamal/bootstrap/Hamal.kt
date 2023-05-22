@@ -2,6 +2,7 @@ package io.hamal.bootstrap
 
 import io.hamal.agent.infra.AgentConfig
 import io.hamal.backend.infra.BackendConfig
+import io.hamal.frontend.FrontendConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -91,6 +92,30 @@ fun main(args: Array<String>) {
             .run(*args)
     }
 
+    if (isEnable(ctx, "frontend")) {
+        applicationBuilder
+            .parent(parent)
+            .child(FrontendConfig::class.java)
+            .web(WebApplicationType.SERVLET)
+            .properties("server.port=8085")
+            .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
+                out.println("")
+                out.println("")
+                out.println(
+                    """
+  ______               _                 _ 
+ |  ____|             | |               | |
+ | |__ _ __ ___  _ __ | |_ ___ _ __   __| |
+ |  __| '__/ _ \| '_ \| __/ _ \ '_ \ / _` |
+ | |  | | | (_) | | | | ||  __/ | | | (_| |
+ |_|  |_|  \___/|_| |_|\__\___|_| |_|\__,_|
+                """.trimIndent()
+                )
+                out.println("")
+                out.println("")
+            }
+            .run(*args)
+    }
 
 }
 

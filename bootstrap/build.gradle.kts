@@ -20,6 +20,7 @@ dependencies {
     }
 
     implementation(project(":backend:infra"))
+    implementation(project(":frontend"))
     implementation(project(":agent:infra"))
 
     testImplementation(project(":bootstrap"))

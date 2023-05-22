@@ -56,5 +56,7 @@ include(":agent:extension:std:log")
 include(":agent:extension:starter")
 include(":agent:extension:web3")
 
+include(":frontend")
+
 rootProject.name = "hamal"
 
