@@ -9,6 +9,6 @@ class ListExecsUseCaseHandler(
     val execQueryRepository: ExecQueryRepository
 ) : QueryManyUseCaseHandler<Exec, ExecQuery.ListExec>(ExecQuery.ListExec::class) {
     override fun invoke(useCase: ExecQuery.ListExec): List<Exec> {
-        return execQueryRepository.list(useCase.limit)
+        return execQueryRepository.list(useCase.afterId, useCase.limit)
     }
 }

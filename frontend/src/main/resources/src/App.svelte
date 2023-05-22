@@ -3,7 +3,7 @@
     import {executions} from "@/store";
 
     onMount(async () => {
-        fetch("http://localhost:8084/v1/executions")
+        fetch("http://localhost:8084/v1/executions?limit=2")
             .then(response => response.json())
             .then(data => {
                 console.log(data.executions);

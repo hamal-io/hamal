@@ -18,6 +18,7 @@ object ExecQuery {
     ) : QueryOneUseCase<StartedExec>
 
     data class ListExec(
+        val afterId: ExecId,
         val limit: Int
     ) : QueryManyUseCase<Exec>
 

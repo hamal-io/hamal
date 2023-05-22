@@ -27,5 +27,5 @@ interface ExecRequestRepository {
 interface ExecQueryRepository {
     fun find(execId: ExecId): Exec?
 
-    fun list(limit: Int): List<Exec>
+    fun list(afterId: ExecId, limit: Int): List<Exec>
 }

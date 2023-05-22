@@ -77,7 +77,10 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
         return execs[execId]
     }
 
-    override fun list(limit: Int): List<Exec> {
-        return execs.keys.take(10).map { execs.get(it)!! }
+    override fun list(afterId: ExecId, limit: Int): List<Exec> {
+        return execs.keys.sorted()
+            .dropWhile { it <= afterId }
+            .take(limit)
+            .map { execs.get(it)!! }
     }
 }
