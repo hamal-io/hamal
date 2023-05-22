@@ -1,35 +1,33 @@
-<script>
-    import ContactCard from "./ContactCard.svelte";
+<script lang="ts">
+    import {onMount} from "svelte";
+    import {executions} from "@/store";
 
-    export let name;
-    let age = 0;
-    let uppercaseName;
-    $: uppercaseName = name.toUpperCase()
-
-    $: console.log(name)
-
-
-    function incrementAge() {
-        age += 1
-    }
-
-    function changeName(evt) {
-        name = evt.target.value
-    }
-
+    onMount(async () => {
+        fetch("http://localhost:8084/v1/executions")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.executions);
+                executions.set(data.executions);
+            }).catch(error => {
+            console.log(error);
+            return [];
+        });
+    });
 </script>
 
 <style>
     h1 {
-        color: #ea03ea;
+        color: rebeccapurple;
     }
 </style>
 
-<h1>Hello {uppercaseName}! - {age}</h1>
-<button on:click={incrementAge}> Increment Age</button>
-<!--<button on:click={changeName}> Change Name</button>-->
-<!--<input type="text" value={name} on:input={changeName}>-->
-<input type="text" bind:value={name}>
-<ContactCard
-        {name}
-/>
+<h1> Executions</h1>
+
+{#each $executions as execution}
+    <div>
+        <h2> {execution.id}</h2>
+        <h3> {execution.ref}</h3>
+        <h4 style="color: green"> {execution.state} </h4>
+    </div>
+{/each}
+

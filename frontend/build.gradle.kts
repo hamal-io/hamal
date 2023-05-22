@@ -43,7 +43,7 @@ val yarnClean = tasks.register<YarnTask>("yarnClean") {
     description = "Installs dependencies"
     group = "Yarn"
     yarnCommand.set(listOf("cache", "clean"))
-    delete("${project.projectDir}/src/main/resources/public/build")
+    delete("${project.projectDir}/src/main/resources/dist")
 }
 
 

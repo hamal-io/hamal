@@ -13,7 +13,7 @@ open class WebConfig : WebMvcConfigurer {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry
             .addResourceHandler("/**")
-            .addResourceLocations("classpath:/public/")
+            .addResourceLocations("classpath:/dist/")
             .setCachePeriod(3600)
             .resourceChain(true)
             .addResolver(PathResourceResolver())

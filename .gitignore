@@ -39,6 +39,7 @@ build/
 .vscode/
 **/node_modules
 **/build
+**/dist
 
 ### Mac OS ###
 .DS_Store
