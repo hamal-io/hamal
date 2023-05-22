@@ -33,6 +33,26 @@ val yarnBuild = tasks.register<YarnTask>("yarnBuild") {
     yarnCommand.set(listOf("run", "build"))
 }
 
+tasks.register<YarnTask>("yarnInstall") {
+    description = "Installs dependencies"
+    group = "Yarn"
+    yarnCommand.set(listOf("install"))
+}
+
+tasks.register<YarnTask>("yarnClean") {
+    description = "Installs dependencies"
+    group = "Yarn"
+    yarnCommand.set(listOf("cache", "clean"))
+    delete("${project.projectDir}/src/main/resources/public/build")
+}
+
+
+tasks.register<YarnTask>("yarnDev") {
+    description = "Runs the application in dev mode"
+    group = "Yarn"
+    yarnCommand.set(listOf("run", "dev"))
+}
+
 tasks.build {
     dependsOn(yarnBuild)
 }
