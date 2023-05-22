@@ -82,5 +82,6 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
             .dropWhile { it <= afterId }
             .take(limit)
             .map { execs.get(it)!! }
+            .reversed()
     }
 }
