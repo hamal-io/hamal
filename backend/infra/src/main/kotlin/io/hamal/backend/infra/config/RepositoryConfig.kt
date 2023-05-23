@@ -2,7 +2,8 @@ package io.hamal.backend.infra.config
 
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ExecRequestRepository
-import io.hamal.backend.repository.api.FuncRepository
+import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.memory.MemoryExecRepository
@@ -20,7 +21,10 @@ open class RepositoryConfig {
     }
 
     @Bean
-    open fun execDefinitionRepository(): FuncRepository = MemoryFuncRepository
+    open fun funcRequestRepository(): FuncRequestRepository = MemoryFuncRepository
+
+    @Bean
+    open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
 
     @Bean
     open fun execRequestRepository(): ExecRequestRepository = MemoryExecRepository

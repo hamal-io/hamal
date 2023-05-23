@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.TriggerRepository.Command.ManualTriggerTo
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.TriggerRef
+import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.domain.vo.base.referenceFromId
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
@@ -36,7 +36,7 @@ interface TriggerRepository {
 
         data class ManualTriggerToCreate(
             override val id: TriggerId,
-            var reference: TriggerRef,
+            var reference: TriggerName,
             //inputs
             //secrets
         ) : Command {
@@ -62,7 +62,7 @@ fun TriggerRepository.Recorder.createManualTrigger(
     commands.add(
         ManualTriggerToCreate(
             id = result,
-            reference = referenceFromId(result, ::TriggerRef)
+            reference = referenceFromId(result, ::TriggerName)
         ).apply(block)
     )
     return result

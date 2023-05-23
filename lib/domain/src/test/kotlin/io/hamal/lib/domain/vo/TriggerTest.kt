@@ -70,16 +70,16 @@ class TriggerRefTest {
         @Test
         fun `Equal if underlying values are equal`() {
             assertEquals(
-                TriggerRef("some-ref"),
-                TriggerRef("some-ref")
+                TriggerName("some-ref"),
+                TriggerName("some-ref")
             )
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
             assertNotEquals(
-                TriggerRef("some-ref"),
-                TriggerRef("another-ref")
+                TriggerName("some-ref"),
+                TriggerName("another-ref")
             )
         }
     }
@@ -90,27 +90,27 @@ class TriggerRefTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                TriggerRef("some-ref").hashCode(),
-                TriggerRef("some-ref").hashCode()
+                TriggerName("some-ref").hashCode(),
+                TriggerName("some-ref").hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                TriggerRef("some-ref").hashCode(),
-                TriggerRef("another-ref").hashCode()
+                TriggerName("some-ref").hashCode(),
+                TriggerName("another-ref").hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(TriggerRef("some-ref").toString(), equalTo("TriggerRef(some-ref)"))
+        assertThat(TriggerName("some-ref").toString(), equalTo("TriggerRef(some-ref)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TriggerRef("some-ref"), "\"some-ref\"")
+    fun Serialization() = generateTestCases(TriggerName("some-ref"), "\"some-ref\"")
 }
 
 @DisplayName("CauseId")

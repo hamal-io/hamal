@@ -2,23 +2,22 @@ package io.hamal.backend.usecase.request.func
 
 import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.notification.FuncCreatedNotification
-import io.hamal.backend.core.notification.ManualTriggerCreatedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.repository.api.FuncRepository
+import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.usecase.request.FuncRequest.FuncCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.FuncRef
+import io.hamal.lib.domain.vo.FuncName
 
 class CreateFuncRequestHandler(
     internal val notifyDomain: NotifyDomainPort,
-    internal val funcRepository: FuncRepository
+    internal val funcRepository: FuncRequestRepository
 ) : RequestOneUseCaseHandler<Func, FuncCreation>(FuncCreation::class) {
     override fun invoke(useCase: FuncCreation): Func {
         val result = createFunc(useCase)
-        notifyDefinitionCreated(result)
-        notifyTriggersCreated(result)
+        notifyFuncCreated(result)
+//        notifyTriggersCreated(result)
         return result
     }
 }
@@ -26,7 +25,7 @@ class CreateFuncRequestHandler(
 internal fun CreateFuncRequestHandler.createFunc(useCase: FuncCreation): Func {
     return funcRepository.request(useCase.reqId) {
         val funcId = createFunc {
-            ref = FuncRef("ref")
+            ref = FuncName("ref")
             code = Code(
                 """
                         |require('eth')
@@ -36,7 +35,7 @@ internal fun CreateFuncRequestHandler.createFunc(useCase: FuncCreation): Func {
     }.first()
 }
 
-internal fun CreateFuncRequestHandler.notifyDefinitionCreated(func: Func) {
+internal fun CreateFuncRequestHandler.notifyFuncCreated(func: Func) {
     notifyDomain(
         FuncCreatedNotification(
             shard = func.shard,
@@ -45,13 +44,13 @@ internal fun CreateFuncRequestHandler.notifyDefinitionCreated(func: Func) {
     )
 }
 
-internal fun CreateFuncRequestHandler.notifyTriggersCreated(func: Func) {
-    func.triggers.forEach { trigger ->
-        notifyDomain.invoke(
-            ManualTriggerCreatedNotification(
-                shard = func.shard,
-                id = trigger.id
-            )
-        )
-    }
-}
+//internal fun CreateFuncRequestHandler.notifyTriggersCreated(func: Func) {
+//    func.triggers.forEach { trigger ->
+//        notifyDomain.invoke(
+//            ManualTriggerCreatedNotification(
+//                shard = func.shard,
+//                id = trigger.id
+//            )
+//        )
+//    }
+//}

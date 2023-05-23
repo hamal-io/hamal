@@ -1,21 +1,18 @@
 package io.hamal.backend.repository.memory
 
 import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.FuncRepository
-import io.hamal.backend.repository.api.FuncRepository.Command
-import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.FuncRequestRepository
+import io.hamal.backend.repository.api.FuncRequestRepository.Command
+import io.hamal.backend.repository.api.FuncRequestRepository.Command.FuncToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncRef
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.FuncName
 
-object MemoryFuncRepository : FuncRepository {
+object MemoryFuncRepository : FuncRequestRepository, FuncQueryRepository {
 
     internal val funcs = mutableMapOf<FuncId, FuncEntity>()
-    internal val triggers = mutableMapOf<TriggerId, TriggerEntity>()
-
     internal val reqIds = mutableSetOf<ReqId>()
 
     override fun get(id: FuncId): Func {
@@ -23,9 +20,9 @@ object MemoryFuncRepository : FuncRepository {
             ?: throw IllegalArgumentException("No func found with $id")
     }
 
-    override fun getTrigger(id: TriggerId): Trigger {
-        return requireNotNull(triggers[id]?.let(TriggerEntity::toModel)) { "No trigger found with $id" }
-    }
+//    override fun getTrigger(id: TriggerId): Trigger {
+//        return requireNotNull(triggers[id]?.let(TriggerEntity::toModel)) { "No trigger found with $id" }
+//    }
 
     override fun execute(reqId: ReqId, commands: List<Command>): List<Func> {
         check(reqIds.add(reqId)) { "Request $reqId was already executed" }
@@ -41,28 +38,37 @@ object MemoryFuncRepository : FuncRepository {
 
         return groupedCommands.keys.map(this::get)
     }
+
+    override fun find(funcId: FuncId): Func? {
+        return funcs[funcId]?.toModel()
+    }
+
+    override fun list(afterId: FuncId, limit: Int): List<Func> {
+        return funcs.keys.sorted()
+            .dropWhile { it <= afterId }
+            .take(limit)
+            .mapNotNull { find(it) }
+            .reversed()
+    }
 }
 
 internal fun MemoryFuncRepository.createFunc(toCreate: FuncToCreate) {
     funcs[toCreate.funcId] = FuncEntity(
         id = toCreate.funcId,
         reference = toCreate.ref,
-        triggers = mutableListOf(),
         code = toCreate.code
     )
 }
 
 internal data class FuncEntity(
     val id: FuncId,
-    val reference: FuncRef,
-    val triggers: MutableList<TriggerId>,
+    val reference: FuncName,
     val code: Code
 ) {
     fun toModel(): Func {
         return Func(
             id = this.id,
-            reference = this.reference,
-            triggers = this.triggers.map(MemoryFuncRepository::getTrigger),
+            name = this.reference,
             code = this.code
         )
     }

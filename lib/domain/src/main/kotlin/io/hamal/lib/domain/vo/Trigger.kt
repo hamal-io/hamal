@@ -3,8 +3,8 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainId
 import io.hamal.lib.domain.vo.base.DomainIdSerializer
-import io.hamal.lib.domain.vo.base.Ref
-import io.hamal.lib.domain.vo.base.RefSerializer
+import io.hamal.lib.domain.vo.base.Name
+import io.hamal.lib.domain.vo.base.NameSerializer
 import kotlinx.serialization.Serializable
 
 
@@ -16,11 +16,11 @@ class TriggerId(override val value: SnowflakeId) : DomainId() {
     internal object Serializer : DomainIdSerializer<TriggerId>(::TriggerId)
 }
 
-@Serializable(with = TriggerRef.Serializer::class)
-class TriggerRef(override val value: Value) : Ref() {
+@Serializable(with = TriggerName.Serializer::class)
+class TriggerName(override val value: Value) : Name() {
     constructor(value: String) : this(Value(value))
 
-    internal object Serializer : RefSerializer<TriggerRef>(::TriggerRef)
+    internal object Serializer : NameSerializer<TriggerName>(::TriggerName)
 }
 
 @Serializable(with = InvokedTriggerId.Serializer::class)

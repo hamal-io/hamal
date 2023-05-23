@@ -45,7 +45,7 @@ internal fun MemoryTriggerRepository.createManualTrigger(toCreate: ManualTrigger
 
 internal data class TriggerEntity(
     val id: TriggerId,
-    var reference: TriggerRef
+    var reference: TriggerName
 ) {
     fun toModel(): Trigger {
         return Trigger.ManualTrigger(

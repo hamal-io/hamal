@@ -9,11 +9,11 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-fun <ID : DomainId, REF : Ref> referenceFromId(id: ID, ctor: (String) -> REF): REF {
+fun <ID : DomainId, REF : Name> referenceFromId(id: ID, ctor: (String) -> REF): REF {
     return ctor("${id.value.toString()}-ref")
 }
 
-abstract class Ref : ValueObject.ComparableImpl<Ref.Value>() {
+abstract class Name : ValueObject.ComparableImpl<Name.Value>() {
     @Serializable
     data class Value(val value: String) : Comparable<Value> {
         init {
@@ -36,7 +36,7 @@ internal object RefValidator {
 }
 
 
-abstract class RefSerializer<REF : Ref>(
+abstract class NameSerializer<REF : Name>(
     val fn: (String) -> REF
 ) : KSerializer<REF> {
     override val descriptor: SerialDescriptor

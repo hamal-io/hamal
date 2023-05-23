@@ -72,16 +72,16 @@ class FuncRefTest {
         @Test
         fun `Equal if underlying values are equal`() {
             assertEquals(
-                FuncRef("some-ref"),
-                FuncRef("some-ref")
+                FuncName("some-ref"),
+                FuncName("some-ref")
             )
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
             assertNotEquals(
-                FuncRef("some-ref"),
-                FuncRef("another-ref")
+                FuncName("some-ref"),
+                FuncName("another-ref")
             )
         }
     }
@@ -92,25 +92,25 @@ class FuncRefTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                FuncRef("some-ref").hashCode(),
-                FuncRef("some-ref").hashCode()
+                FuncName("some-ref").hashCode(),
+                FuncName("some-ref").hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                FuncRef("some-ref").hashCode(),
-                FuncRef("another-ref").hashCode()
+                FuncName("some-ref").hashCode(),
+                FuncName("another-ref").hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(FuncRef("some-ref").toString(), equalTo("FuncRef(some-ref)"))
+        assertThat(FuncName("some-ref").toString(), equalTo("FuncRef(some-ref)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(FuncRef("some-ref"), "\"some-ref\"")
+    fun Serialization() = generateTestCases(FuncName("some-ref"), "\"some-ref\"")
 }

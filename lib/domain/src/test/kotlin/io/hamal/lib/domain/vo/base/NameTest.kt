@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @Nested
-class RefTest {
+class NameTest {
     @Nested
     @DisplayName("ReferenceValidator")
     inner class RefValidatorTest {

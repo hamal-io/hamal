@@ -51,23 +51,23 @@
     onMount(getFuncs);
 
     async function getFuncs() {
-        // fetch("http://localhost:8084/v1/functions")
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data.funcs);
-        //         funcs.set(data.funcs);
-        //     }).catch(error => {
-        //     console.log(error);
-        //     return [];
-        // });
+        fetch("http://localhost:8084/v1/funcs")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.funcs);
+                funcs.set(data.funcs);
+            }).catch(error => {
+            console.log(error);
+            return [];
+        });
     }
 
     function save() {
         console.log("adhoc func")
-        fetch("http://localhost:8084/v1/functions", {
+        fetch("http://localhost:8084/v1/funcs", {
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/text'
+                'Content-Type': 'application/json'
             },
             method: "POST",
             body: editor.getValue()
@@ -97,7 +97,7 @@
             {#each $funcs as func}
                 <div>
                     <h2> {func.id}</h2>
-                    <h4 style="color: green"> {func.state} </h4>
+                    <h4> {func.name} </h4>
                 </div>
             {/each}
         </div>

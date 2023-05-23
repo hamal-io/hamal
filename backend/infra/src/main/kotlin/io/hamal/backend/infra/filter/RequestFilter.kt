@@ -18,7 +18,7 @@ class RequestFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("requestId", ReqId(counter.incrementAndGet().toBigInteger()))
+        request.setAttribute("reqId", ReqId(counter.incrementAndGet().toBigInteger()))
         filterChain.doFilter(request, response)
     }
 

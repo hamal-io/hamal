@@ -1,24 +1,20 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.FuncRequestRepository.Command.FuncToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncRef
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.base.referenceFromId
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
 
-interface FuncRepository {
+interface FuncRequestRepository {
 
     fun get(id: FuncId): Func
-
-    fun getTrigger(id: TriggerId): Trigger
 
     fun execute(reqId: ReqId, commands: List<Command>): List<Func>
 
@@ -42,7 +38,7 @@ interface FuncRepository {
 
         data class FuncToCreate(
             override val funcId: FuncId,
-            var ref: FuncRef,
+            var ref: FuncName,
             var code: Code
         ) : Command {
             override val order = Order.InsertPrimary
@@ -60,12 +56,18 @@ interface FuncRepository {
     }
 }
 
-fun FuncRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): FuncId {
+interface FuncQueryRepository {
+    fun find(funcId: FuncId): Func?
+
+    fun list(afterId: FuncId, limit: Int): List<Func>
+}
+
+fun FuncRequestRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): FuncId {
     val result = generateDomainId(Shard(0), ::FuncId)
     commands.add(
         FuncToCreate(
             funcId = result,
-            ref = referenceFromId(result, ::FuncRef),
+            ref = referenceFromId(result, ::FuncName),
             code = Code("")
         ).apply(block)
     )

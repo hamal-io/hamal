@@ -1,23 +1,21 @@
 package io.hamal.backend.repository.sqlite.domain
 
 import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.FuncRepository
-import io.hamal.backend.repository.api.FuncRepository.Command
-import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.FuncRequestRepository
+import io.hamal.backend.repository.api.FuncRequestRepository.Command
+import io.hamal.backend.repository.api.FuncRequestRepository.Command.FuncToCreate
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncRef
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.FuncName
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 
-class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncRepository {
+class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncRequestRepository {
 
 //    internal val lock: Lock
 //    internal val connection: Connection
@@ -66,16 +64,11 @@ class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncReposit
             map {
                 Func(
                     id = it.getDomainId("id", ::FuncId),
-                    reference = FuncRef(it.getString("reference")),
-                    triggers = listOf(),
+                    name = FuncName(it.getString("reference")),
                     code = Code("")
                 )
             }
         } ?: throw IllegalArgumentException("No job definition found for $id")
-    }
-
-    override fun getTrigger(id: TriggerId): Trigger {
-        TODO()
     }
 
 
@@ -141,8 +134,7 @@ class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncReposit
         return listOf(
             Func(
                 id = toProcess.keys.first(),
-                reference = FuncRef("das"),
-                triggers = listOf(),
+                name = FuncName("das"),
                 Code("")
             )
         )

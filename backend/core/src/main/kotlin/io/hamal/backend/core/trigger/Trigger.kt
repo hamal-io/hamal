@@ -9,12 +9,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class Trigger : DomainObject<TriggerId> {
 
-    abstract val reference: TriggerRef
+    abstract val reference: TriggerName
 
     @Serializable
     data class ManualTrigger(
         override val id: TriggerId,
-        override val reference: TriggerRef,
+        override val reference: TriggerName,
     ) : Trigger()
 
 }
