@@ -5,8 +5,8 @@ import io.hamal.backend.repository.api.ExecRequestRepository
 import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerRepository
-import io.hamal.backend.repository.memory.domain.MemoryExecRepository
-import io.hamal.backend.repository.memory.domain.MemoryFuncRepository
+import io.hamal.backend.repository.memory.MemoryExecRepository
+import io.hamal.backend.repository.memory.MemoryFuncRepository
 import io.hamal.backend.repository.sqlite.log.DefaultBrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

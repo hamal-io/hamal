@@ -1,13 +1,15 @@
-package io.hamal.backend.repository.memory.domain
+package io.hamal.backend.repository.memory
 
 import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.repository.api.FuncRepository.Command
 import io.hamal.backend.repository.api.FuncRepository.Command.FuncToCreate
-import io.hamal.backend.repository.api.FuncRepository.Command.ManualTriggerToCreate
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncRef
+import io.hamal.lib.domain.vo.TriggerId
 
 object MemoryFuncRepository : FuncRepository {
 
@@ -32,7 +34,6 @@ object MemoryFuncRepository : FuncRepository {
             cmds.sortedBy { it.order }.forEach { cmd ->
                 when (cmd) {
                     is FuncToCreate -> createFunc(cmd)
-                    is ManualTriggerToCreate -> createManualTrigger(cmd)
                     else -> TODO("$cmd not supported")
                 }
             }
@@ -51,15 +52,6 @@ internal fun MemoryFuncRepository.createFunc(toCreate: FuncToCreate) {
     )
 }
 
-internal fun MemoryFuncRepository.createManualTrigger(toCreate: ManualTriggerToCreate) {
-    triggers[toCreate.id] = TriggerEntity(
-        id = toCreate.id,
-        reference = toCreate.reference,
-        funcId = toCreate.funcId
-    )
-    funcs[toCreate.funcId]!!.triggers.add(toCreate.id)
-}
-
 internal data class FuncEntity(
     val id: FuncId,
     val reference: FuncRef,
@@ -72,21 +64,6 @@ internal data class FuncEntity(
             reference = this.reference,
             triggers = this.triggers.map(MemoryFuncRepository::getTrigger),
             code = this.code
-        )
-    }
-}
-
-
-internal data class TriggerEntity(
-    val id: TriggerId,
-    val funcId: FuncId,
-    var reference: TriggerRef
-) {
-    fun toModel(): Trigger {
-        return Trigger.ManualTrigger(
-            id = this.id,
-            reference = this.reference,
-            funcId = this.funcId
         )
     }
 }

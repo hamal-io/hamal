@@ -6,12 +6,10 @@ import io.hamal.backend.core.notification.ManualTriggerCreatedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
 import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.repository.api.createFunc
-import io.hamal.backend.repository.api.createManualTrigger
 import io.hamal.backend.usecase.request.FuncRequest.FuncCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncRef
-import io.hamal.lib.domain.vo.TriggerRef
 
 class CreateFuncRequestHandler(
     internal val notifyDomain: NotifyDomainPort,
@@ -34,9 +32,6 @@ internal fun CreateFuncRequestHandler.createFunc(useCase: FuncCreation): Func {
                         |require('eth')
                     """.trimMargin()
             )
-        }
-        createManualTrigger(funcId) {
-            reference = TriggerRef("manual")
         }
     }.first()
 }

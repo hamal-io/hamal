@@ -3,7 +3,6 @@ import {writable} from 'svelte/store';
 
 interface ApiExecution {
     id: string;
-    ref: string;
     state: string;
 }
 

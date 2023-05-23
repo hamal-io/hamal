@@ -1,15 +1,15 @@
 package io.hamal.backend.usecase.request.trigger
 
-import io.hamal.backend.core.trigger.Cause.Manual
-import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.core.notification.ManualTriggerInvokedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.core.trigger.InvokedTrigger.Manual
+import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.usecase.request.TriggerRequest
 import io.hamal.lib.domain.Requester
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
+import io.hamal.lib.domain.vo.InvokedTriggerId
 import io.hamal.lib.domain.vo.InvokedAt
-import io.hamal.lib.domain.vo.CauseId
 import io.hamal.lib.domain.vo.TenantId
 
 class ManualTriggerInvocationRequestHandler(
@@ -24,8 +24,7 @@ class ManualTriggerInvocationRequestHandler(
         check(trigger is Trigger.ManualTrigger) { "Trigger with id ${trigger.id} can not be triggered manually" }
 
         val result = Manual(
-            id = CauseId(123),
-            func = funcRepository.get(trigger.funcId),
+            id = InvokedTriggerId(123),
             trigger = trigger,
             invokedAt = InvokedAt.now(),
             invokedBy = Requester.tenant(TenantId(12))
@@ -34,7 +33,7 @@ class ManualTriggerInvocationRequestHandler(
         notifyDomain(
             ManualTriggerInvokedNotification(
                 shard = useCase.shard,
-                cause = result
+                invokedTrigger = result
             )
         )
 

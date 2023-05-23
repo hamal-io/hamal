@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.memory.domain
+package io.hamal.backend.repository.memory
 
 import io.hamal.backend.core.exec.*
 import io.hamal.backend.repository.api.ExecQueryRepository
@@ -19,16 +19,16 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
     override fun plan(reqId: ReqId, execToPlan: ExecRequestRepository.ExecToPlan): PlannedExec {
         return PlannedExec(
             id = execToPlan.id,
-            func = execToPlan.definition,
-            cause = execToPlan.trigger
+            code = execToPlan.code,
+            invokedTrigger = execToPlan.trigger
         ).also { execs[it.id] = it }
     }
 
     override fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec {
         return ScheduledExec(
             id = planedExec.id,
-            func = planedExec.func,
-            cause = planedExec.cause,
+            code = planedExec.code,
+            invokedTrigger = planedExec.invokedTrigger,
             scheduledAt = ScheduledAt.now()
         ).also { execs[it.id] = it }
     }
@@ -36,8 +36,8 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
     override fun queue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
         val result = QueuedExec(
             id = scheduledExec.id,
-            func = scheduledExec.func,
-            cause = scheduledExec.cause,
+            code = scheduledExec.code,
+            invokedTrigger = scheduledExec.invokedTrigger,
             queuedAt = QueuedAt.now()
         ).also { execs[it.id] = it }
         queue.add(result)
@@ -48,8 +48,8 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
         startedExecs.removeIf { it.id == startedExec.id }
         return CompleteExec(
             id = startedExec.id,
-            func = startedExec.func,
-            cause = startedExec.cause,
+            code = startedExec.code,
+            invokedTrigger = startedExec.invokedTrigger,
             completedAt = CompletedAt.now()
         ).also { execs[it.id] = it }
     }
@@ -63,8 +63,8 @@ object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
         val startedExec = queue.removeFirst().let {
             StartedExec(
                 id = it.id,
-                func = it.func,
-                cause = it.cause,
+                code = it.code,
+                invokedTrigger = it.invokedTrigger,
             ).also { execs[it.id] = it }
         }
 

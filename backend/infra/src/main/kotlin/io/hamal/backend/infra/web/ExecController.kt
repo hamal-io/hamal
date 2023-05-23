@@ -9,10 +9,7 @@ import io.hamal.lib.domain.ddd.InvokeQueryManyUseCasePort
 import io.hamal.lib.domain.ddd.InvokeQueryOneUseCasePort
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.TriggerRef
 import io.hamal.lib.sdk.domain.ApiDetailExecutionModel
-import io.hamal.lib.sdk.domain.ApiDetailExecutionModel.CauseModel
-import io.hamal.lib.sdk.domain.ApiDetailExecutionModel.FunctionModel
 import io.hamal.lib.sdk.domain.ApiSimpleExecutionModel
 import io.hamal.lib.sdk.domain.ApiSimpleExecutionModels
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,16 +33,8 @@ open class ExecController(
         return ResponseEntity.ok(
             ApiDetailExecutionModel(
                 id = result.id,
-                ref = result.func.reference,
                 state = result.state,
-                func = FunctionModel(
-                    id = result.func.id,
-                    code = result.func.code
-                ),
-                cause = CauseModel(
-                    id = result.cause.id,
-                    ref = TriggerRef("TBD")
-                )
+                code = result.code,
             )
         )
     }
@@ -67,7 +56,6 @@ open class ExecController(
                 result.map {
                     ApiSimpleExecutionModel(
                         id = it.id,
-                        ref = it.func.reference,
                         state = it.state
                     )
                 }

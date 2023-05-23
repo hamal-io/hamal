@@ -100,7 +100,6 @@
         {#each $executions as execution}
             <div>
                 <h2> {execution.id}</h2>
-                <h3> {execution.ref}</h3>
                 <h4 style="color: green"> {execution.state} </h4>
             </div>
         {/each}

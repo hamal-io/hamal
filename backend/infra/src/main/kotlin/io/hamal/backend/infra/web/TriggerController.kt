@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.web
 
 import io.hamal.backend.core.tenant.Tenant
-import io.hamal.backend.core.trigger.Cause
+import io.hamal.backend.core.trigger.InvokedTrigger
 import io.hamal.backend.usecase.request.TriggerRequest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -31,7 +31,7 @@ open class TriggerController @Autowired constructor(
         @RequestAttribute("shard") shard: Shard,
         @RequestAttribute("tenant") tenant: Tenant,
         @RequestAttribute("requestId") reqId: ReqId
-    ): Cause {
+    ): InvokedTrigger {
         return request(
             TriggerRequest.ManualTriggerInvocation(
                 reqId = reqId,

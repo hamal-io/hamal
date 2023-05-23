@@ -53,7 +53,7 @@ tasks.register<YarnTask>("yarnDev") {
     yarnCommand.set(listOf("run", "dev"))
 }
 
-tasks.compileKotlin {
+tasks.build {
     dependsOn(yarnBuild)
 }
 

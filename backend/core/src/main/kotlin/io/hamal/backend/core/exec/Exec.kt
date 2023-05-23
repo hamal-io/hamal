@@ -1,7 +1,6 @@
 package io.hamal.backend.core.exec
 
-import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.trigger.Cause
+import io.hamal.backend.core.trigger.InvokedTrigger
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -10,15 +9,15 @@ import kotlinx.serialization.Serializable
 sealed interface Exec : DomainObject<ExecId> {
     override val id: ExecId
     val state: ExecState
-    val func: Func
-    val cause: Cause
+    val code: Code
+    val invokedTrigger: InvokedTrigger
 }
 
 @Serializable
 class PlannedExec(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger
 ) : Exec {
     override val state = ExecState.Planned
     override fun toString(): String {
@@ -30,8 +29,8 @@ class PlannedExec(
 @Serializable
 class ScheduledExec(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause,
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger,
     val scheduledAt: ScheduledAt
 ) : Exec {
     override val state = ExecState.Scheduled
@@ -44,8 +43,8 @@ class ScheduledExec(
 @Serializable
 class QueuedExec(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause,
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger,
     val queuedAt: QueuedAt
 ) : Exec {
     override val state = ExecState.Queued
@@ -58,8 +57,8 @@ class QueuedExec(
 @Serializable
 class StartedExec(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger
 ) : Exec {
     override val state = ExecState.Started
     override fun toString(): String {
@@ -71,8 +70,8 @@ class StartedExec(
 @Serializable
 class CompleteExec(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause,
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger,
     val completedAt: CompletedAt
 ) : Exec {
     override val state = ExecState.Completed
@@ -84,8 +83,8 @@ class CompleteExec(
 @Serializable
 class FailedExecution(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger
 ) : Exec {
     override val state = ExecState.Failed
     override fun toString(): String {
@@ -97,8 +96,8 @@ class FailedExecution(
 @Serializable
 class TerminalFailedExec(
     override val id: ExecId,
-    override val func: Func,
-    override val cause: Cause
+    override val code: Code,
+    override val invokedTrigger: InvokedTrigger
 ) : Exec {
     override val state = ExecState.TerminalFailed
     override fun toString(): String {

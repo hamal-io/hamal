@@ -17,14 +17,14 @@ class PlanExecRequestHandler(
 ) : RequestOneUseCaseHandler<PlannedExec, PlanExec>(PlanExec::class) {
     val log = logger(PlanExecRequestHandler::class)
     override fun invoke(useCase: PlanExec): PlannedExec {
-        log.debug("Create a new exec for ${useCase.func}")
+        log.debug("Create a new exec for ${useCase.code}")
 
         val result = execRequestRepository.plan(
             useCase.reqId,
             ExecRequestRepository.ExecToPlan(
                 shard = useCase.shard,
                 id = generateDomainId(useCase.shard, ::ExecId),
-                definition = useCase.func,
+                code = useCase.code,
                 trigger = useCase.trigger
             )
         )

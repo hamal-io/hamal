@@ -5,8 +5,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestManyUseCasePort
 import io.hamal.lib.domain.vo.FuncRef
-import io.hamal.lib.sdk.domain.ApiAgentRequests
 import io.hamal.lib.sdk.domain.ApiAgentRequest
+import io.hamal.lib.sdk.domain.ApiAgentRequests
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -32,7 +32,7 @@ class QueueController
                 ApiAgentRequest(
                     id = it.id,
                     reference = FuncRef("ref"),
-                    code = it.cause.func.code
+                    code = it.code
                 )
             })
     }

@@ -19,8 +19,8 @@ class AdhocTriggerInvokedHandler(
             ExecRequest.PlanExec(
                 reqId = ReqId(123),
                 shard = notification.shard,
-                func = notification.cause.func,
-                trigger = notification.cause,
+                trigger = notification.adhocTrigger,
+                code =notification.adhocTrigger.code
             )
         )
     }
