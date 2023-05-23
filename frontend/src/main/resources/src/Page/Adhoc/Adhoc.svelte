@@ -1,8 +1,55 @@
 <script lang="ts">
-    import {onMount} from "svelte";
     import {executions} from "./store";
+    import type monaco from 'monaco-editor';
+    import { onMount } from 'svelte';
+    import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+    import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
+    import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+    import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
+    import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 
-    let adhocScript = "local log = require('log')\nlog.info({1,2,3})"
+    let divEl: HTMLDivElement = null;
+    let editor: monaco.editor.IStandaloneCodeEditor;
+    let Monaco;
+
+
+    onMount(async () => {
+        // @ts-ignore
+        self.MonacoEnvironment = {
+            getWorker: function (_moduleId: any, label: string) {
+                if (label === 'json') {
+                    return new jsonWorker();
+                }
+                if (label === 'css' || label === 'scss' || label === 'less') {
+                    return new cssWorker();
+                }
+                if (label === 'html' || label === 'handlebars' || label === 'razor') {
+                    return new htmlWorker();
+                }
+                if (label === 'typescript' || label === 'javascript') {
+                    return new tsWorker();
+                }
+                return new editorWorker();
+            }
+        };
+
+        Monaco = await import('monaco-editor');
+        editor = Monaco.editor.create(divEl, {
+            value: [
+                "local log = require('log')",
+                "log.info('automate the world')",
+            ].join("\n"),
+            language: 'lua',
+            lineNumbers: "on",
+            scrollBeyondLastLine: false,
+            readOnly: false,
+        });
+
+
+        return () => {
+            editor.dispose();
+        };
+    });
 
     onMount(getExecutions);
 
@@ -26,7 +73,7 @@
                 'Content-Type': 'application/text'
             },
             method: "POST",
-            body: adhocScript
+            body: editor.getValue()
         })
             .then(response => getExecutions())
             .catch(error => {
@@ -38,14 +85,7 @@
 </script>
 
 <div class="w-full">
-    <div>
-                    <textarea bind:value={adhocScript}
-                              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              id="message"
-                              placeholder="Write your thoughts here..."
-                              rows="4"/>
-    </div>
-
+    <div class="columns-2">
     <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             on:click={adhoc}
@@ -53,12 +93,17 @@
         Execute
     </button>
 
-    <h1> Executions</h1>
-    {#each $executions as execution}
-        <div>
-            <h2> {execution.id}</h2>
-            <h3> {execution.ref}</h3>
-            <h4 style="color: green"> {execution.state} </h4>
-        </div>
-    {/each}
+    <div bind:this={divEl} class="h-screen w-full" />
+
+    <div class="w-1/2">
+        <h1> Executions</h1>
+        {#each $executions as execution}
+            <div>
+                <h2> {execution.id}</h2>
+                <h3> {execution.ref}</h3>
+                <h4 style="color: green"> {execution.state} </h4>
+            </div>
+        {/each}
+    </div>
+    </div>
 </div>
