@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.memory
 
-import io.hamal.backend.core.trigger.ScheduleTrigger
-import io.hamal.backend.core.trigger.Trigger
+import io.hamal.backend.repository.api.domain.trigger.ScheduleTrigger
+import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerRequestRepository
 import io.hamal.backend.repository.api.TriggerRequestRepository.Command

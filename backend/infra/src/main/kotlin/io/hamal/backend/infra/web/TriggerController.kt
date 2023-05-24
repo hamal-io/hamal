@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.web
 
-import io.hamal.backend.core.tenant.Tenant
+import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.backend.infra.usecase.query.TriggerQuery
 import io.hamal.backend.infra.usecase.request.TriggerRequest
 import io.hamal.lib.common.SnowflakeId

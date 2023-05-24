@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.memory
 
-import io.hamal.backend.core.func.Func
+import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.FuncRequestRepository.Command

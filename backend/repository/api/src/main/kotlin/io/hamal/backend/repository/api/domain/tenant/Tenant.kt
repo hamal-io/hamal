@@ -1,4 +1,4 @@
-package io.hamal.backend.core.tenant
+package io.hamal.backend.repository.api.domain.tenant
 
 import io.hamal.lib.domain.vo.TenantId
 import kotlinx.serialization.Serializable

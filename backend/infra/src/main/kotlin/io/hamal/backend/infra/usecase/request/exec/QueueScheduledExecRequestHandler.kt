@@ -1,12 +1,12 @@
 package io.hamal.backend.infra.usecase.request.exec
 
-import io.hamal.backend.core.exec.QueuedExec
-import io.hamal.backend.core.logger
-import io.hamal.backend.core.notification.ExecutionQueuedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.infra.notification.ExecutionQueuedNotification
 import io.hamal.backend.infra.usecase.request.ExecRequest.QueueScheduledExec
 import io.hamal.backend.repository.api.ExecRequestRepository
+import io.hamal.backend.repository.api.domain.exec.QueuedExec
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
+import logger
 
 class QueueScheduledExecRequestHandler(
     val notifyDomain: NotifyDomainPort,

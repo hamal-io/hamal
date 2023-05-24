@@ -13,6 +13,7 @@ apply(plugin = "io.spring.dependency-management")
 dependencies {
     implementation(project(":lib:sdk"))
 
+    implementation(project(":backend:repository:api"))
     implementation(project(":backend:repository:memory"))
     implementation(project(":backend:repository:sqlite"))
 

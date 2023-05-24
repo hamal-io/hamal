@@ -1,11 +1,11 @@
 package io.hamal.backend.infra.usecase.request.func
 
-import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.notification.FuncCreatedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.infra.notification.FuncCreatedNotification
 import io.hamal.backend.infra.usecase.request.FuncRequest.FuncCreation
 import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.createFunc
+import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 
 class CreateFuncRequestHandler(

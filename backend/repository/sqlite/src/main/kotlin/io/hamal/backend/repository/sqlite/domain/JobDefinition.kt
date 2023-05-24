@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.sqlite.domain
 
-import io.hamal.backend.core.func.Func
 import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.FuncRequestRepository.Command
 import io.hamal.backend.repository.api.FuncRequestRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.domain.ReqId

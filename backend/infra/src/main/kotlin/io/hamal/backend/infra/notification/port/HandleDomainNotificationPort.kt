@@ -1,6 +1,6 @@
 package io.hamal.backend.core.notification.port
 
-import io.hamal.backend.core.notification.DomainNotification
+import io.hamal.backend.infra.notification.DomainNotification
 import kotlin.reflect.KClass
 
 interface HandleDomainNotificationPort<out NOTIFICATION : DomainNotification> {

@@ -1,16 +1,8 @@
-package io.hamal.backend.core
+package io.hamal.backend.infra
 
+import BackendLogger
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
-
-interface BackendLogger {
-    fun trace(msg: String)
-    fun debug(msg: String)
-    fun info(msg: String)
-    fun warn(msg: String)
-    fun error(msg: String)
-    fun error(msg: String, throwable: Throwable)
-}
 
 fun <T : Any> logger(forClass: KClass<T>): BackendLogger {
     return logger(forClass.java.name)
@@ -50,18 +42,4 @@ class DefaultBackendLogger(
     override fun error(msg: String, throwable: Throwable) {
         delegate.error(msg, throwable)
     }
-}
-
-object NopLogger : BackendLogger {
-    override fun trace(msg: String) {}
-
-    override fun debug(msg: String) {}
-
-    override fun info(msg: String) {}
-
-    override fun warn(msg: String) {}
-
-    override fun error(msg: String) {}
-
-    override fun error(msg: String, throwable: Throwable) {}
 }

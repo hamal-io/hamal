@@ -1,11 +1,11 @@
 package io.hamal.backend.infra.adapter
 
-import io.hamal.backend.core.BackendLogger
-import io.hamal.backend.core.logger
+import BackendLogger
 import io.hamal.backend.core.notification.port.FlushDomainNotificationPort
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.ddd.*
+import logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent

@@ -1,7 +1,7 @@
 package io.hamal.backend.infra.usecase.query
 
-import io.hamal.backend.core.exec.Exec
-import io.hamal.backend.core.exec.StartedExec
+import io.hamal.backend.repository.api.domain.exec.Exec
+import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.lib.domain.ddd.QueryManyUseCase
 import io.hamal.lib.domain.ddd.QueryOneUseCase
 import io.hamal.lib.domain.vo.ExecId

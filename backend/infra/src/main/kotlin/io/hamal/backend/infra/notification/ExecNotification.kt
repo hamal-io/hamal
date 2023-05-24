@@ -1,6 +1,6 @@
-package io.hamal.backend.core.notification
+package io.hamal.backend.infra.notification
 
-import io.hamal.backend.core.exec.*
+import io.hamal.backend.repository.api.domain.exec.*
 import io.hamal.lib.domain.Shard
 import kotlinx.serialization.Serializable
 

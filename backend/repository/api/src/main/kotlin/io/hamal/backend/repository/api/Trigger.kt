@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.trigger.Trigger
+import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.backend.repository.api.TriggerRequestRepository.Command.ScheduleTriggerToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard

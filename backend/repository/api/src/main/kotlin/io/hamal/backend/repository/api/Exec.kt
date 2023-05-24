@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.core.exec.*
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.repository.api.domain.trigger.InvokedTrigger
+import io.hamal.backend.repository.api.domain.exec.*
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code

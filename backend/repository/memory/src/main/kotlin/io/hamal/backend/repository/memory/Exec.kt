@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.memory
 
-import io.hamal.backend.core.exec.*
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ExecRequestRepository
+import io.hamal.backend.repository.api.domain.exec.*
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.CompletedAt
 import io.hamal.lib.domain.vo.ExecId

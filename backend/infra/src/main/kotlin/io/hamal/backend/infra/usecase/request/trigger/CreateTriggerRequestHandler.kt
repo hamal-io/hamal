@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.usecase.request.trigger
 
-import io.hamal.backend.core.notification.TriggerCreatedNotification
 import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.core.trigger.Trigger
+import io.hamal.backend.infra.notification.TriggerCreatedNotification
+import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.backend.infra.usecase.request.TriggerRequest.TriggerCreation
 import io.hamal.backend.repository.api.TriggerRequestRepository
 import io.hamal.backend.repository.api.createScheduleTrigger

@@ -1,9 +1,9 @@
 package io.hamal.backend.infra.usecase.request.adhoc
 
-import io.hamal.backend.core.func.Func
-import io.hamal.backend.core.notification.AdhocTriggerInvokedNotification
+import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.core.trigger.AdhocTrigger
+import io.hamal.backend.infra.notification.AdhocTriggerInvokedNotification
+import io.hamal.backend.repository.api.domain.trigger.AdhocTrigger
 import io.hamal.backend.infra.usecase.request.AdhocRequest.ExecuteAdhoc
 import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.createFunc

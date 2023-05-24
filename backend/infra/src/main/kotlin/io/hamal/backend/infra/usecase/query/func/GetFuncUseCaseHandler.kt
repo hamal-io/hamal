@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.usecase.query.func
 
-import io.hamal.backend.core.func.Func
+import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.infra.usecase.query.FuncQuery.GetFunc
 import io.hamal.lib.domain.ddd.QueryOneUseCaseHandler

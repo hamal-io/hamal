@@ -1,6 +1,6 @@
-package io.hamal.backend.core.exec
+package io.hamal.backend.repository.api.domain.exec
 
-import io.hamal.backend.core.trigger.InvokedTrigger
+import io.hamal.backend.repository.api.domain.trigger.InvokedTrigger
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
