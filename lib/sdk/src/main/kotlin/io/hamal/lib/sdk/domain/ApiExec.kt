@@ -13,7 +13,7 @@ data class ApiSimpleExecutionModel(
 
 @Serializable
 data class ApiSimpleExecutionModels(
-    val executions: List<ApiSimpleExecutionModel>
+    val execs: List<ApiSimpleExecutionModel>
 )
 
 

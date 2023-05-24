@@ -21,13 +21,13 @@ class DefaultExecService : ExecService {
 
     override fun complete(execId: ExecId) {
         HttpTemplate("http://localhost:8084")
-            .post("/v1/executions/${execId.value.value}/complete")
+            .post("/v1/execs/${execId.value.value}/complete")
             .execute()
     }
 
     override fun fail(execId: ExecId) {
         HttpTemplate("http://localhost:8084")
-            .post("/v1/executions/${execId.value.value}/fail")
+            .post("/v1/execs/${execId.value.value}/fail")
             .execute()
     }
 

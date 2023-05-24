@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {executions} from "./store";
+    import {execs} from "./store";
     import type monaco from 'monaco-editor';
     import { onMount } from 'svelte';
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -54,11 +54,11 @@
     onMount(getExecutions);
 
     async function getExecutions() {
-        fetch("http://localhost:8084/v1/executions?limit=100")
+        fetch("http://localhost:8084/v1/execs?limit=100")
             .then(response => response.json())
             .then(data => {
-                console.log(data.executions);
-                executions.set(data.executions);
+                console.log(data.execs);
+                execs.set(data.execs);
             }).catch(error => {
             console.log(error);
             return [];
@@ -86,23 +86,24 @@
 
 <div class="w-full">
     <div class="columns-2">
-    <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            on:click={adhoc}
-    >
-        Execute
-    </button>
+        <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                on:click={adhoc}
+        >
+            Execute
+        </button>
 
-    <div bind:this={divEl} class="h-screen w-full" />
+        <div bind:this={divEl} class="h-screen w-full" />
 
-    <div class="w-1/2">
-        <h1> Executions</h1>
-        {#each $executions as execution}
-            <div>
-                <h2> {execution.id}</h2>
-                <h4 style="color: green"> {execution.state} </h4>
-            </div>
-        {/each}
-    </div>
+        <div class="w-1/2">
+            <h1> Executions</h1>
+            {#each $execs as execution}
+                <div>
+                    <h2> {execution.id}</h2>
+                    <h3> {execution.ref}</h3>
+                    <h4 style="color: green"> {execution.state} </h4>
+                </div>
+            {/each}
+        </div>
     </div>
 </div>

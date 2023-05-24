@@ -23,7 +23,7 @@ open class ExecController(
     @Autowired val request: InvokeRequestOneUseCasePort
 ) {
 
-    @GetMapping("/v1/executions/{execId}")
+    @GetMapping("/v1/execs/{execId}")
     fun get(
         @PathVariable("execId") stringExecId: String // FIXME be able to use value objects directly here
     ): ResponseEntity<ApiDetailExecutionModel> {
@@ -40,7 +40,7 @@ open class ExecController(
     }
 
 
-    @GetMapping("/v1/executions")
+    @GetMapping("/v1/execs")
     fun query(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") stringExecId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
@@ -63,7 +63,7 @@ open class ExecController(
         )
     }
 
-    @PostMapping("/v1/executions/{execId}/complete")
+    @PostMapping("/v1/execs/{execId}/complete")
     fun completeExec(
         @PathVariable("execId") stringExecId: String // FIXME be able to use value objects directly here
     ) {
@@ -80,7 +80,7 @@ open class ExecController(
         )
     }
 
-    @PostMapping("/v1/executions/{execId}/fail")
+    @PostMapping("/v1/execs/{execId}/fail")
     fun failExec(
         @PathVariable("execId") stringExecId: String
     ) {

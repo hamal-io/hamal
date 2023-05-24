@@ -1,10 +1,11 @@
 <script>
-    import Adhoc from "@/Page/Adhoc/Adhoc.svelte";
-    import Dashboard from "@/Page/Dashboard/Dashboard.svelte";
-    import NotFound from "@/Page/NotFound/NotFound.svelte";
-    import Function from "@/Page/Function/Function.svelte";
+    import AdhocPage from "./Page/Adhoc/Adhoc.svelte";
+    import Dashboard from "./Page/Dashboard/Dashboard.svelte";
+    import NotFound from "./Page/NotFound/NotFound.svelte";
+    import ListFuncPage from "./Page/Func/Func.svelte";
+    import ListExecPage from "./Page/Exec/Exec.svelte";
 
-    let currentPage = "function"
+    let currentPage = "dashboard"
 
 </script>
 
@@ -36,7 +37,7 @@
                 Adhoc
             </button>
             <button class=" block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    on:click={()=>{currentPage = 'execs'}}>
+                    on:click={()=>{currentPage = 'exec'}}>
                 Exec
             </button>
             <button class=" block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
@@ -52,7 +53,7 @@
                 Func
             </button>
             <button class=" block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    on:click={()=>{currentPage = 'adhoc'}}>
+                    on:click={()=>{currentPage = 'agent'}}>
                 Agent
             </button>
 
@@ -89,15 +90,17 @@
 
 </nav>
 
-<main class="main -ml-48 flex flex-grow flex-col p-4 transition-all duration-150 ease-in md:ml-0">
+<main class="main   -ml-48 flex flex-grow flex-col p-4 transition-all duration-150 ease-in md:ml-0">
     <div class="flex h-full ">
 
         {#if currentPage === 'dashboard'}
             <Dashboard/>
         {:else if currentPage === 'adhoc'}
-            <Adhoc/>
+            <AdhocPage/>
+        {:else if currentPage === 'exec'}
+            <ListExecPage/>
         {:else if currentPage === 'func'}
-            <Function/>
+            <ListFuncPage/>
         {:else}
             <NotFound/>
         {/if}
