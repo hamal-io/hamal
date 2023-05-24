@@ -1,7 +1,7 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.infra.AgentConfig
-import io.hamal.backend.infra.BackendConfig
+import io.hamal.backend.BackendConfig
 import io.hamal.frontend.FrontendConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
     if (isEnable(ctx, "backend")) {
         applicationBuilder
             .parent(parent)
-            .child(BackendConfig::class.java)
+            .child(io.hamal.backend.BackendConfig::class.java)
             .web(WebApplicationType.SERVLET)
             .properties("server.port=8084")
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
