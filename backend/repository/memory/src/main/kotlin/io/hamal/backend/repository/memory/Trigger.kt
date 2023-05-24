@@ -3,9 +3,10 @@ package io.hamal.backend.repository.memory
 import io.hamal.backend.core.trigger.Trigger
 import io.hamal.backend.repository.api.TriggerRepository
 import io.hamal.backend.repository.api.TriggerRepository.Command
-import io.hamal.backend.repository.api.TriggerRepository.Command.ManualTriggerToCreate
+import io.hamal.backend.repository.api.TriggerRepository.Command.ScheduleTriggerToCreate
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerName
 
 object MemoryTriggerRepository : TriggerRepository {
 
@@ -24,7 +25,7 @@ object MemoryTriggerRepository : TriggerRepository {
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->
                 when (cmd) {
-                    is ManualTriggerToCreate -> createManualTrigger(cmd)
+                    is ScheduleTriggerToCreate -> createScheduleTrigger(cmd)
                     else -> TODO("$cmd not supported")
                 }
             }
@@ -35,22 +36,19 @@ object MemoryTriggerRepository : TriggerRepository {
 }
 
 
-internal fun MemoryTriggerRepository.createManualTrigger(toCreate: ManualTriggerToCreate) {
+internal fun MemoryTriggerRepository.createScheduleTrigger(toCreate: ScheduleTriggerToCreate) {
     triggers[toCreate.id] = TriggerEntity(
         id = toCreate.id,
-        reference = toCreate.reference,
+        name = toCreate.name,
     )
 }
 
 
 internal data class TriggerEntity(
     val id: TriggerId,
-    var reference: TriggerName
+    var name: TriggerName
 ) {
     fun toModel(): Trigger {
-        return Trigger.ManualTrigger(
-            id = this.id,
-            reference = this.reference,
-        )
+        TODO()
     }
 }

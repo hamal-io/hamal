@@ -41,7 +41,6 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         invokeUseCasePort: InvokeUseCasePort
     ) = createDomainNotificationConsumerPort
         .register(AdhocTriggerInvokedNotification::class, AdhocTriggerInvokedHandler(invokeUseCasePort))
-        .register(ManualTriggerInvokedNotification::class, ManualTriggerInvokedHandler(invokeUseCasePort))
         .register(ExecPlannedNotification::class, ExecPlannedHandler(invokeUseCasePort))
         .register(ExecScheduledNotification::class, ExecScheduledHandler(invokeUseCasePort))
         .register(ExecutionQueuedNotification::class, ExecQueuedHandler())
@@ -53,20 +52,6 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     private lateinit var request: InvokeRequestOneUseCasePort
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-//        val jobDef = request(
-//            JobDefinitionRequest.JobDefinitionCreation(
-//                requestId = RequestId(10000),
-//                shard = Shard(0)
-//            )
-//        )
-//        request(
-//            ManualTriggerInvocation(
-//                requestId = RequestId(1000),
-//                shard = Shard(0),
-//                triggerId = jobDef.triggers.first().id
-//            )
-//        )
-//        println(jobDef)
     }
 
 }

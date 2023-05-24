@@ -37,14 +37,3 @@ internal fun CreateFuncRequestHandler.notifyFuncCreated(func: Func) {
         )
     )
 }
-
-//internal fun CreateFuncRequestHandler.notifyTriggersCreated(func: Func) {
-//    func.triggers.forEach { trigger ->
-//        notifyDomain.invoke(
-//            ManualTriggerCreatedNotification(
-//                shard = func.shard,
-//                id = trigger.id
-//            )
-//        )
-//    }
-//}

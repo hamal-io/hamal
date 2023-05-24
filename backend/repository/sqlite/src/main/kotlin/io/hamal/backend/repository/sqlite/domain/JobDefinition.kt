@@ -115,7 +115,6 @@ class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncRequest
 //                commands.sortedBy { it.order }.forEach { command ->
 //                    when (command) {
 //                        is JobDefinitionToInsert -> insertJobDefinition(requestId, command)
-//                        is ManualTriggerToInsert -> println("Insert Trigger: $command")
 //                        else -> TODO("Command not supported yet $command")
 //                    }
 //                }

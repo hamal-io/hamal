@@ -7,7 +7,6 @@ import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.base.referenceFromId
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
@@ -67,7 +66,7 @@ fun FuncRequestRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): F
     commands.add(
         FuncToCreate(
             funcId = result,
-            name = referenceFromId(result, ::FuncName),
+            name = FuncName("TBD"),
             code = Code("")
         ).apply(block)
     )

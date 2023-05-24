@@ -1,12 +1,11 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.TriggerRepository.Command.ManualTriggerToCreate
+import io.hamal.backend.repository.api.TriggerRepository.Command.ScheduleTriggerToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
-import io.hamal.lib.domain.vo.base.referenceFromId
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
@@ -34,9 +33,9 @@ interface TriggerRepository {
         val order: Order
         val id: TriggerId
 
-        data class ManualTriggerToCreate(
+        data class ScheduleTriggerToCreate(
             override val id: TriggerId,
-            var reference: TriggerName,
+            var name: TriggerName,
             //inputs
             //secrets
         ) : Command {
@@ -55,14 +54,14 @@ interface TriggerRepository {
     }
 }
 
-fun TriggerRepository.Recorder.createManualTrigger(
-    block: ManualTriggerToCreate.() -> Unit
+fun TriggerRepository.Recorder.createScheduleTrigger(
+    block: ScheduleTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)
     commands.add(
-        ManualTriggerToCreate(
+        ScheduleTriggerToCreate(
             id = result,
-            reference = referenceFromId(result, ::TriggerName)
+            name = TriggerName("TBD")
         ).apply(block)
     )
     return result

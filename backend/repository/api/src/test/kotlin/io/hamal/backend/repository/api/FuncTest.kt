@@ -19,28 +19,7 @@ class RecorderTest {
     @DisplayName("createFunc()")
     inner class CreateFuncTest {
 
-        @Test
-        fun `Records creation of ExecDefinition with default parameters`() {
-            val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
-
-            val resultId = testInstance.createFunc {}
-            assertThat(resultId, equalTo(FuncId(SnowflakeId(2199023255552))))
-
-            val commands = testInstance.commands()
-            assertThat(
-                commands, equalTo(
-                    listOf(
-                        FuncToCreate(
-                            funcId = FuncId(SnowflakeId(2199023255552)),
-                            name = FuncName("2199023255552-ref"),
-                            code = Code("")
-                        )
-                    )
-                )
-            )
-        }
-
-        @Test
+           @Test
         fun `Records creation of func with overwritten parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
