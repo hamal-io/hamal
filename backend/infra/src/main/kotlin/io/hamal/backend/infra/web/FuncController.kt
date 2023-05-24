@@ -39,7 +39,7 @@ open class FuncController(
     }
 
     @GetMapping("/v1/funcs")
-    fun listFunctions(
+    fun listFunc(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") stringFuncId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListFuncResponse> {

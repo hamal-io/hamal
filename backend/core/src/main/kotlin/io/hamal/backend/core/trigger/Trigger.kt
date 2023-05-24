@@ -7,11 +7,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Trigger : DomainObject<TriggerId> {
-
     abstract val name: TriggerName
-
-
+    abstract val code: Code
 }
+
+@Serializable
+class ScheduleTrigger(
+    override val id: TriggerId,
+    override val name: TriggerName,
+    override val code: Code
+) : Trigger()
 
 @Serializable
 sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {

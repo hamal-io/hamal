@@ -1,13 +1,11 @@
 package io.hamal.backend.infra.config
 
-import io.hamal.backend.repository.api.ExecQueryRepository
-import io.hamal.backend.repository.api.ExecRequestRepository
-import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.FuncRequestRepository
+import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.memory.MemoryExecRepository
 import io.hamal.backend.repository.memory.MemoryFuncRepository
+import io.hamal.backend.repository.memory.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.log.DefaultBrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -31,4 +29,10 @@ open class RepositoryConfig {
 
     @Bean
     open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
+
+    @Bean
+    open fun triggerRequestRepository(): TriggerRequestRepository = MemoryTriggerRepository
+
+    @Bean
+    open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
 }

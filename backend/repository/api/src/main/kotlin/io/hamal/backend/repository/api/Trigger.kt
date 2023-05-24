@@ -1,16 +1,17 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.core.trigger.Trigger
-import io.hamal.backend.repository.api.TriggerRepository.Command.ScheduleTriggerToCreate
+import io.hamal.backend.repository.api.TriggerRequestRepository.Command.ScheduleTriggerToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
 
-interface TriggerRepository {
+interface TriggerRequestRepository {
     fun get(id: TriggerId): Trigger
 
     fun execute(reqId: ReqId, commands: List<Command>): List<Trigger>
@@ -36,6 +37,7 @@ interface TriggerRepository {
         data class ScheduleTriggerToCreate(
             override val id: TriggerId,
             var name: TriggerName,
+            var code: Code
             //inputs
             //secrets
         ) : Command {
@@ -54,14 +56,22 @@ interface TriggerRepository {
     }
 }
 
-fun TriggerRepository.Recorder.createScheduleTrigger(
+interface TriggerQueryRepository {
+    fun find(TriggerId: TriggerId): Trigger?
+
+    fun list(afterId: TriggerId, limit: Int): List<Trigger>
+}
+
+
+fun TriggerRequestRepository.Recorder.createScheduleTrigger(
     block: ScheduleTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)
     commands.add(
         ScheduleTriggerToCreate(
             id = result,
-            name = TriggerName("TBD")
+            name = TriggerName("TBD"),
+            code = Code("")
         ).apply(block)
     )
     return result
