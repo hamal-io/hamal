@@ -3,7 +3,7 @@ package io.hamal.backend.infra.handler
 import io.hamal.backend.core.logger
 import io.hamal.backend.core.notification.AdhocTriggerInvokedNotification
 import io.hamal.backend.core.notification.port.HandleDomainNotificationPort
-import io.hamal.backend.usecase.request.ExecRequest
+import io.hamal.backend.infra.usecase.request.ExecRequest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 

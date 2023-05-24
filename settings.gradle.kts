@@ -43,7 +43,6 @@ include(":lib:sdk")
 include(":lib:web3")
 
 include(":backend")
-include(":backend:usecase")
 include(":backend:core")
 include(":backend:infra")
 include(":backend:repository:api")

@@ -1,6 +1,6 @@
 package io.hamal.backend.infra.web
 
-import io.hamal.backend.usecase.request.AdhocRequest
+import io.hamal.backend.infra.usecase.request.AdhocRequest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort

@@ -1,12 +1,10 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.infra.usecase.query.exec.ListExecsUseCaseHandler
+import io.hamal.backend.infra.usecase.request.exec.*
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ExecRequestRepository
-import io.hamal.backend.usecase.query.exec.GetExecUseCaseHandler
-import io.hamal.backend.usecase.query.exec.GetStartedExecUseCaseHandler
-import io.hamal.backend.usecase.query.exec.ListExecsUseCaseHandler
-import io.hamal.backend.usecase.request.exec.*
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -66,7 +64,7 @@ open class QueryExecConfig {
     @Bean
     open fun getStartedExecUseCaseHandler(
         execQueryRepository: ExecQueryRepository
-    ) = GetStartedExecUseCaseHandler(
+    ) = io.hamal.backend.infra.usecase.query.exec.GetStartedExecUseCaseHandler(
         execQueryRepository
     )
 
@@ -80,7 +78,7 @@ open class QueryExecConfig {
     @Bean
     open fun getExecUseCaseHandler(
         execQueryRepository: ExecQueryRepository
-    ) = GetExecUseCaseHandler(
+    ) = io.hamal.backend.infra.usecase.query.exec.GetExecUseCaseHandler(
         execQueryRepository
     )
 

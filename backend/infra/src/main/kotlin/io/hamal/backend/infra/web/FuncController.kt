@@ -2,8 +2,8 @@ package io.hamal.backend.infra.web
 
 import io.hamal.backend.core.func.Func
 import io.hamal.backend.core.tenant.Tenant
-import io.hamal.backend.usecase.query.FuncQuery
-import io.hamal.backend.usecase.request.FuncRequest
+import io.hamal.backend.infra.usecase.query.FuncQuery
+import io.hamal.backend.infra.usecase.request.FuncRequest
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard

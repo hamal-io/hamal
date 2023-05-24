@@ -1,11 +1,11 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.infra.usecase.query.func.GetFuncUseCaseHandler
+import io.hamal.backend.infra.usecase.query.func.ListFuncUseCaseHandler
+import io.hamal.backend.infra.usecase.request.func.CreateFuncRequestHandler
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.FuncRequestRepository
-import io.hamal.backend.usecase.query.func.GetFuncUseCaseHandler
-import io.hamal.backend.usecase.query.func.ListFuncUseCaseHandler
-import io.hamal.backend.usecase.request.func.CreateFuncRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

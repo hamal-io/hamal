@@ -1,8 +1,8 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.infra.usecase.request.adhoc.ExecuteAdhocRequestHandler
 import io.hamal.backend.repository.api.FuncRequestRepository
-import io.hamal.backend.usecase.request.adhoc.ExecuteAdhocRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

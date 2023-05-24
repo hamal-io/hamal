@@ -1,11 +1,11 @@
 package io.hamal.backend.infra.config.usecase
 
 import io.hamal.backend.core.notification.port.NotifyDomainPort
+import io.hamal.backend.infra.usecase.query.trigger.GetTriggerUseCaseHandler
+import io.hamal.backend.infra.usecase.query.trigger.ListTriggerUseCaseHandler
+import io.hamal.backend.infra.usecase.request.trigger.CreateTriggerRequestHandler
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerRequestRepository
-import io.hamal.backend.usecase.query.trigger.GetTriggerUseCaseHandler
-import io.hamal.backend.usecase.query.trigger.ListTriggerUseCaseHandler
-import io.hamal.backend.usecase.request.trigger.CreateTriggerRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
