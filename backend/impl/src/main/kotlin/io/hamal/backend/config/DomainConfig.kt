@@ -1,8 +1,8 @@
 package io.hamal.backend.config
 
-import io.hamal.backend.adapter.CreateDomainNotificationProcessorPort
-import io.hamal.backend.adapter.DefaultDomainNotificationProcessor
-import io.hamal.backend.adapter.DomainNotificationAdapter
+import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.event.service.DefaultEventProcessor
+import io.hamal.backend.event.service.EventProcessorFactory
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
@@ -19,7 +19,7 @@ open class DomainConfig {
     @Bean
     open fun domainNotificationAdapter(
         brokerRepository: BrokerRepository
-    ) = DomainNotificationAdapter(
+    ) = EventEmitter(
         brokerRepository
     )
 
@@ -27,7 +27,7 @@ open class DomainConfig {
     open fun createDomainNotificationConsumerPort(
         taskScheduler: ThreadPoolTaskScheduler,
         brokerRepository: BrokerRepository
-    ): CreateDomainNotificationProcessorPort = DefaultDomainNotificationProcessor(
+    ): EventProcessorFactory = DefaultEventProcessor(
         taskScheduler,
         brokerRepository
     )

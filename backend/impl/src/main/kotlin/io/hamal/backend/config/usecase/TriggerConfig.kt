@@ -1,11 +1,11 @@
 package io.hamal.backend.config.usecase
 
-import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.usecase.query.trigger.GetTriggerUseCaseHandler
-import io.hamal.backend.usecase.query.trigger.ListTriggerUseCaseHandler
-import io.hamal.backend.usecase.request.trigger.CreateTriggerRequestHandler
+import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerRequestRepository
+import io.hamal.backend.usecase.handler.trigger.GetTriggerUseCaseHandler
+import io.hamal.backend.usecase.handler.trigger.ListTriggerUseCaseHandler
+import io.hamal.backend.usecase.handler.trigger.CreateTriggerRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Configuration
 open class RequestTriggerConfig {
     @Bean
     open fun createTriggerRequestHandler(
-        notifyDomainPort: NotifyDomainPort,
+        eventEmitter: EventEmitter,
         triggerRequestRepository: TriggerRequestRepository
     ) = CreateTriggerRequestHandler(
-        notifyDomainPort,
+        eventEmitter,
         triggerRequestRepository
     )
 

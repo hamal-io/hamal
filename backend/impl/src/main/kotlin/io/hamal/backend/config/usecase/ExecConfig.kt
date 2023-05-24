@@ -1,10 +1,11 @@
 package io.hamal.backend.config.usecase
 
-import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.usecase.query.exec.ListExecsUseCaseHandler
-import io.hamal.backend.usecase.request.exec.*
+import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ExecRequestRepository
+import io.hamal.backend.usecase.handler.exec.*
+import io.hamal.backend.usecase.handler.exec.ListExecsUseCaseHandler
+import io.hamal.backend.usecase.request.exec.*
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,46 +16,46 @@ open class RequestExecConfig {
     open fun planExecRequestHandler(
         generateDomainIdPort: GenerateDomainIdPort,
         execRequestRepository: ExecRequestRepository,
-        notifyDomainPort: NotifyDomainPort
+       eventEmitter: EventEmitter
     ) = PlanExecRequestHandler(
         generateDomainIdPort,
         execRequestRepository,
-        notifyDomainPort
+        eventEmitter
     )
 
     @Bean
     open fun schedulePlannedExecRequestHandler(
-        notifyDomainPort: NotifyDomainPort,
+        eventEmitter: EventEmitter,
         execRequestRepository: ExecRequestRepository
     ) = SchedulePlannedExecRequestHandler(
-        notifyDomainPort,
+        eventEmitter,
         execRequestRepository
     )
 
     @Bean
     open fun queueScheduledExecRequestHandler(
-        notifyDomainPort: NotifyDomainPort,
+        eventEmitter: EventEmitter,
         execRequestRepository: ExecRequestRepository
     ) = QueueScheduledExecRequestHandler(
-        notifyDomainPort,
+        eventEmitter,
         execRequestRepository
     )
 
     @Bean
     open fun dequeueExecRequestHandler(
-        notifyDomainPort: NotifyDomainPort,
+        eventEmitter: EventEmitter,
         execRequestRepository: ExecRequestRepository
     ) = DequeueExecRequestHandler(
-        notifyDomainPort,
+        eventEmitter,
         execRequestRepository
     )
 
     @Bean
     open fun completeExecRequestHandler(
-        notifyDomainPort: NotifyDomainPort,
+        eventEmitter: EventEmitter,
         execRequestRepository: ExecRequestRepository
     ) = CompleteStartedExecRequestHandler(
-        notifyDomainPort,
+        eventEmitter,
         execRequestRepository
     )
 }
@@ -64,7 +65,7 @@ open class QueryExecConfig {
     @Bean
     open fun getStartedExecUseCaseHandler(
         execQueryRepository: ExecQueryRepository
-    ) = io.hamal.backend.usecase.query.exec.GetStartedExecUseCaseHandler(
+    ) = GetStartedExecUseCaseHandler(
         execQueryRepository
     )
 
@@ -78,7 +79,7 @@ open class QueryExecConfig {
     @Bean
     open fun getExecUseCaseHandler(
         execQueryRepository: ExecQueryRepository
-    ) = io.hamal.backend.usecase.query.exec.GetExecUseCaseHandler(
+    ) = GetExecUseCaseHandler(
         execQueryRepository
     )
 

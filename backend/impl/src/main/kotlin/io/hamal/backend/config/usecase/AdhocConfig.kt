@@ -1,8 +1,8 @@
 package io.hamal.backend.config.usecase
 
-import io.hamal.backend.core.notification.port.NotifyDomainPort
-import io.hamal.backend.usecase.request.adhoc.ExecuteAdhocRequestHandler
+import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.FuncRequestRepository
+import io.hamal.backend.usecase.handler.adhoc.ExecuteAdhocRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -11,9 +11,9 @@ open class AdhocExecConfig {
     @Bean
     open fun executeAdhocExecRequestHandler(
         funcRequestRepository: FuncRequestRepository,
-        notifyDomainPort: NotifyDomainPort
+        eventEmitter: EventEmitter
     ) = ExecuteAdhocRequestHandler(
-        notifyDomainPort,
+        eventEmitter,
         funcRequestRepository
     )
 }

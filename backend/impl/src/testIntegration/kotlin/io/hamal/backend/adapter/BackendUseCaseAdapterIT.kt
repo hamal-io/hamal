@@ -1,5 +1,6 @@
 package io.hamal.backend.adapter
 
+import io.hamal.backend.BackendUseCaseRegistryAdapter
 import io.hamal.backend.adapter.TestUseCasesConfig.*
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.DomainObject

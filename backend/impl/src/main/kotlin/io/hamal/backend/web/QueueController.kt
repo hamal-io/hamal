@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.usecase.request.ExecRequest
+import io.hamal.backend.usecase.ExecRequestUseCase
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestManyUseCasePort
@@ -21,7 +21,7 @@ class QueueController
     fun dequeueExec(): ApiAgentRequests {
 
         val result = requestMany.invoke(
-            ExecRequest.DequeueExec(
+            ExecRequestUseCase.DequeueExec(
                 reqId = ReqId(1111),
                 shard = Shard(0)
             )

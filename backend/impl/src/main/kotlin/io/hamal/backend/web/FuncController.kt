@@ -2,8 +2,8 @@ package io.hamal.backend.web
 
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.usecase.query.FuncQuery
-import io.hamal.backend.usecase.request.FuncRequest
+import io.hamal.backend.usecase.FuncQueryUseCase
+import io.hamal.backend.usecase.FuncRequestUseCase
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -29,7 +29,7 @@ open class FuncController(
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
         return request(
-            FuncRequest.FuncCreation(
+            FuncRequestUseCase.FuncCreation(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,
@@ -44,7 +44,7 @@ open class FuncController(
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListFuncResponse> {
         val result = queryMany(
-            FuncQuery.ListFunc(
+            FuncQueryUseCase.ListFunc(
                 afterId = FuncId(SnowflakeId(stringFuncId.toLong())),
                 limit = limit
             )

@@ -1,8 +1,10 @@
 package io.hamal.backend
 
-import io.hamal.backend.adapter.CreateDomainNotificationProcessorPort
-import io.hamal.backend.handler.*
-import io.hamal.backend.notification.*
+import io.hamal.backend.event.*
+import io.hamal.backend.event.handler.*
+import io.hamal.backend.event.handler.adhoc.AdhocTriggerInvokedHandler
+import io.hamal.backend.event.handler.exec.*
+import io.hamal.backend.event.service.EventProcessorFactory
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.ddd.InvokeUseCasePort
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,15 +39,15 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
 
     @Bean
     open fun domainNotificationConsumer(
-        createDomainNotificationConsumerPort: CreateDomainNotificationProcessorPort,
+        eventProcessorFactory: EventProcessorFactory,
         invokeUseCasePort: InvokeUseCasePort
-    ) = createDomainNotificationConsumerPort
-        .register(AdhocTriggerInvokedNotification::class, AdhocTriggerInvokedHandler(invokeUseCasePort))
+    ) = eventProcessorFactory
+        .register(AdhocTriggerInvokedEvent::class, AdhocTriggerInvokedHandler(invokeUseCasePort))
         .register(ExecPlannedNotification::class, ExecPlannedHandler(invokeUseCasePort))
-        .register(ExecScheduledNotification::class, ExecScheduledHandler(invokeUseCasePort))
-        .register(ExecutionQueuedNotification::class, ExecQueuedHandler())
-        .register(ExecutionCompletedNotification::class, ExecCompletedHandler())
-        .register(ExecutionFailedNotification::class, ExecFailedHandler())
+        .register(ExecScheduledEvent::class, ExecScheduledHandler(invokeUseCasePort))
+        .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
+        .register(ExecutionCompletedEvent::class, ExecCompletedHandler())
+        .register(ExecutionFailedEvent::class, ExecFailedHandler())
         .create()
 
     @Autowired

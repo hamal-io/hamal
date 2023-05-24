@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.usecase.request.AdhocRequest
+import io.hamal.backend.usecase.AdhocRequestUseCase
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
@@ -21,7 +21,7 @@ open class AdhocController(
     @PostMapping("/v1/adhoc")
     fun adhoc(@RequestBody script: String): ResponseEntity<String> {
         request(
-            AdhocRequest.ExecuteAdhoc(
+            AdhocRequestUseCase.ExecuteAdhoc(
                 reqId = ReqId(counter++),
                 shard = Shard(2),
                 code = Code(script)
