@@ -10,6 +10,7 @@ import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeQueryManyUseCasePort
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 import io.hamal.lib.sdk.domain.ApiListFuncResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -25,10 +26,14 @@ open class FuncController(
         @RequestAttribute shard: Shard,
         @RequestAttribute reqId: ReqId,
         @RequestAttribute tenant: Tenant,
+        @RequestBody req: ApiCreateFuncRequest
     ): Func {
         return request(
             FuncRequest.FuncCreation(
-                reqId, shard
+                reqId = reqId,
+                shard = shard,
+                name = req.name,
+                code = req.code
             )
         )
     }

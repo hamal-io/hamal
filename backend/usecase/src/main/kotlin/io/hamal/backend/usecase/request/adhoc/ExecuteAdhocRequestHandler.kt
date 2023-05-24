@@ -40,7 +40,7 @@ class ExecuteAdhocRequestHandler(
 internal fun ExecuteAdhocRequestHandler.createFunc(useCase: ExecuteAdhoc): Func {
     return funcRepository.request(useCase.reqId) {
         val funcId = createFunc {
-            ref = FuncName("func-ref")
+            name = FuncName("func-ref")
             code = useCase.code
         }
     }.first()

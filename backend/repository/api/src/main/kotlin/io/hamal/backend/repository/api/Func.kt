@@ -38,7 +38,7 @@ interface FuncRequestRepository {
 
         data class FuncToCreate(
             override val funcId: FuncId,
-            var ref: FuncName,
+            var name: FuncName,
             var code: Code
         ) : Command {
             override val order = Order.InsertPrimary
@@ -67,7 +67,7 @@ fun FuncRequestRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): F
     commands.add(
         FuncToCreate(
             funcId = result,
-            ref = referenceFromId(result, ::FuncName),
+            name = referenceFromId(result, ::FuncName),
             code = Code("")
         ).apply(block)
     )

@@ -53,12 +53,12 @@ tasks.register<YarnTask>("yarnDev") {
     yarnCommand.set(listOf("run", "dev"))
 }
 
-tasks.build {
-    dependsOn(yarnBuild)
-}
-
-tasks.clean{
-    dependsOn(yarnClean)
-}
+//tasks.build {
+//    dependsOn(yarnBuild)
+//}
+//
+//tasks.clean{
+//    dependsOn(yarnClean)
+//}
 
 apply(plugin = "io.spring.dependency-management")

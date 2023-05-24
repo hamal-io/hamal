@@ -70,7 +70,11 @@
                 'Content-Type': 'application/json'
             },
             method: "POST",
-            body: editor.getValue()
+            body: JSON.stringify({
+                    name: "name123",
+                    code: editor.getValue()
+                }
+            )
         })
             .then(response => getFuncs())
             .catch(error => {

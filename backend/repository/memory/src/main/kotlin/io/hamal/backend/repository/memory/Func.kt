@@ -55,7 +55,7 @@ object MemoryFuncRepository : FuncRequestRepository, FuncQueryRepository {
 internal fun MemoryFuncRepository.createFunc(toCreate: FuncToCreate) {
     funcs[toCreate.funcId] = FuncEntity(
         id = toCreate.funcId,
-        reference = toCreate.ref,
+        reference = toCreate.name,
         code = toCreate.code
     )
 }

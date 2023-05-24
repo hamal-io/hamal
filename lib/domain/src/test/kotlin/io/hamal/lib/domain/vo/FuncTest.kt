@@ -108,7 +108,7 @@ class FuncRefTest {
 
     @Test
     fun `toString override`() {
-        assertThat(FuncName("some-ref").toString(), equalTo("FuncRef(some-ref)"))
+        assertThat(FuncName("some-ref").toString(), equalTo("FuncName(some-ref)"))
     }
 
     @TestFactory

@@ -106,11 +106,11 @@ class TriggerRefTest {
 
     @Test
     fun `toString override`() {
-        assertThat(TriggerName("some-ref").toString(), equalTo("TriggerRef(some-ref)"))
+        assertThat(TriggerName("some-name").toString(), equalTo("TriggerName(some-name)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TriggerName("some-ref"), "\"some-ref\"")
+    fun Serialization() = generateTestCases(TriggerName("some-name"), "\"some-name\"")
 }
 
 @DisplayName("CauseId")
@@ -157,7 +157,7 @@ class InvokedTriggerIdTest {
 
     @Test
     fun `toString override`() {
-        assertThat(InvokedTriggerId(SnowflakeId(123)).toString(), equalTo("CauseId(123)"))
+        assertThat(InvokedTriggerId(SnowflakeId(123)).toString(), equalTo("InvokedTriggerId(123)"))
     }
 
     @TestFactory

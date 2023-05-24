@@ -32,7 +32,7 @@ class RecorderTest {
                     listOf(
                         FuncToCreate(
                             funcId = FuncId(SnowflakeId(2199023255552)),
-                            ref = FuncName("2199023255552-ref"),
+                            name = FuncName("2199023255552-ref"),
                             code = Code("")
                         )
                     )
@@ -45,7 +45,7 @@ class RecorderTest {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 
             val resultId = testInstance.createFunc {
-                ref = FuncName("some-func-ref")
+                name = FuncName("some-func-ref")
                 code = Code("local hamal_rocks = true")
             }
             assertThat(resultId, equalTo(FuncId(SnowflakeId(2199023255552))))
@@ -56,7 +56,7 @@ class RecorderTest {
                     listOf(
                         FuncToCreate(
                             funcId = FuncId(SnowflakeId(2199023255552)),
-                            ref = FuncName("some-func-ref"),
+                            name = FuncName("some-func-ref"),
                             Code("local hamal_rocks = true")
                         )
                     )

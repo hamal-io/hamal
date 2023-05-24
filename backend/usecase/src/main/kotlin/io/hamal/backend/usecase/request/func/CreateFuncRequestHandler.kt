@@ -7,8 +7,6 @@ import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.usecase.request.FuncRequest.FuncCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.FuncName
 
 class CreateFuncRequestHandler(
     internal val notifyDomain: NotifyDomainPort,
@@ -24,13 +22,9 @@ class CreateFuncRequestHandler(
 
 internal fun CreateFuncRequestHandler.createFunc(useCase: FuncCreation): Func {
     return funcRepository.request(useCase.reqId) {
-        val funcId = createFunc {
-            ref = FuncName("ref")
-            code = Code(
-                """
-                        |require('eth')
-                    """.trimMargin()
-            )
+        createFunc {
+            name = useCase.name
+            code = useCase.code
         }
     }.first()
 }
