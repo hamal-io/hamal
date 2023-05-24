@@ -1,4 +1,4 @@
-package io.hamal.backend.usecase
+package io.hamal.backend.query
 
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ddd.QueryManyUseCase

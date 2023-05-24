@@ -1,11 +1,11 @@
-package io.hamal.backend.usecase.handler.trigger
+package io.hamal.backend.cmd.handler.trigger
 
 import io.hamal.backend.event.TriggerCreatedEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerRequestRepository
 import io.hamal.backend.repository.api.createScheduleTrigger
 import io.hamal.backend.repository.api.domain.trigger.Trigger
-import io.hamal.backend.usecase.TriggerRequestUseCase.TriggerCreation
+import io.hamal.backend.cmd.TriggerCmd.TriggerCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 
 class CreateTriggerRequestHandler(

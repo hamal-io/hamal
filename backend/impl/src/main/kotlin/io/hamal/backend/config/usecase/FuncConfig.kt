@@ -3,9 +3,9 @@ package io.hamal.backend.config.usecase
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.FuncRequestRepository
-import io.hamal.backend.usecase.handler.func.GetFuncUseCaseHandler
-import io.hamal.backend.usecase.handler.func.ListFuncUseCaseHandler
-import io.hamal.backend.usecase.handler.func.CreateFuncRequestHandler
+import io.hamal.backend.query.GetFuncUseCaseHandler
+import io.hamal.backend.query.ListFuncUseCaseHandler
+import io.hamal.backend.cmd.handler.func.CreateFuncRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

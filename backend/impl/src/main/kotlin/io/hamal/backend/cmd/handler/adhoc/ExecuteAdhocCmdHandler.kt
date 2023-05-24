@@ -1,12 +1,12 @@
-package io.hamal.backend.usecase.handler.adhoc
+package io.hamal.backend.cmd.handler.adhoc
 
+import io.hamal.backend.cmd.AdhocCmd.ExecuteAdhoc
 import io.hamal.backend.event.AdhocTriggerInvokedEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.trigger.AdhocTrigger
-import io.hamal.backend.usecase.AdhocRequestUseCase.ExecuteAdhoc
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Requester
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler

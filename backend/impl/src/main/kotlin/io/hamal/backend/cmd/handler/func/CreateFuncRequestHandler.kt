@@ -1,11 +1,11 @@
-package io.hamal.backend.usecase.handler.func
+package io.hamal.backend.cmd.handler.func
 
 import io.hamal.backend.event.FuncCreatedEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.FuncRequestRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.func.Func
-import io.hamal.backend.usecase.FuncRequestUseCase.FuncCreation
+import io.hamal.backend.cmd.FuncCmd.FuncCreation
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 
 class CreateFuncRequestHandler(

@@ -2,8 +2,8 @@ package io.hamal.backend.web
 
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.usecase.FuncQueryUseCase
-import io.hamal.backend.usecase.FuncRequestUseCase
+import io.hamal.backend.query.FuncQueryUseCase
+import io.hamal.backend.cmd.FuncCmd
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -29,7 +29,7 @@ open class FuncController(
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
         return request(
-            FuncRequestUseCase.FuncCreation(
+            FuncCmd.FuncCreation(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,

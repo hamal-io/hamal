@@ -3,9 +3,10 @@ package io.hamal.backend.config.usecase
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ExecRequestRepository
-import io.hamal.backend.usecase.handler.exec.*
-import io.hamal.backend.usecase.handler.exec.ListExecsUseCaseHandler
-import io.hamal.backend.usecase.request.exec.*
+import io.hamal.backend.cmd.handler.exec.*
+import io.hamal.backend.query.ListExecsUseCaseHandler
+import io.hamal.backend.query.GetExecUseCaseHandler
+import io.hamal.backend.query.GetStartedExecUseCaseHandler
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

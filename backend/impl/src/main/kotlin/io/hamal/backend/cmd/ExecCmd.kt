@@ -1,4 +1,4 @@
-package io.hamal.backend.usecase
+package io.hamal.backend.cmd
 
 import io.hamal.backend.repository.api.domain.trigger.InvokedTrigger
 import io.hamal.backend.repository.api.domain.exec.*
@@ -8,7 +8,7 @@ import io.hamal.lib.domain.ddd.RequestManyUseCase
 import io.hamal.lib.domain.ddd.RequestOneUseCase
 import io.hamal.lib.domain.vo.Code
 
-object ExecRequestUseCase {
+object ExecCmd {
     data class PlanExec(
         override val reqId: ReqId,
         override val shard: Shard,

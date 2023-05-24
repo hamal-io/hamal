@@ -1,10 +1,10 @@
-package io.hamal.backend.usecase.handler.exec
+package io.hamal.backend.cmd.handler.exec
 
 import io.hamal.backend.event.ExecutionQueuedEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.ExecRequestRepository
 import io.hamal.backend.repository.api.domain.exec.QueuedExec
-import io.hamal.backend.usecase.ExecRequestUseCase.QueueScheduledExec
+import io.hamal.backend.cmd.ExecCmd.QueueScheduledExec
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 import logger
 

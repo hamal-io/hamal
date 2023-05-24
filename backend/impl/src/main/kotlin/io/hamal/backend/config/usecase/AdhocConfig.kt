@@ -2,7 +2,7 @@ package io.hamal.backend.config.usecase
 
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.FuncRequestRepository
-import io.hamal.backend.usecase.handler.adhoc.ExecuteAdhocRequestHandler
+import io.hamal.backend.cmd.handler.adhoc.ExecuteAdhocRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

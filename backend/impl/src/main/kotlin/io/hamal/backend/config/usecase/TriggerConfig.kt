@@ -3,9 +3,9 @@ package io.hamal.backend.config.usecase
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerRequestRepository
-import io.hamal.backend.usecase.handler.trigger.GetTriggerUseCaseHandler
-import io.hamal.backend.usecase.handler.trigger.ListTriggerUseCaseHandler
-import io.hamal.backend.usecase.handler.trigger.CreateTriggerRequestHandler
+import io.hamal.backend.query.GetTriggerUseCaseHandler
+import io.hamal.backend.query.ListTriggerUseCaseHandler
+import io.hamal.backend.cmd.handler.trigger.CreateTriggerRequestHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

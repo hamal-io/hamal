@@ -1,8 +1,8 @@
-package io.hamal.backend.usecase.handler.trigger
+package io.hamal.backend.query
 
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.backend.repository.api.TriggerQueryRepository
-import io.hamal.backend.usecase.TriggerQueryUseCase
+import io.hamal.backend.query.TriggerQueryUseCase
 import io.hamal.lib.domain.ddd.QueryManyUseCaseHandler
 
 class ListTriggerUseCaseHandler(

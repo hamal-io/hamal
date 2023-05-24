@@ -1,7 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.usecase.ExecQueryUseCase
-import io.hamal.backend.usecase.ExecRequestUseCase
+import io.hamal.backend.query.ExecQueryUseCase
+import io.hamal.backend.cmd.ExecCmd
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -72,7 +72,7 @@ open class ExecController(
 
         val startedExec = queryOne(ExecQueryUseCase.GetStartedExec(execId))
         request(
-            ExecRequestUseCase.CompleteStartedExec(
+            ExecCmd.CompleteStartedExec(
                 reqId = ReqId(1234),
                 shard = Shard(execId.partition().value.toInt()), //FIXME
                 startedExec = startedExec

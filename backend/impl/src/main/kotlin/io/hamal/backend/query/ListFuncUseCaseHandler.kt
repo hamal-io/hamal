@@ -1,8 +1,8 @@
-package io.hamal.backend.usecase.handler.func
+package io.hamal.backend.query
 
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.usecase.FuncQueryUseCase
+import io.hamal.backend.query.FuncQueryUseCase
 import io.hamal.lib.domain.ddd.QueryManyUseCaseHandler
 
 class ListFuncUseCaseHandler(

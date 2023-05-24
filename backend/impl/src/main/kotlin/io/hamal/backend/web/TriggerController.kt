@@ -1,8 +1,8 @@
 package io.hamal.backend.web
 
 import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.usecase.TriggerQueryUseCase
-import io.hamal.backend.usecase.TriggerRequestUseCase
+import io.hamal.backend.query.TriggerQueryUseCase
+import io.hamal.backend.cmd.TriggerCmd
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -30,7 +30,7 @@ open class TriggerController(
         @RequestBody req: ApiCreateTriggerRequest
     ): ResponseEntity<ApiCreateTriggerResponse> {
         val result = request(
-            TriggerRequestUseCase.TriggerCreation(
+            TriggerCmd.TriggerCreation(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,

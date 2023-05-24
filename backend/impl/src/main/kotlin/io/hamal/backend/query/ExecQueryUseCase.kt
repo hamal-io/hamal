@@ -1,4 +1,4 @@
-package io.hamal.backend.usecase
+package io.hamal.backend.query
 
 import io.hamal.backend.repository.api.domain.exec.Exec
 import io.hamal.backend.repository.api.domain.exec.StartedExec
