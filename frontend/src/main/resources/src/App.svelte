@@ -4,6 +4,7 @@
     import NotFound from "./Page/NotFound/NotFound.svelte";
     import ListFuncPage from "./Page/Func/Func.svelte";
     import ListExecPage from "./Page/Exec/Exec.svelte";
+    import ListTriggerPage from "./Page/Trigger/Trigger.svelte";
 
     let currentPage = "dashboard"
 
@@ -101,6 +102,8 @@
             <ListExecPage/>
         {:else if currentPage === 'func'}
             <ListFuncPage/>
+        {:else if currentPage === 'trigger'}
+            <ListTriggerPage/>
         {:else}
             <NotFound/>
         {/if}
