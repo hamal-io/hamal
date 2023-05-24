@@ -1,13 +1,12 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.cmd.FuncCmd
+import io.hamal.backend.query.FuncQueryService
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.query.FuncQueryUseCase
-import io.hamal.backend.cmd.FuncCmd
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeQueryManyUseCasePort
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class FuncController(
-    @Autowired val queryMany: InvokeQueryManyUseCasePort,
+    @Autowired val queryService: FuncQueryService,
     @Autowired val request: InvokeRequestOneUseCasePort,
 ) {
     @PostMapping("/v1/funcs")
@@ -43,11 +42,9 @@ open class FuncController(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") stringFuncId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListFuncResponse> {
-        val result = queryMany(
-            FuncQueryUseCase.ListFunc(
-                afterId = FuncId(SnowflakeId(stringFuncId.toLong())),
-                limit = limit
-            )
+        val result = queryService.list(
+            afterId = FuncId(SnowflakeId(stringFuncId.toLong())),
+            limit = limit
         )
 
         return ResponseEntity.ok(

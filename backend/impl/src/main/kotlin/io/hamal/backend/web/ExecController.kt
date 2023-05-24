@@ -1,12 +1,11 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.query.ExecQueryUseCase
 import io.hamal.backend.cmd.ExecCmd
+import io.hamal.backend.query.ExecQueryService
+import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeQueryManyUseCasePort
-import io.hamal.lib.domain.ddd.InvokeQueryOneUseCasePort
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiDetailExecutionModel
@@ -18,8 +17,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class ExecController(
-    @Autowired val queryOne: InvokeQueryOneUseCasePort,
-    @Autowired val queryMany: InvokeQueryManyUseCasePort,
+    @Autowired val queryService: ExecQueryService,
     @Autowired val request: InvokeRequestOneUseCasePort
 ) {
 
@@ -27,9 +25,7 @@ open class ExecController(
     fun get(
         @PathVariable("execId") stringExecId: String // FIXME be able to use value objects directly here
     ): ResponseEntity<ApiDetailExecutionModel> {
-        val result = queryOne(
-            ExecQueryUseCase.GetExecUseCase(execId = ExecId(SnowflakeId(stringExecId.toLong())))
-        )
+        val result = queryService.get(ExecId(SnowflakeId(stringExecId.toLong())))
         return ResponseEntity.ok(
             ApiDetailExecutionModel(
                 id = result.id,
@@ -45,12 +41,11 @@ open class ExecController(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") stringExecId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiSimpleExecutionModels> {
-        val result = queryMany(
-            ExecQueryUseCase.ListExec(
-                afterId = ExecId(SnowflakeId(stringExecId.toLong())),
-                limit = limit
-            )
+        val result = queryService.list(
+            afterId = ExecId(SnowflakeId(stringExecId.toLong())),
+            limit = limit
         )
+
         return ResponseEntity.ok(
             ApiSimpleExecutionModels(
                 result.map {
@@ -70,7 +65,8 @@ open class ExecController(
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 
-        val startedExec = queryOne(ExecQueryUseCase.GetStartedExec(execId))
+        //FIXME find a nicer way to express this
+        val startedExec = queryService.get(execId) as StartedExec
         request(
             ExecCmd.CompleteStartedExec(
                 reqId = ReqId(1234),

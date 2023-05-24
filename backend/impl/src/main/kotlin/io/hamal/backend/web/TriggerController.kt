@@ -1,12 +1,11 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.query.TriggerQueryUseCase
 import io.hamal.backend.cmd.TriggerCmd
+import io.hamal.backend.query.TriggerQueryService
+import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeQueryManyUseCasePort
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.domain.ApiCreateTriggerRequest
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class TriggerController(
-    @Autowired val queryMany: InvokeQueryManyUseCasePort,
+    @Autowired val queryService: TriggerQueryService,
     @Autowired val request: InvokeRequestOneUseCasePort,
 ) {
     @PostMapping("/v1/triggers")
@@ -54,12 +53,12 @@ open class TriggerController(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") stringTriggerId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListTriggerResponse> {
-        val result = queryMany(
-            TriggerQueryUseCase.ListTrigger(
+        val result =
+            queryService.list(
                 afterId = TriggerId(SnowflakeId(stringTriggerId.toLong())),
                 limit = limit
             )
-        )
+
 
         return ResponseEntity.ok(
             ApiListTriggerResponse(
