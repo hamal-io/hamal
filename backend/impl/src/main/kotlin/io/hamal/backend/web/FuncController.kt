@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.FuncCmd
+import io.hamal.backend.cmd.FuncCmdService
 import io.hamal.backend.query.FuncQueryService
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*
 open class FuncController(
     @Autowired val queryService: FuncQueryService,
     @Autowired val request: InvokeRequestOneUseCasePort,
+    @Autowired val cmdService: FuncCmdService
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
@@ -27,8 +28,9 @@ open class FuncController(
         @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
-        return request(
-            FuncCmd.FuncCreation(
+        // FIXME to ApiCreateFuncResponse
+        return cmdService.create(
+            FuncCmdService.FuncToCreate(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,
