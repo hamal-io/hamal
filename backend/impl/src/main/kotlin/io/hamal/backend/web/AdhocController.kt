@@ -1,6 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.AdhocCmd
+import io.hamal.backend.cmd.AdhocCmdService
+import io.hamal.backend.cmd.AdhocCmdService.AdhocToExecute
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
@@ -13,15 +14,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 open class AdhocController(
-    @Autowired val request: InvokeRequestOneUseCasePort
+    @Autowired val request: InvokeRequestOneUseCasePort,
+    @Autowired val cmdService: AdhocCmdService
 ) {
 
     var counter: Int = 0
 
     @PostMapping("/v1/adhoc")
     fun adhoc(@RequestBody script: String): ResponseEntity<String> {
-        request(
-            AdhocCmd.ExecuteAdhoc(
+        cmdService.execute(
+            AdhocToExecute(
                 reqId = ReqId(counter++),
                 shard = Shard(2),
                 code = Code(script)

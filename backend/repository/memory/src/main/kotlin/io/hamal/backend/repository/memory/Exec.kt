@@ -33,7 +33,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         ).also { execs[it.id] = it }
     }
 
-    override fun queue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
+    override fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
         val result = QueuedExec(
             id = scheduledExec.id,
             code = scheduledExec.code,
@@ -44,9 +44,9 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         return result
     }
 
-    override fun complete(reqId: ReqId, startedExec: StartedExec): CompleteExec {
+    override fun complete(reqId: ReqId, startedExec: StartedExec): CompletedExec {
         startedExecs.removeIf { it.id == startedExec.id }
-        return CompleteExec(
+        return CompletedExec(
             id = startedExec.id,
             code = startedExec.code,
             invokedTrigger = startedExec.invokedTrigger,

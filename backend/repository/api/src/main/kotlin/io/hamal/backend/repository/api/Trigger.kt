@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
-import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 
 
 interface TriggerCmdRepository {
@@ -46,7 +46,7 @@ interface TriggerCmdRepository {
     }
 
     class Recorder(
-        val generateDomainId: GenerateDomainIdPort
+        val generateDomainId: GenerateDomainId
     ) {
 
         internal val commands = mutableListOf<Command>()

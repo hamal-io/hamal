@@ -5,7 +5,7 @@ import io.hamal.backend.event.service.DefaultEventProcessor
 import io.hamal.backend.event.service.EventProcessorFactory
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
-import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -14,7 +14,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 open class DomainConfig {
 
     @Bean
-    open fun generateDomainIdPort(): GenerateDomainIdPort = DomainIdGeneratorAdapter
+    open fun generateDomainIdPort(): GenerateDomainId = DomainIdGeneratorAdapter
 
     @Bean
     open fun domainNotificationAdapter(

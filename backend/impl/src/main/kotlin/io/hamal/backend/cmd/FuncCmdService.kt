@@ -30,7 +30,7 @@ class FuncCmdService
     )
 }
 
-internal fun FuncCmdService.createFunc(funcToCreate: FuncCmdService.FuncToCreate): Func {
+private fun FuncCmdService.createFunc(funcToCreate: FuncCmdService.FuncToCreate): Func {
     return funcCmdRepository.request(funcToCreate.reqId) {
         createFunc {
             name = funcToCreate.name
@@ -39,7 +39,7 @@ internal fun FuncCmdService.createFunc(funcToCreate: FuncCmdService.FuncToCreate
     }.first()
 }
 
-internal fun FuncCmdService.emitEvent(func: Func) {
+private fun FuncCmdService.emitEvent(func: Func) {
     eventEmitter.emit(
         FuncCreatedEvent(
             shard = func.shard,

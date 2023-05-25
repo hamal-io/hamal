@@ -1,17 +1,17 @@
 package io.hamal.backend.cmd.handler.exec
 
-import io.hamal.backend.event.ExecPlannedNotification
+import io.hamal.backend.cmd.ExecCmd.PlanExec
+import io.hamal.backend.event.ExecPlannedEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.domain.exec.PlannedExec
-import io.hamal.backend.cmd.ExecCmd.PlanExec
 import io.hamal.lib.domain.ddd.RequestOneUseCaseHandler
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import logger
 
 class PlanExecRequestHandler(
-    val generateDomainId: GenerateDomainIdPort,
+    val generateDomainId: GenerateDomainId,
     val execCmdRepository: ExecCmdRepository,
     internal val eventEmitter: EventEmitter,
 ) : RequestOneUseCaseHandler<PlannedExec, PlanExec>(PlanExec::class) {
@@ -30,7 +30,7 @@ class PlanExecRequestHandler(
         )
 
         eventEmitter.emit(
-            ExecPlannedNotification(
+            ExecPlannedEvent(
                 shard = result.shard,
                 plannedExec = result
             )

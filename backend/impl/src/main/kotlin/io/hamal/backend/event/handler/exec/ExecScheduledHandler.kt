@@ -1,22 +1,20 @@
 package io.hamal.backend.event.handler.exec
 
+import io.hamal.backend.cmd.ExecCmdService
 import io.hamal.backend.event.ExecScheduledEvent
 import io.hamal.backend.event.handler.EventHandler
-import io.hamal.backend.cmd.ExecCmd
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import logger
 
 class ExecScheduledHandler(
-    val request: InvokeRequestOneUseCasePort
+    val cmdService: ExecCmdService
 ) : EventHandler<ExecScheduledEvent> {
     private val log = logger(ExecScheduledHandler::class)
     override fun handle(notification: ExecScheduledEvent) {
         log.debug("Handle: $notification")
-        request(
-            ExecCmd.QueueScheduledExec(
+        cmdService.enqueue(
+            ExecCmdService.ToEnqueue(
                 reqId = ReqId(1234),
-                shard = notification.shard,
                 scheduledExec = notification.scheduledExec
             )
         )

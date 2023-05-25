@@ -28,7 +28,7 @@ class TriggerCmdService
     )
 }
 
-internal fun TriggerCmdService.createTrigger(triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
+private fun TriggerCmdService.createTrigger(triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
     return triggerCmdRepository.request(triggerToCreate.reqId) {
         createScheduleTrigger {
             name = triggerToCreate.name
@@ -37,7 +37,7 @@ internal fun TriggerCmdService.createTrigger(triggerToCreate: TriggerCmdService.
     }.first()
 }
 
-internal fun TriggerCmdService.emitEvent(trigger: Trigger) {
+private fun TriggerCmdService.emitEvent(trigger: Trigger) {
     eventEmitter.emit(
         TriggerCreatedEvent(
             shard = trigger.shard,

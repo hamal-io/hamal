@@ -26,6 +26,7 @@ class EventEmitter
         } else {
             local.set(local.get().plus(Pair(topic, notification)))
         }
+        flush()
     }
 
     fun flush() {

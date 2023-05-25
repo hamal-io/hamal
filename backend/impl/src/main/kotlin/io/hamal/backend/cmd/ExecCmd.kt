@@ -37,5 +37,5 @@ object ExecCmd {
         override val reqId: ReqId,
         override val shard: Shard,
         val startedExec: StartedExec
-    ) : RequestOneUseCase<CompleteExec>
+    ) : RequestOneUseCase<CompletedExec>
 }

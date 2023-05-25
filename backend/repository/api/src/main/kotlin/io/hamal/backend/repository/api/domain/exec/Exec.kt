@@ -68,7 +68,7 @@ class StartedExec(
 }
 
 @Serializable
-class CompleteExec(
+class CompletedExec(
     override val id: ExecId,
     override val code: Code,
     override val invokedTrigger: InvokedTrigger,

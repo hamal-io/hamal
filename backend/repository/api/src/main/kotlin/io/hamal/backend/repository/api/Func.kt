@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
-import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 
 
 interface FuncCmdRepository {
@@ -45,7 +45,7 @@ interface FuncCmdRepository {
     }
 
     class Recorder(
-        val generateDomainId: GenerateDomainIdPort
+        val generateDomainId: GenerateDomainId
     ) {
 
         internal val commands = mutableListOf<Command>()

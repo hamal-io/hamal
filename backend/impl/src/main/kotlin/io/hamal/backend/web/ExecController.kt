@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.ExecCmd
+import io.hamal.backend.cmd.ExecCmdService
 import io.hamal.backend.query.ExecQueryService
 import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.lib.common.SnowflakeId
@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class ExecController(
     @Autowired val queryService: ExecQueryService,
-    @Autowired val request: InvokeRequestOneUseCasePort
+    @Autowired val request: InvokeRequestOneUseCasePort,
+    @Autowired val cmdService: ExecCmdService
 ) {
 
     @GetMapping("/v1/execs/{execId}")
@@ -67,8 +68,8 @@ open class ExecController(
 
         //FIXME find a nicer way to express this
         val startedExec = queryService.get(execId) as StartedExec
-        request(
-            ExecCmd.CompleteStartedExec(
+        cmdService.complete(
+            ExecCmdService.ToComplete(
                 reqId = ReqId(1234),
                 shard = Shard(execId.partition().value.toInt()), //FIXME
                 startedExec = startedExec

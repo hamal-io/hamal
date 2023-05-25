@@ -15,7 +15,7 @@ class QueueScheduledExecRequestHandler(
     private val log = logger(QueueScheduledExecRequestHandler::class)
     override fun invoke(useCase: QueueScheduledExec): QueuedExec {
         log.debug("Queue scheduled exec: ${useCase.scheduledExec}")
-        val result = execCmdRepository.queue(useCase.reqId, useCase.scheduledExec)
+        val result = execCmdRepository.enqueue(useCase.reqId, useCase.scheduledExec)
         eventEmitter.emit(
             ExecutionQueuedEvent(
                 shard = useCase.shard,

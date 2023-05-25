@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @DomainNotificationTopic("exec::planned")
-data class ExecPlannedNotification(
+data class ExecPlannedEvent(
     override val shard: Shard,
     val plannedExec: PlannedExec
 ) : Event()
@@ -37,7 +37,7 @@ data class ExecutionStartedEvent(
 @DomainNotificationTopic("exec::completed")
 data class ExecutionCompletedEvent(
     override val shard: Shard,
-    val completeExec: CompleteExec
+    val completedExec: CompletedExec
 ) : Event()
 
 @Serializable

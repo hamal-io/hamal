@@ -1,7 +1,7 @@
 package io.hamal.backend
 
+import io.hamal.backend.cmd.ExecCmdService
 import io.hamal.backend.event.*
-import io.hamal.backend.event.handler.*
 import io.hamal.backend.event.handler.adhoc.AdhocTriggerInvokedHandler
 import io.hamal.backend.event.handler.exec.*
 import io.hamal.backend.event.service.EventProcessorFactory
@@ -40,11 +40,12 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     @Bean
     open fun domainNotificationConsumer(
         eventProcessorFactory: EventProcessorFactory,
-        invokeUseCasePort: InvokeUseCasePort
+        invokeUseCasePort: InvokeUseCasePort,
+        cmdService: ExecCmdService
     ) = eventProcessorFactory
-        .register(AdhocTriggerInvokedEvent::class, AdhocTriggerInvokedHandler(invokeUseCasePort))
-        .register(ExecPlannedNotification::class, ExecPlannedHandler(invokeUseCasePort))
-        .register(ExecScheduledEvent::class, ExecScheduledHandler(invokeUseCasePort))
+        .register(AdhocTriggerInvokedEvent::class, AdhocTriggerInvokedHandler(cmdService))
+        .register(ExecPlannedEvent::class, ExecPlannedHandler(cmdService))
+        .register(ExecScheduledEvent::class, ExecScheduledHandler(cmdService))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
         .register(ExecutionCompletedEvent::class, ExecCompletedHandler())
         .register(ExecutionFailedEvent::class, ExecFailedHandler())
