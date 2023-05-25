@@ -1,8 +1,8 @@
 package io.hamal.backend.event.service
 
-import io.hamal.backend.event.handler.EventHandler
 import io.hamal.backend.event.Event
 import io.hamal.backend.event.component.EventHandlerContainer
+import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Consumer
 import io.hamal.backend.repository.api.log.Topic

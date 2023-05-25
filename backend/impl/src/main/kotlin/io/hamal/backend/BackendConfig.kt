@@ -2,9 +2,9 @@ package io.hamal.backend
 
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.event.*
-import io.hamal.backend.event.handler.adhoc.AdhocTriggerInvokedHandler
-import io.hamal.backend.event.handler.exec.*
+import io.hamal.backend.event_handler.adhoc.AdhocTriggerInvokedHandler
 import io.hamal.backend.event.service.EventProcessorFactory
+import io.hamal.backend.event_handler.exec.*
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

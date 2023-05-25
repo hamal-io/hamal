@@ -1,4 +1,4 @@
-package io.hamal.backend.event.handler
+package io.hamal.backend.event_handler
 
 import io.hamal.backend.event.Event
 import kotlin.reflect.KClass
