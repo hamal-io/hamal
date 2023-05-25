@@ -6,7 +6,6 @@ import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiDetailExecutionModel
 import io.hamal.lib.sdk.domain.ApiSimpleExecutionModel
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class ExecController(
     @Autowired val queryService: ExecQueryService,
-    @Autowired val request: InvokeRequestOneUseCasePort,
     @Autowired val cmdService: ExecCmdService
 ) {
 

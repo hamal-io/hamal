@@ -4,7 +4,6 @@ import io.hamal.backend.cmd.AdhocCmdService
 import io.hamal.backend.cmd.AdhocCmdService.AdhocToExecute
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.Code
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 open class AdhocController(
-    @Autowired val request: InvokeRequestOneUseCasePort,
     @Autowired val cmdService: AdhocCmdService
 ) {
 

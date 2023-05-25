@@ -7,7 +7,6 @@ import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 import io.hamal.lib.sdk.domain.ApiListFuncResponse
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class FuncController(
     @Autowired val queryService: FuncQueryService,
-    @Autowired val request: InvokeRequestOneUseCasePort,
     @Autowired val cmdService: FuncCmdService
 ) {
     @PostMapping("/v1/funcs")

@@ -5,9 +5,6 @@ import io.hamal.backend.event.*
 import io.hamal.backend.event.handler.adhoc.AdhocTriggerInvokedHandler
 import io.hamal.backend.event.handler.exec.*
 import io.hamal.backend.event.service.EventProcessorFactory
-import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
-import io.hamal.lib.domain.ddd.InvokeUseCasePort
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -40,7 +37,6 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     @Bean
     open fun domainNotificationConsumer(
         eventProcessorFactory: EventProcessorFactory,
-        invokeUseCasePort: InvokeUseCasePort,
         cmdService: ExecCmdService
     ) = eventProcessorFactory
         .register(AdhocTriggerInvokedEvent::class, AdhocTriggerInvokedHandler(cmdService))
@@ -50,9 +46,6 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(ExecutionCompletedEvent::class, ExecCompletedHandler())
         .register(ExecutionFailedEvent::class, ExecFailedHandler())
         .create()
-
-    @Autowired
-    private lateinit var request: InvokeRequestOneUseCasePort
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
     }

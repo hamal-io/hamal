@@ -7,7 +7,6 @@ import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.ddd.InvokeRequestOneUseCasePort
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.domain.ApiCreateTriggerRequest
 import io.hamal.lib.sdk.domain.ApiCreateTriggerResponse
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class TriggerController(
     @Autowired val queryService: TriggerQueryService,
-    @Autowired val request: InvokeRequestOneUseCasePort,
     @Autowired val cmdService: TriggerCmdService
 ) {
     @PostMapping("/v1/triggers")
