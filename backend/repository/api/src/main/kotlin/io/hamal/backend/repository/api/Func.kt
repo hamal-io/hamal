@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.func.Func
-import io.hamal.backend.repository.api.FuncRequestRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
 
-interface FuncRequestRepository {
+interface FuncCmdRepository {
 
     fun get(id: FuncId): Func
 
@@ -61,7 +61,7 @@ interface FuncQueryRepository {
     fun list(afterId: FuncId, limit: Int): List<Func>
 }
 
-fun FuncRequestRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): FuncId {
+fun FuncCmdRepository.Recorder.createFunc(block: FuncToCreate.() -> Unit): FuncId {
     val result = generateDomainId(Shard(0), ::FuncId)
     commands.add(
         FuncToCreate(

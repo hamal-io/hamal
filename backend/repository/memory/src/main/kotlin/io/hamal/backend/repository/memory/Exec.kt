@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.memory
 
+import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecQueryRepository
-import io.hamal.backend.repository.api.ExecRequestRepository
 import io.hamal.backend.repository.api.domain.exec.*
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.CompletedAt
@@ -9,14 +9,14 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.QueuedAt
 import io.hamal.lib.domain.vo.ScheduledAt
 
-object MemoryExecRepository : ExecRequestRepository, ExecQueryRepository {
+object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
 
     private val execs = mutableMapOf<ExecId, Exec>()
 
     private val queue = mutableListOf<QueuedExec>()
     private val startedExecs = mutableListOf<StartedExec>()
 
-    override fun plan(reqId: ReqId, execToPlan: ExecRequestRepository.ExecToPlan): PlannedExec {
+    override fun plan(reqId: ReqId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
         return PlannedExec(
             id = execToPlan.id,
             code = execToPlan.code,

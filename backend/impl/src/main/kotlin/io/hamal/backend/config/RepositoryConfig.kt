@@ -19,19 +19,19 @@ open class RepositoryConfig {
     }
 
     @Bean
-    open fun funcRequestRepository(): FuncRequestRepository = MemoryFuncRepository
+    open fun funcRequestRepository(): FuncCmdRepository = MemoryFuncRepository
 
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
 
     @Bean
-    open fun execRequestRepository(): ExecRequestRepository = MemoryExecRepository
+    open fun execRequestRepository(): ExecCmdRepository = MemoryExecRepository
 
     @Bean
     open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
 
     @Bean
-    open fun triggerRequestRepository(): TriggerRequestRepository = MemoryTriggerRepository
+    open fun triggerRequestRepository(): TriggerCmdRepository = MemoryTriggerRepository
 
     @Bean
     open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository

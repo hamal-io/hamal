@@ -7,7 +7,7 @@ import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 
-interface ExecRequestRepository {
+interface ExecCmdRepository {
 
     fun plan(reqId: ReqId, execToPlan: ExecToPlan): PlannedExec
     fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec

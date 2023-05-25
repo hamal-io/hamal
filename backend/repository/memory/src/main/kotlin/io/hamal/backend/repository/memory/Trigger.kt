@@ -1,17 +1,17 @@
 package io.hamal.backend.repository.memory
 
+import io.hamal.backend.repository.api.TriggerCmdRepository
+import io.hamal.backend.repository.api.TriggerCmdRepository.Command
+import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
+import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.trigger.ScheduleTrigger
 import io.hamal.backend.repository.api.domain.trigger.Trigger
-import io.hamal.backend.repository.api.TriggerQueryRepository
-import io.hamal.backend.repository.api.TriggerRequestRepository
-import io.hamal.backend.repository.api.TriggerRequestRepository.Command
-import io.hamal.backend.repository.api.TriggerRequestRepository.Command.ScheduleTriggerToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 
-object MemoryTriggerRepository : TriggerRequestRepository, TriggerQueryRepository {
+object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
 
     internal val triggers = mutableMapOf<TriggerId, TriggerEntity>()
 

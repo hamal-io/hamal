@@ -1,6 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.TriggerCmd
+import io.hamal.backend.cmd.TriggerCmdService
+import io.hamal.backend.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.query.TriggerQueryService
 import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*
 open class TriggerController(
     @Autowired val queryService: TriggerQueryService,
     @Autowired val request: InvokeRequestOneUseCasePort,
+    @Autowired val cmdService: TriggerCmdService
 ) {
     @PostMapping("/v1/triggers")
     fun createTrigger(
@@ -28,8 +30,9 @@ open class TriggerController(
         @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateTriggerRequest
     ): ResponseEntity<ApiCreateTriggerResponse> {
-        val result = request(
-            TriggerCmd.TriggerCreation(
+
+        val result = cmdService.create(
+            TriggerToCreate(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,

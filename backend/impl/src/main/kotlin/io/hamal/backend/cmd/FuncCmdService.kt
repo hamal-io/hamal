@@ -2,7 +2,7 @@ package io.hamal.backend.cmd
 
 import io.hamal.backend.event.FuncCreatedEvent
 import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.repository.api.FuncRequestRepository
+import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.lib.domain.ReqId
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class FuncCmdService
 @Autowired constructor(
-    val funcRequestRepository: FuncRequestRepository,
+    val funcCmdRepository: FuncCmdRepository,
     val eventEmitter: EventEmitter
 ) {
 
@@ -31,7 +31,7 @@ class FuncCmdService
 }
 
 internal fun FuncCmdService.createFunc(funcToCreate: FuncCmdService.FuncToCreate): Func {
-    return funcRequestRepository.request(funcToCreate.reqId) {
+    return funcCmdRepository.request(funcToCreate.reqId) {
         createFunc {
             name = funcToCreate.name
             code = funcToCreate.code

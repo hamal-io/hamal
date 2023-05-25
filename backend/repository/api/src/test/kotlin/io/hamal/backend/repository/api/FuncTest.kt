@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.FuncRequestRepository.Command.*
-import io.hamal.backend.repository.api.FuncRequestRepository.Recorder
+import io.hamal.backend.repository.api.FuncCmdRepository.Command.*
+import io.hamal.backend.repository.api.FuncCmdRepository.Recorder
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId

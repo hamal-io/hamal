@@ -1,16 +1,16 @@
 package io.hamal.backend.repository.memory
 
-import io.hamal.backend.repository.api.domain.func.Func
+import io.hamal.backend.repository.api.FuncCmdRepository
+import io.hamal.backend.repository.api.FuncCmdRepository.Command
+import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.FuncRequestRepository
-import io.hamal.backend.repository.api.FuncRequestRepository.Command
-import io.hamal.backend.repository.api.FuncRequestRepository.Command.FuncToCreate
+import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 
-object MemoryFuncRepository : FuncRequestRepository, FuncQueryRepository {
+object MemoryFuncRepository : FuncCmdRepository, FuncQueryRepository {
 
     internal val funcs = mutableMapOf<FuncId, FuncEntity>()
     internal val reqIds = mutableSetOf<ReqId>()

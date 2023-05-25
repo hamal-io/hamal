@@ -3,7 +3,7 @@ package io.hamal.backend.cmd.handler.adhoc
 import io.hamal.backend.cmd.AdhocCmd.ExecuteAdhoc
 import io.hamal.backend.event.AdhocTriggerInvokedEvent
 import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.repository.api.FuncRequestRepository
+import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.trigger.AdhocTrigger
@@ -17,7 +17,7 @@ import io.hamal.lib.domain.vo.TenantId
 
 class ExecuteAdhocRequestHandler(
     internal val eventEmitter: EventEmitter,
-    internal val funcRepository: FuncRequestRepository
+    internal val funcRepository: FuncCmdRepository
 ) : RequestOneUseCaseHandler<Func, ExecuteAdhoc>(ExecuteAdhoc::class) {
     override fun invoke(useCase: ExecuteAdhoc): Func {
         //FIXME just a quick hack - job definition is not really required ?!

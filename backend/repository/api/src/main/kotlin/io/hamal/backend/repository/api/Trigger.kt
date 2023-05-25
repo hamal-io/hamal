@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.trigger.Trigger
-import io.hamal.backend.repository.api.TriggerRequestRepository.Command.ScheduleTriggerToCreate
+import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainIdPort
 
 
-interface TriggerRequestRepository {
+interface TriggerCmdRepository {
     fun get(id: TriggerId): Trigger
 
     fun execute(reqId: ReqId, commands: List<Command>): List<Trigger>
@@ -63,7 +63,7 @@ interface TriggerQueryRepository {
 }
 
 
-fun TriggerRequestRepository.Recorder.createScheduleTrigger(
+fun TriggerCmdRepository.Recorder.createScheduleTrigger(
     block: ScheduleTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)
