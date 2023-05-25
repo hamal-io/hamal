@@ -4,6 +4,7 @@ import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
 import io.hamal.backend.repository.api.TriggerQueryRepository
+import io.hamal.backend.repository.api.TriggerQueryRepository.Query
 import io.hamal.backend.repository.api.domain.trigger.ScheduleTrigger
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
@@ -45,6 +46,20 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
         return triggers.keys.sorted()
             .dropWhile { it <= afterId }
             .take(limit)
+            .mapNotNull { find(it) }
+            .reversed()
+    }
+
+    override fun query(block: Query.() -> Unit): List<Trigger> {
+        val query = Query(
+            afterId = TriggerId(0),
+            limit = Int.MAX_VALUE
+        )
+        block(query)
+
+        return triggers.keys.sorted()
+            .dropWhile { it <= query.afterId }
+            .take(query.limit)
             .mapNotNull { find(it) }
             .reversed()
     }

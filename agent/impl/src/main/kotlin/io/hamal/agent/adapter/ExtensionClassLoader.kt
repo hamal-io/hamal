@@ -1,4 +1,4 @@
-package io.hamal.agent.infra.adapter
+package io.hamal.agent.adapter
 
 import java.net.URL
 import java.net.URLClassLoader

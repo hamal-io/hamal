@@ -1,4 +1,4 @@
-package io.hamal.agent.infra
+package io.hamal.agent
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration

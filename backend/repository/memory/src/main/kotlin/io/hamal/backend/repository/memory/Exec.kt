@@ -60,17 +60,24 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             return listOf()
         }
 
-        val startedExec = queue.removeFirst().let {
-            StartedExec(
-                id = it.id,
-                code = it.code,
-                invokedTrigger = it.invokedTrigger,
-            ).also { execs[it.id] = it }
+        val result = mutableListOf<StartedExec>()
+        for (idx in 0 until 10) {
+            if (queue.isEmpty()) {
+                break
+            }
+            val startedExec = queue.removeFirst().let {
+                StartedExec(
+                    id = it.id,
+                    code = it.code,
+                    invokedTrigger = it.invokedTrigger,
+                ).also { execs[it.id] = it }
+            }
+
+            startedExecs.add(startedExec)
+            result.add(startedExec)
         }
 
-        startedExecs.add(startedExec)
-
-        return listOf(startedExec)
+        return result
     }
 
     override fun find(execId: ExecId): Exec? {

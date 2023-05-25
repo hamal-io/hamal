@@ -1,6 +1,6 @@
-package io.hamal.agent.infra.service
+package io.hamal.agent.service
 
-import io.hamal.agent.infra.adapter.ExtensionLoader
+import io.hamal.agent.adapter.ExtensionLoader
 import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.value.FunctionValue
 import io.hamal.lib.script.api.value.Identifier

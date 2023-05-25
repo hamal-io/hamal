@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
+import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
@@ -58,8 +58,15 @@ interface TriggerCmdRepository {
 
 interface TriggerQueryRepository {
     fun find(TriggerId: TriggerId): Trigger?
-
     fun list(afterId: TriggerId, limit: Int): List<Trigger>
+
+    fun query(block: Query.() -> Unit): List<Trigger>
+
+    data class Query(
+        var afterId: TriggerId,
+        var limit: Int
+    )
+
 }
 
 

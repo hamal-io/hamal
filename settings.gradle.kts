@@ -48,7 +48,7 @@ include(":backend:repository:api")
 include(":backend:repository:memory")
 include(":backend:repository:sqlite")
 
-include(":agent:infra")
+include(":agent:impl")
 include(":agent:extension:api")
 include(":agent:extension:std:log")
 include(":agent:extension:starter")

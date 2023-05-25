@@ -75,7 +75,7 @@ class DefaultEventProcessor(
                                         }
                                     }
                                 }
-                            }, Duration.ofMillis(1)
+                            }, Duration.ofMillis(10)
                         )
                     )
                 }

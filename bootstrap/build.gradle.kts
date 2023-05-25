@@ -21,7 +21,7 @@ dependencies {
 
     implementation(project(":backend:impl"))
     implementation(project(":frontend"))
-    implementation(project(":agent:infra"))
+    implementation(project(":agent:impl"))
 
     testImplementation(project(":bootstrap"))
     testImplementation(external.junit)

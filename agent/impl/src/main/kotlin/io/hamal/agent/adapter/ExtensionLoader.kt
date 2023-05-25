@@ -1,4 +1,4 @@
-package io.hamal.agent.infra.adapter
+package io.hamal.agent.adapter
 
 import io.hamal.agent.extension.api.Extension
 import java.io.File

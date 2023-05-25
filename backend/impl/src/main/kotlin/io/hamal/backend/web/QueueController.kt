@@ -22,7 +22,7 @@ class QueueController
         val result = cmdService.dequeue(
             ExecCmdService.ToDequeue(
                 reqId = ReqId(1111),
-                shard = Shard(0)
+                shard = Shard(0),
             )
         )
 
