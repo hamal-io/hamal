@@ -1,4 +1,4 @@
-package io.hamal.backend.cmd
+package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.AdhocTriggerInvokedEvent
 import io.hamal.backend.event.component.EventEmitter

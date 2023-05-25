@@ -1,7 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.FuncCmdService
-import io.hamal.backend.query.FuncQueryService
+import io.hamal.backend.service.cmd.FuncCmdService
+import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId

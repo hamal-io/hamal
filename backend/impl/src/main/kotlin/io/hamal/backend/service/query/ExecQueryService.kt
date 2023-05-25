@@ -1,4 +1,4 @@
-package io.hamal.backend.query
+package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.domain.exec.Exec

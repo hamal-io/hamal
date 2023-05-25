@@ -1,8 +1,8 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.TriggerCmdService
-import io.hamal.backend.cmd.TriggerCmdService.TriggerToCreate
-import io.hamal.backend.query.TriggerQueryService
+import io.hamal.backend.service.cmd.TriggerCmdService
+import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
+import io.hamal.backend.service.query.TriggerQueryService
 import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId

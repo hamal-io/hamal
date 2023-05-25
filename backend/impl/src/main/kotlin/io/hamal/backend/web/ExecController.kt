@@ -1,7 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.ExecCmdService
-import io.hamal.backend.query.ExecQueryService
+import io.hamal.backend.service.cmd.ExecCmdService
+import io.hamal.backend.service.query.ExecQueryService
 import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId

@@ -1,6 +1,6 @@
 package io.hamal.backend.event.handler.adhoc
 
-import io.hamal.backend.cmd.ExecCmdService
+import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.event.AdhocTriggerInvokedEvent
 import io.hamal.backend.event.handler.EventHandler
 import io.hamal.lib.domain.ReqId

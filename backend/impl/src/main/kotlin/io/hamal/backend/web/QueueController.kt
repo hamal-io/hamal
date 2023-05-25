@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.ExecCmdService
+import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.FuncName

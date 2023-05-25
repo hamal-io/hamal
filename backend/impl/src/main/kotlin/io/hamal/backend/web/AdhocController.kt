@@ -1,7 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.cmd.AdhocCmdService
-import io.hamal.backend.cmd.AdhocCmdService.AdhocToExecute
+import io.hamal.backend.service.cmd.AdhocCmdService
+import io.hamal.backend.service.cmd.AdhocCmdService.AdhocToExecute
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
