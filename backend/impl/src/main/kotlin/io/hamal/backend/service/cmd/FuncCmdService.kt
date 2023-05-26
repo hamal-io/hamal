@@ -18,10 +18,7 @@ class FuncCmdService
     val funcCmdRepository: FuncCmdRepository,
     val eventEmitter: EventEmitter
 ) {
-
     fun create(funcToCreate: FuncToCreate): Func = createFunc(funcToCreate).also(this::emitEvent)
-
-
     data class FuncToCreate(
         val reqId: ReqId,
         val shard: Shard,

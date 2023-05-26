@@ -24,6 +24,9 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
+    implementation(project(":agent:extension:api"))
+    implementation(project(":agent:extension:std:log"))
+
     testImplementation(project(":backend:impl"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
