@@ -1,13 +1,15 @@
-package io.hamal.backend.system_agent
+package io.hamal.backend.component
 
 import io.hamal.agent.extension.std.log.StdLogExtension
-import io.hamal.lib.domain.vo.Code
+import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.script.api.value.EnvironmentValue
 import io.hamal.lib.script.api.value.Identifier
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
+import org.springframework.stereotype.Component
 
+@Component
 class SystemAgent {
 
     private val globalEnv = EnvironmentValue(
@@ -23,21 +25,19 @@ class SystemAgent {
         globalEnv.addGlobal(logEnv.identifier, logEnv)
     }
 
-    fun run(code: Code) {
+    fun run(trigger: Trigger) {
         try {
-            val env = EnvironmentValue(
-                identifier = Identifier("TBD_TRIGGER_NAME"), // FIXME
+            val triggerEnv = EnvironmentValue(
+                identifier = Identifier(trigger.name.value.value),
                 global = globalEnv,
                 parent = globalEnv
             )
-
-            val sandbox = DefaultSandbox(env)
-            println(sandbox.eval(code.value))
+            val sandbox = DefaultSandbox(triggerEnv)
+            println(sandbox.eval(trigger.code.value))
         } catch (t: Throwable) {
             // FIXME log not throw
             t.printStackTrace()
         }
     }
-
 
 }

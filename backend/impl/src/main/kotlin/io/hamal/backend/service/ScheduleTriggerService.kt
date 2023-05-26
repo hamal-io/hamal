@@ -1,8 +1,8 @@
 package io.hamal.backend.service
 
+import io.hamal.backend.component.SystemAgent
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.service.cmd.AdhocCmdService
-import io.hamal.backend.system_agent.SystemAgent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -13,7 +13,8 @@ import kotlin.system.measureTimeMillis
 class ScheduleTriggerService
 @Autowired constructor(
     private val triggerQueryRepository: TriggerQueryRepository,
-    private val adhoc: AdhocCmdService
+    private val adhoc: AdhocCmdService,
+    private val systemAgent: SystemAgent
 ) {
 
 
@@ -24,7 +25,7 @@ class ScheduleTriggerService
         val time = measureTimeMillis {
             triggers.forEach { trigger ->
 //                agent.run(trigger.code)
-                SystemAgent.run(trigger.code)
+                systemAgent.run(trigger)
 //                adhoc.execute(
 //                    AdhocCmdService.AdhocToExecute(
 //                        reqId = ReqId(1),
