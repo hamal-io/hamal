@@ -12,7 +12,6 @@
         fetch("http://localhost:8084/v1/triggers")
             .then(response => response.json())
             .then(data => {
-                console.log(data.triggers);
                 triggers.set(data.triggers);
             }).catch(error => {
             console.log(error);

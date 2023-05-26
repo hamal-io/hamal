@@ -57,7 +57,6 @@
         fetch("http://localhost:8084/v1/execs?limit=100")
             .then(response => response.json())
             .then(data => {
-                console.log(data.execs);
                 execs.set(data.execs);
             }).catch(error => {
             console.log(error);

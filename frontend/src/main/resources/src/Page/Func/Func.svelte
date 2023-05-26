@@ -54,7 +54,6 @@
         fetch("http://localhost:8084/v1/funcs")
             .then(response => response.json())
             .then(data => {
-                console.log(data.funcs);
                 funcs.set(data.funcs);
             }).catch(error => {
             console.log(error);
