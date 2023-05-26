@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTrig
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
@@ -37,7 +37,7 @@ interface TriggerCmdRepository {
         data class ScheduleTriggerToCreate(
             override val id: TriggerId,
             var name: TriggerName,
-            var code: Code
+            var funcId: FuncId
             //inputs
             //secrets
         ) : Command {
@@ -78,7 +78,7 @@ fun TriggerCmdRepository.Recorder.createScheduleTrigger(
         ScheduleTriggerToCreate(
             id = result,
             name = TriggerName("TBD"),
-            code = Code("")
+            funcId = FuncId(0)
         ).apply(block)
     )
     return result

@@ -10,12 +10,12 @@ class ExecScheduledHandler(
     val cmdService: ExecCmdService
 ) : EventHandler<ExecScheduledEvent> {
     private val log = logger(ExecScheduledHandler::class)
-    override fun handle(notification: ExecScheduledEvent) {
-        log.debug("Handle: $notification")
+    override fun handle(evt: ExecScheduledEvent) {
+        log.debug("Handle: $evt")
         cmdService.enqueue(
             ExecCmdService.ToEnqueue(
                 reqId = ReqId(1234),
-                scheduledExec = notification.scheduledExec
+                scheduledExec = evt.scheduledExec
             )
         )
     }

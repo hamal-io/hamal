@@ -8,33 +8,41 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class Trigger : DomainObject<TriggerId> {
     abstract val name: TriggerName
-    abstract val code: Code
+    abstract val funcId: FuncId
 }
 
 @Serializable
-class ScheduleTrigger(
+class FixedDelayTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val code: Code
+    override val funcId: FuncId
 ) : Trigger()
 
 @Serializable
-sealed class InvokedTrigger : DomainObject<InvokedTriggerId> {
+sealed class Invocation : DomainObject<InvocationId> {
     abstract val invokedAt: InvokedAt
     abstract val invokedBy: Requester<TenantId>
 }
 
 @Serializable
-data class AdhocTrigger(
-    override val id: InvokedTriggerId,
-    override val invokedAt: InvokedAt,
-    override val invokedBy: Requester<TenantId>,
-    val code: Code
-) : InvokedTrigger()
-
-@Serializable
-data class InvokedTriggerManual(
-    override val id: InvokedTriggerId = InvokedTriggerId(0), //FIXME
+data class AdhocInvocation(
+    override val id: InvocationId = InvocationId(0), //FIXME
     override val invokedAt: InvokedAt = InvokedAt.now(),//FIXME
     override val invokedBy: Requester<TenantId> = Requester.tenant(TenantId(0)), //FIXME
-) : InvokedTrigger()
+) : Invocation()
+
+@Serializable
+data class ManualInvocation(
+    override val id: InvocationId = InvocationId(0), //FIXME
+    val funcId: FuncId,
+    override val invokedAt: InvokedAt = InvokedAt.now(),//FIXME
+    override val invokedBy: Requester<TenantId> = Requester.tenant(TenantId(0)), //FIXME
+) : Invocation()
+
+@Serializable
+data class TriggerInvocation(
+    override val id: InvocationId = InvocationId(0), //FIXME
+    val trigger: Trigger,
+    override val invokedAt: InvokedAt = InvokedAt.now(),//FIXME
+    override val invokedBy: Requester<TenantId> = Requester.tenant(TenantId(0)), //FIXME
+) : Invocation()

@@ -2,7 +2,7 @@ package io.hamal.backend.web
 
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.repository.api.domain.trigger.InvokedTriggerManual
+import io.hamal.backend.repository.api.domain.trigger.ManualInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
@@ -69,14 +69,18 @@ open class FuncController(
         @PathVariable("funcId") stringFuncId: String,
         @RequestBody body: ApiExecFuncRequest
     ): ResponseEntity<ApiExecFuncResponse> {
+
         //FIXME should be  a service
-        val func = queryService.get(FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong())))
+        val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
+        val func = queryService.get(funcId)
         val result = execCmdService.plan(
             ExecCmdService.ToPlan(
                 reqId = ReqId(123),
                 shard = func.shard,
                 code = func.code,
-                trigger = InvokedTriggerManual()
+                invocation = ManualInvocation(
+                    funcId = funcId
+                )
             )
         )
         return ResponseEntity.ok(

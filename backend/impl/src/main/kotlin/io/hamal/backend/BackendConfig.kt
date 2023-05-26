@@ -1,10 +1,10 @@
 package io.hamal.backend
 
-import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.event.*
-import io.hamal.backend.event_handler.adhoc.AdhocTriggerInvokedHandler
 import io.hamal.backend.event.service.EventProcessorFactory
 import io.hamal.backend.event_handler.exec.*
+import io.hamal.backend.event_handler.trigger.TriggerInvocationHandler
+import io.hamal.backend.service.cmd.ExecCmdService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -37,14 +37,14 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     @Bean
     open fun domainNotificationConsumer(
         eventProcessorFactory: EventProcessorFactory,
-        cmdService: ExecCmdService
+        execCmdService: ExecCmdService
     ) = eventProcessorFactory
-        .register(AdhocTriggerInvokedEvent::class, AdhocTriggerInvokedHandler(cmdService))
-        .register(ExecPlannedEvent::class, ExecPlannedHandler(cmdService))
-        .register(ExecScheduledEvent::class, ExecScheduledHandler(cmdService))
+        .register(ExecPlannedEvent::class, ExecPlannedHandler(execCmdService))
+        .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdService))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
         .register(ExecutionCompletedEvent::class, ExecCompletedHandler())
         .register(ExecutionFailedEvent::class, ExecFailedHandler())
+        .register(TriggerInvocationEvent::class, TriggerInvocationHandler(execCmdService))
         .create()
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {

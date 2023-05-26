@@ -20,7 +20,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         return PlannedExec(
             id = execToPlan.id,
             code = execToPlan.code,
-            invokedTrigger = execToPlan.trigger
+            invocation = execToPlan.trigger
         ).also { execs[it.id] = it }
     }
 
@@ -28,7 +28,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         return ScheduledExec(
             id = planedExec.id,
             code = planedExec.code,
-            invokedTrigger = planedExec.invokedTrigger,
+            invocation = planedExec.invocation,
             scheduledAt = ScheduledAt.now()
         ).also { execs[it.id] = it }
     }
@@ -37,7 +37,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val result = QueuedExec(
             id = scheduledExec.id,
             code = scheduledExec.code,
-            invokedTrigger = scheduledExec.invokedTrigger,
+            invocation = scheduledExec.invocation,
             queuedAt = QueuedAt.now()
         ).also { execs[it.id] = it }
         queue.add(result)
@@ -49,7 +49,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         return CompletedExec(
             id = startedExec.id,
             code = startedExec.code,
-            invokedTrigger = startedExec.invokedTrigger,
+            invocation = startedExec.invocation,
             completedAt = CompletedAt.now()
         ).also { execs[it.id] = it }
     }
@@ -69,7 +69,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                 StartedExec(
                     id = it.id,
                     code = it.code,
-                    invokedTrigger = it.invokedTrigger,
+                    invocation = it.invocation,
                 ).also { execs[it.id] = it }
             }
 

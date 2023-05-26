@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.createScheduleTrigger
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -24,7 +24,7 @@ class TriggerCmdService
         val reqId: ReqId,
         val shard: Shard,
         val name: TriggerName,
-        val code: Code
+        val funcId: FuncId
     )
 }
 
@@ -32,7 +32,7 @@ private fun TriggerCmdService.createTrigger(triggerToCreate: TriggerCmdService.T
     return triggerCmdRepository.request(triggerToCreate.reqId) {
         createScheduleTrigger {
             name = triggerToCreate.name
-            code = triggerToCreate.code
+            funcId = triggerToCreate.funcId
         }
     }.first()
 }

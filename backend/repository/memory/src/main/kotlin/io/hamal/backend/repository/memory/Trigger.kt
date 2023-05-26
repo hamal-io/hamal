@@ -5,10 +5,10 @@ import io.hamal.backend.repository.api.TriggerCmdRepository.Command
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.Query
-import io.hamal.backend.repository.api.domain.trigger.ScheduleTrigger
+import io.hamal.backend.repository.api.domain.trigger.FixedDelayTrigger
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 
@@ -70,7 +70,7 @@ internal fun MemoryTriggerRepository.createScheduleTrigger(toCreate: ScheduleTri
     triggers[toCreate.id] = TriggerEntity(
         id = toCreate.id,
         name = toCreate.name,
-        code = toCreate.code
+        funcId = toCreate.funcId
     )
 }
 
@@ -78,13 +78,13 @@ internal fun MemoryTriggerRepository.createScheduleTrigger(toCreate: ScheduleTri
 internal data class TriggerEntity(
     val id: TriggerId,
     var name: TriggerName,
-    var code: Code
+    var funcId: FuncId
 ) {
     fun toModel(): Trigger {
-        return ScheduleTrigger(
+        return FixedDelayTrigger(
             id = id,
             name = name,
-            code = code
+            funcId = funcId
         )
     }
 }

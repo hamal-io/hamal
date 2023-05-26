@@ -114,23 +114,23 @@ class TriggerRefTest {
 }
 
 @DisplayName("CauseId")
-class InvokedTriggerIdTest {
+class InvocationIdTest {
     @Nested
     @DisplayName("equals()")
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
             assertEquals(
-                InvokedTriggerId(SnowflakeId(23)),
-                InvokedTriggerId(SnowflakeId(23))
+                InvocationId(SnowflakeId(23)),
+                InvocationId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
             assertNotEquals(
-                InvokedTriggerId(SnowflakeId(23)),
-                InvokedTriggerId(SnowflakeId(127))
+                InvocationId(SnowflakeId(23)),
+                InvocationId(SnowflakeId(127))
             )
         }
     }
@@ -141,26 +141,26 @@ class InvokedTriggerIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                InvokedTriggerId(SnowflakeId(23)).hashCode(),
-                InvokedTriggerId(SnowflakeId(23)).hashCode()
+                InvocationId(SnowflakeId(23)).hashCode(),
+                InvocationId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                InvokedTriggerId(SnowflakeId(23)).hashCode(),
-                InvokedTriggerId(SnowflakeId(127)).hashCode()
+                InvocationId(SnowflakeId(23)).hashCode(),
+                InvocationId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(InvokedTriggerId(SnowflakeId(123)).toString(), equalTo("InvokedTriggerId(123)"))
+        assertThat(InvocationId(SnowflakeId(123)).toString(), equalTo("InvokedTriggerId(123)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(InvokedTriggerId(SnowflakeId(23)), "23")
+    fun Serialization() = generateTestCases(InvocationId(SnowflakeId(23)), "23")
 }
 

@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 interface EventHandler<out EVENT : Event> {
 
-    fun handle(notification: @UnsafeVariance EVENT)
+    fun handle(evt: @UnsafeVariance EVENT)
 
     interface Container {
 

@@ -6,7 +6,7 @@ import logger
 
 class ExecQueuedHandler : EventHandler<ExecutionQueuedEvent> {
     private val log = logger(ExecQueuedHandler::class)
-    override fun handle(notification: ExecutionQueuedEvent) {
-        log.debug("Handle: $notification")
+    override fun handle(evt: ExecutionQueuedEvent) {
+        log.debug("Handle: $evt")
     }
 }

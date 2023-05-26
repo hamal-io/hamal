@@ -1,9 +1,9 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.backend.service.cmd.TriggerCmdService
 import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.service.query.TriggerQueryService
-import io.hamal.backend.repository.api.domain.tenant.Tenant
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -34,7 +34,7 @@ open class TriggerController(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,
-                code = req.code
+                funcId = req.funcId
             )
         )
 
@@ -42,7 +42,6 @@ open class TriggerController(
             ApiCreateTriggerResponse(
                 id = result.id,
                 name = result.name,
-                code = result.code
             ),
             HttpStatus.CREATED
         )

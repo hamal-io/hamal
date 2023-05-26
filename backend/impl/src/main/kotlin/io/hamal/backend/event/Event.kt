@@ -6,6 +6,9 @@ import kotlin.reflect.KClass
 
 @Serializable
 sealed class Event {
+    /**
+     *FIXME maybe as function as each event should contain at least one domain object which has the shard already encoded
+     */
     abstract val shard: Shard
 
     val topic: String by lazy {
