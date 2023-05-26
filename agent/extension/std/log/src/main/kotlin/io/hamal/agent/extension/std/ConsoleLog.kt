@@ -1,4 +1,4 @@
-package io.hamal.agent.extension.std.log
+package io.hamal.agent.extension.std
 
 import io.hamal.lib.script.api.Context
 

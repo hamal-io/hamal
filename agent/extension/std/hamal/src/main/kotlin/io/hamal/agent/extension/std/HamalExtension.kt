@@ -1,4 +1,4 @@
-package io.hamal.agent.extension.std.log
+package io.hamal.agent.extension.std
 
 import io.hamal.agent.extension.api.Extension
 import io.hamal.lib.http.HttpTemplate

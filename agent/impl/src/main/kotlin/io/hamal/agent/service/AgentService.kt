@@ -51,6 +51,10 @@ class AgentService {
             entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/hamal/build/libs/extension-std-hamal.jar"))
         extensionEnvironments.add(hamal.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
+        val debug =
+            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/debug/build/libs/extension-std-debug.jar"))
+        extensionEnvironments.add(debug.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
+
 //        x.functionFactories()
 
 //            .map { it.create() }
