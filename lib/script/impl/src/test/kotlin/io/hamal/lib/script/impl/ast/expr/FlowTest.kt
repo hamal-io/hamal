@@ -15,7 +15,7 @@ import org.junit.jupiter.api.TestFactory
 internal class ConditionalExpressionTest {
 
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if condition and block statement are equal`() {
@@ -42,7 +42,7 @@ internal class ConditionalExpressionTest {
 
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if condition and block statement hashcode are same`() {

@@ -4,10 +4,10 @@ import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 
-@DisplayName("Code")
+
 class CodeTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -27,7 +27,7 @@ class CodeTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {

@@ -16,11 +16,11 @@ import org.junit.jupiter.api.Test
 class TupleTest {
 
     @Nested
-    @DisplayName("Tuple0")
+    
     inner class Tuple0Test {
 
         @Nested
-        @DisplayName("equals()")
+        
         inner class EqualsTest {
             @Test
             fun `Always equals`() {
@@ -32,7 +32,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("hashCode()")
+        
         inner class HashCodeTest {
             @Test
             fun `Always same hashcode`() {
@@ -44,7 +44,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("toString()")
+        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -55,7 +55,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("size()")
+        
         inner class SizeTest {
             @Test
             fun ok() {
@@ -67,11 +67,11 @@ class TupleTest {
     }
 
     @Nested
-    @DisplayName("Tuple1")
+    
     inner class Tuple1Test {
 
         @Nested
-        @DisplayName("equals()")
+        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -91,7 +91,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("hashCode()")
+        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -111,7 +111,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("toString()")
+        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -122,7 +122,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("size()")
+        
         inner class SizeTest {
             @Test
             fun ok() {
@@ -135,11 +135,11 @@ class TupleTest {
     }
 
     @Nested
-    @DisplayName("Tuple2")
+    
     inner class Tuple2Test {
 
         @Nested
-        @DisplayName("equals()")
+        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -163,7 +163,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("hashCode()")
+        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -187,7 +187,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("toString()")
+        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -198,7 +198,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("size()")
+        
         inner class SizeTest {
             @Test
             fun ok() {
@@ -211,11 +211,11 @@ class TupleTest {
     }
 
     @Nested
-    @DisplayName("Tuple3")
+    
     inner class Tuple3Test {
 
         @Nested
-        @DisplayName("equals()")
+        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -243,7 +243,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("hashCode()")
+        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -271,7 +271,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("toString()")
+        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -282,7 +282,7 @@ class TupleTest {
         }
 
         @Nested
-        @DisplayName("size()")
+        
         inner class SizeTest {
             @Test
             fun ok() {

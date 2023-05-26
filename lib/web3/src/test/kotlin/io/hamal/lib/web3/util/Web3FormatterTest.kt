@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import java.math.BigInteger
 
 
-@DisplayName("formatToHex()")
+
 class FormatToHexTest {
     @Test
     fun `Formats a byte array into a hexadecimal string without checksum`() {
@@ -28,7 +28,7 @@ class FormatToHexTest {
 }
 
 
-@DisplayName("formatWithoutLeadingZeros()")
+
 class FormatWithoutLeadingZerosTest {
     @Test
     fun `With leading zero`() {
@@ -60,7 +60,7 @@ class FormatWithoutLeadingZerosTest {
 
 
 @Nested
-@DisplayName("formatFixLength()")
+
 class FormatFixLengthTest {
     @Test
     fun `Tries to format empty array`() {

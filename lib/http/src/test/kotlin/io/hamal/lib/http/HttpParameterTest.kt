@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class HttpParameterTest {
 
     @Nested
-    @DisplayName("toQueryString()")
+    
     inner class ToQueryStringTest() {
 
         @Test

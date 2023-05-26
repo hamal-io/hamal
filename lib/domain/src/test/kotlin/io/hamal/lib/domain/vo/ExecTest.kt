@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-@DisplayName("ExecId")
+
 class ExecIdTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -34,7 +34,7 @@ class ExecIdTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {

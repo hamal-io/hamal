@@ -15,7 +15,7 @@ import java.lang.reflect.Field
 class ReflectionUtilsTest {
 
     @Nested
-    @DisplayName("memberPropertiesOf()")
+    
     inner class MemberPropertiesOfTest {
 
         @Test
@@ -52,7 +52,7 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    @DisplayName("memberPropertyOf()")
+    
     inner class MemberPropertyOfTest {
         @Test
         fun `Member property does not exists`() {
@@ -79,7 +79,7 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    @DisplayName("declaredPropertiesOf()")
+    
     inner class DeclaredPropertiesOfTest {
 
         @Test
@@ -108,7 +108,7 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    @DisplayName("declaredPropertyOf()")
+    
     inner class DeclaredPropertyOfTest {
         @Test
         fun `Declared property does not exists`() {
@@ -135,7 +135,7 @@ class ReflectionUtilsTest {
 
 
     @Nested
-    @DisplayName("getValue()")
+    
     inner class GetValueTest {
 
         @Test
@@ -205,7 +205,7 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    @DisplayName("allFields()")
+    
     inner class AllFieldsTest {
         @Test
         fun `List all fields of object`() {

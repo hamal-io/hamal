@@ -25,7 +25,7 @@ import java.util.concurrent.Executors
 
 class SnowflakeTest {
     @Nested
-    @DisplayName("DefaultElapsedSource")
+    
     inner class DefaultElapsedSourceTest {
         @Test
         fun `With default epoch`() {
@@ -46,10 +46,10 @@ class SnowflakeTest {
     }
 
     @Nested
-    @DisplayName("PartitionSource")
+    
     inner class PartitionSourceTest {
         @Nested
-        @DisplayName("Partition")
+        
         inner class PartitionTest {
             @Test
             fun `Limited to 10 bits`() {
@@ -74,7 +74,7 @@ class SnowflakeTest {
         }
 
         @Nested
-        @DisplayName("DefaultPartitionSource")
+        
         inner class DefaultsPartitionSourceTest {
             @Test
             fun `Simple pass through`() {
@@ -88,11 +88,11 @@ class SnowflakeTest {
     }
 
     @Nested
-    @DisplayName("SequenceSource")
+    
     inner class SequenceSourceTest {
 
         @Nested
-        @DisplayName("Sequence")
+        
         inner class SequenceTest {
             @Test
             fun `Limited to 12 bits`() {
@@ -122,11 +122,11 @@ class SnowflakeTest {
         }
 
         @Nested
-        @DisplayName("DefaultSequenceSource")
+        
         inner class DefaultSequenceSourceTest {
 
             @Nested
-            @DisplayName("next()")
+            
             inner class NextTest() {
 
                 @Test
@@ -179,7 +179,7 @@ class SnowflakeTest {
     }
 
     @Nested
-    @DisplayName("Id")
+    
     inner class IdTest {
         @Test
         fun `Genesis - never called`() {
@@ -275,7 +275,7 @@ class SnowflakeTest {
     }
 
     @Nested
-    @DisplayName("SnowflakeGenerator")
+    
     inner class SnowflakeGeneratorTest {
         @Test
         fun `T-0 Partition 0 - first call in this sequence`() {

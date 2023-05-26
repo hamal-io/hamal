@@ -13,11 +13,11 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("BrokerRepository")
+
 class BrokerRepositoryTest {
 
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
 
         @Test
@@ -39,7 +39,7 @@ class BrokerRepositoryTest {
     }
 
     @Nested
-    @DisplayName("resolveTopic()")
+    
     inner class ResolveTopicTest {
         @Test
         fun `Bug - Able to resolve real topic`() {

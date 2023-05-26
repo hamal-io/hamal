@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 
 internal class AssignmentTest : AbstractStatementTest() {
     @Nested
-    @DisplayName("Global")
+    
     inner class GlobalTest {
         @TestFactory
         fun parse() = listOf(
@@ -29,7 +29,7 @@ internal class AssignmentTest : AbstractStatementTest() {
     }
 
     @Nested
-    @DisplayName("Local")
+    
     inner class LocalTest {
 
         @TestFactory

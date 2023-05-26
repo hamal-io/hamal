@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test
 internal class LiteralTest : AbstractExpressionTest() {
 
     @Nested
-    @DisplayName("Number")
+    
     inner class NumberTest {
 
         @Nested
-        @DisplayName("equals()")
+        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -36,7 +36,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        @DisplayName("hashCode()")
+        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -56,7 +56,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        @DisplayName("Parse()")
+        
         inner class ParseTest {
             @Test
             fun number() {
@@ -69,11 +69,11 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("String")
+    
     inner class StringTest {
 
         @Nested
-        @DisplayName("equals()")
+        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -93,7 +93,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        @DisplayName("hashCode()")
+        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -113,7 +113,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        @DisplayName("Parse()")
+        
         inner class ParseTest {
             @Test
             fun string() {
@@ -126,10 +126,10 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("True")
+    
     inner class TrueTest {
         @Nested
-        @DisplayName("Parse()")
+        
         inner class ParseTest {
             @Test
             fun `true`() {
@@ -142,10 +142,10 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("False")
+    
     inner class FalseTest {
         @Nested
-        @DisplayName("Parse()")
+        
         inner class ParseTest {
             @Test
             fun `false`() {
@@ -158,10 +158,10 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("Nil")
+    
     inner class NilTest {
         @Nested
-        @DisplayName("Parse()")
+        
         inner class ParseTest {
             @Test
             fun `nil`() {

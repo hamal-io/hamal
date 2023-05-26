@@ -12,7 +12,7 @@ import kotlin.time.Duration.Companion.seconds
 class KeyedOnceEveryEveryTest {
 
     @Nested
-    @DisplayName("DefaultImpl")
+    
     inner class DefaultImplTest {
 
         @Test
@@ -51,7 +51,7 @@ class KeyedOnceEveryEveryTest {
     }
 
     @Nested
-    @DisplayName("LruImpl")
+    
     inner class LruImplTest {
         @Test
         fun `First time execution`() {

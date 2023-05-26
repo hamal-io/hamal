@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ConsumerIT {
     @Nested
-    @DisplayName("ProtobufConsumer")
+    
     inner class ProtobufConsumerTest {
         @Test
         fun `Late consumer starts at the beginning`() {

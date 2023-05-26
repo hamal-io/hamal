@@ -10,7 +10,7 @@ import java.nio.ByteBuffer
 class ByteWindowTest {
 
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
 
         @Test
@@ -54,7 +54,7 @@ class ByteWindowTest {
     }
 
     @Nested
-    @DisplayName("of()")
+    
     inner class OfTest {
 
         @Test
@@ -118,7 +118,7 @@ class ByteWindowTest {
     }
 
     @Nested
-    @DisplayName("next()")
+    
     inner class NexTest {
 
         @Test

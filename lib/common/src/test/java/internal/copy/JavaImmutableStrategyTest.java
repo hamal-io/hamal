@@ -19,29 +19,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("JavaImmutableStrategy")
+
 class JavaImmutableStrategyTest {
 
     private final JavaImmutableStrategy testInstance = new JavaImmutableStrategy();
 
     @Nested
-    @DisplayName("CopyStrategy")
+    
     class CopyStrategyTest {
 
         private final JavaImmutableStrategy.CopyStrategy testInstance = new JavaImmutableStrategy.CopyStrategy(JavaImmutableStrategy.defaultImmutableClasses);
 
         @Test
-        @DisplayName("17 default classes are considered being safe to copy")
+        
         void safeClassesCount() {
             assertThat(JavaImmutableStrategy.defaultImmutableClasses, hasSize(17));
         }
 
         @Nested
-        @DisplayName("supports()")
+        
         class SupportsTest {
 
             @Test
-            @DisplayName("unsafe object")
+            
             void bothAreNotSafe() {
                 assertFalse(testInstance.supports(Object.class));
             }
@@ -68,7 +68,7 @@ class JavaImmutableStrategyTest {
                 );
             }
 
-            @DisplayName("safe classes")
+            
             @ParameterizedTest(name = "#{index} - {0}")
             @MethodSource("safeClassProvider")
             void safeClasses(Class<?> arg) {
@@ -77,10 +77,10 @@ class JavaImmutableStrategyTest {
         }
 
         @Nested
-        @DisplayName("apply()")
+        
         class ApplyTest {
             @Test
-            @DisplayName("returns the same instance as the object is immutable")
+            
             void ok() {
                 var someValue = BigDecimal.valueOf(43);
                 var result = testInstance.apply(BigDecimal.class, someValue);
@@ -91,28 +91,28 @@ class JavaImmutableStrategyTest {
     }
 
     @Nested
-    @DisplayName("supports()")
+    
     class SupportsTest {
         @Test
-        @DisplayName("both classes are safe but not the same")
+        
         void safeButNotSame() {
             assertFalse(testInstance.supports(LocalTime.class, LocalDateTime.class));
         }
 
         @Test
-        @DisplayName("both classes are not safe")
+        
         void bothAreNotSafe() {
             assertFalse(testInstance.supports(Object.class, Object.class));
         }
 
         @Test
-        @DisplayName("source is unsafe")
+        
         void sourceIsUnsafe() {
             assertFalse(testInstance.supports(Object.class, Boolean.class));
         }
 
         @Test
-        @DisplayName("target is unsafe")
+        
         void targetIsUnsafe() {
             assertFalse(testInstance.supports(Boolean.class, Object.class));
         }
@@ -120,7 +120,7 @@ class JavaImmutableStrategyTest {
     }
 
     @Nested
-    @DisplayName("apply()")
+    
     class ApplyTest {
 
         private static final Instant someNow = Instant.now();
@@ -142,7 +142,7 @@ class JavaImmutableStrategyTest {
         }
 
         @Test
-        @DisplayName("copies enum fields from source to target")
+        
         void ok() {
             var source = new Source();
             var target = new Target();
@@ -154,7 +154,7 @@ class JavaImmutableStrategyTest {
         }
 
         @Test
-        @DisplayName("copies enum fields only if type matches")
+        
         void typesAreNotMatching() {
             var source = new Source();
             var target = new NotMatchingTarget();

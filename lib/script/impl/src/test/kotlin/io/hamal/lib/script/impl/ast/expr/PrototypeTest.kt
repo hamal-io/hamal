@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class PrototypeLiteralTest : AbstractExpressionTest() {
 
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if identifier and parameters are equal`() {
@@ -68,7 +68,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if identifier and parameters hashcode are the same`() {
@@ -123,7 +123,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("Parse()")
+    
     inner class ParseTest {
         @Test
         fun `Parse empty `() {

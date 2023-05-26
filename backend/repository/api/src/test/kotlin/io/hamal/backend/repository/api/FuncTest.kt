@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 class RecorderTest {
 
     @Nested
-    @DisplayName("createFunc()")
+    
     inner class CreateFuncTest {
 
            @Test

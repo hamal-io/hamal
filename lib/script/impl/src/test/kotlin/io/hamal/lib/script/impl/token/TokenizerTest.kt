@@ -14,11 +14,11 @@ import org.junit.jupiter.api.DynamicTest.*
 class TokenizerTest {
 
     @Nested
-    @DisplayName("DefaultImpl")
+    
     inner class DefaultTokenizerTest {
 
         @Nested
-        @DisplayName("isAtEnd()")
+        
         inner class IsAtEndTest {
             @Test
             fun `Advances until reaches end`() {
@@ -34,7 +34,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("peek()")
+        
         inner class PeekTest {
             @Test
             fun `Returns the character of the current position`() {
@@ -57,7 +57,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("peekNext()")
+        
         inner class PeekNextTest {
             @Test
             fun `Return the next character`() {
@@ -81,7 +81,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("peekPrev()")
+        
         inner class PeekPrevTest {
             @Test
             fun `Returns the previous character`() {
@@ -113,7 +113,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("advance()")
+        
         inner class AdvanceTest() {
             @Test
             fun `Advances read position and fills buffer`() {
@@ -136,7 +136,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("advanceUntilWhitespace()")
+        
         inner class AdvanceUntilWhitespaceTest {
             @Test
             fun `Advances until hits whitespace`() {
@@ -168,7 +168,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("skipWhitespace()")
+        
         inner class SkipWhitespaceTest {
             @Test
             fun `Does nothing if not a whitespace`() {
@@ -213,7 +213,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("nextToken()")
+        
         inner class NextTokenTest {
 
             @TestFactory
@@ -362,7 +362,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("nextNumber()")
+        
         inner class NextNumberTest {
             @Test
             fun `Single digit`() {
@@ -396,7 +396,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("nextHexNumber()")
+        
         inner class NextHexNumberTest {
             @Test
             fun `Hexnumber 0x0`() {
@@ -418,7 +418,7 @@ class TokenizerTest {
         }
 
         @Nested
-        @DisplayName("nextString()")
+        
         inner class NextStringTest {
             @Test
             fun `Simple string`() {
@@ -520,7 +520,7 @@ class TokenizerTest {
         }
 
         @Test
-        @DisplayName("if a<0 then a = 0 end")
+        
         fun ifStatement() {
             val testInstance = DefaultTokenizer("if a<0 then a = 0 end")
             assertThat(testInstance.nextToken(), equalTo(Token(If, 1, 1, "if")))

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 
 class EthHexStringTest {
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
         @TestFactory
         fun `Valid hex string`() = listOf(
@@ -35,7 +35,7 @@ class EthHexStringTest {
 
 class EthPrefixedHexStringTest {
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
         @TestFactory
         fun `Valid hex string`() = listOf(
@@ -61,7 +61,7 @@ class EthPrefixedHexStringTest {
     }
 }
 
-@DisplayName("ValidateHexString()")
+
 class ValidateHexStringTest {
 
     @TestFactory

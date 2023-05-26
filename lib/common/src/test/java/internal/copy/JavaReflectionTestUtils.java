@@ -20,19 +20,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Nested
-@DisplayName("JavaReflection")
+
 public class JavaReflectionTestUtils {
 
     @Nested
-    @DisplayName("Fields")
+    
     class FieldsTest {
 
         @Nested
-        @DisplayName("bug in BigDecimal")
+        
         class BugInBigDecimalTest {
 
             @Test
-            @DisplayName("reproduce bug of BigDecimal")
+            
             void BigDecimalBug() {
                 var fields = allFieldsOf(BigDecimalTestCase.class);
                 assertThat(fields, hasSize(1));
@@ -57,11 +57,11 @@ public class JavaReflectionTestUtils {
         }
 
         @Nested
-        @DisplayName("filterNotStatic()")
+        
         class FilterNotStaticTest {
 
             @Test
-            @DisplayName("not static field")
+            
             void notStaticField() throws NoSuchFieldException {
                 var testInstance = JavaReflection.Fields.filterNotStatic();
                 var notStaticField = getField("notStaticField");
@@ -70,7 +70,7 @@ public class JavaReflectionTestUtils {
             }
 
             @Test
-            @DisplayName("static field")
+            
             void staticField() throws NoSuchFieldException {
                 var testInstance = JavaReflection.Fields.filterNotStatic();
                 var staticField = getField("staticField");
@@ -90,11 +90,11 @@ public class JavaReflectionTestUtils {
         }
 
         @Nested
-        @DisplayName("inheritedDeclaredFieldsOf()")
+        
         class InheritedDeclaredFieldsOfTest {
 
             @Test
-            @DisplayName("one level of Object -> Level1")
+            
             public void oneLevel() {
                 var fields = allFieldsOf(Level1.class);
                 assertThat(fields, hasSize(1));
@@ -102,7 +102,7 @@ public class JavaReflectionTestUtils {
             }
 
             @Test
-            @DisplayName("two level of Object -> Level1 -> Level2")
+            
             public void twoLevel() {
                 var fields = allFieldsOf(Level2.class);
                 assertThat(fields, hasSize(2));
@@ -111,7 +111,7 @@ public class JavaReflectionTestUtils {
             }
 
             @Test
-            @DisplayName("three level of Object -> Level1 -> Level2 -> Level3")
+            
             public void threeLevel() {
                 var fields = allFieldsOf(Level3.class);
                 assertThat(fields, hasSize(3));
@@ -121,7 +121,7 @@ public class JavaReflectionTestUtils {
             }
 
             @Test
-            @DisplayName("provided with 3 level but asked to stop at Level2")
+            
             public void getInheritedDeclaredFields_withThreeLayer_butStopAtLayer2() {
                 var fields = allFieldsOf(Level3.class, Level2.class);
                 assertThat(fields, hasSize(2));
@@ -145,44 +145,44 @@ public class JavaReflectionTestUtils {
     }
 
     @Nested
-    @DisplayName("Interfaces")
+    
     class InterfacesTest {
         @Nested
-        @DisplayName("implementsInterface()")
+        
         class ImplementsInterfaceTest {
 
             @Test
-            @DisplayName("interface has self interface")
+            
             void self() {
                 assertTrue(implementsInterface(TestInterface.class, TestInterface.class));
             }
 
             @Test
-            @DisplayName("extended interface has interface")
+            
             void extendedInterface() {
                 assertTrue(implementsInterface(ExtendsTestInterface.class, TestInterface.class));
             }
 
             @Test
-            @DisplayName("class implementing interface has interface")
+            
             void implementingClass() {
                 assertTrue(implementsInterface(ImplementsTestInterface.class, TestInterface.class));
             }
 
             @Test
-            @DisplayName("class implementing extended interface has interface")
+            
             void implementingExtendedClass() {
                 assertTrue(implementsInterface(ImplementsExtendsInterface.class, TestInterface.class));
             }
 
             @Test
-            @DisplayName("class inheriting from class implementing interface has interface")
+            
             void inheritInterface() {
                 assertTrue(implementsInterface(InheritsTestInterface.class, TestInterface.class));
             }
 
             @Test
-            @DisplayName("class implementing interface is not implementing interface extensions")
+            
             void notImplementingExtendedInterface() {
                 assertFalse(implementsInterface(ImplementsTestInterface.class, ExtendsTestInterface.class));
             }

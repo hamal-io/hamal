@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class HashUtilsTest {
 
     @Nested
-    @DisplayName("sha256()")
+    
     inner class Sha256Test {
         @Test
         fun `Creates sha256 of empty string`() {

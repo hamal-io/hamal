@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 internal class GroupedExpressionTest : AbstractExpressionTest() {
     @Nested
-    @DisplayName("Parse")
+    
     inner class ParseTest {
         @Test
         fun `empty grouped expression`() {

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 class ValueTest {
 
     @Nested
-    @DisplayName("type()")
+    
     inner class TypeTest() {
         @Test
         fun `Returns the type specified in the meta table`() {
@@ -22,7 +22,7 @@ class ValueTest {
     }
 
     @Nested
-    @DisplayName("findInfixOperation()")
+    
     inner class FindInfixOperationTest {
         @Test
         fun `Returns the operation`() {
@@ -44,7 +44,7 @@ class ValueTest {
     }
 
     @Nested
-    @DisplayName("findPrefixOperation()")
+    
     inner class FindPrefixOperationTest {
         @Test
         fun `Returns the operation`() {

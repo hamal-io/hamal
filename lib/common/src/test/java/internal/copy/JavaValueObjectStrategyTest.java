@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("JavaValueObjectStrategy")
+
 class JavaValueObjectStrategyTest {
 
     private final JavaValueObjectStrategy testInstance = new JavaValueObjectStrategy(
@@ -28,87 +28,87 @@ class JavaValueObjectStrategyTest {
     );
 
     @Nested
-    @DisplayName("supports()")
+    
     class SupportsTest {
         @Test
-        @DisplayName("source and target are not value objects")
+        
         void bothNotValueObjects() {
             assertFalse(testInstance.supports(Object.class, Object.class));
         }
 
         @Test
-        @DisplayName("primitive -> ValueObject<Equivalent> and safe copyable")
+        
         void primitiveValueObject() {
             assertTrue(testInstance.supports(int.class, SomeIntValueObject.class));
         }
 
         @Test
-        @DisplayName("Equivalent -> ValueObject<Equivalent> and safe copyable")
+        
         void equivalentValueObject() {
             assertTrue(testInstance.supports(Integer.class, SomeIntValueObject.class));
         }
 
         @Test
-        @DisplayName("T -> ValueObject<T> and safe copyable")
+        
         void someSafeValueAndValueObject() {
             assertTrue(testInstance.supports(Instant.class, SomeInstantValueObject.class));
         }
 
         @Test
-        @DisplayName("ValueObject<T> -> T  and safe copyable")
+        
         void valueObjectAndSomeSafeObject() {
             assertTrue(testInstance.supports(SomeInstantValueObject.class, Instant.class));
         }
 
         @Test
-        @DisplayName("ValueObject<T> -> ValueObject<T> and safe copyable")
+        
         void sameValueObjectType() {
             assertTrue(testInstance.supports(SomeIntValueObject.class, SomeIntValueObject.class));
         }
 
         @Test
-        @DisplayName("ValueObject<X> -> ValueObject<X> where X is not safe")
+        
         void sourceNotSafeToCopy() {
             assertFalse(testInstance.supports(SomeUnsafeToCopyValueObject.class, SomeUnsafeToCopyValueObject.class));
         }
 
         @Test
-        @DisplayName("X -> ValueObject<X> where X is not safe")
+        
         void unsafeObjectSourceAndUnsafeValueObjectTarget() {
             assertFalse(testInstance.supports(SomeUnsafeClass.class, SomeUnsafeToCopyValueObject.class));
         }
 
         @Test
-        @DisplayName("ValueObject<X> -> X where X is not safe")
+        
         void someUnsafeValueObjectAndUnsafeObject() {
             assertFalse(testInstance.supports(SomeUnsafeToCopyValueObject.class, SomeUnsafeClass.class));
         }
 
         @Test
-        @DisplayName("ValueObject<X> -> ValueObject<T> and safe copyable")
+        
         void differentUnderlyingValueTypes() {
             assertFalse(testInstance.supports(SomeIntValueObject.class, SomeInstantValueObject.class));
         }
 
         @Test
-        @DisplayName("ValueObject<Equivalent> -> primitive and safe copyable")
+        
         void valueObjectPrimitive() {
             assertTrue(testInstance.supports(SomeIntValueObject.class, int.class));
         }
 
         @Test
-        @DisplayName("ValueObject<Equivalent> -> Equivalent and safe copyable")
+        
         void valueObjectEquivalent() {
             assertTrue(testInstance.supports(SomeIntValueObject.class, Integer.class));
         }
     }
 
     @Nested
-    @DisplayName("apply()")
+    
     class ApplyTest {
 
         @Test
-        @DisplayName("primitive -> ValueObject<Equivalent> and safe copyable")
+        
         void primitiveValueObject() {
             var source = new IntegerPrimitiveSource();
             var target = new ValueObjectTarget();
@@ -119,7 +119,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("Equivalent -> ValueObject<Equivalent> and safe copyable")
+        
         void equivalentValueObject() {
             var source = new IntegerSource();
             var target = new ValueObjectTarget();
@@ -130,7 +130,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("T -> ValueObject<T> and safe copyable")
+        
         void someSafeValueAndValueObject() {
             var source = new InstantSource();
             var target = new InstantValueObjectTarget();
@@ -141,7 +141,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("ValueObject<T> -> T  and safe copyable")
+        
         void valueObjectAndSomeSafeObject() {
             var source = new InstantValueObjectSource();
             var target = new InstantTarget();
@@ -152,7 +152,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("ValueObject<T> -> ValueObject<T> and safe copyable")
+        
         void sameValueObjectType() {
             var source = new ValueObjectSource();
             var target = new ValueObjectTarget();
@@ -164,7 +164,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("ValueObject<Equivalent> -> primitive and safe copyable")
+        
         void valueObjectPrimitive() {
             var source = new ValueObjectSource();
             var target = new IntegerPrimitiveTarget();
@@ -175,7 +175,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("ValueObject<Equivalent> -> Equivalent and safe copyable")
+        
         void valueObjectEquivalent() {
             var source = new ValueObjectSource();
             var target = new IntegerTarget();
@@ -187,7 +187,7 @@ class JavaValueObjectStrategyTest {
         }
 
         @Test
-        @DisplayName("reproduce and fix bug - value object contains static fields")
+        
         void valueObjectContainsStaticFieldsBug() {
             var source = new SomClassWithStaticFieldsSource();
             var target = new SomClassWithStaticFieldsTarget();

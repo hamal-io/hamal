@@ -12,38 +12,38 @@ import static internal.copy.JavaEnumStrategyTest.TestEnum.VALUE_2;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("JavaEnumStrategy")
+
 class JavaEnumStrategyTest {
 
     private final JavaEnumStrategy testInstance = new JavaEnumStrategy();
 
     @Nested
-    @DisplayName("CopyStrategy")
+    
     class CopyStrategyTest {
 
         private final JavaEnumStrategy.CopyStrategy testInstance = new JavaEnumStrategy.CopyStrategy();
 
         @Nested
-        @DisplayName("supports()")
+        
         class SupportsTest {
             @Test
-            @DisplayName("true if value class belongs to an enum")
+            
             void ok() {
                 assertTrue(testInstance.supports(SomeTestEnum.class));
             }
 
             @Test
-            @DisplayName("not an enum")
+            
             void sourceEnumTargetNot() {
                 assertFalse(testInstance.supports(Object.class));
             }
         }
 
         @Nested
-        @DisplayName("apply()")
+        
         class ApplyTest {
             @Test
-            @DisplayName("returns same instance")
+            
             void ok() {
                 var someValue = SomeTestEnum.VALUE_2;
                 var result = testInstance.apply(SomeTestEnum.class, someValue);
@@ -60,36 +60,36 @@ class JavaEnumStrategyTest {
     }
 
     @Nested
-    @DisplayName("supports()")
+    
     class SupportsTest {
 
         @Test
-        @DisplayName("both are not enums")
+        
         void bothAreNotEnums() {
             assertFalse(testInstance.supports(Object.class, Object.class));
         }
 
         @Test
-        @DisplayName("source is enum but target is not")
+        
         void sourceEnumTargetNot() {
             assertFalse(testInstance.supports(TestEnum.class, Object.class));
         }
 
         @Test
-        @DisplayName("source is not enum but target is")
+        
         void targetEnumButSourceNot() {
             assertFalse(testInstance.supports(Object.class, TestEnum.class));
         }
 
         @Test
-        @DisplayName("source and target belong to different enums")
+        
         void sourceAndTargetDifferentEnumTypes() {
             assertFalse(testInstance.supports(TestEnum.class, AnotherEnum.class));
             assertFalse(testInstance.supports(AnotherEnum.class, TestEnum.class));
         }
 
         @Test
-        @DisplayName("source and target belong to the same enum")
+        
         void ok() {
             assertTrue(testInstance.supports(TestEnum.class, TestEnum.class));
             assertTrue(testInstance.supports(AnotherEnum.class, AnotherEnum.class));
@@ -97,7 +97,7 @@ class JavaEnumStrategyTest {
     }
 
     @Nested
-    @DisplayName("apply()")
+    
     class ApplyTest {
 
         static class EnumSource {
@@ -116,7 +116,7 @@ class JavaEnumStrategyTest {
         }
 
         @Test
-        @DisplayName("copies enum fields from source to target")
+        
         void ok() {
             var source = new EnumSource();
             var target = new EnumTarget();
@@ -128,7 +128,7 @@ class JavaEnumStrategyTest {
         }
 
         @Test
-        @DisplayName("copies enum fields only if type matches")
+        
         void typesAreNotMatching() {
             var source = new EnumSource();
             var target = new AnotherEnumTarget();

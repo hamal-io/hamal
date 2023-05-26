@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 
-@DisplayName("FuncId")
+
 class FuncIdTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -35,7 +35,7 @@ class FuncIdTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -64,10 +64,10 @@ class FuncIdTest {
     fun Serialization() = generateTestCases(FuncId(SnowflakeId(23)), "23")
 }
 
-@DisplayName("FuncRef")
+
 class FuncRefTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -87,7 +87,7 @@ class FuncRefTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {

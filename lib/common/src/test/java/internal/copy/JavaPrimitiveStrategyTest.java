@@ -15,20 +15,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("JavaPrimitiveStrategy")
+
 class JavaPrimitiveStrategyTest {
 
     private final JavaPrimitiveStrategy testInstance = new JavaPrimitiveStrategy();
 
     @Nested
-    @DisplayName("CopyStrategy")
+    
     class CopyStrategyTest {
         class JavaPrimitiveCopyStrategyTest {
 
             private final JavaPrimitiveStrategy.CopyStrategy testInstance = new JavaPrimitiveStrategy.CopyStrategy();
 
             @Nested
-            @DisplayName("supports()")
+            
             class SupportsTest {
 
                 private static Stream<Class<?>> primitiveAndEquivalentClassProvider() {
@@ -44,7 +44,7 @@ class JavaPrimitiveStrategyTest {
                     );
                 }
 
-                @DisplayName("supported combinations")
+                
                 @ParameterizedTest(name = "#{index} - {0}")
                 @MethodSource("primitiveAndEquivalentClassProvider")
                 void unsupportedCombinations(Class<?> arg) {
@@ -53,11 +53,11 @@ class JavaPrimitiveStrategyTest {
             }
 
             @Nested
-            @DisplayName("apply()")
+            
             class ApplyTest {
 
                 @Test
-                @DisplayName("primitive boolean")
+                
                 void primitiveBoolean() {
                     boolean someValue = true;
                     var result = testInstance.apply(boolean.class, someValue);
@@ -66,7 +66,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("boolean object")
+                
                 void booleanObject() {
                     Boolean someValue = true;
                     var result = testInstance.apply(Boolean.class, someValue);
@@ -74,7 +74,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("primitive byte")
+                
                 void primitiveByte() {
                     byte someValue = 127;
                     var result = testInstance.apply(byte.class, someValue);
@@ -83,7 +83,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("byte object")
+                
                 void byteObject() {
                     Byte someValue = 127;
                     var result = testInstance.apply(Byte.class, someValue);
@@ -91,7 +91,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("primitive short")
+                
                 void primitiveShort() {
                     short someValue = 42;
                     var result = testInstance.apply(short.class, someValue);
@@ -100,7 +100,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("short object")
+                
                 void shortObject() {
                     Short someValue = 42;
                     var result = testInstance.apply(Short.class, someValue);
@@ -108,7 +108,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("primitive int")
+                
                 void primitiveInt() {
                     int someValue = 42;
                     var result = testInstance.apply(int.class, someValue);
@@ -117,7 +117,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("int object")
+                
                 void intObject() {
                     Integer someValue = 42;
                     var result = testInstance.apply(Integer.class, someValue);
@@ -125,7 +125,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("primitive float")
+                
                 void primitiveFloat() {
                     float someValue = 42.f;
                     var result = testInstance.apply(float.class, someValue);
@@ -134,7 +134,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("float object")
+                
                 void floatObject() {
                     Float someValue = 42.f;
                     var result = testInstance.apply(Float.class, someValue);
@@ -142,7 +142,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("primitive double")
+                
                 void primitiveDouble() {
                     double someValue = 42.d;
                     var result = testInstance.apply(double.class, someValue);
@@ -151,7 +151,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("double object")
+                
                 void doubleObject() {
                     Double someValue = 42.d;
                     var result = testInstance.apply(Double.class, someValue);
@@ -159,7 +159,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("primitive char")
+                
                 void primitiveChar() {
                     char someValue = '*';
                     var result = testInstance.apply(char.class, someValue);
@@ -168,7 +168,7 @@ class JavaPrimitiveStrategyTest {
                 }
 
                 @Test
-                @DisplayName("character object")
+                
                 void characterObject() {
                     Character someValue = '*';
                     var result = testInstance.apply(Character.class, someValue);
@@ -179,58 +179,58 @@ class JavaPrimitiveStrategyTest {
     }
 
     @Nested
-    @DisplayName("supports()")
+    
     class SupportsTest {
         @Test
-        @DisplayName("both are primitive")
+        
         void bothPrimitive() {
             assertTrue(testInstance.supports(int.class, int.class));
         }
 
         @Test
-        @DisplayName("both are primitive equivalents")
+        
         void bothAreEquivalentsPrimitives() {
             assertTrue(testInstance.supports(Integer.class, Integer.class));
         }
 
         @Test
-        @DisplayName("both are different objects")
+        
         void bothDifferentObjects() {
             assertFalse(testInstance.supports(Object.class, Object.class));
         }
 
         @Test
-        @DisplayName("primitive source and equivalent target")
+        
         void sourcePrimitiveTargetEquivalent() {
             assertTrue(testInstance.supports(int.class, Integer.class));
         }
 
         @Test
-        @DisplayName("primitive source and object target")
+        
         void sourcePrimitiveTargetObject() {
             assertFalse(testInstance.supports(int.class, Object.class));
         }
 
         @Test
-        @DisplayName("equivalent source and object target")
+        
         void sourceEquivalentTargetObject() {
             assertFalse(testInstance.supports(Integer.class, Object.class));
         }
 
         @Test
-        @DisplayName("object source and primitive target")
+        
         void sourceObjectTargetPrimitive() {
             assertFalse(testInstance.supports(Object.class, int.class));
         }
 
         @Test
-        @DisplayName("object source and equivalent target")
+        
         void sourceObjectTargetEquivalent() {
             assertFalse(testInstance.supports(Object.class, Integer.class));
         }
 
         @Test
-        @DisplayName("equivalent source and primitive target")
+        
         void sourceEquivalentTargetPrimitive() {
             assertTrue(testInstance.supports(Integer.class, int.class));
         }
@@ -248,7 +248,7 @@ class JavaPrimitiveStrategyTest {
             );
         }
 
-        @DisplayName("primitive primitive combinations")
+        
         @ParameterizedTest(name = "#{index} - {0}")
         @MethodSource("primitiveEquivalentClassProvider")
         void primitivePrimitiveCombinations(Tuple2<Class<?>, Class<?>> arg) {
@@ -257,7 +257,7 @@ class JavaPrimitiveStrategyTest {
             assertTrue(testInstance.supports(somePrimitive, somePrimitive));
         }
 
-        @DisplayName("equivalent primitive combinations")
+        
         @ParameterizedTest(name = "#{index} - {0}")
         @MethodSource("primitiveEquivalentClassProvider")
         void equivalentPrimitive(Tuple2<Class<?>, Class<?>> arg) {
@@ -267,7 +267,7 @@ class JavaPrimitiveStrategyTest {
             assertTrue(testInstance.supports(someEquivalent, somePrimitive));
         }
 
-        @DisplayName("primitive equivalent combinations")
+        
         @ParameterizedTest(name = "#{index} - {0}")
         @MethodSource("primitiveEquivalentClassProvider")
         void primitiveEquivalent(Tuple2<Class<?>, Class<?>> arg) {
@@ -277,7 +277,7 @@ class JavaPrimitiveStrategyTest {
             assertTrue(testInstance.supports(somePrimitive, someEquivalent));
         }
 
-        @DisplayName("equivalent equivalent combinations")
+        
         @ParameterizedTest(name = "#{index} - {0}")
         @MethodSource("primitiveEquivalentClassProvider")
         void equivalentEquivalent(Tuple2<Class<?>, Class<?>> arg) {
@@ -287,7 +287,7 @@ class JavaPrimitiveStrategyTest {
     }
 
     @Nested
-    @DisplayName("apply()")
+    
     class ApplyTest {
 
         class PrimitiveSource {
@@ -357,7 +357,7 @@ class JavaPrimitiveStrategyTest {
         }
 
         @Test
-        @DisplayName("copy primitive source to primitive target")
+        
         void primitiveSourcePrimitiveTarget() {
             var source = new PrimitiveSource();
             var target = new PrimitiveTarget();
@@ -369,7 +369,7 @@ class JavaPrimitiveStrategyTest {
         }
 
         @Test
-        @DisplayName("copy equivalent source to equivalent target")
+        
         void equivalentSourceToEquivalentTarget() {
             var source = new EquivalentSource();
             var target = new EquivalentTarget();
@@ -381,7 +381,7 @@ class JavaPrimitiveStrategyTest {
         }
 
         @Test
-        @DisplayName("copy primitive to source to equivalent target")
+        
         void primitiveSourceEquivalentTarget() {
             var source = new EquivalentSource();
             var target = new PrimitiveTarget();
@@ -393,7 +393,7 @@ class JavaPrimitiveStrategyTest {
         }
 
         @Test
-        @DisplayName("copy primitive source to equivalent target")
+        
         void primitiveSourceToEquivalentTarget() {
             var source = new PrimitiveSource();
             var target = new EquivalentTarget();
@@ -405,7 +405,7 @@ class JavaPrimitiveStrategyTest {
         }
 
         @Test
-        @DisplayName("copy primitive fields only if types are matching")
+        
         void primitiveValuesAreNotMatching() {
             var source = new PrimitiveSource();
             var target = new NotMatchingPrimitiveTarget();
@@ -417,7 +417,7 @@ class JavaPrimitiveStrategyTest {
         }
 
         @Test
-        @DisplayName("copy equivalent fields only if types are matching")
+        
         void equivalentValuesAreNotMatching() {
             var source = new PrimitiveSource();
             var target = new NotMatchingEquivalentTarget();

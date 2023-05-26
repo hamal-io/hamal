@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @Nested
-@DisplayName("Copy")
+
 class CopyTest {
 
     @Nested
-    @DisplayName("immutable classes")
+    
     inner class ImmutableClassesTest {
         @Test
         fun `There are 0 immutable classes declared`() {
@@ -23,7 +23,7 @@ class CopyTest {
     }
 
     @Nested
-    @DisplayName("Copy()")
+    
     inner class CopyTest {
 
         @Test

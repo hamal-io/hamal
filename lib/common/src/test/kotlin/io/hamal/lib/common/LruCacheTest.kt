@@ -16,7 +16,7 @@ class LruCacheTest {
     inner class DefaultImplTest {
 
         @Nested
-        @DisplayName("put()")
+        
         inner class PutTest {
             @Test
             fun `Insert value as value does not there`() {
@@ -46,7 +46,7 @@ class LruCacheTest {
         }
 
         @Nested
-        @DisplayName("putIfAbsent()")
+        
         inner class PutIfAbsentTest {
             @Test
             fun `Inserts value as not value there`() {
@@ -76,7 +76,7 @@ class LruCacheTest {
         }
 
         @Nested
-        @DisplayName("find()")
+        
         inner class FindTest {
             @Test
             fun `Nothing there`() {
@@ -93,7 +93,7 @@ class LruCacheTest {
             }
 
             @Test
-            @DisplayName("found")
+            
             fun `Finds someValue`() {
                 testInstance.put(someKey, someValue)
                 testInstance.put(anotherKey, anotherValue)
@@ -106,10 +106,10 @@ class LruCacheTest {
 
 
         @Nested
-        @DisplayName("computeIfAbsent()")
+        
         inner class ComputeIfAbsentTest {
             @Test
-            @DisplayName("no value there before")
+            
             fun insert() {
                 testInstance.computeIfAbsent(someKey) { someValue }
                 verifySize(1)
@@ -117,7 +117,7 @@ class LruCacheTest {
             }
 
             @Test
-            @DisplayName("overwrite already existing value")
+            
             fun overwrite() {
                 insert()
                 testInstance.computeIfAbsent(someKey) { anotherValue }
@@ -127,7 +127,7 @@ class LruCacheTest {
         }
 
         @Nested
-        @DisplayName("size()")
+        
         inner class SizeTest {
             @Test
             fun `Empty`() {

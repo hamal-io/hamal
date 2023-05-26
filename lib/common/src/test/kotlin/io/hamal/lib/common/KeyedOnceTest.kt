@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class KeyedOnceTest {
 
     @Nested
-    @DisplayName("DefaultImpl")
+    
     inner class DefaultImplTest {
 
         @Test
@@ -37,7 +37,7 @@ class KeyedOnceTest {
     }
 
     @Nested
-    @DisplayName("LruImpl")
+    
     inner class LruImplTest {
         @Test
         fun `First time execution`() {

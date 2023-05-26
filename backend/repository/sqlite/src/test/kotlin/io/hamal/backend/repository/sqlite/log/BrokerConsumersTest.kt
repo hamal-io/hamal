@@ -13,11 +13,11 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("DefaultBrokerConsumersRepository")
+
 class DefaultBrokerConsumersRepositoryTest {
 
     @Nested
-    @DisplayName("Constructor()")
+    
     inner class ConstructorTest {
 
         @BeforeEach
@@ -108,7 +108,7 @@ class DefaultBrokerConsumersRepositoryTest {
     }
 
     @Nested
-    @DisplayName("nextChunkId()")
+    
     inner class NextChunkIdTest {
 
         @BeforeEach
@@ -161,7 +161,7 @@ class DefaultBrokerConsumersRepositoryTest {
     }
 
     @Nested
-    @DisplayName("commit()")
+    
     inner class CommitTest {
 
         @BeforeEach

@@ -15,7 +15,7 @@ import java.sql.DriverManager
 class ParseTest {
 
     @Nested
-    @DisplayName("parse()")
+    
     inner class ParseTest {
         @Test
         fun `Empty string`() {
@@ -167,7 +167,7 @@ class ParseTest {
     }
 }
 
-@DisplayName("DefaultNamedPreparedStatement")
+
 class DefaultNamedPreparedStatementTest {
 
     companion object {
@@ -181,7 +181,7 @@ class DefaultNamedPreparedStatementTest {
     }
 
     @Nested
-    @DisplayName("ensureAllParametersSet()")
+    
     inner class EnsureAllParametersSetTest {
         @Test
         fun `All parameters set`() {

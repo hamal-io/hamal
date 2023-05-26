@@ -13,7 +13,7 @@ import org.junit.jupiter.api.assertThrows
 
 internal class TableIndexLiteralTest {
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
 
         @Test
@@ -46,7 +46,7 @@ internal class TableIndexLiteralTest {
 internal class IndexFieldExpressionTest {
 
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if index is equal`() {
@@ -77,7 +77,7 @@ internal class IndexFieldExpressionTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if index has same hashcode`() {
@@ -109,7 +109,7 @@ internal class IndexFieldExpressionTest {
 
 internal class KeyFieldExpressionTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if key is equal`() {
@@ -140,7 +140,7 @@ internal class KeyFieldExpressionTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if key has same hashcode`() {
@@ -173,7 +173,7 @@ internal class KeyFieldExpressionTest {
 internal class TableConstructorExpressionTest : AbstractExpressionTest() {
 
     @Nested
-    @DisplayName("Parse()")
+    
     inner class Parse {
         @Test
         fun `Parse empty table constructor`() {

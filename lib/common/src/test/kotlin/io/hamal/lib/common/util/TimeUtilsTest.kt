@@ -13,7 +13,7 @@ import java.time.Instant
 class TimeUtilsTest {
 
     @Nested
-    @DisplayName("now()")
+    
     inner class NowTest {
         @Test
         fun `Returns java_time_Instant_now() when not injected`() {
@@ -28,7 +28,7 @@ class TimeUtilsTest {
     }
 
     @Nested
-    @DisplayName("withInstant()")
+    
     inner class WithInstantTest {
         @Test
         fun `Injects instant and can be called multiple times with now()`() {

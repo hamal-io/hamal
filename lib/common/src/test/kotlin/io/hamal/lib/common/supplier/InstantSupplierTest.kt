@@ -13,7 +13,7 @@ import java.time.Instant
 class InstantSupplierTest {
 
     @Nested
-    @DisplayName("DefaultImpl")
+    
     inner class DefaultImplTest {
         @Test
         fun `Returns current instant`() {
@@ -24,7 +24,7 @@ class InstantSupplierTest {
     }
 
     @Nested
-    @DisplayName("FakeImpl")
+    
     inner class FakeImplTest {
         @Test
         fun `Returns hardcoded instant`() {

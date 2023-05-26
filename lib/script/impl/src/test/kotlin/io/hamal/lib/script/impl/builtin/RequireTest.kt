@@ -6,7 +6,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("require()")
+
 internal class RequireTest : AbstractBuiltinTest() {
     @Test
     fun `Requires environment`() {

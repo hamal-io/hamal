@@ -15,11 +15,11 @@ import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("DefaultPartitionRepository")
+
 class DefaultPartitionRepositoryTest {
 
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
@@ -47,7 +47,7 @@ class DefaultPartitionRepositoryTest {
     }
 
     @Nested
-    @DisplayName("append()")
+    
     inner class AppendTest {
         @BeforeEach
         fun setup() {
@@ -102,7 +102,7 @@ class DefaultPartitionRepositoryTest {
     }
 
     @Nested
-    @DisplayName("read()")
+    
     inner class ReadTest {
 
         @Test

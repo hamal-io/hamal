@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class PrefixTest : AbstractExpressionTest() {
 
     @Nested
-    @DisplayName("Parse")
+    
     inner class ParseTest {
         @Test
         fun `prefix expression`() {

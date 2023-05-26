@@ -13,7 +13,7 @@ import kotlin.time.Duration.Companion.seconds
 class OnceEveryTest {
 
     @Nested
-    @DisplayName("DefaultImpl")
+    
     inner class DefaultImplTest {
 
         @Test

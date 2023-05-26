@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 class NumberValueTest {
 
     @Nested
-    @DisplayName("invoke()")
+    
     inner class InvokeTest {
 
         @Test
@@ -131,7 +131,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("plus()")
+    
     inner class PlusTest {
         @Test
         fun ok() {
@@ -147,7 +147,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("minus()")
+    
     inner class MinusTest {
         @Test
         fun ok() {
@@ -163,7 +163,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("multiply()")
+    
     inner class MultiplyTest {
         @Test
         fun ok() {
@@ -179,7 +179,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("divide()")
+    
     inner class DivideTest {
         @Test
         fun ok() {
@@ -195,7 +195,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("remainder()")
+    
     inner class RemainderTest {
         @Test
         fun ok() {
@@ -211,7 +211,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("pow()")
+    
     inner class PowTest {
         @Test
         fun ok() {
@@ -227,7 +227,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("negate()")
+    
     inner class NegateTest {
         @Test
         fun `Negative value`() {
@@ -251,7 +251,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("abs()")
+    
     inner class AbsTest {
         @Test
         fun `Negative value`() {
@@ -299,7 +299,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("ln()")
+    
     inner class LnTest {
         @Test
         fun `Value is negative`() {
@@ -320,7 +320,7 @@ class NumberValueTest {
         }
 
         @Test
-        @DisplayName("value is one")
+        
         fun `Value is 1`() {
             val testInstance = NumberValue(1);
 
@@ -348,7 +348,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("sqrt()")
+    
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class SqrtTest {
 
@@ -380,7 +380,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isLessThan()")
+    
     inner class IsLessThanTest {
         @Test
         fun `Less Than`() {
@@ -405,7 +405,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isLessThanEqual()")
+    
     inner class IsLessThanEqualTest {
         @Test
         fun `Less Than`() {
@@ -430,7 +430,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isGreaterThan()")
+    
     inner class IsGreaterThanTest {
         @Test
         fun `Less Than`() {
@@ -455,7 +455,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isGreaterThanEqual()")
+    
     inner class IsGreaterThanEqualTest {
         @Test
         fun `Less Than`() {
@@ -480,7 +480,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isNegative()")
+    
     inner class IsNegativeTest {
         @Test
         fun `Negative number`() {
@@ -502,7 +502,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isPositive()")
+    
     inner class IsPositiveTest {
         @Test
         fun `Negative number`() {
@@ -524,7 +524,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("isZero()")
+    
     inner class IsZeroTest {
         @Test
         fun `Negative number`() {
@@ -546,7 +546,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("toByte()")
+    
     inner class ToByteTest {
         @Test
         fun ok() {
@@ -556,7 +556,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("toShort()")
+    
     inner class ToShortTest {
         @Test
         fun ok() {
@@ -566,7 +566,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("toInt()")
+    
     inner class ToIntTest {
         @Test
         fun ok() {
@@ -576,7 +576,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("toLong()")
+    
     inner class ToLongTest {
         @Test
         fun ok() {
@@ -586,7 +586,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("toFloat()")
+    
     inner class ToFloatTest {
         @Test
         fun ok() {
@@ -596,7 +596,7 @@ class NumberValueTest {
     }
 
     @Nested
-    @DisplayName("toDouble()")
+    
     inner class ToDoubleTest {
         @Test
         fun ok() {

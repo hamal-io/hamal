@@ -44,7 +44,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    @DisplayName("execute()")
+    
     inner class ExecuteTest {
         @Test
         fun `Statement yields result set`() {
@@ -82,7 +82,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    @DisplayName("executeUpdate()")
+    
     inner class ExecuteUpdate {
         @Test
         fun `Statement inserts one row`() {
@@ -123,7 +123,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    @DisplayName("executeQuery()")
+    
     inner class ExecuteQuery {
         @Test
         fun `Query does not return any value`() {
@@ -163,7 +163,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    @DisplayName("set()")
+    
     inner class SetTest {
 
         @Test

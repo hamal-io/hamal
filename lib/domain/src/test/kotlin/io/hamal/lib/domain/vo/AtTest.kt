@@ -7,10 +7,10 @@ import org.junit.jupiter.api.*
 import java.time.Instant
 
 
-@DisplayName("InvokedAt")
+
 class InvokedAtTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -30,7 +30,7 @@ class InvokedAtTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -61,10 +61,10 @@ class InvokedAtTest {
     fun Serialization() = SerializationFixture.generateTestCases(InvokedAt(Instant.ofEpochMilli(123456)), "123456")
 }
 
-@DisplayName("ScheduledAt")
+
 class ScheduledAtTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -84,7 +84,7 @@ class ScheduledAtTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -115,10 +115,10 @@ class ScheduledAtTest {
     fun Serialization() = SerializationFixture.generateTestCases(ScheduledAt(Instant.ofEpochMilli(123456)), "123456")
 }
 
-@DisplayName("QueuedAt")
+
 class QueuedAtTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -138,7 +138,7 @@ class QueuedAtTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -169,10 +169,10 @@ class QueuedAtTest {
     fun Serialization() = SerializationFixture.generateTestCases(QueuedAt(Instant.ofEpochMilli(123456)), "123456")
 }
 
-@DisplayName("CompletedAt")
+
 class CompletedAtTest {
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -192,7 +192,7 @@ class CompletedAtTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions.*
 
 class ShardTest {
     @Nested
-    @DisplayName("Shard()")
+    
     inner class ConstructorTest {
         @Test
         fun `Tries to create a region id less than 0`() {
@@ -36,7 +36,7 @@ class ShardTest {
     }
 
     @Nested
-    @DisplayName("Serializer")
+    
     inner class SerializerTest {
         @TestFactory
         fun tests() = generateTestCases(Shard(234), "234")

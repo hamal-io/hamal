@@ -33,7 +33,7 @@ class AddressTest {
     @Nested
     inner class ConstructorTest {
         @Test
-        @DisplayName("ok")
+        
         fun ok() {
             val testInstance = EthAddress(BigInteger.valueOf(42))
             assertThat(testInstance.value, equalTo(EthUint160(BigInteger.valueOf(42))))
@@ -111,7 +111,7 @@ class AddressTest {
 
 }
 
-@DisplayName("ValidateAddress()")
+
 class EnsureValidAddressTest {
 
     @TestFactory

@@ -2,19 +2,18 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
-import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert.*
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-@DisplayName("TriggerId")
+
 class TriggerIdTest {
     @Nested
-    @DisplayName("equals()")
+
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -34,7 +33,7 @@ class TriggerIdTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -62,10 +61,9 @@ class TriggerIdTest {
     fun Serialization() = generateTestCases(TriggerId(SnowflakeId(23)), "23")
 }
 
-@DisplayName("TriggerReference")
-class TriggerRefTest {
+class TriggerNameTest {
     @Nested
-    @DisplayName("equals()")
+
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -85,7 +83,7 @@ class TriggerRefTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -113,10 +111,10 @@ class TriggerRefTest {
     fun Serialization() = generateTestCases(TriggerName("some-name"), "\"some-name\"")
 }
 
-@DisplayName("CauseId")
+
 class InvocationIdTest {
     @Nested
-    @DisplayName("equals()")
+
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -136,7 +134,7 @@ class InvocationIdTest {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -157,7 +155,7 @@ class InvocationIdTest {
 
     @Test
     fun `toString override`() {
-        assertThat(InvocationId(SnowflakeId(123)).toString(), equalTo("InvokedTriggerId(123)"))
+        assertThat(InvocationId(SnowflakeId(123)).toString(), equalTo("InvocationId(123)"))
     }
 
     @TestFactory

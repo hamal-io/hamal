@@ -12,11 +12,11 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("DefaultBrokerTopicsRepository")
+
 class DefaultBrokerTopicsRepositoryTest {
 
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
@@ -103,7 +103,7 @@ class DefaultBrokerTopicsRepositoryTest {
     }
 
     @Nested
-    @DisplayName("resolveTopic()")
+    
     inner class ResolveTopicTest {
         @BeforeEach
         fun setup() {

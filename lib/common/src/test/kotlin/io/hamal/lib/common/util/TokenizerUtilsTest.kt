@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class TokenizerUtilsTest {
 
     @Nested
-    @DisplayName("isDigit()")
+    
     inner class IsDigitTest {
         @Test
         fun `Is digit`() {
@@ -31,7 +31,7 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    @DisplayName("isAlpha()")
+    
     inner class IsAlphaTest {
         @Test
         fun `Is alpha`() {
@@ -58,7 +58,7 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    @DisplayName("isUnderscore()")
+    
     inner class IsUnderscoreTest {
         @Test
         fun `Is underscore`() {
@@ -77,7 +77,7 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    @DisplayName("isQuote()")
+    
     inner class IsQuoteTest {
         @Test
         fun `Is quote`() {
@@ -97,7 +97,7 @@ class TokenizerUtilsTest {
 
 
     @Nested
-    @DisplayName("isWhitespace()")
+    
     inner class IsWhitespaceTest {
         @Test
         fun `Is whitespace`() {
@@ -119,7 +119,7 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    @DisplayName("isHexChar()")
+    
     inner class IsHexCharTest {
         @Test
         fun `Is hex char`() {

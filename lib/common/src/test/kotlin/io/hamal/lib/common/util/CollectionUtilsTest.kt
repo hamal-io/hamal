@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class CollectionUtilsTest {
     @Nested
-    @DisplayName("cross()")
+    
     inner class CrossTest {
         @Test
         fun `Creates cartesian product`() {

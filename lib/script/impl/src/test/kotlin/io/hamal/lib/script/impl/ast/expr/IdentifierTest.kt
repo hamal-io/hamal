@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class IdentifierTest : AbstractExpressionTest() {
 
     @Nested
-    @DisplayName("equals()")
+    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -30,7 +30,7 @@ internal class IdentifierTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("hashCode()")
+    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -50,7 +50,7 @@ internal class IdentifierTest : AbstractExpressionTest() {
     }
 
     @Nested
-    @DisplayName("Parse()")
+    
     inner class ParseTest {
         @Test
         fun identifier() {

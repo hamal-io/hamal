@@ -17,11 +17,11 @@ import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@DisplayName("DefaultSegmentRepository")
+
 class DefaultSegmentRepositoryTest {
 
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
 
         @BeforeEach
@@ -112,7 +112,7 @@ class DefaultSegmentRepositoryTest {
     }
 
     @Nested
-    @DisplayName("append()")
+    
     inner class AppendTest {
         @BeforeEach
         fun setup() {
@@ -240,7 +240,7 @@ class DefaultSegmentRepositoryTest {
     }
 
     @Nested
-    @DisplayName("read()")
+    
     inner class ReadTest {
         @BeforeEach
         fun setup() {
@@ -341,7 +341,7 @@ class DefaultSegmentRepositoryTest {
     }
 
     @Nested
-    @DisplayName("close()")
+    
     inner class CloseTest {
         @Test
         fun `Close an open repository`() {

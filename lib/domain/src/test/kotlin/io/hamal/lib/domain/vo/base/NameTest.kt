@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 @Nested
 class NameTest {
     @Nested
-    @DisplayName("ReferenceValidator")
+    
     inner class RefValidatorTest {
         @Test
         fun `Does nothing if reference is legal`() {

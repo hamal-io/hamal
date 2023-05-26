@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("assert()")
+
 internal class AssertTest : AbstractBuiltinTest() {
 
     @Test

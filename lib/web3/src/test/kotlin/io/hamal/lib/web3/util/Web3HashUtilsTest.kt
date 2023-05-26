@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class Web3HashUtilsTest {
     @Nested
-    @DisplayName("keccak256()")
+    
     inner class Keccak256Test {
         @Test
         fun `Keccak of hamal`() {

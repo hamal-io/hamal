@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("JavaUtil")
+
 class JavaUtilTest {
 
     static Stream<Class<?>> primitives() {
@@ -28,7 +28,7 @@ class JavaUtilTest {
         );
     }
 
-    @DisplayName("all primitive classes")
+    
     @ParameterizedTest(name = "#{index} - {0}")
     @MethodSource("primitives")
     void primitives(Class<?> arg) {
@@ -36,12 +36,12 @@ class JavaUtilTest {
     }
 
     @Test
-    @DisplayName("primitiveClasses has size 8")
+    
     void primitiveClassesSize() {
         assertThat(JavaUtil.primitiveClasses.size(), is(8));
     }
 
-    @DisplayName("every primitive has an equivalent mapped")
+    
     @ParameterizedTest(name = "#{index} - {0}")
     @MethodSource("primitives")
     void equivalentMapped(Class<?> arg) {
@@ -49,7 +49,7 @@ class JavaUtilTest {
     }
 
     @Nested
-    @DisplayName("isPrimitive()")
+    
     class IsPrimitiveTest {
         static Stream<Class<?>> primitives() {
             return Stream.of(
@@ -64,7 +64,7 @@ class JavaUtilTest {
             );
         }
 
-        @DisplayName("all primitive classes")
+        
         @ParameterizedTest(name = "#{index} - {0}")
         @MethodSource("primitives")
         void ok(Class<?> arg) {
@@ -72,14 +72,14 @@ class JavaUtilTest {
         }
 
         @Test
-        @DisplayName("not a primitive")
+        
         void notPrimitive() {
             assertFalse(JavaUtil.isPrimitive(Integer.class));
         }
     }
 
     @Nested
-    @DisplayName("isPrimitiveEquivalent()")
+    
     class IsEquivalentTest {
         static Stream<Class<?>> primitiveEquivalents() {
             return Stream.of(
@@ -94,7 +94,7 @@ class JavaUtilTest {
             );
         }
 
-        @DisplayName("all primitive classes")
+        
         @ParameterizedTest(name = "#{index} - {0}")
         @MethodSource("primitiveEquivalents")
         void ok(Class<?> arg) {
@@ -102,7 +102,7 @@ class JavaUtilTest {
         }
 
         @Test
-        @DisplayName("not a primitive equivalent")
+        
         void notPrimitive() {
             assertFalse(JavaUtil.isPrimitiveEquivalent(int.class));
         }

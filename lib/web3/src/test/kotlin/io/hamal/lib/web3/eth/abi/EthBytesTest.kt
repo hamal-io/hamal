@@ -10,7 +10,7 @@ import org.junit.jupiter.api.assertThrows
 @Nested
 class EthBytesTest {
     @Nested
-    @DisplayName("constructor()")
+    
     inner class ConstructorTest {
         @Test
         fun `Byte array has exact size as specified`() {

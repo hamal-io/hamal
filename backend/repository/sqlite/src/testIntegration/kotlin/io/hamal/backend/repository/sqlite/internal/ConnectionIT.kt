@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class DefaultConnectionIT {
 
     @Nested
-    @DisplayName("prepare()")
+    
     inner class PrepareTest {
         @Test
         fun `Statement are not getting cached`() {
@@ -53,7 +53,7 @@ class DefaultConnectionIT {
     }
 
     @Nested
-    @DisplayName("execute()")
+    
     inner class ExecuteTest {
         @Test
         fun `Named parameter is missing`() {
@@ -202,7 +202,7 @@ class DefaultConnectionIT {
     }
 
     @Nested
-    @DisplayName("executeUpdate()")
+    
     inner class ExecuteUpdateTest {
         @Test
         fun `Named parameter is missing`() {
@@ -323,7 +323,7 @@ class DefaultConnectionIT {
     }
 
     @Nested
-    @DisplayName("executeQuery")
+    
     inner class ExecuteQueryTest {
 
         @Test
@@ -406,7 +406,7 @@ class DefaultConnectionIT {
     }
 
     @Nested
-    @DisplayName("tx()")
+    
     inner class TxTest {
         @Test
         fun `Successful transaction automatically commits and returns result`() {
@@ -493,7 +493,7 @@ class DefaultConnectionIT {
 
 
     @Nested
-    @DisplayName("close()")
+    
     inner class CloseTest {
 
         @Test
