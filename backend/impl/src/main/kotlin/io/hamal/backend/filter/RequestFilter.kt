@@ -6,7 +6,10 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import java.math.BigInteger
+import java.security.SecureRandom
 import java.util.concurrent.atomic.AtomicInteger
+
 
 @Component
 class RequestFilter : OncePerRequestFilter() {
@@ -18,7 +21,7 @@ class RequestFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("reqId", ReqId(counter.incrementAndGet().toBigInteger()))
+        request.setAttribute("reqId", ReqId(BigInteger(128, SecureRandom())))
         filterChain.doFilter(request, response)
     }
 

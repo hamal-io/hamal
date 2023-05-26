@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
+import io.hamal.backend.repository.api.TriggerCmdRepository.Command.FixedRateTriggerToCreate
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -9,6 +9,8 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
 import io.hamal.lib.domain.vo.port.GenerateDomainId
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
 
 
 interface TriggerCmdRepository {
@@ -34,10 +36,11 @@ interface TriggerCmdRepository {
         val order: Order
         val id: TriggerId
 
-        data class ScheduleTriggerToCreate(
+        data class FixedRateTriggerToCreate(
             override val id: TriggerId,
             var name: TriggerName,
-            var funcId: FuncId
+            var funcId: FuncId,
+            var duration: Duration
             //inputs
             //secrets
         ) : Command {
@@ -71,14 +74,15 @@ interface TriggerQueryRepository {
 
 
 fun TriggerCmdRepository.Recorder.createScheduleTrigger(
-    block: ScheduleTriggerToCreate.() -> Unit
+    block: FixedRateTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)
     commands.add(
-        ScheduleTriggerToCreate(
+        FixedRateTriggerToCreate(
             id = result,
             name = TriggerName("TBD"),
-            funcId = FuncId(0)
+            funcId = FuncId(0),
+            duration = 1.days
         ).apply(block)
     )
     return result

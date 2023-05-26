@@ -2,15 +2,18 @@ package io.hamal.backend.repository.memory
 
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command
-import io.hamal.backend.repository.api.TriggerCmdRepository.Command.ScheduleTriggerToCreate
+import io.hamal.backend.repository.api.TriggerCmdRepository.Command.FixedRateTriggerToCreate
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.Query
-import io.hamal.backend.repository.api.domain.trigger.FixedDelayTrigger
+import io.hamal.backend.repository.api.domain.trigger.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
+import kotlin.time.Duration
 
 object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
 
@@ -29,7 +32,7 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->
                 when (cmd) {
-                    is ScheduleTriggerToCreate -> createScheduleTrigger(cmd)
+                    is FixedRateTriggerToCreate -> createFixedDelayTrigger(cmd)
                     else -> TODO("$cmd not supported")
                 }
             }
@@ -66,11 +69,13 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
 }
 
 
-internal fun MemoryTriggerRepository.createScheduleTrigger(toCreate: ScheduleTriggerToCreate) {
+internal fun MemoryTriggerRepository.createFixedDelayTrigger(toCreate: FixedRateTriggerToCreate) {
     triggers[toCreate.id] = TriggerEntity(
         id = toCreate.id,
         name = toCreate.name,
-        funcId = toCreate.funcId
+        type = FixedRate,
+        funcId = toCreate.funcId,
+        duration = toCreate.duration
     )
 }
 
@@ -78,13 +83,16 @@ internal fun MemoryTriggerRepository.createScheduleTrigger(toCreate: ScheduleTri
 internal data class TriggerEntity(
     val id: TriggerId,
     var name: TriggerName,
-    var funcId: FuncId
+    val type: TriggerType,
+    var funcId: FuncId,
+    var duration: Duration?
 ) {
     fun toModel(): Trigger {
-        return FixedDelayTrigger(
+        return FixedRateTrigger(
             id = id,
             name = name,
-            funcId = funcId
+            funcId = funcId,
+            duration = duration!!
         )
     }
 }

@@ -6,7 +6,6 @@ import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.trigger.TriggerInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.vo.InvocationId
 
 class TriggerInvocationHandler(
     val execCmdService: ExecCmdService
@@ -23,7 +22,6 @@ class TriggerInvocationHandler(
                 code = func.code,
                 // FIXME func for audit purpose ?
                 invocation = TriggerInvocation(
-                    id = InvocationId(0),
                     trigger = evt.trigger
                 )
             )

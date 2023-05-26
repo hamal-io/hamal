@@ -37,7 +37,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
 
     @Bean
-    open fun domainNotificationConsumer(
+    open fun backendEventConsumer(
         eventProcessorFactory: EventProcessorFactory,
         execCmdService: ExecCmdService
     ) = eventProcessorFactory

@@ -6,7 +6,6 @@ import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.trigger.AdhocInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.vo.InvocationId
 
 class AdhocInvocationHandler(
     val execCmdService: ExecCmdService
@@ -21,9 +20,7 @@ class AdhocInvocationHandler(
                 shard = evt.shard,
                 code = evt.code,
                 // FIXME func for audit purpose ?
-                invocation = AdhocInvocation(
-                    id = InvocationId(0),
-                )
+                invocation = AdhocInvocation()
             )
         )
     }

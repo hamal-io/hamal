@@ -17,7 +17,6 @@ class ScheduleTriggerService
     private val eventEmitter: EventEmitter
 ) {
 
-
     @Scheduled(fixedRate = 1, timeUnit = TimeUnit.SECONDS)
     fun run() {
         val triggers = triggerQueryRepository.query { }

@@ -30,7 +30,8 @@
             body: JSON.stringify({
                     name,
                     funcId,
-                    fixedDelay: "1"
+                    type: 'FixedRate',
+                    duration: "PT1S"
                 }
             )
         })
