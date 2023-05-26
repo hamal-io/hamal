@@ -1,14 +1,18 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.service.cmd.FuncCmdService
-import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
+import io.hamal.backend.repository.api.domain.trigger.InvokedTriggerManual
+import io.hamal.backend.service.cmd.ExecCmdService
+import io.hamal.backend.service.cmd.FuncCmdService
+import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
+import io.hamal.lib.sdk.domain.ApiExecFuncRequest
+import io.hamal.lib.sdk.domain.ApiExecFuncResponse
 import io.hamal.lib.sdk.domain.ApiListFuncResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -17,7 +21,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class FuncController(
     @Autowired val queryService: FuncQueryService,
-    @Autowired val cmdService: FuncCmdService
+    @Autowired val funcCmdService: FuncCmdService,
+    @Autowired val execCmdService: ExecCmdService
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
@@ -27,7 +32,7 @@ open class FuncController(
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
         // FIXME to ApiCreateFuncResponse
-        return cmdService.create(
+        return funcCmdService.create(
             FuncCmdService.FuncToCreate(
                 reqId = reqId,
                 shard = shard,
@@ -55,6 +60,28 @@ open class FuncController(
                         name = it.name
                     )
                 }
+            )
+        )
+    }
+
+    @PostMapping("/v1/funcs/{funcId}/exec")
+    fun execFunc(
+        @PathVariable("funcId") stringFuncId: String,
+        @RequestBody body: ApiExecFuncRequest
+    ): ResponseEntity<ApiExecFuncResponse> {
+        //FIXME should be  a service
+        val func = queryService.get(FuncId(SnowflakeId(stringFuncId.toLong())))
+        val result = execCmdService.plan(
+            ExecCmdService.ToPlan(
+                reqId = ReqId(123),
+                shard = func.shard,
+                code = func.code,
+                trigger = InvokedTriggerManual()
+            )
+        )
+        return ResponseEntity.ok(
+            ApiExecFuncResponse(
+                id = result.id
             )
         )
     }

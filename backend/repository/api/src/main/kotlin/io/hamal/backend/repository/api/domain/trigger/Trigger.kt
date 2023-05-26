@@ -31,3 +31,10 @@ data class AdhocTrigger(
     override val invokedBy: Requester<TenantId>,
     val code: Code
 ) : InvokedTrigger()
+
+@Serializable
+data class InvokedTriggerManual(
+    override val id: InvokedTriggerId = InvokedTriggerId(0), //FIXME
+    override val invokedAt: InvokedAt = InvokedAt.now(),//FIXME
+    override val invokedBy: Requester<TenantId> = Requester.tenant(TenantId(0)), //FIXME
+) : InvokedTrigger()
