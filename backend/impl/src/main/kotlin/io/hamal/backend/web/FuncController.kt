@@ -70,7 +70,7 @@ open class FuncController(
         @RequestBody body: ApiExecFuncRequest
     ): ResponseEntity<ApiExecFuncResponse> {
         //FIXME should be  a service
-        val func = queryService.get(FuncId(SnowflakeId(stringFuncId.toLong())))
+        val func = queryService.get(FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong())))
         val result = execCmdService.plan(
             ExecCmdService.ToPlan(
                 reqId = ReqId(123),

@@ -50,6 +50,7 @@ include(":backend:repository:sqlite")
 
 include(":agent:impl")
 include(":agent:extension:api")
+include(":agent:extension:std:hamal")
 include(":agent:extension:std:log")
 include(":agent:extension:starter")
 include(":agent:extension:web3")
