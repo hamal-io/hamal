@@ -11,4 +11,4 @@ data class Func(
     override val id: FuncId,
     val name: FuncName,
     val code: Code
-) : DomainObject<FuncId>
+) : DomainObject<FuncId>()

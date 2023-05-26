@@ -39,7 +39,9 @@ open class TriggerController(
                 reqId = reqId,
                 shard = shard,
                 name = req.name,
-                funcId = req.funcId
+                funcId = req.funcId,
+                type = req.type,
+                duration = req.duration
             )
         )
 

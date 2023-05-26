@@ -1,7 +1,6 @@
 package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
@@ -12,7 +11,7 @@ import kotlin.time.Duration
 data class ApiCreateTriggerRequest(
     val name: TriggerName,
     val funcId: FuncId,
-    val type: TriggerType? = FixedRate,
+    val type: TriggerType,
     val duration: Duration? = null
 )
 

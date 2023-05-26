@@ -6,6 +6,8 @@ import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.invocation.AdhocInvocationHandler
 import io.hamal.backend.event_handler.invocation.ApiInvocationHandler
 import io.hamal.backend.event_handler.invocation.TriggerInvocationHandler
+import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
+import io.hamal.backend.service.TriggerInvocationService
 import io.hamal.backend.service.cmd.ExecCmdService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
@@ -39,8 +41,12 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     @Bean
     open fun backendEventConsumer(
         eventProcessorFactory: EventProcessorFactory,
-        execCmdService: ExecCmdService
+        execCmdService: ExecCmdService,
+        triggerInvocationService: TriggerInvocationService
     ) = eventProcessorFactory
+
+        .register(TriggerCreatedEvent::class, TriggerCreatedHandler(triggerInvocationService))
+
         .register(ExecPlannedEvent::class, ExecPlannedHandler(execCmdService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdService))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())

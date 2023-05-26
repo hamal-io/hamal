@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-sealed class Trigger : DomainObject<TriggerId> {
+sealed class Trigger : DomainObject<TriggerId>() {
     abstract val name: TriggerName
     abstract val funcId: FuncId
     abstract val type: TriggerType

@@ -1,14 +1,14 @@
 package io.hamal.backend.event
 
+import io.hamal.backend.repository.api.domain.trigger.Trigger
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.TriggerId
 import kotlinx.serialization.Serializable
 
 @Serializable
 @DomainNotificationTopic("trigger::created")
 data class TriggerCreatedEvent(
     override val shard: Shard,
-    val id: TriggerId,
+    val trigger: Trigger
 ) : Event()
 
 

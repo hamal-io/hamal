@@ -73,7 +73,7 @@ interface TriggerQueryRepository {
 }
 
 
-fun TriggerCmdRepository.Recorder.createScheduleTrigger(
+fun TriggerCmdRepository.Recorder.createFixedRateTrigger(
     block: FixedRateTriggerToCreate.() -> Unit
 ): TriggerId {
     val result = generateDomainId(Shard(0), ::TriggerId)

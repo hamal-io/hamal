@@ -6,6 +6,7 @@
 
     let name = 'some-trigger-name'
     let funcId = ''
+    let fixedRate = 'PT5S'
 
     async function getTriggers() {
         fetch("http://localhost:8084/v1/triggers")
@@ -31,7 +32,7 @@
                     name,
                     funcId,
                     type: 'FixedRate',
-                    duration: "PT1S"
+                    duration: fixedRate
                 }
             )
         })
@@ -47,15 +48,33 @@
 <div class="w-full">
     <div class="columns-2">
 
-        <input bind:value={name} style="background: red"/>
-        <input bind:value={funcId} style="background: red"/>
+        <div class="flex-box w-1/2">
+            <div class="flex-content py-2">
+                <label for="name">name</label>
+                <input bind:value={name} id="name" style="background: red"/>
 
-        <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                on:click={save}
-        >
-            Save
-        </button>
+            </div>
+
+            <div class="flex-content py-2">
+                <label for="func-id">func id</label>
+                <input bind:value={funcId} id="func-id" style="background: red"/>
+            </div>
+
+            <div class="flex-content py-2">
+                <label for="fixed-rate">fixed rate</label>
+                <input bind:value={fixedRate} id="fixed-rate" style="background: red"/>
+            </div>
+
+            <div class="flex-content py-2">
+                <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        on:click={save}
+                >
+                    Save
+                </button>
+            </div>
+
+        </div>
 
         <div class="w-1/2">
             <h1> Triggers</h1>
