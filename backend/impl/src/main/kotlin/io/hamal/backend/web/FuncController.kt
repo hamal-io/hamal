@@ -1,8 +1,9 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.event.AdhocInvocationEvent
+import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.tenant.Tenant
-import io.hamal.backend.repository.api.domain.trigger.ManualInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.*
 open class FuncController(
     @Autowired val queryService: FuncQueryService,
     @Autowired val funcCmdService: FuncCmdService,
-    @Autowired val execCmdService: ExecCmdService
+    @Autowired val execCmdService: ExecCmdService,
+    @Autowired val eventEmitter: EventEmitter
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
@@ -66,26 +68,40 @@ open class FuncController(
 
     @PostMapping("/v1/funcs/{funcId}/exec")
     fun execFunc(
+        @RequestAttribute shard: Shard,
+        @RequestAttribute reqId: ReqId,
         @PathVariable("funcId") stringFuncId: String,
         @RequestBody body: ApiExecFuncRequest
-    ): ResponseEntity<ApiExecFuncResponse> {
+    ): ResponseEntity<ApiExecFuncResponse> { // prob 202
 
         //FIXME should be  a service
         val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
         val func = queryService.get(funcId)
-        val result = execCmdService.plan(
-            ExecCmdService.ToPlan(
-                reqId = ReqId(123),
-                shard = func.shard,
+//        val result = execCmdService.plan(
+//            ExecCmdService.ToPlan(
+//                reqId = ReqId(123),
+//                shard = func.shard,
+//                code = func.code,
+//                invocation = ManualInvocation(
+//                    funcId = funcId
+//                )
+//            )
+//        )
+
+        eventEmitter.emit(
+            AdhocInvocationEvent(
+                reqId = reqId,
+                shard = shard,
                 code = func.code,
-                invocation = ManualInvocation(
-                    funcId = funcId
-                )
+                // FIXME invoked at
+                // FIXME invoked by
+
             )
         )
+
         return ResponseEntity.ok(
             ApiExecFuncResponse(
-                id = result.id
+                reqId = reqId
             )
         )
     }

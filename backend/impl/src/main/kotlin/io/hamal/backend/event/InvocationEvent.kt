@@ -2,7 +2,9 @@ package io.hamal.backend.event
 
 import io.hamal.backend.repository.api.domain.func.Func
 import io.hamal.backend.repository.api.domain.trigger.Trigger
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.Code
 import kotlinx.serialization.Serializable
 
 //each invocation should produce an event
@@ -13,6 +15,22 @@ import kotlinx.serialization.Serializable
 //data class AdhocInvocationEvent(
 //    override val shard: Shard,
 //) : Event()
+
+@Serializable
+@DomainNotificationTopic("invocation::adhoc")
+data class AdhocInvocationEvent(
+    override val shard: Shard,
+    val reqId: ReqId,
+    val code: Code
+) : Event()
+
+@Serializable
+@DomainNotificationTopic("invocation::http")
+data class ApiInvocationEvent(
+    override val shard: Shard,
+    val func: Func
+) : Event()
+
 
 @Serializable
 @DomainNotificationTopic("invocation::trigger")

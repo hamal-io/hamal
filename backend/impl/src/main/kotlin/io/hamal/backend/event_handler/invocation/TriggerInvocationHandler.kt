@@ -1,4 +1,4 @@
-package io.hamal.backend.event_handler.trigger
+package io.hamal.backend.event_handler.invocation
 
 import io.hamal.backend.event.TriggerInvocationEvent
 import io.hamal.backend.event_handler.EventHandler

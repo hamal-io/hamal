@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.domain
 
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import kotlinx.serialization.Serializable
@@ -20,7 +20,7 @@ data class ApiExecFuncRequest(
 
 @Serializable
 data class ApiExecFuncResponse(
-    val id: ExecId
+    val reqId: ReqId
 )
 
 

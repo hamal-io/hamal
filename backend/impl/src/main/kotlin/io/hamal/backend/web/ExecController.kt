@@ -1,8 +1,9 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.query.ExecQueryService
-import io.hamal.backend.repository.api.domain.exec.StartedExec
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class ExecController(
     @Autowired val queryService: ExecQueryService,
-    @Autowired val cmdService: ExecCmdService
+    @Autowired val cmdService: ExecCmdService,
+    @Autowired val eventEmitter: EventEmitter
 ) {
 
     @GetMapping("/v1/execs/{execId}")

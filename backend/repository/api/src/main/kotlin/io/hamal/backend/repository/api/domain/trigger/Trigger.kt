@@ -32,9 +32,8 @@ data class AdhocInvocation(
 ) : Invocation()
 
 @Serializable
-data class ManualInvocation(
+data class ApiInvocation(
     override val id: InvocationId = InvocationId(0), //FIXME
-    val funcId: FuncId,
     override val invokedAt: InvokedAt = InvokedAt.now(),//FIXME
     override val invokedBy: Requester<TenantId> = Requester.tenant(TenantId(0)), //FIXME
 ) : Invocation()

@@ -19,7 +19,7 @@ data class ReqId(val value: BigInteger) {
             get() = PrimitiveSerialDescriptor("RequestId", PrimitiveKind.STRING)
 
         override fun deserialize(decoder: Decoder): ReqId {
-            return ReqId(BigInteger(decoder.decodeString()))
+            return ReqId(BigInteger(decoder.decodeString(), 16))
         }
 
         override fun serialize(encoder: Encoder, value: ReqId) {
