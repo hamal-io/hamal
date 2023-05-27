@@ -29,12 +29,13 @@ class EventCmdService(
         val topic = brokerRepository.get(eventToAppend.topicId)
         appender.append(
             topic, TenantEvent(
-                shard = Shard(0),
+                shard = eventToAppend.shard,
                 topic = "tenant-topic",
                 contentType = eventToAppend.contentTpe,
                 value = eventToAppend.value
             )
         )
+
     }
 
     data class TopicToCreate(

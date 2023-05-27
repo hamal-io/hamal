@@ -2,13 +2,16 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Chunk
-import io.hamal.backend.repository.api.log.Consumer.*
+import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
@@ -17,7 +20,7 @@ import kotlin.io.path.pathString
 class DefaultBrokerConsumersRepositoryTest {
 
     @Nested
-    
+
     inner class ConstructorTest {
 
         @BeforeEach
@@ -108,7 +111,7 @@ class DefaultBrokerConsumersRepositoryTest {
     }
 
     @Nested
-    
+
     inner class NextChunkTopicIdTest {
 
         @BeforeEach
@@ -161,7 +164,7 @@ class DefaultBrokerConsumersRepositoryTest {
     }
 
     @Nested
-    
+
     inner class CommitTest {
 
         @BeforeEach

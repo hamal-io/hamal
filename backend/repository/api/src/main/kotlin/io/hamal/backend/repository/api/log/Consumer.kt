@@ -10,6 +10,18 @@ interface Consumer<VALUE : Any> {
 
     fun consumeIndexed(limit: Int, fn: (Int, VALUE) -> CompletableFuture<*>): Int
 
-    @JvmInline
-    value class GroupId(val value: String)
+
+}
+
+@JvmInline
+value class GroupId(val value: String) //FIXME become VO
+
+interface BatchConsumer<VALUE : Any> {
+    val groupId: GroupId
+
+    // min batch size
+    // max batch size
+
+    fun consumeBatch(block: (List<VALUE>) -> CompletableFuture<*>): Int
+
 }

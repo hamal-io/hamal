@@ -1,17 +1,17 @@
 package io.hamal.backend.event_handler.invocation
 
-import io.hamal.backend.event.TriggerInvocationEvent
+import io.hamal.backend.event.FixedDelayInvocationEvent
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.TriggerInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
 
-class TriggerInvocationHandler(
+class FixedDelayInvocationHandler(
     val execCmdService: ExecCmdService
-) : EventHandler<TriggerInvocationEvent> {
-    private val log = logger(TriggerInvocationHandler::class)
-    override fun handle(evt: TriggerInvocationEvent) {
+) : EventHandler<FixedDelayInvocationEvent> {
+    private val log = logger(FixedDelayInvocationHandler::class)
+    override fun handle(evt: FixedDelayInvocationEvent) {
         log.debug("Handle: ${evt}")
         val func = evt.func
 

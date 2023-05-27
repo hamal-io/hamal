@@ -4,7 +4,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.event.component.EventHandlerContainer
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.repository.api.log.BrokerRepository
-import io.hamal.backend.repository.api.log.Consumer
+import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.sqlite.log.ProtobufConsumer
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.DisposableBean
@@ -55,7 +55,7 @@ class DefaultEventProcessor(
 
                 allDomainTopics.forEach { topic ->
                     val consumer = ProtobufConsumer(
-                        Consumer.GroupId("domain-notification-processor"),
+                        GroupId("domain-notification-processor"),
                         topic,
                         brokerRepository,
                         Event::class

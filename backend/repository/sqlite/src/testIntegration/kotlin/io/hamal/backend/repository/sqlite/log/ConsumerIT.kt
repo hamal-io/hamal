@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.Broker
-import io.hamal.backend.repository.api.log.Consumer.GroupId
+import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

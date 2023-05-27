@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerConsumersRepository
 import io.hamal.backend.repository.api.log.Chunk
-import io.hamal.backend.repository.api.log.Consumer.GroupId
+import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.domain.Shard

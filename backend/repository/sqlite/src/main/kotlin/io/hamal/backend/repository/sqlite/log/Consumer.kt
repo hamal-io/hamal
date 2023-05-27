@@ -1,8 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.BrokerRepository
-import io.hamal.backend.repository.api.log.Consumer
-import io.hamal.backend.repository.api.log.Topic
+import io.hamal.backend.repository.api.log.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -13,7 +11,7 @@ import kotlin.reflect.KClass
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class ProtobufConsumer<Value : Any>(
-    override val groupId: Consumer.GroupId,
+    override val groupId: GroupId,
     private val topic: Topic,
     private val brokerRepository: BrokerRepository,
     private val valueClass: KClass<Value>
@@ -34,5 +32,29 @@ class ProtobufConsumer<Value : Any>(
             .maxByOrNull { it }
             ?.let { brokerRepository.commit(groupId, topic, it) }
         return chunksToConsume.size
+    }
+}
+
+@OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
+class ProtobufBatchConsumer<Value : Any>(
+    override val groupId: GroupId,
+    private val topic: Topic,
+    private val brokerRepository: BrokerRepository,
+    private val valueClass: KClass<Value>
+) : BatchConsumer<Value> {
+
+    override fun consumeBatch(block: (List<Value>) -> CompletableFuture<*>): Int {
+        val chunksToConsume = brokerRepository.consume(groupId, topic, 1)
+
+        if (chunksToConsume.isEmpty()) {
+            return 0
+        }
+
+        val batch = chunksToConsume
+            .map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
+            .also { block(it).join() }
+
+        chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { brokerRepository.commit(groupId, topic, it.id) }
+        return batch.size
     }
 }

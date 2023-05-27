@@ -1,5 +1,6 @@
 package io.hamal.backend.event
 
+import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.ReqId
@@ -33,9 +34,18 @@ data class ApiInvocationEvent(
 
 
 @Serializable
-@SystemEventTopic("invocation::trigger")
-data class TriggerInvocationEvent(
+@SystemEventTopic("invocation::fixed_delay")
+data class FixedDelayInvocationEvent(
     override val shard: Shard,
     val func: Func,
     val trigger: Trigger
+) : Event()
+
+@Serializable
+@SystemEventTopic("invocation::event")
+data class EventInvocationEvent(
+    override val shard: Shard,
+    val func: Func,
+    val trigger: EventTrigger,
+    val events: List<Event>
 ) : Event()

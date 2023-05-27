@@ -20,7 +20,7 @@ data class Shard(val value: Int) {
 
     object Serializer : KSerializer<Shard> {
         override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("Shard", PrimitiveKind.LONG)
+            get() = PrimitiveSerialDescriptor("Shard", PrimitiveKind.INT)
 
         override fun deserialize(decoder: Decoder): Shard {
             return Shard(decoder.decodeInt())

@@ -1,7 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName

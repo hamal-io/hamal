@@ -1,6 +1,6 @@
 package io.hamal.backend.service
 
-import io.hamal.backend.event.TriggerInvocationEvent
+import io.hamal.backend.event.FixedDelayInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
@@ -44,7 +44,7 @@ class TriggerInvocationService
 
 internal fun TriggerInvocationService.emitInvocation(trigger: Trigger) {
     eventEmitter.emit(
-        TriggerInvocationEvent(
+        FixedDelayInvocationEvent(
             shard = trigger.shard,
             func = funcQueryService.get(trigger.funcId),
             trigger = trigger

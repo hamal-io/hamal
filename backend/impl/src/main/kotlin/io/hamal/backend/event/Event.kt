@@ -4,6 +4,9 @@ import io.hamal.lib.domain.Shard
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
+//FIXME SystemEvent : Event
+//FIXME TenantEvent : Event
+
 @Serializable
 sealed class Event { //FIXME can this be an interface?!
     /**
