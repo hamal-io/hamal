@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.backend.repository.api.log.Consumer.GroupId
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
 import java.nio.file.Path
@@ -33,4 +34,10 @@ interface GetTopics {
     fun topics(): Set<Topic>
 }
 
-interface BrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopics, ResolveTopic, Closeable
+interface GetTopic {
+    fun get(topicId: TopicId): Topic = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
+
+    fun find(topicId: TopicId): Topic?
+}
+
+interface BrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopic, GetTopics, ResolveTopic, Closeable

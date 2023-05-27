@@ -8,6 +8,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.util.TokenizerUtils
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.domain.vo.base.DomainName
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.Timestamp
@@ -25,6 +26,7 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     operator fun set(parameter: String, value: SnowflakeId): STATEMENT
     operator fun set(parameter: String, value: ReqId): STATEMENT
     operator fun set(parameter: String, value: DomainId): STATEMENT
+    operator fun set(parameter: String, value: DomainName): STATEMENT
     operator fun set(parameter: String, value: ByteArray): STATEMENT
     fun execute(): NamedResultSet?
     fun executeUpdate(): Int
@@ -94,6 +96,12 @@ class DefaultNamedPreparedStatement(
     override fun set(parameter: String, value: DomainId): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value.value) }
+        return this
+    }
+
+    override fun set(parameter: String, value: DomainName): DefaultNamedPreparedStatement {
+        parametersSet.add(parameter)
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value.value) }
         return this
     }
 

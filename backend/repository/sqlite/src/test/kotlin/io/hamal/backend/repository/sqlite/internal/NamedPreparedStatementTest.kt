@@ -5,7 +5,6 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -15,7 +14,7 @@ import java.sql.DriverManager
 class ParseTest {
 
     @Nested
-    
+
     inner class ParseTest {
         @Test
         fun `Empty string`() {
@@ -181,7 +180,7 @@ class DefaultNamedPreparedStatementTest {
     }
 
     @Nested
-    
+
     inner class EnsureAllParametersSetTest {
         @Test
         fun `All parameters set`() {

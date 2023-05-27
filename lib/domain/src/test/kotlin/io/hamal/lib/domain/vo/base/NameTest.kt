@@ -2,8 +2,6 @@ package io.hamal.lib.domain.vo.base
 
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -12,18 +10,18 @@ import org.junit.jupiter.api.assertThrows
 class NameTest {
     @Nested
     
-    inner class RefValidatorTest {
+    inner class DomainNameValidatorTest {
         @Test
         fun `Does nothing if reference is legal`() {
-            RefValidator.validate("hamal")
-            RefValidator.validate("ha-mal")
-            RefValidator.validate("ha_mal")
-            RefValidator.validate("HamaL")
-            RefValidator.validate("h")
-            RefValidator.validate("H4m41")
-            RefValidator.validate("H4:m::41")
-            RefValidator.validate("H@M@1")
-            RefValidator.validate("H".repeat(255))
+            DomainNameValidator.validate("hamal")
+            DomainNameValidator.validate("ha-mal")
+            DomainNameValidator.validate("ha_mal")
+            DomainNameValidator.validate("HamaL")
+            DomainNameValidator.validate("h")
+            DomainNameValidator.validate("H4m41")
+            DomainNameValidator.validate("H4:m::41")
+            DomainNameValidator.validate("H@M@1")
+            DomainNameValidator.validate("H".repeat(255))
         }
 
         @Test
@@ -35,7 +33,7 @@ class NameTest {
                 "h".repeat(256),
             )) {
                 val exception = assertThrows<IllegalArgumentException> {
-                    RefValidator.validate(illegal)
+                    DomainNameValidator.validate(illegal)
                 }
                 assertThat(exception.message, containsString("Reference('$illegal') is illegal"))
             }

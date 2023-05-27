@@ -5,17 +5,18 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 @Serializable
-sealed class Event {
+sealed class Event { //FIXME can this be an interface?!
     /**
      *FIXME maybe as function as each event should contain at least one domain object which has the shard already encoded
      */
     abstract val shard: Shard
 
-    val topic: String by lazy {
+    //FIXME move this out as there is a tenant event now
+    open val topic: String by lazy {
         val topicAnnotation =
-            this::class.annotations.find { annotation -> annotation.annotationClass == DomainNotificationTopic::class }
-                ?: throw IllegalStateException("DomainNotification not annotated with @DomainNotificationTopic")
-        (topicAnnotation as DomainNotificationTopic).value
+            this::class.annotations.find { annotation -> annotation.annotationClass == SystemEventTopic::class }
+                ?: throw IllegalStateException("SystemEvent not annotated with @SystemEventTopic")
+        (topicAnnotation as SystemEventTopic).value
     }
 }
 
@@ -23,9 +24,9 @@ sealed class Event {
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class DomainNotificationTopic(val value: String)
+annotation class SystemEventTopic(val value: String)
 
 
 fun <NOTIFICATION : Event> KClass<NOTIFICATION>.topic() =
-    annotations.find { annotation -> annotation.annotationClass == DomainNotificationTopic::class }
-        .let { it as DomainNotificationTopic }.value
+    annotations.find { annotation -> annotation.annotationClass == SystemEventTopic::class }
+        .let { it as SystemEventTopic }.value

@@ -64,6 +64,9 @@ class DefaultBrokerTopicsRepository(
         }
     }
 
+    override fun find(topicId: TopicId): Topic? = findById(topicId)
+
+
     override fun clear() {
         connection.tx {
             execute("DELETE FROM topics")
@@ -81,6 +84,23 @@ fun DefaultBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT C
         it.getLong("count").toULong()
     }
 } ?: 0UL
+
+private fun DefaultBrokerTopicsRepository.findById(topicId: TopicId): Topic? {
+    return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
+        with {
+            set("id", topicId.value)
+        }
+        map { rs ->
+            Topic(
+                id = TopicId(rs.getInt("id")),
+                brokerId = brokerTopics.brokerId,
+                name = TopicName(rs.getString("name")),
+                path = brokerTopics.path,
+                shard = Shard(0)
+            )
+        }
+    }
+}
 
 private fun DefaultBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
     return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {

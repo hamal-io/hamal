@@ -5,7 +5,7 @@ import io.hamal.lib.domain.Shard
 import kotlinx.serialization.Serializable
 
 @Serializable
-@DomainNotificationTopic("trigger::created")
+@SystemEventTopic("trigger::created")
 data class TriggerCreatedEvent(
     override val shard: Shard,
     val trigger: Trigger

@@ -32,7 +32,7 @@ class EventEmitter
 
     fun flush() {
         val notificationsToFlush = local.get() ?: listOf()
-        notificationsToFlush.forEach { (topic, notification) -> appender.append(topic, notification) }
+        notificationsToFlush.forEach { (topic, evt) -> appender.append(topic, evt) }
         local.remove()
     }
 }

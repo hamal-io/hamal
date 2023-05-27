@@ -4,9 +4,12 @@ import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.domain.vo.base.DomainName
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.nio.file.Files
 import java.sql.Connection
 import java.sql.DriverManager
@@ -35,6 +38,7 @@ class NamedPreparedStatementIT {
                 it.execute("""CREATE TABLE instant_table(value INT NOT NULL, another_value INT)""")
                 it.execute("""CREATE TABLE snowflake_id_table(value INT NOT NULL, another_value INT)""")
                 it.execute("""CREATE TABLE domain_id_table(value INT NOT NULL, another_value INT)""")
+                it.execute("""CREATE TABLE domain_name_table(value TEXT NOT NULL, another_value TEXT)""")
                 it.execute("""CREATE TABLE request_id_table(value INT NOT NULL, another_value INT)""")
                 it.execute("""CREATE TABLE nullable_table(value INT , another_value INT)""")
                 it.execute("""CREATE TABLE unique_number(value INT PRIMARY KEY )""")
@@ -44,7 +48,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    
+
     inner class ExecuteTest {
         @Test
         fun `Statement yields result set`() {
@@ -82,7 +86,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    
+
     inner class ExecuteUpdate {
         @Test
         fun `Statement inserts one row`() {
@@ -123,7 +127,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    
+
     inner class ExecuteQuery {
         @Test
         fun `Query does not return any value`() {
@@ -163,7 +167,7 @@ class NamedPreparedStatementIT {
     }
 
     @Nested
-    
+
     inner class SetTest {
 
         @Test
@@ -276,6 +280,24 @@ class NamedPreparedStatementIT {
 
             verifyIsOne("SELECT COUNT(*) FROM domain_id_table WHERE another_value = 0")
             verifyIsZero("SELECT COUNT(*) FROM domain_id_table WHERE another_value = 2810")
+        }
+
+        @Test
+        fun `Sets named parameter of type domain name`() {
+            class TestDomainName(override val value: String) : DomainName() {
+            }
+
+            connection.prepare("INSERT INTO domain_name_table(value, another_value) VALUES(:some_value, :another_value)")
+                .use {
+                    it["some_value"] = TestDomainName("hamal")
+                    it["another_value"] = TestDomainName("rocks")
+                    it.execute()
+                }
+            verifyIsOne("SELECT COUNT(*) FROM domain_name_table WHERE value = 'hamal'")
+            verifyIsZero("SELECT COUNT(*) FROM domain_name_table WHERE value = 'rocks'")
+
+            verifyIsOne("SELECT COUNT(*) FROM domain_name_table WHERE another_value = 'rocks'")
+            verifyIsZero("SELECT COUNT(*) FROM domain_name_table WHERE another_value = 'hamal'")
         }
 
         @Test

@@ -4,10 +4,28 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
 
+@Serializable
+data class ApiCreateTopicRequest(
+    val name: TopicName
+)
+
+@Serializable
+data class ApiCreateTopicResponse(
+    val id: TopicId,
+    val name: TopicName
+)
 
 @Serializable
 data class ApiAppendEvenRequest(
-    val data: String
+    val value: String
+)
+
+
+@Serializable
+data class ApiAppendEventResponse(
+    // FIXME
+    val topicId: TopicId,
+    val topicName: TopicName
 )
 
 

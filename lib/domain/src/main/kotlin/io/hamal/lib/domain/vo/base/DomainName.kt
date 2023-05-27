@@ -9,40 +9,33 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-abstract class Name : ValueObject.ComparableImpl<Name.Value>() {
-    @Serializable
-    data class Value(val value: String) : Comparable<Value> {
-        init {
-            RefValidator.validate(value)
-        }
-
-        override fun compareTo(other: Value) = value.compareTo(other.value)
-    }
-
+@Serializable
+abstract class DomainName : ValueObject.ComparableImpl<String>() {
     override fun toString(): String {
-        return "${this::class.simpleName}(${value.value})"
+        return "${this::class.simpleName}(${value})"
     }
 }
 
-internal object RefValidator {
+internal object DomainNameValidator {
     private val regex = Regex("^([A-Za-z0-9-_@:.]{1,255})$")
     fun validate(value: String) {
-        require(regex.matches(value)) { IllegalArgumentException("Reference('$value') is illegal") }
+        require(regex.matches(value)) { IllegalArgumentException("DomainName('$value') is illegal") }
     }
 }
 
 
-abstract class NameSerializer<REF : Name>(
-    val fn: (String) -> REF
-) : KSerializer<REF> {
+abstract class DomainNameSerializer<NAME : DomainName>(
+    val fn: (String) -> NAME
+) : KSerializer<NAME> {
     override val descriptor: SerialDescriptor
         get() = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder): REF {
+    override fun deserialize(decoder: Decoder): NAME {
         return fn(decoder.decodeString())
     }
 
-    override fun serialize(encoder: Encoder, value: REF) {
-        encoder.encodeString(value.value.value)
+    override fun serialize(encoder: Encoder, value: NAME) {
+        encoder.encodeString(value.value)
     }
 }
+

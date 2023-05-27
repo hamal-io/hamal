@@ -1,12 +1,10 @@
 package io.hamal.backend.event
 
 import io.hamal.lib.domain.Shard
-import io.hamal.lib.domain.vo.FuncId
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("func::created")
-data class FuncCreatedEvent(
+class TenantEvent(
     override val shard: Shard,
-    val id: FuncId,
+    override val topic: String //FIXME only temp should be part of the event
 ) : Event()

@@ -3,6 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.lib.common.KeyedOnce
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 
 
@@ -52,6 +53,8 @@ class DefaultBrokerRepository(
     override fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id) {
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
+
+    override fun find(topicId: TopicId) = topicsRepository.find(topicId)
 
     override fun topics(): Set<Topic> {
         return topicRepositoryMapping.keys()

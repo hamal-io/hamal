@@ -4,6 +4,7 @@ import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.domain.vo.base.DomainName
 import logger
 import java.sql.DriverManager
 import java.time.Instant
@@ -57,6 +58,14 @@ class NamedPreparedStatementDelegate(
     operator fun set(
         param: String,
         value: DomainId
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value
+        return this
+    }
+
+    operator fun set(
+        param: String,
+        value: DomainName
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this

@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 //) : Event()
 
 @Serializable
-@DomainNotificationTopic("invocation::adhoc")
+@SystemEventTopic("invocation::adhoc")
 data class AdhocInvocationEvent(
     override val shard: Shard,
     val reqId: ReqId,
@@ -25,7 +25,7 @@ data class AdhocInvocationEvent(
 ) : Event()
 
 @Serializable
-@DomainNotificationTopic("invocation::http")
+@SystemEventTopic("invocation::http")
 data class ApiInvocationEvent(
     override val shard: Shard,
     val func: Func
@@ -33,7 +33,7 @@ data class ApiInvocationEvent(
 
 
 @Serializable
-@DomainNotificationTopic("invocation::trigger")
+@SystemEventTopic("invocation::trigger")
 data class TriggerInvocationEvent(
     override val shard: Shard,
     val func: Func,

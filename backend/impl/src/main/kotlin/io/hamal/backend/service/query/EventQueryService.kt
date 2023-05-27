@@ -13,7 +13,8 @@ class EventQueryService(
     fun query(block: TopicQuery.() -> Unit): List<Topic> {
         val query = TopicQuery()
         block(query)
-        //FIXMEs
+        //FIXME apply query filter
+        
         return brokerRepository.topics().toList()
     }
 
