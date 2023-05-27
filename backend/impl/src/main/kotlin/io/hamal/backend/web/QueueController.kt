@@ -31,6 +31,7 @@ class QueueController
                 ApiAgentRequest(
                     id = it.id,
                     reference = FuncName("ref"),
+                    correlation = it.correlation,
                     code = it.code
                 )
             })

@@ -10,6 +10,7 @@ import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncRequest
@@ -82,6 +83,7 @@ open class FuncController(
             OneshotInvocationEvent(
                 reqId = reqId,
                 shard = shard,
+                correlationId = CorrelationId("__TBD__"), //FIXME
                 func = func
             )
         )

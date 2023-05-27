@@ -19,6 +19,7 @@ class EventInvocationHandler(
             ExecCmdService.ToPlan(
                 reqId = ReqId(123),
                 shard = func.shard,
+                correlation = null,
                 code = func.code,
                 // FIXME func for audit purpose ?
                 invocation = EventInvocation()

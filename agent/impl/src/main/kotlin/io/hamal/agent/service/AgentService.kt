@@ -68,8 +68,9 @@ class AgentService {
         DefaultHamalSdk.execService()
             .poll()
             .requests.forEach { request ->
+
                 println("$request")
-                println("Execute: ${request.id}")
+                println("Execute: ${request.id} - ${request.correlation}")
                 val env = EnvironmentValue(
                     identifier = Identifier("_G"),
                     values = mapOf(

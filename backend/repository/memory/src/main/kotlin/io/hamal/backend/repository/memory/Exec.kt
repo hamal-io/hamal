@@ -19,6 +19,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     override fun plan(reqId: ReqId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
         return PlannedExec(
             id = execToPlan.id,
+            reqId = reqId,
+            correlation = execToPlan.correlation,
             code = execToPlan.code,
             invocation = execToPlan.trigger
         ).also { execs[it.id] = it }
@@ -27,6 +29,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     override fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec {
         return ScheduledExec(
             id = planedExec.id,
+            reqId = planedExec.reqId,
+            correlation = planedExec.correlation,
             code = planedExec.code,
             invocation = planedExec.invocation,
             scheduledAt = ScheduledAt.now()
@@ -36,6 +40,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     override fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
         val result = QueuedExec(
             id = scheduledExec.id,
+            reqId = scheduledExec.reqId,
+            correlation = scheduledExec.correlation,
             code = scheduledExec.code,
             invocation = scheduledExec.invocation,
             queuedAt = QueuedAt.now()
@@ -48,6 +54,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         startedExecs.removeIf { it.id == startedExec.id }
         return CompletedExec(
             id = startedExec.id,
+            reqId = startedExec.reqId,
+            correlation = startedExec.correlation,
             code = startedExec.code,
             invocation = startedExec.invocation,
             completedAt = CompletedAt.now()
@@ -68,6 +76,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             val startedExec = queue.removeFirst().let {
                 StartedExec(
                     id = it.id,
+                    reqId = it.reqId,
+                    correlation = it.correlation,
                     code = it.code,
                     invocation = it.invocation,
                 ).also { execs[it.id] = it }

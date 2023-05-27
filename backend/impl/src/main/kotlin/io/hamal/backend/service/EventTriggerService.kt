@@ -39,7 +39,6 @@ class EventTriggerService
     }
 
 
-
     @Scheduled(fixedRate = 3, timeUnit = TimeUnit.SECONDS)
     fun run() {
 
@@ -61,6 +60,7 @@ class EventTriggerService
                     EventInvocationEvent(
                         shard = trigger.shard,
                         func = funcQueryService.get(trigger.funcId),
+                        correlationId = CorrelationId("__TBD__"), //FIXME
                         trigger = trigger,
                         events = evts
                     )

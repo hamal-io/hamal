@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.*
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
@@ -15,8 +16,9 @@ interface ExecCmdRepository {
     fun dequeue(): List<StartedExec>
 
     data class ExecToPlan(
-        val shard: Shard,
         val id: ExecId,
+        val shard: Shard,
+        val correlation: Correlation?,
         val code: Code,
         val trigger: Invocation
     )

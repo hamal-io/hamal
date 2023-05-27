@@ -7,6 +7,7 @@ import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.util.TimeUtils.now
+import io.hamal.lib.domain.vo.CorrelationId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -47,6 +48,7 @@ internal fun TriggerInvocationService.emitInvocation(trigger: Trigger) {
         FixedDelayInvocationEvent(
             shard = trigger.shard,
             func = funcQueryService.get(trigger.funcId),
+            correlationId = CorrelationId("__TBD__"), //FIXME
             trigger = trigger
         )
     )

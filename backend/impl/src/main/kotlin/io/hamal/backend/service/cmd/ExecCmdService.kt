@@ -5,6 +5,7 @@ import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.*
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
@@ -34,6 +35,7 @@ class ExecCmdService
     data class ToPlan(
         val reqId: ReqId,
         val shard: Shard,
+        val correlation: Correlation?,
         val code: Code,
         val invocation: Invocation
     )
@@ -63,8 +65,9 @@ class ExecCmdService
 private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
     return execCmdRepository.plan(
         toPlan.reqId, ExecCmdRepository.ExecToPlan(
-            shard = toPlan.shard,
             id = generateDomainId(toPlan.shard, ::ExecId),
+            shard = toPlan.shard,
+            correlation = toPlan.correlation,
             code = toPlan.code,
             trigger = toPlan.invocation
         )

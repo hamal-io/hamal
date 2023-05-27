@@ -1,12 +1,16 @@
 package io.hamal.backend.repository.api.domain
 
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.DomainObject
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Exec : DomainObject<ExecId>() {
     abstract val state: ExecState
+    abstract val reqId: ReqId
+    abstract val correlation: Correlation?
     abstract val code: Code
     abstract val invocation: Invocation
 }
@@ -14,6 +18,8 @@ sealed class Exec : DomainObject<ExecId>() {
 @Serializable
 class PlannedExec(
     override val id: ExecId,
+    override val reqId: ReqId,
+    override val correlation: Correlation?,
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
@@ -27,6 +33,8 @@ class PlannedExec(
 @Serializable
 class ScheduledExec(
     override val id: ExecId,
+    override val reqId: ReqId,
+    override val correlation: Correlation?,
     override val code: Code,
     override val invocation: Invocation,
     val scheduledAt: ScheduledAt
@@ -41,6 +49,8 @@ class ScheduledExec(
 @Serializable
 class QueuedExec(
     override val id: ExecId,
+    override val reqId: ReqId,
+    override val correlation: Correlation?,
     override val code: Code,
     override val invocation: Invocation,
     val queuedAt: QueuedAt
@@ -55,6 +65,8 @@ class QueuedExec(
 @Serializable
 class StartedExec(
     override val id: ExecId,
+    override val reqId: ReqId,
+    override val correlation: Correlation?,
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
@@ -68,6 +80,8 @@ class StartedExec(
 @Serializable
 class CompletedExec(
     override val id: ExecId,
+    override val reqId: ReqId,
+    override val correlation: Correlation?,
     override val code: Code,
     override val invocation: Invocation,
     val completedAt: CompletedAt
@@ -81,6 +95,8 @@ class CompletedExec(
 @Serializable
 class FailedExecution(
     override val id: ExecId,
+    override val reqId: ReqId,
+    override val correlation: Correlation?,
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {

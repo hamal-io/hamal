@@ -18,6 +18,7 @@ class AdhocInvocationHandler(
             ExecCmdService.ToPlan(
                 reqId = ReqId(123),
                 shard = evt.shard,
+                correlation = null,
                 code = evt.code,
                 // FIXME func for audit purpose ?
                 invocation = AdhocInvocation()
