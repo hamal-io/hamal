@@ -26,9 +26,10 @@ data class AdhocInvocationEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("invocation::http")
-data class ApiInvocationEvent(
+@SystemEventTopic("invocation::one_shot")
+data class OneshotInvocationEvent(
     override val shard: Shard,
+    val reqId: ReqId,
     val func: Func
 ) : Event()
 

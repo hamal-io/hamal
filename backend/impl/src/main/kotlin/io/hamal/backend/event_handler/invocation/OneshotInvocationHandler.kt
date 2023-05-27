@@ -1,26 +1,27 @@
 package io.hamal.backend.event_handler.invocation
 
-import io.hamal.backend.event.ApiInvocationEvent
+import io.hamal.backend.event.OneshotInvocationEvent
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.logger
-import io.hamal.backend.repository.api.domain.ApiInvocation
+import io.hamal.backend.repository.api.domain.OneshotInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
 
-class ApiInvocationHandler(
+class OneshotInvocationHandler(
     val execCmdService: ExecCmdService
-) : EventHandler<ApiInvocationEvent> {
-    private val log = logger(ApiInvocationHandler::class)
-    override fun handle(evt: ApiInvocationEvent) {
+) : EventHandler<OneshotInvocationEvent> {
+    private val log = logger(OneshotInvocationHandler::class)
+    override fun handle(evt: OneshotInvocationEvent) {
         log.debug("Handle: ${evt}")
+        val func = evt.func
 
         execCmdService.plan(
             ExecCmdService.ToPlan(
                 reqId = ReqId(123),
-                shard = evt.shard,
-                code = evt.func.code,
+                shard = func.shard,
+                code = func.code,
                 // FIXME func for audit purpose ?
-                invocation = ApiInvocation()
+                invocation = OneshotInvocation()
             )
         )
     }

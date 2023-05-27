@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.event.AdhocInvocationEvent
+import io.hamal.backend.event.OneshotInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Tenant
@@ -77,25 +77,12 @@ open class FuncController(
         //FIXME should be  a service
         val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
         val func = queryService.get(funcId)
-//        val result = execCmdService.plan(
-//            ExecCmdService.ToPlan(
-//                reqId = ReqId(123),
-//                shard = func.shard,
-//                code = func.code,
-//                invocation = ManualInvocation(
-//                    funcId = funcId
-//                )
-//            )
-//        )
 
         eventEmitter.emit(
-            AdhocInvocationEvent(
+            OneshotInvocationEvent(
                 reqId = reqId,
                 shard = shard,
-                code = func.code,
-                // FIXME invoked at
-                // FIXME invoked by
-
+                func = func
             )
         )
 

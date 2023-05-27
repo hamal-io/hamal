@@ -4,9 +4,9 @@ import io.hamal.backend.event.*
 import io.hamal.backend.event.service.EventProcessorFactory
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.invocation.AdhocInvocationHandler
-import io.hamal.backend.event_handler.invocation.ApiInvocationHandler
 import io.hamal.backend.event_handler.invocation.EventInvocationHandler
 import io.hamal.backend.event_handler.invocation.FixedDelayInvocationHandler
+import io.hamal.backend.event_handler.invocation.OneshotInvocationHandler
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.service.TriggerInvocationService
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -55,7 +55,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(ExecutionFailedEvent::class, ExecFailedHandler())
 
         .register(AdhocInvocationEvent::class, AdhocInvocationHandler(execCmdService))
-        .register(ApiInvocationEvent::class, ApiInvocationHandler(execCmdService))
+        .register(OneshotInvocationEvent::class, OneshotInvocationHandler(execCmdService))
         .register(EventInvocationEvent::class, EventInvocationHandler(execCmdService))
         .register(FixedDelayInvocationEvent::class, FixedDelayInvocationHandler(execCmdService))
 
