@@ -5,6 +5,7 @@ import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.memory.MemoryExecRepository
 import io.hamal.backend.repository.memory.MemoryFuncRepository
+import io.hamal.backend.repository.memory.MemoryStateRepository
 import io.hamal.backend.repository.memory.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.log.DefaultBrokerRepository
 import org.springframework.context.annotation.Bean
@@ -35,4 +36,10 @@ open class RepositoryConfig {
 
     @Bean
     open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
+
+    @Bean
+    open fun stateCmdRepository(): StateCmdRepository = MemoryStateRepository
+
+    @Bean
+    open fun stateQueryRepository(): StateQueryRepository = MemoryStateRepository
 }

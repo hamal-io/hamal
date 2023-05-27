@@ -8,7 +8,6 @@ import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 
 interface ExecCmdRepository {
-
     fun plan(reqId: ReqId, execToPlan: ExecToPlan): PlannedExec
     fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec
     fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec
