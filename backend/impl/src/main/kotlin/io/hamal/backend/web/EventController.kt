@@ -1,5 +1,6 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.event.TenantEvent
 import io.hamal.backend.service.cmd.EventCmdService
 import io.hamal.backend.service.query.EventQueryService
 import io.hamal.lib.domain.ReqId
@@ -22,7 +23,7 @@ open class EventController @Autowired constructor(
     fun listTopics(): ResponseEntity<ApiListTopicResponse> {
         return ResponseEntity.ok(
             ApiListTopicResponse(
-                topics = queryService.query {
+                topics = queryService.queryTopics {
 
                 }.map { topic ->
                     ApiListTopicResponse.Topic(
@@ -62,7 +63,8 @@ open class EventController @Autowired constructor(
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(
         @PathVariable("topicId") topicId: String,
-        @RequestBody body: ApiAppendEvenRequest
+        @RequestHeader("Content-Type") contentType: String,
+        @RequestBody body: ByteArray
     ): ResponseEntity<ApiAppendEventResponse> {
 
         cmdService.append(
@@ -71,7 +73,8 @@ open class EventController @Autowired constructor(
                 shard = Shard(1),
                 tenantId = TenantId(1),
                 topicId = TopicId(topicId.toInt()),
-                value = "I am an event"
+                contentTpe = contentType,
+                value = body
             )
         )
 
@@ -89,15 +92,23 @@ open class EventController @Autowired constructor(
         @RequestParam(required = false, name = "stringEvtId", defaultValue = "0") stringEvtId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListEventResponse> {
-
-        TODO()
-
-//        return ResponseEntity.ok(
-//            ApiListEventResponse(
-//                topic = "SomeTopic",
-//                events = listOf()
-//            )
-//        )
+        return ResponseEntity.ok(
+            ApiListEventResponse(
+                topicId = TopicId(0),
+                topicName = TopicName(""),
+                events = queryService.queryEvents(
+                    EventQueryService.EventQuery(
+                        topicId = TopicId(topicId.toInt())
+                    )
+                ).map {
+                    require(it is TenantEvent)
+                    ApiListEventResponse.Event(
+                        contentType = it.contentType,
+                        value = String(it.value)
+                    )
+                }
+            )
+        )
     }
 
 }

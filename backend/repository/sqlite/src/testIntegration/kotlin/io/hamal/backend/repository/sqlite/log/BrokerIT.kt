@@ -28,7 +28,7 @@ class BrokerIT {
 
             futures.forEach { it.join() }
 
-            val result = testInstance.read(GroupId("group-id"), topic, 100_000)
+            val result = testInstance.consume(GroupId("group-id"), topic, 100_000)
             assertThat(result, hasSize(10_000))
         }
     }
@@ -49,7 +49,7 @@ class BrokerIT {
             futures.forEach { it.join() }
 
             IntRange(1, 100).forEach { thread ->
-                val result = testInstance.read(
+                val result = testInstance.consume(
                     GroupId("group-id"),
                     testInstance.resolveTopic(TopicName("topic-$thread")),
                     1_000_000

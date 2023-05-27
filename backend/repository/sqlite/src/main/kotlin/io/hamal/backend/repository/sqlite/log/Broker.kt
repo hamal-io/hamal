@@ -45,7 +45,7 @@ class DefaultBrokerRepository(
         }
     }
 
-    override fun read(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {
+    override fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {
         val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
@@ -58,6 +58,10 @@ class DefaultBrokerRepository(
 
     override fun topics(): Set<Topic> {
         return topicRepositoryMapping.keys()
+    }
+
+    override fun read(lastId: Chunk.Id, topic: Topic, limit: Int): List<Chunk> {
+        return resolveRepository(topic).read(lastId, limit)
     }
 
     private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) {

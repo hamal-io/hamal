@@ -20,7 +20,7 @@ class ProtobufConsumer<Value : Any>(
 ) : Consumer<Value> {
 
     override fun consumeIndexed(limit: Int, fn: (Int, Value) -> CompletableFuture<*>): Int {
-        val chunksToConsume = brokerRepository.read(groupId, topic, limit)
+        val chunksToConsume = brokerRepository.consume(groupId, topic, limit)
 
         chunksToConsume.mapIndexed { index, chunk ->
             val future = fn(

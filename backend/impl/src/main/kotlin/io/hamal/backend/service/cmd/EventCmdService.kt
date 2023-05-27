@@ -30,7 +30,9 @@ class EventCmdService(
         appender.append(
             topic, TenantEvent(
                 shard = Shard(0),
-                topic = "tenant-topic"
+                topic = "tenant-topic",
+                contentType = eventToAppend.contentTpe,
+                value = eventToAppend.value
             )
         )
     }
@@ -48,7 +50,8 @@ class EventCmdService(
 
         val tenantId: TenantId,
         val topicId: TopicId,
-        val value: String
+        val contentTpe: String,
+        val value: ByteArray
 
     )
 }

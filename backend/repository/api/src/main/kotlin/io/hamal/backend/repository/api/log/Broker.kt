@@ -21,9 +21,13 @@ interface AppendToTopic {
 }
 
 interface ConsumeFromTopic {
-    fun read(groupId: GroupId, topic: Topic, limit: Int): List<Chunk>
+    fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk>
 
     fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id)
+}
+
+interface ReadFromTopic {
+    fun read(lastId: Chunk.Id, topic: Topic, limit: Int): List<Chunk>
 }
 
 interface ResolveTopic {
@@ -40,4 +44,5 @@ interface GetTopic {
     fun find(topicId: TopicId): Topic?
 }
 
-interface BrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopic, GetTopics, ResolveTopic, Closeable
+interface BrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopic, GetTopics, ReadFromTopic, ResolveTopic,
+    Closeable

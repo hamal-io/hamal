@@ -38,7 +38,8 @@ data class ApiListEventResponse(
 
     @Serializable
     data class Event(
-        val data: String
+        val contentType: String,
+        val value: String
     )
 }
 
