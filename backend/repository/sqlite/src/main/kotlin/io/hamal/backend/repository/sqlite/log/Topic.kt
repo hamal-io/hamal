@@ -15,7 +15,7 @@ class DefaultTopicRepository(
 ) : BaseRepository(
     object : Config {
         override val path: Path get() = topic.path
-        override val filename: String get() = String.format("topic-%05d", topic.id.value.toLong())
+        override val filename: String get() = String.format("topic-%08d", topic.id.value.toLong())
         override val shard: Shard get() = topic.shard
 
     }

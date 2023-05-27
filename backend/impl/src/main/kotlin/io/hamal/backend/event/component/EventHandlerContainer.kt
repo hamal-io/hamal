@@ -1,8 +1,8 @@
 package io.hamal.backend.event.component
 
 import io.hamal.backend.event.Event
-import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.event.topic
+import io.hamal.backend.event_handler.EventHandler
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 
@@ -14,9 +14,9 @@ class EventHandlerContainer : EventHandler.Container {
 
     private val lock = ReentrantReadWriteLock()
 
-    override fun <NOTIFICATION : Event> register(
-        clazz: KClass<NOTIFICATION>,
-        receiver: EventHandler<NOTIFICATION>
+    override fun <EVENT : Event> register(
+        clazz: KClass<EVENT>,
+        receiver: EventHandler<EVENT>
     ): Boolean {
         try {
             lock.writeLock().lock()
@@ -31,11 +31,11 @@ class EventHandlerContainer : EventHandler.Container {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <NOTIFICATION : Event> get(clazz: KClass<NOTIFICATION>): List<EventHandler<NOTIFICATION>> {
+    override fun <EVENT : Event> get(clazz: KClass<EVENT>): List<EventHandler<EVENT>> {
         try {
             lock.readLock().lock()
             return receiverMapping[clazz]
-                ?.map { it as EventHandler<NOTIFICATION> }
+                ?.map { it as EventHandler<EVENT> }
                 ?: listOf()
         } finally {
             lock.readLock().unlock()

@@ -20,9 +20,9 @@ interface EventProcessor {
 
 interface EventProcessorFactory {
 
-    fun <NOTIFICATION : Event> register(
-        clazz: KClass<NOTIFICATION>,
-        handler: EventHandler<NOTIFICATION>
+    fun <EVENT : Event> register(
+        clazz: KClass<EVENT>,
+        handler: EventHandler<EVENT>
     ): EventProcessorFactory
 
     fun create(): EventProcessor
@@ -35,9 +35,9 @@ class DefaultEventProcessor(
 
     private val handlerContainer = EventHandlerContainer()
 
-    override fun <NOTIFICATION : Event> register(
-        clazz: KClass<NOTIFICATION>,
-        handler: EventHandler<NOTIFICATION>
+    override fun <EVENT : Event> register(
+        clazz: KClass<EVENT>,
+        handler: EventHandler<EVENT>
     ): EventProcessorFactory {
         handlerContainer.register(clazz, handler)
         return this
@@ -55,7 +55,7 @@ class DefaultEventProcessor(
 
                 allDomainTopics.forEach { topic ->
                     val consumer = ProtobufConsumer(
-                        GroupId("domain-notification-processor"),
+                        GroupId("event-processor"),
                         topic,
                         brokerRepository,
                         Event::class
@@ -64,11 +64,11 @@ class DefaultEventProcessor(
                     scheduledTasks.add(
                         scheduledExecutorService.scheduleAtFixedRate(
                             {
-                                consumer.consume(100) { notification ->
+                                consumer.consume(100) { evt ->
                                     CompletableFuture.runAsync {
-                                        handlerContainer[notification::class].forEach { handler ->
+                                        handlerContainer[evt::class].forEach { handler ->
                                             try {
-                                                handler.handle(notification)
+                                                handler.handle(evt)
                                             } catch (t: Throwable) {
                                                 throw Error(t)
                                             }

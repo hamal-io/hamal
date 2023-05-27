@@ -39,6 +39,7 @@ class EventTriggerService
     }
 
 
+
     @Scheduled(fixedRate = 3, timeUnit = TimeUnit.SECONDS)
     fun run() {
 

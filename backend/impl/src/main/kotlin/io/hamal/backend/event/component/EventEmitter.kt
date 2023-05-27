@@ -5,12 +5,8 @@ import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.log.ProtobufAppender
 import io.hamal.lib.domain.vo.TopicName
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 
-@Component
-class EventEmitter
-@Autowired constructor(val brokerRepository: BrokerRepository) {
+class EventEmitter(val brokerRepository: BrokerRepository) {
 
     private val local: ThreadLocal<List<Pair<Topic, Event>>> = ThreadLocal<List<Pair<Topic, Event>>>()
 

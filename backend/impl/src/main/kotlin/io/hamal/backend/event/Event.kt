@@ -30,6 +30,6 @@ sealed class Event { //FIXME can this be an interface?!
 annotation class SystemEventTopic(val value: String)
 
 
-fun <NOTIFICATION : Event> KClass<NOTIFICATION>.topic() =
+fun <EVENT : Event> KClass<EVENT>.topic() =
     annotations.find { annotation -> annotation.annotationClass == SystemEventTopic::class }
         .let { it as SystemEventTopic }.value
