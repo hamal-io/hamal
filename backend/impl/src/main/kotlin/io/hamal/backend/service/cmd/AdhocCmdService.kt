@@ -1,6 +1,6 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.repository.api.domain.trigger.AdhocInvocation
+import io.hamal.backend.repository.api.domain.AdhocInvocation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code

@@ -6,8 +6,10 @@ import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.domain.Shard
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
 
 data class BrokerTopics(
@@ -24,7 +26,7 @@ class DefaultBrokerTopicsRepository(
 
 }), BrokerTopicsRepository {
 
-    private val topicMapping = KeyedOnce.default<Topic.Name, Topic>()
+    private val topicMapping = KeyedOnce.default<TopicName, Topic>()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -47,7 +49,7 @@ class DefaultBrokerTopicsRepository(
         }
     }
 
-    override fun resolveTopic(name: Topic.Name): Topic {
+    override fun resolveTopic(name: TopicName): Topic {
         return topicMapping.invoke(name) {
             connection.tx {
                 val id = findTopicId(name) ?: createTopic(name)
@@ -80,23 +82,23 @@ fun DefaultBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT C
     }
 } ?: 0UL
 
-private fun DefaultBrokerTopicsRepository.findTopicId(name: Topic.Name): Topic.Id? {
+private fun DefaultBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
     return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {
         with {
             set("name", name.value)
         }
         map {
-            Topic.Id(it.getInt("id"))
+            TopicId(it.getInt("id"))
         }
     }
 }
 
-private fun DefaultBrokerTopicsRepository.createTopic(name: Topic.Name): Topic.Id {
-    return connection.execute<Topic.Id>("INSERT INTO topics(name, instant) VALUES (:name, :now) RETURNING id") {
+private fun DefaultBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
+    return connection.execute<TopicId>("INSERT INTO topics(name, instant) VALUES (:name, :now) RETURNING id") {
         with {
             set("name", name.value)
             set("now", TimeUtils.now())
         }
-        map { Topic.Id(it.getInt("id")) }
+        map { TopicId(it.getInt("id")) }
     }!!
 }

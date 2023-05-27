@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.backend.repository.api.log.Consumer.GroupId
+import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
 import java.nio.file.Path
 
@@ -25,7 +26,11 @@ interface ConsumeFromTopic {
 }
 
 interface ResolveTopic {
-    fun resolveTopic(topicName: Topic.Name): Topic
+    fun resolveTopic(topicName: TopicName): Topic
 }
 
-interface BrokerRepository : AppendToTopic, ConsumeFromTopic, ResolveTopic, Closeable
+interface GetTopics {
+    fun topics(): Set<Topic>
+}
+
+interface BrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopics, ResolveTopic, Closeable

@@ -1,7 +1,7 @@
 package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.TriggerQueryRepository
-import io.hamal.backend.repository.api.domain.trigger.Trigger
+import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.vo.TriggerId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

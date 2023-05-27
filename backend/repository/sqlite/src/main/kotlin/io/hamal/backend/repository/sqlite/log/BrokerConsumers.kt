@@ -4,10 +4,10 @@ import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.BrokerConsumersRepository
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Consumer.GroupId
-import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
 data class BrokerConsumers(
@@ -48,7 +48,7 @@ class DefaultBrokerConsumersRepository(
         }
     }
 
-    override fun nextChunkId(groupId: GroupId, topicId: Topic.Id): Chunk.Id {
+    override fun nextChunkId(groupId: GroupId, topicId: TopicId): Chunk.Id {
         return connection.executeQueryOne(
             """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
         ) {
@@ -62,7 +62,7 @@ class DefaultBrokerConsumersRepository(
         } ?: Chunk.Id(0)
     }
 
-    override fun commit(groupId: GroupId, topicId: Topic.Id, chunkId: Chunk.Id) {
+    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: Chunk.Id) {
         connection.execute(
             """
             INSERT INTO consumers(group_id, topic_id, next_chunk_id)

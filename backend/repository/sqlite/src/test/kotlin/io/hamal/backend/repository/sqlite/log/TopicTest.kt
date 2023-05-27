@@ -1,13 +1,19 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.lib.domain.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.time.Instant
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
@@ -16,7 +22,7 @@ import kotlin.io.path.pathString
 class DefaultTopicRepositoryTest {
 
     @Nested
-    
+
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
@@ -30,9 +36,9 @@ class DefaultTopicRepositoryTest {
 
             DefaultTopicRepository(
                 Topic(
-                    id = Topic.Id(23),
+                    id = TopicId(23),
                     Broker.Id(42),
-                    name = Topic.Name("test-topic"),
+                    name = TopicName("test-topic"),
                     path = targetDir,
                     shard = Shard(123)
                 )
@@ -45,7 +51,7 @@ class DefaultTopicRepositoryTest {
     }
 
     @Nested
-    
+
     inner class AppendTest {
         @BeforeEach
         fun setup() {
@@ -75,7 +81,7 @@ class DefaultTopicRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(Chunk.Id(1)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(1)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(23)))
+                assertThat(chunk.topicId, equalTo(TopicId(23)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
@@ -86,7 +92,7 @@ class DefaultTopicRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(Chunk.Id(3)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(1)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(23)))
+                assertThat(chunk.topicId, equalTo(TopicId(23)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
@@ -96,9 +102,9 @@ class DefaultTopicRepositoryTest {
 
         private val testInstance = DefaultTopicRepository(
             Topic(
-                Topic.Id(23),
+                TopicId(23),
                 Broker.Id(42),
-                Topic.Name("test-topic"),
+                TopicName("test-topic"),
                 Path(testDir),
                 Shard(28)
             )
@@ -106,7 +112,7 @@ class DefaultTopicRepositoryTest {
     }
 
     @Nested
-    
+
     inner class ReadTest {
 
         @Test
@@ -124,7 +130,7 @@ class DefaultTopicRepositoryTest {
             assertThat(chunk.id, equalTo(Chunk.Id(id)))
             assertThat(chunk.partitionId, equalTo(Partition.Id(1)))
             assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
-            assertThat(chunk.topicId, equalTo(Topic.Id(23)))
+            assertThat(chunk.topicId, equalTo(TopicId(23)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
@@ -139,9 +145,9 @@ class DefaultTopicRepositoryTest {
 
         private val testInstance = DefaultTopicRepository(
             Topic(
-                Topic.Id(23),
+                TopicId(23),
                 Broker.Id(42),
-                Topic.Name("test-topic"),
+                TopicName("test-topic"),
                 Path(testDir),
                 Shard(65)
             )

@@ -1,6 +1,6 @@
 package io.hamal.backend.filter
 
-import io.hamal.backend.repository.api.domain.tenant.Tenant.Active
+import io.hamal.backend.repository.api.domain.Tenant.Active
 import io.hamal.lib.domain.vo.TenantId
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

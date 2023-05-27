@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.FuncCmdRepository.Command
 import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.domain.func.Func
+import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId

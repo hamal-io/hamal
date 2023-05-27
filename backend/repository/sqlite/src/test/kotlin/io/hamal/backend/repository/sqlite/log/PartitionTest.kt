@@ -3,10 +3,10 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Partition
 import io.hamal.backend.repository.api.log.Segment
-import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -34,7 +34,7 @@ class DefaultPartitionRepositoryTest {
             DefaultPartitionRepository(
                 Partition(
                     id = Partition.Id(23),
-                    topicId = Topic.Id(34),
+                    topicId = TopicId(34),
                     path = targetDir,
                     shard = Shard(12)
                 )
@@ -77,7 +77,7 @@ class DefaultPartitionRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(Chunk.Id(1)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(23)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(34)))
+                assertThat(chunk.topicId, equalTo(TopicId(34)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -88,7 +88,7 @@ class DefaultPartitionRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(Chunk.Id(3)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(23)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(34)))
+                assertThat(chunk.topicId, equalTo(TopicId(34)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -97,7 +97,7 @@ class DefaultPartitionRepositoryTest {
         }
 
         private val testInstance = DefaultPartitionRepository(
-            Partition(Partition.Id(23), Topic.Id(34), Path(testDir), Shard(23))
+            Partition(Partition.Id(23), TopicId(34), Path(testDir), Shard(23))
         )
     }
 
@@ -120,7 +120,7 @@ class DefaultPartitionRepositoryTest {
             assertThat(chunk.id, equalTo(Chunk.Id(id)))
             assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
             assertThat(chunk.partitionId, equalTo(Partition.Id(2810)))
-            assertThat(chunk.topicId, equalTo(Topic.Id(1212)))
+            assertThat(chunk.topicId, equalTo(TopicId(1212)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
@@ -138,7 +138,7 @@ class DefaultPartitionRepositoryTest {
         private val testInstance = DefaultPartitionRepository(
             Partition(
                 id = Partition.Id(2810),
-                topicId = Topic.Id(1212),
+                topicId = TopicId(1212),
                 path = Path(testDir),
                 shard = Shard(110)
             )

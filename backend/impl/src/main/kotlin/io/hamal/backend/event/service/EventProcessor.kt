@@ -5,8 +5,8 @@ import io.hamal.backend.event.component.EventHandlerContainer
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Consumer
-import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.log.ProtobufConsumer
+import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import java.time.Duration
@@ -50,7 +50,7 @@ class DefaultEventProcessor(
 
             init {
                 val allDomainTopics = handlerContainer.topics()
-                    .map { Topic.Name(it) }
+                    .map { TopicName(it) }
                     .map(brokerRepository::resolveTopic)
 
                 allDomainTopics.forEach { topic ->

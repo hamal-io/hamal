@@ -4,6 +4,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.log.BrokerRepository
 import io.hamal.backend.repository.api.log.Topic
 import io.hamal.backend.repository.sqlite.log.ProtobufAppender
+import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -19,12 +20,12 @@ class EventEmitter
         local.set(listOf())
     }
 
-    fun <EVENT : Event> emit(notification: EVENT) {
-        val topic = brokerRepository.resolveTopic(Topic.Name(notification.topic))
+    fun <EVENT : Event> emit(evt: EVENT) {
+        val topic = brokerRepository.resolveTopic(TopicName(evt.topic))
         if (local.get() == null) {
-            local.set(listOf(Pair(topic, notification)))
+            local.set(listOf(Pair(topic, evt)))
         } else {
-            local.set(local.get().plus(Pair(topic, notification)))
+            local.set(local.get().plus(Pair(topic, evt)))
         }
         flush()
     }

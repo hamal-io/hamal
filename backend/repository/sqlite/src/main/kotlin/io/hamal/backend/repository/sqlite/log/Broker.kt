@@ -3,6 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.api.log.Consumer.GroupId
 import io.hamal.lib.common.KeyedOnce
+import io.hamal.lib.domain.vo.TopicName
 
 
 class DefaultBrokerRepository(
@@ -29,7 +30,7 @@ class DefaultBrokerRepository(
 
     private val topicRepositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
 
-    override fun resolveTopic(topicName: Topic.Name) = topicsRepository.resolveTopic(topicName)
+    override fun resolveTopic(topicName: TopicName) = topicsRepository.resolveTopic(topicName)
 
     override fun append(topic: Topic, bytes: ByteArray) {
         resolveRepository(topic).append(bytes)
@@ -50,6 +51,10 @@ class DefaultBrokerRepository(
 
     override fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id) {
         consumersRepository.commit(groupId, topic.id, chunkId)
+    }
+
+    override fun topics(): Set<Topic> {
+        return topicRepositoryMapping.keys()
     }
 
     private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) {

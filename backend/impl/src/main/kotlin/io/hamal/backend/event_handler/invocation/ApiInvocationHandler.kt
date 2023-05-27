@@ -3,7 +3,7 @@ package io.hamal.backend.event_handler.invocation
 import io.hamal.backend.event.ApiInvocationEvent
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.logger
-import io.hamal.backend.repository.api.domain.trigger.ApiInvocation
+import io.hamal.backend.repository.api.domain.ApiInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
 

@@ -3,11 +3,11 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Partition
 import io.hamal.backend.repository.api.log.Segment
-import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
+import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -105,7 +105,7 @@ class DefaultSegmentRepositoryTest {
         private fun testSegment(path: Path = Path(testDir)) = Segment(
             id = Segment.Id(2810),
             partitionId = Partition.Id(1212),
-            topicId = Topic.Id(1506),
+            topicId = TopicId(1506),
             path = path,
             shard = Shard(24)
         )
@@ -139,7 +139,7 @@ class DefaultSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
+                assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
                 assertThat(chunk.shard, equalTo(Shard(42)))
@@ -161,7 +161,7 @@ class DefaultSegmentRepositoryTest {
                 assertThat(chunk.id, equalTo(Chunk.Id(1)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
+                assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
             }
@@ -191,7 +191,7 @@ class DefaultSegmentRepositoryTest {
                 assertThat(chunk.id, equalTo(Chunk.Id(1)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
+                assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
@@ -202,7 +202,7 @@ class DefaultSegmentRepositoryTest {
                 assertThat(chunk.id, equalTo(Chunk.Id(3)))
                 assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.partitionId, equalTo(Partition.Id(1212)))
-                assertThat(chunk.topicId, equalTo(Topic.Id(1506)))
+                assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
@@ -232,7 +232,7 @@ class DefaultSegmentRepositoryTest {
             Segment(
                 id = Segment.Id(2810),
                 partitionId = Partition.Id(1212),
-                topicId = Topic.Id(1506),
+                topicId = TopicId(1506),
                 path = Path(testDir),
                 shard = Shard(42)
             )
@@ -332,7 +332,7 @@ class DefaultSegmentRepositoryTest {
             Segment(
                 id = Segment.Id(1028),
                 partitionId = Partition.Id(1212),
-                topicId = Topic.Id(1506),
+                topicId = TopicId(1506),
                 path = Path(testDir),
                 shard = Shard(42)
             )
@@ -349,7 +349,7 @@ class DefaultSegmentRepositoryTest {
                 Segment(
                     id = Segment.Id(1028),
                     partitionId = Partition.Id(1212),
-                    topicId = Topic.Id(1506),
+                    topicId = TopicId(1506),
                     path = Path(testDir),
                     shard = Shard(42)
                 )
@@ -364,7 +364,7 @@ class DefaultSegmentRepositoryTest {
                 Segment(
                     id = Segment.Id(1028),
                     partitionId = Partition.Id(1212),
-                    topicId = Topic.Id(1506),
+                    topicId = TopicId(1506),
                     path = Path(testDir),
                     shard = Shard(42)
                 )

@@ -1,7 +1,7 @@
 package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.ExecQueryRepository
-import io.hamal.backend.repository.api.domain.exec.Exec
+import io.hamal.backend.repository.api.domain.Exec
 import io.hamal.lib.domain.vo.ExecId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -2,11 +2,10 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Consumer.GroupId
-import io.hamal.backend.repository.api.log.Topic
+import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
@@ -15,14 +14,14 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ConsumerIT {
     @Nested
-    
+
     inner class ProtobufConsumerTest {
         @Test
         fun `Late consumer starts at the beginning`() {
             val path = Files.createTempDirectory("broker_it")
 
             DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
-                val topic = brokerRepository.resolveTopic(Topic.Name("topic"))
+                val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(topic, "$it") }
 
@@ -58,13 +57,13 @@ class ConsumerIT {
             val path = Files.createTempDirectory("broker_it")
 
             DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
-                val topic = brokerRepository.resolveTopic(Topic.Name("topic"))
+                val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(topic, "$it") }
             }
 
             DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
-                val topic = brokerRepository.resolveTopic(Topic.Name("topic"))
+                val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, value ->
                     CompletableFuture.runAsync {
@@ -79,7 +78,7 @@ class ConsumerIT {
             val path = Files.createTempDirectory("broker_it")
 
             DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
-                val topic = brokerRepository.resolveTopic(Topic.Name("topic"))
+                val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
 
                 val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)

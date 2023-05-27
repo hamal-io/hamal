@@ -3,8 +3,8 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Chunk
 import io.hamal.backend.repository.api.log.Consumer.*
-import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.common.util.FileUtils
+import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -109,7 +109,7 @@ class DefaultBrokerConsumersRepositoryTest {
 
     @Nested
     
-    inner class NextChunkIdTest {
+    inner class NextChunkTopicIdTest {
 
         @BeforeEach
         fun setup() {
@@ -123,31 +123,31 @@ class DefaultBrokerConsumersRepositoryTest {
 
         @Test
         fun `Returns chunk id 0 if no entry exists for group id and topic id`() {
-            val result = testInstance.nextChunkId(GroupId("some-group-id"), Topic.Id(42))
+            val result = testInstance.nextChunkId(GroupId("some-group-id"), TopicId(42))
             assertThat(result, equalTo(Chunk.Id(0)))
             assertThat(testInstance.count(), equalTo(0UL))
         }
 
         @Test
         fun `Next chunk id - is last committed chunk id plus 1`() {
-            testInstance.commit(GroupId("some-group-id"), Topic.Id(1), Chunk.Id(127))
-            val result = testInstance.nextChunkId(GroupId("some-group-id"), Topic.Id(1))
+            testInstance.commit(GroupId("some-group-id"), TopicId(1), Chunk.Id(127))
+            val result = testInstance.nextChunkId(GroupId("some-group-id"), TopicId(1))
             assertThat(result, equalTo(Chunk.Id(128)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different topic`() {
-            testInstance.commit(GroupId("some-group-id"), Topic.Id(1), Chunk.Id(127))
-            val result = testInstance.nextChunkId(GroupId("some-group-id"), Topic.Id(2))
+            testInstance.commit(GroupId("some-group-id"), TopicId(1), Chunk.Id(127))
+            val result = testInstance.nextChunkId(GroupId("some-group-id"), TopicId(2))
             assertThat(result, equalTo(Chunk.Id(0)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different group`() {
-            testInstance.commit(GroupId("some-group-id"), Topic.Id(1), Chunk.Id(127))
-            val result = testInstance.nextChunkId(GroupId("different-group-id"), Topic.Id(1))
+            testInstance.commit(GroupId("some-group-id"), TopicId(1), Chunk.Id(127))
+            val result = testInstance.nextChunkId(GroupId("different-group-id"), TopicId(1))
             assertThat(result, equalTo(Chunk.Id(0)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
@@ -176,7 +176,7 @@ class DefaultBrokerConsumersRepositoryTest {
 
         @Test
         fun `Never committed before`() {
-            testInstance.commit(GroupId("some-group"), Topic.Id(123), Chunk.Id(23))
+            testInstance.commit(GroupId("some-group"), TopicId(123), Chunk.Id(23))
             assertThat(testInstance.count(), equalTo(1UL))
 
             testInstance.connection.executeQuery("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
@@ -188,9 +188,9 @@ class DefaultBrokerConsumersRepositoryTest {
 
         @Test
         fun `Committed before`() {
-            testInstance.commit(GroupId("some-group"), Topic.Id(123), Chunk.Id(23))
+            testInstance.commit(GroupId("some-group"), TopicId(123), Chunk.Id(23))
 
-            testInstance.commit(GroupId("some-group"), Topic.Id(123), Chunk.Id(1337))
+            testInstance.commit(GroupId("some-group"), TopicId(123), Chunk.Id(1337))
             assertThat(testInstance.count(), equalTo(1UL))
 
             testInstance.connection.executeQuery("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
@@ -202,8 +202,8 @@ class DefaultBrokerConsumersRepositoryTest {
 
         @Test
         fun `Does not overwrite different topic id `() {
-            testInstance.commit(GroupId("some-group"), Topic.Id(23), Chunk.Id(1))
-            testInstance.commit(GroupId("some-group"), Topic.Id(34), Chunk.Id(2))
+            testInstance.commit(GroupId("some-group"), TopicId(23), Chunk.Id(1))
+            testInstance.commit(GroupId("some-group"), TopicId(34), Chunk.Id(2))
 
             assertThat(testInstance.count(), equalTo(2UL))
             testInstance.connection.executeQuery("SELECT group_id FROM consumers") { resultSet ->
@@ -213,8 +213,8 @@ class DefaultBrokerConsumersRepositoryTest {
 
         @Test
         fun `Does not overwrite different group id`() {
-            testInstance.commit(GroupId("some-group"), Topic.Id(23), Chunk.Id(1))
-            testInstance.commit(GroupId("another-group"), Topic.Id(23), Chunk.Id(2))
+            testInstance.commit(GroupId("some-group"), TopicId(23), Chunk.Id(1))
+            testInstance.commit(GroupId("another-group"), TopicId(23), Chunk.Id(2))
 
             assertThat(testInstance.count(), equalTo(2UL))
             testInstance.connection.executeQuery("SELECT topic_id FROM consumers") { resultSet ->

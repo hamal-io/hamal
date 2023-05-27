@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.domain.func.Func
+import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard

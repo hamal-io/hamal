@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command.FixedRateTriggerToCreate
-import io.hamal.backend.repository.api.domain.trigger.Trigger
+import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.FuncId

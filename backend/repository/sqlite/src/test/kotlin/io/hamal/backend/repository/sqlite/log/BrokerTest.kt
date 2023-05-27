@@ -1,12 +1,12 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.Broker
-import io.hamal.backend.repository.api.log.Topic
 import io.hamal.lib.common.util.FileUtils
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -17,7 +17,7 @@ import kotlin.io.path.pathString
 class BrokerRepositoryTest {
 
     @Nested
-    
+
     inner class ConstructorTest {
 
         @Test
@@ -39,17 +39,17 @@ class BrokerRepositoryTest {
     }
 
     @Nested
-    
+
     inner class ResolveTopicTest {
         @Test
         fun `Bug - Able to resolve real topic`() {
             val testPath = java.nio.file.Files.createTempDirectory("testDir")
             val testInstance = DefaultBrokerRepository(Broker(Broker.Id(456), testPath))
 
-            val result = testInstance.resolveTopic(Topic.Name("scheduler::flow_enqueued"))
-            assertThat(result.id, equalTo(Topic.Id(1)))
+            val result = testInstance.resolveTopic(TopicName("scheduler::flow_enqueued"))
+            assertThat(result.id, equalTo(TopicId(1)))
             assertThat(result.brokerId, equalTo(Broker.Id(456)))
-            assertThat(result.name, equalTo(Topic.Name("scheduler::flow_enqueued")))
+            assertThat(result.name, equalTo(TopicName("scheduler::flow_enqueued")))
             assertThat(result.path, equalTo(testPath))
         }
     }

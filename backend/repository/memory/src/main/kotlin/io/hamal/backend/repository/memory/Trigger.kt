@@ -5,8 +5,8 @@ import io.hamal.backend.repository.api.TriggerCmdRepository.Command
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command.FixedRateTriggerToCreate
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.Query
-import io.hamal.backend.repository.api.domain.trigger.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.trigger.Trigger
+import io.hamal.backend.repository.api.domain.FixedRateTrigger
+import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.FixedRate

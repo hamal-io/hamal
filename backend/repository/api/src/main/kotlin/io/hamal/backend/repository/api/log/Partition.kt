@@ -1,12 +1,13 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.vo.TopicId
 import java.io.Closeable
 import java.nio.file.Path
 
 data class Partition(
     val id: Id,
-    val topicId: Topic.Id,
+    val topicId: TopicId,
     val path: Path,
     val shard: Shard
 ) {

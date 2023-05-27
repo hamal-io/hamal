@@ -2,8 +2,8 @@ package io.hamal.backend.web
 
 import io.hamal.backend.event.AdhocInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.repository.api.domain.func.Func
-import io.hamal.backend.repository.api.domain.tenant.Tenant
+import io.hamal.backend.repository.api.domain.Func
+import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService

@@ -3,8 +3,8 @@ package io.hamal.backend.service
 import io.hamal.backend.event.TriggerInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
-import io.hamal.backend.repository.api.domain.trigger.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.trigger.Trigger
+import io.hamal.backend.repository.api.domain.FixedRateTrigger
+import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.util.TimeUtils.now
 import org.springframework.beans.factory.annotation.Autowired

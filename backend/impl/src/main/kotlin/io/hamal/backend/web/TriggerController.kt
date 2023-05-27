@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.repository.api.domain.tenant.Tenant
+import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.service.cmd.TriggerCmdService
 import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.service.query.TriggerQueryService

@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.api.domain.func
+package io.hamal.backend.repository.api.domain
 
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.Code

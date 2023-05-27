@@ -2,7 +2,7 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.Broker
 import io.hamal.backend.repository.api.log.Consumer.GroupId
-import io.hamal.backend.repository.api.log.Topic
+import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -16,7 +16,7 @@ class BrokerIT {
         val path = Files.createTempDirectory("broker_it")
 
         DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { testInstance ->
-            val topic = testInstance.resolveTopic(Topic.Name("topic"))
+            val topic = testInstance.resolveTopic(TopicName("topic"))
 
             val futures = IntRange(1, 10).map { thread ->
                 CompletableFuture.runAsync {
@@ -40,7 +40,7 @@ class BrokerIT {
         DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { testInstance ->
             val futures = IntRange(1, 100).map { thread ->
                 CompletableFuture.runAsync {
-                    val topic = testInstance.resolveTopic(Topic.Name("topic-$thread"))
+                    val topic = testInstance.resolveTopic(TopicName("topic-$thread"))
                     IntRange(1, 100).forEach {
                         testInstance.append(topic, "$thread $it".toByteArray())
                     }
@@ -51,7 +51,7 @@ class BrokerIT {
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.read(
                     GroupId("group-id"),
-                    testInstance.resolveTopic(Topic.Name("topic-$thread")),
+                    testInstance.resolveTopic(TopicName("topic-$thread")),
                     1_000_000
                 )
                 assertThat(result, hasSize(100))

@@ -4,7 +4,7 @@ import io.hamal.backend.event.TriggerCreatedEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.createFixedRateTrigger
-import io.hamal.backend.repository.api.domain.trigger.Trigger
+import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain._enum.TriggerType

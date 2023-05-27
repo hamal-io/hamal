@@ -1,7 +1,7 @@
 package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.domain.func.Func
+import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -1,7 +1,7 @@
 package io.hamal.backend.web
 
 import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.repository.api.domain.exec.StartedExec
+import io.hamal.backend.repository.api.domain.StartedExec
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import io.hamal.lib.common.SnowflakeId
