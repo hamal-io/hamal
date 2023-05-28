@@ -7,9 +7,14 @@ import io.hamal.lib.sdk.domain.ApiAgentExecRequests
 interface ExecService {
     fun poll(): ApiAgentExecRequests
 
-    fun complete(execId: ExecId)
+    fun complete(execId: ExecId, stateAfterCompletion: StateAfterCompletion)
 
     fun fail(execId: ExecId)
+
+    data class StateAfterCompletion(
+        val contentType: String,
+        val bytes: ByteArray
+    )
 }
 
 class DefaultExecService : ExecService {
@@ -19,9 +24,10 @@ class DefaultExecService : ExecService {
             .execute(ApiAgentExecRequests::class)
     }
 
-    override fun complete(execId: ExecId) {
+    override fun complete(execId: ExecId, stateAfterCompletion: ExecService.StateAfterCompletion) {
         HttpTemplate("http://localhost:8084")
             .post("/v1/execs/${execId.value.value}/complete")
+            .body(stateAfterCompletion.contentType, stateAfterCompletion.bytes)
             .execute()
     }
 

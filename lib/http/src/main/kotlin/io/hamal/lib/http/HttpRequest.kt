@@ -26,7 +26,8 @@ interface HttpRequest {
 
 interface HttpRequestWithBody : HttpRequest {
     fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): HttpRequestWithBody
-    fun body(json: String): HttpRequestWithBody
+    fun body(str: String): HttpRequestWithBody
+    fun body(contentType: String, bytes: ByteArray): HttpRequestWithBody
 }
 
 inline fun <reified BODY_TYPE : Any> HttpRequestWithBody.body(body: BODY_TYPE): HttpRequestWithBody =
@@ -54,12 +55,23 @@ class DefaultHttpRequest(
         return this
     }
 
-    override fun body(json: String): HttpRequestWithBody {
+    override fun body(str: String): HttpRequestWithBody {
         bodies.add(
             HttpStringBody(
                 name = "cmd",
-                content = json,
+                content = str,
                 contentType = "application/json"
+            )
+        )
+        return this
+    }
+
+    override fun body(contentType: String, bytes: ByteArray): HttpRequestWithBody {
+        bodies.add(
+            HttpByteArrayBody(
+                name = "cmd",
+                content = bytes,
+                contentType = contentType
             )
         )
         return this

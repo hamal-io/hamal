@@ -128,6 +128,7 @@ internal sealed class HttpRequestWithBodyFacade(
 
             1 -> when (val body = bodies.first()) {
                 is HttpStringBody -> ByteArrayEntity(body.content.toByteArray(), ContentType.create(body.contentType))
+                is HttpByteArrayBody -> ByteArrayEntity(body.content, ContentType.create(body.contentType))
                 else -> TODO()
             }
 

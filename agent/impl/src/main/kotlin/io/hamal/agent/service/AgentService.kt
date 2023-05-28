@@ -8,6 +8,7 @@ import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.sdk.DefaultHamalSdk
+import io.hamal.lib.sdk.service.ExecService
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -91,7 +92,12 @@ class AgentService {
 
                 println("Finish executing task ${request.id}")
 
-                DefaultHamalSdk.execService().complete(request.id)
+                DefaultHamalSdk.execService().complete(
+                    request.id, ExecService.StateAfterCompletion(
+                        contentType = "application/json",
+                        bytes = "{\"hamal\":\"rockz\"}".toByteArray()
+                    )
+                )
 
             }
     }

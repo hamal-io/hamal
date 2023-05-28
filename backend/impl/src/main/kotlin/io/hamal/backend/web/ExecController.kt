@@ -61,8 +61,11 @@ open class ExecController(
 
     @PostMapping("/v1/execs/{execId}/complete")
     fun completeExec(
-        @PathVariable("execId") stringExecId: String // FIXME be able to use value objects directly here
+        @PathVariable("execId") stringExecId: String, // FIXME be able to use value objects directly here
+        @RequestHeader("Content-Type") contentType: String,
+        @RequestBody bytes: ByteArray
     ) {
+        
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 
