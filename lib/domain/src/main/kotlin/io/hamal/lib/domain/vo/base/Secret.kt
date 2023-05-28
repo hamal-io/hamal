@@ -1,4 +1,4 @@
-package io.hamal.lib.domain
+package io.hamal.lib.domain.vo.base
 
 import kotlinx.serialization.Serializable
 
