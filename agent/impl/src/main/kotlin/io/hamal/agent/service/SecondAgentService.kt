@@ -16,7 +16,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 @Service
-class AgentService {
+class SecondAgentService {
 
     private val functionValues = mutableListOf<FunctionValue>()
 
@@ -70,7 +70,7 @@ class AgentService {
             .poll()
             .requests.forEach { request ->
 
-                println("PRIMARY AGENT")
+                println("SECONDARY AGENT")
                 println("$request")
                 println("Execute: ${request.id} - ${request.correlation}")
                 println("State: ${request.statePayload}")
