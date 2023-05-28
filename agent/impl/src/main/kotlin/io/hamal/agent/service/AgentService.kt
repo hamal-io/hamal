@@ -73,6 +73,10 @@ class AgentService {
                 println("$request")
                 println("Execute: ${request.id} - ${request.correlation}")
                 println("State: ${request.statePayload}")
+
+                val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
+                println(counter)
+
                 val env = EnvironmentValue(
                     identifier = Identifier("_G"),
                     values = mapOf(
@@ -95,7 +99,7 @@ class AgentService {
                 DefaultHamalSdk.execService().complete(
                     request.id, ExecService.StateAfterCompletion(
                         contentType = "application/json",
-                        bytes = "{\"hamal\":\"rockz\"}".toByteArray()
+                        bytes = (counter + 1).toString().toByteArray()
                     )
                 )
 

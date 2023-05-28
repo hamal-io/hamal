@@ -1,12 +1,13 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.event.AgentCompletedEvent
 import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.repository.api.domain.StartedExec
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiDetailExecutionModel
 import io.hamal.lib.sdk.domain.ApiSimpleExecutionModel
@@ -69,15 +70,27 @@ open class ExecController(
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 
-        //FIXME find a nicer way to express this
-        val startedExec = queryService.get(execId) as StartedExec
-        cmdService.complete(
-            ExecCmdService.ToComplete(
-                reqId = ReqId(1234),
-                shard = Shard(execId.partition().value.toInt()), //FIXME
-                startedExec = startedExec
+        eventEmitter.emit(
+            AgentCompletedEvent(
+                reqId = ReqId(123),
+                shard = Shard(1),
+                execId = execId,
+                statePayload = StatePayload(
+                    contentType = contentType,
+                    bytes = bytes
+                )
             )
         )
+
+//        //FIXME find a nicer way to express this
+//        val startedExec = queryService.get(execId) as StartedExec
+//        cmdService.complete(
+//            ExecCmdService.ToComplete(
+//                reqId = ReqId(1234),
+//                shard = Shard(execId.partition().value.toInt()), //FIXME
+//                startedExec = startedExec
+//            )
+//        )
     }
 
     @PostMapping("/v1/execs/{execId}/fail")

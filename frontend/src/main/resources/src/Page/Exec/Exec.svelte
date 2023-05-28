@@ -26,7 +26,7 @@
     {#each $execs as func}
         <div>
             <h2> {func.id}</h2>
-            <h4> {func.name} </h4>
+            <h4> {func.state    } </h4>
         </div>
     {/each}
 </div>
