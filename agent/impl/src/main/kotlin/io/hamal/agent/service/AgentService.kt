@@ -13,6 +13,7 @@ import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.io.File
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 @Service
@@ -66,45 +67,46 @@ class AgentService {
 
     @Scheduled(initialDelay = 100, fixedDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
-        DefaultHamalSdk.execService()
-            .poll()
-            .requests.forEach { request ->
+        CompletableFuture.runAsync {
+            DefaultHamalSdk.execService()
+                .poll()
+                .requests.forEach { request ->
 
-                println("PRIMARY AGENT")
-                println("$request")
-                println("Execute: ${request.id} - ${request.correlation}")
-                println("State: ${request.statePayload}")
+//                println("$request")
+//                println("Execute: ${request.id} - ${request.correlation}")
+//                println("State: ${request.statePayload}")
+//
+                    val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
+//                println(counter)
 
-                val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
-                println(counter)
-
-                val env = EnvironmentValue(
-                    identifier = Identifier("_G"),
-                    values = mapOf(
-                        AssertFunction.identifier to AssertFunction,
-                        RequireFunction.identifier to RequireFunction
+                    val env = EnvironmentValue(
+                        identifier = Identifier("_G"),
+                        values = mapOf(
+                            AssertFunction.identifier to AssertFunction,
+                            RequireFunction.identifier to RequireFunction
+                        )
                     )
-                )
 
 
-                extensionEnvironments.forEach { environment ->
-                    env.addGlobal(environment.identifier, environment)
+                    extensionEnvironments.forEach { environment ->
+                        env.addGlobal(environment.identifier, environment)
+                    }
+
+                    val sandbox = DefaultSandbox(env)
+                    val result = sandbox.eval(request.code.value)
+//                println("RESULT: $result")
+//
+//                println("Finish executing task ${request.id}")
+
+                    DefaultHamalSdk.execService().complete(
+                        request.id, ExecService.StateAfterCompletion(
+                            contentType = "application/json",
+                            bytes = (counter + 1).toString().toByteArray()
+                        )
+                    )
+
                 }
-
-                val sandbox = DefaultSandbox(env)
-                val result = sandbox.eval(request.code.value)
-                println("RESULT: $result")
-
-                println("Finish executing task ${request.id}")
-
-                DefaultHamalSdk.execService().complete(
-                    request.id, ExecService.StateAfterCompletion(
-                        contentType = "application/json",
-                        bytes = (counter + 1).toString().toByteArray()
-                    )
-                )
-
-            }
+        }
     }
 
 }

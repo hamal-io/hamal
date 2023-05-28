@@ -72,6 +72,10 @@ open class FuncController(
         @RequestAttribute shard: Shard,
         @RequestAttribute reqId: ReqId,
         @PathVariable("funcId") stringFuncId: String,
+        @RequestHeader(
+            "X-Correlation-ID",
+            required = false
+        ) correlationIdStr: String? = null,
         @RequestBody body: ApiExecFuncRequest
     ): ResponseEntity<ApiExecFuncResponse> { // prob 202
 
@@ -83,7 +87,7 @@ open class FuncController(
             OneshotInvocationEvent(
                 reqId = reqId,
                 shard = shard,
-                correlationId = CorrelationId("__TBD__"), //FIXME
+                correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
                 func = func
             )
         )

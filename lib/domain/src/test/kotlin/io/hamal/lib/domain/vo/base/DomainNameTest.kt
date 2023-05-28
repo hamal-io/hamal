@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @Nested
-class NameTest {
+class DomainNameTest {
     @Nested
-    
+
     inner class DomainNameValidatorTest {
         @Test
         fun `Does nothing if reference is legal`() {
@@ -35,7 +35,7 @@ class NameTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     DomainNameValidator.validate(illegal)
                 }
-                assertThat(exception.message, containsString("Reference('$illegal') is illegal"))
+                assertThat(exception.message, containsString("DomainName('$illegal') is illegal"))
             }
         }
     }

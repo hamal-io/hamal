@@ -7,6 +7,7 @@ import io.hamal.lib.sdk.domain.ApiAgentExecRequests
 interface ExecService {
     fun poll(): ApiAgentExecRequests
 
+    //FIXME list of events to publish
     fun complete(execId: ExecId, stateAfterCompletion: StateAfterCompletion)
 
     fun fail(execId: ExecId)

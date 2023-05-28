@@ -45,8 +45,8 @@ class DefaultTopicRepositoryTest {
             ).use { }
 
             assertTrue(FileUtils.exists(targetDir))
-            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00023")))
-            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00023", "partition-0001")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023", "partition-0001")))
         }
     }
 
