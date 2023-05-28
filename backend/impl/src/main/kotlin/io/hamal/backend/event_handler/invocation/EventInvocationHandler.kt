@@ -6,6 +6,10 @@ import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.EventInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecSecrets
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.InvocationSecrets
 
 class EventInvocationHandler(
     val execCmdService: ExecCmdService
@@ -20,6 +24,8 @@ class EventInvocationHandler(
                 reqId = ReqId(123),
                 shard = func.shard,
                 correlation = null,
+                inputs = evt.inputs.toExecInputs(),
+                secrets = evt.secrets.toExecSecrets(),
                 code = func.code,
                 // FIXME func for audit purpose ?
                 invocation = EventInvocation()
@@ -27,3 +33,7 @@ class EventInvocationHandler(
         )
     }
 }
+
+private fun InvocationInputs.toExecInputs() = ExecInputs(this.value)
+
+private fun InvocationSecrets.toExecSecrets() = ExecSecrets(this.value)

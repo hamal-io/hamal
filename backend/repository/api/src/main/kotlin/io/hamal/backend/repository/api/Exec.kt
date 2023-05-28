@@ -6,6 +6,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecSecrets
 
 interface ExecCmdRepository {
     fun plan(reqId: ReqId, execToPlan: ExecToPlan): PlannedExec
@@ -18,6 +20,8 @@ interface ExecCmdRepository {
         val id: ExecId,
         val shard: Shard,
         val correlation: Correlation?,
+        val inputs: ExecInputs,
+        val secrets: ExecSecrets,
         val code: Code,
         val trigger: Invocation
     )

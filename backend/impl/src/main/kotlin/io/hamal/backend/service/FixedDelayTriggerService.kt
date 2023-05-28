@@ -8,6 +8,8 @@ import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.InvocationSecrets
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -49,6 +51,8 @@ internal fun TriggerInvocationService.emitInvocation(trigger: Trigger) {
             shard = trigger.shard,
             func = funcQueryService.get(trigger.funcId),
             correlationId = CorrelationId("__TBD__"), //FIXME
+            inputs = InvocationInputs(listOf()),
+            secrets = InvocationSecrets(listOf()),
             trigger = trigger
         )
     )

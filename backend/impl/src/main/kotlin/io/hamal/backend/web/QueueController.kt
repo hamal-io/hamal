@@ -33,6 +33,8 @@ class QueueController
                     id = it.id,
                     funcName = FuncName("some-name"),
                     correlation = it.correlation,
+                    inputs = it.inputs,
+                    secrets = it.secrets,
                     statePayload = it.correlation?.let { stateQueryService.find(it) }?.payload,
                     code = it.code
                 )

@@ -7,9 +7,9 @@ import kotlinx.serialization.Transient
 
 @Serializable
 @SerialName("TableEntry")
-class TableEntry(val key: Value, val value: Value)
+data class TableEntry(val key: Value, val value: Value)
 
-infix fun <KEY : Value, VALUE : Value> KEY.to(that: VALUE): TableEntry = TableEntry(this, that)
+infix fun <KEY : Value, VALUE : Value> KEY.to(other: VALUE): TableEntry = TableEntry(this, other)
 
 @Serializable
 @SerialName("Table")

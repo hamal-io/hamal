@@ -72,6 +72,9 @@ class AgentService {
                 .poll()
                 .requests.forEach { request ->
 
+                    println("${request.inputs} - ${request.inputs.value.size}")
+                    println("${request.secrets} - ${request.secrets.value.size}")
+
 //                println("$request")
 //                println("Execute: ${request.id} - ${request.correlation}")
 //                println("State: ${request.statePayload}")

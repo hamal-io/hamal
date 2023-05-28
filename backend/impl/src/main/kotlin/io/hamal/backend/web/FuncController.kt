@@ -12,6 +12,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.InvocationSecrets
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncResponse
@@ -88,6 +90,8 @@ open class FuncController(
                 reqId = reqId,
                 shard = shard,
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
+                inputs = InvocationInputs(listOf()),
+                secrets = InvocationSecrets(listOf()),
                 func = func
             )
         )

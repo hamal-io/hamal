@@ -21,6 +21,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             id = execToPlan.id,
             reqId = reqId,
             correlation = execToPlan.correlation,
+            inputs = execToPlan.inputs,
+            secrets = execToPlan.secrets,
             code = execToPlan.code,
             invocation = execToPlan.trigger
         ).also { execs[it.id] = it }
@@ -31,6 +33,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             id = planedExec.id,
             reqId = planedExec.reqId,
             correlation = planedExec.correlation,
+            inputs = planedExec.inputs,
+            secrets = planedExec.secrets,
             code = planedExec.code,
             invocation = planedExec.invocation,
             scheduledAt = ScheduledAt.now()
@@ -42,6 +46,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             id = scheduledExec.id,
             reqId = scheduledExec.reqId,
             correlation = scheduledExec.correlation,
+            inputs = scheduledExec.inputs,
+            secrets = scheduledExec.secrets,
             code = scheduledExec.code,
             invocation = scheduledExec.invocation,
             queuedAt = QueuedAt.now()
@@ -56,6 +62,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             id = startedExec.id,
             reqId = startedExec.reqId,
             correlation = startedExec.correlation,
+            inputs = startedExec.inputs,
+            secrets = startedExec.secrets,
             code = startedExec.code,
             invocation = startedExec.invocation,
             completedAt = CompletedAt.now()
@@ -78,6 +86,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                     id = it.id,
                     reqId = it.reqId,
                     correlation = it.correlation,
+                    inputs = it.inputs,
+                    secrets = it.secrets,
                     code = it.code,
                     invocation = it.invocation,
                 ).also { execs[it.id] = it }

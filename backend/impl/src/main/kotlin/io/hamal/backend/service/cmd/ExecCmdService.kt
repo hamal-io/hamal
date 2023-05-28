@@ -3,6 +3,7 @@ package io.hamal.backend.service.cmd
 import io.hamal.backend.event.*
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.backend.repository.api.ExecCmdRepository.ExecToPlan
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.*
 import io.hamal.lib.domain.Correlation
@@ -10,6 +11,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecSecrets
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -36,6 +39,8 @@ class ExecCmdService
         val reqId: ReqId,
         val shard: Shard,
         val correlation: Correlation?,
+        val inputs: ExecInputs,
+        val secrets: ExecSecrets,
         val code: Code,
         val invocation: Invocation
     )
@@ -64,10 +69,12 @@ class ExecCmdService
 
 private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
     return execCmdRepository.plan(
-        toPlan.reqId, ExecCmdRepository.ExecToPlan(
+        toPlan.reqId, ExecToPlan(
             id = generateDomainId(toPlan.shard, ::ExecId),
             shard = toPlan.shard,
             correlation = toPlan.correlation,
+            inputs = toPlan.inputs,
+            secrets = toPlan.secrets,
             code = toPlan.code,
             trigger = toPlan.invocation
         )

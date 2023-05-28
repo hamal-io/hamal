@@ -11,6 +11,8 @@ sealed class Exec : DomainObject<ExecId>() {
     abstract val state: ExecState
     abstract val reqId: ReqId
     abstract val correlation: Correlation?
+    abstract val inputs: ExecInputs
+    abstract val secrets: ExecSecrets
     abstract val code: Code
     abstract val invocation: Invocation
 }
@@ -20,6 +22,8 @@ class PlannedExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
+    override val inputs: ExecInputs,
+    override val secrets: ExecSecrets,
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
@@ -35,6 +39,8 @@ class ScheduledExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
+    override val inputs: ExecInputs,
+    override val secrets: ExecSecrets,
     override val code: Code,
     override val invocation: Invocation,
     val scheduledAt: ScheduledAt
@@ -51,6 +57,8 @@ class QueuedExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
+    override val inputs: ExecInputs,
+    override val secrets: ExecSecrets,
     override val code: Code,
     override val invocation: Invocation,
     val queuedAt: QueuedAt
@@ -67,6 +75,8 @@ class StartedExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
+    override val inputs: ExecInputs,
+    override val secrets: ExecSecrets,
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
@@ -82,6 +92,8 @@ class CompletedExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
+    override val inputs: ExecInputs,
+    override val secrets: ExecSecrets,
     override val code: Code,
     override val invocation: Invocation,
     val completedAt: CompletedAt
@@ -97,6 +109,8 @@ class FailedExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
+    override val inputs: ExecInputs,
+    override val secrets: ExecSecrets,
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {

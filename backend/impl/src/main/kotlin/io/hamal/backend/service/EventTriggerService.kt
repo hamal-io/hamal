@@ -61,6 +61,8 @@ class EventTriggerService
                         shard = trigger.shard,
                         func = funcQueryService.get(trigger.funcId),
                         correlationId = CorrelationId("__TBD__"), //FIXME
+                        inputs = InvocationInputs(listOf()),
+                        secrets = InvocationSecrets(listOf()),
                         trigger = trigger,
                         events = evts
                     )
