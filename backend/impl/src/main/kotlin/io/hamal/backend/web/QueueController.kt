@@ -33,12 +33,7 @@ class QueueController
                     id = it.id,
                     funcName = FuncName("some-name"),
                     correlation = it.correlation,
-                    state = it.correlation?.let { stateQueryService.find(it) }?.let {
-                        ApiAgentExecRequests.State(
-                            contentType = it.contentType,
-                            bytes = it.bytes
-                        )
-                    },
+                    statePayload = it.correlation?.let { stateQueryService.find(it) }?.payload,
                     code = it.code
                 )
             })

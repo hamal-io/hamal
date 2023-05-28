@@ -65,7 +65,7 @@ open class ExecController(
         @RequestHeader("Content-Type") contentType: String,
         @RequestBody bytes: ByteArray
     ) {
-        
+
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 

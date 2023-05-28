@@ -13,8 +13,7 @@ object MemoryStateRepository : StateCmdRepository, StateQueryRepository {
     override fun set(reqId: ReqId, stateToSet: StateCmdRepository.StateToSet): State {
         return State(
             correlation = stateToSet.correlation,
-            contentType = stateToSet.contentType,
-            bytes = stateToSet.bytes
+            payload = stateToSet.payload,
         ).also { states[it.correlation] = it }
     }
 

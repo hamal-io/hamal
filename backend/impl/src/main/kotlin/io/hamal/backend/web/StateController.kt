@@ -6,6 +6,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiGetStateResponse
@@ -35,7 +36,7 @@ class StateController
             ).let {
                 ApiGetStateResponse(
                     correlation = it.correlation,
-                    contentType = it.contentType
+                    contentType = it.payload.contentType
                 )
             }
         )
@@ -56,15 +57,17 @@ class StateController
                     funcId = FuncId(SnowflakeId(stringFuncId.toLong())),
                     correlationId = CorrelationId(stringCorId)
                 ),
-                contentType = contentType,
-                bytes = bytes
+                payload = StatePayload(
+                    contentType = contentType,
+                    bytes = bytes
+                )
             )
         )
 
         return ResponseEntity.ok(
             ApiSetStateResponse(
                 correlation = result.correlation,
-                contentType = result.contentType
+                contentType = result.payload.contentType
             )
         )
     }

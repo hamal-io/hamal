@@ -72,7 +72,7 @@ class AgentService {
 
                 println("$request")
                 println("Execute: ${request.id} - ${request.correlation}")
-                println("State: ${request.state}")
+                println("State: ${request.statePayload}")
                 val env = EnvironmentValue(
                     identifier = Identifier("_G"),
                     values = mapOf(

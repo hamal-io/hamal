@@ -6,6 +6,7 @@ import io.hamal.backend.repository.api.domain.State
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.Shard
+import io.hamal.lib.domain.StatePayload
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -20,8 +21,7 @@ class StateCmdService
         return stateCmdRepository.set(
             reqId, StateCmdRepository.StateToSet(
                 correlation = stateToSet.correlation,
-                contentType = stateToSet.contentType,
-                bytes = stateToSet.bytes
+                payload = stateToSet.payload,
             )
         )
         //FIXME emit event
@@ -30,7 +30,6 @@ class StateCmdService
     data class StateToSet(
         val shard: Shard,
         val correlation: Correlation,
-        val contentType: String,
-        val bytes: ByteArray
+        val payload: StatePayload
     )
 }
