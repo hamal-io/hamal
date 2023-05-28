@@ -9,6 +9,7 @@ import io.hamal.backend.event_handler.invocation.EventInvocationHandler
 import io.hamal.backend.event_handler.invocation.FixedDelayInvocationHandler
 import io.hamal.backend.event_handler.invocation.OneshotInvocationHandler
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
+import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.TriggerInvocationService
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.StateCmdService
@@ -48,16 +49,17 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         execCmdService: ExecCmdService,
         execQueryService: ExecQueryService,
         stateCmdService: StateCmdService,
-        triggerInvocationService: TriggerInvocationService
+        triggerInvocationService: TriggerInvocationService,
+        orchestrationService: OrchestrationService
     ) = eventProcessorFactory
 
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(triggerInvocationService))
 
-        .register(ExecPlannedEvent::class, ExecPlannedHandler(execCmdService))
+        .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdService))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
-        .register(ExecutionCompletedEvent::class, ExecCompletedHandler())
-        .register(ExecutionFailedEvent::class, ExecFailedHandler())
+        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
+        .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))
 
         .register(AdhocInvocationEvent::class, AdhocInvocationHandler(execCmdService))
         .register(OneshotInvocationEvent::class, OneshotInvocationHandler(execCmdService))

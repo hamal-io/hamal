@@ -93,7 +93,7 @@ class CompletedExec(
 }
 
 @Serializable
-class FailedExecution(
+class FailedExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,

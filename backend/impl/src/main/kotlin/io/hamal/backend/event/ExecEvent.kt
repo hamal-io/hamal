@@ -44,5 +44,5 @@ data class ExecutionCompletedEvent(
 @SystemEventTopic("exec::failed")
 data class ExecutionFailedEvent(
     override val shard: Shard,
-    val failedExecution: FailedExecution
+    val failedExec: FailedExec
 ) : Event()
