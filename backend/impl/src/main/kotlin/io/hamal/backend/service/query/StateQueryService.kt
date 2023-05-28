@@ -12,6 +12,8 @@ class StateQueryService
     private val stateQueryRepository: StateQueryRepository
 ) {
 
+    fun find(correlation: Correlation) = stateQueryRepository.find(correlation)
+
     fun get(correlation: Correlation): State {
         return requireNotNull(stateQueryRepository.find(correlation)) { "No state found correlation $correlation" }
     }
