@@ -1,6 +1,6 @@
-package io.hamal.lib.script.api.value
+package io.hamal.lib.domain.value
 
-sealed interface DepValueOperation {
+sealed interface ValueOperation {
     val operationType: Type
 
     enum class Type(val identifier: String) {
@@ -20,13 +20,13 @@ sealed interface DepValueOperation {
     }
 }
 
-interface DepPrefixValueOperation : DepValueOperation {
+interface PrefixValueOperation : ValueOperation {
     val selfType: String
-    operator fun invoke(self: DepValue): DepValue
+    operator fun invoke(self: Value): Value
 }
 
-interface DepInfixValueOperation : DepValueOperation {
+interface InfixValueOperation : ValueOperation {
     val selfType: String
     val otherType: String
-    operator fun invoke(self: DepValue, other: DepValue): DepValue
+    operator fun invoke(self: Value, other: Value): Value
 }

@@ -4,15 +4,15 @@ interface DepValue {
     val metaTable: DepMetaTable
     fun type(): String = metaTable.type
 
-    fun findInfixOperation(type: ValueOperation.Type, otherType: String): InfixValueOperation? {
+    fun findInfixOperation(type: DepValueOperation.Type, otherType: String): DepInfixValueOperation? {
         return metaTable.operations
-            .filterIsInstance<InfixValueOperation>()
+            .filterIsInstance<DepInfixValueOperation>()
             .find { it.operationType == type && it.otherType == otherType }
     }
 
-    fun findPrefixOperation(type: ValueOperation.Type): PrefixValueOperation? {
+    fun findPrefixOperation(type: DepValueOperation.Type): DepPrefixValueOperation? {
         return metaTable.operations
-            .filterIsInstance<PrefixValueOperation>()
+            .filterIsInstance<DepPrefixValueOperation>()
             .find { it.operationType == type }
     }
 }

@@ -6,7 +6,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
@@ -24,8 +23,7 @@ abstract class DomainId : ValueObject.ComparableImpl<SnowflakeId>() {
 abstract class DomainIdSerializer<ID : DomainId>(
     val fn: (SnowflakeId) -> ID
 ) : KSerializer<ID> {
-    override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
+    override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): ID {
         return fn(SnowflakeId(decoder.decodeLong()))

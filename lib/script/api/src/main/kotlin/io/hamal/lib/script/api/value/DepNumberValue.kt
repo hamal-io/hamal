@@ -1,6 +1,6 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.script.api.value.ValueOperation.Type.*
+import io.hamal.lib.script.api.value.DepValueOperation.Type.*
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -155,14 +155,14 @@ object DefaultNumberMetaTable : DepMetaTable {
         numberInfix(Sub) { self, other -> self.minus(other) },
 
 
-        object : InfixValueOperation {
+        object : DepInfixValueOperation {
             override val selfType = "number"
             override val otherType = "nil"
             override val operationType = Eq
             override fun invoke(self: DepValue, other: DepValue) = DepFalseValue
         },
 
-        object : InfixValueOperation {
+        object : DepInfixValueOperation {
             override val selfType = "number"
             override val otherType = "nil"
             override val operationType = Neq
@@ -173,10 +173,10 @@ object DefaultNumberMetaTable : DepMetaTable {
 }
 
 private fun numberInfix(
-    operation: ValueOperation.Type,
+    operation: DepValueOperation.Type,
     fn: (self: DepNumberValue, other: DepNumberValue) -> DepValue
-): InfixValueOperation {
-    return object : InfixValueOperation {
+): DepInfixValueOperation {
+    return object : DepInfixValueOperation {
         override val operationType = operation
         override val selfType = "number"
         override val otherType = "number"
@@ -189,10 +189,10 @@ private fun numberInfix(
 }
 
 private fun numberPrefix(
-    operation: ValueOperation.Type,
+    operation: DepValueOperation.Type,
     fn: (self: DepNumberValue) -> DepValue
-): PrefixValueOperation {
-    return object : PrefixValueOperation {
+): DepPrefixValueOperation {
+    return object : DepPrefixValueOperation {
         override val operationType = operation
         override val selfType = "number"
         override operator fun invoke(self: DepValue): DepValue {

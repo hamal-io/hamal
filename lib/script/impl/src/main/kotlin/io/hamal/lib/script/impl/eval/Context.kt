@@ -2,7 +2,7 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.api.value.ValueOperation.Type.*
+import io.hamal.lib.script.api.value.DepValueOperation.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
 
 internal data class EvaluationContext<TYPE : Node>(
@@ -122,7 +122,7 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 }
 
-private fun resolveInfixOperationType(operator: Operator): ValueOperation.Type {
+private fun resolveInfixOperationType(operator: Operator): DepValueOperation.Type {
     return when {
         operator == Operator.Divide -> Div
         operator == Operator.Equals -> Eq
@@ -140,7 +140,7 @@ private fun resolveInfixOperationType(operator: Operator): ValueOperation.Type {
     }
 }
 
-private fun resolvePrefixOperationType(operator: Operator): ValueOperation.Type {
+private fun resolvePrefixOperationType(operator: Operator): DepValueOperation.Type {
     return when {
         operator == Operator.Minus -> Negate
         else -> TODO()

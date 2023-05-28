@@ -1,7 +1,7 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.script.api.value.ValueOperation.Type.Add
-import io.hamal.lib.script.api.value.ValueOperation.Type.Sub
+import io.hamal.lib.script.api.value.DepValueOperation.Type.Add
+import io.hamal.lib.script.api.value.DepValueOperation.Type.Sub
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -73,13 +73,13 @@ object TestMetaTable : DepMetaTable {
     override val operations = listOf(TestPrefixOperation, TestInfixOperation)
 }
 
-object TestPrefixOperation : PrefixValueOperation {
+object TestPrefixOperation : DepPrefixValueOperation {
     override val selfType = "test-type"
     override val operationType = Add
     override fun invoke(self: DepValue) = TODO("Not yet implemented")
 }
 
-object TestInfixOperation : InfixValueOperation {
+object TestInfixOperation : DepInfixValueOperation {
     override val selfType = "test-type"
     override val otherType = "test-type"
     override val operationType = Add
