@@ -11,14 +11,14 @@ internal class EvalAssignmentTest : AbstractEvalTest() {
     fun globalTests() = prepareTests(
         listOf(
             """x = 1; y = x""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["x"], equalTo(NumberValue(1)))
-                assertThat(env["y"], equalTo(NumberValue(1)))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["x"], equalTo(DepNumberValue(1)))
+                assertThat(env["y"], equalTo(DepNumberValue(1)))
             },
             """y=0; x = 1; do y = x end""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["x"], equalTo(NumberValue(1)))
-                assertThat(env["y"], equalTo(NumberValue(1)))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["x"], equalTo(DepNumberValue(1)))
+                assertThat(env["y"], equalTo(DepNumberValue(1)))
             },
         )
     )
@@ -27,29 +27,29 @@ internal class EvalAssignmentTest : AbstractEvalTest() {
     fun localTests() = prepareTests(
         listOf(
             """local birthday = 2810""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["birthday"], equalTo(NumberValue(2810)))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["birthday"], equalTo(DepNumberValue(2810)))
             },
             """local project_name = 'Hamal'""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["project_name"], equalTo(StringValue("Hamal")))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["project_name"], equalTo(DepStringValue("Hamal")))
             },
             """local isFun = true""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["isFun"], equalTo(TrueValue))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["isFun"], equalTo(DepTrueValue))
             },
             """local isFailure = false""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["isFailure"], equalTo(FalseValue))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["isFailure"], equalTo(DepFalseValue))
             },
             """local value = nil""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["value"], equalTo(NilValue))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["value"], equalTo(DepNilValue))
             },
             """local x = 1; local y = x""" to { result, env ->
-                assertThat(result, equalTo(NilValue))
-                assertThat(env["x"], equalTo(NumberValue(1)))
-                assertThat(env["y"], equalTo(NumberValue(1)))
+                assertThat(result, equalTo(DepNilValue))
+                assertThat(env["x"], equalTo(DepNumberValue(1)))
+                assertThat(env["y"], equalTo(DepNumberValue(1)))
             },
         )
     )

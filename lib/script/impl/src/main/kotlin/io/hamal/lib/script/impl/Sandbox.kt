@@ -1,18 +1,18 @@
 package io.hamal.lib.script.impl
 
 import io.hamal.lib.script.api.Sandbox
-import io.hamal.lib.script.api.value.EnvironmentValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.api.value.DepEnvironmentValue
+import io.hamal.lib.script.api.value.DepValue
 import io.hamal.lib.script.impl.ast.parse
 import io.hamal.lib.script.impl.token.tokenize
 
 class DefaultSandbox(
-    private val env: EnvironmentValue
+    private val env: DepEnvironmentValue
 ) : Sandbox {
 
     private val interpreter = DefaultInterpreter
 
-    override fun eval(code: String): Value {
+    override fun eval(code: String): DepValue {
         val tokens = tokenize(code)
         val statements = parse(tokens)
         try {

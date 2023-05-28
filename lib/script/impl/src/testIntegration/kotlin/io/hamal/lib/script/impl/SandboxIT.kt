@@ -1,8 +1,8 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.script.api.value.EnvironmentValue
-import io.hamal.lib.script.api.value.ErrorValue
-import io.hamal.lib.script.api.value.Identifier
+import io.hamal.lib.script.api.value.DepEnvironmentValue
+import io.hamal.lib.script.api.value.DepErrorValue
+import io.hamal.lib.script.api.value.DepIdentifier
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import org.junit.jupiter.api.DynamicTest
@@ -22,21 +22,21 @@ class SandboxIT {
                 dynamicTest("${file.parent.parent.name}/${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
 
-                    val env = EnvironmentValue(
-                        identifier = Identifier("_G"),
+                    val env = DepEnvironmentValue(
+                        identifier = DepIdentifier("_G"),
                         values = mapOf(
                             AssertFunction.identifier to AssertFunction,
                             RequireFunction.identifier to RequireFunction
                         )
                     )
 
-                    subEnv.addLocal(Identifier("nested-sub-env"), nestedSubEnv)
+                    subEnv.addLocal(DepIdentifier("nested-sub-env"), nestedSubEnv)
                     env.addLocal(subEnv.identifier, subEnv)
                     val testInstance = DefaultSandbox(env)
 
                     val result = testInstance.eval(code)
 
-                    if (result is ErrorValue) {
+                    if (result is DepErrorValue) {
                         org.junit.jupiter.api.fail { result.toString() }
                     }
                 }
@@ -47,12 +47,12 @@ class SandboxIT {
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }
 
 
-    val subEnv = EnvironmentValue(
-        identifier = Identifier("sub-env")
+    val subEnv = DepEnvironmentValue(
+        identifier = DepIdentifier("sub-env")
     )
 
-    val nestedSubEnv = EnvironmentValue(
-        identifier = Identifier("nested-sub-env")
+    val nestedSubEnv = DepEnvironmentValue(
+        identifier = DepIdentifier("nested-sub-env")
     )
 
 

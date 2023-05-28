@@ -5,7 +5,6 @@ import io.hamal.lib.script.api.value.ValueOperation.Type.Sub
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -63,12 +62,12 @@ class ValueTest {
     private val testInstance = TestValue()
 }
 
-class TestValue : Value {
+class TestValue : DepValue {
     override val metaTable = TestMetaTable
 }
 
 
-object TestMetaTable : MetaTable {
+object TestMetaTable : DepMetaTable {
 
     override val type = "test-type"
     override val operations = listOf(TestPrefixOperation, TestInfixOperation)
@@ -77,7 +76,7 @@ object TestMetaTable : MetaTable {
 object TestPrefixOperation : PrefixValueOperation {
     override val selfType = "test-type"
     override val operationType = Add
-    override fun invoke(self: Value) = TODO("Not yet implemented")
+    override fun invoke(self: DepValue) = TODO("Not yet implemented")
 }
 
 object TestInfixOperation : InfixValueOperation {
@@ -85,5 +84,5 @@ object TestInfixOperation : InfixValueOperation {
     override val otherType = "test-type"
     override val operationType = Add
 
-    override fun invoke(self: Value, other: Value) = TODO("Not yet implemented")
+    override fun invoke(self: DepValue, other: DepValue) = TODO("Not yet implemented")
 }

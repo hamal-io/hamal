@@ -4,14 +4,14 @@ import io.hamal.agent.extension.api.Extension
 import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
 
-object ConsoleFormat : FunctionValue {
-    override val identifier: Identifier = Identifier("format")
+object ConsoleFormat : DepFunctionValue {
+    override val identifier: DepIdentifier = DepIdentifier("format")
 
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: Context): DepValue {
         TODO("Not yet implemented")
     }
 
-    override val metaTable: MetaTable
+    override val metaTable: DepMetaTable
         get() = TODO("Not yet implemented")
 
 }
@@ -32,19 +32,19 @@ object ConsoleFormat : FunctionValue {
 
 
 class StdLogExtension : Extension {
-    override fun create(): EnvironmentValue {
-        return EnvironmentValue(
-            identifier = Identifier("log"),
+    override fun create(): DepEnvironmentValue {
+        return DepEnvironmentValue(
+            identifier = DepIdentifier("log"),
             values = mapOf(
-                Identifier("_cfg") to TableValue(
-                    Identifier("console") to TableValue(
-                        Identifier("level") to StringValue("TRACE"),
-                        Identifier("format") to ConsoleFormat
+                DepIdentifier("_cfg") to DepTableValue(
+                    DepIdentifier("console") to DepTableValue(
+                        DepIdentifier("level") to DepStringValue("TRACE"),
+                        DepIdentifier("format") to ConsoleFormat
                     ),
-                    Identifier("backend") to StringValue("INFO")
+                    DepIdentifier("backend") to DepStringValue("INFO")
                 ),
-                Identifier("debug") to LogDebug(),
-                Identifier("info") to LogInfo()
+                DepIdentifier("debug") to LogDebug(),
+                DepIdentifier("info") to LogInfo()
             )
         )
     }
@@ -52,30 +52,30 @@ class StdLogExtension : Extension {
 }
 
 
-class LogDebug : FunctionValue {
-    override val identifier = Identifier("debug")
-    override val metaTable: MetaTable get() = TODO("Not yet implemented")
-    override fun invoke(ctx: Context): Value {
+class LogDebug : DepFunctionValue {
+    override val identifier = DepIdentifier("debug")
+    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
+    override fun invoke(ctx: Context): DepValue {
         println("DEBUG: ${ctx.parameters.first().value}")
-        return NilValue
+        return DepNilValue
     }
 
 }
 
 
-class LogInfo : FunctionValue {
-    override val identifier = Identifier("info")
-    override val metaTable: MetaTable get() = TODO("Not yet implemented")
-    override fun invoke(ctx: Context): Value {
+class LogInfo : DepFunctionValue {
+    override val identifier = DepIdentifier("info")
+    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
+    override fun invoke(ctx: Context): DepValue {
         val first = ctx.parameters.first().value
-        if (first is Identifier) {
+        if (first is DepIdentifier) {
             println("INFO: ${ctx.env[first]}")
         } else {
             println("INFO: ${first}")
         }
 
 //        println("INFO: ${ctx.parameters.first().value}")
-        return NilValue
+        return DepNilValue
     }
 
 }

@@ -1,7 +1,7 @@
 package io.hamal.lib.script.api.value
 
-interface Value {
-    val metaTable: MetaTable
+interface DepValue {
+    val metaTable: DepMetaTable
     fun type(): String = metaTable.type
 
     fun findInfixOperation(type: ValueOperation.Type, otherType: String): InfixValueOperation? {

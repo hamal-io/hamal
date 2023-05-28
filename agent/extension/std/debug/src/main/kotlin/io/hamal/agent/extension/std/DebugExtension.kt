@@ -6,29 +6,29 @@ import io.hamal.lib.script.api.value.*
 import kotlin.system.measureTimeMillis
 
 class DebugExtension : Extension {
-    override fun create(): EnvironmentValue {
-        return EnvironmentValue(
-            identifier = Identifier("debug"),
+    override fun create(): DepEnvironmentValue {
+        return DepEnvironmentValue(
+            identifier = DepIdentifier("debug"),
             values = mapOf(
-                Identifier("sleep") to ExecFunc(),
+                DepIdentifier("sleep") to ExecFunc(),
             )
         )
     }
 
 }
 
-class ExecFunc : FunctionValue {
-    override val identifier = Identifier("sleep")
-    override val metaTable: MetaTable get() = TODO("Not yet implemented")
+class ExecFunc : DepFunctionValue {
+    override val identifier = DepIdentifier("sleep")
+    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: Context): DepValue {
         val ms = (ctx.parameters.first().value as Number).toLong()
         val time = measureTimeMillis {
             Thread.sleep(ms)
         }
 
         println(time)
-        return NilValue
+        return DepNilValue
     }
 
 }

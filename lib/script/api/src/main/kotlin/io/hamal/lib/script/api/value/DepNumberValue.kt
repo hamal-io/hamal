@@ -6,36 +6,36 @@ import java.math.MathContext
 import java.math.RoundingMode
 
 
-data class NumberValue(
+data class DepNumberValue(
     private val delegate: BigDecimal,
-    override val metaTable: MetaTable = DefaultNumberMetaTable
-) : Number(), Value, Comparable<NumberValue> {
+    override val metaTable: DepMetaTable = DefaultNumberMetaTable
+) : Number(), DepValue, Comparable<DepNumberValue> {
 
     companion object {
-        val Zero = NumberValue(0)
-        val One = NumberValue(1)
+        val Zero = DepNumberValue(0)
+        val One = DepNumberValue(1)
         val mathContext = MathContext.DECIMAL128
 
-        operator fun invoke(value: Byte): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
-        operator fun invoke(value: Short): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
-        operator fun invoke(value: Int): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
-        operator fun invoke(value: Long): NumberValue = NumberValue(BigDecimal.valueOf(value))
+        operator fun invoke(value: Byte): DepNumberValue = DepNumberValue(BigDecimal.valueOf(value.toLong()))
+        operator fun invoke(value: Short): DepNumberValue = DepNumberValue(BigDecimal.valueOf(value.toLong()))
+        operator fun invoke(value: Int): DepNumberValue = DepNumberValue(BigDecimal.valueOf(value.toLong()))
+        operator fun invoke(value: Long): DepNumberValue = DepNumberValue(BigDecimal.valueOf(value))
 
-        operator fun invoke(value: Float): NumberValue {
+        operator fun invoke(value: Float): DepNumberValue {
             require(!value.isNaN()) { IllegalArgumentException("NaN") }
             require(!value.isInfinite()) { IllegalArgumentException("Infinity") }
-            return NumberValue(BigDecimal.valueOf(value.toDouble()))
+            return DepNumberValue(BigDecimal.valueOf(value.toDouble()))
         }
 
-        operator fun invoke(value: Double): NumberValue {
+        operator fun invoke(value: Double): DepNumberValue {
             require(!value.isNaN()) { IllegalArgumentException("NaN") }
             require(!value.isInfinite()) { IllegalArgumentException("Infinity") }
-            return NumberValue(BigDecimal.valueOf(value))
+            return DepNumberValue(BigDecimal.valueOf(value))
         }
 
-        operator fun invoke(value: String): NumberValue {
+        operator fun invoke(value: String): DepNumberValue {
             require(value.isNumber()) { IllegalArgumentException("NaN") }
-            return NumberValue(BigDecimal(value.trim(), mathContext))
+            return DepNumberValue(BigDecimal(value.trim(), mathContext))
         }
 
         private fun String.isNumber(): Boolean {
@@ -45,35 +45,35 @@ data class NumberValue(
     }
 
 
-    fun plus(other: NumberValue) =
-        NumberValue(delegate.add(other.delegate, mathContext), metaTable)
+    fun plus(other: DepNumberValue) =
+        DepNumberValue(delegate.add(other.delegate, mathContext), metaTable)
 
-    fun minus(other: NumberValue) =
-        NumberValue(delegate.subtract(other.delegate, mathContext), metaTable)
+    fun minus(other: DepNumberValue) =
+        DepNumberValue(delegate.subtract(other.delegate, mathContext), metaTable)
 
-    fun multiply(other: NumberValue) =
-        NumberValue(delegate.multiply(other.delegate, mathContext), metaTable)
+    fun multiply(other: DepNumberValue) =
+        DepNumberValue(delegate.multiply(other.delegate, mathContext), metaTable)
 
-    fun divide(other: NumberValue) =
-        NumberValue(delegate.divide(other.delegate, mathContext), metaTable)
+    fun divide(other: DepNumberValue) =
+        DepNumberValue(delegate.divide(other.delegate, mathContext), metaTable)
 
-    fun pow(other: NumberValue) =
-        NumberValue(delegate.pow(other.delegate.toInt(), mathContext), metaTable)
+    fun pow(other: DepNumberValue) =
+        DepNumberValue(delegate.pow(other.delegate.toInt(), mathContext), metaTable)
 
-    fun remainder(other: NumberValue) =
-        NumberValue(delegate.remainder(other.delegate, mathContext), metaTable)
+    fun remainder(other: DepNumberValue) =
+        DepNumberValue(delegate.remainder(other.delegate, mathContext), metaTable)
 
-    fun floor() = NumberValue(delegate.setScale(0, RoundingMode.FLOOR), metaTable)
+    fun floor() = DepNumberValue(delegate.setScale(0, RoundingMode.FLOOR), metaTable)
 
-    fun ceil() = NumberValue(delegate.setScale(0, RoundingMode.CEILING), metaTable)
+    fun ceil() = DepNumberValue(delegate.setScale(0, RoundingMode.CEILING), metaTable)
 
-    fun ln(): NumberValue {
+    fun ln(): DepNumberValue {
         // Algorithm: http://functions.wolfram.com/ElementaryFunctions/Log/10/
         // https://stackoverjob.com/a/6169691/6444586
-        val result: NumberValue
+        val result: DepNumberValue
         require(isPositive()) { IllegalStateException("Value must >= 1") }
         if (delegate == BigDecimal.ONE) {
-            return NumberValue(BigDecimal.ZERO, metaTable)
+            return DepNumberValue(BigDecimal.ZERO, metaTable)
         } else {
             val iterations = 25000L
             val x = delegate.subtract(BigDecimal.ONE)
@@ -86,32 +86,32 @@ data class NumberValue(
                 ret = ret.add(N, mathContext)
             }
             ret = x.divide(ret, mathContext)
-            result = NumberValue(ret, metaTable)
+            result = DepNumberValue(ret, metaTable)
         }
         return result
     }
 
-    fun sqrt(): NumberValue {
+    fun sqrt(): DepNumberValue {
         require(!isNegative()) { throw IllegalStateException("Value must >= 0") }
-        return NumberValue(delegate.sqrt(mathContext), metaTable)
+        return DepNumberValue(delegate.sqrt(mathContext), metaTable)
     }
 
-    fun abs() = NumberValue(delegate.abs(mathContext), metaTable)
+    fun abs() = DepNumberValue(delegate.abs(mathContext), metaTable)
 
-    fun negate() = NumberValue(delegate.negate(mathContext), metaTable)
+    fun negate() = DepNumberValue(delegate.negate(mathContext), metaTable)
 
 
     override fun toString() = delegate.toString()
 
-    override operator fun compareTo(other: NumberValue) = delegate.compareTo(other.delegate)
+    override operator fun compareTo(other: DepNumberValue) = delegate.compareTo(other.delegate)
 
-    fun isLessThan(other: NumberValue) = compareTo(other) < 0
+    fun isLessThan(other: DepNumberValue) = compareTo(other) < 0
 
-    fun isLessThanEqual(other: NumberValue) = compareTo(other) <= 0
+    fun isLessThanEqual(other: DepNumberValue) = compareTo(other) <= 0
 
-    fun isGreaterThan(other: NumberValue) = compareTo(other) > 0
+    fun isGreaterThan(other: DepNumberValue) = compareTo(other) > 0
 
-    fun isGreaterThanEqual(other: NumberValue) = compareTo(other) >= 0
+    fun isGreaterThanEqual(other: DepNumberValue) = compareTo(other) >= 0
 
     fun isNegative() = delegate.signum() < 0
 
@@ -138,7 +138,7 @@ data class NumberValue(
 }
 
 
-object DefaultNumberMetaTable : MetaTable {
+object DefaultNumberMetaTable : DepMetaTable {
     override val type = "number"
     override val operations = listOf(
         numberInfix(Add) { self, other -> self.plus(other) },
@@ -159,14 +159,14 @@ object DefaultNumberMetaTable : MetaTable {
             override val selfType = "number"
             override val otherType = "nil"
             override val operationType = Eq
-            override fun invoke(self: Value, other: Value) = FalseValue
+            override fun invoke(self: DepValue, other: DepValue) = DepFalseValue
         },
 
         object : InfixValueOperation {
             override val selfType = "number"
             override val otherType = "nil"
             override val operationType = Neq
-            override fun invoke(self: Value, other: Value) = TrueValue
+            override fun invoke(self: DepValue, other: DepValue) = DepTrueValue
         },
 
         )
@@ -174,15 +174,15 @@ object DefaultNumberMetaTable : MetaTable {
 
 private fun numberInfix(
     operation: ValueOperation.Type,
-    fn: (self: NumberValue, other: NumberValue) -> Value
+    fn: (self: DepNumberValue, other: DepNumberValue) -> DepValue
 ): InfixValueOperation {
     return object : InfixValueOperation {
         override val operationType = operation
         override val selfType = "number"
         override val otherType = "number"
-        override operator fun invoke(self: Value, other: Value): Value {
-            require(self is NumberValue)
-            require(other is NumberValue)
+        override operator fun invoke(self: DepValue, other: DepValue): DepValue {
+            require(self is DepNumberValue)
+            require(other is DepNumberValue)
             return fn(self, other)
         }
     }
@@ -190,13 +190,13 @@ private fun numberInfix(
 
 private fun numberPrefix(
     operation: ValueOperation.Type,
-    fn: (self: NumberValue) -> Value
+    fn: (self: DepNumberValue) -> DepValue
 ): PrefixValueOperation {
     return object : PrefixValueOperation {
         override val operationType = operation
         override val selfType = "number"
-        override operator fun invoke(self: Value): Value {
-            require(self is NumberValue)
+        override operator fun invoke(self: DepValue): DepValue {
+            require(self is DepNumberValue)
             return fn(self)
         }
     }

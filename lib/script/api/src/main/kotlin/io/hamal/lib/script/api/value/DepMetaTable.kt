@@ -1,11 +1,11 @@
 package io.hamal.lib.script.api.value
 
-interface MetaTable {
+interface DepMetaTable {
     val type: String
     val operations: List<ValueOperation>
 }
 
-object MetaTableNotImplementedYet : MetaTable {
+object DepMetaTableNotImplementedYet : DepMetaTable {
     override val type: String
         get() = TODO("Not yet implemented")
     override val operations: List<ValueOperation>

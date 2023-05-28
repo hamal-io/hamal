@@ -1,8 +1,8 @@
 package io.hamal.agent.extension.api
 
-import io.hamal.lib.script.api.value.EnvironmentValue
+import io.hamal.lib.script.api.value.DepEnvironmentValue
 
 interface Extension {
-    fun create(): EnvironmentValue
+    fun create(): DepEnvironmentValue
 }
 

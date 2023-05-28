@@ -1,13 +1,13 @@
 package io.hamal.lib.script.api.value
 
-fun booleanOf(value: Boolean) = if (value) TrueValue else FalseValue
+fun booleanOf(value: Boolean) = if (value) DepTrueValue else DepFalseValue
 
-object TrueValue : Value {
-    override val metaTable = MetaTableNotImplementedYet
+object DepTrueValue : DepValue {
+    override val metaTable = DepMetaTableNotImplementedYet
     override fun toString() = "true"
 }
 
-object FalseValue : Value {
-    override val metaTable = MetaTableNotImplementedYet
+object DepFalseValue : DepValue {
+    override val metaTable = DepMetaTableNotImplementedYet
     override fun toString() = "false"
 }

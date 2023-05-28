@@ -1,11 +1,9 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.impl.ast.expr.*
+import io.hamal.lib.script.api.value.DepNumberValue
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -61,7 +59,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun number() {
                 runLiteralTest(NumberLiteral.Parse, "28.10") { result, tokens ->
-                    assertThat(result, equalTo(NumberLiteral(NumberValue("28.10"))))
+                    assertThat(result, equalTo(NumberLiteral(DepNumberValue("28.10"))))
                     tokens.wereConsumed()
                 }
             }

@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.FalseValue
-import io.hamal.lib.script.api.value.TrueValue
+import io.hamal.lib.script.api.value.DepFalseValue
+import io.hamal.lib.script.api.value.DepTrueValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -11,10 +11,10 @@ internal class EvalBooleanTest : AbstractEvalTest() {
     @TestFactory
     fun tests() = prepareTests(listOf(
         """true""" to { result, _ ->
-            assertThat(result, equalTo(TrueValue))
+            assertThat(result, equalTo(DepTrueValue))
         },
         """false""" to { result, _ ->
-            assertThat(result, equalTo(FalseValue))
+            assertThat(result, equalTo(DepFalseValue))
         }
     ))
 }

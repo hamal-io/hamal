@@ -71,15 +71,15 @@ object PrecedenceString {
 
     private fun StringBuilder.appendLiteral(literal: LiteralExpression) {
         when (literal) {
-            is TrueLiteral -> appendValue(TrueValue)
-            is FalseLiteral -> appendValue(FalseValue)
+            is TrueLiteral -> appendValue(DepTrueValue)
+            is FalseLiteral -> appendValue(DepFalseValue)
             is NumberLiteral -> appendValue(literal.value)
-            is StringLiteral -> appendValue(StringValue(literal.value))
-            is NilLiteral -> appendValue(NilValue)
+            is StringLiteral -> appendValue(DepStringValue(literal.value))
+            is NilLiteral -> appendValue(DepNilValue)
         }
     }
 
-    private fun StringBuilder.appendValue(value: Value) {
+    private fun StringBuilder.appendValue(value: DepValue) {
         append(value.toString())
     }
 }

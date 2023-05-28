@@ -6,28 +6,28 @@ import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 
 class Web3Extension : Extension {
-    override fun create(): EnvironmentValue {
-        val ethEnvironment = EnvironmentValue(
-            identifier = Identifier("eth"),
+    override fun create(): DepEnvironmentValue {
+        val ethEnvironment = DepEnvironmentValue(
+            identifier = DepIdentifier("eth"),
             values = mapOf(
-                Identifier("getBlock") to fn
+                DepIdentifier("getBlock") to fn
             )
         )
 
-        return EnvironmentValue(
-            identifier = Identifier("web3"),
+        return DepEnvironmentValue(
+            identifier = DepIdentifier("web3"),
             values = mapOf(
-                Identifier("eth") to ethEnvironment
+                DepIdentifier("eth") to ethEnvironment
             )
         )
     }
 
-    val fn = object : FunctionValue {
-        override val metaTable = MetaTableNotImplementedYet
+    val fn = object : DepFunctionValue {
+        override val metaTable = DepMetaTableNotImplementedYet
 
-        override val identifier = Identifier("getBlock")
+        override val identifier = DepIdentifier("getBlock")
 
-        override fun invoke(ctx: Context): Value {
+        override fun invoke(ctx: Context): DepValue {
             println("Getting block")
 //                    val bs = EthHttpBatchService()
 //                    bs.getBlock(req = EthBatchService.GetBlockByHashRequest(EthHash(EthBytes32(ByteArray(32)))))
@@ -49,8 +49,8 @@ class Web3Extension : Extension {
 
             val response = DefaultEthService.getBlock()
 
-            return TableValue(
-                StringValue("hash") to StringValue(response.result.hash)
+            return DepTableValue(
+                DepStringValue("hash") to DepStringValue(response.result.hash)
             )
         }
     }

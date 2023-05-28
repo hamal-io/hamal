@@ -1,15 +1,15 @@
 package io.hamal.lib.script.api.value
 
-typealias TableEntry = Pair<Value, Value>
+typealias TableEntry = Pair<DepValue, DepValue>
 
-open class TableValue : Value, Collection<TableEntry> {
-    override val metaTable = MetaTableNotImplementedYet
+open class DepTableValue : DepValue, Collection<TableEntry> {
+    override val metaTable = DepMetaTableNotImplementedYet
 
-    constructor(entries: Map<Value, Value>) {
+    constructor(entries: Map<DepValue, DepValue>) {
         entries.forEach { store[it.key] = it.value }
     }
 
-    constructor(vararg entries: Pair<Value, Value>) {
+    constructor(vararg entries: Pair<DepValue, DepValue>) {
         entries.forEach { store[it.first] = it.second }
     }
 
@@ -17,24 +17,24 @@ open class TableValue : Value, Collection<TableEntry> {
 //    data class TableEntry(val key: Value, val value: Value)
 
 
-    private val store = mutableMapOf<Value, Value>()
+    private val store = mutableMapOf<DepValue, DepValue>()
 
-    operator fun set(key: Int, value: Value) {
-        this[NumberValue(key)] = value
+    operator fun set(key: Int, value: DepValue) {
+        this[DepNumberValue(key)] = value
     }
 
-    operator fun set(key: Value, value: Value) {
+    operator fun set(key: DepValue, value: DepValue) {
         store[key] = value
     }
 
-    operator fun get(key: Int): Value = store[NumberValue(key)] ?: NilValue
-    operator fun get(key: Value): Value = store[key] ?: NilValue
+    operator fun get(key: Int): DepValue = store[DepNumberValue(key)] ?: DepNilValue
+    operator fun get(key: DepValue): DepValue = store[key] ?: DepNilValue
 
     fun remove(key: Int) {
-        remove(NumberValue(key))
+        remove(DepNumberValue(key))
     }
 
-    fun remove(key: Value) {
+    fun remove(key: DepValue) {
         store.remove(key)
     }
 
@@ -52,7 +52,7 @@ open class TableValue : Value, Collection<TableEntry> {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TableValue
+        other as DepTableValue
 
         return store == other.store
     }

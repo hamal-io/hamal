@@ -22,11 +22,11 @@ sealed interface ValueOperation {
 
 interface PrefixValueOperation : ValueOperation {
     val selfType: String
-    operator fun invoke(self: Value): Value
+    operator fun invoke(self: DepValue): DepValue
 }
 
 interface InfixValueOperation : ValueOperation {
     val selfType: String
     val otherType: String
-    operator fun invoke(self: Value, other: Value): Value
+    operator fun invoke(self: DepValue, other: DepValue): DepValue
 }

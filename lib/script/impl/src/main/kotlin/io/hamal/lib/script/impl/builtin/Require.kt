@@ -4,22 +4,22 @@ import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
-object RequireFunction : FunctionValue {
-    override val identifier: Identifier = Identifier("require")
-    override val metaTable = MetaTableNotImplementedYet
+object RequireFunction : DepFunctionValue {
+    override val identifier: DepIdentifier = DepIdentifier("require")
+    override val metaTable = DepMetaTableNotImplementedYet
 
 
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: Context): DepValue {
         val firstParameter = ctx.parameters.firstOrNull()
-            ?: throw ScriptEvaluationException(ErrorValue("require needs one environment identifier"))
+            ?: throw ScriptEvaluationException(DepErrorValue("require needs one environment identifier"))
 
         val identifier = firstParameter.asIdentifier()
 
-        var result: EnvironmentValue = ctx.env
+        var result: DepEnvironmentValue = ctx.env
         val splits = identifier.value.split("/")
         splits.forEach { envIdent ->
-            result = result.findEnvironmentValue(Identifier(envIdent))
-                ?: throw ScriptEvaluationException(ErrorValue("Environment '${identifier.value}' not found"))
+            result = result.findEnvironmentValue(DepIdentifier(envIdent))
+                ?: throw ScriptEvaluationException(DepErrorValue("Environment '${identifier.value}' not found"))
         }
 
 

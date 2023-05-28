@@ -6,7 +6,7 @@ import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
-    override fun invoke(ctx: EvaluationContext<CallExpression>): Value {
+    override fun invoke(ctx: EvaluationContext<CallExpression>): DepValue {
         val toEvaluate = ctx.toEvaluate
         val env = ctx.env
 
@@ -15,7 +15,7 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 
         val target = ctx.evaluate { identifier }
 
-        if (target is Identifier) {
+        if (target is DepIdentifier) {
 
             val identifier = ctx.evaluateAsIdentifier { identifier }
             env.findFunctionValue(identifier)
@@ -32,7 +32,7 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
             val prototype = env.findProtoTypeValue(identifier)!!
             return ctx.evaluate(prototype.block)
         } else {
-            require(target is FunctionValue)
+            require(target is DepFunctionValue)
             return target(
                 Context(
                     parameters.map {
@@ -53,7 +53,7 @@ internal object EvaluateGroupedExpression : Evaluate<GroupedExpression> {
 }
 
 internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
-    override fun invoke(ctx: EvaluationContext<InfixExpression>): Value {
+    override fun invoke(ctx: EvaluationContext<InfixExpression>): DepValue {
         val self = ctx.evaluate { lhs }
         val other = ctx.evaluate { rhs }
         return ctx.evaluateInfix(ctx.toEvaluate.operator, self, other)
@@ -61,7 +61,7 @@ internal object EvaluateInfixExpression : Evaluate<InfixExpression> {
 }
 
 internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
-    override fun invoke(ctx: EvaluationContext<PrefixExpression>): Value {
+    override fun invoke(ctx: EvaluationContext<PrefixExpression>): DepValue {
         val value = ctx.evaluate { expression }
         return ctx.evaluatePrefix(ctx.toEvaluate.operator, value)
     }
@@ -69,35 +69,35 @@ internal object EvaluatePrefixExpression : Evaluate<PrefixExpression> {
 }
 
 internal object EvaluateIfExpression : Evaluate<IfExpression> {
-    override fun invoke(ctx: EvaluationContext<IfExpression>): Value {
+    override fun invoke(ctx: EvaluationContext<IfExpression>): DepValue {
         for (conditionalStatement in ctx.toEvaluate.conditionalExpression) {
             val conditionValue = ctx.evaluate(conditionalStatement.condition)
             return when (conditionValue) {
-                FalseValue -> continue
-                TrueValue -> {
+                DepFalseValue -> continue
+                DepTrueValue -> {
                     ctx.enterScope()
                     val result = ctx.evaluate(conditionalStatement.block)
                     ctx.leaveScope()
                     result
                 }
 
-                else -> ErrorValue("Expression expected to yield a boolean value")
+                else -> DepErrorValue("Expression expected to yield a boolean value")
             }
         }
-        return NilValue
+        return DepNilValue
     }
 
 }
 
 internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
-    override fun invoke(ctx: EvaluationContext<ForLoopExpression>): Value {
+    override fun invoke(ctx: EvaluationContext<ForLoopExpression>): DepValue {
         val identifier = ctx.evaluateAsIdentifier { identifier }
-        var currentValue: NumberValue = ctx.evaluate { startExpression } as NumberValue
+        var currentValue: DepNumberValue = ctx.evaluate { startExpression } as DepNumberValue
 
-        val endValue = ctx.evaluate { endExpression } as NumberValue
-        val stepValue = ctx.evaluate { stepExpression } as NumberValue
+        val endValue = ctx.evaluate { endExpression } as DepNumberValue
+        val stepValue = ctx.evaluate { stepExpression } as DepNumberValue
 
-        val hasNext = if (stepValue.isGreaterThanEqual(NumberValue.Zero)) {
+        val hasNext = if (stepValue.isGreaterThanEqual(DepNumberValue.Zero)) {
             HasNext.Forward
         } else {
             HasNext.Backwards
@@ -118,16 +118,16 @@ internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
 
     private enum class HasNext {
         Forward {
-            override fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean {
+            override fun invoke(nextValue: DepNumberValue, endValue: DepNumberValue): Boolean {
                 return nextValue.isLessThanEqual(endValue)
             }
         },
         Backwards {
-            override fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean {
+            override fun invoke(nextValue: DepNumberValue, endValue: DepNumberValue): Boolean {
                 return nextValue.isGreaterThanEqual(endValue)
             }
         };
 
-        abstract operator fun invoke(nextValue: NumberValue, endValue: NumberValue): Boolean
+        abstract operator fun invoke(nextValue: DepNumberValue, endValue: DepNumberValue): Boolean
     }
 }

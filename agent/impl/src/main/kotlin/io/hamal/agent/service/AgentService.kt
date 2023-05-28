@@ -1,9 +1,9 @@
 package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
-import io.hamal.lib.script.api.value.EnvironmentValue
-import io.hamal.lib.script.api.value.FunctionValue
-import io.hamal.lib.script.api.value.Identifier
+import io.hamal.lib.script.api.value.DepEnvironmentValue
+import io.hamal.lib.script.api.value.DepFunctionValue
+import io.hamal.lib.script.api.value.DepIdentifier
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit
 @Service
 class AgentService {
 
-    private val functionValues = mutableListOf<FunctionValue>()
+    private val functionValues = mutableListOf<DepFunctionValue>()
 
     //FIXME introduce WorkerExtensionEnvironment as a wrapper around native env
-    private val extensionEnvironments = mutableListOf<EnvironmentValue>()
+    private val extensionEnvironments = mutableListOf<DepEnvironmentValue>()
 
     @PostConstruct
     fun postConstruct() {
@@ -79,8 +79,8 @@ class AgentService {
                     val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
 //                println(counter)
 
-                    val env = EnvironmentValue(
-                        identifier = Identifier("_G"),
+                    val env = DepEnvironmentValue(
+                        identifier = DepIdentifier("_G"),
                         values = mapOf(
                             AssertFunction.identifier to AssertFunction,
                             RequireFunction.identifier to RequireFunction

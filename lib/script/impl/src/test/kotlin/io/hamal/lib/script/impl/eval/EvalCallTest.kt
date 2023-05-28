@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.DepNumberValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.TestFactory
@@ -13,14 +13,14 @@ internal class EvalCallTest : AbstractEvalTest() {
             """
             function answer() return 42  end
             answer()
-        """ to { result, _ -> assertThat(result, equalTo(NumberValue(42))) },
+        """ to { result, _ -> assertThat(result, equalTo(DepNumberValue(42))) },
 
             """
             function answer() return 42  end
             answer()
             answer()
             answer()
-        """ to { result, _ -> assertThat(result, equalTo(NumberValue(42))) },
+        """ to { result, _ -> assertThat(result, equalTo(DepNumberValue(42))) },
         )
     )
 }

@@ -10,13 +10,13 @@ internal class EvalTableTest : AbstractEvalTest() {
     @TestFactory
     fun evalTableTests() = prepareTests(listOf(
         """{ }""" to { result, _ ->
-            assertThat(result, equalTo(TableValue()))
+            assertThat(result, equalTo(DepTableValue()))
         },
         """{1212}""" to { result, _ ->
             assertThat(
                 result, equalTo(
-                    TableValue(
-                        NumberValue(1) to NumberValue(1212)
+                    DepTableValue(
+                        DepNumberValue(1) to DepNumberValue(1212)
                     )
                 )
             )
@@ -24,13 +24,13 @@ internal class EvalTableTest : AbstractEvalTest() {
         """{true, 1, 2, 'some-str', false, nil}""" to { result, _ ->
             assertThat(
                 result, equalTo(
-                    TableValue(
-                        NumberValue(1) to TrueValue,
-                        NumberValue(2) to NumberValue(1),
-                        NumberValue(3) to NumberValue(2),
-                        NumberValue(4) to StringValue("some-str"),
-                        NumberValue(5) to FalseValue,
-                        NumberValue(6) to NilValue
+                    DepTableValue(
+                        DepNumberValue(1) to DepTrueValue,
+                        DepNumberValue(2) to DepNumberValue(1),
+                        DepNumberValue(3) to DepNumberValue(2),
+                        DepNumberValue(4) to DepStringValue("some-str"),
+                        DepNumberValue(5) to DepFalseValue,
+                        DepNumberValue(6) to DepNilValue
                     )
                 )
             )
@@ -38,18 +38,18 @@ internal class EvalTableTest : AbstractEvalTest() {
         """{some = 1212}""" to { result, _ ->
             assertThat(
                 result, equalTo(
-                    TableValue(
-                        Identifier("some") to NumberValue(1212)
+                    DepTableValue(
+                        DepIdentifier("some") to DepNumberValue(1212)
                     )
                 )
             )
         },
         """local t = {some = 1212}""" to { result, env ->
-            assertThat(result, equalTo(NilValue))
+            assertThat(result, equalTo(DepNilValue))
             assertThat(
                 env["t"], equalTo(
-                    TableValue(
-                        Identifier("some") to NumberValue(1212)
+                    DepTableValue(
+                        DepIdentifier("some") to DepNumberValue(1212)
                     )
                 )
             )
@@ -59,7 +59,7 @@ internal class EvalTableTest : AbstractEvalTest() {
             local t = {some = 1212}
             t['some']
             """.trimIndent() to { result, _ ->
-            assertThat(result, equalTo(NumberValue(1212)))
+            assertThat(result, equalTo(DepNumberValue(1212)))
         }
 
     ))

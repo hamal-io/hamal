@@ -6,24 +6,24 @@ import io.hamal.lib.script.api.Context
 import io.hamal.lib.script.api.value.*
 
 class HamalExtension : Extension {
-    override fun create(): EnvironmentValue {
-        return EnvironmentValue(
-            identifier = Identifier("hamal"),
+    override fun create(): DepEnvironmentValue {
+        return DepEnvironmentValue(
+            identifier = DepIdentifier("hamal"),
             values = mapOf(
-                Identifier("_cfg") to TableValue(),
-                Identifier("exec") to ExecFunc(),
+                DepIdentifier("_cfg") to DepTableValue(),
+                DepIdentifier("exec") to ExecFunc(),
             )
         )
     }
 
 }
 
-class ExecFunc : FunctionValue {
-    override val identifier = Identifier("exec")
-    override val metaTable: MetaTable get() = TODO("Not yet implemented")
+class ExecFunc : DepFunctionValue {
+    override val identifier = DepIdentifier("exec")
+    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 
-    override fun invoke(ctx: Context): Value {
-        val funcId = (ctx.parameters.first().value as StringValue).toString().replace("'", "")
+    override fun invoke(ctx: Context): DepValue {
+        val funcId = (ctx.parameters.first().value as DepStringValue).toString().replace("'", "")
         println("DEBUG: ${funcId}")
 
         HttpTemplate("http://localhost:8084")
@@ -37,7 +37,7 @@ class ExecFunc : FunctionValue {
             .execute()
 
 
-        return NilValue
+        return DepNilValue
     }
 
 }
