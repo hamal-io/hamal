@@ -25,3 +25,7 @@ class TriggerInputs(override val value: List<TableEntry>) : Inputs() {
 }
 
 
+@Serializable(with = TriggerSecrets.Serializer::class)
+class TriggerSecrets(override val value: List<Secret>) : Secrets() {
+    internal object Serializer : SecretsSerializer<TriggerSecrets>(::TriggerSecrets)
+}
