@@ -26,10 +26,9 @@ class DefaultLogTopicRepository(
 
     init {
         activeLogShard = LogShard(
-            id = LogShard.Id(1),
+            id = topic.shard,
             topicId = topic.id,
             path = topic.path.resolve(config.filename),
-            shard = topic.shard
         )
         activeLogShardRepository = DefaultLogShardRepository(activeLogShard)
     }

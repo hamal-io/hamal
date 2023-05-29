@@ -15,7 +15,7 @@ class DefaultLogShardRepository(
 ) : BaseRepository(object : Config {
     override val path: Path get() = logShard.path
     override val filename: String get() = String.format("shard-%04d", logShard.id.value.toLong())
-    override val shard: Shard get() = logShard.shard
+    override val shard: Shard get() = logShard.id
 
 }), LogShardRepository {
 
@@ -25,10 +25,9 @@ class DefaultLogShardRepository(
     init {
         activeSegment = LogSegment(
             LogSegment.Id(0),
+            shard = logShard.id,
             path = logShard.path.resolve(config.filename),
-            logShardId = logShard.id,
-            topicId = logShard.topicId,
-            shard = logShard.shard
+            topicId = logShard.topicId
         )
         activeLogSegmentRepository = DefaultLogSegmentRepository(activeSegment)
     }

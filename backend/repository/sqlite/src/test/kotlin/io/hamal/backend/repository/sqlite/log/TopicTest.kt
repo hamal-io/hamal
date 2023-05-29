@@ -1,6 +1,9 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.*
+import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogChunk
+import io.hamal.backend.repository.api.log.LogSegment
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
@@ -44,7 +47,7 @@ class DefaultLogTopicRepositoryTest {
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023")))
-            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023", "shard-0001")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023", "shard-0123")))
         }
     }
 
@@ -77,7 +80,7 @@ class DefaultLogTopicRepositoryTest {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(1)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(1)))
+                assertThat(chunk.shard, equalTo(Shard(28)))
                 assertThat(chunk.topicId, equalTo(TopicId(23)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
@@ -88,12 +91,11 @@ class DefaultLogTopicRepositoryTest {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(3)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(1)))
                 assertThat(chunk.topicId, equalTo(TopicId(23)))
+                assertThat(chunk.shard, equalTo(Shard(28)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
-                assertThat(chunk.shard, equalTo(Shard(28)))
             }
         }
 
@@ -124,7 +126,7 @@ class DefaultLogTopicRepositoryTest {
 
         private fun assertChunk(chunk: LogChunk, id: Int) {
             assertThat(chunk.id, equalTo(LogChunk.Id(id)))
-            assertThat(chunk.logShardId, equalTo(LogShard.Id(1)))
+            assertThat(chunk.shard, equalTo(Shard(65)))
             assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
             assertThat(chunk.topicId, equalTo(TopicId(23)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))

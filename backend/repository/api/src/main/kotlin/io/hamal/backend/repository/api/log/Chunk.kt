@@ -9,9 +9,8 @@ import java.time.Instant
 data class LogChunk(
     val id: Id,
     val segmentId: LogSegment.Id,
-    val logShardId: LogShard.Id,
-    val topicId: TopicId,
     val shard: Shard,
+    val topicId: TopicId,
     val bytes: ByteArray,
     val instant: Instant
 ) {

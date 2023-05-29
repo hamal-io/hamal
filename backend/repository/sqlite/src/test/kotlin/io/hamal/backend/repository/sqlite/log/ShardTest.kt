@@ -35,10 +35,9 @@ class DefaultLogShardRepositoryTest {
 
             DefaultLogShardRepository(
                 LogShard(
-                    id = LogShard.Id(23),
+                    id = Shard(23),
                     topicId = TopicId(34),
                     path = targetDir,
-                    shard = Shard(12)
                 )
             ).use { }
 
@@ -77,7 +76,7 @@ class DefaultLogShardRepositoryTest {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(1)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(23)))
+                assertThat(chunk.shard, equalTo(Shard(23)))
                 assertThat(chunk.topicId, equalTo(TopicId(34)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
@@ -88,7 +87,7 @@ class DefaultLogShardRepositoryTest {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(3)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(23)))
+                assertThat(chunk.shard, equalTo(Shard(23)))
                 assertThat(chunk.topicId, equalTo(TopicId(34)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
@@ -98,7 +97,7 @@ class DefaultLogShardRepositoryTest {
         }
 
         private val testInstance = DefaultLogShardRepository(
-            LogShard(LogShard.Id(23), TopicId(34), Path(testDir), Shard(23))
+            LogShard(Shard(23), TopicId(34), Path(testDir))
         )
     }
 
@@ -119,7 +118,7 @@ class DefaultLogShardRepositoryTest {
         private fun assertChunk(chunk: LogChunk, id: Int) {
             assertThat(chunk.id, equalTo(LogChunk.Id(id)))
             assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
-            assertThat(chunk.logShardId, equalTo(LogShard.Id(2810)))
+            assertThat(chunk.shard, equalTo(Shard(281)))
             assertThat(chunk.topicId, equalTo(TopicId(1212)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
@@ -137,10 +136,9 @@ class DefaultLogShardRepositoryTest {
 
         private val testInstance = DefaultLogShardRepository(
             LogShard(
-                id = LogShard.Id(2810),
+                id = Shard(281),
                 topicId = TopicId(1212),
                 path = Path(testDir),
-                shard = Shard(110)
             )
         )
     }

@@ -6,16 +6,10 @@ import java.io.Closeable
 import java.nio.file.Path
 
 data class LogShard(
-    val id: Id,
+    val id: Shard,
     val topicId: TopicId,
-    val path: Path,
-    val shard: Shard
-) {
-    @JvmInline
-    value class Id(val value: ULong) {
-        constructor(value: Int) : this(value.toULong())
-    }
-}
+    val path: Path
+)
 
 interface LogShardRepository : LogChunkAppender, LogChunkReader, LogChunkCounter, Closeable {
     fun clear()

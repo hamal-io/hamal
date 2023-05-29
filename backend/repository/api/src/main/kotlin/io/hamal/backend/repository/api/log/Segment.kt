@@ -7,10 +7,9 @@ import java.nio.file.Path
 
 data class LogSegment(
     val id: Id,
-    val logShardId: LogShard.Id,
+    val shard: Shard,
     val topicId: TopicId,
-    val path: Path,
-    val shard: Shard
+    val path: Path
 ) {
     @JvmInline
     value class Id(val value: ULong) {

@@ -45,11 +45,10 @@ internal class DefaultLogSegmentRepository(
                 LogChunk(
                     id = it.getDomainId("id", LogChunk::Id),
                     segmentId = segment.id,
-                    logShardId = segment.logShardId,
+                    shard = segment.shard,
                     topicId = segment.topicId,
                     bytes = it.getBytes("bytes"),
-                    instant = it.getInstant("instant"),
-                    shard = segment.shard
+                    instant = it.getInstant("instant")
                 )
             }
         }

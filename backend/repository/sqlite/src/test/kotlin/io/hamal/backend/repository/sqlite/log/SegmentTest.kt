@@ -2,7 +2,6 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.api.log.LogShard
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
@@ -106,10 +105,9 @@ class DefaultLogSegmentRepositoryTest {
 
         private fun testSegment(path: Path = Path(testDir)) = LogSegment(
             id = LogSegment.Id(2810),
-            logShardId = LogShard.Id(1212),
             topicId = TopicId(1506),
-            path = path,
-            shard = Shard(24)
+            shard = Shard(24),
+            path = path
         )
     }
 
@@ -139,11 +137,10 @@ class DefaultLogSegmentRepositoryTest {
 
                 val chunk = it.first()
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(1212)))
+                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
-                assertThat(chunk.shard, equalTo(Shard(42)))
             }
         }
 
@@ -161,7 +158,7 @@ class DefaultLogSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(1)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(1212)))
+                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
@@ -191,7 +188,7 @@ class DefaultLogSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(1)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(1212)))
+                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -202,7 +199,7 @@ class DefaultLogSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunk.Id(3)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.logShardId, equalTo(LogShard.Id(1212)))
+                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -232,10 +229,9 @@ class DefaultLogSegmentRepositoryTest {
         private val testInstance = DefaultLogSegmentRepository(
             LogSegment(
                 id = LogSegment.Id(2810),
-                logShardId = LogShard.Id(1212),
+                shard = Shard(42),
                 topicId = TopicId(1506),
-                path = Path(testDir),
-                shard = Shard(42)
+                path = Path(testDir)
             )
         )
     }
@@ -331,10 +327,9 @@ class DefaultLogSegmentRepositoryTest {
         private val testInstance = DefaultLogSegmentRepository(
             LogSegment(
                 id = LogSegment.Id(1028),
-                logShardId = LogShard.Id(1212),
+                shard = Shard(42),
                 topicId = TopicId(1506),
                 path = Path(testDir),
-                shard = Shard(42)
             )
         )
 
@@ -347,10 +342,9 @@ class DefaultLogSegmentRepositoryTest {
             val testInstance = DefaultLogSegmentRepository(
                 LogSegment(
                     id = LogSegment.Id(1028),
-                    logShardId = LogShard.Id(1212),
+                    shard = Shard(42),
                     topicId = TopicId(1506),
-                    path = Path(testDir),
-                    shard = Shard(42)
+                    path = Path(testDir)
                 )
             )
 
@@ -362,10 +356,9 @@ class DefaultLogSegmentRepositoryTest {
             val testInstance = DefaultLogSegmentRepository(
                 LogSegment(
                     id = LogSegment.Id(1028),
-                    logShardId = LogShard.Id(1212),
+                    shard = Shard(42),
                     topicId = TopicId(1506),
                     path = Path(testDir),
-                    shard = Shard(42)
                 )
             )
 
