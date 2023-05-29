@@ -2,11 +2,10 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
-import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert.*
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.TestFactory
 
 class TenantIdTest {
     @Nested
-    
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -34,7 +32,6 @@ class TenantIdTest {
     }
 
     @Nested
-    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {

@@ -3,14 +3,14 @@ package io.hamal.lib.web3.util
 import io.hamal.lib.web3.eth.abi.EthHexString
 import io.hamal.lib.web3.eth.abi.EthPrefixedHexString
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.*
-import org.junit.jupiter.api.*
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.nio.ByteBuffer
 
 class ByteWindowTest {
-
     @Nested
-    
     inner class ConstructorTest {
 
         @Test
@@ -54,7 +54,6 @@ class ByteWindowTest {
     }
 
     @Nested
-    
     inner class OfTest {
 
         @Test
@@ -118,7 +117,6 @@ class ByteWindowTest {
     }
 
     @Nested
-    
     inner class NexTest {
 
         @Test

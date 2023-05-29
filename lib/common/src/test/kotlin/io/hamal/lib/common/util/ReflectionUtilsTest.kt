@@ -4,8 +4,6 @@ import io.hamal.lib.common.util.ReflectionUtils.declaredProperty
 import io.hamal.lib.common.util.ReflectionUtils.memberProperty
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -13,9 +11,7 @@ import java.lang.reflect.Field
 
 @Nested
 class ReflectionUtilsTest {
-
     @Nested
-    
     inner class MemberPropertiesOfTest {
 
         @Test
@@ -52,7 +48,6 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    
     inner class MemberPropertyOfTest {
         @Test
         fun `Member property does not exists`() {
@@ -79,7 +74,6 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    
     inner class DeclaredPropertiesOfTest {
 
         @Test
@@ -108,7 +102,6 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    
     inner class DeclaredPropertyOfTest {
         @Test
         fun `Declared property does not exists`() {
@@ -133,9 +126,7 @@ class ReflectionUtilsTest {
         }
     }
 
-
     @Nested
-    
     inner class GetValueTest {
 
         @Test
@@ -205,7 +196,6 @@ class ReflectionUtilsTest {
     }
 
     @Nested
-    
     inner class AllFieldsTest {
         @Test
         fun `List all fields of object`() {
@@ -256,7 +246,7 @@ class ReflectionUtilsTest {
         }
     }
 
-    inner class Empty {}
+    inner class Empty
 
     open inner class Root(val root: Int)
 
@@ -268,7 +258,7 @@ class ReflectionUtilsTest {
         private val privateBaseValue: Int,
         protected val protectedBaseValue: Int,
         internal val internalBaseValue: Int,
-        public val publicBaseValue: Int
+        val publicBaseValue: Int
     )
 
     open inner class DerivedClass(

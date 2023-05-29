@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.createFixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerName

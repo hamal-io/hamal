@@ -13,7 +13,6 @@ import org.junit.jupiter.api.TestFactory
 
 class TriggerIdTest {
     @Nested
-
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -33,7 +32,6 @@ class TriggerIdTest {
     }
 
     @Nested
-
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
@@ -63,7 +61,6 @@ class TriggerIdTest {
 
 class TriggerNameTest {
     @Nested
-
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
@@ -83,7 +80,6 @@ class TriggerNameTest {
     }
 
     @Nested
-
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {

@@ -1,13 +1,13 @@
 package io.hamal.backend.config
 
 import io.hamal.backend.repository.api.*
-import io.hamal.backend.repository.api.log.Broker
-import io.hamal.backend.repository.api.log.BrokerRepository
+import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.MemoryExecRepository
 import io.hamal.backend.repository.memory.MemoryFuncRepository
 import io.hamal.backend.repository.memory.MemoryStateRepository
 import io.hamal.backend.repository.memory.MemoryTriggerRepository
-import io.hamal.backend.repository.sqlite.log.DefaultBrokerRepository
+import io.hamal.backend.repository.sqlite.log.DefaultLogBrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import kotlin.io.path.Path
@@ -15,8 +15,8 @@ import kotlin.io.path.Path
 @Configuration
 open class RepositoryConfig {
     @Bean
-    open fun brokerRepository(): BrokerRepository {
-        return DefaultBrokerRepository(Broker(Broker.Id(1), Path("/tmp/hamal")))
+    open fun brokerRepository(): LogBrokerRepository {
+        return DefaultLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
     }
 
     @Bean

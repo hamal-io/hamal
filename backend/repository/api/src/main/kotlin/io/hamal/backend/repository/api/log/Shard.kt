@@ -1,11 +1,11 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import java.io.Closeable
 import java.nio.file.Path
 
-data class Partition(
+data class LogShard(
     val id: Id,
     val topicId: TopicId,
     val path: Path,
@@ -17,6 +17,6 @@ data class Partition(
     }
 }
 
-interface PartitionRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
+interface LogShardRepository : LogChunkAppender, LogChunkReader, LogChunkCounter, Closeable {
     fun clear()
 }

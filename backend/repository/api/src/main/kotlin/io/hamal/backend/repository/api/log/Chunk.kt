@@ -1,15 +1,15 @@
 package io.hamal.backend.repository.api.log
 
+import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.Shard
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.base.DomainId
 import java.time.Instant
 
-data class Chunk(
+data class LogChunk(
     val id: Id,
-    val segmentId: Segment.Id,
-    val partitionId: Partition.Id,
+    val segmentId: LogSegment.Id,
+    val logShardId: LogShard.Id,
     val topicId: TopicId,
     val shard: Shard,
     val bytes: ByteArray,
@@ -21,14 +21,14 @@ data class Chunk(
 }
 
 
-interface ChunkAppender {
-    fun append(bytes: ByteArray): Chunk.Id
+interface LogChunkAppender {
+    fun append(bytes: ByteArray): LogChunk.Id
 }
 
-interface ChunkReader {
-    fun read(firstId: Chunk.Id, limit: Int = 1): List<Chunk>
+interface LogChunkReader {
+    fun read(firstId: LogChunk.Id, limit: Int = 1): List<LogChunk>
 }
 
-interface ChunkCounter {
+interface LogChunkCounter {
     fun count(): ULong
 }

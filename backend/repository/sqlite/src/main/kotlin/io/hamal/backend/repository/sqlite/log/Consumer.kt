@@ -10,15 +10,15 @@ import kotlin.reflect.KClass
 
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufConsumer<Value : Any>(
+class ProtobufLogConsumer<Value : Any>(
     override val groupId: GroupId,
-    private val topic: Topic,
-    private val brokerRepository: BrokerRepository,
+    private val topic: LogTopic,
+    private val logBrokerRepository: LogBrokerRepository,
     private val valueClass: KClass<Value>
-) : Consumer<Value> {
+) : LogConsumer<Value> {
 
     override fun consumeIndexed(limit: Int, fn: (Int, Value) -> CompletableFuture<*>): Int {
-        val chunksToConsume = brokerRepository.consume(groupId, topic, limit)
+        val chunksToConsume = logBrokerRepository.consume(groupId, topic, limit)
 
         chunksToConsume.mapIndexed { index, chunk ->
             val future = fn(
@@ -30,7 +30,7 @@ class ProtobufConsumer<Value : Any>(
             .onEach { it.second.join() }
             .map { it.first }
             .maxByOrNull { it }
-            ?.let { brokerRepository.commit(groupId, topic, it) }
+            ?.let { logBrokerRepository.commit(groupId, topic, it) }
         return chunksToConsume.size
     }
 }
@@ -38,13 +38,13 @@ class ProtobufConsumer<Value : Any>(
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class ProtobufBatchConsumer<Value : Any>(
     override val groupId: GroupId,
-    private val topic: Topic,
-    private val brokerRepository: BrokerRepository,
+    private val topic: LogTopic,
+    private val logBrokerRepository: LogBrokerRepository,
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 
     override fun consumeBatch(block: (List<Value>) -> CompletableFuture<*>): Int {
-        val chunksToConsume = brokerRepository.consume(groupId, topic, 1)
+        val chunksToConsume = logBrokerRepository.consume(groupId, topic, 1)
 
         if (chunksToConsume.isEmpty()) {
             return 0
@@ -54,7 +54,7 @@ class ProtobufBatchConsumer<Value : Any>(
             .map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
             .also { block(it).join() }
 
-        chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { brokerRepository.commit(groupId, topic, it.id) }
+        chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { logBrokerRepository.commit(groupId, topic, it.id) }
         return batch.size
     }
 }

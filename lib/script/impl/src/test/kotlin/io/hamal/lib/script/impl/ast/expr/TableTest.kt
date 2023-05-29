@@ -5,7 +5,6 @@ import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.assertThrows
 
 internal class TableIndexLiteralTest {
     @Nested
-    
     inner class ConstructorTest {
 
         @Test
@@ -44,9 +42,7 @@ internal class TableIndexLiteralTest {
 }
 
 internal class IndexFieldExpressionTest {
-
     @Nested
-    
     inner class EqualsTest {
         @Test
         fun `Equal if index is equal`() {
@@ -77,7 +73,6 @@ internal class IndexFieldExpressionTest {
     }
 
     @Nested
-    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if index has same hashcode`() {
@@ -109,7 +104,6 @@ internal class IndexFieldExpressionTest {
 
 internal class KeyFieldExpressionTest {
     @Nested
-    
     inner class EqualsTest {
         @Test
         fun `Equal if key is equal`() {
@@ -140,7 +134,6 @@ internal class KeyFieldExpressionTest {
     }
 
     @Nested
-    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if key has same hashcode`() {
@@ -171,9 +164,7 @@ internal class KeyFieldExpressionTest {
 }
 
 internal class TableConstructorExpressionTest : AbstractExpressionTest() {
-
     @Nested
-    
     inner class Parse {
         @Test
         fun `Parse empty table constructor`() {

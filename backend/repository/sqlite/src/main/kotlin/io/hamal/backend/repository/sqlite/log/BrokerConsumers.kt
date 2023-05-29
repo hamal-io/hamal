@@ -1,21 +1,21 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.Broker
-import io.hamal.backend.repository.api.log.BrokerConsumersRepository
-import io.hamal.backend.repository.api.log.Chunk
+import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogBrokerConsumersRepository
+import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
 data class BrokerConsumers(
-    val brokerId: Broker.Id,
+    val logBrokerId: LogBroker.Id,
     val path: Path
 )
 
-class DefaultBrokerConsumersRepository(
+class DefaultLogBrokerConsumersRepository(
     internal val brokerConsumers: BrokerConsumers,
 ) : BaseRepository(
     object : Config {
@@ -24,7 +24,7 @@ class DefaultBrokerConsumersRepository(
         override val shard: Shard get() = Shard(0)
 
     }
-), BrokerConsumersRepository {
+), LogBrokerConsumersRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
@@ -48,7 +48,7 @@ class DefaultBrokerConsumersRepository(
         }
     }
 
-    override fun nextChunkId(groupId: GroupId, topicId: TopicId): Chunk.Id {
+    override fun nextChunkId(groupId: GroupId, topicId: TopicId): LogChunk.Id {
         return connection.executeQueryOne(
             """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
         ) {
@@ -57,12 +57,12 @@ class DefaultBrokerConsumersRepository(
                 set("topicId", topicId.value)
             }
             map {
-                Chunk.Id(it.getSnowflakeId("next_chunk_id"))
+                LogChunk.Id(it.getSnowflakeId("next_chunk_id"))
             }
-        } ?: Chunk.Id(0)
+        } ?: LogChunk.Id(0)
     }
 
-    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: Chunk.Id) {
+    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: LogChunk.Id) {
         connection.execute(
             """
             INSERT INTO consumers(group_id, topic_id, next_chunk_id)
@@ -90,7 +90,7 @@ class DefaultBrokerConsumersRepository(
     }
 }
 
-fun DefaultBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
+fun DefaultLogBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
     map {
         it.getLong("count").toULong()
     }

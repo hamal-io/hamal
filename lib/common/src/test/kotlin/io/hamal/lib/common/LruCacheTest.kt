@@ -1,22 +1,17 @@
 package io.hamal.lib.common
 
 import io.hamal.lib.common.LruCache.DefaultImpl
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
 
 @Nested
 class LruCacheTest {
-
     @Nested
     inner class DefaultImplTest {
-
         @Nested
-        
         inner class PutTest {
             @Test
             fun `Insert value as value does not there`() {
@@ -46,7 +41,6 @@ class LruCacheTest {
         }
 
         @Nested
-        
         inner class PutIfAbsentTest {
             @Test
             fun `Inserts value as not value there`() {
@@ -76,7 +70,6 @@ class LruCacheTest {
         }
 
         @Nested
-        
         inner class FindTest {
             @Test
             fun `Nothing there`() {
@@ -93,7 +86,7 @@ class LruCacheTest {
             }
 
             @Test
-            
+
             fun `Finds someValue`() {
                 testInstance.put(someKey, someValue)
                 testInstance.put(anotherKey, anotherValue)
@@ -104,12 +97,10 @@ class LruCacheTest {
             }
         }
 
-
         @Nested
-        
         inner class ComputeIfAbsentTest {
             @Test
-            
+
             fun insert() {
                 testInstance.computeIfAbsent(someKey) { someValue }
                 verifySize(1)
@@ -117,7 +108,7 @@ class LruCacheTest {
             }
 
             @Test
-            
+
             fun overwrite() {
                 insert()
                 testInstance.computeIfAbsent(someKey) { anotherValue }
@@ -127,7 +118,6 @@ class LruCacheTest {
         }
 
         @Nested
-        
         inner class SizeTest {
             @Test
             fun `Empty`() {

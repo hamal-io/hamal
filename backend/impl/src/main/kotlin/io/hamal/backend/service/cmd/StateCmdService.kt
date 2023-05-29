@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.domain.State
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.StatePayload
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -9,7 +9,7 @@ import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs

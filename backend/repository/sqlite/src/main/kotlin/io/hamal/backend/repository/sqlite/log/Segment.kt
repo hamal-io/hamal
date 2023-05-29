@@ -1,40 +1,40 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.Chunk
-import io.hamal.backend.repository.api.log.Segment
-import io.hamal.backend.repository.api.log.SegmentRepository
+import io.hamal.backend.repository.api.log.LogChunk
+import io.hamal.backend.repository.api.log.LogSegment
+import io.hamal.backend.repository.api.log.LogSegmentRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
 import java.nio.file.Path
 
 
-internal class DefaultSegmentRepository(
-    internal val segment: Segment,
+internal class DefaultLogSegmentRepository(
+    internal val segment: LogSegment,
 ) : BaseRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
     override val shard: Shard get() = segment.shard
-}), SegmentRepository {
+}), LogSegmentRepository {
 
-    override fun append(bytes: ByteArray): Chunk.Id {
+    override fun append(bytes: ByteArray): LogChunk.Id {
         return connection.tx {
-            execute<Chunk.Id>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
+            execute<LogChunk.Id>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
                 with {
                     set("bytes", bytes)
                     set("now", TimeUtils.now())
                 }
-                map { Chunk.Id(it.getInt("id")) }
+                map { LogChunk.Id(it.getInt("id")) }
             }
         }!!
     }
 
-    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
+    override fun read(firstId: LogChunk.Id, limit: Int): List<LogChunk> {
         if (limit < 1) {
             return listOf()
         }
-        return connection.executeQuery<Chunk>(
+        return connection.executeQuery<LogChunk>(
             """SELECT id, bytes, instant FROM chunks WHERE id >= :firstId LIMIT :limit """.trimIndent()
         ) {
             with {
@@ -42,10 +42,10 @@ internal class DefaultSegmentRepository(
                 set("limit", limit)
             }
             map {
-                Chunk(
-                    id = it.getDomainId("id", Chunk::Id),
+                LogChunk(
+                    id = it.getDomainId("id", LogChunk::Id),
                     segmentId = segment.id,
-                    partitionId = segment.partitionId,
+                    logShardId = segment.logShardId,
                     topicId = segment.topicId,
                     bytes = it.getBytes("bytes"),
                     instant = it.getInstant("instant"),

@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncName
 import org.springframework.beans.factory.annotation.Autowired

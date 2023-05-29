@@ -3,46 +3,46 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import java.nio.file.Path
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
-class DefaultPartitionRepository(
-    internal val partition: Partition
+class DefaultLogShardRepository(
+    internal val logShard: LogShard
 ) : BaseRepository(object : Config {
-    override val path: Path get() = partition.path
-    override val filename: String get() = String.format("partition-%04d", partition.id.value.toLong())
-    override val shard: Shard get() = partition.shard
+    override val path: Path get() = logShard.path
+    override val filename: String get() = String.format("shard-%04d", logShard.id.value.toLong())
+    override val shard: Shard get() = logShard.shard
 
-}), PartitionRepository {
+}), LogShardRepository {
 
-    internal var activeSegment: Segment
-    internal var activeSegmentRepository: SegmentRepository
+    internal var activeSegment: LogSegment
+    internal var activeLogSegmentRepository: LogSegmentRepository
 
     init {
-        activeSegment = Segment(
-            Segment.Id(0),
-            path = partition.path.resolve(config.filename),
-            partitionId = partition.id,
-            topicId = partition.topicId,
-            shard = partition.shard
+        activeSegment = LogSegment(
+            LogSegment.Id(0),
+            path = logShard.path.resolve(config.filename),
+            logShardId = logShard.id,
+            topicId = logShard.topicId,
+            shard = logShard.shard
         )
-        activeSegmentRepository = DefaultSegmentRepository(activeSegment)
+        activeLogSegmentRepository = DefaultLogSegmentRepository(activeSegment)
     }
 
-    override fun append(bytes: ByteArray): Chunk.Id {
-        return activeSegmentRepository.append(bytes)
+    override fun append(bytes: ByteArray): LogChunk.Id {
+        return activeLogSegmentRepository.append(bytes)
     }
 
-    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
-        return activeSegmentRepository.read(firstId, limit)
+    override fun read(firstId: LogChunk.Id, limit: Int): List<LogChunk> {
+        return activeLogSegmentRepository.read(firstId, limit)
     }
 
     override fun count(): ULong {
-        return activeSegmentRepository.count()
+        return activeLogSegmentRepository.count()
     }
 
     override fun setupConnection(connection: Connection) {}
@@ -50,10 +50,10 @@ class DefaultPartitionRepository(
     override fun setupSchema(connection: Connection) {}
 
     override fun clear() {
-        activeSegmentRepository.clear()
+        activeLogSegmentRepository.clear()
     }
 
     override fun close() {
-        activeSegmentRepository.close()
+        activeLogSegmentRepository.close()
     }
 }

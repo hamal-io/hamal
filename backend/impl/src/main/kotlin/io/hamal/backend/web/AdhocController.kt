@@ -3,7 +3,7 @@ package io.hamal.backend.web
 import io.hamal.backend.event.AdhocInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.value.NumberValue
 import io.hamal.lib.domain.value.StringValue
 import io.hamal.lib.domain.value.to

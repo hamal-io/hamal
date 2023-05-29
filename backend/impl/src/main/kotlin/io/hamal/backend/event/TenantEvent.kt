@@ -1,6 +1,6 @@
 package io.hamal.backend.event
 
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import kotlinx.serialization.Serializable
 
 @Serializable

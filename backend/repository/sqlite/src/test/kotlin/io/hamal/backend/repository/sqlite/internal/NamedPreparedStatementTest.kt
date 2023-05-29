@@ -12,9 +12,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 
 class ParseTest {
-
     @Nested
-
     inner class ParseTest {
         @Test
         fun `Empty string`() {
@@ -180,7 +178,6 @@ class DefaultNamedPreparedStatementTest {
     }
 
     @Nested
-
     inner class EnsureAllParametersSetTest {
         @Test
         fun `All parameters set`() {

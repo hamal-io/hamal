@@ -1,13 +1,13 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import java.io.Closeable
 import java.nio.file.Path
 
-data class Segment(
+data class LogSegment(
     val id: Id,
-    val partitionId: Partition.Id,
+    val logShardId: LogShard.Id,
     val topicId: TopicId,
     val path: Path,
     val shard: Shard
@@ -19,6 +19,6 @@ data class Segment(
 }
 
 
-interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
+interface LogSegmentRepository : LogChunkAppender, LogChunkReader, LogChunkCounter, Closeable {
     fun clear()
 }

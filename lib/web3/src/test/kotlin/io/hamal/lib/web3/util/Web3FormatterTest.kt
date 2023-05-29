@@ -4,12 +4,10 @@ import io.hamal.lib.web3.eth.abi.EthAddress
 import io.hamal.lib.web3.eth.abi.EthHexString
 import io.hamal.lib.web3.eth.abi.EthPrefixedHexString
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.*
-import org.junit.jupiter.api.DisplayName
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.math.BigInteger
-
 
 
 class FormatToHexTest {
@@ -26,7 +24,6 @@ class FormatToHexTest {
         assertThat(result, equalTo(""))
     }
 }
-
 
 
 class FormatWithoutLeadingZerosTest {

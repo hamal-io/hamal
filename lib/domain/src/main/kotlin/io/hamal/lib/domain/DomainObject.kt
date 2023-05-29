@@ -1,11 +1,12 @@
 package io.hamal.lib.domain
 
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.base.DomainId
 
 
 abstract class DomainObject<ID : DomainId> {
     abstract val id: ID
-    val shard get(): Shard = Shard(id.partition().value.toInt())
+    val shard get(): Shard = Shard(id.shard().value.toInt())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

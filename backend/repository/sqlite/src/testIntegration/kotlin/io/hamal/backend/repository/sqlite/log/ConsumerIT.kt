@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -12,20 +12,18 @@ import java.nio.file.Files
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
-class ConsumerIT {
-    @Nested
-
-    inner class ProtobufConsumerTest {
+class ConsumerIT {@Nested
+inner class ProtobufLogConsumerTest {
         @Test
         fun `Late consumer starts at the beginning`() {
             val path = Files.createTempDirectory("broker_it")
 
-            DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
+            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(topic, "$it") }
 
-                val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
+                val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, value ->
                     CompletableFuture.runAsync {
                         assertThat("${index + 1}", equalTo(value))
@@ -56,15 +54,15 @@ class ConsumerIT {
         fun `Best effort to consume chunk once`() {
             val path = Files.createTempDirectory("broker_it")
 
-            DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
+            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(topic, "$it") }
             }
 
-            DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
+            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
-                val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
+                val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, value ->
                     CompletableFuture.runAsync {
                         assertThat("${index + 1}", equalTo(value))
@@ -77,11 +75,11 @@ class ConsumerIT {
         fun `Can run concurrent to appender`() {
             val path = Files.createTempDirectory("broker_it")
 
-            DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { brokerRepository ->
+            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
 
-                val testInstance = ProtobufConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
+                val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 val collected = mutableListOf<String>()
                 val consumerFuture = CompletableFuture.runAsync {
                     while (collected.size < 1_000) {

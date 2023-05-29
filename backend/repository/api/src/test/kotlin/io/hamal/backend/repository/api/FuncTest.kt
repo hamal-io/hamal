@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.FuncCmdRepository.Command.*
+import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.backend.repository.api.FuncCmdRepository.Recorder
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.Code
@@ -9,17 +9,14 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.port.FixedTimeIdGeneratorAdapter
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class RecorderTest {
-
     @Nested
-    
     inner class CreateFuncTest {
 
-           @Test
+        @Test
         fun `Records creation of func with overwritten parameters`() {
             val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
 

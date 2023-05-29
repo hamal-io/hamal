@@ -20,7 +20,7 @@ interface LruCache<KEY : Any, VALUE : Any> {
 
     fun size(): Int
 
-    fun keys() : Set<KEY>
+    fun keys(): Set<KEY>
 
     class DefaultImpl<KEY : Any, VALUE : Any>(capacity: Int) : LruCache<KEY, VALUE> {
         private var store: LinkedHashMap<KEY, VALUE>

@@ -8,21 +8,15 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class ValueTest {
-
-    @Nested
-    
-    inner class TypeTest() {
+class ValueTest {@Nested
+inner class TypeTest() {
         @Test
         fun `Returns the type specified in the meta table`() {
             val result = testInstance.type()
             assertThat(result, equalTo("test-type"))
         }
-    }
-
-    @Nested
-    
-    inner class FindInfixOperationTest {
+    }@Nested
+inner class FindInfixOperationTest {
         @Test
         fun `Returns the operation`() {
             val result = testInstance.findInfixOperation(Add, "test-type")
@@ -40,11 +34,8 @@ class ValueTest {
             val result = testInstance.findInfixOperation(Add, "different-type")
             assertThat(result, nullValue())
         }
-    }
-
-    @Nested
-    
-    inner class FindPrefixOperationTest {
+    }@Nested
+inner class FindPrefixOperationTest {
         @Test
         fun `Returns the operation`() {
             val result = testInstance.findPrefixOperation(Add)

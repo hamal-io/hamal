@@ -3,7 +3,6 @@ package io.hamal.lib.common.util
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -11,9 +10,7 @@ import java.time.Instant
 
 @Nested
 class TimeUtilsTest {
-
     @Nested
-    
     inner class NowTest {
         @Test
         fun `Returns java_time_Instant_now() when not injected`() {
@@ -28,7 +25,6 @@ class TimeUtilsTest {
     }
 
     @Nested
-    
     inner class WithInstantTest {
         @Test
         fun `Injects instant and can be called multiple times with now()`() {

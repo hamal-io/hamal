@@ -2,13 +2,11 @@ package io.hamal.lib.web3.util
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class Web3HashUtilsTest {
     @Nested
-    
     inner class Keccak256Test {
         @Test
         fun `Keccak of hamal`() {

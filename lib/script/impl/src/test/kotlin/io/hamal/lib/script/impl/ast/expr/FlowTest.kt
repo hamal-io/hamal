@@ -5,17 +5,15 @@ import io.hamal.lib.script.impl.ast.stmt.DoStmt
 import io.hamal.lib.script.impl.ast.stmt.ExpressionStatement
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.DynamicTest.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 internal class ConditionalExpressionTest {
-
     @Nested
-    
     inner class EqualsTest {
         @Test
         fun `Equal if condition and block statement are equal`() {
@@ -40,9 +38,7 @@ internal class ConditionalExpressionTest {
 
     }
 
-
     @Nested
-    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if condition and block statement hashcode are same`() {

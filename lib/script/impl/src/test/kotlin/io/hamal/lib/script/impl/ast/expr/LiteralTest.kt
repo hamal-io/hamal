@@ -1,20 +1,17 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.value.DepNumberValue
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Assertions.*
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class LiteralTest : AbstractExpressionTest() {
-
     @Nested
-    
     inner class NumberTest {
-
         @Nested
-        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -34,7 +31,6 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -54,7 +50,6 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        
         inner class ParseTest {
             @Test
             fun number() {
@@ -67,11 +62,8 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    
     inner class StringTest {
-
         @Nested
-        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -91,7 +83,6 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -111,7 +102,6 @@ internal class LiteralTest : AbstractExpressionTest() {
         }
 
         @Nested
-        
         inner class ParseTest {
             @Test
             fun string() {
@@ -124,10 +114,8 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    
     inner class TrueTest {
         @Nested
-        
         inner class ParseTest {
             @Test
             fun `true`() {
@@ -140,10 +128,8 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    
     inner class FalseTest {
         @Nested
-        
         inner class ParseTest {
             @Test
             fun `false`() {
@@ -156,10 +142,8 @@ internal class LiteralTest : AbstractExpressionTest() {
     }
 
     @Nested
-    
     inner class NilTest {
         @Nested
-        
         inner class ParseTest {
             @Test
             fun `nil`() {

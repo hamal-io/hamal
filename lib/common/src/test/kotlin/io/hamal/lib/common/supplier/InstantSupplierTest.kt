@@ -1,19 +1,15 @@
 package io.hamal.lib.common.supplier
 
-import io.hamal.lib.common.supplier.InstantSupplier
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.number.OrderingComparison
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
 @Nested
 class InstantSupplierTest {
-
     @Nested
-    
     inner class DefaultImplTest {
         @Test
         fun `Returns current instant`() {
@@ -24,7 +20,6 @@ class InstantSupplierTest {
     }
 
     @Nested
-    
     inner class FakeImplTest {
         @Test
         fun `Returns hardcoded instant`() {

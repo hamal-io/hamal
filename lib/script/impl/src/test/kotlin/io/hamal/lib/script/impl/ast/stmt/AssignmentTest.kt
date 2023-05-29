@@ -1,15 +1,16 @@
 package io.hamal.lib.script.impl.ast.stmt
 
 import io.hamal.lib.script.impl.ast.expr.*
-import io.hamal.lib.script.impl.ast.stmt.Assignment.*
+import io.hamal.lib.script.impl.ast.stmt.Assignment.Global
+import io.hamal.lib.script.impl.ast.stmt.Assignment.Local
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.TestFactory
 
 internal class AssignmentTest : AbstractStatementTest() {
     @Nested
-    
     inner class GlobalTest {
         @TestFactory
         fun parse() = listOf(
@@ -29,7 +30,6 @@ internal class AssignmentTest : AbstractStatementTest() {
     }
 
     @Nested
-    
     inner class LocalTest {
 
         @TestFactory

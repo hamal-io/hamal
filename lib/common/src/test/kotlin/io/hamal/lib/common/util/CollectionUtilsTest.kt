@@ -4,13 +4,11 @@ import io.hamal.lib.common.util.CollectionUtils.cross
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class CollectionUtilsTest {
     @Nested
-    
     inner class CrossTest {
         @Test
         fun `Creates cartesian product`() {

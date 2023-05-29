@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
 import java.nio.file.Path
 
-data class Broker(
+data class LogBroker(
     val id: Id,
     val path: Path
 ) {
@@ -16,32 +16,32 @@ data class Broker(
 }
 
 interface AppendToTopic {
-    fun append(topic: Topic, bytes: ByteArray)
+    fun append(topic: LogTopic, bytes: ByteArray)
 }
 
 interface ConsumeFromTopic {
-    fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk>
+    fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk>
 
-    fun commit(groupId: GroupId, topic: Topic, chunkId: Chunk.Id)
+    fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunk.Id)
 }
 
 interface ReadFromTopic {
-    fun read(lastId: Chunk.Id, topic: Topic, limit: Int): List<Chunk>
+    fun read(lastId: LogChunk.Id, topic: LogTopic, limit: Int): List<LogChunk>
 }
 
 interface ResolveTopic {
-    fun resolveTopic(topicName: TopicName): Topic
+    fun resolveTopic(topicName: TopicName): LogTopic
 }
 
 interface GetTopics {
-    fun topics(): Set<Topic>
+    fun topics(): Set<LogTopic>
 }
 
 interface GetTopic {
-    fun get(topicId: TopicId): Topic = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
+    fun get(topicId: TopicId): LogTopic = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
 
-    fun find(topicId: TopicId): Topic?
+    fun find(topicId: TopicId): LogTopic?
 }
 
-interface BrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopic, GetTopics, ReadFromTopic, ResolveTopic,
+interface LogBrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopic, GetTopics, ReadFromTopic, ResolveTopic,
     Closeable

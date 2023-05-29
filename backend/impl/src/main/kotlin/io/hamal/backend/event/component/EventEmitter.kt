@@ -1,23 +1,23 @@
 package io.hamal.backend.event.component
 
 import io.hamal.backend.event.Event
-import io.hamal.backend.repository.api.log.BrokerRepository
-import io.hamal.backend.repository.api.log.Topic
+import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.sqlite.log.ProtobufAppender
 import io.hamal.lib.domain.vo.TopicName
 
-class EventEmitter(val brokerRepository: BrokerRepository) {
+class EventEmitter(val logBrokerRepository: LogBrokerRepository) {
 
-    private val local: ThreadLocal<List<Pair<Topic, Event>>> = ThreadLocal<List<Pair<Topic, Event>>>()
+    private val local: ThreadLocal<List<Pair<LogTopic, Event>>> = ThreadLocal<List<Pair<LogTopic, Event>>>()
 
-    private val appender = ProtobufAppender(Event::class, brokerRepository)
+    private val appender = ProtobufAppender(Event::class, logBrokerRepository)
 
     init {
         local.set(listOf())
     }
 
     fun <EVENT : Event> emit(evt: EVENT) {
-        val topic = brokerRepository.resolveTopic(TopicName(evt.topic))
+        val topic = logBrokerRepository.resolveTopic(TopicName(evt.topic))
         if (local.get() == null) {
             local.set(listOf(Pair(topic, evt)))
         } else {

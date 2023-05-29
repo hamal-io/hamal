@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -15,7 +15,7 @@ class BrokerIT {
     fun `Concurrent safe - 10 threads add to the same topic`() {
         val path = Files.createTempDirectory("broker_it")
 
-        DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { testInstance ->
+        DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { testInstance ->
             val topic = testInstance.resolveTopic(TopicName("topic"))
 
             val futures = IntRange(1, 10).map { thread ->
@@ -37,7 +37,7 @@ class BrokerIT {
     fun `Concurrent safe - 100 threads add to the different topics`() {
         val path = Files.createTempDirectory("broker_it")
 
-        DefaultBrokerRepository(Broker(Broker.Id(123), path)).use { testInstance ->
+        DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { testInstance ->
             val futures = IntRange(1, 100).map { thread ->
                 CompletableFuture.runAsync {
                     val topic = testInstance.resolveTopic(TopicName("topic-$thread"))

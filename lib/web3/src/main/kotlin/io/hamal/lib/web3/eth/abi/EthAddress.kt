@@ -9,7 +9,7 @@ import java.math.BigInteger
 import java.util.*
 
 class EthAddress(
-     override val value: EthUint160
+    override val value: EthUint160
 ) : EthType<EthUint160> {
 
 //    val value : BigInteger get() = value

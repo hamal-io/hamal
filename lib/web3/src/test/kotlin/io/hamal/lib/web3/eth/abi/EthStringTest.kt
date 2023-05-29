@@ -1,14 +1,12 @@
 package io.hamal.lib.web3.eth.abi
 
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.DynamicTest.*
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 
 class EthHexStringTest {
     @Nested
-    
     inner class ConstructorTest {
         @TestFactory
         fun `Valid hex string`() = listOf(
@@ -35,7 +33,6 @@ class EthHexStringTest {
 
 class EthPrefixedHexStringTest {
     @Nested
-    
     inner class ConstructorTest {
         @TestFactory
         fun `Valid hex string`() = listOf(

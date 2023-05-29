@@ -2,13 +2,11 @@ package io.hamal.lib.script.impl.ast.expr
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class GroupedExpressionTest : AbstractExpressionTest() {
     @Nested
-    
     inner class ParseTest {
         @Test
         fun `empty grouped expression`() {

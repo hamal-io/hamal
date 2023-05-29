@@ -2,8 +2,11 @@ package io.hamal.lib.web3.eth.abi
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.DynamicTest.*
+import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 import java.math.BigInteger
 
 
@@ -33,7 +36,7 @@ class AddressTest {
     @Nested
     inner class ConstructorTest {
         @Test
-        
+
         fun ok() {
             val testInstance = EthAddress(BigInteger.valueOf(42))
             assertThat(testInstance.value, equalTo(EthUint160(BigInteger.valueOf(42))))

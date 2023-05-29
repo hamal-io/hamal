@@ -9,7 +9,6 @@ import org.junit.jupiter.api.assertThrows
 @Nested
 class DomainNameTest {
     @Nested
-
     inner class DomainNameValidatorTest {
         @Test
         fun `Does nothing if reference is legal`() {

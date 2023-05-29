@@ -1,19 +1,19 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
 import java.nio.file.Path
 
-data class Topic(
+data class LogTopic(
     val id: TopicId,
-    val brokerId: Broker.Id,
+    val logBrokerId: LogBroker.Id,
     val name: TopicName,
     val path: Path,
     val shard: Shard
 )
 
-interface TopicRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
+interface LogTopicRepository : LogChunkAppender, LogChunkReader, LogChunkCounter, Closeable {
     fun clear()
 }

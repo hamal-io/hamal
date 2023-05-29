@@ -2,15 +2,12 @@ package io.hamal.lib.http
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class HttpParameterTest {
-
     @Nested
-    
-    inner class ToQueryStringTest() {
+    inner class ToQueryStringTest {
 
         @Test
         fun `No parameter to build query string`() {

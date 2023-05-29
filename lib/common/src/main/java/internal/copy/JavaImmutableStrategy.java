@@ -35,20 +35,20 @@ public class JavaImmutableStrategy extends JavaCopy.Strategy {
             ValueObject.class
     );
 
+    public JavaImmutableStrategy() {
+        this(new HashSet<>());
+    }
+
+
+    public JavaImmutableStrategy(Set<Class<?>> immutableClasses) {
+        super(new CopyStrategy(mergeWithDefaultImmutableClasses(immutableClasses)));
+    }
+
     private static Set<Class<?>> mergeWithDefaultImmutableClasses(Set<Class<?>> classes) {
         var result = new HashSet<Class<?>>();
         result.addAll(classes);
         result.addAll(defaultImmutableClasses);
         return result;
-    }
-
-
-    public JavaImmutableStrategy() {
-        this(new HashSet<>());
-    }
-
-    public JavaImmutableStrategy(Set<Class<?>> immutableClasses) {
-        super(new CopyStrategy(mergeWithDefaultImmutableClasses(immutableClasses)));
     }
 
     @Override

@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs

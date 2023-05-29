@@ -1,19 +1,16 @@
 package io.hamal.lib.common
 
-import io.hamal.lib.domain.OnceEvery
 import io.hamal.lib.common.supplier.InstantSupplier
+import io.hamal.lib.domain.OnceEvery
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
 class OnceEveryTest {
-
     @Nested
-    
     inner class DefaultImplTest {
 
         @Test

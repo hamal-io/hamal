@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo.port
 
 import io.hamal.lib.common.*
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.base.DomainId
 
 interface GenerateDomainId {
@@ -14,7 +14,7 @@ object DomainIdGeneratorAdapter : GenerateDomainId {
     override fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID {
         val generator = provideGenerator(shard) {
             SnowflakeGenerator(
-                DefaultPartitionSource(shard.value)
+                DefaultShardSource(shard.value)
             )
         }
         return ctor(generator.next())
@@ -27,7 +27,7 @@ class FixedTimeIdGeneratorAdapter : GenerateDomainId {
         val generator = provideGenerator(shard) {
             SnowflakeGenerator(
                 elapsedSource = FixedElapsedSource(0),
-                partitionSource = DefaultPartitionSource(shard.value),
+                shardSource = DefaultShardSource(shard.value),
             )
         }
         return ctor(generator.next())

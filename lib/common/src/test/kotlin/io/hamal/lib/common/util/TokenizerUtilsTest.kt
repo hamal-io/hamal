@@ -2,14 +2,11 @@ package io.hamal.lib.common.util
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class TokenizerUtilsTest {
-
     @Nested
-    
     inner class IsDigitTest {
         @Test
         fun `Is digit`() {
@@ -31,7 +28,6 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    
     inner class IsAlphaTest {
         @Test
         fun `Is alpha`() {
@@ -58,7 +54,6 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    
     inner class IsUnderscoreTest {
         @Test
         fun `Is underscore`() {
@@ -77,7 +72,6 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    
     inner class IsQuoteTest {
         @Test
         fun `Is quote`() {
@@ -95,9 +89,7 @@ class TokenizerUtilsTest {
         }
     }
 
-
     @Nested
-    
     inner class IsWhitespaceTest {
         @Test
         fun `Is whitespace`() {
@@ -119,7 +111,6 @@ class TokenizerUtilsTest {
     }
 
     @Nested
-    
     inner class IsHexCharTest {
         @Test
         fun `Is hex char`() {

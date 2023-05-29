@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 
 @Nested
 class OnceTest {
-
     @Nested
     inner class DefaultImplTest {
 

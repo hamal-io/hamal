@@ -4,7 +4,6 @@ import io.hamal.lib.common.ddd.ValueObject
 import io.hamal.lib.common.util.ReflectionUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -12,9 +11,7 @@ import org.junit.jupiter.api.assertThrows
 @Nested
 
 class CopyTest {
-
     @Nested
-    
     inner class ImmutableClassesTest {
         @Test
         fun `There are 0 immutable classes declared`() {
@@ -23,7 +20,6 @@ class CopyTest {
     }
 
     @Nested
-    
     inner class CopyTest {
 
         @Test
@@ -172,7 +168,7 @@ class CopyTest {
         private val privateBaseValue: Int,
         protected val protectedBaseValue: Int,
         internal val internalBaseValue: Int,
-        public val publicBaseValue: Int
+        val publicBaseValue: Int
     )
 
     open inner class DerivedClass(

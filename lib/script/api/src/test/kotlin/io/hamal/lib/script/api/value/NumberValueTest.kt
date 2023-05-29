@@ -7,11 +7,8 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-class NumberValueTest {
-
-    @Nested
-    
-    inner class InvokeTest {
+class NumberValueTest {@Nested
+inner class InvokeTest {
 
         @Test
         fun `Byte input`() {
@@ -128,11 +125,8 @@ class NumberValueTest {
         }
 
         private val expected = DepNumberValue(28)
-    }
-
-    @Nested
-    
-    inner class PlusTest {
+    }@Nested
+inner class PlusTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
@@ -144,11 +138,8 @@ class NumberValueTest {
             assertThat(testInstance, equalTo(DepNumberValue(28)))
             assertThat(otherInstance, equalTo(DepNumberValue(10)))
         }
-    }
-
-    @Nested
-    
-    inner class MinusTest {
+    }@Nested
+inner class MinusTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
@@ -160,11 +151,8 @@ class NumberValueTest {
             assertThat(testInstance, equalTo(DepNumberValue(28)))
             assertThat(otherInstance, equalTo(DepNumberValue(10)))
         }
-    }
-
-    @Nested
-    
-    inner class MultiplyTest {
+    }@Nested
+inner class MultiplyTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
@@ -176,11 +164,8 @@ class NumberValueTest {
             assertThat(testInstance, equalTo(DepNumberValue(28)))
             assertThat(otherInstance, equalTo(DepNumberValue(10)))
         }
-    }
-
-    @Nested
-    
-    inner class DivideTest {
+    }@Nested
+inner class DivideTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(280)
@@ -192,11 +177,8 @@ class NumberValueTest {
             assertThat(testInstance, equalTo(DepNumberValue(280)))
             assertThat(otherInstance, equalTo(DepNumberValue(10)))
         }
-    }
-
-    @Nested
-    
-    inner class RemainderTest {
+    }@Nested
+inner class RemainderTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue("42.0021224");
@@ -208,11 +190,8 @@ class NumberValueTest {
             assertThat(testInstance, equalTo(DepNumberValue("42.0021224")));
             assertThat(divisor, equalTo(DepNumberValue("3.14152")));
         }
-    }
-
-    @Nested
-    
-    inner class PowTest {
+    }@Nested
+inner class PowTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue("10");
@@ -224,11 +203,8 @@ class NumberValueTest {
             assertThat(testInstance, equalTo(DepNumberValue("10")));
             assertThat(exponent, equalTo(DepNumberValue("2")));
         }
-    }
-
-    @Nested
-    
-    inner class NegateTest {
+    }@Nested
+inner class NegateTest {
         @Test
         fun `Negative value`() {
             val testInstance = DepNumberValue(-28)
@@ -248,11 +224,8 @@ class NumberValueTest {
 
             assertThat(testInstance, equalTo(DepNumberValue(28)))
         }
-    }
-
-    @Nested
-    
-    inner class AbsTest {
+    }@Nested
+inner class AbsTest {
         @Test
         fun `Negative value`() {
             val testInstance = DepNumberValue(-28)
@@ -296,11 +269,8 @@ class NumberValueTest {
             val result = testInstance.ceil();
             assertThat(result, equalTo(expected));
         }
-    }
-
-    @Nested
-    
-    inner class LnTest {
+    }@Nested
+inner class LnTest {
         @Test
         fun `Value is negative`() {
             val testInstance = DepNumberValue(-42);
@@ -377,11 +347,8 @@ class NumberValueTest {
                 assertThat(result, equalTo(expected));
             }
         }
-    }
-
-    @Nested
-    
-    inner class IsLessThanTest {
+    }@Nested
+inner class IsLessThanTest {
         @Test
         fun `Less Than`() {
             val testInstance = DepNumberValue(5)
@@ -402,11 +369,8 @@ class NumberValueTest {
             val otherInstance = DepNumberValue(5)
             assertFalse(testInstance.isLessThan(otherInstance))
         }
-    }
-
-    @Nested
-    
-    inner class IsLessThanEqualTest {
+    }@Nested
+inner class IsLessThanEqualTest {
         @Test
         fun `Less Than`() {
             val testInstance = DepNumberValue(5)
@@ -427,11 +391,8 @@ class NumberValueTest {
             val otherInstance = DepNumberValue(5)
             assertFalse(testInstance.isLessThanEqual(otherInstance))
         }
-    }
-
-    @Nested
-    
-    inner class IsGreaterThanTest {
+    }@Nested
+inner class IsGreaterThanTest {
         @Test
         fun `Less Than`() {
             val testInstance = DepNumberValue(5)
@@ -452,11 +413,8 @@ class NumberValueTest {
             val otherInstance = DepNumberValue(5)
             assertTrue(testInstance.isGreaterThan(otherInstance))
         }
-    }
-
-    @Nested
-    
-    inner class IsGreaterThanEqualTest {
+    }@Nested
+inner class IsGreaterThanEqualTest {
         @Test
         fun `Less Than`() {
             val testInstance = DepNumberValue(5)
@@ -477,11 +435,8 @@ class NumberValueTest {
             val otherInstance = DepNumberValue(5)
             assertTrue(testInstance.isGreaterThanEqual(otherInstance))
         }
-    }
-
-    @Nested
-    
-    inner class IsNegativeTest {
+    }@Nested
+inner class IsNegativeTest {
         @Test
         fun `Negative number`() {
             val testInstance = DepNumberValue(-10)
@@ -499,11 +454,8 @@ class NumberValueTest {
             val testInstance = DepNumberValue(10)
             assertFalse(testInstance.isNegative())
         }
-    }
-
-    @Nested
-    
-    inner class IsPositiveTest {
+    }@Nested
+inner class IsPositiveTest {
         @Test
         fun `Negative number`() {
             val testInstance = DepNumberValue(-10)
@@ -521,11 +473,8 @@ class NumberValueTest {
             val testInstance = DepNumberValue(10)
             assertTrue(testInstance.isPositive())
         }
-    }
-
-    @Nested
-    
-    inner class IsZeroTest {
+    }@Nested
+inner class IsZeroTest {
         @Test
         fun `Negative number`() {
             val testInstance = DepNumberValue(-10)
@@ -543,61 +492,43 @@ class NumberValueTest {
             val testInstance = DepNumberValue(10)
             assertFalse(testInstance.isZero())
         }
-    }
-
-    @Nested
-    
-    inner class ToByteTest {
+    }@Nested
+inner class ToByteTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
             assertThat(testInstance.toByte(), equalTo(28))
         }
-    }
-
-    @Nested
-    
-    inner class ToShortTest {
+    }@Nested
+inner class ToShortTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
             assertThat(testInstance.toShort(), equalTo(28))
         }
-    }
-
-    @Nested
-    
-    inner class ToIntTest {
+    }@Nested
+inner class ToIntTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
             assertThat(testInstance.toInt(), equalTo(28))
         }
-    }
-
-    @Nested
-    
-    inner class ToLongTest {
+    }@Nested
+inner class ToLongTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28)
             assertThat(testInstance.toLong(), equalTo(28))
         }
-    }
-
-    @Nested
-    
-    inner class ToFloatTest {
+    }@Nested
+inner class ToFloatTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28.10)
             assertThat(testInstance.toFloat(), equalTo(28.10f))
         }
-    }
-
-    @Nested
-    
-    inner class ToDoubleTest {
+    }@Nested
+inner class ToDoubleTest {
         @Test
         fun ok() {
             val testInstance = DepNumberValue(28.10)

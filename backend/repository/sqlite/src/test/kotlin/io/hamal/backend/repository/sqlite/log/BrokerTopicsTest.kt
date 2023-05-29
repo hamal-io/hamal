@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.Broker
+import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -16,10 +16,8 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class DefaultBrokerTopicsRepositoryTest {
-
+class DefaultLogBrokerTopicsRepositoryTest {
     @Nested
-
     inner class ConstructorTest {
         @BeforeEach
         fun setup() {
@@ -30,7 +28,7 @@ class DefaultBrokerTopicsRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "some-path", "another-path")
-            DefaultBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
+            DefaultLogBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics.db")))
@@ -38,7 +36,7 @@ class DefaultBrokerTopicsRepositoryTest {
 
         @Test
         fun `Creates topics table`() {
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'topics' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -47,16 +45,16 @@ class DefaultBrokerTopicsRepositoryTest {
 
         @Test
         fun `Does not create topics table if already exists`() {
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.execute("""INSERT INTO topics (name,instant) VALUES ('some-topic',unixepoch());""")
             }
 
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use { }
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use { }
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use { }
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use { }
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
 
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM topics") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -65,7 +63,7 @@ class DefaultBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -74,7 +72,7 @@ class DefaultBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -83,7 +81,7 @@ class DefaultBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -92,7 +90,7 @@ class DefaultBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            DefaultBrokerTopicsRepository(testBrokerTopics()).use {
+            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
@@ -100,13 +98,12 @@ class DefaultBrokerTopicsRepositoryTest {
         }
 
         private fun testBrokerTopics(path: Path = Path(testDir)) = BrokerTopics(
-            brokerId = Broker.Id(2810),
+            logBrokerId = LogBroker.Id(2810),
             path = path
         )
     }
 
     @Nested
-
     inner class ResolveTopicTest {
         @BeforeEach
         fun setup() {
@@ -122,7 +119,7 @@ class DefaultBrokerTopicsRepositoryTest {
         fun `Creates a new entry if topic does not exists`() {
             val result = testInstance.resolveTopic(TopicName("very-first-topic"))
             assertThat(result.id, equalTo(TopicId(1)))
-            assertThat(result.brokerId, equalTo(Broker.Id(345)))
+            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
             assertThat(result.path, equalTo(Path(testDir)))
 
@@ -135,7 +132,7 @@ class DefaultBrokerTopicsRepositoryTest {
 
             val result = testInstance.resolveTopic(TopicName("func::created"))
             assertThat(result.id, equalTo(TopicId(2)))
-            assertThat(result.brokerId, equalTo(Broker.Id(345)))
+            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
             assertThat(result.name, equalTo(TopicName("func::created")))
             assertThat(result.path, equalTo(Path(testDir)))
 
@@ -155,16 +152,16 @@ class DefaultBrokerTopicsRepositoryTest {
 
             val result = testInstance.resolveTopic(TopicName("some-topic"))
             assertThat(result.id, equalTo(TopicId(3)))
-            assertThat(result.brokerId, equalTo(Broker.Id(345)))
+            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
             assertThat(result.name, equalTo(TopicName("some-topic")))
             assertThat(result.path, equalTo(Path(testDir)))
 
             assertThat(testInstance.count(), equalTo(5UL))
         }
 
-        private val testInstance = DefaultBrokerTopicsRepository(
+        private val testInstance = DefaultLogBrokerTopicsRepository(
             BrokerTopics(
-                brokerId = Broker.Id(345),
+                logBrokerId = LogBroker.Id(345),
                 path = Path(testDir),
             )
         )

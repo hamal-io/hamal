@@ -3,15 +3,15 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import java.nio.file.Path
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, sharding by key
 // keeping track of consumer group ids
-class DefaultTopicRepository(
-    internal val topic: Topic
+class DefaultLogTopicRepository(
+    internal val topic: LogTopic
 ) : BaseRepository(
     object : Config {
         override val path: Path get() = topic.path
@@ -19,43 +19,43 @@ class DefaultTopicRepository(
         override val shard: Shard get() = topic.shard
 
     }
-), TopicRepository {
+), LogTopicRepository {
 
-    internal var activePartition: Partition
-    internal var activePartitionRepository: PartitionRepository
+    internal var activeLogShard: LogShard
+    internal var activeLogShardRepository: LogShardRepository
 
     init {
-        activePartition = Partition(
-            id = Partition.Id(1),
+        activeLogShard = LogShard(
+            id = LogShard.Id(1),
             topicId = topic.id,
             path = topic.path.resolve(config.filename),
             shard = topic.shard
         )
-        activePartitionRepository = DefaultPartitionRepository(activePartition)
+        activeLogShardRepository = DefaultLogShardRepository(activeLogShard)
     }
 
     override fun setupConnection(connection: Connection) {}
 
     override fun setupSchema(connection: Connection) {}
 
-    override fun append(bytes: ByteArray): Chunk.Id {
-        return activePartitionRepository.append(bytes)
+    override fun append(bytes: ByteArray): LogChunk.Id {
+        return activeLogShardRepository.append(bytes)
     }
 
-    override fun read(firstId: Chunk.Id, limit: Int): List<Chunk> {
-        return activePartitionRepository.read(firstId, limit)
+    override fun read(firstId: LogChunk.Id, limit: Int): List<LogChunk> {
+        return activeLogShardRepository.read(firstId, limit)
     }
 
     override fun count(): ULong {
-        return activePartitionRepository.count()
+        return activeLogShardRepository.count()
     }
 
     override fun clear() {
-        activePartitionRepository.clear()
+        activeLogShardRepository.clear()
     }
 
     override fun close() {
-        activePartitionRepository.close()
+        activeLogShardRepository.close()
     }
 
 }

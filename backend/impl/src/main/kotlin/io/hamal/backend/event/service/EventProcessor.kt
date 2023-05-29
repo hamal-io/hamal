@@ -3,9 +3,9 @@ package io.hamal.backend.event.service
 import io.hamal.backend.event.Event
 import io.hamal.backend.event.component.EventHandlerContainer
 import io.hamal.backend.event_handler.EventHandler
-import io.hamal.backend.repository.api.log.BrokerRepository
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.sqlite.log.ProtobufConsumer
+import io.hamal.backend.repository.sqlite.log.ProtobufLogConsumer
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -30,7 +30,7 @@ interface EventProcessorFactory {
 
 class DefaultEventProcessor(
     val scheduledExecutorService: ThreadPoolTaskScheduler,
-    val brokerRepository: BrokerRepository
+    val logBrokerRepository: LogBrokerRepository
 ) : EventProcessorFactory {
 
     private val handlerContainer = EventHandlerContainer()
@@ -51,13 +51,13 @@ class DefaultEventProcessor(
             init {
                 val allDomainTopics = handlerContainer.topics()
                     .map { TopicName(it) }
-                    .map(brokerRepository::resolveTopic)
+                    .map(logBrokerRepository::resolveTopic)
 
                 allDomainTopics.forEach { topic ->
-                    val consumer = ProtobufConsumer(
+                    val consumer = ProtobufLogConsumer(
                         GroupId("event-processor"),
                         topic,
-                        brokerRepository,
+                        logBrokerRepository,
                         Event::class
                     )
 

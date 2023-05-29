@@ -2,7 +2,6 @@ package io.hamal.lib.web3.eth.abi
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.assertThrows
 @Nested
 class EthBytesTest {
     @Nested
-    
     inner class ConstructorTest {
         @Test
         fun `Byte array has exact size as specified`() {

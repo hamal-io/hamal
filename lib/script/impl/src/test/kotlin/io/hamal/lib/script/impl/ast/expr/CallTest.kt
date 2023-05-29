@@ -4,16 +4,17 @@ import io.hamal.lib.script.impl.PrecedenceString
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.ast.stmt.Call
 import io.hamal.lib.script.impl.token.tokenize
-import org.hamcrest.MatcherAssert.*
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 internal class CallExpressionTest : AbstractExpressionTest() {
-
     @Nested
-    
     inner class EqualsTest {
         @Test
         fun `Equal if identifier and parameters are equal`() {
@@ -63,7 +64,6 @@ internal class CallExpressionTest : AbstractExpressionTest() {
     }
 
     @Nested
-    
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if identifier and parameters hashcode are the same`() {
@@ -112,7 +112,6 @@ internal class CallExpressionTest : AbstractExpressionTest() {
     }
 
     @Nested
-    
     inner class ParseTest {
         @Test
         fun `Parse empty `() {

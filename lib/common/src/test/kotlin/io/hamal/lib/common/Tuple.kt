@@ -8,19 +8,14 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @Nested
 class TupleTest {
-
     @Nested
-    
     inner class Tuple0Test {
-
         @Nested
-        
         inner class EqualsTest {
             @Test
             fun `Always equals`() {
@@ -32,7 +27,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class HashCodeTest {
             @Test
             fun `Always same hashcode`() {
@@ -44,7 +38,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -55,7 +48,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class SizeTest {
             @Test
             fun ok() {
@@ -67,11 +59,8 @@ class TupleTest {
     }
 
     @Nested
-    
     inner class Tuple1Test {
-
         @Nested
-        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -91,7 +80,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -111,7 +99,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -122,7 +109,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class SizeTest {
             @Test
             fun ok() {
@@ -135,11 +121,8 @@ class TupleTest {
     }
 
     @Nested
-    
     inner class Tuple2Test {
-
         @Nested
-        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -163,7 +146,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
@@ -187,7 +169,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class ToStringTest {
             @Test
             fun ok() {
@@ -198,7 +179,6 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class SizeTest {
             @Test
             fun ok() {
@@ -211,11 +191,8 @@ class TupleTest {
     }
 
     @Nested
-    
     inner class Tuple3Test {
-
         @Nested
-        
         inner class EqualsTest {
             @Test
             fun `Equal if underlying values are equal`() {
@@ -228,12 +205,12 @@ class TupleTest {
             @Test
             fun `Not Equal if underlying values are different`() {
                 assertNotEquals(
-                    Tuple3(true, "2810",1212),
-                    Tuple3(false, "2810",1212)
+                    Tuple3(true, "2810", 1212),
+                    Tuple3(false, "2810", 1212)
                 )
                 assertNotEquals(
-                    Tuple3(true, "2810",1212),
-                    Tuple3(true, "1038",1212)
+                    Tuple3(true, "2810", 1212),
+                    Tuple3(true, "1038", 1212)
                 )
                 assertNotEquals(
                     Tuple3(true, "2810", 1212),
@@ -243,25 +220,24 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class HashCodeTest {
             @Test
             fun `Same hashcode if values are equal`() {
                 assertEquals(
-                    Tuple3(true, "2810",1212).hashCode(),
-                    Tuple3(true, "2810",1212).hashCode()
+                    Tuple3(true, "2810", 1212).hashCode(),
+                    Tuple3(true, "2810", 1212).hashCode()
                 )
             }
 
             @Test
             fun `Different hashcode if values are different`() {
                 assertNotEquals(
-                    Tuple3(true, "2810",1212).hashCode(),
-                    Tuple3(false, "2810",1212).hashCode()
+                    Tuple3(true, "2810", 1212).hashCode(),
+                    Tuple3(false, "2810", 1212).hashCode()
                 )
                 assertNotEquals(
-                    Tuple3(true, "2810",1212).hashCode(),
-                    Tuple3(true, "1038",1212).hashCode()
+                    Tuple3(true, "2810", 1212).hashCode(),
+                    Tuple3(true, "1038", 1212).hashCode()
                 )
                 assertNotEquals(
                     Tuple3(true, "2810", 1212).hashCode(),
@@ -271,18 +247,16 @@ class TupleTest {
         }
 
         @Nested
-        
         inner class ToStringTest {
             @Test
             fun ok() {
-                val testInstance = Tuple3("ABC", 43,true)
+                val testInstance = Tuple3("ABC", 43, true)
                 val result = testInstance.toString()
                 assertThat(result, equalTo("(ABC,43,true)"))
             }
         }
 
         @Nested
-        
         inner class SizeTest {
             @Test
             fun ok() {

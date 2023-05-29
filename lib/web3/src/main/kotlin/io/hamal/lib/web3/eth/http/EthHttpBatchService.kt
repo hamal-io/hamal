@@ -19,7 +19,7 @@ class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
                     hash = EthHash(EthBytes32(ByteArray(32))),
                     parentHash = EthHash(EthBytes32(ByteArray(32))),
                     miner = EthAddress(BigInteger.ZERO),
-                    timestamp = EthUint64(BigInteger.ZERO      )
+                    timestamp = EthUint64(BigInteger.ZERO)
                 )
             )
         )

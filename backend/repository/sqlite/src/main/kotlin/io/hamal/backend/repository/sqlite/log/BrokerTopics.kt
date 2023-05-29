@@ -1,32 +1,32 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.Broker
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
-import io.hamal.backend.repository.api.log.Topic
+import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
 
 data class BrokerTopics(
-    val brokerId: Broker.Id,
+    val logBrokerId: LogBroker.Id,
     val path: Path
 )
 
-class DefaultBrokerTopicsRepository(
+class DefaultLogBrokerTopicsRepository(
     internal val brokerTopics: BrokerTopics,
 ) : BaseRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
     override val shard: Shard get() = Shard(0)
 
-}), BrokerTopicsRepository {
+}), LogBrokerTopicsRepository {
 
-    private val topicMapping = KeyedOnce.default<TopicName, Topic>()
+    private val topicMapping = KeyedOnce.default<TopicName, LogTopic>()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -49,13 +49,13 @@ class DefaultBrokerTopicsRepository(
         }
     }
 
-    override fun resolveTopic(name: TopicName): Topic {
+    override fun resolveTopic(name: TopicName): LogTopic {
         return topicMapping.invoke(name) {
             connection.tx {
                 val id = findTopicId(name) ?: createTopic(name)
-                Topic(
+                LogTopic(
                     id = id,
-                    brokerId = brokerTopics.brokerId,
+                    logBrokerId = brokerTopics.logBrokerId,
                     name = name,
                     path = brokerTopics.path,
                     shard = Shard(0)
@@ -64,7 +64,7 @@ class DefaultBrokerTopicsRepository(
         }
     }
 
-    override fun find(topicId: TopicId): Topic? = findById(topicId)
+    override fun find(topicId: TopicId): LogTopic? = findById(topicId)
 
 
     override fun clear() {
@@ -79,21 +79,21 @@ class DefaultBrokerTopicsRepository(
     }
 }
 
-fun DefaultBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
+fun DefaultLogBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
     map {
         it.getLong("count").toULong()
     }
 } ?: 0UL
 
-private fun DefaultBrokerTopicsRepository.findById(topicId: TopicId): Topic? {
+private fun DefaultLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopic? {
     return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
         with {
             set("id", topicId.value)
         }
         map { rs ->
-            Topic(
+            LogTopic(
                 id = TopicId(rs.getInt("id")),
-                brokerId = brokerTopics.brokerId,
+                logBrokerId = brokerTopics.logBrokerId,
                 name = TopicName(rs.getString("name")),
                 path = brokerTopics.path,
                 shard = Shard(0)
@@ -102,7 +102,7 @@ private fun DefaultBrokerTopicsRepository.findById(topicId: TopicId): Topic? {
     }
 }
 
-private fun DefaultBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
+private fun DefaultLogBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
     return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {
         with {
             set("name", name.value)
@@ -113,7 +113,7 @@ private fun DefaultBrokerTopicsRepository.findTopicId(name: TopicName): TopicId?
     }
 }
 
-private fun DefaultBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
+private fun DefaultLogBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
     return connection.execute<TopicId>("INSERT INTO topics(name, instant) VALUES (:name, :now) RETURNING id") {
         with {
             set("name", name.value)

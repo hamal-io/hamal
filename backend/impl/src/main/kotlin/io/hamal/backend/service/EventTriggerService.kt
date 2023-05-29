@@ -5,7 +5,7 @@ import io.hamal.backend.event.EventInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.log.BatchConsumer
-import io.hamal.backend.repository.api.log.BrokerRepository
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
 import io.hamal.backend.service.query.FuncQueryService
@@ -21,19 +21,19 @@ class EventTriggerService
 @Autowired constructor(
     internal val eventEmitter: EventEmitter,
     internal val funcQueryService: FuncQueryService,
-    internal val brokerRepository: BrokerRepository
+    internal val logBrokerRepository: LogBrokerRepository
 ) {
 
     val consumer: BatchConsumer<Event>
 
     init {
-        val topic = brokerRepository.resolveTopic(TopicName("event-test"))
+        val topic = logBrokerRepository.resolveTopic(TopicName("event-test"))
         println(topic)
 
         consumer = ProtobufBatchConsumer(
             groupId = GroupId("c2"),
             topic = topic,
-            brokerRepository = brokerRepository,
+            logBrokerRepository = logBrokerRepository,
             valueClass = Event::class
         )
     }

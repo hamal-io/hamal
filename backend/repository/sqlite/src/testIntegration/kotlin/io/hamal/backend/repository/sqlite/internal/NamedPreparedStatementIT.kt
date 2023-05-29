@@ -45,11 +45,8 @@ class NamedPreparedStatementIT {
                 it.execute("""CREATE TABLE blob_table(value BLOB NOT NULL, another_value BLOB)""")
             }
         }
-    }
-
-    @Nested
-
-    inner class ExecuteTest {
+    }@Nested
+inner class ExecuteTest {
         @Test
         fun `Statement yields result set`() {
             connection.prepare("INSERT INTO nullable_table(value, another_value) VALUES(:some_value,:another_value) RETURNING *")
@@ -83,11 +80,8 @@ class NamedPreparedStatementIT {
                 containsString("Expected all named parameters to be set, but [some_value, another_value] are missing")
             )
         }
-    }
-
-    @Nested
-
-    inner class ExecuteUpdate {
+    }@Nested
+inner class ExecuteUpdate {
         @Test
         fun `Statement inserts one row`() {
             connection.prepare("INSERT INTO unique_number(value) VALUES(:some_value)")
@@ -124,11 +118,8 @@ class NamedPreparedStatementIT {
                 containsString("Expected all named parameters to be set, but [some_value, another_value] are missing")
             )
         }
-    }
-
-    @Nested
-
-    inner class ExecuteQuery {
+    }@Nested
+inner class ExecuteQuery {
         @Test
         fun `Query does not return any value`() {
             connection.prepare("SELECT * FROM unique_number WHERE value = :some_value")
@@ -164,11 +155,8 @@ class NamedPreparedStatementIT {
                 containsString("Expected all named parameters to be set, but [some_value] are missing")
             )
         }
-    }
-
-    @Nested
-
-    inner class SetTest {
+    }@Nested
+inner class SetTest {
 
         @Test
         fun `Sets named parameter of type boolean`() {

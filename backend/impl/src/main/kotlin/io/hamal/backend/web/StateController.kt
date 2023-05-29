@@ -5,7 +5,7 @@ import io.hamal.backend.service.query.StateQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId

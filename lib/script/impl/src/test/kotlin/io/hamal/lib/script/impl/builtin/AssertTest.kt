@@ -37,7 +37,10 @@ internal class AssertTest : AbstractBuiltinTest() {
     @Test
     fun `Shows custom error message on assertion violation`() {
         val result = expectError("""assert(false,'some deep and meaningful message')""")
-        assertThat(result, equalTo(DepErrorValue(DepStringValue("Assertion violated: 'some deep and meaningful message'"))))
+        assertThat(
+            result,
+            equalTo(DepErrorValue(DepStringValue("Assertion violated: 'some deep and meaningful message'")))
+        )
     }
 
 

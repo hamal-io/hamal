@@ -3,7 +3,7 @@ package io.hamal.backend.web
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.query.StateQueryService
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.sdk.domain.ApiAgentExecRequests
 import org.springframework.beans.factory.annotation.Autowired

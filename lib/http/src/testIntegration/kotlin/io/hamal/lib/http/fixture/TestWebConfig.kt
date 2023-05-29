@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @EnableWebMvc
 @ComponentScan
 @EnableAutoConfiguration
-open class TestWebConfig : WebMvcConfigurer{
+open class TestWebConfig : WebMvcConfigurer {
     @Bean
     open fun messageConverter(): KotlinSerializationJsonHttpMessageConverter {
         return KotlinSerializationJsonHttpMessageConverter(Json {

@@ -1,7 +1,6 @@
 package io.hamal.lib.common
 
 import io.hamal.lib.common.SnowflakeId.ElapsedSource.Elapsed
-import io.hamal.lib.common.SnowflakeId.PartitionSource.Partition
 import io.hamal.lib.common.SnowflakeId.SequenceSource
 import io.hamal.lib.common.SnowflakeId.SequenceSource.*
 import io.hamal.lib.common.util.BitUtils
@@ -31,18 +30,8 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
         }
     }
 
-    interface PartitionSource {
-        fun get(): Partition
-
-        @JvmInline
-        value class Partition(val value: Short) {
-            constructor(value: Int) : this(value.toShort())
-
-            init {
-                require(value >= 0) { "Partition must not be negative - [0, 1023]" }
-                require(value <= 1023) { "Partition is limited to 10 bits - [0, 1023]" }
-            }
-        }
+    interface ShardSource {
+        fun get(): Shard
     }
 
     interface SequenceSource {
@@ -68,12 +57,12 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 
     override fun compareTo(other: SnowflakeId) = value.compareTo(other.value)
 
-    fun partition(): Partition = Partition(
+    fun shard(): Shard = Shard(
         BitUtils.extractRange(
             value = value,
             startIndex = 53,
             numberOfBits = 10
-        ).toShort()
+        ).toInt()
     )
 
     fun sequence(): Sequence = Sequence(
@@ -118,12 +107,12 @@ class DefaultElapsedSource(
     private fun millis() = System.currentTimeMillis() - epoch
 }
 
-class DefaultPartitionSource(
-    private val partition: Partition
-) : SnowflakeId.PartitionSource {
-    constructor(value: Int) : this(Partition(value))
+class DefaultShardSource(
+    private val shard: Shard
+) : SnowflakeId.ShardSource {
+    constructor(value: Int) : this(Shard(value))
 
-    override fun get() = partition
+    override fun get() = shard
 }
 
 class DefaultSequenceSource : SequenceSource {
@@ -165,7 +154,7 @@ class FixedElapsedSource(val value: Long) : SnowflakeId.ElapsedSource {
 }
 
 class SnowflakeGenerator(
-    private val partitionSource: SnowflakeId.PartitionSource,
+    private val shardSource: SnowflakeId.ShardSource,
     private val elapsedSource: SnowflakeId.ElapsedSource = DefaultElapsedSource(),
     private val sequenceSource: SequenceSource = DefaultSequenceSource(),
     private val lock: Lock = ReentrantLock()
@@ -173,21 +162,21 @@ class SnowflakeGenerator(
 
     override fun next(): SnowflakeId {
         return lock.withLock {
-            val partition = partitionSource.get()
+            val shard = shardSource.get()
             val (elapsed, sequence) = sequenceSource.next(elapsedSource::elapsed)
-            generate(elapsed, partition, sequence)
+            generate(elapsed, shard, sequence)
         }
     }
 
     private fun generate(
         elapsed: Elapsed,
-        partition: Partition,
+        shard: Shard,
         sequence: Sequence
     ): SnowflakeId {
-        val partitionValue = partition.value.toLong().shl(53)
+        val shardValue = shard.value.toLong().shl(53)
         val sequenceValue = sequence.value.toLong().shl(41)
         val elapsedValue = elapsed.value
-        val result = partitionValue + sequenceValue + elapsedValue
+        val result = shardValue + sequenceValue + elapsedValue
         return SnowflakeId(result)
     }
 }

@@ -8,7 +8,7 @@ import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.*
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.Shard
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs

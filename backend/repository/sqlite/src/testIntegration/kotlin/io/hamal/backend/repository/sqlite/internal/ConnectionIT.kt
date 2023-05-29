@@ -14,11 +14,8 @@ import java.nio.file.Files
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
-class DefaultConnectionIT {
-
-    @Nested
-    
-    inner class PrepareTest {
+class DefaultConnectionIT {@Nested
+inner class PrepareTest {
         @Test
         fun `Statement are not getting cached`() {
             val result = testInstance.prepare("INSERT INTO some_table(value) VALUES (:some_value)")
@@ -50,11 +47,8 @@ class DefaultConnectionIT {
 
             testInstance.execute("""CREATE TABLE some_table(value INT NOT NULL)""")
         }
-    }
-
-    @Nested
-    
-    inner class ExecuteTest {
+    }@Nested
+inner class ExecuteTest {
         @Test
         fun `Named parameter is missing`() {
             val exception = assertThrows<IllegalArgumentException> {
@@ -199,11 +193,8 @@ class DefaultConnectionIT {
                 }
             }
         }
-    }
-
-    @Nested
-    
-    inner class ExecuteUpdateTest {
+    }@Nested
+inner class ExecuteUpdateTest {
         @Test
         fun `Named parameter is missing`() {
             val exception = assertThrows<IllegalArgumentException> {
@@ -320,11 +311,8 @@ class DefaultConnectionIT {
                 }
             }
         }
-    }
-
-    @Nested
-    
-    inner class ExecuteQueryTest {
+    }@Nested
+inner class ExecuteQueryTest {
 
         @Test
         fun `Named parameter does not exists in query`() {
@@ -403,11 +391,8 @@ class DefaultConnectionIT {
             testInstance.execute("""CREATE TABLE domain_id_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE request_id_table(value INT NOT NULL)""")
         }
-    }
-
-    @Nested
-    
-    inner class TxTest {
+    }@Nested
+inner class TxTest {
         @Test
         fun `Successful transaction automatically commits and returns result`() {
             val result = testInstance.tx {
@@ -489,12 +474,8 @@ class DefaultConnectionIT {
             testInstance.execute("""CREATE TABLE another_table(value INT NOT NULL)""")
         }
 
-    }
-
-
-    @Nested
-    
-    inner class CloseTest {
+    }@Nested
+inner class CloseTest {
 
         @Test
         fun `Closes an open connection`() {

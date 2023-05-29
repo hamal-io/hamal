@@ -1,18 +1,15 @@
 package io.hamal.lib.common
 
 import io.hamal.lib.common.supplier.InstantSupplier
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
 class KeyedOnceEveryEveryTest {
-
     @Nested
-    
     inner class DefaultImplTest {
 
         @Test
@@ -51,7 +48,6 @@ class KeyedOnceEveryEveryTest {
     }
 
     @Nested
-    
     inner class LruImplTest {
         @Test
         fun `First time execution`() {

@@ -1,24 +1,25 @@
 package io.hamal.lib.script.impl.token
 
-import io.hamal.lib.script.impl.token.*
-import io.hamal.lib.script.impl.token.Token.*
+import io.hamal.lib.script.impl.token.Token.Type
 import io.hamal.lib.script.impl.token.Token.Type.*
+import io.hamal.lib.script.impl.token.Token.Type.Function
+import io.hamal.lib.script.impl.token.Token.Type.Number
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DynamicTest.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 
 
 class TokenizerTest {
-
     @Nested
-    
     inner class DefaultTokenizerTest {
-
         @Nested
-        
         inner class IsAtEndTest {
             @Test
             fun `Advances until reaches end`() {
@@ -34,7 +35,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class PeekTest {
             @Test
             fun `Returns the character of the current position`() {
@@ -57,7 +57,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class PeekNextTest {
             @Test
             fun `Return the next character`() {
@@ -81,7 +80,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class PeekPrevTest {
             @Test
             fun `Returns the previous character`() {
@@ -113,7 +111,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class AdvanceTest() {
             @Test
             fun `Advances read position and fills buffer`() {
@@ -136,7 +133,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class AdvanceUntilWhitespaceTest {
             @Test
             fun `Advances until hits whitespace`() {
@@ -168,7 +164,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class SkipWhitespaceTest {
             @Test
             fun `Does nothing if not a whitespace`() {
@@ -213,7 +208,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class NextTokenTest {
 
             @TestFactory
@@ -362,7 +356,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class NextNumberTest {
             @Test
             fun `Single digit`() {
@@ -396,7 +389,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class NextHexNumberTest {
             @Test
             fun `Hexnumber 0x0`() {
@@ -418,7 +410,6 @@ class TokenizerTest {
         }
 
         @Nested
-        
         inner class NextStringTest {
             @Test
             fun `Simple string`() {
@@ -520,7 +511,7 @@ class TokenizerTest {
         }
 
         @Test
-        
+
         fun ifStatement() {
             val testInstance = DefaultTokenizer("if a<0 then a = 0 end")
             assertThat(testInstance.nextToken(), equalTo(Token(If, 1, 1, "if")))
