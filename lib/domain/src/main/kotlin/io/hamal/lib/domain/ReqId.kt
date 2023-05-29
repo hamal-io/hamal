@@ -4,7 +4,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
@@ -15,13 +14,8 @@ data class ReqId(val value: BigInteger) {
     constructor(value: Int) : this(value.toBigInteger())
 
     object Serializer : KSerializer<ReqId> {
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("RequestId", PrimitiveKind.STRING)
-
-        override fun deserialize(decoder: Decoder): ReqId {
-            return ReqId(BigInteger(decoder.decodeString(), 16))
-        }
-
+        override val descriptor = PrimitiveSerialDescriptor("ReqId", PrimitiveKind.STRING)
+        override fun deserialize(decoder: Decoder) = ReqId(BigInteger(decoder.decodeString(), 16))
         override fun serialize(encoder: Encoder, value: ReqId) {
             encoder.encodeString(value.value.toString(16))
         }

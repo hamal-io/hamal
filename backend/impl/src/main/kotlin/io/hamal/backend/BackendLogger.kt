@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 
 fun <T : Any> logger(forClass: KClass<T>): BackendLogger {
-    return io.hamal.backend.logger(forClass.java.name)
+    return logger(forClass.java.name)
 }
 
 fun logger(name: String): BackendLogger {
-    return io.hamal.backend.DefaultBackendLogger(
+    return DefaultBackendLogger(
         LoggerFactory.getLogger(name)
     )
 }
