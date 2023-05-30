@@ -5,8 +5,8 @@ import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.Func
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncName
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,6 +39,7 @@ private fun FuncCmdService.createFunc(funcToCreate: FuncCmdService.FuncToCreate)
 private fun FuncCmdService.emitEvent(func: Func) {
     eventEmitter.emit(
         FuncCreatedEvent(
+            reqId = ReqId(123), // FIXME
             shard = func.shard,
             id = func.id
         )

@@ -2,6 +2,7 @@ package io.hamal.backend.repository.api.domain
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -10,13 +11,54 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Req(
-    val id: ReqId,
+sealed interface Req {
+    val id: ReqId
+    val status: ReqStatus
+
     // parentReqId?
     val payload: ReqPayload
     // requested when
     // requested by
-)
+}
+
+@Serializable
+data class ReceivedReq(
+    override val id: ReqId,
+    // parentReqId?
+    override val payload: ReqPayload
+) : Req {
+    override val status = ReqStatus.Received
+}
+
+
+@Serializable
+data class InFlightReq(
+    override val id: ReqId,
+    // parentReqId?
+    override val payload: ReqPayload
+) : Req {
+    override val status = ReqStatus.InFlight
+}
+
+
+@Serializable
+data class CompletedReq(
+    override val id: ReqId,
+    // parentReqId?
+    override val payload: ReqPayload
+) : Req {
+    override val status = ReqStatus.Completed
+}
+
+@Serializable
+data class FailedReq(
+    override val id: ReqId,
+    // parentReqId?
+    override val payload: ReqPayload
+) : Req {
+    override val status = ReqStatus.Failed
+}
+
 
 @Serializable
 sealed interface ReqPayload {

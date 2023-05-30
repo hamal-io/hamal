@@ -3,6 +3,7 @@ package io.hamal.backend
 import io.hamal.backend.event.*
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.event.service.EventProcessorFactory
+import io.hamal.backend.event_handler.exec.ExecCompletionRequestedHandler
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.invocation.AdhocInvocationHandler
 import io.hamal.backend.event_handler.invocation.EventInvocationHandler
@@ -61,13 +62,15 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdService))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
-        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
-        .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))
+        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService, reqCmdService))
+        .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService, reqCmdService))
 
         .register(AdhocInvocationEvent::class, AdhocInvocationHandler(execCmdService))
         .register(OneshotInvocationEvent::class, OneshotInvocationHandler(execCmdService))
         .register(EventInvocationEvent::class, EventInvocationHandler(execCmdService))
         .register(FixedDelayInvocationEvent::class, FixedDelayInvocationHandler(execCmdService))
+
+        .register(ExecCompletionRequestedEvent::class, ExecCompletionRequestedHandler(execQueryService, execCmdService, stateCmdService))
 
         .register(RequestedEvent::class, RequestedHandler(reqCmdService, eventEmitter))
 

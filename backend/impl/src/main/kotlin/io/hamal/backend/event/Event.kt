@@ -1,6 +1,7 @@
 package io.hamal.backend.event
 
 import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.ReqId
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -9,6 +10,8 @@ import kotlin.reflect.KClass
 
 @Serializable
 sealed class Event { //FIXME can this be an interface?!
+
+    abstract val reqId: ReqId
     /**
      *FIXME maybe as function as each event should contain at least one domain object which has the shard already encoded
      */

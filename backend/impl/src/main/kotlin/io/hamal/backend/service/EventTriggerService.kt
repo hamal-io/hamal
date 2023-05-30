@@ -5,10 +5,11 @@ import io.hamal.backend.event.EventInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.log.BatchConsumer
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.GroupId
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
 import io.hamal.backend.service.query.FuncQueryService
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
@@ -58,6 +59,7 @@ class EventTriggerService
 
                 eventEmitter.emit(
                     EventInvocationEvent(
+                        reqId = ReqId(123),
                         shard = trigger.shard,
                         func = funcQueryService.get(trigger.funcId),
                         correlationId = CorrelationId("__TBD__"), //FIXME

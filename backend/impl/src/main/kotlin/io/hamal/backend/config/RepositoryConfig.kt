@@ -3,10 +3,7 @@ package io.hamal.backend.config
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.memory.MemoryExecRepository
-import io.hamal.backend.repository.memory.MemoryFuncRepository
-import io.hamal.backend.repository.memory.MemoryStateRepository
-import io.hamal.backend.repository.memory.MemoryTriggerRepository
+import io.hamal.backend.repository.memory.*
 import io.hamal.backend.repository.sqlite.log.DefaultLogBrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -42,4 +39,10 @@ open class RepositoryConfig {
 
     @Bean
     open fun stateQueryRepository(): StateQueryRepository = MemoryStateRepository
+
+    @Bean
+    open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
+
+    @Bean
+    open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
 }

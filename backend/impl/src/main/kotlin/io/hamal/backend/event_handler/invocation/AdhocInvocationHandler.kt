@@ -5,7 +5,6 @@ import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.AdhocInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -20,7 +19,7 @@ class AdhocInvocationHandler(
 
         execCmdService.plan(
             ExecCmdService.ToPlan(
-                reqId = ReqId(123),
+                reqId = evt.reqId,
                 shard = evt.shard,
                 correlation = null,
                 inputs = evt.inputs.toExecInputs(),

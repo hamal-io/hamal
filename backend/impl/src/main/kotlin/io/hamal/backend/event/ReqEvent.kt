@@ -2,12 +2,14 @@ package io.hamal.backend.event
 
 import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.ReqId
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SystemEventTopic("requested")
 data class RequestedEvent(
     //reqId
+    override val reqId: ReqId,
     override val shard: Shard,
     val req: Req
 ) : Event()

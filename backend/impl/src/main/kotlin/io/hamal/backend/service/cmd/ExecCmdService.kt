@@ -33,7 +33,8 @@ class ExecCmdService
 
     fun dequeue(toDequeue: ToDequeue): List<InFlightExec> = dequeueExec(toDequeue).also(this::emitEvents)
 
-    fun complete(toComplete: ToComplete): CompletedExec = completeExec(toComplete).also(this::emitEvent)
+    fun complete(reqId: ReqId, inFlightExec: InFlightExec): CompletedExec =
+        completeExec(reqId, inFlightExec).also(this::emitEvent)
 
     data class ToPlan(
         val reqId: ReqId,
@@ -59,12 +60,6 @@ class ExecCmdService
         val reqId: ReqId,
         val shard: Shard,
     )
-
-    data class ToComplete(
-        val reqId: ReqId,
-        val shard: Shard,
-        val inFlightExec: InFlightExec
-    )
 }
 
 private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
@@ -84,6 +79,7 @@ private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
 private fun ExecCmdService.emitEvent(exec: PlannedExec) {
     eventEmitter.emit(
         ExecPlannedEvent(
+            reqId = exec.reqId,
             shard = exec.shard,
             plannedExec = exec
         )
@@ -97,6 +93,7 @@ private fun ExecCmdService.scheduleExec(toSchedule: ToSchedule): ScheduledExec {
 private fun ExecCmdService.emitEvent(exec: ScheduledExec) {
     eventEmitter.emit(
         ExecScheduledEvent(
+            reqId = exec.reqId,
             shard = exec.shard,
             scheduledExec = exec
         )
@@ -111,6 +108,7 @@ private fun ExecCmdService.enqueueExec(toEnqueue: ToEnqueue): QueuedExec {
 private fun ExecCmdService.emitEvent(exec: QueuedExec) {
     eventEmitter.emit(
         ExecutionQueuedEvent(
+            reqId = exec.reqId,
             shard = exec.shard,
             queuedExec = exec
         )
@@ -125,6 +123,7 @@ private fun ExecCmdService.emitEvents(execs: List<InFlightExec>) {
     execs.forEach {
         eventEmitter.emit(
             ExecutionStartedEvent(
+                reqId = it.reqId,
                 shard = it.shard,
                 inFlightExec = it
             )
@@ -133,13 +132,14 @@ private fun ExecCmdService.emitEvents(execs: List<InFlightExec>) {
 }
 
 
-private fun ExecCmdService.completeExec(toComplete: ToComplete): CompletedExec {
-    return execCmdRepository.complete(toComplete.reqId, toComplete.inFlightExec)
+private fun ExecCmdService.completeExec(reqId: ReqId, inFlightExec: InFlightExec): CompletedExec {
+    return execCmdRepository.complete(reqId, inFlightExec)
 }
 
 private fun ExecCmdService.emitEvent(exec: CompletedExec) {
     eventEmitter.emit(
         ExecutionCompletedEvent(
+            reqId = exec.reqId,
             shard = exec.shard,
             completedExec = exec
         )

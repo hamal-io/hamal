@@ -1,12 +1,11 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.event.AgentCompletedEvent
 import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.service.cmd.ExecCmdService
+import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.query.ExecQueryService
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiDetailExecutionModel
@@ -20,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 open class ExecController(
     @Autowired val queryService: ExecQueryService,
     @Autowired val cmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter
+    @Autowired val eventEmitter: EventEmitter,
+    @Autowired val reqCmdService: ReqCmdService
 ) {
 
     @GetMapping("/v1/execs/{execId}")
@@ -70,10 +70,8 @@ open class ExecController(
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 
-        eventEmitter.emit(
-            AgentCompletedEvent(
-                reqId = ReqId(123),
-                shard = Shard(1),
+        reqCmdService.request(
+            ReqPayload.CompleteExec(
                 execId = execId,
                 statePayload = StatePayload(
                     contentType = contentType,
@@ -81,6 +79,18 @@ open class ExecController(
                 )
             )
         )
+
+//        eventEmitter.emit(
+//            AgentCompletedEvent(
+//                reqId = ReqId(123),
+//                shard = Shard(1),
+//                execId = execId,
+//                statePayload = StatePayload(
+//                    contentType = contentType,
+//                    bytes = bytes
+//                )
+//            )
+//        )
     }
 
     @PostMapping("/v1/execs/{execId}/fail")

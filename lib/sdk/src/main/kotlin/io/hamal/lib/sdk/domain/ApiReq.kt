@@ -8,7 +8,19 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface ApiRequest {
+data class ApiListReqResponse(
+    val reqs: List<Req>
+) {
+    @Serializable
+    data class Req(
+        val id: ReqId,
+        val status: ReqStatus
+    )
+}
+
+
+@Serializable
+sealed interface ApiReq {
     val id: ReqId
     val status: ReqStatus
 }
@@ -18,6 +30,7 @@ sealed interface ApiRequest {
 data class ApiAdhocRequest(
     override val id: ReqId,
     override val status: ReqStatus,
-    val execId: ExecId,
-    val execStatus: ExecStatus
-) : ApiRequest
+    val execId: ExecId?,
+    val execStatus: ExecStatus?
+) : ApiReq
+
