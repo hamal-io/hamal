@@ -23,11 +23,12 @@ class ExecSecrets(override val value: List<Secret>) : Secrets() {
 }
 
 
-enum class ExecState {
+enum class ExecStatus {
+
     Planned,
     Scheduled,
     Queued,
-    Started,
+    InFlight,
     Completed,
     Failed,
     TerminalFailed

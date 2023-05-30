@@ -14,8 +14,8 @@ interface ExecCmdRepository {
     fun plan(reqId: ReqId, execToPlan: ExecToPlan): PlannedExec
     fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec
     fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec
-    fun complete(reqId: ReqId, startedExec: StartedExec): CompletedExec
-    fun dequeue(reqId: ReqId): List<StartedExec>
+    fun complete(reqId: ReqId, inFlightExec: InFlightExec): CompletedExec
+    fun dequeue(reqId: ReqId): List<InFlightExec>
 
     data class ExecToPlan(
         val id: ExecId,

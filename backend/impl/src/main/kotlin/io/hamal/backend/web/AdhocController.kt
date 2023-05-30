@@ -1,9 +1,8 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.event.AdhocInvocationEvent
 import io.hamal.backend.event.component.EventEmitter
-import io.hamal.lib.domain.ReqId
-import io.hamal.lib.common.Shard
+import io.hamal.backend.repository.api.domain.ReqPayload
+import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.lib.domain.value.NumberValue
 import io.hamal.lib.domain.value.StringValue
 import io.hamal.lib.domain.value.to
@@ -21,18 +20,19 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class AdhocController(
-    @Autowired val eventEmitter: EventEmitter
+open class AdhocController
+@Autowired constructor(
+    val eventEmitter: EventEmitter,
+    val reqCmdService: ReqCmdService
 ) {
 
-    var counter: Int = 0
-
     @PostMapping("/v1/adhoc")
-    fun adhoc(@RequestBody script: String): ResponseEntity<String> {
-        eventEmitter.emit(
-            AdhocInvocationEvent(
-                reqId = ReqId(counter),
-                shard = Shard(0),
+    fun adhoc(
+        @RequestBody script: String
+    ): ResponseEntity<String> {
+
+        val request = reqCmdService.request(
+            ReqPayload.InvokeAdhoc(
                 inputs = InvocationInputs(
                     listOf(
                         StringValue("Hello") to StringValue("World"),
@@ -49,9 +49,6 @@ open class AdhocController(
                     )
                 ),
                 code = Code(script)
-                // FIXME invoked at
-                // FIXME invoked by
-
             )
         )
         return ResponseEntity.ok("ok")

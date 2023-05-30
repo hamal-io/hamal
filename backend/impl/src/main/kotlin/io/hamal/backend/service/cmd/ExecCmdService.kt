@@ -6,9 +6,9 @@ import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.ExecToPlan
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.*
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -31,7 +31,7 @@ class ExecCmdService
 
     fun enqueue(toEnqueue: ToEnqueue): QueuedExec = enqueueExec(toEnqueue).also(this::emitEvent)
 
-    fun dequeue(toDequeue: ToDequeue): List<StartedExec> = dequeueExec(toDequeue).also(this::emitEvents)
+    fun dequeue(toDequeue: ToDequeue): List<InFlightExec> = dequeueExec(toDequeue).also(this::emitEvents)
 
     fun complete(toComplete: ToComplete): CompletedExec = completeExec(toComplete).also(this::emitEvent)
 
@@ -63,7 +63,7 @@ class ExecCmdService
     data class ToComplete(
         val reqId: ReqId,
         val shard: Shard,
-        val startedExec: StartedExec
+        val inFlightExec: InFlightExec
     )
 }
 
@@ -117,16 +117,16 @@ private fun ExecCmdService.emitEvent(exec: QueuedExec) {
     )
 }
 
-private fun ExecCmdService.dequeueExec(toDequeue: ToDequeue): List<StartedExec> {
-    return execCmdRepository.dequeue() // FIXME
+private fun ExecCmdService.dequeueExec(toDequeue: ToDequeue): List<InFlightExec> {
+    return execCmdRepository.dequeue(toDequeue.reqId) // FIXME
 }
 
-private fun ExecCmdService.emitEvents(execs: List<StartedExec>) {
+private fun ExecCmdService.emitEvents(execs: List<InFlightExec>) {
     execs.forEach {
         eventEmitter.emit(
             ExecutionStartedEvent(
                 shard = it.shard,
-                startedExec = it
+                inFlightExec = it
             )
         )
     }
@@ -134,7 +134,7 @@ private fun ExecCmdService.emitEvents(execs: List<StartedExec>) {
 
 
 private fun ExecCmdService.completeExec(toComplete: ToComplete): CompletedExec {
-    return execCmdRepository.complete(toComplete.reqId, toComplete.startedExec)
+    return execCmdRepository.complete(toComplete.reqId, toComplete.inFlightExec)
 }
 
 private fun ExecCmdService.emitEvent(exec: CompletedExec) {

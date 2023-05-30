@@ -31,7 +31,7 @@ open class ExecController(
         return ResponseEntity.ok(
             ApiDetailExecutionModel(
                 id = result.id,
-                state = result.state,
+                state = result.status,
                 code = result.code,
             )
         )
@@ -53,7 +53,7 @@ open class ExecController(
                 result.map {
                     ApiSimpleExecutionModel(
                         id = it.id,
-                        state = it.state
+                        state = it.status
                     )
                 }
             )

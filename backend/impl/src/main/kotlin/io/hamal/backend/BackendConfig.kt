@@ -1,17 +1,19 @@
 package io.hamal.backend
 
 import io.hamal.backend.event.*
+import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.event.service.EventProcessorFactory
-import io.hamal.backend.event_handler.agent.AgentCompletedHandler
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.invocation.AdhocInvocationHandler
 import io.hamal.backend.event_handler.invocation.EventInvocationHandler
 import io.hamal.backend.event_handler.invocation.FixedDelayInvocationHandler
 import io.hamal.backend.event_handler.invocation.OneshotInvocationHandler
+import io.hamal.backend.event_handler.req.RequestedHandler
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.TriggerInvocationService
 import io.hamal.backend.service.cmd.ExecCmdService
+import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -50,9 +52,10 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         execQueryService: ExecQueryService,
         stateCmdService: StateCmdService,
         triggerInvocationService: TriggerInvocationService,
-        orchestrationService: OrchestrationService
+        orchestrationService: OrchestrationService,
+        reqCmdService: ReqCmdService,
+        eventEmitter: EventEmitter
     ) = eventProcessorFactory
-
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(triggerInvocationService))
 
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
@@ -66,7 +69,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(EventInvocationEvent::class, EventInvocationHandler(execCmdService))
         .register(FixedDelayInvocationEvent::class, FixedDelayInvocationHandler(execCmdService))
 
-        .register(AgentCompletedEvent::class, AgentCompletedHandler(execQueryService, execCmdService, stateCmdService))
+        .register(RequestedEvent::class, RequestedHandler(reqCmdService, eventEmitter))
 
         .create()
 

@@ -14,7 +14,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     private val execs = mutableMapOf<ExecId, Exec>()
 
     private val queue = mutableListOf<QueuedExec>()
-    private val startedExecs = mutableListOf<StartedExec>()
+    private val inFlightExecs = mutableListOf<InFlightExec>()
 
     override fun plan(reqId: ReqId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
         return PlannedExec(
@@ -56,33 +56,33 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         return result
     }
 
-    override fun complete(reqId: ReqId, startedExec: StartedExec): CompletedExec {
-        startedExecs.removeIf { it.id == startedExec.id }
+    override fun complete(reqId: ReqId, inFlightExec: InFlightExec): CompletedExec {
+        inFlightExecs.removeIf { it.id == inFlightExec.id }
         return CompletedExec(
-            id = startedExec.id,
-            reqId = startedExec.reqId,
-            correlation = startedExec.correlation,
-            inputs = startedExec.inputs,
-            secrets = startedExec.secrets,
-            code = startedExec.code,
-            invocation = startedExec.invocation,
+            id = inFlightExec.id,
+            reqId = inFlightExec.reqId,
+            correlation = inFlightExec.correlation,
+            inputs = inFlightExec.inputs,
+            secrets = inFlightExec.secrets,
+            code = inFlightExec.code,
+            invocation = inFlightExec.invocation,
             completedAt = CompletedAt.now()
         ).also { execs[it.id] = it }
     }
 
 
-    override fun dequeue(): List<StartedExec> {
+    override fun dequeue(reqId: ReqId): List<InFlightExec> {
         if (queue.isEmpty()) {
             return listOf()
         }
 
-        val result = mutableListOf<StartedExec>()
+        val result = mutableListOf<InFlightExec>()
         for (idx in 0 until 10) {
             if (queue.isEmpty()) {
                 break
             }
-            val startedExec = queue.removeFirst().let {
-                StartedExec(
+            val inFlightExec = queue.removeFirst().let {
+                InFlightExec(
                     id = it.id,
                     reqId = it.reqId,
                     correlation = it.correlation,
@@ -93,8 +93,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                 ).also { execs[it.id] = it }
             }
 
-            startedExecs.add(startedExec)
-            result.add(startedExec)
+            inFlightExecs.add(inFlightExec)
+            result.add(inFlightExec)
         }
 
         return result

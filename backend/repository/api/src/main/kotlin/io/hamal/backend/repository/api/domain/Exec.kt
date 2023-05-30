@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Exec : DomainObject<ExecId>() {
-    abstract val state: ExecState
+    abstract val status: ExecStatus
     abstract val reqId: ReqId
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
@@ -27,7 +27,7 @@ class PlannedExec(
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
-    override val state = ExecState.Planned
+    override val status = ExecStatus.Planned
     override fun toString(): String {
         return "PlannedExec($id)"
     }
@@ -45,7 +45,7 @@ class ScheduledExec(
     override val invocation: Invocation,
     val scheduledAt: ScheduledAt
 ) : Exec() {
-    override val state = ExecState.Scheduled
+    override val status = ExecStatus.Scheduled
     override fun toString(): String {
         return "ScheduledExec($id)"
     }
@@ -63,7 +63,7 @@ class QueuedExec(
     override val invocation: Invocation,
     val queuedAt: QueuedAt
 ) : Exec() {
-    override val state = ExecState.Queued
+    override val status = ExecStatus.Queued
     override fun toString(): String {
         return "QueuedExec($id)"
     }
@@ -71,7 +71,7 @@ class QueuedExec(
 
 
 @Serializable
-class StartedExec(
+class InFlightExec(
     override val id: ExecId,
     override val reqId: ReqId,
     override val correlation: Correlation?,
@@ -80,11 +80,10 @@ class StartedExec(
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
-    override val state = ExecState.Started
+    override val status = ExecStatus.InFlight
     override fun toString(): String {
-        return "StartedExec($id)"
+        return "InFlightExec($id)"
     }
-
 }
 
 @Serializable
@@ -98,7 +97,7 @@ class CompletedExec(
     override val invocation: Invocation,
     val completedAt: CompletedAt
 ) : Exec() {
-    override val state = ExecState.Completed
+    override val status = ExecStatus.Completed
     override fun toString(): String {
         return "CompletedExec($id)"
     }
@@ -114,7 +113,7 @@ class FailedExec(
     override val code: Code,
     override val invocation: Invocation
 ) : Exec() {
-    override val state = ExecState.Failed
+    override val status = ExecStatus.Failed
     override fun toString(): String {
         return "FailedExec($id)"
     }

@@ -2,13 +2,13 @@ package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.domain.vo.ExecStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiSimpleExecutionModel(
     val id: ExecId,
-    val state: ExecState
+    val state: ExecStatus
 )
 
 @Serializable
@@ -20,6 +20,6 @@ data class ApiSimpleExecutionModels(
 @Serializable
 data class ApiDetailExecutionModel(
     val id: ExecId,
-    val state: ExecState,
+    val state: ExecStatus,
     val code: Code
 )

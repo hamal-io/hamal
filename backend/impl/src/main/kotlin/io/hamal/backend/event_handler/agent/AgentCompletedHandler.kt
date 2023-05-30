@@ -2,7 +2,7 @@ package io.hamal.backend.event_handler.agent
 
 import io.hamal.backend.event.AgentCompletedEvent
 import io.hamal.backend.event_handler.EventHandler
-import io.hamal.backend.repository.api.domain.StartedExec
+import io.hamal.backend.repository.api.domain.InFlightExec
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
@@ -18,7 +18,7 @@ class AgentCompletedHandler(
 
         execQueryService.find(evt.execId)
             ?.let { exec ->
-                if (exec is StartedExec) {
+                if (exec is InFlightExec) {
 
                     if (exec.correlation != null) {
                         stateCmdService.set(
@@ -34,7 +34,7 @@ class AgentCompletedHandler(
                         ExecCmdService.ToComplete(
                             reqId = evt.reqId,
                             shard = evt.shard, //FIXME
-                            startedExec = exec
+                            inFlightExec = exec
                         )
                     )
                 }
