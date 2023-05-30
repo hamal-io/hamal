@@ -31,26 +31,18 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     override fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec {
         return ScheduledExec(
             id = planedExec.id,
-            reqId = planedExec.reqId,
-            correlation = planedExec.correlation,
-            inputs = planedExec.inputs,
-            secrets = planedExec.secrets,
-            code = planedExec.code,
-            invocation = planedExec.invocation,
-            scheduledAt = ScheduledAt.now()
+            reqId = reqId,
+            scheduledAt = ScheduledAt.now(),
+            plannedExec = planedExec
         ).also { execs[it.id] = it }
     }
 
     override fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
         val result = QueuedExec(
             id = scheduledExec.id,
-            reqId = scheduledExec.reqId,
-            correlation = scheduledExec.correlation,
-            inputs = scheduledExec.inputs,
-            secrets = scheduledExec.secrets,
-            code = scheduledExec.code,
-            invocation = scheduledExec.invocation,
-            queuedAt = QueuedAt.now()
+            reqId = reqId,
+            queuedAt = QueuedAt.now(),
+            scheduledExec = scheduledExec
         ).also { execs[it.id] = it }
         queue.add(result)
         return result
@@ -60,13 +52,9 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         inFlightExecs.removeIf { it.id == inFlightExec.id }
         return CompletedExec(
             id = inFlightExec.id,
-            reqId = inFlightExec.reqId,
-            correlation = inFlightExec.correlation,
-            inputs = inFlightExec.inputs,
-            secrets = inFlightExec.secrets,
-            code = inFlightExec.code,
-            invocation = inFlightExec.invocation,
-            completedAt = CompletedAt.now()
+            reqId = reqId,
+            completedAt = CompletedAt.now(),
+            inFlightExec = inFlightExec
         ).also { execs[it.id] = it }
     }
 
@@ -84,12 +72,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             val inFlightExec = queue.removeFirst().let {
                 InFlightExec(
                     id = it.id,
-                    reqId = it.reqId,
-                    correlation = it.correlation,
-                    inputs = it.inputs,
-                    secrets = it.secrets,
-                    code = it.code,
-                    invocation = it.invocation,
+                    reqId = reqId,
+                    queuedExec = it
                 ).also { execs[it.id] = it }
             }
 

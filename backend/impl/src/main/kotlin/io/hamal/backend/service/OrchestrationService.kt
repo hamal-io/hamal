@@ -31,7 +31,7 @@ class OrchestrationService
 
 
     fun schedule(reqId: ReqId, plannedExec: PlannedExec) {
-        lock.withLock{
+        lock.withLock {
             val correlation = plannedExec.correlation
 
             if (correlation == null) {
@@ -53,7 +53,7 @@ class OrchestrationService
     }
 
     fun completed(reqId: ReqId, completedExec: CompletedExec) {
-        lock.withLock{
+        lock.withLock {
             if (completedExec.correlation != null) {
                 // remove from inflight
                 inflight.remove(completedExec.correlation)
@@ -74,7 +74,7 @@ class OrchestrationService
     }
 
     fun failed(reqId: ReqId, failedExec: FailedExec) {
-        lock.withLock{
+        lock.withLock {
             // FIXME retry or permanent fail or maybe do not fail at all...
             TODO()
         }
@@ -83,12 +83,6 @@ class OrchestrationService
 }
 
 fun OrchestrationService.scheduleExec(reqId: ReqId, plannedExec: PlannedExec) {
-    val scheduledExec = execCmdService.schedule(
-        ExecCmdService.ToSchedule(
-            reqId = reqId,
-            plannedExec = plannedExec
-        )
-    )
-
+    val scheduledExec = execCmdService.schedule(reqId, plannedExec)
     execs[scheduledExec.id] = scheduledExec
 }

@@ -21,5 +21,8 @@ class ExecCompletedHandler(
         )
         reqCmdService.complete(evt.reqId)
         reqCmdService.complete(evt.completedExec.reqId)
+        /* FIXME seems rather tedious to complete each request manually - is it possible to have some form
+        *   parent child relationship so if one fails / completes the whole chain gets set ?!
+        */
     }
 }
