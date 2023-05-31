@@ -64,13 +64,11 @@ class DefaultLogTopicRepositoryTest {
         @Test
         fun `Append multiple records to empty shard`() {
             withEpochMilli(98765) {
-                val result = listOf(
+                listOf(
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
-                ).mapIndexed { index, value -> testInstance.append(ReqId(index), value) }
-
-                assertThat(result, equalTo(listOf(LogChunkId(1), LogChunkId(2), LogChunkId(3))))
+                ).forEachIndexed { index, value -> testInstance.append(ReqId(index), value) }
                 assertThat(testInstance.count(), equalTo(3UL))
             }
 

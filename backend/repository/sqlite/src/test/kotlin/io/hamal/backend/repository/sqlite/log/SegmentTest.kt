@@ -53,7 +53,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Does not create chunks table if already exists`() {
             DefaultLogSegmentRepository(testSegment()).use {
-                it.connection.execute("""INSERT INTO chunks (bytes,instant) VALUES ('some-bytes',unixepoch());""")
+                it.connection.execute("""INSERT INTO chunks (req_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
             }
 
 
@@ -149,8 +149,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Append single chunk`() {
             withInstant(Instant.ofEpochMilli(2810)) {
-                val result = testInstance.append(ReqId(1), "VALUE".toByteArray())
-                assertThat(result, equalTo(LogChunkId(1)))
+                testInstance.append(ReqId(1), "VALUE".toByteArray())
             }
 
             assertThat(testInstance.count(), equalTo(1UL))
@@ -174,15 +173,9 @@ class DefaultLogSegmentRepositoryTest {
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
-                ).mapIndexed { index, value -> testInstance.append(ReqId(index), value) }
-
-                assertThat(
-                    result, equalTo(
-                        listOf(LogChunkId(1), LogChunkId(2), LogChunkId(3))
-                    )
-                )
-
+                ).forEachIndexed { index, value -> testInstance.append(ReqId(index), value) }
             }
+
             assertThat(testInstance.count(), equalTo(3UL))
 
             testInstance.read(LogChunkId(1)).let {
@@ -216,11 +209,20 @@ class DefaultLogSegmentRepositoryTest {
             val result = listOf(
                 "Hamal".toByteArray(),
                 "Rockz".toByteArray(),
-            ).mapIndexed { index, value -> testInstance.append(ReqId(index), value) }
+            ).forEachIndexed { index, value -> testInstance.append(ReqId(index + 4), value) }
 
-            assertThat(result, equalTo(listOf(LogChunkId(4), LogChunkId(5))))
             assertThat(testInstance.count(), equalTo(5UL))
         }
+
+        @Test
+        fun `A chunk was already created with this req id`() {
+            givenThreeChunks()
+
+            val result = testInstance.append(ReqId(2), "OTHER_VALUE".toByteArray())
+
+
+        }
+
 
         private fun givenThreeChunks() {
             testInstance.append(ReqId(1), "VALUE_1".toByteArray())

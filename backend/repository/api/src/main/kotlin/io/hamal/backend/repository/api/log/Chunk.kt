@@ -22,7 +22,7 @@ data class LogChunk(
 
 
 interface LogChunkAppender {
-    fun append(reqId: ReqId, bytes: ByteArray): LogChunkId
+    fun append(reqId: ReqId, bytes: ByteArray)
 }
 
 interface LogChunkReader {

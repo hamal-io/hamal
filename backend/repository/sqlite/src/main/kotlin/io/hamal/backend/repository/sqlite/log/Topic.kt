@@ -38,8 +38,8 @@ class DefaultLogTopicRepository(
 
     override fun setupSchema(connection: Connection) {}
 
-    override fun append(reqId: ReqId, bytes: ByteArray): LogChunkId {
-        return activeLogShardRepository.append(reqId, bytes)
+    override fun append(reqId: ReqId, bytes: ByteArray) {
+        activeLogShardRepository.append(reqId, bytes)
     }
 
     override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {

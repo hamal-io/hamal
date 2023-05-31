@@ -20,16 +20,14 @@ internal class DefaultLogSegmentRepository(
     override val shard: Shard get() = segment.shard
 }), LogSegmentRepository {
 
-    override fun append(reqId: ReqId, bytes: ByteArray): LogChunkId {
-        return connection.tx {
-            execute<LogChunkId>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
-                with {
-                    set("bytes", bytes)
-                    set("now", TimeUtils.now())
-                }
-                map { LogChunkId(it.getInt("id")) }
+    override fun append(reqId: ReqId, bytes: ByteArray) {
+        connection.tx {
+            execute("INSERT OR IGNORE INTO chunks (req_id,bytes,instant) VALUES (:reqId, :bytes,:now)") {
+                set("reqId", reqId)
+                set("bytes", bytes)
+                set("now", TimeUtils.now())
             }
-        }!!
+        }
     }
 
     override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
@@ -69,6 +67,7 @@ internal class DefaultLogSegmentRepository(
                 """
              CREATE TABLE IF NOT EXISTS chunks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT ,
+                req_id INTEGER NOT NULL UNIQUE,
                 bytes BLOB NOT NULL ,
                 instant DATETIME NOT NULL
             );

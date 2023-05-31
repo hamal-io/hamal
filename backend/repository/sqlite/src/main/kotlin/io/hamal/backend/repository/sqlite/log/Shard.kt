@@ -33,8 +33,8 @@ class DefaultLogShardRepository(
         activeLogSegmentRepository = DefaultLogSegmentRepository(activeSegment)
     }
 
-    override fun append(reqId: ReqId, bytes: ByteArray): LogChunkId {
-        return activeLogSegmentRepository.append(reqId, bytes)
+    override fun append(reqId: ReqId, bytes: ByteArray) {
+        activeLogSegmentRepository.append(reqId, bytes)
     }
 
     override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
