@@ -1,8 +1,12 @@
 package io.hamal.backend.web
 
 import io.hamal.backend.component.EventEmitter
-import io.hamal.backend.repository.api.domain.ReqPayload.InvokeAdhoc
+import io.hamal.backend.event.AdhocInvocationEvent
 import io.hamal.backend.service.cmd.ReqCmdService
+import io.hamal.lib.common.Shard
+import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.value.NumberValue
 import io.hamal.lib.domain.value.StringValue
 import io.hamal.lib.domain.value.to
@@ -33,8 +37,11 @@ open class AdhocController
     fun adhoc(
         @RequestBody script: String
     ): ResponseEntity<ApiReq> {
-        val result = reqCmdService.request(
-            InvokeAdhoc(
+
+        eventEmitter.emit(
+            ReqId(TimeUtils.now().toEpochMilli()), AdhocInvocationEvent(
+//            reqId = reqId,
+                shard = Shard(1),
                 inputs = InvocationInputs(
                     listOf(
                         StringValue("Hello") to StringValue("World"),
@@ -53,10 +60,31 @@ open class AdhocController
                 code = Code(script)
             )
         )
+
+//        val result = reqCmdService.request(
+//            InvokeAdhoc(
+//                inputs = InvocationInputs(
+//                    listOf(
+//                        StringValue("Hello") to StringValue("World"),
+//                        StringValue("Number") to NumberValue(42),
+//                    )
+//                ),
+//                secrets = InvocationSecrets(
+//                    listOf(
+//                        Secret(
+//                            SecretKey("Key"),
+//                            SecretStore("store"),
+//                            SecretStoreIdentifier("identifier")
+//                        )
+//                    )
+//                ),
+//                code = Code(script)
+//            )
+//        )
         return ResponseEntity(
             ApiAdhocRequest(
-                id = result.id,
-                status = result.status,
+                id = ReqId(123),
+                status = ReqStatus.Received,
                 execId = null,
                 execStatus = null
             ),

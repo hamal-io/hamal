@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-@SystemEventTopic("exec::planned")
+@EventTopic("exec::planned")
 data class ExecPlannedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -16,7 +16,7 @@ data class ExecPlannedEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("exec::scheduled")
+@EventTopic("exec::scheduled")
 data class ExecScheduledEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -24,7 +24,7 @@ data class ExecScheduledEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("exec::queued")
+@EventTopic("exec::queued")
 data class ExecutionQueuedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -32,7 +32,7 @@ data class ExecutionQueuedEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("exec::started")
+@EventTopic("exec::started")
 data class ExecutionStartedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -40,7 +40,7 @@ data class ExecutionStartedEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("exec::completed")
+@EventTopic("exec::completed")
 data class ExecutionCompletedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -48,7 +48,7 @@ data class ExecutionCompletedEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("exec::failed")
+@EventTopic("exec::failed")
 data class ExecutionFailedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -57,7 +57,7 @@ data class ExecutionFailedEvent(
 
 
 @Serializable
-@SystemEventTopic("exec::completion_requested")
+@EventTopic("exec::completion_requested")
 data class ExecCompletionRequestedEvent(
     override val shard: Shard,
 //    override val reqId: ReqId,

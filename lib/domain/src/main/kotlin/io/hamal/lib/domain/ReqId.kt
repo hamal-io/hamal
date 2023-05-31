@@ -14,7 +14,6 @@ data class ReqId(val value: BigInteger) : Comparable<ReqId> {
     constructor(value: Int) : this(value.toBigInteger())
     constructor(value: Long) : this(value.toBigInteger())
     constructor(value: String) : this(BigInteger(value, 16))
-//    constructor(value: SnowflakeId) : this(BigInteger.valueOf(value.value))
 
     object Serializer : KSerializer<ReqId> {
         override val descriptor = PrimitiveSerialDescriptor("ReqId", PrimitiveKind.STRING)

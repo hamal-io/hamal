@@ -17,9 +17,9 @@ sealed class Event { //FIXME can this be an interface?!
     //FIXME move this out as there is a tenant event now
     open val topic: String by lazy {
         val topicAnnotation =
-            this::class.annotations.find { annotation -> annotation.annotationClass == SystemEventTopic::class }
-                ?: throw IllegalStateException("SystemEvent not annotated with @SystemEventTopic")
-        (topicAnnotation as SystemEventTopic).value
+            this::class.annotations.find { annotation -> annotation.annotationClass == EventTopic::class }
+                ?: throw IllegalStateException("Event not annotated with @EventTopic")
+        (topicAnnotation as EventTopic).value
     }
 }
 
@@ -27,9 +27,9 @@ sealed class Event { //FIXME can this be an interface?!
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class SystemEventTopic(val value: String)
+annotation class EventTopic(val value: String)
 
 
 fun <EVENT : Event> KClass<EVENT>.topic() =
-    annotations.find { annotation -> annotation.annotationClass == SystemEventTopic::class }
-        .let { it as SystemEventTopic }.value
+    annotations.find { annotation -> annotation.annotationClass == EventTopic::class }
+        .let { it as EventTopic }.value

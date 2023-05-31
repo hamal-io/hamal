@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.FuncId
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("func::created")
+@EventTopic("func::created")
 data class FuncCreatedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,

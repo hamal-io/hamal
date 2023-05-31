@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.vo.port
 
 import io.hamal.lib.common.*
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.base.DomainId
 
 interface GenerateDomainId {

@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.InvocationSecrets
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("invocation::adhoc")
+@EventTopic("invocation::adhoc")
 data class AdhocInvocationEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -21,7 +21,7 @@ data class AdhocInvocationEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("invocation::one_shot")
+@EventTopic("invocation::one_shot")
 data class OneshotInvocationEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -33,7 +33,7 @@ data class OneshotInvocationEvent(
 
 
 @Serializable
-@SystemEventTopic("invocation::fixed_delay")
+@EventTopic("invocation::fixed_delay")
 data class FixedDelayInvocationEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
@@ -45,7 +45,7 @@ data class FixedDelayInvocationEvent(
 ) : Event()
 
 @Serializable
-@SystemEventTopic("invocation::event")
+@EventTopic("invocation::event")
 data class EventInvocationEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,

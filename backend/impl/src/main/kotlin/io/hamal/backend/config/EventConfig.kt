@@ -2,8 +2,8 @@ package io.hamal.backend.config
 
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.service.DefaultEventProcessor
-import io.hamal.backend.service.EventProcessorFactory
+import io.hamal.backend.service.DefaultEventService
+import io.hamal.backend.service.EventServiceFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -22,7 +22,7 @@ open class EventConfig {
     open fun eventProcessorFactory(
         taskScheduler: ThreadPoolTaskScheduler,
         logBrokerRepository: LogBrokerRepository
-    ): EventProcessorFactory = DefaultEventProcessor(
+    ): EventServiceFactory = DefaultEventService(
         taskScheduler,
         logBrokerRepository
     )

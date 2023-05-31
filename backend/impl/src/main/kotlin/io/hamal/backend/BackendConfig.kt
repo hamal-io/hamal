@@ -9,7 +9,7 @@ import io.hamal.backend.event_handler.invocation.FixedDelayInvocationHandler
 import io.hamal.backend.event_handler.invocation.OneshotInvocationHandler
 import io.hamal.backend.event_handler.req.RequestedHandler
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
-import io.hamal.backend.service.EventProcessorFactory
+import io.hamal.backend.service.EventServiceFactory
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.TriggerInvocationService
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -47,7 +47,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
 
     @Bean
     open fun backendEventConsumer(
-        eventProcessorFactory: EventProcessorFactory,
+        eventServiceFactory: EventServiceFactory,
         execCmdService: ExecCmdService,
         execQueryService: ExecQueryService,
         stateCmdService: StateCmdService,
@@ -55,7 +55,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         orchestrationService: OrchestrationService,
         reqCmdService: ReqCmdService,
         eventEmitter: EventEmitter
-    ) = eventProcessorFactory
+    ) = eventServiceFactory
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(triggerInvocationService))
 
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))

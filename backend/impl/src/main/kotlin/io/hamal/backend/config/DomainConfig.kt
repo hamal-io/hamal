@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class DomainConfig {
     @Bean
-    open fun generateDomainIdPort(): GenerateDomainId = DomainIdGeneratorAdapter
+    open fun generateDomainId(): GenerateDomainId = DomainIdGeneratorAdapter
 
 }

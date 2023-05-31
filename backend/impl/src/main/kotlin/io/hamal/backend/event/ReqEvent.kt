@@ -5,7 +5,7 @@ import io.hamal.lib.common.Shard
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("requested")
+@EventTopic("requested")
 data class RequestedEvent(
     //reqId
 //    override val reqId: ReqId,

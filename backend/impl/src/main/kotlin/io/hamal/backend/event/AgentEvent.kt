@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-@SystemEventTopic("agent::failed")
+@EventTopic("agent::failed")
 data class AgentFailedEvent(
 //    override val reqId: ReqId,
     override val shard: Shard,
