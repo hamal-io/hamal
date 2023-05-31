@@ -1,7 +1,7 @@
 package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.TriggerCreatedEvent
-import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.createFixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
@@ -45,7 +45,7 @@ private fun TriggerCmdService.createTrigger(triggerToCreate: TriggerCmdService.T
 private fun TriggerCmdService.emitEvent(trigger: Trigger) {
     eventEmitter.emit(
         TriggerCreatedEvent(
-            reqId = ReqId(123), //FIXME
+//            reqId = ReqId(123), //FIXME
             shard = trigger.shard,
             trigger
         )

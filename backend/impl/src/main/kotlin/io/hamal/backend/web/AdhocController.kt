@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.domain.ReqPayload.InvokeAdhoc
 import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.lib.domain.value.NumberValue

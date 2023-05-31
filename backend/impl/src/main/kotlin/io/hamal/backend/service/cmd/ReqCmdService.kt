@@ -1,7 +1,7 @@
 package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.RequestedEvent
-import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.domain.ReceivedReq
 import io.hamal.backend.repository.api.domain.Req
@@ -28,7 +28,7 @@ class ReqCmdService
         ).also {
             eventEmitter.emit(
                 RequestedEvent(
-                    reqId = it.id,
+//                    reqId = it.id,
                     shard = Shard(1),
                     req = it
                 )

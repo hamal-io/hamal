@@ -49,7 +49,7 @@ class DefaultLogBrokerRepository(
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunk.Id) {
+    override fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId) {
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
@@ -59,7 +59,7 @@ class DefaultLogBrokerRepository(
         return logTopicRepositoryMapping.keys()
     }
 
-    override fun read(lastId: LogChunk.Id, topic: LogTopic, limit: Int): List<LogChunk> {
+    override fun read(lastId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk> {
         return resolveRepository(topic).read(lastId, limit)
     }
 

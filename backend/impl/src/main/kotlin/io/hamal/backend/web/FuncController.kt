@@ -1,15 +1,15 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.OneshotInvocationEvent
-import io.hamal.backend.event.component.EventEmitter
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
+import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -87,7 +87,7 @@ open class FuncController(
 
         eventEmitter.emit(
             OneshotInvocationEvent(
-                reqId = reqId,
+//                reqId = reqId,
                 shard = shard,
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
                 inputs = InvocationInputs(listOf()),

@@ -1,5 +1,6 @@
 package io.hamal.lib.domain
 
+import io.hamal.lib.common.SnowflakeId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -13,6 +14,7 @@ data class ReqId(val value: BigInteger) : Comparable<ReqId> {
     constructor(value: ByteArray) : this(BigInteger(value))
     constructor(value: Int) : this(value.toBigInteger())
     constructor(value: String) : this(BigInteger(value, 16))
+    constructor(value: SnowflakeId) : this(BigInteger.valueOf(value.value))
 
     object Serializer : KSerializer<ReqId> {
         override val descriptor = PrimitiveSerialDescriptor("ReqId", PrimitiveKind.STRING)

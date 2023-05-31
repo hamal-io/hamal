@@ -1,6 +1,6 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.domain.State
 import io.hamal.lib.domain.Correlation

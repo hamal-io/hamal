@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.GroupId
+import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -12,8 +12,9 @@ import java.nio.file.Files
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
-class ConsumerIT {@Nested
-inner class ProtobufLogConsumerTest {
+class ConsumerIT {
+    @Nested
+    inner class ProtobufLogConsumerTest {
         @Test
         fun `Late consumer starts at the beginning`() {
             val path = Files.createTempDirectory("broker_it")
@@ -24,14 +25,14 @@ inner class ProtobufLogConsumerTest {
                 IntRange(1, 10).forEach { appender.append(topic, "$it") }
 
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
-                testInstance.consumeIndexed(10) { index, value ->
+                testInstance.consumeIndexed(10) { index, _, value ->
                     CompletableFuture.runAsync {
                         assertThat("${index + 1}", equalTo(value))
                     }
                 }
 
                 val counter = AtomicInteger(0)
-                testInstance.consume(10) { _ ->
+                testInstance.consume(10) { _, _ ->
                     CompletableFuture.runAsync {
                         counter.incrementAndGet()
                     }
@@ -40,7 +41,7 @@ inner class ProtobufLogConsumerTest {
                 assertThat(counter.get(), equalTo(0))
 
                 appender.append(topic, "1337")
-                testInstance.consume(10) { value ->
+                testInstance.consume(10) { _, value ->
                     CompletableFuture.runAsync {
                         assertThat(value, equalTo("1337"))
                         counter.incrementAndGet()
@@ -63,7 +64,7 @@ inner class ProtobufLogConsumerTest {
             DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
-                testInstance.consumeIndexed(10) { index, value ->
+                testInstance.consumeIndexed(10) { index,_, value ->
                     CompletableFuture.runAsync {
                         assertThat("${index + 1}", equalTo(value))
                     }
@@ -83,9 +84,9 @@ inner class ProtobufLogConsumerTest {
                 val collected = mutableListOf<String>()
                 val consumerFuture = CompletableFuture.runAsync {
                     while (collected.size < 1_000) {
-                        testInstance.consume(1) {
+                        testInstance.consume(1) { _, str ->
                             CompletableFuture.runAsync {
-                                collected.add(it)
+                                collected.add(str)
                             }
                         }
                     }

@@ -22,11 +22,11 @@ interface AppendToTopic {
 interface ConsumeFromTopic {
     fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk>
 
-    fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunk.Id)
+    fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId)
 }
 
 interface ReadFromTopic {
-    fun read(lastId: LogChunk.Id, topic: LogTopic, limit: Int): List<LogChunk>
+    fun read(lastId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk>
 }
 
 interface ResolveTopic {

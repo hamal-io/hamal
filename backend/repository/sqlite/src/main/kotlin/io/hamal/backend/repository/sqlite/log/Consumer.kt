@@ -17,12 +17,13 @@ class ProtobufLogConsumer<Value : Any>(
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
-    override fun consumeIndexed(limit: Int, fn: (Int, Value) -> CompletableFuture<*>): Int {
+    override fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, Value) -> CompletableFuture<*>): Int {
         val chunksToConsume = logBrokerRepository.consume(groupId, topic, limit)
 
         chunksToConsume.mapIndexed { index, chunk ->
             val future = fn(
                 index,
+                chunk.id,
                 ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
             )
             Pair(chunk.id, future)

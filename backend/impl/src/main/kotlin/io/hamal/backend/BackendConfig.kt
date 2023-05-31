@@ -1,9 +1,7 @@
 package io.hamal.backend
 
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.*
-import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.event.service.EventProcessorFactory
-import io.hamal.backend.event_handler.exec.ExecCompletionRequestedHandler
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.invocation.AdhocInvocationHandler
 import io.hamal.backend.event_handler.invocation.EventInvocationHandler
@@ -11,6 +9,7 @@ import io.hamal.backend.event_handler.invocation.FixedDelayInvocationHandler
 import io.hamal.backend.event_handler.invocation.OneshotInvocationHandler
 import io.hamal.backend.event_handler.req.RequestedHandler
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
+import io.hamal.backend.service.EventProcessorFactory
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.TriggerInvocationService
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -70,7 +69,10 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(EventInvocationEvent::class, EventInvocationHandler(execCmdService))
         .register(FixedDelayInvocationEvent::class, FixedDelayInvocationHandler(execCmdService))
 
-        .register(ExecCompletionRequestedEvent::class, ExecCompletionRequestedHandler(execQueryService, execCmdService, stateCmdService))
+        .register(
+            ExecCompletionRequestedEvent::class,
+            ExecCompletionRequestedHandler(execQueryService, execCmdService, stateCmdService)
+        )
 
         .register(RequestedEvent::class, RequestedHandler(reqCmdService, eventEmitter))
 

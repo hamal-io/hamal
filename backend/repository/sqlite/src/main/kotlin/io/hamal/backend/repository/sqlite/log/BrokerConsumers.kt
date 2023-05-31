@@ -1,9 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBroker
-import io.hamal.backend.repository.api.log.LogBrokerConsumersRepository
-import io.hamal.backend.repository.api.log.LogChunk
-import io.hamal.backend.repository.api.log.GroupId
+import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
@@ -48,7 +45,7 @@ class DefaultLogBrokerConsumersRepository(
         }
     }
 
-    override fun nextChunkId(groupId: GroupId, topicId: TopicId): LogChunk.Id {
+    override fun nextChunkId(groupId: GroupId, topicId: TopicId): LogChunkId {
         return connection.executeQueryOne(
             """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
         ) {
@@ -57,12 +54,12 @@ class DefaultLogBrokerConsumersRepository(
                 set("topicId", topicId.value)
             }
             map {
-                LogChunk.Id(it.getSnowflakeId("next_chunk_id"))
+                LogChunkId(it.getSnowflakeId("next_chunk_id"))
             }
-        } ?: LogChunk.Id(0)
+        } ?: LogChunkId(0)
     }
 
-    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: LogChunk.Id) {
+    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: LogChunkId) {
         connection.execute(
             """
             INSERT INTO consumers(group_id, topic_id, next_chunk_id)

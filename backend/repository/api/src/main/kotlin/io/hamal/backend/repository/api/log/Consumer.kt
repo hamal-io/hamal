@@ -4,11 +4,11 @@ import java.util.concurrent.CompletableFuture
 
 interface LogConsumer<VALUE : Any> {
     val groupId: GroupId
-    fun consume(limit: Int, fn: (VALUE) -> CompletableFuture<*>): Int {
-        return consumeIndexed(limit) { _, value -> fn(value) }
+    fun consume(limit: Int, fn: (LogChunkId, VALUE) -> CompletableFuture<*>): Int {
+        return consumeIndexed(limit) { _, chunkId, value -> fn(chunkId, value) }
     }
 
-    fun consumeIndexed(limit: Int, fn: (Int, VALUE) -> CompletableFuture<*>): Int
+    fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, VALUE) -> CompletableFuture<*>): Int
 
 
 }

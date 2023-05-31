@@ -16,7 +16,7 @@ class FixedDelayInvocationHandler(
     val execCmdService: ExecCmdService
 ) : EventHandler<FixedDelayInvocationEvent> {
     private val log = logger(FixedDelayInvocationHandler::class)
-    override fun handle(evt: FixedDelayInvocationEvent) {
+    override fun handle(reqId: ReqId, evt: FixedDelayInvocationEvent) {
         log.debug("Handle: ${evt}")
         val func = evt.func
 

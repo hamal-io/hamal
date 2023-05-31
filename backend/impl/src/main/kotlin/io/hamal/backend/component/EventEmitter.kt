@@ -1,4 +1,4 @@
-package io.hamal.backend.event.component
+package io.hamal.backend.component
 
 import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -25,6 +25,7 @@ class EventEmitter(val logBrokerRepository: LogBrokerRepository) {
         }
         flush()
     }
+
 
     fun flush() {
         val notificationsToFlush = local.get() ?: listOf()

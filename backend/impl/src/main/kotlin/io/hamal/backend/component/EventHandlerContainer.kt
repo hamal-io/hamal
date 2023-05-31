@@ -1,4 +1,4 @@
-package io.hamal.backend.event.component
+package io.hamal.backend.component
 
 import io.hamal.backend.event.Event
 import io.hamal.backend.event.topic
@@ -20,7 +20,6 @@ class EventHandlerContainer : EventHandler.Container {
     ): Boolean {
         try {
             lock.writeLock().lock()
-            //FIXME ensure notification is annotated or refuse
             val result = !receiverMapping.containsKey(clazz)
             receiverMapping.putIfAbsent(clazz, mutableListOf())
             receiverMapping[clazz] = receiverMapping[clazz]!!.plus(receiver)

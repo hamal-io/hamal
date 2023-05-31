@@ -16,7 +16,7 @@ class OneshotInvocationHandler(
     val execCmdService: ExecCmdService
 ) : EventHandler<OneshotInvocationEvent> {
     private val log = logger(OneshotInvocationHandler::class)
-    override fun handle(evt: OneshotInvocationEvent) {
+    override fun handle(reqId: ReqId, evt: OneshotInvocationEvent) {
         log.debug("Handle: ${evt}")
         val func = evt.func
 

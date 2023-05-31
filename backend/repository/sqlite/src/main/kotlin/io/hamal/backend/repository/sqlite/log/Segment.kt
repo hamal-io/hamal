@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.LogChunk
+import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.backend.repository.api.log.LogSegmentRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
@@ -18,19 +19,19 @@ internal class DefaultLogSegmentRepository(
     override val shard: Shard get() = segment.shard
 }), LogSegmentRepository {
 
-    override fun append(bytes: ByteArray): LogChunk.Id {
+    override fun append(bytes: ByteArray): LogChunkId {
         return connection.tx {
-            execute<LogChunk.Id>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
+            execute<LogChunkId>("INSERT INTO chunks (bytes,instant) VALUES (:bytes,:now) RETURNING id") {
                 with {
                     set("bytes", bytes)
                     set("now", TimeUtils.now())
                 }
-                map { LogChunk.Id(it.getInt("id")) }
+                map { LogChunkId(it.getInt("id")) }
             }
         }!!
     }
 
-    override fun read(firstId: LogChunk.Id, limit: Int): List<LogChunk> {
+    override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
         if (limit < 1) {
             return listOf()
         }
@@ -43,7 +44,7 @@ internal class DefaultLogSegmentRepository(
             }
             map {
                 LogChunk(
-                    id = it.getDomainId("id", LogChunk::Id),
+                    id = it.getDomainId("id", ::LogChunkId),
                     segmentId = segment.id,
                     shard = segment.shard,
                     topicId = segment.topicId,

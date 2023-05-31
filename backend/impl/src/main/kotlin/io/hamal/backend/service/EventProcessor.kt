@@ -1,11 +1,12 @@
-package io.hamal.backend.event.service
+package io.hamal.backend.service
 
+import io.hamal.backend.component.EventHandlerContainer
 import io.hamal.backend.event.Event
-import io.hamal.backend.event.component.EventHandlerContainer
 import io.hamal.backend.event_handler.EventHandler
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.GroupId
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufLogConsumer
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -64,11 +65,11 @@ class DefaultEventProcessor(
                     scheduledTasks.add(
                         scheduledExecutorService.scheduleAtFixedRate(
                             {
-                                consumer.consume(100) { evt ->
+                                consumer.consume(100) { chunkId, evt ->
                                     CompletableFuture.runAsync {
                                         handlerContainer[evt::class].forEach { handler ->
                                             try {
-                                                handler.handle(evt)
+                                                handler.handle(ReqId(chunkId.value), evt)
                                             } catch (t: Throwable) {
                                                 throw Error(t)
                                             }

@@ -15,7 +15,7 @@ class EventInvocationHandler(
     val execCmdService: ExecCmdService
 ) : EventHandler<EventInvocationEvent> {
     private val log = logger(EventInvocationHandler::class)
-    override fun handle(evt: EventInvocationEvent) {
+    override fun handle(reqId: ReqId, evt: EventInvocationEvent) {
         log.debug("Handle: ${evt}")
         val func = evt.func
 

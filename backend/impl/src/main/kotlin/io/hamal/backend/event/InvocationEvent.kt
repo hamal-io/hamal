@@ -4,7 +4,6 @@ import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -14,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SystemEventTopic("invocation::adhoc")
 data class AdhocInvocationEvent(
-    override val reqId: ReqId,
+//    override val reqId: ReqId,
     override val shard: Shard,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
@@ -24,7 +23,7 @@ data class AdhocInvocationEvent(
 @Serializable
 @SystemEventTopic("invocation::one_shot")
 data class OneshotInvocationEvent(
-    override val reqId: ReqId,
+//    override val reqId: ReqId,
     override val shard: Shard,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
@@ -36,7 +35,7 @@ data class OneshotInvocationEvent(
 @Serializable
 @SystemEventTopic("invocation::fixed_delay")
 data class FixedDelayInvocationEvent(
-    override val reqId: ReqId,
+//    override val reqId: ReqId,
     override val shard: Shard,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
@@ -48,7 +47,7 @@ data class FixedDelayInvocationEvent(
 @Serializable
 @SystemEventTopic("invocation::event")
 data class EventInvocationEvent(
-    override val reqId: ReqId,
+//    override val reqId: ReqId,
     override val shard: Shard,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,

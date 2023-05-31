@@ -1,7 +1,7 @@
 package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.FuncCreatedEvent
-import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.Func
@@ -39,9 +39,9 @@ private fun FuncCmdService.createFunc(funcToCreate: FuncCmdService.FuncToCreate)
 private fun FuncCmdService.emitEvent(func: Func) {
     eventEmitter.emit(
         FuncCreatedEvent(
-            reqId = ReqId(123), // FIXME
+//            reqId = ReqId(123), // FIXME
             shard = func.shard,
-            id = func.id
+            funcId = func.id
         )
     )
 }

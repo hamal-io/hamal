@@ -1,7 +1,7 @@
 package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.*
-import io.hamal.backend.event.component.EventEmitter
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.ExecToPlan
 import io.hamal.backend.repository.api.domain.*
@@ -68,7 +68,7 @@ private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
 private fun ExecCmdService.emitEvent(exec: PlannedExec) {
     eventEmitter.emit(
         ExecPlannedEvent(
-            reqId = exec.reqId,
+//            reqId = exec.reqId,
             shard = exec.shard,
             plannedExec = exec
         )
@@ -79,7 +79,7 @@ private fun ExecCmdService.emitEvent(exec: PlannedExec) {
 private fun ExecCmdService.emitEvent(reqId: ReqId, exec: ScheduledExec) {
     eventEmitter.emit(
         ExecScheduledEvent(
-            reqId = reqId,
+//            reqId = reqId,
             shard = exec.shard,
             scheduledExec = exec
         )
@@ -90,7 +90,7 @@ private fun ExecCmdService.emitEvent(reqId: ReqId, exec: ScheduledExec) {
 private fun ExecCmdService.emitEvent(reqId: ReqId, exec: QueuedExec) {
     eventEmitter.emit(
         ExecutionQueuedEvent(
-            reqId = reqId,
+//            reqId = reqId,
             shard = exec.shard,
             queuedExec = exec
         )
@@ -102,7 +102,7 @@ private fun ExecCmdService.emitEvents(reqId: ReqId, execs: List<InFlightExec>) {
     execs.forEach {
         eventEmitter.emit(
             ExecutionStartedEvent(
-                reqId = reqId,
+//                reqId = reqId,
                 shard = it.shard,
                 inFlightExec = it
             )
@@ -114,7 +114,7 @@ private fun ExecCmdService.emitEvents(reqId: ReqId, execs: List<InFlightExec>) {
 private fun ExecCmdService.emitEvent(reqId: ReqId, exec: CompletedExec) {
     eventEmitter.emit(
         ExecutionCompletedEvent(
-            reqId = reqId,
+//            reqId = reqId,
             shard = exec.shard,
             completedExec = exec
         )

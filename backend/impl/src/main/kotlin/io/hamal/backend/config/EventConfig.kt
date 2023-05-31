@@ -1,9 +1,9 @@
 package io.hamal.backend.config
 
-import io.hamal.backend.event.component.EventEmitter
-import io.hamal.backend.event.service.DefaultEventProcessor
-import io.hamal.backend.event.service.EventProcessorFactory
+import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.service.DefaultEventProcessor
+import io.hamal.backend.service.EventProcessorFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler

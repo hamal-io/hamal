@@ -10,11 +10,8 @@ class ExecPlannedHandler(
     private val orchestrationService: OrchestrationService
 ) : EventHandler<ExecPlannedEvent> {
     private val log = logger(this::class)
-    override fun handle(evt: ExecPlannedEvent) {
+    override fun handle(reqId: ReqId, evt: ExecPlannedEvent) {
         log.debug("Handle: $evt")
-        orchestrationService.schedule(
-            reqId = ReqId(124),
-            plannedExec = evt.plannedExec
-        )
+        orchestrationService.schedule(reqId, evt.plannedExec)
     }
 }

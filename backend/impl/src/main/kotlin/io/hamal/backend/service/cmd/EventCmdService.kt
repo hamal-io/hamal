@@ -29,7 +29,7 @@ class EventCmdService(
         val topic = logBrokerRepository.get(eventToAppend.topicId)
         appender.append(
             topic, TenantEvent(
-                reqId = eventToAppend.reqId,
+//                reqId = eventToAppend.reqId,
                 shard = eventToAppend.shard,
                 topic = "tenant-topic",
                 contentType = eventToAppend.contentTpe,

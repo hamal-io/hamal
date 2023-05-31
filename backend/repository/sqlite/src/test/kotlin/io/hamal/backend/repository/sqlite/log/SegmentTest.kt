@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.LogChunk
+import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
@@ -132,7 +133,7 @@ class DefaultLogSegmentRepositoryTest {
 
             assertThat(testInstance.count(), equalTo(2UL))
 
-            testInstance.read(LogChunk.Id(1), 2).let {
+            testInstance.read(LogChunkId(1), 2).let {
                 assertThat(it, hasSize(2))
 
                 val chunk = it.first()
@@ -148,15 +149,15 @@ class DefaultLogSegmentRepositoryTest {
         fun `Append single chunk`() {
             withInstant(Instant.ofEpochMilli(2810)) {
                 val result = testInstance.append("VALUE".toByteArray())
-                assertThat(result, equalTo(LogChunk.Id(1)))
+                assertThat(result, equalTo(LogChunkId(1)))
             }
 
             assertThat(testInstance.count(), equalTo(1UL))
 
-            testInstance.read(LogChunk.Id(1)).let {
+            testInstance.read(LogChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunk.Id(1)))
+                assertThat(chunk.id, equalTo(LogChunkId(1)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
                 assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
@@ -176,17 +177,17 @@ class DefaultLogSegmentRepositoryTest {
 
                 assertThat(
                     result, equalTo(
-                        listOf(LogChunk.Id(1), LogChunk.Id(2), LogChunk.Id(3))
+                        listOf(LogChunkId(1), LogChunkId(2), LogChunkId(3))
                     )
                 )
 
             }
             assertThat(testInstance.count(), equalTo(3UL))
 
-            testInstance.read(LogChunk.Id(1)).let {
+            testInstance.read(LogChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunk.Id(1)))
+                assertThat(chunk.id, equalTo(LogChunkId(1)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
                 assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
@@ -194,10 +195,10 @@ class DefaultLogSegmentRepositoryTest {
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
 
-            testInstance.read(LogChunk.Id(3)).let {
+            testInstance.read(LogChunkId(3)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunk.Id(3)))
+                assertThat(chunk.id, equalTo(LogChunkId(3)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
                 assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
@@ -216,7 +217,7 @@ class DefaultLogSegmentRepositoryTest {
                 "Rockz".toByteArray(),
             ).map(testInstance::append)
 
-            assertThat(result, equalTo(listOf(LogChunk.Id(4), LogChunk.Id(5))))
+            assertThat(result, equalTo(listOf(LogChunkId(4), LogChunkId(5))))
             assertThat(testInstance.count(), equalTo(5UL))
         }
 
@@ -250,7 +251,7 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Tries to read from empty segment`() {
-            val result = testInstance.read(LogChunk.Id(20))
+            val result = testInstance.read(LogChunkId(20))
             assertThat(result, hasSize(0))
         }
 
@@ -258,7 +259,7 @@ class DefaultLogSegmentRepositoryTest {
         fun `Tries to read outside of segment range`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunk.Id(200), 100)
+            val result = testInstance.read(LogChunkId(200), 100)
             assertThat(result, hasSize(0))
         }
 
@@ -266,7 +267,7 @@ class DefaultLogSegmentRepositoryTest {
         fun `Tries to read with a limit of 0`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunk.Id(23), 0)
+            val result = testInstance.read(LogChunkId(23), 0)
             assertThat(result, hasSize(0))
         }
 
@@ -274,7 +275,7 @@ class DefaultLogSegmentRepositoryTest {
         fun `Tries to read with a negative limit`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunk.Id(23), -20)
+            val result = testInstance.read(LogChunkId(23), -20)
             assertThat(result, hasSize(0))
         }
 
@@ -282,7 +283,7 @@ class DefaultLogSegmentRepositoryTest {
         fun `Read exactly one chunk`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunk.Id(69))
+            val result = testInstance.read(LogChunkId(69))
             assertThat(result, hasSize(1))
             assertChunk(result.first(), 69)
         }
@@ -290,7 +291,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Reads multiple chunks`() {
             givenOneHundredChunks()
-            val result = testInstance.read(LogChunk.Id(25), 36)
+            val result = testInstance.read(LogChunkId(25), 36)
             assertThat(result, hasSize(36))
 
             for (id in 0 until 36) {
@@ -302,7 +303,7 @@ class DefaultLogSegmentRepositoryTest {
         fun `Read is only partially covered by segment`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunk.Id(90), 40)
+            val result = testInstance.read(LogChunkId(90), 40)
             assertThat(result, hasSize(11))
 
             for (id in 0 until 11) {
@@ -311,7 +312,7 @@ class DefaultLogSegmentRepositoryTest {
         }
 
         private fun assertChunk(chunk: LogChunk, id: Int) {
-            assertThat(chunk.id, equalTo(LogChunk.Id(id)))
+            assertThat(chunk.id, equalTo(LogChunkId(id)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
