@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.createFixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerName
@@ -20,8 +20,8 @@ class TriggerCmdService
     val triggerCmdRepository: TriggerCmdRepository,
     val eventEmitter: EventEmitter
 ) {
-    fun create(reqId: ReqId, triggerToCreate: TriggerToCreate): Trigger =
-        createTrigger(reqId, triggerToCreate).also { emitEvent(reqId, it) }
+    fun create(computeId: ComputeId, triggerToCreate: TriggerToCreate): Trigger =
+        createTrigger(computeId, triggerToCreate).also { emitEvent(computeId, it) }
 
     data class TriggerToCreate(
         val shard: Shard,
@@ -32,8 +32,8 @@ class TriggerCmdService
     )
 }
 
-private fun TriggerCmdService.createTrigger(reqId: ReqId, triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
-    return triggerCmdRepository.request(reqId) {
+private fun TriggerCmdService.createTrigger(computeId: ComputeId, triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
+    return triggerCmdRepository.request(computeId) {
         createFixedRateTrigger {
             name = triggerToCreate.name
             funcId = triggerToCreate.funcId
@@ -42,10 +42,10 @@ private fun TriggerCmdService.createTrigger(reqId: ReqId, triggerToCreate: Trigg
     }.first()
 }
 
-private fun TriggerCmdService.emitEvent(reqId: ReqId, trigger: Trigger) {
+private fun TriggerCmdService.emitEvent(computeId: ComputeId, trigger: Trigger) {
     eventEmitter.emit(
-        reqId, TriggerCreatedEvent(
-//            reqId = ReqId(123), //FIXME
+        computeId, TriggerCreatedEvent(
+//            computeId = ComputeId(123), //FIXME
             shard = trigger.shard,
             trigger
         )

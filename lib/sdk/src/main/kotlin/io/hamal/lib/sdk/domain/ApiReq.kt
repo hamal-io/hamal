@@ -1,6 +1,6 @@
 package io.hamal.lib.sdk.domain
 
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
@@ -13,7 +13,7 @@ data class ApiListReqResponse(
 ) {
     @Serializable
     data class Req(
-        val id: ReqId,
+        val id: ComputeId,
         val status: ReqStatus
     )
 }
@@ -21,14 +21,14 @@ data class ApiListReqResponse(
 
 @Serializable
 sealed interface ApiReq {
-    val id: ReqId
+    val id: ComputeId
     val status: ReqStatus
 }
 
 @Serializable
 @SerialName("Adhoc")
 data class ApiAdhocRequest(
-    override val id: ReqId,
+    override val id: ComputeId,
     override val status: ReqStatus,
     val execId: ExecId?,
     val execStatus: ExecStatus?

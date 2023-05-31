@@ -82,7 +82,7 @@ open class ExecController(
 
 //        eventEmitter.emit(
 //            AgentCompletedEvent(
-//                reqId = ReqId(123),
+//                computeId = ComputeId(123),
 //                shard = Shard(1),
 //                execId = execId,
 //                statePayload = StatePayload(

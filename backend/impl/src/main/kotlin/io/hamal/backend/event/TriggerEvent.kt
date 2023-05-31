@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @EventTopic("trigger::created")
 data class TriggerCreatedEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val trigger: Trigger
 ) : Event()

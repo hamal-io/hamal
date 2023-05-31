@@ -2,7 +2,7 @@ package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.base.DomainId
 import io.hamal.lib.domain.vo.base.DomainName
 import logger
@@ -73,7 +73,7 @@ class NamedPreparedStatementDelegate(
 
     operator fun set(
         param: String,
-        value: ReqId
+        value: ComputeId
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this

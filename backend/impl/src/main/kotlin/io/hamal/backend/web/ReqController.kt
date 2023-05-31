@@ -2,7 +2,7 @@ package io.hamal.backend.web
 
 import io.hamal.backend.service.query.ReqQueryService
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
@@ -24,11 +24,11 @@ class ReqController(
 
     @GetMapping("/v1/reqs")
     fun listReqs(
-        @RequestParam(required = false, name = "after_id", defaultValue = "0") stringReqId: String,
+        @RequestParam(required = false, name = "after_id", defaultValue = "0") stringComputeId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListReqResponse> {
         val result = queryService.list(
-            afterId = ReqId(stringReqId),
+            afterId = ComputeId(stringComputeId),
             limit = limit
         )
 
@@ -44,13 +44,13 @@ class ReqController(
         )
     }
 
-    @GetMapping("/v1/reqs/{reqId}")
+    @GetMapping("/v1/reqs/{computeId}")
     fun getReq(
-        @PathVariable("reqId") stringReqId: String,
+        @PathVariable("computeId") stringComputeId: String,
     ): ResponseEntity<ApiReq> {
         return ResponseEntity(
             ApiAdhocRequest(
-                id = ReqId(123),
+                id = ComputeId(123),
                 status = ReqStatus.Received,
                 execId = ExecId(SnowflakeId(123L)),
                 execStatus = ExecStatus.InFlight

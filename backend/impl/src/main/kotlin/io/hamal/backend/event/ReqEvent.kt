@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @EventTopic("requested")
 data class RequestedEvent(
-    //reqId
-//    override val reqId: ReqId,
+    //computeId
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val req: Req
 ) : Event()
@@ -26,7 +26,7 @@ data class RequestedEvent(
 //@SystemEventTopic("req::complete_exec")
 //data class CompleteExecEvt(
 //    override val shard: Shard,
-//    val reqId: ReqId,
+//    val computeId: ComputeId,
 //    val execId: ExecId,
 //    val statePayload: StatePayload
 //) : Event()

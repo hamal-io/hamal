@@ -3,7 +3,7 @@ package io.hamal.backend.repository.api
 import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
@@ -15,12 +15,12 @@ interface FuncCmdRepository {
 
     fun get(id: FuncId): Func
 
-    fun execute(reqId: ReqId, commands: List<Command>): List<Func>
+    fun execute(computeId: ComputeId, commands: List<Command>): List<Func>
 
-    fun request(reqId: ReqId, record: Recorder.() -> Unit): List<Func> {
+    fun request(computeId: ComputeId, record: Recorder.() -> Unit): List<Func> {
         val recorder = Recorder(DomainIdGeneratorAdapter) //FIXME
         record(recorder)
-        return execute(reqId, recorder.commands)
+        return execute(computeId, recorder.commands)
     }
 
     interface Command {

@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.domain.InFlightExec
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import org.springframework.beans.factory.annotation.Autowired
 
 class ExecCompletionRequestedHandler(
@@ -14,7 +14,7 @@ class ExecCompletionRequestedHandler(
     @Autowired val execCmdService: ExecCmdService,
     @Autowired val stateCmdService: StateCmdService,
 ) : EventHandler<ExecCompletionRequestedEvent> {
-    override fun handle(reqId: ReqId, evt: ExecCompletionRequestedEvent) {
+    override fun handle(computeId: ComputeId, evt: ExecCompletionRequestedEvent) {
         println("agent completed exec ${evt.execId}")
 
         execQueryService.find(evt.execId)
@@ -23,7 +23,7 @@ class ExecCompletionRequestedHandler(
 
                     if (exec.correlation != null) {
                         stateCmdService.set(
-                            reqId, StateCmdService.StateToSet(
+                            computeId, StateCmdService.StateToSet(
                                 shard = evt.shard,
                                 correlation = exec.correlation!!,
                                 payload = evt.statePayload
@@ -32,7 +32,7 @@ class ExecCompletionRequestedHandler(
                     }
 
                     execCmdService.complete(
-                        reqId = reqId,
+                        computeId = computeId,
                         inFlightExec = exec
                     )
                 }

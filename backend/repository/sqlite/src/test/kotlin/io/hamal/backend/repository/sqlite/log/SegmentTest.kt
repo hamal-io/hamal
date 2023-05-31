@@ -7,7 +7,7 @@ import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -128,8 +128,8 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Bytes, Instant does not have to be unique`() {
             withInstant(Instant.ofEpochMilli(1)) {
-                testInstance.append(ReqId(1), "SomeBytes".toByteArray())
-                testInstance.append(ReqId(2), "SomeBytes".toByteArray())
+                testInstance.append(ComputeId(1), "SomeBytes".toByteArray())
+                testInstance.append(ComputeId(2), "SomeBytes".toByteArray())
             }
 
             assertThat(testInstance.count(), equalTo(2UL))
@@ -149,7 +149,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Append single chunk`() {
             withInstant(Instant.ofEpochMilli(2810)) {
-                testInstance.append(ReqId(1), "VALUE".toByteArray())
+                testInstance.append(ComputeId(1), "VALUE".toByteArray())
             }
 
             assertThat(testInstance.count(), equalTo(1UL))
@@ -173,7 +173,7 @@ class DefaultLogSegmentRepositoryTest {
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
-                ).forEachIndexed { index, value -> testInstance.append(ReqId(index), value) }
+                ).forEachIndexed { index, value -> testInstance.append(ComputeId(index), value) }
             }
 
             assertThat(testInstance.count(), equalTo(3UL))
@@ -209,7 +209,7 @@ class DefaultLogSegmentRepositoryTest {
             val result = listOf(
                 "Hamal".toByteArray(),
                 "Rockz".toByteArray(),
-            ).forEachIndexed { index, value -> testInstance.append(ReqId(index + 4), value) }
+            ).forEachIndexed { index, value -> testInstance.append(ComputeId(index + 4), value) }
 
             assertThat(testInstance.count(), equalTo(5UL))
         }
@@ -218,16 +218,16 @@ class DefaultLogSegmentRepositoryTest {
         fun `A chunk was already created with this req id`() {
             givenThreeChunks()
 
-            val result = testInstance.append(ReqId(2), "OTHER_VALUE".toByteArray())
+            val result = testInstance.append(ComputeId(2), "OTHER_VALUE".toByteArray())
 
 
         }
 
 
         private fun givenThreeChunks() {
-            testInstance.append(ReqId(1), "VALUE_1".toByteArray())
-            testInstance.append(ReqId(2), "VALUE_2".toByteArray())
-            testInstance.append(ReqId(3), "VALUE_3".toByteArray())
+            testInstance.append(ComputeId(1), "VALUE_1".toByteArray())
+            testInstance.append(ComputeId(2), "VALUE_2".toByteArray())
+            testInstance.append(ComputeId(3), "VALUE_3".toByteArray())
         }
 
         private val testInstance = DefaultLogSegmentRepository(
@@ -323,7 +323,7 @@ class DefaultLogSegmentRepositoryTest {
         private fun givenOneHundredChunks() {
             IntRange(1, 100).forEach {
                 withEpochMilli(it.toLong()) {
-                    testInstance.append(ReqId(it), "VALUE_$it".toByteArray())
+                    testInstance.append(ComputeId(it), "VALUE_$it".toByteArray())
                 }
             }
         }

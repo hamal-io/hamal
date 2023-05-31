@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @EventTopic("agent::failed")
 data class AgentFailedEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val execId: ExecId
 ) : Event()

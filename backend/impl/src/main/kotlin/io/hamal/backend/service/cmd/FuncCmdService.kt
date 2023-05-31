@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.createFunc
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncName
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,8 +18,8 @@ class FuncCmdService
     val funcCmdRepository: FuncCmdRepository,
     val eventEmitter: EventEmitter
 ) {
-    fun create(reqId: ReqId, funcToCreate: FuncToCreate): Func =
-        createFunc(reqId, funcToCreate).also { emitEvent(reqId, it) }
+    fun create(computeId: ComputeId, funcToCreate: FuncToCreate): Func =
+        createFunc(computeId, funcToCreate).also { emitEvent(computeId, it) }
 
     data class FuncToCreate(
         val shard: Shard,
@@ -28,8 +28,8 @@ class FuncCmdService
     )
 }
 
-private fun FuncCmdService.createFunc(reqId: ReqId, funcToCreate: FuncCmdService.FuncToCreate): Func {
-    return funcCmdRepository.request(reqId) {
+private fun FuncCmdService.createFunc(computeId: ComputeId, funcToCreate: FuncCmdService.FuncToCreate): Func {
+    return funcCmdRepository.request(computeId) {
         createFunc {
             name = funcToCreate.name
             code = funcToCreate.code
@@ -37,10 +37,10 @@ private fun FuncCmdService.createFunc(reqId: ReqId, funcToCreate: FuncCmdService
     }.first()
 }
 
-private fun FuncCmdService.emitEvent(reqId: ReqId, func: Func) {
+private fun FuncCmdService.emitEvent(computeId: ComputeId, func: Func) {
     eventEmitter.emit(
-        reqId, FuncCreatedEvent(
-//            reqId = ReqId(123), // FIXME
+        computeId, FuncCreatedEvent(
+//            computeId = ComputeId(123), // FIXME
             shard = func.shard,
             funcId = func.id
         )

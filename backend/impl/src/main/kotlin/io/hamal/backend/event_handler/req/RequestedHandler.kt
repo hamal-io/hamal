@@ -9,14 +9,14 @@ import io.hamal.backend.repository.api.domain.ReqPayload.CompleteExec
 import io.hamal.backend.repository.api.domain.ReqPayload.InvokeAdhoc
 import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 
 
 class RequestedHandler(
     val reqCmdService: ReqCmdService,
     val eventEmitter: EventEmitter
 ) : EventHandler<RequestedEvent> {
-    override fun handle(reqId: ReqId, evt: RequestedEvent) {
+    override fun handle(computeId: ComputeId, evt: RequestedEvent) {
         reqCmdService.inflight(evt.req)
 
         try {
@@ -31,10 +31,10 @@ class RequestedHandler(
     }
 }
 
-internal fun RequestedHandler.handle(reqId: ReqId, toInvoke: InvokeAdhoc) {
+internal fun RequestedHandler.handle(computeId: ComputeId, toInvoke: InvokeAdhoc) {
     eventEmitter.emit(
-        reqId, AdhocInvocationEvent(
-//            reqId = reqId,
+        computeId, AdhocInvocationEvent(
+//            computeId = computeId,
             shard = Shard(1),
             inputs = toInvoke.inputs,
             secrets = toInvoke.secrets,
@@ -43,10 +43,10 @@ internal fun RequestedHandler.handle(reqId: ReqId, toInvoke: InvokeAdhoc) {
     )
 }
 
-internal fun RequestedHandler.handle(reqId: ReqId, toComplete: CompleteExec) {
+internal fun RequestedHandler.handle(computeId: ComputeId, toComplete: CompleteExec) {
     eventEmitter.emit(
-        reqId, ExecCompletionRequestedEvent(
-//            reqId = reqId,
+        computeId, ExecCompletionRequestedEvent(
+//            computeId = computeId,
             shard = Shard(1),
             execId = toComplete.execId,
             statePayload = toComplete.statePayload

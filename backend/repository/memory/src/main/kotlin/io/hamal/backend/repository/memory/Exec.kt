@@ -3,7 +3,7 @@ package io.hamal.backend.repository.memory
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.domain.*
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.CompletedAt
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.QueuedAt
@@ -16,10 +16,10 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     private val queue = mutableListOf<QueuedExec>()
     private val inFlightExecs = mutableListOf<InFlightExec>()
 
-    override fun plan(reqId: ReqId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
+    override fun plan(computeId: ComputeId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
         return PlannedExec(
             id = execToPlan.id,
-            reqId = reqId,
+            computeId = computeId,
             correlation = execToPlan.correlation,
             inputs = execToPlan.inputs,
             secrets = execToPlan.secrets,
@@ -28,19 +28,19 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         ).also { execs[it.id] = it }
     }
 
-    override fun schedule(reqId: ReqId, planedExec: PlannedExec): ScheduledExec {
+    override fun schedule(computeId: ComputeId, planedExec: PlannedExec): ScheduledExec {
         return ScheduledExec(
             id = planedExec.id,
-            reqId = reqId,
+            computeId = computeId,
             scheduledAt = ScheduledAt.now(),
             plannedExec = planedExec
         ).also { execs[it.id] = it }
     }
 
-    override fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec {
+    override fun enqueue(computeId: ComputeId, scheduledExec: ScheduledExec): QueuedExec {
         val result = QueuedExec(
             id = scheduledExec.id,
-            reqId = reqId,
+            computeId = computeId,
             queuedAt = QueuedAt.now(),
             scheduledExec = scheduledExec
         ).also { execs[it.id] = it }
@@ -48,18 +48,18 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         return result
     }
 
-    override fun complete(reqId: ReqId, inFlightExec: InFlightExec): CompletedExec {
+    override fun complete(computeId: ComputeId, inFlightExec: InFlightExec): CompletedExec {
         inFlightExecs.removeIf { it.id == inFlightExec.id }
         return CompletedExec(
             id = inFlightExec.id,
-            reqId = reqId,
+            computeId = computeId,
             completedAt = CompletedAt.now(),
             inFlightExec = inFlightExec
         ).also { execs[it.id] = it }
     }
 
 
-    override fun dequeue(reqId: ReqId): List<InFlightExec> {
+    override fun dequeue(computeId: ComputeId): List<InFlightExec> {
         if (queue.isEmpty()) {
             return listOf()
         }
@@ -72,7 +72,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             val inFlightExec = queue.removeFirst().let {
                 InFlightExec(
                     id = it.id,
-                    reqId = reqId,
+                    computeId = computeId,
                     queuedExec = it
                 ).also { execs[it.id] = it }
             }

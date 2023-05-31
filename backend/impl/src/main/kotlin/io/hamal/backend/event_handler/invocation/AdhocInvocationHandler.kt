@@ -5,7 +5,7 @@ import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.AdhocInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -15,13 +15,13 @@ class AdhocInvocationHandler(
     val execCmdService: ExecCmdService
 ) : EventHandler<AdhocInvocationEvent> {
     private val log = logger(AdhocInvocationHandler::class)
-    override fun handle(reqId: ReqId, evt: AdhocInvocationEvent) {
+    override fun handle(computeId: ComputeId, evt: AdhocInvocationEvent) {
         log.debug("Handle: ${evt}")
 
         execCmdService.plan(
-            reqId,
+            computeId,
             ExecCmdService.ToPlan(
-                reqId = reqId, // FIXME move that out
+                computeId = computeId, // FIXME move that out
                 shard = evt.shard,
                 correlation = null,
                 inputs = evt.inputs.toExecInputs(),

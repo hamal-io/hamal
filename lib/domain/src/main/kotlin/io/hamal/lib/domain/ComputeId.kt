@@ -8,20 +8,20 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
 
-@Serializable(with = ReqId.Serializer::class)
-data class ReqId(val value: BigInteger) : Comparable<ReqId> {
+@Serializable(with = ComputeId.Serializer::class)
+data class ComputeId(val value: BigInteger) : Comparable<ComputeId> {
     constructor(value: ByteArray) : this(BigInteger(value))
     constructor(value: Int) : this(value.toBigInteger())
     constructor(value: Long) : this(value.toBigInteger())
     constructor(value: String) : this(BigInteger(value, 16))
 
-    object Serializer : KSerializer<ReqId> {
-        override val descriptor = PrimitiveSerialDescriptor("ReqId", PrimitiveKind.STRING)
-        override fun deserialize(decoder: Decoder) = ReqId(decoder.decodeString())
-        override fun serialize(encoder: Encoder, value: ReqId) {
+    object Serializer : KSerializer<ComputeId> {
+        override val descriptor = PrimitiveSerialDescriptor("ComputeId", PrimitiveKind.STRING)
+        override fun deserialize(decoder: Decoder) = ComputeId(decoder.decodeString())
+        override fun serialize(encoder: Encoder, value: ComputeId) {
             encoder.encodeString(value.value.toString(16))
         }
     }
 
-    override fun compareTo(other: ReqId) = value.compareTo(other.value)
+    override fun compareTo(other: ComputeId) = value.compareTo(other.value)
 }

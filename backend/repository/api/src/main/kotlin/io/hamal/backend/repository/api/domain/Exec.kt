@@ -2,14 +2,14 @@ package io.hamal.backend.repository.api.domain
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Exec : DomainObject<ExecId>() {
     abstract val status: ExecStatus
-    abstract val reqId: ReqId
+    abstract val computeId: ComputeId
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
@@ -21,7 +21,7 @@ sealed class Exec : DomainObject<ExecId>() {
 @Serializable
 class PlannedExec(
     override val id: ExecId,
-    override val reqId: ReqId,
+    override val computeId: ComputeId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val secrets: ExecSecrets,
@@ -40,7 +40,7 @@ class PlannedExec(
 @Serializable
 class ScheduledExec(
     override val id: ExecId,
-    override val reqId: ReqId,
+    override val computeId: ComputeId,
     val plannedExec: PlannedExec,
     val scheduledAt: ScheduledAt
 ) : Exec() {
@@ -60,7 +60,7 @@ class ScheduledExec(
 @Serializable
 class QueuedExec(
     override val id: ExecId,
-    override val reqId: ReqId,
+    override val computeId: ComputeId,
     val scheduledExec: ScheduledExec,
     val queuedAt: QueuedAt
 ) : Exec() {
@@ -79,7 +79,7 @@ class QueuedExec(
 @Serializable
 class InFlightExec(
     override val id: ExecId,
-    override val reqId: ReqId,
+    override val computeId: ComputeId,
     val queuedExec: QueuedExec
     //FIXME inflightSince
 ) : Exec() {
@@ -97,7 +97,7 @@ class InFlightExec(
 @Serializable
 class CompletedExec(
     override val id: ExecId,
-    override val reqId: ReqId,
+    override val computeId: ComputeId,
     val inFlightExec: InFlightExec,
     val completedAt: CompletedAt
 ) : Exec() {
@@ -117,7 +117,7 @@ class CompletedExec(
 @Serializable
 class FailedExec(
     override val id: ExecId,
-    override val reqId: ReqId,
+    override val computeId: ComputeId,
     val inFlightExec: InFlightExec,
     //FIXME failedAt
 ) : Exec() {

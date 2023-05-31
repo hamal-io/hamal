@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @EventTopic("func::created")
 data class FuncCreatedEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val funcId: FuncId,
 ) : Event()

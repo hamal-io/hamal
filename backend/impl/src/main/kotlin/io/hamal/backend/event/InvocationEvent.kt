@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @EventTopic("invocation::adhoc")
 data class AdhocInvocationEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
@@ -23,7 +23,7 @@ data class AdhocInvocationEvent(
 @Serializable
 @EventTopic("invocation::one_shot")
 data class OneshotInvocationEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
@@ -35,7 +35,7 @@ data class OneshotInvocationEvent(
 @Serializable
 @EventTopic("invocation::fixed_delay")
 data class FixedDelayInvocationEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
@@ -47,7 +47,7 @@ data class FixedDelayInvocationEvent(
 @Serializable
 @EventTopic("invocation::event")
 data class EventInvocationEvent(
-//    override val reqId: ReqId,
+//    override val computeId: ComputeId,
     override val shard: Shard,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,

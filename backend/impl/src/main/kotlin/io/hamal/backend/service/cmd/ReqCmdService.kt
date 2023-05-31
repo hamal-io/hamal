@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.domain.ReceivedReq
 import io.hamal.backend.repository.api.domain.Req
 import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.math.BigInteger
@@ -23,12 +23,12 @@ class ReqCmdService
     // FIXME probably move this into a Requester component because request() should be the only function used to deal with requests
     fun request(payload: ReqPayload): Req {
         return ReceivedReq(
-            id = ReqId(BigInteger(128, SecureRandom())), //FIXME depends on the req, usually generate hash of payload
+            id = ComputeId(BigInteger(128, SecureRandom())), //FIXME depends on the req, usually generate hash of payload
             payload = payload
         ).also {
             eventEmitter.emit(
                 it.id, RequestedEvent(
-//                    reqId = it.id,
+//                    computeId = it.id,
                     shard = Shard(1),
                     req = it
                 )
@@ -45,11 +45,11 @@ class ReqCmdService
         reqCmdRepository.inFlight(req)
     }
 
-    fun complete(reqId: ReqId) {
-        reqCmdRepository.complete(reqId)
+    fun complete(computeId: ComputeId) {
+        reqCmdRepository.complete(computeId)
     }
 
-    fun fail(reqId: ReqId) {
-        reqCmdRepository.fail(reqId)
+    fun fail(computeId: ComputeId) {
+        reqCmdRepository.fail(computeId)
     }
 }

@@ -5,7 +5,7 @@ import io.hamal.backend.event.AdhocInvocationEvent
 import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.value.NumberValue
 import io.hamal.lib.domain.value.StringValue
@@ -39,8 +39,8 @@ open class AdhocController
     ): ResponseEntity<ApiReq> {
 
         eventEmitter.emit(
-            ReqId(TimeUtils.now().toEpochMilli()), AdhocInvocationEvent(
-//            reqId = reqId,
+            ComputeId(TimeUtils.now().toEpochMilli()), AdhocInvocationEvent(
+//            computeId = computeId,
                 shard = Shard(1),
                 inputs = InvocationInputs(
                     listOf(
@@ -83,7 +83,7 @@ open class AdhocController
 //        )
         return ResponseEntity(
             ApiAdhocRequest(
-                id = ReqId(123),
+                id = ComputeId(123),
                 status = ReqStatus.Received,
                 execId = null,
                 execStatus = null

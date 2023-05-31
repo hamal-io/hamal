@@ -9,7 +9,7 @@ import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -32,13 +32,13 @@ open class FuncController(
     @PostMapping("/v1/funcs")
     fun createFunc(
         @RequestAttribute shard: Shard,
-        @RequestAttribute reqId: ReqId,
+        @RequestAttribute computeId: ComputeId,
         @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
         // FIXME to ApiCreateFuncResponse
         return funcCmdService.create(
-            reqId, FuncCmdService.FuncToCreate(
+            computeId, FuncCmdService.FuncToCreate(
                 shard = shard,
                 name = req.name,
                 code = req.code
@@ -71,7 +71,7 @@ open class FuncController(
     @PostMapping("/v1/funcs/{funcId}/exec")
     fun execFunc(
         @RequestAttribute shard: Shard,
-        @RequestAttribute reqId: ReqId,
+        @RequestAttribute computeId: ComputeId,
         @PathVariable("funcId") stringFuncId: String,
         @RequestHeader(
             "X-Correlation-ID",
@@ -85,8 +85,8 @@ open class FuncController(
         val func = queryService.get(funcId)
 
         eventEmitter.emit(
-            reqId, OneshotInvocationEvent(
-//                reqId = reqId,
+            computeId, OneshotInvocationEvent(
+//                computeId = computeId,
                 shard = shard,
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
                 inputs = InvocationInputs(listOf()),
@@ -97,7 +97,7 @@ open class FuncController(
 
         return ResponseEntity.ok(
             ApiExecFuncResponse(
-                reqId = reqId
+                computeId = computeId
             )
         )
     }

@@ -3,15 +3,15 @@ package io.hamal.backend.event_handler.exec
 import io.hamal.backend.event.ExecScheduledEvent
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.service.cmd.ExecCmdService
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import logger
 
 class ExecScheduledHandler(
     val cmdService: ExecCmdService
 ) : EventHandler<ExecScheduledEvent> {
     private val log = logger(ExecScheduledHandler::class)
-    override fun handle(reqId: ReqId, evt: ExecScheduledEvent) {
+    override fun handle(computeId: ComputeId, evt: ExecScheduledEvent) {
         log.debug("Handle: $evt")
-        cmdService.enqueue(reqId, evt.scheduledExec)
+        cmdService.enqueue(computeId, evt.scheduledExec)
     }
 }

@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.Query
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.FuncId
@@ -19,15 +19,15 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
 
     internal val triggers = mutableMapOf<TriggerId, TriggerEntity>()
 
-    internal val reqIds = mutableSetOf<ReqId>()
+    internal val computeIds = mutableSetOf<ComputeId>()
 
     override fun get(id: TriggerId): Trigger {
         return requireNotNull(triggers[id]?.let(TriggerEntity::toModel)) { "No trigger found with $id" }
 
     }
 
-    override fun execute(reqId: ReqId, commands: List<Command>): List<Trigger> {
-        check(reqIds.add(reqId)) { "Request $reqId was already executed" }
+    override fun execute(computeId: ComputeId, commands: List<Command>): List<Trigger> {
+        check(computeIds.add(computeId)) { "Request $computeId was already executed" }
         val groupedCommands = commands.groupBy { it.id }
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->

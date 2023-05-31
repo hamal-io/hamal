@@ -10,7 +10,7 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
@@ -59,9 +59,9 @@ class EventTriggerService
                 )
 
                 eventEmitter.emit(
-                    ReqId(TimeUtils.now().toEpochMilli()),
+                    ComputeId(TimeUtils.now().toEpochMilli()),
                 EventInvocationEvent(
-//                        reqId = ReqId(123),
+//                        computeId = ComputeId(123),
                     shard = trigger.shard,
                     func = funcQueryService.get(trigger.funcId),
                     correlationId = CorrelationId("__TBD__"), //FIXME

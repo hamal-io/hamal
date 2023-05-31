@@ -5,7 +5,7 @@ import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.logger
 import io.hamal.backend.repository.api.domain.EventInvocation
 import io.hamal.backend.service.cmd.ExecCmdService
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -15,13 +15,13 @@ class EventInvocationHandler(
     val execCmdService: ExecCmdService
 ) : EventHandler<EventInvocationEvent> {
     private val log = logger(EventInvocationHandler::class)
-    override fun handle(reqId: ReqId, evt: EventInvocationEvent) {
+    override fun handle(computeId: ComputeId, evt: EventInvocationEvent) {
         log.debug("Handle: ${evt}")
         val func = evt.func
 
         execCmdService.plan(
-            reqId, ExecCmdService.ToPlan(
-                reqId = ReqId(123),
+            computeId, ExecCmdService.ToPlan(
+                computeId = ComputeId(123),
                 shard = func.shard,
                 correlation = null,
                 inputs = evt.inputs.toExecInputs(),

@@ -4,7 +4,7 @@ import io.hamal.backend.event.ExecutionFailedEvent
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.cmd.ReqCmdService
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import logger
 
 class ExecFailedHandler(
@@ -13,9 +13,9 @@ class ExecFailedHandler(
 ) : EventHandler<ExecutionFailedEvent> {
 
     private val log = logger(ExecFailedHandler::class)
-    override fun handle(reqId: ReqId, evt: ExecutionFailedEvent) {
+    override fun handle(computeId: ComputeId, evt: ExecutionFailedEvent) {
         log.debug("Handle: $evt")
-        orchestrationService.failed(reqId, evt.failedExec)
-        reqCmdService.fail(reqId)
+        orchestrationService.failed(computeId, evt.failedExec)
+        reqCmdService.fail(computeId)
     }
 }

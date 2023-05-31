@@ -3,7 +3,7 @@ package io.hamal.backend.repository.api
 import io.hamal.backend.repository.api.TriggerCmdRepository.Command.FixedRateTriggerToCreate
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
@@ -16,12 +16,12 @@ import kotlin.time.Duration.Companion.days
 interface TriggerCmdRepository {
     fun get(id: TriggerId): Trigger
 
-    fun execute(reqId: ReqId, commands: List<Command>): List<Trigger>
+    fun execute(computeId: ComputeId, commands: List<Command>): List<Trigger>
 
-    fun request(reqId: ReqId, record: Recorder.() -> Unit): List<Trigger> {
+    fun request(computeId: ComputeId, record: Recorder.() -> Unit): List<Trigger> {
         val recorder = Recorder(DomainIdGeneratorAdapter) //FIXME
         record(recorder)
-        return execute(reqId, recorder.commands)
+        return execute(computeId, recorder.commands)
     }
 
     interface Command {

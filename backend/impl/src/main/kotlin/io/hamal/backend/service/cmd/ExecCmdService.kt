@@ -8,7 +8,7 @@ import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -25,22 +25,22 @@ class ExecCmdService
     val generateDomainId: GenerateDomainId
 ) {
 
-    fun plan(reqId: ReqId, toPlan: ToPlan): PlannedExec = planExec(toPlan).also { emitEvent(reqId, it) }
+    fun plan(computeId: ComputeId, toPlan: ToPlan): PlannedExec = planExec(toPlan).also { emitEvent(computeId, it) }
 
-    fun schedule(reqId: ReqId, plannedExec: PlannedExec): ScheduledExec =
-        execCmdRepository.schedule(reqId, plannedExec).also { emitEvent(reqId, it) }
+    fun schedule(computeId: ComputeId, plannedExec: PlannedExec): ScheduledExec =
+        execCmdRepository.schedule(computeId, plannedExec).also { emitEvent(computeId, it) }
 
-    fun enqueue(reqId: ReqId, scheduledExec: ScheduledExec): QueuedExec =
-        execCmdRepository.enqueue(reqId, scheduledExec).also { emitEvent(reqId, it) }
+    fun enqueue(computeId: ComputeId, scheduledExec: ScheduledExec): QueuedExec =
+        execCmdRepository.enqueue(computeId, scheduledExec).also { emitEvent(computeId, it) }
 
-    fun dequeue(reqId: ReqId): List<InFlightExec> =
-        execCmdRepository.dequeue(reqId).also { emitEvents(reqId, it) }
+    fun dequeue(computeId: ComputeId): List<InFlightExec> =
+        execCmdRepository.dequeue(computeId).also { emitEvents(computeId, it) }
 
-    fun complete(reqId: ReqId, inFlightExec: InFlightExec): CompletedExec =
-        execCmdRepository.complete(reqId, inFlightExec).also { emitEvent(reqId, it) }
+    fun complete(computeId: ComputeId, inFlightExec: InFlightExec): CompletedExec =
+        execCmdRepository.complete(computeId, inFlightExec).also { emitEvent(computeId, it) }
 
     data class ToPlan(
-        val reqId: ReqId,
+        val computeId: ComputeId,
         val shard: Shard,
         val correlation: Correlation?,
         val inputs: ExecInputs,
@@ -53,7 +53,7 @@ class ExecCmdService
 
 private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
     return execCmdRepository.plan(
-        toPlan.reqId, ExecToPlan(
+        toPlan.computeId, ExecToPlan(
             id = generateDomainId(toPlan.shard, ::ExecId),
             shard = toPlan.shard,
             correlation = toPlan.correlation,
@@ -65,10 +65,10 @@ private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
     )
 }
 
-private fun ExecCmdService.emitEvent(reqId: ReqId, exec: PlannedExec) {
+private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: PlannedExec) {
     eventEmitter.emit(
-        reqId, ExecPlannedEvent(
-//            reqId = exec.reqId,
+        computeId, ExecPlannedEvent(
+//            computeId = exec.computeId,
             shard = exec.shard,
             plannedExec = exec
         )
@@ -76,10 +76,10 @@ private fun ExecCmdService.emitEvent(reqId: ReqId, exec: PlannedExec) {
 }
 
 
-private fun ExecCmdService.emitEvent(reqId: ReqId, exec: ScheduledExec) {
+private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: ScheduledExec) {
     eventEmitter.emit(
-        reqId, ExecScheduledEvent(
-//            reqId = reqId,
+        computeId, ExecScheduledEvent(
+//            computeId = computeId,
             shard = exec.shard,
             scheduledExec = exec
         )
@@ -87,10 +87,10 @@ private fun ExecCmdService.emitEvent(reqId: ReqId, exec: ScheduledExec) {
 }
 
 
-private fun ExecCmdService.emitEvent(reqId: ReqId, exec: QueuedExec) {
+private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: QueuedExec) {
     eventEmitter.emit(
-        reqId, ExecutionQueuedEvent(
-//            reqId = reqId,
+        computeId, ExecutionQueuedEvent(
+//            computeId = computeId,
             shard = exec.shard,
             queuedExec = exec
         )
@@ -98,11 +98,11 @@ private fun ExecCmdService.emitEvent(reqId: ReqId, exec: QueuedExec) {
 }
 
 
-private fun ExecCmdService.emitEvents(reqId: ReqId, execs: List<InFlightExec>) {
+private fun ExecCmdService.emitEvents(computeId: ComputeId, execs: List<InFlightExec>) {
     execs.forEach {
         eventEmitter.emit(
-            reqId, ExecutionStartedEvent(
-//                reqId = reqId,
+            computeId, ExecutionStartedEvent(
+//                computeId = computeId,
                 shard = it.shard,
                 inFlightExec = it
             )
@@ -111,10 +111,10 @@ private fun ExecCmdService.emitEvents(reqId: ReqId, execs: List<InFlightExec>) {
 }
 
 
-private fun ExecCmdService.emitEvent(reqId: ReqId, exec: CompletedExec) {
+private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: CompletedExec) {
     eventEmitter.emit(
-        reqId, ExecutionCompletedEvent(
-//            reqId = reqId,
+        computeId, ExecutionCompletedEvent(
+//            computeId = computeId,
             shard = exec.shard,
             completedExec = exec
         )

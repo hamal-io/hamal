@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api.domain
 
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.Code
@@ -12,10 +12,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Req {
-    val id: ReqId
+    val id: ComputeId
     val status: ReqStatus
 
-    // parentReqId?
+    // parentComputeId?
     val payload: ReqPayload
     // requested when
     // requested by
@@ -23,8 +23,8 @@ sealed interface Req {
 
 @Serializable
 data class ReceivedReq(
-    override val id: ReqId,
-    // parentReqId?
+    override val id: ComputeId,
+    // parentComputeId?
     override val payload: ReqPayload
 ) : Req {
     override val status = ReqStatus.Received
@@ -33,8 +33,8 @@ data class ReceivedReq(
 
 @Serializable
 data class InFlightReq(
-    override val id: ReqId,
-    // parentReqId?
+    override val id: ComputeId,
+    // parentComputeId?
     override val payload: ReqPayload
 ) : Req {
     override val status = ReqStatus.InFlight
@@ -43,8 +43,8 @@ data class InFlightReq(
 
 @Serializable
 data class CompletedReq(
-    override val id: ReqId,
-    // parentReqId?
+    override val id: ComputeId,
+    // parentComputeId?
     override val payload: ReqPayload
 ) : Req {
     override val status = ReqStatus.Completed
@@ -52,8 +52,8 @@ data class CompletedReq(
 
 @Serializable
 data class FailedReq(
-    override val id: ReqId,
-    // parentReqId?
+    override val id: ComputeId,
+    // parentComputeId?
     override val payload: ReqPayload
 ) : Req {
     override val status = ReqStatus.Failed
