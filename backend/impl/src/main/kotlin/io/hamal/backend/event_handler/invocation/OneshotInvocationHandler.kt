@@ -21,7 +21,7 @@ class OneshotInvocationHandler(
         val func = evt.func
 
         execCmdService.plan(
-            ExecCmdService.ToPlan(
+            reqId, ExecCmdService.ToPlan(
                 reqId = ReqId(123),
                 shard = func.shard,
                 code = func.code,

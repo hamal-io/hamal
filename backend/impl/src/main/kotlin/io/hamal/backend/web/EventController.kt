@@ -3,8 +3,9 @@ package io.hamal.backend.web
 import io.hamal.backend.event.TenantEvent
 import io.hamal.backend.service.cmd.EventCmdService
 import io.hamal.backend.service.query.EventQueryService
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.common.Shard
+import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -68,6 +69,7 @@ open class EventController @Autowired constructor(
     ): ResponseEntity<ApiAppendEventResponse> {
 
         cmdService.append(
+            ReqId(TimeUtils.now().toEpochMilli()), // FIXME
             EventCmdService.EventToAppend(
                 reqId = ReqId(1),
                 shard = Shard(1),

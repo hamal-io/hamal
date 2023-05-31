@@ -4,6 +4,7 @@ import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -67,7 +68,7 @@ class DefaultLogTopicRepositoryTest {
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
-                ).map(testInstance::append)
+                ).mapIndexed { index, value -> testInstance.append(ReqId(index), value) }
 
                 assertThat(result, equalTo(listOf(LogChunkId(1), LogChunkId(2), LogChunkId(3))))
                 assertThat(testInstance.count(), equalTo(3UL))
@@ -133,7 +134,7 @@ class DefaultLogTopicRepositoryTest {
         private fun givenOneHundredChunks() {
             LongRange(1, 100).forEach {
                 withEpochMilli(it) {
-                    testInstance.append("VALUE_$it".toByteArray())
+                    testInstance.append(ReqId(it.toInt()), "VALUE_$it".toByteArray())
                 }
             }
         }

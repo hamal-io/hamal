@@ -1,12 +1,13 @@
 package io.hamal.backend.service
 
-import io.hamal.backend.event.FixedDelayInvocationEvent
 import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.event.FixedDelayInvocationEvent
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.util.TimeUtils.now
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.InvocationSecrets
@@ -47,6 +48,7 @@ class TriggerInvocationService
 
 internal fun TriggerInvocationService.emitInvocation(trigger: Trigger) {
     eventEmitter.emit(
+        ReqId(now().toEpochMilli()),
         FixedDelayInvocationEvent(
 //            reqId = ReqId(123), //FIXME
             shard = trigger.shard,

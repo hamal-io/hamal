@@ -2,6 +2,7 @@ package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.base.DomainId
 import java.time.Instant
@@ -17,12 +18,11 @@ data class LogChunk(
     val topicId: TopicId,
     val bytes: ByteArray,
     val instant: Instant
-) {
-}
+)
 
 
 interface LogChunkAppender {
-    fun append(bytes: ByteArray): LogChunkId
+    fun append(reqId: ReqId, bytes: ByteArray): LogChunkId
 }
 
 interface LogChunkReader {

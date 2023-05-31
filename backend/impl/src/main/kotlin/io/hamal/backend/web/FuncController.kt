@@ -38,8 +38,7 @@ open class FuncController(
     ): Func {
         // FIXME to ApiCreateFuncResponse
         return funcCmdService.create(
-            FuncCmdService.FuncToCreate(
-                reqId = reqId,
+            reqId, FuncCmdService.FuncToCreate(
                 shard = shard,
                 name = req.name,
                 code = req.code
@@ -86,7 +85,7 @@ open class FuncController(
         val func = queryService.get(funcId)
 
         eventEmitter.emit(
-            OneshotInvocationEvent(
+            reqId, OneshotInvocationEvent(
 //                reqId = reqId,
                 shard = shard,
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME

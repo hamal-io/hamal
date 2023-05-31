@@ -25,10 +25,10 @@ class EventCmdService(
         )
     }
 
-    fun append(eventToAppend: EventToAppend) {
+    fun append(reqId: ReqId, eventToAppend: EventToAppend) {
         val topic = logBrokerRepository.get(eventToAppend.topicId)
         appender.append(
-            topic, TenantEvent(
+            reqId, topic, TenantEvent(
 //                reqId = eventToAppend.reqId,
                 shard = eventToAppend.shard,
                 topic = "tenant-topic",

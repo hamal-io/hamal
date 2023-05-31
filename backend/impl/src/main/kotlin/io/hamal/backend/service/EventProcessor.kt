@@ -69,7 +69,7 @@ class DefaultEventProcessor(
                                     CompletableFuture.runAsync {
                                         handlerContainer[evt::class].forEach { handler ->
                                             try {
-                                                handler.handle(ReqId(chunkId.value), evt)
+                                                handler.handle(ReqId(chunkId.value.value), evt)
                                             } catch (t: Throwable) {
                                                 throw Error(t)
                                             }

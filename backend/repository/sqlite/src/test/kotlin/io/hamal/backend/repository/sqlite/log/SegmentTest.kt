@@ -7,6 +7,7 @@ import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -127,8 +128,8 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Bytes, Instant does not have to be unique`() {
             withInstant(Instant.ofEpochMilli(1)) {
-                testInstance.append("SomeBytes".toByteArray())
-                testInstance.append("SomeBytes".toByteArray())
+                testInstance.append(ReqId(1), "SomeBytes".toByteArray())
+                testInstance.append(ReqId(2), "SomeBytes".toByteArray())
             }
 
             assertThat(testInstance.count(), equalTo(2UL))
@@ -148,7 +149,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Append single chunk`() {
             withInstant(Instant.ofEpochMilli(2810)) {
-                val result = testInstance.append("VALUE".toByteArray())
+                val result = testInstance.append(ReqId(1), "VALUE".toByteArray())
                 assertThat(result, equalTo(LogChunkId(1)))
             }
 
@@ -173,7 +174,7 @@ class DefaultLogSegmentRepositoryTest {
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
-                ).map(testInstance::append)
+                ).mapIndexed { index, value -> testInstance.append(ReqId(index), value) }
 
                 assertThat(
                     result, equalTo(
@@ -215,16 +216,16 @@ class DefaultLogSegmentRepositoryTest {
             val result = listOf(
                 "Hamal".toByteArray(),
                 "Rockz".toByteArray(),
-            ).map(testInstance::append)
+            ).mapIndexed { index, value -> testInstance.append(ReqId(index), value) }
 
             assertThat(result, equalTo(listOf(LogChunkId(4), LogChunkId(5))))
             assertThat(testInstance.count(), equalTo(5UL))
         }
 
         private fun givenThreeChunks() {
-            testInstance.append("VALUE_1".toByteArray())
-            testInstance.append("VALUE_2".toByteArray())
-            testInstance.append("VALUE_3".toByteArray())
+            testInstance.append(ReqId(1), "VALUE_1".toByteArray())
+            testInstance.append(ReqId(2), "VALUE_2".toByteArray())
+            testInstance.append(ReqId(3), "VALUE_3".toByteArray())
         }
 
         private val testInstance = DefaultLogSegmentRepository(
@@ -320,7 +321,7 @@ class DefaultLogSegmentRepositoryTest {
         private fun givenOneHundredChunks() {
             IntRange(1, 100).forEach {
                 withEpochMilli(it.toLong()) {
-                    testInstance.append("VALUE_$it".toByteArray())
+                    testInstance.append(ReqId(it), "VALUE_$it".toByteArray())
                 }
             }
         }

@@ -19,6 +19,7 @@ class AdhocInvocationHandler(
         log.debug("Handle: ${evt}")
 
         execCmdService.plan(
+            reqId,
             ExecCmdService.ToPlan(
                 reqId = reqId, // FIXME move that out
                 shard = evt.shard,

@@ -2,6 +2,8 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.lib.common.util.HashUtils.sha256
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -22,7 +24,7 @@ class ConsumerIT {
             DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
-                IntRange(1, 10).forEach { appender.append(topic, "$it") }
+                IntRange(1, 10).forEach { appender.append(ReqId(it), topic, "$it") }
 
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->
@@ -40,7 +42,7 @@ class ConsumerIT {
 
                 assertThat(counter.get(), equalTo(0))
 
-                appender.append(topic, "1337")
+                appender.append(ReqId(1337), topic, "1337")
                 testInstance.consume(10) { _, value ->
                     CompletableFuture.runAsync {
                         assertThat(value, equalTo("1337"))
@@ -58,13 +60,13 @@ class ConsumerIT {
             DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
-                IntRange(1, 10).forEach { appender.append(topic, "$it") }
+                IntRange(1, 10).forEach { appender.append(ReqId(it), topic, "$it") }
             }
 
             DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
-                testInstance.consumeIndexed(10) { index,_, value ->
+                testInstance.consumeIndexed(10) { index, _, value ->
                     CompletableFuture.runAsync {
                         assertThat("${index + 1}", equalTo(value))
                     }
@@ -92,10 +94,10 @@ class ConsumerIT {
                     }
                 }
 
-                IntRange(1, 10).forEach { _ ->
+                IntRange(1, 10).forEach { thread ->
                     CompletableFuture.runAsync {
                         IntRange(1, 100).forEach {
-                            appender.append(topic, "$it")
+                            appender.append(ReqId(sha256("$thread $it")), topic, "$it")
                         }
                     }
                 }

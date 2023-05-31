@@ -1,7 +1,7 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.event.*
 import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.event.*
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.ExecToPlan
 import io.hamal.backend.repository.api.domain.*
@@ -25,7 +25,7 @@ class ExecCmdService
     val generateDomainId: GenerateDomainId
 ) {
 
-    fun plan(toPlan: ToPlan): PlannedExec = planExec(toPlan).also(this::emitEvent)
+    fun plan(reqId: ReqId, toPlan: ToPlan): PlannedExec = planExec(toPlan).also { emitEvent(reqId, it) }
 
     fun schedule(reqId: ReqId, plannedExec: PlannedExec): ScheduledExec =
         execCmdRepository.schedule(reqId, plannedExec).also { emitEvent(reqId, it) }
@@ -65,9 +65,9 @@ private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
     )
 }
 
-private fun ExecCmdService.emitEvent(exec: PlannedExec) {
+private fun ExecCmdService.emitEvent(reqId: ReqId, exec: PlannedExec) {
     eventEmitter.emit(
-        ExecPlannedEvent(
+        reqId, ExecPlannedEvent(
 //            reqId = exec.reqId,
             shard = exec.shard,
             plannedExec = exec
@@ -78,7 +78,7 @@ private fun ExecCmdService.emitEvent(exec: PlannedExec) {
 
 private fun ExecCmdService.emitEvent(reqId: ReqId, exec: ScheduledExec) {
     eventEmitter.emit(
-        ExecScheduledEvent(
+        reqId, ExecScheduledEvent(
 //            reqId = reqId,
             shard = exec.shard,
             scheduledExec = exec
@@ -89,7 +89,7 @@ private fun ExecCmdService.emitEvent(reqId: ReqId, exec: ScheduledExec) {
 
 private fun ExecCmdService.emitEvent(reqId: ReqId, exec: QueuedExec) {
     eventEmitter.emit(
-        ExecutionQueuedEvent(
+        reqId, ExecutionQueuedEvent(
 //            reqId = reqId,
             shard = exec.shard,
             queuedExec = exec
@@ -101,7 +101,7 @@ private fun ExecCmdService.emitEvent(reqId: ReqId, exec: QueuedExec) {
 private fun ExecCmdService.emitEvents(reqId: ReqId, execs: List<InFlightExec>) {
     execs.forEach {
         eventEmitter.emit(
-            ExecutionStartedEvent(
+            reqId, ExecutionStartedEvent(
 //                reqId = reqId,
                 shard = it.shard,
                 inFlightExec = it
@@ -113,7 +113,7 @@ private fun ExecCmdService.emitEvents(reqId: ReqId, execs: List<InFlightExec>) {
 
 private fun ExecCmdService.emitEvent(reqId: ReqId, exec: CompletedExec) {
     eventEmitter.emit(
-        ExecutionCompletedEvent(
+        reqId, ExecutionCompletedEvent(
 //            reqId = reqId,
             shard = exec.shard,
             completedExec = exec
