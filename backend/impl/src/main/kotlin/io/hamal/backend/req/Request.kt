@@ -1,14 +1,16 @@
 package io.hamal.backend.req
 
 import io.hamal.backend.repository.api.ReqCmdRepository
-import io.hamal.backend.repository.api.domain.EventTrigger
-import io.hamal.backend.repository.api.domain.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.Func
-import io.hamal.backend.repository.api.domain.Req
+import io.hamal.backend.repository.api.domain.*
+import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.math.BigInteger
+import java.security.SecureRandom
 
 data class InvokeAdhoc(
     val execId: ExecId,
@@ -17,6 +19,10 @@ data class InvokeAdhoc(
     val code: Code
 )
 
+data class CompleteExec(
+    val execId: ExecId,
+    val statePayload: StatePayload
+)
 
 @Component
 class Request
@@ -25,8 +31,27 @@ class Request
 ) {
 
     operator fun invoke(invokeAdhoc: InvokeAdhoc): Req {
-        TODO()
+        return InvokeAdhocReq(
+            id = ReqId(BigInteger(128, SecureRandom())),
+            status = ReqStatus.Received,
+            execId = invokeAdhoc.execId,
+            shard = Shard(1),
+            inputs = invokeAdhoc.inputs,
+            secrets = invokeAdhoc.secrets,
+            code = invokeAdhoc.code
+        ).also(reqCmdRepository::queue)
     }
+
+    operator fun invoke(completeExec: CompleteExec): Req {
+        return CompleteExecReq(
+            id = ReqId(BigInteger(128, SecureRandom())),
+            status = ReqStatus.Received,
+            execId = completeExec.execId,
+            shard = Shard(1),
+            statePayload = completeExec.statePayload
+        ).also(reqCmdRepository::queue)
+    }
+
 
     fun invokeEvent(
         execId: ExecId,
@@ -60,12 +85,12 @@ class Request
         TODO()
     }
 
-    fun completeExec(
-        execId: ExecId,
-        statePayload: StatePayload
-    ): Req {
-        TODO()
-    }
+//    fun completeExec(
+//        execId: ExecId,
+//        statePayload: StatePayload
+//    ): Req {
+//        TODO()
+//    }
 
 //    fun request(reqPayload: ReqPayload): Req {
 //        return ApiListReqResponse.Req(

@@ -22,7 +22,7 @@ class ReqRegistry : ApplicationListener<ContextRefreshedEvent> {
         reqOnce(reqClass) {
             val result = reqHandler[reqClass]
                 ?: reqClass.java.interfaces.asSequence().firstOrNull { reqHandler[it.kotlin] != null }
-                ?: throw IllegalArgumentException("No operation registered for $reqClass")
+                ?: throw IllegalArgumentException("No req handler registered for $reqClass")
 
             result as ReqHandler<Req>
         } as ReqHandler<REQ>
