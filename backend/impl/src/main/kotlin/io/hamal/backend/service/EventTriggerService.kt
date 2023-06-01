@@ -3,12 +3,11 @@ package io.hamal.backend.service
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.domain.EventTrigger
-import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.repository.api.log.BatchConsumer
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
-import io.hamal.backend.service.cmd.ReqCmdService
+import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.*
@@ -25,7 +24,7 @@ class EventTriggerService
     internal val eventEmitter: EventEmitter,
     internal val funcQueryService: FuncQueryService,
     internal val logBrokerRepository: LogBrokerRepository,
-    internal val reqCmdService: ReqCmdService,
+    internal val request: Request,
     internal val generateDomainId: GenerateDomainId
 ) {
 
@@ -61,16 +60,26 @@ class EventTriggerService
                     topicId = TopicId(10)
                 )
 
-                reqCmdService.request(
-                    ReqPayload.InvokeEvent(
-                        execId = generateDomainId(Shard(1), ::ExecId),
-                        func = funcQueryService.get(trigger.funcId),
-                        correlationId = CorrelationId("__TBD__"), //FIXME
-                        inputs = InvocationInputs(listOf()),
-                        secrets = InvocationSecrets(listOf()),
-                        trigger = trigger,
-//                        events = evts // FIXME pass events
-                    )
+//                reqCmdService.request(
+//                    InvokeEventReq(
+//
+//                        execId = generateDomainId(Shard(1), ::ExecId),
+//                        func = funcQueryService.get(trigger.funcId),
+//                        correlationId = CorrelationId("__TBD__"), //FIXME
+//                        inputs = InvocationInputs(listOf()),
+//                        secrets = InvocationSecrets(listOf()),
+//                        trigger = trigger,
+////                        events = evts // FIXME pass events
+//                    )
+//                )
+
+                request.invokeEvent(
+                    execId = generateDomainId(Shard(1), ::ExecId),
+                    funcId = trigger.funcId,
+                    correlationId = CorrelationId("__TBD__"),
+                    inputs = InvocationInputs(listOf()),
+                    secrets = InvocationSecrets(listOf()),
+                    trigger = trigger,
                 )
             }
         }

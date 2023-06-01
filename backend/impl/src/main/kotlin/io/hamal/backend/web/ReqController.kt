@@ -1,8 +1,8 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.service.query.ReqQueryService
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiAdhocReq
 import io.hamal.lib.sdk.domain.ApiListReqResponse
 import io.hamal.lib.sdk.domain.ApiReq
@@ -50,7 +50,7 @@ class ReqController(
             ApiAdhocReq(
                 id = result.id,
                 status = result.status,
-                execId = (result.payload as ReqPayload.InvokeAdhoc).execId
+                execId = ExecId(0)
             ),
             HttpStatus.OK
         )

@@ -14,16 +14,10 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     val store = mutableMapOf<ReqId, Req>()
     val lock = ReentrantReadWriteLock()
 
-    override fun queue(toQueue: ReqCmdRepository.ToQueue): Req {
+    override fun queue(req: Req) {
         return lock.writeLock().withLock {
-            Req(
-                id = toQueue.id,
-                status = ReqStatus.Received,
-                payload = toQueue.payload
-            ).also { req ->
-                store[req.id] = req
-                queue.add(req.id)
-            }
+            store[req.id] = req
+            queue.add(req.id)
         }
     }
 
@@ -43,22 +37,14 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun complete(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[reqId] = Req(
-                id = req.id,
-                status = ReqStatus.Completed,
-                payload = req.payload
-            )
+            store[reqId]!!.status = ReqStatus.Completed
         }
     }
 
     override fun fail(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[reqId] = Req(
-                id = req.id,
-                status = ReqStatus.Failed,
-                payload = req.payload
-            )
+            store[reqId]!!.status = ReqStatus.Failed
         }
     }
 

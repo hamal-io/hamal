@@ -2,11 +2,10 @@ package io.hamal.backend.web
 
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.domain.Func
-import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.repository.api.domain.Tenant
+import io.hamal.backend.req.Request
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
-import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
@@ -27,7 +26,7 @@ open class FuncController(
     @Autowired val funcCmdService: FuncCmdService,
     @Autowired val execCmdService: ExecCmdService,
     @Autowired val eventEmitter: EventEmitter,
-    @Autowired val reqCmdService: ReqCmdService,
+    @Autowired val request: Request,
     @Autowired val generateDomainId: GenerateDomainId
 ) {
     @PostMapping("/v1/funcs")
@@ -80,14 +79,12 @@ open class FuncController(
         val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
         val func = queryService.get(funcId)
 
-        val result = reqCmdService.request(
-            ReqPayload.InvokeOneshot(
-                execId = generateDomainId(Shard(1), ::ExecId),
-                correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
-                inputs = InvocationInputs(listOf()),
-                secrets = InvocationSecrets(listOf()),
-                func = func
-            )
+        val result = request.invokeOneshot(
+            execId = generateDomainId(Shard(1), ::ExecId),
+            correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
+            inputs = InvocationInputs(listOf()),
+            secrets = InvocationSecrets(listOf()),
+            funcId = funcId
         )
 
         return ResponseEntity.ok(

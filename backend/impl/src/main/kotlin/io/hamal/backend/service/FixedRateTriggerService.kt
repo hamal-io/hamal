@@ -3,9 +3,8 @@ package io.hamal.backend.service
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.repository.api.domain.Trigger
-import io.hamal.backend.service.cmd.ReqCmdService
+import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils.now
@@ -26,7 +25,7 @@ class FixedRateTriggerService
     internal val funcQueryService: FuncQueryService,
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val eventEmitter: EventEmitter,
-    internal val reqCmdService: ReqCmdService,
+    internal val request: Request,
     internal val generateDomainId: GenerateDomainId
 ) {
 
@@ -52,14 +51,12 @@ class FixedRateTriggerService
 }
 
 internal fun FixedRateTriggerService.emitInvocation(trigger: FixedRateTrigger) {
-    reqCmdService.request(
-        ReqPayload.InvokeFixedRate(
-            execId = generateDomainId(Shard(1), ::ExecId),
-            func = funcQueryService.get(trigger.funcId),
-            correlationId = CorrelationId("__TBD__"), //FIXME
-            inputs = InvocationInputs(listOf()),
-            secrets = InvocationSecrets(listOf()),
-            trigger = trigger
-        )
+    request.invokeFixedRate(
+        execId = generateDomainId(Shard(1), ::ExecId),
+        func = funcQueryService.get(trigger.funcId),
+        correlationId = CorrelationId("__TBD__"), //FIXME
+        inputs = InvocationInputs(listOf()),
+        secrets = InvocationSecrets(listOf()),
+        trigger = trigger
     )
 }

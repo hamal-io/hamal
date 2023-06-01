@@ -1,7 +1,7 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.repository.api.domain.ReqPayload.InvokeAdhoc
-import io.hamal.backend.service.cmd.ReqCmdService
+import io.hamal.backend.req.InvokeAdhoc
+import io.hamal.backend.req.Request
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.value.NumberValue
 import io.hamal.lib.domain.value.StringValue
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 open class AdhocController
 @Autowired constructor(
-    val reqCmdService: ReqCmdService,
+    val request: Request,
     val generateDomainId: GenerateDomainId
 ) {
 
@@ -65,7 +65,7 @@ open class AdhocController
 //            )
 //        )
 
-        val result = reqCmdService.request(
+        val result = request(
             InvokeAdhoc(
                 execId = generateDomainId(Shard(1), ::ExecId),
                 inputs = InvocationInputs(
@@ -86,11 +86,12 @@ open class AdhocController
                 code = Code(script)
             )
         )
+
         return ResponseEntity(
             ApiAdhocReq(
                 id = result.id,
                 status = result.status,
-                execId = (result.payload as InvokeAdhoc).execId
+                execId = ExecId(0)
             ),
             HttpStatus.ACCEPTED
         )

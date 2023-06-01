@@ -1,9 +1,8 @@
 package io.hamal.backend.web
 
 import io.hamal.backend.component.EventEmitter
-import io.hamal.backend.repository.api.domain.ReqPayload
+import io.hamal.backend.req.Request
 import io.hamal.backend.service.cmd.ExecCmdService
-import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.StatePayload
@@ -20,7 +19,7 @@ open class ExecController(
     @Autowired val queryService: ExecQueryService,
     @Autowired val cmdService: ExecCmdService,
     @Autowired val eventEmitter: EventEmitter,
-    @Autowired val reqCmdService: ReqCmdService
+    @Autowired val request: Request
 ) {
 
     @GetMapping("/v1/execs/{execId}")
@@ -69,13 +68,11 @@ open class ExecController(
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 
-        reqCmdService.request(
-            ReqPayload.CompleteExec(
-                execId = execId,
-                statePayload = StatePayload(
-                    contentType = contentType,
-                    bytes = bytes
-                )
+        request.completeExec(
+            execId = execId,
+            statePayload = StatePayload(
+                contentType = contentType,
+                bytes = bytes
             )
         )
     }

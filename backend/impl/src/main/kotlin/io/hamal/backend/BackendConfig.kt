@@ -8,7 +8,7 @@ import io.hamal.backend.service.EventServiceFactory
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.FixedRateTriggerService
 import io.hamal.backend.service.cmd.ExecCmdService
-import io.hamal.backend.service.cmd.ReqCmdService
+import io.hamal.backend.req.Request
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -48,7 +48,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         stateCmdService: StateCmdService,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
-        reqCmdService: ReqCmdService,
+        request: Request,
         eventEmitter: EventEmitter
     ) = eventServiceFactory
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
