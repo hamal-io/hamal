@@ -66,7 +66,6 @@ open class ExecController(
         @RequestHeader("Content-Type") contentType: String,
         @RequestBody bytes: ByteArray
     ) {
-
         println("completing exec $stringExecId")
         val execId = ExecId(SnowflakeId(stringExecId.toLong()))
 
@@ -79,18 +78,6 @@ open class ExecController(
                 )
             )
         )
-
-//        eventEmitter.emit(
-//            AgentCompletedEvent(
-//                computeId = ComputeId(123),
-//                shard = Shard(1),
-//                execId = execId,
-//                statePayload = StatePayload(
-//                    contentType = contentType,
-//                    bytes = bytes
-//                )
-//            )
-//        )
     }
 
     @PostMapping("/v1/execs/{execId}/fail")

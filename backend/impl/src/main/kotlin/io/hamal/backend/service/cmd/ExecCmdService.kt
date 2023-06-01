@@ -7,8 +7,8 @@ import io.hamal.backend.repository.api.ExecCmdRepository.ExecToPlan
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -25,7 +25,8 @@ class ExecCmdService
     val generateDomainId: GenerateDomainId
 ) {
 
-    fun plan(computeId: ComputeId, toPlan: ToPlan): PlannedExec = planExec(toPlan).also { emitEvent(computeId, it) }
+    fun plan(computeId: ComputeId, toPlan: ToPlan): PlannedExec =
+        planExec(computeId, toPlan).also { emitEvent(computeId, it) }
 
     fun schedule(computeId: ComputeId, plannedExec: PlannedExec): ScheduledExec =
         execCmdRepository.schedule(computeId, plannedExec).also { emitEvent(computeId, it) }
@@ -40,7 +41,7 @@ class ExecCmdService
         execCmdRepository.complete(computeId, inFlightExec).also { emitEvent(computeId, it) }
 
     data class ToPlan(
-        val computeId: ComputeId,
+        val execId: ExecId,
         val shard: Shard,
         val correlation: Correlation?,
         val inputs: ExecInputs,
@@ -51,10 +52,10 @@ class ExecCmdService
 
 }
 
-private fun ExecCmdService.planExec(toPlan: ToPlan): PlannedExec {
+private fun ExecCmdService.planExec(computeId: ComputeId, toPlan: ToPlan): PlannedExec {
     return execCmdRepository.plan(
-        toPlan.computeId, ExecToPlan(
-            id = generateDomainId(toPlan.shard, ::ExecId),
+        computeId, ExecToPlan(
+            id = toPlan.execId,
             shard = toPlan.shard,
             correlation = toPlan.correlation,
             inputs = toPlan.inputs,

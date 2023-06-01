@@ -1,18 +1,24 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.Req
-import io.hamal.lib.domain.ComputeId
+import io.hamal.backend.repository.api.domain.ReqPayload
+import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.ReqId
 
 interface ReqCmdRepository {
-    fun inFlight(req: Req)
-    fun complete(computeId: ComputeId)
-    fun fail(computeId: ComputeId)
-    data class ToInsert(
-        val computeId: ComputeId
+    fun queue(toQueue: ToQueue): Req
+    fun dequeue(limit: Int): List<Req>
+    fun complete(reqId: ReqId)
+    fun fail(reqId: ReqId)
+
+    data class ToQueue(
+        val id: ReqId,
+        val shard: Shard,
+        val payload: ReqPayload
     )
 }
 
 interface ReqQueryRepository {
-    fun find(computeId: ComputeId): Req?
-    fun list(afterId: ComputeId, limit: Int): List<Req>
+    fun find(reqId: ReqId): Req?
+    fun list(afterId: ReqId, limit: Int): List<Req>
 }

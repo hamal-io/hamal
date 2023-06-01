@@ -4,10 +4,7 @@ import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.InvocationSecrets
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,6 +12,7 @@ import kotlinx.serialization.Serializable
 data class AdhocInvocationEvent(
 //    override val computeId: ComputeId,
     override val shard: Shard,
+    val execId: ExecId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
     val code: Code

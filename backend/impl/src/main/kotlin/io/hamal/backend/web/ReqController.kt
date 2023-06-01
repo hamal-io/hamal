@@ -1,12 +1,9 @@
 package io.hamal.backend.web
 
+import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.service.query.ReqQueryService
-import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ComputeId
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.sdk.domain.ApiAdhocRequest
+import io.hamal.lib.domain.ReqId
+import io.hamal.lib.sdk.domain.ApiAdhocReq
 import io.hamal.lib.sdk.domain.ApiListReqResponse
 import io.hamal.lib.sdk.domain.ApiReq
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,11 +21,11 @@ class ReqController(
 
     @GetMapping("/v1/reqs")
     fun listReqs(
-        @RequestParam(required = false, name = "after_id", defaultValue = "0") stringComputeId: String,
+        @RequestParam(required = false, name = "stringReqId", defaultValue = "0") stringReqId: String,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListReqResponse> {
         val result = queryService.list(
-            afterId = ComputeId(stringComputeId),
+            afterId = ReqId(stringReqId),
             limit = limit
         )
 
@@ -44,16 +41,16 @@ class ReqController(
         )
     }
 
-    @GetMapping("/v1/reqs/{computeId}")
+    @GetMapping("/v1/reqs/{reqId}")
     fun getReq(
-        @PathVariable("computeId") stringComputeId: String,
+        @PathVariable("reqId") stringReqId: String,
     ): ResponseEntity<ApiReq> {
+        val result = queryService.get(ReqId(stringReqId))
         return ResponseEntity(
-            ApiAdhocRequest(
-                id = ComputeId(123),
-                status = ReqStatus.Received,
-                execId = ExecId(SnowflakeId(123L)),
-                execStatus = ExecStatus.InFlight
+            ApiAdhocReq(
+                id = result.id,
+                status = result.status,
+                execId = (result.payload as ReqPayload.InvokeAdhoc).execId
             ),
             HttpStatus.OK
         )
