@@ -6,7 +6,7 @@ import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.service.EventServiceFactory
 import io.hamal.backend.service.OrchestrationService
-import io.hamal.backend.service.TriggerInvocationService
+import io.hamal.backend.service.FixedRateTriggerService
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.cmd.StateCmdService
@@ -46,12 +46,12 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         execCmdService: ExecCmdService,
         execQueryService: ExecQueryService,
         stateCmdService: StateCmdService,
-        triggerInvocationService: TriggerInvocationService,
+        fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
         reqCmdService: ReqCmdService,
         eventEmitter: EventEmitter
     ) = eventServiceFactory
-        .register(TriggerCreatedEvent::class, TriggerCreatedHandler(triggerInvocationService))
+        .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
 
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdService))

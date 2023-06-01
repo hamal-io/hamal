@@ -3,10 +3,7 @@ package io.hamal.backend.repository.api.domain
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.InvocationSecrets
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,6 +22,37 @@ sealed interface ReqPayload {
         val secrets: InvocationSecrets,
         val code: Code
     ) : ReqPayload
+
+
+    @Serializable
+    data class InvokeOneshot(
+        val execId: ExecId,
+        val correlationId: CorrelationId,
+        val inputs: InvocationInputs,
+        val secrets: InvocationSecrets,
+        val func: Func
+    ) : ReqPayload
+
+    @Serializable
+    data class InvokeFixedRate(
+        val execId: ExecId,
+        val correlationId: CorrelationId,
+        val inputs: InvocationInputs,
+        val secrets: InvocationSecrets,
+        val func: Func,
+        val trigger: FixedRateTrigger
+    ) : ReqPayload
+
+    @Serializable
+    data class InvokeEvent(
+        val execId: ExecId,
+        val correlationId: CorrelationId,
+        val inputs: InvocationInputs,
+        val secrets: InvocationSecrets,
+        val func: Func,
+        val trigger: EventTrigger,
+    ) : ReqPayload
+
 
     @Serializable
     data class CompleteExec(

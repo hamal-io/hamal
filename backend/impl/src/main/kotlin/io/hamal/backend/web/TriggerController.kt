@@ -28,14 +28,14 @@ open class TriggerController(
     @PostMapping("/v1/triggers")
     fun createTrigger(
         @RequestAttribute shard: Shard,
-        @RequestAttribute computeId: ComputeId,
         @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateTriggerRequest
     ): ResponseEntity<ApiCreateTriggerResponse> {
 
 
+        //FIXME replace with request
         val result = cmdService.create(
-            computeId, TriggerToCreate(
+            ComputeId(0), TriggerToCreate(
                 shard = shard,
                 name = req.name,
                 funcId = req.funcId,

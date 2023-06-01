@@ -2,16 +2,17 @@ package io.hamal.backend.service
 
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.Event
-import io.hamal.backend.event.EventInvocationEvent
 import io.hamal.backend.repository.api.domain.EventTrigger
+import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.repository.api.log.BatchConsumer
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
+import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.query.FuncQueryService
-import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -23,7 +24,9 @@ class EventTriggerService
 @Autowired constructor(
     internal val eventEmitter: EventEmitter,
     internal val funcQueryService: FuncQueryService,
-    internal val logBrokerRepository: LogBrokerRepository
+    internal val logBrokerRepository: LogBrokerRepository,
+    internal val reqCmdService: ReqCmdService,
+    internal val generateDomainId: GenerateDomainId
 ) {
 
     val consumer: BatchConsumer<Event>
@@ -58,18 +61,16 @@ class EventTriggerService
                     topicId = TopicId(10)
                 )
 
-                eventEmitter.emit(
-                    ComputeId(TimeUtils.now().toEpochMilli()),
-                EventInvocationEvent(
-//                        computeId = ComputeId(123),
-                    shard = trigger.shard,
-                    func = funcQueryService.get(trigger.funcId),
-                    correlationId = CorrelationId("__TBD__"), //FIXME
-                    inputs = InvocationInputs(listOf()),
-                    secrets = InvocationSecrets(listOf()),
-                    trigger = trigger,
-                    events = evts
-                )
+                reqCmdService.request(
+                    ReqPayload.InvokeEvent(
+                        execId = generateDomainId(Shard(1), ::ExecId),
+                        func = funcQueryService.get(trigger.funcId),
+                        correlationId = CorrelationId("__TBD__"), //FIXME
+                        inputs = InvocationInputs(listOf()),
+                        secrets = InvocationSecrets(listOf()),
+                        trigger = trigger,
+//                        events = evts // FIXME pass events
+                    )
                 )
             }
         }

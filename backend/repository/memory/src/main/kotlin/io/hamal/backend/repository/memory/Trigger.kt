@@ -27,7 +27,7 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
     }
 
     override fun execute(computeId: ComputeId, commands: List<Command>): List<Trigger> {
-        check(computeIds.add(computeId)) { "Request $computeId was already executed" }
+        check(computeIds.add(computeId)) { "$computeId already executed" }
         val groupedCommands = commands.groupBy { it.id }
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->

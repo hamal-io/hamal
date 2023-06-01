@@ -1,19 +1,18 @@
 package io.hamal.backend.web
 
 import io.hamal.backend.component.EventEmitter
-import io.hamal.backend.event.OneshotInvocationEvent
 import io.hamal.backend.repository.api.domain.Func
+import io.hamal.backend.repository.api.domain.ReqPayload
 import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
+import io.hamal.backend.service.cmd.ReqCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ComputeId
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.InvocationSecrets
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncResponse
@@ -27,18 +26,20 @@ open class FuncController(
     @Autowired val queryService: FuncQueryService,
     @Autowired val funcCmdService: FuncCmdService,
     @Autowired val execCmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter
+    @Autowired val eventEmitter: EventEmitter,
+    @Autowired val reqCmdService: ReqCmdService,
+    @Autowired val generateDomainId: GenerateDomainId
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
         @RequestAttribute shard: Shard,
-        @RequestAttribute computeId: ComputeId,
         @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
         // FIXME to ApiCreateFuncResponse
+        //FIXME as request
         return funcCmdService.create(
-            computeId, FuncCmdService.FuncToCreate(
+            ComputeId(0), FuncCmdService.FuncToCreate(
                 shard = shard,
                 name = req.name,
                 code = req.code
@@ -70,13 +71,8 @@ open class FuncController(
 
     @PostMapping("/v1/funcs/{funcId}/exec")
     fun execFunc(
-        @RequestAttribute shard: Shard,
-        @RequestAttribute computeId: ComputeId,
         @PathVariable("funcId") stringFuncId: String,
-        @RequestHeader(
-            "X-Correlation-ID",
-            required = false
-        ) correlationIdStr: String? = null,
+        @RequestHeader("X-Correlation-ID", required = false) correlationIdStr: String? = null,
         @RequestBody body: ApiExecFuncRequest
     ): ResponseEntity<ApiExecFuncResponse> { // prob 202
 
@@ -84,10 +80,9 @@ open class FuncController(
         val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
         val func = queryService.get(funcId)
 
-        eventEmitter.emit(
-            computeId, OneshotInvocationEvent(
-//                computeId = computeId,
-                shard = shard,
+        val result = reqCmdService.request(
+            ReqPayload.InvokeOneshot(
+                execId = generateDomainId(Shard(1), ::ExecId),
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
                 inputs = InvocationInputs(listOf()),
                 secrets = InvocationSecrets(listOf()),
@@ -97,7 +92,7 @@ open class FuncController(
 
         return ResponseEntity.ok(
             ApiExecFuncResponse(
-                computeId = computeId
+                computeId = ComputeId(0)
             )
         )
     }

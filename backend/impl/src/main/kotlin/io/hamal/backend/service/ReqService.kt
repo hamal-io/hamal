@@ -2,15 +2,17 @@ package io.hamal.backend.service
 
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.domain.AdhocInvocation
+import io.hamal.backend.repository.api.domain.EventInvocation
 import io.hamal.backend.repository.api.domain.InFlightExec
-import io.hamal.backend.repository.api.domain.ReqPayload.CompleteExec
-import io.hamal.backend.repository.api.domain.ReqPayload.InvokeAdhoc
+import io.hamal.backend.repository.api.domain.OneshotInvocation
+import io.hamal.backend.repository.api.domain.ReqPayload.*
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
@@ -39,6 +41,9 @@ class ReqService
 
                     when (val payload = req.payload) {
                         is InvokeAdhoc -> handle(computeId, shard, payload)
+                        is InvokeOneshot -> handle(computeId, shard, payload)
+                        is InvokeFixedRate -> handle(computeId, shard, payload)
+                        is InvokeEvent -> handle(computeId, shard, payload)
                         is CompleteExec -> handle(computeId, shard, payload)
                         else -> TODO()
                     }
@@ -67,8 +72,72 @@ internal fun ReqService.handle(computeId: ComputeId, shard: Shard, toInvoke: Inv
             invocation = AdhocInvocation()
         )
     )
+}
+
+internal fun ReqService.handle(computeId: ComputeId, shard: Shard, toInvoke: InvokeOneshot) {
+    val func = toInvoke.func
+
+    execCmdService.plan(
+        computeId, ToPlan(
+            execId = toInvoke.execId,
+            shard = shard,
+            code = func.code,
+            correlation = Correlation(
+                correlationId = toInvoke.correlationId,
+                funcId = func.id
+            ),
+            inputs = toInvoke.inputs.toExecInputs(),
+            secrets = toInvoke.secrets.toExecSecrets(),
+            // FIXME func for audit purpose ?
+            invocation = OneshotInvocation()
+        )
+    )
 
 }
+
+internal fun ReqService.handle(computeId: ComputeId, shard: Shard, toInvoke: InvokeFixedRate) {
+    val func = toInvoke.func
+
+    execCmdService.plan(
+        computeId, ToPlan(
+            execId = toInvoke.execId,
+            shard = shard,
+            code = func.code,
+            correlation = Correlation(
+                correlationId = toInvoke.correlationId,
+                funcId = func.id
+            ),
+            inputs = toInvoke.inputs.toExecInputs(),
+            secrets = toInvoke.secrets.toExecSecrets(),
+            // FIXME func for audit purpose ?
+            invocation = OneshotInvocation()
+        )
+    )
+
+}
+
+internal fun ReqService.handle(computeId: ComputeId, shard: Shard, toInvoke: InvokeEvent) {
+    val func = toInvoke.func
+
+    execCmdService.plan(
+        computeId, ToPlan(
+            execId = toInvoke.execId,
+            shard = shard,
+            code = func.code,
+            correlation = Correlation(
+                correlationId = toInvoke.correlationId,
+                funcId = func.id
+            ),
+            inputs = toInvoke.inputs.toExecInputs(),
+            secrets = toInvoke.secrets.toExecSecrets(),
+            //FIXME events maybe as input
+            // FIXME func for audit purpose ?
+            invocation = EventInvocation()
+        )
+    )
+
+}
+
 
 internal fun ReqService.handle(computeId: ComputeId, shard: Shard, toComplete: CompleteExec) {
     execQueryService.find(toComplete.execId)
