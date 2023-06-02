@@ -7,6 +7,7 @@ import io.hamal.backend.repository.api.log.BatchConsumer
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
+import io.hamal.backend.req.InvokeEvent
 import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
@@ -45,7 +46,6 @@ class EventTriggerService
 
     @Scheduled(fixedRate = 3, timeUnit = TimeUnit.SECONDS)
     fun run() {
-
         val funcs = funcQueryService.list(FuncId(0), 1)
         if (funcs.isEmpty()) {
             return
@@ -60,26 +60,14 @@ class EventTriggerService
                     topicId = TopicId(10)
                 )
 
-//                reqCmdService.request(
-//                    InvokeEventReq(
-//
-//                        execId = generateDomainId(Shard(1), ::ExecId),
-//                        func = funcQueryService.get(trigger.funcId),
-//                        correlationId = CorrelationId("__TBD__"), //FIXME
-//                        inputs = InvocationInputs(listOf()),
-//                        secrets = InvocationSecrets(listOf()),
-//                        trigger = trigger,
-////                        events = evts // FIXME pass events
-//                    )
-//                )
-
-                request.invokeEvent(
-                    execId = generateDomainId(Shard(1), ::ExecId),
-                    funcId = trigger.funcId,
-                    correlationId = CorrelationId("__TBD__"),
-                    inputs = InvocationInputs(listOf()),
-                    secrets = InvocationSecrets(listOf()),
-                    trigger = trigger,
+                request(
+                    InvokeEvent(
+                        execId = generateDomainId(Shard(1), ::ExecId),
+                        funcId = funcs.first().id,
+                        correlationId = CorrelationId("__TBD__"),
+                        inputs = InvocationInputs(listOf()),
+                        secrets = InvocationSecrets(listOf()),
+                    )
                 )
             }
         }

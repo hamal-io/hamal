@@ -35,6 +35,14 @@ data class InvokeFixedRate(
     val secrets: InvocationSecrets
 )
 
+data class InvokeEvent(
+    val execId: ExecId,
+    val funcId: FuncId,
+    val correlationId: CorrelationId,
+    val inputs: InvocationInputs,
+    val secrets: InvocationSecrets
+)
+
 data class CompleteExec(
     val execId: ExecId,
     val statePayload: StatePayload
@@ -69,7 +77,7 @@ class Request(
     }
 
     operator fun invoke(fixedRate: InvokeFixedRate): Req {
-        return InvokeOneshotReq(
+        return InvokeFixedRateReq(
             id = reqId(),
             status = ReqStatus.Received,
             execId = generateDomainId(Shard(1), ::ExecId),
@@ -80,35 +88,30 @@ class Request(
         ).also(reqCmdRepository::queue)
     }
 
+    operator fun invoke(evt: InvokeEvent): Req {
+        return InvokeEventReq(
+            id = reqId(),
+            status = ReqStatus.Received,
+            execId = generateDomainId(Shard(1), ::ExecId),
+            funcId = evt.funcId,
+            correlationId = evt.correlationId,
+            inputs = evt.inputs,
+            secrets = evt.secrets,
+        ).also(reqCmdRepository::queue)
+    }
+
+
     operator fun invoke(complete: CompleteExec): Req {
         return CompleteExecReq(
             id = reqId(),
             status = ReqStatus.Received,
             execId = complete.execId,
-            shard = Shard(1),
             statePayload = complete.statePayload
         ).also(reqCmdRepository::queue)
     }
 
 
     private fun reqId() = ReqId(BigInteger(128, SecureRandom()))
-
-    fun invokeEvent(
-        execId: ExecId,
-        correlationId: CorrelationId,
-        inputs: InvocationInputs,
-        secrets: InvocationSecrets,
-        funcId: FuncId,
-        trigger: EventTrigger
-    ): Req {
-        TODO()
-    }
-
-    fun invokeOneshot(
-
-    ): Req {
-        TODO()
-    }
 
 }
 

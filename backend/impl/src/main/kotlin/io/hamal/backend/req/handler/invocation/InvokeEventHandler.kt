@@ -1,7 +1,7 @@
 package io.hamal.backend.req.handler.invocation
 
-import io.hamal.backend.repository.api.domain.FixedRateInvocation
-import io.hamal.backend.repository.api.domain.InvokeFixedRateReq
+import io.hamal.backend.repository.api.domain.EventInvocation
+import io.hamal.backend.repository.api.domain.InvokeEventReq
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.computeId
 import io.hamal.backend.req.handler.toExecInputs
@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class InvokeFixedRateHandler(
+class InvokeEventHandler(
     @Autowired private val execCmdService: ExecCmdService,
     @Autowired private val funcQueryService: FuncQueryService
-) : ReqHandler<InvokeFixedRateReq>(InvokeFixedRateReq::class) {
-    override fun invoke(req: InvokeFixedRateReq) {
+) : ReqHandler<InvokeEventReq>(InvokeEventReq::class) {
+    override fun invoke(req: InvokeEventReq) {
         val func = funcQueryService.get(req.funcId)
         execCmdService.plan(
             req.computeId(), ToPlan(
@@ -32,7 +32,7 @@ class InvokeFixedRateHandler(
                 inputs = req.inputs.toExecInputs(),
                 secrets = req.secrets.toExecSecrets(),
                 // FIXME func for audit purpose ?
-                invocation = FixedRateInvocation()
+                invocation = EventInvocation()
             )
         )
     }

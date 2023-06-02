@@ -42,37 +42,39 @@ data class InvokeOneshotReq(
 @Serializable
 data class InvokeFixedRateReq(
     override val id: ReqId,
-    override val shard: Shard,
     override var status: ReqStatus,
     val execId: ExecId,
+    val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
-    val func: Func,
-    val trigger: FixedRateTrigger
-) : Req
+) : Req {
+    override val shard = execId.shard()
+}
 
 @Serializable
 data class InvokeEventReq(
     override val id: ReqId,
-    override val shard: Shard,
     override var status: ReqStatus,
     val execId: ExecId,
+    val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
-    val func: Func,
-    val trigger: EventTrigger,
-) : Req
+) : Req {
+    override val shard = execId.shard()
+}
 
 
 @Serializable
 data class CompleteExecReq(
     override val id: ReqId,
-    override val shard: Shard,
     override var status: ReqStatus,
     val execId: ExecId,
     val statePayload: StatePayload
-) : Req
+) : Req {
+    override val shard = execId.shard()
+}
+
 
 
