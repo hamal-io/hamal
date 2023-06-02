@@ -35,35 +35,8 @@ tasks.named("check") {
     dependsOn(testing.suites.named("integrationTest"))
 }
 
-
-val testIntegration by sourceSets.creating
-configurations[testIntegration.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
-configurations[testIntegration.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
-
 tasks.test {
     useJUnitPlatform()
-}
-
-val testIntegrationTask = tasks.register<Test>("testIntegration") {
-    description = "Runs integration tests."
-    group = "verification"
-
-    testClassesDirs = testIntegration.output.classesDirs
-    classpath = configurations[testIntegration.runtimeClasspathConfigurationName] + testIntegration.output
-
-    shouldRunAfter(tasks.test)
-
-    useJUnitPlatform()
-}
-
-tasks.check {
-    dependsOn(testIntegrationTask)
-}
-
-tasks.register<JacocoReport>("testIntegrationCodeCoverageReport") {
-    executionData(layout.buildDirectory.file("jacoco/testIntegration.exec").get().asFile)
-    sourceSets(testIntegration)
-    sourceSets(sourceSets.main.get())
 }
 
 tasks.jacocoTestReport {

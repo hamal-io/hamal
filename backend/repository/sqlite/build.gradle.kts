@@ -16,3 +16,19 @@ dependencies {
     testImplementation(external.hamcrest)
 }
 
+
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(external.sqlite)
+
+                    implementation(project(":backend:repository:sqlite"))
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                }
+            }
+        }
+    }
+}

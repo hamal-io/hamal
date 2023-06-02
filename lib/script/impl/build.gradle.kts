@@ -16,3 +16,22 @@ dependencies {
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
+
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(project(":lib:domain"))
+                    implementation(project(":lib:script:api"))
+                    implementation(external.spring.logging)
+
+                    implementation(project(":lib:script:api"))
+                    implementation(project(":lib:script:impl"))
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                }
+            }
+        }
+    }
+}

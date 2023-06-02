@@ -56,5 +56,5 @@ class SandboxIT {
     )
 
 
-    private val testPath = Paths.get("src", "testIntegration", "resources")
+    private val testPath = Paths.get("src", "integrationTest", "resources")
 }
