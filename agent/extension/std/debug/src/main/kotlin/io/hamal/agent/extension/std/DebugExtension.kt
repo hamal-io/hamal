@@ -10,14 +10,14 @@ class DebugExtension : Extension {
         return DepEnvironmentValue(
             identifier = DepIdentifier("debug"),
             values = mapOf(
-                DepIdentifier("sleep") to ExecFunc(),
+                DepIdentifier("sleep") to Sleep(),
             )
         )
     }
 
 }
 
-class ExecFunc : DepFunctionValue {
+class Sleep : DepFunctionValue {
     override val identifier = DepIdentifier("sleep")
     override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 

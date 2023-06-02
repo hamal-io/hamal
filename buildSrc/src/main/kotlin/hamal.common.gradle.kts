@@ -27,7 +27,6 @@ val testIntegrationTask = tasks.register<Test>("testIntegration") {
 
 tasks.check {
     dependsOn(testIntegrationTask)
-    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport {
@@ -35,4 +34,5 @@ tasks.jacocoTestReport {
         xml.required.set(true)
         csv.required.set(false)
     }
+
 }

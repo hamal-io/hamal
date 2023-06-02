@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":frontend"))
     implementation(project(":agent:impl"))
 
+    testImplementation(project(":lib:sdk"))
     testImplementation(project(":bootstrap"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
