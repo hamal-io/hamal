@@ -1,4 +1,3 @@
-
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -31,7 +30,7 @@ tasks.named<BootJar>("bootJar") {
     launchScript()
 }
 
-
+@Suppress("UnstableApiUsage")
 testing {
     suites {
         configureEach {

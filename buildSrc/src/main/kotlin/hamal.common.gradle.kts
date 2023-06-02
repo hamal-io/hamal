@@ -11,9 +11,13 @@ testing {
     suites {
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter()
+            testType.set(TestSuiteType.UNIT_TEST)
         }
 
         val integrationTest by registering(JvmTestSuite::class) {
+            useJUnitJupiter()
+            testType.set(TestSuiteType.INTEGRATION_TEST)
+
             sources {
                 kotlin {
                     setSrcDirs(listOf("src/integrationTest/kotlin"))
