@@ -1,6 +1,8 @@
 plugins {
     `java-library`
     id("org.jetbrains.kotlin.jvm")
+    id("jacoco")
+    id("jacoco-report-aggregation")
 }
 
 val testIntegration by sourceSets.creating
@@ -25,4 +27,12 @@ val testIntegrationTask = tasks.register<Test>("testIntegration") {
 
 tasks.check {
     dependsOn(testIntegrationTask)
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+    }
 }

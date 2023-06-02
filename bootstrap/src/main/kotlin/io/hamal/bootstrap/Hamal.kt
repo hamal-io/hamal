@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
     if (isEnable(ctx, "backend")) {
         applicationBuilder
             .parent(parent)
-            .child(io.hamal.backend.BackendConfig::class.java)
+            .child(BackendConfig::class.java)
             .web(WebApplicationType.SERVLET)
             .properties("server.port=8084")
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
