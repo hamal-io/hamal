@@ -5,7 +5,7 @@ import io.hamal.lib.domain.ReqId
 
 interface ReqCmdRepository {
     fun queue(req: Req)
-    fun dequeue(limit: Int): List<Req>
+    fun next(limit: Int): List<Req>
     fun complete(reqId: ReqId)
     fun fail(reqId: ReqId)
 }

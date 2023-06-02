@@ -13,7 +13,7 @@ class ReqInvoker private constructor(
 
     @Scheduled(fixedRate = 10, initialDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
-        reqCmdRepository.dequeue(1)
+        reqCmdRepository.next(1)
             .forEach { req ->
                 try {
                     regRegistry[req::class](req)

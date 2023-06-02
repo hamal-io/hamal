@@ -17,25 +17,27 @@ sealed interface Req {
 @Serializable
 data class InvokeAdhocReq(
     override val id: ReqId,
-    override val shard: Shard,
     override var status: ReqStatus,
     val execId: ExecId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
     val code: Code
-) : Req
+) : Req {
+    override val shard = execId.shard()
+}
 
 @Serializable
 data class InvokeOneshotReq(
     override val id: ReqId,
-    override val shard: Shard,
     override var status: ReqStatus,
     val execId: ExecId,
+    val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
-    val func: Func
-) : Req
+) : Req {
+    override val shard = execId.shard()
+}
 
 @Serializable
 data class InvokeFixedRateReq(

@@ -3,6 +3,7 @@ package io.hamal.backend.web
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Tenant
+import io.hamal.backend.req.InvokeOneshot
 import io.hamal.backend.req.Request
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
@@ -77,14 +78,15 @@ open class FuncController(
 
         //FIXME should be  a service
         val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
-        val func = queryService.get(funcId)
 
-        val result = request.invokeOneshot(
-            execId = generateDomainId(Shard(1), ::ExecId),
-            correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
-            inputs = InvocationInputs(listOf()),
-            secrets = InvocationSecrets(listOf()),
-            funcId = funcId
+        val result = request(
+            InvokeOneshot(
+                execId = generateDomainId(Shard(1), ::ExecId),
+                correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
+                inputs = InvocationInputs(listOf()),
+                secrets = InvocationSecrets(listOf()),
+                funcId = funcId
+            )
         )
 
         return ResponseEntity.ok(

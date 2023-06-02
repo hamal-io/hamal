@@ -7,16 +7,24 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.BigInteger
 import java.security.SecureRandom
 
 data class InvokeAdhoc(
-    val execId: ExecId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
     val code: Code
+)
+
+data class InvokeOneshot(
+    val execId: ExecId,
+    val correlationId: CorrelationId,
+    val inputs: InvocationInputs,
+    val secrets: InvocationSecrets,
+    val funcId: FuncId
 )
 
 data class CompleteExec(
@@ -25,33 +33,44 @@ data class CompleteExec(
 )
 
 @Component
-class Request
-@Autowired constructor(
-    val reqCmdRepository: ReqCmdRepository
+class Request(
+    @Autowired private val reqCmdRepository: ReqCmdRepository,
+    @Autowired private val generateDomainId: GenerateDomainId
 ) {
-
-    operator fun invoke(invokeAdhoc: InvokeAdhoc): Req {
+    operator fun invoke(adhoc: InvokeAdhoc): Req {
         return InvokeAdhocReq(
-            id = ReqId(BigInteger(128, SecureRandom())),
+            id = reqId(),
             status = ReqStatus.Received,
-            execId = invokeAdhoc.execId,
-            shard = Shard(1),
-            inputs = invokeAdhoc.inputs,
-            secrets = invokeAdhoc.secrets,
-            code = invokeAdhoc.code
+            execId = generateDomainId(Shard(1), ::ExecId),
+            inputs = adhoc.inputs,
+            secrets = adhoc.secrets,
+            code = adhoc.code
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(completeExec: CompleteExec): Req {
+    operator fun invoke(oneshot: InvokeOneshot): Req {
+        return InvokeOneshotReq(
+            id = reqId(),
+            status = ReqStatus.Received,
+            execId = generateDomainId(Shard(1), ::ExecId),
+            funcId = oneshot.funcId,
+            correlationId = oneshot.correlationId,
+            inputs = oneshot.inputs,
+            secrets = oneshot.secrets,
+        ).also(reqCmdRepository::queue)
+    }
+
+    operator fun invoke(complete: CompleteExec): Req {
         return CompleteExecReq(
-            id = ReqId(BigInteger(128, SecureRandom())),
+            id = reqId(),
             status = ReqStatus.Received,
-            execId = completeExec.execId,
+            execId = complete.execId,
             shard = Shard(1),
-            statePayload = completeExec.statePayload
+            statePayload = complete.statePayload
         ).also(reqCmdRepository::queue)
     }
 
+    private fun reqId() = ReqId(BigInteger(128, SecureRandom()))
 
     fun invokeEvent(
         execId: ExecId,
@@ -65,11 +84,7 @@ class Request
     }
 
     fun invokeOneshot(
-        execId: ExecId,
-        correlationId: CorrelationId,
-        inputs: InvocationInputs,
-        secrets: InvocationSecrets,
-        funcId: FuncId
+
     ): Req {
         TODO()
     }
@@ -84,23 +99,6 @@ class Request
     ): Req {
         TODO()
     }
-
-//    fun completeExec(
-//        execId: ExecId,
-//        statePayload: StatePayload
-//    ): Req {
-//        TODO()
-//    }
-
-//    fun request(reqPayload: ReqPayload): Req {
-//        return ApiListReqResponse.Req(
-//            id = ReqId(BigInteger(128, SecureRandom())),
-//            status = ReqStatus.Received,
-//            payload = reqPayload
-//        ).also(reqCmdRepository::queue)
-//    }
-//
-
 }
 
 

@@ -21,7 +21,7 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
         }
     }
 
-    override fun dequeue(limit: Int): List<Req> {
+    override fun next(limit: Int): List<Req> {
         return lock.writeLock().withLock {
             val result = mutableListOf<Req>()
 

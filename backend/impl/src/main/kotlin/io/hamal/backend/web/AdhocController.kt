@@ -2,7 +2,6 @@ package io.hamal.backend.web
 
 import io.hamal.backend.req.InvokeAdhoc
 import io.hamal.backend.req.Request
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.value.NumberValue
 import io.hamal.lib.domain.value.StringValue
 import io.hamal.lib.domain.value.to
@@ -14,7 +13,6 @@ import io.hamal.lib.domain.vo.base.Secret
 import io.hamal.lib.domain.vo.base.SecretKey
 import io.hamal.lib.domain.vo.base.SecretStore
 import io.hamal.lib.domain.vo.base.SecretStoreIdentifier
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.sdk.domain.ApiAdhocReq
 import io.hamal.lib.sdk.domain.ApiReq
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,8 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 open class AdhocController
 @Autowired constructor(
-    val request: Request,
-    val generateDomainId: GenerateDomainId
+    val request: Request
 ) {
 
     @PostMapping("/v1/adhoc")
@@ -67,7 +64,6 @@ open class AdhocController
 
         val result = request(
             InvokeAdhoc(
-                execId = generateDomainId(Shard(1), ::ExecId),
                 inputs = InvocationInputs(
                     listOf(
                         StringValue("Hello") to StringValue("World"),
