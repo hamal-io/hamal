@@ -13,16 +13,13 @@ import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ExecCmdService
-@Autowired constructor(
-    val execCmdRepository: ExecCmdRepository,
-    val eventEmitter: EventEmitter,
-    val generateDomainId: GenerateDomainId
+class ExecCmdService(
+    @Autowired val execCmdRepository: ExecCmdRepository,
+    @Autowired val eventEmitter: EventEmitter
 ) {
 
     fun plan(computeId: ComputeId, toPlan: ToPlan): PlannedExec =
@@ -69,7 +66,6 @@ private fun ExecCmdService.planExec(computeId: ComputeId, toPlan: ToPlan): Plann
 private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: PlannedExec) {
     eventEmitter.emit(
         computeId, ExecPlannedEvent(
-//            computeId = exec.computeId,
             shard = exec.shard,
             plannedExec = exec
         )
@@ -80,7 +76,6 @@ private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: PlannedExec) {
 private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: ScheduledExec) {
     eventEmitter.emit(
         computeId, ExecScheduledEvent(
-//            computeId = computeId,
             shard = exec.shard,
             scheduledExec = exec
         )
@@ -91,19 +86,16 @@ private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: ScheduledExec) 
 private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: QueuedExec) {
     eventEmitter.emit(
         computeId, ExecutionQueuedEvent(
-//            computeId = computeId,
             shard = exec.shard,
             queuedExec = exec
         )
     )
 }
 
-
 private fun ExecCmdService.emitEvents(computeId: ComputeId, execs: List<InFlightExec>) {
     execs.forEach {
         eventEmitter.emit(
             computeId, ExecutionStartedEvent(
-//                computeId = computeId,
                 shard = it.shard,
                 inFlightExec = it
             )
@@ -115,7 +107,6 @@ private fun ExecCmdService.emitEvents(computeId: ComputeId, execs: List<InFlight
 private fun ExecCmdService.emitEvent(computeId: ComputeId, exec: CompletedExec) {
     eventEmitter.emit(
         computeId, ExecutionCompletedEvent(
-//            computeId = computeId,
             shard = exec.shard,
             completedExec = exec
         )

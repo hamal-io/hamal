@@ -33,35 +33,6 @@ open class AdhocController
         @RequestBody script: String
     ): ResponseEntity<ApiReq> {
 
-        // reqCmdService - request
-        // implementation
-        // stores
-
-//        reqCmdService.request()
-//
-//        eventEmitter.emit(
-//            ComputeId(TimeUtils.now().toEpochMilli()), AdhocInvocationEvent(
-////            computeId = computeId,
-//                shard = Shard(1),
-//                inputs = InvocationInputs(
-//                    listOf(
-//                        StringValue("Hello") to StringValue("World"),
-//                        StringValue("Number") to NumberValue(42),
-//                    )
-//                ),
-//                secrets = InvocationSecrets(
-//                    listOf(
-//                        Secret(
-//                            SecretKey("Key"),
-//                            SecretStore("store"),
-//                            SecretStoreIdentifier("identifier")
-//                        )
-//                    )
-//                ),
-//                code = Code(script)
-//            )
-//        )
-
         val result = request(
             InvokeAdhoc(
                 inputs = InvocationInputs(
