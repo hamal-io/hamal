@@ -21,10 +21,18 @@ data class InvokeAdhoc(
 
 data class InvokeOneshot(
     val execId: ExecId,
+    val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets,
-    val funcId: FuncId
+    val secrets: InvocationSecrets
+)
+
+data class InvokeFixedRate(
+    val execId: ExecId,
+    val funcId: FuncId,
+    val correlationId: CorrelationId,
+    val inputs: InvocationInputs,
+    val secrets: InvocationSecrets
 )
 
 data class CompleteExec(
@@ -60,6 +68,18 @@ class Request(
         ).also(reqCmdRepository::queue)
     }
 
+    operator fun invoke(fixedRate: InvokeFixedRate): Req {
+        return InvokeOneshotReq(
+            id = reqId(),
+            status = ReqStatus.Received,
+            execId = generateDomainId(Shard(1), ::ExecId),
+            funcId = fixedRate.funcId,
+            correlationId = fixedRate.correlationId,
+            inputs = fixedRate.inputs,
+            secrets = fixedRate.secrets,
+        ).also(reqCmdRepository::queue)
+    }
+
     operator fun invoke(complete: CompleteExec): Req {
         return CompleteExecReq(
             id = reqId(),
@@ -69,6 +89,7 @@ class Request(
             statePayload = complete.statePayload
         ).also(reqCmdRepository::queue)
     }
+
 
     private fun reqId() = ReqId(BigInteger(128, SecureRandom()))
 
@@ -89,16 +110,6 @@ class Request(
         TODO()
     }
 
-    fun invokeFixedRate(
-        execId: ExecId,
-        correlationId: CorrelationId,
-        inputs: InvocationInputs,
-        secrets: InvocationSecrets,
-        func: Func,
-        trigger: FixedRateTrigger
-    ): Req {
-        TODO()
-    }
 }
 
 

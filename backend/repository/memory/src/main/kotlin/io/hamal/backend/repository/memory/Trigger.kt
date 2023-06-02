@@ -32,7 +32,7 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->
                 when (cmd) {
-                    is FixedRateTriggerToCreate -> createFixedDelayTrigger(cmd)
+                    is FixedRateTriggerToCreate -> createFixedRateTrigger(cmd)
                     else -> TODO("$cmd not supported")
                 }
             }
@@ -69,7 +69,7 @@ object MemoryTriggerRepository : TriggerCmdRepository, TriggerQueryRepository {
 }
 
 
-internal fun MemoryTriggerRepository.createFixedDelayTrigger(toCreate: FixedRateTriggerToCreate) {
+internal fun MemoryTriggerRepository.createFixedRateTrigger(toCreate: FixedRateTriggerToCreate) {
     triggers[toCreate.id] = TriggerEntity(
         id = toCreate.id,
         name = toCreate.name,

@@ -4,6 +4,7 @@ import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
+import io.hamal.backend.req.InvokeFixedRate
 import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
@@ -31,7 +32,6 @@ class FixedRateTriggerService
 
     private val plannedInvocations = mutableMapOf<Trigger, Instant>()
 
-
     fun triggerAdded(fixedRateTrigger: FixedRateTrigger) {
         plannedInvocations.putIfAbsent(
             fixedRateTrigger,
@@ -45,18 +45,19 @@ class FixedRateTriggerService
         plannedInvocations.filter { now().isAfter(it.value) }.forEach { (trigger, _) ->
             require(trigger is FixedRateTrigger)
             plannedInvocations[trigger] = now().plusSeconds(trigger.duration.inWholeSeconds)
-            emitInvocation(trigger)
+            requestInvocation(trigger)
         }
     }
 }
 
-internal fun FixedRateTriggerService.emitInvocation(trigger: FixedRateTrigger) {
-    request.invokeFixedRate(
-        execId = generateDomainId(Shard(1), ::ExecId),
-        func = funcQueryService.get(trigger.funcId),
-        correlationId = CorrelationId("__TBD__"), //FIXME
-        inputs = InvocationInputs(listOf()),
-        secrets = InvocationSecrets(listOf()),
-        trigger = trigger
+internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
+    request(
+        InvokeFixedRate(
+            execId = generateDomainId(Shard(1), ::ExecId),
+            funcId = trigger.funcId,
+            correlationId = CorrelationId("__TBD__"), //FIXME
+            inputs = InvocationInputs(listOf()),
+            secrets = InvocationSecrets(listOf()),
+        )
     )
 }

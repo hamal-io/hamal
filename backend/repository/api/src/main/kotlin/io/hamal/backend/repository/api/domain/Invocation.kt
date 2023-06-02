@@ -24,7 +24,7 @@ data class OneshotInvocation(
 ) : Invocation()
 
 @Serializable
-data class FixedDelayInvocation(
+data class FixedRateInvocation(
     override val invokedAt: InvokedAt = InvokedAt.now(),//FIXME
     override val invokedBy: Requester<TenantId> = Requester.tenant(TenantId(0)), //FIXME
 ) : Invocation()
