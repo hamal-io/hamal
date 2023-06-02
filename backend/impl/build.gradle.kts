@@ -1,8 +1,12 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
+group = "backend"
+archivesName.set("backend-impl")
 
 dependencies {
     implementation(project(":lib:sdk"))

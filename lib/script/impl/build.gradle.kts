@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 plugins {
     id("hamal.common")
 }
+group = "script"
 archivesName.set("script-impl")
 
 dependencies {

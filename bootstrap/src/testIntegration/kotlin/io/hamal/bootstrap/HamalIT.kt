@@ -1,12 +1,13 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.AgentConfig
+import io.hamal.agent.service.SomeClass
 import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.*
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -30,6 +31,8 @@ class HamalIT(
     @Test
     fun run() {
         println("RUNS ON: $localPort")
+
+        SomeClass().call()
 
         repeat(10) {
             HttpTemplate("http://localhost:8084")

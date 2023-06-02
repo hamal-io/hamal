@@ -1,3 +1,4 @@
+
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -36,3 +37,53 @@ dependencies {
 tasks.named<BootJar>("bootJar") {
     launchScript()
 }
+
+
+//testing {
+//    suites {
+//        val test by getting(JvmTestSuite::class) {
+//            useJUnitJupiter()
+//        }
+//
+//        val integrationTestMemory by registering(JvmTestSuite::class) {
+//            sources {
+//                kotlin {
+//                    setSrcDirs(listOf("src/integrationTestMemory/kotlin"))
+//                }
+//            }
+//
+//            targets {
+//                all {
+//                    testTask.configure {
+//                        shouldRunAfter(test)
+//                    }
+//                }
+//            }
+//        }
+//
+//        val integrationTestSqlite by registering(JvmTestSuite::class) {
+//            sources {
+//                kotlin {
+//                    setSrcDirs(listOf("src/integrationTestSqlite/kotlin"))
+//                }
+//            }
+//
+//            targets {
+//                all {
+//                    testTask.configure {
+//                        shouldRunAfter(test)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
+//reporting {
+//    reports {
+//        val testCodeCoverageReport by creating(JacocoCoverageReport::class) {
+//            testType.set(TestSuiteType.UNIT_TEST)
+//        }
+//    }
+//}
+

@@ -1,7 +1,12 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
+
+group = "agent"
+archivesName.set("agent-impl")
 
 dependencies {
     implementation(project(":lib:sdk"))
