@@ -1,13 +1,9 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.*
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
+import io.hamal.lib.domain.vo.*
 
 interface ExecCmdRepository {
     fun plan(computeId: ComputeId, execToPlan: ExecToPlan): PlannedExec
@@ -17,13 +13,13 @@ interface ExecCmdRepository {
     fun dequeue(computeId: ComputeId): List<InFlightExec>
 
     data class ExecToPlan(
+        val accountId: AccountId,
         val id: ExecId,
-        val shard: Shard,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val secrets: ExecSecrets,
         val code: Code,
-        val trigger: Invocation
+        val invocation: Invocation
     )
 }
 

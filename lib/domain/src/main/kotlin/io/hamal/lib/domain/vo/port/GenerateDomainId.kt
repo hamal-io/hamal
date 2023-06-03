@@ -7,7 +7,7 @@ interface GenerateDomainId {
     operator fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID
 }
 
-object DomainIdGeneratorAdapter : GenerateDomainId {
+object DefaultDomainIdGenerator : GenerateDomainId {
 
     private val provideGenerator = KeyedOnce.default<Shard, SnowflakeId.Generator>()
     override fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID {
@@ -20,7 +20,7 @@ object DomainIdGeneratorAdapter : GenerateDomainId {
     }
 }
 
-class FixedTimeIdGeneratorAdapter : GenerateDomainId {
+class FixedTimeIdGenerator : GenerateDomainId {
     private val provideGenerator = KeyedOnce.default<Shard, SnowflakeId.Generator>()
     override fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID {
         val generator = provideGenerator(shard) {

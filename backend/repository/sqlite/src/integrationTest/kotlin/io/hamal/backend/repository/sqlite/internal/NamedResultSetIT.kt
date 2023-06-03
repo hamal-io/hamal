@@ -34,7 +34,7 @@ class DefaultNamedResultSetIT {
                     |instant_value INT,
                     |snowflake_id_value INT,
                     |domain_id_value INT,
-                    |request_id_value INT,
+                    |compute_id_value INT,
                     |null_value INT,
                     |string_value TEXT,
                     |blob_value BLOB
@@ -89,12 +89,12 @@ class DefaultNamedResultSetIT {
     }
 
     @Test
-    fun getRequestId() {
-        connection.createStatement().use { it.execute("INSERT INTO some_table (request_id_value) VALUES (1234567890)") }
+    fun getComputeId() {
+        connection.createStatement().use { it.execute("INSERT INTO some_table (compute_id_value) VALUES (1234567890)") }
         val testInstance = testInstance(
-            "SELECT request_id_value FROM some_table WHERE request_id_value is not null"
+            "SELECT compute_id_value FROM some_table WHERE compute_id_value is not null"
         )
-        assertThat(testInstance.getRequestId("request_id_value"), equalTo(ComputeId(1234567890)))
+        assertThat(testInstance.getComputeId("compute_id_value"), equalTo(ComputeId(1234567890)))
     }
 
     @Test

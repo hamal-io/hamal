@@ -7,7 +7,7 @@ import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
+import io.hamal.lib.domain.vo.port.DefaultDomainIdGenerator
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 
 
@@ -18,7 +18,7 @@ interface FuncCmdRepository {
     fun execute(computeId: ComputeId, commands: List<Command>): List<Func>
 
     fun request(computeId: ComputeId, record: Recorder.() -> Unit): List<Func> {
-        val recorder = Recorder(DomainIdGeneratorAdapter) //FIXME
+        val recorder = Recorder(DefaultDomainIdGenerator) //FIXME
         record(recorder)
         return execute(computeId, recorder.commands)
     }

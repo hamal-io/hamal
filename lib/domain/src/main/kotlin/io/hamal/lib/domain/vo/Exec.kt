@@ -23,14 +23,21 @@ class ExecSecrets(override val value: List<Secret>) : Secrets() {
 }
 
 
-enum class ExecStatus {
+enum class ExecStatus(val value: Int) {
 
-    Planned,
-    Scheduled,
-    Queued,
-    InFlight,
-    Completed,
-    Failed,
-    TerminalFailed
+    Planned(1),
+    Scheduled(2),
+    Queued(3),
+    InFlight(4),
+    Completed(5),
+    Failed(6),
+    TerminalFailed(7);
+
+    companion object {
+        fun valueOf(value: Int) = requireNotNull(mapped[value]) { "$value is not an exec status" }
+
+        private val mapped = ExecStatus.values()
+            .associateBy { it.value }
+    }
 }
 

@@ -18,20 +18,21 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
 
     override fun plan(computeId: ComputeId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
         return PlannedExec(
-            id = execToPlan.id,
             computeId = computeId,
+            accountId = execToPlan.accountId,
+            id = execToPlan.id,
             correlation = execToPlan.correlation,
             inputs = execToPlan.inputs,
             secrets = execToPlan.secrets,
             code = execToPlan.code,
-            invocation = execToPlan.trigger
+            invocation = execToPlan.invocation
         ).also { execs[it.id] = it }
     }
 
     override fun schedule(computeId: ComputeId, planedExec: PlannedExec): ScheduledExec {
         return ScheduledExec(
-            id = planedExec.id,
             computeId = computeId,
+            id = planedExec.id,
             scheduledAt = ScheduledAt.now(),
             plannedExec = planedExec
         ).also { execs[it.id] = it }

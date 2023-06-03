@@ -103,7 +103,7 @@ class NamedPreparedStatementResultSetDelegate<RESULT : Any>(
 
     private var mapping: ((NamedResultSet) -> RESULT)? = null
 
-    fun with(
+    fun query(
         block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
     ): NamedPreparedStatementResultSetDelegate<RESULT> {
         block(delegate)

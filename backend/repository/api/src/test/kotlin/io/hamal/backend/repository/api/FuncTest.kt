@@ -6,7 +6,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.port.FixedTimeIdGeneratorAdapter
+import io.hamal.lib.domain.vo.port.FixedTimeIdGenerator
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
@@ -18,7 +18,7 @@ class RecorderTest {
 
         @Test
         fun `Records creation of func with overwritten parameters`() {
-            val testInstance = Recorder(FixedTimeIdGeneratorAdapter())
+            val testInstance = Recorder(FixedTimeIdGenerator())
 
             val resultId = testInstance.createFunc {
                 name = FuncName("some-func-ref")

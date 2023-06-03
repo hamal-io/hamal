@@ -11,22 +11,22 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 
-class TenantIdTest {
+class AccountIdTest {
     @Nested
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
             assertEquals(
-                TenantId(SnowflakeId(23)),
-                TenantId(SnowflakeId(23))
+                AccountId(SnowflakeId(23)),
+                AccountId(SnowflakeId(23))
             )
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
             assertNotEquals(
-                TenantId(SnowflakeId(23)),
-                TenantId(SnowflakeId(127))
+                AccountId(SnowflakeId(23)),
+                AccountId(SnowflakeId(127))
             )
         }
     }
@@ -36,25 +36,25 @@ class TenantIdTest {
         @Test
         fun `Same hashcode if values are equal`() {
             assertEquals(
-                TenantId(SnowflakeId(23)).hashCode(),
-                TenantId(SnowflakeId(23)).hashCode()
+                AccountId(SnowflakeId(23)).hashCode(),
+                AccountId(SnowflakeId(23)).hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
             assertNotEquals(
-                TenantId(SnowflakeId(23)).hashCode(),
-                TenantId(SnowflakeId(127)).hashCode()
+                AccountId(SnowflakeId(23)).hashCode(),
+                AccountId(SnowflakeId(127)).hashCode()
             )
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(TenantId(SnowflakeId(123)).toString(), equalTo("TenantId(123)"))
+        assertThat(AccountId(SnowflakeId(123)).toString(), equalTo("AccountId(123)"))
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TenantId(SnowflakeId(23)), "23")
+    fun Serialization() = generateTestCases(AccountId(SnowflakeId(23)), "23")
 }

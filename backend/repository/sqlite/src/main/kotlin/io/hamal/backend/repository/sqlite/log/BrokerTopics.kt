@@ -87,7 +87,7 @@ fun DefaultLogBrokerTopicsRepository.count() = connection.executeQueryOne("SELEC
 
 private fun DefaultLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopic? {
     return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
-        with {
+        query {
             set("id", topicId.value)
         }
         map { rs ->
@@ -104,7 +104,7 @@ private fun DefaultLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopi
 
 private fun DefaultLogBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
     return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {
-        with {
+        query {
             set("name", name.value)
         }
         map {
@@ -115,7 +115,7 @@ private fun DefaultLogBrokerTopicsRepository.findTopicId(name: TopicName): Topic
 
 private fun DefaultLogBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
     return connection.execute<TopicId>("INSERT INTO topics(name, instant) VALUES (:name, :now) RETURNING id") {
-        with {
+        query {
             set("name", name.value)
             set("now", TimeUtils.now())
         }

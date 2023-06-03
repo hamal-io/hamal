@@ -19,7 +19,6 @@ class InvokeAdhocHandler(
         execCmdService.plan(
             req.computeId(), ToPlan(
                 execId = req.execId,
-                shard = req.shard,
                 correlation = null,
                 inputs = req.inputs.toExecInputs(),
                 secrets = req.secrets.toExecSecrets(),

@@ -132,7 +132,7 @@ inner class ExecuteTest {
             val result = testInstance.execute<Int>(
                 "INSERT INTO string_table(id, value) VALUES(:some_id, :some_value) RETURNING id"
             ) {
-                with {
+                query {
                     set("some_id", 1337)
                     set("some_value", "ThisHamalConnectionRockz")
                 }
@@ -151,7 +151,7 @@ inner class ExecuteTest {
             val result = testInstance.execute<Int>(
                 "INSERT OR IGNORE INTO string_table(id, value) VALUES(:some_id, :some_value) RETURNING id"
             ) {
-                with {
+                query {
                     set("some_id", 1337)
                     set("some_value", "ThisHamalConnectionRockz")
                 }
@@ -317,7 +317,7 @@ inner class ExecuteQueryTest {
         fun `Named parameter does not exists in query`() {
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.executeQuery<Boolean>("SELECT value FROM boolean_table WHERE value = :some_value") {
-                    with {
+                    query {
                         set("does_not_exists", false)
                     }
                     map { it.getBoolean("value") }
@@ -332,7 +332,7 @@ inner class ExecuteQueryTest {
 
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.executeQuery<Boolean>("SELECT value FROM boolean_table WHERE value = :some_value") {
-                    with {
+                    query {
                         set("some_value", true)
                     }
                     map { it.getBoolean("does_not_exists") }
@@ -357,7 +357,7 @@ inner class ExecuteQueryTest {
 
             val result =
                 testInstance.executeQuery<BooleanResult>("SELECT value FROM boolean_table WHERE value = :some_value") {
-                    with {
+                    query {
                         set("some_value", true)
                     }
                     map {

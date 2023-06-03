@@ -1,15 +1,16 @@
 package io.hamal.backend.repository.api.domain
 
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Exec : DomainObject<ExecId>() {
-    abstract val status: ExecStatus
     abstract val computeId: ComputeId
+    abstract val accountId: AccountId
+    abstract val status: ExecStatus
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
@@ -20,8 +21,10 @@ sealed class Exec : DomainObject<ExecId>() {
 
 @Serializable
 class PlannedExec(
-    override val id: ExecId,
     override val computeId: ComputeId,
+    override val accountId: AccountId,
+
+    override val id: ExecId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val secrets: ExecSecrets,
@@ -39,12 +42,13 @@ class PlannedExec(
 
 @Serializable
 class ScheduledExec(
-    override val id: ExecId,
     override val computeId: ComputeId,
+    override val id: ExecId,
     val plannedExec: PlannedExec,
     val scheduledAt: ScheduledAt
 ) : Exec() {
     override val status = ExecStatus.Scheduled
+    override val accountId get() = plannedExec.accountId
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
     override val secrets get() = plannedExec.secrets
@@ -59,12 +63,13 @@ class ScheduledExec(
 
 @Serializable
 class QueuedExec(
-    override val id: ExecId,
     override val computeId: ComputeId,
+    override val id: ExecId,
     val scheduledExec: ScheduledExec,
     val queuedAt: QueuedAt
 ) : Exec() {
     override val status = ExecStatus.Queued
+    override val accountId get() = scheduledExec.accountId
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
     override val secrets get() = scheduledExec.secrets
@@ -78,12 +83,13 @@ class QueuedExec(
 
 @Serializable
 class InFlightExec(
-    override val id: ExecId,
     override val computeId: ComputeId,
+    override val id: ExecId,
     val queuedExec: QueuedExec
     //FIXME inflightSince
 ) : Exec() {
     override val status = ExecStatus.InFlight
+    override val accountId get() = queuedExec.accountId
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
     override val secrets get() = queuedExec.secrets
@@ -96,13 +102,15 @@ class InFlightExec(
 
 @Serializable
 class CompletedExec(
-    override val id: ExecId,
     override val computeId: ComputeId,
+
+    override val id: ExecId,
     val inFlightExec: InFlightExec,
     val completedAt: CompletedAt
 ) : Exec() {
     override val status = ExecStatus.Completed
 
+    override val accountId get() = inFlightExec.accountId
     override val correlation get() = inFlightExec.correlation
     override val inputs get() = inFlightExec.inputs
     override val secrets get() = inFlightExec.secrets
@@ -116,12 +124,13 @@ class CompletedExec(
 
 @Serializable
 class FailedExec(
-    override val id: ExecId,
     override val computeId: ComputeId,
+    override val id: ExecId,
     val inFlightExec: InFlightExec,
     //FIXME failedAt
 ) : Exec() {
     override val status = ExecStatus.Failed
+    override val accountId get() = inFlightExec.accountId
     override val correlation get() = inFlightExec.correlation
     override val inputs get() = inFlightExec.inputs
     override val secrets get() = inFlightExec.secrets

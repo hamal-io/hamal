@@ -49,7 +49,7 @@ class DefaultLogBrokerConsumersRepository(
         return connection.executeQueryOne(
             """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
         ) {
-            with {
+            query {
                 set("groupId", groupId.value)
                 set("topicId", topicId.value)
             }

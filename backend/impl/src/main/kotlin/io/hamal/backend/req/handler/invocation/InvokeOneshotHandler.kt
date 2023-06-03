@@ -23,7 +23,6 @@ class InvokeOneshotHandler(
         execCmdService.plan(
             req.computeId(), ToPlan(
                 execId = req.execId,
-                shard = func.shard,
                 code = func.code,
                 correlation = Correlation(
                     correlationId = req.correlationId,

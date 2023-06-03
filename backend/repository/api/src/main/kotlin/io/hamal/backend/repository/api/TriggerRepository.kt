@@ -7,7 +7,7 @@ import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
-import io.hamal.lib.domain.vo.port.DomainIdGeneratorAdapter
+import io.hamal.lib.domain.vo.port.DefaultDomainIdGenerator
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -19,7 +19,7 @@ interface TriggerCmdRepository {
     fun execute(computeId: ComputeId, commands: List<Command>): List<Trigger>
 
     fun request(computeId: ComputeId, record: Recorder.() -> Unit): List<Trigger> {
-        val recorder = Recorder(DomainIdGeneratorAdapter) //FIXME
+        val recorder = Recorder(DefaultDomainIdGenerator) //FIXME
         record(recorder)
         return execute(computeId, recorder.commands)
     }

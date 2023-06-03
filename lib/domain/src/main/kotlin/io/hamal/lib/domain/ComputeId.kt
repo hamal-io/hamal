@@ -8,6 +8,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
 
+//FIXME must include account id ! -
+// otherwise if a second account with same computeId performs the same task - he / she gets result of account one
 @Serializable(with = ComputeId.Serializer::class)
 data class ComputeId(val value: BigInteger) : Comparable<ComputeId> {
     constructor(value: ByteArray) : this(BigInteger(value))

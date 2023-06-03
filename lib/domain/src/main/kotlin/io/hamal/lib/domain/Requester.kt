@@ -1,6 +1,6 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.domain.vo.TenantId
+import io.hamal.lib.domain.vo.AccountId
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,7 +10,7 @@ class Requester<ID>(
 ) {
     companion object {
         @JvmStatic
-        fun tenant(value: TenantId): Requester<TenantId> {
+        fun tenant(value: AccountId): Requester<AccountId> {
             return Requester(Type.Tenant, value)
         }
     }

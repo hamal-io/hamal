@@ -1,7 +1,7 @@
 package io.hamal.backend.filter
 
 import io.hamal.backend.repository.api.domain.Tenant.Active
-import io.hamal.lib.domain.vo.TenantId
+import io.hamal.lib.domain.vo.AccountId
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -15,7 +15,7 @@ class TenantFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("tenant", Active(TenantId(1)))
+        request.setAttribute("tenant", Active(AccountId(1)))
         filterChain.doFilter(request, response)
     }
 

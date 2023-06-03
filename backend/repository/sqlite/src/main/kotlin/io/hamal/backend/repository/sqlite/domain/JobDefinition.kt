@@ -6,8 +6,8 @@ import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.ComputeId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
@@ -60,7 +60,7 @@ class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncCmdRepo
 
     override fun get(id: FuncId): Func {
         return connection.executeQueryOne("SELECT id, version, request_id, reference FROM funcs WHERE id = :id") {
-            with { set("id", id) }
+            query { set("id", id) }
             map {
                 Func(
                     id = it.getDomainId("id", ::FuncId),

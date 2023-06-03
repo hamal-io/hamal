@@ -37,7 +37,7 @@ internal class DefaultLogSegmentRepository(
         return connection.executeQuery<LogChunk>(
             """SELECT id, bytes, instant FROM chunks WHERE id >= :firstId LIMIT :limit """.trimIndent()
         ) {
-            with {
+            query {
                 set("firstId", firstId)
                 set("limit", limit)
             }
