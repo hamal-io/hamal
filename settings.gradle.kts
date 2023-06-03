@@ -44,6 +44,7 @@ include(":backend")
 include(":backend:impl")
 include(":backend:repository:api")
 include(":backend:repository:memory")
+include(":backend:repository:record")
 include(":backend:repository:sqlite")
 
 include(":agent:impl")
