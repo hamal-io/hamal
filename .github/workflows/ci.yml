@@ -29,7 +29,9 @@ jobs:
       - name: Unit Test
         run: ./gradlew testCodeCoverageReport
 
-      - name: Prepare coverage report
+        # FIXME run integration tests
+
+      - name: Upload coverage report
         uses: actions/checkout@v3
         with:
           repository: hamal-io/code-cov
@@ -39,9 +41,10 @@ jobs:
       - run: |
           cd code-cov
           rm -rf *
-          cp -r ${{github.workspace}}/bootstrap/build/reports/jacoco .
+          cp -r ${{github.workspace}}/bootstrap/build/reports/jacoco/testCodeCoverageReport/html/* .
           git add -A
           git config user.email "code-cov@hamal.io"
           git config user.name "code cov"
-          git commit -m "c"
+          git commit -m "${{ github.sha }}"
           git push -f
+          
