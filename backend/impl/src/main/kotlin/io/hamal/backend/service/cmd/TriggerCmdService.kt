@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.createFixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.TriggerName
@@ -20,8 +20,8 @@ class TriggerCmdService
     val triggerCmdRepository: TriggerCmdRepository,
     val eventEmitter: EventEmitter
 ) {
-    fun create(computeId: ComputeId, triggerToCreate: TriggerToCreate): Trigger =
-        createTrigger(computeId, triggerToCreate).also { emitEvent(computeId, it) }
+    fun create(commandId: CommandId, triggerToCreate: TriggerToCreate): Trigger =
+        createTrigger(commandId, triggerToCreate).also { emitEvent(commandId, it) }
 
     data class TriggerToCreate(
         val shard: Shard,
@@ -32,8 +32,8 @@ class TriggerCmdService
     )
 }
 
-private fun TriggerCmdService.createTrigger(computeId: ComputeId, triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
-    return triggerCmdRepository.request(computeId) {
+private fun TriggerCmdService.createTrigger(commandId: CommandId, triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
+    return triggerCmdRepository.request(commandId) {
         createFixedRateTrigger {
             name = triggerToCreate.name
             funcId = triggerToCreate.funcId
@@ -42,10 +42,10 @@ private fun TriggerCmdService.createTrigger(computeId: ComputeId, triggerToCreat
     }.first()
 }
 
-private fun TriggerCmdService.emitEvent(computeId: ComputeId, trigger: Trigger) {
+private fun TriggerCmdService.emitEvent(commandId: CommandId, trigger: Trigger) {
     eventEmitter.emit(
-        computeId, TriggerCreatedEvent(
-//            computeId = ComputeId(123), //FIXME
+        commandId, TriggerCreatedEvent(
+//            commandId = CommandId(123), //FIXME
             shard = trigger.shard,
             trigger
         )

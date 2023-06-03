@@ -2,7 +2,7 @@ package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.base.DomainId
 import java.time.Instant
@@ -22,7 +22,7 @@ data class LogChunk(
 
 
 interface LogChunkAppender {
-    fun append(computeId: ComputeId, bytes: ByteArray)
+    fun append(commandId: CommandId, bytes: ByteArray)
 }
 
 interface LogChunkReader {

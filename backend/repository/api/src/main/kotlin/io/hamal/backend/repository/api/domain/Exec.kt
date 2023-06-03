@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api.domain
 
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.*
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Exec : DomainObject<ExecId>() {
-    abstract val computeId: ComputeId
+    abstract val commandId: CommandId
     abstract val accountId: AccountId
     abstract val status: ExecStatus
 
@@ -21,7 +21,7 @@ sealed class Exec : DomainObject<ExecId>() {
 
 @Serializable
 class PlannedExec(
-    override val computeId: ComputeId,
+    override val commandId: CommandId,
     override val accountId: AccountId,
 
     override val id: ExecId,
@@ -42,7 +42,7 @@ class PlannedExec(
 
 @Serializable
 class ScheduledExec(
-    override val computeId: ComputeId,
+    override val commandId: CommandId,
     override val id: ExecId,
     val plannedExec: PlannedExec,
     val scheduledAt: ScheduledAt
@@ -63,7 +63,7 @@ class ScheduledExec(
 
 @Serializable
 class QueuedExec(
-    override val computeId: ComputeId,
+    override val commandId: CommandId,
     override val id: ExecId,
     val scheduledExec: ScheduledExec,
     val queuedAt: QueuedAt
@@ -83,7 +83,7 @@ class QueuedExec(
 
 @Serializable
 class InFlightExec(
-    override val computeId: ComputeId,
+    override val commandId: CommandId,
     override val id: ExecId,
     val queuedExec: QueuedExec
     //FIXME inflightSince
@@ -102,7 +102,7 @@ class InFlightExec(
 
 @Serializable
 class CompletedExec(
-    override val computeId: ComputeId,
+    override val commandId: CommandId,
 
     override val id: ExecId,
     val inFlightExec: InFlightExec,
@@ -124,7 +124,7 @@ class CompletedExec(
 
 @Serializable
 class FailedExec(
-    override val computeId: ComputeId,
+    override val commandId: CommandId,
     override val id: ExecId,
     val inFlightExec: InFlightExec,
     //FIXME failedAt

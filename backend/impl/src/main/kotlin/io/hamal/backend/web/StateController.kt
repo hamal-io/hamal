@@ -4,7 +4,7 @@ import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.StateQueryService
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.CorrelationId
@@ -50,7 +50,7 @@ class StateController
         @RequestBody bytes: ByteArray
     ): ResponseEntity<ApiSetStateResponse> {
         val result = cmdService.set(
-            computeId = ComputeId(123),
+            commandId = CommandId(123),
             StateCmdService.StateToSet(
                 shard = Shard(1),
                 correlation = Correlation(

@@ -8,7 +8,7 @@ import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import java.nio.file.Path
 
 
@@ -20,10 +20,10 @@ internal class DefaultLogSegmentRepository(
     override val shard: Shard get() = segment.shard
 }), LogSegmentRepository {
 
-    override fun append(computeId: ComputeId, bytes: ByteArray) {
+    override fun append(commandId: CommandId, bytes: ByteArray) {
         connection.tx {
-            execute("INSERT OR IGNORE INTO chunks (req_id,bytes,instant) VALUES (:computeId, :bytes,:now)") {
-                set("computeId", computeId)
+            execute("INSERT OR IGNORE INTO chunks (req_id,bytes,instant) VALUES (:commandId, :bytes,:now)") {
+                set("commandId", commandId)
                 set("bytes", bytes)
                 set("now", TimeUtils.now())
             }

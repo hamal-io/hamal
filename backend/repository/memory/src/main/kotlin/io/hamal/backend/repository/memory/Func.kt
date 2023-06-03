@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.FuncCmdRepository.Command
 import io.hamal.backend.repository.api.FuncCmdRepository.Command.FuncToCreate
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.domain.Func
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
@@ -13,7 +13,7 @@ import io.hamal.lib.domain.vo.FuncName
 object MemoryFuncRepository : FuncCmdRepository, FuncQueryRepository {
 
     internal val funcs = mutableMapOf<FuncId, FuncEntity>()
-    internal val computeIds = mutableSetOf<ComputeId>()
+    internal val commandIds = mutableSetOf<CommandId>()
 
     override fun get(id: FuncId): Func {
         return funcs[id]?.let(FuncEntity::toModel)
@@ -24,8 +24,8 @@ object MemoryFuncRepository : FuncCmdRepository, FuncQueryRepository {
 //        return requireNotNull(triggers[id]?.let(TriggerEntity::toModel)) { "No trigger found with $id" }
 //    }
 
-    override fun execute(computeId: ComputeId, commands: List<Command>): List<Func> {
-        check(computeIds.add(computeId)) { "Request $computeId was already executed" }
+    override fun execute(commandId: CommandId, commands: List<Command>): List<Func> {
+        check(commandIds.add(commandId)) { "Request $commandId was already executed" }
         val groupedCommands = commands.groupBy { it.funcId }
         groupedCommands.forEach { id, cmds ->
             cmds.sortedBy { it.order }.forEach { cmd ->

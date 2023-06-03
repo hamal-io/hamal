@@ -5,7 +5,7 @@ import io.hamal.backend.service.cmd.EventCmdService
 import io.hamal.backend.service.query.EventQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -45,7 +45,7 @@ open class EventController @Autowired constructor(
             with(
                 cmdService.create(
                     EventCmdService.TopicToCreate(
-                        computeId = ComputeId(1),
+                        commandId = CommandId(1),
                         shard = Shard(1),
                         accountId = AccountId(1),
                         name = request.name
@@ -69,9 +69,9 @@ open class EventController @Autowired constructor(
     ): ResponseEntity<ApiAppendEventResponse> {
 
         cmdService.append(
-            ComputeId(TimeUtils.now().toEpochMilli()), // FIXME
+            CommandId(TimeUtils.now().toEpochMilli()), // FIXME
             EventCmdService.EventToAppend(
-                computeId = ComputeId(1),
+                commandId = CommandId(1),
                 shard = Shard(1),
                 accountId = AccountId(1),
                 topicId = TopicId(topicId.toInt()),

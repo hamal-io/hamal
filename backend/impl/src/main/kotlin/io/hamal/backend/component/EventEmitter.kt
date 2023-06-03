@@ -4,7 +4,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.sqlite.log.ProtobufAppender
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.TopicName
 
 class EventEmitter(private val brokerRepository: LogBrokerRepository) {
@@ -17,20 +17,20 @@ class EventEmitter(private val brokerRepository: LogBrokerRepository) {
         local.set(listOf())
     }
 
-    fun <EVENT : Event> emit(computeId: ComputeId, evt: EVENT) {
+    fun <EVENT : Event> emit(commandId: CommandId, evt: EVENT) {
         val topic = brokerRepository.resolveTopic(TopicName(evt.topic))
         if (local.get() == null) {
             local.set(listOf(Pair(topic, evt)))
         } else {
             local.set(local.get().plus(Pair(topic, evt)))
         }
-        flush(computeId)
+        flush(commandId)
     }
 
 
-    fun flush(computeId: ComputeId) {
+    fun flush(commandId: CommandId) {
         val notificationsToFlush = local.get() ?: listOf()
-        notificationsToFlush.forEach { (topic, evt) -> appender.append(computeId, topic, evt) }
+        notificationsToFlush.forEach { (topic, evt) -> appender.append(commandId, topic, evt) }
         local.remove()
     }
 }

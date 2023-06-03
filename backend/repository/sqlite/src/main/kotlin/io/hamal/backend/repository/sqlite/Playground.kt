@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.domain.AdhocInvocation
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.DefaultDomainIdGenerator
@@ -20,7 +20,7 @@ fun main() {
 
 
     val planned = execRepository.plan(
-        ComputeId(4), ExecCmdRepository.ExecToPlan(
+        CommandId(4), ExecCmdRepository.ExecToPlan(
             id = DefaultDomainIdGenerator(Shard(1), ::ExecId),
             accountId = AccountId(2),
             inputs = ExecInputs(listOf()),
@@ -38,6 +38,6 @@ fun main() {
     println(planned)
     println(planned.id)
 
-    val scheduled = execRepository.schedule(ComputeId(7), planned)
+    val scheduled = execRepository.schedule(CommandId(7), planned)
     println(scheduled)
 }

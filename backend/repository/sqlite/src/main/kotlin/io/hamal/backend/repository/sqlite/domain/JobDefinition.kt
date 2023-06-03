@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
@@ -72,7 +72,7 @@ class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncCmdRepo
     }
 
 
-    override fun execute(computeId: ComputeId, commands: List<Command>): List<Func> {
+    override fun execute(commandId: CommandId, commands: List<Command>): List<Func> {
 
         val toProcess = commands.groupBy { it.funcId }
 
@@ -248,7 +248,7 @@ class SqliteFuncRepository(config: Config) : BaseRepository(config), FuncCmdRepo
 
 }
 
-internal fun SqliteFuncRepository.insertFunc(computeId: ComputeId, toInsert: FuncToCreate) {
+internal fun SqliteFuncRepository.insertFunc(commandId: CommandId, toInsert: FuncToCreate) {
 //    return connection.prepareStatement(
 //        """INSERT INTO funcs(id, version, request_id,reference, instant) VALUES(?,?,?,?,?)""",
 //    ).use {

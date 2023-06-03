@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import java.nio.file.Path
 
 
@@ -33,8 +33,8 @@ class DefaultLogShardRepository(
         activeLogSegmentRepository = DefaultLogSegmentRepository(activeSegment)
     }
 
-    override fun append(computeId: ComputeId, bytes: ByteArray) {
-        activeLogSegmentRepository.append(computeId, bytes)
+    override fun append(commandId: CommandId, bytes: ByteArray) {
+        activeLogSegmentRepository.append(commandId, bytes)
     }
 
     override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {

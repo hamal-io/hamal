@@ -2,7 +2,7 @@ package io.hamal.backend.web
 
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.query.StateQueryService
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.sdk.domain.ApiAgentExecRequests
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ class QueueController
     fun dequeueExec(): ApiAgentExecRequests {
 
         //FIXME is this the only request which can not be handled in typical request manner?
-        val result = execCmdService.dequeue(ComputeId(1111))
+        val result = execCmdService.dequeue(CommandId(1111))
 
         return ApiAgentExecRequests(
             requests = result.map {

@@ -3,7 +3,7 @@ package io.hamal.backend.req.handler.exec
 import io.hamal.backend.repository.api.domain.CompleteExecReq
 import io.hamal.backend.repository.api.domain.InFlightExec
 import io.hamal.backend.req.ReqHandler
-import io.hamal.backend.req.handler.computeId
+import io.hamal.backend.req.handler.commandId
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
@@ -19,7 +19,7 @@ class CompleteExecHandler(
 
 
     override fun invoke(req: CompleteExecReq) {
-        val computeId = req.computeId()
+        val commandId = req.commandId()
 
         execQueryService.find(req.execId)
             ?.let { exec ->
@@ -27,7 +27,7 @@ class CompleteExecHandler(
 
                     if (exec.correlation != null) {
                         stateCmdService.set(
-                            computeId, StateCmdService.StateToSet(
+                            commandId, StateCmdService.StateToSet(
                                 shard = req.shard,
                                 correlation = exec.correlation!!,
                                 payload = req.statePayload
@@ -36,7 +36,7 @@ class CompleteExecHandler(
                     }
 
                     execCmdService.complete(
-                        computeId = computeId,
+                        commandId = commandId,
                         inFlightExec = exec
                     )
                 }

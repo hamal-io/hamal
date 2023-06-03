@@ -16,7 +16,7 @@ data class ReqId(val value: BigInteger) : Comparable<ReqId> { //FIXME value shou
     constructor(value: String) : this(BigInteger(value, 16))
 
     object Serializer : KSerializer<ReqId> {
-        override val descriptor = PrimitiveSerialDescriptor("ComputeId", PrimitiveKind.STRING)
+        override val descriptor = PrimitiveSerialDescriptor("CommandId", PrimitiveKind.STRING)
         override fun deserialize(decoder: Decoder) = ReqId(decoder.decodeString())
         override fun serialize(encoder: Encoder, value: ReqId) {
             encoder.encodeString(value.value.toString(16))

@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.base.DomainId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -89,12 +89,12 @@ class DefaultNamedResultSetIT {
     }
 
     @Test
-    fun getComputeId() {
+    fun getCommandId() {
         connection.createStatement().use { it.execute("INSERT INTO some_table (compute_id_value) VALUES (1234567890)") }
         val testInstance = testInstance(
             "SELECT compute_id_value FROM some_table WHERE compute_id_value is not null"
         )
-        assertThat(testInstance.getComputeId("compute_id_value"), equalTo(ComputeId(1234567890)))
+        assertThat(testInstance.getCommandId("compute_id_value"), equalTo(CommandId(1234567890)))
     }
 
     @Test

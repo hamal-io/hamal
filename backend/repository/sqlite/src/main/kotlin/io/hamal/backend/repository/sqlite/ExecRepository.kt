@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.internal.Transaction
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Planned
 import io.hamal.lib.domain.vo.ExecStatus.Scheduled
@@ -23,51 +23,51 @@ class SqliteExecRepository(config: Config) : BaseRepository(config), ExecCmdRepo
     }
 
 
-    override fun plan(computeId: ComputeId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
+    override fun plan(commandId: CommandId, execToPlan: ExecCmdRepository.ExecToPlan): PlannedExec {
         return connection.tx {
             execute(
                 """INSERT INTO execs
                 |(compute_id, account_id, id, status) 
                 |VALUES
-                |(:computeId, :accountId, :id, :status)
+                |(:commandId, :accountId, :id, :status)
                 |ON CONFLICT(compute_id) DO NOTHING;""".trimMargin()
             ) {
-                set("computeId", computeId)
+                set("commandId", commandId)
                 set("accountId", execToPlan.accountId)
                 set("id", execToPlan.id)
                 set("status", Planned.value)
             }
-            find(computeId)
+            find(commandId)
         }!!.toDomainObject() as PlannedExec
     }
 
-    override fun schedule(computeId: ComputeId, planedExec: PlannedExec): ScheduledExec {
+    override fun schedule(commandId: CommandId, planedExec: PlannedExec): ScheduledExec {
         return connection.tx {
             execute(
                 """INSERT INTO execs
                 |(compute_id, account_id, id, status) 
                 |VALUES
-                |(:computeId, :accountId, :id, :status)
+                |(:commandId, :accountId, :id, :status)
                 |ON CONFLICT(compute_id) DO NOTHING;""".trimMargin()
             ) {
-                set("computeId", computeId)
+                set("commandId", commandId)
                 set("accountId", planedExec.accountId)
                 set("id", planedExec.id)
                 set("status", Scheduled.value)
             }
-            find(computeId)
+            find(commandId)
         }!!.toDomainObject() as ScheduledExec
     }
 
-    override fun enqueue(computeId: ComputeId, scheduledExec: ScheduledExec): QueuedExec {
+    override fun enqueue(commandId: CommandId, scheduledExec: ScheduledExec): QueuedExec {
         TODO("Not yet implemented")
     }
 
-    override fun complete(computeId: ComputeId, inFlightExec: InFlightExec): CompletedExec {
+    override fun complete(commandId: CommandId, inFlightExec: InFlightExec): CompletedExec {
         TODO("Not yet implemented")
     }
 
-    override fun dequeue(computeId: ComputeId): List<InFlightExec> {
+    override fun dequeue(commandId: CommandId): List<InFlightExec> {
         TODO("Not yet implemented")
     }
 
@@ -106,18 +106,18 @@ class SqliteExecRepository(config: Config) : BaseRepository(config), ExecCmdRepo
 }
 
 
-private fun Transaction.find(computeId: ComputeId): ExecEntity? =
+private fun Transaction.find(commandId: CommandId): ExecEntity? =
     executeQueryOne(
         """SELECT 
                 |compute_id, account_id, id, status 
-                |FROM execs where compute_id = :computeId""".trimMargin()
+                |FROM execs where compute_id = :commandId""".trimMargin()
     ) {
         query {
-            set("computeId", computeId)
+            set("commandId", commandId)
         }
         map { rs ->
             ExecEntity(
-                computeId = rs.getComputeId("compute_id"),
+                commandId = rs.getCommandId("compute_id"),
                 accountId = rs.getDomainId("account_id", ::AccountId),
                 id = rs.getDomainId("id", ::ExecId),
                 status = ExecStatus.valueOf(rs.getInt("status")),
@@ -126,7 +126,7 @@ private fun Transaction.find(computeId: ComputeId): ExecEntity? =
     }
 
 internal data class ExecEntity(
-    val computeId: ComputeId,
+    val commandId: CommandId,
     val accountId: AccountId,
     val id: ExecId,
     val status: ExecStatus,
@@ -135,7 +135,7 @@ internal data class ExecEntity(
     fun toDomainObject(): Exec {
         //FIXME
         val plannedExec = PlannedExec(
-            computeId = computeId,
+            commandId = commandId,
             accountId = accountId,
             id = id,
             correlation = null,
@@ -147,7 +147,7 @@ internal data class ExecEntity(
 
         if (status == Planned) return plannedExec
 
-        val scheduledExec = ScheduledExec(computeId, id, plannedExec, ScheduledAt.now())
+        val scheduledExec = ScheduledExec(commandId, id, plannedExec, ScheduledAt.now())
 
         if (status == Scheduled) return scheduledExec
 

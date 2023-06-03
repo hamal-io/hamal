@@ -6,7 +6,7 @@ import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatement.ParseR
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.util.TokenizerUtils
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.base.DomainId
 import io.hamal.lib.domain.vo.base.DomainName
 import java.sql.Connection
@@ -24,7 +24,7 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     operator fun set(parameter: String, value: Instant): STATEMENT
     operator fun set(parameter: String, value: String): STATEMENT
     operator fun set(parameter: String, value: SnowflakeId): STATEMENT
-    operator fun set(parameter: String, value: ComputeId): STATEMENT
+    operator fun set(parameter: String, value: CommandId): STATEMENT
     operator fun set(parameter: String, value: DomainId): STATEMENT
     operator fun set(parameter: String, value: DomainName): STATEMENT
     operator fun set(parameter: String, value: ByteArray): STATEMENT
@@ -87,7 +87,7 @@ class DefaultNamedPreparedStatement(
         return this
     }
 
-    override fun set(parameter: String, value: ComputeId): DefaultNamedPreparedStatement {
+    override fun set(parameter: String, value: CommandId): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setBigDecimal(it, value.value.toBigDecimal()) }
         return this

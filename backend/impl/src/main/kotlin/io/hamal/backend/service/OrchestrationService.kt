@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.domain.FailedExec
 import io.hamal.backend.repository.api.domain.PlannedExec
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.ExecId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -30,18 +30,18 @@ class OrchestrationService
     internal val inflight = mutableMapOf<Correlation, ExecId>()
 
 
-    fun schedule(computeId: ComputeId, plannedExec: PlannedExec) {
+    fun schedule(commandId: CommandId, plannedExec: PlannedExec) {
         lock.withLock {
             val correlation = plannedExec.correlation
 
             if (correlation == null) {
-                scheduleExec(computeId, plannedExec)
+                scheduleExec(commandId, plannedExec)
                 return
             }
 
             if (!inflight.containsKey(correlation)) {
                 inflight[correlation] = plannedExec.id
-                scheduleExec(computeId, plannedExec)
+                scheduleExec(commandId, plannedExec)
                 return
             }
 
@@ -52,7 +52,7 @@ class OrchestrationService
         }
     }
 
-    fun completed(computeId: ComputeId, completedExec: CompletedExec) {
+    fun completed(commandId: CommandId, completedExec: CompletedExec) {
         lock.withLock {
             if (completedExec.correlation != null) {
                 // remove from inflight
@@ -64,7 +64,7 @@ class OrchestrationService
                     ?.let { plannedExec ->
                         if (plannedExec.correlation != null) {
                             inflight[plannedExec.correlation!!] = plannedExec.id
-                            scheduleExec(computeId, plannedExec)
+                            scheduleExec(commandId, plannedExec)
                         }
                     }
             }
@@ -73,7 +73,7 @@ class OrchestrationService
         }
     }
 
-    fun failed(computeId: ComputeId, failedExec: FailedExec) {
+    fun failed(commandId: CommandId, failedExec: FailedExec) {
         lock.withLock {
             // FIXME retry or permanent fail or maybe do not fail at all...
             TODO()
@@ -82,7 +82,7 @@ class OrchestrationService
 
 }
 
-fun OrchestrationService.scheduleExec(computeId: ComputeId, plannedExec: PlannedExec) {
-    val scheduledExec = execCmdService.schedule(computeId, plannedExec)
+fun OrchestrationService.scheduleExec(commandId: CommandId, plannedExec: PlannedExec) {
+    val scheduledExec = execCmdService.schedule(commandId, plannedExec)
     execs[scheduledExec.id] = scheduledExec
 }

@@ -1,16 +1,16 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.*
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 
 interface ExecCmdRepository {
-    fun plan(computeId: ComputeId, execToPlan: ExecToPlan): PlannedExec
-    fun schedule(computeId: ComputeId, planedExec: PlannedExec): ScheduledExec
-    fun enqueue(computeId: ComputeId, scheduledExec: ScheduledExec): QueuedExec
-    fun complete(computeId: ComputeId, inFlightExec: InFlightExec): CompletedExec
-    fun dequeue(computeId: ComputeId): List<InFlightExec>
+    fun plan(commandId: CommandId, execToPlan: ExecToPlan): PlannedExec
+    fun schedule(commandId: CommandId, planedExec: PlannedExec): ScheduledExec
+    fun enqueue(commandId: CommandId, scheduledExec: ScheduledExec): QueuedExec
+    fun complete(commandId: CommandId, inFlightExec: InFlightExec): CompletedExec
+    fun dequeue(commandId: CommandId): List<InFlightExec>
 
     data class ExecToPlan(
         val accountId: AccountId,

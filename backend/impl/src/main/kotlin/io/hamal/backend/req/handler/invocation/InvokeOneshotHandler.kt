@@ -3,7 +3,7 @@ package io.hamal.backend.req.handler.invocation
 import io.hamal.backend.repository.api.domain.InvokeOneshotReq
 import io.hamal.backend.repository.api.domain.OneshotInvocation
 import io.hamal.backend.req.ReqHandler
-import io.hamal.backend.req.handler.computeId
+import io.hamal.backend.req.handler.commandId
 import io.hamal.backend.req.handler.toExecInputs
 import io.hamal.backend.req.handler.toExecSecrets
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -21,7 +21,7 @@ class InvokeOneshotHandler(
     override fun invoke(req: InvokeOneshotReq) {
         val func = funcQueryService.get(req.funcId)
         execCmdService.plan(
-            req.computeId(), ToPlan(
+            req.commandId(), ToPlan(
                 execId = req.execId,
                 code = func.code,
                 correlation = Correlation(

@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.lib.common.util.HashUtils.sha256
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -23,7 +23,7 @@ class BrokerIT {
             val futures = IntRange(1, 10).map { thread ->
                 CompletableFuture.runAsync {
                     IntRange(1, 1_000).forEach {
-                        testInstance.append(ComputeId(sha256("$thread $it")), topic, "$thread $it".toByteArray())
+                        testInstance.append(CommandId(sha256("$thread $it")), topic, "$thread $it".toByteArray())
                     }
                 }
             }
@@ -44,7 +44,7 @@ class BrokerIT {
                 CompletableFuture.runAsync {
                     val topic = testInstance.resolveTopic(TopicName("topic-$thread"))
                     IntRange(1, 100).forEach {
-                        testInstance.append(ComputeId(sha256("$thread $it")), topic, "$thread $it".toByteArray())
+                        testInstance.append(CommandId(sha256("$thread $it")), topic, "$thread $it".toByteArray())
                     }
                 }
             }

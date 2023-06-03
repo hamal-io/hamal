@@ -2,7 +2,7 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.domain.ComputeId
+import io.hamal.lib.domain.CommandId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 
@@ -33,8 +33,8 @@ class DefaultLogBrokerRepository(
 
     override fun resolveTopic(topicName: TopicName) = topicsRepository.resolveTopic(topicName)
 
-    override fun append(computeId: ComputeId, topic: LogTopic, bytes: ByteArray) {
-        resolveRepository(topic).append(computeId, bytes)
+    override fun append(commandId: CommandId, topic: LogTopic, bytes: ByteArray) {
+        resolveRepository(topic).append(commandId, bytes)
     }
 
     override fun close() {
