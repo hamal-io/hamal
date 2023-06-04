@@ -33,7 +33,7 @@ data class Entity(
     override fun apply(rec: ExecRecord): Entity {
         return when (rec) {
             is ExecPlannedRecord -> copy(
-                id = rec.id,
+                id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence,
                 status = ExecStatus.Planned,
@@ -119,7 +119,7 @@ fun List<ExecRecord>.createEntity(): Entity {
     check(firstRecord is ExecPlannedRecord)
 
     var result = Entity(
-        id = firstRecord.id,
+        id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence
     )

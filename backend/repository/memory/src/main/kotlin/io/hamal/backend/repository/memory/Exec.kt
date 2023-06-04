@@ -60,7 +60,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         }
         store[execId] = mutableListOf(
             ExecPlannedRecord(
-                id = execId,
+                entityId = execId,
                 cmdId = cmd.id,
                 prevCmdId = cmd.id,
                 sequence = RecordSequence.first(),
@@ -89,7 +89,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val previous = records.last()
         records.add(
             ExecScheduledRecord(
-                id = execId,
+                entityId = execId,
                 cmdId = cmdId,
                 prevCmdId = previous.cmdId,
                 sequence = previous.sequence.next()
@@ -115,7 +115,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val previous = records.last()
         records.add(
             ExecQueuedRecord(
-                id = execId,
+                entityId = execId,
                 cmdId = cmdId,
                 prevCmdId = previous.cmdId,
                 sequence = previous.sequence.next()
@@ -138,7 +138,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             val previous = records.last()
             records.add(
                 ExecStartedRecord(
-                    id = execId,
+                    entityId = execId,
                     cmdId = cmd.id,
                     prevCmdId = previous.cmdId,
                     sequence = previous.sequence.next()
@@ -166,7 +166,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val previous = records.last()
         records.add(
             ExecCompletedRecord(
-                id = execId,
+                entityId = execId,
                 cmdId = cmdId,
                 prevCmdId = previous.cmdId,
                 sequence = previous.sequence.next()

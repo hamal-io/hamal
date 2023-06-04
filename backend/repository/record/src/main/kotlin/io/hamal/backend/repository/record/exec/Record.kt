@@ -2,24 +2,22 @@ package io.hamal.backend.repository.api.record.exec
 
 import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
-import io.hamal.backend.repository.record.RecordType
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface ExecRecord : Record<ExecId, ExecRecord.Type> {
-    enum class Type(override val value: Int) : RecordType {
-        Planned(1),
-        Scheduled(2),
-        Enqueued(3)
-    }
-}
+@Serializable
+sealed interface ExecRecord : Record<ExecId>
 
+@Serializable
+@SerialName("EPR")
 data class ExecPlannedRecord(
-    override val id: ExecId,
+    override val entityId: ExecId,
     override val cmdId: CmdId,
     override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
@@ -27,45 +25,41 @@ data class ExecPlannedRecord(
     val inputs: ExecInputs,
     val secrets: ExecSecrets,
     val code: Code,
-) : ExecRecord {
-    override val type = ExecRecord.Type.Planned
-}
+) : ExecRecord
 
+@Serializable
+@SerialName("ESCR")
 data class ExecScheduledRecord(
-    override val id: ExecId,
+    override val entityId: ExecId,
     override val cmdId: CmdId,
     override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
-) : ExecRecord {
-    override val type = ExecRecord.Type.Scheduled
-}
+) : ExecRecord
 
-
+@Serializable
+@SerialName("EQR")
 data class ExecQueuedRecord(
-    override val id: ExecId,
+    override val entityId: ExecId,
     override val cmdId: CmdId,
     override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
-) : ExecRecord {
-    override val type = ExecRecord.Type.Enqueued
-}
+) : ExecRecord
 
 
+@Serializable
+@SerialName("ESTR")
 data class ExecStartedRecord(
-    override val id: ExecId,
+    override val entityId: ExecId,
     override val cmdId: CmdId,
     override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
-) : ExecRecord {
-    override val type = ExecRecord.Type.Enqueued
-}
+) : ExecRecord
 
-
+@Serializable
+@SerialName("ECR")
 data class ExecCompletedRecord(
-    override val id: ExecId,
+    override val entityId: ExecId,
     override val cmdId: CmdId,
     override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
-) : ExecRecord {
-    override val type = ExecRecord.Type.Enqueued
-}
+) : ExecRecord

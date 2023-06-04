@@ -3,8 +3,13 @@ package io.hamal.backend.config
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.memory.*
+import io.hamal.backend.repository.memory.MemoryFuncRepository
+import io.hamal.backend.repository.memory.MemoryReqRepository
+import io.hamal.backend.repository.memory.MemoryStateRepository
+import io.hamal.backend.repository.memory.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.log.DefaultLogBrokerRepository
+import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
+import io.hamal.lib.common.Shard
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import kotlin.io.path.Path
@@ -23,10 +28,19 @@ open class RepositoryConfig {
     open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
 
     @Bean
-    open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository
+    open fun sqliteExecRepository() =
+        SqliteExecRepository(
+            SqliteExecRepository.Config(
+                path = Path("/tmp/hamal"),
+                shard = Shard(1)
+            )
+        )
 
     @Bean
-    open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
+    open fun execCmdRepository(): ExecCmdRepository = sqliteExecRepository()
+
+    @Bean
+    open fun execQueryRepository(): ExecQueryRepository = sqliteExecRepository()
 
     @Bean
     open fun triggerCmdRepository(): TriggerCmdRepository = MemoryTriggerRepository
