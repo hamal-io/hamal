@@ -78,7 +78,6 @@ data class Entity(
     }
 
     fun toDomainObject(): Exec {
-        checkNotNull(id) { "exec id can not be null at this point" }
 
         val plannedExec = PlannedExec(
             cmdId = cmdId,
