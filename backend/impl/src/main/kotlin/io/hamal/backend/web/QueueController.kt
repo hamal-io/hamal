@@ -8,6 +8,8 @@ import io.hamal.lib.sdk.domain.ApiAgentExecRequests
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import java.math.BigInteger
+import java.security.SecureRandom
 
 @RestController
 class QueueController
@@ -19,7 +21,7 @@ class QueueController
     fun dequeueExec(): ApiAgentExecRequests {
 
         //FIXME is this the only request which can not be handled in typical request manner?
-        val result = execCmdService.start(CmdId(1111))
+        val result = execCmdService.start(CmdId(BigInteger(128, SecureRandom())))
 
         return ApiAgentExecRequests(
             requests = result.map {

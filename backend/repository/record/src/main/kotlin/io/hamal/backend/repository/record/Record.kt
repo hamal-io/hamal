@@ -41,7 +41,6 @@ data class RecordSequence(val value: Int) : Comparable<RecordSequence>//FIXME be
 interface Record<ID : DomainId> {
     val entityId: ID
     val cmdId: CmdId
-    val prevCmdId: CmdId
     val sequence: RecordSequence
     // FIXME sval recordedAt: Instant
 }

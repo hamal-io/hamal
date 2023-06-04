@@ -19,7 +19,6 @@ sealed interface ExecRecord : Record<ExecId>
 data class ExecPlannedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
     val correlation: Correlation?,
     val inputs: ExecInputs,
@@ -32,7 +31,6 @@ data class ExecPlannedRecord(
 data class ExecScheduledRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
 ) : ExecRecord
 
@@ -41,7 +39,6 @@ data class ExecScheduledRecord(
 data class ExecQueuedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
 ) : ExecRecord
 
@@ -51,7 +48,6 @@ data class ExecQueuedRecord(
 data class ExecStartedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
 ) : ExecRecord
 
@@ -60,6 +56,5 @@ data class ExecStartedRecord(
 data class ExecCompletedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val prevCmdId: CmdId,
     override val sequence: RecordSequence,
 ) : ExecRecord

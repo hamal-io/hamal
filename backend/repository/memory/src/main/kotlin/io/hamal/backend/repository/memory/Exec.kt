@@ -62,7 +62,6 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecPlannedRecord(
                 entityId = execId,
                 cmdId = cmd.id,
-                prevCmdId = cmd.id,
                 sequence = RecordSequence.first(),
                 correlation = cmd.correlation,
                 inputs = cmd.inputs,
@@ -91,7 +90,6 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecScheduledRecord(
                 entityId = execId,
                 cmdId = cmdId,
-                prevCmdId = previous.cmdId,
                 sequence = previous.sequence.next()
             )
         )
@@ -117,7 +115,6 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecQueuedRecord(
                 entityId = execId,
                 cmdId = cmdId,
-                prevCmdId = previous.cmdId,
                 sequence = previous.sequence.next()
             )
         )
@@ -140,7 +137,6 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                 ExecStartedRecord(
                     entityId = execId,
                     cmdId = cmd.id,
-                    prevCmdId = previous.cmdId,
                     sequence = previous.sequence.next()
                 )
             )
@@ -168,7 +164,6 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecCompletedRecord(
                 entityId = execId,
                 cmdId = cmdId,
-                prevCmdId = previous.cmdId,
                 sequence = previous.sequence.next()
             )
         )
