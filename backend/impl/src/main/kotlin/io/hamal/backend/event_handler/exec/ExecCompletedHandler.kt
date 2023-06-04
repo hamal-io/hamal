@@ -3,7 +3,7 @@ package io.hamal.backend.event_handler.exec
 import io.hamal.backend.event.ExecutionCompletedEvent
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.service.OrchestrationService
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import logger
 
 class ExecCompletedHandler(
@@ -11,8 +11,8 @@ class ExecCompletedHandler(
 ) : EventHandler<ExecutionCompletedEvent> {
 
     private val log = logger(ExecCompletedHandler::class)
-    override fun handle(commandId: CommandId, evt: ExecutionCompletedEvent) {
+    override fun handle(cmdId: CmdId, evt: ExecutionCompletedEvent) {
         log.debug("Handle: $evt")
-        orchestrationService.completed(commandId, evt.completedExec)
+        orchestrationService.completed(cmdId, evt.completedExec)
     }
 }

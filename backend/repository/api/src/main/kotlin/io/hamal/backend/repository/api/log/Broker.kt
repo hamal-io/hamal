@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
@@ -17,7 +17,7 @@ data class LogBroker(
 }
 
 interface AppendToTopic {
-    fun append(commandId: CommandId, topic: LogTopic, bytes: ByteArray)
+    fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray)
 }
 
 interface ConsumeFromTopic {

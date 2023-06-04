@@ -4,7 +4,7 @@ import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.domain.State
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.StatePayload
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,9 +17,9 @@ class StateCmdService
     val eventEmitter: EventEmitter
 ) {
 
-    fun set(commandId: CommandId, stateToSet: StateToSet): State {
+    fun set(cmdId: CmdId, stateToSet: StateToSet): State {
         return stateCmdRepository.set(
-            commandId, StateCmdRepository.StateToSet(
+            cmdId, StateCmdRepository.StateToSet(
                 correlation = stateToSet.correlation,
                 payload = stateToSet.payload,
             )

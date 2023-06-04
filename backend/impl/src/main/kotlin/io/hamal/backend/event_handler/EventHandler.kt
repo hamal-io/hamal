@@ -1,12 +1,12 @@
 package io.hamal.backend.event_handler
 
 import io.hamal.backend.event.Event
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import kotlin.reflect.KClass
 
 interface EventHandler<out EVENT : Event> {
 
-    fun handle(commandId: CommandId, evt: @UnsafeVariance EVENT)
+    fun handle(cmdId: CmdId, evt: @UnsafeVariance EVENT)
 
     interface Container {
 

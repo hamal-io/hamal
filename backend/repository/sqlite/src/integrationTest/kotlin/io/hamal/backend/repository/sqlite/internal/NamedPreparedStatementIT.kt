@@ -2,7 +2,7 @@ package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.base.DomainId
 import io.hamal.lib.domain.vo.base.DomainName
 import org.hamcrest.CoreMatchers.*
@@ -292,8 +292,8 @@ inner class SetTest {
         fun `Sets named parameter of type request id`() {
             connection.prepare("INSERT INTO request_id_table(value, another_value) VALUES(:some_value, :another_value)")
                 .use {
-                    it["some_value"] = CommandId(2810)
-                    it["another_value"] = CommandId(0)
+                    it["some_value"] = CmdId(2810)
+                    it["another_value"] = CmdId(0)
                     it.execute()
                 }
             verifyIsOne("SELECT COUNT(*) FROM request_id_table WHERE value = 2810")

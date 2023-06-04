@@ -3,7 +3,7 @@ package io.hamal.backend.req.handler.invocation
 import io.hamal.backend.repository.api.domain.AdhocInvocation
 import io.hamal.backend.repository.api.domain.InvokeAdhocReq
 import io.hamal.backend.req.ReqHandler
-import io.hamal.backend.req.handler.commandId
+import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.handler.toExecInputs
 import io.hamal.backend.req.handler.toExecSecrets
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -17,7 +17,7 @@ class InvokeAdhocHandler(
 ) : ReqHandler<InvokeAdhocReq>(InvokeAdhocReq::class) {
     override fun invoke(req: InvokeAdhocReq) {
         execCmdService.plan(
-            req.commandId(), ToPlan(
+            req.cmdId(), ToPlan(
                 execId = req.execId,
                 correlation = null,
                 inputs = req.inputs.toExecInputs(),

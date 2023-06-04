@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.base.DomainId
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
@@ -114,7 +114,7 @@ inner class ExecuteTest {
         @Test
         fun `With named parameter of type request_id`() {
             testInstance.execute("INSERT INTO request_id_table(value) VALUES(:some_value)") {
-                set("some_value", CommandId(12345678))
+                set("some_value", CmdId(12345678))
             }
             verifyIsOne("SELECT COUNT(*) FROM request_id_table WHERE value = 12345678")
         }
@@ -266,7 +266,7 @@ inner class ExecuteUpdateTest {
         @Test
         fun `With named parameter of type request_id`() {
             val result = testInstance.executeUpdate("INSERT INTO request_id_table(value) VALUES(:some_value)") {
-                set("some_value", CommandId(12345678))
+                set("some_value", CmdId(12345678))
             }
             assertThat(result, equalTo(1))
             verifyIsOne("SELECT COUNT(*) FROM request_id_table WHERE value = 12345678")

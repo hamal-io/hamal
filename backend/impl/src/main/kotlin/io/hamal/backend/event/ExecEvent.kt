@@ -30,7 +30,7 @@ data class ExecutionQueuedEvent(
 @EventTopic("exec::started")
 data class ExecutionStartedEvent(
     override val shard: Shard,
-    val inFlightExec: InFlightExec
+    val startedExec: StartedExec
 ) : Event()
 
 @Serializable

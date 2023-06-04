@@ -6,7 +6,7 @@ import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.service.query.TriggerQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.domain.ApiCreateTriggerRequest
 import io.hamal.lib.sdk.domain.ApiCreateTriggerResponse
@@ -35,7 +35,7 @@ open class TriggerController(
 
         //FIXME replace with request
         val result = cmdService.create(
-            CommandId(0), TriggerToCreate(
+            CmdId(0), TriggerToCreate(
                 shard = shard,
                 name = req.name,
                 funcId = req.funcId,

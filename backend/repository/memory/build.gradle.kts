@@ -7,7 +7,7 @@ plugins {
 archivesName.set("backend-repository-memory")
 
 dependencies {
-    api(project(":backend:repository:api"))
+    api(project(":backend:repository:record"))
 
     testImplementation(project(":backend:repository:memory"))
     testImplementation(external.junit)

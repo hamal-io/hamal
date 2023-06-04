@@ -8,4 +8,15 @@ object CollectionUtils {
     fun <T, U> Sequence<T>.cross(other: Sequence<U>): Sequence<Pair<T, U>> {
         return flatMap { lhs -> other.map { rhs -> lhs to rhs } }
     }
+
+    inline fun <T> Collection<T>.takeWhileInclusive(
+        predicate: (T) -> Boolean
+    ): List<T> {
+        var shouldContinue = true
+        return takeWhile {
+            val result = shouldContinue
+            shouldContinue = predicate(it)
+            result
+        }
+    }
 }

@@ -3,7 +3,7 @@ package io.hamal.backend.req.handler.invocation
 import io.hamal.backend.repository.api.domain.FixedRateInvocation
 import io.hamal.backend.repository.api.domain.InvokeFixedRateReq
 import io.hamal.backend.req.ReqHandler
-import io.hamal.backend.req.handler.commandId
+import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.handler.toExecInputs
 import io.hamal.backend.req.handler.toExecSecrets
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -21,7 +21,7 @@ class InvokeFixedRateHandler(
     override fun invoke(req: InvokeFixedRateReq) {
         val func = funcQueryService.get(req.funcId)
         execCmdService.plan(
-            req.commandId(), ToPlan(
+            req.cmdId(), ToPlan(
                 execId = req.execId,
                 code = func.code,
                 correlation = Correlation(

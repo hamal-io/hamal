@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufLogConsumer
 import io.hamal.lib.common.util.HashUtils.md5
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -70,8 +70,8 @@ class DefaultEventService(
                                     CompletableFuture.runAsync {
                                         handlerContainer[evt::class].forEach { handler ->
                                             try {
-                                                val commandId = CommandId(md5("${evt.topic}-${chunkId.value.value}"))
-                                                handler.handle(commandId, evt)
+                                                val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
+                                                handler.handle(cmdId, evt)
                                             } catch (t: Throwable) {
                                                 throw Error(t)
                                             }

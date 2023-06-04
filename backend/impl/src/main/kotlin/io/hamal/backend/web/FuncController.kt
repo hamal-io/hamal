@@ -10,7 +10,7 @@ import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
@@ -39,7 +39,7 @@ open class FuncController(
         // FIXME to ApiCreateFuncResponse
         //FIXME as request
         return funcCmdService.create(
-            CommandId(0), FuncCmdService.FuncToCreate(
+            CmdId(0), FuncCmdService.FuncToCreate(
                 shard = shard,
                 name = req.name,
                 code = req.code
@@ -91,7 +91,7 @@ open class FuncController(
 
         return ResponseEntity.ok(
             ApiExecFuncResponse(
-                commandId = CommandId(0)
+                cmdId = CmdId(0)
             )
         )
     }

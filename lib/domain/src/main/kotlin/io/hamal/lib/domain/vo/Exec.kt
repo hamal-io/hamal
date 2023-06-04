@@ -28,7 +28,7 @@ enum class ExecStatus(val value: Int) {
     Planned(1),
     Scheduled(2),
     Queued(3),
-    InFlight(4),
+    Started(4),
     Completed(5),
     Failed(6),
     TerminalFailed(7);

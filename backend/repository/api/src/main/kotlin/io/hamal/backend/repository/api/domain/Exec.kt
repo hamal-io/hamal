@@ -1,14 +1,15 @@
 package io.hamal.backend.repository.api.domain
 
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Exec : DomainObject<ExecId>() {
-    abstract val commandId: CommandId
+sealed class Exec : DomainObject<ExecId> {
+    abstract override val id: ExecId
+    abstract val cmdId: CmdId
     abstract val accountId: AccountId
     abstract val status: ExecStatus
 
@@ -17,11 +18,29 @@ sealed class Exec : DomainObject<ExecId>() {
     abstract val secrets: ExecSecrets
     abstract val code: Code
     abstract val invocation: Invocation
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Exec
+
+        if (id != other.id) return false
+        if (cmdId != other.cmdId) return false
+        return status == other.status
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + cmdId.hashCode()
+        result = 31 * result + status.hashCode()
+        return result
+    }
 }
 
 @Serializable
 class PlannedExec(
-    override val commandId: CommandId,
+    override val cmdId: CmdId,
     override val accountId: AccountId,
 
     override val id: ExecId,
@@ -42,7 +61,7 @@ class PlannedExec(
 
 @Serializable
 class ScheduledExec(
-    override val commandId: CommandId,
+    override val cmdId: CmdId,
     override val id: ExecId,
     val plannedExec: PlannedExec,
     val scheduledAt: ScheduledAt
@@ -63,7 +82,7 @@ class ScheduledExec(
 
 @Serializable
 class QueuedExec(
-    override val commandId: CommandId,
+    override val cmdId: CmdId,
     override val id: ExecId,
     val scheduledExec: ScheduledExec,
     val queuedAt: QueuedAt
@@ -82,13 +101,13 @@ class QueuedExec(
 
 
 @Serializable
-class InFlightExec(
-    override val commandId: CommandId,
+class StartedExec(
+    override val cmdId: CmdId,
     override val id: ExecId,
     val queuedExec: QueuedExec
     //FIXME inflightSince
 ) : Exec() {
-    override val status = ExecStatus.InFlight
+    override val status = ExecStatus.Started
     override val accountId get() = queuedExec.accountId
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
@@ -102,20 +121,20 @@ class InFlightExec(
 
 @Serializable
 class CompletedExec(
-    override val commandId: CommandId,
+    override val cmdId: CmdId,
 
     override val id: ExecId,
-    val inFlightExec: InFlightExec,
+    val startedExec: StartedExec,
     val completedAt: CompletedAt
 ) : Exec() {
     override val status = ExecStatus.Completed
 
-    override val accountId get() = inFlightExec.accountId
-    override val correlation get() = inFlightExec.correlation
-    override val inputs get() = inFlightExec.inputs
-    override val secrets get() = inFlightExec.secrets
-    override val code get() = inFlightExec.code
-    override val invocation get() = inFlightExec.invocation
+    override val accountId get() = startedExec.accountId
+    override val correlation get() = startedExec.correlation
+    override val inputs get() = startedExec.inputs
+    override val secrets get() = startedExec.secrets
+    override val code get() = startedExec.code
+    override val invocation get() = startedExec.invocation
 
     override fun toString(): String {
         return "CompletedExec($id)"
@@ -124,18 +143,18 @@ class CompletedExec(
 
 @Serializable
 class FailedExec(
-    override val commandId: CommandId,
+    override val cmdId: CmdId,
     override val id: ExecId,
-    val inFlightExec: InFlightExec,
+    val startedExec: StartedExec,
     //FIXME failedAt
 ) : Exec() {
     override val status = ExecStatus.Failed
-    override val accountId get() = inFlightExec.accountId
-    override val correlation get() = inFlightExec.correlation
-    override val inputs get() = inFlightExec.inputs
-    override val secrets get() = inFlightExec.secrets
-    override val code get() = inFlightExec.code
-    override val invocation get() = inFlightExec.invocation
+    override val accountId get() = startedExec.accountId
+    override val correlation get() = startedExec.correlation
+    override val inputs get() = startedExec.inputs
+    override val secrets get() = startedExec.secrets
+    override val code get() = startedExec.code
+    override val invocation get() = startedExec.invocation
     override fun toString(): String {
         return "FailedExec($id)"
     }

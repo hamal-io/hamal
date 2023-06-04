@@ -4,7 +4,6 @@ import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.*
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
-import io.hamal.backend.repository.sqlite.SqliteExecRepository
 import io.hamal.backend.req.Request
 import io.hamal.backend.service.EventServiceFactory
 import io.hamal.backend.service.FixedRateTriggerService
@@ -12,7 +11,6 @@ import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.ExecQueryService
-import io.hamal.lib.common.Shard
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -26,7 +24,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.scheduling.annotation.EnableScheduling
-import kotlin.io.path.Path
 
 @Configuration
 @ComponentScan
@@ -65,14 +62,12 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .create()
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        val execRepository = SqliteExecRepository(
-            SqliteExecRepository.Config(
-                path = Path("/tmp/hamal"),
-                shard = Shard(1)
-            )
-        )
-
-
+//        val execRepository = SqliteExecRepository(
+//            SqliteExecRepository.Config(
+//                path = Path("/tmp/hamal"),
+//                shard = Shard(1)
+//            )
+//        )
     }
 
 }

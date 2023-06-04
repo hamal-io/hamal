@@ -1,25 +1,50 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.backend.repository.api.domain.*
-import io.hamal.lib.domain.CommandId
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 
 interface ExecCmdRepository {
-    fun plan(commandId: CommandId, execToPlan: ExecToPlan): PlannedExec
-    fun schedule(commandId: CommandId, planedExec: PlannedExec): ScheduledExec
-    fun enqueue(commandId: CommandId, scheduledExec: ScheduledExec): QueuedExec
-    fun complete(commandId: CommandId, inFlightExec: InFlightExec): CompletedExec
-    fun dequeue(commandId: CommandId): List<InFlightExec>
+    fun plan(cmd: PlanCmd): PlannedExec
+    fun schedule(cmd: ScheduleCmd): ScheduledExec
+    fun queue(cmd: QueueCmd): QueuedExec
+    fun complete(cmd: CompleteCmd): CompletedExec
+    fun start(cmd: StartCmd): List<StartedExec>
 
-    data class ExecToPlan(
+    data class PlanCmd(
+        val id: CmdId,
         val accountId: AccountId,
-        val id: ExecId,
+        val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val secrets: ExecSecrets,
         val code: Code,
         val invocation: Invocation
+    )
+
+    data class ScheduleCmd(
+        val id: CmdId,
+        val execId: ExecId
+    )
+
+    data class QueueCmd(
+        val id: CmdId,
+        val execId: ExecId
+    )
+
+    data class StartCmd(
+        val id: CmdId,
+    )
+
+    data class CompleteCmd(
+        val id: CmdId,
+        val execId: ExecId
+    )
+
+    data class FailCmd(
+        val id: CmdId,
+        val execId: ExecId
     )
 }
 
