@@ -16,6 +16,7 @@ interface RecordTransaction<ID : DomainId, RECORD : Record<ID>> : Transaction {
     fun storeRecord(record: RECORD)
     fun allRecords(id: ID): List<RECORD>
     fun recordsUntilInclusive(id: ID, seq: RecordSequence): List<RECORD>
+    fun lastRecord(id: ID): RECORD
 }
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -31,14 +32,13 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
         execute(
             """
                 INSERT INTO records
-                    (cmd_id, entity_id,sequence, data) 
+                    (cmd_id, entity_id,  data) 
                 VALUES
-                    (:cmdId, :entityId, :sequence, :data)
+                    (:cmdId, :entityId,  :data)
             """.trimIndent()
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("sequence", record.sequence.value)
             set("data", protobuf.encodeToByteArray(recordClass.serializer(), record))
         }
     }
@@ -47,6 +47,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
         return executeQuery(
             """
         SELECT 
+            sequence,
             data
         FROM records 
             WHERE entity_id = :entityId 
@@ -56,7 +57,11 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
             query {
                 set("entityId", id)
             }
-            map { rs -> protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")) }
+            map { rs ->
+                ProtoBuf { }.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")).apply {
+                    sequence = RecordSequence(rs.getInt("sequence"))
+                }
+            }
         }
     }
 
@@ -76,6 +81,24 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
             }
             map { rs -> protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")) }
         }
+    }
+
+    override fun lastRecord(id: ID): RECORD {
+        return executeQueryOne(
+            """
+        SELECT * FROM
+             records
+         WHERE
+             entity_id = :entityId
+        ORDER BY sequence DESC
+        LIMIT 1
+    """.trimIndent()
+        ) {
+            query {
+                set("entityId", id)
+            }
+            map { rs -> protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")) }
+        } ?: throw IllegalArgumentException("No records found for $id")
     }
 
     override fun execute(sql: String) = delegate.execute(sql)

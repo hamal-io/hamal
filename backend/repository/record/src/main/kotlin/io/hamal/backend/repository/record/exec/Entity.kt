@@ -35,7 +35,7 @@ data class Entity(
             is ExecPlannedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
-                sequence = rec.sequence,
+                sequence = rec.sequence!!,
                 status = ExecStatus.Planned,
                 correlation = rec.correlation,
                 inputs = rec.inputs,
@@ -46,21 +46,21 @@ data class Entity(
 
             is ExecScheduledRecord -> copy(
                 cmdId = rec.cmdId,
-                sequence = rec.sequence,
+                sequence = rec.sequence(),
                 status = ExecStatus.Scheduled,
                 scheduledAt = Instant.now() // FIXME
             )
 
             is ExecQueuedRecord -> copy(
                 cmdId = rec.cmdId,
-                sequence = rec.sequence,
+                sequence = rec.sequence(),
                 status = ExecStatus.Queued,
 //                enqueuedAt = Instant.now() // FIXME
             )
 
             is ExecStartedRecord -> copy(
                 cmdId = rec.cmdId,
-                sequence = rec.sequence,
+                sequence = rec.sequence(),
                 status = ExecStatus.Started,
 //                startedAt = Instant.now() // FIXME
                 //picked by agent id..
@@ -68,7 +68,7 @@ data class Entity(
 
             is ExecCompletedRecord -> copy(
                 cmdId = rec.cmdId,
-                sequence = rec.sequence,
+                sequence = rec.sequence(),
                 status = ExecStatus.Completed,
 //                enqueuedAt = Instant.now() // FIXME
             )
@@ -120,7 +120,7 @@ fun List<ExecRecord>.createEntity(): Entity {
     var result = Entity(
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence
+        sequence = firstRecord.sequence()
     )
 
     forEach { record ->

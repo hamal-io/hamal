@@ -5,7 +5,6 @@ import io.hamal.backend.repository.api.ExecCmdRepository.*
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.*
-import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.ExecId
@@ -62,7 +61,6 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecPlannedRecord(
                 entityId = execId,
                 cmdId = cmd.id,
-                sequence = RecordSequence.first(),
                 correlation = cmd.correlation,
                 inputs = cmd.inputs,
                 secrets = cmd.secrets,
@@ -85,12 +83,10 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val records = checkNotNull(store[execId]) { "No records found for $execId" }
         check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
 
-        val previous = records.last()
         records.add(
             ExecScheduledRecord(
                 entityId = execId,
-                cmdId = cmdId,
-                sequence = previous.sequence.next()
+                cmdId = cmdId
             )
         )
 
@@ -110,12 +106,10 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val records = checkNotNull(store[execId]) { "No records found for $execId" }
         check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
 
-        val previous = records.last()
         records.add(
             ExecQueuedRecord(
                 entityId = execId,
                 cmdId = cmdId,
-                sequence = previous.sequence.next()
             )
         )
 
@@ -131,13 +125,10 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             val records = checkNotNull(store[execId]) { "No records found for $execId" }
             check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
-
-            val previous = records.last()
             records.add(
                 ExecStartedRecord(
                     entityId = execId,
                     cmdId = cmd.id,
-                    sequence = previous.sequence.next()
                 )
             )
 
@@ -159,12 +150,10 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val records = checkNotNull(store[execId]) { "No records found for $execId" }
         check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
 
-        val previous = records.last()
         records.add(
             ExecCompletedRecord(
                 entityId = execId,
                 cmdId = cmdId,
-                sequence = previous.sequence.next()
             )
         )
 

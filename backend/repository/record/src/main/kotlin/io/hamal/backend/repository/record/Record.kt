@@ -38,11 +38,13 @@ data class RecordSequence(val value: Int) : Comparable<RecordSequence>//FIXME be
 
 }
 
-interface Record<ID : DomainId> {
-    val entityId: ID
-    val cmdId: CmdId
-    val sequence: RecordSequence
-    // FIXME sval recordedAt: Instant
+abstract class Record<ID : DomainId> {
+    abstract var sequence: RecordSequence?
+    abstract val entityId: ID
+    abstract val cmdId: CmdId
+
+    fun sequence() =
+        sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 }
 
 interface RecordEntity<ID : DomainId, RECORD : Record<ID>> {

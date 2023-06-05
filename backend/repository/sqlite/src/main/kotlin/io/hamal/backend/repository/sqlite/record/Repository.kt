@@ -25,11 +25,23 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>>(
             CREATE TABLE IF NOT EXISTS records (
                  cmd_id         NUMERIC NOT NULL,
                  entity_id      INTEGER NOT NULL,
-                 sequence       INTEGER NOT NULL,
+                 sequence       INTEGER NOT NULL DEFAULT 0,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (entity_id, sequence),
-                 UNIQUE (cmd_id)
+                 UNIQUE         (cmd_id)
             );
+        """.trimIndent()
+        )
+        connection.execute(
+            """
+             CREATE TRIGGER IF NOT EXISTS auto_sequence
+                AFTER INSERT ON records
+                WHEN new.sequence = 0
+                BEGIN
+                    UPDATE records
+                    SET sequence = (SELECT IFNULL(MAX(sequence), 1) + 1 FROM records WHERE entity_id = new.entity_id)
+                    WHERE entity_id = new.entity_id AND sequence = new.sequence;
+                END;
         """.trimIndent()
         )
     }

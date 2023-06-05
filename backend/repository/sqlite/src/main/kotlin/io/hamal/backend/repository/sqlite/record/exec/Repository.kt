@@ -40,7 +40,6 @@ class SqliteExecRepository(
                     ExecPlannedRecord(
                         entityId = execId,
                         cmdId = cmdId,
-                        sequence = RecordSequence.first(),
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         secrets = cmd.secrets,
@@ -59,12 +58,10 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as ScheduledExec
             } else {
-                val previous = recordsOf(execId).last()
                 storeRecord(
                     ExecScheduledRecord(
                         entityId = execId,
                         cmdId = cmdId,
-                        sequence = previous.sequence.next()
                     )
                 )
                 (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
@@ -79,12 +76,10 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as QueuedExec
             } else {
-                val previous = recordsOf(execId).last()
                 storeRecord(
                     ExecQueuedRecord(
                         entityId = execId,
                         cmdId = cmdId,
-                        sequence = previous.sequence.next()
                     )
                 )
                 (currentVersion(execId) as QueuedExec)
@@ -106,12 +101,10 @@ class SqliteExecRepository(
                 if (commandAlreadyApplied(execId, cmdId)) {
                     versionOf(execId, cmdId) as QueuedExec
                 } else {
-                    val previous = recordsOf(execId).last()
                     storeRecord(
                         ExecStartedRecord(
                             entityId = execId,
                             cmdId = cmd.id,
-                            sequence = previous.sequence.next()
                         )
                     )
                     result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
@@ -130,12 +123,10 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as CompletedExec
             } else {
-                val previous = recordsOf(execId).last()
                 storeRecord(
                     ExecCompletedRecord(
                         entityId = execId,
                         cmdId = cmdId,
-                        sequence = previous.sequence.next()
                     )
                 )
                 (currentVersion(execId) as CompletedExec).also(CurrentExecProjection::apply)
@@ -158,6 +149,7 @@ internal fun Transaction.recordsOf(execId: ExecId): List<ExecRecord> {
     return executeQuery(
         """
         SELECT 
+            sequence,
             data
         FROM records 
             WHERE entity_id = :entityId 
@@ -168,7 +160,9 @@ internal fun Transaction.recordsOf(execId: ExecId): List<ExecRecord> {
             set("entityId", execId)
         }
         map { rs ->
-            ProtoBuf { }.decodeFromByteArray<ExecRecord>(rs.getBytes("data"))
+            ProtoBuf { }.decodeFromByteArray<ExecRecord>(rs.getBytes("data")).apply {
+                sequence = RecordSequence(rs.getInt("sequence"))
+            }
         }
     }
 }

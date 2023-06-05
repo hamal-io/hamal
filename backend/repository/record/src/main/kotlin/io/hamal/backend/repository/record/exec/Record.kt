@@ -10,37 +10,38 @@ import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
-sealed interface ExecRecord : Record<ExecId>
+sealed class ExecRecord(
+    @Transient
+    override var sequence: RecordSequence? = null
+) : Record<ExecId>()
 
 @Serializable
 @SerialName("EPR")
 data class ExecPlannedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val sequence: RecordSequence,
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val secrets: ExecSecrets,
     val code: Code,
-) : ExecRecord
+) : ExecRecord()
 
 @Serializable
 @SerialName("ESCR")
 data class ExecScheduledRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val sequence: RecordSequence,
-) : ExecRecord
+) : ExecRecord()
 
 @Serializable
 @SerialName("EQR")
 data class ExecQueuedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val sequence: RecordSequence,
-) : ExecRecord
+) : ExecRecord()
 
 
 @Serializable
@@ -48,13 +49,11 @@ data class ExecQueuedRecord(
 data class ExecStartedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val sequence: RecordSequence,
-) : ExecRecord
+) : ExecRecord()
 
 @Serializable
 @SerialName("ECR")
 data class ExecCompletedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val sequence: RecordSequence,
-) : ExecRecord
+) : ExecRecord()
