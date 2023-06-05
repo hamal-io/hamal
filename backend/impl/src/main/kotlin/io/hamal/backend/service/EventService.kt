@@ -1,5 +1,6 @@
 package io.hamal.backend.service
 
+import io.hamal.backend.component.Async
 import io.hamal.backend.component.EventHandlerContainer
 import io.hamal.backend.event.Event
 import io.hamal.backend.event_handler.EventHandler
@@ -10,11 +11,9 @@ import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.beans.factory.DisposableBean
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
-import java.time.Duration
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ScheduledFuture
 import kotlin.reflect.KClass
+import kotlin.time.Duration.Companion.milliseconds
 
 interface EventService {
     fun cancel()
@@ -31,7 +30,7 @@ interface EventServiceFactory {
 }
 
 class DefaultEventService(
-    val scheduledExecutorService: ThreadPoolTaskScheduler,
+    val async: Async,
     val logBrokerRepository: LogBrokerRepository
 ) : EventServiceFactory {
 
@@ -64,22 +63,21 @@ class DefaultEventService(
                     )
 
                     scheduledTasks.add(
-                        scheduledExecutorService.scheduleAtFixedRate(
-                            {
-                                consumer.consume(100) { chunkId, evt ->
-                                    CompletableFuture.runAsync {
-                                        handlerContainer[evt::class].forEach { handler ->
-                                            try {
-                                                val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
-                                                handler.handle(cmdId, evt)
-                                            } catch (t: Throwable) {
-                                                throw Error(t)
-                                            }
+                        async.atFixedRate(10.milliseconds) {
+                            consumer.consume(100) { chunkId, evt ->
+                                async.runAsync {
+                                    handlerContainer[evt::class].forEach { handler ->
+                                        try {
+                                            val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
+                                            handler.handle(cmdId, evt)
+                                        } catch (t: Throwable) {
+                                            throw Error(t)
                                         }
                                     }
                                 }
-                            }, Duration.ofMillis(10)
-                        )
+
+                            }
+                        },
                     )
                 }
             }
@@ -95,5 +93,4 @@ class DefaultEventService(
             }
         }
     }
-
 }
