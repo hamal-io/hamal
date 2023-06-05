@@ -17,7 +17,7 @@ open class AsyncConfig : SchedulingConfigurer {
     open fun executor(): ThreadPoolTaskScheduler {
         val result = ThreadPoolTaskScheduler()
         result.threadNamePrefix = "h4m41-"
-        result.poolSize = 2
+        result.poolSize = 4
         result.initialize()
         return result
     }

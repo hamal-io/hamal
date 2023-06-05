@@ -75,7 +75,6 @@ class DefaultEventService(
                                         }
                                     }
                                 }
-
                             }
                         },
                     )
@@ -93,4 +92,5 @@ class DefaultEventService(
             }
         }
     }
+
 }

@@ -65,7 +65,7 @@ class AgentService {
 
     }
 
-    @Scheduled(initialDelay = 100, fixedDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
+    @Scheduled(initialDelay = 100, fixedDelay = 10, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
         CompletableFuture.runAsync {
             DefaultHamalSdk.execService()

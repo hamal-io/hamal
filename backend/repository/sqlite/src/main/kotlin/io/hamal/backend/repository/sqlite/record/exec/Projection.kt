@@ -4,6 +4,7 @@ import io.hamal.backend.repository.api.domain.Exec
 import io.hamal.backend.repository.api.domain.QueuedExec
 import io.hamal.lib.domain.vo.ExecId
 
+
 internal object CurrentExecProjection {
 
     private val projection = mutableMapOf<ExecId, Exec>()

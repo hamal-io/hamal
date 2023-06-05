@@ -22,6 +22,8 @@ interface LruCache<KEY : Any, VALUE : Any> {
 
     fun keys(): Set<KEY>
 
+    fun clear()
+
     class DefaultImpl<KEY : Any, VALUE : Any>(capacity: Int) : LruCache<KEY, VALUE> {
         private var store: LinkedHashMap<KEY, VALUE>
         private val lock: ReadWriteLock = ReentrantReadWriteLock()
@@ -68,6 +70,13 @@ interface LruCache<KEY : Any, VALUE : Any> {
 
         override fun keys(): Set<KEY> {
             return lock.readLock().withLock { store.keys }
+        }
+
+        override fun clear() {
+            lock.writeLock()
+                .withLock {
+                    store.clear()
+                }
         }
     }
 }

@@ -1,7 +1,6 @@
 package io.hamal.backend.repository.sqlite.record
 
 import io.hamal.backend.repository.record.Record
-import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatementDelegate
 import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatementResultSetDelegate
 import io.hamal.backend.repository.sqlite.internal.Transaction
@@ -13,10 +12,9 @@ import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 interface RecordTransaction<ID : DomainId, RECORD : Record<ID>> : Transaction {
-    fun storeRecord(record: RECORD)
-    fun allRecords(id: ID): List<RECORD>
-    fun recordsUntilInclusive(id: ID, seq: RecordSequence): List<RECORD>
-    fun lastRecord(id: ID): RECORD
+    fun storeRecord(record: RECORD): RECORD
+    fun recordsOf(id: ID): List<RECORD>
+    fun lastRecordOf(id: ID): RECORD
 }
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -25,10 +23,13 @@ val protobuf = ProtoBuf {}
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
     private val recordClass: KClass<RECORD>,
-    private val delegate: Transaction
+    private val delegate: Transaction,
+    private val recordCache: RecordCache<ID, RECORD>
 ) : RecordTransaction<ID, RECORD> {
 
-    override fun storeRecord(record: RECORD) {
+    override fun storeRecord(record: RECORD): RECORD {
+        recordCache.add(this, record)
+
         execute(
             """
                 INSERT INTO records
@@ -41,64 +42,17 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
             set("entityId", record.entityId)
             set("data", protobuf.encodeToByteArray(recordClass.serializer(), record))
         }
+
+        return record
     }
 
-    override fun allRecords(id: ID): List<RECORD> {
-        return executeQuery(
-            """
-        SELECT 
-            sequence,
-            data
-        FROM records 
-            WHERE entity_id = :entityId 
-        ORDER BY sequence;
-    """.trimIndent()
-        ) {
-            query {
-                set("entityId", id)
-            }
-            map { rs ->
-                protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")).apply {
-                    sequence = RecordSequence(rs.getInt("sequence"))
-                }
-            }
-        }
+    override fun recordsOf(id: ID): List<RECORD> {
+        return recordCache.list(this, id)
     }
 
-    override fun recordsUntilInclusive(id: ID, seq: RecordSequence): List<RECORD> {
-        return executeQuery(
-            """
-        SELECT 
-            data
-        FROM records 
-            WHERE entity_id = :entityId AND sequence <= :sequence
-        ORDER BY sequence;
-    """.trimIndent()
-        ) {
-            query {
-                set("entityId", id)
-                set("sequence", seq.value)
-            }
-            map { rs -> protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")) }
-        }
-    }
-
-    override fun lastRecord(id: ID): RECORD {
-        return executeQueryOne(
-            """
-        SELECT * FROM
-             records
-         WHERE
-             entity_id = :entityId
-        ORDER BY sequence DESC
-        LIMIT 1
-    """.trimIndent()
-        ) {
-            query {
-                set("entityId", id)
-            }
-            map { rs -> protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")) }
-        } ?: throw IllegalArgumentException("No records found for $id")
+    override fun lastRecordOf(id: ID): RECORD {
+        return recordCache.list(this, id).lastOrNull()
+            ?: throw IllegalArgumentException("No records found for $id")
     }
 
     override fun execute(sql: String) = delegate.execute(sql)

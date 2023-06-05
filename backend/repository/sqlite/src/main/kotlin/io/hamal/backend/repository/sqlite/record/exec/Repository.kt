@@ -46,7 +46,9 @@ class SqliteExecRepository(
                         code = cmd.code,
                     )
                 )
-                (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)
+
+                (currentVersion(execId) as PlannedExec)
+                    .also(CurrentExecProjection::apply)
             }
         }
     }
@@ -64,6 +66,7 @@ class SqliteExecRepository(
                         cmdId = cmdId,
                     )
                 )
+
                 (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
             }
         }
@@ -82,6 +85,7 @@ class SqliteExecRepository(
                         cmdId = cmdId,
                     )
                 )
+
                 (currentVersion(execId) as QueuedExec)
                     .also(CurrentExecProjection::apply)
                     .also(QueueProjection::add)
@@ -107,6 +111,7 @@ class SqliteExecRepository(
                             cmdId = cmd.id,
                         )
                     )
+
                     result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
                 }
             }
@@ -129,6 +134,7 @@ class SqliteExecRepository(
                         cmdId = cmdId,
                     )
                 )
+
                 (currentVersion(execId) as CompletedExec).also(CurrentExecProjection::apply)
             }
         }
