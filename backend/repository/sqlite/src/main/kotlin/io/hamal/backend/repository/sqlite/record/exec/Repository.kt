@@ -7,21 +7,20 @@ import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.*
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.backend.repository.sqlite.BaseRepository
-import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.internal.Transaction
+import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.ExecId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromByteArray
-import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.nio.file.Path
 
 class SqliteExecRepository(
     config: Config
-) : BaseRepository(config), ExecCmdRepository, ExecQueryRepository {
+) : SqliteRecordRepository<ExecId, ExecRecord>(config, ExecRecord::class), ExecCmdRepository, ExecQueryRepository {
 
     data class Config(
         override val path: Path,
@@ -30,191 +29,93 @@ class SqliteExecRepository(
         override val filename = "exec"
     }
 
-    override fun setupConnection(connection: Connection) {
-        connection.execute("""PRAGMA journal_mode = wal;""")
-        connection.execute("""PRAGMA locking_mode = exclusive;""")
-        connection.execute("""PRAGMA temp_store = memory;""")
-        connection.execute("""PRAGMA synchronous = off;""")
-    }
-
-    override fun setupSchema(connection: Connection) {
-        connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS records (
-                 cmd_id         NUMERIC NOT NULL,
-                 entity_id      INTEGER NOT NULL,
-                 sequence       INTEGER NOT NULL,
-                 data           BLOB NOT NULL,
-                 PRIMARY KEY    (entity_id, sequence),
-                 UNIQUE (cmd_id)
-            );
-        """.trimIndent()
-        )
-    }
-
-    override fun clear() {
-        TODO("Not yet implemented")
-    }
-
-
-    @OptIn(ExperimentalSerializationApi::class)
     override fun plan(cmd: PlanCmd): PlannedExec {
-
         val execId = cmd.execId
-
-
-        return connection.tx {
-            if (commandAlreadyApplied(execId, cmd.id)) {
-                versionOf(execId, cmd.id) as PlannedExec
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(execId, cmdId)) {
+                versionOf(execId, cmdId) as PlannedExec
             } else {
-
-                val r = ExecPlannedRecord(
-                    entityId = execId,
-                    cmdId = cmd.id,
-                    sequence = RecordSequence.first(),
-                    correlation = cmd.correlation,
-                    inputs = cmd.inputs,
-                    secrets = cmd.secrets,
-                    code = cmd.code,
+                storeRecord(
+                    ExecPlannedRecord(
+                        entityId = execId,
+                        cmdId = cmdId,
+                        sequence = RecordSequence.first(),
+                        correlation = cmd.correlation,
+                        inputs = cmd.inputs,
+                        secrets = cmd.secrets,
+                        code = cmd.code,
+                    )
                 )
-
-                val recs = recordsOf(execId)
-                println(recs)
-                val data = ProtoBuf { }.encodeToByteArray<ExecRecord>(r)
-                execute(
-                    """
-                INSERT into records
-                (cmd_id, entity_id,sequence, data) 
-                    VALUES
-                (:cmdId, :entityId, :sequence, :data)
-            """.trimIndent()
-                ) {
-                    set("cmdId", r.cmdId)
-                    set("entityId", r.entityId)
-                    set("sequence", r.sequence.value)
-                    set("data", data) //FIXME serialize record
-                }
-
                 (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)
             }
-        }!!
-
+        }
     }
 
     override fun schedule(cmd: ScheduleCmd): ScheduledExec {
         val execId = cmd.execId
         val cmdId = cmd.id
-
-        return connection.tx {
+        return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as ScheduledExec
             } else {
-
-                check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
-
                 val previous = recordsOf(execId).last()
-
-                val r = ExecScheduledRecord(
-                    entityId = execId,
-                    cmdId = cmdId,
-                    sequence = previous.sequence.next()
+                storeRecord(
+                    ExecScheduledRecord(
+                        entityId = execId,
+                        cmdId = cmdId,
+                        sequence = previous.sequence.next()
+                    )
                 )
-
-                val data = ProtoBuf { }.encodeToByteArray<ExecRecord>(r)
-                execute(
-                    """
-                INSERT into records
-                (cmd_id, entity_id,sequence, data) 
-                    VALUES
-                (:cmdId, :entityId, :sequence, :data)
-            """.trimIndent()
-                ) {
-                    set("cmdId", r.cmdId)
-                    set("entityId", r.entityId)
-                    set("sequence", r.sequence.value)
-                    set("data", data) //FIXME serialize record
-                }
-
-                (currentVersion(execId) as ScheduledExec)
-                    .also(CurrentExecProjection::apply)
+                (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
             }
-        }!!
+        }
     }
 
     override fun queue(cmd: QueueCmd): QueuedExec {
         val execId = cmd.execId
         val cmdId = cmd.id
-
-        return connection.tx {
+        return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as QueuedExec
             } else {
-
-                check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
-
                 val previous = recordsOf(execId).last()
-
-                val r = ExecQueuedRecord(
-                    entityId = execId,
-                    cmdId = cmdId,
-                    sequence = previous.sequence.next()
+                storeRecord(
+                    ExecQueuedRecord(
+                        entityId = execId,
+                        cmdId = cmdId,
+                        sequence = previous.sequence.next()
+                    )
                 )
-
-                val data = ProtoBuf { }.encodeToByteArray<ExecRecord>(r)
-                execute(
-                    """
-                INSERT into records
-                (cmd_id, entity_id,sequence, data) 
-                    VALUES
-                (:cmdId, :entityId, :sequence, :data)
-            """.trimIndent()
-                ) {
-                    set("cmdId", r.cmdId)
-                    set("entityId", r.entityId)
-                    set("sequence", r.sequence.value)
-                    set("data", data) //FIXME serialize record
-                }
-
                 (currentVersion(execId) as QueuedExec)
                     .also(CurrentExecProjection::apply)
                     .also(QueueProjection::add)
             }
-        }!!
+        }
     }
 
     override fun start(cmd: StartCmd): List<StartedExec> {
+        val cmdId = cmd.id
         val result = mutableListOf<StartedExec>()
 
-        connection.tx {
+        tx {
             QueueProjection.pop(2).forEach { queuedExec ->
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
-
-                val previous = recordsOf(execId).last()
-
-                val r = ExecStartedRecord(
-                    entityId = execId,
-                    cmdId = cmd.id,
-                    sequence = previous.sequence.next()
-                )
-
-                val data = ProtoBuf { }.encodeToByteArray<ExecRecord>(r)
-                execute(
-                    """
-                INSERT into records
-                (cmd_id,entity_id,sequence, data) 
-                    VALUES
-                (:cmdId, :entityId, :sequence, :data)
-            """.trimIndent()
-                ) {
-                    set("cmdId", r.cmdId)
-                    set("entityId", r.entityId)
-                    set("sequence", r.sequence.value)
-                    set("data", data) //FIXME serialize record
+                if (commandAlreadyApplied(execId, cmdId)) {
+                    versionOf(execId, cmdId) as QueuedExec
+                } else {
+                    val previous = recordsOf(execId).last()
+                    storeRecord(
+                        ExecStartedRecord(
+                            entityId = execId,
+                            cmdId = cmd.id,
+                            sequence = previous.sequence.next()
+                        )
+                    )
+                    result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
                 }
-
-                result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
             }
         }
 
@@ -225,41 +126,21 @@ class SqliteExecRepository(
     override fun complete(cmd: CompleteCmd): CompletedExec {
         val execId = cmd.execId
         val cmdId = cmd.id
-
-        return connection.tx {
+        return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as CompletedExec
             } else {
-
-                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
-
                 val previous = recordsOf(execId).last()
-
-                val r = ExecCompletedRecord(
-                    entityId = execId,
-                    cmdId = cmdId,
-                    sequence = previous.sequence.next()
+                storeRecord(
+                    ExecCompletedRecord(
+                        entityId = execId,
+                        cmdId = cmdId,
+                        sequence = previous.sequence.next()
+                    )
                 )
-
-                val data = ProtoBuf { }.encodeToByteArray<ExecRecord>(r)
-                execute(
-                    """
-                INSERT into records
-                (cmd_id, entity_id,sequence, data) 
-                    VALUES
-                (:cmdId, :entityId, :sequence, :data)
-            """.trimIndent()
-                ) {
-                    set("cmdId", r.cmdId)
-                    set("entityId", r.entityId)
-                    set("sequence", r.sequence.value)
-                    set("data", data) //FIXME serialize record
-                }
-
-                (currentVersion(execId) as CompletedExec)
-                    .also(CurrentExecProjection::apply)
+                (currentVersion(execId) as CompletedExec).also(CurrentExecProjection::apply)
             }
-        }!!
+        }
     }
 
     override fun find(execId: ExecId): Exec? {

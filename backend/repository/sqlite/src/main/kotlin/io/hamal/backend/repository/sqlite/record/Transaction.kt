@@ -13,7 +13,7 @@ import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 interface RecordTransaction<ID : DomainId, RECORD : Record<ID>> : Transaction {
-    fun record(record: RECORD)
+    fun storeRecord(record: RECORD)
     fun allRecords(id: ID): List<RECORD>
     fun recordsUntilInclusive(id: ID, seq: RecordSequence): List<RECORD>
 }
@@ -27,7 +27,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
     private val delegate: Transaction
 ) : RecordTransaction<ID, RECORD> {
 
-    override fun record(record: RECORD) {
+    override fun storeRecord(record: RECORD) {
         execute(
             """
                 INSERT INTO records

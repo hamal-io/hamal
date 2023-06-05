@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.internal
 
 import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement.Companion.prepare
+import io.hamal.backend.repository.sqlite.internal.Transaction.AbortException
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.base.DomainId
@@ -158,7 +159,7 @@ interface Connection : AutoCloseable {
         block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): T? = executeQuery(sql, block).firstOrNull()
 
-    fun <T : Any> tx(block: Transaction.() -> T?): T?
+    fun <T> tx(block: Transaction.() -> T): T
 }
 
 class DefaultConnection(
@@ -256,7 +257,7 @@ class DefaultConnection(
         }
     }
 
-    override fun <T : Any> tx(block: Transaction.() -> T?): T? {
+    override fun <T> tx(block: Transaction.() -> T): T {
         return lock.withLock {
             delegate.autoCommit = false
             try {
@@ -265,10 +266,10 @@ class DefaultConnection(
                 delegate.commit()
                 log.trace("Transaction committed")
                 result
-            } catch (a: Transaction.AbortException) {
+            } catch (a: AbortException) {
                 log.info("Transaction aborted")
                 delegate.rollback()
-                null
+                throw a
             } catch (t: Throwable) {
                 log.warn("Transaction rolled back due to $t")
                 delegate.rollback()
