@@ -58,7 +58,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>>(
                 set("entityId", id)
             }
             map { rs ->
-                ProtoBuf { }.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")).apply {
+                protobuf.decodeFromByteArray(recordClass.serializer(), rs.getBytes("data")).apply {
                     sequence = RecordSequence(rs.getInt("sequence"))
                 }
             }

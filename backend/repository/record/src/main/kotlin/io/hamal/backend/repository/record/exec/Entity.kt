@@ -8,13 +8,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import java.time.Instant
 
-
-//private object Origin : RecordEntity<ExecId, ExecRecord> {
-//    override val id = ExecId(0)
-//    override val cmdId = CommandId(0)
-//    override val sequence = RecordSequence(0)
-//}
-
 data class Entity(
     override val id: ExecId,
     override val cmdId: CmdId,
@@ -104,11 +97,10 @@ data class Entity(
 
         if (status == ExecStatus.Started) return startedExec
 
-        val completedExec = CompletedExec(cmdId, id, startedExec, CompletedAt.now())
-
-        if (status == ExecStatus.Completed) return completedExec
-
-        TODO()
+        return when (status) {
+            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now())
+            else -> TODO()
+        }
     }
 }
 

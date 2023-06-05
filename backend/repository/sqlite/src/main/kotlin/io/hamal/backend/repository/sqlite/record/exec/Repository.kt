@@ -144,6 +144,7 @@ class SqliteExecRepository(
 
 }
 
+@Deprecated("")
 @OptIn(ExperimentalSerializationApi::class)
 internal fun Transaction.recordsOf(execId: ExecId): List<ExecRecord> {
     return executeQuery(
@@ -167,16 +168,18 @@ internal fun Transaction.recordsOf(execId: ExecId): List<ExecRecord> {
     }
 }
 
-
+@Deprecated("")
 internal fun Transaction.currentVersion(execId: ExecId): Exec {
     return recordsOf(execId)
         .createEntity()
         .toDomainObject()
 }
 
+@Deprecated("")
 internal fun Transaction.commandAlreadyApplied(execId: ExecId, cmdId: CmdId) =
     recordsOf(execId).any { it.cmdId == cmdId }
 
+@Deprecated("")
 internal fun Transaction.versionOf(execId: ExecId, cmdId: CmdId): Exec {
     return recordsOf(execId).takeWhileInclusive { it.cmdId != cmdId }
         .createEntity()
