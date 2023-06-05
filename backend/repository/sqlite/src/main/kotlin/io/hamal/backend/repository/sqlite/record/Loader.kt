@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 class RecordLoader<ID : DomainId, RECORD : Record<ID>>(
     private val recordClass: KClass<RECORD>,
 ) {
-    fun loadAll(tx: RecordTransaction<ID, RECORD>, id: ID): List<RECORD> {
+    fun loadAll(tx: RecordTransaction<ID, RECORD, *>, id: ID): List<RECORD> {
         return tx.executeQuery(
             """
         SELECT 

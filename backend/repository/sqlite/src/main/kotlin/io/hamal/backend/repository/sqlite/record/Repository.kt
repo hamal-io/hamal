@@ -1,16 +1,19 @@
 package io.hamal.backend.repository.sqlite.record
 
+import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
+import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.base.DomainId
 import kotlin.reflect.KClass
 
 
-abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>>(
+abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     config: Config,
+    private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
-    private val recordCache: RecordCache<ID, RECORD> = RecordCache(
+    private val recordCache: RecordCache<ID, RECORD, OBJ> = RecordCache(
         RecordLoader(recordClass)
     )
 ) : BaseRepository(config) {
@@ -53,10 +56,17 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>>(
         connection.execute("DELETE FROM records")
     }
 
-    fun <T> tx(block: RecordTransaction<ID, RECORD>.() -> T): T {
+    fun <T> tx(block: RecordTransaction<ID, RECORD, OBJ>.() -> T): T {
         return try {
             connection.tx {
-                block(SqliteRecordTransaction(recordClass, this, recordCache))
+                block(
+                    SqliteRecordTransaction(
+                        createDomainObject,
+                        recordClass,
+                        this,
+                        recordCache
+                    )
+                )
             }
         } catch (t: Throwable) {
             /**

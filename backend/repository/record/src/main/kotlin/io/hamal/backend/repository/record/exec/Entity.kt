@@ -21,7 +21,7 @@ data class Entity(
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null
 
-) : RecordEntity<ExecId, ExecRecord> {
+) : RecordEntity<ExecId, ExecRecord, Exec> {
 
     override fun apply(rec: ExecRecord): Entity {
         return when (rec) {
@@ -70,7 +70,7 @@ data class Entity(
         }
     }
 
-    fun toDomainObject(): Exec {
+    override fun toDomainObject(): Exec {
 
         val plannedExec = PlannedExec(
             cmdId = cmdId,

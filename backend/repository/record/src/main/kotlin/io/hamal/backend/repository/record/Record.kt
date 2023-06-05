@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.record
 
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.base.DomainId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -45,12 +46,19 @@ abstract class Record<ID : DomainId> {
 
     fun sequence() =
         sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
+
 }
 
-interface RecordEntity<ID : DomainId, RECORD : Record<ID>> {
+interface RecordEntity<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
     val id: ID
     val cmdId: CmdId
     val sequence: RecordSequence
 
-    fun apply(rec: RECORD): RecordEntity<ID, RECORD>
+    fun apply(rec: RECORD): RecordEntity<ID, RECORD, OBJ>
+
+    fun toDomainObject(): OBJ
+}
+
+interface CreateDomainObject<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
+    operator fun invoke(records: List<RECORD>): OBJ
 }
