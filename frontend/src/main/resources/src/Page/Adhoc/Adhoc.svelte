@@ -55,7 +55,7 @@
 
     async function getExecutions() {
         fetch("http://localhost:8084/v1/execs?limit=100")
-            .then(response => response.json())
+            .then(response => response.json<ApiAd>())
             .then(data => {
                 execs.set(data.execs);
             }).catch(error => {

@@ -9,11 +9,9 @@ import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils.now
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.InvocationSecrets
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -31,6 +29,15 @@ class FixedRateTriggerService
 ) {
 
     private val plannedInvocations = mutableMapOf<Trigger, Instant>()
+
+    @PostConstruct
+    fun setup() {
+        triggerQueryRepository.list(TriggerId(0), 10)
+            .filterIsInstance<FixedRateTrigger>()
+            .forEach {
+                plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
+            }
+    }
 
     fun triggerAdded(fixedRateTrigger: FixedRateTrigger) {
         plannedInvocations.putIfAbsent(

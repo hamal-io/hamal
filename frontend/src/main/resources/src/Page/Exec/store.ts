@@ -1,8 +1,8 @@
 import type {Writable} from 'svelte/store';
 import {writable} from 'svelte/store';
 
-interface ApiExec {
-    id: string;
+export interface ApiExec {
+    id: bigint;
     state: string;
 }
 

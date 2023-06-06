@@ -1,66 +1,27 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.TriggerCmdRepository.Command.FixedRateTriggerToCreate
 import io.hamal.backend.repository.api.domain.Trigger
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.TriggerName
-import io.hamal.lib.domain.vo.port.DefaultDomainIdGenerator
-import io.hamal.lib.domain.vo.port.GenerateDomainId
+import io.hamal.lib.domain.vo.*
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.days
 
 
 interface TriggerCmdRepository {
-    fun get(id: TriggerId): Trigger
-
-    fun execute(cmdId: CmdId, commands: List<Command>): List<Trigger>
-
-    fun request(cmdId: CmdId, record: Recorder.() -> Unit): List<Trigger> {
-        val recorder = Recorder(DefaultDomainIdGenerator) //FIXME
-        record(recorder)
-        return execute(cmdId, recorder.commands)
-    }
-
-    interface Command {
-
-        enum class Order {
-            InsertPrimary,
-            InsertSecondary,
-            Update,
-            Delete
-        }
-
-        val order: Order
-        val id: TriggerId
-
-        data class FixedRateTriggerToCreate(
-            override val id: TriggerId,
-            var name: TriggerName,
-            var funcId: FuncId,
-            var duration: Duration
-            //inputs
-            //secrets
-        ) : Command {
-            override val order = Order.InsertSecondary
-        }
-    }
-
-    class Recorder(
-        val generateDomainId: GenerateDomainId
-    ) {
-
-        internal val commands = mutableListOf<Command>()
-        fun commands(): List<Command> {
-            return commands.toList()
-        }
-    }
+    fun create(cmd: CreateFixedRateCmd): Trigger
+    data class CreateFixedRateCmd(
+        val id: CmdId,
+        val accountId: AccountId,
+        val triggerId: TriggerId,
+        val name: TriggerName,
+        val funcId: FuncId,
+        val inputs: TriggerInputs,
+        val secrets: TriggerSecrets,
+        val duration: Duration
+    )
 }
 
 interface TriggerQueryRepository {
-    fun find(TriggerId: TriggerId): Trigger?
+    fun find(triggerId: TriggerId): Trigger?
     fun list(afterId: TriggerId, limit: Int): List<Trigger>
 
     fun query(block: Query.() -> Unit): List<Trigger>
@@ -72,18 +33,3 @@ interface TriggerQueryRepository {
 
 }
 
-
-fun TriggerCmdRepository.Recorder.createFixedRateTrigger(
-    block: FixedRateTriggerToCreate.() -> Unit
-): TriggerId {
-    val result = generateDomainId(Shard(0), ::TriggerId)
-    commands.add(
-        FixedRateTriggerToCreate(
-            id = result,
-            name = TriggerName("TBD"),
-            funcId = FuncId(0),
-            duration = 1.days
-        ).apply(block)
-    )
-    return result
-}

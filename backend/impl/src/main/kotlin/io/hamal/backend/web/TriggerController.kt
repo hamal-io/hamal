@@ -8,6 +8,8 @@ import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerInputs
+import io.hamal.lib.domain.vo.TriggerSecrets
 import io.hamal.lib.sdk.domain.ApiCreateTriggerRequest
 import io.hamal.lib.sdk.domain.ApiCreateTriggerResponse
 import io.hamal.lib.sdk.domain.ApiListTriggerResponse
@@ -40,6 +42,8 @@ open class TriggerController(
                 name = req.name,
                 funcId = req.funcId,
                 type = req.type,
+                inputs = TriggerInputs(listOf()),
+                secrets = TriggerSecrets(listOf()),
                 duration = req.duration
             )
         )

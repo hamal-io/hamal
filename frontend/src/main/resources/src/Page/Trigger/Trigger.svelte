@@ -1,6 +1,8 @@
+<script src="../Exec/store.ts"></script>
 <script lang="ts">
-    import {triggers} from "./store";
+    import {ApiTrigger, triggers} from "./store";
     import {onMount} from 'svelte';
+    import Func from "@/Page/Func/Func.svelte";
 
     onMount(getTriggers);
 
@@ -10,7 +12,7 @@
 
     async function getTriggers() {
         fetch("http://localhost:8084/v1/triggers")
-            .then(response => response.json())
+            .then(response => response.json<ApiTrigger>())
             .then(data => {
                 triggers.set(data.triggers);
             }).catch(error => {

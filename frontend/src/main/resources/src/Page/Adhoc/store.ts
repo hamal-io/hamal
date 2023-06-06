@@ -2,7 +2,7 @@ import type {Writable} from 'svelte/store';
 import {writable} from 'svelte/store';
 
 interface ApiExecution {
-    id: string;
+    id: bigint;
     state: string;
 }
 

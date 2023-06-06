@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {execs} from "./store";
+    import {ApiExec, execs} from "./store";
     import {onMount} from 'svelte';
 
     onMount(getFuncs);
 
     async function getFuncs() {
         fetch("http://localhost:8084/v1/execs")
-            .then(response => response.json())
+            .then(response => response.json<ApiExec>())
             .then(data => {
                 execs.set(data.execs);
             }).catch(error => {

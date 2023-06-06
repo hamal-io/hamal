@@ -59,16 +59,17 @@ open class FuncController(
             limit = limit
         )
 
-        return ResponseEntity.ok(
-            ApiListFuncResponse(
-                result.map {
-                    ApiListFuncResponse.Func(
-                        id = it.id,
-                        name = it.name
-                    )
-                }
-            )
+
+        val b =     ApiListFuncResponse(
+            result.map {
+                ApiListFuncResponse.Func(
+                    id = it.id,
+                    name = it.name
+                )
+            }
         )
+
+        return ResponseEntity.ok(b)
     }
 
     @PostMapping("/v1/funcs/{funcId}/exec")

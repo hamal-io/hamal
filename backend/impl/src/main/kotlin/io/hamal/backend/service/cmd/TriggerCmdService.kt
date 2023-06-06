@@ -3,13 +3,12 @@ package io.hamal.backend.service.cmd
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.TriggerCreatedEvent
 import io.hamal.backend.repository.api.TriggerCmdRepository
-import io.hamal.backend.repository.api.createFixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.TriggerName
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import kotlin.time.Duration
@@ -18,7 +17,8 @@ import kotlin.time.Duration
 class TriggerCmdService
 @Autowired constructor(
     val triggerCmdRepository: TriggerCmdRepository,
-    val eventEmitter: EventEmitter
+    val eventEmitter: EventEmitter,
+    val generateDomainId: GenerateDomainId
 ) {
     fun create(cmdId: CmdId, triggerToCreate: TriggerToCreate): Trigger =
         createTrigger(cmdId, triggerToCreate).also { emitEvent(cmdId, it) }
@@ -28,18 +28,29 @@ class TriggerCmdService
         val type: TriggerType,
         val name: TriggerName,
         val funcId: FuncId,
+        val inputs: TriggerInputs,
+        val secrets: TriggerSecrets,
         val duration: Duration?
     )
 }
 
 private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
-    return triggerCmdRepository.request(cmdId) {
-        createFixedRateTrigger {
-            name = triggerToCreate.name
-            funcId = triggerToCreate.funcId
-            duration = triggerToCreate.duration!! //FIXME
-        }
-    }.first()
+    return when (triggerToCreate.type) {
+        TriggerType.FixedRate -> triggerCmdRepository.create(
+            TriggerCmdRepository.CreateFixedRateCmd(
+                id = cmdId,
+                accountId = AccountId(1),
+                triggerId = generateDomainId(Shard(1), ::TriggerId),
+                name = triggerToCreate.name,
+                funcId = triggerToCreate.funcId,
+                inputs = triggerToCreate.inputs,
+                secrets = triggerToCreate.secrets,
+                duration = triggerToCreate.duration!!
+            )
+        )
+
+        else -> TODO()
+    }
 }
 
 private fun TriggerCmdService.emitEvent(cmdId: CmdId, trigger: Trigger) {

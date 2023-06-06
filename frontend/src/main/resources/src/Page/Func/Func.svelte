@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {funcs} from "./store";
+    import {ApiFunc, funcs} from "./store";
     import type monaco from 'monaco-editor';
     import {onMount} from 'svelte';
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -52,7 +52,7 @@
 
     async function getFuncs() {
         fetch("http://localhost:8084/v1/funcs")
-            .then(response => response.json())
+            .then(response => response.json<ApiFunc>())
             .then(data => {
                 funcs.set(data.funcs);
             }).catch(error => {

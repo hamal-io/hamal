@@ -23,7 +23,7 @@ abstract class DomainId : ValueObject.ComparableImpl<SnowflakeId>() {
 abstract class DomainIdSerializer<ID : DomainId>(
     val fn: (SnowflakeId) -> ID
 ) : KSerializer<ID> {
-    override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
+    override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.LONG)
 
     override fun deserialize(decoder: Decoder): ID {
         return fn(SnowflakeId(decoder.decodeLong()))

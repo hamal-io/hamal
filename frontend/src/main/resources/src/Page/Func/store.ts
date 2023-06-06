@@ -1,9 +1,9 @@
 import type {Writable} from 'svelte/store';
 import {writable} from 'svelte/store';
 
-interface ApiFunction {
-    id: string;
+export interface ApiFunc {
+    id: bigint;
     code: string;
 }
 
-export const funcs: Writable<ApiFunction[]> = writable([]);
+export const funcs: Writable<ApiFunc[]> = writable([]);
