@@ -39,9 +39,11 @@ open class FuncController(
         // FIXME to ApiCreateFuncResponse
         //FIXME as request
         return funcCmdService.create(
-            CmdId(0), FuncCmdService.FuncToCreate(
-                shard = shard,
+            CmdId(0), FuncCmdService.ToCreate(
+                funcId = generateDomainId(Shard(1), ::FuncId),
                 name = req.name,
+                inputs = FuncInputs(listOf()),
+                secrets = FuncSecrets(listOf()),
                 code = req.code
             )
         )

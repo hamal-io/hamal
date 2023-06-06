@@ -28,7 +28,7 @@ data class Entity(
             is ExecPlannedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
-                sequence = rec.sequence!!,
+                sequence = rec.sequence(),
                 status = ExecStatus.Planned,
                 correlation = rec.correlation,
                 inputs = rec.inputs,

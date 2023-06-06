@@ -7,6 +7,7 @@ import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.*
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.ExecId
 
 internal object CurrentExecProjection {
@@ -61,6 +62,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecPlannedRecord(
                 entityId = execId,
                 cmdId = cmd.id,
+                accountId = AccountId(1),
                 correlation = cmd.correlation,
                 inputs = cmd.inputs,
                 secrets = cmd.secrets,
@@ -86,7 +88,8 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         records.add(
             ExecScheduledRecord(
                 entityId = execId,
-                cmdId = cmdId
+                cmdId = cmdId,
+                accountId = AccountId(1)
             )
         )
 
@@ -110,6 +113,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecQueuedRecord(
                 entityId = execId,
                 cmdId = cmdId,
+                accountId = AccountId(1)
             )
         )
 
@@ -129,6 +133,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                 ExecStartedRecord(
                     entityId = execId,
                     cmdId = cmd.id,
+                    accountId = AccountId(1)
                 )
             )
 
@@ -154,6 +159,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             ExecCompletedRecord(
                 entityId = execId,
                 cmdId = cmdId,
+                accountId = AccountId(1)
             )
         )
 

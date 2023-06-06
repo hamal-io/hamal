@@ -4,10 +4,7 @@ import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -23,6 +20,7 @@ sealed class ExecRecord(
 data class ExecPlannedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
+    override val accountId: AccountId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val secrets: ExecSecrets,
@@ -34,6 +32,7 @@ data class ExecPlannedRecord(
 data class ExecScheduledRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
+    override val accountId: AccountId
 ) : ExecRecord()
 
 @Serializable
@@ -41,6 +40,7 @@ data class ExecScheduledRecord(
 data class ExecQueuedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
+    override val accountId: AccountId
 ) : ExecRecord()
 
 
@@ -49,6 +49,7 @@ data class ExecQueuedRecord(
 data class ExecStartedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
+    override val accountId: AccountId
 ) : ExecRecord()
 
 @Serializable
@@ -56,4 +57,5 @@ data class ExecStartedRecord(
 data class ExecCompletedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
+    override val accountId: AccountId,
 ) : ExecRecord()

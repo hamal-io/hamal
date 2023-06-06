@@ -9,13 +9,14 @@ import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.ExecId
 import java.nio.file.Path
 
 internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
-    override fun invoke(records: List<ExecRecord>): Exec {
-        check(records.isNotEmpty()) { "At least one record is required" }
-        val firstRecord = records.first()
+    override fun invoke(recs: List<ExecRecord>): Exec {
+        check(recs.isNotEmpty()) { "At least one record is required" }
+        val firstRecord = recs.first()
         check(firstRecord is ExecPlannedRecord)
 
         var result = Entity(
@@ -24,7 +25,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
             sequence = firstRecord.sequence()
         )
 
-        records.forEach { record ->
+        recs.forEach { record ->
             result = result.apply(record)
         }
 
@@ -63,6 +64,7 @@ class SqliteExecRepository(
                     ExecPlannedRecord(
                         entityId = execId,
                         cmdId = cmdId,
+                        accountId = AccountId(1),
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         secrets = cmd.secrets,
@@ -87,6 +89,7 @@ class SqliteExecRepository(
                     ExecScheduledRecord(
                         entityId = execId,
                         cmdId = cmdId,
+                        accountId = AccountId(1)
                     )
                 )
                 (currentVersion(execId) as ScheduledExec)
@@ -106,6 +109,7 @@ class SqliteExecRepository(
                     ExecQueuedRecord(
                         entityId = execId,
                         cmdId = cmdId,
+                        accountId = AccountId(1)
                     )
                 )
 
@@ -133,6 +137,7 @@ class SqliteExecRepository(
                         ExecStartedRecord(
                             entityId = execId,
                             cmdId = cmd.id,
+                            accountId = AccountId(1)
                         )
                     )
                     result.add(
@@ -158,6 +163,7 @@ class SqliteExecRepository(
                     ExecCompletedRecord(
                         entityId = execId,
                         cmdId = cmdId,
+                        accountId = AccountId(1)
                     )
                 )
                 (currentVersion(execId) as CompletedExec)
