@@ -39,7 +39,8 @@ class SqliteExecRepository(
     createDomainObject = CreateExec,
     recordClass = ExecRecord::class,
     projections = listOf(
-        ProjectionCurrent
+        ProjectionCurrent,
+        ProjectionQueue
     )
 ), ExecCmdRepository,
     ExecQueryRepository {
@@ -110,7 +111,7 @@ class SqliteExecRepository(
 
                 (currentVersion(execId) as QueuedExec)
                     .also { ProjectionCurrent.update(this, it) }
-                    .also(ProjectionQueue::add)
+                    .also { ProjectionQueue.update(this, it) }
             }
         }
     }
@@ -120,13 +121,14 @@ class SqliteExecRepository(
         val result = mutableListOf<StartedExec>()
 
         tx {
-            ProjectionQueue.pop(2).forEach { queuedExec ->
+            ProjectionQueue.pop(this, 2).forEach { queuedExec ->
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
                 if (commandAlreadyApplied(execId, cmdId)) {
                     versionOf(execId, cmdId) as QueuedExec
                 } else {
+
                     storeRecord(
                         ExecStartedRecord(
                             entityId = execId,

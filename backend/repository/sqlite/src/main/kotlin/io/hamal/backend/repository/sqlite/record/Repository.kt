@@ -35,7 +35,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
                  sequence       INTEGER NOT NULL DEFAULT 0,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (entity_id, sequence),
-                 UNIQUE         (cmd_id)
+                 UNIQUE         (entity_id, cmd_id)
             );
         """.trimIndent()
         )

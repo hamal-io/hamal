@@ -1,22 +1,66 @@
 package io.hamal.backend.repository.sqlite.record.exec
 
+import io.hamal.backend.repository.api.domain.Exec
 import io.hamal.backend.repository.api.domain.QueuedExec
+import io.hamal.backend.repository.api.record.exec.ExecRecord
+import io.hamal.backend.repository.sqlite.internal.Connection
+import io.hamal.backend.repository.sqlite.record.Projection
+import io.hamal.backend.repository.sqlite.record.RecordTransaction
+import io.hamal.backend.repository.sqlite.record.protobuf
+import io.hamal.lib.domain.vo.ExecId
+import kotlinx.serialization.ExperimentalSerializationApi
 
-//FIXME this must be concurrent safe
-internal object ProjectionQueue {
-    private val queue = mutableListOf<QueuedExec>()
-    fun add(exec: QueuedExec) {
-        queue.add(exec)
-    }
 
-    fun pop(limit: Int): List<QueuedExec> {
-        val result = mutableListOf<QueuedExec>()
-        for (idx in 0 until limit) {
-            if (queue.isEmpty()) {
-                break
+@OptIn(ExperimentalSerializationApi::class)
+internal object ProjectionQueue : Projection<ExecId, ExecRecord, Exec> {
+
+    fun pop(tx: RecordTransaction<ExecId, ExecRecord, Exec>, limit: Int): List<Exec> {
+        return tx.executeQuery(
+            """
+            DELETE FROM queue WHERE id IN (
+                SELECT id FROM queue ORDER BY id LIMIT :limit
+            ) RETURNING *
+        """.trimIndent()
+        ) {
+            query {
+                set("limit", limit)
             }
-            result.add(queue.removeFirst())
+            map { rs ->
+                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+            }
         }
-        return result
     }
+
+    override fun update(tx: RecordTransaction<ExecId, ExecRecord, Exec>, obj: Exec) {
+        require(obj is QueuedExec) { "exec not in status queued" }
+        tx.execute(
+            """
+                INSERT INTO queue
+                    (id, data) 
+                VALUES
+                    (:id, :data)
+            """.trimIndent()
+        ) {
+            set("id", obj.id)
+            set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
+        }
+    }
+
+    override fun setupSchema(connection: Connection) {
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS queue (
+                 id             INTEGER NOT NULL,
+                 data           BLOB NOT NULL,
+                 PRIMARY KEY    (id)
+            );
+        """.trimIndent()
+        )
+    }
+
+    override fun clear(connection: Connection) {
+        connection.execute("""DELETE FROM queue""")
+    }
+
+    override fun invalidate() {}
 }
