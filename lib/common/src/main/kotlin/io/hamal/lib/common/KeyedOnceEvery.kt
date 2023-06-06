@@ -1,7 +1,7 @@
 package io.hamal.lib.common
 
-import io.hamal.lib.domain.OnceEvery
 import io.hamal.lib.common.supplier.InstantSupplier
+import io.hamal.lib.domain.OnceEvery
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration
 
@@ -42,7 +42,7 @@ interface KeyedOnceEvery<KEY : Any, VALUE : Any> {
         private val instantSupplier: InstantSupplier,
         private val maxCapacity: Int
     ) : KeyedOnceEvery<KEY, VALUE> {
-        private val onceStore: LruCache<KEY, OnceEvery<VALUE>> = LruCache.DefaultImpl(maxCapacity)
+        private val onceStore: LruCache<KEY, OnceEvery<VALUE>> = DefaultLruCache(maxCapacity)
 
         override fun invoke(key: KEY, fn: () -> VALUE): VALUE {
             onceStore.putIfAbsent(key, OnceEvery.default(every, instantSupplier))

@@ -11,7 +11,6 @@ import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.base.DomainId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
@@ -23,9 +22,6 @@ interface RecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObje
     fun versionOf(id: ID, cmdId: CmdId): OBJ
     fun currentVersion(id: ID): OBJ
 }
-
-@OptIn(ExperimentalSerializationApi::class)
-val protobuf = ProtoBuf {}
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(

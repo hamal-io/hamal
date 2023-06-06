@@ -34,7 +34,14 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
 
 class SqliteExecRepository(
     config: Config
-) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(config, CreateExec, ExecRecord::class), ExecCmdRepository,
+) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(
+    config = config,
+    createDomainObject = CreateExec,
+    recordClass = ExecRecord::class,
+    projections = listOf(
+        ProjectionCurrent
+    )
+), ExecCmdRepository,
     ExecQueryRepository {
 
     data class Config(
@@ -63,7 +70,7 @@ class SqliteExecRepository(
                 )
 
                 (currentVersion(execId) as PlannedExec)
-                    .also(CurrentExecProjection::apply)
+                    .also { ProjectionCurrent.update(this, it) }
             }
         }
     }
@@ -81,8 +88,8 @@ class SqliteExecRepository(
                         cmdId = cmdId,
                     )
                 )
-
-                (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
+                (currentVersion(execId) as ScheduledExec)
+                    .also { ProjectionCurrent.update(this, it) }
             }
         }
     }
@@ -102,8 +109,8 @@ class SqliteExecRepository(
                 )
 
                 (currentVersion(execId) as QueuedExec)
-                    .also(CurrentExecProjection::apply)
-                    .also(QueueProjection::add)
+                    .also { ProjectionCurrent.update(this, it) }
+                    .also(ProjectionQueue::add)
             }
         }
     }
@@ -113,7 +120,7 @@ class SqliteExecRepository(
         val result = mutableListOf<StartedExec>()
 
         tx {
-            QueueProjection.pop(2).forEach { queuedExec ->
+            ProjectionQueue.pop(2).forEach { queuedExec ->
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
@@ -126,7 +133,10 @@ class SqliteExecRepository(
                             cmdId = cmd.id,
                         )
                     )
-                    result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
+                    result.add(
+                        (currentVersion(execId) as StartedExec)
+                            .also { ProjectionCurrent.update(this, it) }
+                    )
                 }
             }
         }
@@ -148,17 +158,18 @@ class SqliteExecRepository(
                         cmdId = cmdId,
                     )
                 )
-                (currentVersion(execId) as CompletedExec).also(CurrentExecProjection::apply)
+                (currentVersion(execId) as CompletedExec)
+                    .also { ProjectionCurrent.update(this, it) }
             }
         }
     }
 
     override fun find(execId: ExecId): Exec? {
-        return CurrentExecProjection.find(execId)
+        return ProjectionCurrent.find(connection, execId)
     }
 
     override fun list(afterId: ExecId, limit: Int): List<Exec> {
-        return CurrentExecProjection.list(afterId, limit)
+        return ProjectionCurrent.list(connection, afterId, limit)
     }
 
 }

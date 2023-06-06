@@ -15,7 +15,8 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     private val recordClass: KClass<RECORD>,
     private val recordCache: RecordCache<ID, RECORD, OBJ> = RecordCache(
         RecordLoader(recordClass)
-    )
+    ),
+    private val projections: List<Projection<ID, RECORD, OBJ>>
 ) : BaseRepository(config) {
 
     override fun setupConnection(connection: Connection) {
@@ -50,10 +51,14 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
                 END;
         """.trimIndent()
         )
+
+        projections.forEach { projection -> projection.setupSchema(connection) }
+
     }
 
     override fun clear() {
         connection.execute("DELETE FROM records")
+        projections.forEach { projection -> projection.clear(connection) }
     }
 
     fun <T> tx(block: RecordTransaction<ID, RECORD, OBJ>.() -> T): T {
@@ -75,6 +80,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
              * As this should rarely happen --> simpler and cheaper execution for happy path
              */
             recordCache.invalidate()
+            projections.forEach(Projection<ID, RECORD, OBJ>::invalidate)
             throw t
         }
     }

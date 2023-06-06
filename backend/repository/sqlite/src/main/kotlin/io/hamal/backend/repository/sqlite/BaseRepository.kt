@@ -18,16 +18,18 @@ abstract class BaseRepository(
 
     private val connectionOnce = Once.default<Connection>()
 
-    internal val connection = connectionOnce {
-        val result = DefaultConnection(
-            this::class,
-            "jdbc:sqlite:${ensureFilePath(config)}"
-        )
-        log.debug("Setup connection")
-        setupConnection(result)
-        log.debug("Setup schema")
-        setupSchema(result)
-        result
+    internal val connection by lazy {
+        connectionOnce {
+            val result = DefaultConnection(
+                this::class,
+                "jdbc:sqlite:${ensureFilePath(config)}"
+            )
+            log.debug("Setup connection")
+            setupConnection(result)
+            log.debug("Setup schema")
+            setupSchema(result)
+            result
+        }
     }
 
     interface Config {
