@@ -1,12 +1,11 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.ValueOperation.Type.Add
-import io.hamal.lib.common.value.ValueOperation.Type.Sub
+import io.hamal.lib.common.value.ValueOperation.Type.*
+import io.hamal.lib.common.value.ValueSerializationFixture.generateTestCases
+import io.hamal.lib.domain.Tuple3
 import io.hamal.lib.domain.Tuple4
-import io.hamal.lib.domain.vo.fixture.SerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -587,24 +586,75 @@ class NumberValueTest {
 
     @TestFactory
     fun Serialization() = listOf(
-        generateTestCases(NumberValue.Zero, """{"delegate":"0"}"""),
-        generateTestCases(NumberValue(-12.324), """{"delegate":"-12.324"}"""),
-        generateTestCases(NumberValue("123456789.987654321"), """{"delegate":"123456789.987654321"}""")
+        generateTestCases(NumberValue.Zero, """{"type":"NumberValue","value":"0"}"""),
+        generateTestCases(NumberValue(-12.324), """{"type":"NumberValue","value":"-12.324"}"""),
+        generateTestCases(
+            NumberValue("123456789.987654321"),
+            """{"type":"NumberValue","value":"123456789.987654321"}"""
+        )
     ).flatten()
 }
 
 
 class DefaultNumberMetaTableTest {
+    @Test
+    fun `Every operation is covered`() {
+        assertThat(DefaultNumberMetaTable.operations, hasSize(14))
+    }
+
     @TestFactory
     fun infix() = listOf<Tuple4<NumberValue, ValueOperation.Type, Value, Value>>(
 
         Tuple4(NumberValue(1), Add, NumberValue(3), NumberValue(4)),
+        Tuple4(NumberValue(10), Div, NumberValue(5), NumberValue(2)),
+        Tuple4(NumberValue(10), Eq, NumberValue(10), TrueValue),
+        Tuple4(NumberValue(12), Eq, NumberValue(10), FalseValue),
+
+        Tuple4(NumberValue(12), Gt, NumberValue(10), TrueValue),
+        Tuple4(NumberValue(12), Gt, NumberValue(12), FalseValue),
+        Tuple4(NumberValue(12), Gt, NumberValue(14), FalseValue),
+
+        Tuple4(NumberValue(12), Gte, NumberValue(10), TrueValue),
+        Tuple4(NumberValue(12), Gte, NumberValue(12), TrueValue),
+        Tuple4(NumberValue(12), Gte, NumberValue(14), FalseValue),
+
+        Tuple4(NumberValue(12), Lt, NumberValue(10), FalseValue),
+        Tuple4(NumberValue(12), Lt, NumberValue(12), FalseValue),
+        Tuple4(NumberValue(12), Lt, NumberValue(14), TrueValue),
+
+        Tuple4(NumberValue(12), Lte, NumberValue(10), FalseValue),
+        Tuple4(NumberValue(12), Lte, NumberValue(12), TrueValue),
+        Tuple4(NumberValue(12), Lte, NumberValue(14), TrueValue),
+
+        Tuple4(NumberValue(9), Mod, NumberValue(3), NumberValue(0)),
+        Tuple4(NumberValue(9), Mul, NumberValue(3), NumberValue(27)),
+        Tuple4(NumberValue(2), Pow, NumberValue(10), NumberValue(1024)),
+
         Tuple4(NumberValue(1), Sub, NumberValue(3), NumberValue(-2)),
-        TODO()
-    ).map { (self, operator, other, expected) ->
+
+        // Nil
+        Tuple4(NumberValue(1), Eq, NilValue, FalseValue),
+        Tuple4(NumberValue(1), Neq, NilValue, TrueValue),
+
+
+        ).map { (self, operator, other, expected) ->
         dynamicTest("$self $operator $other = $expected") {
             val infixOp = self.findInfixOperation(operator, other.type())!!
             val result = infixOp(self, other)
+            assertThat(result, equalTo(expected))
+        }
+    }
+
+    @TestFactory
+    fun prefix() = listOf<Tuple3<ValueOperation.Type, NumberValue, Value>>(
+
+        Tuple3(Negate, NumberValue(1), NumberValue(-1)),
+        Tuple3(Negate, NumberValue(-1), NumberValue(1)),
+
+        ).map { (operator, self, expected) ->
+        dynamicTest("$operator $self = $expected") {
+            val prefixOp = self.findPrefixOperation(operator)!!
+            val result = prefixOp(self)
             assertThat(result, equalTo(expected))
         }
     }

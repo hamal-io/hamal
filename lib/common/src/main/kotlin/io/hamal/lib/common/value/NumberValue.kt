@@ -14,10 +14,10 @@ import java.math.MathContext
 import java.math.RoundingMode
 
 @Serializable
-@SerialName("Number")
+@SerialName("NumberValue")
 data class NumberValue(
     @Serializable(with = BigDecimalSerializer::class)
-    val delegate: BigDecimal,
+    val value: BigDecimal,
     @Transient
     override val metaTable: MetaTable = DefaultNumberMetaTable
 ) : Number(), Value, Comparable<NumberValue> {
@@ -55,37 +55,37 @@ data class NumberValue(
     }
 
     fun plus(other: NumberValue) =
-        NumberValue(delegate.add(other.delegate, mathContext), metaTable)
+        NumberValue(value.add(other.value, mathContext), metaTable)
 
     fun minus(other: NumberValue) =
-        NumberValue(delegate.subtract(other.delegate, mathContext), metaTable)
+        NumberValue(value.subtract(other.value, mathContext), metaTable)
 
     fun multiply(other: NumberValue) =
-        NumberValue(delegate.multiply(other.delegate, mathContext), metaTable)
+        NumberValue(value.multiply(other.value, mathContext), metaTable)
 
     fun divide(other: NumberValue) =
-        NumberValue(delegate.divide(other.delegate, mathContext), metaTable)
+        NumberValue(value.divide(other.value, mathContext), metaTable)
 
     fun pow(other: NumberValue) =
-        NumberValue(delegate.pow(other.delegate.toInt(), mathContext), metaTable)
+        NumberValue(value.pow(other.value.toInt(), mathContext), metaTable)
 
     fun remainder(other: NumberValue) =
-        NumberValue(delegate.remainder(other.delegate, mathContext), metaTable)
+        NumberValue(value.remainder(other.value, mathContext), metaTable)
 
-    fun floor() = NumberValue(delegate.setScale(0, RoundingMode.FLOOR), metaTable)
+    fun floor() = NumberValue(value.setScale(0, RoundingMode.FLOOR), metaTable)
 
-    fun ceil() = NumberValue(delegate.setScale(0, RoundingMode.CEILING), metaTable)
+    fun ceil() = NumberValue(value.setScale(0, RoundingMode.CEILING), metaTable)
 
     fun ln(): NumberValue {
         // Algorithm: http://functions.wolfram.com/ElementaryFunctions/Log/10/
         // https://stackoverjob.com/a/6169691/6444586
         val result: NumberValue
         require(isPositive()) { IllegalStateException("Value must >= 1") }
-        if (delegate == BigDecimal.ONE) {
+        if (value == BigDecimal.ONE) {
             return NumberValue(BigDecimal.ZERO, metaTable)
         } else {
             val iterations = 25000L
-            val x = delegate.subtract(BigDecimal.ONE)
+            val x = value.subtract(BigDecimal.ONE)
             var ret = BigDecimal(iterations + 1)
             for (i in iterations downTo 0) {
                 var N = BigDecimal(i / 2 + 1).pow(2)
@@ -102,17 +102,17 @@ data class NumberValue(
 
     fun sqrt(): NumberValue {
         require(!isNegative()) { throw IllegalStateException("Value must >= 0") }
-        return NumberValue(delegate.sqrt(mathContext), metaTable)
+        return NumberValue(value.sqrt(mathContext), metaTable)
     }
 
-    fun abs() = NumberValue(delegate.abs(mathContext), metaTable)
+    fun abs() = NumberValue(value.abs(mathContext), metaTable)
 
-    fun negate() = NumberValue(delegate.negate(mathContext), metaTable)
+    fun negate() = NumberValue(value.negate(mathContext), metaTable)
 
 
-    override fun toString() = delegate.toString()
+    override fun toString() = value.toString()
 
-    override operator fun compareTo(other: NumberValue) = delegate.compareTo(other.delegate)
+    override operator fun compareTo(other: NumberValue) = value.compareTo(other.value)
 
     fun isLessThan(other: NumberValue) = compareTo(other) < 0
 
@@ -122,27 +122,27 @@ data class NumberValue(
 
     fun isGreaterThanEqual(other: NumberValue) = compareTo(other) >= 0
 
-    fun isNegative() = delegate.signum() < 0
+    fun isNegative() = value.signum() < 0
 
-    fun isPositive() = delegate.signum() > 0
+    fun isPositive() = value.signum() > 0
 
-    fun isZero() = delegate.signum() == 0
+    fun isZero() = value.signum() == 0
 
-    override fun toByte() = delegate.toByte()
+    override fun toByte() = value.toByte()
 
-    override fun toShort() = delegate.toShort()
+    override fun toShort() = value.toShort()
 
-    override fun toInt() = delegate.toInt()
+    override fun toInt() = value.toInt()
 
-    override fun toLong() = delegate.toLong()
+    override fun toLong() = value.toLong()
 
-    override fun toFloat() = delegate.toFloat()
+    override fun toFloat() = value.toFloat()
 
-    override fun toChar() = delegate.toChar()
+    override fun toChar() = value.toChar()
 
-    override fun toDouble() = delegate.toDouble()
+    override fun toDouble() = value.toDouble()
 
-    fun toBigDecimal() = delegate
+    fun toBigDecimal() = value
 
 
     object BigDecimalSerializer : KSerializer<BigDecimal> {

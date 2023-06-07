@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package io.hamal.lib.domain.vo.fixture
+package io.hamal.lib.common.value
 
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
@@ -10,22 +10,22 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-object SerializationFixture {
+internal object ValueSerializationFixture {
 
-    inline fun <reified INPUT : Any> generateTestCases(
-        testInstance: INPUT,
+    fun generateTestCases(
+        testInstance: Value,
         expectedJson: String
     ): List<DynamicTest> {
         return listOf(
             dynamicTest("${testInstance::class.simpleName} supports protobuf serializer") {
                 val encoded = ProtoBuf.encodeToByteArray(testInstance)
-                val decoded = ProtoBuf.decodeFromByteArray<INPUT>(encoded)
+                val decoded = ProtoBuf.decodeFromByteArray<Value>(encoded)
                 assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
             },
             dynamicTest("${testInstance::class.simpleName} supports json serializer") {
                 val encoded = Json.encodeToString(testInstance)
                 assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
-                val decoded = Json.decodeFromString<INPUT>(encoded)
+                val decoded = Json.decodeFromString<Value>(encoded)
                 assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
             }
         )
