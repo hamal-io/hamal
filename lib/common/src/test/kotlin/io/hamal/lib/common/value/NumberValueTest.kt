@@ -587,9 +587,9 @@ class NumberValueTest {
 
     @TestFactory
     fun Serialization() = listOf(
-        generateTestCases(NumberValue.Zero, "\"0\""),
-        generateTestCases(NumberValue(-12.324), "\"-12.324\""),
-        generateTestCases(NumberValue("123456789.987654321"), "\"123456789.987654321\"")
+        generateTestCases(NumberValue.Zero, """{"delegate":"0"}"""),
+        generateTestCases(NumberValue(-12.324), """{"delegate":"-12.324"}"""),
+        generateTestCases(NumberValue("123456789.987654321"), """{"delegate":"123456789.987654321"}""")
     ).flatten()
 }
 

@@ -16,7 +16,11 @@ class TableValue(
     val entries: List<TableEntry>,
     @Transient
     override val metaTable: MetaTable = DefaultTableMetaTable
-) : Value
+) : Value {
+    companion object {
+        fun empty() = TableValue(listOf())
+    }
+}
 
 object DefaultTableMetaTable : MetaTable {
     override val type = "table"

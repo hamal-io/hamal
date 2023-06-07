@@ -10,6 +10,7 @@ import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -87,7 +88,7 @@ open class FuncController(
             InvokeOneshot(
                 execId = generateDomainId(Shard(1), ::ExecId),
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
-                inputs = InvocationInputs(listOf()),
+                inputs = InvocationInputs(TableValue.empty()),
                 secrets = InvocationSecrets(listOf()),
                 funcId = funcId
             )

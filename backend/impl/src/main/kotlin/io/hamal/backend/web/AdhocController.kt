@@ -5,6 +5,7 @@ import io.hamal.backend.req.Request
 import io.hamal.lib.common.value.NumberValue
 import io.hamal.lib.common.value.StringValue
 import io.hamal.lib.common.value.TableEntry
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -36,9 +37,11 @@ open class AdhocController
         val result = request(
             InvokeAdhoc(
                 inputs = InvocationInputs(
-                    listOf(
-                        TableEntry(StringValue("Hello"), StringValue("World")),
-                        TableEntry(StringValue("Number"), NumberValue(42)),
+                    TableValue(
+                        listOf(
+                            TableEntry(StringValue("Hello"), StringValue("World")),
+                            TableEntry(StringValue("Number"), NumberValue(42)),
+                        )
                     )
                 ),
                 secrets = InvocationSecrets(

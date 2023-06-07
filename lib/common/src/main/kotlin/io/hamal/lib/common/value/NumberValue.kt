@@ -13,9 +13,10 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
+@Serializable
 @SerialName("Number")
-@Serializable(with = NumberValue.Serializer::class)
 data class NumberValue(
+    @Serializable(with = BigDecimalSerializer::class)
     val delegate: BigDecimal,
     @Transient
     override val metaTable: MetaTable = DefaultNumberMetaTable
@@ -143,16 +144,17 @@ data class NumberValue(
 
     fun toBigDecimal() = delegate
 
-    object Serializer : KSerializer<NumberValue> {
-        override fun deserialize(decoder: Decoder): NumberValue {
-            return NumberValue(decoder.decodeString().toBigDecimal())
+
+    object BigDecimalSerializer : KSerializer<BigDecimal> {
+        override fun deserialize(decoder: Decoder): BigDecimal {
+            return decoder.decodeString().toBigDecimal()
         }
 
-        override fun serialize(encoder: Encoder, value: NumberValue) {
-            encoder.encodeString(value.delegate.toEngineeringString())
+        override fun serialize(encoder: Encoder, value: BigDecimal) {
+            encoder.encodeString(value.toEngineeringString())
         }
 
-        override val descriptor = PrimitiveSerialDescriptor("NumberValue", PrimitiveKind.STRING)
+        override val descriptor = PrimitiveSerialDescriptor("BigDecimal", PrimitiveKind.STRING)
     }
 }
 

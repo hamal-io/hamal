@@ -9,6 +9,7 @@ import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils.now
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import jakarta.annotation.PostConstruct
@@ -63,7 +64,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger
             execId = generateDomainId(Shard(1), ::ExecId),
             funcId = trigger.funcId,
             correlationId = CorrelationId("__TBD__"), //FIXME
-            inputs = InvocationInputs(listOf()),
+            inputs = InvocationInputs(TableValue.empty()),
             secrets = InvocationSecrets(listOf()),
         )
     )

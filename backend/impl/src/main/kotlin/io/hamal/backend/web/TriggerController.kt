@@ -6,6 +6,7 @@ import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.service.query.TriggerQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerInputs
@@ -42,7 +43,7 @@ open class TriggerController(
                 name = req.name,
                 funcId = req.funcId,
                 type = req.type,
-                inputs = TriggerInputs(listOf()),
+                inputs = TriggerInputs(TableValue.empty()),
                 secrets = TriggerSecrets(listOf()),
                 duration = req.duration
             )

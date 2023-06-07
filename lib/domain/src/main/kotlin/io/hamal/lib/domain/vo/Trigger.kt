@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.common.value.TableEntry
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.base.*
 import kotlinx.serialization.Serializable
 
@@ -20,7 +20,7 @@ class TriggerName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = TriggerInputs.Serializer::class)
-class TriggerInputs(override val value: List<TableEntry>) : Inputs() {
+class TriggerInputs(override val value: TableValue) : Inputs() {
     internal object Serializer : InputsSerializer<TriggerInputs>(::TriggerInputs)
 }
 

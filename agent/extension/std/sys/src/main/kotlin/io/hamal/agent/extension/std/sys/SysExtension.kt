@@ -1,6 +1,7 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -75,7 +76,7 @@ class CreateFunc : DepFunctionValue {
 
             val r = ApiCreateFuncRequest(
                 name = FuncName((f[DepIdentifier("name")] as DepStringValue).value),
-                inputs = FuncInputs(listOf()),
+                inputs = FuncInputs(TableValue.empty()),
                 secrets = FuncSecrets(listOf()),
                 code = Code("")
             )

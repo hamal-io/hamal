@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.common.value.TableEntry
+import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.base.*
 import kotlinx.serialization.Serializable
 
@@ -19,7 +19,7 @@ class FuncName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = FuncInputs.Serializer::class)
-class FuncInputs(override val value: List<TableEntry>) : Inputs() {
+class FuncInputs(override val value: TableValue) : Inputs() {
     internal object Serializer : InputsSerializer<FuncInputs>(::FuncInputs)
 }
 
