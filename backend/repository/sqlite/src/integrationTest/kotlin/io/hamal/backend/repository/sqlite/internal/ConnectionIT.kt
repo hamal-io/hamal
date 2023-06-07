@@ -4,7 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.base.DomainId
 import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert.*
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -13,8 +13,9 @@ import java.nio.file.Files
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
-class DefaultConnectionIT {@Nested
-inner class PrepareTest {
+class DefaultConnectionIT {
+    @Nested
+    inner class PrepareTest {
         @Test
         fun `Statement are not getting cached`() {
             val result = testInstance.prepare("INSERT INTO some_table(value) VALUES (:some_value)")
@@ -46,8 +47,10 @@ inner class PrepareTest {
 
             testInstance.execute("""CREATE TABLE some_table(value INT NOT NULL)""")
         }
-    }@Nested
-inner class ExecuteTest {
+    }
+
+    @Nested
+    inner class ExecuteTest {
         @Test
         fun `Named parameter is missing`() {
             val exception = assertThrows<IllegalArgumentException> {
@@ -192,8 +195,10 @@ inner class ExecuteTest {
                 }
             }
         }
-    }@Nested
-inner class ExecuteUpdateTest {
+    }
+
+    @Nested
+    inner class ExecuteUpdateTest {
         @Test
         fun `Named parameter is missing`() {
             val exception = assertThrows<IllegalArgumentException> {
@@ -310,8 +315,10 @@ inner class ExecuteUpdateTest {
                 }
             }
         }
-    }@Nested
-inner class ExecuteQueryTest {
+    }
+
+    @Nested
+    inner class ExecuteQueryTest {
 
         @Test
         fun `Named parameter does not exists in query`() {
@@ -390,8 +397,10 @@ inner class ExecuteQueryTest {
             testInstance.execute("""CREATE TABLE domain_id_table(value INT NOT NULL)""")
             testInstance.execute("""CREATE TABLE request_id_table(value INT NOT NULL)""")
         }
-    }@Nested
-inner class TxTest {
+    }
+
+    @Nested
+    inner class TxTest {
         @Test
         fun `Successful transaction automatically commits and returns result`() {
             val result = testInstance.tx {
@@ -425,19 +434,21 @@ inner class TxTest {
         @Test
         fun `abort() stops execution and rolls transaction back`() {
             val counter = AtomicInteger(0)
-            val result = testInstance.tx {
-                counter.incrementAndGet()
-                execute("INSERT INTO some_table(value) VALUES( 123)")
-                counter.incrementAndGet()
+            assertThrows<Transaction.AbortException> {
+                testInstance.tx {
+                    counter.incrementAndGet()
+                    execute("INSERT INTO some_table(value) VALUES( 123)")
+                    counter.incrementAndGet()
 
 
-                abort()
-                execute("INSERT INTO another_table(value) VALUES (321)")
-                counter.incrementAndGet()
+                    abort()
+                    execute("INSERT INTO another_table(value) VALUES (321)")
+                    counter.incrementAndGet()
 
-                throw RuntimeException("Oops")
+                    throw RuntimeException("Oops")
+                }
             }
-            assertThat(result, nullValue())
+
             assertThat(counter.get(), equalTo(2))
 
             verifyIsZero("SELECT COUNT(*) as count FROM some_table")
@@ -473,8 +484,10 @@ inner class TxTest {
             testInstance.execute("""CREATE TABLE another_table(value INT NOT NULL)""")
         }
 
-    }@Nested
-inner class CloseTest {
+    }
+
+    @Nested
+    inner class CloseTest {
 
         @Test
         fun `Closes an open connection`() {

@@ -51,9 +51,5 @@ abstract class BaseRepository(
 
 private fun ensureFilePath(config: BaseRepository.Config): Path {
     return FileUtils.createDirectories(config.path)
-        .resolve(
-            Path(
-                String.format("${config.filename}-%04d.db", config.shard.value)
-            )
-        )
+        .resolve(config.path.resolve(Path(config.filename)))
 }

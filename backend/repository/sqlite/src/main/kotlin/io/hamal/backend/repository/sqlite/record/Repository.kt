@@ -17,7 +17,11 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
         RecordLoader(recordClass)
     ),
     private val projections: List<Projection<ID, RECORD, OBJ>>
-) : BaseRepository(config) {
+) : BaseRepository(object : Config {
+    override val path = config.path
+    override val filename = String.format("${config.filename}-%04d.db", config.shard.value)
+    override val shard = config.shard
+}) {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
