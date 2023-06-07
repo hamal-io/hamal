@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.common.ddd.ValueObject
-import io.hamal.lib.domain.value.TableEntry
+import io.hamal.lib.common.value.TableEntry
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer

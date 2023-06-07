@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.value
+package io.hamal.lib.common.value
 
 fun booleanOf(value: Boolean) = if (value) TrueValue else FalseValue
 

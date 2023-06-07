@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.value.TableEntry
+import io.hamal.lib.common.value.TableEntry
 import io.hamal.lib.domain.vo.base.*
 import kotlinx.serialization.Serializable
 

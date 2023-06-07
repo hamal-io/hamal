@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package io.hamal.lib.domain.vo.helper
+package io.hamal.lib.domain.vo.fixture
 
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json

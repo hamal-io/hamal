@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
+import io.hamal.lib.domain.vo.fixture.SerializationFixture.generateTestCases
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Nested

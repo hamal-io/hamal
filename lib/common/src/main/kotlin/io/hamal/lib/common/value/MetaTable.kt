@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.value
+package io.hamal.lib.common.value
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

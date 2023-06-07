@@ -1,6 +1,6 @@
-package io.hamal.lib.domain.value
+package io.hamal.lib.common.value
 
-import io.hamal.lib.domain.value.ValueOperation.Type.*
+import io.hamal.lib.common.value.ValueOperation.Type.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

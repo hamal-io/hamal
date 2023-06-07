@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.helper.SerializationFixture
+import io.hamal.lib.domain.vo.fixture.SerializationFixture
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.Assertions

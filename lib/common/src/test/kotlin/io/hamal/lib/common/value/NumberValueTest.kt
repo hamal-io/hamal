@@ -1,9 +1,9 @@
-package io.hamal.lib.domain.value
+package io.hamal.lib.common.value
 
+import io.hamal.lib.common.value.ValueOperation.Type.Add
+import io.hamal.lib.common.value.ValueOperation.Type.Sub
 import io.hamal.lib.domain.Tuple4
-import io.hamal.lib.domain.value.ValueOperation.Type.Add
-import io.hamal.lib.domain.value.ValueOperation.Type.Sub
-import io.hamal.lib.domain.vo.helper.SerializationFixture.generateTestCases
+import io.hamal.lib.domain.vo.fixture.SerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
@@ -586,9 +586,11 @@ class NumberValueTest {
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(
-        NumberValue("123456789.987654321"), "\"123456789.987654321\""
-    )
+    fun Serialization() = listOf(
+        generateTestCases(NumberValue.Zero, "\"0\""),
+        generateTestCases(NumberValue(-12.324), "\"-12.324\""),
+        generateTestCases(NumberValue("123456789.987654321"), "\"123456789.987654321\"")
+    ).flatten()
 }
 
 

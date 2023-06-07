@@ -1,7 +1,7 @@
-package io.hamal.lib.domain.value
+package io.hamal.lib.common.value
 
-import io.hamal.lib.domain.value.ValueOperation.Type.Add
-import io.hamal.lib.domain.value.ValueOperation.Type.Sub
+import io.hamal.lib.common.value.ValueOperation.Type.Add
+import io.hamal.lib.common.value.ValueOperation.Type.Sub
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue

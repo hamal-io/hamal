@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.value
+package io.hamal.lib.common.value
 
 internal class TestValue : Value {
     override val metaTable = TestMetaTable
