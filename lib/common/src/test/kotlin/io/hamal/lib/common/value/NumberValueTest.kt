@@ -1,6 +1,6 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.ValueOperation.Type.*
+import io.hamal.lib.common.value.ValueOperator.Type.*
 import io.hamal.lib.common.value.ValueSerializationFixture.generateTestCases
 import io.hamal.lib.domain.Tuple3
 import io.hamal.lib.domain.Tuple4
@@ -599,11 +599,11 @@ class NumberValueTest {
 class DefaultNumberMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultNumberMetaTable.operations, hasSize(14))
+        assertThat(DefaultNumberMetaTable.operators, hasSize(14))
     }
 
     @TestFactory
-    fun infix() = listOf<Tuple4<NumberValue, ValueOperation.Type, Value, Value>>(
+    fun infix() = listOf<Tuple4<NumberValue, ValueOperator.Type, Value, Value>>(
 
         Tuple4(NumberValue(1), Add, NumberValue(3), NumberValue(4)),
         Tuple4(NumberValue(10), Div, NumberValue(5), NumberValue(2)),
@@ -646,7 +646,7 @@ class DefaultNumberMetaTableTest {
     }
 
     @TestFactory
-    fun prefix() = listOf<Tuple3<ValueOperation.Type, NumberValue, Value>>(
+    fun prefix() = listOf<Tuple3<ValueOperator.Type, NumberValue, Value>>(
 
         Tuple3(Negate, NumberValue(1), NumberValue(-1)),
         Tuple3(Negate, NumberValue(-1), NumberValue(1)),

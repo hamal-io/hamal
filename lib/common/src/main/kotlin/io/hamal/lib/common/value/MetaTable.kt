@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @SerialName("MetaTable")
 sealed interface MetaTable {
     val type: String
-    val operations: List<ValueOperation>
+    val operators: List<ValueOperator>
 }

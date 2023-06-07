@@ -15,5 +15,5 @@ object NilValue : Value {
 
 object DefaultNilMetaTable : MetaTable {
     override val type = "nil"
-    override val operations = listOf<ValueOperation>()
+    override val operators = listOf<ValueOperator>()
 }

@@ -1,6 +1,6 @@
 package io.hamal.lib.common.value
 
-sealed interface ValueOperation {
+sealed interface ValueOperator {
     val operationType: Type
 
     enum class Type(val identifier: String) {
@@ -20,12 +20,12 @@ sealed interface ValueOperation {
     }
 }
 
-interface PrefixValueOperation : ValueOperation {
+interface PrefixValueOperator : ValueOperator {
     val selfType: String
     operator fun invoke(self: Value): Value
 }
 
-interface InfixValueOperation : ValueOperation {
+interface InfixValueOperator : ValueOperator {
     val selfType: String
     val otherType: String
     operator fun invoke(self: Value, other: Value): Value

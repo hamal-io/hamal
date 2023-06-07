@@ -7,15 +7,15 @@ sealed interface Value {
     val metaTable: MetaTable
     fun type(): String = metaTable.type
 
-    fun findInfixOperation(type: ValueOperation.Type, otherType: String): InfixValueOperation? {
-        return metaTable.operations
-            .filterIsInstance<InfixValueOperation>()
+    fun findInfixOperation(type: ValueOperator.Type, otherType: String): InfixValueOperator? {
+        return metaTable.operators
+            .filterIsInstance<InfixValueOperator>()
             .find { it.operationType == type && it.otherType == otherType }
     }
 
-    fun findPrefixOperation(type: ValueOperation.Type): PrefixValueOperation? {
-        return metaTable.operations
-            .filterIsInstance<PrefixValueOperation>()
+    fun findPrefixOperation(type: ValueOperator.Type): PrefixValueOperator? {
+        return metaTable.operators
+            .filterIsInstance<PrefixValueOperator>()
             .find { it.operationType == type }
     }
 }

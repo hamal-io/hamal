@@ -1,6 +1,6 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.ValueOperation.Type.*
+import io.hamal.lib.common.value.ValueOperator.Type.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -162,7 +162,7 @@ data class NumberValue(
 object DefaultNumberMetaTable : MetaTable {
     override val type = "number"
 
-    override val operations = listOf(
+    override val operators = listOf(
         numberInfix(Add) { self, other -> self.plus(other) },
         numberInfix(Div) { self, other -> self.divide(other) },
         numberInfix(Eq) { self, other -> booleanOf(self == other) },
@@ -177,14 +177,14 @@ object DefaultNumberMetaTable : MetaTable {
         numberInfix(Sub) { self, other -> self.minus(other) },
 
 
-        object : InfixValueOperation {
+        object : InfixValueOperator {
             override val selfType = type
             override val otherType = "nil"
             override val operationType = Eq
             override fun invoke(self: Value, other: Value) = FalseValue
         },
 
-        object : InfixValueOperation {
+        object : InfixValueOperator {
             override val selfType = type
             override val otherType = "nil"
             override val operationType = Neq
@@ -193,10 +193,10 @@ object DefaultNumberMetaTable : MetaTable {
 }
 
 private fun numberInfix(
-    operation: ValueOperation.Type,
+    operation: ValueOperator.Type,
     fn: (self: NumberValue, other: NumberValue) -> Value
-): InfixValueOperation {
-    return object : InfixValueOperation {
+): InfixValueOperator {
+    return object : InfixValueOperator {
         override val operationType = operation
         override val selfType = "number"
         override val otherType = "number"
@@ -209,10 +209,10 @@ private fun numberInfix(
 }
 
 private fun numberPrefix(
-    operation: ValueOperation.Type,
+    operation: ValueOperator.Type,
     fn: (self: NumberValue) -> Value
-): PrefixValueOperation {
-    return object : PrefixValueOperation {
+): PrefixValueOperator {
+    return object : PrefixValueOperator {
         override val operationType = operation
         override val selfType = "number"
         override operator fun invoke(self: Value): Value {

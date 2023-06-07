@@ -24,5 +24,5 @@ class TableValue(
 
 object DefaultTableMetaTable : MetaTable {
     override val type = "table"
-    override val operations: List<ValueOperation> = listOf()
+    override val operators: List<ValueOperator> = listOf()
 }

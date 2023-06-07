@@ -14,6 +14,6 @@ data class StringValue(val value: String) : KeyValue {
 
 object DefaultStringMetaTable : MetaTable {
     override val type = "string"
-    override val operations: List<ValueOperation> = listOf()
+    override val operators: List<ValueOperator> = listOf()
 }
 

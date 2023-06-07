@@ -7,19 +7,19 @@ internal class TestValue : Value {
 
 internal object TestMetaTable : MetaTable {
     override val type = "test-type"
-    override val operations = listOf(TestPrefixOperation, TestInfixOperation)
+    override val operators = listOf(TestPrefixOperator, TestInfixOperator)
 }
 
-internal object TestPrefixOperation : PrefixValueOperation {
+internal object TestPrefixOperator : PrefixValueOperator {
     override val selfType = "test-type"
-    override val operationType = ValueOperation.Type.Add
+    override val operationType = ValueOperator.Type.Add
     override fun invoke(self: Value) = TODO("Not yet implemented")
 }
 
-internal object TestInfixOperation : InfixValueOperation {
+internal object TestInfixOperator : InfixValueOperator {
     override val selfType = "test-type"
     override val otherType = "test-type"
-    override val operationType = ValueOperation.Type.Add
+    override val operationType = ValueOperator.Type.Add
 
     override fun invoke(self: Value, other: Value) = TODO("Not yet implemented")
 }

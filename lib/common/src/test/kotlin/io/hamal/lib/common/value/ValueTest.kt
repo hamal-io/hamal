@@ -1,7 +1,7 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.ValueOperation.Type.Add
-import io.hamal.lib.common.value.ValueOperation.Type.Sub
+import io.hamal.lib.common.value.ValueOperator.Type.Add
+import io.hamal.lib.common.value.ValueOperator.Type.Sub
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -22,7 +22,7 @@ class FindInfixOperationTest {
     @Test
     fun `Returns the operation`() {
         val result = testInstance.findInfixOperation(Add, "test-type")
-        assertThat(result, equalTo(TestInfixOperation))
+        assertThat(result, equalTo(TestInfixOperator))
     }
 
     @Test
@@ -43,7 +43,7 @@ class FindPrefixOperationTest {
     @Test
     fun `Returns the operation`() {
         val result = testInstance.findPrefixOperation(Add)
-        assertThat(result, equalTo(TestPrefixOperation))
+        assertThat(result, equalTo(TestPrefixOperator))
     }
 
     @Test
