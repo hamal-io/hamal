@@ -13,7 +13,7 @@ data class StringValue(val value: String) : KeyValue {
 }
 
 object DefaultStringMetaTable : MetaTable {
-    override val type = "String"
+    override val type = "string"
     override val operations: List<ValueOperation> = listOf()
 }
 

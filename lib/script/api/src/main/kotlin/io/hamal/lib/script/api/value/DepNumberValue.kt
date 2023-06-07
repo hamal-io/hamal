@@ -167,9 +167,7 @@ object DefaultNumberMetaTable : DepMetaTable {
             override val otherType = "nil"
             override val operationType = Neq
             override fun invoke(self: DepValue, other: DepValue) = DepTrueValue
-        },
-
-        )
+        })
 }
 
 private fun numberInfix(
