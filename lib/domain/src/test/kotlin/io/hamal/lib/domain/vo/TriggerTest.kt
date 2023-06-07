@@ -56,7 +56,7 @@ class TriggerIdTest {
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TriggerId(SnowflakeId(23)), "23")
+    fun serialization() = generateTestCases(TriggerId(SnowflakeId(23)), "23")
 }
 
 class TriggerNameTest {
@@ -104,6 +104,6 @@ class TriggerNameTest {
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(TriggerName("some-name"), "\"some-name\"")
+    fun serialization() = generateTestCases(TriggerName("some-name"), "\"some-name\"")
 }
 

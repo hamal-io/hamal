@@ -58,7 +58,7 @@ class InvokedAtTest {
     }
 
     @TestFactory
-    fun Serialization() = SerializationFixture.generateTestCases(InvokedAt(Instant.ofEpochMilli(123456)), "123456")
+    fun serialization() = SerializationFixture.generateTestCases(InvokedAt(Instant.ofEpochMilli(123456)), "123456")
 }
 
 
@@ -110,7 +110,7 @@ class ScheduledAtTest {
     }
 
     @TestFactory
-    fun Serialization() = SerializationFixture.generateTestCases(ScheduledAt(Instant.ofEpochMilli(123456)), "123456")
+    fun serialization() = SerializationFixture.generateTestCases(ScheduledAt(Instant.ofEpochMilli(123456)), "123456")
 }
 
 
@@ -162,7 +162,7 @@ class QueuedAtTest {
     }
 
     @TestFactory
-    fun Serialization() = SerializationFixture.generateTestCases(QueuedAt(Instant.ofEpochMilli(123456)), "123456")
+    fun serialization() = SerializationFixture.generateTestCases(QueuedAt(Instant.ofEpochMilli(123456)), "123456")
 }
 
 
@@ -214,5 +214,5 @@ class CompletedAtTest {
     }
 
     @TestFactory
-    fun Serialization() = SerializationFixture.generateTestCases(CompletedAt(Instant.ofEpochMilli(123456)), "123456")
+    fun serialization() = SerializationFixture.generateTestCases(CompletedAt(Instant.ofEpochMilli(123456)), "123456")
 }

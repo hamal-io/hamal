@@ -20,5 +20,3 @@ sealed interface Value {
     }
 }
 
-@Serializable
-sealed interface KeyValue : Value

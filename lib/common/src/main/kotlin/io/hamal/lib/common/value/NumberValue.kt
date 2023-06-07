@@ -20,7 +20,7 @@ data class NumberValue(
     val value: BigDecimal,
     @Transient
     override val metaTable: MetaTable = DefaultNumberMetaTable
-) : Number(), Value, Comparable<NumberValue> {
+) : Number(), Value, Comparable<NumberValue>, KeyValue {
     companion object {
         val Zero = NumberValue(0)
         val One = NumberValue(1)

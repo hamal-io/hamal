@@ -585,7 +585,7 @@ class NumberValueTest {
     }
 
     @TestFactory
-    fun Serialization() = listOf(
+    fun serialization() = listOf(
         generateTestCases(NumberValue.Zero, """{"type":"NumberValue","value":"0"}"""),
         generateTestCases(NumberValue(-12.324), """{"type":"NumberValue","value":"-12.324"}"""),
         generateTestCases(
@@ -600,6 +600,11 @@ class DefaultNumberMetaTableTest {
     @Test
     fun `Every operation is covered`() {
         assertThat(DefaultNumberMetaTable.operators, hasSize(14))
+    }
+
+    @Test
+    fun `Test type`() {
+        assertThat(DefaultNumberMetaTable.type, equalTo("number"))
     }
 
     @TestFactory

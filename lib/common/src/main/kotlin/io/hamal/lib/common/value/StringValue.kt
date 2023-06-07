@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-@SerialName("String")
+@SerialName("StringValue")
 data class StringValue(val value: String) : KeyValue {
     @Transient
     override val metaTable = DefaultStringMetaTable

@@ -48,6 +48,6 @@ class CodeTest {
     }
 
     @TestFactory
-    fun Serialization() = generateTestCases(Code("hamal='rocks'"), "\"hamal='rocks'\"")
+    fun serialization() = generateTestCases(Code("hamal='rocks'"), "\"hamal='rocks'\"")
 }
 

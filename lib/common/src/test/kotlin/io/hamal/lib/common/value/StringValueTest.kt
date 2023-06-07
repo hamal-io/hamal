@@ -7,28 +7,21 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-class TrueValueTest {
+class StringValueTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(TrueValue, """{"type":"TrueValue"}"""),
+        generateTestCases(StringValue("hamal"), """{"type":"StringValue","value":"hamal"}"""),
     ).flatten()
 }
 
-class FalseValueTest {
-    @TestFactory
-    fun serialization() = listOf(
-        generateTestCases(FalseValue, """{"type":"FalseValue"}"""),
-    ).flatten()
-}
-
-class DefaultBooleanMetaTableTest {
+class DefaultStringMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultBooleanMetaTable.operators, hasSize(0))
+        assertThat(DefaultStringMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultBooleanMetaTable.type, equalTo("boolean"))
+        assertThat(DefaultStringMetaTable.type, equalTo("string"))
     }
 }

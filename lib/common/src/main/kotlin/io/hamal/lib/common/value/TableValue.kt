@@ -6,13 +6,15 @@ import kotlinx.serialization.Transient
 
 
 @Serializable
+sealed interface KeyValue : Value
+
+@Serializable
 @SerialName("TableEntry")
 data class TableEntry(val key: Value, val value: Value)
 
-
 @Serializable
-@SerialName("Table")
-class TableValue(
+@SerialName("TableValue")
+data class TableValue(
     val entries: List<TableEntry>,
     @Transient
     override val metaTable: MetaTable = DefaultTableMetaTable
