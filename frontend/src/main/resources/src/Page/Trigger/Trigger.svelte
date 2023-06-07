@@ -1,8 +1,7 @@
-<script src="../Exec/store.ts"></script>
 <script lang="ts">
-    import {ApiTrigger, triggers} from "./store";
+    import type {ApiTrigger} from "./store";
+    import {triggers} from "./store";
     import {onMount} from 'svelte';
-    import Func from "@/Page/Func/Func.svelte";
 
     onMount(getTriggers);
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {execs} from "./store";
+    import type {ApiExec} from "@/Page/Exec/store";
     import type monaco from 'monaco-editor';
     import { onMount } from 'svelte';
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -55,7 +55,7 @@
 
     async function getExecutions() {
         fetch("http://localhost:8084/v1/execs?limit=100")
-            .then(response => response.json<ApiAd>())
+            .then(response => response.json<ApiExec>())
             .then(data => {
                 execs.set(data.execs);
             }).catch(error => {

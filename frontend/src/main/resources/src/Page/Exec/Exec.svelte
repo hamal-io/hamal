@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {ApiExec, execs} from "./store";
+    import type {ApiExec} from "./store";
+    import { execs} from "./store";
     import {onMount} from 'svelte';
 
     onMount(getFuncs);

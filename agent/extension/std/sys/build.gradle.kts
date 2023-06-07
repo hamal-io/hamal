@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-std-hamal.jar")
+    archiveFileName.set("extension-std-sys.jar")
 }
 
 distributions {

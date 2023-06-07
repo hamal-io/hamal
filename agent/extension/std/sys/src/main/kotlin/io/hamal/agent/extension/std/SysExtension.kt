@@ -8,7 +8,7 @@ import io.hamal.lib.script.api.value.*
 class HamalExtension : Extension {
     override fun create(): DepEnvironmentValue {
         return DepEnvironmentValue(
-            identifier = DepIdentifier("hamal"),
+            identifier = DepIdentifier("sys"),
             values = mapOf(
                 DepIdentifier("_cfg") to DepTableValue(),
                 DepIdentifier("exec") to ExecFunc(),

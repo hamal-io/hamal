@@ -1,6 +1,8 @@
 <script lang="ts">
-    import {ApiFunc, funcs} from "./store";
+    import type {ApiFunc, ApiListFuncResponse} from "./store";
     import type monaco from 'monaco-editor';
+
+    import {funcs} from "./store";
     import {onMount} from 'svelte';
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
     import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
@@ -11,7 +13,6 @@
     let divEl: HTMLDivElement = null;
     let editor: monaco.editor.IStandaloneCodeEditor;
     let Monaco;
-
 
     onMount(async () => {
         // @ts-ignore
@@ -52,7 +53,13 @@
 
     async function getFuncs() {
         fetch("http://localhost:8084/v1/funcs")
-            .then(response => response.json<ApiFunc>())
+            .then(response => response.text())
+            .then(text => {
+                text = text.replace(/:\s*(-?\d+),/g, ': "$1",')
+                console.log("TEXT", text)
+                return text
+            })
+            .then(text => JSON.parse(text) as ApiListFuncResponse)
             .then(data => {
                 funcs.set(data.funcs);
             }).catch(error => {
