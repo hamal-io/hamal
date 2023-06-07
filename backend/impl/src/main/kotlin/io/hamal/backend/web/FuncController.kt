@@ -42,8 +42,8 @@ open class FuncController(
             CmdId(0), FuncCmdService.ToCreate(
                 funcId = generateDomainId(Shard(1), ::FuncId),
                 name = req.name,
-                inputs = FuncInputs(listOf()),
-                secrets = FuncSecrets(listOf()),
+                inputs = req.inputs,
+                secrets = req.secrets,
                 code = req.code
             )
         )
@@ -60,7 +60,7 @@ open class FuncController(
         )
 
 
-        val b =     ApiListFuncResponse(
+        val b = ApiListFuncResponse(
             result.map {
                 ApiListFuncResponse.Func(
                     id = it.id,
@@ -81,6 +81,7 @@ open class FuncController(
 
         //FIXME should be  a service
         val funcId = FuncId(SnowflakeId(stringFuncId.replace("'", "").toLong()))
+
 
         val result = request(
             InvokeOneshot(

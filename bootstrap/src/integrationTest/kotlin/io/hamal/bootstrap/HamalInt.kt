@@ -1,7 +1,6 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.AgentConfig
-import io.hamal.agent.service.SomeClass
 import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
 import org.junit.jupiter.api.Test
@@ -32,20 +31,16 @@ class HamalIT(
     fun run() {
         println("RUNS ON: $localPort")
 
-        SomeClass().call()
-
-        repeat(10) {
-            HttpTemplate("http://localhost:8084")
-                .post("/v1/adhoc")
-                .body(
-                    "text/plain",
-                    """
+        HttpTemplate("http://localhost:8084")
+            .post("/v1/adhoc")
+            .body(
+                "text/plain",
+                """
                     local log = require('log')
                     log.info('automate the world')
             """.trimIndent().toByteArray()
-                )
-                .execute()
-        }
+            )
+            .execute()
 
         Thread.sleep(1000)
     }

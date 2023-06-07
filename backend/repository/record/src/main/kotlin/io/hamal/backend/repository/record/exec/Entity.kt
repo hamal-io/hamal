@@ -77,7 +77,7 @@ data class Entity(
             accountId = AccountId(1),
             id = id,
             correlation = null,
-            inputs = ExecInputs(listOf()),
+            inputs = inputs ?: ExecInputs(listOf()),
             secrets = ExecSecrets(listOf()),
             code = code!!,
             invocation = AdhocInvocation()

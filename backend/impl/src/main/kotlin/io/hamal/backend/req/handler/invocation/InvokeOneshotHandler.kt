@@ -4,12 +4,12 @@ import io.hamal.backend.repository.api.domain.InvokeOneshotReq
 import io.hamal.backend.repository.api.domain.OneshotInvocation
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
-import io.hamal.backend.req.handler.toExecInputs
 import io.hamal.backend.req.handler.toExecSecrets
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.vo.ExecInputs
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -28,7 +28,7 @@ class InvokeOneshotHandler(
                     correlationId = req.correlationId,
                     funcId = func.id
                 ),
-                inputs = req.inputs.toExecInputs(),
+                inputs = ExecInputs(func.inputs.value),
                 secrets = req.secrets.toExecSecrets(),
                 // FIXME func for audit purpose ?
                 invocation = OneshotInvocation()

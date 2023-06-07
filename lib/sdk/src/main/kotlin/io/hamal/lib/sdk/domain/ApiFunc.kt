@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiCreateFuncRequest(
     val name: FuncName,
+    val inputs: FuncInputs,
+    val secrets: FuncSecrets,
     val code: Code
 )
 

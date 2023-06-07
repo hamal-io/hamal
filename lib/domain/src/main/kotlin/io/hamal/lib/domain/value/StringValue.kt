@@ -16,3 +16,4 @@ object DefaultStringMetaTable : MetaTable {
     override val type = "String"
     override val operations: List<ValueOperation> = listOf()
 }
+
