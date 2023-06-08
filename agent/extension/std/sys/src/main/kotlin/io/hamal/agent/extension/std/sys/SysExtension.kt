@@ -78,7 +78,7 @@ class CreateFunc : DepFunctionValue {
                 name = FuncName((f[DepIdentifier("name")] as DepStringValue).value),
                 inputs = FuncInputs(TableValue.empty()),
                 secrets = FuncSecrets(listOf()),
-                code = Code("")
+                code = Code((f[DepIdentifier("run")] as DepCodeValue).value)
             )
 
             val res = HttpTemplate("http://localhost:8084")
