@@ -22,7 +22,7 @@ internal abstract class AbstractAstTest {
 
     }
 
-    fun ArrayDeque<Token>.wereConsumed() {
+    fun ArrayDeque<Token>.consumed() {
         assertThat("All tokens were consumed except EOF", size, equalTo(1))
         assertThat("Last token must be EOF", this[0].type, equalTo(Eof))
     }

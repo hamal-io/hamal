@@ -16,7 +16,7 @@ internal class DoStmtTest : AbstractStatementTest() {
         dynamicTest(code) {
             runTest(Parse, code) { result, tokens ->
                 assertThat(result, equalTo(expected))
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
     }

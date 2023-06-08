@@ -14,6 +14,7 @@ data class Token(
     }
 
     enum class Type(val value: kotlin.String, val category: Category) {
+        And("and", Keyword),
         Break("break", Keyword),
         Do("do", Keyword),
         Else("else", Keyword),
@@ -24,13 +25,14 @@ data class Token(
         If("if", Keyword),
         In("in", Keyword),
         Local("local", Keyword),
+        Not("not", Keyword),
+        Or("or", Keyword),
         Repeat("repeat", Keyword),
         Return("return", Keyword),
         Then("then", Keyword),
         Until("until", Keyword),
         While("while", Keyword),
 
-        And("and", Operator),
         Asterisk("*", Operator),
         Carat("^", Operator),
         Colon(":", Operator),
@@ -46,8 +48,6 @@ data class Token(
         LeftCurlyBracket("{", Operator),
         LeftParenthesis("(", Operator),
         Minus("-", Operator),
-        Not("not", Operator),
-        Or("or", Operator),
         Percent("%", Operator),
         Plus("+", Operator),
         RightAngleBracket(">", Operator),
@@ -68,6 +68,7 @@ data class Token(
         Number("number", Literal),
         Nil("nil", Literal),
         String("string", Literal),
+        Code("code", Literal),
 
         Semicolon(";", Delimiter),
         Comma(",", Delimiter),

@@ -42,6 +42,7 @@ class DefaultTokenizer(
             isHexNumber() -> nextHexNumber()
             isNumber() -> nextNumber()
             isString() -> nextString()
+            isCode() -> nextCode()
             else -> {
                 advance()
                 nextDelimiter()
@@ -68,6 +69,8 @@ private fun DefaultTokenizer.isNumber() = isDigit(peek()) ||
         (canPeekNext() && peek() == '.' && isDigit(peekNext()))
 
 private fun DefaultTokenizer.isString() = isQuote(peek())
+
+private fun DefaultTokenizer.isCode() = peek() == '<' && (canPeekNext() && peekNext() == '[')
 
 private fun DefaultTokenizer.tokenPosition() = linePosition - buffer.length + 1
 
@@ -159,10 +162,10 @@ internal fun DefaultTokenizer.nextNumber(): Token {
 
 internal fun DefaultTokenizer.nextHexNumber(): Token {
     assert(peek() == '0' && peekNext() == 'x')
-    advance(); // 0
-    advance(); // x
+    advance() // 0
+    advance() // x
     while (!isAtEnd() && TokenizerUtils.isHexChar(peek())) {
-        advance();
+        advance()
     }
     return Token(HexNumber, tokenLine(), tokenPosition(), tokenValue())
 }
@@ -190,6 +193,30 @@ internal fun DefaultTokenizer.nextString(): Token {
     return Token(Type.String, tokenLine(), tokenPosition(), buffer.substring(1, buffer.length - 1))
 }
 
+internal fun DefaultTokenizer.nextCode(): Token {
+    advance()
+    advance()
+    var newLineCounter = 0
+    while (true) {
+        if (isAtEnd()) {
+            return Token(Error, tokenLine(), tokenPosition(), "Unterminated code")
+        }
+
+        if (peek() == '>' && peekPrev() == ']') {
+            break
+        }
+
+        if (peek() == '\n') {
+            newLineCounter++
+        }
+
+        advance()
+    }
+    advance()
+    return Token(Code, tokenLine(), tokenPosition(), buffer.substring(2, buffer.length - 2))
+}
+
+
 internal fun DefaultTokenizer.nextIdentifierOrKeyword(): Token {
     return asKeyword() ?: Token(Identifier, tokenLine(), tokenPosition(), tokenValue())
 }
@@ -205,41 +232,34 @@ private fun DefaultTokenizer.asKeyword(): Token? {
 val operatorMapping = Type.values().filter { it.category == Category.Operator }.associateBy { it.value }
 
 private fun DefaultTokenizer.nextOperator(): Token? {
-    return nextLookAheadOperator() ?: run {
-        val value = buffer.toString()
-        return operatorMapping[value]?.let { Token(it, tokenLine(), tokenPosition(), value) }
-    }
-}
-
-private fun DefaultTokenizer.nextLookAheadOperator(): Token? {
-    val buffer = StringBuffer(buffer)
-
-    for (lookAheadIndex in 0 until 3) {
-        if (!canPeekNext(lookAheadIndex)) {
-            break
+    val lookAheadBuffer = StringBuffer(buffer)
+    repeat(9) { idx ->
+        if (!isAtEnd(idx)) {
+            lookAheadBuffer.append(peekNext(idx))
+        } else {
+            lookAheadBuffer.append(' ')
         }
-        buffer.append(peekNext(lookAheadIndex))
-        val candidate = operatorMapping[buffer.toString()]
-        if (candidate != null) {
-            val noMoreCharacters = (
-                    canPeekNext(lookAheadIndex + 1) &&
-                            (isWhitespace(peekNext(lookAheadIndex + 1)) ||
-                            isAlpha(peekNext(lookAheadIndex + 1)) ||
-                            isDigit(peekNext(lookAheadIndex + 1))
-                            )
-            )
+    }
 
-            val atEnd = isAtEnd(lookAheadIndex + 1)
-            if (noMoreCharacters || atEnd) {
-                for (i in 0 until lookAheadIndex + 1) {
+    fun matchesBuffer(chars: CharArray): Boolean {
+        return chars.filterIndexed { index, c -> lookAheadBuffer[index] != c }.isEmpty()
+    }
+
+    Token.Type.values()
+        .filter { it.value.length > 1 }
+        .filter { it.category == Category.Operator }
+        .sortedByDescending { it.value.length }
+        .forEach { type ->
+            if (matchesBuffer(type.value.toCharArray())) {
+                repeat(type.value.length - 1) {
                     advance()
                 }
-                return Token(candidate, tokenLine(), tokenPosition(), buffer.toString())
+                return Token(type, tokenLine(), tokenPosition(), type.value)
             }
         }
-    }
 
-    return null
+    val value = buffer.toString()
+    return operatorMapping[value]?.let { Token(it, tokenLine(), tokenPosition(), value) }
 }
 
 private fun DefaultTokenizer.nextLiteral(): Token? {

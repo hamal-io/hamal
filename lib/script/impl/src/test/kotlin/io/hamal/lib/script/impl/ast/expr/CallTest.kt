@@ -126,7 +126,7 @@ internal class CallExpressionTest : AbstractExpressionTest() {
                 assertThat(result.identifier, equalTo(IdentifierLiteral("some_fn")))
                 assertThat(result.parameters, empty())
 
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -143,7 +143,7 @@ internal class CallExpressionTest : AbstractExpressionTest() {
                 assertThat(result.identifier, equalTo(IdentifierLiteral("some_fn")))
                 assertThat(result.parameters, equalTo(listOf(StringLiteral("parameter_one"))))
 
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -167,7 +167,7 @@ internal class CallExpressionTest : AbstractExpressionTest() {
                     )
                 )
 
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 

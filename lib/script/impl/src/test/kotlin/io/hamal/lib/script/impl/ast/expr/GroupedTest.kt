@@ -12,7 +12,7 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
         fun `empty grouped expression`() {
             runTest(GroupedExpression.Parse, "( )") { result, tokens ->
                 assertThat(result, equalTo(GroupedExpression(NilLiteral)))
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -20,7 +20,7 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
         fun `literal grouped expression`() {
             runTest(GroupedExpression.Parse, "(2810)") { result, tokens ->
                 assertThat(result, equalTo(GroupedExpression(NumberLiteral(2810))))
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -34,7 +34,7 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
                         )
                     )
                 )
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -52,7 +52,7 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
                         )
                     )
                 )
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
     }

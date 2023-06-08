@@ -175,7 +175,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                 """.trimIndent()
             ) { result, tokens ->
                 assertThat(result.fieldExpressions, empty())
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -193,7 +193,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                         result.fieldExpressions,
                         equalTo(listOf(IndexFieldExpression(TableIndexLiteral(1), NumberLiteral(1))))
                     )
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
 
@@ -214,7 +214,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                             )
                         )
                     )
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
 
@@ -235,7 +235,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                             )
                         )
                     )
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }
@@ -257,7 +257,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                             )
                         )
                     )
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
 
@@ -280,7 +280,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                             )
                         )
                     )
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
 
@@ -311,7 +311,7 @@ internal class TableConstructorExpressionTest : AbstractExpressionTest() {
                         )
                     )
                 )
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -325,7 +325,7 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
             require(result is TableAccessExpression)
             assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableIndexLiteral(1)))
-            tokens.wereConsumed()
+            tokens.consumed()
         }
     }
 
@@ -335,7 +335,7 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
             require(result is TableAccessExpression)
             assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableIndexLiteral(123456789)))
-            tokens.wereConsumed()
+            tokens.consumed()
         }
     }
 
@@ -345,7 +345,7 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
             require(result is TableAccessExpression)
             assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
-            tokens.wereConsumed()
+            tokens.consumed()
         }
     }
 
@@ -355,7 +355,7 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
             require(result is TableAccessExpression)
             assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
-            tokens.wereConsumed()
+            tokens.consumed()
         }
     }
 }

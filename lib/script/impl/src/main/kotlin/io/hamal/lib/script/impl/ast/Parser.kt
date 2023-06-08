@@ -2,7 +2,10 @@ package io.hamal.lib.script.impl.ast
 
 import io.hamal.lib.script.api.ast.Expression
 import io.hamal.lib.script.api.ast.Statement
-import io.hamal.lib.script.impl.ast.expr.*
+import io.hamal.lib.script.impl.ast.expr.Precedence
+import io.hamal.lib.script.impl.ast.expr.currentPrecedence
+import io.hamal.lib.script.impl.ast.expr.infixFn
+import io.hamal.lib.script.impl.ast.expr.parseFn
 import io.hamal.lib.script.impl.ast.stmt.*
 import io.hamal.lib.script.impl.token.Token
 import io.hamal.lib.script.impl.token.Token.Type
@@ -31,8 +34,6 @@ interface Parser {
 
         fun currentTokenType() = currentToken().type
         fun nextTokenType() = nextToken().type
-
-        fun currentOperator() = Operator.from(currentTokenType())
 
         fun expectCurrentTokenTypToBe(type: Type) {
             require(currentTokenType() == type) {

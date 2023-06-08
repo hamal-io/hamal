@@ -52,7 +52,7 @@ internal class OperatorTest : AbstractAstTest() {
             require(statement is ExpressionStatement)
 
             val result = PrecedenceString.of(statement.expression)
-            assertThat(result, equalTo(expected));
+            assertThat(result, equalTo(expected))
         }
     }
 
@@ -81,8 +81,8 @@ internal class OperatorTest : AbstractAstTest() {
         DynamicTest.dynamicTest(code) {
             val tokens = ArrayDeque(tokenize(code))
             val result = Operator.Parse(Context(tokens))
-            assertThat(result, equalTo(expected));
-            tokens.wereConsumed()
+            assertThat(result, equalTo(expected))
+            tokens.consumed()
         }
     }
 

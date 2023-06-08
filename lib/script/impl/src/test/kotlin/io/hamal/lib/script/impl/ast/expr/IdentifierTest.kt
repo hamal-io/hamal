@@ -51,7 +51,7 @@ internal class IdentifierTest : AbstractExpressionTest() {
         fun identifier() {
             runLiteralTest(IdentifierLiteral.Parse, "some_variable") { result, tokens ->
                 assertThat(result, equalTo(IdentifierLiteral("some_variable")))
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
     }

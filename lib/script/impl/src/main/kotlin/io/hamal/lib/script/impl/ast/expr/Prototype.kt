@@ -19,9 +19,15 @@ class PrototypeLiteral(
             ctx.expectCurrentTokenTypToBe(Function)
             ctx.advance()
 
-            val identifier = ctx.parseIdentifier()
-            ctx.expectCurrentTokenTypToBe(LeftParenthesis)
-            ctx.advance()
+            val identifier = if (ctx.currentTokenType() != LeftParenthesis) {
+                val ident = ctx.parseIdentifier()
+                ctx.expectCurrentTokenTypToBe(LeftParenthesis)
+                ctx.advance()
+                ident
+            } else {
+                ctx.advance()
+                IdentifierLiteral("lambda")
+            }
 
             val parameterIdentifiers = ctx.parseParameters()
             ctx.expectCurrentTokenTypToBe(RightParenthesis)
@@ -33,7 +39,6 @@ class PrototypeLiteral(
                 ctx.parseBody()
             )
         }
-
 
 
         private fun Context.parseParameters(): List<IdentifierLiteral> {

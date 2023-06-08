@@ -29,6 +29,7 @@ internal class DefaultEvaluator : Evaluator {
         register(IdentifierLiteral::class, EvaluateIdentifier)
         register(NumberLiteral::class, EvaluateNumberLiteral)
         register(StringLiteral::class, EvaluateStringLiteral)
+        register(CodeLiteral::class, EvaluateCodeLiteral)
         register(FalseLiteral::class, EvaluateFalseLiteral)
         register(TrueLiteral::class, EvaluateTrueLiteral)
         register(NilLiteral::class, EvaluateNilLiteral)

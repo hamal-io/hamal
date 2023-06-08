@@ -135,7 +135,23 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 assertThat(result.parameters, hasSize(0))
                 assertThat(result.block, hasSize(0))
 
-                tokens.wereConsumed()
+                tokens.consumed()
+            }
+        }
+
+        @Test
+        fun `Parse lambda function `() {
+            runLiteralTest(
+                PrototypeLiteral.Parse,
+                """
+                function() end
+                """.trimIndent()
+            ) { result, tokens ->
+                assertThat(result.identifier, equalTo(IdentifierLiteral("lambda")))
+                assertThat(result.parameters, hasSize(0))
+                assertThat(result.block, hasSize(0))
+
+                tokens.consumed()
             }
         }
 
@@ -151,7 +167,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 assertThat(result.parameters, equalTo(listOf(IdentifierLiteral("param_one"))))
                 assertThat(result.block, hasSize(0))
 
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
 
@@ -175,7 +191,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 )
                 assertThat(result.block, hasSize(0))
 
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
     }

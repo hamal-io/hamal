@@ -111,7 +111,7 @@ class TokenizerTest {
         }
 
         @Nested
-        inner class AdvanceTest() {
+        inner class AdvanceTest {
             @Test
             fun `Advances read position and fills buffer`() {
                 val testInstance = DefaultTokenizer("num = 42")
@@ -417,7 +417,7 @@ class TokenizerTest {
                 testInstance.nextString().assertStringLiteral(1, 1, "Hamal")
 
                 val eof = testInstance.nextToken()
-                assertThat(eof.type, equalTo(Type.Eof))
+                assertThat(eof.type, equalTo(Eof))
             }
 
             @Test
@@ -511,7 +511,34 @@ class TokenizerTest {
         }
 
         @Test
+        fun `Empty code`() {
+            val testInstance = DefaultTokenizer("<[]>")
+            assertThat(testInstance.nextToken(), equalTo(Token(Code, 1, 1, "")))
+        }
 
+        @Test
+        fun `Code is simple number test`() {
+            val testInstance = DefaultTokenizer("<[ 42 ]>")
+            assertThat(testInstance.nextToken(), equalTo(Token(Code, 1, 1, " 42 ")))
+        }
+
+        @Test
+        fun `Code is mutlti line test`() {
+            val testInstance = DefaultTokenizer(
+                """<[
+                |local log = require('log')
+                |log.info('test')
+                |]>""".trimMargin()
+            )
+            val result = testInstance.nextToken()
+            assertThat(result, equalTo(Token(Code, 1, 1, """
+local log = require('log')
+log.info('test')
+""")))
+        }
+
+
+        @Test
         fun ifStatement() {
             val testInstance = DefaultTokenizer("if a<0 then a = 0 end")
             assertThat(testInstance.nextToken(), equalTo(Token(If, 1, 1, "if")))
@@ -533,7 +560,7 @@ class TokenizerTest {
         }
 
         private fun Token.assertNumberLiteral(line: Int, linePosition: Int, value: String) {
-            assertLiteral(Type.Number, line, linePosition, value)
+            assertLiteral(Number, line, linePosition, value)
         }
 
         private fun Token.assertHexNumberLiteral(line: Int, linePosition: Int, value: String) {

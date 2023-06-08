@@ -55,7 +55,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun number() {
                 runLiteralTest(NumberLiteral.Parse, "28.10") { result, tokens ->
                     assertThat(result, equalTo(NumberLiteral(DepNumberValue("28.10"))))
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }
@@ -107,7 +107,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun string() {
                 runLiteralTest(StringLiteral.Parse, "'hello hamal'") { result, tokens ->
                     assertThat(result, equalTo(StringLiteral("hello hamal")))
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }
@@ -121,7 +121,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `true`() {
                 runLiteralTest(TrueLiteral.Parse, "true") { result, tokens ->
                     assertThat(result, equalTo(TrueLiteral))
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }
@@ -135,7 +135,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `false`() {
                 runLiteralTest(FalseLiteral.Parse, "false") { result, tokens ->
                     assertThat(result, equalTo(FalseLiteral))
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }
@@ -149,7 +149,59 @@ internal class LiteralTest : AbstractExpressionTest() {
             fun `nil`() {
                 runLiteralTest(NilLiteral.Parse, "nil") { result, tokens ->
                     assertThat(result, equalTo(NilLiteral))
-                    tokens.wereConsumed()
+                    tokens.consumed()
+                }
+            }
+        }
+    }
+
+    @Nested
+    inner class CodeTest {
+        @Nested
+        inner class EqualsTest {
+            @Test
+            fun `Equal if underlying values are equal`() {
+                assertEquals(
+                    CodeLiteral("hamal.rocks()"),
+                    CodeLiteral("hamal.rocks()")
+                )
+            }
+
+            @Test
+            fun `Not Equal if underlying values are different`() {
+                assertNotEquals(
+                    CodeLiteral("hamal.rocks()"),
+                    CodeLiteral("rocks.hamal()")
+                )
+            }
+        }
+
+        @Nested
+        inner class HashCodeTest {
+            @Test
+            fun `Same hashcode if values are equal`() {
+                assertEquals(
+                    CodeLiteral("hamal.rocks()").hashCode(),
+                    CodeLiteral("hamal.rocks()").hashCode()
+                )
+            }
+
+            @Test
+            fun `Different hashcode if values are different`() {
+                assertNotEquals(
+                    CodeLiteral("hamal.rocks()").hashCode(),
+                    CodeLiteral("rocks.hamal()").hashCode()
+                )
+            }
+        }
+
+        @Nested
+        inner class ParseTest {
+            @Test
+            fun code() {
+                runLiteralTest(CodeLiteral.Parse, "<[hamal.rocks()]>") { result, tokens ->
+                    assertThat(result, equalTo(CodeLiteral("hamal.rocks()")))
+                    tokens.consumed()
                 }
             }
         }

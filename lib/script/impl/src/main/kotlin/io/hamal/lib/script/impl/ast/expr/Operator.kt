@@ -4,7 +4,6 @@ import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.expr.Operator.*
 import io.hamal.lib.script.impl.ast.expr.Operator.Companion.operatorMapping
 import io.hamal.lib.script.impl.token.Token.Type
-import io.hamal.lib.script.impl.token.Token.Type.Category
 
 interface ParseOperator {
     operator fun invoke(ctx: Context): Operator
@@ -41,7 +40,6 @@ enum class Operator(
 
     companion object {
         val operatorMapping = Operator.values()
-            .onEach { require(it.tokenType.category == Category.Operator) }
             .associateBy { it.tokenType }
 
         fun from(type: Type) = operatorMapping[type]!!
@@ -96,14 +94,14 @@ private val precedenceMapping = mapOf(
     Exponential to Precedence.Pow,
 )
 
-internal fun precedenceOf(tokenType: Type) =
-    precedenceOf(operatorMapping[tokenType]!!)
-
-internal fun precedenceOf(op: Operator) =
-    precedenceMapping[op] ?: Precedence.Lowest
+//internal fun precedenceOf(tokenType: Type) =
+//    precedenceOf(operatorMapping[tokenType]!!)
+//
+//internal fun precedenceOf(op: Operator) =
+//    precedenceMapping[op] ?: Precedence.Lowest
 
 internal fun Context.currentPrecedence() =
     precedenceMapping[operatorMapping[currentTokenType()]] ?: Precedence.Lowest
 
-internal fun Context.nextPrecedence() =
-    precedenceMapping[operatorMapping[nextTokenType()]] ?: Precedence.Lowest
+//internal fun Context.nextPrecedence() =
+//    precedenceMapping[operatorMapping[nextTokenType()]] ?: Precedence.Lowest

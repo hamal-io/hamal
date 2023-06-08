@@ -23,7 +23,7 @@ internal class AssignmentTest : AbstractStatementTest() {
             dynamicTest(code) {
                 runTest(Global.Parse, code) { result, tokens ->
                     assertThat(result, equalTo(expected))
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }
@@ -47,7 +47,7 @@ internal class AssignmentTest : AbstractStatementTest() {
             dynamicTest(code) {
                 runTest(Local.Parse, code) { result, tokens ->
                     assertThat(result, equalTo(expected))
-                    tokens.wereConsumed()
+                    tokens.consumed()
                 }
             }
         }

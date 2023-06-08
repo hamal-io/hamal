@@ -109,7 +109,7 @@ internal class IfExpressionTest : AbstractExpressionTest() {
         dynamicTest(code) {
             runTest(IfExpression.Parse, code) { result, tokens ->
                 assertThat(result, equalTo(expected))
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
     }
@@ -137,7 +137,7 @@ internal class ForExpressionTest : AbstractExpressionTest() {
         dynamicTest(code) {
             runTest(ForLoopExpression.Parse, code) { result, tokens ->
                 assertThat(result, equalTo(expected))
-                tokens.wereConsumed()
+                tokens.consumed()
             }
         }
     }

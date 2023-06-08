@@ -95,3 +95,17 @@ object NilLiteral : LiteralExpression {
     override fun toString() = "nil"
 }
 
+
+data class CodeLiteral(val value: String) : LiteralExpression {
+    internal object Parse : ParseLiteralExpression<CodeLiteral> {
+        override fun invoke(ctx: Context): CodeLiteral {
+            require(ctx.isNotEmpty())
+            val token = ctx.currentToken()
+            assert(token.type == Type.Code)
+            ctx.advance()
+            return CodeLiteral(token.value)
+        }
+    }
+
+    override fun toString() = "'$value'"
+}

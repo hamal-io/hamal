@@ -24,6 +24,10 @@ internal object EvaluateStringLiteral : Evaluate<StringLiteral> {
     override fun invoke(ctx: EvaluationContext<StringLiteral>) = DepStringValue(ctx.toEvaluate.value)
 }
 
+internal object EvaluateCodeLiteral : Evaluate<CodeLiteral> {
+    override fun invoke(ctx: EvaluationContext<CodeLiteral>) = DepCodeValue(ctx.toEvaluate.value)
+}
+
 internal object EvaluatePrototypeLiteral : Evaluate<PrototypeLiteral> {
     override fun invoke(ctx: EvaluationContext<PrototypeLiteral>): DepPrototypeValue {
         return DepPrototypeValue(
