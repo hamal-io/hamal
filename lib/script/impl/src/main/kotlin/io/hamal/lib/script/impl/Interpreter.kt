@@ -1,8 +1,8 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.Value
+import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.ast.Statement
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.eval.DefaultEvaluator
 import io.hamal.lib.script.impl.eval.EvaluationContext
 

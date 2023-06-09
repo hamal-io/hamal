@@ -1,10 +1,10 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.common.ddd.ValueObject
-import io.hamal.lib.common.value.StringValue
-import io.hamal.lib.common.value.TableEntry
-import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.script.api.value.StringValue
+import io.hamal.lib.script.api.value.TableEntry
+import io.hamal.lib.script.api.value.TableValue
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder

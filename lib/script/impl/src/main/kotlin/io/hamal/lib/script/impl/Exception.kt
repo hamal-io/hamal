@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.common.value.ErrorValue
+import io.hamal.lib.script.api.value.ErrorValue
 
 
 sealed class ScriptException(message: String? = null, cause: Throwable? = null) : Exception(message, cause) {

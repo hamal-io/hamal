@@ -1,8 +1,10 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.ErrorValue
-import io.hamal.lib.common.value.IdentValue
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.ErrorValue
+import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.impl.builtin.AssertFunction
+import io.hamal.lib.script.impl.builtin.RequireFunction
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -23,9 +25,8 @@ class SandboxIT {
                     val env = EnvValue(
                         ident = IdentValue("_G"),
                         values = mapOf(
-                            //FIXME
-//                            AssertFunction.identifier to AssertFunction,
-//                            RequireFunction.identifier to RequireFunction
+                            IdentValue("assert") to AssertFunction,
+                            IdentValue("require") to RequireFunction
                         )
                     )
 

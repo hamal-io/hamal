@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.common.value.NumberValue
+import io.hamal.lib.script.api.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertEquals

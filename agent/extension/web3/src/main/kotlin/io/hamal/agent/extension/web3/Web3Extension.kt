@@ -1,10 +1,10 @@
 package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.FuncValue
-import io.hamal.lib.common.value.IdentValue
-import io.hamal.lib.common.value.MetaTable
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.FuncValue
+import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.MetaTable
 
 class Web3Extension : Extension {
     override fun create(): EnvValue {

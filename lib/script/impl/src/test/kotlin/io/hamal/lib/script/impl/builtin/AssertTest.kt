@@ -1,15 +1,13 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.common.value.ErrorValue
-import io.hamal.lib.common.value.NilValue
-import io.hamal.lib.common.value.StringValue
+import io.hamal.lib.script.api.value.ErrorValue
+import io.hamal.lib.script.api.value.NilValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
 internal class AssertTest : AbstractBuiltinTest() {
-
     @Test
     fun `Always true`() {
         val result = eval("""assert(true)""")
@@ -25,13 +23,13 @@ internal class AssertTest : AbstractBuiltinTest() {
     @Test
     fun `Always false`() {
         val result = expectError("""assert(false)""")
-        assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: 'false'"))))
+        assertThat(result, equalTo(ErrorValue("Assertion violated: 'false'")))
     }
 
     @Test
     fun `Evaluates expression to false`() {
         val result = expectError("""assert(2 < 1)""")
-        assertThat(result, equalTo(ErrorValue(StringValue("Assertion violated: '2 < 1'"))))
+        assertThat(result, equalTo(ErrorValue("Assertion violated: '2 < 1'")))
     }
 
     @Test
@@ -39,7 +37,7 @@ internal class AssertTest : AbstractBuiltinTest() {
         val result = expectError("""assert(false,'some deep and meaningful message')""")
         assertThat(
             result,
-            equalTo(ErrorValue(StringValue("Assertion violated: 'some deep and meaningful message'")))
+            equalTo(ErrorValue("Assertion violated: 'some deep and meaningful message'"))
         )
     }
 
@@ -47,7 +45,7 @@ internal class AssertTest : AbstractBuiltinTest() {
     @Test
     fun `Evaluate not to boolean`() {
         val result = expectError("""assert(2810)""")
-        assertThat(result, equalTo(ErrorValue(StringValue("Assertion of non boolean value is always false"))))
+        assertThat(result, equalTo(ErrorValue("Assertion of non boolean value is always false")))
     }
 
 }

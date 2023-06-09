@@ -6,11 +6,11 @@ import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.service.query.TriggerQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerInputs
 import io.hamal.lib.domain.vo.TriggerSecrets
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ApiCreateTriggerRequest
 import io.hamal.lib.sdk.domain.ApiCreateTriggerResponse
 import io.hamal.lib.sdk.domain.ApiListTriggerResponse

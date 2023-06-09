@@ -3,10 +3,10 @@ package io.hamal.backend.repository.api.record.exec
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.record.RecordEntity
 import io.hamal.backend.repository.record.RecordSequence
-import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.script.api.value.TableValue
 import java.time.Instant
 
 data class Entity(

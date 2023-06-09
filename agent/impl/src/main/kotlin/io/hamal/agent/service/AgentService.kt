@@ -1,10 +1,12 @@
 package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.FuncValue
-import io.hamal.lib.common.value.IdentValue
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.FuncValue
+import io.hamal.lib.script.api.value.IdentValue
 import io.hamal.lib.script.impl.DefaultSandbox
+import io.hamal.lib.script.impl.builtin.AssertFunction
+import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.service.ExecService
 import jakarta.annotation.PostConstruct
@@ -83,9 +85,8 @@ class AgentService {
                     val env = EnvValue(
                         ident = IdentValue("_G"),
                         values = mapOf(
-                            // FIXME
-//                            AssertFunction.identifier to AssertFunction,
-//                            RequireFunction.identifier to RequireFunction
+                            IdentValue("assert") to AssertFunction,
+                            IdentValue("require") to RequireFunction
                         )
                     )
 

@@ -1,9 +1,9 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.common.value.FalseValue
-import io.hamal.lib.common.value.NilValue
-import io.hamal.lib.common.value.NumberValue
-import io.hamal.lib.common.value.TrueValue
+import io.hamal.lib.script.api.value.FalseValue
+import io.hamal.lib.script.api.value.NilValue
+import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.TrueValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory

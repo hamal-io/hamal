@@ -9,9 +9,9 @@ import io.hamal.backend.req.Request
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils.now
-import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
+import io.hamal.lib.script.api.value.TableValue
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled

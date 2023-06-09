@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.common.value.*
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 object PrecedenceString {

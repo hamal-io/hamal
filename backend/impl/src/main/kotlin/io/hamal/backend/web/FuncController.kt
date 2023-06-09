@@ -10,10 +10,10 @@ import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncResponse

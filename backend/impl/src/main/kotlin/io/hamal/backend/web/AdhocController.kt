@@ -2,10 +2,6 @@ package io.hamal.backend.web
 
 import io.hamal.backend.req.InvokeAdhoc
 import io.hamal.backend.req.Request
-import io.hamal.lib.common.value.NumberValue
-import io.hamal.lib.common.value.StringValue
-import io.hamal.lib.common.value.TableEntry
-import io.hamal.lib.common.value.TableValue
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -14,6 +10,10 @@ import io.hamal.lib.domain.vo.base.Secret
 import io.hamal.lib.domain.vo.base.SecretKey
 import io.hamal.lib.domain.vo.base.SecretStore
 import io.hamal.lib.domain.vo.base.SecretStoreIdentifier
+import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.StringValue
+import io.hamal.lib.script.api.value.TableEntry
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ApiAdhocReq
 import io.hamal.lib.sdk.domain.ApiReq
 import org.springframework.beans.factory.annotation.Autowired

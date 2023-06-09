@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.common.value.IdentValue
-import io.hamal.lib.common.value.Value
+import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.IdentifierLiteral
 
 internal object EvaluateIdentifier : Evaluate<IdentifierLiteral> {

@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.common.value.*
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateCallExpression : Evaluate<CallExpression> {
@@ -13,10 +13,27 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 
         val target = ctx.evaluate { identifier }
 
-//        if (target is IdentValue) {
-//
-//            val identifier = ctx.evaluateAsIdentifier { identifier }
-//            env.findFunctionValue(identifier)
+        if (target is IdentValue) {
+
+            val ident = ctx.evaluateAsIdentifier { identifier }
+
+            val func = env.find(ident)
+
+            when (func) {
+                is BuiltinFuncValue -> {
+                    return func(
+                        BuiltinFuncValue.Context(
+                            parameters = parameters.zip(toEvaluate.parameters)
+                                .map { BuiltinFuncValue.Parameter(it.first, it.second) },
+                            env = env
+                        )
+                    )
+                }
+
+                else -> TODO()
+            }
+
+//            env.findFunctionValue(ident)
 //                ?.let { fn ->
 //                    return fn(
 //                        Context(
@@ -27,9 +44,9 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 //                    )
 //                }
 //
-//            val prototype = env.findProtoTypeValue(identifier)!!
+//            val prototype = env.findProtoTypeValue(ident)!!
 //            return ctx.evaluate(prototype.block)
-//        } else {
+        } else {
 //            require(target is DepFunctionValue)
 //            return target(
 //                Context(
@@ -42,8 +59,8 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
 //                    ctx.env
 //                )
 //            )
-//        }
-        TODO()
+            TODO()
+        }
     }
 }
 
@@ -80,7 +97,7 @@ internal object EvaluateIfExpression : Evaluate<IfExpression> {
                     result
                 }
 
-                else -> ErrorValue(StringValue("Expression expected to yield a boolean value"))
+                else -> ErrorValue("Expression expected to yield a boolean value")
             }
         }
         return NilValue

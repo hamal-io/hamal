@@ -1,8 +1,8 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.IdentValue
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.IdentValue
 
 class HamalExtension : Extension {
     override fun create(): EnvValue {

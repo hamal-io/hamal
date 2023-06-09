@@ -1,10 +1,12 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.IdentValue
-import io.hamal.lib.common.value.Value
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.DefaultInterpreter
 import io.hamal.lib.script.impl.ast.parse
+import io.hamal.lib.script.impl.builtin.AssertFunction
+import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.script.impl.token.tokenize
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,9 +31,8 @@ internal abstract class AbstractEvalTest {
         val testEnv = EnvValue(
             IdentValue("_G"),
             values = mapOf(
-                TODO()
-//                AssertFunction.identifier to AssertFunction,
-//                RequireFunction.identifier to RequireFunction
+                IdentValue("assert") to AssertFunction,
+                IdentValue("require") to RequireFunction
             )
         )
 

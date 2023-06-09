@@ -1,8 +1,8 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.common.value.*
-import io.hamal.lib.common.value.ValueOperator.Type.*
 import io.hamal.lib.script.api.ast.Node
+import io.hamal.lib.script.api.value.*
+import io.hamal.lib.script.api.value.ValueOperator.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
 
 internal data class EvaluationContext<TYPE : Node>(

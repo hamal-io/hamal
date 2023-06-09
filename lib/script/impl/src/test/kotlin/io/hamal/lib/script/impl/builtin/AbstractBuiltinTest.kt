@@ -1,10 +1,10 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.common.value.EnvValue
-import io.hamal.lib.common.value.ErrorValue
-import io.hamal.lib.common.value.IdentValue
-import io.hamal.lib.common.value.Value
 import io.hamal.lib.script.api.Sandbox
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.ErrorValue
+import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.DefaultSandbox
 import org.junit.jupiter.api.fail
 
@@ -13,9 +13,8 @@ internal abstract class AbstractBuiltinTest {
     protected val env = EnvValue(
         ident = IdentValue("_G"),
         values = mapOf(
-            TODO()
-//            AssertFunction.identifier to AssertFunction,
-//            RequireFunction.identifier to RequireFunction
+            IdentValue("assert") to AssertFunction,
+            IdentValue("require") to RequireFunction
         )
     )
     protected val sandbox: Sandbox
@@ -39,7 +38,7 @@ internal abstract class AbstractBuiltinTest {
     fun eval(code: String): Value {
         val result = sandbox.eval(code)
         if (result is ErrorValue) {
-            fail { result.cause.toString() }
+            fail { result.message.toString() }
         }
         return result
     }
