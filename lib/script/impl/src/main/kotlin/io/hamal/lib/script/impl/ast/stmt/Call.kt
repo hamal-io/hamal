@@ -10,8 +10,8 @@ class Call(
 ) : Statement {
     internal object Parse : ParseStatement<Call> {
         override fun invoke(ctx: Context): Call {
-            val identifier = IdentifierLiteral.Parse(ctx)
-            return Call(CallExpression.Parse(ctx, identifier))
+            val ident = IdentifierLiteral.Parse(ctx)
+            return Call(CallExpression.Parse(ctx, ident))
         }
     }
 }

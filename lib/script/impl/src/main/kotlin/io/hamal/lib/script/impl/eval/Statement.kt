@@ -19,11 +19,11 @@ internal object EvaluateGlobalAssignment : Evaluate<Assignment.Global> {
     override fun invoke(ctx: EvaluationContext<Assignment.Global>): Value {
         val identifiers = ctx.toEvaluate.identifiers.map(ctx::evaluateAsIdentifier)
         val values = ctx.toEvaluate.expressions.map(ctx::evaluate)
-        identifiers.zip(values).forEach { (identifier, value) ->
+        identifiers.zip(values).forEach { (ident, value) ->
             if (value is IdentValue) {
-                ctx.env.addGlobal(identifier, ctx.env[value]) //FIXME create a copy if needed - like value is a table
+                ctx.env.addGlobal(ident, ctx.env[value]) //FIXME create a copy if needed - like value is a table
             } else {
-                ctx.env.addGlobal(identifier, value)
+                ctx.env.addGlobal(ident, value)
             }
         }
         return NilValue
@@ -34,11 +34,11 @@ internal object EvaluateLocalAssignment : Evaluate<Assignment.Local> {
     override fun invoke(ctx: EvaluationContext<Assignment.Local>): Value {
         val identifiers = ctx.toEvaluate.identifiers.map(ctx::evaluateAsIdentifier)
         val values = ctx.toEvaluate.expressions.map(ctx::evaluate)
-        identifiers.zip(values).forEach { (identifier, value) ->
+        identifiers.zip(values).forEach { (ident, value) ->
             if (value is IdentValue) {
-                ctx.env.addLocal(identifier, ctx.env[value]) //FIXME create a copy if needed - like value is a table
+                ctx.env.addLocal(ident, ctx.env[value]) //FIXME create a copy if needed - like value is a table
             } else {
-                ctx.env.addLocal(identifier, value)
+                ctx.env.addLocal(ident, value)
             }
         }
         return NilValue
@@ -84,7 +84,7 @@ internal object EvaluateExpressionStatement : Evaluate<ExpressionStatement> {
 internal object EvaluatePrototype : Evaluate<Prototype> {
     override fun invoke(ctx: EvaluationContext<Prototype>): Value {
         val value = ctx.evaluateAsPrototype { expression }
-        ctx.env.addLocal(value.identifier, value) //FIXME new env? or putting this in ctx as well like ctx.addLocal
+        ctx.env.addLocal(value.ident, value) //FIXME new env? or putting this in ctx as well like ctx.addLocal
         return value
     }
 }

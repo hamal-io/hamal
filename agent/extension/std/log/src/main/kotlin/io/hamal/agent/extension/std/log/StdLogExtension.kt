@@ -1,7 +1,7 @@
 package io.hamal.agent.extension.std.log
 
 //object ConsoleFormat : DepFunctionValue {
-//    override val identifier: IdentValue = IdentValue("format")
+//    override val ident: IdentValue = IdentValue("format")
 //
 //    override fun invoke(ctx: Context): Value {
 //        TODO("Not yet implemented")
@@ -30,7 +30,7 @@ package io.hamal.agent.extension.std.log
 //class StdLogExtension : Extension {
 //    override fun create(): EnvValue {
 //        return EnvValue(
-//            identifier = IdentValue("log"),
+//            ident = IdentValue("log"),
 //            values = mapOf(
 //                IdentValue("_cfg") to TableValue(
 //                    IdentValue("console") to TableValue(
@@ -49,7 +49,7 @@ package io.hamal.agent.extension.std.log
 //
 //
 //class LogDebug : DepFunctionValue {
-//    override val identifier = IdentValue("debug")
+//    override val ident = IdentValue("debug")
 //    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 //    override fun invoke(ctx: Context): Value {
 //        println("DEBUG: ${ctx.parameters.first().value}")
@@ -60,7 +60,7 @@ package io.hamal.agent.extension.std.log
 //
 //
 //class LogInfo : DepFunctionValue {
-//    override val identifier = IdentValue("info")
+//    override val ident = IdentValue("info")
 //    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 //    override fun invoke(ctx: Context): Value {
 //        val first = ctx.parameters.first().value

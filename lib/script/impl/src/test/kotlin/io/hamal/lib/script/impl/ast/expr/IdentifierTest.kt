@@ -48,7 +48,7 @@ internal class IdentifierTest : AbstractExpressionTest() {
     @Nested
     inner class ParseTest {
         @Test
-        fun identifier() {
+        fun ident() {
             runLiteralTest(IdentifierLiteral.Parse, "some_variable") { result, tokens ->
                 assertThat(result, equalTo(IdentifierLiteral("some_variable")))
                 tokens.consumed()

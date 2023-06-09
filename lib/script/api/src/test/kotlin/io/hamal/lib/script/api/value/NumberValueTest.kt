@@ -596,15 +596,15 @@ class NumberValueTest {
 }
 
 
-class DefaultNumberMetaTableTest {
+class DefaultNumberValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultNumberMetaTable.operators, hasSize(14))
+        assertThat(DefaultNumberValueMetaTable.operators, hasSize(14))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultNumberMetaTable.type, equalTo("number"))
+        assertThat(DefaultNumberValueMetaTable.type, equalTo("number"))
     }
 
     @TestFactory

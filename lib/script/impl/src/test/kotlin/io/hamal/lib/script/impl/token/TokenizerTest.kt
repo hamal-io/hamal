@@ -212,11 +212,11 @@ class TokenizerTest {
 
             @TestFactory
             fun tokens() = listOf(
-                "some_variable" to Token(Identifier, 1, 1, "some_variable"),
-                "not_variable" to Token(Identifier, 1, 1, "not_variable"),
-                "and_variable" to Token(Identifier, 1, 1, "and_variable"),
-                "or_variable" to Token(Identifier, 1, 1, "or_variable"),
-                "true_variable" to Token(Identifier, 1, 1, "true_variable"),
+                "some_variable" to Token(Ident, 1, 1, "some_variable"),
+                "not_variable" to Token(Ident, 1, 1, "not_variable"),
+                "and_variable" to Token(Ident, 1, 1, "and_variable"),
+                "or_variable" to Token(Ident, 1, 1, "or_variable"),
+                "true_variable" to Token(Ident, 1, 1, "true_variable"),
                 "23.45" to Token(Number, 1, 1, "23.45"),
                 "0x815" to Token(HexNumber, 1, 1, "0x815"),
 
@@ -290,9 +290,9 @@ class TokenizerTest {
             fun `Tokenize function call`() {
                 val testInstance = DefaultTokenizer("some_function()")
 
-                val identifier = testInstance.nextToken()
-                assertThat(identifier.type, equalTo(Identifier))
-                assertThat(identifier.value, equalTo("some_function"))
+                val ident = testInstance.nextToken()
+                assertThat(ident.type, equalTo(Ident))
+                assertThat(ident.value, equalTo("some_function"))
 
                 val leftParenthesis = testInstance.nextToken()
                 assertThat(leftParenthesis.type, equalTo(LeftParenthesis))
@@ -308,9 +308,9 @@ class TokenizerTest {
             fun `Tokenize a = {x=0, y=0}`() {
                 val testInstance = DefaultTokenizer("a = {x=0, y=0}")
 
-                var identifier = testInstance.nextToken()
-                assertThat(identifier.type, equalTo(Identifier))
-                assertThat(identifier.value, equalTo("a"))
+                var ident = testInstance.nextToken()
+                assertThat(ident.type, equalTo(Ident))
+                assertThat(ident.value, equalTo("a"))
 
                 var equal = testInstance.nextToken()
                 assertThat(equal.type, equalTo(Equal))
@@ -320,9 +320,9 @@ class TokenizerTest {
                 assertThat(leftCurly.type, equalTo(LeftCurlyBracket))
                 assertThat(leftCurly.value, equalTo("{"))
 
-                identifier = testInstance.nextToken()
-                assertThat(identifier.type, equalTo(Identifier))
-                assertThat(identifier.value, equalTo("x"))
+                ident = testInstance.nextToken()
+                assertThat(ident.type, equalTo(Ident))
+                assertThat(ident.value, equalTo("x"))
 
                 equal = testInstance.nextToken()
                 assertThat(equal.type, equalTo(Equal))
@@ -336,9 +336,9 @@ class TokenizerTest {
                 assertThat(comma.type, equalTo(Comma))
                 assertThat(comma.value, equalTo(","))
 
-                identifier = testInstance.nextToken()
-                assertThat(identifier.type, equalTo(Identifier))
-                assertThat(identifier.value, equalTo("y"))
+                ident = testInstance.nextToken()
+                assertThat(ident.type, equalTo(Ident))
+                assertThat(ident.value, equalTo("y"))
 
                 equal = testInstance.nextToken()
                 assertThat(equal.type, equalTo(Equal))
@@ -450,11 +450,11 @@ class TokenizerTest {
         fun `a dot dot b`() {
             val testInstance = DefaultTokenizer("a..b")
             val a = testInstance.nextToken()
-            assertThat(a, equalTo(Token(Identifier, 1, 1, "a")))
+            assertThat(a, equalTo(Token(Ident, 1, 1, "a")))
             val op = testInstance.nextToken()
             assertThat(op, equalTo(Token(Dot_Dot, 1, 2, "..")))
             val b = testInstance.nextToken()
-            assertThat(b, equalTo(Token(Identifier, 1, 4, "b")))
+            assertThat(b, equalTo(Token(Ident, 1, 4, "b")))
 
         }
 
@@ -462,7 +462,7 @@ class TokenizerTest {
         fun `some_number=2810`() {
             val testInstance = DefaultTokenizer("some_number=2810")
             val ident = testInstance.nextToken()
-            assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
+            assertThat(ident, equalTo(Token(Ident, 1, 1, "some_number")))
             val equal = testInstance.nextToken()
             assertThat(equal, equalTo(Token(Equal, 1, 12, "=")))
             val number = testInstance.nextToken()
@@ -473,7 +473,7 @@ class TokenizerTest {
         fun `some_number==1212`() {
             val testInstance = DefaultTokenizer("some_number==1212")
             val ident = testInstance.nextToken()
-            assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
+            assertThat(ident, equalTo(Token(Ident, 1, 1, "some_number")))
             val equal = testInstance.nextToken()
             assertThat(equal, equalTo(Token(Equal_Equal, 1, 12, "==")))
             val number = testInstance.nextToken()
@@ -484,27 +484,27 @@ class TokenizerTest {
         fun `some_number==another_number`() {
             val testInstance = DefaultTokenizer("some_number==another_number")
             val ident = testInstance.nextToken()
-            assertThat(ident, equalTo(Token(Identifier, 1, 1, "some_number")))
+            assertThat(ident, equalTo(Token(Ident, 1, 1, "some_number")))
             val equal = testInstance.nextToken()
             assertThat(equal, equalTo(Token(Equal_Equal, 1, 12, "==")))
             val number = testInstance.nextToken()
-            assertThat(number, equalTo(Token(Identifier, 1, 14, "another_number")))
+            assertThat(number, equalTo(Token(Ident, 1, 14, "another_number")))
         }
 
         @Test
         fun `some_table dot field`() {
             val testInstance = DefaultTokenizer("some_table.field")
             val table = testInstance.nextToken()
-            assertThat(table, equalTo(Token(Identifier, 1, 1, "some_table")))
+            assertThat(table, equalTo(Token(Ident, 1, 1, "some_table")))
         }
 
         @Test
         fun `local web3 = require('web3')`() {
             val testInstance = DefaultTokenizer("local eth = require('web3')")
             assertThat(testInstance.nextToken(), equalTo(Token(Local, 1, 1, "local")))
-            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 7, "eth")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Ident, 1, 7, "eth")))
             assertThat(testInstance.nextToken(), equalTo(Token(Equal, 1, 11, "=")))
-            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 13, "require")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Ident, 1, 13, "require")))
             assertThat(testInstance.nextToken(), equalTo(Token(LeftParenthesis, 1, 20, "(")))
             assertThat(testInstance.nextToken(), equalTo(Token(Type.String, 1, 21, "web3")))
             assertThat(testInstance.nextToken(), equalTo(Token(RightParenthesis, 1, 27, ")")))
@@ -542,11 +542,11 @@ log.info('test')
         fun ifStatement() {
             val testInstance = DefaultTokenizer("if a<0 then a = 0 end")
             assertThat(testInstance.nextToken(), equalTo(Token(If, 1, 1, "if")))
-            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 4, "a")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Ident, 1, 4, "a")))
             assertThat(testInstance.nextToken(), equalTo(Token(LeftAngleBracket, 1, 5, "<")))
             assertThat(testInstance.nextToken(), equalTo(Token(Number, 1, 6, "0")))
             assertThat(testInstance.nextToken(), equalTo(Token(Then, 1, 8, "then")))
-            assertThat(testInstance.nextToken(), equalTo(Token(Identifier, 1, 13, "a")))
+            assertThat(testInstance.nextToken(), equalTo(Token(Ident, 1, 13, "a")))
             assertThat(testInstance.nextToken(), equalTo(Token(Equal, 1, 15, "=")))
             assertThat(testInstance.nextToken(), equalTo(Token(Number, 1, 17, "0")))
             assertThat(testInstance.nextToken(), equalTo(Token(End, 1, 19, "end")))

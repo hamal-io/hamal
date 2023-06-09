@@ -76,10 +76,10 @@ internal fun Parser.Context.parseStatement(): Statement {
 }
 
 private fun Parser.Context.isCallExpression() =
-    currentTokenType() == Type.Identifier && nextTokenType() == Type.LeftParenthesis
+    currentTokenType() == Type.Ident && nextTokenType() == Type.LeftParenthesis
 
 private fun Parser.Context.isGlobalAssignment(): Boolean {
-    return currentTokenType() == Type.Identifier && nextTokenType() == Type.Equal || nextTokenType() == Type.Comma
+    return currentTokenType() == Type.Ident && nextTokenType() == Type.Equal || nextTokenType() == Type.Comma
 }
 
 private fun Parser.Context.isLocalAssignment() = currentTokenType() == Type.Local

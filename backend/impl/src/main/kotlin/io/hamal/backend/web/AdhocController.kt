@@ -46,7 +46,7 @@ open class AdhocController
                         Secret(
                             SecretKey("Key"),
                             SecretStore("store"),
-                            SecretStoreIdentifier("identifier")
+                            SecretStoreIdentifier("ident")
                         )
                     )
                 ),

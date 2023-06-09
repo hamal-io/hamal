@@ -6,15 +6,15 @@ import io.hamal.lib.script.impl.ScriptEvaluationException
 object RequireFunction : BuiltinFuncValue() {
     override fun invoke(ctx: Context): Value {
         val firstParameter = ctx.parameters.firstOrNull()
-            ?: throw ScriptEvaluationException(ErrorValue("require needs one environment identifier"))
+            ?: throw ScriptEvaluationException(ErrorValue("require needs one environment ident"))
 
-        val identifier = firstParameter.asIdentifier()
+        val ident = firstParameter.asIdentifier()
 
         var result: EnvValue = ctx.env
-        val splits = identifier.value.split("/")
+        val splits = ident.value.split("/")
         splits.forEach { envIdent ->
             result = result.findEnvironmentValue(IdentValue(envIdent))
-                ?: throw ScriptEvaluationException(ErrorValue("Environment '${identifier.value}' not found"))
+                ?: throw ScriptEvaluationException(ErrorValue("Environment '${ident.value}' not found"))
         }
 
         return result

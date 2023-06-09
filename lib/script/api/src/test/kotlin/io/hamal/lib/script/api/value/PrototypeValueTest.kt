@@ -5,14 +5,15 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
-class DefaultEnvValueMetaTableTest {
+
+class DefaultPrototypeValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultEnvValueMetaTable.operators, hasSize(0))
+        assertThat(DefaultPrototypeValueMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultEnvValueMetaTable.type, equalTo("env"))
+        assertThat(DefaultPrototypeValueMetaTable.type, equalTo("prototype"))
     }
 }

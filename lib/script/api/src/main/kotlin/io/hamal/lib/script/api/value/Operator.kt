@@ -3,7 +3,7 @@ package io.hamal.lib.script.api.value
 sealed interface ValueOperator {
     val operatorType: Type
 
-    enum class Type(val identifier: String) {
+    enum class Type(val ident: String) {
         Add("__add"),       // self + other
         Div("__div"),       // self / other
         Eq("__eq"),         // self == other

@@ -22,7 +22,7 @@ data class TableValue(
     @Serializable(with = Serializer::class)
     private val entries: MutableMap<Value, Value> = mutableMapOf(),
     @Transient
-    override val metaTable: MetaTable = DefaultTableMetaTable
+    override val metaTable: MetaTable = DefaultTableValueMetaTable
 ) : Value, Collection<TableEntry> {
 
     constructor(vararg pairs: Pair<Value, Value>) : this() {
@@ -118,7 +118,7 @@ data class TableValue(
     }
 }
 
-object DefaultTableMetaTable : MetaTable {
+object DefaultTableValueMetaTable : MetaTable {
     override val type = "table"
     override val operators: List<ValueOperator> = listOf()
 }

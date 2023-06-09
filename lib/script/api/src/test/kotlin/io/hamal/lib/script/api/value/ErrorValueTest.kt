@@ -17,14 +17,14 @@ class ErrorValueTest {
     ).flatten()
 }
 
-class DefaultErrorMetaTableTest {
+class DefaultErrorValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultErrorMetaTable.operators, hasSize(0))
+        assertThat(DefaultErrorValueMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultErrorMetaTable.type, equalTo("error"))
+        assertThat(DefaultErrorValueMetaTable.type, equalTo("error"))
     }
 }

@@ -218,7 +218,7 @@ internal fun DefaultTokenizer.nextCode(): Token {
 
 
 internal fun DefaultTokenizer.nextIdentifierOrKeyword(): Token {
-    return asKeyword() ?: Token(Identifier, tokenLine(), tokenPosition(), tokenValue())
+    return asKeyword() ?: Token(Ident, tokenLine(), tokenPosition(), tokenValue())
 }
 
 val keywordMapping = Type.values().filter { it.category == Category.Keyword }.associateBy { it.value }

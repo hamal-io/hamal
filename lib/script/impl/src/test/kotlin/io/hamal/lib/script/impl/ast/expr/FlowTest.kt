@@ -120,14 +120,14 @@ internal class ForExpressionTest : AbstractExpressionTest() {
     @TestFactory
     fun parse() = listOf(
         "for i=1,10 do true end" to ForLoopExpression(
-            identifier = IdentifierLiteral("i"),
+            ident = IdentifierLiteral("i"),
             startExpression = NumberLiteral(1),
             endExpression = NumberLiteral(10),
             stepExpression = NumberLiteral(1),
             block = DoStmt(Block(ExpressionStatement(TrueLiteral)))
         ),
         "for i=1,10,2 do true end" to ForLoopExpression(
-            identifier = IdentifierLiteral("i"),
+            ident = IdentifierLiteral("i"),
             startExpression = NumberLiteral(1),
             endExpression = NumberLiteral(10),
             stepExpression = NumberLiteral(2),

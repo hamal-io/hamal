@@ -8,7 +8,7 @@ import io.hamal.lib.script.impl.token.Token.Type.*
 import io.hamal.lib.script.impl.token.Token.Type.Function
 
 class PrototypeLiteral(
-    val identifier: IdentifierLiteral,
+    val ident: IdentifierLiteral,
     val parameters: List<IdentifierLiteral>,
     val block: Block
 ) : LiteralExpression {
@@ -19,7 +19,7 @@ class PrototypeLiteral(
             ctx.expectCurrentTokenTypToBe(Function)
             ctx.advance()
 
-            val identifier = if (ctx.currentTokenType() != LeftParenthesis) {
+            val ident = if (ctx.currentTokenType() != LeftParenthesis) {
                 val ident = ctx.parseIdentifier()
                 ctx.expectCurrentTokenTypToBe(LeftParenthesis)
                 ctx.advance()
@@ -34,7 +34,7 @@ class PrototypeLiteral(
             ctx.advance()
 
             return PrototypeLiteral(
-                identifier,
+                ident,
                 parameterIdentifiers,
                 ctx.parseBody()
             )
@@ -44,7 +44,7 @@ class PrototypeLiteral(
         private fun Context.parseParameters(): List<IdentifierLiteral> {
             val result = mutableListOf<IdentifierLiteral>()
             while (currentTokenType() != RightParenthesis) {
-                expectCurrentTokenTypToBe(Identifier)
+                expectCurrentTokenTypToBe(Ident)
                 result.add(parseIdentifier())
                 if (currentTokenType() == Comma) {
                     advance()
@@ -73,17 +73,17 @@ class PrototypeLiteral(
 
         other as PrototypeLiteral
 
-        if (identifier != other.identifier) return false
+        if (ident != other.ident) return false
         return parameters == other.parameters
     }
 
     override fun hashCode(): Int {
-        var result = identifier.hashCode()
+        var result = ident.hashCode()
         result = 31 * result + parameters.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "$identifier($parameters)"
+        return "$ident($parameters)"
     }
 }

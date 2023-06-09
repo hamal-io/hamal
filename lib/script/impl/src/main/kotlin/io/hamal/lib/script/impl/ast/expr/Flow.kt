@@ -74,7 +74,7 @@ data class IfExpression(
 }
 
 data class ForLoopExpression(
-    val identifier: IdentifierLiteral,
+    val ident: IdentifierLiteral,
     val startExpression: Expression,
     val endExpression: Expression,
     val stepExpression: Expression,
@@ -85,7 +85,7 @@ data class ForLoopExpression(
             ctx.expectCurrentTokenTypToBe(For)
             ctx.advance()
 
-            val identifier = ctx.parseIdentifier()
+            val ident = ctx.parseIdentifier()
             ctx.expectCurrentTokenTypToBe(Equal)
             ctx.advance()
             val startExpression = ctx.parseExpression(Lowest)
@@ -102,7 +102,7 @@ data class ForLoopExpression(
             }
 
             return ForLoopExpression(
-                identifier = identifier,
+                ident = ident,
                 startExpression = startExpression,
                 endExpression = endExpression,
                 stepExpression = stepExpression,

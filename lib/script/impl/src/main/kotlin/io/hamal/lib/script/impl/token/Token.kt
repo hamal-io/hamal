@@ -60,7 +60,7 @@ data class Token(
         Tilde("~", Operator),
         Tilde_Equal("~=", Operator),
 
-        Identifier("identifier", Category.Identifier),
+        Ident("ident", Category.ident),
 
         False("false", Literal),
         True("true", Literal),
@@ -81,7 +81,7 @@ data class Token(
             Keyword,
             Operator,
             Literal,
-            Identifier,
+            ident,
             Misc,
         }
 

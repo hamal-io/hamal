@@ -37,7 +37,7 @@ object PrecedenceString {
     }
 
     private fun StringBuilder.appendCallExpression(expression: CallExpression) {
-        appendExpression(expression.identifier)
+        appendExpression(expression.ident)
         append('(')
         expression.parameters.forEachIndexed { idx, expr ->
             if (idx != 0) {

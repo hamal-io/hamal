@@ -19,15 +19,15 @@ class NilValueTest {
     ).flatten()
 }
 
-class DefaultNilMetaTableTest {
+class DefaultNilValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultNilMetaTable.operators, hasSize(4))
+        assertThat(DefaultNilValueMetaTable.operators, hasSize(4))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultNilMetaTable.type, equalTo("nil"))
+        assertThat(DefaultNilValueMetaTable.type, equalTo("nil"))
     }
 
     @TestFactory

@@ -8,11 +8,11 @@ import kotlinx.serialization.Transient
 @SerialName("StringValue")
 data class StringValue(val value: String) : KeyValue {
     @Transient
-    override val metaTable = DefaultStringMetaTable
+    override val metaTable = DefaultStringValueMetaTable
 
 }
 
-object DefaultStringMetaTable : MetaTable {
+object DefaultStringValueMetaTable : MetaTable {
     override val type = "string"
     override val operators: List<ValueOperator> = listOf()
 }

@@ -27,14 +27,14 @@ class TableValueTest {
     ).flatten()
 }
 
-class DefaultTableMetaTableTest {
+class DefaultTableValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultTableMetaTable.operators, hasSize(0))
+        assertThat(DefaultTableValueMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultTableMetaTable.type, equalTo("table"))
+        assertThat(DefaultTableValueMetaTable.type, equalTo("table"))
     }
 }

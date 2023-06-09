@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
 @SerialName("NilValue")
 object NilValue : Value {
     @Transient
-    override val metaTable = DefaultNilMetaTable
+    override val metaTable = DefaultNilValueMetaTable
     override fun toString(): String {
         return "nil"
     }
 }
 
-object DefaultNilMetaTable : MetaTable {
+object DefaultNilValueMetaTable : MetaTable {
     override val type = "nil"
     override val operators = listOf<ValueOperator>(
         nilInfix(Eq, "nil") { TrueValue },
@@ -33,7 +33,7 @@ fun nilInfix(
     fn: (other: Value) -> Value
 ): InfixValueOperator {
     return object : InfixValueOperator {
-        override val selfType = DefaultNilMetaTable.type
+        override val selfType = DefaultNilValueMetaTable.type
         override val otherType = otherType
         override val operatorType = operator
         override fun invoke(self: Value, other: Value) = fn(other)

@@ -11,7 +11,7 @@ data class IdentifierLiteral(
         override fun invoke(ctx: Context): IdentifierLiteral {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Type.Identifier)
+            assert(token.type == Type.Ident)
             ctx.advance()
             return IdentifierLiteral(token.value)
         }

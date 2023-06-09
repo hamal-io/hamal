@@ -16,8 +16,8 @@ interface Assignment : Statement {
         override val identifiers: List<IdentifierLiteral>,
         override val expressions: List<Expression>
     ) : Assignment {
-        constructor(identifier: IdentifierLiteral, expression: Expression) : this(
-            listOf(identifier),
+        constructor(ident: IdentifierLiteral, expression: Expression) : this(
+            listOf(ident),
             listOf(expression)
         )
 
@@ -28,7 +28,7 @@ interface Assignment : Statement {
 
         internal object Parse : ParseStatement<Global> {
             override fun invoke(ctx: Context): Global {
-                ctx.expectCurrentTokenTypToBe(Identifier)
+                ctx.expectCurrentTokenTypToBe(Ident)
                 val identifiers = ctx.parseIdentifiers()
                 ctx.expectCurrentTokenTypToBe(Equal)
                 ctx.advance()
@@ -42,8 +42,8 @@ interface Assignment : Statement {
         override val identifiers: List<IdentifierLiteral>,
         override val expressions: List<Expression>
     ) : Assignment {
-        constructor(identifier: IdentifierLiteral, expression: Expression) : this(
-            listOf(identifier),
+        constructor(ident: IdentifierLiteral, expression: Expression) : this(
+            listOf(ident),
             listOf(expression)
         )
 
@@ -56,7 +56,7 @@ interface Assignment : Statement {
             override fun invoke(ctx: Context): Local {
                 ctx.expectCurrentTokenTypToBe(Local)
                 ctx.advance()
-                ctx.expectCurrentTokenTypToBe(Identifier)
+                ctx.expectCurrentTokenTypToBe(Ident)
                 val identifiers = ctx.parseIdentifiers()
                 ctx.expectCurrentTokenTypToBe(Equal)
                 ctx.advance()

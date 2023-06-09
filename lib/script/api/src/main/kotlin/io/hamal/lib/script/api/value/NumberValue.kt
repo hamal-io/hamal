@@ -19,7 +19,7 @@ data class NumberValue(
     @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal,
     @Transient
-    override val metaTable: MetaTable = DefaultNumberMetaTable
+    override val metaTable: MetaTable = DefaultNumberValueMetaTable
 ) : Number(), Value, Comparable<NumberValue>, KeyValue {
     companion object {
         val Zero = NumberValue(0)
@@ -159,7 +159,7 @@ data class NumberValue(
 }
 
 
-object DefaultNumberMetaTable : MetaTable {
+object DefaultNumberValueMetaTable : MetaTable {
     override val type = "number"
 
     override val operators = listOf(

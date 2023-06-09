@@ -19,7 +19,7 @@ class HamalExtension : Extension {
 }
 
 //class ExecFunc : DepFunctionValue {
-//    override val identifier = IdentValue("exec")
+//    override val ident = IdentValue("exec")
 //    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 //
 //    override fun invoke(ctx: Context): Value {
@@ -43,7 +43,7 @@ class HamalExtension : Extension {
 //}
 //
 //class CreateFunc : DepFunctionValue {
-//    override val identifier = IdentValue("create_func")
+//    override val ident = IdentValue("create_func")
 //    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 //
 //    override fun invoke(ctx: Context): Value {

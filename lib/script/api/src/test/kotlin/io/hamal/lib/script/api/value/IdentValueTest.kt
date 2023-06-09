@@ -14,14 +14,14 @@ class IdentValueTest {
     ).flatten()
 }
 
-class DefaultIdentMetaTableTest {
+class DefaultIdentValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultIdentMetaTable.operators, hasSize(0))
+        assertThat(DefaultIdentValueMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultIdentMetaTable.type, equalTo("ident"))
+        assertThat(DefaultIdentValueMetaTable.type, equalTo("ident"))
     }
 }

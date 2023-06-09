@@ -8,10 +8,10 @@ import kotlinx.serialization.Transient
 @SerialName("ErrorValue")
 data class ErrorValue(val message: String) : Value {
     @Transient
-    override val metaTable = DefaultErrorMetaTable
+    override val metaTable = DefaultErrorValueMetaTable
 }
 
-object DefaultErrorMetaTable : MetaTable {
+object DefaultErrorValueMetaTable : MetaTable {
     override val type = "error"
     override val operators: List<ValueOperator> = listOf()
 }

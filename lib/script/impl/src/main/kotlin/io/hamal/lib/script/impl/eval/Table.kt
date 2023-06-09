@@ -19,7 +19,7 @@ internal object EvaluateTableConstructor : Evaluate<TableConstructorExpression> 
 
 internal object EvaluateTableAccess : Evaluate<TableAccessExpression> {
     override fun invoke(ctx: EvaluationContext<TableAccessExpression>): Value {
-        val tableIdentifier = ctx.toEvaluate.identifier
+        val tableIdentifier = ctx.toEvaluate.ident
 
         val target = ctx.env[tableIdentifier.value]
         if (target is EnvValue) {

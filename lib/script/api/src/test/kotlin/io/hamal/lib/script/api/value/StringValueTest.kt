@@ -14,14 +14,14 @@ class StringValueTest {
     ).flatten()
 }
 
-class DefaultStringMetaTableTest {
+class DefaultStringValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultStringMetaTable.operators, hasSize(0))
+        assertThat(DefaultStringValueMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultStringMetaTable.type, equalTo("string"))
+        assertThat(DefaultStringValueMetaTable.type, equalTo("string"))
     }
 }

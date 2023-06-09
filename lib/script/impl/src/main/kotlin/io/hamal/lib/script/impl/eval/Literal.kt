@@ -29,11 +29,11 @@ internal object EvaluateCodeLiteral : Evaluate<CodeLiteral> {
 }
 
 internal object EvaluatePrototypeLiteral : Evaluate<PrototypeLiteral> {
-    override fun invoke(ctx: EvaluationContext<PrototypeLiteral>): DepPrototypeValue {
-        return DepPrototypeValue(
-            ctx.evaluateAsIdentifier { identifier },
+    override fun invoke(ctx: EvaluationContext<PrototypeLiteral>): PrototypeValue {
+        return PrototypeValue(
+            ctx.evaluateAsIdentifier { ident },
             ctx.toEvaluate.parameters.map { ctx.evaluateAsString(it) },
-//            ctx.toEvaluate.block
+            ctx.toEvaluate.block
         )
     }
 }

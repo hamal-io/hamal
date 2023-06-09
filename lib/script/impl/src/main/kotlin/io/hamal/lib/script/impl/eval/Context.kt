@@ -55,16 +55,16 @@ internal data class EvaluationContext<TYPE : Node>(
     fun <NEW_TYPE : Node> evaluateAsPrototype(
         env: EnvValue = this.env,
         block: TYPE.() -> NEW_TYPE
-    ): DepPrototypeValue {
+    ): PrototypeValue {
         return evaluateAsPrototype(block(toEvaluate), env)
     }
 
     fun <TYPE : Node> evaluateAsPrototype(
         toEvaluate: TYPE,
         env: EnvValue = this.env
-    ): DepPrototypeValue {
+    ): PrototypeValue {
         val result = evaluate(toEvaluate, env)
-        require(result is DepPrototypeValue)
+        require(result is PrototypeValue)
         return result
     }
 

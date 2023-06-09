@@ -72,7 +72,7 @@ end
 
 
 function hugeid ()
-  print("loading chunk with huge identifier")
+  print("loading chunk with huge ident")
   local st, msg = loadrep("a", "chars")
   assert(not st and 
     (string.find(msg, "lexical element too long") or

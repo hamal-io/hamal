@@ -11,11 +11,11 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
         val parameters = toEvaluate.parameters.map { ctx.evaluate(it) }
 
 
-        val target = ctx.evaluate { identifier }
+        val target = ctx.evaluate { ident }
 
         if (target is IdentValue) {
 
-            val ident = ctx.evaluateAsIdentifier { identifier }
+            val ident = ctx.evaluateAsIdentifier { ident }
 
             val func = env.find(ident)
 
@@ -30,22 +30,12 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
                     )
                 }
 
+                is PrototypeValue -> {
+                    return ctx.evaluate(func.block)
+                }
+
                 else -> TODO()
             }
-
-//            env.findFunctionValue(ident)
-//                ?.let { fn ->
-//                    return fn(
-//                        Context(
-//                            parameters = parameters.zip(toEvaluate.parameters)
-//                                .map { Parameter(it.first, it.second) },
-//                            env = env
-//                        )
-//                    )
-//                }
-//
-//            val prototype = env.findProtoTypeValue(ident)!!
-//            return ctx.evaluate(prototype.block)
         } else {
 //            require(target is DepFunctionValue)
 //            return target(
@@ -107,7 +97,7 @@ internal object EvaluateIfExpression : Evaluate<IfExpression> {
 
 internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
     override fun invoke(ctx: EvaluationContext<ForLoopExpression>): Value {
-        val identifier = ctx.evaluateAsIdentifier { identifier }
+        val ident = ctx.evaluateAsIdentifier { ident }
         var currentValue: NumberValue = ctx.evaluate { startExpression } as NumberValue
 
         val endValue = ctx.evaluate { endExpression } as NumberValue
@@ -120,7 +110,7 @@ internal object EvaluateForLoopExpression : Evaluate<ForLoopExpression> {
         }
 
         while (true) {
-            ctx.env.addLocal(identifier, currentValue)
+            ctx.env.addLocal(ident, currentValue)
             ctx.evaluate { block }
             val nextValue = currentValue.plus(stepValue)
             if (hasNext(nextValue, endValue)) {

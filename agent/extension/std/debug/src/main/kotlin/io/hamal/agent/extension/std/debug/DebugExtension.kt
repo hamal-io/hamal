@@ -17,7 +17,7 @@ class DebugExtension : Extension {
 }
 
 //class Sleep : DepFunctionValue {
-//    override val identifier = IdentValue("sleep")
+//    override val ident = IdentValue("sleep")
 //    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
 //
 //    override fun invoke(ctx: Context): Value {

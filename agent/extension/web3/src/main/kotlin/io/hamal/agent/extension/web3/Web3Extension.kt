@@ -25,7 +25,7 @@ class Web3Extension : Extension {
 
     val fn = object : FuncValue {
 
-//        override val identifier = IdentValue("getBlock")
+//        override val ident = IdentValue("getBlock")
 
         //        override fun invoke(ctx: Context): Value {
 //            println("Getting block")

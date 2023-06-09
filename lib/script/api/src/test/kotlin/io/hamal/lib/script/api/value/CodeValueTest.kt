@@ -17,14 +17,14 @@ class CodeValueTest {
     ).flatten()
 }
 
-class DefaultCodeMetaTableTest {
+class DefaultCodeValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultCodeMetaTable.operators, hasSize(0))
+        assertThat(DefaultCodeValueMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultCodeMetaTable.type, equalTo("code"))
+        assertThat(DefaultCodeValueMetaTable.type, equalTo("code"))
     }
 }

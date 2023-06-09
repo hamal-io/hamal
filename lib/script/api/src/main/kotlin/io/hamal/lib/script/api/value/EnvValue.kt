@@ -7,7 +7,7 @@ class EnvValue(
     parent: EnvValue? = null
 ) : Value {
 
-    override val metaTable: MetaTable = DefaultEnvMetaTable
+    override val metaTable: MetaTable = DefaultEnvValueMetaTable
 
     internal val global: EnvValue
     internal val parent: EnvValue
@@ -82,7 +82,7 @@ class EnvValue(
 
 }
 
-object DefaultEnvMetaTable : MetaTable {
+object DefaultEnvValueMetaTable : MetaTable {
     override val type = "env"
     override val operators = listOf<ValueOperator>()
 }

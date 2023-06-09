@@ -5,7 +5,7 @@ end
 
 assert(x == nil)
 
--- executes block in new scope, but sets global identifier
+-- executes block in new scope, but sets global ident
 for i = 1, 10 do
     g = i
 end

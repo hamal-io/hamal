@@ -25,7 +25,7 @@ data class Secret(
     val storeIdentifier: SecretStoreIdentifier
 )
 
-//FIXME should be serialized to [ key@store:identifier, key2@store2...]
+//FIXME should be serialized to [ key@store:ident, key2@store2...]
 
 @Serializable
 abstract class Secrets : ValueObject.BaseImpl<List<Secret>>() {

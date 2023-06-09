@@ -14,15 +14,15 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
     @Nested
     inner class EqualsTest {
         @Test
-        fun `Equal if identifier and parameters are equal`() {
+        fun `Equal if ident and parameters are equal`() {
             assertEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(TrueLiteral))
                 ),
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(FalseLiteral))
                 )
@@ -33,7 +33,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Not Equal if identifiers are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(TrueLiteral))
                 ),
@@ -49,12 +49,12 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Not Equal if parameters are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(TrueLiteral))
                 ),
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(
                         IdentifierLiteral("ParameterIdentifier"),
                         IdentifierLiteral("AnotherParameterIdentifier")
@@ -69,15 +69,15 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
     @Nested
     inner class HashCodeTest {
         @Test
-        fun `Same hashcode if identifier and parameters hashcode are the same`() {
+        fun `Same hashcode if ident and parameters hashcode are the same`() {
             assertEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(TrueLiteral))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(FalseLiteral))
                 ).hashCode()
@@ -85,10 +85,10 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         }
 
         @Test
-        fun `Different hashcode if identifier has different hashcode`() {
+        fun `Different hashcode if ident has different hashcode`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(TrueLiteral))
                 ).hashCode(),
@@ -104,12 +104,12 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(IdentifierLiteral("ParameterIdentifier")),
                     Block(ExpressionStatement(TrueLiteral))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierLiteral("Identifier"),
+                    IdentifierLiteral("ident"),
                     listOf(
                         IdentifierLiteral("ParameterIdentifier"),
                         IdentifierLiteral("AnotherParameterIdentifier")
@@ -131,7 +131,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierLiteral("empty")))
+                assertThat(result.ident, equalTo(IdentifierLiteral("empty")))
                 assertThat(result.parameters, hasSize(0))
                 assertThat(result.block, hasSize(0))
 
@@ -147,7 +147,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 function() end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierLiteral("lambda")))
+                assertThat(result.ident, equalTo(IdentifierLiteral("lambda")))
                 assertThat(result.parameters, hasSize(0))
                 assertThat(result.block, hasSize(0))
 
@@ -163,7 +163,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 function empty_with_single_param(param_one) end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierLiteral("empty_with_single_param")))
+                assertThat(result.ident, equalTo(IdentifierLiteral("empty_with_single_param")))
                 assertThat(result.parameters, equalTo(listOf(IdentifierLiteral("param_one"))))
                 assertThat(result.block, hasSize(0))
 
@@ -179,7 +179,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 function empty_with_params(one,two,three) end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.identifier, equalTo(IdentifierLiteral("empty_with_params")))
+                assertThat(result.ident, equalTo(IdentifierLiteral("empty_with_params")))
                 assertThat(
                     result.parameters, equalTo(
                         listOf(

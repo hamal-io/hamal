@@ -323,7 +323,7 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by index`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """[1]""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableIndexLiteral(1)))
             tokens.consumed()
         }
@@ -333,17 +333,17 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by multi digit index`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """[123456789]""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableIndexLiteral(123456789)))
             tokens.consumed()
         }
     }
 
     @Test
-    fun `Parse table access by identifier`() {
+    fun `Parse table access by ident`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """.some_field""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
             tokens.consumed()
         }
@@ -353,7 +353,7 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by string`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """['some_field']""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.identifier, equalTo(IdentifierLiteral("table")))
+            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
             assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
             tokens.consumed()
         }

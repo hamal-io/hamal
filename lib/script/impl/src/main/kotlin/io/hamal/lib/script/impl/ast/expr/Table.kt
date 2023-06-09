@@ -47,14 +47,14 @@ data class IndexFieldExpression(
 
 data class TableKeyLiteral(val value: String) : LiteralExpression {
     init {
-        require(value.trim().isNotEmpty()) { "Identifier can not be empty" }
+        require(value.trim().isNotEmpty()) { "ident can not be empty" }
     }
 
     internal object Parse : ParseLiteralExpression<TableKeyLiteral> {
         override fun invoke(ctx: Parser.Context): TableKeyLiteral {
             require(ctx.isNotEmpty())
             val token = ctx.currentToken()
-            assert(token.type == Token.Type.Identifier || token.type == Token.Type.String)
+            assert(token.type == Token.Type.Ident || token.type == Token.Type.String)
             ctx.advance()
             return TableKeyLiteral(token.value)
         }
@@ -127,7 +127,7 @@ class TableConstructorExpression(
 }
 
 class TableAccessExpression(
-    val identifier: IdentifierLiteral,
+    val ident: IdentifierLiteral,
     val parameter: Expression
 ) : Expression {
 
@@ -135,7 +135,7 @@ class TableAccessExpression(
         override fun invoke(ctx: Parser.Context, lhs: Expression): Expression {
             require(lhs is IdentifierLiteral)
             return TableAccessExpression(
-                identifier = lhs,
+                ident = lhs,
                 parameter = ctx.parseParameter()
             )
         }
@@ -160,7 +160,7 @@ class TableAccessExpression(
         private fun Parser.Context.parseKey(): Expression {
             if (currentTokenType() == Token.Type.Dot) {
                 advance()
-                expectCurrentTokenTypToBe(Identifier)
+                expectCurrentTokenTypToBe(Ident)
                 return TableKeyLiteral.Parse(this)
             }
             expectCurrentTokenTypToBe(LeftBracket)

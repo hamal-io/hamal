@@ -19,7 +19,7 @@ abstract class BuiltinFuncValue : Value {
             return when (value) {
                 is StringValue -> IdentValue(value = value.value)
                 is IdentValue -> value
-                else -> throw IllegalStateException("$value can not interpreted as identifier")
+                else -> throw IllegalStateException("$value can not interpreted as ident")
             }
         }
     }
