@@ -1,35 +1,35 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.*
+import io.hamal.lib.common.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal object EvaluateTableConstructor : Evaluate<TableConstructorExpression> {
-    override fun invoke(ctx: EvaluationContext<TableConstructorExpression>): DepValue {
-        val result: List<Pair<DepValue, DepValue>> = ctx.toEvaluate.fieldExpressions.map { fieldExpression ->
+    override fun invoke(ctx: EvaluationContext<TableConstructorExpression>): Value {
+        val result: List<Pair<Value, Value>> = ctx.toEvaluate.fieldExpressions.map { fieldExpression ->
             if (fieldExpression is IndexFieldExpression) {
-                DepNumberValue(fieldExpression.index.value) to ctx.evaluate(fieldExpression.value)
+                NumberValue(fieldExpression.index.value) to ctx.evaluate(fieldExpression.value)
             } else {
                 require(fieldExpression is KeyFieldExpression)
-                DepIdentifier(fieldExpression.key) to ctx.evaluate(fieldExpression.value)
+                IdentValue(fieldExpression.key) to ctx.evaluate(fieldExpression.value)
             }
         }
-        return DepTableValue(result.toMap())
+        return TableValue(result.toMap())
     }
 }
 
 internal object EvaluateTableAccess : Evaluate<TableAccessExpression> {
-    override fun invoke(ctx: EvaluationContext<TableAccessExpression>): DepValue {
+    override fun invoke(ctx: EvaluationContext<TableAccessExpression>): Value {
         val tableIdentifier = ctx.toEvaluate.identifier
 
         val target = ctx.env[tableIdentifier.value]
-        if (target is DepEnvironmentValue) {
+        if (target is EnvValue) {
             require(ctx.toEvaluate.parameter is TableKeyLiteral)
-            return target[DepIdentifier(ctx.toEvaluate.parameter.value)]
+            return target[IdentValue(ctx.toEvaluate.parameter.value)]
         }
 
-        val table = ctx.env[tableIdentifier.value] as DepTableValue
+        val table = ctx.env[tableIdentifier.value] as TableValue
         //FIXME evaluate
         require(ctx.toEvaluate.parameter is TableKeyLiteral)
-        return table.get(DepIdentifier(ctx.toEvaluate.parameter.value))
+        return table.get(IdentValue(ctx.toEvaluate.parameter.value))
     }
 }

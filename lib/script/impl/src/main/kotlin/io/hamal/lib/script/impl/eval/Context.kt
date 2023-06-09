@@ -1,13 +1,13 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.common.value.*
+import io.hamal.lib.common.value.ValueOperator.Type.*
 import io.hamal.lib.script.api.ast.Node
-import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.api.value.DepValueOperation.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
 
 internal data class EvaluationContext<TYPE : Node>(
     val toEvaluate: TYPE,
-    var env: DepEnvironmentValue,
+    var env: EnvValue,
     val evaluator: Evaluator
 ) {
 
@@ -21,39 +21,39 @@ internal data class EvaluationContext<TYPE : Node>(
 
 
     fun <NEW_TYPE : Node> evaluate(
-        env: DepEnvironmentValue = this.env,
+        env: EnvValue = this.env,
         block: TYPE.() -> NEW_TYPE
-    ): DepValue {
+    ): Value {
         return evaluate(block(toEvaluate), env)
     }
 
     fun <TYPE : Node> evaluate(
         toEvaluate: TYPE,
-        env: DepEnvironmentValue = this.env
-    ): DepValue {
+        env: EnvValue = this.env
+    ): Value {
         return evaluator.evaluate(
             EvaluationContext(toEvaluate, env, evaluator)
         )
     }
 
     fun <NEW_TYPE : Node> evaluateAsIdentifier(
-        env: DepEnvironmentValue = this.env,
+        env: EnvValue = this.env,
         block: TYPE.() -> NEW_TYPE
-    ): DepIdentifier {
+    ): IdentValue {
         return evaluateAsIdentifier(block(toEvaluate), env)
     }
 
     fun <TYPE : Node> evaluateAsIdentifier(
         toEvaluate: TYPE,
-        env: DepEnvironmentValue = this.env
-    ): DepIdentifier {
+        env: EnvValue = this.env
+    ): IdentValue {
         val result = evaluate(toEvaluate, env)
-        require(result is DepIdentifier)
+        require(result is IdentValue)
         return result
     }
 
     fun <NEW_TYPE : Node> evaluateAsPrototype(
-        env: DepEnvironmentValue = this.env,
+        env: EnvValue = this.env,
         block: TYPE.() -> NEW_TYPE
     ): DepPrototypeValue {
         return evaluateAsPrototype(block(toEvaluate), env)
@@ -61,7 +61,7 @@ internal data class EvaluationContext<TYPE : Node>(
 
     fun <TYPE : Node> evaluateAsPrototype(
         toEvaluate: TYPE,
-        env: DepEnvironmentValue = this.env
+        env: EnvValue = this.env
     ): DepPrototypeValue {
         val result = evaluate(toEvaluate, env)
         require(result is DepPrototypeValue)
@@ -69,35 +69,35 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 
     fun <NEW_TYPE : Node> evaluateAsString(
-        env: DepEnvironmentValue = this.env,
+        env: EnvValue = this.env,
         block: TYPE.() -> NEW_TYPE
-    ): DepStringValue {
+    ): StringValue {
         return evaluateAsString(block(toEvaluate), env)
     }
 
     fun <TYPE : Node> evaluateAsString(
         toEvaluate: TYPE,
-        env: DepEnvironmentValue = this.env
-    ): DepStringValue {
+        env: EnvValue = this.env
+    ): StringValue {
         val result = evaluate(toEvaluate, env)
-        require(result is DepStringValue)
+        require(result is StringValue)
         return result
     }
 
-    fun <SELF : DepValue, OTHER : DepValue> evaluateInfix(
+    fun <SELF : Value, OTHER : Value> evaluateInfix(
         operator: Operator,
         self: SELF,
         other: OTHER
-    ): DepValue {
+    ): Value {
         val operationType = resolveInfixOperationType(operator)
 
-        val selfValue = if (self is DepIdentifier) {
+        val selfValue = if (self is IdentValue) {
             env[self]
         } else {
             self
         }
 
-        val otherValue = if (other is DepIdentifier) {
+        val otherValue = if (other is IdentValue) {
             env[other]
         } else {
             other
@@ -110,10 +110,10 @@ internal data class EvaluationContext<TYPE : Node>(
         return operation(selfValue, otherValue)
     }
 
-    fun <SELF : DepValue> evaluatePrefix(
+    fun <SELF : Value> evaluatePrefix(
         operator: Operator,
         self: SELF,
-    ): DepValue {
+    ): Value {
         val operationType = resolvePrefixOperationType(operator)
         val operation = requireNotNull(self.findPrefixOperation(operationType)) {
             "No prefix operation specified for: $operationType ${self.type()}"
@@ -122,7 +122,7 @@ internal data class EvaluationContext<TYPE : Node>(
     }
 }
 
-private fun resolveInfixOperationType(operator: Operator): DepValueOperation.Type {
+private fun resolveInfixOperationType(operator: Operator): ValueOperator.Type {
     return when {
         operator == Operator.Divide -> Div
         operator == Operator.Equals -> Eq
@@ -140,7 +140,7 @@ private fun resolveInfixOperationType(operator: Operator): DepValueOperation.Typ
     }
 }
 
-private fun resolvePrefixOperationType(operator: Operator): DepValueOperation.Type {
+private fun resolvePrefixOperationType(operator: Operator): ValueOperator.Type {
     return when {
         operator == Operator.Minus -> Negate
         else -> TODO()

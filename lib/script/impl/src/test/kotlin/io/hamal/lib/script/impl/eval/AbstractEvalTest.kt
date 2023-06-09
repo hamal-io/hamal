@@ -1,21 +1,19 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.DepEnvironmentValue
-import io.hamal.lib.script.api.value.DepIdentifier
-import io.hamal.lib.script.api.value.DepValue
+import io.hamal.lib.common.value.EnvValue
+import io.hamal.lib.common.value.IdentValue
+import io.hamal.lib.common.value.Value
 import io.hamal.lib.script.impl.DefaultInterpreter
 import io.hamal.lib.script.impl.ast.parse
-import io.hamal.lib.script.impl.builtin.AssertFunction
-import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.script.impl.token.tokenize
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-internal typealias TestFunction = (result: DepValue, env: DepEnvironmentValue) -> Unit
+internal typealias TestFunction = (result: Value, env: EnvValue) -> Unit
 
-fun equalToValue(expected: DepValue): (result: DepValue, _: DepEnvironmentValue) -> Unit {
+fun equalToValue(expected: Value): (result: Value, _: EnvValue) -> Unit {
     return { result, _ -> assertThat(result, CoreMatchers.equalTo(expected)) }
 }
 
@@ -28,11 +26,12 @@ internal abstract class AbstractEvalTest {
 
         val testInterpreter = DefaultInterpreter
 
-        val testEnv = DepEnvironmentValue(
-            DepIdentifier("_G"),
+        val testEnv = EnvValue(
+            IdentValue("_G"),
             values = mapOf(
-                AssertFunction.identifier to AssertFunction,
-                RequireFunction.identifier to RequireFunction
+                TODO()
+//                AssertFunction.identifier to AssertFunction,
+//                RequireFunction.identifier to RequireFunction
             )
         )
 

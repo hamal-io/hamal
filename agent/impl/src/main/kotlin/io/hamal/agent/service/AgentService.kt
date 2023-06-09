@@ -1,12 +1,10 @@
 package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
-import io.hamal.lib.script.api.value.DepEnvironmentValue
-import io.hamal.lib.script.api.value.DepFunctionValue
-import io.hamal.lib.script.api.value.DepIdentifier
+import io.hamal.lib.common.value.EnvValue
+import io.hamal.lib.common.value.FuncValue
+import io.hamal.lib.common.value.IdentValue
 import io.hamal.lib.script.impl.DefaultSandbox
-import io.hamal.lib.script.impl.builtin.AssertFunction
-import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.service.ExecService
 import jakarta.annotation.PostConstruct
@@ -19,10 +17,10 @@ import java.util.concurrent.TimeUnit
 @Service
 class AgentService {
 
-    private val functionValues = mutableListOf<DepFunctionValue>()
+    private val functionValues = mutableListOf<FuncValue>()
 
     //FIXME introduce WorkerExtensionEnvironment as a wrapper around native env
-    private val extensionEnvironments = mutableListOf<DepEnvironmentValue>()
+    private val extensionEnvironments = mutableListOf<EnvValue>()
 
     @PostConstruct
     fun postConstruct() {
@@ -82,17 +80,18 @@ class AgentService {
                     val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
 //                println(counter)
 
-                    val env = DepEnvironmentValue(
-                        identifier = DepIdentifier("_G"),
+                    val env = EnvValue(
+                        ident = IdentValue("_G"),
                         values = mapOf(
-                            AssertFunction.identifier to AssertFunction,
-                            RequireFunction.identifier to RequireFunction
+                            // FIXME
+//                            AssertFunction.identifier to AssertFunction,
+//                            RequireFunction.identifier to RequireFunction
                         )
                     )
 
 
                     extensionEnvironments.forEach { environment ->
-                        env.addGlobal(environment.identifier, environment)
+                        env.addGlobal(environment.ident, environment)
                     }
 
                     val sandbox = DefaultSandbox(env)

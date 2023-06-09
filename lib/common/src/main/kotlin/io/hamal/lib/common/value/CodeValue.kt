@@ -5,14 +5,15 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-@SerialName("ErrorValue")
-data class ErrorValue(val cause: StringValue) : Value {
+@SerialName("CodeValue")
+data class CodeValue(val value: String) : Value {
     @Transient
-    override val metaTable = DefaultErrorMetaTable
+    override val metaTable = DefaultCodeMetaTable
+
 }
 
-object DefaultErrorMetaTable : MetaTable {
-    override val type = "error"
+object DefaultCodeMetaTable : MetaTable {
+    override val type = "code"
     override val operators: List<ValueOperator> = listOf()
 }
 

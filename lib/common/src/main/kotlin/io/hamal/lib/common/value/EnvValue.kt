@@ -1,7 +1,7 @@
 package io.hamal.lib.common.value
 
 class EnvValue(
-    val identValue: IdentValue,
+    val ident: IdentValue,
     values: Map<IdentValue, Value>? = null,
     global: EnvValue? = null,
     parent: EnvValue? = null
@@ -22,7 +22,7 @@ class EnvValue(
 
     fun enterScope(): EnvValue {
         return EnvValue(
-            identValue = identValue,
+            ident = ident,
             values = mutableMapOf(),
             global = this.global,
             parent = this

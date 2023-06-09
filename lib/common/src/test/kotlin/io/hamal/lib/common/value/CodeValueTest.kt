@@ -7,24 +7,24 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-class ErrorValueTest {
+class CodeValueTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            ErrorValue(StringValue("Some error message")),
-            """{"type":"ErrorValue","value":"Some error message"}"""
+            CodeValue("log.info('hamal rocks')"),
+            """{"type":"CodeValue","value":"log.info('hamal rocks')"}"""
         ),
     ).flatten()
 }
 
-class DefaultErrorMetaTableTest {
+class DefaultCodeMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultErrorMetaTable.operators, hasSize(0))
+        assertThat(DefaultCodeMetaTable.operators, hasSize(0))
     }
 
     @Test
     fun `Test type`() {
-        assertThat(DefaultErrorMetaTable.type, equalTo("error"))
+        assertThat(DefaultCodeMetaTable.type, equalTo("code"))
     }
 }

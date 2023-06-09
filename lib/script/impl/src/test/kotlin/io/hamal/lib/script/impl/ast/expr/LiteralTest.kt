@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.script.api.value.DepNumberValue
+import io.hamal.lib.common.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -54,7 +54,7 @@ internal class LiteralTest : AbstractExpressionTest() {
             @Test
             fun number() {
                 runLiteralTest(NumberLiteral.Parse, "28.10") { result, tokens ->
-                    assertThat(result, equalTo(NumberLiteral(DepNumberValue("28.10"))))
+                    assertThat(result, equalTo(NumberLiteral(NumberValue("28.10"))))
                     tokens.consumed()
                 }
             }

@@ -1,19 +1,19 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.*
+import io.hamal.lib.common.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 
 internal object EvaluateNilLiteral : Evaluate<NilLiteral> {
-    override fun invoke(ctx: EvaluationContext<NilLiteral>) = DepNilValue
+    override fun invoke(ctx: EvaluationContext<NilLiteral>) = NilValue
 }
 
 internal object EvaluateFalseLiteral : Evaluate<FalseLiteral> {
-    override fun invoke(ctx: EvaluationContext<FalseLiteral>) = DepFalseValue
+    override fun invoke(ctx: EvaluationContext<FalseLiteral>) = FalseValue
 }
 
 internal object EvaluateTrueLiteral : Evaluate<TrueLiteral> {
-    override fun invoke(ctx: EvaluationContext<TrueLiteral>) = DepTrueValue
+    override fun invoke(ctx: EvaluationContext<TrueLiteral>) = TrueValue
 }
 
 internal object EvaluateNumberLiteral : Evaluate<NumberLiteral> {
@@ -21,11 +21,11 @@ internal object EvaluateNumberLiteral : Evaluate<NumberLiteral> {
 }
 
 internal object EvaluateStringLiteral : Evaluate<StringLiteral> {
-    override fun invoke(ctx: EvaluationContext<StringLiteral>) = DepStringValue(ctx.toEvaluate.value)
+    override fun invoke(ctx: EvaluationContext<StringLiteral>) = StringValue(ctx.toEvaluate.value)
 }
 
 internal object EvaluateCodeLiteral : Evaluate<CodeLiteral> {
-    override fun invoke(ctx: EvaluationContext<CodeLiteral>) = DepCodeValue(ctx.toEvaluate.value)
+    override fun invoke(ctx: EvaluationContext<CodeLiteral>) = CodeValue(ctx.toEvaluate.value)
 }
 
 internal object EvaluatePrototypeLiteral : Evaluate<PrototypeLiteral> {
@@ -33,7 +33,7 @@ internal object EvaluatePrototypeLiteral : Evaluate<PrototypeLiteral> {
         return DepPrototypeValue(
             ctx.evaluateAsIdentifier { identifier },
             ctx.toEvaluate.parameters.map { ctx.evaluateAsString(it) },
-            ctx.toEvaluate.block
+//            ctx.toEvaluate.block
         )
     }
 }
