@@ -180,24 +180,24 @@ object DefaultNumberMetaTable : MetaTable {
         object : InfixValueOperator {
             override val selfType = type
             override val otherType = "nil"
-            override val operationType = Eq
+            override val operatorType = Eq
             override fun invoke(self: Value, other: Value) = FalseValue
         },
 
         object : InfixValueOperator {
             override val selfType = type
             override val otherType = "nil"
-            override val operationType = Neq
+            override val operatorType = Neq
             override fun invoke(self: Value, other: Value) = TrueValue
         })
 }
 
 private fun numberInfix(
-    operation: ValueOperator.Type,
+    operatorType: ValueOperator.Type,
     fn: (self: NumberValue, other: NumberValue) -> Value
 ): InfixValueOperator {
     return object : InfixValueOperator {
-        override val operationType = operation
+        override val operatorType = operatorType
         override val selfType = "number"
         override val otherType = "number"
         override operator fun invoke(self: Value, other: Value): Value {
@@ -209,11 +209,11 @@ private fun numberInfix(
 }
 
 private fun numberPrefix(
-    operation: ValueOperator.Type,
+    operatorType: ValueOperator.Type,
     fn: (self: NumberValue) -> Value
 ): PrefixValueOperator {
     return object : PrefixValueOperator {
-        override val operationType = operation
+        override val operatorType = operatorType
         override val selfType = "number"
         override operator fun invoke(self: Value): Value {
             require(self is NumberValue)

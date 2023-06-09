@@ -10,13 +10,13 @@ sealed interface Value {
     fun findInfixOperation(type: ValueOperator.Type, otherType: String): InfixValueOperator? {
         return metaTable.operators
             .filterIsInstance<InfixValueOperator>()
-            .find { it.operationType == type && it.otherType == otherType }
+            .find { it.operatorType == type && it.otherType == otherType }
     }
 
     fun findPrefixOperation(type: ValueOperator.Type): PrefixValueOperator? {
         return metaTable.operators
             .filterIsInstance<PrefixValueOperator>()
-            .find { it.operationType == type }
+            .find { it.operatorType == type }
     }
 }
 

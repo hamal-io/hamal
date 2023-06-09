@@ -88,7 +88,7 @@ open class FuncController(
             InvokeOneshot(
                 execId = generateDomainId(Shard(1), ::ExecId),
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
-                inputs = InvocationInputs(TableValue.empty()),
+                inputs = InvocationInputs(TableValue()),
                 secrets = InvocationSecrets(listOf()),
                 funcId = funcId
             )

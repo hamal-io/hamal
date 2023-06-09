@@ -1,7 +1,7 @@
 package io.hamal.lib.script.api.value
 
 sealed interface ValueOperator {
-    val operationType: Type
+    val operatorType: Type
 
     enum class Type(val identifier: String) {
         Add("__add"),       // self + other

@@ -12,7 +12,6 @@ import io.hamal.lib.domain.vo.base.SecretStore
 import io.hamal.lib.domain.vo.base.SecretStoreIdentifier
 import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableEntry
 import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ApiAdhocReq
 import io.hamal.lib.sdk.domain.ApiReq
@@ -38,10 +37,8 @@ open class AdhocController
             InvokeAdhoc(
                 inputs = InvocationInputs(
                     TableValue(
-                        listOf(
-                            TableEntry(StringValue("Hello"), StringValue("World")),
-                            TableEntry(StringValue("Number"), NumberValue(42)),
-                        )
+                        StringValue("Hello") to StringValue("World"),
+                        StringValue("Number") to NumberValue(42),
                     )
                 ),
                 secrets = InvocationSecrets(

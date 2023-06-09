@@ -78,7 +78,7 @@ data class Entity(
             accountId = AccountId(1),
             id = id,
             correlation = null,
-            inputs = inputs ?: ExecInputs(TableValue.empty()),
+            inputs = inputs ?: ExecInputs(TableValue()),
             secrets = ExecSecrets(listOf()),
             code = code!!,
             invocation = AdhocInvocation()

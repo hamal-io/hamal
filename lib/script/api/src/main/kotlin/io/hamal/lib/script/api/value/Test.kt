@@ -12,14 +12,14 @@ internal object TestMetaTable : MetaTable {
 
 internal object TestPrefixOperator : PrefixValueOperator {
     override val selfType = "test-type"
-    override val operationType = ValueOperator.Type.Add
+    override val operatorType = ValueOperator.Type.Add
     override fun invoke(self: Value) = TODO("Not yet implemented")
 }
 
 internal object TestInfixOperator : InfixValueOperator {
     override val selfType = "test-type"
     override val otherType = "test-type"
-    override val operationType = ValueOperator.Type.Add
+    override val operatorType = ValueOperator.Type.Add
 
     override fun invoke(self: Value, other: Value) = TODO("Not yet implemented")
 }

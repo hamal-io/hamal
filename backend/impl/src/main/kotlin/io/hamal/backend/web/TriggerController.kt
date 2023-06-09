@@ -43,7 +43,7 @@ open class TriggerController(
                 name = req.name,
                 funcId = req.funcId,
                 type = req.type,
-                inputs = TriggerInputs(TableValue.empty()),
+                inputs = TriggerInputs(TableValue()),
                 secrets = TriggerSecrets(listOf()),
                 duration = req.duration
             )

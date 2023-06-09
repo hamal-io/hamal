@@ -1,15 +1,11 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.common.ddd.ValueObject
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableEntry
 import io.hamal.lib.script.api.value.TableValue
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.Json
 
 @Serializable
 abstract class Inputs : ValueObject.BaseImpl<TableValue>() {
@@ -31,27 +27,4 @@ abstract class InputsSerializer<INPUT : Inputs>(
     override fun serialize(encoder: Encoder, value: INPUT) {
         delegate.serialize(encoder, value.value)
     }
-}
-
-
-fun main() {
-    println(
-        Json {}.encodeToString(
-            ExecInputs.serializer(), ExecInputs(
-                TableValue(
-                    listOf(
-                        TableEntry(StringValue("A"), StringValue("B")),
-                        TableEntry(StringValue("A"), StringValue("B")),
-                    )
-                )
-            )
-        )
-    )
-
-    println(
-        Json {}.decodeFromString(
-            ExecInputs.serializer(),
-            "{\"entries\":[{\"key\":{\"type\":\"String\",\"value\":\"A\"},\"value\":{\"type\":\"String\",\"value\":\"B\"}}]}\n"
-        )
-    )
 }
