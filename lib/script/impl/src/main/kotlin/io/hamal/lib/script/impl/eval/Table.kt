@@ -3,8 +3,9 @@ package io.hamal.lib.script.impl.eval
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
-internal object EvaluateTableConstructor : Evaluate<TableConstructorExpression> {
-    override fun invoke(ctx: EvaluationContext<TableConstructorExpression>): Value {
+internal class EvaluateTableConstructor<INVOKE_CTX : FuncInvocationContext> :
+    Evaluate<TableConstructorExpression, INVOKE_CTX> {
+    override fun invoke(ctx: EvaluationContext<TableConstructorExpression, INVOKE_CTX>): Value {
         val result: List<Pair<Value, Value>> = ctx.toEvaluate.fieldExpressions.map { fieldExpression ->
             if (fieldExpression is IndexFieldExpression) {
                 NumberValue(fieldExpression.index.value) to ctx.evaluate(fieldExpression.value)
@@ -17,8 +18,8 @@ internal object EvaluateTableConstructor : Evaluate<TableConstructorExpression> 
     }
 }
 
-internal object EvaluateTableAccess : Evaluate<TableAccessExpression> {
-    override fun invoke(ctx: EvaluationContext<TableAccessExpression>): Value {
+internal class EvaluateTableAccess<INVOKE_CTX : FuncInvocationContext> : Evaluate<TableAccessExpression, INVOKE_CTX> {
+    override fun invoke(ctx: EvaluationContext<TableAccessExpression, INVOKE_CTX>): Value {
         val tableIdentifier = ctx.toEvaluate.ident
 
         val target = ctx.env[tableIdentifier.value]

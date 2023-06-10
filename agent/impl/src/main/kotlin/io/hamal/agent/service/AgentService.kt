@@ -1,8 +1,11 @@
 package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
+import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.FuncInvocationContextFactory
 import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
@@ -71,42 +74,58 @@ class AgentService {
                 .poll()
                 .requests.forEach { request ->
 
-                    println("${request.inputs} - ${request.inputs.value}")
-                    println("${request.secrets} - ${request.secrets.value.size}")
+                    try {
+
+                        println("${request.inputs} - ${request.inputs.value}")
+                        println("${request.secrets} - ${request.secrets.value.size}")
 
 //                println("$request")
 //                println("Execute: ${request.id} - ${request.correlation}")
 //                println("State: ${request.statePayload}")
 //
-                    val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
+                        val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
 //                println(counter)
 
-                    val env = EnvValue(
-                        ident = IdentValue("_G"),
-                        values = mapOf(
-                            IdentValue("assert") to AssertFunction,
-                            IdentValue("require") to RequireFunction
+                        val env = EnvValue(
+                            ident = IdentValue("_G"),
+                            values = mapOf(
+                                IdentValue("assert") to AssertFunction,
+                                IdentValue("require") to RequireFunction
+                            )
                         )
-                    )
 
 
-                    extensionEnvironments.forEach { environment ->
-                        env.addGlobal(environment.ident, environment)
-                    }
+                        extensionEnvironments.forEach { environment ->
+                            env.addGlobal(environment.ident, environment)
+                        }
 
-                    val sandbox = DefaultSandbox(env)
-                    val result = sandbox.eval(request.code.value)
+
+                        val sandbox = DefaultSandbox(
+                            env,
+                            object : FuncInvocationContextFactory<ExtensionFuncInvocationContext> {
+                                override fun create(
+                                    parameters: List<Value>,
+                                    env: EnvValue
+                                ): ExtensionFuncInvocationContext {
+                                    return ExtensionFuncInvocationContext(parameters, env)
+                                }
+                            })
+                        val result = sandbox.eval(request.code.value)
 //                println("RESULT: $result")
 //
 //                println("Finish executing task ${request.id}")
 
-                    DefaultHamalSdk.execService().complete(
-                        request.id, ExecService.StateAfterCompletion(
-                            contentType = "application/json",
-                            bytes = (counter + 1).toString().toByteArray()
+                        DefaultHamalSdk.execService().complete(
+                            request.id, ExecService.StateAfterCompletion(
+                                contentType = "application/json",
+                                bytes = (counter + 1).toString().toByteArray()
+                            )
                         )
-                    )
 
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
+
+                    }
                 }
         }
     }

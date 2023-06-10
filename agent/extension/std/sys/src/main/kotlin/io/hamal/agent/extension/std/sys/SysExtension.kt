@@ -2,6 +2,7 @@ package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
 import io.hamal.agent.extension.api.ExtensionFunc
+import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -26,7 +27,7 @@ class HamalExtension : Extension {
 }
 
 class ExecFunc : ExtensionFunc() {
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
         val funcId = (ctx.parameters.first() as StringValue).toString().replace("'", "")
         println("DEBUG: ${funcId}")
 
@@ -45,7 +46,7 @@ class ExecFunc : ExtensionFunc() {
 }
 
 class CreateFunc : ExtensionFunc() {
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
 //        val funcId = (ctx.parameters.first().value as StringValue).toString().replace("'", "")
 //        println("DEBUG: ${funcId}")
 //
