@@ -2,6 +2,7 @@ package io.hamal.agent.extension.std.log
 
 import io.hamal.agent.extension.api.Extension
 import io.hamal.agent.extension.api.ExtensionFunc
+import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.script.api.value.*
 
 //object ConsoleFormat : DepFunctionValue {
@@ -52,7 +53,7 @@ class StdLogExtension : Extension {
 
 
 class LogDebug : ExtensionFunc() {
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
         println("DEBUG: ${ctx.parameters.first()}")
         return NilValue
     }
@@ -61,13 +62,14 @@ class LogDebug : ExtensionFunc() {
 
 
 class LogInfo : ExtensionFunc() {
-    override fun invoke(ctx: Context): Value {
+    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
         val first = ctx.parameters.first()
         if (first is IdentValue) {
             println("INFO: ${ctx.env[first]}")
         } else {
             println("INFO: ${first}")
         }
+
 
 //        println("INFO: ${ctx.parameters.first().value}")
         return NilValue

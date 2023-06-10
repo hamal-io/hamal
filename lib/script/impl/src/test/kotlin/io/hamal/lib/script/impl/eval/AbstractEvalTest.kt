@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
+import io.hamal.lib.script.api.value.DefaultFuncInvocationContextFactory
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.IdentValue
 import io.hamal.lib.script.api.value.Value
@@ -21,12 +22,11 @@ fun equalToValue(expected: Value): (result: Value, _: EnvValue) -> Unit {
 
 internal abstract class AbstractEvalTest {
 
-
     private fun eval(code: String, testFn: TestFunction) {
         val tokens = tokenize(code)
         val statements = parse(tokens)
 
-        val testInterpreter = DefaultInterpreter
+        val testInterpreter = DefaultInterpreter(DefaultFuncInvocationContextFactory)
 
         val testEnv = EnvValue(
             IdentValue("_G"),
