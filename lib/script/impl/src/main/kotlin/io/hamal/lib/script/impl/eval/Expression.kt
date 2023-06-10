@@ -8,48 +8,25 @@ internal object EvaluateCallExpression : Evaluate<CallExpression> {
         val toEvaluate = ctx.toEvaluate
         val env = ctx.env
 
+        val ident = ctx.evaluateAsIdentifier { ident }
         val parameters = toEvaluate.parameters.map { ctx.evaluate(it) }
 
-
-        val target = ctx.evaluate { ident }
-
-        if (target is IdentValue) {
-
-            val ident = ctx.evaluateAsIdentifier { ident }
-
-            val func = env.find(ident)
-
-            when (func) {
-                is BuiltinFuncValue -> {
-                    return func(
-                        BuiltinFuncValue.Context(
-                            parameters = parameters.zip(toEvaluate.parameters)
-                                .map { BuiltinFuncValue.Parameter(it.first, it.second) },
-                            env = env
-                        )
+        when (val func = env.find(ident)) {
+            is BuiltinFuncValue -> {
+                return func(
+                    BuiltinFuncValue.Context(
+                        parameters = parameters.zip(toEvaluate.parameters)
+                            .map { BuiltinFuncValue.Parameter(it.first, it.second) },
+                        env = env
                     )
-                }
-
-                is PrototypeValue -> {
-                    return ctx.evaluate(func.block)
-                }
-
-                else -> TODO()
+                )
             }
-        } else {
-//            require(target is DepFunctionValue)
-//            return target(
-//                Context(
-//                    parameters.map {
-//                        Parameter(
-//                            value = it,
-//                            expression = toEvaluate.parameters.first() //FIXME
-//                        )
-//                    },
-//                    ctx.env
-//                )
-//            )
-            TODO()
+
+            is PrototypeValue -> {
+                return ctx.evaluate(func.block)
+            }
+
+            else -> TODO()
         }
     }
 }

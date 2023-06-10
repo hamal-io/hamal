@@ -1,5 +1,9 @@
 package io.hamal.agent.extension.std.log
 
+import io.hamal.agent.extension.api.Extension
+import io.hamal.agent.extension.api.ExtensionFunc
+import io.hamal.lib.script.api.value.*
+
 //object ConsoleFormat : DepFunctionValue {
 //    override val ident: IdentValue = IdentValue("format")
 //
@@ -27,51 +31,46 @@ package io.hamal.agent.extension.std.log
  */
 
 
-//class StdLogExtension : Extension {
-//    override fun create(): EnvValue {
-//        return EnvValue(
-//            ident = IdentValue("log"),
-//            values = mapOf(
-//                IdentValue("_cfg") to TableValue(
-//                    IdentValue("console") to TableValue(
-//                        IdentValue("level") to StringValue("TRACE"),
-//                        IdentValue("format") to ConsoleFormat
-//                    ),
-//                    IdentValue("backend") to StringValue("INFO")
-//                ),
-//                IdentValue("debug") to LogDebug(),
-//                IdentValue("info") to LogInfo()
-//            )
-//        )
-//    }
-//
-//}
-//
-//
-//class LogDebug : DepFunctionValue {
-//    override val ident = IdentValue("debug")
-//    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
-//    override fun invoke(ctx: Context): Value {
-//        println("DEBUG: ${ctx.parameters.first().value}")
-//        return NilValue
-//    }
-//
-//}
-//
-//
-//class LogInfo : DepFunctionValue {
-//    override val ident = IdentValue("info")
-//    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
-//    override fun invoke(ctx: Context): Value {
-//        val first = ctx.parameters.first().value
-//        if (first is IdentValue) {
-//            println("INFO: ${ctx.env[first]}")
-//        } else {
-//            println("INFO: ${first}")
-//        }
-//
-////        println("INFO: ${ctx.parameters.first().value}")
-//        return NilValue
-//    }
-//
-//}
+class StdLogExtension : Extension {
+    override fun create(): EnvValue {
+        return EnvValue(
+            ident = IdentValue("log"),
+            values = mapOf(
+                IdentValue("_cfg") to TableValue(
+                    IdentValue("console") to TableValue(
+                        IdentValue("level") to StringValue("TRACE"),
+                    ),
+                    IdentValue("backend") to StringValue("INFO")
+                ),
+                IdentValue("debug") to LogDebug(),
+                IdentValue("info") to LogInfo()
+            )
+        )
+    }
+
+}
+
+
+class LogDebug : ExtensionFunc() {
+    override fun invoke(ctx: Context): Value {
+        println("DEBUG: ${ctx.parameters.first()}")
+        return NilValue
+    }
+
+}
+
+
+class LogInfo : ExtensionFunc() {
+    override fun invoke(ctx: Context): Value {
+        val first = ctx.parameters.first()
+        if (first is IdentValue) {
+            println("INFO: ${ctx.env[first]}")
+        } else {
+            println("INFO: ${first}")
+        }
+
+//        println("INFO: ${ctx.parameters.first().value}")
+        return NilValue
+    }
+
+}

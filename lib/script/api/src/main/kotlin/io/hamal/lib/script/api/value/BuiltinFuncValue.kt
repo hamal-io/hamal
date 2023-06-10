@@ -29,5 +29,4 @@ abstract class BuiltinFuncValue : Value {
 object DefaultBuiltinFuncMetaTable : MetaTable {
     override val type: String = "builtin_func"
     override val operators: List<ValueOperator> = listOf()
-
 }

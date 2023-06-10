@@ -1,28 +1,51 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.script.api.value.EnvValue
-import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.agent.extension.api.ExtensionFunc
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.FuncSecrets
+import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.*
+import io.hamal.lib.sdk.domain.ApiCreateFuncRequest
 
 class HamalExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("sys"),
             values = mapOf(
-//                IdentValue("_cfg") to TableValue(),
-//                IdentValue("exec") to ExecFunc(),
-//                IdentValue("create_func") to CreateFunc(),
+                IdentValue("_cfg") to TableValue(),
+                IdentValue("exec") to ExecFunc(),
+                IdentValue("create_func") to CreateFunc(),
             )
         )
     }
 
 }
 
-//class ExecFunc : DepFunctionValue {
-//    override val ident = IdentValue("exec")
-//    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
-//
-//    override fun invoke(ctx: Context): Value {
+class ExecFunc : ExtensionFunc() {
+    override fun invoke(ctx: Context): Value {
+        val funcId = (ctx.parameters.first() as StringValue).toString().replace("'", "")
+        println("DEBUG: ${funcId}")
+
+        HttpTemplate("http://localhost:8084")
+            .post("/v1/funcs/${funcId}/exec")
+            .body(
+                """
+                {
+                }
+            """.trimIndent()
+            )
+            .execute()
+        return NilValue
+    }
+
+}
+
+class CreateFunc : ExtensionFunc() {
+    override fun invoke(ctx: Context): Value {
 //        val funcId = (ctx.parameters.first().value as StringValue).toString().replace("'", "")
 //        println("DEBUG: ${funcId}")
 //
@@ -35,56 +58,31 @@ class HamalExtension : Extension {
 //            """.trimIndent()
 //            )
 //            .execute()
-//
-//
-//        return NilValue
-//    }
-//
-//}
-//
-//class CreateFunc : DepFunctionValue {
-//    override val ident = IdentValue("create_func")
-//    override val metaTable: DepMetaTable get() = TODO("Not yet implemented")
-//
-//    override fun invoke(ctx: Context): Value {
-////        val funcId = (ctx.parameters.first().value as StringValue).toString().replace("'", "")
-////        println("DEBUG: ${funcId}")
-////
-////        HttpTemplate("http://localhost:8084")
-////            .post("/v1/funcs/${funcId}/exec")
-////            .body(
-////                """
-////                {
-////                }
-////            """.trimIndent()
-////            )
-////            .execute()
-//
-//        try {
-//            println("CREATE_FUNC")
-//
-//            val f = ctx.parameters.first().value as TableValue
-//            println(f)
-//
-//            val r = ApiCreateFuncRequest(
-//                name = FuncName((f[IdentValue("name")] as StringValue).value),
-//                inputs = FuncInputs(TableValue.empty()),
-//                secrets = FuncSecrets(listOf()),
-//                code = Code((f[IdentValue("run")] as DepCodeValue).value)
-//            )
-//
-//            val res = HttpTemplate("http://localhost:8084")
-//                .post("/v1/funcs")
-//                .body(r)
-//                .execute()
-//
-//            println(res)
-//
-//            return NilValue
-//        } catch (t: Throwable) {
-//            t.printStackTrace()
-//            throw t
-//        }
-//    }
-//
-//}
+
+        try {
+            println("CREATE_FUNC")
+
+            val f = ctx.parameters.first() as TableValue
+            println(f)
+
+            val r = ApiCreateFuncRequest(
+                name = FuncName((f[IdentValue("name")] as StringValue).value),
+                inputs = FuncInputs(TableValue()),
+                secrets = FuncSecrets(listOf()),
+                code = Code((f[IdentValue("run")] as CodeValue).value)
+            )
+
+            val res = HttpTemplate("http://localhost:8084")
+                .post("/v1/funcs")
+                .body(r)
+                .execute()
+
+            println(res)
+
+            return NilValue
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            throw t
+        }
+    }
+}

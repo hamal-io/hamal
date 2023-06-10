@@ -2,7 +2,6 @@ package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
 import io.hamal.lib.script.api.value.EnvValue
-import io.hamal.lib.script.api.value.FuncValue
 import io.hamal.lib.script.api.value.IdentValue
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit
 @Service
 class AgentService {
 
-    private val functionValues = mutableListOf<FuncValue>()
+//    private val functionValues = mutableListOf<FuncValue>()
 
     //FIXME introduce WorkerExtensionEnvironment as a wrapper around native env
     private val extensionEnvironments = mutableListOf<EnvValue>()
