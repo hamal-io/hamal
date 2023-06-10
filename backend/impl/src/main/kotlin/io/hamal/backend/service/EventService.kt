@@ -65,14 +65,12 @@ class DefaultEventService(
                     scheduledTasks.add(
                         async.atFixedRate(10.milliseconds) {
                             consumer.consume(100) { chunkId, evt ->
-                                async.runAsync {
-                                    handlerContainer[evt::class].forEach { handler ->
-                                        try {
-                                            val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
-                                            handler.handle(cmdId, evt)
-                                        } catch (t: Throwable) {
-                                            throw Error(t)
-                                        }
+                                handlerContainer[evt::class].forEach { handler ->
+                                    try {
+                                        val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
+                                        handler.handle(cmdId, evt)
+                                    } catch (t: Throwable) {
+                                        throw Error(t)
                                     }
                                 }
                             }

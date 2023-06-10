@@ -5,7 +5,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer
-import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 
@@ -17,21 +16,17 @@ class ProtobufLogConsumer<Value : Any>(
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
-    override fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, Value) -> CompletableFuture<*>): Int {
+    override fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, Value) -> Unit): Int {
         val chunksToConsume = logBrokerRepository.consume(groupId, topic, limit)
 
         chunksToConsume.mapIndexed { index, chunk ->
-            val future = fn(
+            fn(
                 index,
                 chunk.id,
                 ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
             )
-            Pair(chunk.id, future)
-        }
-            .onEach { it.second.join() }
-            .map { it.first }
-            .maxByOrNull { it }
-            ?.let { logBrokerRepository.commit(groupId, topic, it) }
+            chunk.id
+        }.maxByOrNull { it }?.let { logBrokerRepository.commit(groupId, topic, it) }
         return chunksToConsume.size
     }
 }
@@ -44,7 +39,7 @@ class ProtobufBatchConsumer<Value : Any>(
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 
-    override fun consumeBatch(block: (List<Value>) -> CompletableFuture<*>): Int {
+    override fun consumeBatch(block: (List<Value>) -> Unit): Int {
         val chunksToConsume = logBrokerRepository.consume(groupId, topic, 1)
 
         if (chunksToConsume.isEmpty()) {
@@ -53,7 +48,6 @@ class ProtobufBatchConsumer<Value : Any>(
 
         val batch = chunksToConsume
             .map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
-            .also { block(it).join() }
 
         chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { logBrokerRepository.commit(groupId, topic, it.id) }
         return batch.size

@@ -1,14 +1,12 @@
 package io.hamal.backend.repository.api.log
 
-import java.util.concurrent.CompletableFuture
-
 interface LogConsumer<VALUE : Any> {
     val groupId: GroupId
-    fun consume(limit: Int, fn: (LogChunkId, VALUE) -> CompletableFuture<*>): Int {
+    fun consume(limit: Int, fn: (LogChunkId, VALUE) -> Unit): Int {
         return consumeIndexed(limit) { _, chunkId, value -> fn(chunkId, value) }
     }
 
-    fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, VALUE) -> CompletableFuture<*>): Int
+    fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, VALUE) -> Unit): Int
 
 
 }
@@ -22,6 +20,6 @@ interface BatchConsumer<VALUE : Any> {
     // min batch size
     // max batch size
 
-    fun consumeBatch(block: (List<VALUE>) -> CompletableFuture<*>): Int
+    fun consumeBatch(block: (List<VALUE>) -> Unit): Int
 
 }

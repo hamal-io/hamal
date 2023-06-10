@@ -28,9 +28,7 @@ class ConsumerIT {
 
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->
-                    CompletableFuture.runAsync {
-                        assertThat("${index + 1}", equalTo(value))
-                    }
+                    assertThat("${index + 1}", equalTo(value))
                 }
 
                 val counter = AtomicInteger(0)
@@ -44,10 +42,8 @@ class ConsumerIT {
 
                 appender.append(CmdId(1337), topic, "1337")
                 testInstance.consume(10) { _, value ->
-                    CompletableFuture.runAsync {
-                        assertThat(value, equalTo("1337"))
-                        counter.incrementAndGet()
-                    }
+                    assertThat(value, equalTo("1337"))
+                    counter.incrementAndGet()
                 }
                 assertThat(counter.get(), equalTo(1))
             }
@@ -67,9 +63,7 @@ class ConsumerIT {
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->
-                    CompletableFuture.runAsync {
-                        assertThat("${index + 1}", equalTo(value))
-                    }
+                    assertThat("${index + 1}", equalTo(value))
                 }
             }
         }
@@ -87,9 +81,7 @@ class ConsumerIT {
                 val consumerFuture = CompletableFuture.runAsync {
                     while (collected.size < 1_000) {
                         testInstance.consume(1) { _, str ->
-                            CompletableFuture.runAsync {
-                                collected.add(str)
-                            }
+                            collected.add(str)
                         }
                     }
                 }
