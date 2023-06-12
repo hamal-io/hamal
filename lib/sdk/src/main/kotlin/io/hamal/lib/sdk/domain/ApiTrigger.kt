@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiCreateTriggerRequest(
     val name: TriggerName,
     val funcId: FuncId,
@@ -18,6 +19,7 @@ data class ApiCreateTriggerRequest(
 )
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiCreateTriggerResponse(
     val id: TriggerId,
     val name: TriggerName,
@@ -25,6 +27,7 @@ data class ApiCreateTriggerResponse(
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiListTriggerResponse(
     val triggers: List<Trigger>
 ) {

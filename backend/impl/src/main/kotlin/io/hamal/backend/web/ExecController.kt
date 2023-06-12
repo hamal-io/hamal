@@ -2,7 +2,7 @@ package io.hamal.backend.web
 
 import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.req.CompleteExec
-import io.hamal.backend.req.Request
+import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.query.ExecQueryService
 import io.hamal.lib.common.SnowflakeId
@@ -20,7 +20,7 @@ open class ExecController(
     @Autowired val queryService: ExecQueryService,
     @Autowired val cmdService: ExecCmdService,
     @Autowired val eventEmitter: EventEmitter,
-    @Autowired val request: Request
+    @Autowired val request: SubmitRequest
 ) {
 
     @GetMapping("/v1/execs/{execId}")

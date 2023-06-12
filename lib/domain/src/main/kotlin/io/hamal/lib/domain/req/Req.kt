@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.api.domain
+package io.hamal.lib.domain.req
 
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ReqId
@@ -15,7 +15,7 @@ sealed interface Req {
 }
 
 @Serializable
-data class InvokeAdhocReq(
+data class SubmittedAdhocInvocationReq(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,

@@ -1,8 +1,8 @@
 package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.req.Req
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

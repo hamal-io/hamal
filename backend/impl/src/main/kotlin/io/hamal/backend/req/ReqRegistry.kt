@@ -1,7 +1,7 @@
 package io.hamal.backend.req
 
-import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.common.KeyedOnce
+import io.hamal.lib.domain.req.Req
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component

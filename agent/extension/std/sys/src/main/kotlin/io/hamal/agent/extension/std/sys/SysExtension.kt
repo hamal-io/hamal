@@ -3,10 +3,8 @@ package io.hamal.agent.extension.std.sys
 import io.hamal.agent.extension.api.Extension
 import io.hamal.agent.extension.api.ExtensionFunc
 import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.FuncSecrets
+import io.hamal.lib.domain.req.AdhocInvocationReq
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.script.api.value.*
@@ -20,8 +18,38 @@ class HamalExtension : Extension {
                 IdentValue("_cfg") to TableValue(),
                 IdentValue("exec") to ExecFunc(),
                 IdentValue("create_func") to CreateFunc(),
+                IdentValue("adhoc") to Adhoc()
             )
         )
+    }
+}
+
+class Adhoc : ExtensionFunc() {
+    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+        try {
+            println("ADHOC")
+
+            val f = ctx.parameters.first() as TableValue
+            println(f)
+
+            val r = AdhocInvocationReq(
+                inputs = InvocationInputs(TableValue()),
+                secrets = InvocationSecrets(listOf()),
+                code = Code((f[IdentValue("run")] as CodeValue).value)
+            )
+
+            val res = HttpTemplate("http://localhost:8084")
+                .post("/v1/adhoc")
+                .body(r)
+                .execute()
+
+            println(res)
+
+            return NilValue
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            throw t
+        }
     }
 
 }

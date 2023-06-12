@@ -5,6 +5,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiCreateFuncRequest(
     val name: FuncName,
     val inputs: FuncInputs,
@@ -14,6 +15,7 @@ data class ApiCreateFuncRequest(
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiExecFuncRequest(
     val correlationId: String? = null, //FIXME vo
     val inputs: InvocationInputs? = null,
@@ -21,12 +23,14 @@ data class ApiExecFuncRequest(
 )
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiExecFuncResponse(
     val cmdId: CmdId
 )
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiListFuncResponse(
     val funcs: List<Func>
 ) {

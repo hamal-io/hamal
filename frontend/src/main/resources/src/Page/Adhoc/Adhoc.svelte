@@ -2,7 +2,7 @@
     import type {ApiAdhoc} from "@/Page/Adhoc/store";
     import {execs} from "@/Page/Adhoc/store";
     import type monaco from 'monaco-editor';
-    import { onMount } from 'svelte';
+    import {onMount} from 'svelte';
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
     import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
     import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
@@ -70,10 +70,15 @@
         fetch("http://localhost:8084/v1/adhoc", {
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/text'
+                'Content-Type': 'application/json'
             },
             method: "POST",
-            body: editor.getValue()
+            body: JSON.stringify({
+                    inputs: {},
+                    secrets: [],
+                    code: editor.getValue()
+                }
+            )
         })
             .then(response => getExecutions())
             .catch(error => {
@@ -93,7 +98,7 @@
             Execute
         </button>
 
-        <div bind:this={divEl} class="h-screen w-full" />
+        <div bind:this={divEl} class="h-screen w-full"/>
 
         <div class="w-1/2">
             <h1> Executions</h1>

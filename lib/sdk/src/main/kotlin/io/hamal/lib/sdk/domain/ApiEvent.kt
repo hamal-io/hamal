@@ -5,23 +5,27 @@ import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiCreateTopicRequest(
     val name: TopicName
 )
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiCreateTopicResponse(
     val id: TopicId,
     val name: TopicName
 )
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiAppendEvenRequest(
     val value: String
 )
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiAppendEventResponse(
     // FIXME
     val topicId: TopicId,
@@ -30,6 +34,7 @@ data class ApiAppendEventResponse(
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiListEventResponse(
     val topicId: TopicId,
     val topicName: TopicName,
@@ -45,6 +50,7 @@ data class ApiListEventResponse(
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiListTopicResponse(
     val topics: List<Topic>
 ) {

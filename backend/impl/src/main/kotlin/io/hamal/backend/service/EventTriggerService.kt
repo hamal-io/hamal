@@ -8,7 +8,7 @@ import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
 import io.hamal.backend.req.InvokeEvent
-import io.hamal.backend.req.Request
+import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.backend.service.query.TriggerQueryService
 import io.hamal.lib.common.Shard
@@ -29,7 +29,7 @@ class EventTriggerService
     internal val funcQueryService: FuncQueryService,
     internal val logBrokerRepository: LogBrokerRepository,
     internal val triggerQueryService: TriggerQueryService,
-    internal val request: Request,
+    internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
     internal val async: Async
 ) {
@@ -108,7 +108,7 @@ class EventTriggerService
 
                     try {
                         consumer.consumeBatch(1) { evts ->
-                            request(
+                            submitRequest(
                                 InvokeEvent(
                                     execId = generateDomainId(Shard(1), ::ExecId),
                                     funcId = trigger.funcId,

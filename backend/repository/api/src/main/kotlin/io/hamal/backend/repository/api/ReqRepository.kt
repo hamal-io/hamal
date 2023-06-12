@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.req.Req
 
 interface ReqCmdRepository {
     fun queue(req: Req)

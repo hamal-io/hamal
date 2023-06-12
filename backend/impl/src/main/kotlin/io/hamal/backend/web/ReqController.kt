@@ -1,8 +1,8 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.repository.api.domain.InvokeAdhocReq
 import io.hamal.backend.service.query.ReqQueryService
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.req.SubmittedAdhocInvocationReq
 import io.hamal.lib.sdk.domain.ApiAdhocReq
 import io.hamal.lib.sdk.domain.ApiListReqResponse
 import io.hamal.lib.sdk.domain.ApiReq
@@ -47,7 +47,7 @@ class ReqController(
     ): ResponseEntity<ApiReq> {
         val result = queryService.get(ReqId(stringReqId))
         return when (result) {
-            is InvokeAdhocReq -> ResponseEntity(
+            is SubmittedAdhocInvocationReq -> ResponseEntity(
                 ApiAdhocReq(
                     id = result.id,
                     status = result.status,

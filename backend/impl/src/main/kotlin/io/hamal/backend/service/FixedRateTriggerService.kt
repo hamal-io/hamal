@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.req.InvokeFixedRate
-import io.hamal.backend.req.Request
+import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils.now
@@ -25,7 +25,7 @@ class FixedRateTriggerService
     internal val funcQueryService: FuncQueryService,
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val eventEmitter: EventEmitter,
-    internal val request: Request,
+    internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId
 ) {
 
@@ -60,7 +60,7 @@ class FixedRateTriggerService
 }
 
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
-    request(
+    submitRequest(
         InvokeFixedRate(
             execId = generateDomainId(Shard(1), ::ExecId),
             funcId = trigger.funcId,

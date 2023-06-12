@@ -2,9 +2,9 @@ package io.hamal.backend.repository.memory
 
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.req.Req
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.withLock
 

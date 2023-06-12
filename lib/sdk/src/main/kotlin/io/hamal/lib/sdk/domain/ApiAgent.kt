@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 
+@Deprecated("do not have separate dto")
 @Serializable
 data class ApiAgentExecRequests(
     val requests: List<ExecRequest>

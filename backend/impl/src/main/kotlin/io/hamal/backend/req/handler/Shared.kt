@@ -1,7 +1,7 @@
 package io.hamal.backend.req.handler
 
-import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.req.Req
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecSecrets
 import io.hamal.lib.domain.vo.InvocationInputs
