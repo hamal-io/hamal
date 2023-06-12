@@ -39,16 +39,16 @@ class ProtobufBatchConsumer<Value : Any>(
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 
-    override fun consumeBatch(block: (List<Value>) -> Unit): Int {
-        val chunksToConsume = logBrokerRepository.consume(groupId, topic, 1)
+    override fun consumeBatch(batchSize: Int, block: (List<Value>) -> Unit): Int {
+        val chunksToConsume = logBrokerRepository.consume(groupId, topic, batchSize)
 
         if (chunksToConsume.isEmpty()) {
             return 0
         }
 
-        val batch = chunksToConsume
-            .map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
+        val batch = chunksToConsume.map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
 
+        block(batch)
         chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { logBrokerRepository.commit(groupId, topic, it.id) }
         return batch.size
     }

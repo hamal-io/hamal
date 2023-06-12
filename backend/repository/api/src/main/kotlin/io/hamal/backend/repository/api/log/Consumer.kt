@@ -20,6 +20,6 @@ interface BatchConsumer<VALUE : Any> {
     // min batch size
     // max batch size
 
-    fun consumeBatch(block: (List<VALUE>) -> Unit): Int
+    fun consumeBatch(batchSize: Int, block: (List<VALUE>) -> Unit): Int
 
 }
