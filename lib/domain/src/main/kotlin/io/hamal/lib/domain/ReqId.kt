@@ -13,13 +13,13 @@ data class ReqId(val value: BigInteger) : Comparable<ReqId> { //FIXME value shou
     constructor(value: ByteArray) : this(BigInteger(value))
     constructor(value: Int) : this(value.toBigInteger())
     constructor(value: Long) : this(value.toBigInteger())
-    constructor(value: String) : this(BigInteger(value, 16))
+    constructor(value: String) : this(BigInteger(value))
 
     object Serializer : KSerializer<ReqId> {
         override val descriptor = PrimitiveSerialDescriptor("CommandId", PrimitiveKind.STRING)
         override fun deserialize(decoder: Decoder) = ReqId(decoder.decodeString())
         override fun serialize(encoder: Encoder, value: ReqId) {
-            encoder.encodeString(value.value.toString(16))
+            encoder.encodeString(value.value.toString())
         }
     }
 

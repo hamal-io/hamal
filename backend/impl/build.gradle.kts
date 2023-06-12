@@ -24,11 +24,35 @@ dependencies {
 
     implementation(project(":agent:extension:api"))
     implementation(project(":agent:extension:std:log"))
+}
 
-    testImplementation(project(":backend:impl"))
-    testImplementation(external.junit)
-    testImplementation(external.hamcrest)
-    testImplementation(external.spring.test) {
-        exclude("org.assertj", "*")
+
+@Suppress("UnstableApiUsage")
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(project())
+                    implementation(project(":lib:sdk"))
+
+                    implementation(external.spring.web) {
+                        exclude("com.fasterxml.jackson.core", "jackson-core")
+                        exclude("org.springframework.boot", "spring-boot-starter-json")
+                        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+                    }
+
+                    implementation(project(":backend:impl"))
+                    implementation(project(":frontend"))
+                    implementation(project(":agent:impl"))
+
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                    implementation(external.spring.test) {
+                        exclude("org.assertj", "*")
+                    }
+                }
+            }
+        }
     }
 }

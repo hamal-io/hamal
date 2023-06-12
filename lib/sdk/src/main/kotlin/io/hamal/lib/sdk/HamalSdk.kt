@@ -1,5 +1,6 @@
 package io.hamal.lib.sdk
 
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.service.AdhocService
 import io.hamal.lib.sdk.service.DefaultAdhocService
 import io.hamal.lib.sdk.service.DefaultExecService
@@ -10,13 +11,15 @@ interface HamalSdk {
     fun execService(): ExecService
 }
 
-object DefaultHamalSdk : HamalSdk {
+data class DefaultHamalSdk(
+    val baseUrl: String
+) : HamalSdk {
     override fun adhocService(): AdhocService {
-        return DefaultAdhocService()
+        return DefaultAdhocService(HttpTemplate(baseUrl = baseUrl))
     }
 
     override fun execService(): ExecService {
-        return DefaultExecService()
+        return DefaultExecService(HttpTemplate(baseUrl = baseUrl))
     }
 
 }

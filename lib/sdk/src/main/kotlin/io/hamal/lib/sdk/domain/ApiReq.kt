@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

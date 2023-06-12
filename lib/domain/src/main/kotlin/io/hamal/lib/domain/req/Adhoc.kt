@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.InvocationSecrets
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AdhocInvocationReq(
+data class InvokeAdhocReq(
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
     val code: Code

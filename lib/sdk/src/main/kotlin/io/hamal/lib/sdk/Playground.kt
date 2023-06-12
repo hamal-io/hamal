@@ -1,16 +1,16 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.domain.req.AdhocInvocationReq
+import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.InvocationSecrets
 import io.hamal.lib.script.api.value.TableValue
 
 fun main() {
-    val sdk = DefaultHamalSdk
+    val sdk = DefaultHamalSdk("http://localhost:8084")
 
     val res = sdk.adhocService().submit(
-        AdhocInvocationReq(
+        InvokeAdhocReq(
             inputs = InvocationInputs(TableValue()),
             secrets = InvocationSecrets(listOf()),
             code = Code(

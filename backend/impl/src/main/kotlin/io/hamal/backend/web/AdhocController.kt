@@ -1,8 +1,8 @@
 package io.hamal.backend.web
 
 import io.hamal.backend.req.SubmitRequest
-import io.hamal.lib.domain.req.AdhocInvocationReq
-import io.hamal.lib.domain.req.SubmittedAdhocInvocationReq
+import io.hamal.lib.domain.req.InvokeAdhocReq
+import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,8 +16,8 @@ open class AdhocController(
 ) {
     @PostMapping("/v1/adhoc")
     fun adhoc(
-        @RequestBody adhocInvocation: AdhocInvocationReq
-    ): ResponseEntity<SubmittedAdhocInvocationReq> {
+        @RequestBody adhocInvocation: InvokeAdhocReq
+    ): ResponseEntity<SubmittedInvokeAdhocReq> {
         val result = submitRequest(adhocInvocation)
         return ResponseEntity(result, HttpStatus.ACCEPTED)
     }

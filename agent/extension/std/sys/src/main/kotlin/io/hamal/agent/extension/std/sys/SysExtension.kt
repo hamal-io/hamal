@@ -3,7 +3,7 @@ package io.hamal.agent.extension.std.sys
 import io.hamal.agent.extension.api.Extension
 import io.hamal.agent.extension.api.ExtensionFunc
 import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
-import io.hamal.lib.domain.req.AdhocInvocationReq
+import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
@@ -32,7 +32,7 @@ class Adhoc : ExtensionFunc() {
             val f = ctx.parameters.first() as TableValue
             println(f)
 
-            val r = AdhocInvocationReq(
+            val r = InvokeAdhocReq(
                 inputs = InvocationInputs(TableValue()),
                 secrets = InvocationSecrets(listOf()),
                 code = Code((f[IdentValue("run")] as CodeValue).value)

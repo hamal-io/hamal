@@ -4,7 +4,6 @@ import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
-import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -48,8 +47,8 @@ class SubmitRequest(
     @Autowired private val reqCmdRepository: ReqCmdRepository,
     @Autowired private val generateDomainId: GenerateDomainId
 ) {
-    operator fun invoke(adhoc: AdhocInvocationReq): SubmittedAdhocInvocationReq {
-        return SubmittedAdhocInvocationReq(
+    operator fun invoke(adhoc: InvokeAdhocReq): SubmittedInvokeAdhocReq {
+        return SubmittedInvokeAdhocReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = generateDomainId(Shard(1), ::ExecId),
@@ -106,7 +105,8 @@ class SubmitRequest(
     }
 
 
-    private fun reqId() = ReqId(BigInteger(128, SecureRandom()))
+    private val rnd = SecureRandom()
+    private fun reqId() = ReqId(BigInteger(128, SecureRandom.getInstance("SHA1PRNG", "SUN")))
 
 }
 

@@ -70,7 +70,7 @@ class AgentService {
     @Scheduled(initialDelay = 100, fixedDelay = 1000, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
         CompletableFuture.runAsync {
-            DefaultHamalSdk.execService()
+            DefaultHamalSdk("http://localhost:8084").execService()
                 .poll()
                 .requests.forEach { request ->
 
@@ -115,7 +115,7 @@ class AgentService {
 //
 //                println("Finish executing task ${request.id}")
 
-                        DefaultHamalSdk.execService().complete(
+                        DefaultHamalSdk("http://localhost:8084").execService().complete(
                             request.id, ExecService.StateAfterCompletion(
                                 contentType = "application/json",
                                 bytes = (counter + 1).toString().toByteArray()

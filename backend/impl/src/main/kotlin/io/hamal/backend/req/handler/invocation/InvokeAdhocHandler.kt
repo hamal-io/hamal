@@ -7,15 +7,15 @@ import io.hamal.backend.req.handler.toExecInputs
 import io.hamal.backend.req.handler.toExecSecrets
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
-import io.hamal.lib.domain.req.SubmittedAdhocInvocationReq
+import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class InvokeAdhocHandler(
     @Autowired private val execCmdService: ExecCmdService,
-) : ReqHandler<SubmittedAdhocInvocationReq>(SubmittedAdhocInvocationReq::class) {
-    override fun invoke(req: SubmittedAdhocInvocationReq) {
+) : ReqHandler<SubmittedInvokeAdhocReq>(SubmittedInvokeAdhocReq::class) {
+    override fun invoke(req: SubmittedInvokeAdhocReq) {
         execCmdService.plan(
             req.cmdId(), ToPlan(
                 execId = req.execId,

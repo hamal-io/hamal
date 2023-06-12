@@ -1,7 +1,8 @@
-package io.hamal.lib.domain._enum
+package io.hamal.lib.domain.req
+
 
 enum class ReqStatus {
     Submitted,
     Completed,
-    Failed
+    Failed;
 }
