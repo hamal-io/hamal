@@ -2,6 +2,7 @@ package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import kotlinx.serialization.Serializable
@@ -12,7 +13,8 @@ data class ApiCreateTriggerRequest(
     val name: TriggerName,
     val funcId: FuncId,
     val type: TriggerType,
-    val duration: Duration? = null
+    val duration: Duration? = null,
+    val topicId: TopicId? = null
 )
 
 @Serializable

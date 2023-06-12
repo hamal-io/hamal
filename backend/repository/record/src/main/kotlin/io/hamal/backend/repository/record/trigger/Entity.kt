@@ -1,11 +1,13 @@
 package io.hamal.backend.repository.record.trigger
 
+import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.repository.record.RecordEntity
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.*
 import kotlin.time.Duration
@@ -21,6 +23,7 @@ data class Entity(
     var inputs: TriggerInputs? = null,
     var secrets: TriggerSecrets? = null,
 
+    var topicId: TopicId? = null,
     var duration: Duration? = null
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
@@ -38,19 +41,44 @@ data class Entity(
                 secrets = rec.secrets,
                 duration = rec.duration
             )
+
+            is EventTriggerCreationRecord -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                funcId = rec.funcId,
+                type = Event,
+                inputs = rec.inputs,
+                secrets = rec.secrets,
+                topicId = rec.topicId
+            )
         }
     }
 
     override fun toDomainObject(): Trigger {
-        return FixedRateTrigger(
-            cmdId = cmdId,
-            accountId = AccountId(1),
-            id = id,
-            funcId = funcId!!,
-            name = name!!,
-            inputs = inputs!!,
-            secrets = secrets!!,
-            duration = duration!!
-        )
+        return when (type!!) {
+            FixedRate -> FixedRateTrigger(
+                cmdId = cmdId,
+                accountId = AccountId(1),
+                id = id,
+                funcId = funcId!!,
+                name = name!!,
+                inputs = inputs!!,
+                secrets = secrets!!,
+                duration = duration!!
+            )
+
+            Event -> EventTrigger(
+                cmdId = cmdId,
+                accountId = AccountId(1),
+                id = id,
+                funcId = funcId!!,
+                name = name!!,
+                inputs = inputs!!,
+                secrets = secrets!!,
+                topicId = topicId!!
+            )
+        }
     }
 }

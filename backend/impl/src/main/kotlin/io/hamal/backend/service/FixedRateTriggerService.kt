@@ -33,11 +33,12 @@ class FixedRateTriggerService
 
     @PostConstruct
     fun setup() {
-        triggerQueryRepository.list(TriggerId(0), 10)
-            .filterIsInstance<FixedRateTrigger>()
-            .forEach {
-                plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
-            }
+        triggerQueryRepository.query {
+            afterId = TriggerId(0)
+            limit = 10
+        }.filterIsInstance<FixedRateTrigger>().forEach {
+            plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
+        }
     }
 
     fun triggerAdded(fixedRateTrigger: FixedRateTrigger) {

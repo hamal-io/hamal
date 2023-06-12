@@ -1,11 +1,13 @@
 package io.hamal.backend.repository.sqlite.record.trigger
 
+import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
+import io.hamal.backend.repository.sqlite.unsafeInCriteria
 import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.domain.vo.TriggerId
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -36,7 +38,10 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
         }
     }
 
-    fun list(connection: Connection, afterId: TriggerId, limit: Int): List<Trigger> {
+    fun list(
+        connection: Connection,
+        query: TriggerQueryRepository.Query
+    ): List<Trigger> {
         return connection.executeQuery<Trigger>(
             """
             SELECT 
@@ -44,14 +49,15 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
              FROM
                 current
             WHERE
-                id > :afterId
+                id > :afterId AND
+                ${unsafeInCriteria("type", query.types.map { it.value })}
             ORDER BY id ASC
             LIMIT :limit
         """.trimIndent()
         ) {
             query {
-                set("afterId", afterId)
-                set("limit", limit)
+                set("afterId", query.afterId)
+                set("limit", query.limit)
             }
             map { rs ->
                 protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
@@ -63,12 +69,13 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, data) 
+                    (id,type, data) 
                 VALUES
-                    (:id, :data)
+                    (:id,:type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
+            set("type", obj.type.value)
             set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
         }
     }
@@ -78,6 +85,7 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
+                 type           INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );

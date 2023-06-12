@@ -95,7 +95,6 @@ class NamedPreparedStatementDelegate(
         delegate[param] = value
         return this
     }
-
 }
 
 class NamedPreparedStatementResultSetDelegate<RESULT : Any>(

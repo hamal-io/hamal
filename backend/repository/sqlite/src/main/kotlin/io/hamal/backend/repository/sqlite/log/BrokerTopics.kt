@@ -6,8 +6,8 @@ import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.Shard
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
@@ -60,7 +60,7 @@ class DefaultLogBrokerTopicsRepository(
                     path = brokerTopics.path,
                     shard = Shard(0)
                 )
-            }!!
+            }
         }
     }
 
@@ -92,7 +92,7 @@ private fun DefaultLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopi
         }
         map { rs ->
             LogTopic(
-                id = TopicId(rs.getInt("id")),
+                id = rs.getDomainId("id", ::TopicId),
                 logBrokerId = brokerTopics.logBrokerId,
                 name = TopicName(rs.getString("name")),
                 path = brokerTopics.path,
@@ -108,7 +108,7 @@ private fun DefaultLogBrokerTopicsRepository.findTopicId(name: TopicName): Topic
             set("name", name.value)
         }
         map {
-            TopicId(it.getInt("id"))
+            it.getDomainId("id", ::TopicId)
         }
     }
 }
@@ -119,6 +119,6 @@ private fun DefaultLogBrokerTopicsRepository.createTopic(name: TopicName): Topic
             set("name", name.value)
             set("now", TimeUtils.now())
         }
-        map { TopicId(it.getInt("id")) }
+        map { it.getDomainId("id", ::TopicId) }
     }!!
 }
