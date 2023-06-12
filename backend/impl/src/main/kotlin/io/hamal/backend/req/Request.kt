@@ -53,7 +53,7 @@ class Request(
     @Autowired private val reqCmdRepository: ReqCmdRepository,
     @Autowired private val generateDomainId: GenerateDomainId
 ) {
-    operator fun invoke(adhoc: InvokeAdhoc): Req {
+    operator fun invoke(adhoc: InvokeAdhoc): InvokeAdhocReq {
         return InvokeAdhocReq(
             id = reqId(),
             status = ReqStatus.Received,
@@ -64,7 +64,7 @@ class Request(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(oneshot: InvokeOneshot): Req {
+    operator fun invoke(oneshot: InvokeOneshot): InvokeOneshotReq {
         return InvokeOneshotReq(
             id = reqId(),
             status = ReqStatus.Received,
@@ -76,7 +76,7 @@ class Request(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(fixedRate: InvokeFixedRate): Req {
+    operator fun invoke(fixedRate: InvokeFixedRate): InvokeFixedRateReq {
         return InvokeFixedRateReq(
             id = reqId(),
             status = ReqStatus.Received,
@@ -88,7 +88,7 @@ class Request(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(evt: InvokeEvent): Req {
+    operator fun invoke(evt: InvokeEvent): InvokeEventReq {
         return InvokeEventReq(
             id = reqId(),
             status = ReqStatus.Received,
@@ -101,7 +101,7 @@ class Request(
     }
 
 
-    operator fun invoke(complete: CompleteExec): Req {
+    operator fun invoke(complete: CompleteExec): CompleteExecReq {
         return CompleteExecReq(
             id = reqId(),
             status = ReqStatus.Received,

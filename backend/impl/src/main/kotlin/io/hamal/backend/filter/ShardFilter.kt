@@ -14,7 +14,7 @@ class ShardFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        request.setAttribute("shard", Shard(128))
+        request.setAttribute("shard", Shard(1))
         filterChain.doFilter(request, response)
     }
 

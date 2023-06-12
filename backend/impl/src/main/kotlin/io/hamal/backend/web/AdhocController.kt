@@ -3,7 +3,6 @@ package io.hamal.backend.web
 import io.hamal.backend.req.InvokeAdhoc
 import io.hamal.backend.req.Request
 import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.InvocationSecrets
 import io.hamal.lib.domain.vo.base.Secret
@@ -58,7 +57,7 @@ open class AdhocController
             ApiAdhocReq(
                 id = result.id,
                 status = result.status,
-                execId = ExecId(0)
+                execId = result.execId
             ),
             HttpStatus.ACCEPTED
         )
