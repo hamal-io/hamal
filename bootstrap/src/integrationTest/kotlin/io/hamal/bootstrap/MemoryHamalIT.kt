@@ -32,11 +32,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     properties = ["server.port=8084"]
 )
 @ActiveProfiles("memory")
-class HamalIT(
+class MemoryHamalIT(
     @LocalServerPort val localPort: Int
 ) {
 
-
+    // FIXME should deploy one adhoc
     @Test
     fun run() {
         println("RUNS ON: $localPort")

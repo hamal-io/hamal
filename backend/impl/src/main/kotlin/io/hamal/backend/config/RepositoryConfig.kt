@@ -4,6 +4,9 @@ import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.*
+import io.hamal.backend.repository.memory.record.MemoryExecRepository
+import io.hamal.backend.repository.memory.record.MemoryFuncRepository
+import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository

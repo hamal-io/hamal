@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class EventCmdService(
-    val logBrokerRepository: LogBrokerRepository
+    private val logBrokerRepository: LogBrokerRepository
 ) {
 
     private val appender = ProtobufAppender(Event::class, logBrokerRepository)

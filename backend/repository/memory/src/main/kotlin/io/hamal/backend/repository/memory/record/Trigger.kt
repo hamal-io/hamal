@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.memory
+package io.hamal.backend.repository.memory.record
 
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
