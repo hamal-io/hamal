@@ -45,6 +45,8 @@ testing {
                     implementation(project(":backend:impl"))
                     implementation(project(":frontend"))
                     implementation(project(":agent:impl"))
+                    implementation(project(":backend:repository:api"))
+                    implementation(project(":backend:repository:memory"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

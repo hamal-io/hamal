@@ -11,7 +11,6 @@ interface AdhocService {
 
 data class DefaultAdhocService(val template: HttpTemplate) : AdhocService {
     override fun submit(req: InvokeAdhocReq): SubmittedInvokeAdhocReq {
-        println(req)
         return template
             .post("/v1/adhoc")
             .body(req)

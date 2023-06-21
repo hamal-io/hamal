@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -22,27 +23,29 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(
     classes = [
-        BackendConfig::class
+        BackendConfig::class,
     ]
 )
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
 )
+@ActiveProfiles("memory")
 class HamalIT(
     @LocalServerPort val localPort: Int
 ) {
     @Test
-    fun `Submits adhoc requests`() {
+    fun `Submits adhoc requests without inputs or secrets`() {
         val result = sdk.adhocService().submit(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),
                 secrets = InvocationSecrets(),
-                code = Code("")
+                code = Code("40 + 2")
             )
         )
         assertThat(result.status, equalTo(ReqStatus.Submitted))
         assertThat(result.inputs, equalTo(InvocationInputs()))
         assertThat(result.secrets, equalTo(InvocationSecrets()))
+        assertThat(result.code, equalTo(Code("40 + 2")))
     }
 
     @PostConstruct

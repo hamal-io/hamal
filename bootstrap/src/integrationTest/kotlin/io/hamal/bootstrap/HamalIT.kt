@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -30,6 +31,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = WebEnvironment.DEFINED_PORT,
     properties = ["server.port=8084"]
 )
+@ActiveProfiles("memory")
 class HamalIT(
     @LocalServerPort val localPort: Int
 ) {
