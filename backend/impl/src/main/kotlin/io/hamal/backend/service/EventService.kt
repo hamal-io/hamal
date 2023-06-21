@@ -6,7 +6,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.sqlite.log.ProtobufLogConsumer
+import io.hamal.backend.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName

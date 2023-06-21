@@ -5,6 +5,7 @@ import io.hamal.backend.repository.api.ExecCmdRepository.*
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.*
+import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
@@ -67,7 +68,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                 inputs = cmd.inputs,
                 secrets = cmd.secrets,
                 code = cmd.code,
-            )
+            ).apply { sequence = RecordSequence(1) }
         )
 
         return (currentVersion(execId) as PlannedExec)

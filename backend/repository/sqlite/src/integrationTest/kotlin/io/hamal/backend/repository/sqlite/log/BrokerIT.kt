@@ -17,7 +17,7 @@ class BrokerIT {
     fun `Concurrent safe - 10 threads add to the same topic`() {
         val path = Files.createTempDirectory("broker_it")
 
-        DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { testInstance ->
+        SqliteLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { testInstance ->
             val topic = testInstance.resolveTopic(TopicName("topic"))
 
             val futures = IntRange(1, 10).map { thread ->
@@ -39,7 +39,7 @@ class BrokerIT {
     fun `Concurrent safe - 100 threads add to the different topics`() {
         val path = Files.createTempDirectory("broker_it")
 
-        DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { testInstance ->
+        SqliteLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { testInstance ->
             val futures = IntRange(1, 100).map { thread ->
                 CompletableFuture.runAsync {
                     val topic = testInstance.resolveTopic(TopicName("topic-$thread"))

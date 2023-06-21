@@ -12,5 +12,9 @@ interface ReqCmdRepository {
 
 interface ReqQueryRepository {
     fun find(reqId: ReqId): Req?
-    fun list(afterId: ReqId, limit: Int): List<Req>
+    fun query(block: Query.() -> Unit): List<Req>
+    data class Query(
+        var afterId: ReqId,
+        var limit: Int
+    )
 }

@@ -20,7 +20,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class DefaultLogTopicRepositoryTest {
+class SqliteLogTopicRepositoryTest {
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -33,7 +33,7 @@ class DefaultLogTopicRepositoryTest {
         fun `Creates a directory if path does not exists yet and populates with a shard`() {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
-            DefaultLogTopicRepository(
+            SqliteLogTopicRepository(
                 LogTopic(
                     id = TopicId(23),
                     LogBroker.Id(42),
@@ -95,7 +95,7 @@ class DefaultLogTopicRepositoryTest {
             }
         }
 
-        private val testInstance = DefaultLogTopicRepository(
+        private val testInstance = SqliteLogTopicRepository(
             LogTopic(
                 TopicId(23),
                 LogBroker.Id(42),
@@ -137,7 +137,7 @@ class DefaultLogTopicRepositoryTest {
             }
         }
 
-        private val testInstance = DefaultLogTopicRepository(
+        private val testInstance = SqliteLogTopicRepository(
             LogTopic(
                 TopicId(23),
                 LogBroker.Id(42),

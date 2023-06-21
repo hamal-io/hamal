@@ -1,6 +1,9 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.*
+import io.hamal.backend.repository.api.log.GroupId
+import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogBrokerConsumersRepository
+import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
@@ -12,7 +15,7 @@ data class BrokerConsumers(
     val path: Path
 )
 
-class DefaultLogBrokerConsumersRepository(
+class SqliteLogBrokerConsumersRepository(
     internal val brokerConsumers: BrokerConsumers,
 ) : BaseRepository(
     object : Config {
@@ -87,7 +90,7 @@ class DefaultLogBrokerConsumersRepository(
     }
 }
 
-fun DefaultLogBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
+fun SqliteLogBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
     map {
         it.getLong("count").toULong()
     }

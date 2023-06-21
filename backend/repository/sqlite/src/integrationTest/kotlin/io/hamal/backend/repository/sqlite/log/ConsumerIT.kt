@@ -2,6 +2,8 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.ProtobufAppender
+import io.hamal.backend.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.util.HashUtils.sha256
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
@@ -21,7 +23,7 @@ class ConsumerIT {
         fun `Late consumer starts at the beginning`() {
             val path = Files.createTempDirectory("broker_it")
 
-            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
+            SqliteLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
@@ -53,13 +55,13 @@ class ConsumerIT {
         fun `Best effort to consume chunk once`() {
             val path = Files.createTempDirectory("broker_it")
 
-            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
+            SqliteLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
             }
 
-            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
+            SqliteLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->
@@ -72,7 +74,7 @@ class ConsumerIT {
         fun `Can run concurrent to appender`() {
             val path = Files.createTempDirectory("broker_it")
 
-            DefaultLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
+            SqliteLogBrokerRepository(LogBroker(LogBroker.Id(123), path)).use { brokerRepository ->
                 val topic = brokerRepository.resolveTopic(TopicName("topic"))
                 val appender = ProtobufAppender(String::class, brokerRepository)
 

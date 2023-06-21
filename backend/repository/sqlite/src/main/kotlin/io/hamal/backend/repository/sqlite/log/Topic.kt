@@ -11,7 +11,7 @@ import java.nio.file.Path
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, sharding by key
 // keeping track of consumer group ids
-class DefaultLogTopicRepository(
+class SqliteLogTopicRepository(
     internal val topic: LogTopic
 ) : BaseRepository(
     object : Config {
@@ -31,7 +31,7 @@ class DefaultLogTopicRepository(
             topicId = topic.id,
             path = topic.path.resolve(config.filename),
         )
-        activeLogShardRepository = DefaultLogShardRepository(activeLogShard)
+        activeLogShardRepository = SqliteLogShardRepository(activeLogShard)
     }
 
     override fun setupConnection(connection: Connection) {}

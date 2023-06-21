@@ -6,7 +6,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.sqlite.log.ProtobufBatchConsumer
+import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
 import io.hamal.backend.req.InvokeEvent
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.query.FuncQueryService

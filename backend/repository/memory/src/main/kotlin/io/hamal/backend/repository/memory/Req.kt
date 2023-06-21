@@ -6,6 +6,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.Req
 import io.hamal.lib.domain.req.ReqStatus
 import kotlinx.serialization.protobuf.ProtoBuf
+import java.math.BigInteger
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.withLock
 
@@ -54,11 +55,13 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
         return ProtoBuf { }.decodeFromByteArray(Req.serializer(), result)
     }
 
-    override fun list(afterId: ReqId, limit: Int): List<Req> {
+    override fun query(block: ReqQueryRepository.Query.() -> Unit): List<Req> {
+        val query = ReqQueryRepository.Query(ReqId(BigInteger.ZERO), limit = 25)
+        block(query)
         return lock.readLock().withLock {
             store.keys.sorted()
-                .dropWhile { it <= afterId }
-                .take(limit)
+                .dropWhile { it <= query.afterId }
+                .take(query.limit)
                 .mapNotNull { find(it) }
                 .reversed()
         }

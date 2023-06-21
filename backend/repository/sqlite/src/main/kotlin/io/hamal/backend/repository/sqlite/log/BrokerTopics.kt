@@ -17,7 +17,7 @@ data class BrokerTopics(
     val path: Path
 )
 
-class DefaultLogBrokerTopicsRepository(
+class SqliteLogBrokerTopicsRepository(
     internal val brokerTopics: BrokerTopics,
 ) : BaseRepository(object : Config {
     override val path: Path get() = brokerTopics.path
@@ -79,13 +79,13 @@ class DefaultLogBrokerTopicsRepository(
     }
 }
 
-fun DefaultLogBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
+fun SqliteLogBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
     map {
         it.getLong("count").toULong()
     }
 } ?: 0UL
 
-private fun DefaultLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopic? {
+private fun SqliteLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopic? {
     return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
         query {
             set("id", topicId.value)
@@ -102,7 +102,7 @@ private fun DefaultLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopi
     }
 }
 
-private fun DefaultLogBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
+private fun SqliteLogBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
     return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {
         query {
             set("name", name.value)
@@ -113,7 +113,7 @@ private fun DefaultLogBrokerTopicsRepository.findTopicId(name: TopicName): Topic
     }
 }
 
-private fun DefaultLogBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
+private fun SqliteLogBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
     return connection.execute<TopicId>("INSERT INTO topics(name, instant) VALUES (:name, :now) RETURNING id") {
         query {
             set("name", name.value)

@@ -11,7 +11,7 @@ import java.nio.file.Path
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
-class DefaultLogShardRepository(
+class SqliteLogShardRepository(
     internal val logShard: LogShard
 ) : BaseRepository(object : Config {
     override val path: Path get() = logShard.path
@@ -30,7 +30,7 @@ class DefaultLogShardRepository(
             path = logShard.path.resolve(config.filename),
             topicId = logShard.topicId
         )
-        activeLogSegmentRepository = DefaultLogSegmentRepository(activeSegment)
+        activeLogSegmentRepository = SqliteLogSegmentRepository(activeSegment)
     }
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {

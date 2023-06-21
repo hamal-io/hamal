@@ -7,21 +7,21 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 
 
-class DefaultLogBrokerRepository(
-    private val logBroker: LogBroker
+class SqliteLogBrokerRepository(
+    logBroker: LogBroker
 ) : LogBrokerRepository {
 
     internal val consumersRepository: LogBrokerConsumersRepository
     internal val topicsRepository: LogBrokerTopicsRepository
 
     init {
-        topicsRepository = DefaultLogBrokerTopicsRepository(
+        topicsRepository = SqliteLogBrokerTopicsRepository(
             BrokerTopics(
                 logBrokerId = logBroker.id,
                 path = logBroker.path
             )
         )
-        consumersRepository = DefaultLogBrokerConsumersRepository(
+        consumersRepository = SqliteLogBrokerConsumersRepository(
             BrokerConsumers(
                 logBrokerId = logBroker.id,
                 path = logBroker.path
@@ -65,6 +65,6 @@ class DefaultLogBrokerRepository(
     }
 
     private fun resolveRepository(topic: LogTopic) = logTopicRepositoryMapping(topic) {
-        DefaultLogTopicRepository(topic)
+        SqliteLogTopicRepository(topic)
     }
 }

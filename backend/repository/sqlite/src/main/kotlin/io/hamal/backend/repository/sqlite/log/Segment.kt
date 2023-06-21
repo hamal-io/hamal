@@ -12,7 +12,7 @@ import io.hamal.lib.domain.CmdId
 import java.nio.file.Path
 
 
-internal class DefaultLogSegmentRepository(
+internal class SqliteLogSegmentRepository(
     internal val segment: LogSegment,
 ) : BaseRepository(object : Config {
     override val path: Path get() = segment.path

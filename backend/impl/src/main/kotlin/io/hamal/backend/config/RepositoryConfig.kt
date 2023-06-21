@@ -4,7 +4,7 @@ import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.*
-import io.hamal.backend.repository.sqlite.log.DefaultLogBrokerRepository
+import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.backend.repository.sqlite.record.trigger.SqliteTriggerRepository
@@ -20,7 +20,7 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
     @Bean
     open fun brokerRepository(): LogBrokerRepository {
-        return DefaultLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
+        return SqliteLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
     }
 
     @Bean
@@ -90,7 +90,7 @@ open class MemoryRepositoryConfig {
     @Bean
     //FIXME have a memory impl
     open fun brokerRepository(): LogBrokerRepository {
-        return DefaultLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
+        return SqliteLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
     }
     @Bean
     open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository

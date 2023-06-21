@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 class ReqQueryService(
     @Autowired val reqQueryRepository: ReqQueryRepository
 ) {
-
     fun get(reqId: ReqId): Req {
         return reqQueryRepository.find(reqId)!! //FIXME require and proper error message
     }
@@ -20,7 +19,10 @@ class ReqQueryService(
     }
 
     fun list(afterId: ReqId, limit: Int): List<Req> {
-        return reqQueryRepository.list(afterId, limit)
+        return reqQueryRepository.query {
+            this.afterId = afterId
+            this.limit = limit
+        }
     }
 
 }
