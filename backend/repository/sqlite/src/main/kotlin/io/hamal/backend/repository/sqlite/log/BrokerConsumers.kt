@@ -7,13 +7,13 @@ import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
-data class BrokerConsumers(
-    val logBrokerId: LogBroker.Id,
+data class SqliteBrokerConsumers(
+    override val logBrokerId: LogBroker.Id,
     val path: Path
-)
+) : BrokerConsumers
 
-class DefaultLogBrokerConsumersRepository(
-    internal val brokerConsumers: BrokerConsumers,
+class SqliteLogBrokerConsumersRepository(
+    internal val brokerConsumers: SqliteBrokerConsumers,
 ) : BaseRepository(
     object : Config {
         override val path: Path get() = brokerConsumers.path
@@ -85,10 +85,10 @@ class DefaultLogBrokerConsumersRepository(
     override fun close() {
         connection.close()
     }
-}
 
-fun DefaultLogBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
-    map {
-        it.getLong("count").toULong()
-    }
-} ?: 0UL
+    override fun count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
+        map {
+            it.getLong("count").toULong()
+        }
+    } ?: 0UL
+}

@@ -1,6 +1,6 @@
 package io.hamal.backend.req
 
-import io.hamal.backend.repository.api.domain.Req
+import io.hamal.lib.domain.req.Req
 import kotlin.reflect.KClass
 
 abstract class ReqHandler<REQUEST : Req>(

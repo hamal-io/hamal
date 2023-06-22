@@ -7,6 +7,7 @@ import io.hamal.backend.service.query.TriggerQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerInputs
 import io.hamal.lib.domain.vo.TriggerSecrets
@@ -35,7 +36,6 @@ open class TriggerController(
         @RequestBody req: ApiCreateTriggerRequest
     ): ResponseEntity<ApiCreateTriggerResponse> {
 
-
         //FIXME replace with request
         val result = cmdService.create(
             CmdId(0), TriggerToCreate(
@@ -45,7 +45,8 @@ open class TriggerController(
                 type = req.type,
                 inputs = TriggerInputs(TableValue()),
                 secrets = TriggerSecrets(listOf()),
-                duration = req.duration
+                duration = req.duration,
+                topicId = req.topicId
             )
         )
 
@@ -62,14 +63,18 @@ open class TriggerController(
     @GetMapping("/v1/triggers")
     fun listTrigger(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") stringTriggerId: String,
+        @RequestParam(required = false, name = "types", defaultValue = "") typesString: List<String>,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Int
     ): ResponseEntity<ApiListTriggerResponse> {
+
+        val types = typesString.map { TriggerType.valueOf(it) }
+
         val result =
             queryService.list(
                 afterId = TriggerId(SnowflakeId(stringTriggerId.toLong())),
+                types = types.toSet(),
                 limit = limit
             )
-
 
         return ResponseEntity.ok(
             ApiListTriggerResponse(

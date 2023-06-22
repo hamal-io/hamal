@@ -1,7 +1,6 @@
 package io.hamal.backend.req.handler.invocation
 
 import io.hamal.backend.repository.api.domain.EventInvocation
-import io.hamal.backend.repository.api.domain.InvokeEventReq
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.handler.toExecInputs
@@ -10,6 +9,7 @@ import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.req.InvokeEventReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 

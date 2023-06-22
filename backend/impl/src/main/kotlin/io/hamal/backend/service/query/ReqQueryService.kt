@@ -1,8 +1,8 @@
 package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.domain.Req
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.req.Req
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 class ReqQueryService(
     @Autowired val reqQueryRepository: ReqQueryRepository
 ) {
-
     fun get(reqId: ReqId): Req {
         return reqQueryRepository.find(reqId)!! //FIXME require and proper error message
     }
@@ -20,7 +19,10 @@ class ReqQueryService(
     }
 
     fun list(afterId: ReqId, limit: Int): List<Req> {
-        return reqQueryRepository.list(afterId, limit)
+        return reqQueryRepository.query {
+            this.afterId = afterId
+            this.limit = limit
+        }
     }
 
 }

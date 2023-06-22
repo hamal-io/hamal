@@ -9,11 +9,19 @@ import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
+data class SqliteLogSegment(
+    override val id: LogSegment.Id,
+    override val shard: Shard,
+    override val topicId: TopicId,
+    val path: Path
+) : LogSegment
 
-internal class DefaultLogSegmentRepository(
-    internal val segment: LogSegment,
+
+internal class SqliteLogSegmentRepository(
+    internal val segment: SqliteLogSegment,
 ) : BaseRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())

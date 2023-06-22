@@ -11,7 +11,8 @@ class TriggerCreatedHandler(
 ) : EventHandler<TriggerCreatedEvent> {
     override fun handle(cmdId: CmdId, evt: TriggerCreatedEvent) {
         println(evt)
-        require(evt.trigger is FixedRateTrigger)
-        fixedRateTriggerService.triggerAdded(evt.trigger)
+        if (evt.trigger is FixedRateTrigger) {
+            fixedRateTriggerService.triggerAdded(evt.trigger)
+        }
     }
 }

@@ -17,7 +17,7 @@ import kotlin.time.Duration
 class TriggerCmdService
 @Autowired constructor(
     val triggerCmdRepository: TriggerCmdRepository,
-    val eventEmitter: EventEmitter,
+    val eventEmitter: EventEmitter<*>,
     val generateDomainId: GenerateDomainId
 ) {
     fun create(cmdId: CmdId, triggerToCreate: TriggerToCreate): Trigger =
@@ -30,7 +30,8 @@ class TriggerCmdService
         val funcId: FuncId,
         val inputs: TriggerInputs,
         val secrets: TriggerSecrets,
-        val duration: Duration?
+        val duration: Duration?,
+        val topicId: TopicId?
     )
 }
 
@@ -49,7 +50,18 @@ private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: Trigg
             )
         )
 
-        else -> TODO()
+        TriggerType.Event -> triggerCmdRepository.create(
+            TriggerCmdRepository.CreateEventCmd(
+                id = cmdId,
+                accountId = AccountId(1),
+                triggerId = generateDomainId(Shard(1), ::TriggerId),
+                name = triggerToCreate.name,
+                funcId = triggerToCreate.funcId,
+                inputs = triggerToCreate.inputs,
+                secrets = triggerToCreate.secrets,
+                topicId = triggerToCreate.topicId!!
+            )
+        )
     }
 }
 

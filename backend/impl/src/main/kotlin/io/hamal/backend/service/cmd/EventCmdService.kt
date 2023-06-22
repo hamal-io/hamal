@@ -4,7 +4,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.event.TenantEvent
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
-import io.hamal.backend.repository.sqlite.log.ProtobufAppender
+import io.hamal.backend.repository.api.log.ProtobufAppender
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
@@ -13,8 +13,8 @@ import io.hamal.lib.domain.vo.TopicName
 import org.springframework.stereotype.Service
 
 @Service
-class EventCmdService(
-    val logBrokerRepository: LogBrokerRepository
+class EventCmdService<TOPIC : LogTopic>(
+    private val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) {
 
     private val appender = ProtobufAppender(Event::class, logBrokerRepository)
@@ -29,14 +29,12 @@ class EventCmdService(
         val topic = logBrokerRepository.get(eventToAppend.topicId)
         appender.append(
             cmdId, topic, TenantEvent(
-//                cmdId = eventToAppend.cmdId,
                 shard = eventToAppend.shard,
                 topic = "tenant-topic",
                 contentType = eventToAppend.contentTpe,
                 value = eventToAppend.value
             )
         )
-
     }
 
     data class TopicToCreate(

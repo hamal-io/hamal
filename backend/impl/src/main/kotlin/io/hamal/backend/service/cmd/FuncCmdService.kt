@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 class FuncCmdService
 @Autowired constructor(
     val funcCmdRepository: FuncCmdRepository,
-    val eventEmitter: EventEmitter
+    val eventEmitter: EventEmitter<*>
 ) {
     fun create(cmdId: CmdId, toCreate: ToCreate): Func =
         createFunc(cmdId, toCreate).also { emitEvent(cmdId, it) }

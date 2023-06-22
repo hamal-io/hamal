@@ -6,7 +6,8 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.sqlite.log.ProtobufLogConsumer
+import io.hamal.backend.repository.api.log.LogTopic
+import io.hamal.backend.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
@@ -29,9 +30,9 @@ interface EventServiceFactory {
     fun create(): EventService
 }
 
-class DefaultEventService(
+class DefaultEventService<TOPIC : LogTopic>(
     val async: Async,
-    val logBrokerRepository: LogBrokerRepository
+    val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) : EventServiceFactory {
 
     private val handlerContainer = EventHandlerContainer()
@@ -65,14 +66,12 @@ class DefaultEventService(
                     scheduledTasks.add(
                         async.atFixedRate(10.milliseconds) {
                             consumer.consume(100) { chunkId, evt ->
-                                async.runAsync {
-                                    handlerContainer[evt::class].forEach { handler ->
-                                        try {
-                                            val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
-                                            handler.handle(cmdId, evt)
-                                        } catch (t: Throwable) {
-                                            throw Error(t)
-                                        }
+                                handlerContainer[evt::class].forEach { handler ->
+                                    try {
+                                        val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
+                                        handler.handle(cmdId, evt)
+                                    } catch (t: Throwable) {
+                                        throw Error(t)
                                     }
                                 }
                             }
@@ -92,5 +91,4 @@ class DefaultEventService(
             }
         }
     }
-
 }

@@ -23,7 +23,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class DefaultLogSegmentRepositoryTest {
+class SqliteLogSegmentRepositoryTest {
     @Nested
     inner class ConstructorTest {
 
@@ -36,7 +36,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "shard-001", "another-path")
-            DefaultLogSegmentRepository(testSegment(targetDir)).use { }
+            SqliteLogSegmentRepository(testSegment(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "00000000000000002810.db")))
@@ -44,7 +44,7 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Creates chunks table`() {
-            DefaultLogSegmentRepository(testSegment()).connection
+            SqliteLogSegmentRepository(testSegment()).connection
                 .executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'chunks' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -52,17 +52,17 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Does not create chunks table if already exists`() {
-            DefaultLogSegmentRepository(testSegment()).use {
+            SqliteLogSegmentRepository(testSegment()).use {
                 it.connection.execute("""INSERT INTO chunks (req_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
             }
 
 
-            DefaultLogSegmentRepository(testSegment()).use { }
-            DefaultLogSegmentRepository(testSegment()).use {}
-            DefaultLogSegmentRepository(testSegment()).use {}
-            DefaultLogSegmentRepository(testSegment()).use {}
+            SqliteLogSegmentRepository(testSegment()).use { }
+            SqliteLogSegmentRepository(testSegment()).use {}
+            SqliteLogSegmentRepository(testSegment()).use {}
+            SqliteLogSegmentRepository(testSegment()).use {}
 
-            DefaultLogSegmentRepository(testSegment()).use {
+            SqliteLogSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM chunks") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -71,7 +71,7 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            DefaultLogSegmentRepository(testSegment()).use {
+            SqliteLogSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT journal_mode FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -80,7 +80,7 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            DefaultLogSegmentRepository(testSegment()).use {
+            SqliteLogSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT locking_mode FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -89,7 +89,7 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            DefaultLogSegmentRepository(testSegment()).use {
+            SqliteLogSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT temp_store FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -98,14 +98,14 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            DefaultLogSegmentRepository(testSegment()).use {
+            SqliteLogSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT synchronous FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }
 
-        private fun testSegment(path: Path = Path(testDir)) = LogSegment(
+        private fun testSegment(path: Path = Path(testDir)) = SqliteLogSegment(
             id = LogSegment.Id(2810),
             topicId = TopicId(1506),
             shard = Shard(24),
@@ -169,7 +169,7 @@ class DefaultLogSegmentRepositoryTest {
         @Test
         fun `Append multiple chunks to empty segment`() {
             withEpochMilli(123456) {
-                val result = listOf(
+                listOf(
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
@@ -206,7 +206,7 @@ class DefaultLogSegmentRepositoryTest {
         fun `Append multiple chunks to segment which already contains chunks`() {
             givenThreeChunks()
 
-            val result = listOf(
+            listOf(
                 "Hamal".toByteArray(),
                 "Rockz".toByteArray(),
             ).forEachIndexed { index, value -> testInstance.append(CmdId(index + 4), value) }
@@ -230,8 +230,8 @@ class DefaultLogSegmentRepositoryTest {
             testInstance.append(CmdId(3), "VALUE_3".toByteArray())
         }
 
-        private val testInstance = DefaultLogSegmentRepository(
-            LogSegment(
+        private val testInstance = SqliteLogSegmentRepository(
+            SqliteLogSegment(
                 id = LogSegment.Id(2810),
                 shard = Shard(42),
                 topicId = TopicId(1506),
@@ -328,8 +328,8 @@ class DefaultLogSegmentRepositoryTest {
             }
         }
 
-        private val testInstance = DefaultLogSegmentRepository(
-            LogSegment(
+        private val testInstance = SqliteLogSegmentRepository(
+            SqliteLogSegment(
                 id = LogSegment.Id(1028),
                 shard = Shard(42),
                 topicId = TopicId(1506),
@@ -343,8 +343,8 @@ class DefaultLogSegmentRepositoryTest {
     inner class CloseTest {
         @Test
         fun `Close an open repository`() {
-            val testInstance = DefaultLogSegmentRepository(
-                LogSegment(
+            val testInstance = SqliteLogSegmentRepository(
+                SqliteLogSegment(
                     id = LogSegment.Id(1028),
                     shard = Shard(42),
                     topicId = TopicId(1506),
@@ -357,8 +357,8 @@ class DefaultLogSegmentRepositoryTest {
 
         @Test
         fun `Closing an already closed connection is not a problem`() {
-            val testInstance = DefaultLogSegmentRepository(
-                LogSegment(
+            val testInstance = SqliteLogSegmentRepository(
+                SqliteLogSegment(
                     id = LogSegment.Id(1028),
                     shard = Shard(42),
                     topicId = TopicId(1506),

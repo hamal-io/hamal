@@ -16,7 +16,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class DefaultLogBrokerTopicsRepositoryTest {
+class SqliteLogBrokerTopicsRepositoryTest {
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -28,7 +28,7 @@ class DefaultLogBrokerTopicsRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "some-path", "another-path")
-            DefaultLogBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
+            SqliteLogBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics.db")))
@@ -36,7 +36,7 @@ class DefaultLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Creates topics table`() {
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'topics' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -45,16 +45,16 @@ class DefaultLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Does not create topics table if already exists`() {
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.execute("""INSERT INTO topics (name,instant) VALUES ('some-topic',unixepoch());""")
             }
 
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
 
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM topics") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -63,7 +63,7 @@ class DefaultLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -72,7 +72,7 @@ class DefaultLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -81,7 +81,7 @@ class DefaultLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -90,14 +90,14 @@ class DefaultLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            DefaultLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }
 
-        private fun testBrokerTopics(path: Path = Path(testDir)) = BrokerTopics(
+        private fun testBrokerTopics(path: Path = Path(testDir)) = SqliteBrokerTopics(
             logBrokerId = LogBroker.Id(2810),
             path = path
         )
@@ -159,8 +159,8 @@ class DefaultLogBrokerTopicsRepositoryTest {
             assertThat(testInstance.count(), equalTo(5UL))
         }
 
-        private val testInstance = DefaultLogBrokerTopicsRepository(
-            BrokerTopics(
+        private val testInstance = SqliteLogBrokerTopicsRepository(
+            SqliteBrokerTopics(
                 logBrokerId = LogBroker.Id(345),
                 path = Path(testDir),
             )

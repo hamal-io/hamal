@@ -10,11 +10,11 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.stereotype.Service
 
 @Service
-class EventQueryService(
-    val logBrokerRepository: LogBrokerRepository
+class EventQueryService<TOPIC : LogTopic>(
+    val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) {
 
-    fun queryTopics(block: TopicQuery.() -> Unit): List<LogTopic> {
+    fun queryTopics(block: TopicQuery.() -> Unit): List<TOPIC> {
         val query = TopicQuery()
         block(query)
         //FIXME apply query filter

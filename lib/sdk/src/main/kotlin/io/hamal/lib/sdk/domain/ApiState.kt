@@ -4,6 +4,7 @@ import io.hamal.lib.domain.Correlation
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiGetStateResponse(
     val correlation: Correlation,
     val contentType: String
@@ -11,6 +12,7 @@ data class ApiGetStateResponse(
 
 
 @Serializable
+@Deprecated("do not have separate dto")
 data class ApiSetStateResponse(
     val correlation: Correlation,
     val contentType: String

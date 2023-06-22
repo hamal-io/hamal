@@ -3,7 +3,6 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.api.log.LogShard
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils
@@ -22,7 +21,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class DefaultLogShardRepositoryTest {
+class SqliteLogShardRepositoryTest {
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -35,8 +34,8 @@ class DefaultLogShardRepositoryTest {
         fun `Creates a directory if path does not exists yet and populates first segment`() {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
-            DefaultLogShardRepository(
-                LogShard(
+            SqliteLogShardRepository(
+                SqliteLogShard(
                     id = Shard(23),
                     topicId = TopicId(34),
                     path = targetDir,
@@ -97,8 +96,8 @@ class DefaultLogShardRepositoryTest {
 
         }
 
-        private val testInstance = DefaultLogShardRepository(
-            LogShard(Shard(23), TopicId(34), Path(testDir))
+        private val testInstance = SqliteLogShardRepository(
+            SqliteLogShard(Shard(23), TopicId(34), Path(testDir))
         )
     }
 
@@ -133,8 +132,8 @@ class DefaultLogShardRepositoryTest {
             }
         }
 
-        private val testInstance = DefaultLogShardRepository(
-            LogShard(
+        private val testInstance = SqliteLogShardRepository(
+            SqliteLogShard(
                 id = Shard(281),
                 topicId = TopicId(1212),
                 path = Path(testDir),

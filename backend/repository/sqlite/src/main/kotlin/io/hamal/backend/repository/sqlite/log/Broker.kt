@@ -5,35 +5,41 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import java.nio.file.Path
+
+data class SqliteLogBroker(
+    override val id: LogBroker.Id,
+    val path: Path
+) : LogBroker
 
 
-class DefaultLogBrokerRepository(
-    private val logBroker: LogBroker
-) : LogBrokerRepository {
+class SqliteLogBrokerRepository(
+    logBroker: SqliteLogBroker
+) : LogBrokerRepository<SqliteLogTopic> {
 
-    internal val consumersRepository: LogBrokerConsumersRepository
-    internal val topicsRepository: LogBrokerTopicsRepository
+    private val consumersRepository: SqliteLogBrokerConsumersRepository
+    private val topicsRepository: SqliteLogBrokerTopicsRepository
 
     init {
-        topicsRepository = DefaultLogBrokerTopicsRepository(
-            BrokerTopics(
+        topicsRepository = SqliteLogBrokerTopicsRepository(
+            SqliteBrokerTopics(
                 logBrokerId = logBroker.id,
                 path = logBroker.path
             )
         )
-        consumersRepository = DefaultLogBrokerConsumersRepository(
-            BrokerConsumers(
+        consumersRepository = SqliteLogBrokerConsumersRepository(
+            SqliteBrokerConsumers(
                 logBrokerId = logBroker.id,
                 path = logBroker.path
             )
         )
     }
 
-    private val logTopicRepositoryMapping = KeyedOnce.default<LogTopic, LogTopicRepository>()
+    private val logTopicRepositoryMapping = KeyedOnce.default<SqliteLogTopic, LogTopicRepository>()
 
     override fun resolveTopic(topicName: TopicName) = topicsRepository.resolveTopic(topicName)
 
-    override fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray) {
+    override fun append(cmdId: CmdId, topic: SqliteLogTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
     }
 
@@ -45,26 +51,26 @@ class DefaultLogBrokerRepository(
         }
     }
 
-    override fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk> {
+    override fun consume(groupId: GroupId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
         val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId) {
+    override fun commit(groupId: GroupId, topic: SqliteLogTopic, chunkId: LogChunkId) {
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
     override fun find(topicId: TopicId) = topicsRepository.find(topicId)
 
-    override fun topics(): Set<LogTopic> {
+    override fun topics(): Set<SqliteLogTopic> {
         return logTopicRepositoryMapping.keys()
     }
 
-    override fun read(lastId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk> {
+    override fun read(lastId: LogChunkId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
         return resolveRepository(topic).read(lastId, limit)
     }
 
-    private fun resolveRepository(topic: LogTopic) = logTopicRepositoryMapping(topic) {
-        DefaultLogTopicRepository(topic)
+    private fun resolveRepository(topic: SqliteLogTopic) = logTopicRepositoryMapping(topic) {
+        SqliteLogTopicRepository(topic)
     }
 }

@@ -47,9 +47,16 @@ abstract class BaseRepository(
             connection.close()
         }
     }
+
+
 }
 
 private fun ensureFilePath(config: BaseRepository.Config): Path {
     return FileUtils.createDirectories(config.path)
         .resolve(config.path.resolve(Path(config.filename)))
+}
+
+//FIXME properly integrate this
+internal fun <T : Any> unsafeInCriteria(parameter: String, values: Iterable<T>): String {
+    return "$parameter in (${values.joinToString(",") { it.toString() }})"
 }

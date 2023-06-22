@@ -4,45 +4,49 @@ import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
-import java.nio.file.Path
 
-data class LogBroker(
-    val id: Id,
-    val path: Path
-) {
+interface LogBroker {
+    val id: Id
+
     @JvmInline
     value class Id(val value: ULong) {
         constructor(value: Int) : this(value.toULong())
     }
 }
 
-interface AppendToTopic {
-    fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray)
+interface AppendToTopic<TOPIC : LogTopic> {
+    fun append(cmdId: CmdId, topic: TOPIC, bytes: ByteArray)
 }
 
-interface ConsumeFromTopic {
-    fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk>
+interface ConsumeFromTopic<TOPIC : LogTopic> {
+    fun consume(groupId: GroupId, topic: TOPIC, limit: Int): List<LogChunk>
 
-    fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId)
+    fun commit(groupId: GroupId, topic: TOPIC, chunkId: LogChunkId)
 }
 
-interface ReadFromTopic {
-    fun read(lastId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk>
+interface ReadFromTopic<TOPIC : LogTopic> {
+    fun read(lastId: LogChunkId, topic: TOPIC, limit: Int): List<LogChunk>
 }
 
-interface ResolveTopic {
-    fun resolveTopic(topicName: TopicName): LogTopic
+interface ResolveTopic<TOPIC : LogTopic> {
+    fun resolveTopic(topicName: TopicName): TOPIC
 }
 
-interface GetTopics {
-    fun topics(): Set<LogTopic>
+interface GetTopics<TOPIC : LogTopic> {
+    fun topics(): Set<TOPIC>
 }
 
-interface GetTopic {
-    fun get(topicId: TopicId): LogTopic = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
+interface GetTopic<TOPIC : LogTopic> {
+    fun get(topicId: TopicId): TOPIC = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
 
-    fun find(topicId: TopicId): LogTopic?
+    fun find(topicId: TopicId): TOPIC?
 }
 
-interface LogBrokerRepository : AppendToTopic, ConsumeFromTopic, GetTopic, GetTopics, ReadFromTopic, ResolveTopic,
+interface LogBrokerRepository<TOPIC : LogTopic> :
+    AppendToTopic<TOPIC>,
+    ConsumeFromTopic<TOPIC>,
+    GetTopic<TOPIC>,
+    GetTopics<TOPIC>,
+    ReadFromTopic<TOPIC>,
+    ResolveTopic<TOPIC>,
     Closeable

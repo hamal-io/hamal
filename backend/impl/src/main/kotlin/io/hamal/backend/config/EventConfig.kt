@@ -10,18 +10,17 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 open class EventConfig {
-
     @Bean
     open fun eventEmitter(
-        logBrokerRepository: LogBrokerRepository
-    ) = EventEmitter(
+        logBrokerRepository: LogBrokerRepository<*>
+    ): EventEmitter<*> = EventEmitter(
         logBrokerRepository
     )
 
     @Bean
     open fun eventProcessorFactory(
         async: Async,
-        logBrokerRepository: LogBrokerRepository
+        logBrokerRepository: LogBrokerRepository<*>
     ): EventServiceFactory = DefaultEventService(
         async,
         logBrokerRepository

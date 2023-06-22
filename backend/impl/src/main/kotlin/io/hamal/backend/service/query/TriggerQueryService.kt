@@ -2,6 +2,7 @@ package io.hamal.backend.service.query
 
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.Trigger
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -18,8 +19,12 @@ class TriggerQueryService(
         return triggerQueryRepository.find(triggerId)
     }
 
-    fun list(afterId: TriggerId, limit: Int): List<Trigger> {
-        return triggerQueryRepository.list(afterId, limit)
+    fun list(afterId: TriggerId, types: Set<TriggerType>, limit: Int): List<Trigger> {
+        return triggerQueryRepository.query {
+            this.afterId = afterId
+            this.types = types
+            this.limit = limit
+        }
     }
 
 }

@@ -1,6 +1,9 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.*
+import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogChunk
+import io.hamal.backend.repository.api.log.LogChunkId
+import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
@@ -20,7 +23,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class DefaultLogTopicRepositoryTest {
+class SqliteLogTopicRepositoryTest {
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -33,8 +36,8 @@ class DefaultLogTopicRepositoryTest {
         fun `Creates a directory if path does not exists yet and populates with a shard`() {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
-            DefaultLogTopicRepository(
-                LogTopic(
+            SqliteLogTopicRepository(
+                SqliteLogTopic(
                     id = TopicId(23),
                     LogBroker.Id(42),
                     name = TopicName("test-topic"),
@@ -95,13 +98,13 @@ class DefaultLogTopicRepositoryTest {
             }
         }
 
-        private val testInstance = DefaultLogTopicRepository(
-            LogTopic(
+        private val testInstance = SqliteLogTopicRepository(
+            SqliteLogTopic(
                 TopicId(23),
                 LogBroker.Id(42),
                 TopicName("test-topic"),
-                Path(testDir),
-                Shard(28)
+                Shard(28),
+                Path(testDir)
             )
         )
     }
@@ -137,17 +140,16 @@ class DefaultLogTopicRepositoryTest {
             }
         }
 
-        private val testInstance = DefaultLogTopicRepository(
-            LogTopic(
+        private val testInstance = SqliteLogTopicRepository(
+            SqliteLogTopic(
                 TopicId(23),
                 LogBroker.Id(42),
                 TopicName("test-topic"),
-                Path(testDir),
-                Shard(65)
+                Shard(65),
+                Path(testDir)
             )
         )
     }
-
 
     private val testDir = "/tmp/hamal/test/shards"
 }

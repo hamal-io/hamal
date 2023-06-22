@@ -1,9 +1,8 @@
-package io.hamal.backend.repository.api.domain
+package io.hamal.lib.domain.req
 
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
-import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -15,7 +14,7 @@ sealed interface Req {
 }
 
 @Serializable
-data class InvokeAdhocReq(
+data class SubmittedInvokeAdhocReq(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,

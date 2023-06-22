@@ -28,3 +28,16 @@ data class FixedRateTriggerCreationRecord(
     val secrets: TriggerSecrets,
     val duration: Duration
 ) : TriggerRecord()
+
+@Serializable
+@SerialName("ECR")
+data class EventTriggerCreationRecord(
+    override val entityId: TriggerId,
+    override val cmdId: CmdId,
+    override val accountId: AccountId,
+    val funcId: FuncId,
+    val name: TriggerName,
+    val inputs: TriggerInputs,
+    val secrets: TriggerSecrets,
+    val topicId: TopicId
+) : TriggerRecord()

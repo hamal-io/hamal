@@ -4,7 +4,7 @@ import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.req.InvokeOneshot
-import io.hamal.backend.req.Request
+import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
@@ -27,8 +27,8 @@ open class FuncController(
     @Autowired val queryService: FuncQueryService,
     @Autowired val funcCmdService: FuncCmdService,
     @Autowired val execCmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter,
-    @Autowired val request: Request,
+    @Autowired val eventEmitter: EventEmitter<*>,
+    @Autowired val request: SubmitRequest,
     @Autowired val generateDomainId: GenerateDomainId
 ) {
     @PostMapping("/v1/funcs")
