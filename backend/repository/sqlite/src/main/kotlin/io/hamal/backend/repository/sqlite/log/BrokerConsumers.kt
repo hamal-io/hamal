@@ -1,22 +1,19 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.api.log.LogBroker
-import io.hamal.backend.repository.api.log.LogBrokerConsumersRepository
-import io.hamal.backend.repository.api.log.LogChunkId
+import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
-data class BrokerConsumers(
-    val logBrokerId: LogBroker.Id,
+data class SqliteBrokerConsumers(
+    override val logBrokerId: LogBroker.Id,
     val path: Path
-)
+) : BrokerConsumers
 
 class SqliteLogBrokerConsumersRepository(
-    internal val brokerConsumers: BrokerConsumers,
+    internal val brokerConsumers: SqliteBrokerConsumers,
 ) : BaseRepository(
     object : Config {
         override val path: Path get() = brokerConsumers.path
@@ -88,10 +85,10 @@ class SqliteLogBrokerConsumersRepository(
     override fun close() {
         connection.close()
     }
-}
 
-fun SqliteLogBrokerConsumersRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
-    map {
-        it.getLong("count").toULong()
-    }
-} ?: 0UL
+    override fun count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
+        map {
+            it.getLong("count").toULong()
+        }
+    } ?: 0UL
+}

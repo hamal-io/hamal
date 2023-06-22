@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
+import io.hamal.backend.repository.api.log.BrokerTopics
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
@@ -11,13 +12,13 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
 
-data class BrokerTopics(
-    val logBrokerId: LogBroker.Id,
+data class SqliteBrokerTopics(
+    override val logBrokerId: LogBroker.Id,
     val path: Path
-)
+) : BrokerTopics
 
 class SqliteLogBrokerTopicsRepository(
-    internal val brokerTopics: BrokerTopics,
+    internal val brokerTopics: SqliteBrokerTopics,
 ) : BaseRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
@@ -75,13 +76,14 @@ class SqliteLogBrokerTopicsRepository(
     override fun close() {
         connection.close()
     }
+
+    override fun count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
+        map {
+            it.getLong("count").toULong()
+        }
+    } ?: 0UL
 }
 
-fun SqliteLogBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
-    map {
-        it.getLong("count").toULong()
-    }
-} ?: 0UL
 
 private fun SqliteLogBrokerTopicsRepository.findById(topicId: TopicId): SqliteLogTopic? {
     return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {

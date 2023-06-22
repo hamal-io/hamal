@@ -22,13 +22,13 @@ class SqliteLogBrokerRepository(
 
     init {
         topicsRepository = SqliteLogBrokerTopicsRepository(
-            BrokerTopics(
+            SqliteBrokerTopics(
                 logBrokerId = logBroker.id,
                 path = logBroker.path
             )
         )
         consumersRepository = SqliteLogBrokerConsumersRepository(
-            BrokerConsumers(
+            SqliteBrokerConsumers(
                 logBrokerId = logBroker.id,
                 path = logBroker.path
             )

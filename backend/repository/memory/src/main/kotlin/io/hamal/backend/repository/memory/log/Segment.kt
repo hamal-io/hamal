@@ -45,8 +45,12 @@ class MemoryLogSegmentRepository(
             return listOf()
         }
         return lock.withLock {
-            store.drop(firstId.value.value.toInt() - 1)
-                .take(limit)
+            if (firstId.value.value == 0L) {
+                store.take(limit)
+            } else {
+                store.drop(firstId.value.value.toInt() - 1)
+                    .take(limit)
+            }
         }
     }
 

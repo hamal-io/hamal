@@ -101,7 +101,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
             }
         }
 
-        private fun testBrokerConsumers(path: Path = Path(testDir)) = BrokerConsumers(
+        private fun testBrokerConsumers(path: Path = Path(testDir)) = SqliteBrokerConsumers(
             logBrokerId = LogBroker.Id(2810),
             path = path
         )
@@ -153,7 +153,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
         }
 
         private val testInstance = SqliteLogBrokerConsumersRepository(
-            BrokerConsumers(
+            SqliteBrokerConsumers(
                 logBrokerId = LogBroker.Id(345),
                 path = Path(testDir)
             )
@@ -223,7 +223,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
 
         private val testInstance = SqliteLogBrokerConsumersRepository(
-            BrokerConsumers(
+            SqliteBrokerConsumers(
                 logBrokerId = LogBroker.Id(345),
                 path = Path(testDir)
             )

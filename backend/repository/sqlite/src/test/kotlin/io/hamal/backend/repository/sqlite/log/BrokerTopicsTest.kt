@@ -97,7 +97,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
             }
         }
 
-        private fun testBrokerTopics(path: Path = Path(testDir)) = BrokerTopics(
+        private fun testBrokerTopics(path: Path = Path(testDir)) = SqliteBrokerTopics(
             logBrokerId = LogBroker.Id(2810),
             path = path
         )
@@ -160,7 +160,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
         }
 
         private val testInstance = SqliteLogBrokerTopicsRepository(
-            BrokerTopics(
+            SqliteBrokerTopics(
                 logBrokerId = LogBroker.Id(345),
                 path = Path(testDir),
             )
