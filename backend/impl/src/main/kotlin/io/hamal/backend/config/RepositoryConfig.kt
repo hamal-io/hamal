@@ -3,6 +3,8 @@ package io.hamal.backend.config
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.memory.*
+import io.hamal.backend.repository.memory.log.MemoryLogBroker
+import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
 import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
@@ -91,9 +93,8 @@ open class SqliteRepositoryConfig {
 @Configuration
 open class MemoryRepositoryConfig {
     @Bean
-    //FIXME have a memory impl
-    open fun brokerRepository(): SqliteLogBrokerRepository {
-        return SqliteLogBrokerRepository(SqliteLogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
+    open fun brokerRepository(): MemoryLogBrokerRepository {
+        return MemoryLogBrokerRepository(MemoryLogBroker(LogBroker.Id(1)))
     }
 
     @Bean
