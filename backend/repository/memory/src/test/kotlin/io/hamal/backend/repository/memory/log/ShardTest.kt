@@ -3,7 +3,6 @@ package io.hamal.backend.repository.memory.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.api.log.LogShard
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CmdId
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import kotlin.io.path.Path
 
 
 class MemoryLogShardRepositoryTest {
@@ -69,7 +67,7 @@ class MemoryLogShardRepositoryTest {
         }
 
         private val testInstance = MemoryLogShardRepository(
-            LogShard(Shard(23), TopicId(34), Path(testDir))
+            MemoryLogShard(Shard(23), TopicId(34))
         )
     }
 
@@ -105,13 +103,10 @@ class MemoryLogShardRepositoryTest {
         }
 
         private val testInstance = MemoryLogShardRepository(
-            LogShard(
+            MemoryLogShard(
                 id = Shard(281),
-                topicId = TopicId(1212),
-                path = Path(testDir),
+                topicId = TopicId(1212)
             )
         )
     }
-
-    private val testDir = "/tmp/hamal/test/shards"
 }

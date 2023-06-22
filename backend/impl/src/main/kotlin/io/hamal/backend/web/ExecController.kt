@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 open class ExecController(
     @Autowired val queryService: ExecQueryService,
     @Autowired val cmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter,
+    @Autowired val eventEmitter: EventEmitter<*>,
     @Autowired val request: SubmitRequest
 ) {
 

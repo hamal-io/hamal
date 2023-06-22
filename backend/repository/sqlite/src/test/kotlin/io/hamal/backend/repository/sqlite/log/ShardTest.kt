@@ -3,7 +3,6 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.api.log.LogShard
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils
@@ -36,7 +35,7 @@ class SqliteLogShardRepositoryTest {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
             SqliteLogShardRepository(
-                LogShard(
+                SqliteLogShard(
                     id = Shard(23),
                     topicId = TopicId(34),
                     path = targetDir,
@@ -98,7 +97,7 @@ class SqliteLogShardRepositoryTest {
         }
 
         private val testInstance = SqliteLogShardRepository(
-            LogShard(Shard(23), TopicId(34), Path(testDir))
+            SqliteLogShard(Shard(23), TopicId(34), Path(testDir))
         )
     }
 
@@ -134,7 +133,7 @@ class SqliteLogShardRepositoryTest {
         }
 
         private val testInstance = SqliteLogShardRepository(
-            LogShard(
+            SqliteLogShard(
                 id = Shard(281),
                 topicId = TopicId(1212),
                 path = Path(testDir),

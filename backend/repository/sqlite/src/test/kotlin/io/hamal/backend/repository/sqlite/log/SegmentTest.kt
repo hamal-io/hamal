@@ -105,7 +105,7 @@ class SqliteLogSegmentRepositoryTest {
             }
         }
 
-        private fun testSegment(path: Path = Path(testDir)) = LogSegment(
+        private fun testSegment(path: Path = Path(testDir)) = SqliteLogSegment(
             id = LogSegment.Id(2810),
             topicId = TopicId(1506),
             shard = Shard(24),
@@ -231,7 +231,7 @@ class SqliteLogSegmentRepositoryTest {
         }
 
         private val testInstance = SqliteLogSegmentRepository(
-            LogSegment(
+            SqliteLogSegment(
                 id = LogSegment.Id(2810),
                 shard = Shard(42),
                 topicId = TopicId(1506),
@@ -329,7 +329,7 @@ class SqliteLogSegmentRepositoryTest {
         }
 
         private val testInstance = SqliteLogSegmentRepository(
-            LogSegment(
+            SqliteLogSegment(
                 id = LogSegment.Id(1028),
                 shard = Shard(42),
                 topicId = TopicId(1506),
@@ -344,7 +344,7 @@ class SqliteLogSegmentRepositoryTest {
         @Test
         fun `Close an open repository`() {
             val testInstance = SqliteLogSegmentRepository(
-                LogSegment(
+                SqliteLogSegment(
                     id = LogSegment.Id(1028),
                     shard = Shard(42),
                     topicId = TopicId(1506),
@@ -358,7 +358,7 @@ class SqliteLogSegmentRepositoryTest {
         @Test
         fun `Closing an already closed connection is not a problem`() {
             val testInstance = SqliteLogSegmentRepository(
-                LogSegment(
+                SqliteLogSegment(
                     id = LogSegment.Id(1028),
                     shard = Shard(42),
                     topicId = TopicId(1506),

@@ -2,11 +2,11 @@ package io.hamal.backend.config
 
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBroker
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.*
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
 import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
+import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
@@ -22,8 +22,8 @@ import kotlin.io.path.Path
 @Configuration
 open class SqliteRepositoryConfig {
     @Bean
-    open fun brokerRepository(): LogBrokerRepository {
-        return SqliteLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
+    open fun brokerRepository(): SqliteLogBrokerRepository {
+        return SqliteLogBrokerRepository(SqliteLogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
     }
 
     @Bean
@@ -92,27 +92,37 @@ open class SqliteRepositoryConfig {
 open class MemoryRepositoryConfig {
     @Bean
     //FIXME have a memory impl
-    open fun brokerRepository(): LogBrokerRepository {
-        return SqliteLogBrokerRepository(LogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
+    open fun brokerRepository(): SqliteLogBrokerRepository {
+        return SqliteLogBrokerRepository(SqliteLogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
     }
+
     @Bean
     open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository
+
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
+
     @Bean
     open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository
+
     @Bean
     open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
+
     @Bean
     open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
+
     @Bean
     open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+
     @Bean
     open fun stateCmdRepository(): StateCmdRepository = MemoryStateRepository
+
     @Bean
     open fun stateQueryRepository(): StateQueryRepository = MemoryStateRepository
+
     @Bean
-    open fun triggerCmdRepository() : TriggerCmdRepository = MemoryTriggerRepository
+    open fun triggerCmdRepository(): TriggerCmdRepository = MemoryTriggerRepository
+
     @Bean
-    open fun triggerQueryRepository() : TriggerQueryRepository = MemoryTriggerRepository
+    open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
 }

@@ -17,7 +17,7 @@ import kotlin.time.Duration
 class TriggerCmdService
 @Autowired constructor(
     val triggerCmdRepository: TriggerCmdRepository,
-    val eventEmitter: EventEmitter,
+    val eventEmitter: EventEmitter<*>,
     val generateDomainId: GenerateDomainId
 ) {
     fun create(cmdId: CmdId, triggerToCreate: TriggerToCreate): Trigger =

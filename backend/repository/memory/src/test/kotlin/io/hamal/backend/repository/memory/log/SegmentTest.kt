@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import kotlin.io.path.Path
 
 
 class MemoryLogSegmentRepositoryTest {
@@ -136,11 +135,10 @@ class MemoryLogSegmentRepositoryTest {
         }
 
         private val testInstance = MemoryLogSegmentRepository(
-            LogSegment(
+            MemoryLogSegment(
                 id = LogSegment.Id(2810),
                 shard = Shard(42),
-                topicId = TopicId(1506),
-                path = Path(testDir)
+                topicId = TopicId(1506)
             )
         )
     }
@@ -234,11 +232,10 @@ class MemoryLogSegmentRepositoryTest {
         }
 
         private val testInstance = MemoryLogSegmentRepository(
-            LogSegment(
+            MemoryLogSegment(
                 id = LogSegment.Id(1028),
                 shard = Shard(42),
-                topicId = TopicId(1506),
-                path = Path(testDir),
+                topicId = TopicId(1506)
             )
         )
 
@@ -249,11 +246,10 @@ class MemoryLogSegmentRepositoryTest {
         @Test
         fun `Close an open repository`() {
             val testInstance = MemoryLogSegmentRepository(
-                LogSegment(
+                MemoryLogSegment(
                     id = LogSegment.Id(1028),
                     shard = Shard(42),
-                    topicId = TopicId(1506),
-                    path = Path(testDir)
+                    topicId = TopicId(1506)
                 )
             )
 
@@ -263,11 +259,10 @@ class MemoryLogSegmentRepositoryTest {
         @Test
         fun `Closing an already closed connection is not a problem`() {
             val testInstance = MemoryLogSegmentRepository(
-                LogSegment(
+                MemoryLogSegment(
                     id = LogSegment.Id(1028),
                     shard = Shard(42),
-                    topicId = TopicId(1506),
-                    path = Path(testDir),
+                    topicId = TopicId(1506)
                 )
             )
 
@@ -276,6 +271,4 @@ class MemoryLogSegmentRepositoryTest {
             testInstance.close()
         }
     }
-
-    private val testDir = "/tmp/hamal/test/segments"
 }

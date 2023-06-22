@@ -24,7 +24,7 @@ class FixedRateTriggerService
 @Autowired constructor(
     internal val funcQueryService: FuncQueryService,
     internal val triggerQueryRepository: TriggerQueryRepository,
-    internal val eventEmitter: EventEmitter,
+    internal val eventEmitter: EventEmitter<*>,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId
 ) {

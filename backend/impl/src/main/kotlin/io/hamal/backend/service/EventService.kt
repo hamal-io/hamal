@@ -6,6 +6,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.event_handler.EventHandler
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.CmdId
@@ -29,9 +30,9 @@ interface EventServiceFactory {
     fun create(): EventService
 }
 
-class DefaultEventService(
+class DefaultEventService<TOPIC : LogTopic>(
     val async: Async,
-    val logBrokerRepository: LogBrokerRepository
+    val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) : EventServiceFactory {
 
     private val handlerContainer = EventHandlerContainer()

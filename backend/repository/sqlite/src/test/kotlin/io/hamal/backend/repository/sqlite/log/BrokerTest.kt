@@ -28,8 +28,9 @@ class LogBrokerRepositoryTest {
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "consumers.db")))
         }
 
-        private fun testBroker(path: Path = Path(testDir)) = LogBroker(
-            id = LogBroker.Id(2810), path = path
+        private fun testBroker(path: Path = Path(testDir)) = SqliteLogBroker(
+            id = LogBroker.Id(2810),
+            path = path
         )
 
         private val testDir = "/tmp/hamal/test/broker"
@@ -40,7 +41,7 @@ class LogBrokerRepositoryTest {
         @Test
         fun `Bug - Able to resolve real topic`() {
             val testPath = java.nio.file.Files.createTempDirectory("testDir")
-            val testInstance = SqliteLogBrokerRepository(LogBroker(LogBroker.Id(456), testPath))
+            val testInstance = SqliteLogBrokerRepository(SqliteLogBroker(LogBroker.Id(456), testPath))
 
             val result = testInstance.resolveTopic(TopicName("scheduler::flow_enqueued"))
             assertThat(result.id, equalTo(TopicId(1)))

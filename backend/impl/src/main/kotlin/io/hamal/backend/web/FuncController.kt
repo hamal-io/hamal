@@ -27,7 +27,7 @@ open class FuncController(
     @Autowired val queryService: FuncQueryService,
     @Autowired val funcCmdService: FuncCmdService,
     @Autowired val execCmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter,
+    @Autowired val eventEmitter: EventEmitter<*>,
     @Autowired val request: SubmitRequest,
     @Autowired val generateDomainId: GenerateDomainId
 ) {

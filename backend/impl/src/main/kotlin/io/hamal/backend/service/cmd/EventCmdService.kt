@@ -13,8 +13,8 @@ import io.hamal.lib.domain.vo.TopicName
 import org.springframework.stereotype.Service
 
 @Service
-class EventCmdService(
-    private val logBrokerRepository: LogBrokerRepository
+class EventCmdService<TOPIC : LogTopic>(
+    private val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) {
 
     private val appender = ProtobufAppender(Event::class, logBrokerRepository)

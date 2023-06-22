@@ -5,14 +5,22 @@ import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
+data class SqliteLogShard(
+    override val id: Shard,
+    override val topicId: TopicId,
+    val path: Path
+) : LogShard
+
+
 class SqliteLogShardRepository(
-    internal val logShard: LogShard
+    internal val logShard: SqliteLogShard
 ) : BaseRepository(object : Config {
     override val path: Path get() = logShard.path
     override val filename: String get() = String.format("shard-%04d", logShard.id.value.toLong())
@@ -20,11 +28,11 @@ class SqliteLogShardRepository(
 
 }), LogShardRepository {
 
-    private var activeSegment: LogSegment
-    private var activeLogSegmentRepository: LogSegmentRepository
+    private var activeSegment: SqliteLogSegment
+    private var activeLogSegmentRepository: SqliteLogSegmentRepository
 
     init {
-        activeSegment = LogSegment(
+        activeSegment = SqliteLogSegment(
             LogSegment.Id(0),
             shard = logShard.id,
             path = logShard.path.resolve(config.filename),

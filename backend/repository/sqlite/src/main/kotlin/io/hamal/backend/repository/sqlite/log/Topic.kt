@@ -5,14 +5,24 @@ import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
+
+data class SqliteLogTopic(
+    override val id: TopicId,
+    override val logBrokerId: LogBroker.Id,
+    override val name: TopicName,
+    override val shard: Shard,
+    val path: Path
+) : LogTopic
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, sharding by key
 // keeping track of consumer group ids
 class SqliteLogTopicRepository(
-    internal val topic: LogTopic
+    internal val topic: SqliteLogTopic
 ) : BaseRepository(
     object : Config {
         override val path: Path get() = topic.path
@@ -22,11 +32,11 @@ class SqliteLogTopicRepository(
     }
 ), LogTopicRepository {
 
-    internal var activeLogShard: LogShard
-    internal var activeLogShardRepository: LogShardRepository
+    internal var activeLogShard: SqliteLogShard
+    internal var activeLogShardRepository: SqliteLogShardRepository
 
     init {
-        activeLogShard = LogShard(
+        activeLogShard = SqliteLogShard(
             id = topic.shard,
             topicId = topic.id,
             path = topic.path.resolve(config.filename),
@@ -57,5 +67,4 @@ class SqliteLogTopicRepository(
     override fun close() {
         activeLogShardRepository.close()
     }
-
 }

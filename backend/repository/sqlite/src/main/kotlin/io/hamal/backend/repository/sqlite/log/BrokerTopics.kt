@@ -2,7 +2,6 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
-import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.KeyedOnce
@@ -24,9 +23,9 @@ class SqliteLogBrokerTopicsRepository(
     override val filename: String get() = "topics.db"
     override val shard: Shard get() = Shard(0)
 
-}), LogBrokerTopicsRepository {
+}), LogBrokerTopicsRepository<SqliteLogTopic> {
 
-    private val topicMapping = KeyedOnce.default<TopicName, LogTopic>()
+    private val topicMapping = KeyedOnce.default<TopicName, SqliteLogTopic>()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -49,11 +48,11 @@ class SqliteLogBrokerTopicsRepository(
         }
     }
 
-    override fun resolveTopic(name: TopicName): LogTopic {
+    override fun resolveTopic(name: TopicName): SqliteLogTopic {
         return topicMapping.invoke(name) {
             connection.tx {
                 val id = findTopicId(name) ?: createTopic(name)
-                LogTopic(
+                SqliteLogTopic(
                     id = id,
                     logBrokerId = brokerTopics.logBrokerId,
                     name = name,
@@ -64,8 +63,7 @@ class SqliteLogBrokerTopicsRepository(
         }
     }
 
-    override fun find(topicId: TopicId): LogTopic? = findById(topicId)
-
+    override fun find(topicId: TopicId): SqliteLogTopic? = findById(topicId)
 
     override fun clear() {
         connection.tx {
@@ -85,13 +83,13 @@ fun SqliteLogBrokerTopicsRepository.count() = connection.executeQueryOne("SELECT
     }
 } ?: 0UL
 
-private fun SqliteLogBrokerTopicsRepository.findById(topicId: TopicId): LogTopic? {
+private fun SqliteLogBrokerTopicsRepository.findById(topicId: TopicId): SqliteLogTopic? {
     return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
         query {
             set("id", topicId.value)
         }
         map { rs ->
-            LogTopic(
+            SqliteLogTopic(
                 id = rs.getDomainId("id", ::TopicId),
                 logBrokerId = brokerTopics.logBrokerId,
                 name = TopicName(rs.getString("name")),

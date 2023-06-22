@@ -13,8 +13,6 @@ interface LogConsumer<VALUE : Any> {
     }
 
     fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, VALUE) -> Unit): Int
-
-
 }
 
 @JvmInline
@@ -31,10 +29,10 @@ interface BatchConsumer<VALUE : Any> {
 }
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufLogConsumer<Value : Any>(
+class ProtobufLogConsumer<TOPIC : LogTopic, Value : Any>(
     override val groupId: GroupId,
-    private val topic: LogTopic,
-    private val logBrokerRepository: LogBrokerRepository,
+    private val topic: TOPIC,
+    private val logBrokerRepository: LogBrokerRepository<TOPIC>,
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
@@ -54,10 +52,10 @@ class ProtobufLogConsumer<Value : Any>(
 }
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufBatchConsumer<Value : Any>(
+class ProtobufBatchConsumer<TOPIC : LogTopic, Value : Any>(
     override val groupId: GroupId,
-    private val topic: LogTopic,
-    private val logBrokerRepository: LogBrokerRepository,
+    private val topic: TOPIC,
+    private val logBrokerRepository: LogBrokerRepository<TOPIC>,
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 

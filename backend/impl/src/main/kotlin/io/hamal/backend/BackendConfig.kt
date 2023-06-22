@@ -4,7 +4,6 @@ import io.hamal.backend.component.EventEmitter
 import io.hamal.backend.event.*
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
-import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.EventServiceFactory
 import io.hamal.backend.service.FixedRateTriggerService
 import io.hamal.backend.service.OrchestrationService
@@ -48,7 +47,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         stateCmdService: StateCmdService,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
-        eventEmitter: EventEmitter
+        eventEmitter: EventEmitter<*>
     ) = eventServiceFactory
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
 

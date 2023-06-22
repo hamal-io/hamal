@@ -6,6 +6,7 @@ import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
 import io.hamal.backend.req.InvokeEvent
 import io.hamal.backend.req.SubmitRequest
@@ -23,11 +24,11 @@ import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-class EventTriggerService
+class EventTriggerService<TOPIC : LogTopic>
 @Autowired constructor(
-    internal val eventEmitter: EventEmitter,
+    internal val eventEmitter: EventEmitter<TOPIC>,
     internal val funcQueryService: FuncQueryService,
-    internal val logBrokerRepository: LogBrokerRepository,
+    internal val logBrokerRepository: LogBrokerRepository<TOPIC>,
     internal val triggerQueryService: TriggerQueryService,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
@@ -79,7 +80,7 @@ class EventTriggerService
 //        }
 //    }
 
-    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<Event>>()
+    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, Event>>()
 
 
     @PostConstruct
