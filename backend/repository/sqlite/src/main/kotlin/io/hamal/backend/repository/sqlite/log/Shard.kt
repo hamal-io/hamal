@@ -20,8 +20,8 @@ class SqliteLogShardRepository(
 
 }), LogShardRepository {
 
-    internal var activeSegment: LogSegment
-    internal var activeLogSegmentRepository: LogSegmentRepository
+    private var activeSegment: LogSegment
+    private var activeLogSegmentRepository: LogSegmentRepository
 
     init {
         activeSegment = LogSegment(
