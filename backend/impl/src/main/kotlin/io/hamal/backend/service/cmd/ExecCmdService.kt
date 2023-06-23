@@ -8,10 +8,7 @@ import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.service.cmd.ExecCmdService.ToPlan
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
+import io.hamal.lib.domain.vo.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -38,11 +35,11 @@ class ExecCmdService(
 
     data class ToPlan(
         val execId: ExecId,
+        val tenantId: TenantId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val secrets: ExecSecrets,
         val code: Code,
-        val invocation: Invocation
     )
 
 }
@@ -53,11 +50,10 @@ private fun ExecCmdService.planExec(cmdId: CmdId, toPlan: ToPlan): PlannedExec {
             id = cmdId,
             execId = toPlan.execId,
             correlation = toPlan.correlation,
-            accountId = toPlan.invocation.invokedBy.value, // FIXME
+            tenantId = toPlan.tenantId,
             inputs = toPlan.inputs,
             secrets = toPlan.secrets,
             code = toPlan.code,
-            invocation = toPlan.invocation
         )
     )
 }

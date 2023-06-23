@@ -60,7 +60,7 @@ data class Entity(
         return when (type!!) {
             FixedRate -> FixedRateTrigger(
                 cmdId = cmdId,
-                accountId = AccountId(1),
+                tenantId = TenantId(1),
                 id = id,
                 funcId = funcId!!,
                 name = name!!,
@@ -71,7 +71,7 @@ data class Entity(
 
             Event -> EventTrigger(
                 cmdId = cmdId,
-                accountId = AccountId(1),
+                tenantId = TenantId(1),
                 id = id,
                 funcId = funcId!!,
                 name = name!!,

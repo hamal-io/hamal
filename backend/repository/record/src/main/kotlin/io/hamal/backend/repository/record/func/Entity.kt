@@ -35,7 +35,7 @@ data class Entity(
     override fun toDomainObject(): Func {
         return Func(
             cmdId = cmdId,
-            accountId = AccountId(1),
+            tenantId = TenantId(1),
             id = id,
             name = name!!,
             inputs = inputs!!,

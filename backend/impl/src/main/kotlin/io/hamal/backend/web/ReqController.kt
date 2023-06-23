@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController
 class ReqController(
     @Autowired val queryService: ReqQueryService
 ) {
-
     @GetMapping("/v1/reqs")
     fun listReqs(
         @RequestParam(required = false, name = "stringReqId", defaultValue = "0") stringReqId: String,

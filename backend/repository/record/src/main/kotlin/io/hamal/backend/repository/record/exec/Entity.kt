@@ -3,6 +3,7 @@ package io.hamal.backend.repository.api.record.exec
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.record.RecordEntity
 import io.hamal.backend.repository.record.RecordSequence
+import io.hamal.backend.repository.record.exec.*
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
@@ -35,7 +36,7 @@ data class Entity(
                 inputs = rec.inputs,
                 secrets = rec.secrets,
                 code = rec.code,
-                plannedAt = Instant.now() // FIXME
+                plannedAt = Instant.now(), // FIXME
             )
 
             is ExecScheduledRecord -> copy(
@@ -75,13 +76,12 @@ data class Entity(
 
         val plannedExec = PlannedExec(
             cmdId = cmdId,
-            accountId = AccountId(1),
+            tenantId = TenantId(1),
             id = id,
             correlation = null,
             inputs = inputs ?: ExecInputs(TableValue()),
             secrets = ExecSecrets(listOf()),
-            code = code!!,
-            invocation = AdhocInvocation()
+            code = code!!
         )
 
         if (status == ExecStatus.Planned) return plannedExec

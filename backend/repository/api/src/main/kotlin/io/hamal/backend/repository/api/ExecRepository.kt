@@ -14,13 +14,12 @@ interface ExecCmdRepository {
 
     data class PlanCmd(
         val id: CmdId,
-        val accountId: AccountId,
+        val tenantId: TenantId,
         val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val secrets: ExecSecrets,
-        val code: Code,
-        val invocation: Invocation
+        val code: Code
     )
 
     data class ScheduleCmd(

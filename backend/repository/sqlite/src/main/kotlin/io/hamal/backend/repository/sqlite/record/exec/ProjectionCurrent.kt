@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.record.exec
 
 import io.hamal.backend.repository.api.domain.Exec
-import io.hamal.backend.repository.api.record.exec.ExecRecord
+import io.hamal.backend.repository.record.exec.ExecRecord
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction

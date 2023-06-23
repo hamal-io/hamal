@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.api.record.exec
+package io.hamal.backend.repository.record.exec
 
 import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
@@ -20,11 +20,11 @@ sealed class ExecRecord(
 data class ExecPlannedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val accountId: AccountId,
+    override val tenantId: TenantId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val secrets: ExecSecrets,
-    val code: Code,
+    val code: Code
 ) : ExecRecord()
 
 @Serializable
@@ -32,7 +32,7 @@ data class ExecPlannedRecord(
 data class ExecScheduledRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val accountId: AccountId
+    override val tenantId: TenantId
 ) : ExecRecord()
 
 @Serializable
@@ -40,7 +40,7 @@ data class ExecScheduledRecord(
 data class ExecQueuedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val accountId: AccountId
+    override val tenantId: TenantId
 ) : ExecRecord()
 
 
@@ -49,7 +49,7 @@ data class ExecQueuedRecord(
 data class ExecStartedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val accountId: AccountId
+    override val tenantId: TenantId
 ) : ExecRecord()
 
 @Serializable
@@ -57,5 +57,5 @@ data class ExecStartedRecord(
 data class ExecCompletedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    override val accountId: AccountId,
+    override val tenantId: TenantId,
 ) : ExecRecord()

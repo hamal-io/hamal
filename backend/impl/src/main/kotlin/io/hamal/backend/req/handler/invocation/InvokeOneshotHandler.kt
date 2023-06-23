@@ -1,6 +1,5 @@
 package io.hamal.backend.req.handler.invocation
 
-import io.hamal.backend.repository.api.domain.OneshotInvocation
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.handler.toExecSecrets
@@ -23,15 +22,14 @@ class InvokeOneshotHandler(
         execCmdService.plan(
             req.cmdId(), ToPlan(
                 execId = req.execId,
+                tenantId = req.tenantId,
                 code = func.code,
                 correlation = Correlation(
                     correlationId = req.correlationId,
                     funcId = func.id
                 ),
                 inputs = ExecInputs(func.inputs.value),
-                secrets = req.secrets.toExecSecrets(),
-                // FIXME func for audit purpose ?
-                invocation = OneshotInvocation()
+                secrets = req.secrets.toExecSecrets()
             )
         )
     }

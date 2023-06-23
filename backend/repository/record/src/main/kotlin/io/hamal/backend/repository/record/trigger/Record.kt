@@ -21,7 +21,7 @@ sealed class TriggerRecord(
 data class FixedRateTriggerCreationRecord(
     override val entityId: TriggerId,
     override val cmdId: CmdId,
-    override val accountId: AccountId,
+    override val tenantId: TenantId,
     val funcId: FuncId,
     val name: TriggerName,
     val inputs: TriggerInputs,
@@ -34,7 +34,7 @@ data class FixedRateTriggerCreationRecord(
 data class EventTriggerCreationRecord(
     override val entityId: TriggerId,
     override val cmdId: CmdId,
-    override val accountId: AccountId,
+    override val tenantId: TenantId,
     val funcId: FuncId,
     val name: TriggerName,
     val inputs: TriggerInputs,

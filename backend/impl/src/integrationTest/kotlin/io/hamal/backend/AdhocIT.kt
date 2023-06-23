@@ -1,14 +1,13 @@
 package io.hamal.backend
 
+import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.InvocationSecrets
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.SuccessHttpResponse
@@ -16,6 +15,7 @@ import io.hamal.lib.http.body
 import jakarta.annotation.PostConstruct
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,6 +42,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 class HamalIT(
     @LocalServerPort val localPort: Int,
+    @Autowired val execQueryRepository: ExecQueryRepository,
     @Autowired val reqQueryRepository: ReqQueryRepository
 ) {
     @Test
@@ -64,6 +65,7 @@ class HamalIT(
         assertThat(result.code, equalTo(Code("40 + 2")))
 
         verifyReqCompleted(result.id)
+        verifyExecQueued(result.execId)
     }
 
     @PostConstruct
@@ -83,6 +85,20 @@ class HamalIT(
             assertThat(id, equalTo(id))
             assertThat(status, equalTo(ReqStatus.Completed))
             assertThat(shard, equalTo(Shard(1)))
+        }
+    }
+
+    private fun verifyExecQueued(execId: ExecId) {
+        with(execQueryRepository.find(execId)!!) {
+            assertThat(id, equalTo(execId))
+            assertThat(tenantId, equalTo(TenantId(1)))
+            assertThat(status, equalTo(ExecStatus.Queued))
+
+            assertThat(correlation, nullValue())
+            assertThat(inputs, equalTo(ExecInputs()))
+            assertThat(secrets, equalTo(ExecSecrets()))
+            assertThat(code, equalTo(Code("40 + 2")))
+
         }
     }
 

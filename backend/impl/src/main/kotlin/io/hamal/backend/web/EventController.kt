@@ -6,7 +6,7 @@ import io.hamal.backend.service.query.EventQueryService
 import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sdk.domain.*
@@ -15,9 +15,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class EventController @Autowired constructor(
-    val cmdService: EventCmdService<*>,
-    val queryService: EventQueryService<*>
+open class EventController(
+    @Autowired private val cmdService: EventCmdService<*>,
+    @Autowired private val queryService: EventQueryService<*>
 ) {
 
     @GetMapping("/v1/topics")
@@ -47,7 +47,7 @@ open class EventController @Autowired constructor(
                     EventCmdService.TopicToCreate(
                         cmdId = CmdId(1),
                         shard = Shard(1),
-                        accountId = AccountId(1),
+                        tenantId = TenantId(1),
                         name = request.name
                     )
                 )
@@ -73,7 +73,7 @@ open class EventController @Autowired constructor(
             EventCmdService.EventToAppend(
                 cmdId = CmdId(1),
                 shard = Shard(1),
-                accountId = AccountId(1),
+                tenantId = TenantId(1),
                 topicId = TopicId(topicId.toInt()),
                 contentTpe = contentType,
                 value = body

@@ -2,7 +2,7 @@ package io.hamal.backend.repository.record
 
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.base.DomainId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -44,7 +44,7 @@ abstract class Record<ID : DomainId> {
     abstract var sequence: RecordSequence?
     abstract val entityId: ID
     abstract val cmdId: CmdId
-    abstract val accountId: AccountId
+    abstract val tenantId: TenantId
 
     fun sequence() = sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 

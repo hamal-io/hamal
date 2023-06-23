@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
 import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.stereotype.Service
@@ -40,7 +40,7 @@ class EventCmdService<TOPIC : LogTopic>(
     data class TopicToCreate(
         val cmdId: CmdId,
         val shard: Shard,
-        val accountId: AccountId,
+        val tenantId: TenantId,
         val name: TopicName
     )
 
@@ -48,7 +48,7 @@ class EventCmdService<TOPIC : LogTopic>(
         val cmdId: CmdId,
         val shard: Shard,
 
-        val accountId: AccountId,
+        val tenantId: TenantId,
         val topicId: TopicId,
         val contentTpe: String,
         val value: ByteArray

@@ -13,12 +13,12 @@ class ExecId(override val value: SnowflakeId) : DomainId() {
 }
 
 @Serializable(with = ExecInputs.Serializer::class)
-class ExecInputs(override val value: TableValue) : Inputs() {
+class ExecInputs(override val value: TableValue = TableValue()) : Inputs() {
     internal object Serializer : InputsSerializer<ExecInputs>(::ExecInputs)
 }
 
 @Serializable(with = ExecSecrets.Serializer::class)
-class ExecSecrets(override val value: List<Secret>) : Secrets() {
+class ExecSecrets(override val value: List<Secret> = listOf()) : Secrets() {
     internal object Serializer : SecretsSerializer<ExecSecrets>(::ExecSecrets)
 }
 

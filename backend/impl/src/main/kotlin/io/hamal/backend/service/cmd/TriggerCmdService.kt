@@ -40,7 +40,7 @@ private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: Trigg
         TriggerType.FixedRate -> triggerCmdRepository.create(
             TriggerCmdRepository.CreateFixedRateCmd(
                 id = cmdId,
-                accountId = AccountId(1),
+                tenantId = TenantId(1),
                 triggerId = generateDomainId(Shard(1), ::TriggerId),
                 name = triggerToCreate.name,
                 funcId = triggerToCreate.funcId,
@@ -53,7 +53,7 @@ private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: Trigg
         TriggerType.Event -> triggerCmdRepository.create(
             TriggerCmdRepository.CreateEventCmd(
                 id = cmdId,
-                accountId = AccountId(1),
+                tenantId = TenantId(1),
                 triggerId = generateDomainId(Shard(1), ::TriggerId),
                 name = triggerToCreate.name,
                 funcId = triggerToCreate.funcId,

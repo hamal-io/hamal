@@ -31,7 +31,7 @@ private fun FuncCmdService.createFunc(cmdId: CmdId, toCreate: FuncCmdService.ToC
     return funcCmdRepository.create(
         FuncCmdRepository.CreateCmd(
             id = cmdId,
-            accountId = AccountId(1),
+            tenantId = TenantId(1),
             funcId = toCreate.funcId,
             name = toCreate.name,
             inputs = toCreate.inputs,

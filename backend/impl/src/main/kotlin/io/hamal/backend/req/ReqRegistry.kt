@@ -28,7 +28,7 @@ class ReqRegistry : ApplicationListener<ContextRefreshedEvent> {
         } as ReqHandler<REQ>
 
     @Suppress("UNCHECKED_CAST")
-    internal fun register(
+    private fun register(
         reqClass: KClass<out Req>, operation: ReqHandler<*>
     ) {
         check(operation.reqClass == reqClass)

@@ -9,7 +9,6 @@ class InvocationInputs(override val value: TableValue = TableValue()) : Inputs()
     internal object Serializer : InputsSerializer<InvocationInputs>(::InvocationInputs)
 }
 
-
 @Serializable(with = InvocationSecrets.Serializer::class)
 class InvocationSecrets(override val value: List<Secret> = listOf()) : Secrets() {
     internal object Serializer : SecretsSerializer<InvocationSecrets>(::InvocationSecrets)

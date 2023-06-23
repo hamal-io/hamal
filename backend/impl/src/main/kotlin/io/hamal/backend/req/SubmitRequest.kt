@@ -1,7 +1,7 @@
 package io.hamal.backend.req
 
+import io.hamal.backend.WebContext
 import io.hamal.backend.repository.api.ReqCmdRepository
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.req.*
@@ -45,13 +45,15 @@ data class CompleteExec(
 @Component
 class SubmitRequest(
     @Autowired private val reqCmdRepository: ReqCmdRepository,
-    @Autowired private val generateDomainId: GenerateDomainId
+    @Autowired private val generateDomainId: GenerateDomainId,
+    @Autowired private val context: WebContext
 ) {
     operator fun invoke(adhoc: InvokeAdhocReq): SubmittedInvokeAdhocReq {
         return SubmittedInvokeAdhocReq(
             id = reqId(),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(Shard(1), ::ExecId),
+            execId = context.generateDomainId(::ExecId),
+            tenantId = context.tenantId(),
             inputs = adhoc.inputs,
             secrets = adhoc.secrets,
             code = adhoc.code
@@ -62,7 +64,8 @@ class SubmitRequest(
         return InvokeOneshotReq(
             id = reqId(),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(Shard(1), ::ExecId),
+            execId = context.generateDomainId(::ExecId),
+            tenantId = context.tenantId(),
             funcId = oneshot.funcId,
             correlationId = oneshot.correlationId,
             inputs = oneshot.inputs,
@@ -74,7 +77,8 @@ class SubmitRequest(
         return InvokeFixedRateReq(
             id = reqId(),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(Shard(1), ::ExecId),
+            execId = context.generateDomainId(::ExecId),
+            tenantId = context.tenantId(),
             funcId = fixedRate.funcId,
             correlationId = fixedRate.correlationId,
             inputs = fixedRate.inputs,
@@ -86,7 +90,8 @@ class SubmitRequest(
         return InvokeEventReq(
             id = reqId(),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(Shard(1), ::ExecId),
+            execId = context.generateDomainId(::ExecId),
+            tenantId = context.tenantId(),
             funcId = evt.funcId,
             correlationId = evt.correlationId,
             inputs = evt.inputs,
@@ -105,8 +110,8 @@ class SubmitRequest(
     }
 
 
-    private val rnd = SecureRandom()
-    private fun reqId() = ReqId(BigInteger(128, SecureRandom.getInstance("SHA1PRNG", "SUN")))
+    private val rnd = SecureRandom.getInstance("SHA1PRNG", "SUN")
+    private fun reqId() = ReqId(BigInteger(128, rnd))
 
 }
 

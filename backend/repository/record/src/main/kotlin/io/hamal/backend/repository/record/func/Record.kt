@@ -20,7 +20,7 @@ sealed class FuncRecord(
 data class FuncCreationRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
-    override val accountId: AccountId,
+    override val tenantId: TenantId,
     val name: FuncName,
     val inputs: FuncInputs,
     val secrets: FuncSecrets,

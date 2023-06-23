@@ -70,7 +70,7 @@ class SqliteTriggerRepository(
                     FixedRateTriggerCreationRecord(
                         entityId = triggerId,
                         cmdId = cmdId,
-                        accountId = cmd.accountId,
+                        tenantId = cmd.tenantId,
                         funcId = cmd.funcId,
                         name = cmd.name,
                         inputs = cmd.inputs,
@@ -96,7 +96,7 @@ class SqliteTriggerRepository(
                     EventTriggerCreationRecord(
                         entityId = triggerId,
                         cmdId = cmdId,
-                        accountId = cmd.accountId,
+                        tenantId = cmd.tenantId,
                         funcId = cmd.funcId,
                         name = cmd.name,
                         inputs = cmd.inputs,

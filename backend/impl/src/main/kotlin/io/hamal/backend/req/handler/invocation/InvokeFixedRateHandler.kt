@@ -1,6 +1,5 @@
 package io.hamal.backend.req.handler.invocation
 
-import io.hamal.backend.repository.api.domain.FixedRateInvocation
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.handler.toExecInputs
@@ -23,15 +22,14 @@ class InvokeFixedRateHandler(
         execCmdService.plan(
             req.cmdId(), ToPlan(
                 execId = req.execId,
-                code = func.code,
+                tenantId = req.tenantId,
                 correlation = Correlation(
                     correlationId = req.correlationId,
                     funcId = func.id
                 ),
                 inputs = req.inputs.toExecInputs(),
                 secrets = req.secrets.toExecSecrets(),
-                // FIXME func for audit purpose ?
-                invocation = FixedRateInvocation()
+                code = func.code,
             )
         )
     }

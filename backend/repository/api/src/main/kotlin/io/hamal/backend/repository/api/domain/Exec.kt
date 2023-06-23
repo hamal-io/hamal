@@ -10,14 +10,13 @@ import kotlinx.serialization.Serializable
 sealed class Exec : DomainObject<ExecId> {
     abstract override val id: ExecId
     abstract val cmdId: CmdId
-    abstract val accountId: AccountId
+    abstract val tenantId: TenantId
     abstract val status: ExecStatus
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
     abstract val secrets: ExecSecrets
     abstract val code: Code
-    abstract val invocation: Invocation
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -41,14 +40,13 @@ sealed class Exec : DomainObject<ExecId> {
 @Serializable
 class PlannedExec(
     override val cmdId: CmdId,
-    override val accountId: AccountId,
+    override val tenantId: TenantId,
 
     override val id: ExecId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val secrets: ExecSecrets,
     override val code: Code,
-    override val invocation: Invocation
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
     override val status = ExecStatus.Planned
@@ -67,13 +65,11 @@ class ScheduledExec(
     val scheduledAt: ScheduledAt
 ) : Exec() {
     override val status = ExecStatus.Scheduled
-    override val accountId get() = plannedExec.accountId
+    override val tenantId get() = plannedExec.tenantId
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
     override val secrets get() = plannedExec.secrets
     override val code get() = plannedExec.code
-    override val invocation get() = plannedExec.invocation
-
     override fun toString(): String {
         return "ScheduledExec($id)"
     }
@@ -88,12 +84,11 @@ class QueuedExec(
     val queuedAt: QueuedAt
 ) : Exec() {
     override val status = ExecStatus.Queued
-    override val accountId get() = scheduledExec.accountId
+    override val tenantId get() = scheduledExec.tenantId
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
     override val secrets get() = scheduledExec.secrets
     override val code get() = scheduledExec.code
-    override val invocation get() = scheduledExec.invocation
     override fun toString(): String {
         return "QueuedExec($id)"
     }
@@ -108,12 +103,11 @@ class StartedExec(
     //FIXME inflightSince
 ) : Exec() {
     override val status = ExecStatus.Started
-    override val accountId get() = queuedExec.accountId
+    override val tenantId get() = queuedExec.tenantId
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
     override val secrets get() = queuedExec.secrets
     override val code get() = queuedExec.code
-    override val invocation get() = queuedExec.invocation
     override fun toString(): String {
         return "InFlightExec($id)"
     }
@@ -129,12 +123,11 @@ class CompletedExec(
 ) : Exec() {
     override val status = ExecStatus.Completed
 
-    override val accountId get() = startedExec.accountId
+    override val tenantId get() = startedExec.tenantId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val secrets get() = startedExec.secrets
     override val code get() = startedExec.code
-    override val invocation get() = startedExec.invocation
 
     override fun toString(): String {
         return "CompletedExec($id)"
@@ -149,12 +142,11 @@ class FailedExec(
     //FIXME failedAt
 ) : Exec() {
     override val status = ExecStatus.Failed
-    override val accountId get() = startedExec.accountId
+    override val tenantId get() = startedExec.tenantId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val secrets get() = startedExec.secrets
     override val code get() = startedExec.code
-    override val invocation get() = startedExec.invocation
     override fun toString(): String {
         return "FailedExec($id)"
     }

@@ -11,7 +11,7 @@ import io.hamal.backend.repository.record.func.FuncRecord
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.common.Shard
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.FuncId
 import java.nio.file.Path
 
@@ -64,7 +64,7 @@ class SqliteFuncRepository(
                     FuncCreationRecord(
                         entityId = funcId,
                         cmdId = cmdId,
-                        accountId = AccountId(1),
+                        tenantId = TenantId(1),
                         name = cmd.name,
                         inputs = cmd.inputs,
                         secrets = cmd.secrets,

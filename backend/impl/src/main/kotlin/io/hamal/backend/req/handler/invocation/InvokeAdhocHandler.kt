@@ -1,6 +1,5 @@
 package io.hamal.backend.req.handler.invocation
 
-import io.hamal.backend.repository.api.domain.AdhocInvocation
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.handler.toExecInputs
@@ -19,12 +18,11 @@ class InvokeAdhocHandler(
         execCmdService.plan(
             req.cmdId(), ToPlan(
                 execId = req.execId,
+                tenantId = req.tenantId,
                 correlation = null,
                 inputs = req.inputs.toExecInputs(),
                 secrets = req.secrets.toExecSecrets(),
-                code = req.code,
-                // FIXME func for audit purpose ?
-                invocation = AdhocInvocation()
+                code = req.code
             )
         )
     }
