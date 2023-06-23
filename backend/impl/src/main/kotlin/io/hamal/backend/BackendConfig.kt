@@ -2,8 +2,8 @@ package io.hamal.backend
 
 import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.event.*
-import io.hamal.backend.event_handler.exec.*
-import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
+import io.hamal.backend.event.handler.exec.*
+import io.hamal.backend.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.service.SystemEventServiceFactory
 import io.hamal.backend.service.FixedRateTriggerService
 import io.hamal.backend.service.OrchestrationService

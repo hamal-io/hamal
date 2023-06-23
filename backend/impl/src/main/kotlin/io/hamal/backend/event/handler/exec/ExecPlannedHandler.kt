@@ -1,7 +1,7 @@
-package io.hamal.backend.event_handler.exec
+package io.hamal.backend.event.handler.exec
 
 import io.hamal.backend.event.ExecPlannedEvent
-import io.hamal.backend.event_handler.SystemEventHandler
+import io.hamal.backend.event.handler.SystemEventHandler
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.lib.domain.CmdId
 import logger

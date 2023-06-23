@@ -3,7 +3,6 @@ package io.hamal.backend.service.cmd
 import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.domain.State
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.StatePayload
@@ -28,7 +27,6 @@ class StateCmdService
     }
 
     data class StateToSet(
-        val shard: Shard,
         val correlation: Correlation,
         val payload: StatePayload
     )

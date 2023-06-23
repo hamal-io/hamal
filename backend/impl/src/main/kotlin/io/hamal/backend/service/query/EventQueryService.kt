@@ -14,6 +14,8 @@ class EventQueryService<TOPIC : LogTopic>(
     val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) {
 
+    fun findTopic(topicId: TopicId) = logBrokerRepository.find(topicId)
+
     fun queryTopics(block: TopicQuery.() -> Unit): List<TOPIC> {
         val query = TopicQuery()
         block(query)

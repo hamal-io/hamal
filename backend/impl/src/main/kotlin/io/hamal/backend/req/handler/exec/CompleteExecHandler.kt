@@ -28,7 +28,6 @@ class CompleteExecHandler(
                     if (exec.correlation != null) {
                         stateCmdService.set(
                             cmdId, StateCmdService.StateToSet(
-                                shard = req.shard,
                                 correlation = exec.correlation!!,
                                 payload = req.statePayload
                             )

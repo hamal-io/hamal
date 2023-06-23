@@ -1,4 +1,4 @@
-package io.hamal.backend.event_handler
+package io.hamal.backend.event.handler
 
 import io.hamal.backend.event.SystemEvent
 import io.hamal.lib.domain.CmdId

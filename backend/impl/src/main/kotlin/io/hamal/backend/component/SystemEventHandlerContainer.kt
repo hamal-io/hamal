@@ -2,7 +2,7 @@ package io.hamal.backend.component
 
 import io.hamal.backend.event.SystemEvent
 import io.hamal.backend.event.topic
-import io.hamal.backend.event_handler.SystemEventHandler
+import io.hamal.backend.event.handler.SystemEventHandler
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 

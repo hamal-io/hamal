@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
@@ -12,6 +13,16 @@ interface LogBroker {
     value class Id(val value: ULong) {
         constructor(value: Int) : this(value.toULong())
     }
+}
+
+interface CreateTopic<TOPIC : LogTopic> {
+    fun create(cmdId: CmdId, topicToCreate: TopicToCreate)
+
+    data class TopicToCreate(
+        val id: TopicId,
+        val tenantId: TenantId,
+        val name: TopicName
+    )
 }
 
 interface AppendToTopic<TOPIC : LogTopic> {

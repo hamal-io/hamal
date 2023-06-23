@@ -3,7 +3,7 @@ package io.hamal.backend.service
 import io.hamal.backend.component.Async
 import io.hamal.backend.component.SystemEventHandlerContainer
 import io.hamal.backend.event.SystemEvent
-import io.hamal.backend.event_handler.SystemEventHandler
+import io.hamal.backend.event.handler.SystemEventHandler
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic

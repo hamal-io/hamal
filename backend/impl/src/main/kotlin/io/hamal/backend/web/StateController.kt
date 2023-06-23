@@ -3,9 +3,8 @@ package io.hamal.backend.web
 import io.hamal.backend.service.cmd.StateCmdService
 import io.hamal.backend.service.query.StateQueryService
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.CmdId
-import io.hamal.lib.common.Shard
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
@@ -52,7 +51,6 @@ class StateController
         val result = cmdService.set(
             cmdId = CmdId(123),
             StateCmdService.StateToSet(
-                shard = Shard(1),
                 correlation = Correlation(
                     funcId = FuncId(SnowflakeId(stringFuncId.toLong())),
                     correlationId = CorrelationId(stringCorId)

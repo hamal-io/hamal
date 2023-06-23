@@ -1,11 +1,9 @@
 package io.hamal.backend
 
-import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
+import io.hamal.backend.service.query.EventQueryService
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.req.ReqStatus
-import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
+import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpTemplate
@@ -14,7 +12,6 @@ import io.hamal.lib.http.body
 import jakarta.annotation.PostConstruct
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,32 +36,26 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 )
 @ActiveProfiles("memory")
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
-class AdhocIT(
+class TenantEventIT(
     @LocalServerPort val localPort: Int,
-    @Autowired val execQueryRepository: ExecQueryRepository,
-    @Autowired val reqQueryRepository: ReqQueryRepository
+    @Autowired val reqQueryRepository: ReqQueryRepository,
+    @Autowired val eventQueryService: EventQueryService<*>
 ) {
     @Test
-    fun `Submits adhoc requests without inputs or secrets`() {
+    fun `Create topic`() {
         val response = request(
-            InvokeAdhocReq(
-                inputs = InvocationInputs(),
-                secrets = InvocationSecrets(),
-                code = Code("40 + 2")
-            )
+            CreateTopicReq(name = TopicName("eth::block_processed"))
         )
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        val result = response.result(SubmittedInvokeAdhocReq::class)
+        val result = response.result(SubmittedCreateTopicReq::class)
 
-        assertThat(result.status, equalTo(ReqStatus.Submitted))
-        assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.secrets, equalTo(InvocationSecrets()))
-        assertThat(result.code, equalTo(Code("40 + 2")))
+        assertThat(result.name, equalTo(TopicName("eth::block_processed")))
+        assertThat(result.tenantId, equalTo(TenantId(1)))
 
         verifyReqCompleted(result.id)
-        verifyExecQueued(result.execId)
+        verifyTopicCreated(result.topicId)
     }
 
     @PostConstruct
@@ -72,9 +63,9 @@ class AdhocIT(
         httpTemplate = HttpTemplate("http://localhost:${localPort}")
     }
 
-    private fun request(req: InvokeAdhocReq) =
+    private fun request(req: CreateTopicReq) =
         httpTemplate
-            .post("/v1/adhoc")
+            .post("/v1/topics")
             .body(req)
             .execute()
 
@@ -86,17 +77,10 @@ class AdhocIT(
         }
     }
 
-    private fun verifyExecQueued(execId: ExecId) {
-        with(execQueryRepository.find(execId)!!) {
-            assertThat(id, equalTo(execId))
-            assertThat(tenantId, equalTo(TenantId(1)))
-            assertThat(status, equalTo(ExecStatus.Queued))
-
-            assertThat(correlation, nullValue())
-            assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(secrets, equalTo(ExecSecrets()))
-            assertThat(code, equalTo(Code("40 + 2")))
-
+    private fun verifyTopicCreated(topicId: TopicId) {
+        with(eventQueryService.findTopic(topicId)!!) {
+            assertThat(id, equalTo(topicId))
+            assertThat(name, equalTo(TopicName("eth::block_processed")))
         }
     }
 

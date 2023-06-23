@@ -6,7 +6,6 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.BigInteger
@@ -45,11 +44,10 @@ data class CompleteExec(
 @Component
 class SubmitRequest(
     @Autowired private val reqCmdRepository: ReqCmdRepository,
-    @Autowired private val generateDomainId: GenerateDomainId,
     @Autowired private val context: WebContext
 ) {
-    operator fun invoke(adhoc: InvokeAdhocReq): SubmittedInvokeAdhocReq {
-        return SubmittedInvokeAdhocReq(
+    operator fun invoke(adhoc: InvokeAdhocReq) =
+        SubmittedInvokeAdhocReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = context.generateDomainId(::ExecId),
@@ -58,10 +56,10 @@ class SubmitRequest(
             secrets = adhoc.secrets,
             code = adhoc.code
         ).also(reqCmdRepository::queue)
-    }
 
-    operator fun invoke(oneshot: InvokeOneshot): InvokeOneshotReq {
-        return InvokeOneshotReq(
+
+    operator fun invoke(oneshot: InvokeOneshot) =
+        InvokeOneshotReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = context.generateDomainId(::ExecId),
@@ -71,10 +69,9 @@ class SubmitRequest(
             inputs = oneshot.inputs,
             secrets = oneshot.secrets,
         ).also(reqCmdRepository::queue)
-    }
 
-    operator fun invoke(fixedRate: InvokeFixedRate): InvokeFixedRateReq {
-        return InvokeFixedRateReq(
+    operator fun invoke(fixedRate: InvokeFixedRate) =
+        InvokeFixedRateReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = context.generateDomainId(::ExecId),
@@ -84,10 +81,10 @@ class SubmitRequest(
             inputs = fixedRate.inputs,
             secrets = fixedRate.secrets,
         ).also(reqCmdRepository::queue)
-    }
 
-    operator fun invoke(evt: InvokeEvent): InvokeEventReq {
-        return InvokeEventReq(
+
+    operator fun invoke(evt: InvokeEvent) =
+        InvokeEventReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = context.generateDomainId(::ExecId),
@@ -97,22 +94,28 @@ class SubmitRequest(
             inputs = evt.inputs,
             secrets = evt.secrets,
         ).also(reqCmdRepository::queue)
-    }
 
-
-    operator fun invoke(complete: CompleteExec): CompleteExecReq {
-        return CompleteExecReq(
+    operator fun invoke(complete: CompleteExec) =
+        CompleteExecReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = complete.execId,
             statePayload = complete.statePayload
         ).also(reqCmdRepository::queue)
-    }
+
+
+    operator fun invoke(createTopic: CreateTopicReq) =
+        SubmittedCreateTopicReq(
+            id = reqId(),
+            status = ReqStatus.Submitted,
+            topicId = context.generateDomainId(::TopicId),
+            tenantId = context.tenantId(),
+            name = createTopic.name
+        ).also(reqCmdRepository::queue)
 
 
     private val rnd = SecureRandom.getInstance("SHA1PRNG", "SUN")
     private fun reqId() = ReqId(BigInteger(128, rnd))
 
 }
-
 
