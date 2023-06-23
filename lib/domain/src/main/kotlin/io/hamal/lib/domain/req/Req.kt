@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 sealed interface Req {
     val id: ReqId
 
-    //    val shard: Shard
+    //    val partition: Partition
     var status: ReqStatus
 }
 

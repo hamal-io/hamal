@@ -2,7 +2,6 @@ package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.util.concurrent.locks.ReentrantLock
@@ -25,8 +24,7 @@ class MemoryLogBrokerTopicsRepository(
                 MemoryLogTopic(
                     id = TopicId(topicMapping.size + 1),
                     logBrokerId = brokerTopics.logBrokerId,
-                    name = name,
-                    shard = Shard(0)
+                    name = name
                 )
             )
             topicMapping[name]!!

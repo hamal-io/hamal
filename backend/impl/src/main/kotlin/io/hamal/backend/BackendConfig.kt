@@ -63,7 +63,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
 //        val execRepository = SqliteExecRepository(
 //            SqliteExecRepository.Config(
 //                path = Path("/tmp/hamal"),
-//                shard = Shard(1)
+//                partition = Partition(1)
 //            )
 //        )
     }

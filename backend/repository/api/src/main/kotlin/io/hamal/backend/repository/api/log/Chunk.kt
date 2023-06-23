@@ -1,6 +1,5 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -14,7 +13,6 @@ data class LogChunkId(override val value: SnowflakeId) : DomainId() {
 data class LogChunk(
     val id: LogChunkId,
     val segmentId: LogSegment.Id,
-    val shard: Shard,
     val topicId: TopicId,
     val bytes: ByteArray,
     val instant: Instant

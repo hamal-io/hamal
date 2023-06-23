@@ -4,7 +4,6 @@ import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.CmdId
@@ -33,7 +32,7 @@ class SqliteLogTopicRepositoryTest {
         }
 
         @Test
-        fun `Creates a directory if path does not exists yet and populates with a shard`() {
+        fun `Creates a directory if path does not exists yet and populates with a partition`() {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
             SqliteLogTopicRepository(
@@ -41,14 +40,12 @@ class SqliteLogTopicRepositoryTest {
                     id = TopicId(23),
                     LogBroker.Id(42),
                     name = TopicName("test-topic"),
-                    path = targetDir,
-                    shard = Shard(123)
+                    path = targetDir
                 )
             ).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023")))
-            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023", "shard-0123")))
         }
     }
 
@@ -65,7 +62,7 @@ class SqliteLogTopicRepositoryTest {
         }
 
         @Test
-        fun `Append multiple records to empty shard`() {
+        fun `Append multiple records to empty partition`() {
             withEpochMilli(98765) {
                 listOf(
                     "VALUE_1".toByteArray(),
@@ -79,7 +76,6 @@ class SqliteLogTopicRepositoryTest {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunkId(1)))
-                assertThat(chunk.shard, equalTo(Shard(28)))
                 assertThat(chunk.topicId, equalTo(TopicId(23)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
@@ -91,7 +87,6 @@ class SqliteLogTopicRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunkId(3)))
                 assertThat(chunk.topicId, equalTo(TopicId(23)))
-                assertThat(chunk.shard, equalTo(Shard(28)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
@@ -103,7 +98,6 @@ class SqliteLogTopicRepositoryTest {
                 TopicId(23),
                 LogBroker.Id(42),
                 TopicName("test-topic"),
-                Shard(28),
                 Path(testDir)
             )
         )
@@ -125,7 +119,6 @@ class SqliteLogTopicRepositoryTest {
 
         private fun assertChunk(chunk: LogChunk, id: Int) {
             assertThat(chunk.id, equalTo(LogChunkId(id)))
-            assertThat(chunk.shard, equalTo(Shard(65)))
             assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
             assertThat(chunk.topicId, equalTo(TopicId(23)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
@@ -145,11 +138,10 @@ class SqliteLogTopicRepositoryTest {
                 TopicId(23),
                 LogBroker.Id(42),
                 TopicName("test-topic"),
-                Shard(65),
                 Path(testDir)
             )
         )
     }
 
-    private val testDir = "/tmp/hamal/test/shards"
+    private val testDir = "/tmp/hamal/test/partitions"
 }

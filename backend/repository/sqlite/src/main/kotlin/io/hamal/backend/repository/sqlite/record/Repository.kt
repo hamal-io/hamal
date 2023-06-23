@@ -19,8 +19,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     private val projections: List<Projection<ID, RECORD, OBJ>>
 ) : BaseRepository(object : Config {
     override val path = config.path
-    override val filename = String.format("${config.filename}-%04d.db", config.shard.value)
-    override val shard = config.shard
+    override val filename = config.filename
 }) {
 
     override fun setupConnection(connection: Connection) {

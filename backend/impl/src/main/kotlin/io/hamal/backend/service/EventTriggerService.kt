@@ -12,7 +12,7 @@ import io.hamal.backend.req.InvokeEvent
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.backend.service.query.TriggerQueryService
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -69,7 +69,7 @@ class EventTriggerService<TOPIC : LogTopic>
 //
 //                request(
 //                    InvokeEvent(
-//                        execId = generateDomainId(Shard(1), ::ExecId),
+//                        execId = generateDomainId(Partition(1), ::ExecId),
 //                        funcId = funcs.first().id,
 //                        correlationId = CorrelationId("__TBD__"),
 //                        inputs = InvocationInputs(listOf()),
@@ -111,7 +111,7 @@ class EventTriggerService<TOPIC : LogTopic>
                         consumer.consumeBatch(1) { evts ->
                             submitRequest(
                                 InvokeEvent(
-                                    execId = generateDomainId(Shard(1), ::ExecId),
+                                    execId = generateDomainId(Partition(1), ::ExecId),
                                     funcId = trigger.funcId,
                                     correlationId = CorrelationId("__TBD__"),
                                     inputs = InvocationInputs(TableValue()),

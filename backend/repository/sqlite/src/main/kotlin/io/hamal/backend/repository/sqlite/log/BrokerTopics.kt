@@ -6,7 +6,6 @@ import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -22,7 +21,6 @@ class SqliteLogBrokerTopicsRepository(
 ) : BaseRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
-    override val shard: Shard get() = Shard(0)
 
 }), LogBrokerTopicsRepository<SqliteLogTopic> {
 
@@ -57,8 +55,7 @@ class SqliteLogBrokerTopicsRepository(
                     id = id,
                     logBrokerId = brokerTopics.logBrokerId,
                     name = name,
-                    path = brokerTopics.path,
-                    shard = Shard(0)
+                    path = brokerTopics.path
                 )
             }
         }
@@ -95,8 +92,7 @@ private fun SqliteLogBrokerTopicsRepository.findById(topicId: TopicId): SqliteLo
                 id = rs.getDomainId("id", ::TopicId),
                 logBrokerId = brokerTopics.logBrokerId,
                 name = TopicName(rs.getString("name")),
-                path = brokerTopics.path,
-                shard = Shard(0)
+                path = brokerTopics.path
             )
         }
     }

@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.TopicId
@@ -34,7 +34,6 @@ class EventCmdService<TOPIC : LogTopic>(
         val topic = logBrokerRepository.get(eventToAppend.topicId)
         appender.append(
             cmdId, topic, TenantEvent(
-                shard = eventToAppend.shard,
                 contentType = eventToAppend.contentTpe,
                 value = eventToAppend.value
             )
@@ -49,7 +48,7 @@ class EventCmdService<TOPIC : LogTopic>(
 
     data class EventToAppend(
         val cmdId: CmdId,
-        val shard: Shard,
+        val partition: Partition,
 
         val tenantId: TenantId,
         val topicId: TopicId,

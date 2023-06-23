@@ -8,7 +8,7 @@ import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.*
@@ -33,7 +33,6 @@ open class FuncController(
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
-        @RequestAttribute shard: Shard,
         @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
@@ -41,7 +40,7 @@ open class FuncController(
         //FIXME as request
         return funcCmdService.create(
             CmdId(0), FuncCmdService.ToCreate(
-                funcId = generateDomainId(Shard(1), ::FuncId),
+                funcId = generateDomainId(Partition(1), ::FuncId),
                 name = req.name,
                 inputs = req.inputs,
                 secrets = req.secrets,
@@ -86,7 +85,7 @@ open class FuncController(
 
         val result = request(
             InvokeOneshot(
-                execId = generateDomainId(Shard(1), ::ExecId),
+                execId = generateDomainId(Partition(1), ::ExecId),
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
                 inputs = InvocationInputs(TableValue()),
                 secrets = InvocationSecrets(listOf()),

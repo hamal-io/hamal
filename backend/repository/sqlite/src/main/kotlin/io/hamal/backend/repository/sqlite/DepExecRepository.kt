@@ -5,7 +5,7 @@
 //import io.hamal.backend.repository.api.domain.*
 //import io.hamal.backend.repository.sqlite.internal.Connection
 //import io.hamal.backend.repository.sqlite.internal.Transaction
-//import io.hamal.lib.common.Shard
+//import io.hamal.lib.common.Partition
 //import io.hamal.lib.domain.CommandId
 //import io.hamal.lib.domain.vo.*
 //import io.hamal.lib.domain.vo.ExecStatus.Planned
@@ -17,7 +17,7 @@
 //
 //    data class Config(
 //        override val path: Path,
-//        override val shard: Shard
+//        override val partition: Partition
 //    ) : BaseRepository.Config {
 //        override val filename = "exec"
 //    }

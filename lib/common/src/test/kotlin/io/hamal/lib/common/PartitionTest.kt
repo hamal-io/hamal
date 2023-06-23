@@ -7,41 +7,41 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class ShardTest {
+class PartitionTest {
     @Nested
     inner class ConstructorTest {
 
         @Test
         fun `Limited to 10 bits`() {
-            Shard(1023)
+            Partition(1023)
 
             val exception = assertThrows<IllegalArgumentException> {
-                Shard(1024)
+                Partition(1024)
             }
-            assertThat(exception.message, containsString("Shard is limited to 10 bits - [0, 1023]"))
+            assertThat(exception.message, containsString("Partition is limited to 10 bits - [0, 1023]"))
         }
 
         @Test
-        fun `Shard is not negative`() {
-            Shard(1)
-            Shard(0)
+        fun `Partition is not negative`() {
+            Partition(1)
+            Partition(0)
 
             val exception = assertThrows<IllegalArgumentException> {
-                Shard(-1)
+                Partition(-1)
             }
-            assertThat(exception.message, containsString("Shard must not be negative - [0, 1023]"))
+            assertThat(exception.message, containsString("Partition must not be negative - [0, 1023]"))
         }
 
         @Test
-        fun `Valid shards`() {
-            Shard(0)
-            Shard(23)
-            Shard(1023)
+        fun `Valid partitions`() {
+            Partition(0)
+            Partition(23)
+            Partition(1023)
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(Shard(123).toString(), equalTo("Shard(123)"))
+        assertThat(Partition(123).toString(), equalTo("Partition(123)"))
     }
 }

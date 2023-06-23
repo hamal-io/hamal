@@ -9,7 +9,6 @@ import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.exec.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.TenantId
 import java.nio.file.Path
@@ -48,8 +47,7 @@ class SqliteExecRepository(
     ExecQueryRepository {
 
     data class Config(
-        override val path: Path,
-        override val shard: Shard
+        override val path: Path
     ) : BaseRepository.Config {
         override val filename = "exec"
     }

@@ -6,7 +6,6 @@ import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.backend.repository.api.log.LogSegmentRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -14,7 +13,6 @@ import java.nio.file.Path
 
 data class SqliteLogSegment(
     override val id: LogSegment.Id,
-    override val shard: Shard,
     override val topicId: TopicId,
     val path: Path
 ) : LogSegment
@@ -25,7 +23,6 @@ internal class SqliteLogSegmentRepository(
 ) : BaseRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
-    override val shard: Shard get() = segment.shard
 }), LogSegmentRepository {
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {
@@ -53,7 +50,6 @@ internal class SqliteLogSegmentRepository(
                 LogChunk(
                     id = it.getDomainId("id", ::LogChunkId),
                     segmentId = segment.id,
-                    shard = segment.shard,
                     topicId = segment.topicId,
                     bytes = it.getBytes("bytes"),
                     instant = it.getInstant("instant")

@@ -44,7 +44,6 @@ private fun FuncCmdService.createFunc(cmdId: CmdId, toCreate: FuncCmdService.ToC
 private fun FuncCmdService.emitEvent(cmdId: CmdId, func: Func) {
     eventEmitter.emit(
         cmdId, FuncCreatedEvent(
-            shard = func.shard,
             funcId = func.id
         )
     )

@@ -61,7 +61,6 @@ private fun ExecCmdService.planExec(cmdId: CmdId, toPlan: ToPlan): PlannedExec {
 private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: PlannedExec) {
     eventEmitter.emit(
         cmdId, ExecPlannedEvent(
-            shard = exec.shard,
             plannedExec = exec
         )
     )
@@ -71,7 +70,6 @@ private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: PlannedExec) {
 private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: ScheduledExec) {
     eventEmitter.emit(
         cmdId, ExecScheduledEvent(
-            shard = exec.shard,
             scheduledExec = exec
         )
     )
@@ -81,7 +79,6 @@ private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: ScheduledExec) {
 private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: QueuedExec) {
     eventEmitter.emit(
         cmdId, ExecutionQueuedEvent(
-            shard = exec.shard,
             queuedExec = exec
         )
     )
@@ -91,7 +88,6 @@ private fun ExecCmdService.emitEvents(cmdId: CmdId, execs: List<StartedExec>) {
     execs.forEach {
         eventEmitter.emit(
             cmdId, ExecutionStartedEvent(
-                shard = it.shard,
                 startedExec = it
             )
         )
@@ -102,7 +98,6 @@ private fun ExecCmdService.emitEvents(cmdId: CmdId, execs: List<StartedExec>) {
 private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: CompletedExec) {
     eventEmitter.emit(
         cmdId, ExecutionCompletedEvent(
-            shard = exec.shard,
             completedExec = exec
         )
     )

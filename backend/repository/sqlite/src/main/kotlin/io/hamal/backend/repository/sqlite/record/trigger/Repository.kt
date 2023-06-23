@@ -14,7 +14,6 @@ import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import java.nio.file.Path
@@ -54,7 +53,6 @@ class SqliteTriggerRepository(
 
     data class Config(
         override val path: Path,
-        override val shard: Shard
     ) : BaseRepository.Config {
         override val filename = "trigger"
     }

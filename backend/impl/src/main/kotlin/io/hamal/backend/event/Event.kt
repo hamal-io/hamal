@@ -1,12 +1,9 @@
 package io.hamal.backend.event
 
-import io.hamal.lib.common.Shard
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-sealed interface Event {
-    val shard: Shard
-}
+sealed interface Event
 
 @Serializable
 sealed class SystemEvent : Event {
@@ -20,7 +17,6 @@ fun <EVENT : SystemEvent> KClass<EVENT>.topic() =
 
 @Serializable
 data class TenantEvent(
-    override val shard: Shard,
     val contentType: String,
     val value: ByteArray
 ) : Event

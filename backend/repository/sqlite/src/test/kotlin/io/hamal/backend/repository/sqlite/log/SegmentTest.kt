@@ -3,7 +3,6 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
@@ -35,7 +34,7 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Creates a directory if path does not exists yet`() {
-            val targetDir = Path(testDir, "shard-001", "another-path")
+            val targetDir = Path(testDir, "partition-001", "another-path")
             SqliteLogSegmentRepository(testSegment(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
@@ -108,7 +107,6 @@ class SqliteLogSegmentRepositoryTest {
         private fun testSegment(path: Path = Path(testDir)) = SqliteLogSegment(
             id = LogSegment.Id(2810),
             topicId = TopicId(1506),
-            shard = Shard(24),
             path = path
         )
     }
@@ -139,7 +137,6 @@ class SqliteLogSegmentRepositoryTest {
 
                 val chunk = it.first()
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
@@ -159,7 +156,6 @@ class SqliteLogSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunkId(1)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
@@ -183,7 +179,6 @@ class SqliteLogSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunkId(1)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -194,7 +189,6 @@ class SqliteLogSegmentRepositoryTest {
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(LogChunkId(3)))
                 assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
-                assertThat(chunk.shard, equalTo(Shard(42)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -233,7 +227,6 @@ class SqliteLogSegmentRepositoryTest {
         private val testInstance = SqliteLogSegmentRepository(
             SqliteLogSegment(
                 id = LogSegment.Id(2810),
-                shard = Shard(42),
                 topicId = TopicId(1506),
                 path = Path(testDir)
             )
@@ -331,7 +324,6 @@ class SqliteLogSegmentRepositoryTest {
         private val testInstance = SqliteLogSegmentRepository(
             SqliteLogSegment(
                 id = LogSegment.Id(1028),
-                shard = Shard(42),
                 topicId = TopicId(1506),
                 path = Path(testDir),
             )
@@ -346,7 +338,6 @@ class SqliteLogSegmentRepositoryTest {
             val testInstance = SqliteLogSegmentRepository(
                 SqliteLogSegment(
                     id = LogSegment.Id(1028),
-                    shard = Shard(42),
                     topicId = TopicId(1506),
                     path = Path(testDir)
                 )
@@ -360,7 +351,6 @@ class SqliteLogSegmentRepositoryTest {
             val testInstance = SqliteLogSegmentRepository(
                 SqliteLogSegment(
                     id = LogSegment.Id(1028),
-                    shard = Shard(42),
                     topicId = TopicId(1506),
                     path = Path(testDir),
                 )

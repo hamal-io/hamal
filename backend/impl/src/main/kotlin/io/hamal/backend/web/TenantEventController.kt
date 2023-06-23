@@ -4,7 +4,7 @@ import io.hamal.backend.event.TenantEvent
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.EventCmdService
 import io.hamal.backend.service.query.EventQueryService
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.req.CreateTopicReq
@@ -59,7 +59,7 @@ open class TenantEventController(
 //                cmdService.create(
 //                    EventCmdService.TopicToCreate(
 //                        cmdId = CmdId(1),
-//                        shard = Shard(1),
+//                        partition = Partition(1),
 //                        tenantId = TenantId(1),
 //                        name = request.name
 //                    )
@@ -85,7 +85,7 @@ open class TenantEventController(
             CmdId(TimeUtils.now().toEpochMilli()), // FIXME
             EventCmdService.EventToAppend(
                 cmdId = CmdId(1),
-                shard = Shard(1),
+                partition = Partition(1),
                 tenantId = TenantId(1),
                 topicId = TopicId(topicId.toInt()),
                 contentTpe = contentType,

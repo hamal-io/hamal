@@ -13,7 +13,6 @@ import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.backend.repository.sqlite.record.trigger.SqliteTriggerRepository
-import io.hamal.lib.common.Shard
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -32,8 +31,7 @@ open class SqliteRepositoryConfig {
     open fun sqliteFuncRepository() =
         SqliteFuncRepository(
             SqliteFuncRepository.Config(
-                path = Path("/tmp/hamal"),
-                shard = Shard(1)
+                path = Path("/tmp/hamal")
             )
         )
 
@@ -48,8 +46,7 @@ open class SqliteRepositoryConfig {
     open fun sqliteExecRepository() =
         SqliteExecRepository(
             SqliteExecRepository.Config(
-                path = Path("/tmp/hamal"),
-                shard = Shard(1)
+                path = Path("/tmp/hamal")
             )
         )
 
@@ -64,8 +61,7 @@ open class SqliteRepositoryConfig {
     open fun sqliteTriggerRepository() =
         SqliteTriggerRepository(
             SqliteTriggerRepository.Config(
-                path = Path("/tmp/hamal"),
-                shard = Shard(1)
+                path = Path("/tmp/hamal")
             )
         )
 

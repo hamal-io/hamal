@@ -1,7 +1,7 @@
 package io.hamal.backend
 
 import io.hamal.backend.repository.api.domain.Tenant
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainId
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 data class WebContextData(
     val tenant: Tenant,
-    val shard: Shard
+    val partition: Partition
 )
 
 
@@ -24,10 +24,10 @@ class WebContext(
 
     fun tenantId() = get().tenant.id
 
-    fun shard() = get().shard
+    fun partition() = get().partition
 
     fun <ID : DomainId> generateDomainId(ctor: (SnowflakeId) -> ID) =
-        generateDomainId(shard(), ctor)
+        generateDomainId(partition(), ctor)
 
     fun get(): WebContextData {
         return holder.get()

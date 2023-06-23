@@ -2,7 +2,6 @@ package io.hamal.backend.repository.sqlite
 
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.internal.DefaultConnection
-import io.hamal.lib.common.Shard
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.Once
 import logger
@@ -35,7 +34,6 @@ abstract class BaseRepository(
     interface Config {
         val path: Path
         val filename: String
-        val shard: Shard
     }
 
     abstract fun setupConnection(connection: Connection)

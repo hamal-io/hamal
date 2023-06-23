@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -13,58 +13,61 @@ data class SqliteLogTopic(
     override val id: TopicId,
     override val logBrokerId: LogBroker.Id,
     override val name: TopicName,
-    override val shard: Shard,
     val path: Path
 ) : LogTopic
 
 
 // FIXME just a pass through for now - replace with proper implementation,
-// like supporting multiple partitions, sharding by key
+// like supporting multiple partitions, partitioning by key
 // keeping track of consumer group ids
+
+
+// FIXME just a pass through for now - replace with proper implementation,
+// like supporting multiple segments, roll over etc
+
 class SqliteLogTopicRepository(
     internal val topic: SqliteLogTopic
 ) : BaseRepository(
     object : Config {
         override val path: Path get() = topic.path
         override val filename: String get() = String.format("topic-%08d", topic.id.value.value)
-        override val shard: Shard get() = topic.shard
 
     }
 ), LogTopicRepository {
 
-    internal var activeLogShard: SqliteLogShard
-    internal var activeLogShardRepository: SqliteLogShardRepository
+    private var activeSegment: SqliteLogSegment
+    private var activeLogSegmentRepository: SqliteLogSegmentRepository
 
     init {
-        activeLogShard = SqliteLogShard(
-            id = topic.shard,
-            topicId = topic.id,
+        activeSegment = SqliteLogSegment(
+            LogSegment.Id(0),
             path = topic.path.resolve(config.filename),
+            topicId = topic.id
         )
-        activeLogShardRepository = SqliteLogShardRepository(activeLogShard)
+        activeLogSegmentRepository = SqliteLogSegmentRepository(activeSegment)
+    }
+
+    override fun append(cmdId: CmdId, bytes: ByteArray) {
+        activeLogSegmentRepository.append(cmdId, bytes)
+    }
+
+    override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
+        return activeLogSegmentRepository.read(firstId, limit)
+    }
+
+    override fun count(): ULong {
+        return activeLogSegmentRepository.count()
     }
 
     override fun setupConnection(connection: Connection) {}
 
     override fun setupSchema(connection: Connection) {}
 
-    override fun append(cmdId: CmdId, bytes: ByteArray) {
-        activeLogShardRepository.append(cmdId, bytes)
-    }
-
-    override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
-        return activeLogShardRepository.read(firstId, limit)
-    }
-
-    override fun count(): ULong {
-        return activeLogShardRepository.count()
-    }
-
     override fun clear() {
-        activeLogShardRepository.clear()
+        activeLogSegmentRepository.clear()
     }
 
     override fun close() {
-        activeLogShardRepository.close()
+        activeLogSegmentRepository.close()
     }
 }

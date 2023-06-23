@@ -12,7 +12,7 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 abstract class DomainId : ValueObject.ComparableImpl<SnowflakeId>() {
-    fun shard() = value.shard()
+    fun partition() = value.partition()
     fun sequence() = value.sequence()
     fun elapsed() = value.elapsed()
     override fun toString(): String {

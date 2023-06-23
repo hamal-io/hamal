@@ -1,8 +1,8 @@
 package io.hamal.lib.domain.vo.port
 
-import io.hamal.lib.common.Shard
+import io.hamal.lib.common.Partition
 
 
 fun interface ResolveRegionPort {
-    operator fun invoke(): Shard
+    operator fun invoke(): Partition
 }

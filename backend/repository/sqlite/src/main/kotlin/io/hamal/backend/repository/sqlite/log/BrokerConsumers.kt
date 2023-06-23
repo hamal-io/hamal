@@ -3,7 +3,6 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.vo.TopicId
 import java.nio.file.Path
 
@@ -18,7 +17,6 @@ class SqliteLogBrokerConsumersRepository(
     object : Config {
         override val path: Path get() = brokerConsumers.path
         override val filename: String get() = "consumers.db"
-        override val shard: Shard get() = Shard(0)
 
     }
 ), LogBrokerConsumersRepository {

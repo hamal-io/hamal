@@ -4,16 +4,16 @@ import io.hamal.lib.common.*
 import io.hamal.lib.domain.vo.base.DomainId
 
 interface GenerateDomainId {
-    operator fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID
+    operator fun <ID : DomainId> invoke(partition: Partition, ctor: (SnowflakeId) -> ID): ID
 }
 
 object DefaultDomainIdGenerator : GenerateDomainId {
 
-    private val provideGenerator = KeyedOnce.default<Shard, SnowflakeId.Generator>()
-    override fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID {
-        val generator = provideGenerator(shard) {
+    private val provideGenerator = KeyedOnce.default<Partition, SnowflakeId.Generator>()
+    override fun <ID : DomainId> invoke(partition: Partition, ctor: (SnowflakeId) -> ID): ID {
+        val generator = provideGenerator(partition) {
             SnowflakeGenerator(
-                DefaultShardSource(shard.value)
+                DefaultPartitionSource(partition.value)
             )
         }
         return ctor(generator.next())
@@ -21,12 +21,12 @@ object DefaultDomainIdGenerator : GenerateDomainId {
 }
 
 class FixedTimeIdGenerator : GenerateDomainId {
-    private val provideGenerator = KeyedOnce.default<Shard, SnowflakeId.Generator>()
-    override fun <ID : DomainId> invoke(shard: Shard, ctor: (SnowflakeId) -> ID): ID {
-        val generator = provideGenerator(shard) {
+    private val provideGenerator = KeyedOnce.default<Partition, SnowflakeId.Generator>()
+    override fun <ID : DomainId> invoke(partition: Partition, ctor: (SnowflakeId) -> ID): ID {
+        val generator = provideGenerator(partition) {
             SnowflakeGenerator(
                 elapsedSource = FixedElapsedSource(0),
-                shardSource = DefaultShardSource(shard.value),
+                partitionSource = DefaultPartitionSource(partition.value),
             )
         }
         return ctor(generator.next())

@@ -30,8 +30,8 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
         }
     }
 
-    interface ShardSource {
-        fun get(): Shard
+    interface PartitionSource {
+        fun get(): Partition
     }
 
     interface SequenceSource {
@@ -57,7 +57,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 
     override fun compareTo(other: SnowflakeId) = value.compareTo(other.value)
 
-    fun shard(): Shard = Shard(
+    fun partition(): Partition = Partition(
         BitUtils.extractRange(
             value = value,
             startIndex = 53,
@@ -107,12 +107,12 @@ class DefaultElapsedSource(
     private fun millis() = System.currentTimeMillis() - epoch
 }
 
-class DefaultShardSource(
-    private val shard: Shard
-) : SnowflakeId.ShardSource {
-    constructor(value: Int) : this(Shard(value))
+class DefaultPartitionSource(
+    private val partition: Partition
+) : SnowflakeId.PartitionSource {
+    constructor(value: Int) : this(Partition(value))
 
-    override fun get() = shard
+    override fun get() = partition
 }
 
 class DefaultSequenceSource : SequenceSource {
@@ -154,7 +154,7 @@ class FixedElapsedSource(val value: Long) : SnowflakeId.ElapsedSource {
 }
 
 class SnowflakeGenerator(
-    private val shardSource: SnowflakeId.ShardSource,
+    private val partitionSource: SnowflakeId.PartitionSource,
     private val elapsedSource: SnowflakeId.ElapsedSource = DefaultElapsedSource(),
     private val sequenceSource: SequenceSource = DefaultSequenceSource(),
     private val lock: Lock = ReentrantLock()
@@ -162,21 +162,21 @@ class SnowflakeGenerator(
 
     override fun next(): SnowflakeId {
         return lock.withLock {
-            val shard = shardSource.get()
+            val partition = partitionSource.get()
             val (elapsed, sequence) = sequenceSource.next(elapsedSource::elapsed)
-            generate(elapsed, shard, sequence)
+            generate(elapsed, partition, sequence)
         }
     }
 
     private fun generate(
         elapsed: Elapsed,
-        shard: Shard,
+        partition: Partition,
         sequence: Sequence
     ): SnowflakeId {
-        val shardValue = shard.value.toLong().shl(53)
+        val partitionValue = partition.value.toLong().shl(53)
         val sequenceValue = sequence.value.toLong().shl(41)
         val elapsedValue = elapsed.value
-        val result = shardValue + sequenceValue + elapsedValue
+        val result = partitionValue + sequenceValue + elapsedValue
         return SnowflakeId(result)
     }
 }
