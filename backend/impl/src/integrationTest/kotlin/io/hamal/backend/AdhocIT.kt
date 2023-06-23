@@ -5,11 +5,14 @@ import io.hamal.lib.common.Shard
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.InvocationSecrets
-import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.HamalSdk
+import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.body
 import jakarta.annotation.PostConstruct
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.equalTo
@@ -41,16 +44,19 @@ class HamalIT(
     @LocalServerPort val localPort: Int,
     @Autowired val reqQueryRepository: ReqQueryRepository
 ) {
-
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
-        val result = sdk.adhocService().submit(
+        val response = request(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),
                 secrets = InvocationSecrets(),
                 code = Code("40 + 2")
             )
         )
+
+        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(response is SuccessHttpResponse) { "request was not successful" }
+        val result = response.result(SubmittedInvokeAdhocReq::class)
 
         assertThat(result.status, equalTo(ReqStatus.Submitted))
         assertThat(result.inputs, equalTo(InvocationInputs()))
@@ -62,8 +68,15 @@ class HamalIT(
 
     @PostConstruct
     fun setup() {
-        sdk = DefaultHamalSdk("http://localhost:${localPort}")
+        httpTemplate = HttpTemplate("http://localhost:${localPort}")
     }
+
+    private fun request(req: InvokeAdhocReq) =
+        httpTemplate
+            .post("/v1/adhoc")
+            .body(req)
+            .execute()
+
 
     private fun verifyReqCompleted(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
@@ -73,5 +86,5 @@ class HamalIT(
         }
     }
 
-    private lateinit var sdk: HamalSdk
+    private lateinit var httpTemplate: HttpTemplate
 }

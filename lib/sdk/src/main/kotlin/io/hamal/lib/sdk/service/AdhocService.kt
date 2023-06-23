@@ -16,5 +16,4 @@ data class DefaultAdhocService(val template: HttpTemplate) : AdhocService {
             .body(req)
             .execute(SubmittedInvokeAdhocReq::class)
     }
-
 }

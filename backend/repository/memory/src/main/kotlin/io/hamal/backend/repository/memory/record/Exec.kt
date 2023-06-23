@@ -5,7 +5,6 @@ import io.hamal.backend.repository.api.ExecCmdRepository.*
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.*
-import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
@@ -37,7 +36,7 @@ internal object QueueProjection {
 
     fun pop(limit: Int): List<QueuedExec> {
         val result = mutableListOf<QueuedExec>()
-        for (idx in 0 until 10) {
+        for (idx in 0 until limit) {
             if (queue.isEmpty()) {
                 break
             }
@@ -47,19 +46,16 @@ internal object QueueProjection {
     }
 }
 
-//FIXME concurrent safety?!
-object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
-
-    internal val store = mutableMapOf<ExecId, MutableList<ExecRecord>>()
+object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCmdRepository, ExecQueryRepository {
 
     override fun plan(cmd: PlanCmd): PlannedExec {
-
         val execId = cmd.execId
 
-        if (store.containsKey(execId)) {
+        if (contains(execId)) {
             return versionOf(execId, cmd.id) as PlannedExec
         }
-        store[execId] = mutableListOf(
+
+        addRecord(
             ExecPlannedRecord(
                 entityId = execId,
                 cmdId = cmd.id,
@@ -68,7 +64,7 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
                 inputs = cmd.inputs,
                 secrets = cmd.secrets,
                 code = cmd.code,
-            ).apply { sequence = RecordSequence(1) }
+            )
         )
 
         return (currentVersion(execId) as PlannedExec)
@@ -83,10 +79,9 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             return versionOf(execId, cmdId) as ScheduledExec
         }
 
-        val records = checkNotNull(store[execId]) { "No records found for $execId" }
         check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
 
-        records.add(
+        addRecord(
             ExecScheduledRecord(
                 entityId = execId,
                 cmdId = cmdId,
@@ -107,10 +102,9 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             return versionOf(execId, cmdId) as QueuedExec
         }
 
-        val records = checkNotNull(store[execId]) { "No records found for $execId" }
         check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
 
-        records.add(
+        addRecord(
             ExecQueuedRecord(
                 entityId = execId,
                 cmdId = cmdId,
@@ -127,10 +121,9 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
         val result = mutableListOf<StartedExec>()
         QueueProjection.pop(2).forEach { queuedExec ->
             val execId = queuedExec.id
-            val records = checkNotNull(store[execId]) { "No records found for $execId" }
             check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
-            records.add(
+            addRecord(
                 ExecStartedRecord(
                     entityId = execId,
                     cmdId = cmd.id,
@@ -153,10 +146,9 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
             return versionOf(execId, cmdId) as CompletedExec
         }
 
-        val records = checkNotNull(store[execId]) { "No records found for $execId" }
         check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
 
-        records.add(
+        addRecord(
             ExecCompletedRecord(
                 entityId = execId,
                 cmdId = cmdId,
@@ -175,24 +167,21 @@ object MemoryExecRepository : ExecCmdRepository, ExecQueryRepository {
     override fun list(afterId: ExecId, limit: Int): List<Exec> {
         return CurrentExecProjection.list(afterId, limit)
     }
+
+    private fun MemoryExecRepository.currentVersion(id: ExecId): Exec {
+        return listRecords(id)
+            .createEntity()
+            .toDomainObject()
+    }
+
+    private fun MemoryExecRepository.commandAlreadyApplied(id: ExecId, cmdId: CmdId) =
+        listRecords(id).any { it.cmdId == cmdId }
+
+    private fun MemoryExecRepository.versionOf(id: ExecId, cmdId: CmdId): Exec {
+        return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
+            .createEntity()
+            .toDomainObject()
+    }
 }
 
 
-internal fun MemoryExecRepository.currentVersion(id: ExecId): Exec {
-    val records = store[id]
-    checkNotNull(records) { "No records found for $id" }
-    return records
-        .createEntity()
-        .toDomainObject()
-}
-
-internal fun MemoryExecRepository.commandAlreadyApplied(id: ExecId, cmdId: CmdId) =
-    store.getOrDefault(id, listOf()).any { it.cmdId == cmdId }
-
-internal fun MemoryExecRepository.versionOf(id: ExecId, cmdId: CmdId): Exec {
-    val records = store[id]
-    requireNotNull(records) { "No records found for $id" }
-    return records.takeWhileInclusive { it.cmdId != cmdId }
-        .createEntity()
-        .toDomainObject()
-}
