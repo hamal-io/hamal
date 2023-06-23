@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
 sealed class Exec : DomainObject<ExecId> {
     abstract override val id: ExecId
     abstract val cmdId: CmdId
-    abstract val tenantId: TenantId
     abstract val status: ExecStatus
 
     abstract val correlation: Correlation?
@@ -40,8 +39,6 @@ sealed class Exec : DomainObject<ExecId> {
 @Serializable
 class PlannedExec(
     override val cmdId: CmdId,
-    override val tenantId: TenantId,
-
     override val id: ExecId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
@@ -65,7 +62,6 @@ class ScheduledExec(
     val scheduledAt: ScheduledAt
 ) : Exec() {
     override val status = ExecStatus.Scheduled
-    override val tenantId get() = plannedExec.tenantId
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
     override val secrets get() = plannedExec.secrets
@@ -84,7 +80,6 @@ class QueuedExec(
     val queuedAt: QueuedAt
 ) : Exec() {
     override val status = ExecStatus.Queued
-    override val tenantId get() = scheduledExec.tenantId
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
     override val secrets get() = scheduledExec.secrets
@@ -103,7 +98,6 @@ class StartedExec(
     //FIXME inflightSince
 ) : Exec() {
     override val status = ExecStatus.Started
-    override val tenantId get() = queuedExec.tenantId
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
     override val secrets get() = queuedExec.secrets
@@ -122,8 +116,6 @@ class CompletedExec(
     val completedAt: CompletedAt
 ) : Exec() {
     override val status = ExecStatus.Completed
-
-    override val tenantId get() = startedExec.tenantId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val secrets get() = startedExec.secrets
@@ -142,7 +134,6 @@ class FailedExec(
     //FIXME failedAt
 ) : Exec() {
     override val status = ExecStatus.Failed
-    override val tenantId get() = startedExec.tenantId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val secrets get() = startedExec.secrets

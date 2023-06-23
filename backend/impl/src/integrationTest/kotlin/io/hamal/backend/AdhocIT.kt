@@ -89,7 +89,6 @@ class AdhocIT(
     private fun verifyExecQueued(execId: ExecId) {
         with(execQueryRepository.find(execId)!!) {
             assertThat(id, equalTo(execId))
-            assertThat(tenantId, equalTo(TenantId(1)))
             assertThat(status, equalTo(ExecStatus.Queued))
 
             assertThat(correlation, nullValue())

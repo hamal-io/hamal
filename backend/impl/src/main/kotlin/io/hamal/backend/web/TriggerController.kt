@@ -1,6 +1,5 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.service.cmd.TriggerCmdService
 import io.hamal.backend.service.cmd.TriggerCmdService.TriggerToCreate
 import io.hamal.backend.service.query.TriggerQueryService
@@ -30,7 +29,6 @@ open class TriggerController(
 ) {
     @PostMapping("/v1/triggers")
     fun createTrigger(
-        @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateTriggerRequest
     ): ResponseEntity<ApiCreateTriggerResponse> {
 

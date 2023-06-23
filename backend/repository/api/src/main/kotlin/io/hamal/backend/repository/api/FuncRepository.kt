@@ -9,7 +9,6 @@ interface FuncCmdRepository {
     fun create(cmd: CreateCmd): Func
     data class CreateCmd(
         val id: CmdId,
-        val tenantId: TenantId,
         val funcId: FuncId,
         val name: FuncName,
         val inputs: FuncInputs,

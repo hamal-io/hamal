@@ -2,13 +2,11 @@ package io.hamal.backend.web
 
 import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.repository.api.domain.Func
-import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.req.InvokeOneshot
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.ExecCmdService
 import io.hamal.backend.service.cmd.FuncCmdService
 import io.hamal.backend.service.query.FuncQueryService
-import io.hamal.lib.common.Partition
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.*
@@ -33,14 +31,13 @@ open class FuncController(
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
-        @RequestAttribute tenant: Tenant,
         @RequestBody req: ApiCreateFuncRequest
     ): Func {
         // FIXME to ApiCreateFuncResponse
         //FIXME as request
         return funcCmdService.create(
             CmdId(0), FuncCmdService.ToCreate(
-                funcId = generateDomainId(Partition(1), ::FuncId),
+                funcId = generateDomainId(::FuncId),
                 name = req.name,
                 inputs = req.inputs,
                 secrets = req.secrets,
@@ -85,7 +82,7 @@ open class FuncController(
 
         val result = request(
             InvokeOneshot(
-                execId = generateDomainId(Partition(1), ::ExecId),
+                execId = generateDomainId(::ExecId),
                 correlationId = CorrelationId(correlationIdStr ?: "__default__"), //FIXME
                 inputs = InvocationInputs(TableValue()),
                 secrets = InvocationSecrets(listOf()),

@@ -9,7 +9,6 @@ import io.hamal.backend.repository.record.exec.*
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.TenantId
 
 internal object CurrentExecProjection {
     private val projection = mutableMapOf<ExecId, Exec>()
@@ -60,7 +59,6 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
             ExecPlannedRecord(
                 entityId = execId,
                 cmdId = cmd.id,
-                tenantId = TenantId(1),
                 correlation = cmd.correlation,
                 inputs = cmd.inputs,
                 secrets = cmd.secrets,
@@ -85,8 +83,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
         addRecord(
             ExecScheduledRecord(
                 entityId = execId,
-                cmdId = cmdId,
-                tenantId = TenantId(1)
+                cmdId = cmdId
             )
         )
 
@@ -108,8 +105,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
         addRecord(
             ExecQueuedRecord(
                 entityId = execId,
-                cmdId = cmdId,
-                tenantId = TenantId(1)
+                cmdId = cmdId
             )
         )
 
@@ -127,8 +123,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
             addRecord(
                 ExecStartedRecord(
                     entityId = execId,
-                    cmdId = cmd.id,
-                    tenantId = TenantId(1)
+                    cmdId = cmd.id
                 )
             )
 
@@ -152,8 +147,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
         addRecord(
             ExecCompletedRecord(
                 entityId = execId,
-                cmdId = cmdId,
-                tenantId = TenantId(1)
+                cmdId = cmdId
             )
         )
 

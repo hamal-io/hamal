@@ -12,7 +12,6 @@ import kotlin.time.Duration
 @Serializable
 sealed class Trigger : DomainObject<TriggerId> {
     abstract val cmdId: CmdId
-    abstract val tenantId: TenantId
     abstract val name: TriggerName
     abstract val funcId: FuncId
     abstract val type: TriggerType
@@ -23,7 +22,6 @@ sealed class Trigger : DomainObject<TriggerId> {
 @Serializable
 class FixedRateTrigger(
     override val cmdId: CmdId,
-    override val tenantId: TenantId,
     override val id: TriggerId,
     override val name: TriggerName,
     override val funcId: FuncId,
@@ -37,7 +35,6 @@ class FixedRateTrigger(
 @Serializable
 class EventTrigger(
     override val cmdId: CmdId,
-    override val tenantId: TenantId,
     override val id: TriggerId,
     override val name: TriggerName,
     override val funcId: FuncId,

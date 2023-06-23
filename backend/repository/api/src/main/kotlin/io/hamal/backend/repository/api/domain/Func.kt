@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
 data class Func(
     override val id: FuncId,
     val cmdId: CmdId,
-    val tenantId: TenantId,
     val name: FuncName,
     val inputs: FuncInputs,
     val secrets: FuncSecrets,

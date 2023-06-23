@@ -11,7 +11,6 @@ import io.hamal.backend.repository.record.func.FuncRecord
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.TenantId
 import java.nio.file.Path
 
 internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
@@ -62,7 +61,6 @@ class SqliteFuncRepository(
                     FuncCreationRecord(
                         entityId = funcId,
                         cmdId = cmdId,
-                        tenantId = TenantId(1),
                         name = cmd.name,
                         inputs = cmd.inputs,
                         secrets = cmd.secrets,

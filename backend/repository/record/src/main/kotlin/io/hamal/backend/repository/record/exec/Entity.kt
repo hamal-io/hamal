@@ -76,7 +76,6 @@ data class Entity(
 
         val plannedExec = PlannedExec(
             cmdId = cmdId,
-            tenantId = TenantId(1),
             id = id,
             correlation = null,
             inputs = inputs ?: ExecInputs(TableValue()),

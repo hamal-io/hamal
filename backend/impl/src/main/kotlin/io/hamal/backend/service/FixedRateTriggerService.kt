@@ -7,7 +7,6 @@ import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.req.InvokeFixedRate
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.query.FuncQueryService
-import io.hamal.lib.common.Partition
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -62,7 +61,7 @@ class FixedRateTriggerService
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
     submitRequest(
         InvokeFixedRate(
-            execId = generateDomainId(Partition(1), ::ExecId),
+            execId = generateDomainId(::ExecId),
             funcId = trigger.funcId,
             correlationId = CorrelationId("__TBD__"), //FIXME
             inputs = InvocationInputs(TableValue()),

@@ -16,7 +16,6 @@ class CreateTopicHandler(
             req.cmdId(),
             EventCmdService.TopicToCreate(
                 id = req.topicId,
-                tenantId = req.tenantId,
                 name = req.name
             )
         )

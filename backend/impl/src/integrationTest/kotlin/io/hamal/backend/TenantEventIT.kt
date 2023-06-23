@@ -52,7 +52,6 @@ class TenantEventIT(
         val result = response.result(SubmittedCreateTopicReq::class)
 
         assertThat(result.name, equalTo(TopicName("eth::block_processed")))
-        assertThat(result.tenantId, equalTo(TenantId(1)))
 
         verifyReqCompleted(result.id)
         verifyTopicCreated(result.topicId)

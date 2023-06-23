@@ -22,7 +22,6 @@ class InvokeOneshotHandler(
         execCmdService.plan(
             req.cmdId(), ToPlan(
                 execId = req.execId,
-                tenantId = req.tenantId,
                 code = func.code,
                 correlation = Correlation(
                     correlationId = req.correlationId,

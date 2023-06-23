@@ -10,7 +10,6 @@ import io.hamal.backend.repository.record.exec.*
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.TenantId
 import java.nio.file.Path
 
 internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
@@ -63,11 +62,10 @@ class SqliteExecRepository(
                     ExecPlannedRecord(
                         entityId = execId,
                         cmdId = cmdId,
-                        tenantId = TenantId(1),
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         secrets = cmd.secrets,
-                        code = cmd.code,
+                        code = cmd.code
                     )
                 )
 
@@ -87,8 +85,7 @@ class SqliteExecRepository(
                 storeRecord(
                     ExecScheduledRecord(
                         entityId = execId,
-                        cmdId = cmdId,
-                        tenantId = TenantId(1)
+                        cmdId = cmdId
                     )
                 )
                 (currentVersion(execId) as ScheduledExec)
@@ -107,8 +104,7 @@ class SqliteExecRepository(
                 storeRecord(
                     ExecQueuedRecord(
                         entityId = execId,
-                        cmdId = cmdId,
-                        tenantId = TenantId(1)
+                        cmdId = cmdId
                     )
                 )
 
@@ -135,8 +131,7 @@ class SqliteExecRepository(
                     storeRecord(
                         ExecStartedRecord(
                             entityId = execId,
-                            cmdId = cmd.id,
-                            tenantId = TenantId(1)
+                            cmdId = cmd.id
                         )
                     )
                     result.add(
@@ -161,8 +156,7 @@ class SqliteExecRepository(
                 storeRecord(
                     ExecCompletedRecord(
                         entityId = execId,
-                        cmdId = cmdId,
-                        tenantId = TenantId(1)
+                        cmdId = cmdId
                     )
                 )
                 (currentVersion(execId) as CompletedExec)

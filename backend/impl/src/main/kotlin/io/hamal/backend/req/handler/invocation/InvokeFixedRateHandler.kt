@@ -22,7 +22,6 @@ class InvokeFixedRateHandler(
         execCmdService.plan(
             req.cmdId(), ToPlan(
                 execId = req.execId,
-                tenantId = req.tenantId,
                 correlation = Correlation(
                     correlationId = req.correlationId,
                     funcId = func.id

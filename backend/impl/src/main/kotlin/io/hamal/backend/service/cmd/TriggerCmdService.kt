@@ -4,7 +4,6 @@ import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.event.TriggerCreatedEvent
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.domain.Trigger
-import io.hamal.lib.common.Partition
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
@@ -39,8 +38,7 @@ private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: Trigg
         TriggerType.FixedRate -> triggerCmdRepository.create(
             TriggerCmdRepository.CreateFixedRateCmd(
                 id = cmdId,
-                tenantId = TenantId(1),
-                triggerId = generateDomainId(Partition(1), ::TriggerId),
+                triggerId = generateDomainId(::TriggerId),
                 name = triggerToCreate.name,
                 funcId = triggerToCreate.funcId,
                 inputs = triggerToCreate.inputs,
@@ -52,8 +50,7 @@ private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: Trigg
         TriggerType.Event -> triggerCmdRepository.create(
             TriggerCmdRepository.CreateEventCmd(
                 id = cmdId,
-                tenantId = TenantId(1),
-                triggerId = generateDomainId(Partition(1), ::TriggerId),
+                triggerId = generateDomainId(::TriggerId),
                 name = triggerToCreate.name,
                 funcId = triggerToCreate.funcId,
                 inputs = triggerToCreate.inputs,

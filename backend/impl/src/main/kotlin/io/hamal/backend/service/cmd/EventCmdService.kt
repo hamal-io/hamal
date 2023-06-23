@@ -1,13 +1,10 @@
 package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.TenantEvent
-import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
-import io.hamal.lib.common.Partition
 import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.vo.TenantId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.stereotype.Service
@@ -42,18 +39,13 @@ class EventCmdService<TOPIC : LogTopic>(
 
     data class TopicToCreate(
         val id: TopicId,
-        val tenantId: TenantId,
         val name: TopicName
     )
 
     data class EventToAppend(
         val cmdId: CmdId,
-        val partition: Partition,
-
-        val tenantId: TenantId,
         val topicId: TopicId,
         val contentTpe: String,
         val value: ByteArray
-
     )
 }

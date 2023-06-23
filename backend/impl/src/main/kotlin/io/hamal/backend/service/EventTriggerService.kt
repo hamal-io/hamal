@@ -111,7 +111,7 @@ class EventTriggerService<TOPIC : LogTopic>
                         consumer.consumeBatch(1) { evts ->
                             submitRequest(
                                 InvokeEvent(
-                                    execId = generateDomainId(Partition(1), ::ExecId),
+                                    execId = generateDomainId(::ExecId),
                                     funcId = trigger.funcId,
                                     correlationId = CorrelationId("__TBD__"),
                                     inputs = InvocationInputs(TableValue()),

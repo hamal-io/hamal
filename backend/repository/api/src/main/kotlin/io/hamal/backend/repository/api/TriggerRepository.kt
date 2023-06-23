@@ -16,7 +16,6 @@ interface TriggerCmdRepository {
 
     data class CreateFixedRateCmd(
         val id: CmdId,
-        val tenantId: TenantId,
         val triggerId: TriggerId,
         val name: TriggerName,
         val funcId: FuncId,
@@ -27,7 +26,6 @@ interface TriggerCmdRepository {
 
     data class CreateEventCmd(
         val id: CmdId,
-        val tenantId: TenantId,
         val triggerId: TriggerId,
         val name: TriggerName,
         val funcId: FuncId,
