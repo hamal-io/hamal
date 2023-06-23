@@ -1,9 +1,9 @@
 package io.hamal.backend.service
 
 import io.hamal.backend.component.Async
-import io.hamal.backend.component.EventHandlerContainer
-import io.hamal.backend.event.Event
-import io.hamal.backend.event_handler.EventHandler
+import io.hamal.backend.component.SystemEventHandlerContainer
+import io.hamal.backend.event.SystemEvent
+import io.hamal.backend.event_handler.SystemEventHandler
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
@@ -20,27 +20,27 @@ interface EventService {
     fun cancel()
 }
 
-interface EventServiceFactory {
+interface SystemEventServiceFactory {
 
-    fun <EVENT : Event> register(
+    fun <EVENT : SystemEvent> register(
         clazz: KClass<EVENT>,
-        handler: EventHandler<EVENT>
-    ): EventServiceFactory
+        handler: SystemEventHandler<EVENT>
+    ): SystemEventServiceFactory
 
     fun create(): EventService
 }
 
-class DefaultEventService<TOPIC : LogTopic>(
+class DefaultSystemEventService<TOPIC : LogTopic>(
     val async: Async,
     val logBrokerRepository: LogBrokerRepository<TOPIC>
-) : EventServiceFactory {
+) : SystemEventServiceFactory {
 
-    private val handlerContainer = EventHandlerContainer()
+    private val handlerContainer = SystemEventHandlerContainer()
 
-    override fun <EVENT : Event> register(
+    override fun <EVENT : SystemEvent> register(
         clazz: KClass<EVENT>,
-        handler: EventHandler<EVENT>
-    ): EventServiceFactory {
+        handler: SystemEventHandler<EVENT>
+    ): SystemEventServiceFactory {
         handlerContainer.register(clazz, handler)
         return this
     }
@@ -60,7 +60,7 @@ class DefaultEventService<TOPIC : LogTopic>(
                         GroupId("event-service"),
                         topic,
                         logBrokerRepository,
-                        Event::class
+                        SystemEvent::class
                     )
 
                     scheduledTasks.add(

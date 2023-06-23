@@ -1,8 +1,8 @@
 package io.hamal.backend.service
 
 import io.hamal.backend.component.Async
-import io.hamal.backend.component.EventEmitter
-import io.hamal.backend.event.Event
+import io.hamal.backend.component.SystemEventEmitter
+import io.hamal.backend.event.TenantEvent
 import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Service
 class EventTriggerService<TOPIC : LogTopic>
 @Autowired constructor(
-    internal val eventEmitter: EventEmitter<TOPIC>,
+    internal val eventEmitter: SystemEventEmitter<TOPIC>,
     internal val funcQueryService: FuncQueryService,
     internal val logBrokerRepository: LogBrokerRepository<TOPIC>,
     internal val triggerQueryService: TriggerQueryService,
@@ -80,7 +80,7 @@ class EventTriggerService<TOPIC : LogTopic>
 //        }
 //    }
 
-    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, Event>>()
+    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, TenantEvent>>()
 
 
     @PostConstruct
@@ -98,7 +98,7 @@ class EventTriggerService<TOPIC : LogTopic>
                 groupId = GroupId(trigger.id.value.value.toString(16)),
                 topic = topic,
                 logBrokerRepository = logBrokerRepository,
-                valueClass = Event::class
+                valueClass = TenantEvent::class
             )
 
             triggerConsumers[trigger.id] = consumer

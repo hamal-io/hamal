@@ -5,8 +5,8 @@ import io.hamal.lib.common.Shard
 import kotlinx.serialization.Serializable
 
 @Serializable
-@EventTopic("trigger::created")
+@SystemEventTopic("trigger::created")
 data class TriggerCreatedEvent(
     override val shard: Shard,
     val trigger: Trigger
-) : Event()
+) : SystemEvent()

@@ -1,22 +1,22 @@
 package io.hamal.backend.component
 
-import io.hamal.backend.event.Event
+import io.hamal.backend.event.SystemEvent
 import io.hamal.backend.event.topic
-import io.hamal.backend.event_handler.EventHandler
+import io.hamal.backend.event_handler.SystemEventHandler
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 
-class EventHandlerContainer : EventHandler.Container {
+class SystemEventHandlerContainer : SystemEventHandler.Container {
     private val receiverMapping = mutableMapOf<
-            KClass<out Event>,
-            List<EventHandler<Event>>
+            KClass<out SystemEvent>,
+            List<SystemEventHandler<SystemEvent>>
             >()
 
     private val lock = ReentrantReadWriteLock()
 
-    override fun <EVENT : Event> register(
+    override fun <EVENT : SystemEvent> register(
         clazz: KClass<EVENT>,
-        receiver: EventHandler<EVENT>
+        receiver: SystemEventHandler<EVENT>
     ): Boolean {
         try {
             lock.writeLock().lock()
@@ -30,11 +30,11 @@ class EventHandlerContainer : EventHandler.Container {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <EVENT : Event> get(clazz: KClass<EVENT>): List<EventHandler<EVENT>> {
+    override fun <EVENT : SystemEvent> get(clazz: KClass<EVENT>): List<SystemEventHandler<EVENT>> {
         try {
             lock.readLock().lock()
             return receiverMapping[clazz]
-                ?.map { it as EventHandler<EVENT> }
+                ?.map { it as SystemEventHandler<EVENT> }
                 ?: listOf()
         } finally {
             lock.readLock().unlock()

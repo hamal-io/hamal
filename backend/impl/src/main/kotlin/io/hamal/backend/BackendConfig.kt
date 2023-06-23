@@ -1,10 +1,10 @@
 package io.hamal.backend
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.event.*
 import io.hamal.backend.event_handler.exec.*
 import io.hamal.backend.event_handler.trigger.TriggerCreatedHandler
-import io.hamal.backend.service.EventServiceFactory
+import io.hamal.backend.service.SystemEventServiceFactory
 import io.hamal.backend.service.FixedRateTriggerService
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -41,13 +41,13 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
 
     @Bean
     open fun backendEventConsumer(
-        eventServiceFactory: EventServiceFactory,
+        eventServiceFactory: SystemEventServiceFactory,
         execCmdService: ExecCmdService,
         execQueryService: ExecQueryService,
         stateCmdService: StateCmdService,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
-        eventEmitter: EventEmitter<*>
+        eventEmitter: SystemEventEmitter<*>
     ) = eventServiceFactory
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
 

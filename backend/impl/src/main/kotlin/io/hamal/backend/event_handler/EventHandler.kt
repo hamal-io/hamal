@@ -1,21 +1,21 @@
 package io.hamal.backend.event_handler
 
-import io.hamal.backend.event.Event
+import io.hamal.backend.event.SystemEvent
 import io.hamal.lib.domain.CmdId
 import kotlin.reflect.KClass
 
-interface EventHandler<out EVENT : Event> {
+interface SystemEventHandler<out EVENT : SystemEvent> {
 
     fun handle(cmdId: CmdId, evt: @UnsafeVariance EVENT)
 
     interface Container {
 
-        fun <NOTIFICATION : Event> register(
+        fun <NOTIFICATION : SystemEvent> register(
             clazz: KClass<NOTIFICATION>,
-            receiver: EventHandler<NOTIFICATION>
+            receiver: SystemEventHandler<NOTIFICATION>
         ): Boolean
 
-        operator fun <NOTIFICATION : Event> get(clazz: KClass<NOTIFICATION>): List<EventHandler<NOTIFICATION>>
+        operator fun <NOTIFICATION : SystemEvent> get(clazz: KClass<NOTIFICATION>): List<SystemEventHandler<NOTIFICATION>>
 
         fun topics(): Set<String>
 

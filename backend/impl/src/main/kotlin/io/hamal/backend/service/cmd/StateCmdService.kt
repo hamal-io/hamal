@@ -1,6 +1,6 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.domain.State
 import io.hamal.lib.common.Shard
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 class StateCmdService
 @Autowired constructor(
     val stateCmdRepository: StateCmdRepository,
-    val eventEmitter: EventEmitter<*>
+    val eventEmitter: SystemEventEmitter<*>
 ) {
 
     fun set(cmdId: CmdId, stateToSet: StateToSet): State {

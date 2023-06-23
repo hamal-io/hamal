@@ -1,6 +1,6 @@
 package io.hamal.backend.service
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.domain.FixedRateTrigger
 import io.hamal.backend.repository.api.domain.Trigger
@@ -24,7 +24,7 @@ class FixedRateTriggerService
 @Autowired constructor(
     internal val funcQueryService: FuncQueryService,
     internal val triggerQueryRepository: TriggerQueryRepository,
-    internal val eventEmitter: EventEmitter<*>,
+    internal val eventEmitter: SystemEventEmitter<*>,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId
 ) {

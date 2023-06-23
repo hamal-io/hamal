@@ -1,6 +1,6 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.event.*
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.PlanCmd
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class ExecCmdService(
     @Autowired val execCmdRepository: ExecCmdRepository,
-    @Autowired val eventEmitter: EventEmitter<*>
+    @Autowired val eventEmitter: SystemEventEmitter<*>
 ) {
 
     fun plan(cmdId: CmdId, toPlan: ToPlan): PlannedExec =

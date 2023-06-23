@@ -1,6 +1,6 @@
 package io.hamal.backend.service.query
 
-import io.hamal.backend.event.Event
+import io.hamal.backend.event.TenantEvent
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogTopic
@@ -23,11 +23,11 @@ class EventQueryService<TOPIC : LogTopic>(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun queryEvents(query: EventQuery): List<Event> {
+    fun queryEvents(query: EventQuery): List<TenantEvent> {
         val topic = logBrokerRepository.get(query.topicId)
         return logBrokerRepository.read(LogChunkId(0), topic, query.limit)
             .map { chunk ->
-                ProtoBuf.decodeFromByteArray(Event.serializer(), chunk.bytes)
+                ProtoBuf.decodeFromByteArray(TenantEvent.serializer(), chunk.bytes)
             }
     }
 

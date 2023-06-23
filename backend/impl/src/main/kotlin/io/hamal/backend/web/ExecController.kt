@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.req.CompleteExec
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.ExecCmdService
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 open class ExecController(
     @Autowired val queryService: ExecQueryService,
     @Autowired val cmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter<*>,
+    @Autowired val eventEmitter: SystemEventEmitter<*>,
     @Autowired val request: SubmitRequest
 ) {
 

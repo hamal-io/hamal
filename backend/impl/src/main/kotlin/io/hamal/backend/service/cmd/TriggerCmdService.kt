@@ -1,6 +1,6 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.event.TriggerCreatedEvent
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.domain.Trigger
@@ -17,7 +17,7 @@ import kotlin.time.Duration
 class TriggerCmdService
 @Autowired constructor(
     val triggerCmdRepository: TriggerCmdRepository,
-    val eventEmitter: EventEmitter<*>,
+    val eventEmitter: SystemEventEmitter<*>,
     val generateDomainId: GenerateDomainId
 ) {
     fun create(cmdId: CmdId, triggerToCreate: TriggerToCreate): Trigger =

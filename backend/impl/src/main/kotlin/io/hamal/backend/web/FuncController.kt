@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.component.EventEmitter
+import io.hamal.backend.component.SystemEventEmitter
 import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.api.domain.Tenant
 import io.hamal.backend.req.InvokeOneshot
@@ -27,7 +27,7 @@ open class FuncController(
     @Autowired val queryService: FuncQueryService,
     @Autowired val funcCmdService: FuncCmdService,
     @Autowired val execCmdService: ExecCmdService,
-    @Autowired val eventEmitter: EventEmitter<*>,
+    @Autowired val eventEmitter: SystemEventEmitter<*>,
     @Autowired val request: SubmitRequest,
     @Autowired val generateDomainId: GenerateDomainId
 ) {
