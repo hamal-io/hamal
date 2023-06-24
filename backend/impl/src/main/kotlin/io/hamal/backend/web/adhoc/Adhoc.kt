@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class AdhocController(
+open class Adhoc(
     @Autowired private val submitRequest: SubmitRequest
 ) {
     @PostMapping("/v1/adhoc")

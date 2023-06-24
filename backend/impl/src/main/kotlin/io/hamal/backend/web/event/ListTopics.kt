@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class ListTopicsController(
+open class ListTopics(
     @Autowired private val queryService: EventQueryService<*>
 ) {
 

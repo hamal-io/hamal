@@ -26,10 +26,11 @@ jobs:
       - name: Assemble
         run: ./gradlew assemble
 
-      - name: Run tests and generate report
-        run: ./gradlew jacocoTestReport
+      - name: Run tests
+        run: ./gradlew check
 
-        # FIXME run integration tests
+      - name: Generate report
+        run: ./gradlew integrationTestCodeCoverageReport
 
       - name: Upload coverage report
         uses: actions/checkout@v3
@@ -41,7 +42,7 @@ jobs:
       - run: |
           cd code-cov
           rm -rf *
-          cp -r ${{github.workspace}}/bootstrap/build/reports/jacoco/testCodeCoverageReport/html/* .
+          cp -r ${{github.workspace}}/bootstrap/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
           git add -A
           git config user.email "code-cov@hamal.io"
           git config user.name "code cov"

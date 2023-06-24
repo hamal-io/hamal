@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class CreateTopicController(
+open class CreateTopic(
     @Autowired private val submitRequest: SubmitRequest
 ) {
     @PostMapping("/v1/topics")
