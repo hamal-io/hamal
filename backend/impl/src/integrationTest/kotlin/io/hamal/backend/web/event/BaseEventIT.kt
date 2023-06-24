@@ -75,5 +75,12 @@ internal sealed class BaseEventIT(
         }
     }
 
+    fun verifyReqFailed(id: ReqId) {
+        with(reqQueryRepository.find(id)!!) {
+            assertThat(id, equalTo(id))
+            assertThat(status, equalTo(ReqStatus.Failed))
+        }
+    }
+
     internal val httpTemplate = HttpTemplate("http://localhost:${localPort}")
 }

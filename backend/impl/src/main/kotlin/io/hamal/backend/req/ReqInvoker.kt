@@ -10,9 +10,9 @@ class ReqInvoker private constructor(
     private val reqCmdRepository: ReqCmdRepository,
     private val regRegistry: ReqRegistry,
 ) {
-    @Scheduled(fixedRate = 10, initialDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
+    @Scheduled(fixedRate = 1, initialDelay = 100, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
-        reqCmdRepository.next(100)
+        reqCmdRepository.next(10)
             .forEach { req ->
                 try {
                     regRegistry[req::class](req)
@@ -22,6 +22,5 @@ class ReqInvoker private constructor(
                     reqCmdRepository.fail(req.id)
                 }
             }
-
     }
 }

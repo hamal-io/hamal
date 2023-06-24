@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.server.LocalServerPort
 
 
-//@TestPropertySource(properties = ["name=ListTopicsIT"])
 internal class ListTopicsIT(
     @LocalServerPort localPort: Int,
     @Autowired reqQueryRepository: ReqQueryRepository,

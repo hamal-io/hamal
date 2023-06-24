@@ -37,7 +37,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = RANDOM_PORT,
 )
 @ActiveProfiles("memory")
-//@TestPropertySource(properties = ["name=AdhocIT"])
 class AdhocIT(
     @LocalServerPort val localPort: Int,
     @Autowired val execQueryRepository: ExecQueryRepository,

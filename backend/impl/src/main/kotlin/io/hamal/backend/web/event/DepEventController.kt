@@ -1,7 +1,6 @@
 package io.hamal.backend.web.event
 
 import io.hamal.backend.event.Event
-import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.EventCmdService
 import io.hamal.backend.service.query.EventQueryService
 import io.hamal.lib.common.util.TimeUtils
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class DepEventController(
-    @Autowired private val submitRequest: SubmitRequest,
     @Autowired private val cmdService: EventCmdService<*>,
     @Autowired private val queryService: EventQueryService<*>
 ) {

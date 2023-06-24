@@ -6,10 +6,7 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 
 
 class MemoryLogBrokerTopicsRepositoryTest {
@@ -74,28 +71,16 @@ class MemoryLogBrokerTopicsRepositoryTest {
                 )
             )
 
-            testInstance.create(
-                CmdId(2),
-                LogBrokerTopicsRepository.TopicToCreate(
-                    TopicId(2),
-                    TopicName("very-first-topic")
+            val throwable = assertThrows<IllegalArgumentException> {
+                testInstance.create(
+                    CmdId(2),
+                    LogBrokerTopicsRepository.TopicToCreate(
+                        TopicId(2),
+                        TopicName("very-first-topic")
+                    )
                 )
-            )
-
-            testInstance.create(
-                CmdId(3),
-                LogBrokerTopicsRepository.TopicToCreate(
-                    TopicId(3),
-                    TopicName("very-first-topic")
-                )
-            )
-            testInstance.create(
-                CmdId(4),
-                LogBrokerTopicsRepository.TopicToCreate(
-                    TopicId(4),
-                    TopicName("very-first-topic")
-                )
-            )
+            }
+            assertThat(throwable.message, equalTo("TopicName(very-first-topic) already exists"))
 
             assertThat(testInstance.count(), equalTo(1UL))
         }

@@ -38,6 +38,22 @@ internal class CreateTopicIT(
             assertThat(topic.name, equalTo(TopicName("namespace::topics_one")))
         }
     }
+
+    @Test
+    fun `Create topic name already exists`() {
+        createTopic(TopicName("namespace::topics_one"))
+
+        with(createTopic(TopicName("namespace::topics_one"))) {
+            Thread.sleep(100)
+            verifyReqFailed(id)
+        }
+
+        with(listTopics()) {
+            assertThat(topics, hasSize(1))
+            val topic = topics.first()
+            assertThat(topic.name, equalTo(TopicName("namespace::topics_one")))
+        }
+    }
 }
 
 private fun CreateTopicIT.verifyTopicCreated(topicId: TopicId) {

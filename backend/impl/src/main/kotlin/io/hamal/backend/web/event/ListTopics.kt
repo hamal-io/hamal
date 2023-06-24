@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.*
 open class ListTopics(
     @Autowired private val queryService: EventQueryService<*>
 ) {
-
     @GetMapping("/v1/topics")
     fun listTopics(): ResponseEntity<ListTopicsResponse> {
+        val topics = queryService.queryTopics { }
         return ResponseEntity.ok(
             ListTopicsResponse(
-                topics = queryService.queryTopics {
-
-                }.map { topic ->
+                topics = topics.map { topic ->
                     Topic(
                         id = topic.id,
                         name = topic.name
@@ -27,5 +25,4 @@ open class ListTopics(
             )
         )
     }
-
 }

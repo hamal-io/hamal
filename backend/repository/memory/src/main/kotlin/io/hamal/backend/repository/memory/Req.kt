@@ -46,7 +46,7 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun fail(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(Req.serializer(), req.apply { status = ReqStatus.Completed })
+            store[req.id] = ProtoBuf { }.encodeToByteArray(Req.serializer(), req.apply { status = ReqStatus.Failed })
         }
     }
 
