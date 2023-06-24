@@ -10,7 +10,7 @@ data class LogChunkId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 }
 
-data class LogChunk(
+class LogChunk(
     val id: LogChunkId,
     val segmentId: LogSegment.Id,
     val topicId: TopicId,

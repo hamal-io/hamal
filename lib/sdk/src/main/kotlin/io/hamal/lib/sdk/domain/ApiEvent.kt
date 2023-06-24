@@ -1,5 +1,7 @@
 package io.hamal.lib.sdk.domain
 
+import io.hamal.lib.domain.vo.Content
+import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
@@ -34,17 +36,15 @@ data class ApiAppendEventResponse(
 
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiListEventResponse(
+data class ListEventsResponse(
     val topicId: TopicId,
     val topicName: TopicName,
     val events: List<Event>
 ) {
-
     @Serializable
     data class Event(
-        val contentType: String,
-        val value: String
+        val contentType: ContentType,
+        val content: Content
     )
 }
 

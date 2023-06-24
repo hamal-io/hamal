@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.server.LocalServerPort
 
 
-internal class ListTopicsIT(
+internal class ListTopicsRouteIT(
     @LocalServerPort localPort: Int,
     @Autowired reqQueryRepository: ReqQueryRepository,
     @Autowired eventQueryService: EventQueryService<*>,
     @Autowired eventBrokerRepository: LogBrokerRepository<*>
-) : BaseEventIT(
+) : BaseEventRouteIT(
     localPort = localPort,
     reqQueryRepository = reqQueryRepository,
     eventQueryService = eventQueryService,

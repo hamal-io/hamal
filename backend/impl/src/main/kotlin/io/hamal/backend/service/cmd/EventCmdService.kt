@@ -6,6 +6,8 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.Content
+import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.springframework.stereotype.Service
@@ -32,7 +34,7 @@ class EventCmdService<TOPIC : LogTopic>(
         appender.append(
             cmdId, topic, Event(
                 contentType = eventToAppend.contentTpe,
-                value = eventToAppend.value
+                content = eventToAppend.content
             )
         )
     }
@@ -43,9 +45,8 @@ class EventCmdService<TOPIC : LogTopic>(
     )
 
     data class EventToAppend(
-        val cmdId: CmdId,
         val topicId: TopicId,
-        val contentTpe: String,
-        val value: ByteArray
+        val contentTpe: ContentType,
+        val content: Content
     )
 }

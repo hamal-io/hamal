@@ -26,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = RANDOM_PORT
 )
 @ActiveProfiles("memory")
-abstract class BaseIT(
+abstract class BaseRouteIT(
     val localPort: Int,
     val reqQueryRepository: ReqQueryRepository,
     val eventBrokerRepository: LogBrokerRepository<*>
@@ -37,17 +37,17 @@ abstract class BaseIT(
         eventBrokerRepository.clear()
     }
 
-    fun verifyReqCompleted(id: ReqId) {
-        with(reqQueryRepository.find(id)!!) {
-            assertThat(id, equalTo(id))
-            assertThat(status, equalTo(ReqStatus.Completed))
-        }
-    }
-
     fun verifyReqFailed(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
             assertThat(status, equalTo(ReqStatus.Failed))
+        }
+    }
+
+    fun verifyReqCompleted(id: ReqId) {
+        with(reqQueryRepository.find(id)!!) {
+            assertThat(id, equalTo(id))
+            assertThat(status, equalTo(ReqStatus.Completed))
         }
     }
 

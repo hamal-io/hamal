@@ -108,6 +108,15 @@ class SubmitRequest(
             name = createTopic.name
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(appendEvent: AppendEventReq) =
+        SubmittedAppendEventReq(
+            id = reqId(),
+            status = ReqStatus.Submitted,
+            topicId = appendEvent.topicId,
+            contentType = appendEvent.contentType,
+            bytes = appendEvent.bytes
+        ).also(reqCmdRepository::queue)
+
 
     private val rnd = SecureRandom.getInstance("SHA1PRNG", "SUN")
     private fun reqId() = ReqId(BigInteger(128, rnd))

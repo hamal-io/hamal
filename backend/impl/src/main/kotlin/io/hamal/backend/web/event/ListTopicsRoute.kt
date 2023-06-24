@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class ListTopics(
+open class ListTopicsRoute(
     @Autowired private val queryService: EventQueryService<*>
 ) {
     @GetMapping("/v1/topics")

@@ -8,8 +8,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Req {
     val id: ReqId
-
-    //    val partition: Partition
     var status: ReqStatus
 }
 

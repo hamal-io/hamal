@@ -8,5 +8,3 @@ logging:
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
-  profiles:
-    active: memory

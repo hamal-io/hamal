@@ -3,7 +3,7 @@ package io.hamal.backend.web.adhoc
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.web.BaseIT
+import io.hamal.backend.web.BaseRouteIT
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
@@ -19,12 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.server.LocalServerPort
 
 
-class AdhocIT(
+class AdhocRouteIT(
     @LocalServerPort localPort: Int,
     @Autowired reqQueryRepository: ReqQueryRepository,
     @Autowired eventBrokerRepository: LogBrokerRepository<*>,
     @Autowired val execQueryRepository: ExecQueryRepository
-) : BaseIT(
+) : BaseRouteIT(
     localPort = localPort,
     reqQueryRepository = reqQueryRepository,
     eventBrokerRepository = eventBrokerRepository
