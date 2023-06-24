@@ -41,7 +41,7 @@ include(":lib:sdk")
 include(":lib:web3")
 
 include(":backend")
-include(":backend:impl")
+include(":backend:instance")
 include(":backend:repository:api")
 include(":backend:repository:memory")
 include(":backend:repository:record")

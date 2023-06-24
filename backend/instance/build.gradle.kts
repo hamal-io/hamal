@@ -1,17 +1,20 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     id("hamal.common")
-    application
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("org.springframework.boot").version("3.0.5")
-    kotlin("plugin.spring").version("1.8.10")
 }
 
-apply(plugin = "io.spring.dependency-management")
+group = "backend"
+archivesName.set("backend-impl")
 
 dependencies {
     implementation(project(":lib:sdk"))
+    implementation(project(":lib:script:impl"))
+
+    implementation(project(":backend:repository:api"))
+    implementation(project(":backend:repository:memory"))
+    implementation(project(":backend:repository:sqlite"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
@@ -19,23 +22,19 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":backend:instance"))
-    implementation(project(":frontend"))
-    implementation(project(":agent:impl"))
-
-    compileOnly(external.spring.devTools)
+    implementation(project(":agent:extension:api"))
+    implementation(project(":agent:extension:std:log"))
 }
 
-tasks.named<BootJar>("bootJar") {
-    launchScript()
-}
 
 @Suppress("UnstableApiUsage")
 testing {
     suites {
         configureEach {
             if (this is JvmTestSuite) {
+
                 dependencies {
+                    implementation(project())
                     implementation(project(":lib:sdk"))
 
                     implementation(external.spring.web) {
@@ -47,6 +46,8 @@ testing {
                     implementation(project(":backend:instance"))
                     implementation(project(":frontend"))
                     implementation(project(":agent:impl"))
+                    implementation(project(":backend:repository:api"))
+                    implementation(project(":backend:repository:memory"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

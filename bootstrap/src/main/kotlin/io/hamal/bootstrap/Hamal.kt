@@ -1,7 +1,7 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.AgentConfig
-import io.hamal.backend.BackendConfig
+import io.hamal.backend.instance.BackendConfig
 import io.hamal.frontend.FrontendConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
