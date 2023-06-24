@@ -1,46 +1,33 @@
 package io.hamal.backend.web.adhoc
 
-import io.hamal.backend.BackendConfig
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.lib.domain.ReqId
+import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.web.BaseIT
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import jakarta.annotation.PostConstruct
-import org.hamcrest.MatcherAssert.*
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit.jupiter.SpringExtension
 
 
-@ExtendWith(SpringExtension::class)
-@ContextConfiguration(
-    classes = [
-        BackendConfig::class,
-    ]
-)
-@SpringBootTest(
-    webEnvironment = RANDOM_PORT,
-)
-@ActiveProfiles("memory")
 class AdhocIT(
-    @LocalServerPort val localPort: Int,
-    @Autowired val execQueryRepository: ExecQueryRepository,
-    @Autowired val reqQueryRepository: ReqQueryRepository
+    @LocalServerPort localPort: Int,
+    @Autowired reqQueryRepository: ReqQueryRepository,
+    @Autowired eventBrokerRepository: LogBrokerRepository<*>,
+    @Autowired val execQueryRepository: ExecQueryRepository
+) : BaseIT(
+    localPort = localPort,
+    reqQueryRepository = reqQueryRepository,
+    eventBrokerRepository = eventBrokerRepository
 ) {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
@@ -67,10 +54,6 @@ class AdhocIT(
         verifyExecQueued(result.execId)
     }
 
-    @PostConstruct
-    fun setup() {
-        httpTemplate = HttpTemplate("http://localhost:${localPort}")
-    }
 
     private fun request(req: InvokeAdhocReq) =
         httpTemplate
@@ -78,13 +61,6 @@ class AdhocIT(
             .body(req)
             .execute()
 
-
-    private fun verifyReqCompleted(id: ReqId) {
-        with(reqQueryRepository.find(id)!!) {
-            assertThat(id, equalTo(id))
-            assertThat(status, equalTo(ReqStatus.Completed))
-        }
-    }
 
     private fun verifyExecQueued(execId: ExecId) {
         with(execQueryRepository.find(execId)!!) {
@@ -95,9 +71,6 @@ class AdhocIT(
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(secrets, equalTo(ExecSecrets()))
             assertThat(code, equalTo(Code("40 + 2")))
-
         }
     }
-
-    private lateinit var httpTemplate: HttpTemplate
 }
