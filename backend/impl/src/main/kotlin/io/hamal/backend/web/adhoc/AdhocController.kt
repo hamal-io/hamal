@@ -1,4 +1,4 @@
-package io.hamal.backend.web
+package io.hamal.backend.web.adhoc
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.InvokeAdhocReq

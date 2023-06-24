@@ -70,8 +70,8 @@ class DefaultSystemEventService<TOPIC : LogTopic>(
                     )
 
                     scheduledTasks.add(
-                        async.atFixedRate(10.milliseconds) {
-                            consumer.consume(100) { chunkId, evt ->
+                        async.atFixedRate(1.milliseconds) {
+                            consumer.consume(10) { chunkId, evt ->
                                 handlerContainer[evt::class].forEach { handler ->
                                     try {
                                         val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))

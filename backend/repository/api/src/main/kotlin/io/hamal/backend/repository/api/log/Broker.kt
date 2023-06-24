@@ -47,4 +47,6 @@ interface LogBrokerRepository<TOPIC : LogTopic> :
     FindTopic<TOPIC>,
     GetTopics<TOPIC>,
     ReadFromTopic<TOPIC>,
-    Closeable
+    Closeable {
+    fun clear()
+}

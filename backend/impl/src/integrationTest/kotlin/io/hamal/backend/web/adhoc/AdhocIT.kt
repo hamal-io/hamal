@@ -1,5 +1,6 @@
-package io.hamal.backend
+package io.hamal.backend.web.adhoc
 
+import io.hamal.backend.BackendConfig
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.lib.domain.ReqId
@@ -21,8 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -38,7 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = RANDOM_PORT,
 )
 @ActiveProfiles("memory")
-@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
+//@TestPropertySource(properties = ["name=AdhocIT"])
 class AdhocIT(
     @LocalServerPort val localPort: Int,
     @Autowired val execQueryRepository: ExecQueryRepository,
@@ -63,7 +62,7 @@ class AdhocIT(
         assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.code, equalTo(Code("40 + 2")))
 
-        Thread.sleep(500)
+        Thread.sleep(100)
 
         verifyReqCompleted(result.id)
         verifyExecQueued(result.execId)
