@@ -1,6 +1,7 @@
 package io.hamal.backend.service.cmd
 
 import io.hamal.backend.event.TenantEvent
+import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
@@ -17,14 +18,13 @@ class EventCmdService<TOPIC : LogTopic>(
     private val appender = ProtobufAppender(TenantEvent::class, logBrokerRepository)
 
     fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic {
-        TODO()
-//        return logBrokerRepository.create(
-//            cmdId,
-//            CreateTopic.TopicToCreate(
-//                id = toCreate.id,
-//                name = toCreate.name
-//            )
-//        )
+        return logBrokerRepository.create(
+            cmdId,
+            CreateTopic.TopicToCreate(
+                id = toCreate.id,
+                name = toCreate.name
+            )
+        )
     }
 
     fun append(cmdId: CmdId, eventToAppend: EventToAppend) {

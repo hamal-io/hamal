@@ -4,13 +4,12 @@ import io.hamal.backend.component.Async
 import io.hamal.backend.component.SystemEventHandlerContainer
 import io.hamal.backend.event.SystemEvent
 import io.hamal.backend.event.handler.SystemEventHandler
-import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.LogTopic
-import io.hamal.backend.repository.api.log.ProtobufLogConsumer
+import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.springframework.beans.factory.DisposableBean
 import java.util.concurrent.ScheduledFuture
 import kotlin.reflect.KClass
@@ -32,6 +31,7 @@ interface SystemEventServiceFactory {
 
 class DefaultSystemEventService<TOPIC : LogTopic>(
     val async: Async,
+    val generateDomainId: GenerateDomainId,
     val logBrokerRepository: LogBrokerRepository<TOPIC>
 ) : SystemEventServiceFactory {
 
@@ -51,11 +51,17 @@ class DefaultSystemEventService<TOPIC : LogTopic>(
             private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
             init {
-                val allDomainTopics = handlerContainer.topics()
+                val systemEventTopics = handlerContainer.topics()
                     .map { TopicName(it) }
-                    .map(logBrokerRepository::resolveTopic)
+                    .map { topicName ->
+                        val topicId = generateDomainId(::TopicId)
+                        logBrokerRepository.find(topicName) ?: logBrokerRepository.create(
+                            CmdId(topicId),
+                            CreateTopic.TopicToCreate(topicId, topicName)
+                        )
+                    }
 
-                allDomainTopics.forEach { topic ->
+                systemEventTopics.forEach { topic ->
                     val consumer = ProtobufLogConsumer(
                         GroupId("event-service"),
                         topic,

@@ -7,7 +7,6 @@ import io.hamal.lib.domain.vo.TopicName
 
 data class MemoryLogTopic(
     override val id: TopicId,
-    override val logBrokerId: LogBroker.Id,
     override val name: TopicName,
 ) : LogTopic
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class CreateTopicHandler(
     @Autowired private val eventCmdService: EventCmdService<*>
-) : ReqHandler<SubmittedCreateTopicReq>(SubmittedCreateTopicReq::class){
+) : ReqHandler<SubmittedCreateTopicReq>(SubmittedCreateTopicReq::class) {
     override fun invoke(req: SubmittedCreateTopicReq) {
         eventCmdService.create(
             req.cmdId(),
@@ -20,5 +20,4 @@ class CreateTopicHandler(
             )
         )
     }
-
 }

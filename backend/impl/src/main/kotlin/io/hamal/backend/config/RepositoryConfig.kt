@@ -1,9 +1,7 @@
 package io.hamal.backend.config
 
 import io.hamal.backend.repository.api.*
-import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.memory.*
-import io.hamal.backend.repository.memory.log.MemoryLogBroker
 import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
@@ -24,7 +22,7 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
     @Bean
     open fun brokerRepository(): SqliteLogBrokerRepository {
-        return SqliteLogBrokerRepository(SqliteLogBroker(LogBroker.Id(1), Path("/tmp/hamal")))
+        return SqliteLogBrokerRepository(SqliteLogBroker(Path("/tmp/hamal")))
     }
 
     @Bean
@@ -90,7 +88,7 @@ open class SqliteRepositoryConfig {
 open class MemoryRepositoryConfig {
     @Bean
     open fun brokerRepository(): MemoryLogBrokerRepository {
-        return MemoryLogBrokerRepository(MemoryLogBroker(LogBroker.Id(1)))
+        return MemoryLogBrokerRepository()
     }
 
     @Bean

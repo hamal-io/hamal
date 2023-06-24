@@ -8,10 +8,8 @@ import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
 
 data class SqliteLogBroker(
-    override val id: LogBroker.Id,
     val path: Path
-) : LogBroker
-
+)
 
 class SqliteLogBrokerRepository(
     logBroker: SqliteLogBroker
@@ -23,13 +21,11 @@ class SqliteLogBrokerRepository(
     init {
         topicsRepository = SqliteLogBrokerTopicsRepository(
             SqliteBrokerTopics(
-                logBrokerId = logBroker.id,
                 path = logBroker.path
             )
         )
         consumersRepository = SqliteLogBrokerConsumersRepository(
             SqliteBrokerConsumers(
-                logBrokerId = logBroker.id,
                 path = logBroker.path
             )
         )
@@ -37,7 +33,14 @@ class SqliteLogBrokerRepository(
 
     private val logTopicRepositoryMapping = KeyedOnce.default<SqliteLogTopic, LogTopicRepository>()
 
-    override fun resolveTopic(topicName: TopicName) = topicsRepository.resolveTopic(topicName)
+    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): SqliteLogTopic =
+        topicsRepository.create(
+            cmdId,
+            LogBrokerTopicsRepository.TopicToCreate(
+                topicToCreate.id,
+                topicToCreate.name
+            )
+        )
 
     override fun append(cmdId: CmdId, topic: SqliteLogTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
@@ -60,7 +63,9 @@ class SqliteLogBrokerRepository(
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
+
     override fun find(topicId: TopicId) = topicsRepository.find(topicId)
+    override fun find(topicName: TopicName) = topicsRepository.find(topicName)
 
     override fun topics(): Set<SqliteLogTopic> {
         return logTopicRepositoryMapping.keys()

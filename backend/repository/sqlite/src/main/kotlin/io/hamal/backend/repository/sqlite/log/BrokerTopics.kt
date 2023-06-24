@@ -1,20 +1,18 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.BrokerTopics
-import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.nio.file.Path
+import java.util.concurrent.ConcurrentHashMap
 
 data class SqliteBrokerTopics(
-    override val logBrokerId: LogBroker.Id,
     val path: Path
-) : BrokerTopics
+)
 
 class SqliteLogBrokerTopicsRepository(
     internal val brokerTopics: SqliteBrokerTopics,
@@ -24,7 +22,7 @@ class SqliteLogBrokerTopicsRepository(
 
 }), LogBrokerTopicsRepository<SqliteLogTopic> {
 
-    private val topicMapping = KeyedOnce.default<TopicName, SqliteLogTopic>()
+    private val topicMapping = ConcurrentHashMap<TopicName, SqliteLogTopic>()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -37,7 +35,7 @@ class SqliteLogBrokerTopicsRepository(
             execute(
                 """
          CREATE TABLE IF NOT EXISTS topics (
-            id INTEGER PRIMARY KEY AUTOINCREMENT ,
+            id INTEGER PRIMARY KEY,
             name TEXT NOT NULL ,
             instant DATETIME NOT NULL,
             UNIQUE(name)
@@ -47,26 +45,55 @@ class SqliteLogBrokerTopicsRepository(
         }
     }
 
-    override fun resolveTopic(name: TopicName): SqliteLogTopic {
-        return topicMapping.invoke(name) {
-            connection.tx {
-                val id = findTopicId(name) ?: createTopic(name)
+    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): SqliteLogTopic {
+        return connection.execute<SqliteLogTopic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
+            query {
+                set("id", toCreate.id)
+                set("name", toCreate.name)
+                set("now", TimeUtils.now())
+            }
+            map { rs ->
                 SqliteLogTopic(
-                    id = id,
-                    logBrokerId = brokerTopics.logBrokerId,
-                    name = name,
+                    id = rs.getDomainId("id", ::TopicId),
+                    name = TopicName(rs.getString("name")),
                     path = brokerTopics.path
                 )
             }
-        }
+        }!!
     }
 
-    override fun find(topicId: TopicId): SqliteLogTopic? = findById(topicId)
+    override fun find(name: TopicName): SqliteLogTopic? =
+        topicMapping[name] ?: connection.executeQueryOne("SELECT id, name FROM topics WHERE name = :name") {
+            query {
+                set("name", name.value)
+            }
+            map { rs ->
+                SqliteLogTopic(
+                    id = rs.getDomainId("id", ::TopicId),
+                    name = TopicName(rs.getString("name")),
+                    path = brokerTopics.path
+                )
+            }
+        }?.also { topicMapping[it.name] = it }
+
+    override fun find(id: TopicId): SqliteLogTopic? =
+        topicMapping.values.find { it.id == id }
+            ?: connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
+                query {
+                    set("id", id)
+                }
+                map { rs ->
+                    SqliteLogTopic(
+                        id = rs.getDomainId("id", ::TopicId),
+                        name = TopicName(rs.getString("name")),
+                        path = brokerTopics.path
+                    )
+                }
+            }?.also { topicMapping[it.name] = it }
 
     override fun clear() {
         connection.tx {
             execute("DELETE FROM topics")
-            execute("DELETE FROM sqlite_sequence")
         }
     }
 
@@ -79,42 +106,4 @@ class SqliteLogBrokerTopicsRepository(
             it.getLong("count").toULong()
         }
     } ?: 0UL
-}
-
-
-private fun SqliteLogBrokerTopicsRepository.findById(topicId: TopicId): SqliteLogTopic? {
-    return connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
-        query {
-            set("id", topicId.value)
-        }
-        map { rs ->
-            SqliteLogTopic(
-                id = rs.getDomainId("id", ::TopicId),
-                logBrokerId = brokerTopics.logBrokerId,
-                name = TopicName(rs.getString("name")),
-                path = brokerTopics.path
-            )
-        }
-    }
-}
-
-private fun SqliteLogBrokerTopicsRepository.findTopicId(name: TopicName): TopicId? {
-    return connection.executeQueryOne("SELECT id FROM topics WHERE name = :name") {
-        query {
-            set("name", name.value)
-        }
-        map {
-            it.getDomainId("id", ::TopicId)
-        }
-    }
-}
-
-private fun SqliteLogBrokerTopicsRepository.createTopic(name: TopicName): TopicId {
-    return connection.execute<TopicId>("INSERT INTO topics(name, instant) VALUES (:name, :now) RETURNING id") {
-        query {
-            set("name", name.value)
-            set("now", TimeUtils.now())
-        }
-        map { it.getDomainId("id", ::TopicId) }
-    }!!
 }

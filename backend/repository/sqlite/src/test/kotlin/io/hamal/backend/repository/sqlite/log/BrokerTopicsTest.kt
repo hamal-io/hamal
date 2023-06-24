@@ -1,16 +1,15 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
 import io.hamal.lib.common.util.FileUtils
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.sqlite.SQLiteException
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
@@ -97,14 +96,11 @@ class SqliteLogBrokerTopicsRepositoryTest {
             }
         }
 
-        private fun testBrokerTopics(path: Path = Path(testDir)) = SqliteBrokerTopics(
-            logBrokerId = LogBroker.Id(2810),
-            path = path
-        )
+        private fun testBrokerTopics(path: Path = Path(testDir)) = SqliteBrokerTopics(path)
     }
 
     @Nested
-    inner class ResolveTopicTest {
+    inner class CreateTopicTest {
         @BeforeEach
         fun setup() {
             testInstance.clear()
@@ -117,9 +113,15 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Creates a new entry if topic does not exists`() {
-            val result = testInstance.resolveTopic(TopicName("very-first-topic"))
+            val result = testInstance.create(
+                CmdId(1),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(1),
+                    TopicName("very-first-topic")
+                )
+            )
+
             assertThat(result.id, equalTo(TopicId(1)))
-            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
             assertThat(result.path, equalTo(Path(testDir)))
 
@@ -128,11 +130,22 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Bug - able to create realistic topic name`() {
-            testInstance.resolveTopic(TopicName("very-first-topic"))
+            testInstance.create(
+                CmdId(1),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(1),
+                    TopicName("very-first-topic")
+                )
+            )
 
-            val result = testInstance.resolveTopic(TopicName("func::created"))
+            val result = testInstance.create(
+                CmdId(2),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(2),
+                    TopicName("func::created")
+                )
+            )
             assertThat(result.id, equalTo(TopicId(2)))
-            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
             assertThat(result.name, equalTo(TopicName("func::created")))
             assertThat(result.path, equalTo(Path(testDir)))
 
@@ -140,30 +153,34 @@ class SqliteLogBrokerTopicsRepositoryTest {
         }
 
         @Test
-        fun `Does not creat a new entry if topic already exists`() {
-            testInstance.resolveTopic(TopicName("yet-another-topic"))
-            testInstance.resolveTopic(TopicName("another-topic"))
+        fun `Throws if topic already exists`() {
+            testInstance.create(
+                CmdId(1),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(1),
+                    TopicName("very-first-topic")
+                )
+            )
 
-            testInstance.resolveTopic(TopicName("some-topic"))
+            val throwable = assertThrows<SQLiteException> {
+                testInstance.create(
+                    CmdId(2),
+                    LogBrokerTopicsRepository.TopicToCreate(
+                        TopicId(2),
+                        TopicName("very-first-topic")
+                    )
+                )
+            }
+            assertThat(
+                throwable.message,
+                equalTo("[SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: topics.name)")
+            )
 
-            testInstance.resolveTopic(TopicName("some-more-topic"))
-            testInstance.resolveTopic(TopicName("some-more-mor-topic"))
-
-
-            val result = testInstance.resolveTopic(TopicName("some-topic"))
-            assertThat(result.id, equalTo(TopicId(3)))
-            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
-            assertThat(result.name, equalTo(TopicName("some-topic")))
-            assertThat(result.path, equalTo(Path(testDir)))
-
-            assertThat(testInstance.count(), equalTo(5UL))
+            assertThat(testInstance.count(), equalTo(1UL))
         }
 
         private val testInstance = SqliteLogBrokerTopicsRepository(
-            SqliteBrokerTopics(
-                logBrokerId = LogBroker.Id(345),
-                path = Path(testDir),
-            )
+            SqliteBrokerTopics(Path(testDir))
         )
     }
 

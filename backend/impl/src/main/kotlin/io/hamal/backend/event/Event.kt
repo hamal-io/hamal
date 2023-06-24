@@ -1,5 +1,6 @@
 package io.hamal.backend.event
 
+import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -7,7 +8,7 @@ sealed interface Event
 
 @Serializable
 sealed class SystemEvent : Event {
-    val topic = this::class.topic()
+    val topic = TopicName(this::class.topic())
 }
 
 fun <EVENT : SystemEvent> KClass<EVENT>.topic() =

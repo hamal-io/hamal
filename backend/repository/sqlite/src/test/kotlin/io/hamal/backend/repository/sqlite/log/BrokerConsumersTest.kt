@@ -1,7 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
@@ -101,11 +100,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
             }
         }
 
-        private fun testBrokerConsumers(path: Path = Path(testDir)) = SqliteBrokerConsumers(
-            logBrokerId = LogBroker.Id(2810),
-            path = path
-        )
-
+        private fun testBrokerConsumers(path: Path = Path(testDir)) = SqliteBrokerConsumers(path)
     }
 
     @Nested
@@ -153,10 +148,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
         }
 
         private val testInstance = SqliteLogBrokerConsumersRepository(
-            SqliteBrokerConsumers(
-                logBrokerId = LogBroker.Id(345),
-                path = Path(testDir)
-            )
+            SqliteBrokerConsumers(Path(testDir))
         )
     }
 
@@ -223,10 +215,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
 
         private val testInstance = SqliteLogBrokerConsumersRepository(
-            SqliteBrokerConsumers(
-                logBrokerId = LogBroker.Id(345),
-                path = Path(testDir)
-            )
+            SqliteBrokerConsumers(Path(testDir))
         )
     }
 

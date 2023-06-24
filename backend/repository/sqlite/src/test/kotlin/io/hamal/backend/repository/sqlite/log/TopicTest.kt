@@ -1,6 +1,5 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
@@ -38,7 +37,6 @@ class SqliteLogTopicRepositoryTest {
             SqliteLogTopicRepository(
                 SqliteLogTopic(
                     id = TopicId(23),
-                    LogBroker.Id(42),
                     name = TopicName("test-topic"),
                     path = targetDir
                 )
@@ -96,7 +94,6 @@ class SqliteLogTopicRepositoryTest {
         private val testInstance = SqliteLogTopicRepository(
             SqliteLogTopic(
                 TopicId(23),
-                LogBroker.Id(42),
                 TopicName("test-topic"),
                 Path(testDir)
             )
@@ -136,7 +133,6 @@ class SqliteLogTopicRepositoryTest {
         private val testInstance = SqliteLogTopicRepository(
             SqliteLogTopic(
                 TopicId(23),
-                LogBroker.Id(42),
                 TopicName("test-topic"),
                 Path(testDir)
             )

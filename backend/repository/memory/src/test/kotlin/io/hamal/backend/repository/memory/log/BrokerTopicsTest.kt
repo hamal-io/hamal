@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
-import io.hamal.backend.repository.api.log.LogBroker
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -12,8 +13,9 @@ import org.junit.jupiter.api.Test
 
 
 class MemoryLogBrokerTopicsRepositoryTest {
+
     @Nested
-    inner class ResolveTopicTest {
+    inner class CreateTopicTest {
         @BeforeEach
         fun setup() {
             testInstance.clear()
@@ -25,22 +27,38 @@ class MemoryLogBrokerTopicsRepositoryTest {
         }
 
         @Test
-        fun `Creates a new entry if topic does not exists`() {
-            val result = testInstance.resolveTopic(TopicName("very-first-topic"))
-            assertThat(result.id, equalTo(TopicId(1)))
-            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
-            assertThat(result.name, equalTo(TopicName("very-first-topic")))
+        fun `Creates a new topic if topic does not exists`() {
+            val result = testInstance.create(
+                CmdId(1),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(1),
+                    TopicName("very-first-topic")
+                )
+            )
 
+            assertThat(result.id, equalTo(TopicId(1)))
+            assertThat(result.name, equalTo(TopicName("very-first-topic")))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Bug - able to create realistic topic name`() {
-            testInstance.resolveTopic(TopicName("very-first-topic"))
+            testInstance.create(
+                CmdId(1),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(1),
+                    TopicName("very-first-topic")
+                )
+            )
 
-            val result = testInstance.resolveTopic(TopicName("func::created"))
+            val result = testInstance.create(
+                CmdId(2),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(2),
+                    TopicName("func::created")
+                )
+            )
             assertThat(result.id, equalTo(TopicId(2)))
-            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
             assertThat(result.name, equalTo(TopicName("func::created")))
 
             assertThat(testInstance.count(), equalTo(2UL))
@@ -48,28 +66,41 @@ class MemoryLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Does not creat a new entry if topic already exists`() {
-            testInstance.resolveTopic(TopicName("yet-another-topic"))
-            testInstance.resolveTopic(TopicName("another-topic"))
+            testInstance.create(
+                CmdId(1),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(1),
+                    TopicName("very-first-topic")
+                )
+            )
 
-            testInstance.resolveTopic(TopicName("some-topic"))
+            testInstance.create(
+                CmdId(2),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(2),
+                    TopicName("very-first-topic")
+                )
+            )
 
-            testInstance.resolveTopic(TopicName("some-more-topic"))
-            testInstance.resolveTopic(TopicName("some-more-mor-topic"))
+            testInstance.create(
+                CmdId(3),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(3),
+                    TopicName("very-first-topic")
+                )
+            )
+            testInstance.create(
+                CmdId(4),
+                LogBrokerTopicsRepository.TopicToCreate(
+                    TopicId(4),
+                    TopicName("very-first-topic")
+                )
+            )
 
-
-            val result = testInstance.resolveTopic(TopicName("some-topic"))
-            assertThat(result.id, equalTo(TopicId(3)))
-            assertThat(result.logBrokerId, equalTo(LogBroker.Id(345)))
-            assertThat(result.name, equalTo(TopicName("some-topic")))
-
-            assertThat(testInstance.count(), equalTo(5UL))
+            assertThat(testInstance.count(), equalTo(1UL))
         }
 
-        private val testInstance = MemoryLogBrokerTopicsRepository(
-            MemoryBrokerTopics(
-                logBrokerId = LogBroker.Id(345),
-            )
-        )
+        private val testInstance = MemoryLogBrokerTopicsRepository()
     }
 
 }

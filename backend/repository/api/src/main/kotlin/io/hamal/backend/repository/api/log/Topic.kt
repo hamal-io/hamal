@@ -6,7 +6,6 @@ import java.io.Closeable
 
 interface LogTopic {
     val id: TopicId
-    val logBrokerId: LogBroker.Id
     val name: TopicName
 }
 

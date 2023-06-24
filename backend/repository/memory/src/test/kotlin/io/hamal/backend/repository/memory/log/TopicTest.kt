@@ -1,6 +1,5 @@
 package io.hamal.backend.repository.memory.log
 
-import io.hamal.backend.repository.api.log.LogBroker
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
@@ -66,7 +65,6 @@ class MemoryLogTopicRepositoryTest {
         private val testInstance = MemoryLogTopicRepository(
             MemoryLogTopic(
                 TopicId(23),
-                LogBroker.Id(42),
                 TopicName("test-topic")
             )
         )
@@ -105,7 +103,6 @@ class MemoryLogTopicRepositoryTest {
         private val testInstance = MemoryLogTopicRepository(
             MemoryLogTopic(
                 TopicId(23),
-                LogBroker.Id(42),
                 TopicName("test-topic")
             )
         )

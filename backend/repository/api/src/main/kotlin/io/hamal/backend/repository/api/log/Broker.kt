@@ -5,13 +5,13 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
 
-interface LogBroker {
-    val id: Id
+interface CreateTopic<TOPIC : LogTopic> {
+    fun create(cmdId: CmdId, topicToCreate: TopicToCreate): TOPIC
 
-    @JvmInline
-    value class Id(val value: ULong) {
-        constructor(value: Int) : this(value.toULong())
-    }
+    data class TopicToCreate(
+        val id: TopicId,
+        val name: TopicName
+    )
 }
 
 interface AppendToTopic<TOPIC : LogTopic> {
@@ -28,25 +28,23 @@ interface ReadFromTopic<TOPIC : LogTopic> {
     fun read(lastId: LogChunkId, topic: TOPIC, limit: Int): List<LogChunk>
 }
 
-interface ResolveTopic<TOPIC : LogTopic> {
-    fun resolveTopic(topicName: TopicName): TOPIC
-}
-
 interface GetTopics<TOPIC : LogTopic> {
     fun topics(): Set<TOPIC>
 }
 
-interface GetTopic<TOPIC : LogTopic> {
+interface FindTopic<TOPIC : LogTopic> {
     fun get(topicId: TopicId): TOPIC = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
 
     fun find(topicId: TopicId): TOPIC?
+
+    fun find(topicName: TopicName): TOPIC?
 }
 
 interface LogBrokerRepository<TOPIC : LogTopic> :
+    CreateTopic<TOPIC>,
     AppendToTopic<TOPIC>,
     ConsumeFromTopic<TOPIC>,
-    GetTopic<TOPIC>,
+    FindTopic<TOPIC>,
     GetTopics<TOPIC>,
     ReadFromTopic<TOPIC>,
-    ResolveTopic<TOPIC>,
     Closeable

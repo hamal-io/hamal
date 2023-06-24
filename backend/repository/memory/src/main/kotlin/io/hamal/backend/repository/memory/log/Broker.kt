@@ -6,30 +6,19 @@ import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 
-data class MemoryLogBroker(
-    override val id: LogBroker.Id
-) : LogBroker
 
-
-class MemoryLogBrokerRepository(
-    logBroker: MemoryLogBroker
-) : LogBrokerRepository<MemoryLogTopic> {
+class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
 
     private val consumersRepository: MemoryLogBrokerConsumersRepository
     private val topicsRepository: MemoryLogBrokerTopicsRepository
 
     init {
-        topicsRepository = MemoryLogBrokerTopicsRepository(
-            MemoryBrokerTopics(
-                logBrokerId = logBroker.id
-            )
-        )
+        topicsRepository = MemoryLogBrokerTopicsRepository()
         consumersRepository = MemoryLogBrokerConsumersRepository()
     }
 
     private val logTopicRepositoryMapping = KeyedOnce.default<MemoryLogTopic, LogTopicRepository>()
 
-    override fun resolveTopic(topicName: TopicName) = topicsRepository.resolveTopic(topicName)
 
     override fun append(cmdId: CmdId, topic: MemoryLogTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
@@ -52,7 +41,16 @@ class MemoryLogBrokerRepository(
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
+    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): MemoryLogTopic =
+        topicsRepository.create(
+            cmdId, LogBrokerTopicsRepository.TopicToCreate(
+                topicToCreate.id,
+                topicToCreate.name
+            )
+        )
+
     override fun find(topicId: TopicId) = topicsRepository.find(topicId)
+    override fun find(topicName: TopicName) = topicsRepository.find(topicName)
 
     override fun topics(): Set<MemoryLogTopic> {
         return logTopicRepositoryMapping.keys()
