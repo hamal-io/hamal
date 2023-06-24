@@ -31,8 +31,22 @@ dependencies {
 testing {
     suites {
         configureEach {
-
             if (this is JvmTestSuite) {
+
+                targets {
+                    all {
+                        testTask.configure {
+                            systemProperties(
+                                mapOf(
+                                    "junit.jupiter.execution.parallel.enabled" to true,
+                                    "junit.jupiter.execution.parallel.mode.default" to "same_thread",
+                                    "junit.jupiter.execution.parallel.mode.classes.default" to "concurrent",
+                                )
+                            )
+                        }
+                    }
+                }
+
                 dependencies {
                     implementation(project())
                     implementation(project(":lib:sdk"))

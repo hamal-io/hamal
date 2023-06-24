@@ -31,7 +31,7 @@ class SqliteLogBrokerRepository(
         )
     }
 
-    private val logTopicRepositoryMapping = KeyedOnce.default<SqliteLogTopic, LogTopicRepository>()
+    private val topicRepositoryMapping = KeyedOnce.default<SqliteLogTopic, LogTopicRepository>()
 
     override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): SqliteLogTopic =
         topicsRepository.create(
@@ -49,7 +49,7 @@ class SqliteLogBrokerRepository(
     override fun close() {
         topicsRepository.close()
         consumersRepository.close()
-        logTopicRepositoryMapping.keys().forEach { topic ->
+        topicRepositoryMapping.keys().forEach { topic ->
             resolveRepository(topic).close()
         }
     }
@@ -63,19 +63,17 @@ class SqliteLogBrokerRepository(
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
-
     override fun find(topicId: TopicId) = topicsRepository.find(topicId)
     override fun find(topicName: TopicName) = topicsRepository.find(topicName)
-
-    override fun topics(): Set<SqliteLogTopic> {
-        return logTopicRepositoryMapping.keys()
+    override fun queryTopics(): List<SqliteLogTopic> {
+        return topicsRepository.query()
     }
 
     override fun read(lastId: LogChunkId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
         return resolveRepository(topic).read(lastId, limit)
     }
 
-    private fun resolveRepository(topic: SqliteLogTopic) = logTopicRepositoryMapping(topic) {
+    private fun resolveRepository(topic: SqliteLogTopic) = topicRepositoryMapping(topic) {
         SqliteLogTopicRepository(topic)
     }
 }

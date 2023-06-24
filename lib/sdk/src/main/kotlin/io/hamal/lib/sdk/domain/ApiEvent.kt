@@ -50,11 +50,9 @@ data class ApiListEventResponse(
 
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiListTopicResponse(
+data class ListTopicsResponse(
     val topics: List<Topic>
 ) {
-
     @Serializable
     data class Topic(
         val id: TopicId,

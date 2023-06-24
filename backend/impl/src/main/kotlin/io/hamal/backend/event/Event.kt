@@ -4,10 +4,8 @@ import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-sealed interface Event
-
 @Serializable
-sealed class SystemEvent : Event {
+sealed class SystemEvent {
     val topic = TopicName(this::class.topic())
 }
 
@@ -16,14 +14,14 @@ fun <EVENT : SystemEvent> KClass<EVENT>.topic() =
         ?: throw IllegalStateException("SystemEvent not annotated with @SystemEventTopic"))
         .let { it as SystemEventTopic }.value
 
-@Serializable
-data class TenantEvent(
-    val contentType: String,
-    val value: ByteArray
-) : Event
-
-
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class SystemEventTopic(val value: String)
+
+
+@Serializable
+data class Event(
+    val contentType: String,
+    val value: ByteArray
+)

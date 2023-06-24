@@ -1,6 +1,6 @@
 package io.hamal.backend.service.cmd
 
-import io.hamal.backend.event.TenantEvent
+import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class EventCmdService<TOPIC : LogTopic>(
-    private val logBrokerRepository: LogBrokerRepository<TOPIC>
+    private val eventBrokerRepository: LogBrokerRepository<TOPIC>
 ) {
 
-    private val appender = ProtobufAppender(TenantEvent::class, logBrokerRepository)
+    private val appender = ProtobufAppender(Event::class, eventBrokerRepository)
 
     fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic {
-        return logBrokerRepository.create(
+        return eventBrokerRepository.create(
             cmdId,
             CreateTopic.TopicToCreate(
                 id = toCreate.id,
@@ -28,9 +28,9 @@ class EventCmdService<TOPIC : LogTopic>(
     }
 
     fun append(cmdId: CmdId, eventToAppend: EventToAppend) {
-        val topic = logBrokerRepository.get(eventToAppend.topicId)
+        val topic = eventBrokerRepository.get(eventToAppend.topicId)
         appender.append(
-            cmdId, topic, TenantEvent(
+            cmdId, topic, Event(
                 contentType = eventToAppend.contentTpe,
                 value = eventToAppend.value
             )

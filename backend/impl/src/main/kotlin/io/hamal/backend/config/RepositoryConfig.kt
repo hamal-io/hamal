@@ -1,13 +1,16 @@
 package io.hamal.backend.config
 
 import io.hamal.backend.repository.api.*
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.*
 import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
+import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
 import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
+import io.hamal.backend.repository.sqlite.log.SqliteLogTopic
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.backend.repository.sqlite.record.trigger.SqliteTriggerRepository
@@ -21,7 +24,12 @@ import kotlin.io.path.Path
 @Configuration
 open class SqliteRepositoryConfig {
     @Bean
-    open fun brokerRepository(): SqliteLogBrokerRepository {
+    open fun systemEventBrokerRepository(): LogBrokerRepository<SqliteLogTopic> {
+        return SqliteLogBrokerRepository(SqliteLogBroker(Path("/tmp/hamal/system")))
+    }
+
+    @Bean
+    open fun eventBrokerRepository(): LogBrokerRepository<SqliteLogTopic> {
         return SqliteLogBrokerRepository(SqliteLogBroker(Path("/tmp/hamal")))
     }
 
@@ -87,7 +95,12 @@ open class SqliteRepositoryConfig {
 @Configuration
 open class MemoryRepositoryConfig {
     @Bean
-    open fun brokerRepository(): MemoryLogBrokerRepository {
+    open fun systemEventBrokerRepository(): LogBrokerRepository<MemoryLogTopic> {
+        return MemoryLogBrokerRepository()
+    }
+
+    @Bean
+    open fun eventBrokerRepository(): LogBrokerRepository<MemoryLogTopic> {
         return MemoryLogBrokerRepository()
     }
 

@@ -91,6 +91,21 @@ class SqliteLogBrokerTopicsRepository(
                 }
             }?.also { topicMapping[it.name] = it }
 
+    override fun query(): List<SqliteLogTopic> {
+        return connection.executeQuery<SqliteLogTopic>("SELECT id,name FROM topics") {
+            query {
+                set("some_value", true)
+            }
+            map { rs ->
+                SqliteLogTopic(
+                    id = rs.getDomainId("id", ::TopicId),
+                    name = TopicName(rs.getString("name")),
+                    path = brokerTopics.path
+                )
+            }
+        }
+    }
+
     override fun clear() {
         connection.tx {
             execute("DELETE FROM topics")

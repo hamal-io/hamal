@@ -1,8 +1,7 @@
 package io.hamal.backend.service
 
 import io.hamal.backend.component.Async
-import io.hamal.backend.component.SystemEventEmitter
-import io.hamal.backend.event.TenantEvent
+import io.hamal.backend.event.Event
 import io.hamal.backend.repository.api.domain.EventTrigger
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -10,9 +9,7 @@ import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
 import io.hamal.backend.req.InvokeEvent
 import io.hamal.backend.req.SubmitRequest
-import io.hamal.backend.service.query.FuncQueryService
 import io.hamal.backend.service.query.TriggerQueryService
-import io.hamal.lib.common.Partition
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -26,61 +23,16 @@ import kotlin.time.Duration.Companion.milliseconds
 @Service
 class EventTriggerService<TOPIC : LogTopic>
 @Autowired constructor(
-    internal val eventEmitter: SystemEventEmitter<TOPIC>,
-    internal val funcQueryService: FuncQueryService,
-    internal val logBrokerRepository: LogBrokerRepository<TOPIC>,
+    internal val eventBrokerRepository: LogBrokerRepository<TOPIC>,
     internal val triggerQueryService: TriggerQueryService,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
     internal val async: Async
 ) {
 
-
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
-//    val consumer: BatchConsumer<Event>
-//
-//    init {
-//        val topic = logBrokerRepository.resolveTopic(TopicName("event-test"))
-//        println(topic)
-//
-//        consumer = ProtobufBatchConsumer(
-//            groupId = GroupId("c2"),
-//            topic = topic,
-//            logBrokerRepository = logBrokerRepository,
-//            valueClass = Event::class
-//        )
-//    }
-//    @Scheduled(fixedRate = 3, timeUnit = TimeUnit.SECONDS)
-//    fun run() {
-//        val funcs = funcQueryService.list(FuncId(0), 1)
-//        if (funcs.isEmpty()) {
-//            return
-//        }
-//
-//        consumer.consumeBatch { evts ->
-//            CompletableFuture.runAsync {
-//                val trigger = EventTrigger(
-//                    id = TriggerId(1),
-//                    name = TriggerName("event-trigger"),
-//                    funcId = funcs.first().id,
-//                    topicId = TopicId(10)
-//                )
-//
-//                request(
-//                    InvokeEvent(
-//                        execId = generateDomainId(Partition(1), ::ExecId),
-//                        funcId = funcs.first().id,
-//                        correlationId = CorrelationId("__TBD__"),
-//                        inputs = InvocationInputs(listOf()),
-//                        secrets = InvocationSecrets(listOf()),
-//                    )
-//                )
-//            }
-//        }
-//    }
-
-    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, TenantEvent>>()
+    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, Event>>()
 
 
     @PostConstruct
@@ -93,12 +45,12 @@ class EventTriggerService<TOPIC : LogTopic>
             println("start $trigger")
             require(trigger is EventTrigger)
 
-            val topic = logBrokerRepository.find(trigger.topicId)!!
+            val topic = eventBrokerRepository.find(trigger.topicId)!!
             val consumer = ProtobufBatchConsumer(
                 groupId = GroupId(trigger.id.value.value.toString(16)),
                 topic = topic,
-                logBrokerRepository = logBrokerRepository,
-                valueClass = TenantEvent::class
+                logBrokerRepository = eventBrokerRepository,
+                valueClass = Event::class
             )
 
             triggerConsumers[trigger.id] = consumer
@@ -122,17 +74,6 @@ class EventTriggerService<TOPIC : LogTopic>
                     } catch (t: Throwable) {
                         t.printStackTrace()
                     }
-
-//                    consumer.consume(100) { chunkId, evt ->
-//                        handlerContainer[evt::class].forEach { handler ->
-//                            try {
-//                                val cmdId = CmdId(HashUtils.md5("${evt.topic}-${chunkId.value.value}"))
-//                                handler.handle(cmdId, evt)
-//                            } catch (t: Throwable) {
-//                                throw Error(t)
-//                            }
-//                        }
-//                    }
                 },
             )
         }

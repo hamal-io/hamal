@@ -362,17 +362,18 @@ class DefaultConnectionIT {
             testInstance.execute("INSERT INTO boolean_table(value)VALUES(true)")
             data class BooleanResult(val value: Boolean)
 
-            val result =
-                testInstance.executeQuery<BooleanResult>("SELECT value FROM boolean_table WHERE value = :some_value") {
-                    query {
-                        set("some_value", true)
-                    }
-                    map {
-                        BooleanResult(
-                            value = it.getBoolean("value")
-                        )
-                    }
+            val result = testInstance.executeQuery<BooleanResult>(
+                "SELECT value FROM boolean_table WHERE value = :some_value"
+            ) {
+                query {
+                    set("some_value", true)
                 }
+                map {
+                    BooleanResult(
+                        value = it.getBoolean("value")
+                    )
+                }
+            }
 
             assertThat(result, equalTo(listOf(BooleanResult(true))))
         }

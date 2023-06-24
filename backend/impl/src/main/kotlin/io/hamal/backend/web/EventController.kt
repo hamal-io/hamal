@@ -1,6 +1,6 @@
 package io.hamal.backend.web
 
-import io.hamal.backend.event.TenantEvent
+import io.hamal.backend.event.Event
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.backend.service.cmd.EventCmdService
 import io.hamal.backend.service.query.EventQueryService
@@ -11,26 +11,27 @@ import io.hamal.lib.domain.req.SubmittedCreateTopicReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sdk.domain.*
+import io.hamal.lib.sdk.domain.ListTopicsResponse.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class TenantEventController(
+open class EventController(
     @Autowired private val submitRequest: SubmitRequest,
     @Autowired private val cmdService: EventCmdService<*>,
     @Autowired private val queryService: EventQueryService<*>
 ) {
 
     @GetMapping("/v1/topics")
-    fun listTopics(): ResponseEntity<ApiListTopicResponse> {
+    fun listTopics(): ResponseEntity<ListTopicsResponse> {
         return ResponseEntity.ok(
-            ApiListTopicResponse(
+            ListTopicsResponse(
                 topics = queryService.queryTopics {
 
                 }.map { topic ->
-                    ApiListTopicResponse.Topic(
+                    Topic(
                         id = topic.id,
                         name = topic.name
                     )
@@ -46,31 +47,6 @@ open class TenantEventController(
         val result = submitRequest(createTopic)
         return ResponseEntity(result, HttpStatus.ACCEPTED)
     }
-
-    //    @PostMapping("/v1/topics")
-//    fun depcreateTopic(
-//        @RequestBody request: ApiCreateTopicRequest
-//    ): ResponseEntity<ApiCreateTopicResponse> {
-//
-//        return ResponseEntity.ok(
-//            with(
-//                cmdService.create(
-//                    EventCmdService.TopicToCreate(
-//                        cmdId = CmdId(1),
-//                        partition = Partition(1),
-//                        tenantId = TenantId(1),
-//                        name = request.name
-//                    )
-//                )
-//            ) {
-//                ApiCreateTopicResponse(
-//                    id = this.id,
-//                    name = this.name
-//                )
-//            }
-//        )
-//    }
-
 
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(
@@ -112,7 +88,7 @@ open class TenantEventController(
                         topicId = TopicId(topicId.toInt())
                     )
                 ).map {
-                    require(it is TenantEvent)
+                    require(it is Event)
                     ApiListEventResponse.Event(
                         contentType = it.contentType,
                         value = String(it.value)

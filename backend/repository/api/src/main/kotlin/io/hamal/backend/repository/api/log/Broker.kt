@@ -29,7 +29,7 @@ interface ReadFromTopic<TOPIC : LogTopic> {
 }
 
 interface GetTopics<TOPIC : LogTopic> {
-    fun topics(): Set<TOPIC>
+    fun queryTopics(): List<TOPIC>
 }
 
 interface FindTopic<TOPIC : LogTopic> {

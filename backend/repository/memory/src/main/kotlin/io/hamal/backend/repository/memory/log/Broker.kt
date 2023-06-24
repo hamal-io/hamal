@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.*
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicToCreate
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -9,16 +10,10 @@ import io.hamal.lib.domain.vo.TopicName
 
 class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
 
-    private val consumersRepository: MemoryLogBrokerConsumersRepository
-    private val topicsRepository: MemoryLogBrokerTopicsRepository
+    private val consumersRepository: MemoryLogBrokerConsumersRepository = MemoryLogBrokerConsumersRepository()
+    private val topicsRepository: MemoryLogBrokerTopicsRepository = MemoryLogBrokerTopicsRepository()
 
-    init {
-        topicsRepository = MemoryLogBrokerTopicsRepository()
-        consumersRepository = MemoryLogBrokerConsumersRepository()
-    }
-
-    private val logTopicRepositoryMapping = KeyedOnce.default<MemoryLogTopic, LogTopicRepository>()
-
+    private val repositoryMapping = KeyedOnce.default<MemoryLogTopic, LogTopicRepository>()
 
     override fun append(cmdId: CmdId, topic: MemoryLogTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
@@ -27,9 +22,10 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
     override fun close() {
         topicsRepository.close()
         consumersRepository.close()
-        logTopicRepositoryMapping.keys().forEach { topic ->
-            resolveRepository(topic).close()
-        }
+        repositoryMapping.keys()
+            .forEach { topic ->
+                resolveRepository(topic).close()
+            }
     }
 
     override fun consume(groupId: GroupId, topic: MemoryLogTopic, limit: Int): List<LogChunk> {
@@ -43,7 +39,8 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
 
     override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): MemoryLogTopic =
         topicsRepository.create(
-            cmdId, LogBrokerTopicsRepository.TopicToCreate(
+            cmdId,
+            TopicToCreate(
                 topicToCreate.id,
                 topicToCreate.name
             )
@@ -51,16 +48,15 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
 
     override fun find(topicId: TopicId) = topicsRepository.find(topicId)
     override fun find(topicName: TopicName) = topicsRepository.find(topicName)
-
-    override fun topics(): Set<MemoryLogTopic> {
-        return logTopicRepositoryMapping.keys()
+    override fun queryTopics(): List<MemoryLogTopic> {
+        return topicsRepository.query()
     }
 
     override fun read(lastId: LogChunkId, topic: MemoryLogTopic, limit: Int): List<LogChunk> {
         return resolveRepository(topic).read(lastId, limit)
     }
 
-    private fun resolveRepository(topic: MemoryLogTopic) = logTopicRepositoryMapping(topic) {
+    private fun resolveRepository(topic: MemoryLogTopic) = repositoryMapping(topic) {
         MemoryLogTopicRepository(topic)
     }
 }

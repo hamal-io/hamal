@@ -35,6 +35,10 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository<MemoryLogTopic
         topicMapping.values.find { it.id == id }
     }
 
+    override fun query(): List<MemoryLogTopic> = lock.withLock {
+        topicMapping.values.toList()
+    }
+
     override fun count(): ULong {
         return lock.withLock { topicMapping.size.toULong() }
     }
