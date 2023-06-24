@@ -64,8 +64,8 @@ data class ErrorHttpResponse(
     val errorDeserializer: HttpErrorDeserializer
 ) : HttpResponse {
 
-    fun error(): Throwable {
-        return errorDeserializer.deserialize(inputStream)
+    fun <ERROR : Any> error(clazz: KClass<ERROR>): ERROR {
+        return errorDeserializer.deserialize(inputStream, clazz)
     }
 
 }

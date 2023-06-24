@@ -153,7 +153,7 @@ class DefaultHttpRequest(
         return when (val response = execute()) {
             is SuccessHttpResponse -> response.result(clazz)
             is NoContentHttpResponse -> throw IllegalStateException("No content was returned from the server")
-            is ErrorHttpResponse -> throw response.error()
+            is ErrorHttpResponse -> throw IllegalStateException("Http request was not successful")
         }
     }
 }

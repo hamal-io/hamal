@@ -50,6 +50,13 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
         }
     }
 
+    override fun clear() {
+        lock.writeLock().withLock {
+            store.clear()
+        }
+    }
+
+
     override fun find(reqId: ReqId): Req? {
         val result = lock.readLock().withLock { store[reqId] } ?: return null
         return ProtoBuf { }.decodeFromByteArray(Req.serializer(), result)

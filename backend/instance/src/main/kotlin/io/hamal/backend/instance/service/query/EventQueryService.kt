@@ -14,6 +14,9 @@ class EventQueryService<TOPIC : LogTopic>(
     private val eventBrokerRepository: LogBrokerRepository<TOPIC>
 ) {
 
+    fun getTopic(topicId: TopicId) = eventBrokerRepository.find(topicId)
+        ?: throw NoSuchElementException("Topic not found")
+
     fun findTopic(topicId: TopicId) = eventBrokerRepository.find(topicId)
 
     fun queryTopics(block: TopicQuery.() -> Unit): List<TOPIC> {

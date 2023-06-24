@@ -8,6 +8,7 @@ interface ReqCmdRepository {
     fun next(limit: Int): List<Req>
     fun complete(reqId: ReqId)
     fun fail(reqId: ReqId)
+    fun clear()
 }
 
 interface ReqQueryRepository {

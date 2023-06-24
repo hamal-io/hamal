@@ -5,8 +5,6 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.serializer
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -23,20 +21,16 @@ object DefaultHttpSerdeFactory : HttpSerdeFactory {
 }
 
 interface HttpErrorDeserializer {
-    fun deserialize(inputStream: InputStream): Throwable
+    fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR
 }
 
 object DefaultErrorDeserializer : HttpErrorDeserializer {
-    override fun deserialize(inputStream: InputStream): HttpError {
-        val bis = BufferedInputStream(inputStream)
-        val out = ByteArrayOutputStream()
-        var result = bis.read()
-        while (result != -1) {
-            out.write(result.toByte().toInt())
-            result = bis.read()
-        }
-        return HttpError(out.toString("UTF-8"))
+    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+    override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
+        return delegate.decodeFromStream(clazz.serializer(), inputStream)
     }
+
+    private val delegate = Json { ignoreUnknownKeys = true }
 }
 
 interface HttpContentDeserializer {

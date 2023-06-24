@@ -1,29 +1,14 @@
 package io.hamal.backend.instance.web.event
 
 
-import io.hamal.backend.instance.service.query.EventQueryService
-import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.web.server.LocalServerPort
 
-internal class CreateTopicRouteIT(
-    @LocalServerPort localPort: Int,
-    @Autowired reqQueryRepository: ReqQueryRepository,
-    @Autowired eventQueryService: EventQueryService<*>,
-    @Autowired eventBrokerRepository: LogBrokerRepository<*>
-) : BaseEventRouteIT(
-    localPort = localPort,
-    reqQueryRepository = reqQueryRepository,
-    eventQueryService = eventQueryService,
-    eventBrokerRepository = eventBrokerRepository
-) {
+internal class CreateTopicRouteIT : BaseEventRouteIT() {
     @Test
     fun `Create topic`() {
         val result = createTopic(TopicName("namespace::topics_one"))

@@ -1,6 +1,9 @@
 package io.hamal.backend.instance.web
 
 import io.hamal.backend.instance.BackendConfig
+import io.hamal.backend.instance.service.query.EventQueryService
+import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.ReqId
@@ -10,8 +13,10 @@ import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -26,15 +31,36 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = RANDOM_PORT
 )
 @ActiveProfiles("memory")
-abstract class BaseRouteIT(
-    val localPort: Int,
-    val reqQueryRepository: ReqQueryRepository,
-    val eventBrokerRepository: LogBrokerRepository<*>
-) {
+abstract class BaseRouteIT {
+
+    @LocalServerPort
+    lateinit var localPort: Number
+
+    @Autowired
+    lateinit var eventBrokerRepository: LogBrokerRepository<*>
+
+    @Autowired
+    lateinit var eventQueryService: EventQueryService<*>
+
+    @Autowired
+    lateinit var execQueryRepository: ExecQueryRepository
+
+    @Autowired
+    lateinit var reqQueryRepository: ReqQueryRepository
+
+    @Autowired
+    lateinit var reqCmdRepository: ReqCmdRepository
+
+    val httpTemplate: HttpTemplate by lazy {
+        HttpTemplate(
+            baseUrl = "http://localhost:${localPort}"
+        )
+    }
 
     @BeforeEach
     fun before() {
         eventBrokerRepository.clear()
+        reqCmdRepository.clear()
     }
 
     fun verifyReqFailed(id: ReqId) {
@@ -51,5 +77,10 @@ abstract class BaseRouteIT(
         }
     }
 
-    val httpTemplate = HttpTemplate("http://localhost:${localPort}")
+    fun verifyNoRequests() {
+        val requests = reqQueryRepository.query { }
+        assertThat(requests, empty())
+    }
+
+
 }

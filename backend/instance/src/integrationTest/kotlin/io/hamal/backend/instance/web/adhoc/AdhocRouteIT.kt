@@ -1,9 +1,6 @@
 package io.hamal.backend.instance.web.adhoc
 
 import io.hamal.backend.instance.web.BaseRouteIT
-import io.hamal.backend.repository.api.ExecQueryRepository
-import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
@@ -15,20 +12,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.web.server.LocalServerPort
 
 
-class AdhocRouteIT(
-    @LocalServerPort localPort: Int,
-    @Autowired reqQueryRepository: ReqQueryRepository,
-    @Autowired eventBrokerRepository: LogBrokerRepository<*>,
-    @Autowired val execQueryRepository: ExecQueryRepository
-) : BaseRouteIT(
-    localPort = localPort,
-    reqQueryRepository = reqQueryRepository,
-    eventBrokerRepository = eventBrokerRepository
-) {
+class AdhocRouteIT : BaseRouteIT() {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
         val response = request(

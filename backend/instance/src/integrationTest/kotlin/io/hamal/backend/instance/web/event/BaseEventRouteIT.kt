@@ -1,9 +1,6 @@
 package io.hamal.backend.instance.web.event
 
-import io.hamal.backend.instance.service.query.EventQueryService
 import io.hamal.backend.instance.web.BaseRouteIT
-import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
@@ -19,16 +16,7 @@ import io.hamal.lib.sdk.domain.ListTopicsResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseEventRouteIT(
-    localPort: Int,
-    reqQueryRepository: ReqQueryRepository,
-    eventBrokerRepository: LogBrokerRepository<*>,
-    val eventQueryService: EventQueryService<*>
-) : BaseRouteIT(
-    localPort = localPort,
-    reqQueryRepository = reqQueryRepository,
-    eventBrokerRepository = eventBrokerRepository
-) {
+internal sealed class BaseEventRouteIT : BaseRouteIT() {
 
     fun listEvents(topicId: TopicId): ListEventsResponse {
         val listTopicsResponse = httpTemplate.get("/v1/topics/${topicId.value.value}/events").execute()
