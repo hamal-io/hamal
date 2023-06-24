@@ -53,6 +53,8 @@ class TenantEventIT(
 
         assertThat(result.name, equalTo(TopicName("eth::block_processed")))
 
+        Thread.sleep(500)
+
         verifyReqCompleted(result.id)
         verifyTopicCreated(result.topicId)
     }

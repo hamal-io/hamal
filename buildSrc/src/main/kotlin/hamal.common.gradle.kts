@@ -12,6 +12,20 @@ testing {
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter()
             testType.set(TestSuiteType.UNIT_TEST)
+
+            targets {
+                all {
+                    testTask.configure {
+                        systemProperties(
+                            mapOf(
+                                "junit.jupiter.execution.parallel.enabled" to true,
+                                "junit.jupiter.execution.parallel.mode.default" to "same_thread",
+                                "junit.jupiter.execution.parallel.mode.classes.default" to "concurrent",
+                            )
+                        )
+                    }
+                }
+            }
         }
 
         val integrationTest by registering(JvmTestSuite::class) {
@@ -27,6 +41,13 @@ testing {
             targets {
                 all {
                     testTask.configure {
+                        systemProperties(
+                            mapOf(
+                                "junit.jupiter.execution.parallel.enabled" to true,
+                                "junit.jupiter.execution.parallel.mode.default" to "same_thread",
+                                "junit.jupiter.execution.parallel.mode.classes.default" to "concurrent",
+                            )
+                        )
                         shouldRunAfter(test)
                     }
                 }

@@ -31,6 +31,7 @@ dependencies {
 testing {
     suites {
         configureEach {
+
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(project())

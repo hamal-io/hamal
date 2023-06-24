@@ -63,6 +63,8 @@ class AdhocIT(
         assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.code, equalTo(Code("40 + 2")))
 
+        Thread.sleep(500)
+
         verifyReqCompleted(result.id)
         verifyExecQueued(result.execId)
     }
