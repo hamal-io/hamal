@@ -37,6 +37,15 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
+    override fun clear() {
+        topicsRepository.clear()
+        consumersRepository.clear()
+        repositoryMapping.keys()
+            .forEach { topic ->
+                resolveRepository(topic).clear()
+            }
+    }
+
     override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): MemoryLogTopic =
         topicsRepository.create(
             cmdId,
