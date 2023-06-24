@@ -26,8 +26,8 @@ jobs:
       - name: Assemble
         run: ./gradlew assemble
 
-      - name: Unit Test
-        run: ./gradlew testCodeCoverageReport
+      - name: Run tests and generate report
+        run: ./gradlew jacocoTestReport
 
         # FIXME run integration tests
 
