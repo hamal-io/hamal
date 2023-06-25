@@ -1,7 +1,6 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.event.Event
 import io.hamal.backend.instance.req.InvokeEvent
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.instance.service.query.TriggerQueryService
@@ -10,6 +9,7 @@ import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId

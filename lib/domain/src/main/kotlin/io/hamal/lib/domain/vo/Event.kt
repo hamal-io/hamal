@@ -7,6 +7,13 @@ import io.hamal.lib.domain.vo.base.DomainName
 import io.hamal.lib.domain.vo.base.DomainNameSerializer
 import kotlinx.serialization.Serializable
 
+@Serializable(with = EventId.Serializer::class)
+data class EventId(override val value: SnowflakeId) : DomainId() {
+    constructor(value: Int) : this(SnowflakeId(value.toLong()))
+
+    internal object Serializer : DomainIdSerializer<EventId>(::EventId)
+}
+
 
 @Serializable(with = TopicId.Serializer::class)
 data class TopicId(override val value: SnowflakeId) : DomainId() {

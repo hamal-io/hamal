@@ -1,11 +1,11 @@
 package io.hamal.backend.instance.service.cmd
 
-import io.hamal.backend.instance.event.Event
 import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.Content
 import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId

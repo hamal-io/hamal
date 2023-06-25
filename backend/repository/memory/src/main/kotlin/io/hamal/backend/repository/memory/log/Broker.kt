@@ -61,8 +61,8 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
         return topicsRepository.query()
     }
 
-    override fun read(lastId: LogChunkId, topic: MemoryLogTopic, limit: Int): List<LogChunk> {
-        return resolveRepository(topic).read(lastId, limit)
+    override fun read(firstId: LogChunkId, topic: MemoryLogTopic, limit: Int): List<LogChunk> {
+        return resolveRepository(topic).read(firstId, limit)
     }
 
     private fun resolveRepository(topic: MemoryLogTopic) = repositoryMapping(topic) {

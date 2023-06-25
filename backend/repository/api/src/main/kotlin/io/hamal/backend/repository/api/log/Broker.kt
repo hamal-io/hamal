@@ -25,7 +25,7 @@ interface ConsumeFromTopic<TOPIC : LogTopic> {
 }
 
 interface ReadFromTopic<TOPIC : LogTopic> {
-    fun read(lastId: LogChunkId, topic: TOPIC, limit: Int): List<LogChunk>
+    fun read(firstId: LogChunkId, topic: TOPIC, limit: Int): List<LogChunk>
 }
 
 interface GetTopics<TOPIC : LogTopic> {

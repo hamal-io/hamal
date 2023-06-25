@@ -5,6 +5,13 @@ import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
+
+enum class ReqStatus {
+    Submitted,
+    Completed,
+    Failed;
+}
+
 @Serializable
 sealed interface Req {
     val id: ReqId

@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.config
 
-import io.hamal.backend.instance.config.converter.TopicIdConverter
 import io.hamal.lib.domain.HamalError
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Configuration
@@ -29,8 +28,9 @@ open class WebConfig : WebMvcConfigurer {
     override fun addFormatters(registry: FormatterRegistry) {
         super.addFormatters(registry)
 
-//        registry.addConverter(ContentConverter())
-        registry.addConverter(TopicIdConverter())
+        registry.addConverter(EventIdConverter)
+        registry.addConverter(LimitConverter)
+        registry.addConverter(TopicIdConverter)
     }
 
 

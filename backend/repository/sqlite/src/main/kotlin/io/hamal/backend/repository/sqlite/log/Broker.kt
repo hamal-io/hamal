@@ -79,8 +79,8 @@ class SqliteLogBrokerRepository(
     }
 
 
-    override fun read(lastId: LogChunkId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
-        return resolveRepository(topic).read(lastId, limit)
+    override fun read(firstId: LogChunkId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
+        return resolveRepository(topic).read(firstId, limit)
     }
 
     private fun resolveRepository(topic: SqliteLogTopic) = topicRepositoryMapping(topic) {
