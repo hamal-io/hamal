@@ -12,6 +12,8 @@ import io.hamal.lib.http.HttpTemplate
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -31,6 +33,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = RANDOM_PORT
 )
 @ActiveProfiles("memory")
+@TestMethodOrder(MethodOrderer.Random::class)
 abstract class BaseRouteIT {
 
     @LocalServerPort
@@ -41,6 +44,9 @@ abstract class BaseRouteIT {
 
     @Autowired
     lateinit var eventQueryService: EventQueryService<*>
+
+    @Autowired
+    lateinit var execCmdRepository: ReqCmdRepository
 
     @Autowired
     lateinit var execQueryRepository: ExecQueryRepository
@@ -61,6 +67,7 @@ abstract class BaseRouteIT {
     fun before() {
         eventBrokerRepository.clear()
         reqCmdRepository.clear()
+        execCmdRepository.clear()
     }
 
     fun verifyReqFailed(id: ReqId) {
@@ -78,7 +85,7 @@ abstract class BaseRouteIT {
     }
 
     fun verifyNoRequests() {
-        val requests = reqQueryRepository.query { }
+        val requests = reqQueryRepository.list { }
         assertThat(requests, empty())
     }
 

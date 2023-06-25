@@ -20,7 +20,7 @@ class TriggerQueryService(
     }
 
     fun list(afterId: TriggerId, types: Set<TriggerType>, limit: Int): List<Trigger> {
-        return triggerQueryRepository.query {
+        return triggerQueryRepository.list {
             this.afterId = afterId
             this.types = types
             this.limit = limit

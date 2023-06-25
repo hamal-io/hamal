@@ -23,7 +23,7 @@ class EventQueryService<TOPIC : LogTopic>(
 
     fun findTopic(topicId: TopicId) = eventBrokerRepository.find(topicId)
 
-    fun queryTopics(block: TopicQuery.() -> Unit): List<TOPIC> {
+    fun listTopics(block: TopicQuery.() -> Unit): List<TOPIC> {
         val query = TopicQuery().also(block)
         //FIXME apply query filter
         return eventBrokerRepository.queryTopics()
@@ -31,7 +31,7 @@ class EventQueryService<TOPIC : LogTopic>(
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun queryEvents(topic: TOPIC, block: EventQuery.() -> Unit): List<EventWithId> {
+    fun listEvents(topic: TOPIC, block: EventQuery.() -> Unit): List<EventWithId> {
         val query = EventQuery().also(block)
         val firstId = LogChunkId(SnowflakeId(query.afterId.value.value + 1))
         return eventBrokerRepository.read(firstId, topic, query.limit.value)

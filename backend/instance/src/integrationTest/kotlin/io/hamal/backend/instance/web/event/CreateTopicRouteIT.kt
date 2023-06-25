@@ -12,7 +12,7 @@ internal class CreateTopicRouteIT : BaseEventRouteIT() {
     @Test
     fun `Create topic`() {
         val result = createTopic(TopicName("namespace::topics_one"))
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         verifyReqCompleted(result.id)
         verifyTopicCreated(result.topicId)
@@ -29,7 +29,7 @@ internal class CreateTopicRouteIT : BaseEventRouteIT() {
         createTopic(TopicName("namespace::topics_one"))
 
         with(createTopic(TopicName("namespace::topics_one"))) {
-            Thread.sleep(100)
+            Thread.sleep(10)
             verifyReqFailed(id)
         }
 

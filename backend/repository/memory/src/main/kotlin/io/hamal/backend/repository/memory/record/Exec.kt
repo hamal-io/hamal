@@ -3,12 +3,14 @@ package io.hamal.backend.repository.memory.record
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.*
 import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.backend.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.createEntity
 import io.hamal.backend.repository.record.exec.*
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.Limit
 
 internal object CurrentExecProjection {
     private val projection = mutableMapOf<ExecId, Exec>()
@@ -18,12 +20,16 @@ internal object CurrentExecProjection {
 
     fun find(execId: ExecId): Exec? = projection[execId]
 
-    fun list(afterId: ExecId, limit: Int): List<Exec> {
+    fun list(afterId: ExecId, limit: Limit): List<Exec> {
         return projection.keys.sorted()
             .dropWhile { it <= afterId }
-            .take(limit)
+            .take(limit.value)
             .mapNotNull { find(it) }
             .reversed()
+    }
+
+    fun clear() {
+        projection.clear()
     }
 }
 
@@ -43,6 +49,10 @@ internal object QueueProjection {
             result.add(queue.removeFirst())
         }
         return result
+    }
+
+    fun clear() {
+        queue.clear()
     }
 }
 
@@ -159,8 +169,9 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
         return CurrentExecProjection.find(execId)
     }
 
-    override fun list(afterId: ExecId, limit: Int): List<Exec> {
-        return CurrentExecProjection.list(afterId, limit)
+    override fun list(block: ExecQuery.() -> Unit): List<Exec> {
+        val query = ExecQuery().also(block)
+        return CurrentExecProjection.list(query.afterId, query.limit)
     }
 
     private fun MemoryExecRepository.currentVersion(id: ExecId): Exec {

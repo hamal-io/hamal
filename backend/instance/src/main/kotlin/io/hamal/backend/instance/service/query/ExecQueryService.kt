@@ -11,15 +11,15 @@ class ExecQueryService(
     @Autowired val execQueryRepository: ExecQueryRepository
 ) {
     fun get(execId: ExecId): Exec {
-        return execQueryRepository.find(execId)!! //FIXME require and proper error message
+        return execQueryRepository.find(execId)
+            ?: throw NoSuchElementException("Exec not found")
     }
 
     fun find(execId: ExecId): Exec? {
         return execQueryRepository.find(execId)
     }
 
-    fun list(afterId: ExecId, limit: Int): List<Exec> {
-        return execQueryRepository.list(afterId, limit)
+    fun list(block: ExecQueryRepository.ExecQuery.() -> Unit): List<Exec> {
+        return execQueryRepository.list(block)
     }
-
 }

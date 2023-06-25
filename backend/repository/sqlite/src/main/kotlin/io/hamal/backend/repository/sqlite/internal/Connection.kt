@@ -4,6 +4,7 @@ import io.hamal.backend.repository.sqlite.internal.DefaultNamedPreparedStatement
 import io.hamal.backend.repository.sqlite.internal.Transaction.AbortException
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.base.DomainId
 import io.hamal.lib.domain.vo.base.DomainName
 import logger
@@ -29,6 +30,14 @@ class NamedPreparedStatementDelegate(
         value: Int
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
+        return this
+    }
+
+    operator fun set(
+        param: String,
+        value: Limit
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value.value
         return this
     }
 

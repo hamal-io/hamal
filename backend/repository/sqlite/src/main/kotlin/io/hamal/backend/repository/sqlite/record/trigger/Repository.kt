@@ -111,7 +111,7 @@ class SqliteTriggerRepository(
         return ProjectionCurrent.find(connection, triggerId)
     }
 
-    override fun query(block: Query.() -> Unit): List<Trigger> {
+    override fun list(block: Query.() -> Unit): List<Trigger> {
         val query = Query(
             afterId = TriggerId(0),
             types = TriggerType.values().toSet(),

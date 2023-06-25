@@ -9,7 +9,7 @@ interface LogBrokerTopicsRepository<TOPIC : LogTopic> : Closeable {
     fun create(cmdId: CmdId, toCreate: TopicToCreate): TOPIC
     fun find(name: TopicName): TOPIC?
     fun find(id: TopicId): TOPIC?
-    fun query(): List<TOPIC>
+    fun list(): List<TOPIC>
     fun count(): ULong
     data class TopicToCreate(
         val id: TopicId,

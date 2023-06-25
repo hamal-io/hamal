@@ -67,7 +67,7 @@ class SqliteLogBrokerRepository(
     override fun find(topicId: TopicId) = topicsRepository.find(topicId)
     override fun find(topicName: TopicName) = topicsRepository.find(topicName)
     override fun queryTopics(): List<SqliteLogTopic> {
-        return topicsRepository.query()
+        return topicsRepository.list()
     }
 
     override fun clear() {

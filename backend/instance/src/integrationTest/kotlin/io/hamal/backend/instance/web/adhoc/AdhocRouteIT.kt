@@ -34,7 +34,7 @@ class AdhocRouteIT : BaseRouteIT() {
         assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.code, equalTo(Code("40 + 2")))
 
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         verifyReqCompleted(result.id)
         verifyExecQueued(result.execId)

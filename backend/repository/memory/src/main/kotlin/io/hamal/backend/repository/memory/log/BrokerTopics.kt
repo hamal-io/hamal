@@ -33,7 +33,7 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository<MemoryLogTopic
         topicMapping.values.find { it.id == id }
     }
 
-    override fun query(): List<MemoryLogTopic> = lock.withLock {
+    override fun list(): List<MemoryLogTopic> = lock.withLock {
         topicMapping.values.toList()
     }
 

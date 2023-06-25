@@ -32,7 +32,7 @@ class FixedRateTriggerService
 
     @PostConstruct
     fun setup() {
-        triggerQueryRepository.query {
+        triggerQueryRepository.list {
             afterId = TriggerId(0)
             limit = 10
         }.filterIsInstance<FixedRateTrigger>().forEach {

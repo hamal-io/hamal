@@ -8,6 +8,7 @@ import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
 import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.Limit
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -36,7 +37,7 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
         }
     }
 
-    fun list(connection: Connection, afterId: ExecId, limit: Int): List<Exec> {
+    fun list(connection: Connection, afterId: ExecId, limit: Limit): List<Exec> {
         return connection.executeQuery<Exec>(
             """
             SELECT 

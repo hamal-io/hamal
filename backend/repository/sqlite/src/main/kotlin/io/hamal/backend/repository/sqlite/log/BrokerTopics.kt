@@ -91,7 +91,7 @@ class SqliteLogBrokerTopicsRepository(
                 }
             }?.also { topicMapping[it.name] = it }
 
-    override fun query(): List<SqliteLogTopic> {
+    override fun list(): List<SqliteLogTopic> {
         return connection.executeQuery<SqliteLogTopic>("SELECT id,name FROM topics") {
             query {
                 set("some_value", true)

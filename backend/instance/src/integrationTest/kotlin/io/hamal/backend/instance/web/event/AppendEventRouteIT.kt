@@ -21,7 +21,7 @@ internal class AppendEventRouteIT : BaseEventRouteIT() {
             Content("""{"hamal":"rocks"}""")
         )
 
-        Thread.sleep(100)
+        Thread.sleep(10)
         verifyReqCompleted(result.id)
 
         with(listEvents(topicResponse.topicId)) {
@@ -45,7 +45,7 @@ internal class AppendEventRouteIT : BaseEventRouteIT() {
             )
         }
 
-        Thread.sleep(100)
+        Thread.sleep(10)
         requests.forEach { verifyReqCompleted(it.id) }
 
         with(listEvents(topicResponse.topicId)) {
@@ -64,7 +64,7 @@ internal class AppendEventRouteIT : BaseEventRouteIT() {
             .execute()
 
         assertThat(topicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(topicResponse is ErrorHttpResponse)
+        require(topicResponse is ErrorHttpResponse) { "request was successful" }
 
         val error = topicResponse.error(HamalError::class)
         assertThat(error.message, equalTo("Topic not found"))

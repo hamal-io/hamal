@@ -7,13 +7,12 @@ import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.*
 import io.hamal.lib.sdk.domain.ListTopicsResponse.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 open class ListEventsRoute<TOPIC : LogTopic>(
-    @Autowired private val queryService: EventQueryService<TOPIC>
+    private val queryService: EventQueryService<TOPIC>
 ) {
     @GetMapping("/v1/topics/{topicId}/events")
     fun listEvents(
@@ -22,7 +21,7 @@ open class ListEventsRoute<TOPIC : LogTopic>(
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ListEventsResponse> {
         val topic = queryService.getTopic(topicId)
-        val events = queryService.queryEvents(topic) {
+        val events = queryService.listEvents(topic) {
             this.afterId = afterId
             this.limit = limit
         }

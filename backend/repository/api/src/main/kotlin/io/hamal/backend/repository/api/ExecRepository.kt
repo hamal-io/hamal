@@ -3,10 +3,7 @@ package io.hamal.backend.repository.api
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Code
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
+import io.hamal.lib.domain.vo.*
 
 interface ExecCmdRepository {
     fun plan(cmd: PlanCmd): PlannedExec
@@ -51,6 +48,9 @@ interface ExecCmdRepository {
 
 interface ExecQueryRepository {
     fun find(execId: ExecId): Exec?
-
-    fun list(afterId: ExecId, limit: Int): List<Exec>
+    fun list(block: ExecQuery.() -> Unit): List<Exec>
+    data class ExecQuery(
+        var afterId: ExecId = ExecId(0),
+        var limit: Limit = Limit(1)
+    )
 }

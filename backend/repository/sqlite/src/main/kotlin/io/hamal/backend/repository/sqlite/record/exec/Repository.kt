@@ -3,6 +3,7 @@ package io.hamal.backend.repository.sqlite.record.exec
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.*
 import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.backend.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.backend.repository.api.domain.*
 import io.hamal.backend.repository.api.record.exec.Entity
 import io.hamal.backend.repository.record.CreateDomainObject
@@ -169,8 +170,9 @@ class SqliteExecRepository(
         return ProjectionCurrent.find(connection, execId)
     }
 
-    override fun list(afterId: ExecId, limit: Int): List<Exec> {
-        return ProjectionCurrent.list(connection, afterId, limit)
+    override fun list(block: ExecQuery.() -> Unit): List<Exec> {
+        val query = ExecQuery().also(block)
+        return ProjectionCurrent.list(connection, query.afterId, query.limit)
     }
 
 }

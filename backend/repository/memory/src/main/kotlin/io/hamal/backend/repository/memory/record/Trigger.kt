@@ -21,7 +21,7 @@ object MemoryTriggerRepository: TriggerCmdRepository, TriggerQueryRepository{
         TODO("Not yet implemented")
     }
 
-    override fun query(block: TriggerQueryRepository.Query.() -> Unit): List<Trigger> {
+    override fun list(block: TriggerQueryRepository.Query.() -> Unit): List<Trigger> {
         //FIXME
         return listOf()
     }

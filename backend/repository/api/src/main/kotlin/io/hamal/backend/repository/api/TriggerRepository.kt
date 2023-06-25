@@ -38,7 +38,7 @@ interface TriggerCmdRepository {
 interface TriggerQueryRepository {
     fun find(triggerId: TriggerId): Trigger?
 
-    fun query(block: Query.() -> Unit): List<Trigger>
+    fun list(block: Query.() -> Unit): List<Trigger>
 
     data class Query(
         var afterId: TriggerId,

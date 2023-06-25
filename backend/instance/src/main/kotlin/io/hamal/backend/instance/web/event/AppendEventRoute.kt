@@ -9,15 +9,14 @@ import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.*
 import io.hamal.lib.sdk.domain.ListTopicsResponse.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 open class AppendEventRoute(
-    @Autowired private val submitRequest: SubmitRequest,
-    @Autowired private val eventQueryService: EventQueryService<*>
+    private val submitRequest: SubmitRequest,
+    private val eventQueryService: EventQueryService<*>
 ) {
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(

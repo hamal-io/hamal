@@ -16,7 +16,7 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
     @Test
     fun `No events`() {
         val topicResponse = createTopic(TopicName("test-topic"))
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         val result = listEvents(topicResponse.topicId)
         assertThat(result.events, empty())
@@ -26,7 +26,7 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
     fun `Single event`() {
         val topicResponse = createTopic(TopicName("test-topic"))
         appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         with(listEvents(topicResponse.topicId)) {
             assertThat(topicId, equalTo(topicResponse.topicId))
@@ -47,7 +47,7 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
         IntRange(1, 100).forEach {
             appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
         }
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         val listResponse = httpTemplate.get("/v1/topics/${topicResponse.topicId.value}/events")
             .parameter("limit", 23)
@@ -66,7 +66,7 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
         IntRange(1, 100).forEach {
             appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
         }
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         val listResponse = httpTemplate.get("/v1/topics/${topicResponse.topicId.value}/events")
             .parameter("after_id", 95)
@@ -80,13 +80,12 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
         assertThat(event.content, equalTo(Content((96).toString())))
     }
 
-
     @Test
     fun `Does not show events of different topic`() {
         val topicResponse = createTopic(TopicName("test-topic"))
         val anotherTopicResponse = createTopic(TopicName("another-test-topic"))
         appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         with(listEvents(anotherTopicResponse.topicId)) {
             assertThat(topicId, equalTo(anotherTopicResponse.topicId))
@@ -94,7 +93,6 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
             assertThat(events, empty())
         }
     }
-
 
     @Test
     fun `Tries to list events of  topic which does not exists`() {

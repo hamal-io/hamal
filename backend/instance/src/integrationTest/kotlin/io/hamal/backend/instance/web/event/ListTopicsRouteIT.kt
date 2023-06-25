@@ -17,7 +17,7 @@ internal class ListTopicsRouteIT : BaseEventRouteIT() {
     @Test
     fun `Single topic`() {
         createTopic(TopicName("namespace::topics_one"))
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         val result = listTopics()
         assertThat(result.topics, hasSize(1))
@@ -31,7 +31,7 @@ internal class ListTopicsRouteIT : BaseEventRouteIT() {
         createTopic(TopicName("namespace::topics_one"))
         createTopic(TopicName("namespace::topics_two"))
         createTopic(TopicName("namespace::topics_three"))
-        Thread.sleep(100)
+        Thread.sleep(10)
 
         val result = listTopics()
         assertThat(result.topics, hasSize(3))

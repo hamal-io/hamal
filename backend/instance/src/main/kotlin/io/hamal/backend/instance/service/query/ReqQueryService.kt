@@ -19,7 +19,7 @@ class ReqQueryService(
     }
 
     fun list(afterId: ReqId, limit: Int): List<Req> {
-        return reqQueryRepository.query {
+        return reqQueryRepository.list {
             this.afterId = afterId
             this.limit = limit
         }

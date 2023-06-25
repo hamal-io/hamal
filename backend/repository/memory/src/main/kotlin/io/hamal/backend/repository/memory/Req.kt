@@ -2,6 +2,8 @@ package io.hamal.backend.repository.memory
 
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
+import io.hamal.backend.repository.memory.record.CurrentExecProjection
+import io.hamal.backend.repository.memory.record.QueueProjection
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.Req
 import io.hamal.lib.domain.req.ReqStatus
@@ -53,6 +55,9 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun clear() {
         lock.writeLock().withLock {
             store.clear()
+            queue.clear()
+            QueueProjection.clear()
+            CurrentExecProjection.clear()
         }
     }
 
@@ -62,7 +67,7 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
         return ProtoBuf { }.decodeFromByteArray(Req.serializer(), result)
     }
 
-    override fun query(block: ReqQueryRepository.Query.() -> Unit): List<Req> {
+    override fun list(block: ReqQueryRepository.Query.() -> Unit): List<Req> {
         val query = ReqQueryRepository.Query(ReqId(BigInteger.ZERO), limit = 25)
         block(query)
         return lock.readLock().withLock {
