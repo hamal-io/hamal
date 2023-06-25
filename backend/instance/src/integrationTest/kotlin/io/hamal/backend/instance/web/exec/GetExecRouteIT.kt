@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.backend.repository.api.domain.Exec
+import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecInputs

@@ -6,9 +6,9 @@ import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.cmd.FuncCmdService
 import io.hamal.backend.instance.service.query.FuncQueryService
-import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.script.api.value.TableValue

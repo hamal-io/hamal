@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.StatePayload
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -19,7 +19,7 @@ data class ApiAgentExecRequests(
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val secrets: ExecSecrets,
-        val statePayload: StatePayload?,
+        val statePayload: State?,
         val code: Code
     )
 }

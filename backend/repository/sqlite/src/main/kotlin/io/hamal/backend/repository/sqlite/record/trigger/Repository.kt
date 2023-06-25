@@ -4,9 +4,6 @@ import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.Query
-import io.hamal.backend.repository.api.domain.EventTrigger
-import io.hamal.backend.repository.api.domain.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.trigger.Entity
 import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
@@ -14,6 +11,9 @@ import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.lib.domain.EventTrigger
+import io.hamal.lib.domain.FixedRateTrigger
+import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import java.nio.file.Path

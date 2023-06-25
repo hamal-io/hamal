@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.req
 
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.StatePayload
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -51,15 +50,4 @@ data class InvokeEventReq(
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
 ) : Req
-
-
-@Serializable
-data class CompleteExecReq(
-    override val id: ReqId,
-    override var status: ReqStatus,
-    val execId: ExecId,
-    val statePayload: StatePayload
-) : Req
-
-
 

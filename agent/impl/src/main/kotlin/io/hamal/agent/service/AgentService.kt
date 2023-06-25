@@ -2,6 +2,9 @@ package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
 import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
+import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.Content
+import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.FuncInvocationContextFactory
 import io.hamal.lib.script.api.value.IdentValue
@@ -10,7 +13,6 @@ import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.service.ExecService
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -83,7 +85,7 @@ class AgentService {
 //                println("Execute: ${request.id} - ${request.correlation}")
 //                println("State: ${request.statePayload}")
 //
-                        val counter = (request.statePayload?.bytes?.let { String(it) } ?: "0").toInt()
+//                        val counter = (request.statePayload?.content?.let { String(it) } ?: "0").toInt()
 //                println(counter)
 
                         val env = EnvValue(
@@ -116,9 +118,9 @@ class AgentService {
 //                println("Finish executing task ${request.id}")
 
                         DefaultHamalSdk("http://localhost:8084").execService().complete(
-                            request.id, ExecService.StateAfterCompletion(
-                                contentType = "application/json",
-                                bytes = (counter + 1).toString().toByteArray()
+                            request.id, State(
+                                contentType = ContentType("application/json"),
+                                content = Content("")
                             )
                         )
 

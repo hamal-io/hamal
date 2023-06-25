@@ -1,11 +1,13 @@
 package io.hamal.backend.instance.req
 
 import io.hamal.backend.repository.api.ReqCmdRepository
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.StatePayload
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
+import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.BigInteger
@@ -36,9 +38,11 @@ data class InvokeEvent(
     val secrets: InvocationSecrets
 )
 
+@Serializable
 data class CompleteExec(
     val execId: ExecId,
-    val statePayload: StatePayload
+    val statePayload: State,
+    val events: List<Event>
 )
 
 @Component
@@ -91,12 +95,13 @@ class SubmitRequest(
             secrets = evt.secrets,
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(complete: CompleteExec) =
-        CompleteExecReq(
+    operator fun invoke(execId: ExecId, complete: CompleteExecReq) =
+        SubmittedCompleteExecReq(
             id = reqId(),
             status = ReqStatus.Submitted,
-            execId = complete.execId,
-            statePayload = complete.statePayload
+            execId = execId,
+            state = complete.state,
+            events = complete.events
         ).also(reqCmdRepository::queue)
 
 

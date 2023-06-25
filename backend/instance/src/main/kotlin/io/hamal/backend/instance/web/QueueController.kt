@@ -31,7 +31,7 @@ class QueueController
                     correlation = it.correlation,
                     inputs = it.inputs,
                     secrets = it.secrets,
-                    statePayload = it.correlation?.let { stateQueryService.find(it) }?.payload,
+                    statePayload = it.correlation?.let { stateQueryService.find(it) }?.state,
                     code = it.code
                 )
             })

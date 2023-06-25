@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.record.func
 
-import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.record.RecordEntity
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.*
 
 data class Entity(

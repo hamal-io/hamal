@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.exec
 
 import io.hamal.backend.instance.service.query.ExecQueryService
-import io.hamal.backend.repository.api.domain.Exec
+import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.vo.ExecId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

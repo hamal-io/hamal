@@ -1,12 +1,12 @@
 package io.hamal.backend.repository.sqlite.record.exec
 
-import io.hamal.backend.repository.api.domain.Exec
 import io.hamal.backend.repository.record.exec.ExecRecord
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
 import io.hamal.lib.common.DefaultLruCache
+import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.Limit
 import kotlinx.serialization.ExperimentalSerializationApi

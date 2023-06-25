@@ -5,9 +5,9 @@ import io.hamal.backend.instance.req.InvokeFixedRate
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.backend.repository.api.TriggerQueryRepository
-import io.hamal.backend.repository.api.domain.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.common.util.TimeUtils.now
+import io.hamal.lib.domain.FixedRateTrigger
+import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.script.api.value.TableValue

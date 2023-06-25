@@ -1,12 +1,12 @@
 package io.hamal.backend.repository.sqlite.record.func
 
-import io.hamal.backend.repository.api.domain.Func
 import io.hamal.backend.repository.record.func.FuncRecord
 import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
 import io.hamal.lib.common.DefaultLruCache
+import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import kotlinx.serialization.ExperimentalSerializationApi
 

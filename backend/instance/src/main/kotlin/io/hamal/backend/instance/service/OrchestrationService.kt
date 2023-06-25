@@ -1,12 +1,7 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.service.cmd.ExecCmdService
-import io.hamal.backend.repository.api.domain.CompletedExec
-import io.hamal.backend.repository.api.domain.Exec
-import io.hamal.backend.repository.api.domain.FailedExec
-import io.hamal.backend.repository.api.domain.PlannedExec
-import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

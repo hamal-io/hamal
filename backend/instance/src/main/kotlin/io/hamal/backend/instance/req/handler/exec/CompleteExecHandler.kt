@@ -5,8 +5,9 @@ import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.cmd.StateCmdService
 import io.hamal.backend.instance.service.query.ExecQueryService
-import io.hamal.backend.repository.api.domain.StartedExec
+import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.req.CompleteExecReq
+import io.hamal.lib.domain.req.SubmittedCompleteExecReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -15,10 +16,10 @@ class CompleteExecHandler(
     @Autowired private val execQueryService: ExecQueryService,
     @Autowired private val execCmdService: ExecCmdService,
     @Autowired private val stateCmdService: StateCmdService,
-) : ReqHandler<CompleteExecReq>(CompleteExecReq::class) {
+) : ReqHandler<SubmittedCompleteExecReq>(SubmittedCompleteExecReq::class) {
 
 
-    override fun invoke(req: CompleteExecReq) {
+    override fun invoke(req: SubmittedCompleteExecReq) {
         val cmdId = req.cmdId()
 
         execQueryService.find(req.execId)
@@ -29,7 +30,7 @@ class CompleteExecHandler(
                         stateCmdService.set(
                             cmdId, StateCmdService.StateToSet(
                                 correlation = exec.correlation!!,
-                                payload = req.statePayload
+                                payload = req.state
                             )
                         )
                     }

@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.domain.EventTrigger
-import io.hamal.backend.repository.api.domain.FixedRateTrigger
-import io.hamal.backend.repository.api.domain.Trigger
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.EventTrigger
+import io.hamal.lib.domain.FixedRateTrigger
+import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import kotlin.time.Duration

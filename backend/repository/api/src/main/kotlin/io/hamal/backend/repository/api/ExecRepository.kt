@@ -1,8 +1,6 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.domain.*
-import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
 
 interface ExecCmdRepository {

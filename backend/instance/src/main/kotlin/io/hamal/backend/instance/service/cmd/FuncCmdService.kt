@@ -3,8 +3,8 @@ package io.hamal.backend.instance.service.cmd
 import io.hamal.backend.instance.component.SystemEventEmitter
 import io.hamal.backend.instance.event.FuncCreatedEvent
 import io.hamal.backend.repository.api.FuncCmdRepository
-import io.hamal.backend.repository.api.domain.Func
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

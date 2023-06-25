@@ -1,8 +1,5 @@
-package io.hamal.backend.repository.api.domain
+package io.hamal.lib.domain
 
-import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.DomainObject
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 

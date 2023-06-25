@@ -1,4 +1,4 @@
-package io.hamal.backend.repository.api.domain
+package io.hamal.lib.domain
 
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.DomainObject

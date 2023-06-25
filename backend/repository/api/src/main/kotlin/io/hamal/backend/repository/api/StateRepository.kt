@@ -1,18 +1,18 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.backend.repository.api.domain.State
-import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.StatePayload
+import io.hamal.lib.domain.CorrelatedState
+import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.State
 
 interface StateCmdRepository {
-    fun set(cmdId: CmdId, stateToSet: StateToSet): State
+    fun set(cmdId: CmdId, stateToSet: StateToSet): CorrelatedState
     data class StateToSet(
         val correlation: Correlation,
-        val payload: StatePayload
+        val state: State
     )
 }
 
 interface StateQueryRepository {
-    fun find(correlation: Correlation): State?
+    fun find(correlation: Correlation): CorrelatedState?
 }
