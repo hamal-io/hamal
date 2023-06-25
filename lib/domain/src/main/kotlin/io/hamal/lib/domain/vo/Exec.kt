@@ -30,8 +30,7 @@ enum class ExecStatus(val value: Int) {
     Queued(3),
     Started(4),
     Completed(5),
-    Failed(6),
-    TerminalFailed(7);
+    Failed(6);
 
     companion object {
         fun valueOf(value: Int) = requireNotNull(mapped[value]) { "$value is not an exec status" }

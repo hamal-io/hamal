@@ -43,6 +43,14 @@ class CompletedAt(override val value: Instant) : DomainAt() {
         @JvmStatic
         fun now(): CompletedAt = CompletedAt(TimeUtils.now())
     }
-
     internal object Serializer : DomainAtSerializer<CompletedAt>(::CompletedAt)
+}
+
+@Serializable(with = FailedAt.Serializer::class)
+class FailedAt(override val value: Instant) : DomainAt() {
+    companion object {
+        @JvmStatic
+        fun now(): FailedAt = FailedAt(TimeUtils.now())
+    }
+    internal object Serializer : DomainAtSerializer<FailedAt>(::FailedAt)
 }

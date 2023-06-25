@@ -8,7 +8,9 @@ interface ExecCmdRepository {
     fun schedule(cmd: ScheduleCmd): ScheduledExec
     fun queue(cmd: QueueCmd): QueuedExec
     fun complete(cmd: CompleteCmd): CompletedExec
+    fun fail(cmd: FailCmd): FailedExec
     fun start(cmd: StartCmd): List<StartedExec>
+    fun clear()
 
     data class PlanCmd(
         val id: CmdId,

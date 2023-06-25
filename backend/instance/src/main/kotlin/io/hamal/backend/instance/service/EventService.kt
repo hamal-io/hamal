@@ -77,7 +77,8 @@ class DefaultSystemEventService<TOPIC : LogTopic>(
                                         val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
                                         handler.handle(cmdId, evt)
                                     } catch (t: Throwable) {
-                                        throw Error(t)
+                                        t.printStackTrace()
+//                                        throw Error(t)
                                     }
                                 }
                             }

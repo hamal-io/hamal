@@ -142,6 +142,12 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
         return result
     }
 
+    override fun clear() {
+        super.clear()
+        CurrentExecProjection.clear()
+        QueueProjection.clear()
+    }
+
 
     override fun complete(cmd: CompleteCmd): CompletedExec {
         val execId = cmd.execId
@@ -163,6 +169,28 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
         return (versionOf(execId, cmdId) as CompletedExec)
             .also(CurrentExecProjection::apply)
     }
+
+    override fun fail(cmd: FailCmd): FailedExec {
+        val execId = cmd.execId
+        val cmdId = cmd.id
+
+        if (commandAlreadyApplied(execId, cmdId)) {
+            return versionOf(execId, cmdId) as FailedExec
+        }
+
+        check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
+
+        addRecord(
+            ExecFailedRecord(
+                entityId = execId,
+                cmdId = cmdId
+            )
+        )
+
+        return (versionOf(execId, cmdId) as FailedExec)
+            .also(CurrentExecProjection::apply)
+    }
+
 
     override fun find(execId: ExecId): Exec? {
         return CurrentExecProjection.find(execId)

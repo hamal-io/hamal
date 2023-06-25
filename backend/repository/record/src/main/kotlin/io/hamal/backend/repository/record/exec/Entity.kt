@@ -66,6 +66,13 @@ data class Entity(
 //                enqueuedAt = Instant.now() // FIXME
             )
 
+            is ExecFailedRecord -> copy(
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                status = ExecStatus.Failed,
+
+                )
+
             else -> TODO()
         }
     }
@@ -84,19 +91,17 @@ data class Entity(
         if (status == ExecStatus.Planned) return plannedExec
 
         val scheduledExec = ScheduledExec(cmdId, id, plannedExec, ScheduledAt.now())
-
         if (status == ExecStatus.Scheduled) return scheduledExec
 
         val queuedExec = QueuedExec(cmdId, id, scheduledExec, QueuedAt.now())
-
         if (status == ExecStatus.Queued) return queuedExec
 
         val startedExec = StartedExec(cmdId, id, queuedExec)
-
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
             ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now())
+            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now())
             else -> TODO()
         }
     }

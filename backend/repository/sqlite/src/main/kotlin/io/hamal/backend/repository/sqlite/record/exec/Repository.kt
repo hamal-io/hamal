@@ -166,6 +166,25 @@ class SqliteExecRepository(
         }
     }
 
+    override fun fail(cmd: FailCmd): FailedExec {
+        val execId = cmd.execId
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(execId, cmdId)) {
+                versionOf(execId, cmdId) as FailedExec
+            } else {
+                storeRecord(
+                    ExecFailedRecord(
+                        entityId = execId,
+                        cmdId = cmdId
+                    )
+                )
+                (currentVersion(execId) as FailedExec)
+                    .also { ProjectionCurrent.update(this, it) }
+            }
+        }
+    }
+
     override fun find(execId: ExecId): Exec? {
         return ProjectionCurrent.find(connection, execId)
     }

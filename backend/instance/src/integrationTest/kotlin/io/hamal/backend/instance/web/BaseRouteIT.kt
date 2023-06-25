@@ -1,13 +1,16 @@
 package io.hamal.backend.instance.web
 
 import io.hamal.backend.instance.BackendConfig
+import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.query.EventQueryService
+import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.http.HttpTemplate
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -46,7 +49,10 @@ abstract class BaseRouteIT {
     lateinit var eventQueryService: EventQueryService<*>
 
     @Autowired
-    lateinit var execCmdRepository: ReqCmdRepository
+    lateinit var execCmdRepository: ExecCmdRepository
+
+    @Autowired
+    lateinit var execCmdService: ExecCmdService
 
     @Autowired
     lateinit var execQueryRepository: ExecQueryRepository
@@ -56,6 +62,9 @@ abstract class BaseRouteIT {
 
     @Autowired
     lateinit var reqCmdRepository: ReqCmdRepository
+
+    @Autowired
+    lateinit var generateDomainId: GenerateDomainId
 
     val httpTemplate: HttpTemplate by lazy {
         HttpTemplate(

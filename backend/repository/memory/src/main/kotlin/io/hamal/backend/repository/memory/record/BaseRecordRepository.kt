@@ -21,4 +21,10 @@ abstract class BaseRecordRepository<ID : DomainId, RECORD : Record<ID>> {
 
     fun listRecords(id: ID): List<RECORD> = lock.withLock { store.getOrDefault(id, listOf()) }
     fun contains(id: ID) = lock.withLock { store.containsKey(id) }
+
+    open fun clear() {
+        lock.withLock {
+            store.clear()
+        }
+    }
 }

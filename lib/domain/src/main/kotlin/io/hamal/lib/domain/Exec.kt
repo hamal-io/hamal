@@ -92,7 +92,6 @@ class StartedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     val queuedExec: QueuedExec
-    //FIXME inflightSince
 ) : Exec() {
     override val status = ExecStatus.Started
     override val correlation get() = queuedExec.correlation
@@ -100,7 +99,7 @@ class StartedExec(
     override val secrets get() = queuedExec.secrets
     override val code get() = queuedExec.code
     override fun toString(): String {
-        return "InFlightExec($id)"
+        return "StartedExec($id)"
     }
 }
 
@@ -129,6 +128,7 @@ class FailedExec(
     override val id: ExecId,
     val startedExec: StartedExec,
     //FIXME failedAt
+    val failedAt: FailedAt
 ) : Exec() {
     override val status = ExecStatus.Failed
     override val correlation get() = startedExec.correlation

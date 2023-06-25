@@ -57,3 +57,10 @@ data class ExecCompletedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
 ) : ExecRecord()
+
+@Serializable
+@SerialName("EFR")
+data class ExecFailedRecord(
+    override val entityId: ExecId,
+    override val cmdId: CmdId,
+) : ExecRecord()
