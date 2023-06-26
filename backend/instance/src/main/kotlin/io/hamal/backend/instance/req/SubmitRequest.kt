@@ -14,14 +14,6 @@ import java.math.BigInteger
 import java.security.SecureRandom
 
 
-data class InvokeOneshot(
-    val execId: ExecId,
-    val funcId: FuncId,
-    val correlationId: CorrelationId,
-    val inputs: InvocationInputs,
-    val secrets: InvocationSecrets
-)
-
 data class InvokeFixedRate(
     val execId: ExecId,
     val funcId: FuncId,
@@ -61,12 +53,12 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
 
 
-    operator fun invoke(oneshot: InvokeOneshot) =
-        InvokeOneshotReq(
+    operator fun invoke(funcId: FuncId, oneshot: InvokeOneshotReq) =
+        SubmittedInvokeOneshotReq(
             id = reqId(),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
-            funcId = oneshot.funcId,
+            funcId = funcId,
             correlationId = oneshot.correlationId,
             inputs = oneshot.inputs,
             secrets = oneshot.secrets,

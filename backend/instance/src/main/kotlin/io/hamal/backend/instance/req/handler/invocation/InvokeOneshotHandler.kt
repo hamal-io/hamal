@@ -7,7 +7,7 @@ import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.req.InvokeOneshotReq
+import io.hamal.lib.domain.req.SubmittedInvokeOneshotReq
 import io.hamal.lib.domain.vo.ExecInputs
 import org.springframework.stereotype.Component
 
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component
 class InvokeOneshotHandler(
     private val execCmdService: ExecCmdService,
     private val funcQueryService: FuncQueryService
-) : ReqHandler<InvokeOneshotReq>(InvokeOneshotReq::class) {
-    override fun invoke(req: InvokeOneshotReq) {
+) : ReqHandler<SubmittedInvokeOneshotReq>(SubmittedInvokeOneshotReq::class) {
+    override fun invoke(req: SubmittedInvokeOneshotReq) {
         val func = funcQueryService.get(req.funcId)
         execCmdService.plan(
             req.cmdId(), ToPlan(

@@ -5,33 +5,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateFuncReq(
-    val name: FuncName,
-    val inputs: FuncInputs,
-    val secrets: FuncSecrets,
-    val code: Code
-)
-
-@Serializable
-data class SubmittedCreateFuncReq(
-    override val id: ReqId,
-    override var status: ReqStatus,
-    val funcId: FuncId,
-    val funcName: FuncName,
-    val inputs: FuncInputs,
-    val secrets: FuncSecrets,
-    val code: Code
-) : SubmittedReq
-
-@Serializable
-data class InvokeOneshotReq(
-    val correlationId: CorrelationId,
-    val inputs: InvocationInputs,
-    val secrets: InvocationSecrets
-)
-
-@Serializable
-data class SubmittedInvokeOneshotReq(
+data class InvokeFixedRateReq(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
@@ -40,3 +14,15 @@ data class SubmittedInvokeOneshotReq(
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
 ) : SubmittedReq
+
+@Serializable
+data class InvokeEventReq(
+    override val id: ReqId,
+    override var status: ReqStatus,
+    val execId: ExecId,
+    val funcId: FuncId,
+    val correlationId: CorrelationId,
+    val inputs: InvocationInputs,
+    val secrets: InvocationSecrets,
+) : SubmittedReq
+
