@@ -2,6 +2,7 @@ package io.hamal.backend.repository.api
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.SubmittedReq
+import io.hamal.lib.domain.vo.Limit
 
 interface ReqCmdRepository {
     fun queue(req: SubmittedReq)
@@ -15,7 +16,7 @@ interface ReqQueryRepository {
     fun find(reqId: ReqId): SubmittedReq?
     fun list(block: Query.() -> Unit): List<SubmittedReq>
     data class Query(
-        var afterId: ReqId,
-        var limit: Int
+        var afterId: ReqId = ReqId(0),
+        var limit: Limit = Limit(1)
     )
 }

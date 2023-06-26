@@ -10,8 +10,6 @@ import io.hamal.lib.domain.vo.port.GenerateDomainId
 import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.math.BigInteger
-import java.security.SecureRandom
 
 
 data class InvokeFixedRate(
@@ -44,7 +42,7 @@ class SubmitRequest(
 ) {
     operator fun invoke(adhoc: InvokeAdhocReq) =
         SubmittedInvokeAdhocReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             inputs = adhoc.inputs,
@@ -55,7 +53,7 @@ class SubmitRequest(
 
     operator fun invoke(funcId: FuncId, oneshot: InvokeOneshotReq) =
         SubmittedInvokeOneshotReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = funcId,
@@ -66,7 +64,7 @@ class SubmitRequest(
 
     operator fun invoke(fixedRate: InvokeFixedRate) =
         InvokeFixedRateReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = fixedRate.funcId,
@@ -78,7 +76,7 @@ class SubmitRequest(
 
     operator fun invoke(evt: InvokeEvent) =
         InvokeEventReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = evt.funcId,
@@ -89,7 +87,7 @@ class SubmitRequest(
 
     operator fun invoke(execId: ExecId, complete: CompleteExecReq) =
         SubmittedCompleteExecReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = execId,
             state = complete.state,
@@ -98,7 +96,7 @@ class SubmitRequest(
 
     operator fun invoke(createFuncReq: CreateFuncReq) =
         SubmittedCreateFuncReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             funcId = generateDomainId(::FuncId),
             funcName = createFuncReq.name,
@@ -109,7 +107,7 @@ class SubmitRequest(
 
     operator fun invoke(createTopic: CreateTopicReq) =
         SubmittedCreateTopicReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             topicId = generateDomainId(::TopicId),
             name = createTopic.name
@@ -117,16 +115,12 @@ class SubmitRequest(
 
     operator fun invoke(appendEvent: AppendEventReq) =
         SubmittedAppendEventReq(
-            id = reqId(),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             topicId = appendEvent.topicId,
             contentType = appendEvent.contentType,
             bytes = appendEvent.bytes
         ).also(reqCmdRepository::queue)
-
-
-    private val rnd = SecureRandom.getInstance("SHA1PRNG", "SUN")
-    private fun reqId() = ReqId(BigInteger(128, rnd))
 
 }
 

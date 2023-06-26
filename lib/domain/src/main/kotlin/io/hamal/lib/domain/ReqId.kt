@@ -1,27 +1,12 @@
 package io.hamal.lib.domain
 
-import kotlinx.serialization.KSerializer
+import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.domain.vo.base.DomainIdSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.math.BigInteger
 
 @Serializable(with = ReqId.Serializer::class)
-data class ReqId(val value: BigInteger) : Comparable<ReqId> { //FIXME value should be string
-    constructor(value: ByteArray) : this(BigInteger(value))
-    constructor(value: Int) : this(value.toBigInteger())
-    constructor(value: Long) : this(value.toBigInteger())
-    constructor(value: String) : this(BigInteger(value))
-
-    object Serializer : KSerializer<ReqId> {
-        override val descriptor = PrimitiveSerialDescriptor("CommandId", PrimitiveKind.STRING)
-        override fun deserialize(decoder: Decoder) = ReqId(decoder.decodeString())
-        override fun serialize(encoder: Encoder, value: ReqId) {
-            encoder.encodeString(value.value.toString())
-        }
-    }
-
-    override fun compareTo(other: ReqId) = value.compareTo(other.value)
+class ReqId(override val value: SnowflakeId) : DomainId() {
+    constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    internal object Serializer : DomainIdSerializer<ReqId>(::ReqId)
 }

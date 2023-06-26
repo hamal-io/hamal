@@ -10,7 +10,7 @@ import io.hamal.lib.sdk.domain.DequeueExecsResponse
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 
-internal sealed class BaseQueueIT : BaseRouteIT() {
+internal sealed class BaseQueueRouteIT : BaseRouteIT() {
     fun dequeue(): DequeueExecsResponse {
         val dequeueResponse = httpTemplate.post("/v1/dequeue").execute()
         MatcherAssert.assertThat(dequeueResponse.statusCode, Matchers.equalTo(HttpStatusCode.Ok))

@@ -5,10 +5,9 @@ import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.backend.repository.memory.record.CurrentExecProjection
 import io.hamal.backend.repository.memory.record.QueueProjection
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.SubmittedReq
 import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain.req.SubmittedReq
 import kotlinx.serialization.protobuf.ProtoBuf
-import java.math.BigInteger
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.withLock
 
@@ -41,14 +40,16 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun complete(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Completed })
+            store[req.id] =
+                ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Completed })
         }
     }
 
     override fun fail(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Failed })
+            store[req.id] =
+                ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Failed })
         }
     }
 
@@ -68,12 +69,11 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     }
 
     override fun list(block: ReqQueryRepository.Query.() -> Unit): List<SubmittedReq> {
-        val query = ReqQueryRepository.Query(ReqId(BigInteger.ZERO), limit = 25)
-        block(query)
+        val query = ReqQueryRepository.Query().also(block)
         return lock.readLock().withLock {
             store.keys.sorted()
                 .dropWhile { it <= query.afterId }
-                .take(query.limit)
+                .take(query.limit.value)
                 .mapNotNull { find(it) }
                 .reversed()
         }

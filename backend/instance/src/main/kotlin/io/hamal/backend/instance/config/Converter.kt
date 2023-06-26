@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.base.DomainId
 import org.springframework.core.convert.converter.Converter
@@ -14,6 +15,7 @@ object LimitConverter : Converter<String, Limit> {
 object EventIdConverter : DomainIdConverter<EventId>(EventId::class, ::EventId)
 object ExecIdConverter : DomainIdConverter<ExecId>(ExecId::class, ::ExecId)
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)
+object ReqIdConverter : DomainIdConverter<ReqId>(ReqId::class, ::ReqId)
 object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)
 
 sealed class DomainIdConverter<ID : DomainId>(

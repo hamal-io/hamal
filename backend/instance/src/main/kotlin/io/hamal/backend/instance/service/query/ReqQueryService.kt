@@ -18,11 +18,7 @@ class ReqQueryService(
         return reqQueryRepository.find(reqId)
     }
 
-    fun list(afterId: ReqId, limit: Int): List<SubmittedReq> {
-        return reqQueryRepository.list {
-            this.afterId = afterId
-            this.limit = limit
-        }
+    fun list(block: ReqQueryRepository.Query.() -> Unit): List<SubmittedReq> {
+        return reqQueryRepository.list(block)
     }
-
 }

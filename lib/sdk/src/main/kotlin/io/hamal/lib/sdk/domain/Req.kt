@@ -2,21 +2,15 @@ package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain.req.SubmittedReq
 import io.hamal.lib.domain.vo.ExecId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiListReqResponse(
-    val reqs: List<Req>
-) {
-    @Serializable
-    data class Req(
-        val id: ReqId,
-        val status: ReqStatus
-    )
-}
+data class ListSubmittedReqsResponse(
+    val reqs: List<SubmittedReq>
+)
 
 
 @Serializable

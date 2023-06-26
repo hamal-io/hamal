@@ -41,7 +41,7 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
 
     @Test
     fun `Limit funcs`() {
-        IntRange(1, 100).forEach {
+        repeat(100) {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("func-$it"),
@@ -60,7 +60,7 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
         assertThat(listResponse.funcs, hasSize(12))
 
         listResponse.funcs.forEachIndexed { idx, func ->
-            assertThat(func.name, equalTo(FuncName("func-${(12 - idx)}")))
+            assertThat(func.name, equalTo(FuncName("func-${(11 - idx)}")))
         }
     }
 
