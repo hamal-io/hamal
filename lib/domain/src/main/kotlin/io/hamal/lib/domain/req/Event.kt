@@ -18,7 +18,7 @@ data class SubmittedCreateTopicReq(
     override var status: ReqStatus,
     val topicId: TopicId,
     val name: TopicName
-) : Req
+) : SubmittedReq
 
 
 @Serializable
@@ -35,4 +35,4 @@ data class SubmittedAppendEventReq(
     val topicId: TopicId,
     val contentType: ContentType,
     val bytes: Content
-) : Req
+) : SubmittedReq

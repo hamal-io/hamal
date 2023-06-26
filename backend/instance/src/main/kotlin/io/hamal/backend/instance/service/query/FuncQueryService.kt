@@ -11,15 +11,15 @@ class FuncQueryService(
     @Autowired val funcQueryRepository: FuncQueryRepository
 ) {
     fun get(funcId: FuncId): Func {
-        return funcQueryRepository.find(funcId)!! //FIXME require and proper error message
+        return funcQueryRepository.find(funcId)
+            ?: throw NoSuchElementException("Func not found")
     }
 
     fun find(funcId: FuncId): Func? {
         return funcQueryRepository.find(funcId)
     }
 
-    fun list(afterId: FuncId, limit: Int): List<Func> {
-        return funcQueryRepository.list(afterId, limit)
+    fun list(block: FuncQueryRepository.FuncQuery.() -> Unit): List<Func> {
+        return funcQueryRepository.list(block)
     }
-
 }

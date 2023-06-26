@@ -4,12 +4,11 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.instance.service.cmd.EventCmdService
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class CreateTopicHandler(
-    @Autowired private val eventCmdService: EventCmdService<*>
+    private val eventCmdService: EventCmdService<*>
 ) : ReqHandler<SubmittedCreateTopicReq>(SubmittedCreateTopicReq::class) {
     override fun invoke(req: SubmittedCreateTopicReq) {
         eventCmdService.create(

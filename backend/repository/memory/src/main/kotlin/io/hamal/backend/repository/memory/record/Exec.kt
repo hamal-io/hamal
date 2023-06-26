@@ -59,11 +59,9 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
 
     override fun plan(cmd: PlanCmd): PlannedExec {
         val execId = cmd.execId
-
         if (contains(execId)) {
             return versionOf(execId, cmd.id) as PlannedExec
         }
-
         addRecord(
             ExecPlannedRecord(
                 entityId = execId,
@@ -74,7 +72,6 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
                 code = cmd.code
             )
         )
-
         return (currentVersion(execId) as PlannedExec)
             .also(CurrentExecProjection::apply)
     }

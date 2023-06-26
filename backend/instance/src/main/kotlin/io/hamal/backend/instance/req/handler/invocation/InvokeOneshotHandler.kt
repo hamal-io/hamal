@@ -9,13 +9,12 @@ import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.InvokeOneshotReq
 import io.hamal.lib.domain.vo.ExecInputs
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class InvokeOneshotHandler(
-    @Autowired private val execCmdService: ExecCmdService,
-    @Autowired private val funcQueryService: FuncQueryService
+    private val execCmdService: ExecCmdService,
+    private val funcQueryService: FuncQueryService
 ) : ReqHandler<InvokeOneshotReq>(InvokeOneshotReq::class) {
     override fun invoke(req: InvokeOneshotReq) {
         val func = funcQueryService.get(req.funcId)

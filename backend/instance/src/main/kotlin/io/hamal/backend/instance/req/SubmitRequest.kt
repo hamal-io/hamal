@@ -104,6 +104,16 @@ class SubmitRequest(
             events = complete.events
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(createFuncReq: CreateFuncReq) =
+        SubmittedCreateFuncReq(
+            id = reqId(),
+            status = ReqStatus.Submitted,
+            funcId = generateDomainId(::FuncId),
+            funcName = createFuncReq.name,
+            inputs = createFuncReq.inputs,
+            secrets = createFuncReq.secrets,
+            code = createFuncReq.code
+        ).also(reqCmdRepository::queue)
 
     operator fun invoke(createTopic: CreateTopicReq) =
         SubmittedCreateTopicReq(

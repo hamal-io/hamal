@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.domain.req.Req
+import io.hamal.lib.domain.req.SubmittedReq
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
@@ -18,23 +18,23 @@ class ReqRegistry : ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    operator fun <REQ : Req> get(reqClass: KClass<out REQ>): ReqHandler<REQ> =
+    operator fun <REQ : SubmittedReq> get(reqClass: KClass<out REQ>): ReqHandler<REQ> =
         reqOnce(reqClass) {
             val result = reqHandler[reqClass]
                 ?: reqClass.java.interfaces.asSequence().firstOrNull { reqHandler[it.kotlin] != null }
                 ?: throw IllegalArgumentException("No req handler registered for $reqClass")
 
-            result as ReqHandler<Req>
+            result as ReqHandler<SubmittedReq>
         } as ReqHandler<REQ>
 
     @Suppress("UNCHECKED_CAST")
     private fun register(
-        reqClass: KClass<out Req>, operation: ReqHandler<*>
+        reqClass: KClass<out SubmittedReq>, operation: ReqHandler<*>
     ) {
         check(operation.reqClass == reqClass)
-        reqHandler[reqClass] = operation as ReqHandler<Req>
+        reqHandler[reqClass] = operation as ReqHandler<SubmittedReq>
     }
 
-    private val reqHandler = mutableMapOf<KClass<out Req>, ReqHandler<Req>>()
-    private val reqOnce: KeyedOnce<KClass<out Req>, ReqHandler<Req>> = KeyedOnce.default()
+    private val reqHandler = mutableMapOf<KClass<out SubmittedReq>, ReqHandler<SubmittedReq>>()
+    private val reqOnce: KeyedOnce<KClass<out SubmittedReq>, ReqHandler<SubmittedReq>> = KeyedOnce.default()
 }

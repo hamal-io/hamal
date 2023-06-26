@@ -12,7 +12,7 @@ enum class ReqStatus {
 }
 
 @Serializable
-sealed interface Req {
+sealed interface SubmittedReq {
     val id: ReqId
     var status: ReqStatus
 }
@@ -27,7 +27,7 @@ data class InvokeOneshotReq(
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
-) : Req
+) : SubmittedReq
 
 @Serializable
 data class InvokeFixedRateReq(
@@ -38,7 +38,7 @@ data class InvokeFixedRateReq(
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
-) : Req
+) : SubmittedReq
 
 @Serializable
 data class InvokeEventReq(
@@ -49,5 +49,5 @@ data class InvokeEventReq(
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
-) : Req
+) : SubmittedReq
 

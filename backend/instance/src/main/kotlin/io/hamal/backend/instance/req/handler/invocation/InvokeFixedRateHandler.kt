@@ -9,13 +9,12 @@ import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.InvokeFixedRateReq
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class InvokeFixedRateHandler(
-    @Autowired private val execCmdService: ExecCmdService,
-    @Autowired private val funcQueryService: FuncQueryService
+    private val execCmdService: ExecCmdService,
+    private val funcQueryService: FuncQueryService
 ) : ReqHandler<InvokeFixedRateReq>(InvokeFixedRateReq::class) {
     override fun invoke(req: InvokeFixedRateReq) {
         val func = funcQueryService.get(req.funcId)

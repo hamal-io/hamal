@@ -3,6 +3,7 @@ package io.hamal.backend.repository.sqlite.record.func
 import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.func.Entity
 import io.hamal.backend.repository.record.func.FuncCreationRecord
@@ -78,7 +79,8 @@ class SqliteFuncRepository(
         return ProjectionCurrent.find(connection, funcId)
     }
 
-    override fun list(afterId: FuncId, limit: Int): List<Func> {
-        return ProjectionCurrent.list(connection, afterId, limit)
+    override fun list(block: FuncQuery.() -> Unit): List<Func> {
+        val query = FuncQuery().also(block)
+        return ProjectionCurrent.list(connection, query.afterId, query.limit)
     }
 }

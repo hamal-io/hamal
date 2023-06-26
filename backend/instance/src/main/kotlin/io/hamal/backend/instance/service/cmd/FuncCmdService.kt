@@ -19,7 +19,7 @@ class FuncCmdService
         createFunc(cmdId, toCreate).also { emitEvent(cmdId, it) }
 
     data class ToCreate(
-        val funcId: FuncId,
+        val id: FuncId,
         val name: FuncName,
         val inputs: FuncInputs,
         val secrets: FuncSecrets,
@@ -31,7 +31,7 @@ private fun FuncCmdService.createFunc(cmdId: CmdId, toCreate: FuncCmdService.ToC
     return funcCmdRepository.create(
         FuncCmdRepository.CreateCmd(
             id = cmdId,
-            funcId = toCreate.funcId,
+            funcId = toCreate.id,
             name = toCreate.name,
             inputs = toCreate.inputs,
             secrets = toCreate.secrets,

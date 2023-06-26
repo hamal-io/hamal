@@ -19,4 +19,4 @@ data class SubmittedCompleteExecReq(
     val execId: ExecId,
     val state: State,
     val events: List<Event>
-) : Req
+) : SubmittedReq

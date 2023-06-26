@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.backend.repository.memory.record.CurrentExecProjection
 import io.hamal.backend.repository.memory.record.QueueProjection
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.Req
+import io.hamal.lib.domain.req.SubmittedReq
 import io.hamal.lib.domain.req.ReqStatus
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.math.BigInteger
@@ -18,16 +18,16 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     val store = mutableMapOf<ReqId, ByteArray>()
     val lock = ReentrantReadWriteLock()
 
-    override fun queue(req: Req) {
+    override fun queue(req: SubmittedReq) {
         return lock.writeLock().withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(Req.serializer(), req)
+            store[req.id] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req)
             queue.add(req.id)
         }
     }
 
-    override fun next(limit: Int): List<Req> {
+    override fun next(limit: Int): List<SubmittedReq> {
         return lock.writeLock().withLock {
-            val result = mutableListOf<Req>()
+            val result = mutableListOf<SubmittedReq>()
 
             repeat(limit) {
                 val reqId = queue.removeFirstOrNull() ?: return result
@@ -41,14 +41,14 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun complete(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(Req.serializer(), req.apply { status = ReqStatus.Completed })
+            store[req.id] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Completed })
         }
     }
 
     override fun fail(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.writeLock().withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(Req.serializer(), req.apply { status = ReqStatus.Failed })
+            store[req.id] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Failed })
         }
     }
 
@@ -62,12 +62,12 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     }
 
 
-    override fun find(reqId: ReqId): Req? {
+    override fun find(reqId: ReqId): SubmittedReq? {
         val result = lock.readLock().withLock { store[reqId] } ?: return null
-        return ProtoBuf { }.decodeFromByteArray(Req.serializer(), result)
+        return ProtoBuf { }.decodeFromByteArray(SubmittedReq.serializer(), result)
     }
 
-    override fun list(block: ReqQueryRepository.Query.() -> Unit): List<Req> {
+    override fun list(block: ReqQueryRepository.Query.() -> Unit): List<SubmittedReq> {
         val query = ReqQueryRepository.Query(ReqId(BigInteger.ZERO), limit = 25)
         block(query)
         return lock.readLock().withLock {

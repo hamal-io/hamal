@@ -9,13 +9,12 @@ import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.InvokeEventReq
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class InvokeEventHandler(
-    @Autowired private val execCmdService: ExecCmdService,
-    @Autowired private val funcQueryService: FuncQueryService
+    private val execCmdService: ExecCmdService,
+    private val funcQueryService: FuncQueryService
 ) : ReqHandler<InvokeEventReq>(InvokeEventReq::class) {
     override fun invoke(req: InvokeEventReq) {
         val func = funcQueryService.get(req.funcId)

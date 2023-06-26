@@ -22,4 +22,4 @@ data class SubmittedInvokeAdhocReq(
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets,
     val code: Code
-) : Req
+) : SubmittedReq

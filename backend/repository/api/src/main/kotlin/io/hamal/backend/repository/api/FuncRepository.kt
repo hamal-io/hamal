@@ -20,5 +20,9 @@ interface FuncCmdRepository {
 interface FuncQueryRepository {
     fun find(funcId: FuncId): Func?
 
-    fun list(afterId: FuncId, limit: Int): List<Func>
+    fun list(block: FuncQuery.() -> Unit): List<Func>
+    data class FuncQuery(
+        var afterId: FuncId = FuncId(0),
+        var limit: Limit = Limit(1)
+    )
 }

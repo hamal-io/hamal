@@ -25,7 +25,7 @@ internal class CreateTopicRouteIT : BaseEventRouteIT() {
     }
 
     @Test
-    fun `Create topic name already exists`() {
+    fun `Tries to create topic but name already exists`() {
         createTopic(TopicName("namespace::topics_one"))
 
         with(createTopic(TopicName("namespace::topics_one"))) {

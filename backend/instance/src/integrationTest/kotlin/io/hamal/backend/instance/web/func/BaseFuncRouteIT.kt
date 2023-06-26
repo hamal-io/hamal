@@ -1,0 +1,21 @@
+package io.hamal.backend.instance.web.func
+
+import io.hamal.backend.instance.web.BaseRouteIT
+import io.hamal.lib.domain.req.CreateFuncReq
+import io.hamal.lib.domain.req.SubmittedCreateFuncReq
+import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.body
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+
+internal sealed class BaseFuncRouteIT : BaseRouteIT() {
+    fun createFunc(req: CreateFuncReq): SubmittedCreateFuncReq {
+        val createTopicResponse = httpTemplate.post("/v1/funcs").body(req).execute()
+
+        assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+
+        return createTopicResponse.result(SubmittedCreateFuncReq::class)
+    }
+}
