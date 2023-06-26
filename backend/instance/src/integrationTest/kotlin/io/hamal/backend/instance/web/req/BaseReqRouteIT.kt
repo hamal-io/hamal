@@ -13,7 +13,7 @@ import io.hamal.lib.sdk.domain.ListSubmittedReqsResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseRouteReqIT : BaseRouteIT() {
+internal sealed class BaseReqRouteIT : BaseRouteIT() {
 
     fun list(): ListSubmittedReqsResponse {
         val listResponse = httpTemplate.get("/v1/reqs").execute()

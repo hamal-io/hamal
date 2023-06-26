@@ -27,8 +27,7 @@ data class ApiCreateTriggerResponse(
 
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiListTriggerResponse(
+data class ListTriggersResponse(
     val triggers: List<Trigger>
 ) {
 

@@ -22,6 +22,18 @@ class TriggerCmdService
     fun create(cmdId: CmdId, triggerToCreate: TriggerToCreate): Trigger =
         createTrigger(cmdId, triggerToCreate).also { emitEvent(cmdId, it) }
 
+    fun create(cmdId: CmdId, triggerToCreate: FixedRateTriggerToCreate): Trigger =
+        createTrigger(cmdId, triggerToCreate).also { emitEvent(cmdId, it) }
+
+    data class FixedRateTriggerToCreate(
+        val id: TriggerId,
+        val name: TriggerName,
+        val funcId: FuncId,
+        val inputs: TriggerInputs,
+        val secrets: TriggerSecrets,
+        val duration: Duration,
+    )
+
     data class TriggerToCreate(
         val type: TriggerType,
         val name: TriggerName,
@@ -32,6 +44,20 @@ class TriggerCmdService
         val topicId: TopicId?
     )
 }
+
+private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: TriggerCmdService.FixedRateTriggerToCreate) =
+    triggerCmdRepository.create(
+        TriggerCmdRepository.CreateFixedRateCmd(
+            id = cmdId,
+            triggerId = generateDomainId(::TriggerId),
+            name = triggerToCreate.name,
+            funcId = triggerToCreate.funcId,
+            inputs = triggerToCreate.inputs,
+            secrets = triggerToCreate.secrets,
+            duration = triggerToCreate.duration
+        )
+    )
+
 
 private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: TriggerCmdService.TriggerToCreate): Trigger {
     return when (triggerToCreate.type) {
@@ -62,10 +88,5 @@ private fun TriggerCmdService.createTrigger(cmdId: CmdId, triggerToCreate: Trigg
 }
 
 private fun TriggerCmdService.emitEvent(cmdId: CmdId, trigger: Trigger) {
-    eventEmitter.emit(
-        cmdId, TriggerCreatedEvent(
-//            cmdId = CommandId(123), //FIXME
-            trigger
-        )
-    )
+    eventEmitter.emit(cmdId, TriggerCreatedEvent(trigger))
 }

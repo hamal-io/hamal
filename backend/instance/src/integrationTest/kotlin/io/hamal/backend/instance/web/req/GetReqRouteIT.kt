@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class GetReqRouteIT : BaseRouteReqIT() {
+internal class GetReqRouteIT : BaseReqRouteIT() {
     @Test
     fun `Gets req`() {
         val request = adhoc()

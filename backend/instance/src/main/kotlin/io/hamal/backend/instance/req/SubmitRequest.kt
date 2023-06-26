@@ -105,6 +105,20 @@ class SubmitRequest(
             code = createFuncReq.code
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(createTriggerReq: CreateTriggerReq) =
+        when (createTriggerReq) {
+            is CreateFixedRateTrigger -> SubmittedCreateFixedRateTriggerReq(
+                id = generateDomainId(::ReqId),
+                status = ReqStatus.Submitted,
+                triggerId = generateDomainId(::TriggerId),
+                triggerName = createTriggerReq.name,
+                funcId = createTriggerReq.funcId,
+                inputs = createTriggerReq.inputs,
+                secrets = createTriggerReq.secrets,
+                duration = createTriggerReq.duration,
+            )
+        }.also(reqCmdRepository::queue)
+
     operator fun invoke(createTopic: CreateTopicReq) =
         SubmittedCreateTopicReq(
             id = generateDomainId(::ReqId),
