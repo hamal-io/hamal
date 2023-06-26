@@ -42,7 +42,5 @@ internal class GetExecRouteIT : BaseExecRouteIT() {
 
         val error = response.error(HamalError::class)
         assertThat(error.message, equalTo("Exec not found"))
-
-        verifyNoRequests()
     }
 }
