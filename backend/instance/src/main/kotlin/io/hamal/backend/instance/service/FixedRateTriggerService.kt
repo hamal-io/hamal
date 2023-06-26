@@ -34,7 +34,7 @@ class FixedRateTriggerService
     fun setup() {
         triggerQueryRepository.list {
             afterId = TriggerId(0)
-            limit = 10
+            limit = Limit(10)
         }.filterIsInstance<FixedRateTrigger>().forEach {
             plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
         }

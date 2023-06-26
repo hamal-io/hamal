@@ -40,7 +40,7 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
 
     fun list(
         connection: Connection,
-        query: TriggerQueryRepository.Query
+        query: TriggerQueryRepository.TriggerQuery
     ): List<Trigger> {
         return connection.executeQuery<Trigger>(
             """

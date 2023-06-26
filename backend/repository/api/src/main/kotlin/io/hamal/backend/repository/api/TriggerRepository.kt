@@ -38,12 +38,12 @@ interface TriggerCmdRepository {
 interface TriggerQueryRepository {
     fun find(triggerId: TriggerId): Trigger?
 
-    fun list(block: Query.() -> Unit): List<Trigger>
+    fun list(block: TriggerQuery.() -> Unit): List<Trigger>
 
-    data class Query(
-        var afterId: TriggerId,
-        var types: Set<TriggerType>,
-        var limit: Int
+    data class TriggerQuery(
+        var afterId: TriggerId = TriggerId(0),
+        var types: Set<TriggerType> = TriggerType.values().toSet(),
+        var limit: Limit = Limit(1)
     )
 
 }

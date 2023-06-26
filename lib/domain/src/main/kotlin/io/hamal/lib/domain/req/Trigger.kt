@@ -7,48 +7,27 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-sealed interface CreateTriggerReq {
-    val name: TriggerName
-    val funcId: FuncId
-    val type: TriggerType
-    val inputs: TriggerInputs
-    val secrets: TriggerSecrets
-}
+data class CreateTriggerReq(
+    val type: TriggerType,
+    val name: TriggerName,
+    val funcId: FuncId,
+    val inputs: TriggerInputs,
+    val secrets: TriggerSecrets,
+    val duration: Duration? = null,
+)
 
 @Serializable
-data class CreateFixedRateTrigger(
-    override val name: TriggerName,
-    override val funcId: FuncId,
-    override val inputs: TriggerInputs,
-    override val secrets: TriggerSecrets,
-    val duration: Duration,
-) : CreateTriggerReq {
-    override val type = TriggerType.FixedRate
-}
-
-@Serializable
-sealed interface SubmittedCreateTriggerReq : SubmittedReq {
-    val type: TriggerType
-    val triggerId: TriggerId
-    val triggerName: TriggerName
-    val funcId: FuncId
-    val inputs: TriggerInputs
-    val secrets: TriggerSecrets
-}
-
-@Serializable
-data class SubmittedCreateFixedRateTriggerReq(
+data class SubmittedCreateTriggerReq(
     override val id: ReqId,
     override var status: ReqStatus,
-    override val triggerId: TriggerId,
-    override val triggerName: TriggerName,
-    override val funcId: FuncId,
-    override val inputs: TriggerInputs,
-    override val secrets: TriggerSecrets,
-    val duration: Duration,
-) : SubmittedCreateTriggerReq {
-    override val type = TriggerType.FixedRate
-}
+    val type: TriggerType,
+    val triggerId: TriggerId,
+    val triggerName: TriggerName,
+    val funcId: FuncId,
+    val inputs: TriggerInputs,
+    val secrets: TriggerSecrets,
+    val duration: Duration? = null,
+) : SubmittedReq
 
 
 @Serializable

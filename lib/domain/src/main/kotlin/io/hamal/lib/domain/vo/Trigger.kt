@@ -20,12 +20,12 @@ class TriggerName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = TriggerInputs.Serializer::class)
-class TriggerInputs(override val value: TableValue) : Inputs() {
+class TriggerInputs(override val value: TableValue = TableValue()) : Inputs() {
     internal object Serializer : InputsSerializer<TriggerInputs>(::TriggerInputs)
 }
 
 
 @Serializable(with = TriggerSecrets.Serializer::class)
-class TriggerSecrets(override val value: List<Secret>) : Secrets() {
+class TriggerSecrets(override val value: List<Secret> = listOf()) : Secrets() {
     internal object Serializer : SecretsSerializer<TriggerSecrets>(::TriggerSecrets)
 }

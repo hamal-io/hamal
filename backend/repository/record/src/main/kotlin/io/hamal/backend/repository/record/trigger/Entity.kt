@@ -80,3 +80,21 @@ data class Entity(
         }
     }
 }
+
+fun List<TriggerRecord>.createEntity(): Entity {
+    check(isNotEmpty()) { "At least one record is required" }
+    val firstRecord = first()
+    check(firstRecord is FixedRateTriggerCreationRecord)
+
+    var result = Entity(
+        id = firstRecord.entityId,
+        cmdId = firstRecord.cmdId,
+        sequence = firstRecord.sequence()
+    )
+
+    forEach { record ->
+        result = result.apply(record)
+    }
+
+    return result
+}

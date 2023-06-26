@@ -3,7 +3,7 @@ package io.hamal.backend.repository.sqlite.record.trigger
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.backend.repository.api.TriggerQueryRepository
-import io.hamal.backend.repository.api.TriggerQueryRepository.Query
+import io.hamal.backend.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.trigger.Entity
 import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
@@ -14,7 +14,6 @@ import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
-import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import java.nio.file.Path
 
@@ -111,13 +110,8 @@ class SqliteTriggerRepository(
         return ProjectionCurrent.find(connection, triggerId)
     }
 
-    override fun list(block: Query.() -> Unit): List<Trigger> {
-        val query = Query(
-            afterId = TriggerId(0),
-            types = TriggerType.values().toSet(),
-            limit = Int.MAX_VALUE
-        )
-        block(query)
+    override fun list(block: TriggerQuery.() -> Unit): List<Trigger> {
+        val query = TriggerQuery().also(block)
         return ProjectionCurrent.list(connection, query)
     }
 }
