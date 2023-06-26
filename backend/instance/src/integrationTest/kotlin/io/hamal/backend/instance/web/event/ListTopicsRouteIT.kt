@@ -19,11 +19,13 @@ internal class ListTopicsRouteIT : BaseEventRouteIT() {
         createTopic(TopicName("namespace::topics_one"))
         Thread.sleep(10)
 
-        val result = listTopics()
-        assertThat(result.topics, hasSize(1))
+        with(listTopics()) {
+            assertThat(topics, hasSize(1))
 
-        val topic = result.topics.first()
-        assertThat(topic.name, equalTo(TopicName("namespace::topics_one")))
+            with(topics.first()) {
+                assertThat(name, equalTo(TopicName("namespace::topics_one")))
+            }
+        }
     }
 
     @Test
@@ -33,16 +35,17 @@ internal class ListTopicsRouteIT : BaseEventRouteIT() {
         createTopic(TopicName("namespace::topics_three"))
         Thread.sleep(10)
 
-        val result = listTopics()
-        assertThat(result.topics, hasSize(3))
+        with(listTopics()) {
+            assertThat(topics, hasSize(3))
 
-        val topicOne = result.topics.first()
-        assertThat(topicOne.name, equalTo(TopicName("namespace::topics_one")))
+            val topicOne = topics[0]
+            assertThat(topicOne.name, equalTo(TopicName("namespace::topics_one")))
 
-        val topicTwo = result.topics[1]
-        assertThat(topicTwo.name, equalTo(TopicName("namespace::topics_two")))
+            val topicTwo = topics[1]
+            assertThat(topicTwo.name, equalTo(TopicName("namespace::topics_two")))
 
-        val topicThree = result.topics[2]
-        assertThat(topicThree.name, equalTo(TopicName("namespace::topics_three")))
+            val topicThree = topics[2]
+            assertThat(topicThree.name, equalTo(TopicName("namespace::topics_three")))
+        }
     }
 }

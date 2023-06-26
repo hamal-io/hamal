@@ -7,6 +7,7 @@ import io.hamal.lib.domain.vo.*
 
 interface FuncCmdRepository {
     fun create(cmd: CreateCmd): Func
+    fun clear()
     data class CreateCmd(
         val id: CmdId,
         val funcId: FuncId,

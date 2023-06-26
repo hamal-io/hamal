@@ -30,11 +30,9 @@ data class ApiExecFuncResponse(
 
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiListFuncResponse(
+data class ListFuncsResponse(
     val funcs: List<Func>
 ) {
-
     @Serializable
     data class Func(
         val id: FuncId,

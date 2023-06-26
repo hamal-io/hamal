@@ -4,10 +4,7 @@ import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.query.EventQueryService
 import io.hamal.backend.instance.service.query.FuncQueryService
-import io.hamal.backend.repository.api.ExecCmdRepository
-import io.hamal.backend.repository.api.ExecQueryRepository
-import io.hamal.backend.repository.api.ReqCmdRepository
-import io.hamal.backend.repository.api.ReqQueryRepository
+import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
@@ -62,6 +59,9 @@ abstract class BaseRouteIT {
     lateinit var funcQueryService: FuncQueryService
 
     @Autowired
+    lateinit var funcCmdRepository: FuncCmdRepository
+
+    @Autowired
     lateinit var reqQueryRepository: ReqQueryRepository
 
     @Autowired
@@ -81,6 +81,7 @@ abstract class BaseRouteIT {
         eventBrokerRepository.clear()
         reqCmdRepository.clear()
         execCmdRepository.clear()
+        funcCmdRepository.clear()
     }
 
     fun verifyReqFailed(id: ReqId) {

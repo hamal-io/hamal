@@ -13,7 +13,6 @@ import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ApiExecFuncRequest
 import io.hamal.lib.sdk.domain.ApiExecFuncResponse
-import io.hamal.lib.sdk.domain.ApiListFuncResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -27,29 +26,6 @@ open class FuncController(
     @Autowired val request: SubmitRequest,
     @Autowired val generateDomainId: GenerateDomainId
 ) {
-    @GetMapping("/v1/funcs")
-    fun listFunc(
-        @RequestParam(required = false, name = "after_id", defaultValue = "0") stringFuncId: String,
-        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ApiListFuncResponse> {
-        val result = queryService.list {
-            this.afterId = FuncId(SnowflakeId(stringFuncId.toLong()))
-            this.limit = limit
-        }
-
-
-        val b = ApiListFuncResponse(
-            result.map {
-                ApiListFuncResponse.Func(
-                    id = it.id,
-                    name = it.name
-                )
-            }
-        )
-
-        return ResponseEntity.ok(b)
-    }
-
     @PostMapping("/v1/funcs/{funcId}/exec")
     fun execFunc(
         @PathVariable("funcId") stringFuncId: String,

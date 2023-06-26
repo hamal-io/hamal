@@ -19,11 +19,11 @@ class FuncName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = FuncInputs.Serializer::class)
-class FuncInputs(override val value: TableValue) : Inputs() {
+class FuncInputs(override val value: TableValue = TableValue()) : Inputs() {
     internal object Serializer : InputsSerializer<FuncInputs>(::FuncInputs)
 }
 
 @Serializable(with = FuncSecrets.Serializer::class)
-class FuncSecrets(override val value: List<Secret>) : Secrets() {
+class FuncSecrets(override val value: List<Secret> = listOf()) : Secrets() {
     internal object Serializer : SecretsSerializer<FuncSecrets>(::FuncSecrets)
 }

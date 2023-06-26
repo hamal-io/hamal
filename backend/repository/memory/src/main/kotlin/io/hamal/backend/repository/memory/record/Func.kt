@@ -59,6 +59,11 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
         val query = FuncQuery().also(block)
         return CurrentFuncProjection.list(query.afterId, query.limit)
     }
+
+    override fun clear() {
+        super.clear()
+        CurrentFuncProjection.clear()
+    }
 }
 
 private fun MemoryFuncRepository.currentVersion(id: FuncId): Func {
