@@ -121,7 +121,7 @@ class SqliteExecRepository(
         val result = mutableListOf<StartedExec>()
 
         tx {
-            ProjectionQueue.pop(this, 2).forEach { queuedExec ->
+            ProjectionQueue.pop(this, 1).forEach { queuedExec ->
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 

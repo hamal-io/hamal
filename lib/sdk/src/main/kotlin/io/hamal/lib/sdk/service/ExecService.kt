@@ -5,10 +5,10 @@ import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.domain.ApiAgentExecRequests
+import io.hamal.lib.sdk.domain.DequeueExecsResponse
 
 interface ExecService {
-    fun poll(): ApiAgentExecRequests
+    fun poll(): DequeueExecsResponse
 
     //FIXME list of events to publish
     fun complete(execId: ExecId, stateAfterCompletion: State)
@@ -17,10 +17,10 @@ interface ExecService {
 }
 
 data class DefaultExecService(val template: HttpTemplate) : ExecService {
-    override fun poll(): ApiAgentExecRequests {
+    override fun poll(): DequeueExecsResponse {
         return HttpTemplate("http://localhost:8084")
             .post("/v1/dequeue")
-            .execute(ApiAgentExecRequests::class)
+            .execute(DequeueExecsResponse::class)
     }
 
     override fun complete(execId: ExecId, stateAfterCompletion: State) {

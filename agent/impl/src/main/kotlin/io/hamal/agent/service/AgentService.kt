@@ -74,7 +74,7 @@ class AgentService {
         CompletableFuture.runAsync {
             DefaultHamalSdk("http://localhost:8084").execService()
                 .poll()
-                .requests.forEach { request ->
+                .execs.forEach { request ->
 
                     try {
 

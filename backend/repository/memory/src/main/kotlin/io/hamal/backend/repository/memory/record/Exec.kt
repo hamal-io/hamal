@@ -122,7 +122,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
 
     override fun start(cmd: StartCmd): List<StartedExec> {
         val result = mutableListOf<StartedExec>()
-        QueueProjection.pop(2).forEach { queuedExec ->
+        QueueProjection.pop(1).forEach { queuedExec ->
             val execId = queuedExec.id
             check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 

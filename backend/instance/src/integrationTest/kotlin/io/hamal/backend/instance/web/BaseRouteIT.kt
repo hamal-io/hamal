@@ -3,6 +3,7 @@ package io.hamal.backend.instance.web
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.query.EventQueryService
+import io.hamal.backend.instance.service.query.ExecQueryService
 import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -54,6 +55,9 @@ abstract class BaseRouteIT {
 
     @Autowired
     lateinit var execQueryRepository: ExecQueryRepository
+
+    @Autowired
+    lateinit var execQueryService: ExecQueryService
 
     @Autowired
     lateinit var funcQueryService: FuncQueryService

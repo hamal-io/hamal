@@ -2,24 +2,24 @@ package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecSecrets
 import kotlinx.serialization.Serializable
 
 
-@Deprecated("do not have separate dto")
 @Serializable
-data class ApiAgentExecRequests(
-    val requests: List<ExecRequest>
+data class DequeueExecsResponse(
+    val execs: List<Exec>
 ) {
-
     @Serializable
-    data class ExecRequest(
+    data class Exec(
         val id: ExecId,
-        val funcName: FuncName,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val secrets: ExecSecrets,
-        val statePayload: State?,
+        val state: State,
         val code: Code
     )
 }
