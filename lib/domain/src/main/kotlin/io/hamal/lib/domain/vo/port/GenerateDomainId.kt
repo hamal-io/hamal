@@ -1,9 +1,6 @@
 package io.hamal.lib.domain.vo.port
 
-import io.hamal.lib.common.DefaultPartitionSource
-import io.hamal.lib.common.Partition
-import io.hamal.lib.common.SnowflakeGenerator
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.*
 import io.hamal.lib.domain.vo.base.DomainId
 
 interface GenerateDomainId {
@@ -11,13 +8,15 @@ interface GenerateDomainId {
 }
 
 class DefaultDomainIdGenerator(
-    partition: Partition
+    private val partition: Partition
 ) : GenerateDomainId {
+    private val provideGenerator = KeyedOnce.default<(SnowflakeId) -> DomainId, SnowflakeId.Generator>()
     override fun <ID : DomainId> invoke(ctor: (SnowflakeId) -> ID): ID {
+        val generator = provideGenerator(ctor) {
+            SnowflakeGenerator(
+                DefaultPartitionSource(partition.value)
+            )
+        }
         return ctor(generator.next())
     }
-
-    private val generator = SnowflakeGenerator(
-        partitionSource = DefaultPartitionSource(partition.value)
-    )
 }

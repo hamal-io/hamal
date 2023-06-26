@@ -38,15 +38,15 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
         /**
          * Blocks if sequence is exhausted until next milliseconds
          */
-        fun next(elapsedSource: () -> Elapsed): Tuple2<Elapsed, Sequence>
+        fun next(elapsedSource: () -> Elapsed): Pair<Elapsed, Sequence>
 
         @JvmInline
         value class Sequence(val value: Short) {
             constructor(value: Int) : this(value.toShort())
 
             init {
-                require(value > 0) { "Sequence must be positive - [1, 4096]" }
-                require(value <= 4096) { "Sequence is limited to 12 bits - [1, 4096]" }
+                require(value >= 0) { "Sequence must not be negative - [0, 4095]" }
+                require(value <= 4095) { "Sequence is limited to 12 bits - [0, 4095]" }
             }
         }
     }
@@ -60,7 +60,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     fun partition(): Partition = Partition(
         BitUtils.extractRange(
             value = value,
-            startIndex = 53,
+            startIndex = 0,
             numberOfBits = 10
         ).toInt()
     )
@@ -68,7 +68,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     fun sequence(): Sequence = Sequence(
         BitUtils.extractRange(
             value = value,
-            startIndex = 41,
+            startIndex = 10,
             numberOfBits = 12
         ).toShort()
     )
@@ -77,7 +77,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     fun elapsed(): Elapsed = Elapsed(
         BitUtils.extractRange(
             value = value,
-            startIndex = 0,
+            startIndex = 22,
             numberOfBits = 41
         )
     )
@@ -121,7 +121,7 @@ class DefaultSequenceSource : SequenceSource {
     private var nextSequence = 0
     private val maxSequence = 4096
 
-    override fun next(elapsedSource: () -> Elapsed): Tuple2<Elapsed, Sequence> {
+    override fun next(elapsedSource: () -> Elapsed): Pair<Elapsed, Sequence> {
         val elapsed = elapsedSource()
         check(elapsed >= previousCalledAt) { "Elapsed must be monotonic" }
 
@@ -145,7 +145,7 @@ class DefaultSequenceSource : SequenceSource {
             nextSequence = 0
         }
 
-        return Tuple2(previousCalledAt, Sequence(++nextSequence))
+        return Pair(previousCalledAt, Sequence(nextSequence++))
     }
 }
 
@@ -173,10 +173,10 @@ class SnowflakeGenerator(
         partition: Partition,
         sequence: Sequence
     ): SnowflakeId {
-        val partitionValue = partition.value.toLong().shl(53)
-        val sequenceValue = sequence.value.toLong().shl(41)
-        val elapsedValue = elapsed.value
-        val result = partitionValue + sequenceValue + elapsedValue
+        val elapsedValue = elapsed.value.shl(22)
+        val sequenceValue = sequence.value.toLong().shl(10)
+        val partitionValue = partition.value.toLong()
+        val result = elapsedValue + sequenceValue + partitionValue
         return SnowflakeId(result)
     }
 }

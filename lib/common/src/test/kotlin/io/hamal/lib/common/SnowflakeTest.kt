@@ -1,8 +1,7 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package io.hamal.lib.domain.util
+package io.hamal.lib.common
 
-import io.hamal.lib.common.*
 import io.hamal.lib.common.SnowflakeId.ElapsedSource
 import io.hamal.lib.common.SnowflakeId.ElapsedSource.Elapsed
 import io.hamal.lib.common.SnowflakeId.SequenceSource.Sequence
@@ -60,20 +59,13 @@ class SnowflakeTest {
         inner class SequenceTest {
             @Test
             fun `Limited to 12 bits`() {
-                Sequence(4096)
+                Sequence(0)
+                Sequence(4095)
 
                 val exception = assertThrows<IllegalArgumentException> {
-                    Sequence(4097)
+                    Sequence(4096)
                 }
-                assertThat(exception.message, containsString("Sequence is limited to 12 bits - [1, 4096]"))
-            }
-
-            @Test
-            fun `Sequence is not 0`() {
-                val exception = assertThrows<IllegalArgumentException> {
-                    Sequence(0)
-                }
-                assertThat(exception.message, containsString("Sequence must be positive - [1, 4096]"))
+                assertThat(exception.message, containsString("Sequence is limited to 12 bits - [0, 4095]"))
             }
 
             @Test
@@ -81,7 +73,7 @@ class SnowflakeTest {
                 val exception = assertThrows<IllegalArgumentException> {
                     Sequence(-1)
                 }
-                assertThat(exception.message, containsString("Sequence must be positive - [1, 4096]"))
+                assertThat(exception.message, containsString("Sequence must not be negative - [0, 4095]"))
             }
         }
 
@@ -125,7 +117,7 @@ class SnowflakeTest {
                         }
                     }
 
-                    for (i in 1 until 4097) {
+                    for (i in 0 until 4096) {
                         val (elapsed, seq) = testInstance.next(elapsedSource::elapsed)
                         assertThat(elapsed, equalTo(Elapsed(1)))
                         assertThat(seq, equalTo(Sequence(i)))
@@ -133,7 +125,7 @@ class SnowflakeTest {
 
                     val (resultElapsed, resultSeq) = testInstance.next(elapsedSource::elapsed)
                     assertThat(resultElapsed, equalTo(Elapsed(2)))
-                    assertThat(resultSeq, equalTo(Sequence(1)))
+                    assertThat(resultSeq, equalTo(Sequence(0)))
                 }
             }
         }
@@ -141,55 +133,103 @@ class SnowflakeTest {
 
     @Nested
     inner class IdTest {
+
         @Test
-        fun `Genesis - never called`() {
+        fun `partition = 0 - sequence = 0 - elapsed = 0`() {
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(0)
+            )
+
+            val result = testInstance.next()
+            assertThat(result, equalTo(SnowflakeId(0)))
+
+            assertThat(result.partition(), equalTo(Partition(0)))
+            assertThat(result.sequence(), equalTo(Sequence(0)))
+            assertThat(result.elapsed(), equalTo(Elapsed(0)))
+        }
+
+        @Test
+        fun `partition = 0 - sequence = 1 - elapsed = 0`() {
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(0)
+            )
+
+            testInstance.next()
+            val result = testInstance.next()
+            assertThat(result, equalTo(SnowflakeId(1024)))
+
+            assertThat(result.partition(), equalTo(Partition(0)))
+            assertThat(result.sequence(), equalTo(Sequence(1)))
+            assertThat(result.elapsed(), equalTo(Elapsed(0)))
+        }
+
+        @Test
+        fun `partition = 0 - sequence = 2 - elapsed = 0`() {
+            val testInstance = SnowflakeGenerator(
+                elapsedSource = FixedElapsedSource(0),
+                partitionSource = DefaultPartitionSource(0)
+            )
+
+            testInstance.next()
+            testInstance.next()
+            val result = testInstance.next()
+            assertThat(result, equalTo(SnowflakeId(2048)))
+
+            assertThat(result.partition(), equalTo(Partition(0)))
+            assertThat(result.sequence(), equalTo(Sequence(2)))
+            assertThat(result.elapsed(), equalTo(Elapsed(0)))
+        }
+
+        @Test
+        fun `partition = 10 - sequence = 0 - elapsed = 0`() {
             val testInstance = SnowflakeGenerator(
                 elapsedSource = FixedElapsedSource(0),
                 partitionSource = DefaultPartitionSource(10)
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(SnowflakeId(90074191570665472)))
+            assertThat(result, equalTo(SnowflakeId(10)))
 
             assertThat(result.partition(), equalTo(Partition(10)))
-            assertThat(result.sequence(), equalTo(Sequence(1)))
+            assertThat(result.sequence(), equalTo(Sequence(0)))
             assertThat(result.elapsed(), equalTo(Elapsed(0)))
         }
 
         @Test
-        fun `123456 milli seconds after epoch`() {
+        fun `partition = 42 - sequence = 0 - elapsed = 123456`() {
             val testInstance = SnowflakeGenerator(
                 elapsedSource = FixedElapsedSource(123456),
                 partitionSource = DefaultPartitionSource(42)
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(SnowflakeId(378304567722500672)))
+            assertThat(result, equalTo(SnowflakeId(517811994666)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
-            assertThat(result.sequence(), equalTo(Sequence(1)))
+            assertThat(result.sequence(), equalTo(Sequence(0)))
             assertThat(result.elapsed(), equalTo(Elapsed(123456)))
         }
 
         @Test
-        fun `Around 39 years after epoch`() {
+        fun `partition = 42 - sequence = 0 - elapsed = 1099511627776 (~39 years)`() {
             val testInstance = SnowflakeGenerator(
                 elapsedSource = FixedElapsedSource(1099511627776),
                 partitionSource = DefaultPartitionSource(42)
             )
 
-
             val result = testInstance.next()
-            assertThat(result, equalTo(SnowflakeId(378305667234004992)))
+            assertThat(result, equalTo(SnowflakeId(4611686018427387946)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
-            assertThat(result.sequence(), equalTo(Sequence(1)))
+            assertThat(result.sequence(), equalTo(Sequence(0)))
             assertThat(result.elapsed(), equalTo(Elapsed(1099511627776)))
 
         }
 
         @Test
-        fun `Around 69 years after epoch`() {
+        fun `partition = 42 - sequence = 0 - elapsed = 2199023255550 (~69)`() {
             val testInstance = SnowflakeGenerator(
                 elapsedSource = FixedElapsedSource(2199023255550),
                 partitionSource = DefaultPartitionSource(42)
@@ -197,31 +237,11 @@ class SnowflakeTest {
 
 
             val result = testInstance.next()
-            assertThat(result, equalTo(SnowflakeId(378306766745632766)))
+            assertThat(result, equalTo(SnowflakeId(9223372036846387242)))
 
             assertThat(result.partition(), equalTo(Partition(42)))
-            assertThat(result.sequence(), equalTo(Sequence(1)))
+            assertThat(result.sequence(), equalTo(Sequence(0)))
             assertThat(result.elapsed(), equalTo(Elapsed(2199023255550)))
-        }
-
-        @Test
-        fun `10 years after epoch on Partition 128 and a couple of sequences`() {
-            val testInstance = SnowflakeGenerator(
-                elapsedSource = FixedElapsedSource(315569520000),
-                partitionSource = DefaultPartitionSource(128)
-            )
-
-
-            for (i in 1 until 2810) {
-                testInstance.next()
-            }
-
-            val result = testInstance.next()
-            assertThat(result, equalTo(SnowflakeId(1159101075524468096)))
-
-            assertThat(result.partition(), equalTo(Partition(128)))
-            assertThat(result.sequence(), equalTo(Sequence(2810)))
-            assertThat(result.elapsed(), equalTo(Elapsed(315569520000)))
         }
 
         @Test
@@ -244,10 +264,10 @@ class SnowflakeTest {
             )
 
             val result = testInstance.next()
-            assertThat(result, equalTo(SnowflakeId(2199023255552)))
+            assertThat(result, equalTo(SnowflakeId(0)))
 
             assertThat(result.partition(), equalTo(Partition(0)))
-            assertThat(result.sequence(), equalTo(Sequence(1)))
+            assertThat(result.sequence(), equalTo(Sequence(0)))
             assertThat(result.elapsed(), equalTo(Elapsed(0)))
         }
 
@@ -257,7 +277,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(1),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255553)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(4194304)))
         }
 
         @Test
@@ -266,7 +286,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(10),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255562)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(41943040)))
         }
 
         @Test
@@ -275,10 +295,10 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(10),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255562)))
-            assertThat(testInstance.next(), equalTo(SnowflakeId(4398046511114)))
-            assertThat(testInstance.next(), equalTo(SnowflakeId(6597069766666)))
-            assertThat(testInstance.next(), equalTo(SnowflakeId(8796093022218)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(41943040)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(41944064)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(41945088)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(41946112)))
         }
 
         @Test
@@ -287,7 +307,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(100),
                 partitionSource = DefaultPartitionSource(0)
             )
-            assertThat(testInstance.next(), equalTo(SnowflakeId(2199023255652)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(419430400)))
         }
 
         @Test
@@ -296,7 +316,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(0),
                 partitionSource = DefaultPartitionSource(1)
             )
-            assertThat(testInstance.next(), equalTo(SnowflakeId(9009398277996544)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(1)))
         }
 
         @Test
@@ -305,7 +325,7 @@ class SnowflakeTest {
                 elapsedSource = FixedElapsedSource(0),
                 partitionSource = DefaultPartitionSource(2)
             )
-            assertThat(testInstance.next(), equalTo(SnowflakeId(18016597532737536)))
+            assertThat(testInstance.next(), equalTo(SnowflakeId(2)))
         }
 
         @Test
@@ -315,8 +335,8 @@ class SnowflakeTest {
                 partitionSource = DefaultPartitionSource(0)
             )
 
-            for (i in 1 until 4096) {
-                val expectedNext = (i).toLong().shl(63 - 22)
+            for (i in 0 until 4096) {
+                val expectedNext = (i).toLong().shl(10)
                 val result = testInstance.next()
                 assertThat(result, equalTo(SnowflakeId(expectedNext)))
 
@@ -347,14 +367,6 @@ class SnowflakeTest {
 
             val merged = resultOne.get().plus(resultTwo.get()).plus(resultThree.get())
             assertThat(merged, hasSize(1_500_000))
-
-            // all ids in resultTwo must be greater than resultOne - because Partition is most significant
-            val resultOneMax = resultOne.get().max()
-            resultTwo.get().forEach { resultTwoId -> assertThat(resultTwoId, greaterThan(resultOneMax)) }
-
-            // all ids of resultThree must be greater than resultTwo - because Partition is most significant
-            val resultTwoMax = resultTwo.get().max()
-            resultThree.get().forEach { resultThreeId -> assertThat(resultThreeId, greaterThan(resultTwoMax)) }
         }
     }
 
