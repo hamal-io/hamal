@@ -11,9 +11,8 @@ import kotlin.time.Duration
 
 interface TriggerCmdRepository {
     fun create(cmd: CreateFixedRateCmd): FixedRateTrigger
-
     fun create(cmd: CreateEventCmd): EventTrigger
-
+    fun clear()
     data class CreateFixedRateCmd(
         val id: CmdId,
         val triggerId: TriggerId,

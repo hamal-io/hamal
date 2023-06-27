@@ -5,6 +5,7 @@ import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.query.EventQueryService
 import io.hamal.backend.instance.service.query.ExecQueryService
 import io.hamal.backend.instance.service.query.FuncQueryService
+import io.hamal.backend.instance.service.query.TriggerQueryService
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.ReqId
@@ -72,6 +73,12 @@ abstract class BaseRouteIT {
     lateinit var reqCmdRepository: ReqCmdRepository
 
     @Autowired
+    lateinit var triggerCmdRepository: TriggerCmdRepository
+
+    @Autowired
+    lateinit var triggerQueryService: TriggerQueryService
+
+    @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
     val httpTemplate: HttpTemplate by lazy {
@@ -86,6 +93,7 @@ abstract class BaseRouteIT {
         reqCmdRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
+        triggerCmdRepository.clear()
     }
 
     fun verifyReqFailed(id: ReqId) {

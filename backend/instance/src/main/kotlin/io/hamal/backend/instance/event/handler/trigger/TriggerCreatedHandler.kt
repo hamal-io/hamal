@@ -7,10 +7,9 @@ import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.FixedRateTrigger
 
 class TriggerCreatedHandler(
-    val fixedRateTriggerService: FixedRateTriggerService
+    private val fixedRateTriggerService: FixedRateTriggerService
 ) : SystemEventHandler<TriggerCreatedEvent> {
     override fun handle(cmdId: CmdId, evt: TriggerCreatedEvent) {
-        println(evt)
         if (evt.trigger is FixedRateTrigger) {
             fixedRateTriggerService.triggerAdded(evt.trigger)
         }
