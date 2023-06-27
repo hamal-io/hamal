@@ -32,6 +32,8 @@
                     name,
                     funcId,
                     type: 'FixedRate',
+                    inputs: {},
+                    secrets: [],
                     duration: fixedRate
                 }
             )
