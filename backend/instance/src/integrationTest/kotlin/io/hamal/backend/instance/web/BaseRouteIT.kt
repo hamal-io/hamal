@@ -10,6 +10,7 @@ import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain.req.SubmittedReq
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.http.HttpTemplate
 import org.hamcrest.MatcherAssert.*
@@ -96,6 +97,13 @@ abstract class BaseRouteIT {
         triggerCmdRepository.clear()
     }
 
+    fun verifyReqCompleted(id: ReqId) {
+        with(reqQueryRepository.find(id)!!) {
+            assertThat(id, equalTo(id))
+            assertThat(status, equalTo(ReqStatus.Completed))
+        }
+    }
+
     fun verifyReqFailed(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
@@ -103,7 +111,34 @@ abstract class BaseRouteIT {
         }
     }
 
-    fun awaitReqFailed(id: ReqId) {
+
+    fun awaitCompleted(id: ReqId) {
+        while (true) {
+            reqQueryRepository.find(id)?.let {
+                if (it.status == ReqStatus.Completed) {
+                    return
+                }
+                if (it.status == ReqStatus.Failed) {
+                    throw IllegalStateException("expected $id to complete but ")
+                }
+            }
+            Thread.sleep(1)
+        }
+    }
+
+    fun <REQ : SubmittedReq> awaitCompleted(req: REQ): REQ {
+        return req.also { awaitCompleted(it.id) }
+    }
+
+    fun <REQ : SubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
+        return reqs.toList().onEach { awaitCompleted(it.id) }
+    }
+
+    fun <REQ : SubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
+        return reqs.onEach { awaitCompleted(it.id) }
+    }
+
+    fun awaitFailed(id: ReqId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
                 if (it.status == ReqStatus.Failed) {
@@ -118,26 +153,14 @@ abstract class BaseRouteIT {
         }
     }
 
-    fun verifyReqCompleted(id: ReqId) {
-        with(reqQueryRepository.find(id)!!) {
-            assertThat(id, equalTo(id))
-            assertThat(status, equalTo(ReqStatus.Completed))
-        }
+    fun <REQ : SubmittedReq> awaitFailed(req: REQ): REQ {
+        return req.also { awaitFailed(it.id) }
     }
 
-    fun awaitReqCompleted(id: ReqId) {
-        while (true) {
-            reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Completed) {
-                    return
-                }
-                if (it.status == ReqStatus.Failed) {
-                    throw IllegalStateException("expected $id to complete but ")
-                }
-            }
-            Thread.sleep(1)
-        }
+    fun <REQ : SubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
+        return reqs.onEach { awaitFailed(it.id) }
     }
+
 
     fun verifyNoRequests() {
         val requests = reqQueryRepository.list { }

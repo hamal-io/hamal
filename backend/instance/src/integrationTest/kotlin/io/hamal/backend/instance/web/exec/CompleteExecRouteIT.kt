@@ -33,7 +33,7 @@ internal class CompleteExecRouteIT : BaseExecRouteIT() {
 
                 val result = completionResponse.result(SubmittedCompleteExecReq::class)
 
-                awaitReqFailed(result.id)
+                awaitFailed(result.id)
                 // FIXME verify state not updated
                 // FIXME verify event not emitted
             }
@@ -48,7 +48,7 @@ internal class CompleteExecRouteIT : BaseExecRouteIT() {
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = completionResponse.result(SubmittedCompleteExecReq::class)
-        awaitReqCompleted(result.id)
+        awaitCompleted(result.id)
 
         verifyExecCompleted(result.execId)
         //FIXME verify state updated
@@ -73,7 +73,7 @@ internal class CompleteExecRouteIT : BaseExecRouteIT() {
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         val result = response.result(SubmittedCompleteExecReq::class)
-        awaitReqFailed(result.id)
+        awaitFailed(result.id)
     }
 
     private fun verifyExecCompleted(execId: ExecId) {

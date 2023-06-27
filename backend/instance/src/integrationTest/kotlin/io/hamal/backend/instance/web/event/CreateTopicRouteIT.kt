@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test
 internal class CreateTopicRouteIT : BaseEventRouteIT() {
     @Test
     fun `Create topic`() {
-        val result = createTopic(TopicName("namespace::topics_one"))
-        awaitReqCompleted(result.id)
+        val result = awaitCompleted(
+            createTopic(TopicName("namespace::topics_one"))
+        )
         verifyTopicCreated(result.topicId)
 
         with(listTopics()) {
@@ -24,10 +25,10 @@ internal class CreateTopicRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Tries to create topic but name already exists`() {
-        createTopic(TopicName("namespace::topics_one"))
+        awaitCompleted(createTopic(TopicName("namespace::topics_one")))
 
         with(createTopic(TopicName("namespace::topics_one"))) {
-            awaitReqFailed(id)
+            awaitFailed(id)
         }
 
         with(listTopics()) {

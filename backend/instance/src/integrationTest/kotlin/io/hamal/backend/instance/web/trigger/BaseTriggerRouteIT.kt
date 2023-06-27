@@ -36,7 +36,8 @@ internal sealed class BaseTriggerRouteIT : BaseRouteIT() {
     }
 
     fun createFixedRateTrigger(name: TriggerName): SubmittedCreateTriggerReq {
-        val funcResponse = createFunc(FuncName(name.value)).also { awaitReqCompleted(it.id) }
+        val funcResponse = awaitCompleted(createFunc(FuncName(name.value)))
+
         val creationResponse = httpTemplate.post("/v1/triggers")
             .body(
                 CreateTriggerReq(

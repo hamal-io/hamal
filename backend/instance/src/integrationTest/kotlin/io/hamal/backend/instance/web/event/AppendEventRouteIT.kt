@@ -14,14 +14,17 @@ import org.junit.jupiter.api.Test
 internal class AppendEventRouteIT : BaseEventRouteIT() {
     @Test
     fun `Append event`() {
-        val topicResponse = createTopic(TopicName("namespace::topics_one"))
-        val result = appendEvent(
-            topicResponse.topicId,
-            ContentType("application/json"),
-            Content("""{"hamal":"rocks"}""")
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("namespace::topics_one"))
         )
 
-        awaitReqCompleted(result.id)
+        awaitCompleted(
+            appendEvent(
+                topicResponse.topicId,
+                ContentType("application/json"),
+                Content("""{"hamal":"rocks"}""")
+            )
+        )
 
         with(listEvents(topicResponse.topicId)) {
             assertThat(events, hasSize(1))
@@ -34,17 +37,19 @@ internal class AppendEventRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Append event multiple times`() {
-        val topicResponse = createTopic(TopicName("namespace::topics_one"))
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("namespace::topics_one"))
+        )
 
-        val requests = IntRange(1, 10).map {
-            appendEvent(
-                topicResponse.topicId,
-                ContentType("application/json"),
-                Content("""{"hamal":"rocks"}""")
-            )
-        }
-
-        requests.forEach { awaitReqCompleted(it.id) }
+        awaitCompleted(
+            IntRange(1, 10).map {
+                appendEvent(
+                    topicResponse.topicId,
+                    ContentType("application/json"),
+                    Content("""{"hamal":"rocks"}""")
+                )
+            }
+        )
 
         with(listEvents(topicResponse.topicId)) {
             assertThat(events, hasSize(10))

@@ -20,6 +20,7 @@ internal class CreateTriggerRouteIT : BaseTriggerRouteIT() {
     @Test
     fun `Creates fixed rate trigger`() {
         val funcResponse = createFunc(FuncName("fixed-trigger-func"))
+
         val creationResponse = httpTemplate.post("/v1/triggers")
             .body(
                 CreateTriggerReq(
@@ -37,7 +38,7 @@ internal class CreateTriggerRouteIT : BaseTriggerRouteIT() {
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = creationResponse.result(SubmittedCreateTriggerReq::class)
-        awaitReqCompleted(result.id)
+        awaitCompleted(result.id)
 
         with(triggerQueryService.get(result.triggerId)) {
             assertThat(id, equalTo(result.triggerId))

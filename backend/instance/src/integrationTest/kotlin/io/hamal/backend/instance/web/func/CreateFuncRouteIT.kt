@@ -31,7 +31,7 @@ internal class CreateFuncRouteIT : BaseFuncRouteIT() {
                 code = Code("13 + 37")
             )
         )
-        awaitReqCompleted(result.id)
+        awaitCompleted(result.id)
         verifyFuncCreated(result.funcId)
     }
 }

@@ -15,8 +15,9 @@ import org.junit.jupiter.api.Test
 internal class ListEventsRouteIT : BaseEventRouteIT() {
     @Test
     fun `No events`() {
-        val topicResponse = createTopic(TopicName("test-topic"))
-        awaitReqCompleted(topicResponse.id)
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("test-topic"))
+        )
 
         val result = listEvents(topicResponse.topicId)
         assertThat(result.events, empty())
@@ -24,9 +25,13 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Single event`() {
-        val topicResponse = createTopic(TopicName("test-topic"))
-        val appendResponse = appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
-        awaitReqCompleted(appendResponse.id)
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("test-topic"))
+        )
+
+        awaitCompleted(
+            appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
+        )
 
         with(listEvents(topicResponse.topicId)) {
             assertThat(topicId, equalTo(topicResponse.topicId))
@@ -43,12 +48,15 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Limit events`() {
-        val topicResponse = createTopic(TopicName("test-topic")).also { awaitReqCompleted(it.id) }
-        val requests = IntRange(1, 100).map {
-            appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
-        }
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("test-topic")).also { awaitCompleted(it.id) }
+        )
 
-        requests.forEach { awaitReqCompleted(it.id) }
+        awaitCompleted(
+            IntRange(1, 100).map {
+                appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
+            }
+        )
 
         val listResponse = httpTemplate.get("/v1/topics/${topicResponse.topicId.value}/events")
             .parameter("limit", 23)
@@ -63,12 +71,15 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Skip and limit events`() {
-        val topicResponse = createTopic(TopicName("test-topic"))
-        val requests = IntRange(1, 100).map {
-            appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
-        }
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("test-topic"))
+        )
 
-        requests.forEach { awaitReqCompleted(it.id) }
+        awaitCompleted(
+            IntRange(1, 100).map {
+                appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
+            }
+        )
 
         val listResponse = httpTemplate.get("/v1/topics/${topicResponse.topicId.value}/events")
             .parameter("after_id", 95)
@@ -84,10 +95,17 @@ internal class ListEventsRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Does not show events of different topic`() {
-        val topicResponse = createTopic(TopicName("test-topic"))
-        val anotherTopicResponse = createTopic(TopicName("another-test-topic"))
-        appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
-            .also { awaitReqCompleted(it.id) }
+        val topicResponse = awaitCompleted(
+            createTopic(TopicName("test-topic"))
+        )
+
+        val anotherTopicResponse = awaitCompleted(
+            createTopic(TopicName("another-test-topic"))
+        )
+
+        awaitCompleted(
+            appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
+        )
 
         with(listEvents(anotherTopicResponse.topicId)) {
             assertThat(topicId, equalTo(anotherTopicResponse.topicId))

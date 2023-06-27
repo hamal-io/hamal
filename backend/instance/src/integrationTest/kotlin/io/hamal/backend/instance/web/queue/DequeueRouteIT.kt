@@ -16,13 +16,15 @@ internal class DequeueRouteIT : BaseQueueRouteIT() {
 
     @Test
     fun `Dequeues single exec`() {
-        adhoc(
-            InvokeAdhocReq(
-                inputs = InvocationInputs(),
-                secrets = InvocationSecrets(),
-                code = Code("1 + 1")
+        awaitCompleted(
+            adhoc(
+                InvokeAdhocReq(
+                    inputs = InvocationInputs(),
+                    secrets = InvocationSecrets(),
+                    code = Code("1 + 1")
+                )
             )
-        ).also { awaitReqCompleted(it.id) }
+        )
 
         with(dequeue()) {
             assertThat(execs, hasSize(1))

@@ -20,14 +20,16 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
 
     @Test
     fun `Single func`() {
-        val result = createFunc(
-            CreateFuncReq(
-                name = FuncName("func-one"),
-                inputs = FuncInputs(),
-                secrets = FuncSecrets(),
-                code = Code("")
+        val result = awaitCompleted(
+            createFunc(
+                CreateFuncReq(
+                    name = FuncName("func-one"),
+                    inputs = FuncInputs(),
+                    secrets = FuncSecrets(),
+                    code = Code("")
+                )
             )
-        ).also { awaitReqCompleted(it.id) }
+        )
 
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))
@@ -40,17 +42,18 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
 
     @Test
     fun `Limit funcs`() {
-        val requests = IntRange(0, 20).map {
-            createFunc(
-                CreateFuncReq(
-                    name = FuncName("func-$it"),
-                    inputs = FuncInputs(),
-                    secrets = FuncSecrets(),
-                    code = Code("")
+        awaitCompleted(
+            IntRange(0, 20).map {
+                createFunc(
+                    CreateFuncReq(
+                        name = FuncName("func-$it"),
+                        inputs = FuncInputs(),
+                        secrets = FuncSecrets(),
+                        code = Code("")
+                    )
                 )
-            )
-        }
-        requests.forEach { awaitReqCompleted(it.id) }
+            }
+        )
 
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("limit", 12)
@@ -76,10 +79,8 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
             )
         }
 
-        requests.forEach { awaitReqCompleted(it.id) }
-
+        awaitCompleted(requests)
         val fortyNinth = requests[49]
-
 
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("after_id", fortyNinth.funcId)

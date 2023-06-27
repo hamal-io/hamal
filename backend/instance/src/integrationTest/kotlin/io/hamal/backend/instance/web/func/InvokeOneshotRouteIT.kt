@@ -17,14 +17,17 @@ internal class InvokeOneshotRouteIT : BaseFuncRouteIT() {
 
     @Test
     fun `Invokes func`() {
-        val createResponse = createFunc(
-            CreateFuncReq(
-                name = FuncName("test"),
-                inputs = FuncInputs(),
-                secrets = FuncSecrets(),
-                code = Code("")
+        val createResponse = awaitCompleted(
+            createFunc(
+                CreateFuncReq(
+                    name = FuncName("test"),
+                    inputs = FuncInputs(),
+                    secrets = FuncSecrets(),
+                    code = Code("")
+                )
             )
         )
+
         val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.funcId.value.value}/exec")
             .body(
                 InvokeOneshotReq(
@@ -43,7 +46,7 @@ internal class InvokeOneshotRouteIT : BaseFuncRouteIT() {
         assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.correlationId, equalTo(CorrelationId("__default__")))
 
-        awaitReqCompleted(result.id)
+        awaitCompleted(result.id)
     }
 
 

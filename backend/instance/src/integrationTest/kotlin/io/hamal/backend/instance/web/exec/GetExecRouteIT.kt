@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Test
 internal class GetExecRouteIT : BaseExecRouteIT() {
     @Test
     fun `Get exec`() {
-        val createAdhocResponse = createAdhocExec().also { awaitReqCompleted(it.id) }
+        val createAdhocResponse = awaitCompleted(
+            createAdhocExec()
+        )
 
         val response = httpTemplate.get("/v1/execs/${createAdhocResponse.execId.value}").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))

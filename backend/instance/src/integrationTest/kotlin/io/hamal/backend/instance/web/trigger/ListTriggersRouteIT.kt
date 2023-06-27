@@ -17,8 +17,7 @@ internal class ListTriggersRouteIT : BaseTriggerRouteIT() {
 
     @Test
     fun `Single trigger`() {
-        val creationResponse = createFixedRateTrigger(TriggerName("trigger-one"))
-        Thread.sleep(10)
+        val creationResponse = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one")))
 
         with(listTriggers()) {
             assertThat(triggers, hasSize(1))
@@ -31,8 +30,9 @@ internal class ListTriggersRouteIT : BaseTriggerRouteIT() {
 
     @Test
     fun `Limit triggers`() {
-        val requests = IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
-        requests.forEach { awaitReqCompleted(it.id) }
+        awaitCompleted(
+            IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
+        )
 
         val listResponse = httpTemplate.get("/v1/triggers")
             .parameter("limit", 12)
@@ -48,7 +48,7 @@ internal class ListTriggersRouteIT : BaseTriggerRouteIT() {
     @Test
     fun `Skip and limit triggers`() {
         val requests = IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
-        requests.forEach { awaitReqCompleted(it.id) }
+        awaitCompleted(requests)
 
         val request15 = requests[15]
 

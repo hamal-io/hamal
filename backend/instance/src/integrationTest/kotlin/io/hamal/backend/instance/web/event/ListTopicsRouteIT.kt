@@ -16,7 +16,7 @@ internal class ListTopicsRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Single topic`() {
-        createTopic(TopicName("namespace::topics_one")).also { awaitReqCompleted(it.id) }
+        awaitCompleted(createTopic(TopicName("namespace::topics_one")))
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
@@ -29,11 +29,11 @@ internal class ListTopicsRouteIT : BaseEventRouteIT() {
 
     @Test
     fun `Multiple topics`() {
-        listOf(
+        awaitCompleted(
             createTopic(TopicName("namespace::topics_one")),
             createTopic(TopicName("namespace::topics_two")),
             createTopic(TopicName("namespace::topics_three"))
-        ).forEach { awaitReqCompleted(it.id) }
+        )
 
         with(listTopics()) {
             assertThat(topics, hasSize(3))
