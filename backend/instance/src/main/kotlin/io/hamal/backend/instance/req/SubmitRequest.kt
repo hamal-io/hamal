@@ -131,8 +131,7 @@ class SubmitRequest(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             topicId = appendEvent.topicId,
-            contentType = appendEvent.contentType,
-            bytes = appendEvent.bytes
+            event = appendEvent.event
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(setStateReq: SetStateReq) =

@@ -14,7 +14,7 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
 
-class AdhocRouteIT : BaseRouteIT() {
+internal class AdhocRouteIT : BaseRouteIT() {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
         val response = request(

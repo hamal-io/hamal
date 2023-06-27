@@ -2,6 +2,7 @@ package io.hamal.backend.instance.web.event
 
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.instance.service.query.EventQueryService
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.req.AppendEventReq
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
 import io.hamal.lib.domain.vo.Content
@@ -28,8 +29,10 @@ open class AppendEventRoute(
         val result = submitRequest(
             AppendEventReq(
                 topicId = topic.id,
-                contentType = contentType,
-                bytes = Content(body)
+                event = Event(
+                    contentType = contentType,
+                    content = Content(body)
+                )
             )
         )
         return ResponseEntity(result, HttpStatus.ACCEPTED)
