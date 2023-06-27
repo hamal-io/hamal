@@ -1,6 +1,6 @@
 package io.hamal.backend.instance
 
-import io.hamal.backend.instance.component.SystemEventEmitter
+import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.event.*
 import io.hamal.backend.instance.event.handler.exec.*
 import io.hamal.backend.instance.event.handler.trigger.TriggerCreatedHandler

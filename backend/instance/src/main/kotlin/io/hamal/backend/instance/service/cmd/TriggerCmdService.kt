@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.service.cmd
 
-import io.hamal.backend.instance.component.SystemEventEmitter
+import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.event.TriggerCreatedEvent
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.lib.domain.CmdId

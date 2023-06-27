@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.component.SystemEventHandlerContainer
+import io.hamal.backend.instance.event.SystemEventHandlerContainer
 import io.hamal.backend.instance.event.SystemEvent
 import io.hamal.backend.instance.event.handler.SystemEventHandler
 import io.hamal.backend.repository.api.log.*

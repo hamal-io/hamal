@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.service
 
-import io.hamal.backend.instance.component.SystemEventEmitter
+import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.req.InvokeFixedRate
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.instance.service.query.FuncQueryService

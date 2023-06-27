@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.component.SystemEventEmitter
+import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.service.DefaultSystemEventService
 import io.hamal.backend.instance.service.SystemEventServiceFactory
 import io.hamal.backend.repository.api.log.LogBrokerRepository

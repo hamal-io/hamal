@@ -1,8 +1,6 @@
-package io.hamal.backend.instance.component
+package io.hamal.backend.instance.event
 
-import io.hamal.backend.instance.event.SystemEvent
 import io.hamal.backend.instance.event.handler.SystemEventHandler
-import io.hamal.backend.instance.event.topic
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 

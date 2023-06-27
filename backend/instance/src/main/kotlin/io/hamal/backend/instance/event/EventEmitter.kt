@@ -1,6 +1,5 @@
-package io.hamal.backend.instance.component
+package io.hamal.backend.instance.event
 
-import io.hamal.backend.instance.event.SystemEvent
 import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
@@ -8,7 +7,6 @@ import io.hamal.backend.repository.api.log.ProtobufAppender
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.port.GenerateDomainId
-
 
 class SystemEventEmitter<TOPIC : LogTopic>(
     private val generateDomainId: GenerateDomainId,
