@@ -135,5 +135,13 @@ class SubmitRequest(
             bytes = appendEvent.bytes
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(setStateReq: SetStateReq) =
+        SubmittedSetStateReq(
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            funcId = setStateReq.funcId,
+            correlationId = setStateReq.correlationId,
+            state = setStateReq.state
+        ).also(reqCmdRepository::queue)
 }
 

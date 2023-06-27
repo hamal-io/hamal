@@ -27,7 +27,7 @@ open class WebConfig : WebMvcConfigurer {
 
     override fun addFormatters(registry: FormatterRegistry) {
         super.addFormatters(registry)
-
+        registry.addConverter(CorrelationIdConverter)
         registry.addConverter(EventIdConverter)
         registry.addConverter(ExecIdConverter)
         registry.addConverter(FuncIdConverter)
@@ -40,7 +40,6 @@ open class WebConfig : WebMvcConfigurer {
     @ControllerAdvice
     @Order(Ordered.HIGHEST_PRECEDENCE)
     class ErrorHandler {
-
 
         @ExceptionHandler(Exception::class)
         fun handle(e: Exception): ResponseEntity<HamalError> {
