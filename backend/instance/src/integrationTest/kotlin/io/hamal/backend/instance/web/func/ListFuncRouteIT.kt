@@ -27,8 +27,7 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
                 secrets = FuncSecrets(),
                 code = Code("")
             )
-        )
-        Thread.sleep(10)
+        ).also { awaitReqCompleted(it.id) }
 
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))
@@ -41,7 +40,7 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
 
     @Test
     fun `Limit funcs`() {
-        repeat(100) {
+        val requests = IntRange(0, 20).map {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("func-$it"),
@@ -51,7 +50,7 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
                 )
             )
         }
-        Thread.sleep(10)
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("limit", 12)
@@ -76,7 +75,9 @@ internal class ListFuncRouteIT : BaseFuncRouteIT() {
                 )
             )
         }
-        Thread.sleep(10)
+
+        requests.forEach { awaitReqCompleted(it.id) }
+
         val fortyNinth = requests[49]
 
 

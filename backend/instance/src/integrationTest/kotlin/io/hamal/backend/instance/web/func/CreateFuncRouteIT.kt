@@ -31,9 +31,7 @@ internal class CreateFuncRouteIT : BaseFuncRouteIT() {
                 code = Code("13 + 37")
             )
         )
-        Thread.sleep(10)
-
-        verifyReqCompleted(result.id)
+        awaitReqCompleted(result.id)
         verifyFuncCreated(result.funcId)
     }
 }

@@ -31,8 +31,8 @@ internal class ListTriggersRouteIT : BaseTriggerRouteIT() {
 
     @Test
     fun `Limit triggers`() {
-        repeat(20) { createFixedRateTrigger(TriggerName("trigger-$it")) }
-        Thread.sleep(10)
+        val requests = IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val listResponse = httpTemplate.get("/v1/triggers")
             .parameter("limit", 12)
@@ -48,7 +48,7 @@ internal class ListTriggersRouteIT : BaseTriggerRouteIT() {
     @Test
     fun `Skip and limit triggers`() {
         val requests = IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
-        Thread.sleep(10)
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val request15 = requests[15]
 

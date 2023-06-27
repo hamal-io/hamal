@@ -21,8 +21,7 @@ internal class AppendEventRouteIT : BaseEventRouteIT() {
             Content("""{"hamal":"rocks"}""")
         )
 
-        Thread.sleep(10)
-        verifyReqCompleted(result.id)
+        awaitReqCompleted(result.id)
 
         with(listEvents(topicResponse.topicId)) {
             assertThat(events, hasSize(1))
@@ -45,8 +44,7 @@ internal class AppendEventRouteIT : BaseEventRouteIT() {
             )
         }
 
-        Thread.sleep(10)
-        requests.forEach { verifyReqCompleted(it.id) }
+        requests.forEach { awaitReqCompleted(it.id) }
 
         with(listEvents(topicResponse.topicId)) {
             assertThat(events, hasSize(10))

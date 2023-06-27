@@ -22,8 +22,7 @@ internal class ListExecsRouteIT : BaseExecRouteIT() {
 
     @Test
     fun `Single exec`() {
-        val createAdhocResponse = createAdhocExec()
-        Thread.sleep(10)
+        val createAdhocResponse = createAdhocExec().also { awaitReqCompleted(it.id) }
 
         val response = httpTemplate.get("/v1/execs").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
@@ -40,8 +39,8 @@ internal class ListExecsRouteIT : BaseExecRouteIT() {
 
     @Test
     fun `Limit execs`() {
-        IntRange(1, 100).map { createAdhocExec() }
-        Thread.sleep(10)
+        val requests = IntRange(1, 100).map { createAdhocExec() }
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val response = httpTemplate.get("/v1/execs")
             .parameter("limit", 42)
@@ -64,7 +63,7 @@ internal class ListExecsRouteIT : BaseExecRouteIT() {
         val fortySixthRequest = requests.drop(45).take(1).first()
         val fortySeventhRequest = requests.drop(46).take(1).first()
 
-        Thread.sleep(10)
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val response = httpTemplate.get("/v1/execs")
             .parameter("limit", 1)

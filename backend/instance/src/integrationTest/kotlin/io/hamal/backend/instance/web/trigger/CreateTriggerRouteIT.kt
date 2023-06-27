@@ -32,13 +32,12 @@ internal class CreateTriggerRouteIT : BaseTriggerRouteIT() {
                 )
             )
             .execute()
-        Thread.sleep(10)
 
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = creationResponse.result(SubmittedCreateTriggerReq::class)
-        verifyReqCompleted(result.id)
+        awaitReqCompleted(result.id)
 
         with(triggerQueryService.get(result.triggerId)) {
             assertThat(id, equalTo(result.triggerId))
@@ -65,7 +64,6 @@ internal class CreateTriggerRouteIT : BaseTriggerRouteIT() {
                 )
             )
             .execute()
-        Thread.sleep(10)
 
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }

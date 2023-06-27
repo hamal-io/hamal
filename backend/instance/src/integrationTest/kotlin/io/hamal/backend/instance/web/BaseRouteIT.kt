@@ -103,10 +103,39 @@ abstract class BaseRouteIT {
         }
     }
 
+    fun awaitReqFailed(id: ReqId) {
+        while (true) {
+            reqQueryRepository.find(id)?.let {
+                if (it.status == ReqStatus.Failed) {
+                    return
+                }
+
+                if (it.status == ReqStatus.Completed) {
+                    throw IllegalStateException("expected $id to fail but completed")
+                }
+            }
+            Thread.sleep(1)
+        }
+    }
+
     fun verifyReqCompleted(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
             assertThat(status, equalTo(ReqStatus.Completed))
+        }
+    }
+
+    fun awaitReqCompleted(id: ReqId) {
+        while (true) {
+            reqQueryRepository.find(id)?.let {
+                if (it.status == ReqStatus.Completed) {
+                    return
+                }
+                if (it.status == ReqStatus.Failed) {
+                    throw IllegalStateException("expected $id to complete but ")
+                }
+            }
+            Thread.sleep(1)
         }
     }
 

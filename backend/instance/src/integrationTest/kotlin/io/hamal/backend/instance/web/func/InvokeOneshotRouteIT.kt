@@ -34,8 +34,6 @@ internal class InvokeOneshotRouteIT : BaseFuncRouteIT() {
                 )
             ).execute()
 
-        Thread.sleep(10)
-
         assertThat(invocationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
@@ -45,7 +43,7 @@ internal class InvokeOneshotRouteIT : BaseFuncRouteIT() {
         assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.correlationId, equalTo(CorrelationId("__default__")))
 
-        verifyReqCompleted(result.id)
+        awaitReqCompleted(result.id)
     }
 
 

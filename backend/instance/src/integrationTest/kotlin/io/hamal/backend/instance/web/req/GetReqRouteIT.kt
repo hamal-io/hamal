@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test
 internal class GetReqRouteIT : BaseReqRouteIT() {
     @Test
     fun `Gets req`() {
-        val request = adhoc()
-        Thread.sleep(10)
+        val request = adhoc().also { awaitReqCompleted(it.id) }
+
         val response = httpTemplate.get("/v1/reqs/${request.id.value}").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }

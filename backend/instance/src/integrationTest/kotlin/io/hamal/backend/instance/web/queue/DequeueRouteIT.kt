@@ -22,8 +22,7 @@ internal class DequeueRouteIT : BaseQueueRouteIT() {
                 secrets = InvocationSecrets(),
                 code = Code("1 + 1")
             )
-        )
-        Thread.sleep(10)
+        ).also { awaitReqCompleted(it.id) }
 
         with(dequeue()) {
             assertThat(execs, hasSize(1))

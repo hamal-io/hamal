@@ -19,8 +19,8 @@ internal class ListReqsRouteIT : BaseReqRouteIT() {
 
     @Test
     fun `Single req`() {
-        val adhocResponse = adhoc()
-        Thread.sleep(10)
+        val adhocResponse = adhoc().also { awaitReqCompleted(it.id) }
+
         with(list()) {
             assertThat(reqs, hasSize(1))
 
@@ -34,8 +34,9 @@ internal class ListReqsRouteIT : BaseReqRouteIT() {
 
     @Test
     fun `Limit reqs`() {
-        repeat(100) { adhoc(Code("$it")) }
-        Thread.sleep(10)
+        val requests = IntRange(0, 25).map { adhoc(Code("$it")) }
+
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val listResponse = httpTemplate.get("/v1/reqs")
             .parameter("limit", 23)
@@ -54,7 +55,8 @@ internal class ListReqsRouteIT : BaseReqRouteIT() {
     @Test
     fun `Skip and limit reqs`() {
         val requests = IntRange(0, 100).map { adhoc(Code("$it")) }
-        Thread.sleep(10)
+
+        requests.forEach { awaitReqCompleted(it.id) }
 
         val request70 = requests[70]
 
