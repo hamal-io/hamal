@@ -3,6 +3,7 @@ package io.hamal.backend.repository.memory.record
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.record.trigger.createEntity
@@ -59,7 +60,23 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
     }
 
     override fun create(cmd: TriggerCmdRepository.CreateEventCmd): EventTrigger {
-        TODO("Not yet implemented")
+        val triggerId = cmd.triggerId
+        if (contains(triggerId)) {
+            return versionOf(triggerId, cmd.id) as EventTrigger
+        }
+        MemoryTriggerRepository.addRecord(
+            EventTriggerCreationRecord(
+                entityId = triggerId,
+                cmdId = cmd.id,
+                funcId = cmd.funcId,
+                name = cmd.name,
+                inputs = cmd.inputs,
+                secrets = cmd.secrets,
+                topicId = cmd.topicId
+            )
+        )
+        return (currentVersion(triggerId) as EventTrigger)
+            .also(CurrentTriggerProjection::apply)
     }
 
     override fun find(triggerId: TriggerId) = CurrentTriggerProjection.find(triggerId)

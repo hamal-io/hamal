@@ -19,8 +19,8 @@ interface FuncCmdRepository {
 }
 
 interface FuncQueryRepository {
+    fun get(funcId: FuncId) = find(funcId) ?: throw NoSuchElementException("Func not found")
     fun find(funcId: FuncId): Func?
-
     fun list(block: FuncQuery.() -> Unit): List<Func>
     data class FuncQuery(
         var afterId: FuncId = FuncId(0),

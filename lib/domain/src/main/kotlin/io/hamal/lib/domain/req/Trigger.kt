@@ -27,6 +27,7 @@ data class SubmittedCreateTriggerReq(
     val inputs: TriggerInputs,
     val secrets: TriggerSecrets,
     val duration: Duration? = null,
+    val topicId: TopicId? = null
 ) : SubmittedReq
 
 

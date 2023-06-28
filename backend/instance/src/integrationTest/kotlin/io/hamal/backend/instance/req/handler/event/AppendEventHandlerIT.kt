@@ -25,13 +25,13 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class AppendEventHandlerIT : BaseReqHandlerIT() {
     @Test
     fun `Appends event to topic`() {
-        val topic = createTopic(TopicName("topic"))
+        val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
             SubmittedAppendEventReq(
                 id = ReqId(SnowflakeId(123)),
                 status = ReqStatus.Submitted,
-                topicId = topic.id,
+                topicId = TopicId(4444),
                 event = Event(
                     contentType = ContentType("application/json"),
                     content = Content("""{"hamal":"rockz"}""")
@@ -46,7 +46,7 @@ internal class AppendEventHandlerIT : BaseReqHandlerIT() {
             with(evts.first()) {
                 assertThat(segmentId, equalTo(LogSegment.Id(0)))
                 assertThat(id, equalTo(LogChunkId(1)))
-                assertThat(topicId, equalTo(topic.id))
+                assertThat(topicId, equalTo(TopicId(4444)))
 
                 val evt = ProtoBuf { }.decodeFromByteArray(Event.serializer(), bytes)
                 assertThat(evt.contentType, equalTo(ContentType("application/json")))

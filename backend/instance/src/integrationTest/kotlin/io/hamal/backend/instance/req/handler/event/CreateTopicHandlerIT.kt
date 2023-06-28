@@ -17,28 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class CreateTopicHandlerIT : BaseReqHandlerIT() {
     @Test
     fun `Creates topic with id and name`() {
-        testInstance(
-            SubmittedCreateTopicReq(
-                id = ReqId(1),
-                status = ReqStatus.Submitted,
-                topicId = TopicId(2345),
-                name = TopicName("some-topic-name")
-            )
-        )
+        testInstance(submittedCreateTopicReq)
 
         verifySingleTopicExists()
     }
 
     @Test
     fun `Topic with id already exists`() {
-        testInstance(
-            SubmittedCreateTopicReq(
-                id = ReqId(1),
-                status = ReqStatus.Submitted,
-                topicId = TopicId(2345),
-                name = TopicName("some-topic-name")
-            )
-        )
+        testInstance(submittedCreateTopicReq)
 
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
@@ -57,14 +43,7 @@ internal class CreateTopicHandlerIT : BaseReqHandlerIT() {
 
     @Test
     fun `Topic with name already exists`() {
-        testInstance(
-            SubmittedCreateTopicReq(
-                id = ReqId(1),
-                status = ReqStatus.Submitted,
-                topicId = TopicId(2345),
-                name = TopicName("some-topic-name")
-            )
-        )
+        testInstance(submittedCreateTopicReq)
 
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
@@ -93,4 +72,11 @@ internal class CreateTopicHandlerIT : BaseReqHandlerIT() {
 
     @Autowired
     private lateinit var testInstance: CreateTopicHandler<MemoryLogTopic>
+
+    private val submittedCreateTopicReq = SubmittedCreateTopicReq(
+        id = ReqId(1),
+        status = ReqStatus.Submitted,
+        topicId = TopicId(2345),
+        name = TopicName("some-topic-name")
+    )
 }

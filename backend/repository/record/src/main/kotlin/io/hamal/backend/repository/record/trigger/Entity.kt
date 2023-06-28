@@ -84,7 +84,8 @@ data class Entity(
 fun List<TriggerRecord>.createEntity(): Entity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is FixedRateTriggerCreationRecord)
+
+    check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord)
 
     var result = Entity(
         id = firstRecord.entityId,

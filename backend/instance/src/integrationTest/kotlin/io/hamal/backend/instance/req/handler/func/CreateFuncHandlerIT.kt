@@ -21,50 +21,14 @@ internal class CreateFuncHandlerIT : BaseReqHandlerIT() {
 
     @Test
     fun `Creates func`() {
-        testInstance(
-            SubmittedCreateFuncReq(
-                id = ReqId(1),
-                status = ReqStatus.Submitted,
-                funcId = FuncId(12345),
-                funcName = FuncName("awesome-func"),
-                inputs = FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
-                secrets = FuncSecrets(
-                    listOf(
-                        Secret(
-                            key = SecretKey("key"),
-                            store = SecretStore("store"),
-                            storeIdentifier = SecretStoreIdentifier("identifier")
-                        )
-                    )
-                ),
-                code = Code("some code")
-            )
-        )
+        testInstance(submitCreateFuncReq)
 
         verifySingleFuncExists()
     }
 
     @Test
     fun `Func with id already exists`() {
-        testInstance(
-            SubmittedCreateFuncReq(
-                id = ReqId(1),
-                status = ReqStatus.Submitted,
-                funcId = FuncId(12345),
-                funcName = FuncName("awesome-func"),
-                inputs = FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
-                secrets = FuncSecrets(
-                    listOf(
-                        Secret(
-                            key = SecretKey("key"),
-                            store = SecretStore("store"),
-                            storeIdentifier = SecretStoreIdentifier("identifier")
-                        )
-                    )
-                ),
-                code = Code("some code")
-            )
-        )
+        testInstance(submitCreateFuncReq)
 
         testInstance(
             SubmittedCreateFuncReq(
@@ -109,4 +73,22 @@ internal class CreateFuncHandlerIT : BaseReqHandlerIT() {
 
     @Autowired
     private lateinit var testInstance: CreateFuncHandler
+
+    private val submitCreateFuncReq = SubmittedCreateFuncReq(
+        id = ReqId(1),
+        status = ReqStatus.Submitted,
+        funcId = FuncId(12345),
+        funcName = FuncName("awesome-func"),
+        inputs = FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
+        secrets = FuncSecrets(
+            listOf(
+                Secret(
+                    key = SecretKey("key"),
+                    store = SecretStore("store"),
+                    storeIdentifier = SecretStoreIdentifier("identifier")
+                )
+            )
+        ),
+        code = Code("some code")
+    )
 }

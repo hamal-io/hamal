@@ -76,6 +76,9 @@ internal abstract class BaseIT {
     lateinit var triggerQueryService: TriggerQueryService
 
     @Autowired
+    lateinit var triggerQueryRepository: TriggerQueryRepository
+
+    @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
     @BeforeEach
