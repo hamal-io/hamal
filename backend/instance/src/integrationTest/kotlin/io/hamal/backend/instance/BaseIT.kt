@@ -58,6 +58,9 @@ internal abstract class BaseIT {
     lateinit var funcQueryService: FuncQueryService
 
     @Autowired
+    lateinit var funcQueryRepository: FuncQueryRepository
+
+    @Autowired
     lateinit var funcCmdRepository: FuncCmdRepository
 
     @Autowired

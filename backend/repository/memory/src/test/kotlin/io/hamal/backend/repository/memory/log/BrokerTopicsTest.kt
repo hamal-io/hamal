@@ -80,7 +80,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
                     )
                 )
             }
-            assertThat(throwable.message, equalTo("TopicName(very-first-topic) already exists"))
+            assertThat(throwable.message, equalTo("Topic already exists"))
 
             assertThat(testInstance.count(), equalTo(1UL))
         }
