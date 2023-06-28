@@ -1,13 +1,10 @@
 package io.hamal.backend.instance.req
 
 import io.hamal.backend.repository.api.ReqCmdRepository
-import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
-import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -27,14 +24,6 @@ data class InvokeEvent(
     val inputs: InvocationInputs,
     val secrets: InvocationSecrets
 )
-
-@Serializable
-data class CompleteExec(
-    val execId: ExecId,
-    val statePayload: State,
-    val events: List<Event>
-)
-
 @Component
 class SubmitRequest(
     @Autowired private val generateDomainId: GenerateDomainId,
