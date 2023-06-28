@@ -14,7 +14,8 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository<MemoryLogTopic
     private val topicMapping = mutableMapOf<TopicName, MemoryLogTopic>()
     override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): MemoryLogTopic {
         return lock.withLock {
-            require(!topicMapping.containsKey(toCreate.name)) { "${toCreate.name} already exists" }
+            require(topicMapping.values.none { it.id == toCreate.id }) { "Topic already exists" }
+            require(!topicMapping.containsKey(toCreate.name)) { "Topic already exists" }
             topicMapping[toCreate.name] = MemoryLogTopic(
                 id = toCreate.id,
                 name = toCreate.name

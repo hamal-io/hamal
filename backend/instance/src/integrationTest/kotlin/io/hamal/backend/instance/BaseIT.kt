@@ -7,6 +7,7 @@ import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.backend.instance.service.query.TriggerQueryService
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -36,7 +37,7 @@ internal abstract class BaseIT {
     lateinit var localPort: Number
 
     @Autowired
-    lateinit var eventBrokerRepository: LogBrokerRepository<*>
+    lateinit var eventBrokerRepository: LogBrokerRepository<MemoryLogTopic>
 
     @Autowired
     lateinit var eventQueryService: EventQueryService<*>

@@ -33,7 +33,7 @@ interface GetTopics<TOPIC : LogTopic> {
 }
 
 interface FindTopic<TOPIC : LogTopic> {
-    fun get(topicId: TopicId): TOPIC = requireNotNull(find(topicId)) { "Topic with id $topicId not found" }
+    fun get(topicId: TopicId): TOPIC = find(topicId) ?: throw NoSuchElementException("Topic not found")
 
     fun find(topicId: TopicId): TOPIC?
 
