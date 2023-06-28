@@ -47,6 +47,7 @@ interface ExecCmdRepository {
 }
 
 interface ExecQueryRepository {
+    fun get(execId: ExecId) = find(execId) ?: throw NoSuchElementException("Exec not found")
     fun find(execId: ExecId): Exec?
     fun list(block: ExecQuery.() -> Unit): List<Exec>
     data class ExecQuery(

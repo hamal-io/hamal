@@ -32,53 +32,5 @@ internal sealed class BaseExecRouteTest : BaseRouteTest() {
         return createAdhocExecResponse.result(SubmittedInvokeAdhocReq::class)
     }
 
-    fun createExec(status: ExecStatus): Exec {
 
-        val planedExec = execCmdRepository.plan(
-            PlanCmd(
-                id = CmdId(1),
-                execId = generateDomainId(::ExecId),
-                correlation = null,
-                inputs = ExecInputs(),
-                secrets = ExecSecrets(),
-                code = Code("")
-            )
-        )
-
-        if (status == ExecStatus.Planned) {
-            return planedExec
-        }
-
-        val scheduled = execCmdRepository.schedule(
-            ScheduleCmd(
-                id = CmdId(2),
-                execId = planedExec.id,
-            )
-        )
-
-        if (status == ExecStatus.Scheduled) {
-            return scheduled
-        }
-
-        val queued = execCmdRepository.queue(
-            QueueCmd(
-                id = CmdId(3),
-                execId = scheduled.id
-            )
-        )
-        if (status == ExecStatus.Queued) {
-            return queued
-        }
-
-        val startedExec = execCmdRepository.start(StartCmd(CmdId(4))).first()
-        if (status == ExecStatus.Started) {
-            return startedExec
-        }
-
-        return when (status) {
-            ExecStatus.Completed -> execCmdRepository.complete(CompleteCmd(id = CmdId(5), execId = startedExec.id))
-            ExecStatus.Failed -> execCmdRepository.fail(FailCmd(id = CmdId(5), execId = startedExec.id))
-            else -> TODO()
-        }
-    }
 }

@@ -25,7 +25,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         .filterNot { it == ExecStatus.Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {
-                val exec = createExec(execStatus)
+                val exec = createExec(generateDomainId(::ExecId), execStatus)
 
                 val completionResponse = requestCompletion(exec.id)
                 assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
@@ -41,7 +41,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
 
     @Test
     fun `Complete started exec`() {
-        val startedExec = createExec(ExecStatus.Started) as StartedExec
+        val startedExec = createExec(ExecId(123), ExecStatus.Started) as StartedExec
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))

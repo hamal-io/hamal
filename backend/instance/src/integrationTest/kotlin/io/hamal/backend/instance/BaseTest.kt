@@ -8,6 +8,9 @@ import io.hamal.backend.instance.service.query.TriggerQueryService
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.log.MemoryLogTopic
+import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.Exec
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
@@ -88,5 +91,67 @@ internal abstract class BaseTest {
         execCmdRepository.clear()
         funcCmdRepository.clear()
         triggerCmdRepository.clear()
+    }
+
+
+    fun createExec(execId: ExecId, status: ExecStatus): Exec {
+
+        val planedExec = execCmdRepository.plan(
+            ExecCmdRepository.PlanCmd(
+                id = CmdId(1),
+                execId = execId,
+                correlation = null,
+                inputs = ExecInputs(),
+                secrets = ExecSecrets(),
+                code = Code("")
+            )
+        )
+
+        if (status == ExecStatus.Planned) {
+            return planedExec
+        }
+
+        val scheduled = execCmdRepository.schedule(
+            ExecCmdRepository.ScheduleCmd(
+                id = CmdId(2),
+                execId = planedExec.id,
+            )
+        )
+
+        if (status == ExecStatus.Scheduled) {
+            return scheduled
+        }
+
+        val queued = execCmdRepository.queue(
+            ExecCmdRepository.QueueCmd(
+                id = CmdId(3),
+                execId = scheduled.id
+            )
+        )
+        if (status == ExecStatus.Queued) {
+            return queued
+        }
+
+        val startedExec = execCmdRepository.start(ExecCmdRepository.StartCmd(CmdId(4))).first()
+        if (status == ExecStatus.Started) {
+            return startedExec
+        }
+
+        return when (status) {
+            ExecStatus.Completed -> execCmdRepository.complete(
+                ExecCmdRepository.CompleteCmd(
+                    id = CmdId(5),
+                    execId = startedExec.id
+                )
+            )
+
+            ExecStatus.Failed -> execCmdRepository.fail(
+                ExecCmdRepository.FailCmd(
+                    id = CmdId(5),
+                    execId = startedExec.id
+                )
+            )
+            else -> TODO()
+        }
     }
 }

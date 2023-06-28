@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.service.cmd
 
-import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.event.*
 import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.repository.api.ExecCmdRepository
@@ -31,8 +30,8 @@ class ExecCmdService(
     fun start(cmdId: CmdId): List<StartedExec> =
         execCmdRepository.start(ExecCmdRepository.StartCmd(cmdId)).also { emitEvents(cmdId, it) }
 
-    fun complete(cmdId: CmdId, startedExec: StartedExec): CompletedExec =
-        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(cmdId, startedExec.id)).also { emitEvent(cmdId, it) }
+//    fun complete(cmdId: CmdId, startedExec: StartedExec): CompletedExec =
+//        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(cmdId, startedExec.id)).also { emitEvent(cmdId, it) }
 
     data class ToPlan(
         val execId: ExecId,

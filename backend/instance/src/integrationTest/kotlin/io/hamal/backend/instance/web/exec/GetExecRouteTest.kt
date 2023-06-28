@@ -20,6 +20,7 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
         val createAdhocResponse = awaitCompleted(
             createAdhocExec()
         )
+        Thread.sleep(10)
 
         val response = httpTemplate.get("/v1/execs/${createAdhocResponse.execId.value}").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
