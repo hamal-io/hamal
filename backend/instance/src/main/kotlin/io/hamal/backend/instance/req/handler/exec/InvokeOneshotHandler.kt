@@ -2,13 +2,11 @@ package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.backend.instance.req.handler.toExecSecrets
 import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.SubmittedInvokeOneshotReq
-import io.hamal.lib.domain.vo.ExecInputs
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,8 +24,8 @@ class InvokeOneshotHandler(
                     correlationId = req.correlationId,
                     funcId = func.id
                 ),
-                inputs = ExecInputs(func.inputs.value),
-                secrets = req.secrets.toExecSecrets()
+                inputs = merge(func.inputs, req.inputs),
+                secrets = merge(func.secrets, req.secrets)
             )
         )
     }

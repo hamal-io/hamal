@@ -19,15 +19,21 @@ internal object NextCommandId {
 
 internal abstract class BaseReqHandlerTest : BaseTest() {
 
-    fun createFunc(id: FuncId, name: FuncName): Func {
+    fun createFunc(
+        id: FuncId = generateDomainId(::FuncId),
+        name: FuncName = FuncName("SomeFuncName"),
+        inputs: FuncInputs = FuncInputs(),
+        secrets: FuncSecrets = FuncSecrets(),
+        code: Code = Code("")
+    ): Func {
         return funcCmdRepository.create(
             FuncCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 funcId = id,
                 name = name,
-                inputs = FuncInputs(),
-                secrets = FuncSecrets(),
-                code = Code("")
+                inputs = inputs,
+                secrets = secrets,
+                code = code
             )
         )
     }

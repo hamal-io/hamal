@@ -84,7 +84,7 @@ data class Entity(
             id = id,
             correlation = null,
             inputs = inputs ?: ExecInputs(TableValue()),
-            secrets = ExecSecrets(listOf()),
+            secrets = secrets ?: ExecSecrets(listOf()),
             code = code!!
         )
 

@@ -2,8 +2,6 @@ package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.backend.instance.req.handler.toExecInputs
-import io.hamal.backend.instance.req.handler.toExecSecrets
 import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.instance.service.query.FuncQueryService
@@ -25,8 +23,8 @@ class InvokeFixedRateHandler(
                     correlationId = req.correlationId,
                     funcId = func.id
                 ),
-                inputs = req.inputs.toExecInputs(),
-                secrets = req.secrets.toExecSecrets(),
+                inputs = merge(func.inputs, req.inputs),
+                secrets = merge(func.secrets, req.secrets),
                 code = func.code,
             )
         )
