@@ -30,7 +30,7 @@ data class SubmittedCreateTriggerReq(
 
 
 @Serializable
-data class InvokeFixedRateReq(
+data class SubmittedInvokeFixedRateReq(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
@@ -40,7 +40,7 @@ data class InvokeFixedRateReq(
 ) : SubmittedReq
 
 @Serializable
-data class InvokeEventReq(
+data class SubmittedInvokeEventReq(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,

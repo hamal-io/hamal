@@ -1,9 +1,7 @@
 package io.hamal.backend.instance.service.cmd
 
 import io.hamal.backend.instance.event.*
-import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.repository.api.ExecCmdRepository
-import io.hamal.backend.repository.api.ExecCmdRepository.PlanCmd
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
@@ -16,9 +14,6 @@ class ExecCmdService(
     @Autowired val execCmdRepository: ExecCmdRepository,
     @Autowired val eventEmitter: SystemEventEmitter<*>
 ) {
-
-    fun plan(cmdId: CmdId, toPlan: ToPlan): PlannedExec =
-        planExec(cmdId, toPlan).also { emitEvent(cmdId, it) }
 
     fun schedule(cmdId: CmdId, plannedExec: PlannedExec): ScheduledExec =
         execCmdRepository.schedule(ExecCmdRepository.ScheduleCmd(cmdId, plannedExec.id)).also { emitEvent(cmdId, it) }
@@ -40,27 +35,6 @@ class ExecCmdService(
     )
 
 }
-
-private fun ExecCmdService.planExec(cmdId: CmdId, toPlan: ToPlan): PlannedExec {
-    return execCmdRepository.plan(
-        PlanCmd(
-            id = cmdId,
-            execId = toPlan.execId,
-            correlation = toPlan.correlation,
-            inputs = toPlan.inputs,
-            code = toPlan.code,
-        )
-    )
-}
-
-private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: PlannedExec) {
-    eventEmitter.emit(
-        cmdId, ExecPlannedEvent(
-            plannedExec = exec
-        )
-    )
-}
-
 
 private fun ExecCmdService.emitEvent(cmdId: CmdId, exec: ScheduledExec) {
     eventEmitter.emit(

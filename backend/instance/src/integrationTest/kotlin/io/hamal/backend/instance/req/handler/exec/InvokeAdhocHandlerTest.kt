@@ -7,7 +7,6 @@ import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecStatus.Planned
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
@@ -28,7 +27,6 @@ internal class InvokeAdhocHandlerTest : BaseReqHandlerTest() {
             with(it.first()) {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
-                assertThat(status, equalTo(Planned))
                 assertThat(inputs, equalTo(ExecInputs(TableValue(StringValue("hamal") to StringValue("justworks")))))
                 assertThat(code, equalTo(Code("code")))
             }

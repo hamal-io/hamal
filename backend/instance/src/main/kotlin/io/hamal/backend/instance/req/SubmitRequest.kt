@@ -48,7 +48,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(fixedRate: InvokeFixedRate) =
-        InvokeFixedRateReq(
+        SubmittedInvokeFixedRateReq(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
@@ -59,7 +59,7 @@ class SubmitRequest(
 
 
     operator fun invoke(evt: InvokeEvent) =
-        InvokeEventReq(
+        SubmittedInvokeEventReq(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),

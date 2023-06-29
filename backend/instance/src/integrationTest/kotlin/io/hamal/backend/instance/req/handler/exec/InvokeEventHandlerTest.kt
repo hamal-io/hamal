@@ -4,7 +4,7 @@ import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
-import io.hamal.lib.domain.req.SubmittedInvokeOneshotReq
+import io.hamal.lib.domain.req.SubmittedInvokeEventReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
@@ -14,14 +14,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
-
+internal class InvokeEventHandlerTest : BaseReqHandlerTest() {
     @Test
-    fun `Invokes one shot execution`() {
+    fun `Invokes event execution`() {
         createFunc(
             id = FuncId(4444), code = Code("SomeCode"), inputs = FuncInputs(
                 TableValue(
-                    StringValue("override") to StringValue("false"), StringValue("func") to StringValue("func")
+                    StringValue("override") to StringValue("false"),
+                    StringValue("func") to StringValue("func")
                 )
             )
         )
@@ -57,7 +57,7 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
     }
 
     @Test
-    fun `Tries to invoke one shot execution but func does not exists`() {
+    fun `Tries to invoke event execution but func does not exists`() {
         val exception = assertThrows<NoSuchElementException> { testInstance(submittedInvocationReq) }
         assertThat(exception.message, equalTo("Func not found"))
         execQueryRepository.list { }.also {
@@ -66,17 +66,18 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: InvokeOneshotHandler
+    private lateinit var testInstance: InvokeEventHandler
 
     //@formatter:off
-    private val submittedInvocationReq = SubmittedInvokeOneshotReq(
+    private val submittedInvocationReq = SubmittedInvokeEventReq(
         id = ReqId(1),
         correlationId = CorrelationId("some-correlation"),
         status = ReqStatus.Submitted,
         execId = ExecId(3333),
         inputs = InvocationInputs(
             TableValue(
-                StringValue("override") to StringValue("true"), StringValue("invocation") to StringValue("invocation")
+                StringValue("override") to StringValue("true"),
+                StringValue("invocation") to StringValue("invocation")
             )
         ),
         funcId = FuncId(4444)

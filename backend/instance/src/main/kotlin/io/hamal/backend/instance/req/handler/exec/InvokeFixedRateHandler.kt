@@ -1,23 +1,32 @@
 package io.hamal.backend.instance.req.handler.exec
 
+import io.hamal.backend.instance.event.ExecPlannedEvent
+import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.backend.instance.service.cmd.ExecCmdService
-import io.hamal.backend.instance.service.cmd.ExecCmdService.ToPlan
 import io.hamal.backend.instance.service.query.FuncQueryService
+import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.req.InvokeFixedRateReq
+import io.hamal.lib.domain.PlannedExec
+import io.hamal.lib.domain.req.SubmittedInvokeFixedRateReq
 import org.springframework.stereotype.Component
 
 @Component
 class InvokeFixedRateHandler(
-    private val execCmdService: ExecCmdService,
+    private val execCmdRepository: ExecCmdRepository,
+    private val eventEmitter: SystemEventEmitter<*>,
     private val funcQueryService: FuncQueryService
-) : ReqHandler<InvokeFixedRateReq>(InvokeFixedRateReq::class) {
-    override fun invoke(req: InvokeFixedRateReq) {
+) : ReqHandler<SubmittedInvokeFixedRateReq>(SubmittedInvokeFixedRateReq::class) {
+    override fun invoke(req: SubmittedInvokeFixedRateReq) {
+        planExec(req).also { emitEvent(req.cmdId(), it) }
+    }
+
+    private fun planExec(req: SubmittedInvokeFixedRateReq): PlannedExec {
         val func = funcQueryService.get(req.funcId)
-        execCmdService.plan(
-            req.cmdId(), ToPlan(
+        return execCmdRepository.plan(
+            ExecCmdRepository.PlanCmd(
+                id = req.cmdId(),
                 execId = req.execId,
                 correlation = Correlation(
                     correlationId = req.correlationId,
@@ -27,5 +36,9 @@ class InvokeFixedRateHandler(
                 code = func.code,
             )
         )
+    }
+
+    private fun emitEvent(cmdId: CmdId, exec: PlannedExec) {
+        eventEmitter.emit(cmdId, ExecPlannedEvent(exec))
     }
 }
