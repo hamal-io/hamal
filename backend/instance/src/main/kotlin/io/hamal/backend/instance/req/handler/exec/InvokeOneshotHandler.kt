@@ -25,7 +25,6 @@ class InvokeOneshotHandler(
                     funcId = func.id
                 ),
                 inputs = merge(func.inputs, req.inputs),
-                secrets = merge(func.secrets, req.secrets)
             )
         )
     }

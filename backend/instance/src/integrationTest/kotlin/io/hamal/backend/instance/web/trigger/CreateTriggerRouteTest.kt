@@ -5,7 +5,10 @@ import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.TriggerInputs
+import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -28,7 +31,6 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = funcResponse.funcId,
                     inputs = TriggerInputs(),
-                    secrets = TriggerSecrets(),
                     duration = 10.seconds,
                 )
             )
@@ -44,7 +46,6 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
             assertThat(id, equalTo(result.triggerId))
             assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
             assertThat(inputs, equalTo(TriggerInputs()))
-            assertThat(secrets, equalTo(TriggerSecrets()))
             assertThat(funcId, equalTo(funcResponse.funcId))
             require(this is FixedRateTrigger) { "not FixedRateTrigger" }
             assertThat(duration, equalTo(10.seconds))
@@ -60,7 +61,6 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = FuncId(123),
                     inputs = TriggerInputs(),
-                    secrets = TriggerSecrets(),
                     duration = 10.seconds,
                 )
             )

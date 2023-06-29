@@ -1,12 +1,10 @@
 package io.hamal.backend.instance.web.exec
 
 import io.hamal.backend.instance.web.BaseRouteTest
-import io.hamal.backend.repository.api.ExecCmdRepository.*
-import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
@@ -20,7 +18,6 @@ internal sealed class BaseExecRouteTest : BaseRouteTest() {
             .body(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    secrets = InvocationSecrets(),
                     code = Code("40 + 2")
                 )
             )

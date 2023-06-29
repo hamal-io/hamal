@@ -7,10 +7,6 @@ import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeOneshotReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Planned
-import io.hamal.lib.domain.vo.base.Secret
-import io.hamal.lib.domain.vo.base.SecretKey
-import io.hamal.lib.domain.vo.base.SecretStore
-import io.hamal.lib.domain.vo.base.SecretStoreIdentifier
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,11 +23,6 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
             id = FuncId(4444), code = Code("SomeCode"), inputs = FuncInputs(
                 TableValue(
                     StringValue("override") to StringValue("false"), StringValue("func") to StringValue("func")
-                )
-            ), secrets = FuncSecrets(
-                listOf(
-                    Secret(SecretKey("override"), SecretStore("override"), SecretStoreIdentifier("false")),
-                    Secret(SecretKey("func"), SecretStore("func"), SecretStoreIdentifier("func"))
                 )
             )
         )
@@ -59,19 +50,6 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
                                 StringValue("invocation") to StringValue("invocation"),
                                 StringValue("override") to StringValue("true"),
                             ),
-                        )
-                    )
-                )
-                assertThat(
-                    secrets, equalTo(
-                        ExecSecrets(
-                            //@formatter:off
-                            listOf(
-                                Secret(SecretKey("func"), SecretStore("func"), SecretStoreIdentifier("func")),
-                                Secret(SecretKey("override"), SecretStore("override"), SecretStoreIdentifier("true")),
-                                Secret(SecretKey("invocation"), SecretStore("invocation"), SecretStoreIdentifier("invocation"))
-                            )
-                            //@formatter:on
                         )
                     )
                 )
@@ -103,13 +81,7 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
                 StringValue("override") to StringValue("true"), StringValue("invocation") to StringValue("invocation")
             )
         ),
-        funcId = FuncId(4444),
-        secrets = InvocationSecrets(
-            listOf(
-                Secret(SecretKey("override"), SecretStore("override"), SecretStoreIdentifier("true")),
-                Secret(SecretKey("invocation"), SecretStore("invocation"), SecretStoreIdentifier("invocation"))
-            )
-        )
+        funcId = FuncId(4444)
     )
     //@formatter:on
 }

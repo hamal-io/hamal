@@ -24,7 +24,6 @@ data class FixedRateTriggerCreationRecord(
     val funcId: FuncId,
     val name: TriggerName,
     val inputs: TriggerInputs,
-    val secrets: TriggerSecrets,
     val duration: Duration
 ) : TriggerRecord()
 
@@ -36,6 +35,5 @@ data class EventTriggerCreationRecord(
     val funcId: FuncId,
     val name: TriggerName,
     val inputs: TriggerInputs,
-    val secrets: TriggerSecrets,
     val topicId: TopicId
 ) : TriggerRecord()

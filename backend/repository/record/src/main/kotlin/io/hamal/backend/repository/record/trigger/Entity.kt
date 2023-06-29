@@ -21,7 +21,6 @@ data class Entity(
     var name: TriggerName? = null,
     var type: TriggerType? = null,
     var inputs: TriggerInputs? = null,
-    var secrets: TriggerSecrets? = null,
 
     var topicId: TopicId? = null,
     var duration: Duration? = null
@@ -38,7 +37,6 @@ data class Entity(
                 funcId = rec.funcId,
                 type = FixedRate,
                 inputs = rec.inputs,
-                secrets = rec.secrets,
                 duration = rec.duration
             )
 
@@ -50,7 +48,6 @@ data class Entity(
                 funcId = rec.funcId,
                 type = Event,
                 inputs = rec.inputs,
-                secrets = rec.secrets,
                 topicId = rec.topicId
             )
         }
@@ -64,7 +61,6 @@ data class Entity(
                 funcId = funcId!!,
                 name = name!!,
                 inputs = inputs!!,
-                secrets = secrets!!,
                 duration = duration!!
             )
 
@@ -74,7 +70,6 @@ data class Entity(
                 funcId = funcId!!,
                 name = name!!,
                 inputs = inputs!!,
-                secrets = secrets!!,
                 topicId = topicId!!
             )
         }

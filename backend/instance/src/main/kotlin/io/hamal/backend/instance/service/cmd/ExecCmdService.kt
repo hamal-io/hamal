@@ -8,7 +8,6 @@ import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -37,7 +36,6 @@ class ExecCmdService(
         val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val secrets: ExecSecrets,
         val code: Code,
     )
 
@@ -50,7 +48,6 @@ private fun ExecCmdService.planExec(cmdId: CmdId, toPlan: ToPlan): PlannedExec {
             execId = toPlan.execId,
             correlation = toPlan.correlation,
             inputs = toPlan.inputs,
-            secrets = toPlan.secrets,
             code = toPlan.code,
         )
     )

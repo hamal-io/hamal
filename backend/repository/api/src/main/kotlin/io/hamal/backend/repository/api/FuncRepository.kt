@@ -13,7 +13,6 @@ interface FuncCmdRepository {
         val funcId: FuncId,
         val name: FuncName,
         val inputs: FuncInputs,
-        val secrets: FuncSecrets,
         val code: Code,
     )
 }

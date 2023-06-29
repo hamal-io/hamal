@@ -19,7 +19,6 @@ interface TriggerCmdRepository {
         val name: TriggerName,
         val funcId: FuncId,
         val inputs: TriggerInputs,
-        val secrets: TriggerSecrets,
         val duration: Duration
     )
 
@@ -29,7 +28,6 @@ interface TriggerCmdRepository {
         val name: TriggerName,
         val funcId: FuncId,
         val inputs: TriggerInputs,
-        val secrets: TriggerSecrets,
         val topicId: TopicId
     )
 }

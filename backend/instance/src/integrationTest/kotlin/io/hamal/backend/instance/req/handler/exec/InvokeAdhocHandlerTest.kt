@@ -4,12 +4,11 @@ import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Planned
-import io.hamal.lib.domain.vo.base.Secret
-import io.hamal.lib.domain.vo.base.SecretKey
-import io.hamal.lib.domain.vo.base.SecretStore
-import io.hamal.lib.domain.vo.base.SecretStoreIdentifier
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,19 +30,6 @@ internal class InvokeAdhocHandlerTest : BaseReqHandlerTest() {
                 assertThat(correlation, nullValue())
                 assertThat(status, equalTo(Planned))
                 assertThat(inputs, equalTo(ExecInputs(TableValue(StringValue("hamal") to StringValue("justworks")))))
-                assertThat(
-                    secrets, equalTo(
-                        ExecSecrets(
-                            listOf(
-                                Secret(
-                                    key = SecretKey("key"),
-                                    store = SecretStore("store"),
-                                    storeIdentifier = SecretStoreIdentifier("ident")
-                                )
-                            )
-                        )
-                    )
-                )
                 assertThat(code, equalTo(Code("code")))
             }
         }
@@ -57,15 +43,6 @@ internal class InvokeAdhocHandlerTest : BaseReqHandlerTest() {
         status = ReqStatus.Submitted,
         execId = ExecId(3333),
         inputs = InvocationInputs(TableValue(StringValue("hamal") to StringValue("justworks"))),
-        secrets = InvocationSecrets(
-            listOf(
-                Secret(
-                    key = SecretKey("key"),
-                    store = SecretStore("store"),
-                    storeIdentifier = SecretStoreIdentifier("ident")
-                )
-            )
-        ),
         code = Code("code")
     )
 }

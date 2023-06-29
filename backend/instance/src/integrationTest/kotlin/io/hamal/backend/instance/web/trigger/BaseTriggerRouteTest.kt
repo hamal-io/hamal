@@ -23,7 +23,6 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
                 CreateFuncReq(
                     name = name,
                     inputs = FuncInputs(),
-                    secrets = FuncSecrets(),
                     code = Code("")
                 )
             )
@@ -45,7 +44,6 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
                     name = name,
                     funcId = funcResponse.funcId,
                     inputs = TriggerInputs(),
-                    secrets = TriggerSecrets(),
                     duration = 10.seconds,
                 )
             )

@@ -27,7 +27,6 @@ private fun CreateFuncHandler.createFunc(req: SubmittedCreateFuncReq): Func {
             funcId = req.funcId,
             name = req.funcName,
             inputs = req.inputs,
-            secrets = req.secrets,
             code = req.code
         )
     )

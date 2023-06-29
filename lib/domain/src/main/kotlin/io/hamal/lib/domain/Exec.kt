@@ -11,7 +11,6 @@ sealed class Exec : DomainObject<ExecId> {
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
-    abstract val secrets: ExecSecrets
     abstract val code: Code
 
     override fun equals(other: Any?): Boolean {
@@ -39,7 +38,6 @@ class PlannedExec(
     override val id: ExecId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
-    override val secrets: ExecSecrets,
     override val code: Code,
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
@@ -61,7 +59,6 @@ class ScheduledExec(
     override val status = ExecStatus.Scheduled
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
-    override val secrets get() = plannedExec.secrets
     override val code get() = plannedExec.code
     override fun toString(): String {
         return "ScheduledExec($id)"
@@ -79,7 +76,6 @@ class QueuedExec(
     override val status = ExecStatus.Queued
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
-    override val secrets get() = scheduledExec.secrets
     override val code get() = scheduledExec.code
     override fun toString(): String {
         return "QueuedExec($id)"
@@ -96,7 +92,6 @@ class StartedExec(
     override val status = ExecStatus.Started
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
-    override val secrets get() = queuedExec.secrets
     override val code get() = queuedExec.code
     override fun toString(): String {
         return "StartedExec($id)"
@@ -114,7 +109,6 @@ class CompletedExec(
     override val status = ExecStatus.Completed
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
-    override val secrets get() = startedExec.secrets
     override val code get() = startedExec.code
 
     override fun toString(): String {
@@ -133,7 +127,6 @@ class FailedExec(
     override val status = ExecStatus.Failed
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
-    override val secrets get() = startedExec.secrets
     override val code get() = startedExec.code
     override fun toString(): String {
         return "FailedExec($id)"

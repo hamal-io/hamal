@@ -22,7 +22,6 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    secrets = FuncSecrets(),
                     code = Code("")
                 )
             )
@@ -32,8 +31,7 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
             .body(
                 InvokeOneshotReq(
                     correlationId = CorrelationId("__default__"),
-                    inputs = InvocationInputs(),
-                    secrets = InvocationSecrets()
+                    inputs = InvocationInputs()
                 )
             ).execute()
 
@@ -43,7 +41,6 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
         val result = invocationResponse.result(SubmittedInvokeOneshotReq::class)
         assertThat(result.funcId, equalTo(createResponse.funcId))
         assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.correlationId, equalTo(CorrelationId("__default__")))
 
         awaitCompleted(result.id)
@@ -56,8 +53,7 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
             .body(
                 InvokeOneshotReq(
                     correlationId = CorrelationId("__default__"),
-                    inputs = InvocationInputs(),
-                    secrets = InvocationSecrets()
+                    inputs = InvocationInputs()
                 )
             ).execute()
 

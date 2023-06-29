@@ -16,7 +16,6 @@ data class Entity(
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
-    var secrets: ExecSecrets? = null,
     var code: Code? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null
@@ -32,7 +31,6 @@ data class Entity(
                 status = ExecStatus.Planned,
                 correlation = rec.correlation,
                 inputs = rec.inputs,
-                secrets = rec.secrets,
                 code = rec.code,
                 plannedAt = Instant.now(), // FIXME
             )
@@ -84,7 +82,6 @@ data class Entity(
             id = id,
             correlation = null,
             inputs = inputs ?: ExecInputs(TableValue()),
-            secrets = secrets ?: ExecSecrets(listOf()),
             code = code!!
         )
 

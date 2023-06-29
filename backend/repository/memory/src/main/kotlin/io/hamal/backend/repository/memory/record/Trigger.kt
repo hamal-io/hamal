@@ -51,7 +51,6 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
                 funcId = cmd.funcId,
                 name = cmd.name,
                 inputs = cmd.inputs,
-                secrets = cmd.secrets,
                 duration = cmd.duration
             )
         )
@@ -71,7 +70,6 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
                 funcId = cmd.funcId,
                 name = cmd.name,
                 inputs = cmd.inputs,
-                secrets = cmd.secrets,
                 topicId = cmd.topicId
             )
         )

@@ -64,7 +64,6 @@ class SqliteFuncRepository(
                         cmdId = cmdId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        secrets = cmd.secrets,
                         code = cmd.code,
                     )
                 )

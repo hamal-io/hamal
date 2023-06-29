@@ -5,7 +5,6 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
 import kotlinx.serialization.Serializable
 
 
@@ -18,7 +17,6 @@ data class DequeueExecsResponse(
         val id: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val secrets: ExecSecrets,
         val state: State,
         val code: Code
     )

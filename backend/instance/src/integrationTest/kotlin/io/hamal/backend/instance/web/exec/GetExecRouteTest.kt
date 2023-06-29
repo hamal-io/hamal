@@ -4,7 +4,6 @@ import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -30,7 +29,6 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
             assertThat(id, equalTo(createAdhocResponse.execId))
             assertThat(status, equalTo(ExecStatus.Queued))
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(secrets, equalTo(ExecSecrets()))
             assertThat(code, equalTo(Code("40 + 2")))
             assertThat(correlation, nullValue())
         }

@@ -14,7 +14,6 @@ data class InvokeFixedRate(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets
 )
 
 data class InvokeEvent(
@@ -22,7 +21,6 @@ data class InvokeEvent(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets
 )
 @Component
 class SubmitRequest(
@@ -35,7 +33,6 @@ class SubmitRequest(
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             inputs = adhoc.inputs,
-            secrets = adhoc.secrets,
             code = adhoc.code
         ).also(reqCmdRepository::queue)
 
@@ -48,7 +45,6 @@ class SubmitRequest(
             funcId = funcId,
             correlationId = oneshot.correlationId,
             inputs = oneshot.inputs,
-            secrets = oneshot.secrets,
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(fixedRate: InvokeFixedRate) =
@@ -59,7 +55,6 @@ class SubmitRequest(
             funcId = fixedRate.funcId,
             correlationId = fixedRate.correlationId,
             inputs = fixedRate.inputs,
-            secrets = fixedRate.secrets,
         ).also(reqCmdRepository::queue)
 
 
@@ -71,7 +66,6 @@ class SubmitRequest(
             funcId = evt.funcId,
             correlationId = evt.correlationId,
             inputs = evt.inputs,
-            secrets = evt.secrets,
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(execId: ExecId, complete: CompleteExecReq) =
@@ -90,7 +84,6 @@ class SubmitRequest(
             funcId = generateDomainId(::FuncId),
             funcName = createFuncReq.name,
             inputs = createFuncReq.inputs,
-            secrets = createFuncReq.secrets,
             code = createFuncReq.code
         ).also(reqCmdRepository::queue)
 
@@ -103,7 +96,6 @@ class SubmitRequest(
             triggerName = createTriggerReq.name,
             funcId = createTriggerReq.funcId,
             inputs = createTriggerReq.inputs,
-            secrets = createTriggerReq.secrets,
             duration = createTriggerReq.duration,
         ).also(reqCmdRepository::queue)
 

@@ -20,7 +20,6 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
             adhoc(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    secrets = InvocationSecrets(),
                     code = Code("1 + 1")
                 )
             )
@@ -31,7 +30,6 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
 
             with(execs.first()) {
                 assertThat(inputs, equalTo(ExecInputs()))
-                assertThat(secrets, equalTo(ExecSecrets()))
                 assertThat(correlation, nullValue())
                 assertThat(code, equalTo(Code("1 + 1")))
 

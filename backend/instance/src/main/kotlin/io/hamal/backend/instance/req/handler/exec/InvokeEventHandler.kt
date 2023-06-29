@@ -24,7 +24,6 @@ class InvokeEventHandler(
                     funcId = func.id
                 ),
                 inputs = merge(func.inputs, req.inputs),
-                secrets = merge(func.secrets, req.secrets),
                 code = func.code
             )
         )

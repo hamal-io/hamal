@@ -84,7 +84,6 @@ class AgentService {
                     try {
 
                         println("${request.inputs} - ${request.inputs.value}")
-                        println("${request.secrets} - ${request.secrets.value.size}")
 
 //                println("$request")
 //                println("Execute: ${request.id} - ${request.correlation}")

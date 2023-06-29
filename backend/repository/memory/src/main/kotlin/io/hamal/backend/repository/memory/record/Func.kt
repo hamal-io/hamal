@@ -45,7 +45,6 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
                 cmdId = cmd.id,
                 name = cmd.name,
                 inputs = cmd.inputs,
-                secrets = cmd.secrets,
                 code = cmd.code
             )
         )

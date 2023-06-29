@@ -4,7 +4,6 @@ import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.FuncSecrets
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,7 +24,6 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
-                    secrets = FuncSecrets(),
                     code = Code("")
                 )
             )
@@ -48,7 +46,6 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
                     CreateFuncReq(
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
-                        secrets = FuncSecrets(),
                         code = Code("")
                     )
                 )
@@ -73,7 +70,6 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
-                    secrets = FuncSecrets(),
                     code = Code("")
                 )
             )

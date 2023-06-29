@@ -68,7 +68,6 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
                 cmdId = cmd.id,
                 correlation = cmd.correlation,
                 inputs = cmd.inputs,
-                secrets = cmd.secrets,
                 code = cmd.code
             )
         )

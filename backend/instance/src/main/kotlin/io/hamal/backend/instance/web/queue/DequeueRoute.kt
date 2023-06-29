@@ -28,7 +28,6 @@ class DequeueRoute(
                         id = it.id,
                         correlation = it.correlation,
                         inputs = it.inputs,
-                        secrets = it.secrets,
                         state = State(ContentType(""), Content("")),//FIXME
                         code = it.code
                     )

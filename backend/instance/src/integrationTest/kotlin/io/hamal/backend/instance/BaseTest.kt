@@ -102,7 +102,6 @@ internal abstract class BaseTest {
                 execId = execId,
                 correlation = null,
                 inputs = ExecInputs(),
-                secrets = ExecSecrets(),
                 code = Code("")
             )
         )

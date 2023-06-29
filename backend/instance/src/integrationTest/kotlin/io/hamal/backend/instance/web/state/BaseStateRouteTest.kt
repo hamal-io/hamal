@@ -6,7 +6,6 @@ import io.hamal.lib.domain.req.SubmittedCreateFuncReq
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.FuncSecrets
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
@@ -20,7 +19,6 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
                 CreateFuncReq(
                     name = name,
                     inputs = FuncInputs(),
-                    secrets = FuncSecrets(),
                     code = Code("")
                 )
             )

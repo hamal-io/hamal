@@ -7,7 +7,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecSecrets
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -25,7 +24,6 @@ data class ExecPlannedRecord(
     override val cmdId: CmdId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val secrets: ExecSecrets,
     val code: Code
 ) : ExecRecord()
 

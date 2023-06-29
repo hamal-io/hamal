@@ -12,7 +12,6 @@ data class CreateTriggerReq(
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
-    val secrets: TriggerSecrets,
     val duration: Duration? = null,
 )
 
@@ -25,7 +24,6 @@ data class SubmittedCreateTriggerReq(
     val triggerName: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
-    val secrets: TriggerSecrets,
     val duration: Duration? = null,
     val topicId: TopicId? = null
 ) : SubmittedReq
@@ -39,7 +37,6 @@ data class InvokeFixedRateReq(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets,
 ) : SubmittedReq
 
 @Serializable
@@ -50,6 +47,5 @@ data class InvokeEventReq(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets,
 ) : SubmittedReq
 

@@ -8,10 +8,6 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.base.Secret
-import io.hamal.lib.domain.vo.base.SecretKey
-import io.hamal.lib.domain.vo.base.SecretStore
-import io.hamal.lib.domain.vo.base.SecretStoreIdentifier
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -85,19 +81,6 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(duration, equalTo(42.seconds))
                 assertThat(inputs, equalTo(TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks")))))
-                assertThat(
-                    secrets, equalTo(
-                        TriggerSecrets(
-                            listOf(
-                                Secret(
-                                    key = SecretKey("key"),
-                                    store = SecretStore("store"),
-                                    storeIdentifier = SecretStoreIdentifier("identifier")
-                                )
-                            )
-                        )
-                    )
-                )
             }
         }
     }
@@ -113,19 +96,6 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(topicId, equalTo(TopicId(1111)))
                 assertThat(inputs, equalTo(TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks")))))
-                assertThat(
-                    secrets, equalTo(
-                        TriggerSecrets(
-                            listOf(
-                                Secret(
-                                    key = SecretKey("key"),
-                                    store = SecretStore("store"),
-                                    storeIdentifier = SecretStoreIdentifier("identifier")
-                                )
-                            )
-                        )
-                    )
-                )
             }
         }
     }
@@ -148,15 +118,6 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         triggerName = TriggerName("FixedRateTrigger"),
         duration = 42.seconds,
         inputs = TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
-        secrets = TriggerSecrets(
-            listOf(
-                Secret(
-                    key = SecretKey("key"),
-                    store = SecretStore("store"),
-                    storeIdentifier = SecretStoreIdentifier("identifier")
-                )
-            )
-        ),
     )
 
     private val submitCreateEventTriggerReq = SubmittedCreateTriggerReq(
@@ -168,14 +129,5 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         triggerId = TriggerId(1234),
         triggerName = TriggerName("EventTrigger"),
         inputs = TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
-        secrets = TriggerSecrets(
-            listOf(
-                Secret(
-                    key = SecretKey("key"),
-                    store = SecretStore("store"),
-                    storeIdentifier = SecretStoreIdentifier("identifier")
-                )
-            )
-        ),
     )
 }

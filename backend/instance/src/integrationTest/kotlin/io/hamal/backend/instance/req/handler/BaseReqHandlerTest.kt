@@ -23,7 +23,6 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
         id: FuncId = generateDomainId(::FuncId),
         name: FuncName = FuncName("SomeFuncName"),
         inputs: FuncInputs = FuncInputs(),
-        secrets: FuncSecrets = FuncSecrets(),
         code: Code = Code("")
     ): Func {
         return funcCmdRepository.create(
@@ -32,7 +31,6 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
                 funcId = id,
                 name = name,
                 inputs = inputs,
-                secrets = secrets,
                 code = code
             )
         )

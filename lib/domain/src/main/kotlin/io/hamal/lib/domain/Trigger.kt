@@ -14,7 +14,6 @@ sealed class Trigger : DomainObject<TriggerId> {
     abstract val funcId: FuncId
     abstract val type: TriggerType
     abstract val inputs: TriggerInputs
-    abstract val secrets: TriggerSecrets
 }
 
 @Serializable
@@ -24,7 +23,6 @@ class FixedRateTrigger(
     override val name: TriggerName,
     override val funcId: FuncId,
     override val inputs: TriggerInputs,
-    override val secrets: TriggerSecrets,
     val duration: Duration
 ) : Trigger() {
     override val type = FixedRate
@@ -37,7 +35,6 @@ class EventTrigger(
     override val name: TriggerName,
     override val funcId: FuncId,
     override val inputs: TriggerInputs,
-    override val secrets: TriggerSecrets,
     val topicId: TopicId
 ) : Trigger() {
     override val type = Event

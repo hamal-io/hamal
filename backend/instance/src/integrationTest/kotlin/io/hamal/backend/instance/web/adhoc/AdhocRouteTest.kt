@@ -20,7 +20,6 @@ internal class AdhocRouteTest : BaseRouteTest() {
         val response = request(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),
-                secrets = InvocationSecrets(),
                 code = Code("40 + 2")
             )
         )
@@ -31,7 +30,6 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
         assertThat(result.status, equalTo(ReqStatus.Submitted))
         assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.secrets, equalTo(InvocationSecrets()))
         assertThat(result.code, equalTo(Code("40 + 2")))
 
         Thread.sleep(10)
@@ -55,7 +53,6 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
             assertThat(correlation, nullValue())
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(secrets, equalTo(ExecSecrets()))
             assertThat(code, equalTo(Code("40 + 2")))
         }
     }

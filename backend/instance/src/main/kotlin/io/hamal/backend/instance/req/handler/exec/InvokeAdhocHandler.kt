@@ -17,7 +17,6 @@ class InvokeAdhocHandler(
                 execId = req.execId,
                 correlation = null,
                 inputs = req.inputs.toExecInputs(),
-                secrets = req.secrets.toExecSecrets(),
                 code = req.code
             )
         )

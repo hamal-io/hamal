@@ -65,7 +65,6 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger
             funcId = trigger.funcId,
             correlationId = CorrelationId("__TBD__"), //FIXME
             inputs = InvocationInputs(TableValue()),
-            secrets = InvocationSecrets(listOf()),
         )
     )
 }

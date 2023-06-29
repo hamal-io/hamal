@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable(with = FuncId.Serializer::class)
 class FuncId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
+
     internal object Serializer : DomainIdSerializer<FuncId>(::FuncId)
 }
 
@@ -20,9 +21,4 @@ class FuncName(override val value: String) : DomainName() {
 @Serializable(with = FuncInputs.Serializer::class)
 class FuncInputs(override val value: TableValue = TableValue()) : Inputs() {
     internal object Serializer : InputsSerializer<FuncInputs>(::FuncInputs)
-}
-
-@Serializable(with = FuncSecrets.Serializer::class)
-class FuncSecrets(override val value: List<Secret> = listOf()) : Secrets() {
-    internal object Serializer : SecretsSerializer<FuncSecrets>(::FuncSecrets)
 }

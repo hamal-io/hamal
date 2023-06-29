@@ -1,7 +1,10 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.lib.domain.*
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.Limit
 
 interface ExecCmdRepository {
     fun plan(cmd: PlanCmd): PlannedExec
@@ -17,7 +20,6 @@ interface ExecCmdRepository {
         val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val secrets: ExecSecrets,
         val code: Code
     )
 

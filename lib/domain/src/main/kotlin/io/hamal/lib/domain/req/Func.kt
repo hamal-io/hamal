@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 data class CreateFuncReq(
     val name: FuncName,
     val inputs: FuncInputs,
-    val secrets: FuncSecrets,
     val code: Code
 )
 
@@ -19,7 +18,6 @@ data class SubmittedCreateFuncReq(
     val funcId: FuncId,
     val funcName: FuncName,
     val inputs: FuncInputs,
-    val secrets: FuncSecrets,
     val code: Code
 ) : SubmittedReq
 
@@ -27,7 +25,6 @@ data class SubmittedCreateFuncReq(
 data class InvokeOneshotReq(
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets
 )
 
 @Serializable
@@ -38,5 +35,4 @@ data class SubmittedInvokeOneshotReq(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
-    val secrets: InvocationSecrets,
 ) : SubmittedReq

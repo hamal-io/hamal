@@ -31,7 +31,6 @@ class CreateTriggerHandler(
                     name = req.triggerName,
                     funcId = req.funcId,
                     inputs = req.inputs,
-                    secrets = req.secrets,
                     duration = req.duration!!
                 )
             )
@@ -46,7 +45,6 @@ class CreateTriggerHandler(
                         name = req.triggerName,
                         funcId = req.funcId,
                         inputs = req.inputs,
-                        secrets = req.secrets,
                         topicId = req.topicId!!
                     )
                 )
