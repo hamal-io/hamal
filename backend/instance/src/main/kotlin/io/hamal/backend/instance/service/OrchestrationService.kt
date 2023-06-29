@@ -1,21 +1,21 @@
 package io.hamal.backend.instance.service
 
-import io.hamal.backend.instance.service.cmd.ExecCmdService
+import io.hamal.backend.instance.event.ExecScheduledEvent
+import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Service
-class OrchestrationService
-@Autowired constructor(
-    internal val execCmdService: ExecCmdService
+class OrchestrationService(
+    private val execCmdRepository: ExecCmdRepository,
+    private val eventEmitter: SystemEventEmitter<*>
 ) {
 
     internal val lock: ReentrantLock = ReentrantLock()
-
     internal val backlog = mutableMapOf<Correlation, MutableList<PlannedExec>>()
 
     // all execs in state of scheduled or greater
@@ -75,9 +75,15 @@ class OrchestrationService
         }
     }
 
+    fun scheduleExec(cmdId: CmdId, plannedExec: PlannedExec) {
+        val scheduledExec = execCmdRepository.schedule(ExecCmdRepository.ScheduleCmd(cmdId, plannedExec.id))
+            .also { emitEvent(cmdId, it) }
+
+        execs[scheduledExec.id] = scheduledExec
+    }
+
+    fun emitEvent(cmdId: CmdId, exec: ScheduledExec) {
+        eventEmitter.emit(cmdId, ExecScheduledEvent(exec))
+    }
 }
 
-fun OrchestrationService.scheduleExec(cmdId: CmdId, plannedExec: PlannedExec) {
-    val scheduledExec = execCmdService.schedule(cmdId, plannedExec)
-    execs[scheduledExec.id] = scheduledExec
-}

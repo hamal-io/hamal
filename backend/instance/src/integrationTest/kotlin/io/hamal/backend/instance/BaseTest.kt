@@ -1,6 +1,5 @@
 package io.hamal.backend.instance
 
-import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.query.EventQueryService
 import io.hamal.backend.instance.service.query.ExecQueryService
 import io.hamal.backend.instance.service.query.FuncQueryService
@@ -47,9 +46,6 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var execCmdRepository: ExecCmdRepository
-
-    @Autowired
-    lateinit var execCmdService: ExecCmdService
 
     @Autowired
     lateinit var execQueryRepository: ExecQueryRepository
@@ -150,6 +146,7 @@ internal abstract class BaseTest {
                     execId = startedExec.id
                 )
             )
+
             else -> TODO()
         }
     }

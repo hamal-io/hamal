@@ -1,15 +1,14 @@
 package io.hamal.backend.instance
 
-import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.event.*
 import io.hamal.backend.instance.event.handler.exec.*
 import io.hamal.backend.instance.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.instance.service.FixedRateTriggerService
 import io.hamal.backend.instance.service.OrchestrationService
 import io.hamal.backend.instance.service.SystemEventServiceFactory
-import io.hamal.backend.instance.service.cmd.ExecCmdService
 import io.hamal.backend.instance.service.cmd.StateCmdService
 import io.hamal.backend.instance.service.query.ExecQueryService
+import io.hamal.backend.repository.api.ExecCmdRepository
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -42,8 +41,8 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     @Bean
     open fun backendEventConsumer(
         eventServiceFactory: SystemEventServiceFactory,
-        execCmdService: ExecCmdService,
         execQueryService: ExecQueryService,
+        execCmdRepository: ExecCmdRepository,
         stateCmdService: StateCmdService,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
@@ -52,7 +51,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
 
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
-        .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdService))
+        .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdRepository, eventEmitter))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
         .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
         .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))

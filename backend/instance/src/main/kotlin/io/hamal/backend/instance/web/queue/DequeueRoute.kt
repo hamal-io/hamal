@@ -1,7 +1,11 @@
 package io.hamal.backend.instance.web.queue
 
-import io.hamal.backend.instance.service.cmd.ExecCmdService
+import io.hamal.backend.instance.event.ExecutionStartedEvent
+import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.backend.repository.api.ExecCmdRepository.*
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.Content
 import io.hamal.lib.domain.vo.ContentType
@@ -16,11 +20,15 @@ import java.security.SecureRandom
 
 @RestController
 class DequeueRoute(
-    private val execCmdService: ExecCmdService,
+    private val execCmdRepository: ExecCmdRepository,
+    private val eventEmitter: SystemEventEmitter<*>
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<DequeueExecsResponse> {
-        val result = execCmdService.start(CmdId(BigInteger(128, rnd)))
+        val cmdId = CmdId(BigInteger(128, rnd))
+        val result = execCmdRepository.start(StartCmd(cmdId)).also {
+            emitEvents(cmdId, it)
+        }
         return ResponseEntity(
             DequeueExecsResponse(
                 execs = result.map {
@@ -28,11 +36,18 @@ class DequeueRoute(
                         id = it.id,
                         correlation = it.correlation,
                         inputs = it.inputs,
-                        state = State(ContentType(""), Content("")),//FIXME
+                        state = State(
+                            contentType = ContentType(""),
+                            content = Content("")
+                        ),//FIXME
                         code = it.code
                     )
                 }), HttpStatus.OK
         )
+    }
+
+    private fun emitEvents(cmdId: CmdId, execs: List<StartedExec>) {
+        execs.forEach { eventEmitter.emit(cmdId, ExecutionStartedEvent(it)) }
     }
 
     private val rnd = SecureRandom.getInstance("SHA1PRNG", "SUN")
