@@ -53,7 +53,7 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
                         )
                     )
                 )
-                assertThat(code, equalTo(Code("code")))
+                assertThat(code, equalTo(Code("SomeCode")))
             }
         }
     }

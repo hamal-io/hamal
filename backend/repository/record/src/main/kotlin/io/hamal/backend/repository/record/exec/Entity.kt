@@ -80,7 +80,7 @@ data class Entity(
         val plannedExec = PlannedExec(
             cmdId = cmdId,
             id = id,
-            correlation = null,
+            correlation = correlation,
             inputs = inputs ?: ExecInputs(TableValue()),
             code = code!!
         )
