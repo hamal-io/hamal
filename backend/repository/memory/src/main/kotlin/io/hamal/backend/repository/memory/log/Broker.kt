@@ -55,9 +55,9 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
             )
         )
 
-    override fun find(topicId: TopicId) = topicsRepository.find(topicId)
-    override fun find(topicName: TopicName) = topicsRepository.find(topicName)
-    override fun queryTopics(): List<MemoryLogTopic> {
+    override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
+    override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
+    override fun listTopics(): List<MemoryLogTopic> {
         return topicsRepository.list()
     }
 

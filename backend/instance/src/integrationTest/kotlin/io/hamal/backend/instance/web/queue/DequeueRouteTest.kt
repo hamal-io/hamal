@@ -40,5 +40,5 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
 }
 
 private fun DequeueRouteTest.verifyExecStarted(execId: ExecId) {
-    assertThat(execQueryService.get(execId).status, equalTo(ExecStatus.Started))
+    assertThat(execQueryRepository.get(execId).status, equalTo(ExecStatus.Started))
 }

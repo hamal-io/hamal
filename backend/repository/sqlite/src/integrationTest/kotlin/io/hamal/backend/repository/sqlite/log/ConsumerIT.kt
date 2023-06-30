@@ -70,7 +70,7 @@ class ConsumerIT {
             }
 
             SqliteLogBrokerRepository(SqliteLogBroker(path)).use { brokerRepository ->
-                val topic = brokerRepository.find(TopicName("topic"))!!
+                val topic = brokerRepository.findTopic(TopicName("topic"))!!
                 val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->
                     assertThat("${index + 1}", equalTo(value))

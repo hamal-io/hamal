@@ -58,7 +58,7 @@ class BrokerIT {
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.consume(
                     GroupId("group-id"),
-                    testInstance.find(TopicName("topic-$thread"))!!,
+                    testInstance.findTopic(TopicName("topic-$thread"))!!,
                     1_000_000
                 )
                 assertThat(result, hasSize(100))

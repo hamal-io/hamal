@@ -1,9 +1,5 @@
 package io.hamal.backend.instance
 
-import io.hamal.backend.instance.service.query.EventQueryService
-import io.hamal.backend.instance.service.query.ExecQueryService
-import io.hamal.backend.instance.service.query.FuncQueryService
-import io.hamal.backend.instance.service.query.TriggerQueryService
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.log.MemoryLogTopic
@@ -42,19 +38,10 @@ internal abstract class BaseTest {
     lateinit var eventBrokerRepository: LogBrokerRepository<MemoryLogTopic>
 
     @Autowired
-    lateinit var eventQueryService: EventQueryService<*>
-
-    @Autowired
     lateinit var execCmdRepository: ExecCmdRepository
 
     @Autowired
     lateinit var execQueryRepository: ExecQueryRepository
-
-    @Autowired
-    lateinit var execQueryService: ExecQueryService
-
-    @Autowired
-    lateinit var funcQueryService: FuncQueryService
 
     @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
@@ -70,9 +57,6 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
-
-    @Autowired
-    lateinit var triggerQueryService: TriggerQueryService
 
     @Autowired
     lateinit var triggerQueryRepository: TriggerQueryRepository

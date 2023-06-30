@@ -42,7 +42,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val result = creationResponse.result(SubmittedCreateTriggerReq::class)
         awaitCompleted(result.id)
 
-        with(triggerQueryService.get(result.triggerId)) {
+        with(triggerQueryRepository.get(result.triggerId)) {
             assertThat(id, equalTo(result.triggerId))
             assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
             assertThat(inputs, equalTo(TriggerInputs()))

@@ -4,8 +4,8 @@ import io.hamal.backend.instance.event.ExecPlannedEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.backend.instance.service.query.FuncQueryService
 import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.PlannedExec
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Component
 class InvokeEventHandler(
     private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: SystemEventEmitter<*>,
-    private val funcQueryService: FuncQueryService
+    private val funcQueryRepository: FuncQueryRepository
 ) : ReqHandler<SubmittedInvokeEventReq>(SubmittedInvokeEventReq::class) {
     override fun invoke(req: SubmittedInvokeEventReq) {
         planExec(req).also { emitEvent(req.cmdId(), it) }
     }
 
     private fun planExec(req: SubmittedInvokeEventReq): PlannedExec {
-        val func = funcQueryService.get(req.funcId)
+        val func = funcQueryRepository.get(req.funcId)
         return execCmdRepository.plan(
             ExecCmdRepository.PlanCmd(
                 id = req.cmdId(),

@@ -33,6 +33,7 @@ interface TriggerCmdRepository {
 }
 
 interface TriggerQueryRepository {
+    fun get(triggerId: TriggerId) = find(triggerId) ?: throw NoSuchElementException("Trigger not found")
     fun find(triggerId: TriggerId): Trigger?
 
     fun list(block: TriggerQuery.() -> Unit): List<Trigger>

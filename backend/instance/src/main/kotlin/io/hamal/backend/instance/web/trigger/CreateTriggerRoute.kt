@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.trigger
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.instance.service.query.FuncQueryService
+import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import kotlinx.serialization.*
@@ -13,7 +13,7 @@ import kotlin.time.*
 
 @RestController
 open class CreateTriggerRoute(
-    private val funcQueryService: FuncQueryService,
+    private val funcQueryRepository: FuncQueryRepository,
     private val request: SubmitRequest
 ) {
     @PostMapping("/v1/triggers")
@@ -27,6 +27,6 @@ open class CreateTriggerRoute(
     }
 
     private fun ensureFuncExists(createTrigger: CreateTriggerReq) {
-        funcQueryService.get(createTrigger.funcId)
+        funcQueryRepository.get(createTrigger.funcId)
     }
 }

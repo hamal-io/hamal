@@ -47,7 +47,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         listResponse.reqs
             .map { it as SubmittedInvokeAdhocReq }
             .forEachIndexed { idx, req ->
-                val code = execQueryService.get(req.execId).code
+                val code = execQueryRepository.get(req.execId).code
                 assertThat(code, equalTo(Code("${22 - idx}")))
             }
     }
@@ -69,7 +69,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         listResponse.reqs
             .map { it as SubmittedInvokeAdhocReq }
             .forEach { req ->
-                val code = execQueryService.get(req.execId).code
+                val code = execQueryRepository.get(req.execId).code
                 assertThat(code, equalTo(Code("71")))
             }
     }

@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.event
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.instance.service.query.EventQueryService
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.req.AppendEventReq
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 open class AppendEventRoute(
     private val submitRequest: SubmitRequest,
-    private val eventQueryService: EventQueryService<*>
+    private val eventBrokerRepository: LogBrokerRepository<*>
 ) {
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(
@@ -25,7 +25,7 @@ open class AppendEventRoute(
         @RequestHeader("Content-Type") contentType: ContentType,
         @RequestBody body: ByteArray
     ): ResponseEntity<SubmittedAppendEventReq> {
-        val topic = eventQueryService.getTopic(topicId)
+        val topic = eventBrokerRepository.getTopic(topicId)
         val result = submitRequest(
             AppendEventReq(
                 topicId = topic.id,

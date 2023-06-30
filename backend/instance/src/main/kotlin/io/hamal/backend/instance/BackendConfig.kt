@@ -6,8 +6,8 @@ import io.hamal.backend.instance.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.instance.service.FixedRateTriggerService
 import io.hamal.backend.instance.service.OrchestrationService
 import io.hamal.backend.instance.service.SystemEventServiceFactory
-import io.hamal.backend.instance.service.query.ExecQueryService
 import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.backend.repository.api.ExecQueryRepository
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -40,7 +40,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
     @Bean
     open fun backendEventConsumer(
         eventServiceFactory: SystemEventServiceFactory,
-        execQueryService: ExecQueryService,
+        execQueryRepository: ExecQueryRepository,
         execCmdRepository: ExecCmdRepository,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,

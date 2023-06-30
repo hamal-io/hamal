@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.event
 
-import io.hamal.backend.instance.service.query.EventQueryService
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.sdk.domain.*
 import io.hamal.lib.sdk.domain.ListTopicsResponse.*
 import org.springframework.http.ResponseEntity
@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 open class ListTopicsRoute(
-    private val queryService: EventQueryService<*>
+    private val eventBrokerRepository: LogBrokerRepository<*>
 ) {
     @GetMapping("/v1/topics")
     fun listTopics(): ResponseEntity<ListTopicsResponse> {
-        val topics = queryService.listTopics { }
+        val topics = eventBrokerRepository.listTopics()
         return ResponseEntity.ok(
             ListTopicsResponse(
                 topics = topics.map { topic ->

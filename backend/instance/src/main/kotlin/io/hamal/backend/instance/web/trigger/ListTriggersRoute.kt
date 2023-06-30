@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.trigger
 
-import io.hamal.backend.instance.service.query.TriggerQueryService
+import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.TriggerId
@@ -14,19 +14,18 @@ import kotlin.time.*
 
 @RestController
 open class ListTriggersRoute(
-    private val queryService: TriggerQueryService
+    private val triggerQueryRepository: TriggerQueryRepository
 ) {
     @GetMapping("/v1/triggers")
     fun listTrigger(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ListTriggersResponse> {
-        val result =
-            queryService.list {
-                this.afterId = triggerId
-                this.types = TriggerType.values().toSet()
-                this.limit = limit
-            }
+        val result = triggerQueryRepository.list {
+            this.afterId = triggerId
+            this.types = TriggerType.values().toSet()
+            this.limit = limit
+        }
         return ResponseEntity.ok(
             ListTriggersResponse(
                 result.map {

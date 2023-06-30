@@ -64,9 +64,9 @@ class SqliteLogBrokerRepository(
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
-    override fun find(topicId: TopicId) = topicsRepository.find(topicId)
-    override fun find(topicName: TopicName) = topicsRepository.find(topicName)
-    override fun queryTopics(): List<SqliteLogTopic> {
+    override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
+    override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
+    override fun listTopics(): List<SqliteLogTopic> {
         return topicsRepository.list()
     }
 

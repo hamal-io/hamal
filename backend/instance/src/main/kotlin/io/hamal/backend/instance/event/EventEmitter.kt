@@ -22,7 +22,7 @@ class SystemEventEmitter<TOPIC : LogTopic>(
     }
 
     fun <EVENT : SystemEvent> emit(cmdId: CmdId, evt: EVENT) {
-        val topic = brokerRepository.find(evt.topic) ?: brokerRepository.create(
+        val topic = brokerRepository.findTopic(evt.topic) ?: brokerRepository.create(
             cmdId,
             CreateTopic.TopicToCreate(generateDomainId(::TopicId), evt.topic)
         )

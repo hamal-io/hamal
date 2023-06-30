@@ -1,14 +1,11 @@
 package io.hamal.backend.instance.web
 
-import io.hamal.backend.instance.service.query.StateQueryService
 import io.hamal.lib.sdk.domain.ApiGetStateResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class GetStateRoute(
-    val queryService: StateQueryService,
-) {
+class GetStateRoute {
 
     @GetMapping("/v1/funcs/{funcId}/state/{correlationId}")
     fun getState(

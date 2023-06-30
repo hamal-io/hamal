@@ -1,8 +1,15 @@
 package io.hamal.backend.repository.api.log
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
+import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventWithId
+import io.hamal.lib.domain.vo.EventId
+import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.protobuf.ProtoBuf
 import java.io.Closeable
 
 interface CreateTopic<TOPIC : LogTopic> {
@@ -28,16 +35,12 @@ interface ReadFromTopic<TOPIC : LogTopic> {
     fun read(firstId: LogChunkId, topic: TOPIC, limit: Int): List<LogChunk>
 }
 
-interface GetTopics<TOPIC : LogTopic> {
-    fun queryTopics(): List<TOPIC>
-}
-
 interface FindTopic<TOPIC : LogTopic> {
-    fun get(topicId: TopicId): TOPIC = find(topicId) ?: throw NoSuchElementException("Topic not found")
+    fun getTopic(topicId: TopicId): TOPIC = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
 
-    fun find(topicId: TopicId): TOPIC?
+    fun findTopic(topicId: TopicId): TOPIC?
 
-    fun find(topicName: TopicName): TOPIC?
+    fun findTopic(topicName: TopicName): TOPIC?
 }
 
 interface LogBrokerRepository<TOPIC : LogTopic> :
@@ -45,8 +48,29 @@ interface LogBrokerRepository<TOPIC : LogTopic> :
     AppendToTopic<TOPIC>,
     ConsumeFromTopic<TOPIC>,
     FindTopic<TOPIC>,
-    GetTopics<TOPIC>,
     ReadFromTopic<TOPIC>,
     Closeable {
+    fun listTopics(): List<TOPIC>
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun listEvents(topic: TOPIC, block: EventQuery.() -> Unit): List<EventWithId> {
+        val query = EventQuery().also(block)
+        val firstId = LogChunkId(SnowflakeId(query.afterId.value.value + 1))
+        return read(firstId, topic, query.limit.value)
+            .map { chunk ->
+                val evt = ProtoBuf.decodeFromByteArray(Event.serializer(), chunk.bytes)
+                EventWithId(
+                    id = EventId(chunk.id.value),
+                    contentType = evt.contentType,
+                    content = evt.content
+                )
+            }
+    }
+
     fun clear()
+
+    data class EventQuery(
+        var afterId: EventId = EventId(0),
+        var limit: Limit = Limit(1)
+    )
 }

@@ -32,12 +32,12 @@ interface BatchConsumer<VALUE : Any> {
 class ProtobufLogConsumer<TOPIC : LogTopic, Value : Any>(
     override val groupId: GroupId,
     private val topic: TOPIC,
-    private val logBrokerRepository: LogBrokerRepository<TOPIC>,
+    private val repository: LogBrokerRepository<TOPIC>,
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
     override fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, Value) -> Unit): Int {
-        val chunksToConsume = logBrokerRepository.consume(groupId, topic, limit)
+        val chunksToConsume = repository.consume(groupId, topic, limit)
 
         chunksToConsume.mapIndexed { index, chunk ->
             fn(
@@ -46,7 +46,7 @@ class ProtobufLogConsumer<TOPIC : LogTopic, Value : Any>(
                 ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
             )
             chunk.id
-        }.maxByOrNull { it }?.let { logBrokerRepository.commit(groupId, topic, it) }
+        }.maxByOrNull { it }?.let { repository.commit(groupId, topic, it) }
         return chunksToConsume.size
     }
 }
@@ -55,12 +55,12 @@ class ProtobufLogConsumer<TOPIC : LogTopic, Value : Any>(
 class ProtobufBatchConsumer<TOPIC : LogTopic, Value : Any>(
     override val groupId: GroupId,
     private val topic: TOPIC,
-    private val logBrokerRepository: LogBrokerRepository<TOPIC>,
+    private val repository: LogBrokerRepository<TOPIC>,
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 
     override fun consumeBatch(batchSize: Int, block: (List<Value>) -> Unit): Int {
-        val chunksToConsume = logBrokerRepository.consume(groupId, topic, batchSize)
+        val chunksToConsume = repository.consume(groupId, topic, batchSize)
 
         if (chunksToConsume.isEmpty()) {
             return 0
@@ -69,7 +69,7 @@ class ProtobufBatchConsumer<TOPIC : LogTopic, Value : Any>(
         val batch = chunksToConsume.map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
 
         block(batch)
-        chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { logBrokerRepository.commit(groupId, topic, it.id) }
+        chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { repository.commit(groupId, topic, it.id) }
         return batch.size
     }
 }

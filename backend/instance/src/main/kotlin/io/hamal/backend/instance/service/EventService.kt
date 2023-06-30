@@ -1,8 +1,8 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.event.SystemEventHandlerContainer
 import io.hamal.backend.instance.event.SystemEvent
+import io.hamal.backend.instance.event.SystemEventHandlerContainer
 import io.hamal.backend.instance.event.handler.SystemEventHandler
 import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.util.HashUtils.md5
@@ -32,7 +32,7 @@ interface SystemEventServiceFactory {
 class DefaultSystemEventService<TOPIC : LogTopic>(
     val async: Async,
     val generateDomainId: GenerateDomainId,
-    val logBrokerRepository: LogBrokerRepository<TOPIC>
+    val systemEventBrokerRepository: LogBrokerRepository<TOPIC>
 ) : SystemEventServiceFactory {
 
     private val handlerContainer = SystemEventHandlerContainer()
@@ -55,7 +55,7 @@ class DefaultSystemEventService<TOPIC : LogTopic>(
                     .map { TopicName(it) }
                     .map { topicName ->
                         val topicId = generateDomainId(::TopicId)
-                        logBrokerRepository.find(topicName) ?: logBrokerRepository.create(
+                        systemEventBrokerRepository.findTopic(topicName) ?: systemEventBrokerRepository.create(
                             CmdId(topicId),
                             CreateTopic.TopicToCreate(topicId, topicName)
                         )
@@ -65,7 +65,7 @@ class DefaultSystemEventService<TOPIC : LogTopic>(
                     val consumer = ProtobufLogConsumer(
                         GroupId("event-service"),
                         topic,
-                        logBrokerRepository,
+                        systemEventBrokerRepository,
                         SystemEvent::class
                     )
 

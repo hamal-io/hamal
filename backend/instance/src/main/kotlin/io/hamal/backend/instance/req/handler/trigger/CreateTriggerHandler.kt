@@ -36,7 +36,7 @@ class CreateTriggerHandler(
             )
 
             TriggerType.Event -> {
-                eventBrokerRepository.get(req.topicId!!)
+                eventBrokerRepository.getTopic(req.topicId!!)
 
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateEventCmd(

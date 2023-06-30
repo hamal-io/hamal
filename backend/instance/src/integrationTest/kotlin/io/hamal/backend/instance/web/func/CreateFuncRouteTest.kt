@@ -27,7 +27,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
 }
 
 private fun CreateFuncRouteTest.verifyFuncCreated(funcId: FuncId) {
-    with(funcQueryService.get(funcId)) {
+    with(funcQueryRepository.get(funcId)) {
         assertThat(id, equalTo(funcId))
         assertThat(name, equalTo(FuncName("test-func")))
         assertThat(inputs, equalTo(FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks")))))

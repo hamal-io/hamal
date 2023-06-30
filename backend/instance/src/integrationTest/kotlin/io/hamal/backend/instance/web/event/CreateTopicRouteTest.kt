@@ -40,7 +40,7 @@ internal class CreateTopicRouteTest : BaseEventRouteTest() {
 }
 
 private fun CreateTopicRouteTest.verifyTopicCreated(topicId: TopicId) {
-    with(eventQueryService.findTopic(topicId)!!) {
+    with(eventBrokerRepository.findTopic(topicId)!!) {
         assertThat(id, equalTo(topicId))
         assertThat(name, equalTo(TopicName("namespace::topics_one")))
     }

@@ -14,7 +14,7 @@ class AppendEventHandler<TOPIC : LogTopic>(
     private val eventBrokerRepository: LogBrokerRepository<TOPIC>
 ) : ReqHandler<SubmittedAppendEventReq>(SubmittedAppendEventReq::class) {
     override fun invoke(req: SubmittedAppendEventReq) {
-        val topic = eventBrokerRepository.get(req.topicId)
+        val topic = eventBrokerRepository.getTopic(req.topicId)
         appender.append(req.cmdId(), topic, req.event)
     }
 

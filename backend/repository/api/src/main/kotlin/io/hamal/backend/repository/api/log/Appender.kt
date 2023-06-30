@@ -15,11 +15,11 @@ interface Appender<TOPIC : LogTopic, VALUE : Any> {
 
 class ProtobufAppender<TOPIC : LogTopic, VALUE : Any>(
     private val valueClass: KClass<VALUE>,
-    private val logBrokerRepository: LogBrokerRepository<TOPIC>
+    private val repository: LogBrokerRepository<TOPIC>
 ) : Appender<TOPIC, VALUE> {
     @OptIn(InternalSerializationApi::class)
     override fun append(cmdId: CmdId, topic: TOPIC, value: VALUE) {
         val encoded = ProtoBuf.encodeToByteArray(valueClass.serializer(), value)
-        logBrokerRepository.append(cmdId, topic, encoded)
+        repository.append(cmdId, topic, encoded)
     }
 }
