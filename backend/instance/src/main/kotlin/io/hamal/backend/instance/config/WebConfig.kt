@@ -20,7 +20,7 @@ open class WebConfig : WebMvcConfigurer {
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         super.configureMessageConverters(converters)
         converters.add(KotlinSerializationJsonHttpMessageConverter(Json {
-            ignoreUnknownKeys = false
+            ignoreUnknownKeys = true
             encodeDefaults = true
         }))
     }

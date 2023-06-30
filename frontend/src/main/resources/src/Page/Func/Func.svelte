@@ -79,7 +79,6 @@
             body: JSON.stringify({
                     name: "name123",
                     inputs: {},
-                    secrets: [],
                     code: editor.getValue()
                 }
             )

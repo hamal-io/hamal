@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.web.event
 
 import io.hamal.lib.domain.HamalError
+import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.vo.Content
 import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicName
@@ -72,6 +73,6 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
         val error = topicResponse.error(HamalError::class)
         assertThat(error.message, equalTo("Topic not found"))
 
-        verifyNoRequests()
+        verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
 }

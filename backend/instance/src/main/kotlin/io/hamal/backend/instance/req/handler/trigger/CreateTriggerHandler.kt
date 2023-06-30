@@ -31,7 +31,7 @@ class CreateTriggerHandler(
                     name = req.triggerName,
                     funcId = req.funcId,
                     inputs = req.inputs,
-                    duration = req.duration!!
+                    duration = requireNotNull(req.duration) { "duration must not be null" }
                 )
             )
 
@@ -45,7 +45,7 @@ class CreateTriggerHandler(
                         name = req.triggerName,
                         funcId = req.funcId,
                         inputs = req.inputs,
-                        topicId = req.topicId!!
+                        topicId = requireNotNull(req.topicId) { "topicId must not be null" }
                     )
                 )
             }

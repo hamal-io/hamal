@@ -2,10 +2,7 @@ package io.hamal.backend.instance.web.trigger
 
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.domain.req.SubmittedCreateFuncReq
-import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
+import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -32,6 +29,15 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
         return createTopicResponse.result(SubmittedCreateFuncReq::class)
+    }
+
+    fun createTopic(topicName: TopicName): SubmittedCreateTopicReq {
+        val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
+
+        assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+
+        return createTopicResponse.result(SubmittedCreateTopicReq::class)
     }
 
     fun createFixedRateTrigger(name: TriggerName): SubmittedCreateTriggerReq {

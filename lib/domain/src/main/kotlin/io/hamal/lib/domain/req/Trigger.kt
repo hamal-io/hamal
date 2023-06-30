@@ -13,6 +13,7 @@ data class CreateTriggerReq(
     val funcId: FuncId,
     val inputs: TriggerInputs,
     val duration: Duration? = null,
+    val topicId: TopicId? = null,
 )
 
 @Serializable

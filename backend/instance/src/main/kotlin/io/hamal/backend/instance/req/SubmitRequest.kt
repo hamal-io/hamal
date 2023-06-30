@@ -97,6 +97,7 @@ class SubmitRequest(
             funcId = createTriggerReq.funcId,
             inputs = createTriggerReq.inputs,
             duration = createTriggerReq.duration,
+            topicId = createTriggerReq.topicId
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(createTopic: CreateTopicReq) =

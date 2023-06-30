@@ -8,6 +8,7 @@ import io.hamal.lib.http.HttpTemplate
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
+import kotlin.reflect.KClass
 
 internal abstract class BaseRouteTest : BaseTest() {
 
@@ -87,5 +88,9 @@ internal abstract class BaseRouteTest : BaseTest() {
         assertThat(requests, empty())
     }
 
+    fun <SUBMITTED_REQ : SubmittedReq> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
+        val requests = reqQueryRepository.list { }.filterIsInstance(clazz.java)
+        assertThat(requests, empty())
+    }
 
 }
