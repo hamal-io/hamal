@@ -5,6 +5,7 @@ import io.hamal.lib.script.api.value.ValueSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
+import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
@@ -18,7 +19,7 @@ class StringValueTest {
 class DefaultStringValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultStringValueMetaTable.operators, hasSize(0))
+        assertThat(DefaultStringValueMetaTable.operators, hasSize(1))
     }
 
     @Test
@@ -30,5 +31,11 @@ class DefaultStringValueMetaTableTest {
     fun infix() = listOf<Tuple4<StringValue, ValueOperator.Type, Value, Value>>(
         Tuple4(StringValue("h4m41"), ValueOperator.Type.Eq, StringValue("h4m41"), TrueValue),
         Tuple4(StringValue("h4m41"), ValueOperator.Type.Eq, StringValue("HAMAL"), FalseValue),
-    )
+    ).map { (self, operator, other, expected) ->
+        DynamicTest.dynamicTest("$self $operator $other = $expected") {
+            val infixOp = self.findInfixOperation(operator, other.type())!!
+            val result = infixOp(self, other)
+            assertThat(result, equalTo(expected))
+        }
+    }
 }

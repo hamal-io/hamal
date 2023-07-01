@@ -14,15 +14,15 @@ class TableValueTest {
         generateTestCases(TableValue(), """{"type":"TableValue"}"""),
         generateTestCases(
             TableValue(
-                StringValue("key") to StringValue("value")
+                "key" to StringValue("value")
             ),
-            """{"type":"TableValue","entries":{"s_key":{"type":"StringValue","value":"value"}}}""".trimIndent()
+            """{"type":"TableValue","entries":{"key":{"type":"StringValue","value":"value"}}}""".trimIndent()
         ),
         generateTestCases(
             TableValue(
-                NumberValue(23) to NumberValue(34)
+                23 to NumberValue(34)
             ),
-            """{"type":"TableValue","entries":{"n_23":{"type":"NumberValue","value":"34"}}}"""
+            """{"type":"TableValue","entries":{"23":{"type":"NumberValue","value":"34"}}}"""
         ),
     ).flatten()
 }

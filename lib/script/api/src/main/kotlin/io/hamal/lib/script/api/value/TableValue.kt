@@ -9,49 +9,59 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 
-@Serializable
-sealed interface KeyValue : Value
+//@Serializable
+//sealed interface TableKeyValue : Value
 
 @Serializable
 @SerialName("TableEntry")
-data class TableEntry(val key: Value, val value: Value)
+data class TableEntry(val key: IdentValue, val value: Value)
 
 @SerialName("TableValue")
 @Serializable
 data class TableValue(
     @Serializable(with = Serializer::class)
-    private val entries: MutableMap<Value, Value> = mutableMapOf(),
+    private val entries: MutableMap<IdentValue, Value> = mutableMapOf(),
     @Transient
     override val metaTable: MetaTable = DefaultTableValueMetaTable
 ) : Value, Collection<TableEntry> {
-
-    constructor(vararg pairs: Pair<Value, Value>) : this() {
-        pairs.forEach { pair -> entries[pair.first] = pair.second }
+    constructor(vararg pairs: Pair<Any, Value>) : this() {
+        pairs.forEach { pair ->
+            val key = pair.first
+            if (key is String) {
+                entries[IdentValue(key)] = pair.second
+            } else if (key is Number) {
+                entries[IdentValue(key.toString())] = pair.second
+            } else if (key is IdentValue) {
+                entries[key] = pair.second
+            }
+        }
     }
 
-    constructor(map: Map<Value, Value>) : this() {
-        map.forEach { (key, value) -> entries[key] = value }
+    constructor(map: Map<IdentValue, Value>) : this() {
+        map.forEach { (key, value) ->
+            entries[key] = value
+        }
     }
 
     operator fun set(key: Int, value: Value) {
-        this[NumberValue(key)] = value
+        this[IdentValue(key.toString())] = value
     }
 
-    operator fun set(key: Value, value: Value) {
+    operator fun set(key: IdentValue, value: Value) {
         entries[key] = value
     }
 
-    operator fun get(key: Int): Value = get(NumberValue(key))
-    operator fun get(key: NumberValue): Value = entries[key] ?: NilValue
-    operator fun get(key: Value): Value {
-        if (key is IdentValue) {
-            val result = entries[key] ?: entries[StringValue(key.value)] ?: NilValue
-            return result
-        }
-        return entries[key] ?: NilValue
+    operator fun get(key: Int): Value = get(IdentValue(key.toString()))
+    operator fun get(key: String): Value = get(IdentValue(key))
+    operator fun get(key: Value): Value = when (key) {
+        is StringValue -> get(IdentValue(key.value))
+        is NumberValue -> get(IdentValue(key.value.toString()))
+        is IdentValue -> get(key)
+        else -> TODO()
     }
 
-    operator fun get(key: IdentValue): Value = entries[StringValue(key.value)] ?: NilValue
+    operator fun get(key: IdentValue): Value = entries[key] ?: NilValue
+
 
     fun remove(key: Int) {
         remove(NumberValue(key))
@@ -89,39 +99,30 @@ data class TableValue(
         return "{$valueString}"
     }
 
-    object Serializer : KSerializer<MutableMap<Value, Value>> {
+    object Serializer : KSerializer<MutableMap<IdentValue, Value>> {
         private val delegate = MapSerializer(KeySerializer, Value.serializer())
 
         @OptIn(ExperimentalSerializationApi::class)
         override val descriptor = SerialDescriptor("TableValue", delegate.descriptor)
 
-        override fun deserialize(decoder: Decoder): MutableMap<Value, Value> {
+        override fun deserialize(decoder: Decoder): MutableMap<IdentValue, Value> {
             return delegate.deserialize(decoder).toMutableMap()
         }
 
-        override fun serialize(encoder: Encoder, value: MutableMap<Value, Value>) {
+        override fun serialize(encoder: Encoder, value: MutableMap<IdentValue, Value>) {
             return delegate.serialize(encoder, value)
         }
     }
 
-    object KeySerializer : KSerializer<Value> {
+    object KeySerializer : KSerializer<IdentValue> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("KeyValue", PrimitiveKind.STRING)
 
-        override fun deserialize(decoder: Decoder): Value {
-            val str = decoder.decodeString()
-            return when {
-                str.startsWith("s_") -> StringValue(str.substring(2))
-                str.startsWith("n_") -> NumberValue(str.substring(2))
-                else -> throw IllegalArgumentException("Only StringValue and NumberValue are supported")
-            }
+        override fun deserialize(decoder: Decoder): IdentValue {
+            return IdentValue(decoder.decodeString())
         }
 
-        override fun serialize(encoder: Encoder, value: Value) {
-            when (value) {
-                is StringValue -> encoder.encodeString("s_${value.value}")
-                is NumberValue -> encoder.encodeString("n_${value.value}")
-                else -> TODO()
-            }
+        override fun serialize(encoder: Encoder, value: IdentValue) {
+            return encoder.encodeString(value.value)
         }
 
     }

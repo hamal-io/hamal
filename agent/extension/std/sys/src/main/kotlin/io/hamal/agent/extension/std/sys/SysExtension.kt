@@ -40,11 +40,11 @@ class ListFuncs : ExtensionFunc() {
             .execute(ListFuncsResponse::class)
             .funcs
             .mapIndexed { idx, func ->
-                NumberValue(idx + 1) to TableValue(
-                    StringValue("id") to NumberValue(func.id.value),
-                    StringValue("name") to StringValue(func.name.value)
+                IdentValue((idx + 1).toString()) to TableValue(
+                    "id" to NumberValue(func.id.value),
+                    "name" to StringValue(func.name.value)
                 )
-            }.toMap<Value, Value>()
+            }.toMap<IdentValue, Value>()
 
         return TableValue(response)
     }

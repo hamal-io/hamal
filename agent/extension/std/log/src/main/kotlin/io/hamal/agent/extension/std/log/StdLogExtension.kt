@@ -38,10 +38,10 @@ class StdLogExtension : Extension {
             ident = IdentValue("log"),
             values = mapOf(
                 IdentValue("_cfg") to TableValue(
-                    IdentValue("console") to TableValue(
-                        IdentValue("level") to StringValue("TRACE"),
+                    "console" to TableValue(
+                        "level" to StringValue("TRACE"),
                     ),
-                    IdentValue("backend") to StringValue("INFO")
+                    "backend" to StringValue("INFO")
                 ),
                 IdentValue("debug") to LogDebug(),
                 IdentValue("info") to LogInfo()

@@ -21,9 +21,9 @@ internal class EvaluateTableIndexLiteral<INVOKE_CTX : FuncInvocationContext> :
 internal class EvaluateTableConstructor<INVOKE_CTX : FuncInvocationContext> :
     Evaluate<TableConstructorExpression, INVOKE_CTX> {
     override fun invoke(ctx: EvaluationContext<TableConstructorExpression, INVOKE_CTX>): Value {
-        val result: List<Pair<Value, Value>> = ctx.toEvaluate.fieldExpressions.map { fieldExpression ->
+        val result: List<Pair<IdentValue, Value>> = ctx.toEvaluate.fieldExpressions.map { fieldExpression ->
             if (fieldExpression is IndexFieldExpression) {
-                NumberValue(fieldExpression.index.value) to ctx.evaluate(fieldExpression.value)
+                IdentValue((fieldExpression.index.value).toString()) to ctx.evaluate(fieldExpression.value)
             } else {
                 require(fieldExpression is KeyFieldExpression)
                 IdentValue(fieldExpression.key) to ctx.evaluate(fieldExpression.value)
