@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.impl.token.Token.Type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -323,8 +324,8 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by index`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """[1]""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
-            assertThat(result.parameter, equalTo(TableIndexLiteral(1)))
+            assertThat(result.target, equalTo(IdentifierLiteral("table")))
+            assertThat(result.key, equalTo(TableIndexLiteral(1)))
             tokens.consumed()
         }
     }
@@ -333,8 +334,8 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by multi digit index`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """[123456789]""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
-            assertThat(result.parameter, equalTo(TableIndexLiteral(123456789)))
+            assertThat(result.target, equalTo(IdentifierLiteral("table")))
+            assertThat(result.key, equalTo(TableIndexLiteral(123456789)))
             tokens.consumed()
         }
     }
@@ -343,8 +344,8 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by ident`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """.some_field""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
-            assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
+            assertThat(result.target, equalTo(IdentifierLiteral("table")))
+            assertThat(result.key, equalTo(TableKeyLiteral("some_field")))
             tokens.consumed()
         }
     }
@@ -353,9 +354,24 @@ internal class TableAccessExpressionTest : AbstractExpressionTest() {
     fun `Parse table access by string`() {
         runInfixTest(TableAccessExpression.Parse, IdentifierLiteral("table"), """['some_field']""") { result, tokens ->
             require(result is TableAccessExpression)
-            assertThat(result.ident, equalTo(IdentifierLiteral("table")))
-            assertThat(result.parameter, equalTo(TableKeyLiteral("some_field")))
+            assertThat(result.target, equalTo(IdentifierLiteral("table")))
+            assertThat(result.key, equalTo(TableKeyLiteral("some_field")))
             tokens.consumed()
         }
     }
+
+    @Test
+    fun `Parse table nested table access`() {
+        runInfixTest(
+            TableAccessExpression.Parse,
+            IdentifierLiteral("table"),
+            """.some_field.another_field"""
+        ) { result, tokens ->
+            require(result is TableAccessExpression)
+            assertThat(result.target, equalTo(IdentifierLiteral("table")))
+            assertThat(result.key, equalTo(TableKeyLiteral("some_field")))
+            tokens.inOrder(Dot, Ident, Eof)
+        }
+    }
+
 }

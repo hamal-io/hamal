@@ -75,7 +75,6 @@
             method: "POST",
             body: JSON.stringify({
                     inputs: {},
-                    secrets: [],
                     code: editor.getValue()
                 }
             )

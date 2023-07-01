@@ -9,13 +9,14 @@ import io.hamal.lib.script.impl.builtin.RequireFunction
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.fail
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.name
 
 
-class SandboxIT {
+class SandboxTest {
     @TestFactory
     fun generateTestCases(): List<DynamicTest> {
         return collectFiles()
@@ -38,7 +39,7 @@ class SandboxIT {
                     val result = testInstance.eval(code)
 
                     if (result is ErrorValue) {
-                        org.junit.jupiter.api.fail { result.toString() }
+                        fail { result.toString() }
                     }
                 }
             }

@@ -28,6 +28,7 @@ internal class DefaultEvaluator<INVOKE_CTX : FuncInvocationContext> : Evaluator<
     init {
         /*LITERAL*/
         register(IdentifierLiteral::class, EvaluateIdentifier())
+        register(TableKeyLiteral::class, EvaluateTableKeyLiteral())
         register(NumberLiteral::class, EvaluateNumberLiteral())
         register(StringLiteral::class, EvaluateStringLiteral())
         register(CodeLiteral::class, EvaluateCodeLiteral())

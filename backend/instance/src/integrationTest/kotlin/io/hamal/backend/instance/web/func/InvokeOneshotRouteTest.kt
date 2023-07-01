@@ -30,8 +30,39 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.funcId.value.value}/exec")
             .body(
                 InvokeOneshotReq(
-                    correlationId = CorrelationId("__default__"),
+                    correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs()
+                )
+            ).execute()
+
+        assertThat(invocationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
+
+        val result = invocationResponse.result(SubmittedInvokeOneshotReq::class)
+        assertThat(result.funcId, equalTo(createResponse.funcId))
+        assertThat(result.inputs, equalTo(InvocationInputs()))
+        assertThat(result.correlationId, equalTo(CorrelationId("some-correlation-id")))
+
+        awaitCompleted(result.id)
+    }
+
+    @Test
+    fun `Invokes func without providing correlation id`() {
+        val createResponse = awaitCompleted(
+            createFunc(
+                CreateFuncReq(
+                    name = FuncName("test"),
+                    inputs = FuncInputs(),
+                    code = Code("")
+                )
+            )
+        )
+
+        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.funcId.value.value}/exec")
+            .body(
+                InvokeOneshotReq(
+                    inputs = InvocationInputs(),
+                    correlationId = null
                 )
             ).execute()
 
@@ -45,7 +76,6 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
 
         awaitCompleted(result.id)
     }
-
 
     @Test
     fun `Tries to invoke func which does not exist`() {

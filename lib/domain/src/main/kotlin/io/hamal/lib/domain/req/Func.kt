@@ -23,7 +23,7 @@ data class SubmittedCreateFuncReq(
 
 @Serializable
 data class InvokeOneshotReq(
-    val correlationId: CorrelationId,
+    val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
 )
 

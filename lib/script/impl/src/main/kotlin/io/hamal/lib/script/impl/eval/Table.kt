@@ -3,6 +3,14 @@ package io.hamal.lib.script.impl.eval
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
+internal class EvaluateTableKeyLiteral<INVOKE_CTX : FuncInvocationContext> :
+    Evaluate<TableKeyLiteral, INVOKE_CTX> {
+    override fun invoke(ctx: EvaluationContext<TableKeyLiteral, INVOKE_CTX>): Value {
+        return IdentValue(ctx.toEvaluate.value)
+    }
+}
+
+
 internal class EvaluateTableConstructor<INVOKE_CTX : FuncInvocationContext> :
     Evaluate<TableConstructorExpression, INVOKE_CTX> {
     override fun invoke(ctx: EvaluationContext<TableConstructorExpression, INVOKE_CTX>): Value {
@@ -20,17 +28,19 @@ internal class EvaluateTableConstructor<INVOKE_CTX : FuncInvocationContext> :
 
 internal class EvaluateTableAccess<INVOKE_CTX : FuncInvocationContext> : Evaluate<TableAccessExpression, INVOKE_CTX> {
     override fun invoke(ctx: EvaluationContext<TableAccessExpression, INVOKE_CTX>): Value {
-        val tableIdentifier = ctx.toEvaluate.ident
+        val key = ctx.evaluate(ctx.toEvaluate.key) as IdentValue
 
-        val target = ctx.env[tableIdentifier.value]
-        if (target is EnvValue) {
-            require(ctx.toEvaluate.parameter is TableKeyLiteral)
-            return target[IdentValue(ctx.toEvaluate.parameter.value)]
+        return when (val target = ctx.evaluate(ctx.toEvaluate.target)) {
+            is IdentValue -> {
+                when (val table = ctx.env[target]) {
+                    is EnvValue -> table[key]
+                    is TableValue -> table[key]
+                    else -> TODO()
+                }
+            }
+
+            is TableValue -> target[key]
+            else -> TODO()
         }
-
-        val table = ctx.env[tableIdentifier.value] as TableValue
-        //FIXME evaluate
-        require(ctx.toEvaluate.parameter is TableKeyLiteral)
-        return table.get(IdentValue(ctx.toEvaluate.parameter.value))
     }
 }

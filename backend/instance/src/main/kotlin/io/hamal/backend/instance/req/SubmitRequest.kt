@@ -22,6 +22,7 @@ data class InvokeEvent(
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
 )
+
 @Component
 class SubmitRequest(
     @Autowired private val generateDomainId: GenerateDomainId,
@@ -43,7 +44,7 @@ class SubmitRequest(
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = funcId,
-            correlationId = oneshot.correlationId,
+            correlationId = oneshot.correlationId ?: CorrelationId("__default__"),
             inputs = oneshot.inputs,
         ).also(reqCmdRepository::queue)
 

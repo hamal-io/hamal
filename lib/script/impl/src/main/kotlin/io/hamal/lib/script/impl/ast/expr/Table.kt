@@ -127,16 +127,15 @@ class TableConstructorExpression(
 }
 
 class TableAccessExpression(
-    val ident: IdentifierLiteral,
-    val parameter: Expression
+    val target: Expression,
+    val key: Expression
 ) : Expression {
 
     object Parse : ParseInfixExpression {
         override fun invoke(ctx: Parser.Context, lhs: Expression): Expression {
-            require(lhs is IdentifierLiteral)
             return TableAccessExpression(
-                ident = lhs,
-                parameter = ctx.parseParameter()
+                target = lhs,
+                key = ctx.parseParameter()
             )
         }
 

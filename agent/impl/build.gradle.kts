@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":lib:script:impl"))
 
     implementation(project(":agent:extension:api"))
+    implementation(project(":agent:extension:std:sys"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
