@@ -34,11 +34,19 @@ class SysExtension : Extension {
 class ListFuncs : ExtensionFunc() {
     override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
         println("ListFuncs")
+
         val response = HttpTemplate("http://localhost:8084")
             .get("/v1/funcs")
             .execute(ListFuncsResponse::class)
+            .funcs
+            .mapIndexed { idx, func ->
+                NumberValue(idx + 1) to TableValue(
+                    StringValue("id") to NumberValue(func.id.value),
+                    StringValue("name") to StringValue(func.name.value)
+                )
+            }.toMap<Value, Value>()
 
-        return NilValue
+        return TableValue(response)
     }
 }
 

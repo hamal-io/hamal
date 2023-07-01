@@ -14,6 +14,23 @@ data class StringValue(val value: String) : KeyValue {
 
 object DefaultStringValueMetaTable : MetaTable {
     override val type = "string"
-    override val operators: List<ValueOperator> = listOf()
+    override val operators: List<ValueOperator> = listOf(
+        stringInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+    )
 }
 
+private fun stringInfix(
+    operatorType: ValueOperator.Type,
+    fn: (self: StringValue, other: StringValue) -> Value
+): InfixValueOperator {
+    return object : InfixValueOperator {
+        override val operatorType = operatorType
+        override val selfType = "string"
+        override val otherType = "string"
+        override operator fun invoke(self: Value, other: Value): Value {
+            require(self is StringValue)
+            require(other is StringValue)
+            return fn(self, other)
+        }
+    }
+}

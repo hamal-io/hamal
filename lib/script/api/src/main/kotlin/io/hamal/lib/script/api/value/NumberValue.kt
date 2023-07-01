@@ -1,5 +1,6 @@
 package io.hamal.lib.script.api.value
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.script.api.value.ValueOperator.Type.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -30,6 +31,7 @@ data class NumberValue(
         operator fun invoke(value: Short): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
         operator fun invoke(value: Int): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
         operator fun invoke(value: Long): NumberValue = NumberValue(BigDecimal.valueOf(value))
+        operator fun invoke(value: SnowflakeId): NumberValue = NumberValue(BigDecimal.valueOf(value.value))
 
         operator fun invoke(value: Float): NumberValue {
             require(!value.isNaN()) { IllegalArgumentException("NaN") }

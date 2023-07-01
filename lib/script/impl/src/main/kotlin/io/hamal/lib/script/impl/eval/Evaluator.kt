@@ -29,6 +29,7 @@ internal class DefaultEvaluator<INVOKE_CTX : FuncInvocationContext> : Evaluator<
         /*LITERAL*/
         register(IdentifierLiteral::class, EvaluateIdentifier())
         register(TableKeyLiteral::class, EvaluateTableKeyLiteral())
+        register(TableIndexLiteral::class, EvaluateTableIndexLiteral())
         register(NumberLiteral::class, EvaluateNumberLiteral())
         register(StringLiteral::class, EvaluateStringLiteral())
         register(CodeLiteral::class, EvaluateCodeLiteral())
@@ -61,8 +62,9 @@ internal class DefaultEvaluator<INVOKE_CTX : FuncInvocationContext> : Evaluator<
     }
 
     private fun <TYPE : Node> resolve(targetClass: KClass<out TYPE>): Evaluate<TYPE, INVOKE_CTX> {
+        requireNotNull(store[targetClass]) { "No evaluator found for $targetClass" }
         @Suppress("UNCHECKED_CAST")
-        return store[targetClass]!! as Evaluate<TYPE, INVOKE_CTX>
+        return store[targetClass] as Evaluate<TYPE, INVOKE_CTX>
     }
 
     private fun <TYPE : Node> register(targetClazz: KClass<TYPE>, evaluate: Evaluate<TYPE, INVOKE_CTX>) {

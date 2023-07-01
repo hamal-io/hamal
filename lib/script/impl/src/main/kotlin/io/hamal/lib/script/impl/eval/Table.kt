@@ -10,6 +10,13 @@ internal class EvaluateTableKeyLiteral<INVOKE_CTX : FuncInvocationContext> :
     }
 }
 
+internal class EvaluateTableIndexLiteral<INVOKE_CTX : FuncInvocationContext> :
+    Evaluate<TableIndexLiteral, INVOKE_CTX> {
+    override fun invoke(ctx: EvaluationContext<TableIndexLiteral, INVOKE_CTX>): Value {
+        return NumberValue(ctx.toEvaluate.value)
+    }
+}
+
 
 internal class EvaluateTableConstructor<INVOKE_CTX : FuncInvocationContext> :
     Evaluate<TableConstructorExpression, INVOKE_CTX> {
@@ -28,12 +35,12 @@ internal class EvaluateTableConstructor<INVOKE_CTX : FuncInvocationContext> :
 
 internal class EvaluateTableAccess<INVOKE_CTX : FuncInvocationContext> : Evaluate<TableAccessExpression, INVOKE_CTX> {
     override fun invoke(ctx: EvaluationContext<TableAccessExpression, INVOKE_CTX>): Value {
-        val key = ctx.evaluate(ctx.toEvaluate.key) as IdentValue
+        val key = ctx.evaluate(ctx.toEvaluate.key)
 
         return when (val target = ctx.evaluate(ctx.toEvaluate.target)) {
             is IdentValue -> {
                 when (val table = ctx.env[target]) {
-                    is EnvValue -> table[key]
+                    is EnvValue -> table[key as IdentValue]
                     is TableValue -> table[key]
                     else -> TODO()
                 }

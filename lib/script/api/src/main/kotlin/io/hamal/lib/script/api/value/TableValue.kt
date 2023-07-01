@@ -41,8 +41,17 @@ data class TableValue(
         entries[key] = value
     }
 
-    operator fun get(key: Int): Value = entries[NumberValue(key)] ?: NilValue
-    operator fun get(key: Value): Value = entries[key] ?: NilValue
+    operator fun get(key: Int): Value = get(NumberValue(key))
+    operator fun get(key: NumberValue): Value = entries[key] ?: NilValue
+    operator fun get(key: Value): Value {
+        if (key is IdentValue) {
+            val result = entries[key] ?: entries[StringValue(key.value)] ?: NilValue
+            return result
+        }
+        return entries[key] ?: NilValue
+    }
+
+    operator fun get(key: IdentValue): Value = entries[StringValue(key.value)] ?: NilValue
 
     fun remove(key: Int) {
         remove(NumberValue(key))

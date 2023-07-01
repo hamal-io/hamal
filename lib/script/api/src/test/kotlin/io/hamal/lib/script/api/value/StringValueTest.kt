@@ -1,5 +1,6 @@
 package io.hamal.lib.script.api.value
 
+import io.hamal.lib.domain.Tuple4
 import io.hamal.lib.script.api.value.ValueSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,4 +25,10 @@ class DefaultStringValueMetaTableTest {
     fun `Test type`() {
         assertThat(DefaultStringValueMetaTable.type, equalTo("string"))
     }
+
+    @TestFactory
+    fun infix() = listOf<Tuple4<StringValue, ValueOperator.Type, Value, Value>>(
+        Tuple4(StringValue("h4m41"), ValueOperator.Type.Eq, StringValue("h4m41"), TrueValue),
+        Tuple4(StringValue("h4m41"), ValueOperator.Type.Eq, StringValue("HAMAL"), FalseValue),
+    )
 }
