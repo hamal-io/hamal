@@ -3,7 +3,12 @@ package io.hamal.agent.extension.std.sys
 import io.hamal.agent.extension.api.Extension
 import io.hamal.agent.extension.api.ExtensionFunc
 import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
+import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.InvokeOneshotReq
+import io.hamal.lib.domain.req.SubmittedCreateFuncReq
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
@@ -21,7 +26,8 @@ class SysExtension : Extension {
                 IdentValue("list_funcs") to ListFuncs(),
                 IdentValue("func") to
                         TableValue(
-                            IdentValue("list") to ListFuncs()
+                            "list" to ListFuncs(),
+                            "create" to CreateFunc()
                         )
             )
         )
@@ -41,7 +47,7 @@ class ListFuncs : ExtensionFunc() {
             .funcs
             .mapIndexed { idx, func ->
                 IdentValue((idx + 1).toString()) to TableValue(
-                    "id" to NumberValue(func.id.value),
+                    "id" to StringValue(func.id.value.toString()),
                     "name" to StringValue(func.name.value)
                 )
             }.toMap<IdentValue, Value>()
@@ -73,44 +79,32 @@ class InvokeFunc : ExtensionFunc() {
 
 class CreateFunc : ExtensionFunc() {
     override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-//        val funcId = (ctx.parameters.first().value as StringValue).toString().replace("'", "")
-//        println("DEBUG: ${funcId}")
-//
-//        HttpTemplate("http://localhost:8084")
-//            .post("/v1/funcs/${funcId}/exec")
-//            .body(
-//                """
-//                {
-//                }
-//            """.trimIndent()
-//            )
-//            .execute()
+        try {
+            println("CREATE_FUNC")
 
-//        try {
-//            println("CREATE_FUNC")
-//
-//            val f = ctx.parameters.first() as TableValue
-//            println(f)
-//
-//            val r = ApiCreateFuncRequest(
-//                name = FuncName((f[IdentValue("name")] as StringValue).value),
-//                inputs = FuncInputs(TableValue()),
-//                secrets = FuncSecrets(listOf()),
-//                code = Code((f[IdentValue("run")] as CodeValue).value)
-//            )
-//
-//            val res = HttpTemplate("http://localhost:8084")
-//                .post("/v1/funcs")
-//                .body(r)
-//                .execute()
-//
-//            println(res)
-//
-//            return NilValue
-//        } catch (t: Throwable) {
-//            t.printStackTrace()
-//            throw t
-//        }
+            val f = ctx.parameters.first() as TableValue
+            println(f)
+
+            val r = CreateFuncReq(
+                name = FuncName((f[IdentValue("name")] as StringValue).value),
+                inputs = FuncInputs(TableValue()),
+                code = Code((f[IdentValue("run")] as CodeValue).value)
+            )
+
+            val res = HttpTemplate("http://localhost:8084")
+                .post("/v1/funcs")
+                .body(r)
+                .execute(SubmittedCreateFuncReq::class)
+
+            println(res)
+
+            // FIXME await completion
+
+            return StringValue(res.funcId.value.toString())
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            throw t
+        }
         TODO()
     }
 }
