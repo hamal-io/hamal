@@ -15,7 +15,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 
-class SysExtension : Extension {
+class StdSysExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("sys"),

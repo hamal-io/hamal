@@ -2,7 +2,8 @@ package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
 import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
-import io.hamal.agent.extension.std.sys.SysExtension
+import io.hamal.agent.extension.std.log.StdLogExtension
+import io.hamal.agent.extension.std.sys.StdSysExtension
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.Content
 import io.hamal.lib.domain.vo.ContentType
@@ -17,7 +18,6 @@ import io.hamal.lib.sdk.DefaultHamalSdk
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.io.File
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
@@ -50,23 +50,24 @@ class AgentService {
 //
 //        extensionEnvironments.add(x.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
-        val log =
-            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/log/build/libs/extension-std-log.jar"))
-        extensionEnvironments.add(log.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
+//        val log =
+//            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/log/build/libs/extension-std-log.jar"))
+//        extensionEnvironments.add(log.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
+        extensionEnvironments.add(StdLogExtension().create())
 
 //        val sys =
 //            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/sys/build/libs/extension-std-sys.jar"))
 //        extensionEnvironments.add(sys.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
-        extensionEnvironments.add(SysExtension().create())
+        extensionEnvironments.add(StdSysExtension().create())
 
-        val debug =
-            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/debug/build/libs/extension-std-debug.jar"))
-        extensionEnvironments.add(debug.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
-
-        val web3 =
-            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/web3/build/libs/extension-web3.jar"))
-        extensionEnvironments.add(web3.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
+//        val debug =
+//            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/std/debug/build/libs/extension-std-debug.jar"))
+//        extensionEnvironments.add(debug.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
+//
+//        val web3 =
+//            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/web3/build/libs/extension-web3.jar"))
+//        extensionEnvironments.add(web3.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
 
 
 //        x.functionFactories()
