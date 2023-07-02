@@ -24,5 +24,4 @@ internal sealed class BaseQueueRouteTest : BaseRouteTest() {
             .post("/v1/adhoc")
             .body(req)
             .execute(SubmittedInvokeAdhocReq::class)
-
 }
