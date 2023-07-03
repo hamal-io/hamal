@@ -7,10 +7,7 @@ import io.hamal.agent.extension.std.sys.StdSysExtension
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.Content
 import io.hamal.lib.domain.vo.ContentType
-import io.hamal.lib.script.api.value.EnvValue
-import io.hamal.lib.script.api.value.FuncInvocationContextFactory
-import io.hamal.lib.script.api.value.IdentValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.DefaultSandbox
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
@@ -78,7 +75,7 @@ class AgentService {
 
     }
 
-    @Scheduled(initialDelay = 100, fixedDelay = 1000, timeUnit = TimeUnit.MILLISECONDS)
+    @Scheduled(initialDelay = 100, fixedDelay = 1, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
         CompletableFuture.runAsync {
             DefaultHamalSdk("http://localhost:8084").execService()
@@ -121,7 +118,13 @@ class AgentService {
                                 }
                             })
                         val result = sandbox.eval(request.code.value)
-//                println("RESULT: $result")
+                        println("RESULT: $result")
+
+                        if (result is ErrorValue) {
+                            //FAIL
+                            DefaultHamalSdk("http://localhost:8084")
+                                .execService().fail(request.id, result)
+                        }
 //
 //                println("Finish executing task ${request.id}")
 
@@ -134,7 +137,6 @@ class AgentService {
 
                     } catch (t: Throwable) {
                         t.printStackTrace()
-
                     }
                 }
         }

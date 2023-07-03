@@ -45,6 +45,7 @@ testing {
                     }
 
                     implementation(project(":backend:instance"))
+                    implementation(project(":backend:repository:api"))
                     implementation(project(":frontend"))
                     implementation(project(":agent:impl"))
 

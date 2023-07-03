@@ -25,6 +25,7 @@ interface HttpRequest {
 }
 
 interface HttpRequestWithBody : HttpRequest {
+    override fun header(key: String, value: String): HttpRequestWithBody
     fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): HttpRequestWithBody
     fun body(str: String): HttpRequestWithBody
     fun body(contentType: String, bytes: ByteArray): HttpRequestWithBody
