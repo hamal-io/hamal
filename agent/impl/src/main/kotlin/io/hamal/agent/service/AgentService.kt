@@ -1,16 +1,14 @@
 package io.hamal.agent.service
 
 import io.hamal.agent.adapter.ExtensionLoader
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.agent.extension.std.log.StdLogExtension
 import io.hamal.agent.extension.std.sys.StdSysExtension
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.Content
 import io.hamal.lib.domain.vo.ContentType
-import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.impl.DefaultSandbox
-import io.hamal.lib.script.impl.builtin.AssertFunction
-import io.hamal.lib.script.impl.builtin.RequireFunction
+import io.hamal.lib.script.api.Sandbox
+import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
@@ -19,7 +17,9 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 @Service
-class AgentService {
+class AgentService(
+    private val sandbox: Sandbox
+) {
 
 //    private val functionValues = mutableListOf<FuncValue>()
 
@@ -93,30 +93,30 @@ class AgentService {
 //                        val counter = (request.statePayload?.content?.let { String(it) } ?: "0").toInt()
 //                println(counter)
 
-                        val env = EnvValue(
-                            ident = IdentValue("_G"),
-                            values = mapOf(
-                                IdentValue("assert") to AssertFunction,
-                                IdentValue("require") to RequireFunction
-                            )
-                        )
-
-
-                        extensionEnvironments.forEach { environment ->
-                            env.addGlobal(environment.ident, environment)
-                        }
-
-
-                        val sandbox = DefaultSandbox(
-                            env,
-                            object : FuncInvocationContextFactory<ExtensionFuncInvocationContext> {
-                                override fun create(
-                                    parameters: List<Value>,
-                                    env: EnvValue
-                                ): ExtensionFuncInvocationContext {
-                                    return ExtensionFuncInvocationContext(parameters, env)
-                                }
-                            })
+//                        val env = EnvValue(
+//                            ident = IdentValue("_G"),
+//                            values = mapOf(
+//                                IdentValue("assert") to AssertFunction,
+//                                IdentValue("require") to RequireFunction
+//                            )
+//                        )
+//
+//
+//                        extensionEnvironments.forEach { environment ->
+//                            env.addGlobal(environment.ident, environment)
+//                        }
+//
+//
+//                        val sandbox = DefaultSandbox(
+//                            env,
+//                            object : FuncInvocationContextFactory<ExtensionFuncInvocationContext> {
+//                                override fun create(
+//                                    parameters: List<Value>,
+//                                    env: EnvValue
+//                                ): ExtensionFuncInvocationContext {
+//                                    return ExtensionFuncInvocationContext(parameters, env)
+//                                }
+//                            })
                         val result = sandbox.eval(request.code.value)
                         println("RESULT: $result")
 

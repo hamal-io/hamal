@@ -13,7 +13,7 @@ class DefaultSandbox<INVOKE_CTX : FuncInvocationContext>(
     funcInvocationContextFactory: FuncInvocationContextFactory<INVOKE_CTX>
 ) : Sandbox {
 
-    private val interpreter = DefaultInterpreter<INVOKE_CTX>(funcInvocationContextFactory)
+    private val interpreter = DefaultInterpreter(funcInvocationContextFactory)
 
     override fun eval(code: String): Value {
         val tokens = tokenize(code)

@@ -7,6 +7,7 @@ import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.bootstrap.config.TestEnvConfig
 import io.hamal.bootstrap.suite.func.functionTests
 import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
@@ -33,6 +35,7 @@ import java.util.*
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(
     classes = [
+        TestEnvConfig::class,
         BackendConfig::class,
         AgentConfig::class
     ]
@@ -41,6 +44,7 @@ import java.util.*
     webEnvironment = WebEnvironment.DEFINED_PORT,
     properties = ["server.port=8084"]
 )
+@ActiveProfiles("test")
 abstract class BaseHamalTest {
 
     @LocalServerPort

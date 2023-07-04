@@ -191,7 +191,8 @@ class CreateFunc : ExtensionFunc() {
             val r = CreateFuncReq(
                 name = FuncName((f[IdentValue("name")] as StringValue).value),
                 inputs = FuncInputs(TableValue()),
-                code = Code((f[IdentValue("run")] as CodeValue).value)
+//                code = Code((f[IdentValue("run")] as CodeValue).value)
+                code = Code("")
             )
 
             val res = HttpTemplate("http://localhost:8084")

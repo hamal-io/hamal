@@ -10,44 +10,28 @@ import io.hamal.lib.sdk.domain.ListEventsResponse
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import java.lang.Thread.sleep
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import kotlin.io.path.name
 
 val functionTests: (TestContext) -> List<DynamicTest> = { ctx ->
-    listOf(
-        dynamicTest("Creates empty func") {
+    collectFiles().map { testFile ->
+        dynamicTest("${testFile.parent.name}/${testFile.name}") {
 
             //FIXME pass test id via inputs
-            val topicId = ctx.createTopic(TopicName("test-001"))
+            val topicId = ctx.createTopic(TopicName("test-topic"))
 
-            val res = ctx.sdk.adhocService().submit(
+            val code = Code(String(Files.readAllBytes(testFile)))
+
+            ctx.sdk.adhocService().submit(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    code = Code(
-                        """
-                    local log = require('log')
-                    local sys = require('sys')
-                    
-                    val func_id = sys.func.create({
-                        name = 'empty-test-func',
-                        run = <[]>
-                    })
-
-                    local funcs = sys.func.list()
-                    log.info(funcs)
-
-                    local func = funcs[1]
-                    assert(func.id == func_id)
-                    assert(func.name == 'empty-test-func')
-                    
-                    local topic_id = '${topicId.value.value}'
-                    local emitter = sys.evt.emitter(topic_id)
-                    emitter.emit({})
-
-                                     
-                """.trimIndent()
-                    )
+                    code = code
                 )
             )
 
+            //
             while (true) {
                 val events = HttpTemplate("http://localhost:8084")
                     .get("/v1/topics/${topicId.value.value}/events")
@@ -61,6 +45,10 @@ val functionTests: (TestContext) -> List<DynamicTest> = { ctx ->
                 sleep(1)
             }
         }
-    )
+    }.toList()
 }
+
+val testPath = Paths.get("src", "integrationTest", "resources", "suite")
+
+fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }
 
