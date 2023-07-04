@@ -10,6 +10,8 @@ import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.Limit
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 internal object CurrentExecProjection {
     private val projection = mutableMapOf<ExecId, Exec>()
@@ -56,86 +58,78 @@ internal object QueueProjection {
 }
 
 object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCmdRepository, ExecQueryRepository {
+    private val lock = ReentrantLock()
 
     override fun plan(cmd: PlanCmd): PlannedExec {
-        val execId = cmd.execId
-        if (contains(execId)) {
-            return versionOf(execId, cmd.id) as PlannedExec
+        return lock.withLock {
+            val execId = cmd.execId
+            if (contains(execId)) {
+                versionOf(execId, cmd.id) as PlannedExec
+            } else {
+
+                addRecord(
+                    ExecPlannedRecord(
+                        entityId = execId,
+                        cmdId = cmd.id,
+                        correlation = cmd.correlation,
+                        inputs = cmd.inputs,
+                        code = cmd.code
+                    )
+                )
+                (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)
+            }
         }
-        addRecord(
-            ExecPlannedRecord(
-                entityId = execId,
-                cmdId = cmd.id,
-                correlation = cmd.correlation,
-                inputs = cmd.inputs,
-                code = cmd.code
-            )
-        )
-        return (currentVersion(execId) as PlannedExec)
-            .also(CurrentExecProjection::apply)
     }
 
     override fun schedule(cmd: ScheduleCmd): ScheduledExec {
-        val execId = cmd.execId
-        val cmdId = cmd.id
+        return lock.withLock {
+            val execId = cmd.execId
+            val cmdId = cmd.id
 
-        if (commandAlreadyApplied(execId, cmdId)) {
-            return versionOf(execId, cmdId) as ScheduledExec
+            if (commandAlreadyApplied(execId, cmdId)) {
+                versionOf(execId, cmdId) as ScheduledExec
+            } else {
+                check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
+
+                addRecord(ExecScheduledRecord(execId, cmdId))
+
+                (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
+            }
         }
-
-        check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
-
-        addRecord(
-            ExecScheduledRecord(
-                entityId = execId,
-                cmdId = cmdId
-            )
-        )
-
-        return (currentVersion(execId) as ScheduledExec)
-            .also(CurrentExecProjection::apply)
-
     }
 
     override fun queue(cmd: QueueCmd): QueuedExec {
-        val execId = cmd.execId
-        val cmdId = cmd.id
+        return lock.withLock {
+            val execId = cmd.execId
+            val cmdId = cmd.id
 
-        if (commandAlreadyApplied(execId, cmdId)) {
-            return versionOf(execId, cmdId) as QueuedExec
+            if (commandAlreadyApplied(execId, cmdId)) {
+                versionOf(execId, cmdId) as QueuedExec
+            } else {
+                check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
+
+                addRecord(ExecQueuedRecord(execId, cmdId))
+
+                (currentVersion(execId) as QueuedExec)
+                    .also(CurrentExecProjection::apply)
+                    .also(QueueProjection::add)
+            }
         }
-
-        check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
-
-        addRecord(
-            ExecQueuedRecord(
-                entityId = execId,
-                cmdId = cmdId
-            )
-        )
-
-        return (currentVersion(execId) as QueuedExec)
-            .also(CurrentExecProjection::apply)
-            .also(QueueProjection::add)
     }
 
     override fun start(cmd: StartCmd): List<StartedExec> {
-        val result = mutableListOf<StartedExec>()
-        QueueProjection.pop(1).forEach { queuedExec ->
-            val execId = queuedExec.id
-            check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
+        return lock.withLock {
+            val result = mutableListOf<StartedExec>()
+            QueueProjection.pop(1).forEach { queuedExec ->
+                val execId = queuedExec.id
+                check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
-            addRecord(
-                ExecStartedRecord(
-                    entityId = execId,
-                    cmdId = cmd.id
-                )
-            )
+                addRecord(ExecStartedRecord(execId, cmd.id))
 
-            result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
+                result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
+            }
+            result
         }
-
-        return result
     }
 
     override fun clear() {
@@ -146,45 +140,38 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
 
 
     override fun complete(cmd: CompleteCmd): CompletedExec {
-        val execId = cmd.execId
-        val cmdId = cmd.id
+        return lock.withLock {
+            val execId = cmd.execId
+            val cmdId = cmd.id
 
-        if (commandAlreadyApplied(execId, cmdId)) {
-            return versionOf(execId, cmdId) as CompletedExec
+            if (commandAlreadyApplied(execId, cmdId)) {
+                versionOf(execId, cmdId) as CompletedExec
+            } else {
+                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
+
+                addRecord(ExecCompletedRecord(execId, cmdId))
+
+                (versionOf(execId, cmdId) as CompletedExec)
+                    .also(CurrentExecProjection::apply)
+            }
         }
-
-        check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
-
-        addRecord(
-            ExecCompletedRecord(
-                entityId = execId,
-                cmdId = cmdId
-            )
-        )
-
-        return (versionOf(execId, cmdId) as CompletedExec)
-            .also(CurrentExecProjection::apply)
     }
 
     override fun fail(cmd: FailCmd): FailedExec {
-        val execId = cmd.execId
-        val cmdId = cmd.id
+        return lock.withLock {
+            val execId = cmd.execId
+            val cmdId = cmd.id
 
-        if (commandAlreadyApplied(execId, cmdId)) {
-            return versionOf(execId, cmdId) as FailedExec
+            if (commandAlreadyApplied(execId, cmdId)) {
+                versionOf(execId, cmdId) as FailedExec
+            } else {
+                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
+
+                addRecord(ExecFailedRecord(execId, cmdId))
+
+                (versionOf(execId, cmdId) as FailedExec).also(CurrentExecProjection::apply)
+            }
         }
-
-        check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
-
-        addRecord(
-            ExecFailedRecord(
-                entityId = execId,
-                cmdId = cmdId
-            )
-        )
-
-        return (versionOf(execId, cmdId) as FailedExec)
-            .also(CurrentExecProjection::apply)
     }
 
 
@@ -212,5 +199,4 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
             .toDomainObject()
     }
 }
-
 

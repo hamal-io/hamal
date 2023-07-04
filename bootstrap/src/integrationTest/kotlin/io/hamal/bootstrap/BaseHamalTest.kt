@@ -8,18 +8,15 @@ import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.bootstrap.config.TestEnvConfig
-import io.hamal.bootstrap.suite.func.functionTests
-import io.hamal.lib.domain.req.CreateTopicReq
-import io.hamal.lib.domain.req.SubmittedCreateTopicReq
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.http.body
+import io.hamal.lib.domain.req.InvokeAdhocReq
+import io.hamal.lib.domain.vo.Code
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HamalSdk
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.*
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +26,11 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.*
+import kotlin.io.path.name
 
 
 @ExtendWith(SpringExtension::class)
@@ -66,8 +67,17 @@ abstract class BaseHamalTest {
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @TestFactory
-    fun run(): List<DynamicTest> =
-        functionTests(TestContext(sdk))
+    fun run(): List<DynamicTest> = collectFiles().map { testFile ->
+        dynamicTest("${testFile.parent.name}/${testFile.name}") {
+            sdk.adhocService().submit(
+                InvokeAdhocReq(
+                    inputs = InvocationInputs(),
+                    code = Code(String(Files.readAllBytes(testFile)))
+                )
+            )
+            ActiveTest.awaitCompletion()
+        }
+    }.toList()
 
     @BeforeEach
     fun before() {
@@ -86,19 +96,8 @@ abstract class BaseHamalTest {
 
     private lateinit var sdk: HamalSdk
 
+
 }
 
-data class TestContext(
-    val sdk: HamalSdk,
-) {
-
-
-    fun createTopic(name: TopicName): TopicId {
-        // FIXME replace with sdk
-        return HttpTemplate("http://localhost:8084")
-            .post("/v1/topics")
-            .body(CreateTopicReq(name))
-            .execute(SubmittedCreateTopicReq::class)
-            .topicId
-    }
-}
+private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
+private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }

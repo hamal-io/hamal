@@ -5,6 +5,7 @@ import io.hamal.agent.extension.std.sys.StdSysExtension
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.IdentValue
 import io.hamal.lib.script.impl.builtin.AssertFunction
+import io.hamal.lib.script.impl.builtin.ExitFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,6 +24,7 @@ open class EnvConfig {
             ident = IdentValue("_G"),
             values = mapOf(
                 IdentValue("assert") to AssertFunction,
+                IdentValue("exit") to ExitFunction,
                 IdentValue("require") to RequireFunction
             )
         ).apply {

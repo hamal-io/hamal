@@ -20,6 +20,8 @@ class DefaultSandbox<INVOKE_CTX : FuncInvocationContext>(
         val statements = parse(tokens)
         return try {
             interpreter.run(statements, env)
+        } catch (e: ExitException) {
+            e.status
         } catch (e: ScriptEvaluationException) {
             e.error
         } catch (t: Throwable) {
