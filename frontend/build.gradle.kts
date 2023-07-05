@@ -7,6 +7,10 @@ plugins {
     id("com.github.node-gradle.node").version("5.0.0")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 node {
     nodeProjectDir.set(file("${project.projectDir}/src/main/resources"))
     nodeProxySettings.set(ProxySettings.SMART)
