@@ -65,7 +65,7 @@ class AgentService(
 //        val web3 =
 //            entryPointLoader.load(File("/home/ddymke/Repo/hamal/agent/extension/web3/build/libs/extension-web3.jar"))
 //        extensionEnvironments.add(web3.create()) // FIXME store the factory not the environment - a new environment must be created when calling require each times
-
+//
 
 //        x.functionFactories()
 
