@@ -44,9 +44,14 @@ testing {
                         exclude("com.fasterxml.jackson.core", "jackson-annotations")
                     }
 
+                    implementation(project(":lib:script:impl"))
                     implementation(project(":backend:instance"))
+                    implementation(project(":backend:repository:api"))
                     implementation(project(":frontend"))
                     implementation(project(":agent:impl"))
+                    implementation(project(":agent:extension:api"))
+                    implementation(project(":agent:extension:std:sys"))
+                    implementation(project(":agent:extension:std:log"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

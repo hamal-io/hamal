@@ -3,9 +3,9 @@ package io.hamal.lib.script.impl.builtin
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ScriptEvaluationException
 
-object RequireFunction : BuiltinFuncValue() {
-    override fun invoke(ctx: Context): Value {
-        val firstParameter = ctx.parameters.firstOrNull()
+object RequireFunction : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val firstParameter = ctx.params.firstOrNull()
             ?: throw ScriptEvaluationException(ErrorValue("require needs one environment ident"))
 
         val ident = firstParameter.asIdentifier()

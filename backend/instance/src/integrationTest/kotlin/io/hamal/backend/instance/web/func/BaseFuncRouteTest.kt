@@ -26,5 +26,4 @@ internal sealed class BaseFuncRouteTest : BaseRouteTest() {
         require(listFuncsResponse is SuccessHttpResponse) { "request was not successful" }
         return listFuncsResponse.result(ListFuncsResponse::class)
     }
-
 }

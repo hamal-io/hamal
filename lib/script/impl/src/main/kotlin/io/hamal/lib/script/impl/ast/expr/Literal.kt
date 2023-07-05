@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Node.Position
 import io.hamal.lib.script.api.value.NumberValue
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.token.Token.Type
@@ -9,45 +10,77 @@ interface LiteralExpression : Expression
 
 internal interface ParseLiteralExpression<EXPRESSION : LiteralExpression> : ParseExpression<EXPRESSION>
 
-data class NumberLiteral(val value: NumberValue) : LiteralExpression {
-    constructor(value: Int) : this(NumberValue(value))
+class NumberLiteral(
+    override val position: Position,
+    val value: NumberValue
+) : LiteralExpression {
+    constructor(position: Position, value: Int) : this(position, NumberValue(value))
 
     internal object Parse : ParseLiteralExpression<NumberLiteral> {
         override fun invoke(ctx: Context): NumberLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Type.Number)
             ctx.advance()
-            return NumberLiteral(NumberValue(token.value))
+            return NumberLiteral(position, NumberValue(token.value))
         }
     }
 
     override fun toString() = value.toString()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as NumberLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }
 
-data class StringLiteral(val value: String) : LiteralExpression {
+class StringLiteral(
+    override val position: Position,
+    val value: String
+) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<StringLiteral> {
         override fun invoke(ctx: Context): StringLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Type.String)
             ctx.advance()
-            return StringLiteral(token.value)
+            return StringLiteral(position, token.value)
         }
     }
 
     override fun toString() = "'$value'"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as StringLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }
 
-object TrueLiteral : LiteralExpression {
+class TrueLiteral(
+    override val position: Position
+) : LiteralExpression {
 
     internal object Parse : ParseLiteralExpression<TrueLiteral> {
         override fun invoke(ctx: Context): TrueLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Type.True)
             ctx.advance()
-            return TrueLiteral
+            return TrueLiteral(position)
         }
     }
 
@@ -58,14 +91,17 @@ object TrueLiteral : LiteralExpression {
     override fun toString() = "true"
 }
 
-object FalseLiteral : LiteralExpression {
+class FalseLiteral(
+    override val position: Position
+) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<FalseLiteral> {
         override fun invoke(ctx: Context): FalseLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Type.False)
             ctx.advance()
-            return FalseLiteral
+            return FalseLiteral(position)
         }
     }
 
@@ -77,14 +113,17 @@ object FalseLiteral : LiteralExpression {
 }
 
 
-object NilLiteral : LiteralExpression {
+class NilLiteral(
+    override val position: Position
+) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<NilLiteral> {
         override fun invoke(ctx: Context): NilLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Type.Nil)
             ctx.advance()
-            return NilLiteral
+            return NilLiteral(position)
         }
     }
 
@@ -96,16 +135,31 @@ object NilLiteral : LiteralExpression {
 }
 
 
-data class CodeLiteral(val value: String) : LiteralExpression {
+class CodeLiteral(
+    override val position: Position,
+    val value: String
+) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<CodeLiteral> {
         override fun invoke(ctx: Context): CodeLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Type.Code)
             ctx.advance()
-            return CodeLiteral(token.value)
+            return CodeLiteral(position, token.value)
         }
     }
 
     override fun toString() = "'$value'"
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as CodeLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
 }

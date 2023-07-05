@@ -1,8 +1,6 @@
 package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.agent.extension.api.ExtensionFunc
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.web3.eth.DefaultEthService
 
@@ -10,21 +8,21 @@ class Web3Extension : Extension {
     override fun create(): EnvValue {
         val ethEnvironment = EnvValue(
             ident = IdentValue("eth"),
-            values = mapOf(
-                IdentValue("getBlock") to fn
+            values = TableValue(
+                "getBlock" to fn
             )
         )
 
         return EnvValue(
             ident = IdentValue("web3"),
-            values = mapOf(
-                IdentValue("eth") to ethEnvironment
+            values = TableValue(
+                "eth" to ethEnvironment
             )
         )
     }
 
-    val fn = object : ExtensionFunc() {
-        override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+    val fn = object : FuncValue() {
+        override fun invoke(ctx: FuncContext): Value {
             println("Getting block")
 //                    val bs = EthHttpBatchService()
 //                    bs.getBlock(req = EthBatchService.GetBlockByHashRequest(EthHash(EthBytes32(ByteArray(32)))))
@@ -47,7 +45,7 @@ class Web3Extension : Extension {
             val response = DefaultEthService.getBlock()
 
             return TableValue(
-                StringValue("hash") to StringValue(response.result.hash)
+                "hash" to StringValue(response.result.hash)
             )
         }
 

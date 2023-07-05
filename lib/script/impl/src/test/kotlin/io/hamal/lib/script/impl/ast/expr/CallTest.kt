@@ -1,8 +1,10 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.impl.PrecedenceString
+import io.hamal.lib.script.impl.anotherPosition
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.ast.stmt.Call
+import io.hamal.lib.script.impl.somePosition
 import io.hamal.lib.script.impl.token.tokenize
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -20,42 +22,76 @@ internal class CallExpressionTest : AbstractExpressionTest() {
         fun `Equal if ident and parameters are equal`() {
             assertEquals(
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ),
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 )
             )
+
+            assertEquals(
+                CallExpression(
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
+                ),
+                CallExpression(
+                    anotherPosition,
+                    IdentifierLiteral(anotherPosition, "ident"),
+                    listOf(IdentifierLiteral(anotherPosition, "ParameterIdentifier"))
+                )
+            )
+
         }
 
         @Test
         fun `Not Equal if identifiers are not equal`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ),
                 CallExpression(
-                    IdentifierLiteral("AnotherIdentifier"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "AnotherIdentifier"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 )
             )
+
+            assertNotEquals(
+                CallExpression(
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
+                ),
+                CallExpression(
+                    anotherPosition,
+                    IdentifierLiteral(anotherPosition, "AnotherIdentifier"),
+                    listOf(IdentifierLiteral(anotherPosition, "ParameterIdentifier"))
+                )
+            )
+
         }
 
         @Test
         fun `Not Equal if parameters are not equal`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ),
                 CallExpression(
-                    IdentifierLiteral("ident"),
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
                     listOf(
-                        IdentifierLiteral("ParameterIdentifier"),
-                        IdentifierLiteral("AnotherParameterIdentifier")
+                        IdentifierLiteral(somePosition, "ParameterIdentifier"),
+                        IdentifierLiteral(somePosition, "AnotherParameterIdentifier")
                     )
                 )
             )
@@ -69,26 +105,44 @@ internal class CallExpressionTest : AbstractExpressionTest() {
         fun `Same hashcode if ident and parameters hashcode are the same`() {
             assertEquals(
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ).hashCode(),
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
                 ).hashCode()
             )
+
+            assertEquals(
+                CallExpression(
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
+                ).hashCode(),
+                CallExpression(
+                    anotherPosition,
+                    IdentifierLiteral(anotherPosition, "ident"),
+                    listOf(IdentifierLiteral(anotherPosition, "ParameterIdentifier")),
+                ).hashCode()
+            )
+
         }
 
         @Test
         fun `Different hashcode if ident has different hashcode`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ).hashCode(),
                 CallExpression(
-                    IdentifierLiteral("AnotherIdentifier"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "AnotherIdentifier"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ).hashCode()
             )
         }
@@ -97,14 +151,16 @@ internal class CallExpressionTest : AbstractExpressionTest() {
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
                 CallExpression(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier"))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier"))
                 ).hashCode(),
                 CallExpression(
-                    IdentifierLiteral("ident"),
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
                     listOf(
-                        IdentifierLiteral("ParameterIdentifier"),
-                        IdentifierLiteral("AnotherParameterIdentifier")
+                        IdentifierLiteral(somePosition, "ParameterIdentifier"),
+                        IdentifierLiteral(somePosition, "AnotherParameterIdentifier")
                     )
                 ).hashCode()
             )
@@ -117,13 +173,13 @@ internal class CallExpressionTest : AbstractExpressionTest() {
         fun `Parse empty `() {
             runInfixTest(
                 CallExpression.Parse,
-                IdentifierLiteral("some_fn"),
+                IdentifierLiteral(somePosition, "some_fn"),
                 """
                 ()
                 """.trimIndent()
             ) { result, tokens ->
                 require(result is CallExpression)
-                assertThat(result.ident, equalTo(IdentifierLiteral("some_fn")))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "some_fn")))
                 assertThat(result.parameters, empty())
 
                 tokens.consumed()
@@ -134,14 +190,14 @@ internal class CallExpressionTest : AbstractExpressionTest() {
         fun `Parse single argument`() {
             runInfixTest(
                 CallExpression.Parse,
-                IdentifierLiteral("some_fn"),
+                IdentifierLiteral(somePosition, "some_fn"),
                 """
                 ('parameter_one')
                 """.trimIndent()
             ) { result, tokens ->
                 require(result is CallExpression)
-                assertThat(result.ident, equalTo(IdentifierLiteral("some_fn")))
-                assertThat(result.parameters, equalTo(listOf(StringLiteral("parameter_one"))))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "some_fn")))
+                assertThat(result.parameters, equalTo(listOf(StringLiteral(somePosition, "parameter_one"))))
 
                 tokens.consumed()
             }
@@ -151,18 +207,18 @@ internal class CallExpressionTest : AbstractExpressionTest() {
         fun `Parse multiple arguments`() {
             runInfixTest(
                 CallExpression.Parse,
-                IdentifierLiteral("some_fn"),
+                IdentifierLiteral(somePosition, "some_fn"),
                 """
                 ('parameter_one',1337)
                 """.trimIndent()
             ) { result, tokens ->
                 require(result is CallExpression)
-                assertThat(result.ident, equalTo(IdentifierLiteral("some_fn")))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "some_fn")))
                 assertThat(
                     result.parameters, equalTo(
                         listOf(
-                            StringLiteral("parameter_one"),
-                            NumberLiteral(1337)
+                            StringLiteral(somePosition, "parameter_one"),
+                            NumberLiteral(somePosition, 1337)
                         )
                     )
                 )
@@ -198,7 +254,7 @@ internal class CallExpressionTest : AbstractExpressionTest() {
                 require(statement is Call)
 
                 val result = PrecedenceString.of(statement.expression)
-                assertThat(result, equalTo(expected));
+                assertThat(result, equalTo(expected))
             }
         }
 

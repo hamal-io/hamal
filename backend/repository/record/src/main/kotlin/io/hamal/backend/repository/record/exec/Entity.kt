@@ -5,6 +5,7 @@ import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.backend.repository.record.exec.*
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.script.api.value.TableValue
 import java.time.Instant
 
@@ -16,7 +17,7 @@ data class Entity(
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
-    var code: Code? = null,
+    var code: CodeValue? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null
 

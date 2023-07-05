@@ -1,29 +1,24 @@
 package io.hamal.agent.extension.std.debug
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.agent.extension.api.ExtensionFunc
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
-import io.hamal.lib.script.api.value.EnvValue
-import io.hamal.lib.script.api.value.IdentValue
-import io.hamal.lib.script.api.value.NilValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.script.api.value.*
 import kotlin.system.measureTimeMillis
 
 class DebugExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("debug"),
-            values = mapOf(
-                IdentValue("sleep") to Sleep(),
+            values = TableValue(
+                "sleep" to Sleep(),
             )
         )
     }
 
 }
 
-class Sleep : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        val ms = (ctx.parameters.first() as Number).toLong()
+class Sleep : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val ms = (ctx.params.first().value as Number).toLong()
         val time = measureTimeMillis {
             Thread.sleep(ms)
         }

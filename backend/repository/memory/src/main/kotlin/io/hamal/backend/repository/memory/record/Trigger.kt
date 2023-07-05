@@ -14,6 +14,8 @@ import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.TriggerId
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 internal object CurrentTriggerProjection {
     private val projection = mutableMapOf<TriggerId, Trigger>()
@@ -39,42 +41,46 @@ internal object CurrentTriggerProjection {
 
 object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(),
     TriggerCmdRepository, TriggerQueryRepository {
+    private val lock = ReentrantLock()
     override fun create(cmd: TriggerCmdRepository.CreateFixedRateCmd): FixedRateTrigger {
-        val triggerId = cmd.triggerId
-        if (contains(triggerId)) {
-            return versionOf(triggerId, cmd.id) as FixedRateTrigger
-        }
-        MemoryTriggerRepository.addRecord(
-            FixedRateTriggerCreationRecord(
-                entityId = triggerId,
-                cmdId = cmd.id,
-                funcId = cmd.funcId,
-                name = cmd.name,
-                inputs = cmd.inputs,
-                duration = cmd.duration
+        return lock.withLock {
+            val triggerId = cmd.triggerId
+            if (contains(triggerId)) {
+                versionOf(triggerId, cmd.id) as FixedRateTrigger
+            }
+            MemoryTriggerRepository.addRecord(
+                FixedRateTriggerCreationRecord(
+                    entityId = triggerId,
+                    cmdId = cmd.id,
+                    funcId = cmd.funcId,
+                    name = cmd.name,
+                    inputs = cmd.inputs,
+                    duration = cmd.duration
+                )
             )
-        )
-        return (currentVersion(triggerId) as FixedRateTrigger)
-            .also(CurrentTriggerProjection::apply)
+            (currentVersion(triggerId) as FixedRateTrigger).also(CurrentTriggerProjection::apply)
+        }
     }
 
     override fun create(cmd: TriggerCmdRepository.CreateEventCmd): EventTrigger {
-        val triggerId = cmd.triggerId
-        if (contains(triggerId)) {
-            return versionOf(triggerId, cmd.id) as EventTrigger
+        return lock.withLock {
+            val triggerId = cmd.triggerId
+            if (contains(triggerId)) {
+                versionOf(triggerId, cmd.id) as EventTrigger
+            } else {
+                MemoryTriggerRepository.addRecord(
+                    EventTriggerCreationRecord(
+                        entityId = triggerId,
+                        cmdId = cmd.id,
+                        funcId = cmd.funcId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        topicId = cmd.topicId
+                    )
+                )
+                (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)
+            }
         }
-        MemoryTriggerRepository.addRecord(
-            EventTriggerCreationRecord(
-                entityId = triggerId,
-                cmdId = cmd.id,
-                funcId = cmd.funcId,
-                name = cmd.name,
-                inputs = cmd.inputs,
-                topicId = cmd.topicId
-            )
-        )
-        return (currentVersion(triggerId) as EventTrigger)
-            .also(CurrentTriggerProjection::apply)
     }
 
     override fun find(triggerId: TriggerId) = CurrentTriggerProjection.find(triggerId)

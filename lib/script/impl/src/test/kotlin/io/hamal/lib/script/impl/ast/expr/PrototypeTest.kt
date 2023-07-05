@@ -1,7 +1,9 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.impl.anotherPosition
 import io.hamal.lib.script.impl.ast.stmt.Block
 import io.hamal.lib.script.impl.ast.stmt.ExpressionStatement
+import io.hamal.lib.script.impl.somePosition
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -17,30 +19,50 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Equal if ident and parameters are equal`() {
             assertEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(TrueLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition)))
                 ),
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(FalseLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, FalseLiteral(somePosition)))
                 )
             )
+
+            assertEquals(
+                PrototypeLiteral(
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition)))
+                ),
+                PrototypeLiteral(
+                    anotherPosition,
+                    IdentifierLiteral(anotherPosition, "ident"),
+                    listOf(IdentifierLiteral(anotherPosition, "ParameterIdentifier")),
+                    Block(anotherPosition, ExpressionStatement(anotherPosition, FalseLiteral(anotherPosition)))
+                )
+            )
+
         }
 
         @Test
         fun `Not Equal if identifiers are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(TrueLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition)))
                 ),
                 PrototypeLiteral(
-                    IdentifierLiteral("AnotherIdentifier"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(FalseLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "AnotherIdentifier"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, FalseLiteral(somePosition)))
                 )
             )
         }
@@ -49,17 +71,19 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Not Equal if parameters are not equal`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(TrueLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition)))
                 ),
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
                     listOf(
-                        IdentifierLiteral("ParameterIdentifier"),
-                        IdentifierLiteral("AnotherParameterIdentifier")
+                        IdentifierLiteral(somePosition, "ParameterIdentifier"),
+                        IdentifierLiteral(somePosition, "AnotherParameterIdentifier")
                     ),
-                    Block(ExpressionStatement(FalseLiteral))
+                    Block(somePosition, ExpressionStatement(somePosition, FalseLiteral(somePosition)))
                 )
             )
         }
@@ -72,30 +96,54 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Same hashcode if ident and parameters hashcode are the same`() {
             assertEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(TrueLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(
+                        somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition))
+                    )
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(FalseLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, FalseLiteral(somePosition)))
                 ).hashCode()
             )
+
+            assertEquals(
+                PrototypeLiteral(
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(
+                        somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition))
+                    )
+                ).hashCode(),
+                PrototypeLiteral(
+                    anotherPosition,
+                    IdentifierLiteral(anotherPosition, "ident"),
+                    listOf(IdentifierLiteral(anotherPosition, "ParameterIdentifier")),
+                    Block(anotherPosition, ExpressionStatement(anotherPosition, FalseLiteral(anotherPosition)))
+                ).hashCode()
+            )
+
         }
 
         @Test
         fun `Different hashcode if ident has different hashcode`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(TrueLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition)))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierLiteral("AnotherIdentifier"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(FalseLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "AnotherIdentifier"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, FalseLiteral(somePosition)))
                 ).hashCode()
             )
         }
@@ -104,17 +152,19 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
         fun `Different hashcode if parameter has different hashcode`() {
             assertNotEquals(
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
-                    listOf(IdentifierLiteral("ParameterIdentifier")),
-                    Block(ExpressionStatement(TrueLiteral))
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
+                    listOf(IdentifierLiteral(somePosition, "ParameterIdentifier")),
+                    Block(somePosition, ExpressionStatement(somePosition, TrueLiteral(somePosition)))
                 ).hashCode(),
                 PrototypeLiteral(
-                    IdentifierLiteral("ident"),
+                    somePosition,
+                    IdentifierLiteral(somePosition, "ident"),
                     listOf(
-                        IdentifierLiteral("ParameterIdentifier"),
-                        IdentifierLiteral("AnotherParameterIdentifier")
+                        IdentifierLiteral(somePosition, "ParameterIdentifier"),
+                        IdentifierLiteral(somePosition, "AnotherParameterIdentifier")
                     ),
-                    Block(ExpressionStatement(FalseLiteral))
+                    Block(somePosition, ExpressionStatement(somePosition, FalseLiteral(somePosition)))
                 ).hashCode()
             )
         }
@@ -127,11 +177,11 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
             runLiteralTest(
                 PrototypeLiteral.Parse,
                 """
-                function empty() 
+                function empty()
                 end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.ident, equalTo(IdentifierLiteral("empty")))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "empty")))
                 assertThat(result.parameters, hasSize(0))
                 assertThat(result.block, hasSize(0))
 
@@ -147,7 +197,7 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 function() end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.ident, equalTo(IdentifierLiteral("lambda")))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "lambda")))
                 assertThat(result.parameters, hasSize(0))
                 assertThat(result.block, hasSize(0))
 
@@ -163,8 +213,8 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 function empty_with_single_param(param_one) end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.ident, equalTo(IdentifierLiteral("empty_with_single_param")))
-                assertThat(result.parameters, equalTo(listOf(IdentifierLiteral("param_one"))))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "empty_with_single_param")))
+                assertThat(result.parameters, equalTo(listOf(IdentifierLiteral(somePosition, "param_one"))))
                 assertThat(result.block, hasSize(0))
 
                 tokens.consumed()
@@ -179,13 +229,13 @@ internal class PrototypeLiteralTest : AbstractExpressionTest() {
                 function empty_with_params(one,two,three) end
                 """.trimIndent()
             ) { result, tokens ->
-                assertThat(result.ident, equalTo(IdentifierLiteral("empty_with_params")))
+                assertThat(result.ident, equalTo(IdentifierLiteral(somePosition, "empty_with_params")))
                 assertThat(
                     result.parameters, equalTo(
                         listOf(
-                            IdentifierLiteral("one"),
-                            IdentifierLiteral("two"),
-                            IdentifierLiteral("three")
+                            IdentifierLiteral(somePosition, "one"),
+                            IdentifierLiteral(somePosition, "two"),
+                            IdentifierLiteral(somePosition, "three")
                         )
                     )
                 )

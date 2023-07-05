@@ -8,10 +8,6 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-
-//@Serializable
-//sealed interface TableKeyValue : Value
-
 @Serializable
 @SerialName("TableEntry")
 data class TableEntry(val key: IdentValue, val value: Value)
@@ -26,13 +22,10 @@ data class TableValue(
 ) : Value, Collection<TableEntry> {
     constructor(vararg pairs: Pair<Any, Value>) : this() {
         pairs.forEach { pair ->
-            val key = pair.first
-            if (key is String) {
-                entries[IdentValue(key)] = pair.second
-            } else if (key is Number) {
-                entries[IdentValue(key.toString())] = pair.second
-            } else if (key is IdentValue) {
-                entries[key] = pair.second
+            when (val key = pair.first) {
+                is String -> entries[IdentValue(key)] = pair.second
+                is Number -> entries[IdentValue(key.toString())] = pair.second
+                is IdentValue -> entries[key] = pair.second
             }
         }
     }
@@ -49,6 +42,12 @@ data class TableValue(
 
     operator fun set(key: IdentValue, value: Value) {
         entries[key] = value
+    }
+
+    fun setAll(tableValue: TableValue) {
+        tableValue.entries.forEach { entry ->
+            entries[entry.key] = entry.value
+        }
     }
 
     operator fun get(key: Int): Value = get(IdentValue(key.toString()))
@@ -130,5 +129,27 @@ data class TableValue(
 
 object DefaultTableValueMetaTable : MetaTable {
     override val type = "table"
-    override val operators: List<ValueOperator> = listOf()
+    override val operators: List<ValueOperator> = listOf(
+        tableInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+    )
 }
+
+private fun tableInfix(
+    operatorType: ValueOperator.Type,
+    fn: (self: TableValue, other: TableValue) -> Value
+): InfixValueOperator {
+    return object : InfixValueOperator {
+        override val operatorType = operatorType
+        override val selfType = "table"
+        override val otherType = "table"
+        override operator fun invoke(self: Value, other: Value): Value {
+            require(self is TableValue)
+            require(other is TableValue)
+            return fn(self, other)
+        }
+    }
+}
+
+
+infix fun String.to(that: String): Pair<String, StringValue> = Pair(this, StringValue(that))
+infix fun String.to(that: Number): Pair<String, NumberValue> = Pair(this, NumberValue(that))

@@ -7,6 +7,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.sdk.domain.ListTriggersResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -20,7 +21,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
                 CreateFuncReq(
                     name = name,
                     inputs = FuncInputs(),
-                    code = Code("")
+                    code = CodeValue("")
                 )
             )
             .execute()

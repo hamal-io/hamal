@@ -7,6 +7,7 @@ import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
+import io.hamal.lib.script.api.value.CodeValue
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
@@ -82,7 +83,7 @@ internal abstract class BaseTest {
                 execId = execId,
                 correlation = null,
                 inputs = ExecInputs(),
-                code = Code("")
+                code = CodeValue("")
             )
         )
 

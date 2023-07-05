@@ -6,9 +6,13 @@ import kotlinx.serialization.Transient
 
 @Serializable
 @SerialName("ErrorValue")
-data class ErrorValue(val message: String) : Value {
+data class ErrorValue(
+    val message: String
+) : Value {
+
     @Transient
     override val metaTable = DefaultErrorValueMetaTable
+    operator fun get(key: IdentValue): Value = if (key.value == "message") StringValue(message) else NilValue
 }
 
 object DefaultErrorValueMetaTable : MetaTable {

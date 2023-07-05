@@ -3,12 +3,12 @@ package io.hamal.backend.instance.web.state
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.SubmittedCreateFuncReq
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.CodeValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
@@ -19,7 +19,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
                 CreateFuncReq(
                     name = name,
                     inputs = FuncInputs(),
-                    code = Code("")
+                    code = CodeValue("")
                 )
             )
             .execute()

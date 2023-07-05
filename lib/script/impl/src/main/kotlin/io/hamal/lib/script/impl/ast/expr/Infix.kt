@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Node.Position
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.expr.Operator.*
 import io.hamal.lib.script.impl.ast.parseExpression
@@ -38,35 +39,40 @@ internal interface ParseInfixExpression {
 }
 
 
-data class InfixExpression(
+class InfixExpression(
+    override val position: Position,
     val lhs: Expression,
     val operator: Operator,
     var rhs: Expression
 ) : Expression {
     internal object Parse : ParseInfixExpression {
         override fun invoke(ctx: Context, lhs: Expression): Expression {
+            val position = ctx.currentPosition()
             val precedence = ctx.currentPrecedence()
             val operator = Parse(ctx)
             val rhs = ctx.parseExpression(precedence)
 
             if (operator.rightAssociative() && lhs is InfixExpression) {
-                return injectRightAssociativeExpression(lhs, operator, rhs)
+                return injectRightAssociativeExpression(ctx, lhs, operator, rhs)
             }
-            return InfixExpression(lhs = lhs, operator = operator, rhs)
+            return InfixExpression(position = position, lhs = lhs, operator = operator, rhs)
         }
 
         private fun Operator.rightAssociative(): Boolean = this == Exponential || this == Concat
 
         private fun injectRightAssociativeExpression(
+            ctx: Context,
             lhs: InfixExpression,
             operator: Operator,
             rhs: Expression
         ): InfixExpression {
+            val position = ctx.currentPosition()
             var nodeToInject: InfixExpression = lhs
             while (nodeToInject.rhs is InfixExpression) {
                 nodeToInject = nodeToInject.rhs as InfixExpression
             }
             val newRhs = InfixExpression(
+                position = position,
                 lhs = nodeToInject.rhs,
                 operator = operator,
                 rhs = rhs
@@ -79,6 +85,22 @@ data class InfixExpression(
 
     override fun toString(): String {
         return "$lhs $operator $rhs"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as InfixExpression
+        if (lhs != other.lhs) return false
+        if (operator != other.operator) return false
+        return rhs == other.rhs
+    }
+
+    override fun hashCode(): Int {
+        var result = lhs.hashCode()
+        result = 31 * result + operator.hashCode()
+        result = 31 * result + rhs.hashCode()
+        return result
     }
 }
 

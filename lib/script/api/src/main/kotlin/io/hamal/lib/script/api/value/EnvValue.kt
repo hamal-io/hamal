@@ -2,7 +2,7 @@ package io.hamal.lib.script.api.value
 
 class EnvValue(
     val ident: IdentValue,
-    values: Map<IdentValue, Value>? = null,
+    values: TableValue? = null,
     global: EnvValue? = null,
     parent: EnvValue? = null
 ) : Value {
@@ -10,20 +10,19 @@ class EnvValue(
     override val metaTable: MetaTable = DefaultEnvValueMetaTable
 
     internal val global: EnvValue
-    internal val parent: EnvValue
-
-    private val values = mutableMapOf<IdentValue, Value>()
+    private val parent: EnvValue
+    private val values = TableValue()
 
     init {
         this.global = global ?: this
         this.parent = parent ?: this
-        values?.let(this.values::putAll)
+        values?.let(this.values::setAll)
     }
 
     fun enterScope(): EnvValue {
         return EnvValue(
             ident = ident,
-            values = mutableMapOf(),
+            values = TableValue(),
             global = this.global,
             parent = this
         )
@@ -46,21 +45,12 @@ class EnvValue(
         return find(identValue) ?: NilValue
     }
 
-    operator fun get(identValue: String) = get(IdentValue(identValue))
+    operator fun get(identValue: String): Value = get(IdentValue(identValue))
 
     fun find(identValue: IdentValue): Value? {
         return if (parent == this) values[identValue]
-        else values[identValue] ?: parent.find(identValue)
+        else values[identValue].let { if (it == NilValue) parent.find(identValue) else it }
     }
-
-//    fun findFunctionValue(identValue: IdentValue): FunctionValue? {
-//        val result = find(identValue)
-//        return if (result is FunctionValue) {
-//            result
-//        } else {
-//            null
-//        }
-//    }
 
     fun findEnvironmentValue(identValue: IdentValue): EnvValue? {
         val result = find(identValue)
@@ -70,16 +60,6 @@ class EnvValue(
             null
         }
     }
-
-//    fun findProtoTypeValue(identValue: IdentValue): PrototypeValue? {
-//        val result = find(identValue)
-//        return if (result is PrototypeValue) {
-//            result
-//        } else {
-//            null
-//        }
-//    }
-
 }
 
 object DefaultEnvValueMetaTable : MetaTable {

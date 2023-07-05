@@ -9,13 +9,14 @@ import kotlinx.serialization.Transient
 data class StringValue(val value: String) : Value {
     @Transient
     override val metaTable = DefaultStringValueMetaTable
-    override fun toString(): String = "'$value'"
+    override fun toString(): String = value
 }
 
 object DefaultStringValueMetaTable : MetaTable {
     override val type = "string"
     override val operators: List<ValueOperator> = listOf(
         stringInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+        stringInfix(ValueOperator.Type.Neq) { self, other -> booleanOf(self != other) },
     )
 }
 

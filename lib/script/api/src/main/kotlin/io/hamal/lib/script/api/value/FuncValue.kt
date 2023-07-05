@@ -1,29 +1,28 @@
 package io.hamal.lib.script.api.value
 
-interface FuncInvocationContext {
-    val parameters: List<Value>
+import io.hamal.lib.script.api.ast.Expression
+
+data class FuncContext(
+    val params: List<FuncParam>,
     val env: EnvValue
+)
+
+data class FuncParam(
+    val value: Value,
+    val expression: Expression
+) {
+    fun asIdentifier(): IdentValue {
+        return when (value) {
+            is StringValue -> IdentValue(value = value.value)
+            is IdentValue -> value
+            else -> throw IllegalStateException("$value can not interpreted as ident")
+        }
+    }
 }
 
-interface FuncInvocationContextFactory<INVOKE_CTX : FuncInvocationContext> {
-    fun create(parameters: List<Value>, env: EnvValue): INVOKE_CTX
-}
-
-object DefaultFuncInvocationContextFactory : FuncInvocationContextFactory<DefaultFuncInvocationContext> {
-        override fun create(
-        parameters: List<Value>,
-        env: EnvValue
-    ): DefaultFuncInvocationContext = DefaultFuncInvocationContext(parameters, env)
-}
-
-data class DefaultFuncInvocationContext(
-    override val parameters: List<Value>,
-    override val env: EnvValue
-) : FuncInvocationContext
-
-abstract class FuncValue<CTX : FuncInvocationContext> : Value {
+abstract class FuncValue : Value {
     override val metaTable: MetaTable = DefaultFuncValueMetaTable
-    abstract operator fun invoke(ctx: CTX): Value
+    abstract operator fun invoke(ctx: FuncContext): Value
 
 }
 

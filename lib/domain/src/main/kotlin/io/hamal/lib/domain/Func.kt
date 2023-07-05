@@ -1,9 +1,9 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.script.api.value.CodeValue
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,5 +12,5 @@ data class Func(
     val cmdId: CmdId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: Code
+    val code: CodeValue
 ) : DomainObject<FuncId>

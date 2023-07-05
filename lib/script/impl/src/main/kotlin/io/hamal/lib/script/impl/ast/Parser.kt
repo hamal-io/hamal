@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.ast
 
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.api.ast.Statement
 import io.hamal.lib.script.impl.ast.expr.Precedence
 import io.hamal.lib.script.impl.ast.expr.currentPrecedence
@@ -41,12 +42,16 @@ interface Parser {
             }
         }
 
+        fun currentPosition(): Node.Position = Node.Position(currentToken().line, currentToken().position)
+
         fun isNotEmpty() = tokens.isNotEmpty()
     }
 }
 
 internal fun Parser.Context.parseBlockStatement(): Block {
     val statements = mutableListOf<Statement>()
+    val position = currentPosition()
+
     while (
         currentTokenType() != Type.Eof &&
         currentTokenType() != Type.End &&
@@ -58,10 +63,11 @@ internal fun Parser.Context.parseBlockStatement(): Block {
             advance()
         }
     }
-    return Block(statements)
+    return Block(position, statements)
 }
 
 internal fun Parser.Context.parseStatement(): Statement {
+    val position = currentPosition()
     return when {
         isGlobalAssignment() -> Assignment.Global.Parse(this)
         isCallExpression() -> Call.Parse(this)
@@ -70,7 +76,7 @@ internal fun Parser.Context.parseStatement(): Statement {
         isReturn() -> Return.Parse(this)
         isBlock() -> DoStmt.Parse(this)
         else -> {
-            ExpressionStatement(parseExpression())
+            ExpressionStatement(position, parseExpression())
         }
     }
 }

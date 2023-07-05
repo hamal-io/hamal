@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Node.Position
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token
@@ -11,8 +12,10 @@ sealed interface FieldExpression {
     val value: Expression
 }
 
-
-data class TableIndexLiteral(val value: Int) : LiteralExpression {
+class TableIndexLiteral(
+    override val position: Position,
+    val value: Int
+) : LiteralExpression {
     init {
         require(value > 0) { "First element starts with index 1" }
     }
@@ -20,11 +23,23 @@ data class TableIndexLiteral(val value: Int) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<TableIndexLiteral> {
         override fun invoke(ctx: Parser.Context): TableIndexLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Token.Type.Number)
             ctx.advance()
-            return TableIndexLiteral(token.value.toInt())
+            return TableIndexLiteral(position, token.value.toInt())
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableIndexLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value
     }
 }
 
@@ -45,7 +60,10 @@ data class IndexFieldExpression(
     }
 }
 
-data class TableKeyLiteral(val value: String) : LiteralExpression {
+class TableKeyLiteral(
+    override val position: Position,
+    val value: String
+) : LiteralExpression {
     init {
         require(value.trim().isNotEmpty()) { "ident can not be empty" }
     }
@@ -53,11 +71,27 @@ data class TableKeyLiteral(val value: String) : LiteralExpression {
     internal object Parse : ParseLiteralExpression<TableKeyLiteral> {
         override fun invoke(ctx: Parser.Context): TableKeyLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             val token = ctx.currentToken()
             assert(token.type == Token.Type.Ident || token.type == Token.Type.String)
             ctx.advance()
-            return TableKeyLiteral(token.value)
+            return TableKeyLiteral(position, token.value)
         }
+    }
+
+    override fun toString(): String {
+        return value
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableKeyLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
     }
 }
 
@@ -78,12 +112,14 @@ data class KeyFieldExpression(
 }
 
 class TableConstructorExpression(
+    override val position: Position,
     val fieldExpressions: List<FieldExpression>
 ) : Expression {
 
     internal object Parse : ParseExpression<TableConstructorExpression> {
         override fun invoke(ctx: Parser.Context): TableConstructorExpression {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             ctx.expectCurrentTokenTypToBe(LeftCurlyBracket)
             ctx.advance()
 
@@ -95,7 +131,7 @@ class TableConstructorExpression(
                 if (ctx.currentTokenType() != Equal) {
                     fieldExpressions.add(
                         IndexFieldExpression(
-                            index = TableIndexLiteral(index++),
+                            index = TableIndexLiteral(ctx.currentPosition(), index++),
                             value = expression
                         )
                     )
@@ -120,13 +156,24 @@ class TableConstructorExpression(
             }
             ctx.expectCurrentTokenTypToBe(RightCurlyBracket)
             ctx.advance()
-            return TableConstructorExpression(fieldExpressions)
+            return TableConstructorExpression(position, fieldExpressions)
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableConstructorExpression
+        return fieldExpressions == other.fieldExpressions
+    }
+
+    override fun hashCode(): Int {
+        return fieldExpressions.hashCode()
+    }
 }
 
 class TableAccessExpression(
+    override val position: Position,
     val target: Expression,
     val key: Expression
 ) : Expression {
@@ -134,6 +181,7 @@ class TableAccessExpression(
     object Parse : ParseInfixExpression {
         override fun invoke(ctx: Parser.Context, lhs: Expression): Expression {
             return TableAccessExpression(
+                position = ctx.currentPosition(),
                 target = lhs,
                 key = ctx.parseParameter()
             )
@@ -171,4 +219,23 @@ class TableAccessExpression(
             return result
         }
     }
+
+    override fun toString(): String {
+        return "${target}.${key}"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableAccessExpression
+        if (target != other.target) return false
+        return key == other.key
+    }
+
+    override fun hashCode(): Int {
+        var result = target.hashCode()
+        result = 31 * result + key.hashCode()
+        return result
+    }
+
 }

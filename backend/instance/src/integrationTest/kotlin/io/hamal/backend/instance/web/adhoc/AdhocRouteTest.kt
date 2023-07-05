@@ -4,10 +4,14 @@ import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.CodeValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -20,7 +24,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
         val response = request(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),
-                code = Code("40 + 2")
+                code = CodeValue("40 + 2")
             )
         )
 
@@ -30,7 +34,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
         assertThat(result.status, equalTo(ReqStatus.Submitted))
         assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.code, equalTo(Code("40 + 2")))
+        assertThat(result.code, equalTo(CodeValue("40 + 2")))
 
         Thread.sleep(10)
 
@@ -53,7 +57,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
             assertThat(correlation, nullValue())
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(code, equalTo(Code("40 + 2")))
+            assertThat(code, equalTo(CodeValue("40 + 2")))
         }
     }
 }

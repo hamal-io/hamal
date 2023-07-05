@@ -1,8 +1,11 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.impl.anotherPosition
+import io.hamal.lib.script.impl.somePosition
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -11,17 +14,23 @@ internal class IdentifierTest : AbstractExpressionTest() {
     inner class EqualsTest {
         @Test
         fun `Equal if underlying values are equal`() {
-            Assertions.assertEquals(
-                IdentifierLiteral("SomeIdentifier"),
-                IdentifierLiteral("SomeIdentifier")
+            assertEquals(
+                IdentifierLiteral(somePosition, "SomeIdentifier"),
+                IdentifierLiteral(somePosition, "SomeIdentifier")
             )
+
+            assertEquals(
+                IdentifierLiteral(somePosition, "SomeIdentifier"),
+                IdentifierLiteral(anotherPosition, "SomeIdentifier")
+            )
+
         }
 
         @Test
         fun `Not Equal if underlying values are different`() {
-            Assertions.assertNotEquals(
-                IdentifierLiteral("SomeIdentifier"),
-                IdentifierLiteral("AnotherIdentifier")
+            assertNotEquals(
+                IdentifierLiteral(somePosition, "SomeIdentifier"),
+                IdentifierLiteral(somePosition, "AnotherIdentifier")
             )
         }
     }
@@ -30,17 +39,22 @@ internal class IdentifierTest : AbstractExpressionTest() {
     inner class HashCodeTest {
         @Test
         fun `Same hashcode if values are equal`() {
-            Assertions.assertEquals(
-                IdentifierLiteral("SomeIdentifier").hashCode(),
-                IdentifierLiteral("SomeIdentifier").hashCode()
+            assertEquals(
+                IdentifierLiteral(somePosition, "SomeIdentifier").hashCode(),
+                IdentifierLiteral(somePosition, "SomeIdentifier").hashCode()
+            )
+
+            assertEquals(
+                IdentifierLiteral(anotherPosition, "SomeIdentifier").hashCode(),
+                IdentifierLiteral(anotherPosition, "SomeIdentifier").hashCode()
             )
         }
 
         @Test
         fun `Different hashcode if values are different`() {
-            Assertions.assertNotEquals(
-                IdentifierLiteral("SomeIdentifier").hashCode(),
-                IdentifierLiteral("AnotherIdentifier").hashCode()
+            assertNotEquals(
+                IdentifierLiteral(somePosition, "SomeIdentifier").hashCode(),
+                IdentifierLiteral(anotherPosition, "AnotherIdentifier").hashCode()
             )
         }
     }
@@ -50,7 +64,7 @@ internal class IdentifierTest : AbstractExpressionTest() {
         @Test
         fun ident() {
             runLiteralTest(IdentifierLiteral.Parse, "some_variable") { result, tokens ->
-                assertThat(result, equalTo(IdentifierLiteral("some_variable")))
+                assertThat(result, equalTo(IdentifierLiteral(somePosition, "some_variable")))
                 tokens.consumed()
             }
         }

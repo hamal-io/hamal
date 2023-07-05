@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.api.ast.Node.Position
 import io.hamal.lib.script.api.ast.Statement
 import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.ast.parseStatement
@@ -8,6 +9,7 @@ import io.hamal.lib.script.impl.token.Token.Type.*
 import io.hamal.lib.script.impl.token.Token.Type.Function
 
 class PrototypeLiteral(
+    override val position: Position,
     val ident: IdentifierLiteral,
     val parameters: List<IdentifierLiteral>,
     val block: Block
@@ -16,6 +18,7 @@ class PrototypeLiteral(
     internal object Parse : ParseLiteralExpression<PrototypeLiteral> {
         override fun invoke(ctx: Context): PrototypeLiteral {
             require(ctx.isNotEmpty())
+            val position = ctx.currentPosition()
             ctx.expectCurrentTokenTypToBe(Function)
             ctx.advance()
 
@@ -26,7 +29,7 @@ class PrototypeLiteral(
                 ident
             } else {
                 ctx.advance()
-                IdentifierLiteral("lambda")
+                IdentifierLiteral(ctx.currentPosition(), "lambda")
             }
 
             val parameterIdentifiers = ctx.parseParameters()
@@ -34,6 +37,7 @@ class PrototypeLiteral(
             ctx.advance()
 
             return PrototypeLiteral(
+                position,
                 ident,
                 parameterIdentifiers,
                 ctx.parseBody()
@@ -55,6 +59,7 @@ class PrototypeLiteral(
 
         private fun Context.parseBody(): Block {
             val statements = mutableListOf<Statement>()
+            val position = currentPosition()
             while (currentTokenType() != End) {
                 require(currentTokenType() != Eof) {
                     "Expected end  but reached end of file"
@@ -63,7 +68,7 @@ class PrototypeLiteral(
             }
             expectCurrentTokenTypToBe(End)
             advance()
-            return Block(statements)
+            return Block(position, statements)
         }
     }
 

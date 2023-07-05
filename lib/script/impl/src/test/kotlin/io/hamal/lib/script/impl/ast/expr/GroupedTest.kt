@@ -1,5 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
+import io.hamal.lib.script.impl.somePosition
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Nested
@@ -11,7 +12,7 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
         @Test
         fun `empty grouped expression`() {
             runTest(GroupedExpression.Parse, "( )") { result, tokens ->
-                assertThat(result, equalTo(GroupedExpression(NilLiteral)))
+                assertThat(result, equalTo(GroupedExpression(somePosition, NilLiteral(somePosition))))
                 tokens.consumed()
             }
         }
@@ -19,7 +20,7 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
         @Test
         fun `literal grouped expression`() {
             runTest(GroupedExpression.Parse, "(2810)") { result, tokens ->
-                assertThat(result, equalTo(GroupedExpression(NumberLiteral(2810))))
+                assertThat(result, equalTo(GroupedExpression(somePosition, NumberLiteral(somePosition, 2810))))
                 tokens.consumed()
             }
         }
@@ -30,7 +31,8 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
                 assertThat(
                     result, equalTo(
                         GroupedExpression(
-                            PrefixExpression(Operator.Minus, NumberLiteral(23))
+                            somePosition,
+                            PrefixExpression(somePosition, Operator.Minus, NumberLiteral(somePosition, 23))
                         )
                     )
                 )
@@ -44,10 +46,12 @@ internal class GroupedExpressionTest : AbstractExpressionTest() {
                 assertThat(
                     result, equalTo(
                         GroupedExpression(
+                            somePosition,
                             InfixExpression(
-                                NumberLiteral(1),
+                                somePosition,
+                                NumberLiteral(somePosition, 1),
                                 Operator.Plus,
-                                NumberLiteral(2)
+                                NumberLiteral(somePosition, 2)
                             )
                         )
                     )

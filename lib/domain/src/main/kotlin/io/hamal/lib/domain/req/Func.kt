@@ -2,13 +2,14 @@ package io.hamal.lib.domain.req
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.script.api.value.CodeValue
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateFuncReq(
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: Code
+    val code: CodeValue
 )
 
 @Serializable
@@ -18,7 +19,7 @@ data class SubmittedCreateFuncReq(
     val funcId: FuncId,
     val funcName: FuncName,
     val inputs: FuncInputs,
-    val code: Code
+    val code: CodeValue
 ) : SubmittedReq
 
 @Serializable

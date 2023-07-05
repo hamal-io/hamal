@@ -6,6 +6,9 @@ plugins {
     id("jacoco-report-aggregation")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
 
 testing {
     suites {

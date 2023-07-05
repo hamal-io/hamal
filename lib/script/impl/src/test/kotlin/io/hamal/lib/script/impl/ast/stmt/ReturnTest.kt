@@ -2,6 +2,7 @@ package io.hamal.lib.script.impl.ast.stmt
 
 import io.hamal.lib.script.impl.ast.expr.NilLiteral
 import io.hamal.lib.script.impl.ast.expr.NumberLiteral
+import io.hamal.lib.script.impl.somePosition
 import io.hamal.lib.script.impl.token.Token.Type.End
 import io.hamal.lib.script.impl.token.Token.Type.Eof
 import org.hamcrest.MatcherAssert.assertThat
@@ -14,11 +15,11 @@ internal class ReturnTest : AbstractStatementTest() {
     fun parse() = listOf(
         Pair(
             "return end",
-            Return(NilLiteral)
+            Return(somePosition, NilLiteral(somePosition))
         ),
         Pair(
             "return 1 end",
-            Return(NumberLiteral(1))
+            Return(somePosition, NumberLiteral(somePosition, 1))
         )
     ).map { (code, expected) ->
         DynamicTest.dynamicTest(code) {

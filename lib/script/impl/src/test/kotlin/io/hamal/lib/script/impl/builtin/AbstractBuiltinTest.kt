@@ -9,9 +9,9 @@ internal abstract class AbstractBuiltinTest {
 
     protected val env = EnvValue(
         ident = IdentValue("_G"),
-        values = mapOf(
-            IdentValue("assert") to AssertFunction,
-            IdentValue("require") to RequireFunction
+        values = TableValue(
+            "assert" to AssertFunction,
+            "require" to RequireFunction
         )
     )
     private val sandbox: Sandbox
@@ -29,7 +29,7 @@ internal abstract class AbstractBuiltinTest {
     init {
         testEnv.addLocal(nestedTestEnv.ident, nestedTestEnv)
         env.addLocal(testEnv.ident, testEnv)
-        sandbox = DefaultSandbox(env, DefaultFuncInvocationContextFactory)
+        sandbox = DefaultSandbox(env)
     }
 
     fun eval(code: String): Value {

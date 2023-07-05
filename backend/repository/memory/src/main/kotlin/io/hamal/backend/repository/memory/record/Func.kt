@@ -11,6 +11,8 @@ import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.Limit
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 internal object CurrentFuncProjection {
     private val projection = mutableMapOf<FuncId, Func>()
@@ -34,22 +36,25 @@ internal object CurrentFuncProjection {
 }
 
 object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCmdRepository, FuncQueryRepository {
+    private val lock = ReentrantLock()
     override fun create(cmd: FuncCmdRepository.CreateCmd): Func {
-        val funcId = cmd.funcId
-        if (contains(funcId)) {
-            return versionOf(funcId, cmd.id)
+        return lock.withLock {
+            val funcId = cmd.funcId
+            if (contains(funcId)) {
+                versionOf(funcId, cmd.id)
+            } else {
+                addRecord(
+                    FuncCreationRecord(
+                        entityId = funcId,
+                        cmdId = cmd.id,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        code = cmd.code
+                    )
+                )
+                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+            }
         }
-        addRecord(
-            FuncCreationRecord(
-                entityId = funcId,
-                cmdId = cmd.id,
-                name = cmd.name,
-                inputs = cmd.inputs,
-                code = cmd.code
-            )
-        )
-        return (currentVersion(funcId))
-            .also(CurrentFuncProjection::apply)
     }
 
     override fun find(funcId: FuncId): Func? = CurrentFuncProjection.find(funcId)

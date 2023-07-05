@@ -79,7 +79,7 @@
             body: JSON.stringify({
                     name: "name123",
                     inputs: {},
-                    code: editor.getValue()
+                    code: {"value": editor.getValue()}
                 }
             )
         })

@@ -10,16 +10,5 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 
-@ExtendWith(SpringExtension::class)
-@ContextConfiguration(
-    classes = [
-        BackendConfig::class,
-        AgentConfig::class
-    ]
-)
-@SpringBootTest(
-    webEnvironment = WebEnvironment.DEFINED_PORT,
-    properties = ["server.port=8084"]
-)
 @ActiveProfiles("memory")
 class SqliteHamalTest : BaseHamalTest()

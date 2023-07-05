@@ -1,6 +1,7 @@
 package io.hamal.lib.domain
 
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.script.api.value.CodeValue
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,7 +12,7 @@ sealed class Exec : DomainObject<ExecId> {
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
-    abstract val code: Code
+    abstract val code: CodeValue
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,7 +39,7 @@ class PlannedExec(
     override val id: ExecId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
-    override val code: Code,
+    override val code: CodeValue,
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
     override val status = ExecStatus.Planned

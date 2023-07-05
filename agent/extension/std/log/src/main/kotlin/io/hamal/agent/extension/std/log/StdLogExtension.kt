@@ -1,8 +1,6 @@
 package io.hamal.agent.extension.std.log
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.agent.extension.api.ExtensionFunc
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.script.api.value.*
 
 //object ConsoleFormat : DepFunctionValue {
@@ -36,8 +34,8 @@ class StdLogExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("log"),
-            values = mapOf(
-                IdentValue("_cfg") to TableValue(
+            values = TableValue(
+                "_cfg" to TableValue(
                     "console" to TableValue(
                         "level" to StringValue("TRACE"),
                     ),
@@ -52,18 +50,18 @@ class StdLogExtension : Extension {
 }
 
 
-class LogDebug : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        println("DEBUG: ${ctx.parameters.first()}")
+class LogDebug : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        println("DEBUG: ${ctx.params.first()}")
         return NilValue
     }
 
 }
 
 
-class LogInfo : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        val first = ctx.parameters.first()
+class LogInfo : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val first = ctx.params.first().value
         if (first is IdentValue) {
             println("INFO: ${ctx.env[first]}")
         } else {

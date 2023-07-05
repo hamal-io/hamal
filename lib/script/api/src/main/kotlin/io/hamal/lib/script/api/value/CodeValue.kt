@@ -7,6 +7,8 @@ import kotlinx.serialization.Transient
 @Serializable
 @SerialName("CodeValue")
 data class CodeValue(val value: String) : Value {
+    constructor(str: StringValue) : this(str.value)
+
     @Transient
     override val metaTable = DefaultCodeValueMetaTable
 
