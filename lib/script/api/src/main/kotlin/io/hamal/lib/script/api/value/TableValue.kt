@@ -26,13 +26,10 @@ data class TableValue(
 ) : Value, Collection<TableEntry> {
     constructor(vararg pairs: Pair<Any, Value>) : this() {
         pairs.forEach { pair ->
-            val key = pair.first
-            if (key is String) {
-                entries[IdentValue(key)] = pair.second
-            } else if (key is Number) {
-                entries[IdentValue(key.toString())] = pair.second
-            } else if (key is IdentValue) {
-                entries[key] = pair.second
+            when (val key = pair.first) {
+                is String -> entries[IdentValue(key)] = pair.second
+                is Number -> entries[IdentValue(key.toString())] = pair.second
+                is IdentValue -> entries[key] = pair.second
             }
         }
     }
@@ -49,6 +46,12 @@ data class TableValue(
 
     operator fun set(key: IdentValue, value: Value) {
         entries[key] = value
+    }
+
+    fun setAll(tableValue: TableValue) {
+        tableValue.entries.forEach { entry ->
+            entries[entry.key] = entry.value
+        }
     }
 
     operator fun get(key: Int): Value = get(IdentValue(key.toString()))

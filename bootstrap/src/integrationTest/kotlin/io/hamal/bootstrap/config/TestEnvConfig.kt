@@ -22,9 +22,9 @@ class TestEnvConfig {
 
         return EnvValue(
             ident = IdentValue("_G"),
-            values = mapOf(
-                IdentValue("assert") to AssertFunction,
-                IdentValue("require") to RequireFunction,
+            values = TableValue(
+                "assert" to AssertFunction,
+                "require" to RequireFunction,
             )
         ).apply {
             extensionEnvironments.forEach { environment ->

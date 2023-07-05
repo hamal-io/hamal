@@ -34,8 +34,8 @@ class StdLogExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("log"),
-            values = mapOf(
-                IdentValue("_cfg") to TableValue(
+            values = TableValue(
+                "_cfg" to TableValue(
                     "console" to TableValue(
                         "level" to StringValue("TRACE"),
                     ),

@@ -2,6 +2,7 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.DefaultInterpreter
 import io.hamal.lib.script.impl.ast.parse
@@ -29,9 +30,9 @@ internal abstract class AbstractEvalTest {
 
         val testEnv = EnvValue(
             IdentValue("_G"),
-            values = mapOf(
-                IdentValue("assert") to AssertFunction,
-                IdentValue("require") to RequireFunction
+            values = TableValue(
+                "assert" to AssertFunction,
+                "require" to RequireFunction
             )
         )
 

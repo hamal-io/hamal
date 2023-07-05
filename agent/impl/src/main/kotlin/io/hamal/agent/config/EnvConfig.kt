@@ -4,6 +4,7 @@ import io.hamal.agent.extension.std.log.StdLogExtension
 import io.hamal.agent.extension.std.sys.StdSysExtension
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.IdentValue
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.ExitFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
@@ -22,10 +23,10 @@ open class EnvConfig {
 
         return EnvValue(
             ident = IdentValue("_G"),
-            values = mapOf(
-                IdentValue("assert") to AssertFunction,
-                IdentValue("exit") to ExitFunction,
-                IdentValue("require") to RequireFunction
+            values = TableValue(
+                "assert" to AssertFunction,
+                "exit" to ExitFunction,
+                "require" to RequireFunction
             )
         ).apply {
             extensionEnvironments.forEach { environment ->

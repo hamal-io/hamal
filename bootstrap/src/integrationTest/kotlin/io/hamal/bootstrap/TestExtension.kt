@@ -11,10 +11,10 @@ class TestExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("test"),
-            values = mapOf(
-                IdentValue("assert") to TestAssert(),
-                IdentValue("complete") to CompleteTest(),
-                IdentValue("fail") to FailTest()
+            values = TableValue(
+                "assert" to TestAssert(),
+                "complete" to CompleteTest(),
+                "fail" to FailTest()
             )
         )
     }

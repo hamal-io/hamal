@@ -3,19 +3,18 @@ local sys = require('sys')
 local test = require('test')
 
 local func_id = sys.func.create({
-    name = 'empty-test-func',
-    inputs = {
-        hamal = 'rockz'
-    },
-    code = '4 + 2'
+    name = 'empty-test-func'
 })
 
-log.info(func_id)
+local funcs = sys.func.list()
+log.info(funcs)
 
-local func = sys.func.get(func_id)
-log.info(func)
-
+local func = funcs[1]
 test.assert(func.id == func_id)
 test.assert(func.name == 'empty-test-func')
+
+local topics = sys.topic.list()
+local topic = topics[1]
+log.info(topic)
 
 test.complete()

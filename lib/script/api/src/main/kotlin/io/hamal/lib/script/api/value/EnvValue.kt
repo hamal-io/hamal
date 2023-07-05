@@ -2,7 +2,7 @@ package io.hamal.lib.script.api.value
 
 class EnvValue(
     val ident: IdentValue,
-    values: Map<IdentValue, Value>? = null,
+    values: TableValue? = null,
     global: EnvValue? = null,
     parent: EnvValue? = null
 ) : Value {
@@ -12,18 +12,18 @@ class EnvValue(
     internal val global: EnvValue
     internal val parent: EnvValue
 
-    private val values = mutableMapOf<IdentValue, Value>()
+    private val values = TableValue()
 
     init {
         this.global = global ?: this
         this.parent = parent ?: this
-        values?.let(this.values::putAll)
+        values?.let(this.values::setAll)
     }
 
     fun enterScope(): EnvValue {
         return EnvValue(
             ident = ident,
-            values = mutableMapOf(),
+            values = TableValue(),
             global = this.global,
             parent = this
         )
@@ -48,9 +48,9 @@ class EnvValue(
 
     operator fun get(identValue: String) = get(IdentValue(identValue))
 
-    fun find(identValue: IdentValue): Value? {
+    fun find(identValue: IdentValue): Value {
         return if (parent == this) values[identValue]
-        else values[identValue] ?: parent.find(identValue)
+        else values[identValue]
     }
 
 //    fun findFunctionValue(identValue: IdentValue): FunctionValue? {

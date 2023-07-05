@@ -1,6 +1,7 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
+import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
@@ -14,29 +15,21 @@ class StdSysExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("sys"),
-            values = mapOf(
-                IdentValue("_cfg") to TableValue(),
-                IdentValue("invoke") to InvokeFunc(),
-                IdentValue("func") to TableValue(
+            values = TableValue(
+                "_cfg" to TableValue(),
+                "func" to TableValue(
                     "create" to CreateFunc(),
+                    "get" to GetFunc(),
                     "list" to ListFuncs()
                 ),
-                IdentValue("topic") to TableValue(
+                "topic" to TableValue(
                     "create" to CreateTopic(),
                     "list" to ListTopics()
                 ),
-                IdentValue("evt") to TableValue(
+                "evt" to TableValue(
                     "emitter" to CreateEventEmitter(),
                     "list" to ListEvents()
                 ),
-//                IdentValue("on") to TableValue(
-//                    "complete" to TableValue(
-//                        "emit" to CreateEventEmitter()
-//                    ),
-//                    "fail" to TableValue(
-//
-//                    )
-//                )
             )
         )
 
@@ -90,6 +83,27 @@ class ListEvents : FuncValue() {
             }.toMap<IdentValue, Value>()
 
         return TableValue(response)
+    }
+}
+
+class GetFunc : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        println("GetFunc")
+        val funcId = when (val value = ctx.params.first().value) {
+            is StringValue -> value.value
+            is IdentValue -> (ctx.env[value] as StringValue).value
+            else -> TODO()
+        }
+        return HttpTemplate("http://localhost:8084")
+            .get("/v1/funcs/${funcId}")
+            .execute(Func::class)
+            .let { func ->
+                TableValue(
+                    "id" to StringValue(func.id.value.toString()),
+                    "name" to StringValue(func.name.value),
+
+                    )
+            }
     }
 }
 

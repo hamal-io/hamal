@@ -8,8 +8,8 @@ class DebugExtension : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("debug"),
-            values = mapOf(
-                IdentValue("sleep") to Sleep(),
+            values = TableValue(
+                "sleep" to Sleep(),
             )
         )
     }

@@ -8,15 +8,15 @@ class Web3Extension : Extension {
     override fun create(): EnvValue {
         val ethEnvironment = EnvValue(
             ident = IdentValue("eth"),
-            values = mapOf(
-                IdentValue("getBlock") to fn
+            values = TableValue(
+                "getBlock" to fn
             )
         )
 
         return EnvValue(
             ident = IdentValue("web3"),
-            values = mapOf(
-                IdentValue("eth") to ethEnvironment
+            values = TableValue(
+                "eth" to ethEnvironment
             )
         )
     }
@@ -45,7 +45,7 @@ class Web3Extension : Extension {
             val response = DefaultEthService.getBlock()
 
             return TableValue(
-                StringValue("hash") to StringValue(response.result.hash)
+                "hash" to StringValue(response.result.hash)
             )
         }
 
