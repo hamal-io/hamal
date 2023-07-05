@@ -2,7 +2,11 @@ package io.hamal.backend.repository.api
 
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Func
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.Limit
+import io.hamal.lib.script.api.value.CodeValue
 
 
 interface FuncCmdRepository {
@@ -13,7 +17,7 @@ interface FuncCmdRepository {
         val funcId: FuncId,
         val name: FuncName,
         val inputs: FuncInputs,
-        val code: Code,
+        val code: CodeValue,
     )
 }
 

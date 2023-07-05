@@ -6,6 +6,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeFixedRateReq
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,7 +20,7 @@ internal class InvokeFixedRateHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes fixed rate execution`() {
         createFunc(
-            id = FuncId(4444), code = Code("SomeCode"), inputs = FuncInputs(
+            id = FuncId(4444), code = CodeValue("SomeCode"), inputs = FuncInputs(
                 TableValue(
                     StringValue("override") to StringValue("false"),
                     StringValue("func") to StringValue("func")
@@ -52,7 +53,7 @@ internal class InvokeFixedRateHandlerTest : BaseReqHandlerTest() {
                         )
                     )
                 )
-                assertThat(code, equalTo(Code("SomeCode")))
+                assertThat(code, equalTo(CodeValue("SomeCode")))
             }
         }
     }

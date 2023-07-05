@@ -1,10 +1,10 @@
 package io.hamal.backend.instance.web.func
 
 import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.script.api.value.StringValue
 import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,7 +18,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
             CreateFuncReq(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
-                code = Code("13 + 37")
+                code = CodeValue("13 + 37")
             )
         )
         awaitCompleted(result.id)
@@ -31,6 +31,6 @@ private fun CreateFuncRouteTest.verifyFuncCreated(funcId: FuncId) {
         assertThat(id, equalTo(funcId))
         assertThat(name, equalTo(FuncName("test-func")))
         assertThat(inputs, equalTo(FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks")))))
-        assertThat(code, equalTo(Code("13 + 37")))
+        assertThat(code, equalTo(CodeValue("13 + 37")))
     }
 }

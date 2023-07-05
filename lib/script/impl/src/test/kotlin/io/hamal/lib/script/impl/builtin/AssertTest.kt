@@ -41,11 +41,9 @@ internal class AssertTest : AbstractBuiltinTest() {
         )
     }
 
-
     @Test
     fun `Evaluate not to boolean`() {
         val result = expectError("""assert(2810)""")
         assertThat(result, equalTo(ErrorValue("Line 1: Assertion of non boolean value is always false")))
     }
-
 }

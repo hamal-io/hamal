@@ -4,11 +4,15 @@ import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.InvokeOneshotReq
 import io.hamal.lib.domain.req.SubmittedInvokeOneshotReq
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.CodeValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -22,7 +26,7 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = Code("")
+                    code = CodeValue("")
                 )
             )
         )
@@ -53,7 +57,7 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = Code("")
+                    code = CodeValue("")
                 )
             )
         )

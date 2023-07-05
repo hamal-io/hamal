@@ -42,6 +42,7 @@ internal class EvaluateTableAccess : Evaluate<TableAccessExpression> {
                 when (val table = ctx.env[target]) {
                     is EnvValue -> table[key as IdentValue]
                     is TableValue -> table[key]
+                    is ErrorValue -> table[key as IdentValue]
                     else -> TODO()
                 }
             }

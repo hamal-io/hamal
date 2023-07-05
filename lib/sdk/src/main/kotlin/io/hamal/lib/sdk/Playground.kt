@@ -1,8 +1,8 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.script.api.value.TableValue
 
 fun main() {
@@ -11,7 +11,7 @@ fun main() {
     val res = sdk.adhocService().submit(
         InvokeAdhocReq(
             inputs = InvocationInputs(TableValue()),
-            code = Code(
+            code = CodeValue(
                 """
                 local log = require('log')
                 log.info('test 123')

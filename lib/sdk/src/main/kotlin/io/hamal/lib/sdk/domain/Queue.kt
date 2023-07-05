@@ -2,9 +2,9 @@ package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.script.api.value.CodeValue
 import kotlinx.serialization.Serializable
 
 
@@ -18,6 +18,6 @@ data class DequeueExecsResponse(
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val state: State,
-        val code: Code
+        val code: CodeValue
     )
 }

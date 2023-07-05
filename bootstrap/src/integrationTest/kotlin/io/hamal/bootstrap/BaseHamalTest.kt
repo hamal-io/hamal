@@ -9,8 +9,8 @@ import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.bootstrap.config.TestEnvConfig
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HamalSdk
 import jakarta.annotation.PostConstruct
@@ -72,7 +72,7 @@ abstract class BaseHamalTest {
             sdk.adhocService().submit(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    code = Code(String(Files.readAllBytes(testFile)))
+                    code = CodeValue(String(Files.readAllBytes(testFile)))
                 )
             )
             ActiveTest.awaitCompletion()

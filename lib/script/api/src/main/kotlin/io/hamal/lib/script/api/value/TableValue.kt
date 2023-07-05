@@ -8,10 +8,6 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-
-//@Serializable
-//sealed interface TableKeyValue : Value
-
 @Serializable
 @SerialName("TableEntry")
 data class TableEntry(val key: IdentValue, val value: Value)
@@ -133,5 +129,27 @@ data class TableValue(
 
 object DefaultTableValueMetaTable : MetaTable {
     override val type = "table"
-    override val operators: List<ValueOperator> = listOf()
+    override val operators: List<ValueOperator> = listOf(
+        tableInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+    )
 }
+
+private fun tableInfix(
+    operatorType: ValueOperator.Type,
+    fn: (self: TableValue, other: TableValue) -> Value
+): InfixValueOperator {
+    return object : InfixValueOperator {
+        override val operatorType = operatorType
+        override val selfType = "table"
+        override val otherType = "table"
+        override operator fun invoke(self: Value, other: Value): Value {
+            require(self is TableValue)
+            require(other is TableValue)
+            return fn(self, other)
+        }
+    }
+}
+
+
+infix fun String.to(that: String): Pair<String, StringValue> = Pair(this, StringValue(that))
+infix fun String.to(that: Number): Pair<String, NumberValue> = Pair(this, NumberValue(that))

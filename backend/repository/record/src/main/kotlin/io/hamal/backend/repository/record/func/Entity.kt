@@ -4,10 +4,10 @@ import io.hamal.backend.repository.record.RecordEntity
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Func
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.script.api.value.CodeValue
 
 data class Entity(
     override val id: FuncId,
@@ -16,7 +16,7 @@ data class Entity(
 
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
-    var code: Code? = null
+    var code: CodeValue? = null
 
 ) : RecordEntity<FuncId, FuncRecord, Func> {
 

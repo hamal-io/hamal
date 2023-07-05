@@ -2,9 +2,15 @@ package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
 import io.hamal.lib.domain.Func
+import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.*
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.sdk.domain.ListEventsResponse
@@ -94,16 +100,28 @@ class GetFunc : FuncValue() {
             is IdentValue -> (ctx.env[value] as StringValue).value
             else -> TODO()
         }
-        return HttpTemplate("http://localhost:8084")
-            .get("/v1/funcs/${funcId}")
-            .execute(Func::class)
-            .let { func ->
-                TableValue(
-                    "id" to StringValue(func.id.value.toString()),
-                    "name" to StringValue(func.name.value),
 
+        val response = HttpTemplate("http://localhost:8084")
+            .get("/v1/funcs/${funcId}")
+            .execute()
+
+        if (response is SuccessHttpResponse) {
+            return response.result(Func::class)
+                .let { func ->
+                    TableValue(
+                        "id" to StringValue(func.id.value.toString()),
+                        "name" to StringValue(func.name.value),
+                        "inputs" to func.inputs.value,
+                        "code" to CodeValue(func.code.value)
                     )
-            }
+                }
+        } else {
+            require(response is ErrorHttpResponse)
+            return response.error(HamalError::class)
+                .let { error ->
+                    ErrorValue(error.message ?: "An unknown error occurred")
+                }
+        }
     }
 }
 
@@ -195,16 +213,25 @@ class InvokeFunc : FuncValue() {
 class CreateFunc : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         try {
-            println("CREATE_FUNC")
-
             val f = ctx.params.first().value as TableValue
-            println(f)
+
+            val inputs = when (val x = f["inputs"]) {
+                is NilValue -> TableValue()
+                is TableValue -> x
+                else -> TODO()
+            }
+
+            val code = when (val x = f["code"]) {
+                is NilValue -> CodeValue("")
+                is CodeValue -> x
+                is StringValue -> CodeValue(x)
+                else -> TODO()
+            }
 
             val r = CreateFuncReq(
                 name = FuncName((f[IdentValue("name")] as StringValue).value),
-                inputs = FuncInputs(TableValue()),
-//                code = Code((f[IdentValue("run")] as CodeValue).value)
-                code = Code("")
+                inputs = FuncInputs(inputs),
+                code = code
             )
 
             val res = HttpTemplate("http://localhost:8084")
@@ -212,9 +239,6 @@ class CreateFunc : FuncValue() {
                 .body(r)
                 .execute(SubmittedCreateFuncReq::class)
 
-            println(res)
-
-            // FIXME await completion
 
             return StringValue(res.funcId.value.toString())
         } catch (t: Throwable) {

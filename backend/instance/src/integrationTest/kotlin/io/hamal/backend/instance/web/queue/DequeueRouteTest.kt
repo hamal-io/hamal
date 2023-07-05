@@ -1,7 +1,11 @@
 package io.hamal.backend.instance.web.queue
 
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.script.api.value.CodeValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -20,7 +24,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
             adhoc(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    code = Code("1 + 1")
+                    code = CodeValue("1 + 1")
                 )
             )
         )
@@ -31,7 +35,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
             with(execs.first()) {
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
-                assertThat(code, equalTo(Code("1 + 1")))
+                assertThat(code, equalTo(CodeValue("1 + 1")))
 
                 verifyExecStarted(id)
             }

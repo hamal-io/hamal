@@ -1,10 +1,10 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.lib.domain.*
-import io.hamal.lib.domain.vo.Code
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.Limit
+import io.hamal.lib.script.api.value.CodeValue
 
 interface ExecCmdRepository {
     fun plan(cmd: PlanCmd): PlannedExec
@@ -20,7 +20,7 @@ interface ExecCmdRepository {
         val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val code: Code
+        val code: CodeValue
     )
 
     data class ScheduleCmd(

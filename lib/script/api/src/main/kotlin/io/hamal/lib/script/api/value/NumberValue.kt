@@ -31,6 +31,7 @@ data class NumberValue(
         operator fun invoke(value: Short): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
         operator fun invoke(value: Int): NumberValue = NumberValue(BigDecimal.valueOf(value.toLong()))
         operator fun invoke(value: Long): NumberValue = NumberValue(BigDecimal.valueOf(value))
+        operator fun invoke(value: Number): NumberValue = NumberValue(BigDecimal.valueOf(value.toDouble()))
         operator fun invoke(value: SnowflakeId): NumberValue = NumberValue(BigDecimal.valueOf(value.value))
 
         operator fun invoke(value: Float): NumberValue {
