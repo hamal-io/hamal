@@ -5,7 +5,7 @@ import io.hamal.lib.script.impl.ast.Parser.Context
 import io.hamal.lib.script.impl.token.Token.Type
 
 
-data class IdentifierLiteral(
+class IdentifierLiteral(
     override val position: Position,
     val value: String
 ) : LiteralExpression {
@@ -21,6 +21,16 @@ data class IdentifierLiteral(
     }
 
     override fun toString() = value
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as IdentifierLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }
 
 internal fun Context.parseIdentifier(): IdentifierLiteral {

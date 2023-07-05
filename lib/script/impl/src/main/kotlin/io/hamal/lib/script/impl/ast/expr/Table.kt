@@ -12,8 +12,7 @@ sealed interface FieldExpression {
     val value: Expression
 }
 
-
-data class TableIndexLiteral(
+class TableIndexLiteral(
     override val position: Position,
     val value: Int
 ) : LiteralExpression {
@@ -30,6 +29,17 @@ data class TableIndexLiteral(
             ctx.advance()
             return TableIndexLiteral(position, token.value.toInt())
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableIndexLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value
     }
 }
 
@@ -50,7 +60,7 @@ data class IndexFieldExpression(
     }
 }
 
-data class TableKeyLiteral(
+class TableKeyLiteral(
     override val position: Position,
     val value: String
 ) : LiteralExpression {
@@ -71,6 +81,17 @@ data class TableKeyLiteral(
 
     override fun toString(): String {
         return value
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableKeyLiteral
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
     }
 }
 
@@ -139,6 +160,16 @@ class TableConstructorExpression(
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableConstructorExpression
+        return fieldExpressions == other.fieldExpressions
+    }
+
+    override fun hashCode(): Int {
+        return fieldExpressions.hashCode()
+    }
 }
 
 class TableAccessExpression(
@@ -192,4 +223,19 @@ class TableAccessExpression(
     override fun toString(): String {
         return "${target}.${key}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TableAccessExpression
+        if (target != other.target) return false
+        return key == other.key
+    }
+
+    override fun hashCode(): Int {
+        var result = target.hashCode()
+        result = 31 * result + key.hashCode()
+        return result
+    }
+
 }

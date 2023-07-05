@@ -8,7 +8,7 @@ import io.hamal.lib.script.impl.ast.expr.NilLiteral
 import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token
 
-data class Return(
+class Return(
     override val position: Position,
     val expression: Expression
 ) : Statement {
@@ -29,4 +29,16 @@ data class Return(
             return result
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Return
+        return expression == other.expression
+    }
+
+    override fun hashCode(): Int {
+        return expression.hashCode()
+    }
+
 }

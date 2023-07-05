@@ -7,10 +7,5 @@ interface Node {
     data class Position(
         val line: Int,
         val position: Int
-    ) {
-        companion object {
-            val Start = Position(1, 0)
-        }
-    }
-
+    )
 }

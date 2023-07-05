@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
-import io.hamal.lib.script.api.ast.Node
+import io.hamal.lib.script.api.ast.Node.Position
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.ast.expr.Precedence.Lowest
 import io.hamal.lib.script.impl.ast.parseBlockStatement
@@ -10,13 +10,28 @@ import io.hamal.lib.script.impl.ast.stmt.Block
 import io.hamal.lib.script.impl.ast.stmt.DoStmt
 import io.hamal.lib.script.impl.token.Token.Type.*
 
-data class ConditionalExpression(
+class ConditionalExpression(
+    override val position: Position,
     val condition: Expression,
     val block: Block
-)
+) : Expression{
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as ConditionalExpression
+        if (condition != other.condition) return false
+        return block == other.block
+    }
 
-data class IfExpression(
-    override val position: Node.Position,
+    override fun hashCode(): Int {
+        var result = condition.hashCode()
+        result = 31 * result + block.hashCode()
+        return result
+    }
+}
+
+class IfExpression(
+    override val position: Position,
     val conditionalExpression: List<ConditionalExpression>
 ) : Expression {
     internal object Parse : ParseExpression<IfExpression> {
@@ -37,10 +52,12 @@ data class IfExpression(
 
 
         private fun Parser.Context.parseIf(): ConditionalExpression {
+            val position = currentPosition()
             val condition = parseExpression(Lowest)
             expectCurrentTokenTypToBe(Then)
             advance()
             return ConditionalExpression(
+                position = position,
                 condition = condition,
                 block = parseBlockStatement()
             )
@@ -55,6 +72,7 @@ data class IfExpression(
                 advance()
                 result.add(
                     ConditionalExpression(
+                        position = currentPosition(),
                         condition = condition,
                         block = parseBlockStatement()
                     )
@@ -69,21 +87,36 @@ data class IfExpression(
             }
             advance()
             return ConditionalExpression(
+                position = currentPosition(),
                 condition = TrueLiteral(currentPosition()),
                 block = parseBlockStatement()
             )
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as IfExpression
+        return conditionalExpression == other.conditionalExpression
+    }
+
+    override fun hashCode(): Int {
+        return conditionalExpression.hashCode()
+    }
+
 }
 
-data class ForLoopExpression(
-    override val position: Node.Position,
+class ForLoopExpression(
+    override val position: Position,
     val ident: IdentifierLiteral,
     val startExpression: Expression,
     val endExpression: Expression,
     val stepExpression: Expression,
     val block: DoStmt
 ) : Expression {
+
+
     internal object Parse : ParseExpression<ForLoopExpression> {
         override fun invoke(ctx: Parser.Context): ForLoopExpression {
             val position = ctx.currentPosition()
@@ -116,5 +149,25 @@ data class ForLoopExpression(
             )
 
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as ForLoopExpression
+        if (ident != other.ident) return false
+        if (startExpression != other.startExpression) return false
+        if (endExpression != other.endExpression) return false
+        if (stepExpression != other.stepExpression) return false
+        return block == other.block
+    }
+
+    override fun hashCode(): Int {
+        var result = ident.hashCode()
+        result = 31 * result + startExpression.hashCode()
+        result = 31 * result + endExpression.hashCode()
+        result = 31 * result + stepExpression.hashCode()
+        result = 31 * result + block.hashCode()
+        return result
     }
 }

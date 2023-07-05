@@ -10,13 +10,24 @@ internal interface ParseStatement<out STATEMENT : Statement> {
 }
 
 
-data class ExpressionStatement(
+class ExpressionStatement(
     override val position: Position,
     val expression: Expression
-) : Statement
+) : Statement {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as ExpressionStatement
+        return expression == other.expression
+    }
+
+    override fun hashCode(): Int {
+        return expression.hashCode()
+    }
+}
 
 
-data class Block(
+class Block(
     override val position: Position,
     val statements: List<Statement>,
     override val size: Int
@@ -35,4 +46,17 @@ data class Block(
     override fun isEmpty() = statements.isEmpty()
 
     override fun iterator(): Iterator<Statement> = statements.iterator()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Block
+        if (statements != other.statements) return false
+        return size == other.size
+    }
+
+    override fun hashCode(): Int {
+        var result = statements.hashCode()
+        result = 31 * result + size
+        return result
+    }
 }

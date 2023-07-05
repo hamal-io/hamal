@@ -7,7 +7,7 @@ import io.hamal.lib.script.impl.ast.parseExpression
 import io.hamal.lib.script.impl.token.Token.Type.LeftParenthesis
 import io.hamal.lib.script.impl.token.Token.Type.RightParenthesis
 
-data class GroupedExpression(
+class GroupedExpression(
     override val position: Node.Position,
     val expression: Expression
 ) : Expression {
@@ -30,4 +30,15 @@ data class GroupedExpression(
     }
 
     override fun toString() = "($expression)"
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as GroupedExpression
+        return expression == other.expression
+    }
+
+    override fun hashCode(): Int {
+        return expression.hashCode()
+    }
+
 }

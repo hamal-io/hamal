@@ -7,7 +7,7 @@ import io.hamal.lib.script.impl.ast.parseBlockStatement
 import io.hamal.lib.script.impl.token.Token
 import io.hamal.lib.script.impl.token.Token.Type.End
 
-data class DoStmt(
+class DoStmt(
     override val position: Node.Position,
     val block: Block
 ) : Statement {
@@ -29,4 +29,16 @@ data class DoStmt(
             return DoStmt(position, block)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as DoStmt
+        return block == other.block
+    }
+
+    override fun hashCode(): Int {
+        return block.hashCode()
+    }
+
 }

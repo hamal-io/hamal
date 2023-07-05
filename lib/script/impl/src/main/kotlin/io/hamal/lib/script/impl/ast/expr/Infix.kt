@@ -39,7 +39,7 @@ internal interface ParseInfixExpression {
 }
 
 
-data class InfixExpression(
+class InfixExpression(
     override val position: Position,
     val lhs: Expression,
     val operator: Operator,
@@ -85,6 +85,22 @@ data class InfixExpression(
 
     override fun toString(): String {
         return "$lhs $operator $rhs"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as InfixExpression
+        if (lhs != other.lhs) return false
+        if (operator != other.operator) return false
+        return rhs == other.rhs
+    }
+
+    override fun hashCode(): Int {
+        var result = lhs.hashCode()
+        result = 31 * result + operator.hashCode()
+        result = 31 * result + rhs.hashCode()
+        return result
     }
 }
 

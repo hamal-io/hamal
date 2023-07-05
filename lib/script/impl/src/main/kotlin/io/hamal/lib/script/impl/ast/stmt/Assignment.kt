@@ -13,7 +13,7 @@ interface Assignment : Statement {
     val identifiers: List<IdentifierLiteral>
     val expressions: List<Expression>
 
-    data class Global(
+    class Global(
         override val position: Position,
         override val identifiers: List<IdentifierLiteral>,
         override val expressions: List<Expression>
@@ -40,9 +40,25 @@ interface Assignment : Statement {
                 return Global(position, identifiers, expressions)
             }
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+            other as Global
+            if (identifiers != other.identifiers) return false
+            return expressions == other.expressions
+        }
+
+        override fun hashCode(): Int {
+            var result = identifiers.hashCode()
+            result = 31 * result + expressions.hashCode()
+            return result
+        }
+
+
     }
 
-    data class Local(
+    class Local(
         override val position: Position,
         override val identifiers: List<IdentifierLiteral>,
         override val expressions: List<Expression>
@@ -70,6 +86,20 @@ interface Assignment : Statement {
                 val expressions = ctx.parseExpressions()
                 return Local(position, identifiers, expressions)
             }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+            other as Local
+            if (identifiers != other.identifiers) return false
+            return expressions == other.expressions
+        }
+
+        override fun hashCode(): Int {
+            var result = identifiers.hashCode()
+            result = 31 * result + expressions.hashCode()
+            return result
         }
     }
 }
