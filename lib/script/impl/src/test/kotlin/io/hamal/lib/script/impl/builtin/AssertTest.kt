@@ -23,13 +23,13 @@ internal class AssertTest : AbstractBuiltinTest() {
     @Test
     fun `Always false`() {
         val result = expectError("""assert(false)""")
-        assertThat(result, equalTo(ErrorValue("Assertion violated: 'false'")))
+        assertThat(result, equalTo(ErrorValue("Line 1: Assertion violated: 'false'")))
     }
 
     @Test
     fun `Evaluates expression to false`() {
         val result = expectError("""assert(2 < 1)""")
-        assertThat(result, equalTo(ErrorValue("Assertion violated: '2 < 1'")))
+        assertThat(result, equalTo(ErrorValue("Line 1: Assertion violated: '2 < 1'")))
     }
 
     @Test
@@ -37,7 +37,7 @@ internal class AssertTest : AbstractBuiltinTest() {
         val result = expectError("""assert(false,'some deep and meaningful message')""")
         assertThat(
             result,
-            equalTo(ErrorValue("Assertion violated: 'some deep and meaningful message'"))
+            equalTo(ErrorValue("Line 1: Assertion violated: 'some deep and meaningful message'"))
         )
     }
 
@@ -45,7 +45,7 @@ internal class AssertTest : AbstractBuiltinTest() {
     @Test
     fun `Evaluate not to boolean`() {
         val result = expectError("""assert(2810)""")
-        assertThat(result, equalTo(ErrorValue("Assertion of non boolean value is always false")))
+        assertThat(result, equalTo(ErrorValue("Line 1: Assertion of non boolean value is always false")))
     }
 
 }

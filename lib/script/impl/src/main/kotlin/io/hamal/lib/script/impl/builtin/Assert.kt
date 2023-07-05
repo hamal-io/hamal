@@ -8,6 +8,8 @@ object AssertFunction : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         val params = ctx.params
 
+        val line = params.getOrNull(0)?.expression?.position?.line ?: 1
+
         val assertionMessage = params.getOrNull(1)
             ?.value
             ?.let { (it as StringValue).value }
@@ -16,9 +18,9 @@ object AssertFunction : FuncValue() {
         val result = params.firstOrNull()?.value
         if (result != TrueValue) {
             if (result != FalseValue) {
-                throw ScriptEvaluationException(ErrorValue("Assertion of non boolean value is always false"))
+                throw ScriptEvaluationException(ErrorValue("Line $line: Assertion of non boolean value is always false"))
             }
-            throw ScriptEvaluationException(ErrorValue("Assertion violated: '$assertionMessage'"))
+            throw ScriptEvaluationException(ErrorValue("Line $line: Assertion violated: '$assertionMessage'"))
         }
         return NilValue
     }

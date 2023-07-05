@@ -50,7 +50,6 @@ class IfExpression(
             return IfExpression(position, conditionals)
         }
 
-
         private fun Parser.Context.parseIf(): ConditionalExpression {
             val position = currentPosition()
             val condition = parseExpression(Lowest)
@@ -104,7 +103,6 @@ class IfExpression(
     override fun hashCode(): Int {
         return conditionalExpression.hashCode()
     }
-
 }
 
 class ForLoopExpression(
@@ -115,8 +113,6 @@ class ForLoopExpression(
     val stepExpression: Expression,
     val block: DoStmt
 ) : Expression {
-
-
     internal object Parse : ParseExpression<ForLoopExpression> {
         override fun invoke(ctx: Parser.Context): ForLoopExpression {
             val position = ctx.currentPosition()
@@ -130,7 +126,6 @@ class ForLoopExpression(
             ctx.expectCurrentTokenTypToBe(Comma)
             ctx.advance()
             val endExpression = ctx.parseExpression(Lowest)
-
 
             val stepExpression = if (ctx.currentTokenType() == Comma) {
                 ctx.advance()
