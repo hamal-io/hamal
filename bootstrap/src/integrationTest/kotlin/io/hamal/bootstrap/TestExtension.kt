@@ -1,8 +1,6 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.agent.extension.api.ExtensionFunc
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ExitException
 import org.junit.jupiter.api.fail
@@ -23,12 +21,12 @@ class TestExtension : Extension {
 
 }
 
-internal class TestAssert : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        val parameters = ctx.parameters
+internal class TestAssert : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val parameters = ctx.params
         val assertionMessage = "TBD"
 
-        val result = parameters.firstOrNull()
+        val result = parameters.firstOrNull()?.value
         if (result != TrueValue) {
             if (result != FalseValue) {
                 ActiveTest.failTest("Assertion of non boolean value is always false")
@@ -41,16 +39,16 @@ internal class TestAssert : ExtensionFunc() {
     }
 }
 
-internal class CompleteTest : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+internal class CompleteTest : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
         ActiveTest.completeTest()
         throw ExitException(NumberValue.Zero)
     }
 }
 
-internal class FailTest : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        val reason = ctx.parameters.firstOrNull()
+internal class FailTest : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val reason = ctx.params.firstOrNull()?.value
             ?.let { value -> if (value is StringValue) value.value else null }
             ?: "Failed"
 

@@ -1,8 +1,6 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.agent.extension.api.ExtensionFunc
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
@@ -45,14 +43,14 @@ class StdSysExtension : Extension {
     }
 }
 
-class CreateEventEmitter : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        val topicId = ctx.parameters.first() as IdentValue
+class CreateEventEmitter : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val topicId = ctx.params.first().value as IdentValue
 
         return TableValue(
             "topic_id" to StringValue(topicId.value),
-            "emit" to object : FuncValue<ExtensionFuncInvocationContext>() {
-                override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+            "emit" to object : FuncValue() {
+                override fun invoke(ctx: FuncContext): Value {
                     println("EMIT")
                     println(ctx.env["topic_id"])
 
@@ -69,11 +67,11 @@ class CreateEventEmitter : ExtensionFunc() {
     }
 }
 
-class ListEvents : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+class ListEvents : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
         println("List Events")
 
-        val f = ctx.parameters.first() as TableValue
+        val f = ctx.params.first().value as TableValue
         val topicId = when (val t = f["topic_id"]) {
             is IdentValue -> ctx.env["topic_id"]
             else -> t
@@ -95,8 +93,8 @@ class ListEvents : ExtensionFunc() {
     }
 }
 
-class ListFuncs : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+class ListFuncs : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
         println("ListFuncs")
 
         val response = HttpTemplate("http://localhost:8084")
@@ -114,8 +112,8 @@ class ListFuncs : ExtensionFunc() {
     }
 }
 
-class ListTopics : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+class ListTopics : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
         println("ListFuncs")
 
         val response = HttpTemplate("http://localhost:8084")
@@ -134,12 +132,12 @@ class ListTopics : ExtensionFunc() {
 }
 
 
-class CreateTopic : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+class CreateTopic : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
         try {
             println("CREATE TOPIC")
 
-            val f = ctx.parameters.first() as TableValue
+            val f = ctx.params.first().value as TableValue
             println(f)
 
             val r = CreateTopicReq(
@@ -160,9 +158,9 @@ class CreateTopic : ExtensionFunc() {
     }
 }
 
-class InvokeFunc : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        val funcId = (ctx.parameters.first() as StringValue).toString().replace("'", "")
+class InvokeFunc : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        val funcId = (ctx.params.first().value as StringValue).toString().replace("'", "")
         println("DEBUG: ${funcId}")
 
         HttpTemplate("http://localhost:8084")
@@ -180,12 +178,12 @@ class InvokeFunc : ExtensionFunc() {
 }
 
 
-class CreateFunc : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
+class CreateFunc : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
         try {
             println("CREATE_FUNC")
 
-            val f = ctx.parameters.first() as TableValue
+            val f = ctx.params.first().value as TableValue
             println(f)
 
             val r = CreateFuncReq(

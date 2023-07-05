@@ -5,11 +5,10 @@ import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.api.value.ValueOperator.Type.*
 import io.hamal.lib.script.impl.ast.expr.Operator
 
-internal data class EvaluationContext<TYPE : Node, INVOKE_CTX : FuncInvocationContext>(
+internal data class EvaluationContext<TYPE : Node>(
     val toEvaluate: TYPE,
     var env: EnvValue,
-    val evaluator: Evaluator<INVOKE_CTX>,
-    val funcInvocationContextFactory: FuncInvocationContextFactory<INVOKE_CTX>
+    val evaluator: Evaluator
 ) {
 
     fun enterScope() {
@@ -33,7 +32,7 @@ internal data class EvaluationContext<TYPE : Node, INVOKE_CTX : FuncInvocationCo
         env: EnvValue = this.env
     ): Value {
         return evaluator.evaluate(
-            EvaluationContext(toEvaluate, env, evaluator, funcInvocationContextFactory)
+            EvaluationContext(toEvaluate, env, evaluator)
         )
     }
 

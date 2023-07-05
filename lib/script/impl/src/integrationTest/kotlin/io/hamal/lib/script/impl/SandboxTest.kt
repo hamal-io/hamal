@@ -1,6 +1,5 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.script.api.value.DefaultFuncInvocationContextFactory
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.ErrorValue
 import io.hamal.lib.script.api.value.IdentValue
@@ -34,7 +33,7 @@ class SandboxTest {
 
                     subEnv.addLocal(IdentValue("nested-sub-env"), nestedSubEnv)
                     env.addLocal(subEnv.ident, subEnv)
-                    val testInstance = DefaultSandbox(env, DefaultFuncInvocationContextFactory)
+                    val testInstance = DefaultSandbox(env)
 
                     val result = testInstance.eval(code)
 

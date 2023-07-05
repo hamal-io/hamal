@@ -2,28 +2,27 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.api.ast.Statement
-import io.hamal.lib.script.api.value.FuncInvocationContext
 import io.hamal.lib.script.api.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.ast.stmt.*
 import kotlin.reflect.KClass
 
-internal interface Evaluate<TYPE : Node, INVOKE_CTX : FuncInvocationContext> {
-    operator fun invoke(ctx: EvaluationContext<TYPE, INVOKE_CTX>): Value
+internal interface Evaluate<TYPE : Node> {
+    operator fun invoke(ctx: EvaluationContext<TYPE>): Value
 }
 
 
-internal interface Evaluator<INVOKE_CTX : FuncInvocationContext> {
-    fun <TYPE : Node> evaluate(ctx: EvaluationContext<TYPE, INVOKE_CTX>): Value
+internal interface Evaluator {
+    fun <TYPE : Node> evaluate(ctx: EvaluationContext<TYPE>): Value
 }
 
-internal class DefaultEvaluator<INVOKE_CTX : FuncInvocationContext> : Evaluator<INVOKE_CTX> {
-    override fun <TYPE : Node> evaluate(ctx: EvaluationContext<TYPE, INVOKE_CTX>): Value {
+internal class DefaultEvaluator : Evaluator {
+    override fun <TYPE : Node> evaluate(ctx: EvaluationContext<TYPE>): Value {
         val evaluate = resolve(ctx.toEvaluate::class)
         return evaluate.invoke(ctx)
     }
 
-    private val store = mutableMapOf<KClass<*>, Evaluate<*, INVOKE_CTX>>()
+    private val store = mutableMapOf<KClass<*>, Evaluate<*>>()
 
     init {
         /*LITERAL*/
@@ -61,13 +60,13 @@ internal class DefaultEvaluator<INVOKE_CTX : FuncInvocationContext> : Evaluator<
         register(Return::class, EvaluateReturn())
     }
 
-    private fun <TYPE : Node> resolve(targetClass: KClass<out TYPE>): Evaluate<TYPE, INVOKE_CTX> {
+    private fun <TYPE : Node> resolve(targetClass: KClass<out TYPE>): Evaluate<TYPE> {
         requireNotNull(store[targetClass]) { "No evaluator found for $targetClass" }
         @Suppress("UNCHECKED_CAST")
-        return store[targetClass] as Evaluate<TYPE, INVOKE_CTX>
+        return store[targetClass] as Evaluate<TYPE>
     }
 
-    private fun <TYPE : Node> register(targetClazz: KClass<TYPE>, evaluate: Evaluate<TYPE, INVOKE_CTX>) {
+    private fun <TYPE : Node> register(targetClazz: KClass<TYPE>, evaluate: Evaluate<TYPE>) {
         store[targetClazz] = evaluate
     }
 }

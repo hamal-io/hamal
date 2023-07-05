@@ -1,7 +1,5 @@
 package io.hamal.bootstrap.config
 
-import io.hamal.agent.extension.api.ExtensionFunc
-import io.hamal.agent.extension.api.ExtensionFuncInvocationContext
 import io.hamal.agent.extension.std.log.StdLogExtension
 import io.hamal.agent.extension.std.sys.StdSysExtension
 import io.hamal.bootstrap.TestExtension
@@ -34,19 +32,4 @@ class TestEnvConfig {
             }
         }
     }
-}
-
-class TestAssertFunc : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        println("Test Assert")
-        return NilValue
-    }
-}
-
-class TestCompleteFunc : ExtensionFunc() {
-    override fun invoke(ctx: ExtensionFuncInvocationContext): Value {
-        println("Test Complete")
-        return NilValue
-    }
-
 }
