@@ -1,6 +1,8 @@
 package io.hamal.lib.script.api.value
 
 import io.hamal.lib.domain.Tuple4
+import io.hamal.lib.script.api.value.ValueOperator.Type.Eq
+import io.hamal.lib.script.api.value.ValueOperator.Type.Neq
 import io.hamal.lib.script.api.value.ValueSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -19,7 +21,7 @@ class StringValueTest {
 class DefaultStringValueMetaTableTest {
     @Test
     fun `Every operation is covered`() {
-        assertThat(DefaultStringValueMetaTable.operators, hasSize(1))
+        assertThat(DefaultStringValueMetaTable.operators, hasSize(2))
     }
 
     @Test
@@ -29,8 +31,10 @@ class DefaultStringValueMetaTableTest {
 
     @TestFactory
     fun infix() = listOf<Tuple4<StringValue, ValueOperator.Type, Value, Value>>(
-        Tuple4(StringValue("h4m41"), ValueOperator.Type.Eq, StringValue("h4m41"), TrueValue),
-        Tuple4(StringValue("h4m41"), ValueOperator.Type.Eq, StringValue("HAMAL"), FalseValue),
+        Tuple4(StringValue("h4m41"), Eq, StringValue("h4m41"), TrueValue),
+        Tuple4(StringValue("h4m41"), Eq, StringValue("HAMAL"), FalseValue),
+        Tuple4(StringValue("h4m41"), Neq, StringValue("h4m41"), FalseValue),
+        Tuple4(StringValue("h4m41"), Neq, StringValue("HAMAL"), TrueValue),
     ).map { (self, operator, other, expected) ->
         DynamicTest.dynamicTest("$self $operator $other = $expected") {
             val infixOp = self.findInfixOperation(operator, other.type())!!

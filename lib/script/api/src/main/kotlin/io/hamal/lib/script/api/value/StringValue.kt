@@ -16,6 +16,7 @@ object DefaultStringValueMetaTable : MetaTable {
     override val type = "string"
     override val operators: List<ValueOperator> = listOf(
         stringInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+        stringInfix(ValueOperator.Type.Neq) { self, other -> booleanOf(self != other) },
     )
 }
 
