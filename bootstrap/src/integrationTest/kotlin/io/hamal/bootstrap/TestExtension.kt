@@ -24,15 +24,21 @@ class TestExtension : Extension {
 internal class TestAssert : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         val parameters = ctx.params
-        val assertionMessage = "TBD"
+
+        val line = ctx.params.first().expression.position.line
+
+        val assertionMessage = ctx.params.getOrNull(1)
+            ?.value
+            ?.let { (it as StringValue).value }
+            ?: "${ctx.params.first().expression}"
 
         val result = parameters.firstOrNull()?.value
         if (result != TrueValue) {
             if (result != FalseValue) {
-                ActiveTest.failTest("Assertion of non boolean value is always false")
+                ActiveTest.failTest("Line $line: Assertion of non boolean value is always false")
                 throw ExitException(NumberValue.One)
             }
-            ActiveTest.failTest("Assertion violated: '$assertionMessage'")
+            ActiveTest.failTest("Line $line: Assertion violated: '$assertionMessage'")
             throw ExitException(NumberValue.One)
         }
         return NilValue

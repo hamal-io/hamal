@@ -1,6 +1,7 @@
 package io.hamal.lib.script.impl.ast.expr
 
 import io.hamal.lib.script.api.ast.Expression
+import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.impl.ast.Parser
 import io.hamal.lib.script.impl.ast.expr.Precedence.Lowest
 import io.hamal.lib.script.impl.ast.parseBlockStatement
@@ -15,10 +16,12 @@ data class ConditionalExpression(
 )
 
 data class IfExpression(
+    override val position: Node.Position,
     val conditionalExpression: List<ConditionalExpression>
 ) : Expression {
     internal object Parse : ParseExpression<IfExpression> {
         override fun invoke(ctx: Parser.Context): IfExpression {
+            val position = ctx.currentPosition()
             val conditionals = mutableListOf<ConditionalExpression>()
             ctx.expectCurrentTokenTypToBe(If)
             ctx.advance()
@@ -29,7 +32,7 @@ data class IfExpression(
 
             ctx.expectCurrentTokenTypToBe(End)
             ctx.advance()
-            return IfExpression(conditionals)
+            return IfExpression(position, conditionals)
         }
 
 
@@ -66,7 +69,7 @@ data class IfExpression(
             }
             advance()
             return ConditionalExpression(
-                condition = TrueLiteral,
+                condition = TrueLiteral(currentPosition()),
                 block = parseBlockStatement()
             )
         }
@@ -74,6 +77,7 @@ data class IfExpression(
 }
 
 data class ForLoopExpression(
+    override val position: Node.Position,
     val ident: IdentifierLiteral,
     val startExpression: Expression,
     val endExpression: Expression,
@@ -82,6 +86,7 @@ data class ForLoopExpression(
 ) : Expression {
     internal object Parse : ParseExpression<ForLoopExpression> {
         override fun invoke(ctx: Parser.Context): ForLoopExpression {
+            val position = ctx.currentPosition()
             ctx.expectCurrentTokenTypToBe(For)
             ctx.advance()
 
@@ -98,10 +103,11 @@ data class ForLoopExpression(
                 ctx.advance()
                 ctx.parseExpression(Lowest)
             } else {
-                NumberLiteral(1)
+                NumberLiteral(ctx.currentPosition(), 1)
             }
 
             return ForLoopExpression(
+                position = position,
                 ident = ident,
                 startExpression = startExpression,
                 endExpression = endExpression,

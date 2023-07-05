@@ -10,7 +10,7 @@ local funcs = sys.func.list()
 log.info(funcs)
 
 local func = funcs[1]
-test.assert(func.id == func_id)
+test.assert(func.id ~= func_id)
 test.assert(func.name == 'empty-test-func')
 
 local topics = sys.topic.list()
