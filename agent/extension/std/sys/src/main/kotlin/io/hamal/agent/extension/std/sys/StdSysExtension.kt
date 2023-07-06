@@ -215,6 +215,13 @@ class CreateFunc : FuncValue() {
         try {
             val f = ctx.params.first().value as TableValue
 
+            val name: StringValue = when (val x = f["name"]) {
+                is NilValue -> StringValue("")
+                is StringValue -> x
+                is IdentValue -> ctx.env[x] as StringValue
+                else -> TODO()
+            }
+
             val inputs = when (val x = f["inputs"]) {
                 is NilValue -> TableValue()
                 is TableValue -> x
@@ -229,7 +236,7 @@ class CreateFunc : FuncValue() {
             }
 
             val r = CreateFuncReq(
-                name = FuncName((f[IdentValue("name")] as StringValue).value),
+                name = FuncName(name.value),
                 inputs = FuncInputs(inputs),
                 code = code
             )

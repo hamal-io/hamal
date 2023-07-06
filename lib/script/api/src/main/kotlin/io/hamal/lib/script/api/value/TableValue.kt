@@ -1,5 +1,6 @@
 package io.hamal.lib.script.api.value
 
+import io.hamal.lib.script.api.value.ValueOperator.Type.Eq
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -59,7 +60,12 @@ data class TableValue(
         else -> TODO()
     }
 
-    operator fun get(key: IdentValue): Value = entries[key] ?: NilValue
+    operator fun get(key: IdentValue): Value {
+        if (key == IdentValue("length")) {
+            return NumberValue(size)
+        }
+        return entries[key] ?: NilValue
+    }
 
 
     fun remove(key: Int) {
@@ -123,14 +129,13 @@ data class TableValue(
         override fun serialize(encoder: Encoder, value: IdentValue) {
             return encoder.encodeString(value.value)
         }
-
     }
 }
 
 object DefaultTableValueMetaTable : MetaTable {
     override val type = "table"
     override val operators: List<ValueOperator> = listOf(
-        tableInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+        tableInfix(Eq) { self, other -> booleanOf(self == other) },
     )
 }
 
