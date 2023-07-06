@@ -15,7 +15,7 @@ local execs = sys.exec.list()
 log.info(execs)
 test.assert(execs.length == 2)
 
-local exec = execs[2]
+local exec = execs[1]
 test.assert(exec.id == exec_id)
 
 test.complete()

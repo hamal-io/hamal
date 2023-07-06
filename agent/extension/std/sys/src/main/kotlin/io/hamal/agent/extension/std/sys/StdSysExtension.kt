@@ -1,6 +1,7 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.Extension
+import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.*
@@ -27,6 +28,7 @@ class StdSysExtension : Extension {
                 "adhoc" to InvokeAdhoc(),
                 "exec" to TableValue(
                     "list" to ListExecs(),
+                    "get" to GetExec()
                 ),
                 "func" to TableValue(
                     "create" to CreateFunc(),
@@ -155,6 +157,41 @@ class GetFunc : FuncValue() {
                         "name" to StringValue(func.name.value),
                         "inputs" to func.inputs.value,
                         "code" to CodeValue(func.code.value)
+                    )
+                }
+        } else {
+            require(response is ErrorHttpResponse)
+            return response.error(HamalError::class)
+                .let { error ->
+                    ErrorValue(error.message ?: "An unknown error occurred")
+                }
+        }
+    }
+}
+
+class GetExec : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        println("GetExec")
+        val execId = when (val value = ctx.params.first().value) {
+            is StringValue -> value.value
+            is IdentValue -> (ctx.env[value] as StringValue).value
+            else -> TODO()
+        }
+
+        val response = HttpTemplate("http://localhost:8084")
+            .get("/v1/execs/${execId}")
+            .execute()
+
+        if (response is SuccessHttpResponse) {
+            return response.result(Exec::class)
+                .let { exec ->
+                    TableValue(
+                        "id" to StringValue(exec.id.value.toString()),
+                        "status" to StringValue(exec.status.name),
+                        "inputs" to exec.inputs.value,
+                        "correlationId" to (exec.correlation?.correlationId?.value?.let { StringValue(it) }
+                            ?: NilValue),
+                        "code" to exec.code
                     )
                 }
         } else {
