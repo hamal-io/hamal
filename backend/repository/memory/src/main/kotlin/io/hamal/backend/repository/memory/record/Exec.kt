@@ -22,7 +22,7 @@ internal object CurrentExecProjection {
     fun find(execId: ExecId): Exec? = projection[execId]
 
     fun list(afterId: ExecId, limit: Limit): List<Exec> {
-        return projection.keys.sorted()
+        return projection.keys.sorted().reversed()
             .dropWhile { it <= afterId }
             .take(limit.value)
             .mapNotNull { find(it) }

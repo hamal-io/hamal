@@ -14,6 +14,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.script.api.value.*
 import io.hamal.lib.sdk.domain.ListEventsResponse
+import io.hamal.lib.sdk.domain.ListExecsResponse
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 import io.hamal.lib.sdk.domain.ListTopicsResponse
 
@@ -23,6 +24,10 @@ class StdSysExtension : Extension {
             ident = IdentValue("sys"),
             values = TableValue(
                 "_cfg" to TableValue(),
+                "adhoc" to InvokeAdhoc(),
+                "exec" to TableValue(
+                    "list" to ListExecs(),
+                ),
                 "func" to TableValue(
                     "create" to CreateFunc(),
                     "get" to GetFunc(),
@@ -40,6 +45,43 @@ class StdSysExtension : Extension {
         )
 
     }
+}
+
+class InvokeAdhoc : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        try {
+            val f = ctx.params.first().value as TableValue
+
+            val inputs = when (val x = f["inputs"]) {
+                is NilValue -> TableValue()
+                is TableValue -> x
+                else -> TODO()
+            }
+
+            val code = when (val x = f["code"]) {
+                is NilValue -> CodeValue("")
+                is CodeValue -> x
+                is StringValue -> CodeValue(x)
+                else -> TODO()
+            }
+
+            val r = InvokeAdhocReq(
+                inputs = InvocationInputs(inputs),
+                code = code
+            )
+
+            val res = HttpTemplate("http://localhost:8084")
+                .post("/v1/adhoc")
+                .body(r)
+                .execute(SubmittedInvokeAdhocReq::class)
+
+            return StringValue(res.execId.value.toString())
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            throw t
+        }
+    }
+
 }
 
 class CreateEventEmitter : FuncValue() {
@@ -143,6 +185,26 @@ class ListFuncs : FuncValue() {
         return TableValue(response)
     }
 }
+
+class ListExecs : FuncValue() {
+    override fun invoke(ctx: FuncContext): Value {
+        println("ListExecs")
+
+        val response = HttpTemplate("http://localhost:8084")
+            .get("/v1/execs")
+            .execute(ListExecsResponse::class)
+            .execs
+            .mapIndexed { idx, exec ->
+                IdentValue((idx + 1).toString()) to TableValue(
+                    "id" to StringValue(exec.id.value.toString()),
+                    "status" to StringValue(exec.status.name)
+                )
+            }.toMap<IdentValue, Value>()
+
+        return TableValue(response)
+    }
+}
+
 
 class ListTopics : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
