@@ -16,6 +16,25 @@ data class CodeValue(val value: String) : Value {
 
 object DefaultCodeValueMetaTable : MetaTable {
     override val type = "code"
-    override val operators: List<ValueOperator> = listOf()
+    override val operators: List<ValueOperator> = listOf(
+        codeInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
+        codeInfix(ValueOperator.Type.Neq) { self, other -> booleanOf(self != other) },
+    )
 }
 
+
+private fun codeInfix(
+    operatorType: ValueOperator.Type,
+    fn: (self: CodeValue, other: CodeValue) -> Value
+): InfixValueOperator {
+    return object : InfixValueOperator {
+        override val operatorType = operatorType
+        override val selfType = "code"
+        override val otherType = "code"
+        override operator fun invoke(self: Value, other: Value): Value {
+            require(self is CodeValue)
+            require(other is CodeValue)
+            return fn(self, other)
+        }
+    }
+}

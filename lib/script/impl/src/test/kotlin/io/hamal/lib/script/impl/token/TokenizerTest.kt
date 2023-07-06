@@ -512,29 +512,35 @@ class TokenizerTest {
 
         @Test
         fun `Empty code`() {
-            val testInstance = DefaultTokenizer("<[]>")
+            val testInstance = DefaultTokenizer("[[]]")
             assertThat(testInstance.nextToken(), equalTo(Token(Code, 1, 1, "")))
         }
 
         @Test
         fun `Code is simple number test`() {
-            val testInstance = DefaultTokenizer("<[ 42 ]>")
+            val testInstance = DefaultTokenizer("[[ 42 ]]")
             assertThat(testInstance.nextToken(), equalTo(Token(Code, 1, 1, " 42 ")))
         }
 
         @Test
-        fun `Code is mutlti line test`() {
+        fun `Code is multi line test`() {
             val testInstance = DefaultTokenizer(
-                """<[
+                """[[
                 |local log = require('log')
                 |log.info('test')
-                |]>""".trimMargin()
+                |]]""".trimMargin()
             )
             val result = testInstance.nextToken()
-            assertThat(result, equalTo(Token(Code, 1, 1, """
+            assertThat(
+                result, equalTo(
+                    Token(
+                        Code, 1, 1, """
 local log = require('log')
 log.info('test')
-""")))
+"""
+                    )
+                )
+            )
         }
 
 

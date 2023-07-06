@@ -70,7 +70,7 @@ private fun DefaultTokenizer.isNumber() = isDigit(peek()) ||
 
 private fun DefaultTokenizer.isString() = isQuote(peek())
 
-private fun DefaultTokenizer.isCode() = peek() == '<' && (canPeekNext() && peekNext() == '[')
+private fun DefaultTokenizer.isCode() = peek() == '[' && (canPeekNext() && peekNext() == '[')
 
 private fun DefaultTokenizer.tokenPosition() = linePosition - buffer.length + 1
 
@@ -202,7 +202,7 @@ internal fun DefaultTokenizer.nextCode(): Token {
             return Token(Error, tokenLine(), tokenPosition(), "Unterminated code")
         }
 
-        if (peek() == '>' && peekPrev() == ']') {
+        if (peek() == ']' && peekPrev() == ']') {
             break
         }
 

@@ -229,7 +229,7 @@ internal class LiteralTest : AbstractExpressionTest() {
         inner class ParseTest {
             @Test
             fun code() {
-                runLiteralTest(CodeLiteral.Parse, "<[hamal.rocks()]>") { result, tokens ->
+                runLiteralTest(CodeLiteral.Parse, "[[hamal.rocks()]]") { result, tokens ->
                     assertThat(result, equalTo(CodeLiteral(somePosition, "hamal.rocks()")))
                     tokens.consumed()
                 }
