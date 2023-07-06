@@ -20,7 +20,7 @@ data class NumberValue(
     @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal,
     @Transient
-    override val metaTable: MetaTable = DefaultNumberValueMetaTable
+    override val metaTable: MetaTable<NumberValue> = DefaultNumberValueMetaTable
 ) : Number(), Value, Comparable<NumberValue> {
     companion object {
         val Zero = NumberValue(0)
@@ -162,7 +162,7 @@ data class NumberValue(
 }
 
 
-object DefaultNumberValueMetaTable : MetaTable {
+object DefaultNumberValueMetaTable : MetaTable<NumberValue> {
     override val type = "number"
 
     override val operators = listOf(
@@ -193,6 +193,7 @@ object DefaultNumberValueMetaTable : MetaTable {
             override val operatorType = Neq
             override fun invoke(self: Value, other: Value) = TrueValue
         })
+    override val props: Map<IdentValue, ValueProp<NumberValue>> = mapOf()
 }
 
 private fun numberInfix(

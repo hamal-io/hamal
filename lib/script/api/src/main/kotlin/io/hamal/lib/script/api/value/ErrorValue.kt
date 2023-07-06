@@ -12,11 +12,23 @@ data class ErrorValue(
 
     @Transient
     override val metaTable = DefaultErrorValueMetaTable
-    operator fun get(key: IdentValue): Value = if (key.value == "message") StringValue(message) else NilValue
+    operator fun get(key: IdentValue): Value {
+        return metaTable.props[key]
+            ?.let { it(this) }
+            ?: NilValue
+    }
 }
 
-object DefaultErrorValueMetaTable : MetaTable {
+object DefaultErrorValueMetaTable : MetaTable<ErrorValue> {
     override val type = "error"
     override val operators: List<ValueOperator> = listOf()
+    override val props: Map<IdentValue, ValueProp<ErrorValue>> = mapOf(
+        IdentValue("message") to ErrorMessageProp
+    )
 }
 
+object ErrorMessageProp : ValueProp<ErrorValue> {
+    override fun invoke(self: ErrorValue): Value {
+        return StringValue(self.message)
+    }
+}

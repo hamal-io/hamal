@@ -12,12 +12,13 @@ data class StringValue(val value: String) : Value {
     override fun toString(): String = value
 }
 
-object DefaultStringValueMetaTable : MetaTable {
+object DefaultStringValueMetaTable : MetaTable<StringValue> {
     override val type = "string"
     override val operators: List<ValueOperator> = listOf(
         stringInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
         stringInfix(ValueOperator.Type.Neq) { self, other -> booleanOf(self != other) },
     )
+    override val props: Map<IdentValue, ValueProp<StringValue>> = mapOf()
 }
 
 private fun stringInfix(

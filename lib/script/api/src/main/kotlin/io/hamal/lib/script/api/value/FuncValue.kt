@@ -21,12 +21,13 @@ data class FuncParam(
 }
 
 abstract class FuncValue : Value {
-    override val metaTable: MetaTable = DefaultFuncValueMetaTable
+    override val metaTable = DefaultFuncValueMetaTable
     abstract operator fun invoke(ctx: FuncContext): Value
 
 }
 
-object DefaultFuncValueMetaTable : MetaTable {
+object DefaultFuncValueMetaTable : MetaTable<FuncValue> {
     override val type = "func"
     override val operators: List<ValueOperator> = listOf()
+    override val props: Map<IdentValue, ValueProp<FuncValue>> = mapOf()
 }

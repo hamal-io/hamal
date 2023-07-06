@@ -11,7 +11,8 @@ data class PrototypeValue(
     override val metaTable = DefaultStringValueMetaTable
 }
 
-object DefaultPrototypeValueMetaTable : MetaTable {
+object DefaultPrototypeValueMetaTable : MetaTable<PrototypeValue> {
     override val type = "prototype"
     override val operators: List<ValueOperator> = listOf()
+    override val props: Map<IdentValue, ValueProp<PrototypeValue>> = mapOf()
 }

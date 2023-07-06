@@ -5,9 +5,10 @@ internal class TestValue : Value {
 }
 
 
-internal object TestMetaTable : MetaTable {
+internal object TestMetaTable : MetaTable<TestValue> {
     override val type = "test-type"
     override val operators = listOf(TestPrefixOperator, TestInfixOperator)
+    override val props: Map<IdentValue, ValueProp<TestValue>> = mapOf()
 }
 
 internal object TestPrefixOperator : PrefixValueOperator {

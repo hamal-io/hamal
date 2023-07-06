@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("MetaTable")
-sealed interface MetaTable {
+sealed interface MetaTable<VALUE : Value> {
     val type: String
     val operators: List<ValueOperator>
+    val props: Map<IdentValue, ValueProp<VALUE>>
 }

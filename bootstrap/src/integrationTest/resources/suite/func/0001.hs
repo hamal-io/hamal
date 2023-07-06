@@ -14,5 +14,6 @@ test.assert(func.id == func_id)
 test.assert(func.name == 'empty-test-func')
 test.assert(func.inputs == { hamal = 'rockz' })
 test.assert(func.code == [[4 + 2]])
+test.assert(func.length == 4)
 
 test.complete()

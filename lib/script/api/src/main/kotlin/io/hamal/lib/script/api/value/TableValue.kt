@@ -19,7 +19,7 @@ data class TableValue(
     @Serializable(with = Serializer::class)
     private val entries: MutableMap<IdentValue, Value> = mutableMapOf(),
     @Transient
-    override val metaTable: MetaTable = DefaultTableValueMetaTable
+    override val metaTable: MetaTable<TableValue> = DefaultTableValueMetaTable
 ) : Value, Collection<TableEntry> {
     constructor(vararg pairs: Pair<Any, Value>) : this() {
         pairs.forEach { pair ->
@@ -61,10 +61,9 @@ data class TableValue(
     }
 
     operator fun get(key: IdentValue): Value {
-        if (key == IdentValue("length")) {
-            return NumberValue(size)
-        }
-        return entries[key] ?: NilValue
+        return entries[key] ?: metaTable.props[key]
+            ?.let { it(this) }
+        ?: NilValue
     }
 
 
@@ -132,11 +131,21 @@ data class TableValue(
     }
 }
 
-object DefaultTableValueMetaTable : MetaTable {
+object DefaultTableValueMetaTable : MetaTable<TableValue> {
     override val type = "table"
     override val operators: List<ValueOperator> = listOf(
         tableInfix(Eq) { self, other -> booleanOf(self == other) },
     )
+    override val props = mapOf(
+        IdentValue("length") to TableLengthProp
+
+    )
+}
+
+object TableLengthProp : ValueProp<TableValue> {
+    override fun invoke(self: TableValue): Value {
+        return NumberValue(self.size)
+    }
 }
 
 private fun tableInfix(

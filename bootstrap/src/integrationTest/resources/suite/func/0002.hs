@@ -15,13 +15,14 @@ log.info(funcs.length == 1)
 local func_one = funcs[1]
 test.assert(func_one.id == func_one_id)
 test.assert(func_one.name == 'func-1')
+test.assert(func_one.length == 2)
 
 local func_two_id = sys.func.create({ })
 
 funcs = sys.func.list()
 test.assert(funcs.length == 2)
 
-func_two = funcs[1]
+local func_two = funcs[1]
 test.assert(func_two.id == func_two_id)
 test.assert(func_two.name == '')
 

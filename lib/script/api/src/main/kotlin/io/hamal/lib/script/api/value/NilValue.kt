@@ -15,7 +15,7 @@ object NilValue : Value {
     }
 }
 
-object DefaultNilValueMetaTable : MetaTable {
+object DefaultNilValueMetaTable : MetaTable<NilValue> {
     override val type = "nil"
     override val operators = listOf<ValueOperator>(
         nilInfix(Eq, "nil") { TrueValue },
@@ -24,6 +24,7 @@ object DefaultNilValueMetaTable : MetaTable {
         nilInfix(Eq, "number") { booleanOf(it is NilValue) },
         nilInfix(Neq, "number") { booleanOf(it !is NilValue) },
     )
+    override val props: Map<IdentValue, ValueProp<NilValue>> = mapOf()
 }
 
 

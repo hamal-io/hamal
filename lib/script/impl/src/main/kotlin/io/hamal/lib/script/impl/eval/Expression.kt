@@ -4,8 +4,7 @@ import io.hamal.lib.script.api.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 
-internal class EvaluateCallExpression :
-    Evaluate<CallExpression> {
+internal class EvaluateCallExpression : Evaluate<CallExpression> {
     override fun invoke(ctx: EvaluationContext<CallExpression>): Value {
         val toEvaluate = ctx.toEvaluate
         val env = ctx.env

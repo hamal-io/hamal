@@ -14,12 +14,13 @@ data class CodeValue(val value: String) : Value {
 
 }
 
-object DefaultCodeValueMetaTable : MetaTable {
+object DefaultCodeValueMetaTable : MetaTable<CodeValue> {
     override val type = "code"
     override val operators: List<ValueOperator> = listOf(
         codeInfix(ValueOperator.Type.Eq) { self, other -> booleanOf(self == other) },
         codeInfix(ValueOperator.Type.Neq) { self, other -> booleanOf(self != other) },
     )
+    override val props: Map<IdentValue, ValueProp<CodeValue>> = mapOf()
 }
 
 
