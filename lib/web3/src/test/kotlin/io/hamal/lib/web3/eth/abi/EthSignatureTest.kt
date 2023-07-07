@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal object Web3EventSignatureTest {
     @Test
     fun `encoded - Transfer(address,address,uint256)`() {
-        val testInstance = EthEventSignature("Transfer(address,address,uint256)")
+        val testInstance = EthSignature("Transfer(address,address,uint256)")
         val result = testInstance.encoded
         assertThat(
             result,

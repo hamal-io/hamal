@@ -6,7 +6,7 @@ import io.hamal.lib.web3.util.Web3Formatter
 import io.hamal.lib.web3.util.Web3HashUtils
 
 
-data class EthEventSignature(
+data class EthSignature(
     val value: String
 ) {
     val encoded by lazy {

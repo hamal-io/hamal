@@ -13,17 +13,6 @@ interface EthTypeDecoder<VALUE_TYPE : EthType<*>> {
     fun decode(window: ByteWindow): VALUE_TYPE
 
     companion object {
-        private fun padding(length: Int): Int {
-            val mod = length % 32
-            return 32 - mod
-        }
-
-        private fun withLeadingSignBit(bs: ByteArray): ByteArray {
-            // big integer requires for uint256 - 33 bytes - 1 sign bit and 32 bytes for the value
-            val result = ByteArray(33)
-            System.arraycopy(bs, 0, result, 1, 32)
-            return result
-        }
 
         val Address: EthTypeDecoder<EthAddress> = object : EthTypeDecoder<EthAddress> {
             override fun decode(window: ByteWindow) = EthAddress(BigInteger(window.next()))
@@ -77,6 +66,16 @@ interface EthTypeDecoder<VALUE_TYPE : EthType<*>> {
 
         val Uint256: EthTypeDecoder<EthUint256> = object : EthTypeDecoder<EthUint256> {
             override fun decode(window: ByteWindow) = EthUint256(BigInteger(withLeadingSignBit(window.next())))
+        }
+
+        private fun padding(length: Int): Int {
+            val mod = length % 32
+            return 32 - mod
+        }
+
+        private fun withLeadingSignBit(bs: ByteArray): ByteArray {
+            // big integer requires for uint256 - 33 bytes - 1 sign bit and 32 bytes for the value
+            return ByteArray(33).also { System.arraycopy(bs, 0, it, 1, 32) }
         }
     }
 

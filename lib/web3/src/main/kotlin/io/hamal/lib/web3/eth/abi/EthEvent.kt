@@ -9,7 +9,7 @@ data class EthEvent<INDEXED : EthOutputTuple, NOT_INDEXED : EthOutputTuple>(
     val indexed: INDEXED,
     val notIndexed: NOT_INDEXED
 ) {
-    val signature = EthEventSignature(
+    val signature = EthSignature(
         name + '(' + indexed.concatenatedTypes() + ',' + notIndexed.concatenatedTypes() + ')'
     )
 

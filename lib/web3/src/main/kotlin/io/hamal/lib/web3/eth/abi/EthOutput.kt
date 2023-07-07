@@ -27,10 +27,7 @@ data class EthOutput<VALUE_TYPE : EthType<*>>(
         fun String(name: String) = EthOutput(name, EthString::class, EthTypeDecoder.String)
 
         //@formatter:off
-
-        fun Tuple0(): EthOutputTuple0 {
-            return EthOutputTuple0
-        }
+        fun Tuple0() = EthOutputTuple0
 
         fun <
             VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,

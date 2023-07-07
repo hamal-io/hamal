@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test
 
 object EthInputTuple0Test {
     @Test
-    fun `plainSignature`() {
-        val result = testInstance.plainSignature()
+    fun `signature`() {
+        val result = testInstance.signature
         assertThat(result, equalTo("()"))
     }
 
