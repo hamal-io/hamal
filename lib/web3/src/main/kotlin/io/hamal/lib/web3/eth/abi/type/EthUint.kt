@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.eth.abi
+package io.hamal.lib.web3.eth.abi.type
 
 import io.hamal.lib.web3.util.Web3Formatter
 import java.math.BigInteger
@@ -10,14 +10,10 @@ sealed class EthUnsigned(
     init {
         require(value >= BigInteger.ZERO) { "Value must be positive" }
         val maxValue = BigInteger.ONE.shiftLeft(numberOfBits).subtract(BigInteger.ONE)
-        require(value < maxValue) { "Value must be <= $maxValue" }
+        require(value <= maxValue) { "Value must be <= $maxValue" }
     }
 
     override fun toByteArray(): ByteArray = value.toByteArray()
-
-    fun toEthPrefixedString(): EthPrefixedHexString = EthPrefixedHexString(
-        "0x${Web3Formatter.formatWithoutLeadingZeros(value.toByteArray())}"
-    )
 
     override fun toByteWindow() = toEthPrefixedString().toByteWindow()
     override fun equals(other: Any?): Boolean {
@@ -30,6 +26,10 @@ sealed class EthUnsigned(
     override fun hashCode(): Int {
         return value.hashCode()
     }
+
+    private fun toEthPrefixedString(): EthPrefixedHexString = EthPrefixedHexString(
+        "0x${Web3Formatter.formatWithoutLeadingZeros(value.toByteArray())}"
+    )
 }
 
 class EthUint8(value: BigInteger) : EthUnsigned(value, 8)

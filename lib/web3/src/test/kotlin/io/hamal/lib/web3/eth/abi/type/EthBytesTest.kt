@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.eth.abi
+package io.hamal.lib.web3.eth.abi.type
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

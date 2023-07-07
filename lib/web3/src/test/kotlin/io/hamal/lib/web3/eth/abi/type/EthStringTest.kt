@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.eth.abi
+package io.hamal.lib.web3.eth.abi.type
 
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested

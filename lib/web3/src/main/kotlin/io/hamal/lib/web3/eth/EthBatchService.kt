@@ -1,6 +1,7 @@
 package io.hamal.lib.web3.eth
 
-import io.hamal.lib.web3.eth.abi.EthHash
+import io.hamal.lib.web3.eth.abi.type.EthHash
+
 
 interface EthBatchService<SERVICE : EthBatchService<SERVICE>> {
     fun execute(): List<EthResponse>

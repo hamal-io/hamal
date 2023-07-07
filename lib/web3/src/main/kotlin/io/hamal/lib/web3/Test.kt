@@ -1,8 +1,8 @@
 package io.hamal.lib.web3
 
 import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.abi.EthBytes32
-import io.hamal.lib.web3.eth.abi.EthHash
+import io.hamal.lib.web3.eth.abi.type.EthBytes32
+import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 fun main() {

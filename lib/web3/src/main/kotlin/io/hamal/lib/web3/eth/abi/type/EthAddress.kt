@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.eth.abi
+package io.hamal.lib.web3.eth.abi.type
 
 import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Formatter

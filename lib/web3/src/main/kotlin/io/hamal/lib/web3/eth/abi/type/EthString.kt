@@ -1,9 +1,11 @@
-package io.hamal.lib.web3.eth.abi
+package io.hamal.lib.web3.eth.abi.type
 
 import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Parser
+import java.nio.charset.Charset
 
-sealed class EthString : EthType<String> {
+
+sealed interface EthBaseString : EthType<String> {
     operator fun get(idx: Int): Char = value[idx]
 
     fun lowercase(): String = value.lowercase()
@@ -17,9 +19,18 @@ sealed class EthString : EthType<String> {
     }
 }
 
+data class EthString(
+    override val value: String
+) : EthBaseString {
+    override fun toByteArray(): ByteArray = value.toByteArray(Charset.defaultCharset())
+    override fun toByteWindow() = ByteWindow.of(toByteArray())
+    override fun toString(): String = value
+}
+
+
 data class EthHexString(
     override val value: String
-) : EthString() {
+) : EthBaseString {
 
     init {
         ValidateHexString(value)
@@ -32,7 +43,7 @@ data class EthHexString(
 
 data class EthPrefixedHexString(
     override val value: String
-) : EthString() {
+) : EthBaseString {
     init {
         require(value.startsWith("0x")) { "$value does not start with 0x" }
         ValidateHexString(value.substring(2))

@@ -1,7 +1,7 @@
 package io.hamal.lib.web3.util
 
-import io.hamal.lib.web3.eth.abi.EthHexString
-import io.hamal.lib.web3.eth.abi.EthPrefixedHexString
+import io.hamal.lib.web3.eth.abi.type.EthHexString
+import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import java.nio.ByteBuffer
 
 class ByteWindow internal constructor(

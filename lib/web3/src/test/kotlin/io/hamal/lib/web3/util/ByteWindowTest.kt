@@ -1,7 +1,7 @@
 package io.hamal.lib.web3.util
 
-import io.hamal.lib.web3.eth.abi.EthHexString
-import io.hamal.lib.web3.eth.abi.EthPrefixedHexString
+import io.hamal.lib.web3.eth.abi.type.EthHexString
+import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested

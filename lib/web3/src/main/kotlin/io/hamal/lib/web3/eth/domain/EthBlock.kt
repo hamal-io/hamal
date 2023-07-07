@@ -1,8 +1,8 @@
 package io.hamal.lib.web3.eth.domain
 
-import io.hamal.lib.web3.eth.abi.EthAddress
-import io.hamal.lib.web3.eth.abi.EthHash
-import io.hamal.lib.web3.eth.abi.EthUint64
+import io.hamal.lib.web3.eth.abi.type.EthAddress
+import io.hamal.lib.web3.eth.abi.type.EthHash
+import io.hamal.lib.web3.eth.abi.type.EthUint64
 
 
 data class EthBlock(
