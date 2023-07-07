@@ -4,6 +4,7 @@ import io.hamal.lib.domain.Tuple1
 import io.hamal.lib.domain.Tuple2
 import io.hamal.lib.domain.Tuple3
 import io.hamal.lib.web3.eth.abi.type.*
+import io.hamal.lib.web3.eth.abi.type.EthType.Companion.solidityType
 import io.hamal.lib.web3.util.ByteWindow
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
@@ -49,7 +50,7 @@ interface OutputTuple {
 }
 
 
-internal class OutputTuple0 : OutputTuple {
+class OutputTuple0 : OutputTuple {
     override fun decodeToMap(data: EthPrefixedHexString): Map<String, EthType<*>> {
         return mapOf()
     }
@@ -64,7 +65,7 @@ internal class OutputTuple0 : OutputTuple {
 }
 
 
-internal data class OutputTuple1<VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>>(
+data class OutputTuple1<VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>>(
     val _1: ARG_1
 ) : OutputTuple {
     fun decode(data: EthPrefixedHexString): Tuple1<VALUE_1> {
@@ -87,13 +88,12 @@ internal data class OutputTuple1<VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1
     }
 
     override fun concatenatedTypes(): String {
-//        return _1.type.solidityType()
-        TODO()
+        return solidityType(_1.clazz)
     }
 }
 
 
-internal data class OutputTuple2<
+data class OutputTuple2<
         VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
         VALUE_2 : EthType<*>, ARG_2 : EthOutput<VALUE_2>
         >(
@@ -128,17 +128,14 @@ internal data class OutputTuple2<
         )
     }
 
-    override fun concatenatedTypes(): String {
-//        return _1.type.solidityType() + ',' + _2.type.solidityType()
-        TODO()
-    }
+    override fun concatenatedTypes() = "${solidityType(_1.clazz)},${solidityType(_2.clazz)}"
 }
 
 
-internal data class OutputTuple3<
+data class OutputTuple3<
         VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
         VALUE_2 : EthType<*>, ARG_2 : EthOutput<VALUE_2>,
-        VALUE_3 : EthType<*>, ARG_3 : EthOutput<VALUE_2>
+        VALUE_3 : EthType<*>, ARG_3 : EthOutput<VALUE_3>
         >(
     val _1: ARG_1,
     val _2: ARG_2,
@@ -174,8 +171,6 @@ internal data class OutputTuple3<
         )
     }
 
-    override fun concatenatedTypes(): String {
-//        return _1.type.solidityType() + ',' + _2.type.solidityType() + ',' + _3.type.solidityType()
-        TODO()
-    }
+
+    override fun concatenatedTypes() = "${solidityType(_1.clazz)},${solidityType(_2.clazz)},${solidityType(_3.clazz)}"
 }

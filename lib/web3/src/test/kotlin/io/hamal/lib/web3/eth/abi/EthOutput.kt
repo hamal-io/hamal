@@ -1,5 +1,6 @@
 package io.hamal.lib.web3.eth.abi
 
+import io.hamal.lib.domain.Tuple2
 import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.util.ByteWindow
 import org.hamcrest.CoreMatchers.equalTo
@@ -97,7 +98,7 @@ internal class BoolTest {
 
 internal class Uint8Test {
     @Test
-    fun `Uint8 output`() {
+    fun `Max uint8 output`() {
         val window = createByteWindow("0x00000000000000000000000000000000000000000000000000000000000000ff")
         val testInstance = EthOutput.Uint8("SomeUint8")
         val result = testInstance.decode(window)
@@ -117,7 +118,7 @@ internal class Uint8Test {
 
 internal class Uint16Test {
     @Test
-    fun `Uint16 output`() {
+    fun `Max uint16 output`() {
         val window = createByteWindow("0x000000000000000000000000000000000000000000000000000000000000ffff")
         val testInstance = EthOutput.Uint16("SomeUint16")
         val result = testInstance.decode(window)
@@ -137,7 +138,7 @@ internal class Uint16Test {
 
 internal class Uint32Test {
     @Test
-    fun `Uint32 output`() {
+    fun `Max uint32 output`() {
         val window = createByteWindow("0x00000000000000000000000000000000000000000000000000000000ffffffff")
         val testInstance = EthOutput.Uint32("SomeUint32")
         val result = testInstance.decode(window)
@@ -157,7 +158,7 @@ internal class Uint32Test {
 
 internal class Uint64Test {
     @Test
-    fun `Uint64 output`() {
+    fun `Max uint64 output`() {
         val window = createByteWindow("0x000000000000000000000000000000000000000000000000ffffffffffffffff")
         val testInstance = EthOutput.Uint64("SomeUint64")
         val result = testInstance.decode(window)
@@ -177,7 +178,7 @@ internal class Uint64Test {
 
 internal class Uint112Test {
     @Test
-    fun `Uint112 output`() {
+    fun `Max uint112 output`() {
         val window = createByteWindow("0x000000000000000000000000000000000000ffffffffffffffffffffffffffff")
         val testInstance = EthOutput.Uint112("SomeUint112")
         val result = testInstance.decode(window)
@@ -197,7 +198,7 @@ internal class Uint112Test {
 
 internal class Uint128Test {
     @Test
-    fun `Uint128 output`() {
+    fun `Max uint128 output`() {
         val window = createByteWindow("0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff")
         val testInstance = EthOutput.Uint128("SomeUint128")
         val result = testInstance.decode(window)
@@ -217,7 +218,7 @@ internal class Uint128Test {
 
 internal class Uint160Test {
     @Test
-    fun `Uint160 output`() {
+    fun `Max uint160 output`() {
         val window = createByteWindow("0x000000000000000000000000ffffffffffffffffffffffffffffffffffffffff")
         val testInstance = EthOutput.Uint160("SomeUint160")
         val result = testInstance.decode(window)
@@ -237,7 +238,7 @@ internal class Uint160Test {
 
 internal class Uint256Test {
     @Test
-    fun `Uint256 output`() {
+    fun `Max uint256 output`() {
         val window = createByteWindow("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
         val testInstance = EthOutput.Uint256("SomeUint256")
         val result = testInstance.decode(window)
@@ -292,6 +293,155 @@ internal class StringTest {
     }
 }
 
+internal class OutputTuple0Test {
+    @Test
+    fun `decodeToMap() - Always empty`() {
+        val result = testInstance.decodeToMap(EthPrefixedHexString("0x123456"))
+        assertThat(result, equalTo(mapOf()))
+    }
+
+    @Test
+    fun `decode() - Always empty`() {
+        testInstance.decode(EthPrefixedHexString("0x123456")) { decoded ->
+            assertThat(decoded.toList(), equalTo(listOf()))
+        }
+    }
+
+    @Test
+    fun `concatenatedTypes()`() {
+        val result = testInstance.concatenatedTypes()
+        assertThat(result, equalTo(""))
+    }
+
+    private val testInstance = OutputTuple0()
+}
+
+internal class OutputTuple1Test {
+    @Test
+    fun `decodeToMap() - Always empty`() {
+        val result = testInstance.decodeToMap(EthPrefixedHexString("0x123456"))
+        assertThat(
+            result, equalTo(
+                mapOf(
+                    "Arg1" to EthUint112(BigInteger.valueOf(1193046))
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `decode() - Always empty`() {
+        testInstance.decode(EthPrefixedHexString("0x123456")) { decoded ->
+            assertThat(
+                decoded.toList(), equalTo(
+                    listOf(
+                        Tuple2("Arg1", EthUint112(BigInteger.valueOf(1193046)))
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `concatenatedTypes()`() {
+        val result = testInstance.concatenatedTypes()
+        assertThat(result, equalTo("uint112"))
+    }
+
+    private val testInstance = OutputTuple1(EthOutput.Uint112("Arg1"))
+}
+
+
+internal class OutputTuple2Test {
+    @Test
+    fun `decodeToMap() - Always empty`() {
+        val result = testInstance.decodeToMap(
+            EthPrefixedHexString("0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000040")
+        )
+        assertThat(
+            result, equalTo(
+                mapOf(
+                    "Arg1" to EthUint32(BigInteger.valueOf(32)),
+                    "Arg2" to EthUint64(BigInteger.valueOf(64))
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `decode() - Always empty`() {
+        testInstance.decode(
+            EthPrefixedHexString("0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000040")
+        ) { decoded ->
+            assertThat(
+                decoded.toList(), equalTo(
+                    listOf(
+                        Tuple2("Arg1", EthUint32(BigInteger.valueOf(32))),
+                        Tuple2("Arg2", EthUint64(BigInteger.valueOf(64)))
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `concatenatedTypes()`() {
+        val result = testInstance.concatenatedTypes()
+        assertThat(result, equalTo("uint32,uint64"))
+    }
+
+    private val testInstance = OutputTuple2(
+        EthOutput.Uint32("Arg1"),
+        EthOutput.Uint64("Arg2")
+    )
+}
+
+internal class OutputTuple3Test {
+    @Test
+    fun `decodeToMap() - Always empty`() {
+        val result = testInstance.decodeToMap(
+            EthPrefixedHexString("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000080")
+        )
+        assertThat(
+            result, equalTo(
+                mapOf(
+                    "Arg1" to EthUint32(BigInteger.valueOf(32)),
+                    "Arg2" to EthUint64(BigInteger.valueOf(64)),
+                    "Arg3" to EthUint128(BigInteger.valueOf(128))
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `decode() - Always empty`() {
+        testInstance.decode(
+            EthPrefixedHexString("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000080")
+        ) { decoded ->
+            assertThat(
+                decoded.toList(), equalTo(
+                    listOf(
+                        Tuple2("Arg1", EthUint32(BigInteger.valueOf(32))),
+                        Tuple2("Arg2", EthUint64(BigInteger.valueOf(64))),
+                        Tuple2("Arg3", EthUint128(BigInteger.valueOf(128)))
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `concatenatedTypes()`() {
+        val result = testInstance.concatenatedTypes()
+        assertThat(result, equalTo("uint32,uint64,uint128"))
+    }
+
+    private val testInstance = OutputTuple3(
+        EthOutput.Uint32("Arg1"),
+        EthOutput.Uint64("Arg2"),
+        EthOutput.Uint128("Arg3")
+    )
+}
 
 fun createByteWindow(hexData: String): ByteWindow {
     return if (hexData.startsWith("0x")) {

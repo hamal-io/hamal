@@ -12,8 +12,6 @@ class EthAddress(
     override val value: EthUint160
 ) : EthType<EthUint160> {
 
-//    val value : BigInteger get() = value
-
     constructor(value: BigInteger) : this(EthUint160(value))
 
     companion object {
