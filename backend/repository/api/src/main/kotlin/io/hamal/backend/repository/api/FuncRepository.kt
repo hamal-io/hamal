@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.api
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.CmdId
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
@@ -26,7 +27,7 @@ interface FuncQueryRepository {
     fun find(funcId: FuncId): Func?
     fun list(block: FuncQuery.() -> Unit): List<Func>
     data class FuncQuery(
-        var afterId: FuncId = FuncId(0),
+        var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1)
     )
 }

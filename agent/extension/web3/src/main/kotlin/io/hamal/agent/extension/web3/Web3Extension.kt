@@ -9,7 +9,9 @@ class Web3Extension : Extension {
         val ethEnvironment = EnvValue(
             ident = IdentValue("eth"),
             values = TableValue(
-                "getBlock" to fn
+                "block" to TableValue(
+                    "get" to fn
+                )
             )
         )
 

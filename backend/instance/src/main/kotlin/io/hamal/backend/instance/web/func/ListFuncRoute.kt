@@ -12,7 +12,7 @@ open class ListFuncRoute(
 ) {
     @GetMapping("/v1/funcs")
     fun listFunc(
-        @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: FuncId,
+        @RequestParam(required = false, name = "after_id", defaultValue = "${Long.MAX_VALUE}") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ListFuncsResponse> {
         val result = funcQueryRepository.list {

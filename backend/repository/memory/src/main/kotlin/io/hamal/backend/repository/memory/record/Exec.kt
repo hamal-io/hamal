@@ -23,10 +23,10 @@ internal object CurrentExecProjection {
 
     fun list(afterId: ExecId, limit: Limit): List<Exec> {
         return projection.keys.sorted()
-            .dropWhile { it <= afterId }
+            .reversed()
+            .dropWhile { it >= afterId }
             .take(limit.value)
             .mapNotNull { find(it) }
-            .reversed()
     }
 
     fun clear() {

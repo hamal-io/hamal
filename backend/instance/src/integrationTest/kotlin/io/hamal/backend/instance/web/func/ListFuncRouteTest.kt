@@ -59,7 +59,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         assertThat(listResponse.funcs, hasSize(12))
 
         listResponse.funcs.forEachIndexed { idx, func ->
-            assertThat(func.name, equalTo(FuncName("func-${(11 - idx)}")))
+            assertThat(func.name, equalTo(FuncName("func-${(20 - idx)}")))
         }
     }
 
@@ -86,6 +86,6 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         assertThat(listResponse.funcs, hasSize(1))
 
         val func = listResponse.funcs.first()
-        assertThat(func.name, equalTo(FuncName("func-50")))
+        assertThat(func.name, equalTo(FuncName("func-48")))
     }
 }

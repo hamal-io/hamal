@@ -24,10 +24,10 @@ internal object CurrentFuncProjection {
 
     fun list(afterId: FuncId, limit: Limit): List<Func> {
         return projection.keys.sorted()
-            .dropWhile { it <= afterId }
+            .reversed()
+            .dropWhile { it >= afterId }
             .take(limit.value)
             .mapNotNull { find(it) }
-            .reversed()
     }
 
     fun clear() {

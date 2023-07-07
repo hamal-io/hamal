@@ -64,8 +64,8 @@ internal class ListExecsRouteTest : BaseExecRouteTest() {
     fun `Skip and limit execs`() {
         val requests = awaitCompleted(IntRange(1, 100).map { createAdhocExec() })
 
+        val fortyFifthRequest = requests.drop(44).take(1).first()
         val fortySixthRequest = requests.drop(45).take(1).first()
-        val fortySeventhRequest = requests.drop(46).take(1).first()
 
         val response = httpTemplate.get("/v1/execs")
             .parameter("limit", 1)
@@ -78,7 +78,7 @@ internal class ListExecsRouteTest : BaseExecRouteTest() {
         with(response.result(ListExecsResponse::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
-                assertThat(exec.id, equalTo(fortySeventhRequest.execId))
+                assertThat(exec.id, equalTo(fortyFifthRequest.execId))
                 assertThat(exec.status, equalTo(ExecStatus.Queued))
             }
         }

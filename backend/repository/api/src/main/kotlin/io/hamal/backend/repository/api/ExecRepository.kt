@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.api
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -53,7 +54,7 @@ interface ExecQueryRepository {
     fun find(execId: ExecId): Exec?
     fun list(block: ExecQuery.() -> Unit): List<Exec>
     data class ExecQuery(
-        var afterId: ExecId = ExecId(0),
+        var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1)
     )
 }
