@@ -30,6 +30,10 @@ sealed class EthUnsigned(
     private fun toEthPrefixedString(): EthPrefixedHexString = EthPrefixedHexString(
         "0x${Web3Formatter.formatWithoutLeadingZeros(value.toByteArray())}"
     )
+
+    override fun toString(): String {
+        return value.toString()
+    }
 }
 
 class EthUint8(value: BigInteger) : EthUnsigned(value, 8)

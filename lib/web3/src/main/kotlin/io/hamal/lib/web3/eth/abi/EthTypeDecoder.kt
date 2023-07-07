@@ -4,6 +4,10 @@ import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.util.ByteWindow
 import java.math.BigInteger
 
+data class DecodedEthType<VALUE_TYPE : EthType<*>>(
+    val name: String,
+    val value: VALUE_TYPE
+)
 
 interface EthTypeDecoder<VALUE_TYPE : EthType<*>> {
     fun decode(window: ByteWindow): VALUE_TYPE

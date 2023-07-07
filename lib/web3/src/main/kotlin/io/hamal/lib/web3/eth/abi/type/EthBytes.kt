@@ -18,11 +18,25 @@ sealed class EthBytes(
     override fun toByteWindow(): ByteWindow {
         TODO("Not yet implemented")
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as EthBytes
+        return value.contentEquals(other.value)
+    }
+
+    override fun hashCode(): Int {
+        return value.contentHashCode()
+    }
 }
 
 class EthBytes32(
     value: ByteArray
-) : EthBytes(value, 32)
+) : EthBytes(value, 32) {
+    constructor(prefixedHexString: EthPrefixedHexString) : this(prefixedHexString.toByteWindow().next())
+
+}
 
 
 /**

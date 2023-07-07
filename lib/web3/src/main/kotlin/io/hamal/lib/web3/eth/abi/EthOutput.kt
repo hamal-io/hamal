@@ -1,13 +1,8 @@
 package io.hamal.lib.web3.eth.abi
 
-import io.hamal.lib.domain.Tuple1
-import io.hamal.lib.domain.Tuple2
-import io.hamal.lib.domain.Tuple3
 import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.eth.abi.type.EthType.Companion.solidityType
 import io.hamal.lib.web3.util.ByteWindow
-import java.util.concurrent.atomic.AtomicReference
-import java.util.function.Consumer
 import kotlin.reflect.KClass
 
 data class EthOutput<VALUE_TYPE : EthType<*>>(
@@ -30,61 +25,62 @@ data class EthOutput<VALUE_TYPE : EthType<*>>(
         fun Uint160(name: String) = EthOutput(name, EthUint160::class, EthTypeDecoder.Uint160)
         fun Uint256(name: String) = EthOutput(name, EthUint256::class, EthTypeDecoder.Uint256)
         fun String(name: String) = EthOutput(name, EthString::class, EthTypeDecoder.String)
+
+        //@formatter:off
+
+        fun Tuple0(): EthOutputTuple0 {
+            return EthOutputTuple0
+        }
+
+        fun <
+            VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
+        > Tuple1(_1: ARG_1): EthOutputTuple1<VALUE_1, ARG_1> {
+            return EthOutputTuple1(_1)
+        }
+
+        fun <
+            VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
+            VALUE_2 : EthType<*>, ARG_2 : EthOutput<VALUE_2>
+        > Tuple2(_1: ARG_1, _2: ARG_2): EthOutputTuple2<VALUE_1, ARG_1, VALUE_2, ARG_2> {
+            return EthOutputTuple2(_1, _2)
+        }
+
+        fun <
+            VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
+            VALUE_2 : EthType<*>, ARG_2 : EthOutput<VALUE_2>,
+            VALUE_3 : EthType<*>, ARG_3 : EthOutput<VALUE_3>
+        > Tuple3(_1: ARG_1, _2: ARG_2,_3: ARG_3): EthOutputTuple3<VALUE_1, ARG_1, VALUE_2, ARG_2, VALUE_3, ARG_3> {
+            return EthOutputTuple3(_1, _2, _3)
+        }
+
+        //@formatter:on
     }
 }
 
 
-interface OutputTuple {
+sealed interface EthOutputTuple {
     fun decodeToMap(data: EthPrefixedHexString): Map<String, EthType<*>> {
-        val result = mutableMapOf<String, EthType<*>>()
-        decode(data) { decoded ->
-            decoded.forEach {
-                result[it._1] = it._2
-            }
-        }
-        return result
+        return decode(data).associateBy({ it.name }, { it.value })
     }
 
-    fun decode(data: EthPrefixedHexString, decoded: Consumer<Sequence<Tuple2<String, EthType<*>>>>)
+    fun decode(data: EthPrefixedHexString): List<DecodedEthType<*>>
     fun concatenatedTypes(): String
 }
 
 
-class OutputTuple0 : OutputTuple {
-    override fun decodeToMap(data: EthPrefixedHexString): Map<String, EthType<*>> {
-        return mapOf()
-    }
-
-    override fun decode(data: EthPrefixedHexString, decoded: Consumer<Sequence<Tuple2<String, EthType<*>>>>) {
-        decoded.accept(sequenceOf())
-    }
-
-    override fun concatenatedTypes(): String {
-        return ""
-    }
+object EthOutputTuple0 : EthOutputTuple {
+    override fun decodeToMap(data: EthPrefixedHexString): Map<String, EthType<*>> = mapOf()
+    override fun decode(data: EthPrefixedHexString): List<DecodedEthType<*>> = listOf()
+    override fun concatenatedTypes() = ""
 }
 
 
-data class OutputTuple1<VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>>(
+data class EthOutputTuple1<VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>>(
     val _1: ARG_1
-) : OutputTuple {
-    fun decode(data: EthPrefixedHexString): Tuple1<VALUE_1> {
-        val result: AtomicReference<Tuple1<VALUE_1>> = AtomicReference()
-        decode(data) { decoded ->
-            val decodedList: List<Tuple2<String, EthType<*>>> = decoded.toList()
-            @Suppress("UNCHECKED_CAST")
-            result.set(Tuple1(decodedList[0]._2 as VALUE_1))
-        }
-        return result.get()
-    }
-
-    override fun decode(data: EthPrefixedHexString, decoded: Consumer<Sequence<Tuple2<String, EthType<*>>>>) {
+) : EthOutputTuple {
+    override fun decode(data: EthPrefixedHexString): List<DecodedEthType<*>> {
         val window = data.toByteWindow()
-        decoded.accept(
-            sequenceOf(
-                Tuple2(_1.name, _1.decode(window))
-            )
-        )
+        return listOf(DecodedEthType(_1.name, _1.decode(window)))
     }
 
     override fun concatenatedTypes(): String {
@@ -93,38 +89,19 @@ data class OutputTuple1<VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>>(
 }
 
 
-data class OutputTuple2<
+data class EthOutputTuple2<
         VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
         VALUE_2 : EthType<*>, ARG_2 : EthOutput<VALUE_2>
         >(
     val _1: ARG_1,
     val _2: ARG_2
-) : OutputTuple {
-    fun decode(data: EthPrefixedHexString): Tuple2<VALUE_1, VALUE_2> {
-        val result = AtomicReference<Tuple2<VALUE_1, VALUE_2>>()
-        decode(data) { decoded ->
-            val decodedList = decoded.toList()
-            @Suppress("UNCHECKED_CAST")
-            result.set(
-                Tuple2(
-                    decodedList[0]._2 as VALUE_1,
-                    decodedList[1]._2 as VALUE_2
-                )
-            )
-        }
-        return result.get()
-    }
+) : EthOutputTuple {
 
-    override fun decode(
-        data: EthPrefixedHexString,
-        decoded: Consumer<Sequence<Tuple2<String, EthType<*>>>>
-    ) {
+    override fun decode(data: EthPrefixedHexString): List<DecodedEthType<*>> {
         val window = data.toByteWindow()
-        decoded.accept(
-            sequenceOf(
-                Tuple2(_1.name, _1.decode(window)),
-                Tuple2(_2.name, _2.decode(window))
-            )
+        return listOf(
+            DecodedEthType(_1.name, _1.decode(window)),
+            DecodedEthType(_2.name, _2.decode(window))
         )
     }
 
@@ -132,7 +109,7 @@ data class OutputTuple2<
 }
 
 
-data class OutputTuple3<
+data class EthOutputTuple3<
         VALUE_1 : EthType<*>, ARG_1 : EthOutput<VALUE_1>,
         VALUE_2 : EthType<*>, ARG_2 : EthOutput<VALUE_2>,
         VALUE_3 : EthType<*>, ARG_3 : EthOutput<VALUE_3>
@@ -140,37 +117,15 @@ data class OutputTuple3<
     val _1: ARG_1,
     val _2: ARG_2,
     val _3: ARG_3,
-) : OutputTuple {
-    fun decode(data: EthPrefixedHexString): Tuple3<VALUE_1, VALUE_2, VALUE_3> {
-        val result = AtomicReference<Tuple3<VALUE_1, VALUE_2, VALUE_3>>()
-        decode(data) { decoded ->
-            val decodedList = decoded.toList()
-            @Suppress("UNCHECKED_CAST")
-            result.set(
-                Tuple3(
-                    decodedList[0]._2 as VALUE_1,
-                    decodedList[1]._2 as VALUE_2,
-                    decodedList[2]._2 as VALUE_3
-                )
-            )
-        }
-        return result.get()
-    }
-
-    override fun decode(
-        data: EthPrefixedHexString,
-        decoded: Consumer<Sequence<Tuple2<String, EthType<*>>>>
-    ) {
+) : EthOutputTuple {
+    override fun decode(data: EthPrefixedHexString): List<DecodedEthType<*>> {
         val window = data.toByteWindow()
-        decoded.accept(
-            sequenceOf(
-                Tuple2(_1.name, _1.decode(window)),
-                Tuple2(_2.name, _2.decode(window)),
-                Tuple2(_3.name, _3.decode(window))
-            )
+        return listOf(
+            DecodedEthType(_1.name, _1.decode(window)),
+            DecodedEthType(_2.name, _2.decode(window)),
+            DecodedEthType(_3.name, _3.decode(window))
         )
     }
-
 
     override fun concatenatedTypes() = "${solidityType(_1.clazz)},${solidityType(_2.clazz)},${solidityType(_3.clazz)}"
 }

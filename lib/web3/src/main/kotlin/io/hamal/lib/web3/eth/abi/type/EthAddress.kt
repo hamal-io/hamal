@@ -8,11 +8,13 @@ import java.lang.Character.isUpperCase
 import java.math.BigInteger
 import java.util.*
 
-class EthAddress(
+data class EthAddress(
     override val value: EthUint160
 ) : EthType<EthUint160> {
 
     constructor(value: BigInteger) : this(EthUint160(value))
+    constructor(hexString: EthPrefixedHexString) : this(hexString.toHexString())
+    constructor(hexString: EthHexString) : this(BigInteger(hexString.value, 16))
 
     companion object {
         @JvmStatic
