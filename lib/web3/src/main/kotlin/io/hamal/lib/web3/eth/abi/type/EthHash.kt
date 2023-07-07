@@ -19,4 +19,10 @@ data class EthHash(
     fun toHexString(): EthHexString {
         return EthHexString(Web3Formatter.formatToHex(value.value))
     }
+
+    fun toPrefixedHexString(): EthPrefixedHexString {
+        return EthPrefixedHexString("0x${Web3Formatter.formatToHex(value.value)}")
+    }
+
+    override fun toString() = toPrefixedHexString().value
 }

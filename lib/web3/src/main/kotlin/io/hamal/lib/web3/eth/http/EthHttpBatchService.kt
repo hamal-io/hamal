@@ -10,23 +10,23 @@ import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthBlock
 import java.math.BigInteger
 
-class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
-    override fun execute(): List<EthResponse> {
-        return listOf(
-            EthBlockResponse(
-                EthBlock(
-                    number = EthUint64(BigInteger.ONE),
-                    hash = EthHash(EthBytes32(ByteArray(32))),
-                    parentHash = EthHash(EthBytes32(ByteArray(32))),
-                    miner = EthAddress(BigInteger.ZERO),
-                    timestamp = EthUint64(BigInteger.ZERO)
-                )
-            )
-        )
-    }
-
-    override fun getBlock(req: EthBatchService.GetBlockRequest): EthHttpBatchService {
-        return this
-    }
-
-}
+//class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
+//    override fun execute(): List<EthResponse> {
+//        return listOf(
+//            EthBlockResponse(
+//                EthBlock(
+//                    number = EthUint64(BigInteger.ONE),
+//                    hash = EthHash(EthBytes32(ByteArray(32))),
+//                    parentHash = EthHash(EthBytes32(ByteArray(32))),
+//                    miner = EthAddress(BigInteger.ZERO),
+//                    timestamp = EthUint64(BigInteger.ZERO)
+//                )
+//            )
+//        )
+//    }
+//
+//    override fun getBlock(req: ): EthHttpBatchService {
+//        return this
+//    }
+//
+//}
