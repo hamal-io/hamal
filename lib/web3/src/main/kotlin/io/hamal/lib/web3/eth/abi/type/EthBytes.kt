@@ -1,45 +1,35 @@
 package io.hamal.lib.web3.eth.abi.type
 
 import io.hamal.lib.web3.util.ByteWindow
+import kotlinx.serialization.Serializable
+import java.nio.ByteBuffer
 
-sealed class EthBytes(
-    final override val value: ByteArray,
-    numberOfBytes: Int
-) : EthType<ByteArray> {
+@Serializable
+sealed interface EthBytes : EthType<ByteArray> {
+    val numberOfBytes: Int
 
-    init {
-        require(value.size == numberOfBytes) { "Requires array of $numberOfBytes bytes" }
-    }
-
-    override fun toByteArray(): ByteArray {
-        TODO("Not yet implemented")
-    }
-
-    override fun toByteWindow(): ByteWindow {
-        TODO("Not yet implemented")
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        other as EthBytes
-        return value.contentEquals(other.value)
-    }
-
-    override fun hashCode(): Int {
-        return value.contentHashCode()
-    }
+    //FIXME validate input for each and add tests
+//    init {
+//        require(value.size == numberOfBytes) { "Requires array of $numberOfBytes bytes" }
+//    }
+    override fun toByteArray(): ByteArray = value
+    override fun toByteWindow() = ByteWindow(ByteBuffer.wrap(value), numberOfBytes)
 }
 
-class EthBytes32(
-    value: ByteArray
-) : EthBytes(value, 32) {
+@Serializable
+data class EthBytes32(
+    override val value: ByteArray
+) : EthBytes {
     constructor(prefixedHexString: EthPrefixedHexString) : this(prefixedHexString.toByteWindow().next())
 
+    override val numberOfBytes = 32
 }
 
 
 /**
  * Intended to be used in unit tests only
  */
-internal class TestEthBytes(bytes: ByteArray, numberOfBytes: Int) : EthBytes(bytes, numberOfBytes)
+internal data class TestEthBytes(
+    override val value: ByteArray,
+    override val numberOfBytes: Int
+) : EthBytes

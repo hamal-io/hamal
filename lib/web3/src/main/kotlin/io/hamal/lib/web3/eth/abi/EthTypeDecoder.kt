@@ -9,7 +9,7 @@ data class DecodedEthType<VALUE_TYPE : EthType<*>>(
     val value: VALUE_TYPE
 )
 
-interface EthTypeDecoder<VALUE_TYPE : EthType<*>> {
+interface EthTypeDecoder<out VALUE_TYPE : EthType<*>> {
     fun decode(window: ByteWindow): VALUE_TYPE
 
     companion object {
