@@ -4,24 +4,38 @@ import io.hamal.lib.web3.eth.abi.type.EthUint64
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface EthResp
+sealed interface EthResp {
+    val id: EthReqId
+}
 
 @Serializable
-data class EthResponse(
+data class EthGetBlockResp(
+    override val id: EthReqId,
     val result: EthBlock
-)
-
-@Serializable
-data class EthGetBlockResponse(
-    val result: EthBlock
-)
-
-@Serializable
-class BlockNumberResp(
-    val requestId: EthReqId,
-    val value: EthUint64
 ) : EthResp {
     override fun toString(): String {
-        return "EthBlockNumber($value)"
+        return "EthGetBlockResp($result)"
     }
 }
+
+@Serializable
+data class EthGetLiteBlockResp(
+    override val id: EthReqId,
+    val result: EthLiteBlock
+) : EthResp {
+    override fun toString(): String {
+        return "EthGetLiteBlockResp($result)"
+    }
+}
+
+@Serializable
+class EthGetBlockNumberResp(
+    override val id: EthReqId,
+    val result: EthUint64
+) : EthResp {
+    override fun toString(): String {
+        return "EthGetBlockNumberResp($result)"
+    }
+}
+
+

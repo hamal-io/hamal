@@ -2,6 +2,7 @@ package io.hamal.lib.http
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.builtins.ArraySerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.serializer
@@ -35,12 +36,18 @@ object DefaultErrorDeserializer : HttpErrorDeserializer {
 
 interface HttpContentDeserializer {
     fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE
+    fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE>
 }
 
 object KotlinJsonHttpContentDeserializer : HttpContentDeserializer {
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
         return delegate.decodeFromStream(clazz.serializer(), inputStream)
+    }
+
+    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+    override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
+        return delegate.decodeFromStream(ArraySerializer(clazz, clazz.serializer()), inputStream).toList()
     }
 
     private val delegate = Json { ignoreUnknownKeys = true }

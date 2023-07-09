@@ -15,6 +15,7 @@ interface HttpRequest {
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
+    fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE>
     enum class HttpMethod {
         Delete,
         Get,
@@ -153,6 +154,14 @@ class DefaultHttpRequest(
     override fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT {
         return when (val response = execute()) {
             is SuccessHttpResponse -> response.result(clazz)
+            is NoContentHttpResponse -> throw IllegalStateException("No content was returned from the server")
+            is ErrorHttpResponse -> throw IllegalStateException("Http request was not successful")
+        }
+    }
+
+    override fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE> {
+        return when (val response = execute()) {
+            is SuccessHttpResponse -> response.resultList(clazz)
             is NoContentHttpResponse -> throw IllegalStateException("No content was returned from the server")
             is ErrorHttpResponse -> throw IllegalStateException("Http request was not successful")
         }

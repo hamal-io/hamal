@@ -49,6 +49,10 @@ data class SuccessHttpResponse(
     fun <RESULT : Any> result(clazz: KClass<RESULT>): RESULT {
         return contentDeserializer.deserialize(inputStream, clazz)
     }
+
+    fun <RESULT : Any> resultList(clazz: KClass<RESULT>): List<RESULT> {
+        return contentDeserializer.deserializeList(inputStream, clazz)
+    }
 }
 
 data class NoContentHttpResponse(

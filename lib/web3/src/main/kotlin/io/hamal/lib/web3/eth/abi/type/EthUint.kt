@@ -15,9 +15,9 @@ sealed class EthUnsigned : EthType<BigInteger> {
 
     override fun toByteArray(): ByteArray = value.toByteArray()
 
-    override fun toByteWindow() = toEthPrefixedString().toByteWindow()
+    override fun toByteWindow() = toPrefixedHexString().toByteWindow()
 
-    fun toEthPrefixedString(): EthPrefixedHexString = EthPrefixedHexString(
+    fun toPrefixedHexString(): EthPrefixedHexString = EthPrefixedHexString(
         "0x${Web3Formatter.formatWithoutLeadingZeros(value.toByteArray())}"
     )
 

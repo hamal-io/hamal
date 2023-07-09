@@ -14,3 +14,12 @@ data class EthBlock(
     val miner: EthAddress,
     val timestamp: EthUint64
 )
+
+@Serializable
+data class EthLiteBlock(
+    val number: EthUint64,
+    val hash: EthHash,
+    val parentHash: EthHash,
+    val miner: EthAddress,
+    val timestamp: EthUint64
+)
