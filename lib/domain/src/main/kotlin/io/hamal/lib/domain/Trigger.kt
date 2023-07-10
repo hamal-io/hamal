@@ -1,5 +1,7 @@
 package io.hamal.lib.domain
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate

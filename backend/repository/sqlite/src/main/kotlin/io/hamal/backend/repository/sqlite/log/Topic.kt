@@ -2,10 +2,10 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
 import io.hamal.backend.repository.sqlite.BaseRepository
-import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.sqlite.Connection
 import java.nio.file.Path
 
 data class SqliteLogTopic(

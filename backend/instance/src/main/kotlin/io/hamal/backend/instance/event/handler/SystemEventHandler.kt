@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.event.handler
 
 import io.hamal.backend.instance.event.SystemEvent
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import kotlin.reflect.KClass
 
 interface SystemEventHandler<out EVENT : SystemEvent> {

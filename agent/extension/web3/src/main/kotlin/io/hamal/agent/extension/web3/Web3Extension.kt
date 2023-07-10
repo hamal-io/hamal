@@ -2,7 +2,6 @@ package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
 import io.hamal.lib.script.api.value.*
-import io.hamal.lib.web3.eth.DefaultEthService
 
 class Web3Extension : Extension {
     override fun create(): EnvValue {
@@ -44,10 +43,10 @@ class Web3Extension : Extension {
 //                        StringValue("parentHash") to StringValue(block.parentHash.toString())
 //                    )
 
-            val response = DefaultEthService.getBlock()
+//            val response = DefaultEthService.getBlock()
 
             return TableValue(
-                "hash" to StringValue(response.result.hash)
+//                "hash" to StringValue(response.result.hash)
             )
         }
 

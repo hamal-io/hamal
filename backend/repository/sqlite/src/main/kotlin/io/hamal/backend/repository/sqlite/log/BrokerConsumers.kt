@@ -4,8 +4,8 @@ import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerConsumersRepository
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.sqlite.BaseRepository
-import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.sqlite.Connection
 import java.nio.file.Path
 
 data class SqliteBrokerConsumers(

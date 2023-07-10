@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.api
 
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger

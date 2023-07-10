@@ -1,9 +1,10 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.base.DomainId
 import org.springframework.core.convert.converter.Converter
 import kotlin.reflect.KClass
 

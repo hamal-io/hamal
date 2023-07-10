@@ -2,7 +2,7 @@
 
 package io.hamal.lib.domain.vo.base
 
-import io.hamal.lib.common.ddd.ValueObject
+import io.hamal.lib.common.domain.ValueObject
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer

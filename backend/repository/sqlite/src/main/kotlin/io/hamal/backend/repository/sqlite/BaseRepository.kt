@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.sqlite
 
-import io.hamal.backend.repository.sqlite.internal.Connection
-import io.hamal.backend.repository.sqlite.internal.DefaultConnection
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.Once
+import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.DefaultConnection
 import logger
 import java.io.Closeable
 import java.nio.file.Path

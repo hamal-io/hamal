@@ -2,8 +2,8 @@ package io.hamal.backend.instance.web.event
 
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.EventId
-import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.*
 import io.hamal.lib.sdk.domain.ListTopicsResponse.*

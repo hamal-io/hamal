@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.web.func
 
 import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 import org.springframework.http.ResponseEntity

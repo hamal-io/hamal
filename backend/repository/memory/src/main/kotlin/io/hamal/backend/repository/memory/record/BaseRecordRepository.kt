@@ -2,7 +2,7 @@ package io.hamal.backend.repository.memory.record
 
 import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
-import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.common.domain.DomainId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 

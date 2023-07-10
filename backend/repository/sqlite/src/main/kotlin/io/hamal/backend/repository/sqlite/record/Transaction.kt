@@ -2,13 +2,13 @@ package io.hamal.backend.repository.sqlite.record
 
 import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.Record
-import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatementDelegate
-import io.hamal.backend.repository.sqlite.internal.NamedPreparedStatementResultSetDelegate
-import io.hamal.backend.repository.sqlite.internal.Transaction
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
+import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
+import io.hamal.lib.sqlite.Transaction
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer

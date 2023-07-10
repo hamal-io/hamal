@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat

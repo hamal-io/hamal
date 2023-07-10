@@ -3,6 +3,7 @@ package io.hamal.backend.instance.service
 import io.hamal.backend.instance.event.ExecScheduledEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import org.springframework.stereotype.Service

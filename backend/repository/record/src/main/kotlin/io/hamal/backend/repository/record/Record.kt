@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.record
 
-import io.hamal.lib.domain.CmdId
-import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.DomainObject
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind

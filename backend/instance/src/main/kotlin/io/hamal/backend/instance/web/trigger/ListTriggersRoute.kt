@@ -1,8 +1,8 @@
 package io.hamal.backend.instance.web.trigger
 
 import io.hamal.backend.repository.api.TriggerQueryRepository
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.domain.ListTriggersResponse
 import kotlinx.serialization.*

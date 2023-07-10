@@ -6,7 +6,7 @@ import io.hamal.backend.instance.event.SystemEventHandlerContainer
 import io.hamal.backend.instance.event.handler.SystemEventHandler
 import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.util.HashUtils.md5
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.domain.vo.port.GenerateDomainId

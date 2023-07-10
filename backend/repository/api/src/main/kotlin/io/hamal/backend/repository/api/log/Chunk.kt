@@ -1,9 +1,9 @@
 package io.hamal.backend.repository.api.log
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.base.DomainId
 import java.time.Instant
 
 data class LogChunkId(override val value: SnowflakeId) : DomainId() {

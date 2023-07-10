@@ -6,7 +6,7 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecQueryRepository
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CompletedExec
 import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq

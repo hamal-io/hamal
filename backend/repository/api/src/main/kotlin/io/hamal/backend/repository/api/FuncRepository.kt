@@ -1,12 +1,12 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.script.api.value.CodeValue
 
 

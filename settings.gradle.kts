@@ -43,6 +43,7 @@ include(":lib:http")
 include(":lib:script:api")
 include(":lib:script:impl")
 include(":lib:sdk")
+include(":lib:sqlite")
 include(":lib:web3")
 
 include(":backend")

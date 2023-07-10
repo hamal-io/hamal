@@ -2,7 +2,7 @@ package io.hamal.backend.instance.event.handler.exec
 
 import io.hamal.backend.instance.event.ExecutionQueuedEvent
 import io.hamal.backend.instance.event.handler.SystemEventHandler
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import logger
 
 class ExecQueuedHandler : SystemEventHandler<ExecutionQueuedEvent> {

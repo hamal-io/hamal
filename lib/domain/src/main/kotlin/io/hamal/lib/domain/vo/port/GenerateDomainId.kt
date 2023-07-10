@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo.port
 
 import io.hamal.lib.common.*
-import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.common.domain.DomainId
 
 interface GenerateDomainId {
     operator fun <ID : DomainId> invoke(ctor: (SnowflakeId) -> ID): ID

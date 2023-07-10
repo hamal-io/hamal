@@ -9,7 +9,7 @@ archivesName.set("backend-repository-sqlite")
 dependencies {
     api(project(":backend:repository:record"))
 
-    implementation(external.sqlite)
+    implementation(project(":lib:sqlite"))
 
     testImplementation(project(":backend:repository:sqlite"))
     testImplementation(external.junit)
@@ -22,7 +22,7 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(external.sqlite)
+                    implementation(project(":lib:sqlite"))
 
                     implementation(project(":backend:repository:sqlite"))
                     implementation(external.junit)

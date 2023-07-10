@@ -3,8 +3,8 @@ package io.hamal.backend.repository.sqlite.record
 import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.domain.DomainObject
-import io.hamal.lib.domain.vo.base.DomainId
+import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.DomainObject
 
 class RecordCache<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val recordLoader: RecordLoader<ID, RECORD>

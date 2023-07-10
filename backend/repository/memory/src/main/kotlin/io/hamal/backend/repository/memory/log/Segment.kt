@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.backend.repository.api.log.LogSegmentRepository
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock

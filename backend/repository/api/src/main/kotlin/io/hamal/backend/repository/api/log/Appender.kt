@@ -2,7 +2,7 @@
 
 package io.hamal.backend.repository.api.log
 
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf

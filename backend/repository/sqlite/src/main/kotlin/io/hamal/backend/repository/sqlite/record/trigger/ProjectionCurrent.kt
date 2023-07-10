@@ -2,7 +2,6 @@ package io.hamal.backend.repository.sqlite.record.trigger
 
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.record.trigger.TriggerRecord
-import io.hamal.backend.repository.sqlite.internal.Connection
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
@@ -10,6 +9,7 @@ import io.hamal.backend.repository.sqlite.unsafeInCriteria
 import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.sqlite.Connection
 import kotlinx.serialization.ExperimentalSerializationApi
 
 

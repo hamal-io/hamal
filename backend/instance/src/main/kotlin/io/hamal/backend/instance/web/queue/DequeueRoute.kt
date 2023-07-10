@@ -4,7 +4,7 @@ import io.hamal.backend.instance.event.ExecutionStartedEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecCmdRepository.*
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.Content

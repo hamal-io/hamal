@@ -2,7 +2,7 @@ package io.hamal.backend.repository.record.trigger
 
 import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

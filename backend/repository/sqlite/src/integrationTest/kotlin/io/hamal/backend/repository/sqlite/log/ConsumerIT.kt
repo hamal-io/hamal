@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.ProtobufAppender
 import io.hamal.backend.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.util.HashUtils.sha256
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat

@@ -3,7 +3,7 @@ package io.hamal.backend.repository.memory
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.StateQueryRepository
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.CmdId
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 
 object MemoryStateRepository : StateCmdRepository, StateQueryRepository {

@@ -1,10 +1,11 @@
 package io.hamal.backend.repository.api
 
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.Limit
 import io.hamal.lib.script.api.value.CodeValue
 
 interface ExecCmdRepository {
