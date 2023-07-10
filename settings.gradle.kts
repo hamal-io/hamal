@@ -35,7 +35,6 @@ dependencyResolutionManagement {
 }
 
 
-include("bootstrap")
 
 include(":lib:common")
 include(":lib:domain")
@@ -46,22 +45,24 @@ include(":lib:sdk")
 include(":lib:sqlite")
 include(":lib:web3")
 
-include(":backend")
-include(":backend:instance")
-include(":backend:repository:api")
-include(":backend:repository:memory")
-include(":backend:repository:record")
-include(":backend:repository:sqlite")
+include(":core:bootstrap")
 
-include(":agent:impl")
-include(":agent:extension:api")
-include(":agent:extension:std:debug")
-include(":agent:extension:std:sys")
-include(":agent:extension:std:log")
-include(":agent:extension:starter")
-include(":agent:extension:web3")
+include(":core:backend")
+include(":core:backend:instance")
+include(":core:backend:repository:api")
+include(":core:backend:repository:memory")
+include(":core:backend:repository:record")
+include(":core:backend:repository:sqlite")
 
-include(":frontend")
+include(":core:agent:impl")
+include(":core:agent:extension:api")
+include(":core:agent:extension:std:debug")
+include(":core:agent:extension:std:sys")
+include(":core:agent:extension:std:log")
+include(":core:agent:extension:starter")
+include(":core:agent:extension:web3")
+
+include(":core:frontend")
 
 rootProject.name = "hamal"
 
