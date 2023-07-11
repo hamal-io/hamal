@@ -34,6 +34,28 @@ dependencyResolutionManagement {
     }
 }
 
+include(":application:proxy")
+
+include(":core:backend")
+
+include(":core:agent:impl")
+include(":core:agent:extension:api")
+include(":core:agent:extension:std:debug")
+include(":core:agent:extension:std:sys")
+include(":core:agent:extension:std:log")
+include(":core:agent:extension:starter")
+include(":core:agent:extension:web3")
+
+include(":core:backend")
+include(":core:backend:instance")
+include(":core:backend:repository:api")
+include(":core:backend:repository:memory")
+include(":core:backend:repository:record")
+include(":core:backend:repository:sqlite")
+
+include(":core:bootstrap")
+
+include(":core:frontend")
 
 
 include(":lib:common")
@@ -45,24 +67,6 @@ include(":lib:sdk")
 include(":lib:sqlite")
 include(":lib:web3")
 
-include(":core:bootstrap")
-
-include(":core:backend")
-include(":core:backend:instance")
-include(":core:backend:repository:api")
-include(":core:backend:repository:memory")
-include(":core:backend:repository:record")
-include(":core:backend:repository:sqlite")
-
-include(":core:agent:impl")
-include(":core:agent:extension:api")
-include(":core:agent:extension:std:debug")
-include(":core:agent:extension:std:sys")
-include(":core:agent:extension:std:log")
-include(":core:agent:extension:starter")
-include(":core:agent:extension:web3")
-
-include(":core:frontend")
 
 rootProject.name = "hamal"
 

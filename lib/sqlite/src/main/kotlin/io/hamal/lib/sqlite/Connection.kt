@@ -8,6 +8,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.sqlite.Transaction.AbortException
 import logger
+import java.math.BigInteger
 import java.sql.DriverManager
 import java.time.Instant
 import java.util.concurrent.locks.ReentrantLock
@@ -15,7 +16,7 @@ import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
 class NamedPreparedStatementDelegate(
-    internal val delegate: NamedPreparedStatement<*>
+    val delegate: NamedPreparedStatement<*>
 ) {
     operator fun set(
         param: String,
@@ -28,6 +29,14 @@ class NamedPreparedStatementDelegate(
     operator fun set(
         param: String,
         value: Int
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value
+        return this
+    }
+
+    operator fun set(
+        param: String,
+        value: BigInteger
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this

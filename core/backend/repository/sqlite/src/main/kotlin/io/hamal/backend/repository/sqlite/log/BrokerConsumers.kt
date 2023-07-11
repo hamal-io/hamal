@@ -3,8 +3,8 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerConsumersRepository
 import io.hamal.backend.repository.api.log.LogChunkId
-import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import java.nio.file.Path
 
@@ -14,7 +14,7 @@ data class SqliteBrokerConsumers(
 
 class SqliteLogBrokerConsumersRepository(
     internal val brokerConsumers: SqliteBrokerConsumers,
-) : BaseRepository(
+) : BaseSqliteRepository(
     object : Config {
         override val path: Path get() = brokerConsumers.path
         override val filename: String get() = "consumers.db"

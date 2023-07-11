@@ -4,10 +4,10 @@ import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.backend.repository.api.log.LogSegmentRepository
-import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import java.nio.file.Path
 
@@ -20,7 +20,7 @@ data class SqliteLogSegment(
 
 internal class SqliteLogSegmentRepository(
     internal val segment: SqliteLogSegment,
-) : BaseRepository(object : Config {
+) : BaseSqliteRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
 }), LogSegmentRepository {

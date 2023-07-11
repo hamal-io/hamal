@@ -78,6 +78,11 @@ class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
     @OptIn(InternalSerializationApi::class)
     override fun execute(): List<EthResp> {
         return lock.withLock {
+
+            if (requests.isEmpty()) {
+                return listOf()
+            }
+
             val response = HttpTemplate("https://cloudflare-eth.com")
                 .post("/")
                 .body(JsonArray(requests))

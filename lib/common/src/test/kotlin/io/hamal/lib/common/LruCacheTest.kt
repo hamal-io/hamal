@@ -12,7 +12,7 @@ class DefaultLruCacheTest {
     inner class PutTest {
         @Test
         fun `Insert value as value does not there`() {
-            testInstance.put(someKey, someValue)
+            testInstance.set(someKey, someValue)
             verifySize(1)
             verifySomeValue()
         }
@@ -21,7 +21,7 @@ class DefaultLruCacheTest {
         fun `Overwrites existing value`() {
             `Insert value as value does not there`()
 
-            testInstance.put(someKey, anotherValue)
+            testInstance.set(someKey, anotherValue)
             verifySize(1)
             verifyAnotherValue()
         }
@@ -30,7 +30,7 @@ class DefaultLruCacheTest {
         fun `Evicts data if too may insertions happen`() {
             `Insert value as value does not there`()
 
-            IntRange(10, 30).forEach { testInstance.put(it, it) }
+            IntRange(10, 30).forEach { testInstance.set(it, it) }
 
             verifySize(20)
             verifyAdditionalData()
@@ -41,7 +41,7 @@ class DefaultLruCacheTest {
     inner class PutIfAbsentTest {
         @Test
         fun `Inserts value as not value there`() {
-            testInstance.putIfAbsent(someKey, someValue)
+            testInstance.setIfAbsent(someKey, someValue)
             verifySize(1)
             verifySomeValue()
         }
@@ -50,7 +50,7 @@ class DefaultLruCacheTest {
         fun `Does not overwrite existing value`() {
             `Inserts value as not value there`()
 
-            testInstance.putIfAbsent(someKey, anotherValue)
+            testInstance.setIfAbsent(someKey, anotherValue)
             verifySize(1)
             verifySomeValue()
         }
@@ -59,7 +59,7 @@ class DefaultLruCacheTest {
         fun `Evicts data if too may insertions happen`() {
             `Inserts value as not value there`()
 
-            IntRange(10, 30).forEach { testInstance.put(it, it) }
+            IntRange(10, 30).forEach { testInstance.set(it, it) }
 
             verifySize(20)
             verifyAdditionalData()
@@ -76,7 +76,7 @@ class DefaultLruCacheTest {
 
         @Test
         fun `Nothing found as key does not match`() {
-            testInstance.put(anotherKey, anotherValue)
+            testInstance.set(anotherKey, anotherValue)
 
             val maybeResult = testInstance.find(someKey)
             assertTrue(maybeResult == null)
@@ -85,8 +85,8 @@ class DefaultLruCacheTest {
         @Test
 
         fun `Finds someValue`() {
-            testInstance.put(someKey, someValue)
-            testInstance.put(anotherKey, anotherValue)
+            testInstance.set(someKey, someValue)
+            testInstance.set(anotherKey, anotherValue)
 
             val maybeResult = testInstance.find(someKey)
             assertTrue(maybeResult != null)
@@ -125,7 +125,7 @@ class DefaultLruCacheTest {
         @Test
         fun `Ok`() {
             IntRange(1, 20).forEach {
-                testInstance.put(it, it)
+                testInstance.set(it, it)
                 val size = testInstance.size()
                 assertThat(size, equalTo(it))
             }

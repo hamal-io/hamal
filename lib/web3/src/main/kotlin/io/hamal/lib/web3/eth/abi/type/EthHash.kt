@@ -1,6 +1,5 @@
 package io.hamal.lib.web3.eth.abi.type
 
-import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Formatter
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -15,13 +14,9 @@ data class EthHash(
 ) : EthType<EthBytes32> {
     constructor(prefixedHexString: EthPrefixedHexString) : this(EthBytes32(prefixedHexString))
 
-    override fun toByteArray(): ByteArray {
-        TODO("Not yet implemented")
-    }
+    override fun toByteArray() = value.toByteArray()
 
-    override fun toByteWindow(): ByteWindow {
-        TODO("Not yet implemented")
-    }
+    override fun toByteWindow() = value.toByteWindow()
 
     fun toHexString(): EthHexString {
         return EthHexString(Web3Formatter.formatToHex(value.value))

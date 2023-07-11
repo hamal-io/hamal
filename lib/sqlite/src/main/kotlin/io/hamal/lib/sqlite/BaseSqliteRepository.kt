@@ -1,15 +1,13 @@
-package io.hamal.backend.repository.sqlite
+package io.hamal.lib.sqlite
 
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.Once
-import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.DefaultConnection
 import logger
 import java.io.Closeable
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-abstract class BaseRepository(
+abstract class BaseSqliteRepository(
     val config: Config
 ) : Closeable {
 
@@ -17,7 +15,7 @@ abstract class BaseRepository(
 
     private val connectionOnce = Once.default<Connection>()
 
-    internal val connection by lazy {
+    val connection by lazy {
         connectionOnce {
             val result = DefaultConnection(
                 this::class,
@@ -49,12 +47,12 @@ abstract class BaseRepository(
 
 }
 
-private fun ensureFilePath(config: BaseRepository.Config): Path {
+private fun ensureFilePath(config: BaseSqliteRepository.Config): Path {
     return FileUtils.createDirectories(config.path)
         .resolve(config.path.resolve(Path(config.filename)))
 }
 
 //FIXME properly integrate this
-internal fun <T : Any> unsafeInCriteria(parameter: String, values: Iterable<T>): String {
+fun <T : Any> unsafeInCriteria(parameter: String, values: Iterable<T>): String {
     return "$parameter in (${values.joinToString(",") { it.toString() }})"
 }

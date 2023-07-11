@@ -8,10 +8,10 @@ import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.func.Entity
 import io.hamal.backend.repository.record.func.FuncCreationRecord
 import io.hamal.backend.repository.record.func.FuncRecord
-import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
@@ -47,7 +47,7 @@ class SqliteFuncRepository(
 
     data class Config(
         override val path: Path
-    ) : BaseRepository.Config {
+    ) : BaseSqliteRepository.Config {
         override val filename = "func"
     }
 

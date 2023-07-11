@@ -1,10 +1,10 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import java.nio.file.Path
 
@@ -25,7 +25,7 @@ data class SqliteLogTopic(
 
 class SqliteLogTopicRepository(
     internal val topic: SqliteLogTopic
-) : BaseRepository(
+) : BaseSqliteRepository(
     object : Config {
         override val path: Path get() = topic.path
         override val filename: String get() = String.format("topic-%08d", topic.id.value.value)

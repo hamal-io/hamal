@@ -37,7 +37,7 @@ internal abstract class EthUnsignedSerializer<UNSIGNED : EthUnsigned>(
     }
 
     override fun serialize(encoder: Encoder, value: UNSIGNED) {
-        encoder.encodeString(value.value.toString(16))
+        encoder.encodeString("0x${value.value.toString(16)}")
     }
 }
 

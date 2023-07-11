@@ -9,12 +9,12 @@ import io.hamal.backend.repository.record.trigger.Entity
 import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
-import io.hamal.backend.repository.sqlite.BaseRepository
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path
 
 internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Trigger> {
@@ -52,7 +52,7 @@ class SqliteTriggerRepository(
 
     data class Config(
         override val path: Path,
-    ) : BaseRepository.Config {
+    ) : BaseSqliteRepository.Config {
         override val filename = "trigger"
     }
 
