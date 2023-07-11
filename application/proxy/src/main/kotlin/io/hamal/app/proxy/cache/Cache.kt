@@ -56,7 +56,7 @@ class LruCache(
     }
 
 
-    private val blockStore = DefaultLruCache<EthUint64, EthBlock>(100_000)
+    private val blockStore = DefaultLruCache<EthUint64, EthBlock>(1000)
     private val blockNumberMapping = mutableMapOf<EthHash, EthUint64>()
     private val lock = ReentrantLock()
 }

@@ -12,6 +12,7 @@ import kotlinx.serialization.encoding.Encoder
 data class EthHash(
     override val value: EthBytes32
 ) : EthType<EthBytes32> {
+    constructor(byteArray: ByteArray) : this(EthBytes32(byteArray))
     constructor(prefixedHexString: EthPrefixedHexString) : this(EthBytes32(prefixedHexString))
 
     override fun toByteArray() = value.toByteArray()

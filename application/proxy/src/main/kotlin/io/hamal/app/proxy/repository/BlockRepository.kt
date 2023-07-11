@@ -4,7 +4,6 @@ import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.eth.domain.EthBlock
-import io.hamal.lib.web3.util.Web3Formatter
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromByteArray
@@ -84,17 +83,57 @@ internal fun EthBlock.encode(): PersistedEthBlock {
         number = number.value.toLong(),
         hash = hash.value.toByteArray(),
         parentHash = parentHash.value.toByteArray(),
-        miner = miner.toByteArray(),
+        sha3Uncles = sha3Uncles.toByteArray(),
+        miner = miner.value.value.toByteArray(),
+        stateRoot = stateRoot.toByteArray(),
+        transactionsRoot = transactionsRoot.toByteArray(),
+        receiptsRoot = receiptsRoot.toByteArray(),
+        gasLimit = gasLimit.value.toLong(),
+        gasUsed = gasUsed.value.toLong(),
         timestamp = timestamp.value.toLong(),
+        extraData = extraData.toByteArray(),
+        transactions = transactions.map(EthBlock.Transaction::encode)
+    )
+}
+
+internal fun EthBlock.Transaction.encode(): PersistedEthBlock.Transaction {
+    return PersistedEthBlock.Transaction(
+        type = type.value.toByte(),
+        hash = hash.value.toByteArray(),
+        from = from.value.value.toByteArray(),
+        to = to.value.value.toByteArray(),
+        input = input.value.toByteArray(),
+        value = value.toByteArray(),
+        gas = gas.value.toLong(),
+        gasPrice = gasPrice.value.toLong(),
     )
 }
 
 internal fun PersistedEthBlock.decode() = EthBlock(
-    number = EthUint64(BigInteger.valueOf(number)),
-    hash = EthHash(EthBytes32(hash)),
-    parentHash = EthHash(EthBytes32(parentHash)),
-    miner = EthAddress(EthPrefixedHexString("0x${Web3Formatter.formatToHex(miner)}")),
-    timestamp = EthUint64(BigInteger.valueOf(timestamp))
+    number = EthUint64(number),
+    hash = EthHash(hash),
+    parentHash = EthHash(parentHash),
+    sha3Uncles = EthHash(sha3Uncles),
+    miner = EthAddress(BigInteger(miner)),
+    stateRoot = EthHash(stateRoot),
+    transactionsRoot = EthHash(transactionsRoot),
+    receiptsRoot = EthHash(receiptsRoot),
+    gasLimit = EthUint64(gasLimit),
+    gasUsed = EthUint64(gasUsed),
+    timestamp = EthUint64(timestamp),
+    extraData = EthBytes32(extraData),
+    transactions = transactions.map(PersistedEthBlock.Transaction::decode)
+)
+
+internal fun PersistedEthBlock.Transaction.decode() = EthBlock.Transaction(
+    type = EthUint8(type),
+    hash = EthHash(hash),
+    from = EthAddress(BigInteger(from)),
+    to = EthAddress(BigInteger(to)),
+    input = EthPrefixedHexString(input),
+    value = EthUint256(BigInteger(value)),
+    gas = EthUint64(gas),
+    gasPrice = EthUint64(gasPrice),
 )
 
 @Serializable
@@ -102,6 +141,26 @@ internal data class PersistedEthBlock(
     val number: Long,
     val hash: ByteArray,
     val parentHash: ByteArray,
+    val sha3Uncles: ByteArray,
     val miner: ByteArray,
-    val timestamp: Long
-)
+    val stateRoot: ByteArray,
+    val transactionsRoot: ByteArray,
+    val receiptsRoot: ByteArray,
+    val gasLimit: Long,
+    val gasUsed: Long,
+    val timestamp: Long,
+    val extraData: ByteArray,
+    val transactions: List<Transaction>
+) {
+    @Serializable
+    data class Transaction(
+        val type: Byte,
+        val hash: ByteArray,
+        val from: ByteArray,
+        val to: ByteArray,
+        val input: ByteArray,
+        val value: ByteArray,
+        val gas: Long,
+        val gasPrice: Long,
+    )
+}

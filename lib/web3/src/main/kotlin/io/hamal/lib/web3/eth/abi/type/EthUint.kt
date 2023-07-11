@@ -46,6 +46,8 @@ internal abstract class EthUnsignedSerializer<UNSIGNED : EthUnsigned>(
 data class EthUint8(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 8
 
+    constructor(value: Byte) : this(BigInteger.valueOf(value.toLong()))
+
     init {
         ensureValidValue()
     }
@@ -78,6 +80,8 @@ data class EthUint32(override val value: BigInteger) : EthUnsigned() {
 @Serializable(with = EthUint64.Serializer::class)
 data class EthUint64(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 64
+
+    constructor(value: Long) : this(BigInteger.valueOf(value))
 
     init {
         ensureValidValue()
