@@ -13,11 +13,10 @@ import kotlin.io.path.Path
 class RepositoryConfig {
     @Bean
     fun protobuf() = ProtoBuf {}
-
     @Bean
     fun blockRepository(
         protoBuf: ProtoBuf
     ): BlockRepository = SqliteBlockRepository(path, protoBuf)
-    
+
     private val path = Path("/tmp/hamal/proxy")
 }

@@ -2,11 +2,15 @@ package io.hamal.app.proxy.repository
 
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.web3.eth.abi.type.EthHash
-import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.eth.domain.EthBlock
+import io.hamal.lib.web3.util.Web3Formatter
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
+import java.math.BigInteger
 import java.nio.file.Path
 
 interface BlockRepository {
@@ -53,14 +57,14 @@ class SqliteBlockRepository(
     override fun findBlock(number: EthUint64): EthBlock? {
         return connection.executeQueryOne("SELECT block FROM blocks WHERE block_number = :blockNumber") {
             query { set("blockNumber", number) }
-            map { rs -> protobuf.decodeFromByteArray(EthBlock.serializer(), rs.getBytes("block")) }
+            map { rs -> protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block")).decode() }
         }
     }
 
     override fun findBlock(hash: EthHash): EthBlock? {
         return connection.executeQueryOne("SELECT block FROM blocks WHERE block_hash = :blockHash") {
             query { set("blockHash", hash) }
-            map { rs -> protobuf.decodeFromByteArray(EthBlock.serializer(), rs.getBytes("block")) }
+            map { rs -> protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block")).decode() }
         }
     }
 
@@ -69,8 +73,35 @@ class SqliteBlockRepository(
             execute("INSERT INTO blocks(block_number, block_hash, block) VALUES( :blockNumber, :blockHash, :block )") {
                 set("blockNumber", block.number)
                 set("blockHash", block.hash)
-                set("block", protobuf.encodeToByteArray(EthBlock.serializer(), block))
+                set("block", protobuf.encodeToByteArray<PersistedEthBlock>(block.encode()))
             }
         }
     }
 }
+
+internal fun EthBlock.encode(): PersistedEthBlock {
+    return PersistedEthBlock(
+        number = number.value.toLong(),
+        hash = hash.value.toByteArray(),
+        parentHash = parentHash.value.toByteArray(),
+        miner = miner.toByteArray(),
+        timestamp = timestamp.value.toLong(),
+    )
+}
+
+internal fun PersistedEthBlock.decode() = EthBlock(
+    number = EthUint64(BigInteger.valueOf(number)),
+    hash = EthHash(EthBytes32(hash)),
+    parentHash = EthHash(EthBytes32(parentHash)),
+    miner = EthAddress(EthPrefixedHexString("0x${Web3Formatter.formatToHex(miner)}")),
+    timestamp = EthUint64(BigInteger.valueOf(timestamp))
+)
+
+@Serializable
+internal data class PersistedEthBlock(
+    val number: Long,
+    val hash: ByteArray,
+    val parentHash: ByteArray,
+    val miner: ByteArray,
+    val timestamp: Long
+)
