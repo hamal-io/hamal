@@ -1,0 +1,7 @@
+services:
+  proxy:
+    image: hamal.io/proxy
+    ports:
+      - "8081:8081"
+    volumes:
+      - "/hamal:/tmp/hamal"

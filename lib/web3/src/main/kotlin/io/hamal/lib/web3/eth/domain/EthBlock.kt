@@ -25,7 +25,7 @@ data class EthBlock(
         val type: EthUint8,
         val hash: EthHash,
         val from: EthAddress,
-        val to: EthAddress,
+        val to: EthAddress?,
         val input: EthPrefixedHexString,
         val value: EthUint256,
         val gas: EthUint64,
