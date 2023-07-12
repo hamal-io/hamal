@@ -8,10 +8,7 @@ on:
 jobs:
   gradle:
     timeout-minutes: 5
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
