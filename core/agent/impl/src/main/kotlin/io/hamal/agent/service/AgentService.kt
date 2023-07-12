@@ -20,7 +20,7 @@ class AgentService(
 
     private val sdk by lazy { DefaultHamalSdk(httpTemplateSupplier()) }
 
-    @Scheduled(initialDelay = 1000, fixedDelay = 1, timeUnit = TimeUnit.MILLISECONDS)
+    @Scheduled(initialDelay = 1, fixedDelay = 1, timeUnit = TimeUnit.MILLISECONDS)
     fun run() {
         CompletableFuture.runAsync {
             sdk.execService()
