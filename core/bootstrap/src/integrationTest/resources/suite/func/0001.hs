@@ -1,7 +1,7 @@
 local sys = require('sys')
 local test = require('test')
 
-local func_id = sys.func.create({
+local func_id = sys.funcs.create({
     name = 'empty-test-func',
     inputs = {
         hamal = 'rockz'
@@ -9,7 +9,7 @@ local func_id = sys.func.create({
     code = [[4 + 2]]
 })
 
-local func = sys.func.get(func_id)
+local func = sys.funcs.get(func_id)
 test.assert(func.id == func_id)
 test.assert(func.name == 'empty-test-func')
 test.assert(func.inputs == { hamal = 'rockz' })

@@ -11,7 +11,7 @@ local exec_id = sys.adhoc({
 })
 log.info(exec_id)
 
-local execs = sys.exec.list()
+local execs = sys.execs.list()
 log.info(execs)
 test.assert(execs.length == 2)
 

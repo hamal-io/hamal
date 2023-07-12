@@ -29,22 +29,23 @@ class StdSysExtension(
             values = TableValue(
                 "_cfg" to TableValue(),
                 "adhoc" to InvokeAdhoc(templateSupplier),
-                "exec" to TableValue(
+                "execs" to TableValue(
                     "list" to ListExecs(templateSupplier),
                     "get" to GetExec(templateSupplier)
                 ),
-                "func" to TableValue(
+                "funcs" to TableValue(
                     "create" to CreateFunc(templateSupplier),
                     "get" to GetFunc(templateSupplier),
                     "list" to ListFuncs(templateSupplier)
                 ),
-                "topic" to TableValue(
+                "topics" to TableValue(
                     "create" to CreateTopic(templateSupplier),
                     "list" to ListTopics(templateSupplier)
                 ),
-                "evt" to TableValue(
+                "events" to TableValue(
                     "emitter" to CreateEventEmitter(templateSupplier),
-                    "list" to ListEvents(templateSupplier
+                    "list" to ListEvents(
+                        templateSupplier
                     )
                 ),
             )
