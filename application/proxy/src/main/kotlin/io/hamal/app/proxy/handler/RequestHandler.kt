@@ -3,11 +3,9 @@ package io.hamal.app.proxy.handler
 import io.hamal.app.proxy.cache.Cache
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.eth.abi.type.EthBool
+import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthGetBlockResp
-import io.hamal.lib.web3.eth.domain.EthMethod
-import io.hamal.lib.web3.eth.domain.EthReqId
-import io.hamal.lib.web3.eth.domain.EthResp
+import io.hamal.lib.web3.eth.domain.*
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -50,6 +48,13 @@ class DefaultEthRequestHandler(
                     }
                 }
 
+                EthMethod.GetTransactionReceipt -> {
+                    val hash = json.decodeFromJsonElement(EthHash.serializer(), request.params[0])
+                    cache.findReceipt(hash)?.let { receipt ->
+                        resultMapping[request.id] = EthGetReceiptResp(request.id, receipt)
+                    }
+                }
+
                 else -> TODO()
             }
         }
@@ -69,6 +74,13 @@ class DefaultEthRequestHandler(
                         batchService.getBlock(blockNumber)
                     }
                 }
+
+                EthMethod.GetTransactionReceipt -> {
+                    if (!resultMapping.containsKey(request.id)) {
+                        val hash = json.decodeFromJsonElement(EthHash.serializer(), request.params[0])
+                        batchService.getTransactionReceipt(hash)
+                    }
+                }
             }
         }
 
@@ -80,6 +92,7 @@ class DefaultEthRequestHandler(
         result.forEach { ethResp ->
             when (ethResp) {
                 is EthGetBlockResp -> cache.store(ethResp.result)
+                is EthGetReceiptResp -> cache.store(ethResp.result)
                 else -> TODO()
             }
         }

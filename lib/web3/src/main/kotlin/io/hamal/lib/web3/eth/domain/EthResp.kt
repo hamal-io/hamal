@@ -29,6 +29,17 @@ data class EthGetTransactionResp(
 }
 
 @Serializable
+data class EthGetReceiptResp(
+    override val id: EthReqId,
+    val result: EthReceipt
+) : EthResp {
+    override fun toString(): String {
+        return "EthGetReceiptResp($result)"
+    }
+}
+
+
+@Serializable
 data class EthGetLiteBlockResp(
     override val id: EthReqId,
     val result: EthLiteBlock

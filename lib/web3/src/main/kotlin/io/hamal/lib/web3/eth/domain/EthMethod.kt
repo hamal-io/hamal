@@ -10,7 +10,8 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(with = EthMethod.Serializer::class)
 enum class EthMethod(val value: String) {
     GetBlockByHash("eth_getBlockByHash"),
-    GetBlockByNumber("eth_getBlockByNumber");
+    GetBlockByNumber("eth_getBlockByNumber"),
+    GetTransactionReceipt("eth_getTransactionReceipt");
 
     object Serializer : KSerializer<EthMethod> {
         override val descriptor = PrimitiveSerialDescriptor("EthMethod", STRING)

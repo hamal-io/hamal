@@ -62,6 +62,16 @@ class EthHttpBatchService(
         resultClass = EthGetTransactionResp::class
     )
 
+    override fun getTransactionReceipt(hash: EthHash) = request(
+        method = "eth_getTransactionReceipt",
+        params = JsonArray(
+            listOf(
+                JsonPrimitive(hash.toPrefixedHexString().value)
+            )
+        ),
+        resultClass = EthGetReceiptResp::class
+    )
+
     override fun getLiteBlock(hash: EthHash) = request(
         method = "eth_getBlockByHash",
         params = JsonArray(

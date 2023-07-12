@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
 class ByteWindow internal constructor(
     private val buffer: ByteBuffer,
     val windowSize: Int
-) {
+) : Iterable<ByteArray> {
 
     companion object {
         fun of(data: EthHexString, windowSize: Int = 32): ByteWindow {
@@ -49,6 +49,14 @@ class ByteWindow internal constructor(
         val result = ByteArray(numberOfBytes)
         buffer[result]
         return result
+    }
+
+    override fun iterator(): Iterator<ByteArray> {
+        val self = this
+        return object : Iterator<ByteArray> {
+            override fun hasNext() = self.remaining() > 0
+            override fun next() = self.next()
+        }
     }
 
     override fun toString(): String {

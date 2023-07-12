@@ -16,3 +16,4 @@ data class EthTransaction(
     val gas: EthUint64,
     val gasPrice: EthUint64,
 )
+
