@@ -19,29 +19,32 @@ import io.hamal.lib.sdk.domain.ListExecsResponse
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 import io.hamal.lib.sdk.domain.ListTopicsResponse
 
-class StdSysExtension : Extension {
+class StdSysExtension(
+    private val templateSupplier: () -> HttpTemplate
+) : Extension {
     override fun create(): EnvValue {
         return EnvValue(
             ident = IdentValue("sys"),
             values = TableValue(
                 "_cfg" to TableValue(),
-                "adhoc" to InvokeAdhoc(),
+                "adhoc" to InvokeAdhoc(templateSupplier),
                 "exec" to TableValue(
-                    "list" to ListExecs(),
-                    "get" to GetExec()
+                    "list" to ListExecs(templateSupplier),
+                    "get" to GetExec(templateSupplier)
                 ),
                 "func" to TableValue(
-                    "create" to CreateFunc(),
-                    "get" to GetFunc(),
-                    "list" to ListFuncs()
+                    "create" to CreateFunc(templateSupplier),
+                    "get" to GetFunc(templateSupplier),
+                    "list" to ListFuncs(templateSupplier)
                 ),
                 "topic" to TableValue(
-                    "create" to CreateTopic(),
-                    "list" to ListTopics()
+                    "create" to CreateTopic(templateSupplier),
+                    "list" to ListTopics(templateSupplier)
                 ),
                 "evt" to TableValue(
-                    "emitter" to CreateEventEmitter(),
-                    "list" to ListEvents()
+                    "emitter" to CreateEventEmitter(templateSupplier),
+                    "list" to ListEvents(templateSupplier
+                    )
                 ),
             )
         )
@@ -49,7 +52,9 @@ class StdSysExtension : Extension {
     }
 }
 
-class InvokeAdhoc : FuncValue() {
+class InvokeAdhoc(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         try {
             val f = ctx.params.first().value as TableValue
@@ -72,7 +77,7 @@ class InvokeAdhoc : FuncValue() {
                 code = code
             )
 
-            val res = HttpTemplate("http://localhost:8084")
+            val res = templateSupplier()
                 .post("/v1/adhoc")
                 .body(r)
                 .execute(SubmittedInvokeAdhocReq::class)
@@ -86,7 +91,9 @@ class InvokeAdhoc : FuncValue() {
 
 }
 
-class CreateEventEmitter : FuncValue() {
+class CreateEventEmitter(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         val topicId = ctx.params.first().value as IdentValue
 
@@ -97,7 +104,7 @@ class CreateEventEmitter : FuncValue() {
                     println("EMIT")
                     println(ctx.env["topic_id"])
 
-                    HttpTemplate("http://localhost:8084")
+                    templateSupplier()
                         .post("/v1/topics/${ctx.env["topic_id"]}/events")
                         .header("Content-Type", "application/json")
                         .body("""{}""")
@@ -110,7 +117,9 @@ class CreateEventEmitter : FuncValue() {
     }
 }
 
-class ListEvents : FuncValue() {
+class ListEvents(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         println("List Events")
 
@@ -120,7 +129,7 @@ class ListEvents : FuncValue() {
             else -> t
         }
 
-        val response = HttpTemplate("http://localhost:8084")
+        val response = templateSupplier()
             .get("/v1/topics/$topicId/events")
             .execute(ListEventsResponse::class)
             .events
@@ -136,7 +145,9 @@ class ListEvents : FuncValue() {
     }
 }
 
-class GetFunc : FuncValue() {
+class GetFunc(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         println("GetFunc")
         val funcId = when (val value = ctx.params.first().value) {
@@ -145,7 +156,7 @@ class GetFunc : FuncValue() {
             else -> TODO()
         }
 
-        val response = HttpTemplate("http://localhost:8084")
+        val response = templateSupplier()
             .get("/v1/funcs/${funcId}")
             .execute()
 
@@ -169,7 +180,9 @@ class GetFunc : FuncValue() {
     }
 }
 
-class GetExec : FuncValue() {
+class GetExec(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         println("GetExec")
         val execId = when (val value = ctx.params.first().value) {
@@ -178,7 +191,7 @@ class GetExec : FuncValue() {
             else -> TODO()
         }
 
-        val response = HttpTemplate("http://localhost:8084")
+        val response = templateSupplier()
             .get("/v1/execs/${execId}")
             .execute()
 
@@ -204,11 +217,13 @@ class GetExec : FuncValue() {
     }
 }
 
-class ListFuncs : FuncValue() {
+class ListFuncs(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         println("ListFuncs")
 
-        val response = HttpTemplate("http://localhost:8084")
+        val response = templateSupplier()
             .get("/v1/funcs")
             .execute(ListFuncsResponse::class)
             .funcs
@@ -223,11 +238,13 @@ class ListFuncs : FuncValue() {
     }
 }
 
-class ListExecs : FuncValue() {
+class ListExecs(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         println("ListExecs")
 
-        val response = HttpTemplate("http://localhost:8084")
+        val response = templateSupplier()
             .get("/v1/execs")
             .execute(ListExecsResponse::class)
             .execs
@@ -243,11 +260,13 @@ class ListExecs : FuncValue() {
 }
 
 
-class ListTopics : FuncValue() {
+class ListTopics(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         println("ListFuncs")
 
-        val response = HttpTemplate("http://localhost:8084")
+        val response = templateSupplier()
             .get("/v1/topics")
             .execute(ListTopicsResponse::class)
             .topics
@@ -263,7 +282,9 @@ class ListTopics : FuncValue() {
 }
 
 
-class CreateTopic : FuncValue() {
+class CreateTopic(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         try {
             println("CREATE TOPIC")
@@ -275,7 +296,7 @@ class CreateTopic : FuncValue() {
                 name = TopicName((f[IdentValue("name")] as StringValue).value)
             )
 
-            val res = HttpTemplate("http://localhost:8084")
+            val res = templateSupplier()
                 .post("/v1/topics")
                 .body(r)
                 .execute(SubmittedCreateTopicReq::class)
@@ -289,12 +310,14 @@ class CreateTopic : FuncValue() {
     }
 }
 
-class InvokeFunc : FuncValue() {
+class InvokeFunc(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         val funcId = (ctx.params.first().value as StringValue).toString().replace("'", "")
         println("DEBUG: ${funcId}")
 
-        HttpTemplate("http://localhost:8084")
+        templateSupplier()
             .post("/v1/funcs/${funcId}/exec")
             .body(
                 InvokeOneshotReq(
@@ -309,7 +332,9 @@ class InvokeFunc : FuncValue() {
 }
 
 
-class CreateFunc : FuncValue() {
+class CreateFunc(
+    private val templateSupplier: () -> HttpTemplate
+) : FuncValue() {
     override fun invoke(ctx: FuncContext): Value {
         try {
             val f = ctx.params.first().value as TableValue
@@ -340,7 +365,7 @@ class CreateFunc : FuncValue() {
                 code = code
             )
 
-            val res = HttpTemplate("http://localhost:8084")
+            val res = templateSupplier()
                 .post("/v1/funcs")
                 .body(r)
                 .execute(SubmittedCreateFuncReq::class)

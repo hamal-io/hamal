@@ -3,6 +3,7 @@ package io.hamal.agent.config
 import io.hamal.agent.adapter.ExtensionLoader
 import io.hamal.agent.extension.std.log.StdLogExtension
 import io.hamal.agent.extension.std.sys.StdSysExtension
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.script.api.value.EnvValue
 import io.hamal.lib.script.api.value.IdentValue
 import io.hamal.lib.script.api.value.TableValue
@@ -21,7 +22,7 @@ open class EnvConfig {
     open fun envValue(): EnvValue {
         val extensionEnvironments = mutableListOf<EnvValue>()
         extensionEnvironments.add(StdLogExtension().create())
-        extensionEnvironments.add(StdSysExtension().create())
+        extensionEnvironments.add(StdSysExtension { HttpTemplate("http://localhost:8084") }.create())
 
         val entryPointLoader = ExtensionLoader.DefaultImpl()
 

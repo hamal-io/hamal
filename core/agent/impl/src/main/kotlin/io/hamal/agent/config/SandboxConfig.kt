@@ -10,5 +10,4 @@ import org.springframework.context.annotation.Configuration
 open class SandboxConfig {
     @Bean
     open fun sandbox(envValue: EnvValue): Sandbox = DefaultSandbox(envValue)
-
 }

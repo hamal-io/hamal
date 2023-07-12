@@ -4,10 +4,11 @@ import io.hamal.agent.AgentConfig
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.bootstrap.config.TestEnvConfig
+import io.hamal.bootstrap.config.TestAgentConfig
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.script.api.value.CodeValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HamalSdk
@@ -34,14 +35,13 @@ import kotlin.io.path.name
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(
     classes = [
-        TestEnvConfig::class,
+        TestAgentConfig::class,
         BackendConfig::class,
         AgentConfig::class
     ]
 )
 @SpringBootTest(
-    webEnvironment = WebEnvironment.DEFINED_PORT,
-    properties = ["server.port=8084"]
+    webEnvironment = WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
 abstract class BaseHamalTest {
@@ -89,10 +89,10 @@ abstract class BaseHamalTest {
 
     @PostConstruct
     fun setup() {
-        sdk = DefaultHamalSdk("http://localhost:${localPort}")
+        httpTemplate = HttpTemplate("http://localhost:${localPort}")
+        sdk = DefaultHamalSdk(httpTemplate)
     }
 
-    private lateinit var sdk: HamalSdk
 
     private fun setupTestEnv() {
         eventBrokerRepository.clear()
@@ -103,6 +103,9 @@ abstract class BaseHamalTest {
     }
 
 }
+
+lateinit var sdk: HamalSdk
+lateinit var httpTemplate: HttpTemplate
 
 private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
 private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }

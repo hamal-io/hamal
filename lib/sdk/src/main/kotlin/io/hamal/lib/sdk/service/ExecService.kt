@@ -20,13 +20,13 @@ interface ExecService {
 
 data class DefaultExecService(val template: HttpTemplate) : ExecService {
     override fun poll(): DequeueExecsResponse {
-        return HttpTemplate("http://localhost:8084")
+        return template
             .post("/v1/dequeue")
             .execute(DequeueExecsResponse::class)
     }
 
     override fun complete(execId: ExecId, stateAfterCompletion: State) {
-        HttpTemplate("http://localhost:8084")
+        template
             .post("/v1/execs/${execId.value.value}/complete")
             .body(
                 CompleteExecReq(
@@ -38,7 +38,7 @@ data class DefaultExecService(val template: HttpTemplate) : ExecService {
     }
 
     override fun fail(execId: ExecId, error: ErrorValue) {
-        HttpTemplate("http://localhost:8084")
+        template
             .post("/v1/execs/${execId.value.value}/fail")
             .body(FailExecReq(reason = error))
             .execute()

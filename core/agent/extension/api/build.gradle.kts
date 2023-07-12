@@ -2,9 +2,10 @@ plugins {
     id("hamal.common")
 }
 
-dependencies{
+dependencies {
     api(project(":lib:common"))
     api(project(":lib:script:api"))
+    api(project(":lib:sdk"))
 }
 
 //

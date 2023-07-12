@@ -12,14 +12,16 @@ interface HamalSdk {
 }
 
 data class DefaultHamalSdk(
-    val baseUrl: String
+    val httpTemplate: HttpTemplate
 ) : HamalSdk {
     override fun adhocService(): AdhocService {
-        return DefaultAdhocService(HttpTemplate(baseUrl = baseUrl))
+        return DefaultAdhocService(httpTemplate)
     }
 
     override fun execService(): ExecService {
-        return DefaultExecService(HttpTemplate(baseUrl = baseUrl))
+        return DefaultExecService(httpTemplate)
     }
 
 }
+
+typealias HttpTemplateSupplier = () -> HttpTemplate
