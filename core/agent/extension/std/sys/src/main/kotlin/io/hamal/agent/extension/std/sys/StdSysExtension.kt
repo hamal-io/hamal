@@ -18,6 +18,7 @@ import io.hamal.lib.sdk.domain.ListEventsResponse
 import io.hamal.lib.sdk.domain.ListExecsResponse
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 import io.hamal.lib.sdk.domain.ListTopicsResponse
+import java.lang.Thread.sleep
 
 class StdSysExtension(
     private val templateSupplier: () -> HttpTemplate
@@ -82,6 +83,8 @@ class InvokeAdhoc(
                 .body(r)
                 .execute(SubmittedInvokeAdhocReq::class)
 
+            sleep(500)
+
             return StringValue(res.execId.value.toString())
         } catch (t: Throwable) {
             t.printStackTrace()
@@ -109,6 +112,8 @@ class CreateEventEmitter(
                         .header("Content-Type", "application/json")
                         .body("""{}""")
                         .execute(SubmittedAppendEventReq::class)
+
+                    sleep(500)
 
                     return NilValue
                 }
@@ -140,6 +145,7 @@ class ListEvents(
 //                    "content" to evt.content
                 )
             }.toMap<IdentValue, Value>()
+
 
         return TableValue(response)
     }
@@ -300,6 +306,8 @@ class CreateTopic(
                 .post("/v1/topics")
                 .body(r)
                 .execute(SubmittedCreateTopicReq::class)
+            sleep(500)
+
 
             println(res)
             return StringValue(res.topicId.value.toString())
@@ -326,6 +334,8 @@ class InvokeFunc(
                 )
             )
             .execute()
+
+        sleep(500)
         return NilValue
     }
 
@@ -369,7 +379,7 @@ class CreateFunc(
                 .post("/v1/funcs")
                 .body(r)
                 .execute(SubmittedCreateFuncReq::class)
-
+            sleep(500)
 
             return StringValue(res.funcId.value.toString())
         } catch (t: Throwable) {
