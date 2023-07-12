@@ -15,6 +15,7 @@ import java.nio.file.Path
 interface BlockRepository {
     fun findBlock(number: EthUint64): EthBlock?
     fun findBlock(hash: EthHash): EthBlock?
+    fun findBlockHashOfTransaction(hash: EthHash): EthHash?
     fun store(block: EthBlock)
 }
 
@@ -46,24 +47,45 @@ class SqliteBlockRepository(
             );
         """.trimIndent()
         )
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS transactions (
+                 tx_hash        BLOB NOT NULL,
+                 block_hash     BLOB NOT NULL,
+                 PRIMARY KEY    (tx_hash)
+            );
+        """.trimIndent()
+        )
     }
 
     override fun clear() {
         connection.execute("DELETE FROM blocks")
+        connection.execute("DELETE FROM transactions")
     }
-
 
     override fun findBlock(number: EthUint64): EthBlock? {
         return connection.executeQueryOne("SELECT block FROM blocks WHERE block_number = :blockNumber") {
             query { set("blockNumber", number) }
-            map { rs -> protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block")).decode() }
+            map { rs ->
+                protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block").zlibDecompress()).decode()
+            }
         }
     }
 
     override fun findBlock(hash: EthHash): EthBlock? {
         return connection.executeQueryOne("SELECT block FROM blocks WHERE block_hash = :blockHash") {
             query { set("blockHash", hash) }
-            map { rs -> protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block")).decode() }
+            map { rs ->
+                protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block").zlibDecompress()).decode()
+            }
+        }
+    }
+
+    override fun findBlockHashOfTransaction(hash: EthHash): EthHash? {
+        return connection.executeQueryOne("SELECT block_hash FROM transactions WHERE tx_hash = :txHash") {
+            query { set("txHash", hash) }
+            map { rs -> EthHash(EthPrefixedHexString(rs.getString("block_hash"))) }
         }
     }
 
@@ -72,7 +94,14 @@ class SqliteBlockRepository(
             execute("INSERT INTO blocks(block_number, block_hash, block) VALUES( :blockNumber, :blockHash, :block )") {
                 set("blockNumber", block.number)
                 set("blockHash", block.hash)
-                set("block", protobuf.encodeToByteArray<PersistedEthBlock>(block.encode()))
+                set("block", protobuf.encodeToByteArray<PersistedEthBlock>(block.encode()).zlibCompress())
+            }
+
+            block.transactions.forEach { transaction ->
+                execute("INSERT INTO transactions(tx_hash, block_hash) VALUES( :txHash, :blockHash)") {
+                    set("txHash", transaction.hash)
+                    set("blockHash", block.hash)
+                }
             }
         }
     }

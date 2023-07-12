@@ -1,16 +1,18 @@
 package io.hamal.agent.extension.web3
 
 import io.hamal.agent.extension.api.Extension
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.script.api.value.*
+import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.eth.domain.EthGetBlockResp
+import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 class Web3Extension : Extension {
     override fun create(): EnvValue {
         val ethEnvironment = EnvValue(
             ident = IdentValue("eth"),
             values = TableValue(
-                "block" to TableValue(
-                    "get" to fn
-                )
+                "get_block" to fn
             )
         )
 
@@ -33,7 +35,6 @@ class Web3Extension : Extension {
 //                    Thread.sleep(1000)
 //
 //                    val block = (result.first() as EthBlockResponse).result
-//
 //                    //FIXME it would be cool if application can extend type system -
 //                    // so that web3 entities are accessible in script as well
 //                    return TableValue(
@@ -43,10 +44,32 @@ class Web3Extension : Extension {
 //                        StringValue("parentHash") to StringValue(block.parentHash.toString())
 //                    )
 
-//            val response = DefaultEthService.getBlock()
+
+            val blockNumber = ctx.params.first().let { param ->
+                when (val value = param.value) {
+                    is NumberValue -> EthUint64(value.value.toLong())
+                    else -> TODO()
+                }
+            }
+
+            val response = EthHttpBatchService(HttpTemplate("http://localhost:8081"))
+                .getBlock(blockNumber)
+                .execute()
+                .filterIsInstance<EthGetBlockResp>()
+                .first()
 
             return TableValue(
-//                "hash" to StringValue(response.result.hash)
+                "parent_hash" to StringValue(response.result.parentHash.toPrefixedHexString().value),
+                "hash" to StringValue(
+                    response.result.hash.toPrefixedHexString().value
+                ),
+                "transactions" to TableValue(
+                    *response.result.transactions.mapIndexed { idx, tx ->
+                        NumberValue(idx + 1) to TableValue(
+                            "hash" to StringValue(tx.hash.toPrefixedHexString().value)
+                        )
+                    }.toTypedArray()
+                )
             )
         }
 

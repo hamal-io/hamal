@@ -1,6 +1,7 @@
 package io.hamal.app.proxy.handler
 
 import io.hamal.app.proxy.cache.Cache
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.eth.abi.type.EthBool
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthGetBlockResp
@@ -53,7 +54,9 @@ class DefaultEthRequestHandler(
             }
         }
 
-        val batchService = EthHttpBatchService()
+        val batchService = EthHttpBatchService(
+            HttpTemplate("https://cloudflare-eth.com")
+        )
 
         requests.forEach { request ->
             when (request.method) {

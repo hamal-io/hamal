@@ -5,10 +5,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResp
-import io.hamal.lib.web3.eth.domain.EthGetBlockResp
-import io.hamal.lib.web3.eth.domain.EthGetLiteBlockResp
-import io.hamal.lib.web3.eth.domain.EthResp
+import io.hamal.lib.web3.eth.domain.*
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -19,7 +16,9 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
-class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
+class EthHttpBatchService(
+    private val httpTemplate: HttpTemplate
+) : EthBatchService<EthHttpBatchService> {
 
     private val lock = ReentrantLock()
     private val resultClasses = mutableListOf<KClass<*>>()
@@ -53,6 +52,16 @@ class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
         resultClass = EthGetBlockResp::class
     )
 
+    override fun getTransaction(hash: EthHash) = request(
+        method = "eth_getTransactionByHash",
+        params = JsonArray(
+            listOf(
+                JsonPrimitive(hash.toPrefixedHexString().value)
+            )
+        ),
+        resultClass = EthGetTransactionResp::class
+    )
+
     override fun getLiteBlock(hash: EthHash) = request(
         method = "eth_getBlockByHash",
         params = JsonArray(
@@ -83,7 +92,7 @@ class EthHttpBatchService : EthBatchService<EthHttpBatchService> {
                 return listOf()
             }
 
-            val response = HttpTemplate("https://cloudflare-eth.com")
+            val response = httpTemplate
                 .post("/")
                 .body(JsonArray(requests))
                 .execute(JsonArray::class)
