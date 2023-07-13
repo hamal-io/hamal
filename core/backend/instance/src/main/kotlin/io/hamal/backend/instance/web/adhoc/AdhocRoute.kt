@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class AdhocRoute(
+class AdhocRoute(
     private val submitRequest: SubmitRequest
 ) {
     @PostMapping("/v1/adhoc")

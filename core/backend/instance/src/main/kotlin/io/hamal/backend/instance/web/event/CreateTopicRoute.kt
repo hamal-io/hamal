@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class CreateTopicRoute(
+class CreateTopicRoute(
     private val submitRequest: SubmitRequest
 ) {
     @PostMapping("/v1/topics")

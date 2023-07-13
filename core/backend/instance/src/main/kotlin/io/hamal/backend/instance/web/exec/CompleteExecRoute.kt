@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class CompleteExecRoute(
+class CompleteExecRoute(
     val request: SubmitRequest
 ) {
     @PostMapping("/v1/execs/{execId}/complete")

@@ -13,7 +13,7 @@ import kotlin.time.*
 
 
 @RestController
-open class ListTriggersRoute(
+class ListTriggersRoute(
     private val triggerQueryRepository: TriggerQueryRepository
 ) {
     @GetMapping("/v1/triggers")

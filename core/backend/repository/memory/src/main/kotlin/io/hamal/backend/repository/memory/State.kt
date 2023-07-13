@@ -11,11 +11,12 @@ object MemoryStateRepository : StateCmdRepository, StateQueryRepository {
 
     private val states = ConcurrentHashMap<Correlation, CorrelatedState>()
 
-    override fun set(cmdId: CmdId, stateToSet: StateCmdRepository.StateToSet): CorrelatedState {
-        return CorrelatedState(
-            correlation = stateToSet.correlation,
-            state = stateToSet.state,
-        ).also { states[it.correlation] = it }
+    override fun set(cmdId: CmdId, correlatedState: CorrelatedState) {
+        states[correlatedState.correlation] = correlatedState
+    }
+
+    override fun clear() {
+        states.clear()
     }
 
     override fun find(correlation: Correlation) = states[correlation]

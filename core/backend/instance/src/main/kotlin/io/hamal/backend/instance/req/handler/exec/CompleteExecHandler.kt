@@ -9,6 +9,7 @@ import io.hamal.backend.repository.api.ExecQueryRepository
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CompletedExec
+import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq
@@ -31,7 +32,7 @@ class CompleteExecHandler(
 
         completeExec(req)
             // FIXME also emit events in req
-            .also { emitCompleteionEvent(cmdId, it) }
+            .also { emitCompletionEvent(cmdId, it) }
             .also { setState(cmdId, it, req.state) }
 
     }
@@ -39,7 +40,7 @@ class CompleteExecHandler(
     private fun completeExec(req: SubmittedCompleteExecReq) =
         execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.execId))
 
-    private fun emitCompleteionEvent(cmdId: CmdId, exec: CompletedExec) {
+    private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
         eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))
     }
 
@@ -47,7 +48,7 @@ class CompleteExecHandler(
         val correlation = exec.correlation
         if (correlation != null) {
             stateCmdRepository.set(
-                cmdId, StateCmdRepository.StateToSet(
+                cmdId, CorrelatedState(
                     correlation = correlation,
                     state = state
                 )

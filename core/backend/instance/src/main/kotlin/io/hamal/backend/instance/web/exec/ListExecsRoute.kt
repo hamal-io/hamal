@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class ListExecsRoute(
+class ListExecsRoute(
     private val execQueryRepository: ExecQueryRepository
 ) {
     @GetMapping("/v1/execs")

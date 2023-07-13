@@ -57,6 +57,12 @@ internal abstract class BaseTest {
     lateinit var reqCmdRepository: ReqCmdRepository
 
     @Autowired
+    lateinit var stateQueryRepository: StateQueryRepository
+
+    @Autowired
+    lateinit var stateCmdRepository: StateCmdRepository
+
+    @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @Autowired
@@ -68,9 +74,10 @@ internal abstract class BaseTest {
     @BeforeEach
     fun before() {
         eventBrokerRepository.clear()
-        reqCmdRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
+        reqCmdRepository.clear()
+        stateCmdRepository.clear()
         triggerCmdRepository.clear()
     }
 

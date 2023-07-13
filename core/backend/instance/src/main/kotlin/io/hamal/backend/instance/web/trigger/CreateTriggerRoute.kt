@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 import kotlin.time.*
 
 @RestController
-open class CreateTriggerRoute(
+class CreateTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: LogBrokerRepository<*>,
     private val request: SubmitRequest

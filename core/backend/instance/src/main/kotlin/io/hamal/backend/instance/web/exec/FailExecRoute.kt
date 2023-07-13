@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class FailExecRoute(
+class FailExecRoute(
     val request: SubmitRequest
 ) {
     @PostMapping("/v1/execs/{execId}/fail")

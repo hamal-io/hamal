@@ -6,13 +6,12 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 
 interface StateCmdRepository {
-    fun set(cmdId: CmdId, stateToSet: StateToSet): CorrelatedState
-    data class StateToSet(
-        val correlation: Correlation,
-        val state: State
-    )
+    fun set(cmdId: CmdId, correlatedState: CorrelatedState)
+    fun clear()
 }
 
 interface StateQueryRepository {
     fun find(correlation: Correlation): CorrelatedState?
+    fun get(correlation: Correlation) = find(correlation)
+        ?: CorrelatedState(correlation, State())
 }

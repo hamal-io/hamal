@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class InvokeOneshotRoute(
+class InvokeOneshotRoute(
     private val request: SubmitRequest,
     private val funcQueryRepository: FuncQueryRepository
 ) {

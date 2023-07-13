@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class GetFuncRoute(
+class GetFuncRoute(
     private val funcQueryRepository: FuncQueryRepository,
 ) {
     @GetMapping("/v1/funcs/{funcId}")

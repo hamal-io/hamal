@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class ListTopicsRoute(
+class ListTopicsRoute(
     private val eventBrokerRepository: LogBrokerRepository<*>
 ) {
     @GetMapping("/v1/topics")

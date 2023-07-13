@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class AppendEventRoute(
+class AppendEventRoute(
     private val submitRequest: SubmitRequest,
     private val eventBrokerRepository: LogBrokerRepository<*>
 ) {
