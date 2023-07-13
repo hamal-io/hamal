@@ -4,6 +4,7 @@ import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
@@ -82,15 +83,20 @@ internal abstract class BaseTest {
     }
 
 
-    fun createExec(execId: ExecId, status: ExecStatus): Exec {
+    fun createExec(
+        execId: ExecId,
+        status: ExecStatus,
+        correlation: Correlation? = null,
+        code: CodeValue = CodeValue("")
+    ): Exec {
 
         val planedExec = execCmdRepository.plan(
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
-                correlation = null,
+                correlation = correlation,
                 inputs = ExecInputs(),
-                code = CodeValue("")
+                code = code
             )
         )
 

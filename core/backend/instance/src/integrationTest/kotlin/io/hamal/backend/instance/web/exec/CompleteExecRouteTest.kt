@@ -1,13 +1,12 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.lib.domain.CompletedExec
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.StartedExec
-import io.hamal.lib.domain.State
+import io.hamal.lib.domain.*
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq
+import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
@@ -20,12 +19,20 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 internal class CompleteExecRouteTest : BaseExecRouteTest() {
+
     @TestFactory
     fun `Can not complete exec which is not started`() = ExecStatus.values()
         .filterNot { it == ExecStatus.Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {
-                val exec = createExec(generateDomainId(::ExecId), execStatus)
+                val exec = createExec(
+                    execId = generateDomainId(::ExecId),
+                    status = execStatus,
+                    correlation = Correlation(
+                        funcId = generateDomainId(::FuncId),
+                        correlationId = CorrelationId("__correlation__")
+                    )
+                )
 
                 val completionResponse = requestCompletion(exec.id)
                 assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
@@ -34,14 +41,21 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 val result = completionResponse.result(SubmittedCompleteExecReq::class)
 
                 awaitFailed(result.id)
-                // FIXME verify state not updated
+                verifyNoStateSet(result.execId)
                 // FIXME verify event not emitted
             }
         }
 
     @Test
-    fun `Complete started exec`() {
-        val startedExec = createExec(ExecId(123), ExecStatus.Started) as StartedExec
+    fun `Completes started exec`() {
+        val startedExec = createExec(
+            execId = ExecId(123),
+            status = ExecStatus.Started,
+            correlation = Correlation(
+                funcId = generateDomainId(::FuncId),
+                correlationId = CorrelationId("__correlation__")
+            )
+        ) as StartedExec
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
@@ -51,9 +65,10 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         awaitCompleted(result.id)
 
         verifyExecCompleted(result.execId)
-        //FIXME verify state updated
-        //FIXME verify events emitted
+        verifyStateSet(result.execId)
+        //FIXME events
     }
+
 
     @Test
     fun `Tries to complete exec which does not exist`() {
@@ -74,9 +89,25 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
     }
 
     private fun verifyExecCompleted(execId: ExecId) {
-        with(execQueryRepository.find(execId)!! as CompletedExec) {
+        with(execQueryRepository.get(execId) as CompletedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
+        }
+    }
+
+    private fun verifyStateSet(execId: ExecId) {
+        val exec = (execQueryRepository.get(execId) as CompletedExec)
+        with(stateQueryRepository.get(exec.correlation!!)) {
+            assertThat(correlation, equalTo(exec.correlation))
+            assertThat(state, equalTo(State(TableValue("value" to NumberValue("13.37")))))
+        }
+    }
+
+    private fun verifyNoStateSet(execId: ExecId) {
+        val exec = (execQueryRepository.get(execId))
+        with(stateQueryRepository.get(exec.correlation!!)) {
+            assertThat(correlation, equalTo(exec.correlation))
+            assertThat(state, equalTo(State()))
         }
     }
 
@@ -85,9 +116,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
             .body(
                 CompleteExecReq(
                     state = State(TableValue("value" to NumberValue("13.37"))),
-                    events = listOf(
-                        Event(TableValue("value" to NumberValue(42)))
-                    )
+                    events = listOf(Event(TableValue("value" to NumberValue(42))))
                 )
             )
             .execute()

@@ -1,9 +1,12 @@
 package io.hamal.backend.instance.web.state
 
 import io.hamal.lib.domain.CorrelatedState
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -19,8 +22,16 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
     @Test
     fun `Get state`() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
-        val execId = awaitCompleted(invokeFunc(funcId, CorrelationId("__1__"))).execId
-        startExec()
+
+        val execId = createExec(
+            execId = ExecId(123),
+            status = ExecStatus.Started,
+            correlation = Correlation(
+                funcId = funcId,
+                correlationId = CorrelationId("__1__")
+            )
+        ).id
+
         awaitCompleted(completeExec(execId, State(TableValue("hamal" to StringValue("rocks")))))
 
         val response = httpTemplate.get("/v1/funcs/${funcId.value.value}/state/__1__").execute()
@@ -30,13 +41,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
         val correlatedState = response.result(CorrelatedState::class)
         assertThat(correlatedState.correlation.funcId, equalTo(funcId))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(
-            correlatedState.state, equalTo(
-                State(
-                    TableValue("hamal" to StringValue("rocks"))
-                )
-            )
-        )
+        assertThat(correlatedState.state, equalTo(State(TableValue("hamal" to StringValue("rocks")))))
     }
 
     @Test
