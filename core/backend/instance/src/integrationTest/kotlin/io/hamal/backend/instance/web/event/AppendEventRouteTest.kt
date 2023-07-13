@@ -2,11 +2,12 @@ package io.hamal.backend.instance.web.event
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.StringValue
+import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -22,8 +23,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
         awaitCompleted(
             appendEvent(
                 topicResponse.topicId,
-                ContentType("application/json"),
-                Content("""{"hamal":"rocks"}""")
+                TableValue("hamal" to StringValue("rocks"))
             )
         )
 
@@ -31,8 +31,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
             assertThat(events, hasSize(1))
 
             val event = events.first()
-            assertThat(event.contentType, equalTo(ContentType("application/json")))
-            assertThat(event.content, equalTo(Content("""{"hamal":"rocks"}""")))
+            assertThat(event.value, equalTo(TableValue("hamal" to StringValue("rocks"))))
         }
     }
 
@@ -46,8 +45,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
             IntRange(1, 10).map {
                 appendEvent(
                     topicResponse.topicId,
-                    ContentType("application/json"),
-                    Content("""{"hamal":"rocks"}""")
+                    TableValue("hamal" to StringValue("rocks"))
                 )
             }
         )
@@ -55,8 +53,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
         with(listEvents(topicResponse.topicId)) {
             assertThat(events, hasSize(10))
             events.forEach { event ->
-                assertThat(event.contentType, equalTo(ContentType("application/json")))
-                assertThat(event.content, equalTo(Content("""{"hamal":"rocks"}""")))
+                assertThat(event.value, equalTo(TableValue("hamal" to StringValue("rocks"))))
             }
         }
     }
@@ -64,7 +61,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
     @Test
     fun `Tries to append to topic which does not exists`() {
         val topicResponse = httpTemplate.post("/v1/topics/1234/events")
-            .body("text/plain", "Some Text nobody will receive".toByteArray())
+            .body(TableValue("hamal" to StringValue("rocks")))
             .execute()
 
         assertThat(topicResponse.statusCode, equalTo(HttpStatusCode.NotFound))

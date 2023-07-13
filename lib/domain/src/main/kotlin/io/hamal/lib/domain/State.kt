@@ -1,14 +1,14 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
+import io.hamal.lib.domain.vo.base.Inputs
+import io.hamal.lib.domain.vo.base.InputsSerializer
+import io.hamal.lib.script.api.value.TableValue
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class State(
-    val contentType: ContentType,
-    val content: Content
-)
+@Serializable(with = State.Serializer::class)
+class State(override val value: TableValue = TableValue()) : Inputs() {
+    internal object Serializer : InputsSerializer<State>(::State)
+}
 
 @Serializable
 data class CorrelatedState(

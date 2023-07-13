@@ -7,12 +7,13 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.StringValue
+import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -62,15 +63,9 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         id = ReqId(10),
         status = ReqStatus.Submitted,
         execId = ExecId(1234),
-        state = State(
-            contentType = ContentType("application/json"),
-            content = Content("""{"counter":1}""")
-        ),
+        state = State(TableValue("counter" to NumberValue(1))),
         events = listOf(
-            Event(
-                contentType = ContentType("text/plain"),
-                content = Content("Ich habe fertisch")
-            )
+            Event(TableValue("ich" to StringValue("habFertsch")))
         ),
     )
 

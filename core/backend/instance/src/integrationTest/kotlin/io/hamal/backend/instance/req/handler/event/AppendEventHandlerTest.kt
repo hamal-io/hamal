@@ -9,10 +9,10 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.script.api.value.StringValue
+import io.hamal.lib.script.api.value.TableValue
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat
@@ -32,10 +32,7 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
                 id = ReqId(SnowflakeId(123)),
                 status = ReqStatus.Submitted,
                 topicId = TopicId(4444),
-                event = Event(
-                    contentType = ContentType("application/json"),
-                    content = Content("""{"hamal":"rockz"}""")
-                )
+                event = Event(TableValue("hamal" to StringValue("rockz")))
             )
         )
 
@@ -49,8 +46,7 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
                 assertThat(topicId, equalTo(TopicId(4444)))
 
                 val evt = ProtoBuf { }.decodeFromByteArray(Event.serializer(), bytes)
-                assertThat(evt.contentType, equalTo(ContentType("application/json")))
-                assertThat(evt.content, equalTo(Content("""{"hamal":"rockz"}""")))
+                assertThat(evt.value, equalTo(TableValue("hamal" to StringValue("rockz"))))
             }
         }
     }
@@ -63,10 +59,7 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
                     id = ReqId(SnowflakeId(123)),
                     status = ReqStatus.Submitted,
                     topicId = TopicId(123),
-                    event = Event(
-                        contentType = ContentType("application/json"),
-                        content = Content("""{"hamal":"rockz"}""")
-                    )
+                    event = Event(TableValue("hamal" to StringValue("rockz")))
                 )
             )
         }

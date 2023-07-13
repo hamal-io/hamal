@@ -1,10 +1,9 @@
 package io.hamal.agent.service
 
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.script.api.Sandbox
 import io.hamal.lib.script.api.value.ErrorValue
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import org.springframework.scheduling.annotation.Scheduled
@@ -39,10 +38,7 @@ class AgentService(
                         }
 //
                         sdk.execService().complete(
-                            request.id, State(
-                                contentType = ContentType("application/json"),
-                                content = Content("")
-                            )
+                            request.id, State(TableValue())
                         )
 
                     } catch (t: Throwable) {

@@ -1,12 +1,12 @@
 package io.hamal.backend.instance.web.event
 
 import io.hamal.lib.domain.HamalError
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ListEventsResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -30,7 +30,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
         )
 
         awaitCompleted(
-            appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
+            appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(1)))
         )
 
         with(listEvents(topicResponse.topicId)) {
@@ -40,8 +40,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
 
             with(events.first()) {
                 assertThat(id, equalTo(EventId(1)))
-                assertThat(contentType, equalTo(ContentType("text/plain")))
-                assertThat(content, equalTo(Content("1")))
+                assertThat(value, equalTo(TableValue("counter" to NumberValue(1))))
             }
         }
     }
@@ -54,7 +53,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
+                appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(it)))
             }
         )
 
@@ -65,7 +64,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
         assertThat(listResponse.events, hasSize(23))
 
         listResponse.events.forEachIndexed { idx, event ->
-            assertThat(event.content, equalTo(Content((idx + 1).toString())))
+            assertThat(event.value, equalTo(TableValue("counter" to NumberValue(idx + 1))))
         }
     }
 
@@ -77,7 +76,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicResponse.topicId, ContentType("text/plain"), Content(it.toString().toByteArray()))
+                appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(it)))
             }
         )
 
@@ -90,7 +89,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
 
         val event = listResponse.events.first()
         assertThat(event.id, equalTo(EventId(96)))
-        assertThat(event.content, equalTo(Content((96).toString())))
+        assertThat(event.value, equalTo(TableValue("counter" to NumberValue(96))))
     }
 
     @Test
@@ -104,7 +103,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
         )
 
         awaitCompleted(
-            appendEvent(topicResponse.topicId, ContentType("text/plain"), Content("1".toByteArray()))
+            appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(1)))
         )
 
         with(listEvents(anotherTopicResponse.topicId)) {

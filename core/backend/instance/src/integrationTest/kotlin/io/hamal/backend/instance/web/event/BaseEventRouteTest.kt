@@ -4,13 +4,12 @@ import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.ListEventsResponse
 import io.hamal.lib.sdk.domain.ListTopicsResponse
 import org.hamcrest.MatcherAssert.assertThat
@@ -42,9 +41,9 @@ internal sealed class BaseEventRouteTest : BaseRouteTest() {
         return createTopicResponse.result(SubmittedCreateTopicReq::class)
     }
 
-    fun appendEvent(topicId: TopicId, contentType: ContentType, content: Content): SubmittedAppendEventReq {
+    fun appendEvent(topicId: TopicId, value: TableValue): SubmittedAppendEventReq {
         val createTopicResponse = httpTemplate.post("/v1/topics/${topicId.value.value}/events")
-            .body(contentType.value, content.value)
+            .body(value)
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))

@@ -142,8 +142,7 @@ class ListEvents(
             .mapIndexed { idx, evt ->
                 IdentValue((idx + 1).toString()) to TableValue(
                     "id" to StringValue(evt.id.value.toString()),
-                    "content_type" to StringValue(evt.contentType.value),
-//                    "content" to evt.content
+                    "value" to evt.value
                 )
             }.toMap<IdentValue, Value>()
 

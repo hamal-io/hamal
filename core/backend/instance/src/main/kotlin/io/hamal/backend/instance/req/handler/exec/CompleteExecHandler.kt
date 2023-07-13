@@ -6,9 +6,11 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CompletedExec
 import io.hamal.lib.domain.StartedExec
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq
 import org.springframework.stereotype.Component
 
@@ -16,7 +18,8 @@ import org.springframework.stereotype.Component
 class CompleteExecHandler(
     private val execQueryRepository: ExecQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter<*>
+    private val eventEmitter: SystemEventEmitter<*>,
+    private val stateCmdRepository: StateCmdRepository
 ) : ReqHandler<SubmittedCompleteExecReq>(SubmittedCompleteExecReq::class) {
 
     override fun invoke(req: SubmittedCompleteExecReq) {
@@ -25,25 +28,30 @@ class CompleteExecHandler(
         val exec = execQueryRepository.get(req.execId)
         require(exec is StartedExec) { "Exec not in status Started" }
 
-//        if (exec.correlation != null) {
-//            stateCmdService.set(
-//                cmdId, StateCmdService.StateToSet(
-//                    correlation = exec.correlation!!,
-//                    payload = req.state
-//                )
-//            )
-//        }
 
         completeExec(req)
-            // FIXME also set state
             // FIXME also emit events in req
-            .also { emitEvent(cmdId, it) }
+            .also { emitCompleteionEvent(cmdId, it) }
+            .also { setState(cmdId, it, req.state) }
+
     }
 
     private fun completeExec(req: SubmittedCompleteExecReq) =
         execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.execId))
 
-    private fun emitEvent(cmdId: CmdId, exec: CompletedExec) {
-        eventEmitter.emit(cmdId, ExecutionCompletedEvent(completedExec = exec))
+    private fun emitCompleteionEvent(cmdId: CmdId, exec: CompletedExec) {
+        eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))
+    }
+
+    private fun setState(cmdId: CmdId, exec: CompletedExec, state: State) {
+        val correlation = exec.correlation
+        if (correlation != null) {
+            stateCmdRepository.set(
+                cmdId, StateCmdRepository.StateToSet(
+                    correlation = correlation,
+                    state = state
+                )
+            )
+        }
     }
 }

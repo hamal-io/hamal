@@ -5,9 +5,8 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.req.AppendEventReq
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.script.api.value.TableValue
 import io.hamal.lib.sdk.domain.*
 import io.hamal.lib.sdk.domain.ListTopicsResponse.*
 import org.springframework.http.HttpStatus
@@ -22,17 +21,13 @@ open class AppendEventRoute(
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,
-        @RequestHeader("Content-Type") contentType: ContentType,
-        @RequestBody body: ByteArray
+        @RequestBody value: TableValue
     ): ResponseEntity<SubmittedAppendEventReq> {
         val topic = eventBrokerRepository.getTopic(topicId)
         val result = submitRequest(
             AppendEventReq(
                 topicId = topic.id,
-                event = Event(
-                    contentType = contentType,
-                    content = Content(body)
-                )
+                event = Event(value)
             )
         )
         return ResponseEntity(result, HttpStatus.ACCEPTED)

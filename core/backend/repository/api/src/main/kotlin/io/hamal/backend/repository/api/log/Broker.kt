@@ -50,6 +50,7 @@ interface LogBrokerRepository<TOPIC : LogTopic> :
     FindTopic<TOPIC>,
     ReadFromTopic<TOPIC>,
     Closeable {
+
     fun listTopics(): List<TOPIC>
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -61,8 +62,7 @@ interface LogBrokerRepository<TOPIC : LogTopic> :
                 val evt = ProtoBuf.decodeFromByteArray(Event.serializer(), chunk.bytes)
                 EventWithId(
                     id = EventId(chunk.id.value),
-                    contentType = evt.contentType,
-                    content = evt.content
+                    value = evt.value
                 )
             }
     }

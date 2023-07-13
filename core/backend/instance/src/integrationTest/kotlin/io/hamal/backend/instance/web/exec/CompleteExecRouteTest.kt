@@ -6,13 +6,13 @@ import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq
-import io.hamal.lib.domain.vo.Content
-import io.hamal.lib.domain.vo.ContentType
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.script.api.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -60,10 +60,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         val response = httpTemplate.post("/v1/execs/123456765432/complete")
             .body(
                 CompleteExecReq(
-                    state = State(
-                        contentType = ContentType("text/plain"),
-                        content = Content("")
-                    ),
+                    state = State(),
                     events = listOf()
                 )
             )
@@ -87,15 +84,9 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         httpTemplate.post("/v1/execs/${execId.value}/complete")
             .body(
                 CompleteExecReq(
-                    state = State(
-                        contentType = ContentType("text/plain"),
-                        content = Content("13.37")
-                    ),
+                    state = State(TableValue("value" to NumberValue("13.37"))),
                     events = listOf(
-                        Event(
-                            contentType = ContentType("text/plain"),
-                            content = Content("42")
-                        )
+                        Event(TableValue("value" to NumberValue(42)))
                     )
                 )
             )
