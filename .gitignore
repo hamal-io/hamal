@@ -12,9 +12,16 @@ target/
 *.iml
 *.ipr
 .idea/
+**/.idead/
 .gradle/
 .run/
 **/out/
+
+*.o
+*.so
+**/lua
+**/luac
+**/liblua.a
 
 ### Eclipse ###
 .apt_generated
