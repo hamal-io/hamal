@@ -98,7 +98,7 @@ public final class NativeSupport {
             // Generate library name.
             StringBuilder builder = new StringBuilder(isWindows ? "libjnlua-" : "jnlua-");
 
-            if (src == LuaState53.class) {
+            if (src == LuaState.class) {
                 builder.append("5.3-");
             } else {
                 builder.append("5.2-");
@@ -123,7 +123,8 @@ public final class NativeSupport {
             }
 
 
-            System.load("/home/ddymke/Repo/hamal/lib/kua/native/kua/build/libkua.so");
+//            System.load("/home/ddymke/Repo/hamal/lib/kua/native/kua/build/libkua.so");
+            System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so");
         }
     }
 }

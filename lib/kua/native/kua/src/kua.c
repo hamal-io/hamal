@@ -24,6 +24,11 @@
 #define JNLUA_THREADLOCAL static __thread
 #endif
 
+#define JNLUA_SUFFIX 53
+
+#include <stdint.h>
+#define JNLUA_THREADLOCAL static __thread
+
 /* ---- Definitions ---- */
 #define JNLUA_APIVERSION 3
 #define JNLUA_JNIVERSION JNI_VERSION_1_6

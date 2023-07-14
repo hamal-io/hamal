@@ -22,6 +22,7 @@ target/
 **/lua
 **/luac
 **/liblua.a
+**/cmake-build-debug/
 
 ### Eclipse ###
 .apt_generated
