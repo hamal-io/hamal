@@ -61,7 +61,7 @@ public class LuaState53 extends LuaState {
 
     @Override
     native void lua_load(InputStream inputStream, String chunkname,
-                           String mode) throws IOException;
+                         String mode) throws IOException;
 
     @Override
     native void lua_dump(OutputStream outputStream, boolean strip) throws IOException;

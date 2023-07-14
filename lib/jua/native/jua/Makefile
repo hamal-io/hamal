@@ -27,10 +27,6 @@ build/jua.o: jua.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I$(LUA_INC_DIR) -o build/jua.o jua.c
 
-build/jua_vm.o: jua_vm.c jua_vm.h
-	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I$(LUA_INC_DIR) -o build/jua_vm.o jua_vm.c
-
 clean:
 	-rm build/*.o
 	-rm build/*.so

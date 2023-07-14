@@ -108,7 +108,7 @@ public abstract class LuaState {
 	/**
 	 * Registry pseudo-index.
 	 */
-	public final int REGISTRYINDEX = 0;
+	public final int REGISTRYINDEX;
 
 	/**
 	 * OK status.
@@ -144,17 +144,17 @@ public abstract class LuaState {
 	/**
 	 * The Lua version. The format is &lt;major&gt;.&lt;minor&gt;.
 	 */
-	public final String LUA_VERSION = "v";
+	public final String LUA_VERSION;
 
 	/**
 	 * The Lua version number. The format is &lt;major&gt; * 100 + &lt;minor&gt;.
 	 */
-	public final int LUA_VERSION_NUM = 1;
+	public final int LUA_VERSION_NUM;
 
 	/**
 	 * The Lua integer width. Used internally.
 	 */
-	private final int luaIntWidth = 4;
+	private final int luaIntWidth;
 
 	/**
 	 * The API version.
@@ -277,54 +277,54 @@ public abstract class LuaState {
 	}
 
 	private LuaState(long luaState, int memory) {
-//		NativeSupport.getInstance().getLoader().load(this.getClass());
-//		REGISTRYINDEX = lua_registryindex();
-//		LUA_VERSION = lua_version();
-//		LUA_VERSION_NUM = lua_versionnum();
-//		luaIntWidth = lua_integerwidth();
-//
-//		characterSet = Charset.forName("UTF-8");
-//
-//		ownState = luaState == 0L;
-//		luaMemoryTotal = memory;
-//		lua_newstate(APIVERSION, luaState);
-//		check();
-//
-//		// Create a finalize guardian
-//		finalizeGuardian = new Object() {
-//			@Override
-//			public void finalize() {
-//				synchronized (LuaState.this) {
-//					closeInternal();
-//				}
-//			}
-//		};
-//
-//		// Add metamethods
-//		for (int i = 0; i < JavaReflector.Metamethod.values().length; i++) {
-//			final JavaReflector.Metamethod metamethod = JavaReflector.Metamethod
-//					.values()[i];
-//			lua_pushjavafunction(new JavaFunction() {
-//				@Override
-//				public int invoke(LuaState luaState) {
-//					JavaFunction javaFunction = getMetamethod(
-//							luaState.toJavaObjectRaw(1), metamethod);
-//					if (javaFunction != null) {
-//						return javaFunction.invoke(LuaState.this);
-//					} else {
-//						throw new UnsupportedOperationException(
-//								metamethod.getMetamethodName());
-//					}
-//				}
-//			});
-//			lua_setfield(-2, metamethod.getMetamethodName());
-//		}
-//		lua_pop(1);
-//
-//		// Set fields
-//		classLoader = Thread.currentThread().getContextClassLoader();
-//		javaReflector = DefaultJavaReflector.getInstance();
-//		converter = DefaultConverter.getInstance();
+		NativeSupport.getInstance().getLoader().load(this.getClass());
+		REGISTRYINDEX = lua_registryindex();
+		LUA_VERSION = lua_version();
+		LUA_VERSION_NUM = lua_versionnum();
+		luaIntWidth = lua_integerwidth();
+
+		characterSet = Charset.forName("UTF-8");
+
+		ownState = luaState == 0L;
+		luaMemoryTotal = memory;
+		lua_newstate(APIVERSION, luaState);
+		check();
+
+		// Create a finalize guardian
+		finalizeGuardian = new Object() {
+			@Override
+			public void finalize() {
+				synchronized (LuaState.this) {
+					closeInternal();
+				}
+			}
+		};
+
+		// Add metamethods
+		for (int i = 0; i < JavaReflector.Metamethod.values().length; i++) {
+			final JavaReflector.Metamethod metamethod = JavaReflector.Metamethod
+					.values()[i];
+			lua_pushjavafunction(new JavaFunction() {
+				@Override
+				public int invoke(LuaState luaState) {
+					JavaFunction javaFunction = getMetamethod(
+							luaState.toJavaObjectRaw(1), metamethod);
+					if (javaFunction != null) {
+						return javaFunction.invoke(LuaState.this);
+					} else {
+						throw new UnsupportedOperationException(
+								metamethod.getMetamethodName());
+					}
+				}
+			});
+			lua_setfield(-2, metamethod.getMetamethodName());
+		}
+		lua_pop(1);
+
+		// Set fields
+		classLoader = Thread.currentThread().getContextClassLoader();
+		javaReflector = DefaultJavaReflector.getInstance();
+		converter = DefaultConverter.getInstance();
 	}
 
 	// -- Properties
