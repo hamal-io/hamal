@@ -18,7 +18,6 @@ target/
 **/out/
 
 *.o
-*.so
 **/lua
 **/luac
 **/liblua.a
