@@ -13,8 +13,9 @@ endif()
 include_directories(${JNI_INCLUDE_DIRS})
 
 set(KUA_LIB_SRCS
-        "src/kua.c"
-        )
+    src/kua.c
+    src/kua_info.c
+)
 
 
 add_library(kua SHARED ${KUA_LIB_SRCS})
