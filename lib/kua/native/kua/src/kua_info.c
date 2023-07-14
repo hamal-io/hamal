@@ -1,7 +1,5 @@
+#include "kua_common.h"
 #include "kua_macro.h"
-
-#include "lua.h"
-#include <jni.h>
 
 
 JNIEXPORT jint JNICALL

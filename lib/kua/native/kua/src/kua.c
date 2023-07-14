@@ -1634,7 +1634,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1resume) (JNIEnv *env, jobject ob
 //	int nresults = 0;
 //
 //	JNLUA_ENV(env);
-//	L = getluathread(obj);
+//	L = get_thread(obj);
 //	if (checktype(L, index, LUA_TTHREAD)
 //			&& checkarg(nargs >= 0, "illegal argument count")
 //			&& checknelems(L, nargs + 1)) {
