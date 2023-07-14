@@ -57,10 +57,10 @@ include(":core:bootstrap")
 
 include(":core:frontend")
 
-
 include(":lib:common")
 include(":lib:domain")
 include(":lib:http")
+include(":lib:klua")
 include(":lib:script:api")
 include(":lib:script:impl")
 include(":lib:sdk")
