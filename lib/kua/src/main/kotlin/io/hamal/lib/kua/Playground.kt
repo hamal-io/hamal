@@ -5,4 +5,5 @@ fun main() {
     FixedPathLoader.load()
     val s = State()
     println(s.integerWidth())
+    println(s.versionNumber())
 }

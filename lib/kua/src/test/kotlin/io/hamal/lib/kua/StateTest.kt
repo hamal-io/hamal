@@ -12,6 +12,14 @@ class IntegerWidthTest {
     }
 }
 
+class VersionNumberTest {
+    @Test
+    fun `Loads current lua version number`() {
+        val result = testInstance.versionNumber()
+        assertThat("5.4", result, equalTo(504))
+    }
+}
+
 private val testInstance by lazy {
     ResourceLoader.load()
     State()
