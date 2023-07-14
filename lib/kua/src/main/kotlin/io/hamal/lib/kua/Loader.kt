@@ -7,6 +7,7 @@ interface Loader {
 
 object FixedPathLoader : Loader {
     override fun load() {
+        System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/lua/liblua.so")
         System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
     }
 }
@@ -14,8 +15,8 @@ object FixedPathLoader : Loader {
 object ResourceLoader : Loader {
     override fun load() {
         val classloader = Thread.currentThread().contextClassLoader
-        val path = classloader.getResource("./libkua.so")!!
-        System.load(path.file)
+        System.load(classloader.getResource("./liblua.so")!!.file)
+        System.load(classloader.getResource("./libkua.so")!!.file)
     }
 }
 
