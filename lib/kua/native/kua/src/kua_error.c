@@ -4,6 +4,7 @@
 #include "kua_error.h"
 
 static jclass illegalargumentexception_class = NULL;
+static jclass stackoverflowerror_class = NULL;
 
 static jclass
 referenceclass(JNIEnv *env, const char *className) {
@@ -21,4 +22,13 @@ throw_illegal_argument(JNIEnv *env, char const *message) {
 //        return JNLUA_JNIVERSION;
     }
     return (*env)->ThrowNew(env, illegalargumentexception_class, message);
+}
+
+
+jint
+throw_stack_overflow(JNIEnv *env, char const *message) {
+    if (!(stackoverflowerror_class = referenceclass(env, "java/lang/StackOverflowError"))) {
+//        return JNLUA_JNIVERSION;
+    }
+    return (*env)->ThrowNew(env, stackoverflowerror_class, message);
 }

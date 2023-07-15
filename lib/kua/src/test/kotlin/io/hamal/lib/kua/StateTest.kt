@@ -45,6 +45,16 @@ internal class PushBooleanTest : BaseStateTest() {
         assertThat(testInstance.size(), equalTo(1))
         assertThat(testInstance.toBoolean(1), equalTo(true))
     }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushBoolean(true) }
+
+        val exception = assertThrows<StackOverflowError> {
+            testInstance.pushBoolean(true)
+        }
+        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+    }
 }
 
 internal class ToBooleanTest : BaseStateTest() {

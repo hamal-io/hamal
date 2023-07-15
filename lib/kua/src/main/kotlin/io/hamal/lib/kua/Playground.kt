@@ -19,7 +19,6 @@ fun main() {
         
         print("test", table['test'])
         assert(1==1)
-        
     """.trimIndent()))
     println(sbox.stack.size())
     sbox.state.call(0, 0)

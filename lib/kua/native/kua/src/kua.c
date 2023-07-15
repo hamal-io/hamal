@@ -169,12 +169,12 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1registryindex)(JNIEnv *env, jobj
 /* lua_version() */
 JNIEXPORT jstring JNICALL JNI_LUASTATE_METHOD(lua_1version)(JNIEnv *env, jobject obj) {
 	const char *luaVersion;
-	
+
 	luaVersion = LUA_VERSION;
 	if (strncmp(luaVersion, "Lua ", 4) == 0) {
 		luaVersion += 4;
 	}
-	return (*env)->NewStringUTF(env, luaVersion); 
+	return (*env)->NewStringUTF(env, luaVersion);
 }
 
 /* lua_version_num() */
@@ -190,7 +190,7 @@ static int newstate_protected (lua_State *L) {
 	jobject *ref;
 	jobject newstate_obj = (jobject)lua_touserdata(L, 1);
 	lua_pop(L, 1);
-	
+
 	/* Set the Java state in the Lua state. */
 	ref = lua_newuserdata(L, sizeof(jobject));
 	lua_createtable(L, 0, 1);
@@ -204,7 +204,7 @@ static int newstate_protected (lua_State *L) {
 	}
 	lua_setmetatable(L, -2);
 	lua_setfield(L, LUA_REGISTRYINDEX, JNLUA_JAVASTATE);
-	
+
 	/*
 	 * Create the meta table for Java objects and return it. Population will
 	 * be finished on the Java side.
@@ -296,12 +296,12 @@ static lua_State *controlled_newstate (jobject obj) {
 
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1newstate) (JNIEnv *env, jobject obj, int apiversion, jlong existing) {
 	lua_State *L;
-	
+
 	/* Initialized? */
 	if (!initialized) {
 		return;
 	}
-	
+
 	/* API version? */
 	if (apiversion != JNLUA_APIVERSION) {
 		return;
@@ -313,7 +313,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1newstate) (JNIEnv *env, jobject 
 	if (!L) {
 		return;
 	}
-	
+
 	/* Setup Lua state. */
 	if (checkstack(L, JNLUA_MINSTACK)) {
 		lua_pushcfunction(L, newstate_protected);
@@ -328,7 +328,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1newstate) (JNIEnv *env, jobject 
 		}
 		return;
 	}
-	
+
 	/* Set the Lua state in the Java state. */
 	setluathread(obj, L);
 	setluastate(obj, L);
@@ -339,7 +339,7 @@ static int close_protected (lua_State *L) {
 	/* Unset the Java state in the Lua state. */
 	lua_pushnil(L);
 	lua_setfield(L, LUA_REGISTRYINDEX, JNLUA_JAVASTATE);
-	
+
 	return 0;
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1close) (JNIEnv *env, jobject obj, jboolean ownstate) {
@@ -354,11 +354,11 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1close) (JNIEnv *env, jobject obj
 		if (L != T || lua_getstack(L, 0, &ar)) {
 			return;
 		}
-		
+
 		/* Unset the Lua state in the Java state. */
 		setluastate(obj, NULL);
 		setluathread(obj, NULL);
-		
+
 		/* Close Lua state. */
 		lua_setallocf(L, l_alloc_unchecked, NULL);
 		setluamemoryused(obj, 0);
@@ -368,14 +368,14 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1close) (JNIEnv *env, jobject obj
 		if (!lua_checkstack(L, JNLUA_MINSTACK)) {
 			return;
 		}
-		
+
 		/* Cleanup Lua state. */
 		lua_pushcfunction(L, close_protected);
 		JNLUA_PCALL(L, 0, 0);
 		if ((*env)->ExceptionCheck(env)) {
 			return;
 		}
-		
+
 		/* Unset the Lua state in the Java state. */
 		setluastate(obj, NULL);
 		setluathread(obj, NULL);
@@ -393,7 +393,7 @@ static int gc_protected (lua_State *L) {
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1gc) (JNIEnv *env, jobject obj, jint what, jint data) {
 	lua_State *L;
 	jint result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if(checkstack(L, JNLUA_MINSTACK)) {
@@ -412,7 +412,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1gc) (JNIEnv *env, jobject obj, j
 static int openlib_protected (lua_State *L) {
 	const char *libname;
 	lua_CFunction openfunc;
-	
+
 	switch (lua_tointeger(L, 1)) {
 	case 0:
 		libname = "_G";
@@ -480,7 +480,7 @@ static int openlib_isvalid(jint lib) {
 
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1openlib) (JNIEnv *env, jobject obj, jint lib) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -503,7 +503,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1load) (JNIEnv *env, jobject obj,
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
 			&& (chunkname_utf = getstringchars(chunkname))
-			&& (mode_utf = getstringchars(mode)) 
+			&& (mode_utf = getstringchars(mode))
 			&& (stream.byte_array = newbytearray(1024))) {
 		status = lua_load(L, readhandler, &stream, chunkname_utf, mode_utf);
 		if (status != LUA_OK) {
@@ -623,7 +623,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1setglobal) (JNIEnv *env, jobject
 /* lua_pushboolean() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushboolean) (JNIEnv *env, jobject obj, jboolean b) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)) {
@@ -640,7 +640,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushbytearray) (JNIEnv *env, job
 	lua_State *L;
 	jbyte *pushbytearray_b = NULL;
 	jsize pushbytearray_length;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -659,7 +659,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushbytearray) (JNIEnv *env, job
 /* lua_pushinteger() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushinteger) (JNIEnv *env, jobject obj, jlong n) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)) {
@@ -693,7 +693,7 @@ static int pushjavaobject_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushjavaobject) (JNIEnv *env, jobject obj, jobject object) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -707,7 +707,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushjavaobject) (JNIEnv *env, jo
 /* lua_pushnil() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushnil) (JNIEnv *env, jobject obj) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)) {
@@ -718,7 +718,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushnil) (JNIEnv *env, jobject o
 /* lua_pushnumber() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushnumber) (JNIEnv *env, jobject obj, jdouble n) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)) {
@@ -743,7 +743,7 @@ JNIEXPORT jboolean JNICALL JNI_LUASTATE_METHOD(lua_1isboolean) (JNIEnv *env, job
 JNIEXPORT jboolean JNICALL JNI_LUASTATE_METHOD(lua_1iscfunction) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	lua_CFunction c_function = NULL;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index)) {
@@ -768,7 +768,7 @@ JNIEXPORT jboolean JNICALL JNI_LUASTATE_METHOD(lua_1isfunction) (JNIEnv *env, jo
 /* lua_isjavafunction() */
 JNIEXPORT jboolean JNICALL JNI_LUASTATE_METHOD(lua_1isjavafunction) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index)) {
@@ -785,7 +785,7 @@ static int isjavaobject_protected (lua_State *L) {
 JNIEXPORT jboolean JNICALL JNI_LUASTATE_METHOD(lua_1isjavaobject) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	jboolean isjavaobject_result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index)) {
@@ -893,7 +893,7 @@ static int compare_protected (lua_State *L) {
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1compare) (JNIEnv *env, jobject obj, jint index1, jint index2, jint op) {
 	lua_State *L;
 	jint result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index1) || !validindex(L, index2)) {
@@ -916,7 +916,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1compare) (JNIEnv *env, jobject o
 /* lua_rawequal() */
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1rawequal) (JNIEnv *env, jobject obj, jint index1, jint index2) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index1) || !validindex(L, index2)) {
@@ -929,7 +929,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1rawequal) (JNIEnv *env, jobject 
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1rawlen) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	size_t result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)) {
@@ -941,7 +941,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1rawlen) (JNIEnv *env, jobject ob
 /* lua_toboolean() */
 JNIEXPORT jboolean JNICALL JNI_LUASTATE_METHOD(lua_1toboolean) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index)) {
@@ -997,7 +997,7 @@ JNIEXPORT jbyteArray JNICALL JNI_LUASTATE_METHOD(lua_1tobytearray) (JNIEnv *env,
 JNIEXPORT jlong JNICALL JNI_LUASTATE_METHOD(lua_1tointeger) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	lua_Integer result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)) {
@@ -1033,7 +1033,7 @@ static int tojavafunction_protected (lua_State *L) {
 JNIEXPORT jobject JNICALL JNI_LUASTATE_METHOD(lua_1tojavafunction) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	jobject tojavafunction_result = NULL;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1056,7 +1056,7 @@ static int tojavaobject_protected (lua_State *L) {
 JNIEXPORT jobject JNICALL JNI_LUASTATE_METHOD(lua_1tojavaobject) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	jobject tojavaobject_result = NULL;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1075,7 +1075,7 @@ JNIEXPORT jobject JNICALL JNI_LUASTATE_METHOD(lua_1tojavaobject) (JNIEnv *env, j
 JNIEXPORT jdouble JNICALL JNI_LUASTATE_METHOD(lua_1tonumber) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	lua_Number result = 0.0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)) {
@@ -1089,7 +1089,7 @@ JNIEXPORT jobject JNICALL JNI_LUASTATE_METHOD(lua_1tonumberx) (JNIEnv *env, jobj
 	lua_State *L;
 	lua_Number result = 0.0;
 	int isnum = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)) {
@@ -1102,7 +1102,7 @@ JNIEXPORT jobject JNICALL JNI_LUASTATE_METHOD(lua_1tonumberx) (JNIEnv *env, jobj
 JNIEXPORT jlong JNICALL JNI_LUASTATE_METHOD(lua_1topointer) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	const void *result = NULL;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)) {
@@ -1114,7 +1114,7 @@ JNIEXPORT jlong JNICALL JNI_LUASTATE_METHOD(lua_1topointer) (JNIEnv *env, jobjec
 /* lua_type() */
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1type) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (!validindex(L, index)) {
@@ -1127,7 +1127,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1type) (JNIEnv *env, jobject obj,
 /* lua_absindex() */
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1absindex) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	return (jint) lua_absindex(L, index);
@@ -1140,7 +1140,7 @@ static int arith_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1arith) (JNIEnv *env, jobject obj, jint op) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1183,7 +1183,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1concat) (JNIEnv *env, jobject ob
 /* lua_copy() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1copy) (JNIEnv *env, jobject obj, jint from_index, jint to_index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, from_index)
@@ -1195,7 +1195,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1copy) (JNIEnv *env, jobject obj,
 /* lua_gettop() */
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1gettop) (JNIEnv *env, jobject obj) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	return (jint) lua_gettop(L);
@@ -1208,7 +1208,7 @@ static int len_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1len) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1223,7 +1223,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1len) (JNIEnv *env, jobject obj, 
 /* lua_insert() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1insert) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkrealindex(L, index)) {
@@ -1234,7 +1234,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1insert) (JNIEnv *env, jobject ob
 /* lua_pop() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pop) (JNIEnv *env, jobject obj, jint n) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkarg(n >= 0 && n <= lua_gettop(L), "illegal count")) {
@@ -1245,7 +1245,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pop) (JNIEnv *env, jobject obj, 
 /* lua_pushvalue() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1pushvalue) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1268,7 +1268,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1remove) (JNIEnv *env, jobject ob
 /* lua_replace() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1replace) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)
@@ -1280,7 +1280,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1replace) (JNIEnv *env, jobject o
 /* lua_settop() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1settop) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if ((index >= 0 && (index <= lua_gettop(L) || checkstack(L, index - lua_gettop(L))))
@@ -1297,7 +1297,7 @@ static int createtable_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1createtable) (JNIEnv *env, jobject obj, jint narr, jint nrec) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1319,7 +1319,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1getsubtable) (JNIEnv *env, jobje
 	lua_State *L;
 	const char* getsubtable_fname = NULL;
 	jint getsubtable_result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1371,7 +1371,7 @@ static int gettable_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1gettable) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1392,7 +1392,7 @@ static int newtable_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1newtable) (JNIEnv *env, jobject obj) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)) {
@@ -1410,7 +1410,7 @@ static int next_protected (lua_State *L) {
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1next) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	jint next_result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1430,7 +1430,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1next) (JNIEnv *env, jobject obj,
 /* lua_rawget() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1rawget) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checktype(L, index, LUA_TTABLE)) {
@@ -1441,7 +1441,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1rawget) (JNIEnv *env, jobject ob
 /* lua_rawgeti() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1rawgeti) (JNIEnv *env, jobject obj, jint index, jint n) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1457,7 +1457,7 @@ static int rawset_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1rawset) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1500,7 +1500,7 @@ static int settable_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1settable) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1523,7 +1523,7 @@ static int setfield_protected (lua_State *L) {
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1setfield) (JNIEnv *env, jobject obj, jint index, jstring k) {
 	lua_State *L;
 	const char *setfield_k = NULL;
-	
+
 	setfield_k = NULL;
 	JNLUA_ENV(env);
 	L = getluathread(obj);
@@ -1549,7 +1549,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1setfield) (JNIEnv *env, jobject 
 JNIEXPORT int JNICALL JNI_LUASTATE_METHOD(lua_1getmetatable) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	int result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (lua_checkstack(L, JNLUA_MINSTACK)
@@ -1562,7 +1562,7 @@ JNIEXPORT int JNICALL JNI_LUASTATE_METHOD(lua_1getmetatable) (JNIEnv *env, jobje
 /* lua_setmetatable() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1setmetatable) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkindex(L, index)
@@ -1582,7 +1582,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1getmetafield) (JNIEnv *env, jobj
 	lua_State *L;
 	const char *getmetafield_k = NULL;
 	jint getmetafield_result = 0;
-	
+
 	getmetafield_k = NULL;
 	JNLUA_ENV(env);
 	L = getluathread(obj);
@@ -1607,7 +1607,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1getmetafield) (JNIEnv *env, jobj
 /* lua_newthread() */
 static int newthread_protected (lua_State *L) {
 	lua_State *T;
-	
+
 	T = lua_newthread(L);
 	lua_insert(L, 1);
 	lua_xmove(L, T, 1);
@@ -1615,7 +1615,7 @@ static int newthread_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1newthread) (JNIEnv *env, jobject obj) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1663,13 +1663,13 @@ return 0;
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1status) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	int result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checktype(L, index, LUA_TTHREAD)) {
 		result = lua_status(lua_tothread(L, index));
 	}
-	return (jint) result;	
+	return (jint) result;
 }
 
 /* ---- Reference ---- */
@@ -1705,7 +1705,7 @@ static int unref_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1unref) (JNIEnv *env, jobject obj, jint index, jint ref) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1724,7 +1724,7 @@ JNIEXPORT jobject JNICALL JNI_LUASTATE_METHOD(lua_1getstack) (JNIEnv *env, jobje
 	lua_State *L;
 	lua_Debug *ar = NULL;
 	jobject result = NULL;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkarg(level >= 0, "illegal level")) {
@@ -1774,7 +1774,7 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1getinfo) (JNIEnv *env, jobject o
 /* lua_tablesize() */
 static int tablesize_protected (lua_State *L) {
 	int count = 0;
-	
+
 	lua_pushnil(L);
 	while (lua_next(L, -2)) {
 		lua_pop(L, 1);
@@ -1786,7 +1786,7 @@ static int tablesize_protected (lua_State *L) {
 JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1tablesize) (JNIEnv *env, jobject obj, jint index) {
 	lua_State *L;
 	jint tablesize_result = 0;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1805,14 +1805,14 @@ JNIEXPORT jint JNICALL JNI_LUASTATE_METHOD(lua_1tablesize) (JNIEnv *env, jobject
 static int tablemove_protected (lua_State *L) {
 	int from = lua_tointeger(L, 1), to = lua_tointeger(L, 2);
 	int count = lua_tointeger(L, 3), i;
-	
+
 	if (from < to) {
 		for (i = count - 1; i >= 0; i--) {
 			lua_rawgeti(L, 4, from + i);
 			lua_rawseti(L, 4, to + i);
 		}
 	} else if (from > to) {
-		for (i = 0; i < count; i++) { 
+		for (i = 0; i < count; i++) {
 			lua_rawgeti(L, 4, from + i);
 			lua_rawseti(L, 4, to + i);
 		}
@@ -1821,7 +1821,7 @@ static int tablemove_protected (lua_State *L) {
 }
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1tablemove) (JNIEnv *env, jobject obj, jint index, jint from, jint to, jint count) {
 	lua_State *L;
-	
+
 	JNLUA_ENV(env);
 	L = getluathread(obj);
 	if (checkstack(L, JNLUA_MINSTACK)
@@ -1841,7 +1841,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(lua_1tablemove) (JNIEnv *env, jobject
 /* lua_debugfree() */
 JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(00024LuaDebug_lua_1debugfree) (JNIEnv *env, jobject obj) {
 	lua_Debug *ar;
-	
+
 	JNLUA_ENV(env);
 	ar = getluadebug(obj);
 	setluadebug(obj, NULL);
@@ -1851,7 +1851,7 @@ JNIEXPORT void JNICALL JNI_LUASTATE_METHOD(00024LuaDebug_lua_1debugfree) (JNIEnv
 /* lua_debugname() */
 JNIEXPORT jstring JNICALL JNI_LUASTATE_METHOD(00024LuaDebug_lua_1debugname) (JNIEnv *env, jobject obj) {
 	lua_Debug *ar;
-	
+
 	JNLUA_ENV(env);
 	ar = getluadebug(obj);
 	return ar != NULL && ar->name != NULL ? (*env)->NewStringUTF(env, ar->name) : NULL;
@@ -1860,7 +1860,7 @@ JNIEXPORT jstring JNICALL JNI_LUASTATE_METHOD(00024LuaDebug_lua_1debugname) (JNI
 /* lua_debugnamewhat() */
 JNIEXPORT jstring JNICALL JNI_LUASTATE_METHOD(00024LuaDebug_lua_1debugnamewhat) (JNIEnv *env, jobject obj) {
 	lua_Debug *ar;
-	
+
 	JNLUA_ENV(env);
 	ar = getluadebug(obj);
 	return ar != NULL && ar->namewhat != NULL ? (*env)->NewStringUTF(env, ar->namewhat) : NULL;
@@ -1870,7 +1870,7 @@ JNIEXPORT jstring JNICALL JNI_LUASTATE_METHOD(00024LuaDebug_lua_1debugnamewhat) 
 /* Handles the loading of this library. */
 JNIEXPORT jint JNICALL JNI_OnLoad (JavaVM *vm, void *reserved) {
 	JNIEnv *env;
-	
+
 	/* Get environment */
 	if ((*vm)->GetEnv(vm, (void **) &env, JNLUA_JNIVERSION) != JNI_OK) {
 		return JNLUA_JNIVERSION;
@@ -1965,12 +1965,12 @@ JNIEXPORT jint JNICALL JNI_OnLoad (JavaVM *vm, void *reserved) {
 /* Handles the unloading of this library. */
 JNIEXPORT void JNICALL JNI_OnUnload (JavaVM *vm, void *reserved) {
 	JNIEnv *env;
-	
+
 	/* Get environment */
 	if ((*vm)->GetEnv(vm, (void **) &env, JNLUA_JNIVERSION) != JNI_OK) {
 		return;
 	}
-	
+
 	/* Free classes */
 	if (luastate_class) {
 		(*env)->DeleteGlobalRef(env, luastate_class);
@@ -2032,7 +2032,7 @@ JNIEXPORT void JNICALL JNI_OnUnload (JavaVM *vm, void *reserved) {
 /* Finds a class and returns a new JNI global reference to it. */
 static jclass referenceclass (JNIEnv *env, const char *className) {
 	jclass clazz;
-	
+
 	clazz = (*env)->FindClass(env, className);
 	if (!clazz) {
 		return NULL;
@@ -2043,7 +2043,7 @@ static jclass referenceclass (JNIEnv *env, const char *className) {
 /* Return a new JNI byte array. */
 static jbyteArray newbytearray (jsize length) {
 	jbyteArray array;
-	
+
 	array = (*thread_env)->NewByteArray(thread_env, length);
 	if (!check(array != NULL, luamemoryallocationexception_class, "JNI error: NewByteArray() failed")) {
 		return NULL;
@@ -2125,7 +2125,7 @@ static void setluadebug (jobject javadebug, lua_Debug *ar) {
 /* Returns whether an index is valid. */
 static int validindex (lua_State *L, int index) {
 	int top;
-	
+
 	top = lua_gettop(L);
 	if (index <= 0) {
 		if (index > LUA_REGISTRYINDEX) {
@@ -2151,11 +2151,11 @@ static int checkstack (lua_State *L, int space) {
 static int checkindex (lua_State *L, int index) {
 	return checkarg(validindex(L, index), "illegal index");
 }
-	
+
 /* Checks if an index is valid, ignoring pseudo indexes. */
 static int checkrealindex (lua_State *L, int index) {
 	int top;
-	
+
 	top = lua_gettop(L);
 	if (index <= 0) {
 		index = top + index + 1;
@@ -2168,13 +2168,13 @@ static int checktype (lua_State *L, int index, int type) {
 	return checkindex(L, index)
 			&& checkarg(lua_type(L, index) == type, "illegal type");
 }
-	
+
 /* Checks that there are at least n values on the stack. */
 static int checknelems (lua_State *L, int n) {
 	return checkstate(lua_gettop(L) >= n, "stack underflow");
 }
 
-/* Checks an argument for not-null. */ 
+/* Checks an argument for not-null. */
 static int checknotnull (void *object) {
 	return check(object != NULL, nullpointerexception_class, "null");
 }
@@ -2202,7 +2202,7 @@ static int check (int cond, jthrowable throwable_class, const char *msg) {
 /* Pushes a Java object on the stack. */
 static void pushjavaobject (lua_State *L, jobject object) {
 	jobject *user_data;
-	
+
 	user_data = (jobject *) lua_newuserdata(L, sizeof(jobject));
 	luaL_getmetatable(L, JNLUA_OBJECT);
 	*user_data = (*thread_env)->NewGlobalRef(thread_env, object);
@@ -2212,7 +2212,7 @@ static void pushjavaobject (lua_State *L, jobject object) {
 	}
 	lua_setmetatable(L, -2);
 }
-	
+
 /* Returns the Java object at the specified index, or NULL if such an object is unobtainable. */
 static jobject tojavaobject (lua_State *L, int index, jclass class) {
 	int result;
@@ -2273,7 +2273,7 @@ static int calljavafunction (lua_State *L) {
 	jthrowable throwable;
 	jstring where;
 	jobject luaerror;
-	
+
 	/* Get Java state. */
 	lua_getfield(L, LUA_REGISTRYINDEX, JNLUA_JAVASTATE);
 	if (!lua_isuserdata(L, -1)) {
@@ -2283,7 +2283,7 @@ static int calljavafunction (lua_State *L) {
 	}
 	javastate = *(jobject *) lua_touserdata(L, -1);
 	lua_pop(L, 1);
-	
+
 	/* Get Java function object. */
 	lua_pushvalue(L, lua_upvalueindex(1));
 	javafunction = tojavaobject(L, -1, javafunction_interface);
@@ -2293,7 +2293,7 @@ static int calljavafunction (lua_State *L) {
 		lua_pushliteral(L, "no Java function");
 		return lua_error(L);
 	}
-	
+
 	/* Perform the call, handling coroutine situations. */
 	setyield(javastate, JNI_FALSE);
 	T = getluathread(javastate);
@@ -2304,7 +2304,7 @@ static int calljavafunction (lua_State *L) {
 		nresults = (*thread_env)->CallIntMethod(thread_env, javafunction, invoke_id, javastate);
 		setluathread(javastate, T);
 	}
-	
+
 	/* Handle exception */
 	throwable = (*thread_env)->ExceptionOccurred(thread_env);
 	if (throwable) {
@@ -2318,11 +2318,11 @@ static int calljavafunction (lua_State *L) {
 			lua_pushliteral(L, "JNI error: NewObject() failed creating Lua error");
 		}
 		(*thread_env)->ExceptionClear(thread_env);
-		
+
 		/* Error out */
 		return lua_error(L);
 	}
-	
+
 	/* Handle yield */
 	if (getyield(javastate)) {
 		if (nresults < 0 || nresults > lua_gettop(L)) {
@@ -2335,7 +2335,7 @@ static int calljavafunction (lua_State *L) {
 		}
 		return lua_yield(L, nresults);
 	}
-	
+
 	return nresults;
 }
 
@@ -2359,7 +2359,7 @@ static int messagehandler (lua_State *L) {
 		}
 		level++;
 	}
-	
+
 	/* Create Lua stack trace as a Java LuaStackTraceElement[] */
 	luastacktrace = (*thread_env)->NewObjectArray(thread_env, count, luastacktraceelement_class, NULL);
 	if (!luastacktrace) {
@@ -2384,7 +2384,7 @@ static int messagehandler (lua_State *L) {
 		}
 		level++;
 	}
-	
+
 	/* Get or create the error object  */
 	luaerror = tojavaobject(L, -1, luaerror_class);
 	if (!luaerror) {
@@ -2394,7 +2394,7 @@ static int messagehandler (lua_State *L) {
 		}
 	}
 	(*thread_env)->CallVoidMethod(thread_env, luaerror, setluastacktrace_id, luastacktrace);
-	
+
 	/* Replace error */
 	pushjavaobject(L, luaerror);
 	return 1;
@@ -2471,12 +2471,12 @@ static int throw_protected (lua_State *L) {
 //		lua_pushliteral(L, "JNI error: Throw() failed");
 //		return lua_error(L);
 //	}
-	
+
 	return 0;
 }
 static void throw (lua_State *L, int status) {
 	const char *message;
-	
+
 	if (checkstack(L, JNLUA_MINSTACK)) {
 		lua_pushcfunction(L, throw_protected);
 		lua_insert(L, -2);

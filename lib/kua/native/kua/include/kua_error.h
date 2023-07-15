@@ -6,4 +6,7 @@
 jint
 throw_illegal_argument(JNIEnv *env, char const *message);
 
+jint
+throw_stack_overflow(JNIEnv *env, char const *message);
+
 #endif //KUA_EXCEPTION_H
