@@ -22,8 +22,8 @@ if false then a = 3 // 0; a = 0 % 0 end
 
 
 -- testing priorities
-
-
+assert(2 ^ 3 ^ 2 == 2 ^ (3 ^ 2));
+assert(2 ^ 3 * 4 == (2 ^ 3) * 4);
 assert(2.0^-2 == 1/4 and -2^- -2 == - - -4);
 assert(not nil and 2 and not(2>3 or 3<2));
 assert(-3-1-5 == 0+0-9);

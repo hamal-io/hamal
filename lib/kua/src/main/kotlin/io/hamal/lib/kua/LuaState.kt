@@ -1,6 +1,6 @@
 package io.hamal.lib.kua
 
-internal class LuaState : AutoCloseable {
+class LuaState : AutoCloseable {
 
     external fun versionNumber(): Int
     external fun integerWidth(): Int
@@ -12,6 +12,7 @@ internal class LuaState : AutoCloseable {
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int
     external fun pushString(value: String): Int
+    external fun pushFunc(fn: KuaFunc)
 
     external fun toBoolean(idx: Int): Boolean
     external fun toNumber(idx: Int): Double
@@ -28,5 +29,9 @@ internal class LuaState : AutoCloseable {
 
     override fun close() {
         TODO("Not yet implemented")
+    }
+
+    override fun toString(): String {
+        return "LuaState"
     }
 }

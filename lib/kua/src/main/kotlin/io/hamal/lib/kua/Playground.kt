@@ -9,7 +9,17 @@ fun main() {
 
 //    println(sbox.stack.size())
 //    println(sbox.stack.pushBoolean(true))
+
+
+    sbox.state.pushFunc(TestFunc())
+    sbox.state.call(0,0)
+//
+//    sbox.state.pushFunc(TestFunc())
+//    sbox.state.call(0,0)
+
 //    println(sbox.stack.toBoolean(1))
+    println(sbox.stack.size())
+
 
 //    println(sbox.state.loadString("""
 //        local table = {}
@@ -22,10 +32,13 @@ fun main() {
 //    """.trimIndent()))
 //    println(sbox.stack.size())
 //    sbox.state.call(0, 0)
+//
+
+
 //    println(sbox.stack.size())
 
 
-    sbox.state.pushNumber(2.0)
-    println(sbox.stack.toBoolean(1))
+//    sbox.state.pushNumber(2.0)
+//    println(sbox.stack.toBoolean(1))
 
 }
