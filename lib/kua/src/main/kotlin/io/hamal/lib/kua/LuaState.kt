@@ -6,6 +6,7 @@ internal class LuaState : AutoCloseable {
     external fun integerWidth(): Int
 
     external fun size(): Int
+    external fun type(idx: Int): Int
     external fun pushBoolean(value: Boolean): Int
     external fun toBoolean(idx: Int): Boolean
 

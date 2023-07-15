@@ -2,9 +2,11 @@ package io.hamal.lib.kua
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+@DisplayName("versionNumber()")
 internal class VersionNumberTest : BaseStateTest() {
     @Test
     fun `Loads current lua version number`() {
@@ -13,6 +15,7 @@ internal class VersionNumberTest : BaseStateTest() {
     }
 }
 
+@DisplayName("integerWidth()")
 internal class IntegerWidthTest : BaseStateTest() {
     @Test
     fun `Loads integer width from lua`() {
@@ -21,6 +24,7 @@ internal class IntegerWidthTest : BaseStateTest() {
     }
 }
 
+@DisplayName("size()")
 internal class SizeTest : BaseStateTest() {
     @Test
     fun `Nothing pushed on the stack`() {
@@ -37,6 +41,85 @@ internal class SizeTest : BaseStateTest() {
     }
 }
 
+@DisplayName("type()")
+internal class TypeTest : BaseStateTest() {
+
+    @Test
+    fun `Tries to get type with negative index`() {
+        testInstance.pushBoolean(true)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.type(-1)
+        }
+        assertThat(exception.message, equalTo("Index out of bounds"))
+    }
+
+    @Test
+    fun `Tries to read boolean with 0 index`() {
+        testInstance.pushBoolean(true)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.type(0)
+        }
+        assertThat(exception.message, equalTo("Index out of bounds"))
+    }
+
+    @Test
+    fun `Tries to read boolean with index bigger than stack size`() {
+        testInstance.pushBoolean(true)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.type(2)
+        }
+        assertThat(exception.message, equalTo("Index out of bounds"))
+    }
+
+    @Test
+    fun `Nil`() {
+        TODO()
+    }
+
+    @Test
+    fun `Boolean`() {
+        testInstance.pushBoolean(true)
+        val result = testInstance.type(1)
+        assertThat(result, equalTo(1))
+    }
+
+    @Test
+    fun `Pointer`() {
+        TODO()
+    }
+
+    @Test
+    fun `Number`() {
+        TODO()
+    }
+
+    @Test
+    fun `String`() {
+        TODO()
+    }
+
+    @Test
+    fun `Table`() {
+        TODO()
+    }
+
+    @Test
+    fun `Function`() {
+        TODO()
+    }
+
+    @Test
+    fun `UserData`() {
+        TODO()
+    }
+
+    @Test
+    fun `Thread`() {
+        TODO()
+    }
+}
+
+@DisplayName("pushBoolean()")
 internal class PushBooleanTest : BaseStateTest() {
     @Test
     fun `Pushes value to stack`() {
@@ -57,6 +140,7 @@ internal class PushBooleanTest : BaseStateTest() {
     }
 }
 
+@DisplayName("toBoolean()")
 internal class ToBooleanTest : BaseStateTest() {
 
     @Test
@@ -97,6 +181,7 @@ internal class ToBooleanTest : BaseStateTest() {
         assertThat(testInstance.size(), equalTo(2))
     }
 }
+
 
 internal sealed class BaseStateTest {
     val testInstance: LuaState = run {

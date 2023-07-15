@@ -28,12 +28,6 @@ static void state_to_thread(JNIEnv *env, jobject K, lua_State *L) {
 
 
 
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(size)(JNIEnv *env, jobject K) {
-    lua_State *L = state_from_thread(env, K);
-//    if (checkstack(L, JNLUA_MINSTACK)) {
-    return (jint) lua_gettop(L);
-}
 
 
 /* Handles Lua errors. */
@@ -137,15 +131,6 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
 
 }
 
-
-JNIEXPORT jboolean JNICALL
-STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
-    lua_State *L = state_from_thread(env, K);
-
-    if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return 0;
-
-    return (jboolean) lua_toboolean(L, idx);
-}
 
 
 JNIEXPORT void JNICALL
