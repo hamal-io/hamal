@@ -2,18 +2,20 @@
 #include "kua_macro.h"
 #include "kua_state.h"
 
+#include "kua_stack.h"
+
+int
+type(lua_State *L, int idx) {
+    if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    return lua_type(L, idx);
+}
+
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(size)(JNIEnv *env, jobject K) {
     lua_State *L = state_from_thread(env, K);
     return (jint) lua_gettop(L);
 }
 
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(type)(JNIEnv *env, jobject K, jint idx) {
-    lua_State *L = state_from_thread(env, K);
-    if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    return (jint) lua_type(L, idx);
-}
 
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(pushNil)(JNIEnv *env, jobject K) {
@@ -52,7 +54,7 @@ STATE_METHOD_NAME(pushString)(JNIEnv *env, jobject K, jstring s) {
 JNIEXPORT jboolean JNICALL
 STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
     lua_State *L = state_from_thread(env, K);
-    if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (dep_check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(env, L, idx, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return (jboolean) lua_toboolean(L, idx);
 }
@@ -60,7 +62,7 @@ STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
 JNIEXPORT jdouble JNICALL
 STATE_METHOD_NAME(toNumber)(JNIEnv *env, jobject K, jint idx) {
     lua_State *L = state_from_thread(env, K);
-    if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (dep_check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(env, L, idx, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_tonumber(L, idx);
 }
@@ -69,7 +71,7 @@ STATE_METHOD_NAME(toNumber)(JNIEnv *env, jobject K, jint idx) {
 JNIEXPORT jstring JNICALL
 STATE_METHOD_NAME(toString)(JNIEnv *env, jobject K, jint idx) {
     lua_State *L = state_from_thread(env, K);
-    if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return NULL;
+    if (dep_check_index(env, L, idx) == CHECK_RESULT_ERROR) return NULL;
     if (check_type_at(env, L, idx, 4) == CHECK_RESULT_ERROR) return NULL;
     char const *lua_string = lua_tostring(L, idx);
     return (*env)->NewStringUTF(env, lua_string);

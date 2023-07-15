@@ -2,8 +2,8 @@ package io.hamal.lib.kua
 
 class LuaState : AutoCloseable {
 
-    external fun versionNumber(): Int
-    external fun integerWidth(): Int
+    external fun luaVersionNumber(): Int
+    external fun luaIntegerWidth(): Int
 
     external fun size(): Int
     external fun type(idx: Int): Int

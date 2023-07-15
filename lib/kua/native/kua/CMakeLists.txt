@@ -15,8 +15,9 @@ include_directories(${JNI_INCLUDE_DIRS})
 set(KUA_LIB_SRCS
 #    src/kua.c
     src/kua_check.c
-    src/kua_error.c
+        src/kua_jni_error.c
     src/kua_info.c
+    src/kua_jni.c
     src/kua_memory.c
     src/kua_stack.c
     src/kua_state.c

@@ -1,6 +1,6 @@
 #include "kua_common.h"
 #include "kua_check.h"
-#include "kua_error.h"
+#include "kua_jni_error.h"
 #include "kua_macro.h"
 #include "lualib.h"
 
@@ -8,7 +8,7 @@
 
 //static jfieldID current_state_id = NULL;
 static jfieldID current_thread_id = NULL;
-JNIEnv *current_env = NULL;
+JNIEnv *dep_current_env = NULL;
 
 lua_State *
 state_from_thread(JNIEnv *env, jobject K) {
@@ -46,7 +46,7 @@ static int setfield_protected(lua_State *L) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(setField)(JNIEnv *env, jobject K, jint index, jstring k) {
-    current_env = env;
+    dep_current_env = env;
 
     lua_State *L = state_from_thread(env, K);
     const char *setfield_k = NULL;
@@ -79,7 +79,7 @@ static int getsubtable_protected(lua_State *L) {
 
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(getSubTable)(JNIEnv *env, jobject K, jint index, jstring fname) {
-    current_env = env;
+    dep_current_env = env;
     lua_State *L = state_from_thread(env, K);
     jint getsubtable_result = 0;
 
@@ -109,7 +109,7 @@ STATE_METHOD_NAME(getSubTable)(JNIEnv *env, jobject K, jint index, jstring fname
 /* lua_pushvalue() */
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(push)(JNIEnv *env, jobject K, jint index) {
-    current_env = env;
+    dep_current_env = env;
     lua_State *L = state_from_thread(env, K);
 //    if (checkstack(L, JNLUA_MINSTACK)
 //        && checkindex(L, index)) {
@@ -119,7 +119,7 @@ STATE_METHOD_NAME(push)(JNIEnv *env, jobject K, jint index) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(pop)(JNIEnv *env, jobject K, jint index) {
-    current_env = env;
+    dep_current_env = env;
     lua_State *L = state_from_thread(env, K);
 //    if (checkstack(L, JNLUA_MINSTACK)
 //        && checkindex(L, index)) {
@@ -129,7 +129,7 @@ STATE_METHOD_NAME(pop)(JNIEnv *env, jobject K, jint index) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(rawGet)(JNIEnv *env, jobject K, jint index) {
-    current_env = env;
+    dep_current_env = env;
     lua_State *L = state_from_thread(env, K);
 //    if (checktype(L, index, LUA_TTABLE)) {
     lua_rawget(L, index);
@@ -138,7 +138,7 @@ STATE_METHOD_NAME(rawGet)(JNIEnv *env, jobject K, jint index) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(rawGetI)(JNIEnv *env, jobject K, jint index, jint key) {
-    current_env = env;
+    dep_current_env = env;
     lua_State *L = state_from_thread(env, K);
 //    if (checktype(L, index, LUA_TTABLE)) {
     lua_rawgeti(L, index, key);
@@ -158,7 +158,7 @@ STATE_METHOD_NAME(setGlobal)(JNIEnv *env, jobject K, jstring name) {
     const char *nativeString = (*env)->GetStringUTFChars(env, name, 0);
 
 
-    current_env = env;
+    dep_current_env = env;
     lua_State *L = state_from_thread(env, K);
 
 //    if (checkstack(L, JNLUA_MINSTACK)
@@ -182,7 +182,7 @@ static int createtable_protected(lua_State *L) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(createTable)(JNIEnv *env, jobject K, jint narr, jint nrec) {
-    current_env = env;
+    dep_current_env = env;
 
     lua_State *L = state_from_thread(env, K);
 //    JNLUA_ENV(env);
@@ -216,7 +216,7 @@ static jobject tojavaobject(lua_State *L, int index, jclass class) {
     }
     object = *(jobject *) lua_touserdata(L, index);
     if (class) {
-        if (!(*current_env)->IsInstanceOf(current_env, object, class)) {
+        if (!(*dep_current_env)->IsInstanceOf(dep_current_env, object, class)) {
             return NULL;
         }
     }
@@ -238,7 +238,7 @@ static int calljavafunction(lua_State *L) {
     if (!lua_isuserdata(L, -1)) {
         /* Java state has been cleared as the Java VM was destroyed. Cannot call. */
         lua_pushliteral(L, "no Java state");
-        throw_illegal_state(current_env, "no state");
+        dep_throw_illegal_state(dep_current_env, "no state");
         return lua_error(L);
     }
 //
@@ -253,7 +253,7 @@ static int calljavafunction(lua_State *L) {
     if (!javafunction) {
         /* Function was cleared from outside JNLua code. */
         lua_pushliteral(L, "no Java function");
-        throw_illegal_state(current_env, "no func");
+        dep_throw_illegal_state(dep_current_env, "no func");
         return lua_error(L);
     }
 
@@ -262,13 +262,13 @@ static int calljavafunction(lua_State *L) {
 //    T = getluathread(javastate);
 //    if (T == L) {
 
-    nresults = (*current_env)->CallIntMethod(current_env, javafunction, invoke_id, javastate);
-//    nresults = (*current_env)->CallIntMethod(current_env, javafunction, invoke_id);
+    nresults = (*dep_current_env)->CallIntMethod(dep_current_env, javafunction, invoke_id, javastate);
+//    nresults = (*dep_current_env)->CallIntMethod(dep_current_env, javafunction, invoke_id);
 //
 
 //    } else {
 //        setluathread(javastate, L);
-//        nresults = (*current_env)->CallIntMethod(current_env, javafunction, invoke_id, javastate);
+//        nresults = (*dep_current_env)->CallIntMethod(dep_current_env, javafunction, invoke_id, javastate);
 //        setluathread(javastate, T);
 //    }
 
@@ -313,10 +313,10 @@ static void pushjavaobject(lua_State *L, jobject object) {
 
     user_data = (jobject *) lua_newuserdata(L, sizeof(jobject));
     luaL_getmetatable(L, KUA_OBJECT_NAME);
-    *user_data = (*current_env)->NewGlobalRef(current_env, object);
+    *user_data = (*dep_current_env)->NewGlobalRef(dep_current_env, object);
 
     if (!*user_data) {
-        throw_illegal_state(current_env, "JNI error: NewGlobalRef() failed pushing Java object");
+        dep_throw_illegal_state(dep_current_env, "JNI error: NewGlobalRef() failed pushing Java object");
         lua_pushliteral(L, "JNI error: NewGlobalRef() failed pushing Java object");
         lua_error(L);
     }
@@ -345,7 +345,7 @@ referenceclass(JNIEnv *env, const char *className) {
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(pushFunc)(JNIEnv *env, jobject K, jobject f) {
 //    lua_State *L;
-    current_env = env;
+    dep_current_env = env;
 
 
     lua_State *L = state_from_thread(env, K);
@@ -364,7 +364,7 @@ static int pushjavaobject_protected(lua_State *L) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(pushAny)(JNIEnv *env, jobject K, jobject any) {
-    current_env = env;
+    dep_current_env = env;
 
     lua_State *L = state_from_thread(env, K);
 //    if (checkstack(L, JNLUA_MINSTACK)
@@ -480,15 +480,15 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
 static int gcjavaobject(lua_State *L) {
 //    jobject obj;
 //
-//    if (!current_env) {
+//    if (!dep_current_env) {
 //        /* Environment has been cleared as the Java VM was destroyed. Nothing to do. */
 //        return 0;
 //    }
 //    obj = *(jobject *) lua_touserdata(L, 1);
 //    if (lua_toboolean(L, lua_upvalueindex(1))) {
-//        (*current_env)->DeleteWeakGlobalRef(current_env, obj);
+//        (*dep_current_env)->DeleteWeakGlobalRef(dep_current_env, obj);
 //    } else {
-//        (*current_env)->DeleteGlobalRef(current_env, obj);
+//        (*dep_current_env)->DeleteGlobalRef(dep_current_env, obj);
 //    }
     return 0;
 }
@@ -505,8 +505,8 @@ static int newstate_protected(lua_State *L) {
     lua_pushboolean(L, 1); /* weak global reference */
     lua_pushcclosure(L, gcjavaobject, 1);
     lua_setfield(L, -2, "__gc");
-//    *ref = (*current_env)->NewWeakGlobalRef(current_env, newstate_obj);
-    *ref = (*current_env)->NewGlobalRef(current_env, newstate_obj);
+//    *ref = (*dep_current_env)->NewWeakGlobalRef(dep_current_env, newstate_obj);
+    *ref = (*dep_current_env)->NewGlobalRef(dep_current_env, newstate_obj);
     if (!*ref) {
         lua_pushliteral(L, "JNI error: NewWeakGlobalRef() failed setting up Lua state");
         return lua_error(L);
@@ -530,7 +530,7 @@ static int newstate_protected(lua_State *L) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
-    current_env = env;
+    dep_current_env = env;
     lua_State *L;
     L = luaL_newstate();
 

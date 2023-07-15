@@ -1,13 +1,7 @@
-#include "kua_common.h"
-#include "kua_macro.h"
+#include "lua.h"
 
+int
+lua_version_number() { return LUA_VERSION_NUM; }
 
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(integerWidth)(UNUSED JNIEnv *env, UNUSED jobject obj) {
-    return sizeof(lua_Integer);
-}
-
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(versionNumber)(UNUSED JNIEnv *env, UNUSED jobject obj) {
-    return (jint) LUA_VERSION_NUM;
-}
+int
+lua_integer_width() { return sizeof(lua_Integer); }

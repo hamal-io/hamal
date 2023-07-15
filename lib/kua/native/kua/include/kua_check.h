@@ -16,7 +16,17 @@ enum check_result {
  * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR
  */
 enum check_result
-check_index(JNIEnv *env, lua_State *L, int idx);
+dep_check_index(JNIEnv *env, lua_State *L, int idx);
+
+/**
+ * Checks whether a given index is inside of bounds. If not throw an IllegalArgumentException and return with 1
+ * @param L
+ * @param idx
+ * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR
+ */
+enum check_result
+check_index(lua_State *L, int idx);
+
 
 /**
  * Checks the stack for overflow. If so throw StackOverflowError
