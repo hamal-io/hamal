@@ -1,5 +1,8 @@
 #include "kua_common.h"
+#include "kua_check.h"
+#include "kua_error.h"
 #include "kua_macro.h"
+
 #include <lauxlib.h>
 
 static jfieldID current_state_id = NULL;
@@ -32,13 +35,13 @@ static lua_State *controlled_newstate(jobject K) {
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(top)(JNIEnv *env, jobject K) {
+STATE_METHOD_NAME(size)(JNIEnv *env, jobject K) {
     lua_State *L = get_state(env, K);
 //    if (checkstack(L, JNLUA_MINSTACK)) {
     return (jint) lua_gettop(L);
 }
 
-JNIEXPORT void JNICALL
+JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean b) {
 //    lua_State *L;
 
@@ -52,23 +55,28 @@ STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean b) {
 
 //    return sizeof(lua_Integer);
 
-//    return b;
+    return (jint) lua_gettop(L);
 }
 
-JNIEXPORT jboolean JNICALL
-STATE_METHOD_NAME(peekBoolean)(JNIEnv *env, jobject K, jint idx) {
-//    lua_State *L;
-
-//    JNLUA_ENV(env);
-//    lua_State *L = get_thread(env, K);
-    lua_State *L = get_state(env, K);
-
-////    if (checkstack(L, JNLUA_MINSTACK)) {
-//    lua_pushboolean(L, b);
+//static jclass illegalargumentexception_class = NULL;
+//
+//static jclass
+//referenceclass(JNIEnv *env, const char *className) {
+//    jclass clazz;
+//    clazz = (*env)->FindClass(env, className);
+//    if (!clazz) {
+//        return NULL;
 //    }
+//    return (*env)->NewGlobalRef(env, clazz);
+//}
 
-//    return sizeof(lua_Integer);
 
+JNIEXPORT jboolean JNICALL
+STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
+    lua_State *L = get_state(env, K);
+    if (check_index(env, L, idx)) {
+        return 0;
+    }
     return (jboolean) lua_toboolean(L, idx);
 }
 
@@ -99,7 +107,7 @@ STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
     set_thread(env, K, L);
     set_state(env, K, L);
 
-    Java_io_hamal_lib_kua_State_pushBoolean(env, K, 0);
+//    Java_io_hamal_lib_kua_State_pushBoolean(env, K, 0);
 
 
 //    return (jboolean) lua_toboolean(L, 1);
