@@ -53,7 +53,7 @@ JNIEXPORT jboolean JNICALL
 STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
     lua_State *L = state_from_thread(env, K);
     if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    //FIXME check type
+    if (check_type_at(env, L, idx, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return (jboolean) lua_toboolean(L, idx);
 }
 
@@ -61,7 +61,7 @@ JNIEXPORT jdouble JNICALL
 STATE_METHOD_NAME(toNumber)(JNIEnv *env, jobject K, jint idx) {
     lua_State *L = state_from_thread(env, K);
     if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    //FIXME check type
+    if (check_type_at(env, L, idx, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_tonumber(L, idx);
 }
 
@@ -70,7 +70,7 @@ JNIEXPORT jstring JNICALL
 STATE_METHOD_NAME(toString)(JNIEnv *env, jobject K, jint idx) {
     lua_State *L = state_from_thread(env, K);
     if (check_index(env, L, idx) == CHECK_RESULT_ERROR) return NULL;
-    //FIXME check type
+    if (check_type_at(env, L, idx, 4) == CHECK_RESULT_ERROR) return NULL;
     char const *lua_string = lua_tostring(L, idx);
     return (*env)->NewStringUTF(env, lua_string);
 }

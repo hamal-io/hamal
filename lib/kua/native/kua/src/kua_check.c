@@ -19,3 +19,21 @@ check_stack(JNIEnv *env, lua_State *L) {
     }
     return CHECK_RESULT_OK;
 }
+
+
+enum check_result
+check_type_at(JNIEnv *env, lua_State *L, int idx, int expected_type) {
+    int current_type = lua_type(L, idx);
+    if (current_type != expected_type) {
+        lua_pushstring(L, "Expected type to be ");
+        lua_pushstring(L, lua_typename(L, expected_type));
+        lua_pushstring(L, " but was ");
+        lua_pushstring(L, lua_typename(L, current_type));
+
+        lua_concat(L, 4);
+
+        throw_illegal_state(env, lua_tostring(L, lua_gettop(L)));
+        return CHECK_RESULT_ERROR;
+    }
+    return CHECK_RESULT_OK;
+}

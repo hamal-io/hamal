@@ -4,6 +4,7 @@
 #include "kua_error.h"
 
 static jclass illegalargumentexception_class = NULL;
+static jclass illegal_state_exception_class = NULL;
 static jclass stackoverflowerror_class = NULL;
 
 static jclass
@@ -22,6 +23,14 @@ throw_illegal_argument(JNIEnv *env, char const *message) {
 //        return JNLUA_JNIVERSION;
     }
     return (*env)->ThrowNew(env, illegalargumentexception_class, message);
+}
+
+jint
+throw_illegal_state(JNIEnv *env, char const *message) {
+    if (!(illegal_state_exception_class = referenceclass(env, "java/lang/IllegalStateException"))) {
+//        return JNLUA_JNIVERSION;
+    }
+    return (*env)->ThrowNew(env, illegal_state_exception_class, message);
 }
 
 

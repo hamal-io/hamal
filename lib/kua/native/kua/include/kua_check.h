@@ -27,4 +27,13 @@ check_index(JNIEnv *env, lua_State *L, int idx);
 enum check_result
 check_stack(JNIEnv *env, lua_State *L);
 
+/**
+ * Checks whether the type at given index matches the expectations
+ * @param env
+ * @param L
+ * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR
+ */
+enum check_result
+check_type_at(JNIEnv *env, lua_State *L, int idx, int expected_type);
+
 #endif //KUA_CHECK_H
