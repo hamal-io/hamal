@@ -5,10 +5,17 @@ abstract class KuaFunc {
 //    fun invoke(): Int
 }
 
+data class NamedKuaFunc(
+    val name: String,
+    val func: KuaFunc
+)
+
 class TestFunc : KuaFunc() {
     override fun invokedByLua(state: LuaState): Int {
-        println("Hamal Rockz")
-        println(state)
+//        println("Hamal Rockz")
+//        println(state.size())
+        println("INFO: " + state.toString(1))
         return 0
     }
 }
+

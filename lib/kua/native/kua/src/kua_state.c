@@ -38,6 +38,166 @@ static void state_to_thread(JNIEnv *env, jobject K, lua_State *L) {
 static jmethodID invoke_id = 0;
 static jclass kua_func_class = NULL;
 
+/* lua_setfield() */
+static int setfield_protected(lua_State *L) {
+    lua_setfield(L, 2, (const char *) lua_touserdata(L, 1));
+    return 0;
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(setField)(JNIEnv *env, jobject K, jint index, jstring k) {
+    current_env = env;
+
+    lua_State *L = state_from_thread(env, K);
+    const char *setfield_k = NULL;
+
+    setfield_k = NULL;
+//    JNLUA_ENV(env);
+//    L = getluathread(K);
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checktype(L, index, LUA_TTABLE)
+//        && (setfield_k = getstringchars(k))) {
+    index = lua_absindex(L, index);
+    lua_pushcfunction(L, setfield_protected);
+    lua_insert(L, -2);
+    lua_pushlightuserdata(L, (void *) setfield_k);
+    lua_insert(L, -2);
+    lua_pushvalue(L, index);
+    lua_insert(L, -2);
+    lua_pcall(L, 3, 0, 0);
+//    }
+
+//    if (setfield_k) {
+//        releasestringchars(k, setfield_k);
+//    }
+}
+
+static int getsubtable_protected(lua_State *L) {
+    lua_pushboolean(L, luaL_getsubtable(L, 2, (const char *) lua_touserdata(L, 1)));
+    return 2;
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(getSubTable)(JNIEnv *env, jobject K, jint index, jstring fname) {
+    current_env = env;
+    lua_State *L = state_from_thread(env, K);
+    jint getsubtable_result = 0;
+
+//    JNLUA_ENV(env);
+//    L = getluathread(K);
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checkindex(L, index)
+//        && (getsubtable_fname = getstringchars(fname))) {
+
+    const char *nativeString = (*env)->GetStringUTFChars(env, fname, 0);
+
+    index = lua_absindex(L, index);
+    lua_pushcfunction(L, getsubtable_protected);
+    lua_pushlightuserdata(L, (void *) nativeString);
+    lua_pushvalue(L, index);
+    lua_pcall(L, 2, 2, 0);
+    getsubtable_result = (jint) lua_toboolean(L, -1);
+    lua_pop(L, 1);
+//    }
+//    if (getsubtable_fname) {
+//        releasestringchars(fname, getsubtable_fname);
+//    }
+    return getsubtable_result;
+}
+
+
+/* lua_pushvalue() */
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(push)(JNIEnv *env, jobject K, jint index) {
+    current_env = env;
+    lua_State *L = state_from_thread(env, K);
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checkindex(L, index)) {
+    lua_pushvalue(L, index);
+//    }
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(pop)(JNIEnv *env, jobject K, jint index) {
+    current_env = env;
+    lua_State *L = state_from_thread(env, K);
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checkindex(L, index)) {
+    lua_pop(L, index);
+//    }
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(rawGet)(JNIEnv *env, jobject K, jint index) {
+    current_env = env;
+    lua_State *L = state_from_thread(env, K);
+//    if (checktype(L, index, LUA_TTABLE)) {
+    lua_rawget(L, index);
+//    }
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(rawGetI)(JNIEnv *env, jobject K, jint index, jint key) {
+    current_env = env;
+    lua_State *L = state_from_thread(env, K);
+//    if (checktype(L, index, LUA_TTABLE)) {
+    lua_rawgeti(L, index, key);
+//    }
+}
+
+
+/* lua_setglobal() */
+static int setglobal_protected(lua_State *L) {
+    lua_setglobal(L, (const char *) lua_touserdata(L, 1));
+    return 0;
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(setGlobal)(JNIEnv *env, jobject K, jstring name) {
+//    lua_State *L;
+    const char *nativeString = (*env)->GetStringUTFChars(env, name, 0);
+
+
+    current_env = env;
+    lua_State *L = state_from_thread(env, K);
+
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checknelems(L, 1)
+//        && (setglobal_name = getstringchars(name))) {
+    lua_pushcfunction(L, setglobal_protected);
+    lua_insert(L, -2);
+    lua_pushlightuserdata(L, (void *) nativeString);
+    lua_insert(L, -2);
+    lua_pcall(L, 2, 0, 0);
+//    }
+//    if (setglobal_name) {
+//        releasestringchars(name, setglobal_name);
+//    }
+}
+
+static int createtable_protected(lua_State *L) {
+    lua_createtable(L, lua_tointeger(L, 1), lua_tointeger(L, 2));
+    return 1;
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(createTable)(JNIEnv *env, jobject K, jint narr, jint nrec) {
+    current_env = env;
+
+    lua_State *L = state_from_thread(env, K);
+//    JNLUA_ENV(env);
+//    L = getluathread(K);
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checkarg(narr >= 0, "illegal array count")
+//        && checkarg(nrec >= 0, "illegal record count")) {
+    lua_pushcfunction(L, createtable_protected);
+    lua_pushinteger(L, narr);
+    lua_pushinteger(L, nrec);
+    lua_pcall(L, 2, 1, 0);
+//    }
+}
+
+
 static jobject tojavaobject(lua_State *L, int index, jclass class) {
     int result;
     jobject object;
@@ -197,6 +357,23 @@ STATE_METHOD_NAME(pushFunc)(JNIEnv *env, jobject K, jobject f) {
 //    }
 }
 
+static int pushjavaobject_protected(lua_State *L) {
+    pushjavaobject(L, (jobject) lua_touserdata(L, 1));
+    return 1;
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(pushAny)(JNIEnv *env, jobject K, jobject any) {
+    current_env = env;
+
+    lua_State *L = state_from_thread(env, K);
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checknotnull(any)) {
+    lua_pushcfunction(L, pushjavaobject_protected);
+    lua_pushlightuserdata(L, (void *) any);
+    lua_pcall(L, 1, 1, 0);
+//    }
+}
 
 /* Handles Lua errors. */
 static int messagehandler(lua_State *L) {
