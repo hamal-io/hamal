@@ -9,7 +9,10 @@ internal class LuaState : AutoCloseable {
     external fun pushBoolean(value: Boolean): Int
     external fun toBoolean(idx: Int): Boolean
 
-    external fun init()
+    external fun loadString(code: String): Int
+    external fun call(argCount: Int, returnCount: Int)
+
+    private external fun init()
 
     init {
         init()

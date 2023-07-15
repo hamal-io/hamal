@@ -2,6 +2,7 @@
 #include "kua_check.h"
 #include "kua_error.h"
 #include "kua_macro.h"
+#include "lualib.h"
 
 #include <lauxlib.h>
 
@@ -58,6 +59,108 @@ STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean b) {
     return (jint) lua_gettop(L);
 }
 
+/* Handles Lua errors. */
+static int messagehandler (lua_State *L) {
+    int level, count;
+    lua_Debug ar;
+    jobjectArray luastacktrace;
+    jstring name, source;
+    jobject luastacktraceelement;
+    jobject luaerror;
+    jstring message;
+
+    /* Count relevant stack frames */
+    level = 1;
+    count = 0;
+//    while (lua_getstack(L, level, &ar)) {
+//        lua_getinfo(L, "nSl", &ar);
+//        if (isrelevant(&ar)) {
+//            count++;
+//        }
+//        level++;
+//    }
+//
+//    /* Create Lua stack trace as a Java LuaStackTraceElement[] */
+//    luastacktrace = (*thread_env)->NewObjectArray(thread_env, count, luastacktraceelement_class, NULL);
+//    if (!luastacktrace) {
+//        return 1;
+//    }
+//    level = 1;
+//    count = 0;
+//    while (lua_getstack(L, level, &ar)) {
+//        lua_getinfo(L, "nSl", &ar);
+//        if (isrelevant(&ar)) {
+//            name = ar.name ? (*thread_env)->NewStringUTF(thread_env, ar.name) : NULL;
+//            source = ar.source ? (*thread_env)->NewStringUTF(thread_env, ar.source) : NULL;
+//            luastacktraceelement = (*thread_env)->NewObject(thread_env, luastacktraceelement_class,	luastacktraceelement_id, name, source, ar.currentline);
+//            if (!luastacktraceelement) {
+//                return 1;
+//            }
+//            (*thread_env)->SetObjectArrayElement(thread_env, luastacktrace, count, luastacktraceelement);
+//            if ((*thread_env)->ExceptionCheck(thread_env)) {
+//                return 1;
+//            }
+//            count++;
+//        }
+//        level++;
+//    }
+//
+//    /* Get or create the error object  */
+//    luaerror = tojavaobject(L, -1, luaerror_class);
+//    if (!luaerror) {
+//        message = tostring(L, -1);
+//        if (!(luaerror = (*thread_env)->NewObject(thread_env, luaerror_class, luaerror_id, message, NULL))) {
+//            return 1;
+//        }
+//    }
+//    (*thread_env)->CallVoidMethod(thread_env, luaerror, setluastacktrace_id, luastacktrace);
+//
+//    /* Replace error */
+//    pushjavaobject(L, luaerror);
+    return 1;
+}
+
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(loadString)(JNIEnv *env, jobject K, jstring code) {
+//    lua_State *L;
+
+//    JNLUA_ENV(env);
+//    lua_State *L = get_thread(env, K);
+    lua_State *L = get_state(env, K);
+
+    const char *nativeString = (*env)->GetStringUTFChars(env, code, 0);
+    // use your string
+    int result = luaL_loadstring(L, nativeString);
+
+    (*env)->ReleaseStringUTFChars(env, code, nativeString);
+
+    return (jint) result;
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint nargs, jint nresults) {
+    lua_State *L;
+    int index, status;
+
+//    JNLUA_ENV(env);
+    L = get_state(env, K);
+//    if (checkarg(nargs >= 0, "illegal argument count")
+//        && checknelems(L, nargs + 1)
+//        && checkarg(nresults >= 0 || nresults == LUA_MULTRET, "illegal return count")
+//        && (nresults == LUA_MULTRET || checkstack(L, nresults - (nargs + 1)))) {
+    index = lua_absindex(L, -nargs - 1);
+    lua_pushcfunction(L, messagehandler);
+    lua_insert(L, index);
+    status = lua_pcall(L, nargs, nresults, index);
+    lua_remove(L, index);
+//    if (status != LUA_OK) {
+//        throw(L, status);
+//    }
+
+}
+
+
 //static jclass illegalargumentexception_class = NULL;
 //
 //static jclass
@@ -101,6 +204,9 @@ STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
 
 //    L = controlled_newstate(K);
     L = luaL_newstate();
+
+    // load Lua base libraries (print / math / etc)
+    luaL_openlibs(L);
 
 //    lua_pushboolean(L, 0);
 
