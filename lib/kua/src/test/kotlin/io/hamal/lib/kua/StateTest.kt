@@ -73,7 +73,9 @@ internal class TypeTest : BaseStateTest() {
 
     @Test
     fun `Nil`() {
-        TODO()
+        testInstance.pushNil()
+        val result = testInstance.type(1)
+        assertThat(result, equalTo(0))
     }
 
     @Test
@@ -84,40 +86,40 @@ internal class TypeTest : BaseStateTest() {
     }
 
     @Test
-    fun `Pointer`() {
-        TODO()
-    }
-
-    @Test
     fun `Number`() {
-        TODO()
+        testInstance.pushNumber(13.0)
+        val result = testInstance.type(1)
+        assertThat(result, equalTo(3))
     }
 
     @Test
     fun `String`() {
-        TODO()
-    }
-
-    @Test
-    fun `Table`() {
-        TODO()
-    }
-
-    @Test
-    fun `Function`() {
-        TODO()
-    }
-
-    @Test
-    fun `UserData`() {
-        TODO()
-    }
-
-    @Test
-    fun `Thread`() {
-        TODO()
+        testInstance.pushString("hamal")
+        val result = testInstance.type(1)
+        assertThat(result, equalTo(4))
     }
 }
+
+@DisplayName("pushNil()")
+internal class PushNilTest : BaseStateTest() {
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushNil()
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.size(), equalTo(1))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushNil() }
+
+        val exception = assertThrows<StackOverflowError> {
+            testInstance.pushNil()
+        }
+        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+    }
+}
+
 
 @DisplayName("pushBoolean()")
 internal class PushBooleanTest : BaseStateTest() {
@@ -135,6 +137,47 @@ internal class PushBooleanTest : BaseStateTest() {
 
         val exception = assertThrows<StackOverflowError> {
             testInstance.pushBoolean(true)
+        }
+        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+    }
+}
+
+@DisplayName("pushNumber()")
+internal class PushNumberTest : BaseStateTest() {
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushNumber(13.37)
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.toNumber(1), equalTo(13.37))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushNumber(it.toDouble()) }
+        val exception = assertThrows<StackOverflowError> {
+            testInstance.pushNumber(-1.0)
+        }
+        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+    }
+}
+
+@DisplayName("pushString()")
+internal class PushStringTest : BaseStateTest() {
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushString("hamal")
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.toString(1), equalTo("hamal"))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushString("code-sleep-repeat") }
+
+        val exception = assertThrows<StackOverflowError> {
+            testInstance.pushString("until you can not anymore")
         }
         assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
     }
