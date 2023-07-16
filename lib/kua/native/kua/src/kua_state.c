@@ -323,7 +323,7 @@ referenceclass(JNIEnv *env, const char *className) {
 
 
 JNIEXPORT void JNICALL
-STATE_METHOD_NAME(pushFunc)(JNIEnv *env, jobject K, jobject f) {
+STATE_METHOD_NAME(pushFuncValue)(JNIEnv *env, jobject K, jobject f) {
 //    lua_State *L;
     dep_current_env = env;
 
@@ -523,7 +523,7 @@ STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
     luaL_openlibs(L);
     state_to_thread(env, K, L);
 
-    kua_func_class = referenceclass(env, "io/hamal/lib/kua/KuaFunc");
+    kua_func_class = referenceclass(env, "io/hamal/lib/kua/value/FuncValue");
     invoke_id = (*env)->GetMethodID(env, kua_func_class, "invokedByLua", "(Lio/hamal/lib/kua/LuaState;)I");
 //    invoke_id = (*env)->GetMethodID(env, kua_func_class, "invoke", "()I");
 }

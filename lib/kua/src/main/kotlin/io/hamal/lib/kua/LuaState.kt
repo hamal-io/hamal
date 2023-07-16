@@ -1,5 +1,7 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.value.FuncValue
+
 class LuaState : AutoCloseable {
 
     external fun luaVersionNumber(): Int
@@ -12,7 +14,7 @@ class LuaState : AutoCloseable {
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int
     external fun pushString(value: String): Int
-    external fun pushFunc(fn: KuaFunc)
+    external fun pushFuncValue(fn: FuncValue)
     external fun pushAny(any: Any)
 
     external fun push(idx: Int): Int

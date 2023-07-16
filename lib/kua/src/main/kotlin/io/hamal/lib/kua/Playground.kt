@@ -1,21 +1,25 @@
 package io.hamal.lib.kua
 
-fun LuaState.register(namedJavaFunction: NamedKuaFunc) {
-    pushFunc(namedJavaFunction.func)
+import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.NamedFuncValue
+import io.hamal.lib.kua.value.TestFunc
+
+fun LuaState.register(namedJavaFunction: NamedFuncValue) {
+    pushFuncValue(namedJavaFunction.func)
     setGlobal(namedJavaFunction.name)
 }
 
 
 fun LuaState.register(
     moduleName: String,
-    namedJavaFunctions: List<NamedKuaFunc>,
+    namedJavaFunctions: List<NamedFuncValue>,
     global: Boolean
 ) {
 //    check()
     createTable(0, namedJavaFunctions.size)
     for (i in namedJavaFunctions.indices) {
         val name: String = namedJavaFunctions[i].name
-        pushFunc(namedJavaFunctions[i].func)
+        pushFuncValue(namedJavaFunctions[i].func)
         setField(-2, name)
     }
 ////    getSubTable(REGISTRYINDEX, "_LOADED")
@@ -35,7 +39,7 @@ fun LuaState.register(
 
 fun main() {
 //    System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
-    FixedPathLoader.load()
+    ResourceLoader.load()
     val s = LuaState()
 
     val sbox = LuaSandbox(s)
@@ -46,21 +50,21 @@ fun main() {
 //        ), true
 //    )
 
-    sbox.state.register(NamedKuaFunc("log_info", TestFunc()))
+    sbox.state.register(NamedFuncValue("log_info", TestFunc()))
 
-        println(sbox.state.loadString("""
-            local module = {
+    sbox.runCode(CodeValue("""
+          local module = {
                 invoke = log_info
             }
             
             log_info("I create a log record for ya")
             
             module.invoke("test")
-            
-            
     """.trimIndent()))
+
 //    println(sbox.stack.size())
-    sbox.state.call(0, 0)
+//    sbox.state.call(0, 0)
+
 
 
 //    println(sbox.stack.size())

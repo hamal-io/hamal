@@ -1,16 +1,18 @@
-package io.hamal.lib.kua
+package io.hamal.lib.kua.value
 
-abstract class KuaFunc {
+import io.hamal.lib.kua.LuaState
+
+abstract class FuncValue {
     abstract fun invokedByLua(state: LuaState): Int
 //    fun invoke(): Int
 }
 
-data class NamedKuaFunc(
+data class NamedFuncValue(
     val name: String,
-    val func: KuaFunc
+    val func: FuncValue
 )
 
-class TestFunc : KuaFunc() {
+class TestFunc : FuncValue() {
     override fun invokedByLua(state: LuaState): Int {
 //        println("Hamal Rockz")
 //        println(state.size())
