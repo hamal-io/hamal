@@ -8,6 +8,18 @@ dependencies {
     testImplementation(external.hamcrest)
 }
 
+project.sourceSets {
+    integrationTest {
+        resources {
+            setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))
+        }
+    }
+    test {
+        resources {
+            setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))
+        }
+    }
+}
 
 
 tasks.withType<Jar> {

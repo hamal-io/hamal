@@ -13,7 +13,7 @@ import kotlin.io.path.name
 class LuaTests {
     @TestFactory
     fun generateTestCases(): List<DynamicTest> {
-        FixedPathLoader.load()
+        ResourceLoader.load()
 
         return collectFiles()
             .map { file ->
@@ -30,3 +30,4 @@ class LuaTests {
 
     private val testPath = Paths.get("src", "integrationTest", "resources", "lua-5.4.6-tests")
 }
+
