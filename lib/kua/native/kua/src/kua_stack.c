@@ -3,7 +3,7 @@
 
 int
 type(lua_State *L, int idx) {
-    if (check_argument(idx > 0, "Index must be positive (>0)") == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_type(L, idx);
 }
@@ -15,7 +15,7 @@ top(lua_State *L) {
 
 int
 push(lua_State *L, int idx) {
-    if (check_argument(idx > 0, "Index must be positive (>0)") == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushvalue(L, idx);
     return top(L);
@@ -59,7 +59,7 @@ push_string(lua_State *L, char const *value) {
 
 int
 to_boolean(lua_State *L, int idx) {
-    if (check_argument(idx > 0, "Index must be positive (>0)") == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(L, idx, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_toboolean(L, idx);
@@ -67,7 +67,7 @@ to_boolean(lua_State *L, int idx) {
 
 double
 to_number(lua_State *L, int idx) {
-    if (check_argument(idx > 0, "Index must be positive (>0)") == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(L, idx, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_tonumber(L, idx);
@@ -75,7 +75,7 @@ to_number(lua_State *L, int idx) {
 
 char const *
 to_string(lua_State *L, int idx) {
-    if (check_argument(idx > 0, "Index must be positive (>0)") == CHECK_RESULT_ERROR) return NULL;
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
     if (check_type_at(L, idx, 4) == CHECK_RESULT_ERROR) return NULL;
     return lua_tostring(L, idx);

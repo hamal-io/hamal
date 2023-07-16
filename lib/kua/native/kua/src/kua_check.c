@@ -1,10 +1,12 @@
 #include "kua_check.h"
 #include "kua_jni_error.h"
 
+#include <stdlib.h>
+
 enum check_result
 check_index(lua_State *L, int idx) {
     int top = lua_gettop(L);
-    if (idx < 1 || idx > top) {
+    if (abs(idx) > top) {
         throw_illegal_argument("Index out of bounds");
         return CHECK_RESULT_ERROR;
     }
@@ -22,7 +24,7 @@ check_argument(int condition, char const *error_message) {
 
 enum check_result
 check_stack_overflow(lua_State *L, int total) {
-    if (lua_checkstack(L, total) == 0) {
+    if (lua_checkstack(L, abs(total)) == 0) {
         throw_illegal_argument("Prevented stack overflow");
         return CHECK_RESULT_ERROR;
     }
