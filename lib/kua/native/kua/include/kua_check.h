@@ -49,9 +49,11 @@ check_stack_underflow(lua_State *L, int total);
 /**
  * Checks whether the type at given index matches the expectations
  * @param L
+ * @param idx
+ * @param expected_type
  * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR
  */
 enum check_result
-check_type_at(lua_State *L, int idx, int expected_type);
+check_type_at(lua_State *L, int idx, enum Type expected_type);
 
 #endif //KUA_CHECK_H

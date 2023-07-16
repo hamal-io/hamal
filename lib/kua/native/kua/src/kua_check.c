@@ -41,7 +41,7 @@ check_stack_underflow(lua_State *L, int total) {
 }
 
 enum check_result
-check_type_at(lua_State *L, int idx, int expected_type) {
+check_type_at(lua_State *L, int idx, enum Type expected_type) {
     int current_type = lua_type(L, idx);
     if (current_type != expected_type) {
         lua_pushstring(L, "Expected type to be ");

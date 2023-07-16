@@ -1,3 +1,5 @@
+#include <lua.h>
+
 #include "kua_check.h"
 #include "kua_stack.h"
 
@@ -61,7 +63,7 @@ int
 to_boolean(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_type_at(L, idx, BOOLEAN_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_toboolean(L, idx);
 }
 
@@ -69,7 +71,7 @@ double
 to_number(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_type_at(L, idx, NUMBER_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_tonumber(L, idx);
 }
 
@@ -77,6 +79,6 @@ char const *
 to_string(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
-    if (check_type_at(L, idx, 4) == CHECK_RESULT_ERROR) return NULL;
+    if (check_type_at(L, idx, STRING_TYPE) == CHECK_RESULT_ERROR) return NULL;
     return lua_tostring(L, idx);
 }

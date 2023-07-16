@@ -2,6 +2,7 @@ package io.hamal.lib.kua
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -86,6 +87,12 @@ internal class TypeTest : BaseStateTest() {
     }
 
     @Test
+    @Disabled
+    fun `LightUserData`() {
+        TODO()
+    }
+
+    @Test
     fun `Number`() {
         testInstance.pushNumber(13.0)
         val result = testInstance.type(1)
@@ -97,6 +104,39 @@ internal class TypeTest : BaseStateTest() {
         testInstance.pushString("hamal")
         val result = testInstance.type(1)
         assertThat(result, equalTo(4))
+    }
+
+    @Test
+    fun `Table`() {
+        testInstance.createTable(0, 0)
+        val result = testInstance.type(1)
+        assertThat(result, equalTo(5))
+    }
+
+    @Test
+    @Disabled
+    fun `Function`() {
+        TODO()
+    }
+
+    @Test
+    @Disabled
+    fun `UserData`() {
+        TODO()
+    }
+
+    @Test
+    @Disabled
+    fun `Thread`() {
+        TODO()
+    }
+}
+
+@DisplayName("setGlobal()")
+internal class SetGlobalTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
     }
 }
 
@@ -156,6 +196,98 @@ internal class PushTest : BaseStateTest() {
     }
 }
 
+@DisplayName("pushBoolean()")
+internal class PushBooleanTest : BaseStateTest() {
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushBoolean(true)
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+        assertThat(testInstance.toBoolean(1), equalTo(true))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushBoolean(true) }
+
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pushBoolean(true)
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
+@DisplayName("pushFuncValue()")
+internal class PushFuncValueTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("pushNil()")
+internal class PushNilTest : BaseStateTest() {
+
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushNil()
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushNil() }
+
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pushNil()
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
+@DisplayName("pushNumber()")
+internal class PushNumberTest : BaseStateTest() {
+
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushNumber(13.37)
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+        assertThat(testInstance.toNumber(1), equalTo(13.37))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushNumber(it.toDouble()) }
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pushNumber(-1.0)
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
+@DisplayName("pushString()")
+internal class PushStringTest : BaseStateTest() {
+    @Test
+    fun `Pushes value to stack`() {
+        val result = testInstance.pushString("hamal")
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+        assertThat(testInstance.toString(1), equalTo("hamal"))
+    }
+
+    @Test
+    fun `Tries to push too many items on the stack limited to 999_999`() {
+        repeat(999999) { testInstance.pushString("code-sleep-repeat") }
+
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pushString("until you can not anymore")
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
 @DisplayName("pop()")
 internal class PopTest : BaseStateTest() {
     @Test
@@ -194,88 +326,6 @@ internal class PopTest : BaseStateTest() {
         assertThat(testInstance.top(), equalTo(1))
 
         assertThat(testInstance.toNumber(1), equalTo(1.0))
-    }
-}
-
-@DisplayName("pushNil()")
-internal class PushNilTest : BaseStateTest() {
-    @Test
-    fun `Pushes value to stack`() {
-        val result = testInstance.pushNil()
-        assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
-    }
-
-    @Test
-    fun `Tries to push too many items on the stack limited to 999_999`() {
-        repeat(999999) { testInstance.pushNil() }
-
-        val exception = assertThrows<IllegalArgumentException> {
-            testInstance.pushNil()
-        }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
-    }
-}
-
-@DisplayName("pushBoolean()")
-internal class PushBooleanTest : BaseStateTest() {
-    @Test
-    fun `Pushes value to stack`() {
-        val result = testInstance.pushBoolean(true)
-        assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
-        assertThat(testInstance.toBoolean(1), equalTo(true))
-    }
-
-    @Test
-    fun `Tries to push too many items on the stack limited to 999_999`() {
-        repeat(999999) { testInstance.pushBoolean(true) }
-
-        val exception = assertThrows<IllegalArgumentException> {
-            testInstance.pushBoolean(true)
-        }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
-    }
-}
-
-@DisplayName("pushNumber()")
-internal class PushNumberTest : BaseStateTest() {
-    @Test
-    fun `Pushes value to stack`() {
-        val result = testInstance.pushNumber(13.37)
-        assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
-        assertThat(testInstance.toNumber(1), equalTo(13.37))
-    }
-
-    @Test
-    fun `Tries to push too many items on the stack limited to 999_999`() {
-        repeat(999999) { testInstance.pushNumber(it.toDouble()) }
-        val exception = assertThrows<IllegalArgumentException> {
-            testInstance.pushNumber(-1.0)
-        }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
-    }
-}
-
-@DisplayName("pushString()")
-internal class PushStringTest : BaseStateTest() {
-    @Test
-    fun `Pushes value to stack`() {
-        val result = testInstance.pushString("hamal")
-        assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
-        assertThat(testInstance.toString(1), equalTo("hamal"))
-    }
-
-    @Test
-    fun `Tries to push too many items on the stack limited to 999_999`() {
-        repeat(999999) { testInstance.pushString("code-sleep-repeat") }
-
-        val exception = assertThrows<IllegalArgumentException> {
-            testInstance.pushString("until you can not anymore")
-        }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
 }
 
@@ -462,6 +512,82 @@ internal class ToStringTest : BaseStateTest() {
         testInstance.pushString("or-write-some-code")
         assertThat(testInstance.toString(-1), equalTo("or-write-some-code"))
         assertThat(testInstance.top(), equalTo(2))
+    }
+}
+
+@DisplayName("createTableTest()")
+internal class CreateTableTest : BaseStateTest() {
+    @Test
+    fun `Creates an empty table on empty stack`() {
+        val result = testInstance.createTable(1, 2)
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+
+        assertThat(testInstance.type(1), equalTo(5))
+    }
+
+    @Test
+    fun `Array count must not be negative`() {
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.createTable(-1, 0)
+        }
+        assertThat(exception.message, equalTo("Array count must not be negative"))
+    }
+
+    @Test
+    fun `Records count must not be negative`() {
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.createTable(0, -1)
+        }
+        assertThat(exception.message, equalTo("Records count must not be negative"))
+    }
+}
+
+@DisplayName("getSubTable")
+internal class GetSubTableTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("rawGet()")
+internal class RawGetTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("rawGetI()")
+internal class RawGetITest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("setField()")
+internal class SetFieldTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("loadString()")
+internal class LoadStringTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("call()")
+internal class CallTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
     }
 }
 

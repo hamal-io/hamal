@@ -2,6 +2,7 @@
 #define KUA_JNI_H
 
 #include "kua_macro.h"
+#include <jni.h>
 
 JNIEnv *
 current_env();

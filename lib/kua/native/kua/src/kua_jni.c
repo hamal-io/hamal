@@ -2,8 +2,10 @@
 
 #include "kua_info.h"
 #include "kua_stack.h"
-
 #include "kua_state.h"
+#include "kua_table.h"
+#include "kua_kotlin.h"
+
 
 #define UNUSED __attribute__((unused))
 #define STATE_METHOD_NAME(method) Java_io_hamal_lib_kua_LuaState_##method
@@ -100,3 +102,14 @@ STATE_METHOD_NAME(toString)(JNIEnv *env, jobject K, jint idx) {
     return (*env)->NewStringUTF(env, str);
 }
 
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount) {
+    ENV_AND_STATE
+    call(L, argsCount, resultCount);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(createTable)(JNIEnv *env, jobject K, jint arrayCount, jint recordsCount) {
+    ENV_AND_STATE
+    return create_table(L, arrayCount, recordsCount);
+}

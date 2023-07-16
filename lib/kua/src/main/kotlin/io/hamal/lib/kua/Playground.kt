@@ -1,8 +1,6 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.NamedFuncValue
-import io.hamal.lib.kua.value.TestFunc
 
 fun LuaState.register(namedJavaFunction: NamedFuncValue) {
     pushFuncValue(namedJavaFunction.func)
@@ -39,7 +37,7 @@ fun LuaState.register(
 
 fun main() {
 //    System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
-    ResourceLoader.load()
+    FixedPathLoader.load()
     val s = LuaState()
 
     val sbox = LuaSandbox(s)
@@ -50,21 +48,26 @@ fun main() {
 //        ), true
 //    )
 
-    sbox.state.register(NamedFuncValue("log_info", TestFunc()))
+//    sbox.state.register(NamedFuncValue("log_info", TestFunc()))
+//
+//    sbox.runCode(CodeValue("""
+//          local module = {
+//                invoke = log_info
+//            }
+//
+//            log_info("I create a log record for ya")
+//
+//            module.invoke("test")
+//
+//    """.trimIndent()))
 
-    sbox.runCode(CodeValue("""
-          local module = {
-                invoke = log_info
-            }
-            
-            log_info("I create a log record for ya")
-            
-            module.invoke("test")
-    """.trimIndent()))
+    println( sbox.state.createTable(1, 1))
+    println(sbox.stack.size())
+    println(sbox.state.type(1))
+
 
 //    println(sbox.stack.size())
 //    sbox.state.call(0, 0)
-
 
 
 //    println(sbox.stack.size())
@@ -82,9 +85,6 @@ fun main() {
 
 //    println(sbox.stack.toBoolean(1))
 //    println(sbox.stack.size())
-
-
-
 
 
 //    println(sbox.stack.size())
