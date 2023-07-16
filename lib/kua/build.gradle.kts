@@ -9,6 +9,23 @@ dependencies {
 }
 
 
+
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(external.spring.logging)
+
+                    implementation(project(":lib:kua"))
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                }
+            }
+        }
+    }
 }
