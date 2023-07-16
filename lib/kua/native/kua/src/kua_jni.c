@@ -34,3 +34,58 @@ STATE_METHOD_NAME(type)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return (jint) type(L, idx);
 }
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(size)(JNIEnv *env, jobject K) {
+    ENV_AND_STATE
+    return (jint) size(L);
+}
+
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushNil)(JNIEnv *env, jobject K) {
+    ENV_AND_STATE
+    return (jint) push_nil(L);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean value) {
+    ENV_AND_STATE
+    return (jint) push_boolean(L, value);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushNumber)(JNIEnv *env, jobject K, jdouble value) {
+    ENV_AND_STATE
+    return (jint) push_number(L, value);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushString)(JNIEnv *env, jobject K, jstring value) {
+    ENV_AND_STATE
+    char const *lua_string = (*env)->GetStringUTFChars(env, value, 0);
+    jint result = push_string(L, lua_string);
+    (*env)->ReleaseStringUTFChars(env, value, lua_string);
+    return result;
+}
+
+JNIEXPORT jboolean JNICALL
+STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return to_boolean(L, idx);
+}
+
+JNIEXPORT jdouble JNICALL
+STATE_METHOD_NAME(toNumber)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return (jdouble) to_number(L, idx);
+}
+
+
+JNIEXPORT jstring JNICALL
+STATE_METHOD_NAME(toString)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    char const *str = to_string(L, idx);
+    return (*env)->NewStringUTF(env, str);
+}
+

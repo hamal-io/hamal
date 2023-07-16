@@ -2,29 +2,19 @@
 #include "kua_jni_error.h"
 
 enum check_result
-dep_check_index(JNIEnv *env, lua_State *L, int idx) {
-    int top = lua_gettop(L);
-    if (idx < 1 || idx > top) {
-        dep_throw_illegal_argument(env, "Index out of bounds");
-        return CHECK_RESULT_ERROR;
-    }
-    return CHECK_RESULT_OK;
-}
-
-enum check_result
 check_index(lua_State *L, int idx) {
     int top = lua_gettop(L);
     if (idx < 1 || idx > top) {
-        throw_illegal_argument( "Index out of bounds");
+        throw_illegal_argument("Index out of bounds");
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
 }
 
 enum check_result
-check_stack(JNIEnv *env, lua_State *L) {
+check_stack(lua_State *L) {
     if (lua_checkstack(L, 1) == 0) {
-        dep_throw_stack_overflow(env, "StackOverflow - Its all part of the process");
+        throw_stack_overflow("StackOverflow - Its all part of the process");
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
@@ -32,7 +22,7 @@ check_stack(JNIEnv *env, lua_State *L) {
 
 
 enum check_result
-check_type_at(JNIEnv *env, lua_State *L, int idx, int expected_type) {
+check_type_at(lua_State *L, int idx, int expected_type) {
     int current_type = lua_type(L, idx);
     if (current_type != expected_type) {
         lua_pushstring(L, "Expected type to be ");
@@ -42,7 +32,7 @@ check_type_at(JNIEnv *env, lua_State *L, int idx, int expected_type) {
 
         lua_concat(L, 4);
 
-        dep_throw_illegal_state(env, lua_tostring(L, lua_gettop(L)));
+        throw_illegal_state(lua_tostring(L, lua_gettop(L)));
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;

@@ -18,14 +18,6 @@ referenceclass(JNIEnv *env, const char *className) {
     return (*env)->NewGlobalRef(env, clazz);
 }
 
-jint
-dep_throw_illegal_argument(JNIEnv *env, char const *message) {
-
-    if (!(illegalargumentexception_class = referenceclass(env, "java/lang/IllegalArgumentException"))) {
-//        return JNLUA_JNIVERSION;
-    }
-    return (*env)->ThrowNew(env, illegalargumentexception_class, message);
-}
 
 int
 throw_illegal_argument(char const *message) {
@@ -37,8 +29,9 @@ throw_illegal_argument(char const *message) {
 }
 
 
-jint
-dep_throw_illegal_state(JNIEnv *env, char const *message) {
+int
+throw_illegal_state(char const *message) {
+    JNIEnv *env = current_env();
     if (!(illegal_state_exception_class = referenceclass(env, "java/lang/IllegalStateException"))) {
 //        return JNLUA_JNIVERSION;
     }
@@ -46,8 +39,9 @@ dep_throw_illegal_state(JNIEnv *env, char const *message) {
 }
 
 
-jint
-dep_throw_stack_overflow(JNIEnv *env, char const *message) {
+int
+throw_stack_overflow(char const *message) {
+    JNIEnv *env = current_env();
     if (!(stackoverflowerror_class = referenceclass(env, "java/lang/StackOverflowError"))) {
 //        return JNLUA_JNIVERSION;
     }
