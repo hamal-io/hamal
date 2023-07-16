@@ -18,14 +18,33 @@ enum check_result {
 enum check_result
 check_index(lua_State *L, int idx);
 
+/**
+ * Throws an IllegalArgumentException if the condition is false (!=1)
+ * @param condition
+ * @param error_message
+ * @return
+ */
+enum check_result
+check_argument(int condition, char const *error_message);
 
 /**
- * Checks the stack for overflow. If so throw StackOverflowError
+ * Checks if stack has space for (total) more elements. If not throw StackOverflowException
  * @param L
+ * @param total
  * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR
  */
 enum check_result
-check_stack(lua_State *L);
+check_stack_overflow(lua_State *L, int total);
+
+/**
+ * Checks that stack has at least (total) more elements. If not throw StackUnderflowError
+ * @param L
+ * @param total
+ * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR
+ */
+enum check_result
+check_stack_underflow(lua_State *L, int total);
+
 
 /**
  * Checks whether the type at given index matches the expectations

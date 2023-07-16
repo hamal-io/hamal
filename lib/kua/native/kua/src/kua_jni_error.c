@@ -37,13 +37,3 @@ throw_illegal_state(char const *message) {
     }
     return (*env)->ThrowNew(env, illegal_state_exception_class, message);
 }
-
-
-int
-throw_stack_overflow(char const *message) {
-    JNIEnv *env = current_env();
-    if (!(stackoverflowerror_class = referenceclass(env, "java/lang/StackOverflowError"))) {
-//        return JNLUA_JNIVERSION;
-    }
-    return (*env)->ThrowNew(env, stackoverflowerror_class, message);
-}

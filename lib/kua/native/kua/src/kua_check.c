@@ -12,14 +12,31 @@ check_index(lua_State *L, int idx) {
 }
 
 enum check_result
-check_stack(lua_State *L) {
-    if (lua_checkstack(L, 1) == 0) {
-        throw_stack_overflow("StackOverflow - Its all part of the process");
+check_argument(int condition, char const *error_message) {
+    if (condition != 1) {
+        throw_illegal_argument(error_message);
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
 }
 
+enum check_result
+check_stack_overflow(lua_State *L, int total) {
+    if (lua_checkstack(L, total) == 0) {
+        throw_illegal_argument("Prevented stack overflow");
+        return CHECK_RESULT_ERROR;
+    }
+    return CHECK_RESULT_OK;
+}
+
+enum check_result
+check_stack_underflow(lua_State *L, int total) {
+    if (lua_gettop(L) - total < 0) {
+        throw_illegal_argument("Prevented stack underflow");
+        return CHECK_RESULT_ERROR;
+    }
+    return CHECK_RESULT_OK;
+}
 
 enum check_result
 check_type_at(lua_State *L, int idx, int expected_type) {

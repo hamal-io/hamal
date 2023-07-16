@@ -7,7 +7,13 @@ int
 type(lua_State *L, int idx);
 
 int
-size(lua_State *L);
+top(lua_State *L);
+
+int
+push(lua_State *L, int idx);
+
+int
+pop(lua_State *L, int total);
 
 int
 push_nil(lua_State *L);

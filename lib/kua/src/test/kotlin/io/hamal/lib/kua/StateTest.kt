@@ -24,18 +24,18 @@ internal class IntegerWidthTest : BaseStateTest() {
     }
 }
 
-@DisplayName("size()")
-internal class SizeTest : BaseStateTest() {
+@DisplayName("top()")
+internal class TopTest : BaseStateTest() {
     @Test
     fun `Nothing pushed on the stack`() {
-        val result = testInstance.size()
+        val result = testInstance.top()
         assertThat(result, equalTo(0))
     }
 
     @Test
     fun `Pushing to the stack cause stack to grow`() {
         repeat(100) { idx ->
-            assertThat(testInstance.size(), equalTo(idx))
+            assertThat(testInstance.top(), equalTo(idx))
             testInstance.pushBoolean(true)
         }
     }
@@ -50,7 +50,7 @@ internal class TypeTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.type(-1)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -59,7 +59,7 @@ internal class TypeTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.type(0)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -100,23 +100,108 @@ internal class TypeTest : BaseStateTest() {
     }
 }
 
+@DisplayName("push()")
+internal class PushTest : BaseStateTest() {
+    @Test
+    fun `Tries to push negative idx`() {
+        testInstance.pushNumber(23.23)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.push(-1)
+        }
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
+    }
+
+    @Test
+    fun `Pushes value at the top of the index`() {
+        testInstance.pushNumber(1.0)
+        testInstance.pushNumber(2.0)
+        testInstance.pushNumber(3.0)
+
+        val result = testInstance.push(1)
+        assertThat(result, equalTo(4))
+        assertThat(testInstance.top(), equalTo(4))
+
+        assertThat(testInstance.toNumber(4), equalTo(1.0))
+    }
+
+    @Test
+    fun `Tries to push index 0 `() {
+        testInstance.pushBoolean(true)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.push(0)
+        }
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
+    }
+
+    @Test
+    fun `Tries to push with index bigger than stack size`() {
+        repeat(999999) { testInstance.pushNil() }
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.push(2)
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
+@DisplayName("pop()")
+internal class PopTest : BaseStateTest() {
+    @Test
+    fun `Tries to pop negative amount from stack`() {
+        testInstance.pushNumber(23.23)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pop(-1)
+        }
+        assertThat(exception.message, equalTo("Total must be positive (>0)"))
+    }
+
+    @Test
+    fun `Tries to pop 0 elements from stack`() {
+        testInstance.pushBoolean(true)
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pop(0)
+        }
+        assertThat(exception.message, equalTo("Total must be positive (>0)"))
+    }
+
+    @Test
+    fun `Tries to pop elements from empty stack`() {
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pop(1)
+        }
+        assertThat(exception.message, equalTo("Prevented stack underflow"))
+    }
+
+    @Test
+    fun `Pops elements from stack`() {
+        testInstance.pushNumber(1.0)
+        testInstance.pushNumber(2.0)
+        testInstance.pushNumber(3.0)
+
+        val result = testInstance.pop(2)
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+
+        assertThat(testInstance.toNumber(1), equalTo(1.0))
+    }
+}
+
 @DisplayName("pushNil()")
 internal class PushNilTest : BaseStateTest() {
     @Test
     fun `Pushes value to stack`() {
         val result = testInstance.pushNil()
         assertThat(result, equalTo(1))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
     }
 
     @Test
     fun `Tries to push too many items on the stack limited to 999_999`() {
         repeat(999999) { testInstance.pushNil() }
 
-        val exception = assertThrows<StackOverflowError> {
+        val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushNil()
         }
-        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
 }
 
@@ -126,7 +211,7 @@ internal class PushBooleanTest : BaseStateTest() {
     fun `Pushes value to stack`() {
         val result = testInstance.pushBoolean(true)
         assertThat(result, equalTo(1))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
         assertThat(testInstance.toBoolean(1), equalTo(true))
     }
 
@@ -134,10 +219,10 @@ internal class PushBooleanTest : BaseStateTest() {
     fun `Tries to push too many items on the stack limited to 999_999`() {
         repeat(999999) { testInstance.pushBoolean(true) }
 
-        val exception = assertThrows<StackOverflowError> {
+        val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushBoolean(true)
         }
-        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
 }
 
@@ -147,17 +232,17 @@ internal class PushNumberTest : BaseStateTest() {
     fun `Pushes value to stack`() {
         val result = testInstance.pushNumber(13.37)
         assertThat(result, equalTo(1))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
         assertThat(testInstance.toNumber(1), equalTo(13.37))
     }
 
     @Test
     fun `Tries to push too many items on the stack limited to 999_999`() {
         repeat(999999) { testInstance.pushNumber(it.toDouble()) }
-        val exception = assertThrows<StackOverflowError> {
+        val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushNumber(-1.0)
         }
-        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
 }
 
@@ -167,7 +252,7 @@ internal class PushStringTest : BaseStateTest() {
     fun `Pushes value to stack`() {
         val result = testInstance.pushString("hamal")
         assertThat(result, equalTo(1))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
         assertThat(testInstance.toString(1), equalTo("hamal"))
     }
 
@@ -175,10 +260,10 @@ internal class PushStringTest : BaseStateTest() {
     fun `Tries to push too many items on the stack limited to 999_999`() {
         repeat(999999) { testInstance.pushString("code-sleep-repeat") }
 
-        val exception = assertThrows<StackOverflowError> {
+        val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushString("until you can not anymore")
         }
-        assertThat(exception.message, equalTo("StackOverflow - Its all part of the process"))
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
 }
 
@@ -191,7 +276,7 @@ internal class ToBooleanTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toBoolean(-1)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -200,7 +285,7 @@ internal class ToBooleanTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toBoolean(0)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -225,11 +310,11 @@ internal class ToBooleanTest : BaseStateTest() {
     fun `Reads value on stack without popping the value`() {
         testInstance.pushBoolean(true)
         assertThat(testInstance.toBoolean(1), equalTo(true))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
 
         testInstance.pushBoolean(false)
         assertThat(testInstance.toBoolean(2), equalTo(false))
-        assertThat(testInstance.size(), equalTo(2))
+        assertThat(testInstance.top(), equalTo(2))
     }
 }
 
@@ -241,7 +326,7 @@ internal class ToNumberTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toNumber(-1)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -250,7 +335,7 @@ internal class ToNumberTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toNumber(0)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -275,11 +360,11 @@ internal class ToNumberTest : BaseStateTest() {
     fun `Reads value on stack without popping the value`() {
         testInstance.pushNumber(99.88)
         assertThat(testInstance.toNumber(1), equalTo(99.88))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
 
         testInstance.pushNumber(88.77)
         assertThat(testInstance.toNumber(2), equalTo(88.77))
-        assertThat(testInstance.size(), equalTo(2))
+        assertThat(testInstance.top(), equalTo(2))
     }
 }
 
@@ -292,7 +377,7 @@ internal class ToStringTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toString(-1)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -301,7 +386,7 @@ internal class ToStringTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toString(0)
         }
-        assertThat(exception.message, equalTo("Index out of bounds"))
+        assertThat(exception.message, equalTo("Index must be positive (>0)"))
     }
 
     @Test
@@ -326,11 +411,11 @@ internal class ToStringTest : BaseStateTest() {
     fun `Reads value on stack without popping the value`() {
         testInstance.pushString("eat-poop-sleep-repeat")
         assertThat(testInstance.toString(1), equalTo("eat-poop-sleep-repeat"))
-        assertThat(testInstance.size(), equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
 
         testInstance.pushString("or-write-some-code")
         assertThat(testInstance.toString(2), equalTo("or-write-some-code"))
-        assertThat(testInstance.size(), equalTo(2))
+        assertThat(testInstance.top(), equalTo(2))
     }
 }
 

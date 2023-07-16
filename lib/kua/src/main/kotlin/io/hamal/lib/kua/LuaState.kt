@@ -5,7 +5,7 @@ class LuaState : AutoCloseable {
     external fun luaVersionNumber(): Int
     external fun luaIntegerWidth(): Int
 
-    external fun size(): Int
+    external fun top(): Int
     external fun type(idx: Int): Int
 
     external fun pushBoolean(value: Boolean): Int
@@ -15,22 +15,20 @@ class LuaState : AutoCloseable {
     external fun pushFunc(fn: KuaFunc)
     external fun pushAny(any: Any)
 
-    external fun push(idx: Int)
-    external fun pop(idx: Int)
+    external fun push(idx: Int): Int
+    external fun pop(total: Int): Int
     external fun rawGet(idx: Int)
     external fun rawGetI(idx: Int, key: Int)
-
 
     external fun toBoolean(idx: Int): Boolean
     external fun toNumber(idx: Int): Double
     external fun toString(idx: Int): String
 
-    external fun setField(idx: Int, key: String)
-
-    external fun setGlobal(key: String)
-
     external fun createTable(arrayCount: Int, recordCount: Int)
     external fun getSubTable(idx: Int, key: String): Int
+
+    external fun setField(idx: Int, key: String)
+    external fun setGlobal(key: String)
 
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)

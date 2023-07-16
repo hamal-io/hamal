@@ -106,26 +106,6 @@ STATE_METHOD_NAME(getSubTable)(JNIEnv *env, jobject K, jint index, jstring fname
 }
 
 
-/* lua_pushvalue() */
-JNIEXPORT void JNICALL
-STATE_METHOD_NAME(push)(JNIEnv *env, jobject K, jint index) {
-    dep_current_env = env;
-    lua_State *L = state_from_thread(env, K);
-//    if (checkstack(L, JNLUA_MINSTACK)
-//        && checkindex(L, index)) {
-    lua_pushvalue(L, index);
-//    }
-}
-
-JNIEXPORT void JNICALL
-STATE_METHOD_NAME(pop)(JNIEnv *env, jobject K, jint index) {
-    dep_current_env = env;
-    lua_State *L = state_from_thread(env, K);
-//    if (checkstack(L, JNLUA_MINSTACK)
-//        && checkindex(L, index)) {
-    lua_pop(L, index);
-//    }
-}
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(rawGet)(JNIEnv *env, jobject K, jint index) {
@@ -238,7 +218,7 @@ static int calljavafunction(lua_State *L) {
     if (!lua_isuserdata(L, -1)) {
         /* Java state has been cleared as the Java VM was destroyed. Cannot call. */
         lua_pushliteral(L, "no Java state");
-        dep_throw_illegal_state(dep_current_env, "no state");
+        throw_illegal_state("no state");
         return lua_error(L);
     }
 //
@@ -253,7 +233,7 @@ static int calljavafunction(lua_State *L) {
     if (!javafunction) {
         /* Function was cleared from outside JNLua code. */
         lua_pushliteral(L, "no Java function");
-        dep_throw_illegal_state(dep_current_env, "no func");
+        throw_illegal_state("no func");
         return lua_error(L);
     }
 
@@ -316,7 +296,7 @@ static void pushjavaobject(lua_State *L, jobject object) {
     *user_data = (*dep_current_env)->NewGlobalRef(dep_current_env, object);
 
     if (!*user_data) {
-        dep_throw_illegal_state(dep_current_env, "JNI error: NewGlobalRef() failed pushing Java object");
+        throw_illegal_state("JNI error: NewGlobalRef() failed pushing Java object");
         lua_pushliteral(L, "JNI error: NewGlobalRef() failed pushing Java object");
         lua_error(L);
     }

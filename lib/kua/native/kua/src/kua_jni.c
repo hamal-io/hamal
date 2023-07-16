@@ -36,11 +36,22 @@ STATE_METHOD_NAME(type)(JNIEnv *env, jobject K, jint idx) {
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(size)(JNIEnv *env, jobject K) {
+STATE_METHOD_NAME(top)(JNIEnv *env, jobject K) {
     ENV_AND_STATE
-    return (jint) size(L);
+    return (jint) top(L);
 }
 
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(push)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return (jint) push(L, idx);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pop)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return (jint) pop(L, idx);
+}
 
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(pushNil)(JNIEnv *env, jobject K) {
