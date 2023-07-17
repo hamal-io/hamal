@@ -44,6 +44,12 @@ STATE_METHOD_NAME(luaVersionNumber)(UNUSED JNIEnv *env, UNUSED jobject K) {
     return (jint) lua_version_number();
 }
 
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(luaRegistryIndex)(UNUSED JNIEnv *env, UNUSED jobject K) {
+    ENV_AND_STATE
+    return (jint) lua_registry_index();
+}
+
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[STACK]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 JNIEXPORT jint JNICALL
@@ -171,6 +177,15 @@ JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(getTableLength)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return (jint) table_len(L, idx);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(getSubTable)(JNIEnv *env, jobject K, jint idx, jstring key) {
+    ENV_AND_STATE
+    char const *table_key = to_raw_string(key);
+    int result = table_get_sub_table(L, idx, table_key);
+    release_raw_string(key, table_key);
+    return (jint) result;
 }
 
 

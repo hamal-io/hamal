@@ -1,5 +1,6 @@
 #include "kua_table.h"
 #include "kua_check.h"
+#include "lauxlib.h"
 
 int
 table_create(lua_State *L, int arrayCount, int recordsCount) {
@@ -62,4 +63,11 @@ table_raw_get_idx(lua_State *L, int stack_idx, int table_idx) {
     if (check_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_rawgeti(L, stack_idx, table_idx);
+}
+
+int
+table_get_sub_table(lua_State *L, int idx, char const *key) {
+    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    return luaL_getsubtable(L, idx, key);
 }

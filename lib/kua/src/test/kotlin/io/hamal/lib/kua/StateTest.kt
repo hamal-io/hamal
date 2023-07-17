@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 
-@DisplayName("versionNumber()")
-internal class VersionNumberTest : BaseStateTest() {
+@DisplayName("luaVersionNumber()")
+internal class LuaVersionNumberTest : BaseStateTest() {
     @Test
     fun `Loads current lua version number`() {
         val result = testInstance.luaVersionNumber()
@@ -17,12 +17,21 @@ internal class VersionNumberTest : BaseStateTest() {
     }
 }
 
-@DisplayName("integerWidth()")
-internal class IntegerWidthTest : BaseStateTest() {
+@DisplayName("luaIntegerWidth()")
+internal class LuaIntegerWidthTest : BaseStateTest() {
     @Test
     fun `Loads integer width from lua`() {
         val result = testInstance.luaIntegerWidth()
         assertThat("64bit platform - 8 byte", result, equalTo(8))
+    }
+}
+
+@DisplayName("luaRegistryIndex()")
+internal class LuaRegistryIndexTest : BaseStateTest() {
+    @Test
+    fun `Loads integer width from lua`() {
+        val result = testInstance.luaRegistryIndex()
+        assertThat(result, equalTo(-1001000))
     }
 }
 

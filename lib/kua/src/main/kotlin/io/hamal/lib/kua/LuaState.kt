@@ -7,6 +7,7 @@ class LuaState : AutoCloseable {
 
     external fun luaVersionNumber(): Int
     external fun luaIntegerWidth(): Int
+    external fun luaRegistryIndex(): Int
 
     external fun top(): Int
     external fun type(idx: Int): Int
@@ -36,7 +37,6 @@ class LuaState : AutoCloseable {
     external fun getTableRaw(idx: Int): Int
     external fun getTableRawIdx(stackIdx: Int, tableIdx: Int): Int
     external fun getSubTable(idx: Int, key: String): Int
-
 
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)

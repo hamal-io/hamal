@@ -19,15 +19,25 @@ int main(void) {
     lua_createtable(L, 0, 4);
     int tbl = lua_gettop(L);
 
-//    lua_pushstring(L, "key");
+    lua_createtable(L, 0, 0);
+    int second = lua_gettop(L);
     lua_pushstring(L, "value");
-    lua_rawseti(L, tbl, 23);
+    lua_rawseti(L, second, 1);
+
+    lua_setfield(L, 1, "__TABLE__");
+
     printf("%d\n", lua_gettop(L));
 
-    lua_rawgeti(L, tbl, 23);
+//    lua_rawgeti(L, 1, 23);
+//    printf("%d\n", lua_type(L, 2));
+
+    luaL_getsubtable(L, 1, "__TABLE__");
     printf("%d\n", lua_gettop(L));
-    printf("%d\n", lua_type(L, 2));
-    printf("%s\n", lua_tostring(L, 2));
+
+//    lua_rawgeti(L, tbl, 23);
+//    printf("%d\n", lua_gettop(L));
+//    printf("%d\n", lua_type(L, 2));
+//    printf("%s\n", lua_tostring(L, 2));
 
 //    lua_pushinteger(L, 23);
 //    lua_pushstring(L, "context");

@@ -14,9 +14,10 @@ data class NamedFuncValue(
 
 class TestFunc : FuncValue() {
     override fun invokedByLua(state: LuaState): Int {
-//        println("Hamal Rockz")
+        print("Hamal Rockz\n")
 //        println(state.size())
-        println("INFO: " + state.toString(1))
+//        println("INFO: " + state.toString(1))
+
         return 0
     }
 }

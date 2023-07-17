@@ -44,39 +44,6 @@ static void state_to_thread(JNIEnv *env, jobject K, lua_State *L) {
 static jmethodID invoke_id = 0;
 static jclass kua_func_class = NULL;
 
-static int getsubtable_protected(lua_State *L) {
-    lua_pushboolean(L, luaL_getsubtable(L, 2, (const char *) lua_touserdata(L, 1)));
-    return 2;
-}
-
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(getSubTable)(JNIEnv *env, jobject K, jint index, jstring fname) {
-    dep_current_env = env;
-    lua_State *L = state_from_thread(env, K);
-    jint getsubtable_result = 0;
-
-//    JNLUA_ENV(env);
-//    L = getluathread(K);
-//    if (checkstack(L, JNLUA_MINSTACK)
-//        && checkindex(L, index)
-//        && (getsubtable_fname = getstringchars(fname))) {
-
-    const char *nativeString = (*env)->GetStringUTFChars(env, fname, 0);
-
-    index = lua_absindex(L, index);
-    lua_pushcfunction(L, getsubtable_protected);
-    lua_pushlightuserdata(L, (void *) nativeString);
-    lua_pushvalue(L, index);
-    lua_pcall(L, 2, 2, 0);
-    getsubtable_result = (jint) lua_toboolean(L, -1);
-    lua_pop(L, 1);
-//    }
-//    if (getsubtable_fname) {
-//        releasestringchars(fname, getsubtable_fname);
-//    }
-    return getsubtable_result;
-}
-
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(rawGet)(JNIEnv *env, jobject K, jint index) {
