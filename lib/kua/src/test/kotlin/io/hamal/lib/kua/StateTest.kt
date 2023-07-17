@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+
 @DisplayName("versionNumber()")
 internal class VersionNumberTest : BaseStateTest() {
     @Test
@@ -554,8 +555,48 @@ internal class CreateTableTest : BaseStateTest() {
 @DisplayName("setTableField()")
 internal class SetTableFieldTest : BaseStateTest() {
     @Test
-    @Disabled
-    fun implementMe() {
+    fun `Sets value to empty table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.getTableField(1, "key")
+        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
+    }
+
+
+    @Test
+    fun `Sets different value for same key table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+
+        testInstance.pushNumber(42.0)
+        testInstance.setTableField(1, "key")
+
+        testInstance.getTableField(1, "key")
+        assertThat(testInstance.toNumber(-1), equalTo(42.0))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
+    }
+
+    @Test
+    fun `Sets different value with different key table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+
+        testInstance.pushNumber(42.0)
+        testInstance.setTableField(1, "different")
+
+        testInstance.getTableField(1, "key")
+        assertThat(testInstance.toString(-1), equalTo("value"))
+
+        testInstance.getTableField(1, "different")
+        assertThat(testInstance.toNumber(-1), equalTo(42.0))
+
+        assertThat(testInstance.getTableLength(1), equalTo(2))
     }
 
     @Test
@@ -618,12 +659,12 @@ internal class GetTableFieldTest : BaseStateTest() {
     }
 }
 
-@DisplayName("tableRawLength()")
-internal class TableRawLengthTest : BaseStateTest() {
+@DisplayName("getTableLength()")
+internal class GetTableLengthTest : BaseStateTest() {
     @Test
     fun `Size of empty table`() {
         testInstance.createTable(12, 12)
-        val result = testInstance.tableRawLength(1)
+        val result = testInstance.getTableLength(1)
         assertThat(result, equalTo(0))
     }
 
@@ -634,7 +675,7 @@ internal class TableRawLengthTest : BaseStateTest() {
         testInstance.setTableField(1, "key")
         assertThat(testInstance.top(), equalTo(1))
 
-        val result = testInstance.tableRawLength(1)
+        val result = testInstance.getTableLength(1)
         assertThat(result, equalTo(1))
         assertThat(testInstance.top(), equalTo(1))
     }
@@ -646,7 +687,7 @@ internal class TableRawLengthTest : BaseStateTest() {
             testInstance.pushString("value")
             testInstance.setTableField(1, "key-${idx}")
 
-            val result = testInstance.tableRawLength(1)
+            val result = testInstance.getTableLength(1)
             assertThat(result, equalTo(idx + 1))
         }
         assertThat(testInstance.top(), equalTo(1))
@@ -663,7 +704,7 @@ internal class TableRawLengthTest : BaseStateTest() {
 
         assertThat(testInstance.top(), equalTo(11))
 
-        val result = testInstance.tableRawLength(1)
+        val result = testInstance.getTableLength(1)
         assertThat(result, equalTo(10))
 
         assertThat(testInstance.top(), equalTo(11))
@@ -673,9 +714,131 @@ internal class TableRawLengthTest : BaseStateTest() {
     fun `Tries to get table size from not a table`() {
         testInstance.pushNumber(2.34)
         val exception = assertThrows<IllegalStateException> {
-            testInstance.tableRawLength(1)
+            testInstance.getTableLength(1)
         }
         assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+}
+
+@DisplayName("setTableRaw()")
+internal class SetTableRawTest : BaseStateTest() {
+    @Test
+    fun `Sets value to empty table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("key")
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.pushString("key")
+        testInstance.getTableRaw(1)
+        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
+    }
+
+    @Test
+    fun `Sets different value for same key table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("key")
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.pushString("key")
+        testInstance.pushNumber(42.0)
+        testInstance.setTableRaw(1)
+
+        testInstance.getTableField(1, "key")
+        assertThat(testInstance.toNumber(-1), equalTo(42.0))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
+    }
+
+    @Test
+    fun `Sets different value with different key table`() {
+        testInstance.createTable(0, 1)
+
+        testInstance.pushString("key")
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+
+        testInstance.pushString("different")
+        testInstance.pushNumber(42.0)
+        testInstance.setTableRaw(1)
+
+        testInstance.getTableField(1, "key")
+        assertThat(testInstance.toString(-1), equalTo("value"))
+
+        testInstance.getTableField(1, "different")
+        assertThat(testInstance.toNumber(-1), equalTo(42.0))
+
+        assertThat(testInstance.getTableLength(1), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to set a value from to not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.pushString("key")
+            testInstance.pushString("value")
+            testInstance.setTableRaw(1)
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+}
+
+@DisplayName("getTableRaw()")
+internal class GetTableRawTest : BaseStateTest() {
+    @Test
+    fun `Gets value from table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("key")
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.pushString("key")
+        testInstance.getTableRaw(1)
+        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.top(), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to get value from table which does not exists for key`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("key")
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+
+        testInstance.pushString("does-not-find-anything")
+        testInstance.getTableRaw(1)
+        assertThat(testInstance.type(-1), equalTo(0)) // Nil
+        assertThat(testInstance.top(), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to get a value from not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.pushString("key")
+            testInstance.getTableRaw(1)
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+
+    @Test
+    fun `Tries to get field from table but stack would overflow`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("key")
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+
+        repeat(999997) { testInstance.pushBoolean(true) }
+
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.pushString("key")
+            testInstance.getTableRaw(1)
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
 }
 
@@ -686,23 +849,6 @@ internal class GetSubTableTest : BaseStateTest() {
     fun implementMe() {
     }
 }
-
-@DisplayName("rawGet()")
-internal class RawGetTest : BaseStateTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
-@DisplayName("rawGetI()")
-internal class RawGetITest : BaseStateTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
 
 @DisplayName("loadString()")
 internal class LoadStringTest : BaseStateTest() {

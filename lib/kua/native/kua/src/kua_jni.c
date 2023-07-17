@@ -133,6 +133,11 @@ STATE_METHOD_NAME(setTableField)(JNIEnv *env, jobject K, jint idx, jstring key) 
     return (jint) result;
 }
 
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(setTableRaw)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return table_raw_set(L, idx);
+}
 
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(getTableField)(JNIEnv *env, jobject K, jint idx, jstring key) {
@@ -144,9 +149,15 @@ STATE_METHOD_NAME(getTableField)(JNIEnv *env, jobject K, jint idx, jstring key) 
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableRawLength)(JNIEnv *env, jobject K, jint idx) {
+STATE_METHOD_NAME(getTableRaw)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
-    return (jint) table_raw_len(L, idx);
+    return (jint) table_raw_get(L, idx);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(getTableLength)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return (jint) table_len(L, idx);
 }
 
 

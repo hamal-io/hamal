@@ -11,11 +11,11 @@ table_create(lua_State *L, int arrayCount, int recordsCount) {
 }
 
 int
-table_raw_len(lua_State *L, int idx) {
+table_len(lua_State *L, int idx) {
     if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     int counter = 0;
     lua_pushnil(L);
-    while (lua_next(L, 1) != 0) {
+    while (lua_next(L, idx) != 0) {
         counter++;
         lua_pop(L, 1);
     }
@@ -24,18 +24,28 @@ table_raw_len(lua_State *L, int idx) {
 
 int
 table_set(lua_State *L, int idx, char const *key) {
-    //    if (checkstack(L, JNLUA_MINSTACK)
-//        && checktype(L, index, LUA_TTABLE)
-//        && (setfield_k = getstringchars(k))) {
     if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_setfield(L, idx, key);
-    return 0; //FIXME table size
+    return table_len(L, idx);
+}
+
+int
+table_raw_set(lua_State *L, int idx) {
+    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    lua_rawset(L, idx);
+    return table_len(L, idx);
 }
 
 int
 table_get(lua_State *L, int idx, char const *key) {
     if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    lua_getfield(L, idx, key);
-    return 0;
+    return lua_getfield(L, idx, key);
+}
+
+int
+table_raw_get(lua_State *L, int idx) {
+    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    return lua_rawget(L, idx);
 }

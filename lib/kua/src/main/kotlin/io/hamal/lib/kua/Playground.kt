@@ -14,7 +14,7 @@ fun main() {
     sbox.state.getTableField(1, "key")
     sbox.state.getTableField(1, "key")
 
-    val result = sbox.state.tableRawLength(1)
+    val result = sbox.state.getTableLength(1)
     println(result)
 
 }

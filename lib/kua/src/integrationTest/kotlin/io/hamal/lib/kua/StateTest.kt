@@ -64,7 +64,7 @@ internal class TableTest : BaseStateTest() {
         testInstance.getTableField(1, "key")
         assertThat(testInstance.toString(-1), equalTo("value"))
 
-        assertThat(testInstance.tableRawLength(1), equalTo(1))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
 
         testInstance.pop(2)
         verifyStackIsEmpty()

@@ -29,11 +29,12 @@ class LuaState : AutoCloseable {
     external fun createTable(arrayCount: Int, recordCount: Int): Int
     external fun setTableField(idx: Int, key: String): Int
     external fun getTableField(idx: Int, key: String): Int
-    external fun tableRawLength(idx: Int): Int
+    external fun getTableLength(idx: Int): Int
 
+    external fun setTableRaw(idx: Int): Int
+    external fun getTableRaw(idx: Int): Int
     external fun getSubTable(idx: Int, key: String): Int
-    external fun rawGet(idx: Int)
-    external fun rawGetI(idx: Int, key: Int)
+
 
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)
