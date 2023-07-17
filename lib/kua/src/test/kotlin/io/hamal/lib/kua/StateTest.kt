@@ -625,7 +625,7 @@ internal class GetTableFieldTest : BaseStateTest() {
     }
 
     @Test
-    fun `Tries to get value from table which does not exists for key`() {
+    fun `Tries to get value from table which key does not exists for`() {
         testInstance.createTable(0, 1)
         testInstance.pushString("value")
         testInstance.setTableField(1, "key")
@@ -737,7 +737,7 @@ internal class SetTableRawTest : BaseStateTest() {
     }
 
     @Test
-    fun `Sets different value for same key table`() {
+    fun `Sets different value for same key`() {
         testInstance.createTable(0, 1)
         testInstance.pushString("key")
         testInstance.pushString("value")
@@ -754,7 +754,7 @@ internal class SetTableRawTest : BaseStateTest() {
     }
 
     @Test
-    fun `Sets different value with different key table`() {
+    fun `Sets different value with different key`() {
         testInstance.createTable(0, 1)
 
         testInstance.pushString("key")
@@ -786,6 +786,67 @@ internal class SetTableRawTest : BaseStateTest() {
     }
 }
 
+@DisplayName("setTableRawIdx()")
+internal class SetTableRawIdxTest : BaseStateTest() {
+    @Test
+    fun `Sets value to empty table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableRawIdx(1, 23)
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.pushNumber(23.0)
+        testInstance.getTableRaw(1)
+        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
+    }
+
+    @Test
+    fun `Sets different value for same index`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableRawIdx(1, 23)
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.pushNumber(42.0)
+        testInstance.setTableRawIdx(1, 23)
+
+        testInstance.pushNumber(23.0)
+        testInstance.getTableRaw(1)
+        assertThat(testInstance.toNumber(-1), equalTo(42.0))
+        assertThat(testInstance.getTableLength(1), equalTo(1))
+    }
+
+    @Test
+    fun `Sets different value with different key`() {
+        testInstance.createTable(0, 1)
+
+        testInstance.pushString("value")
+        testInstance.setTableRawIdx(1, 2)
+
+        testInstance.pushNumber(42.0)
+        testInstance.setTableRawIdx(1, 4)
+
+        testInstance.getTableRawIdx(1, 2)
+        assertThat(testInstance.toString(-1), equalTo("value"))
+
+        testInstance.getTableRawIdx(1, 4)
+        assertThat(testInstance.toNumber(-1), equalTo(42.0))
+
+        assertThat(testInstance.getTableLength(1), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to set a value from to not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.pushString("value")
+            testInstance.setTableRawIdx(1, 4)
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+}
+
 @DisplayName("getTableRaw()")
 internal class GetTableRawTest : BaseStateTest() {
     @Test
@@ -803,7 +864,7 @@ internal class GetTableRawTest : BaseStateTest() {
     }
 
     @Test
-    fun `Tries to get value from table which does not exists for key`() {
+    fun `Tries to get value from table which key does not exists for`() {
         testInstance.createTable(0, 1)
         testInstance.pushString("key")
         testInstance.pushString("value")
@@ -837,6 +898,57 @@ internal class GetTableRawTest : BaseStateTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushString("key")
             testInstance.getTableRaw(1)
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
+@DisplayName("getTableRawIdx()")
+internal class GetTableRawIdxTest : BaseStateTest() {
+    @Test
+    fun `Gets value from table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushNumber(5.0)
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.getTableRawIdx(1, 5)
+        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.top(), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to get value from table which key does not exists for`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushNumber(43.0)
+        testInstance.pushString("value")
+        testInstance.setTableRaw(1)
+
+        testInstance.getTableRawIdx(1, 1337)
+        assertThat(testInstance.type(-1), equalTo(0)) // Nil
+        assertThat(testInstance.top(), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to get a value from not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.getTableRawIdx(1, 3)
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+
+    @Test
+    fun `Tries to get field from table but stack would overflow`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableRawIdx(1, 1)
+
+        repeat(999998) { testInstance.pushBoolean(true) }
+
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.getTableRawIdx(1, 1)
         }
         assertThat(exception.message, equalTo("Prevented stack overflow"))
     }

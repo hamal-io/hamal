@@ -19,14 +19,12 @@ int main(void) {
     lua_createtable(L, 0, 4);
     int tbl = lua_gettop(L);
 
-    lua_pushstring(L, "key");
+//    lua_pushstring(L, "key");
     lua_pushstring(L, "value");
-    lua_rawset(L, tbl);
+    lua_rawseti(L, tbl, 23);
     printf("%d\n", lua_gettop(L));
 
-
-    lua_pushstring(L, "key");
-    lua_rawget(L, 1);
+    lua_rawgeti(L, tbl, 23);
     printf("%d\n", lua_gettop(L));
     printf("%d\n", lua_type(L, 2));
     printf("%s\n", lua_tostring(L, 2));

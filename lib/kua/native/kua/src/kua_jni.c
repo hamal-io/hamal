@@ -140,6 +140,13 @@ STATE_METHOD_NAME(setTableRaw)(JNIEnv *env, jobject K, jint idx) {
 }
 
 JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(setTableRawIdx)(JNIEnv *env, jobject K, jint stack_idx, jint table_idx) {
+    ENV_AND_STATE
+    return table_raw_set_idx(L, stack_idx, table_idx);
+}
+
+
+JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(getTableField)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
@@ -152,6 +159,12 @@ JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(getTableRaw)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return (jint) table_raw_get(L, idx);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(getTableRawIdx)(JNIEnv *env, jobject K, jint stack_idx, jint table_idx) {
+    ENV_AND_STATE
+    return (jint) table_raw_get_idx(L, stack_idx, table_idx);
 }
 
 JNIEXPORT jint JNICALL
