@@ -7,6 +7,13 @@
 #include <jni.h>
 #include <lauxlib.h>
 
+
+void
+get_global(lua_State *L, char const *key) {
+
+}
+
+
 //static jfieldID current_state_id = NULL;
 static jfieldID current_thread_id = NULL;
 JNIEnv *dep_current_env = NULL;
@@ -30,48 +37,12 @@ static void state_to_thread(JNIEnv *env, jobject K, lua_State *L) {
 //    (*env)->SetLongField(env, K, current_state_id, (jlong) (uintptr_t) L);
 //}
 
-
-
 #define KUA_OBJECT_NAME "kua.Object"
 #define KUA_STATE_NAME "kua.KuaState"
 
 
 static jmethodID invoke_id = 0;
 static jclass kua_func_class = NULL;
-
-/* lua_setfield() */
-static int setfield_protected(lua_State *L) {
-    lua_setfield(L, 2, (const char *) lua_touserdata(L, 1));
-    return 0;
-}
-
-JNIEXPORT void JNICALL
-STATE_METHOD_NAME(setField)(JNIEnv *env, jobject K, jint index, jstring k) {
-    dep_current_env = env;
-
-    lua_State *L = state_from_thread(env, K);
-    const char *setfield_k = NULL;
-
-    setfield_k = NULL;
-//    JNLUA_ENV(env);
-//    L = getluathread(K);
-//    if (checkstack(L, JNLUA_MINSTACK)
-//        && checktype(L, index, LUA_TTABLE)
-//        && (setfield_k = getstringchars(k))) {
-    index = lua_absindex(L, index);
-    lua_pushcfunction(L, setfield_protected);
-    lua_insert(L, -2);
-    lua_pushlightuserdata(L, (void *) setfield_k);
-    lua_insert(L, -2);
-    lua_pushvalue(L, index);
-    lua_insert(L, -2);
-    lua_pcall(L, 3, 0, 0);
-//    }
-
-//    if (setfield_k) {
-//        releasestringchars(k, setfield_k);
-//    }
-}
 
 static int getsubtable_protected(lua_State *L) {
     lua_pushboolean(L, luaL_getsubtable(L, 2, (const char *) lua_touserdata(L, 1)));
@@ -414,4 +385,32 @@ STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
     invoke_id = (*env)->GetMethodID(env, kua_func_class, "invokedByLua", "(Lio/hamal/lib/kua/LuaState;)I");
 //    invoke_id = (*env)->GetMethodID(env, kua_func_class, "invoke", "()I");
 }
+
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(getGlobal)(JNIEnv *env, jobject K, jstring key) {
+
+    const char *nativeString = (*env)->GetStringUTFChars(env, key, 0);
+
+    lua_State *L = state_from_thread(env, K);
+
+//    lua_getglobal(L, (const char *) nativeString);
+
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && (getglobal_name = getstringchars(name))) {
+//    lua_pushcfunction(L, getglobal_protected);
+//    lua_pushlightuserdata(L, (void *) nativeString);
+//    lua_pcall(L, 1, 1, 0);
+
+    lua_getglobal(L, (const char *) nativeString);
+
+//    }
+//    lua_getglobal(L, (const char*)lua_touserdata(L, 1));
+
+//    if (getglobal_name) {
+//        releasestringchars(name, getglobal_name);
+//    }
+}
+
+
 

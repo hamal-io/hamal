@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 project(lua C)
 
 set(CMAKE_C_STANDARD 23)
+find_library(MATH_LIBRARY m)
 
 set(LUA_LIB_SRCS
         "src/lapi.c"
@@ -40,3 +41,7 @@ set(LUA_LIB_SRCS
 
 add_library(lua SHARED ${LUA_LIB_SRCS})
 target_include_directories(lua PUBLIC include)
+
+if(MATH_LIBRARY)
+    target_link_libraries(lua PUBLIC ${MATH_LIBRARY})
+endif()

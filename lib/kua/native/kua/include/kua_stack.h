@@ -33,6 +33,9 @@ to_boolean(lua_State *L, int idx);
 double
 to_number(lua_State *L, int idx);
 
+double
+pop_number(lua_State *L);
+
 char const *
 to_string(lua_State *L, int idx);
 

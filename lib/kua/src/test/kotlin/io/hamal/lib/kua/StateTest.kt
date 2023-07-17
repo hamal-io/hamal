@@ -114,9 +114,9 @@ internal class TypeTest : BaseStateTest() {
     }
 
     @Test
-    @Disabled
     fun `Function`() {
-        TODO()
+        testInstance.loadString("local x = 10")
+        assertThat(testInstance.type(1), equalTo(6))
     }
 
     @Test
@@ -134,6 +134,14 @@ internal class TypeTest : BaseStateTest() {
 
 @DisplayName("setGlobal()")
 internal class SetGlobalTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("getGlobal()")
+internal class GetGlobalTest : BaseStateTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -543,6 +551,134 @@ internal class CreateTableTest : BaseStateTest() {
     }
 }
 
+@DisplayName("setTableField()")
+internal class SetTableFieldTest : BaseStateTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+
+    @Test
+    fun `Tries to set a value from to not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.setTableField(1, "key")
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+}
+
+@DisplayName("getTableField()")
+internal class GetTableFieldTest : BaseStateTest() {
+
+    @Test
+    fun `Gets value from table`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+        assertThat(testInstance.top(), equalTo(1))
+
+        testInstance.getTableField(1, "key")
+        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.top(), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to get value from table which does not exists for key`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+
+        testInstance.getTableField(1, "does-not-find-anything")
+        assertThat(testInstance.type(-1), equalTo(0)) // Nil
+        assertThat(testInstance.top(), equalTo(2))
+    }
+
+    @Test
+    fun `Tries to get a value from not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.getTableField(1, "key")
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+
+    @Test
+    fun `Tries to get field from table but stack would overflow`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+
+        repeat(999998) { testInstance.pushBoolean(true) }
+
+        val exception = assertThrows<IllegalArgumentException> {
+            testInstance.getTableField(1, "key")
+        }
+        assertThat(exception.message, equalTo("Prevented stack overflow"))
+    }
+}
+
+@DisplayName("tableRawLength()")
+internal class TableRawLengthTest : BaseStateTest() {
+    @Test
+    fun `Size of empty table`() {
+        testInstance.createTable(12, 12)
+        val result = testInstance.tableRawLength(1)
+        assertThat(result, equalTo(0))
+    }
+
+    @Test
+    fun `Size of table with single field`() {
+        testInstance.createTable(0, 1)
+        testInstance.pushString("value")
+        testInstance.setTableField(1, "key")
+        assertThat(testInstance.top(), equalTo(1))
+
+        val result = testInstance.tableRawLength(1)
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
+    }
+
+    @Test
+    fun `Size of table with multiple fields`() {
+        testInstance.createTable(0, 1)
+        repeat(10) { idx ->
+            testInstance.pushString("value")
+            testInstance.setTableField(1, "key-${idx}")
+
+            val result = testInstance.tableRawLength(1)
+            assertThat(result, equalTo(idx + 1))
+        }
+        assertThat(testInstance.top(), equalTo(1))
+    }
+
+    @Test
+    fun `Does not alter the stack`() {
+        testInstance.createTable(0, 1)
+        repeat(10) { idx ->
+            testInstance.pushString("value")
+            testInstance.setTableField(1, "key-${idx}")
+            testInstance.getTableField(1, "Key-${idx}")
+        }
+
+        assertThat(testInstance.top(), equalTo(11))
+
+        val result = testInstance.tableRawLength(1)
+        assertThat(result, equalTo(10))
+
+        assertThat(testInstance.top(), equalTo(11))
+    }
+
+    @Test
+    fun `Tries to get table size from not a table`() {
+        testInstance.pushNumber(2.34)
+        val exception = assertThrows<IllegalStateException> {
+            testInstance.tableRawLength(1)
+        }
+        assertThat(exception.message, equalTo("Expected type to be table but was number"))
+    }
+}
+
 @DisplayName("getSubTable")
 internal class GetSubTableTest : BaseStateTest() {
     @Test
@@ -567,13 +703,6 @@ internal class RawGetITest : BaseStateTest() {
     }
 }
 
-@DisplayName("setField()")
-internal class SetFieldTest : BaseStateTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
 
 @DisplayName("loadString()")
 internal class LoadStringTest : BaseStateTest() {

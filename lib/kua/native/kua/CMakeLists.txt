@@ -30,3 +30,7 @@ set(KUA_LIB_SRCS
 add_library(kua SHARED ${KUA_LIB_SRCS})
 target_include_directories(kua PUBLIC include)
 target_link_libraries(kua PUBLIC lua)
+
+add_executable(playground src/playground.c )
+target_include_directories(playground PUBLIC include)
+target_link_libraries(playground PUBLIC m kua )

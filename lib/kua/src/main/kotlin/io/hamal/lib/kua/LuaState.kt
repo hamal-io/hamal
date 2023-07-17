@@ -11,6 +11,7 @@ class LuaState : AutoCloseable {
     external fun top(): Int
     external fun type(idx: Int): Int
     external fun setGlobal(key: String)
+    external fun getGlobal(key: String)
 
     external fun push(idx: Int): Int
     external fun pushBoolean(value: Boolean): Int
@@ -26,10 +27,13 @@ class LuaState : AutoCloseable {
     external fun toString(idx: Int): String
 
     external fun createTable(arrayCount: Int, recordCount: Int): Int
+    external fun setTableField(idx: Int, key: String): Int
+    external fun getTableField(idx: Int, key: String): Int
+    external fun tableRawLength(idx: Int): Int
+
     external fun getSubTable(idx: Int, key: String): Int
     external fun rawGet(idx: Int)
     external fun rawGetI(idx: Int, key: Int)
-    external fun setField(idx: Int, key: String)
 
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)

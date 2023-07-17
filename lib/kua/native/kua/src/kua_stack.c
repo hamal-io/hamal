@@ -75,6 +75,13 @@ to_number(lua_State *L, int idx) {
     return lua_tonumber(L, idx);
 }
 
+double
+pop_number(lua_State *L) {
+    double result = to_number(L, top(L));
+    lua_pop(L, 1);
+    return result;
+}
+
 char const *
 to_string(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
