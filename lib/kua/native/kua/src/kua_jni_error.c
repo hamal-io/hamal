@@ -5,7 +5,7 @@
 int
 throw_illegal_argument(char const *message) {
     JNIEnv *env = current_env();
-    return (*env)->ThrowNew(env, jni_ref().illegal_state_exception_class, message);
+    return (*env)->ThrowNew(env, jni_ref().illegal_argument_exception_class, message);
 }
 
 int

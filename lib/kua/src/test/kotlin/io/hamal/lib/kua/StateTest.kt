@@ -988,8 +988,8 @@ internal class CallTest : BaseStateTest() {
 }
 
 internal sealed class BaseStateTest {
-    val testInstance: LuaState = run {
+    val testInstance: State = run {
         ResourceLoader.load()
-        LuaState()
+        State()
     }
 }

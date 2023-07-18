@@ -4,11 +4,13 @@
 #include "kua_state.h"
 
 
-#include "kua_macro.h"
 #include "lualib.h"
 
 #include <lauxlib.h>
 
+
+#define UNUSED __attribute__((unused))
+#define STATE_METHOD_NAME(method) Java_io_hamal_lib_kua_State_##method
 
 static jfieldID current_thread_id = NULL;
 JNIEnv *dep_current_env = NULL;
@@ -151,7 +153,7 @@ setup_references(JNIEnv *env) {
     current_jni_ref.error_class = referenceclass(env, "java/lang/Error");
 
     jclass kua_func_class = referenceclass(env, "io/hamal/lib/kua/value/FuncValue");
-    current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/LuaState;)I");
+    current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/State;)I");
     //@formatter:on
 }
 

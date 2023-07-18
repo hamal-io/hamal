@@ -10,7 +10,7 @@ internal class InvokeFuncValueTest : BaseStateTest() {
     @Test
     fun `Invoke FuncValue without parameter`() {
         val testFunc = object : FuncValue() {
-            override fun invokedByLua(state: LuaState) = (0).also { called = true }
+            override fun invokedByLua(state: State) = (0).also { called = true }
             var called = false
         }
 
@@ -74,9 +74,9 @@ internal class TableTest : BaseStateTest() {
 
 
 internal sealed class BaseStateTest {
-    val testInstance: LuaState = run {
+    val testInstance: State = run {
         ResourceLoader.load()
-        LuaState()
+        State()
     }
 
     fun verifyStackIsEmpty() {

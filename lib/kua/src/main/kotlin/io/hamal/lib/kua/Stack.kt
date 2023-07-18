@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
-class LuaStack internal constructor(
-    internal val state: LuaState
+class Stack internal constructor(
+    internal val state: State
 ) {
     fun isEmpty() = state.top() == 0
     fun isNotEmpty() = !isEmpty()

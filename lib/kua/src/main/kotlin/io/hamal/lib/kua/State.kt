@@ -3,7 +3,7 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.value.FuncValue
 
 
-class LuaState : AutoCloseable {
+class State : AutoCloseable {
 
     external fun luaVersionNumber(): Int
     external fun luaIntegerWidth(): Int
@@ -52,6 +52,6 @@ class LuaState : AutoCloseable {
     }
 
     override fun toString(): String {
-        return "LuaState"
+        return "State"
     }
 }

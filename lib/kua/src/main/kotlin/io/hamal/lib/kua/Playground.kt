@@ -5,39 +5,12 @@ import io.hamal.lib.kua.value.NamedFuncValue
 import io.hamal.lib.kua.value.TestFunc
 
 
-fun LuaState.register(
-    moduleName: String,
-    namedJavaFunctions: List<NamedFuncValue>
-) {
-
-    createTable(0, namedJavaFunctions.size)
-    for (i in namedJavaFunctions.indices) {
-        val name: String = namedJavaFunctions[i].name
-        pushFuncValue(namedJavaFunctions[i].func)
-        setTableField(1, name)
-    }
-    getSubTable(luaRegistryIndex(), "_LOADED")
-//    pushValue(-2)
-    push(-2)
-    setTableField(-2, moduleName)
-    pop(1)
-//    if (global) {
-//        rawGet(REGISTRYINDEX, LuaState.RIDX_GLOBALS)
-        getTableRawIdx(luaRegistryIndex(), 2)
-//        pushValue(-2)
-        push(-2)
-        setTableField(-2, moduleName)
-        pop(1)
-//    }
-
-}
-
 fun main() {
 //    System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
     FixedPathLoader.load()
-    val s = LuaState()
+    val s = State()
 
-    val sbox = LuaSandbox(s)
+    val sbox = Sandbox(s)
 
     println(sbox.state.luaRegistryIndex())
 
@@ -52,9 +25,12 @@ fun main() {
 //    val result = sbox.state.getTableLength(1)
 //    println(result)
 
-    sbox.state.register(
-        "test", listOf(
-            NamedFuncValue("log", TestFunc())
+    sbox.register(
+        Module(
+            name = "test",
+            namedFuncs = listOf(
+                NamedFuncValue("log", TestFunc())
+            )
         )
     )
 

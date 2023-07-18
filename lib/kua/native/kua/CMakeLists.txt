@@ -22,7 +22,6 @@ set(KUA_LIB_SRCS
     src/kua_stack.c
     src/kua_state.c
     src/kua_table.c
-    src/kua_thread.c
 )
 
 
