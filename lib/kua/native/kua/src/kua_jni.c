@@ -4,7 +4,7 @@
 #include "kua_stack.h"
 #include "kua_state.h"
 #include "kua_table.h"
-#include "kua_kotlin.h"
+#include "kua_call.h"
 
 
 #define UNUSED __attribute__((unused))
@@ -103,6 +103,12 @@ STATE_METHOD_NAME(pushString)(JNIEnv *env, jobject K, jstring value) {
     return result;
 }
 
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushFuncValue)(JNIEnv *env, jobject K, jobject func) {
+    ENV_AND_STATE
+    return push_func_value(L, func);
+}
+
 JNIEXPORT jboolean JNICALL
 STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
@@ -196,3 +202,7 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
     ENV_AND_STATE
     call(L, argsCount, resultCount);
 }
+
+//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[KOTLIN]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[STATE]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

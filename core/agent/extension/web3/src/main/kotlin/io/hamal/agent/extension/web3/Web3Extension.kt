@@ -44,13 +44,13 @@ class Web3Extension : Extension {
 //                        StringValue("parentHash") to StringValue(block.parentHash.toString())
 //                    )
 
-
             val blockNumber = ctx.params.first().let { param ->
                 when (val value = param.value) {
                     is NumberValue -> EthUint64(value.value.toLong())
                     else -> TODO()
                 }
             }
+
 
             val response = EthHttpBatchService(HttpTemplate("http://localhost:8081"))
                 .getBlock(blockNumber)

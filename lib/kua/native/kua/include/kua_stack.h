@@ -28,13 +28,13 @@ int
 push_string(lua_State *L, char const *value);
 
 int
+push_func_value(lua_State *L, void *func);
+
+int
 to_boolean(lua_State *L, int idx);
 
 double
 to_number(lua_State *L, int idx);
-
-double
-pop_number(lua_State *L);
 
 char const *
 to_string(lua_State *L, int idx);

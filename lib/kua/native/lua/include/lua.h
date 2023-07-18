@@ -101,18 +101,18 @@ typedef LUA_KCONTEXT lua_KContext;
 
 
 /*
-** Type for C functions registered with Lua
+** type for C functions registered with Lua
 */
 typedef int (*lua_CFunction) (lua_State *L);
 
 /*
-** Type for continuation functions
+** type for continuation functions
 */
 typedef int (*lua_KFunction) (lua_State *L, int status, lua_KContext ctx);
 
 
 /*
-** Type for functions that read/write blocks when loading/dumping Lua chunks
+** type for functions that read/write blocks when loading/dumping Lua chunks
 */
 typedef const char * (*lua_Reader) (lua_State *L, void *ud, size_t *sz);
 
@@ -120,19 +120,19 @@ typedef int (*lua_Writer) (lua_State *L, const void *p, size_t sz, void *ud);
 
 
 /*
-** Type for memory-allocation functions
+** type for memory-allocation functions
 */
 typedef void * (*lua_Alloc) (void *ud, void *ptr, size_t osize, size_t nsize);
 
 
 /*
-** Type for warning functions
+** type for warning functions
 */
 typedef void (*lua_WarnFunction) (void *ud, const char *msg, int tocont);
 
 
 /*
-** Type used by the debug API to collect debug information
+** type used by the debug API to collect debug information
 */
 typedef struct lua_Debug lua_Debug;
 

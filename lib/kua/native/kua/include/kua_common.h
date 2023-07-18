@@ -3,7 +3,7 @@
 
 #include <lua.h>
 
-enum Type {
+enum type {
     NIL_TYPE = 0,
     BOOLEAN_TYPE = 1,
     LIGHT_USER_DATA_TYPE = 2,
@@ -14,5 +14,11 @@ enum Type {
     USER_DATA_TYPE = 7,
     THREAD_TYPE = 8
 };
+
+enum result {
+    RESULT_OK,
+    RESULT_ERROR
+};
+
 
 #endif //KUA_COMMON_H

@@ -41,6 +41,7 @@ fun main() {
 
     println(sbox.state.luaRegistryIndex())
 
+
 //
 //    sbox.state.createTable(1, 1)
 //    sbox.state.pushString("value")

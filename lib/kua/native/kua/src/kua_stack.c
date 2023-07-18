@@ -2,6 +2,7 @@
 
 #include "kua_check.h"
 #include "kua_stack.h"
+#include "kua_call.h"
 
 int
 type(lua_State *L, int idx) {
@@ -60,6 +61,16 @@ push_string(lua_State *L, char const *value) {
 }
 
 int
+push_func_value(lua_State *L, void *func) {
+    //    if (checkstack(L, JNLUA_MINSTACK)
+//        && checknotnull(func)) {
+    lua_pushcfunction(L, call_func_value_closure);
+    lua_pushlightuserdata(L, func);
+    lua_pcall(L, 1, 1, 0);
+    return top(L);
+}
+
+int
 to_boolean(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
@@ -73,13 +84,6 @@ to_number(lua_State *L, int idx) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(L, idx, NUMBER_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_tonumber(L, idx);
-}
-
-double
-pop_number(lua_State *L) {
-    double result = to_number(L, top(L));
-    lua_pop(L, 1);
-    return result;
 }
 
 char const *
