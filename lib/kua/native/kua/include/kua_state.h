@@ -17,4 +17,6 @@ struct jni_ref {
 struct jni_ref
 jni_ref(void);
 
+
+
 #endif //KUA_STATE_H

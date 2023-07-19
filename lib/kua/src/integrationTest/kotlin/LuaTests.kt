@@ -1,5 +1,5 @@
-package io.hamal.lib.kua
-
+import io.hamal.lib.kua.ResourceLoader
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.value.CodeValue
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -13,13 +13,11 @@ import kotlin.io.path.name
 class LuaTests {
     @TestFactory
     fun generateTestCases(): List<DynamicTest> {
-        ResourceLoader.load()
-
         return collectFiles()
             .map { file ->
                 dynamicTest("${file.parent.parent.name}/${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
-                    val testInstance = Sandbox(State())
+                    val testInstance = Sandbox(ResourceLoader)
                     testInstance.runCode(CodeValue(code))
                 }
             }

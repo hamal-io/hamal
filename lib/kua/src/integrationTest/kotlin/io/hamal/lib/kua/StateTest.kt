@@ -5,7 +5,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-
 internal class InvokeFuncValueTest : BaseStateTest() {
     @Test
     fun `Invoke FuncValue without parameter`() {
@@ -24,7 +23,7 @@ internal class InvokeFuncValueTest : BaseStateTest() {
     }
 }
 
-internal class LoadAndCallFunctionTest : BaseStateTest() {
+internal class CallFunctionTest : BaseStateTest() {
     @Test
     fun `Creates and invokes a lua function without parameter`() {
         testInstance.loadString("function answer() return 42 end")
@@ -71,7 +70,6 @@ internal class TableTest : BaseStateTest() {
         verifyStackIsEmpty()
     }
 }
-
 
 internal sealed class BaseStateTest {
     val testInstance: State = run {

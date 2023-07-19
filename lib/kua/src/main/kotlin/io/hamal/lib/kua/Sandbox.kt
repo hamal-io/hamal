@@ -1,13 +1,25 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.ModuleValue
 
-class Sandbox(internal val state: State) {
-    internal val stack = Stack(state)
+class Sandbox(loader: Loader) : AutoCloseable {
+    private val state: State = run {
+        loader.load()
+        State()
+    }
+    val stack = Stack(state)
 
-    fun register(module: Module) = state.registerModule(module)
+    fun register(module: ModuleValue) = state.registerModule(module)
 
-    fun runCode(code: CodeValue) = state.runCode(code.value)
+    fun runCode(code: CodeValue) = runCode(code.value)
+
+    fun runCode(code: String) = state.runCode(code)
+
+    override fun close() {
+//        state.close()
+//        println("Implement me")
+    }
 }
 
 internal fun State.runCode(code: String) {
@@ -15,7 +27,7 @@ internal fun State.runCode(code: String) {
     call(0, 0)
 }
 
-internal fun State.registerModule(module: Module) {
+internal fun State.registerModule(module: ModuleValue) {
     val funcs = module.namedFuncs
 
     createTable(0, funcs.size)
