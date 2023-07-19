@@ -47,7 +47,7 @@ fun main() {
 
 
 class ReturnFunc(val stack: Stack) : FuncValue() {
-    override fun invokedByLua(state: State): Int {
+    override fun invokedByLua(state: Bridge): Int {
         println("Return Func")
 //        println(stack.size())
         state.pushString("WORKS")
@@ -60,7 +60,7 @@ class ReturnFunc(val stack: Stack) : FuncValue() {
 }
 
 class ReceiveFunc(): FuncValue(){
-    override fun invokedByLua(state: State): Int {
+    override fun invokedByLua(state: Bridge): Int {
         println(state.top())
         println(state.type(-1))
         println(state.type(-2))

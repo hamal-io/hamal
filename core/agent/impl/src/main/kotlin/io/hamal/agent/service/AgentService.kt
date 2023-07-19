@@ -1,6 +1,9 @@
 package io.hamal.agent.service
 
+import io.hamal.lib.domain.State
+import io.hamal.lib.kua.ResourceLoader
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import org.springframework.scheduling.annotation.Scheduled
@@ -10,8 +13,7 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class AgentService(
-    private val httpTemplateSupplier: HttpTemplateSupplier,
-    private val sandbox: Sandbox
+    private val httpTemplateSupplier: HttpTemplateSupplier
 ) {
 
     private val sdk by lazy { DefaultHamalSdk(httpTemplateSupplier()) }
@@ -24,8 +26,8 @@ class AgentService(
                 .execs.forEach { request ->
 
                     try {
-
-                        TODO()
+                        val sandbox = Sandbox(ResourceLoader)
+                        sandbox.runCode(request.code)
 
 //                        println("${request.inputs} - ${request.inputs.value}")
 //
@@ -36,10 +38,10 @@ class AgentService(
 //                            sdk.execService().fail(request.id, result)
 //                        }
 ////
-//                        sdk.execService().complete(
-//                            request.id, State(TableValue())
-//                        )
-
+                        sdk.execService().complete(
+                            request.id, State(TableValue())
+                        )
+//
                     } catch (t: Throwable) {
                         t.printStackTrace()
                     }

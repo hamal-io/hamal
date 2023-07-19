@@ -18,6 +18,8 @@ data class DecimalValue(
     @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal
 ) : Number(), Value, Comparable<DecimalValue> {
+    override val type = Value.Type.Decimal
+
     companion object {
         val Zero = DecimalValue(0)
         val One = DecimalValue(1)

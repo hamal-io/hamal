@@ -2,7 +2,7 @@ package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.FixedPathLoader
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.State
+import io.hamal.lib.kua.Bridge
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -19,14 +19,14 @@ internal class FuncValueTest {
             val sandbox = Sandbox(FixedPathLoader)
 
             val returningFunc = object : FuncValue() {
-                override fun invokedByLua(state: State): Int {
+                override fun invokedByLua(state: Bridge): Int {
                     state.pushString(it)
                     return 1
                 }
             }
 
             val receiverFunc = object : FuncValue() {
-                override fun invokedByLua(state: State): Int {
+                override fun invokedByLua(state: Bridge): Int {
                     result = state.toString(-1)
                     return 0
                 }
@@ -64,7 +64,7 @@ internal class FuncValueTest {
             val sandbox = Sandbox(FixedPathLoader)
 
             val returningFunc = object : FuncValue() {
-                override fun invokedByLua(state: State): Int {
+                override fun invokedByLua(state: Bridge): Int {
                     state.pushString(it.first)
                     state.pushString(it.second)
                     return 2
@@ -72,7 +72,7 @@ internal class FuncValueTest {
             }
 
             val receiverFunc = object : FuncValue() {
-                override fun invokedByLua(state: State): Int {
+                override fun invokedByLua(state: Bridge): Int {
                     resultOne = state.toString(-2)
                     resultTwo = state.toString(-1)
                     return 0

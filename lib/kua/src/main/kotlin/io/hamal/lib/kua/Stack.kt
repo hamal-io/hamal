@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 class Stack internal constructor(
-    val state: State
+    val state: Bridge
 ) {
     fun isEmpty() = state.top() == 0
     fun isNotEmpty() = !isEmpty()

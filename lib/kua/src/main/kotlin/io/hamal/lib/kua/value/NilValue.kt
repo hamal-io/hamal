@@ -5,4 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("NilValue")
-object NilValue : Value
+object NilValue : Value {
+    override val type = Value.Type.Nil
+}

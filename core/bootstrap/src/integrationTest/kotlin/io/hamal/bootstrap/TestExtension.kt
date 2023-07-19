@@ -1,7 +1,7 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.kua.State
+import io.hamal.lib.kua.Bridge
 import io.hamal.lib.kua.value.FuncValue
 import io.hamal.lib.kua.value.ModuleValue
 import org.junit.jupiter.api.fail
@@ -31,7 +31,7 @@ internal class CompleteTest : FuncValue() {
 //        ActiveTest.completeTest()
 //        throw ExitException(NumberValue.Zero)
 //    }
-    override fun invokedByLua(state: State): Int {
+    override fun invokedByLua(state: Bridge): Int {
         TODO("Not yet implemented")
     }
 }
@@ -46,7 +46,7 @@ internal class FailTest : FuncValue() {
 //        throw ExitException(NumberValue.One)
 //    }
 //
-    override fun invokedByLua(state: State): Int {
+    override fun invokedByLua(state: Bridge): Int {
         TODO("Not yet implemented")
     }
 }

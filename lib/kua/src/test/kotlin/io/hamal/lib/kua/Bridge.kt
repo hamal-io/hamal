@@ -988,8 +988,8 @@ internal class CallTest : BaseStateTest() {
 }
 
 internal sealed class BaseStateTest {
-    val testInstance: State = run {
+    val testInstance: Bridge = run {
         ResourceLoader.load()
-        State()
+        Bridge()
     }
 }

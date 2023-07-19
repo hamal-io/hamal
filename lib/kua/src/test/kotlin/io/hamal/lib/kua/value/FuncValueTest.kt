@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.ResourceLoader
-import io.hamal.lib.kua.State
+import io.hamal.lib.kua.Bridge
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class FuncValueTest {
     }
 
     private class Swap : FuncValue() {
-        override fun invokedByLua(state: State): Int {
+        override fun invokedByLua(state: Bridge): Int {
             val a = state.toNumber(1)
             val b = state.toNumber(2)
             state.pushNumber(b)
@@ -33,9 +33,9 @@ internal class FuncValueTest {
     }
 
 
-    private val testState: State = run {
+    private val testState: Bridge = run {
         ResourceLoader.load()
-        State()
+        Bridge()
     }
 
     private fun verifyStackIsEmpty() {

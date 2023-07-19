@@ -4,9 +4,9 @@ import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ModuleValue
 
 class Sandbox(loader: Loader) : AutoCloseable {
-    private val state: State = run {
+    private val state: Bridge = run {
         loader.load()
-        State()
+        Bridge()
     }
     val stack = Stack(state)
 
@@ -22,12 +22,12 @@ class Sandbox(loader: Loader) : AutoCloseable {
     }
 }
 
-internal fun State.runCode(code: String) {
+internal fun Bridge.runCode(code: String) {
     loadString(code)
     call(0, 0)
 }
 
-internal fun State.registerModule(module: ModuleValue) {
+internal fun Bridge.registerModule(module: ModuleValue) {
     val funcs = module.namedFuncs
 
     createTable(0, funcs.size)

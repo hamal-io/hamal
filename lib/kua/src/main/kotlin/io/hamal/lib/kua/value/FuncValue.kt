@@ -1,9 +1,11 @@
 package io.hamal.lib.kua.value
 
-import io.hamal.lib.kua.State
+import io.hamal.lib.kua.Bridge
 
-abstract class FuncValue {
-    abstract fun invokedByLua(state: State): Int
+abstract class FuncValue : Value {
+    override val type = Value.Type.Func
+
+    abstract fun invokedByLua(state: Bridge): Int
 //    fun invoke(): Int
 }
 
@@ -13,7 +15,7 @@ data class NamedFuncValue(
 )
 
 class TestFunc : FuncValue() {
-    override fun invokedByLua(state: State): Int {
+    override fun invokedByLua(state: Bridge): Int {
         print("Hamal Rockz\n")
 //        println(state.size())
 //        println("INFO: " + state.toString(1))
