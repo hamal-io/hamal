@@ -11,8 +11,8 @@ import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.TableValue
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat

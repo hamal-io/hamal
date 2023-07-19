@@ -1,10 +1,10 @@
 package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.ast.Statement
-import io.hamal.lib.script.api.value.FuncContext
-import io.hamal.lib.script.api.value.IdentValue
-import io.hamal.lib.script.api.value.NilValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.kua.value.FuncContext
+import io.hamal.lib.kua.value.IdentValue
+import io.hamal.lib.kua.value.NilValue
+import io.hamal.lib.kua.value.Value
 import io.hamal.lib.script.impl.ast.stmt.*
 
 internal class EvaluateStatement : Evaluate<Statement> {

@@ -1,7 +1,7 @@
 package io.hamal.lib.script.api.value
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.script.api.value.ValueOperator.Type.*
+import io.hamal.lib.kua.value.ValueOperator.Type.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

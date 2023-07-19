@@ -1,6 +1,6 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.script.api.value.ValueSerializationFixture.generateTestCases
+import io.hamal.lib.kua.value.ValueSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

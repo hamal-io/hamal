@@ -10,7 +10,7 @@ archivesName.set("backend-impl")
 
 dependencies {
     implementation(project(":lib:sdk"))
-    implementation(project(":lib:script:impl"))
+    implementation(project(":lib:kua"))
 
     implementation(project(":core:backend:repository:api"))
     implementation(project(":core:backend:repository:memory"))

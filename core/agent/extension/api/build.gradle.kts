@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     api(project(":lib:common"))
-    api(project(":lib:script:api"))
+    api(project(":lib:kua"))
     api(project(":lib:sdk"))
 }
 

@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.builtin
 
 import io.hamal.lib.script.api.Sandbox
-import io.hamal.lib.script.api.value.*
+import io.hamal.lib.kua.value.*
 import io.hamal.lib.script.impl.DefaultSandbox
 import org.junit.jupiter.api.fail
 

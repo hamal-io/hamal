@@ -1,9 +1,9 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.value.FuncContext
-import io.hamal.lib.script.api.value.FuncValue
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.kua.value.FuncContext
+import io.hamal.lib.kua.value.FuncValue
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.Value
 import io.hamal.lib.script.impl.ExitException
 
 object ExitFunction : FuncValue() {

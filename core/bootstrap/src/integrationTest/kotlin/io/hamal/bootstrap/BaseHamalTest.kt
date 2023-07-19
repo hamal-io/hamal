@@ -9,7 +9,7 @@ import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HamalSdk
 import jakarta.annotation.PostConstruct

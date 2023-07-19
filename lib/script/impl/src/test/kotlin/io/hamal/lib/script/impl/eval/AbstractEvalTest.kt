@@ -1,9 +1,9 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.EnvValue
-import io.hamal.lib.script.api.value.IdentValue
-import io.hamal.lib.script.api.value.TableValue
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.kua.value.EnvValue
+import io.hamal.lib.kua.value.IdentValue
+import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.value.Value
 import io.hamal.lib.script.impl.DefaultInterpreter
 import io.hamal.lib.script.impl.ast.parse
 import io.hamal.lib.script.impl.builtin.AssertFunction

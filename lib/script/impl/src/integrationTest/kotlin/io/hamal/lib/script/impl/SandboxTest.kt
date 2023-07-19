@@ -1,9 +1,9 @@
 package io.hamal.lib.script.impl
 
-import io.hamal.lib.script.api.value.EnvValue
-import io.hamal.lib.script.api.value.ErrorValue
-import io.hamal.lib.script.api.value.IdentValue
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.EnvValue
+import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.value.IdentValue
+import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.script.impl.builtin.AssertFunction
 import io.hamal.lib.script.impl.builtin.RequireFunction
 import org.junit.jupiter.api.DynamicTest

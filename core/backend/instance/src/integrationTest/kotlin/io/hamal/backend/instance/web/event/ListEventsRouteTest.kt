@@ -5,8 +5,8 @@ import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.sdk.domain.ListEventsResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*

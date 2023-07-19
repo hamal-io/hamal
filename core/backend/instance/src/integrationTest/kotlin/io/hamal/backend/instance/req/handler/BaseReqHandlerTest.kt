@@ -7,7 +7,7 @@ import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 import java.util.concurrent.atomic.AtomicInteger
 
 internal object NextCommandId {

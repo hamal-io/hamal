@@ -1,65 +1,53 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.script.api.value.*
-import io.hamal.lib.script.impl.ExitException
+import io.hamal.lib.kua.State
+import io.hamal.lib.kua.value.FuncValue
+import io.hamal.lib.kua.value.ModuleValue
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class TestExtension : Extension {
-    override fun create(): EnvValue {
-        return EnvValue(
-            ident = IdentValue("test"),
-            values = TableValue(
-                "assert" to TestAssert(),
-                "complete" to CompleteTest(),
-                "fail" to FailTest()
-            )
-        )
+    //    override fun create(): EnvValue {
+//        return EnvValue(
+//            ident = IdentValue("test"),
+//            values = TableValue(
+//                "assert" to TestAssert(),
+//                "complete" to CompleteTest(),
+//                "fail" to FailTest()
+//            )
+//        )
+//    }
+    override fun create(): ModuleValue {
+        TODO("Not yet implemented")
     }
 
 }
 
-internal class TestAssert : FuncValue() {
-    override fun invoke(ctx: FuncContext): Value {
-        val parameters = ctx.params
-
-        val line = ctx.params.first().expression.position.line
-
-        val assertionMessage = ctx.params.getOrNull(1)
-            ?.value
-            ?.let { (it as StringValue).value }
-            ?: "${ctx.params.first().expression}"
-
-        val result = parameters.firstOrNull()?.value
-        if (result != TrueValue) {
-            if (result != FalseValue) {
-                ActiveTest.failTest("Line $line: Assertion of non boolean value is always false")
-                throw ExitException(NumberValue.One)
-            }
-            ActiveTest.failTest("Line $line: Assertion violated: '$assertionMessage'")
-            throw ExitException(NumberValue.One)
-        }
-        return NilValue
-    }
-}
 
 internal class CompleteTest : FuncValue() {
-    override fun invoke(ctx: FuncContext): Value {
-        ActiveTest.completeTest()
-        throw ExitException(NumberValue.Zero)
+    //    override fun invoke(ctx: FuncContext): Value {
+//        ActiveTest.completeTest()
+//        throw ExitException(NumberValue.Zero)
+//    }
+    override fun invokedByLua(state: State): Int {
+        TODO("Not yet implemented")
     }
 }
 
 internal class FailTest : FuncValue() {
-    override fun invoke(ctx: FuncContext): Value {
-        val reason = ctx.params.firstOrNull()?.value
-            ?.let { value -> if (value is StringValue) value.value else null }
-            ?: "Failed"
-
-        ActiveTest.failTest(reason)
-        throw ExitException(NumberValue.One)
+//    override fun invoke(ctx: FuncContext): Value {
+//        val reason = ctx.params.firstOrNull()?.value
+//            ?.let { value -> if (value is StringValue) value.value else null }
+//            ?: "Failed"
+//
+//        ActiveTest.failTest(reason)
+//        throw ExitException(NumberValue.One)
+//    }
+//
+    override fun invokedByLua(state: State): Int {
+        TODO("Not yet implemented")
     }
 }
 

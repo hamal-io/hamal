@@ -2,7 +2,7 @@ package io.hamal.lib.script.impl.eval
 
 import io.hamal.lib.script.api.ast.Node
 import io.hamal.lib.script.api.ast.Statement
-import io.hamal.lib.script.api.value.Value
+import io.hamal.lib.kua.value.Value
 import io.hamal.lib.script.impl.ast.expr.*
 import io.hamal.lib.script.impl.ast.stmt.*
 import kotlin.reflect.KClass

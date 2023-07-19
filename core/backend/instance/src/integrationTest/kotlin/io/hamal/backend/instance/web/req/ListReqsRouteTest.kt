@@ -2,7 +2,7 @@ package io.hamal.backend.instance.web.req
 
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.domain.ListSubmittedReqsResponse
 import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat

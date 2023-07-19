@@ -8,8 +8,8 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

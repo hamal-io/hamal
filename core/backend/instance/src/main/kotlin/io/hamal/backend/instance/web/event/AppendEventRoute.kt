@@ -6,7 +6,7 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.req.AppendEventReq
 import io.hamal.lib.domain.req.SubmittedAppendEventReq
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.sdk.domain.*
 import io.hamal.lib.sdk.domain.ListTopicsResponse.*
 import org.springframework.http.HttpStatus

@@ -7,7 +7,7 @@ import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 
 
 interface FuncCmdRepository {

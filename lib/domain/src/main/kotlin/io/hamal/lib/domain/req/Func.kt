@@ -2,7 +2,7 @@ package io.hamal.lib.domain.req
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.ast.expr
 
-import io.hamal.lib.script.api.value.NumberValue
+import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.script.impl.anotherPosition
 import io.hamal.lib.script.impl.somePosition
 import org.hamcrest.MatcherAssert.assertThat

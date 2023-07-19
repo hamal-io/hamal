@@ -1,8 +1,5 @@
 package io.hamal.agent.extension.std.log
 
-import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.script.api.value.*
-
 //object ConsoleFormat : DepFunctionValue {
 //    override val ident: IdentValue = IdentValue("format")
 //
@@ -29,48 +26,48 @@ import io.hamal.lib.script.api.value.*
  *
  */
 
-
-class StdLogExtension : Extension {
-    override fun create(): EnvValue {
-        return EnvValue(
-            ident = IdentValue("log"),
-            values = TableValue(
-                "_cfg" to TableValue(
-                    "console" to TableValue(
-                        "level" to StringValue("TRACE"),
-                    ),
-                    "backend" to StringValue("INFO")
-                ),
-                IdentValue("debug") to LogDebug(),
-                IdentValue("info") to LogInfo()
-            )
-        )
-    }
-
-}
-
-
-class LogDebug : FuncValue() {
-    override fun invoke(ctx: FuncContext): Value {
-        println("DEBUG: ${ctx.params.first()}")
-        return NilValue
-    }
-
-}
-
-
-class LogInfo : FuncValue() {
-    override fun invoke(ctx: FuncContext): Value {
-        val first = ctx.params.first().value
-        if (first is IdentValue) {
-            println("INFO: ${ctx.env[first]}")
-        } else {
-            println("INFO: ${first}")
-        }
-
-
-//        println("INFO: ${ctx.parameters.first().value}")
-        return NilValue
-    }
-
-}
+//
+//class StdLogExtension : Extension {
+//    override fun create(): EnvValue {
+//        return EnvValue(
+//            ident = IdentValue("log"),
+//            values = TableValue(
+//                "_cfg" to TableValue(
+//                    "console" to TableValue(
+//                        "level" to StringValue("TRACE"),
+//                    ),
+//                    "backend" to StringValue("INFO")
+//                ),
+//                IdentValue("debug") to LogDebug(),
+//                IdentValue("info") to LogInfo()
+//            )
+//        )
+//    }
+//
+//}
+//
+//
+//class LogDebug : FuncValue() {
+//    override fun invoke(ctx: FuncContext): Value {
+//        println("DEBUG: ${ctx.params.first()}")
+//        return NilValue
+//    }
+//
+//}
+//
+//
+//class LogInfo : FuncValue() {
+//    override fun invoke(ctx: FuncContext): Value {
+//        val first = ctx.params.first().value
+//        if (first is IdentValue) {
+//            println("INFO: ${ctx.env[first]}")
+//        } else {
+//            println("INFO: ${first}")
+//        }
+//
+//
+////        println("INFO: ${ctx.parameters.first().value}")
+//        return NilValue
+//    }
+//
+//}

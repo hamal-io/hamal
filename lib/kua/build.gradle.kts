@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":lib:common"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

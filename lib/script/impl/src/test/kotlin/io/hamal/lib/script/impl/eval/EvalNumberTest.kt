@@ -1,8 +1,8 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.FalseValue
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.TrueValue
+import io.hamal.lib.kua.value.FalseValue
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.TrueValue
 import org.junit.jupiter.api.TestFactory
 
 internal class EvalNumberTest : AbstractEvalTest() {

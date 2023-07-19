@@ -44,7 +44,7 @@ testing {
                         exclude("com.fasterxml.jackson.core", "jackson-annotations")
                     }
 
-                    implementation(project(":lib:script:impl"))
+                    implementation(project(":lib:kua"))
                     implementation(project(":core:backend:instance"))
                     implementation(project(":core:backend:repository:api"))
                     implementation(project(":core:frontend"))

@@ -3,9 +3,9 @@ package io.hamal.backend.instance.req.handler.exec
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.script.api.value.NumberValue
-import io.hamal.lib.script.api.value.StringValue
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

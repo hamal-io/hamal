@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 
 interface ExecCmdRepository {
     fun plan(cmd: PlanCmd): PlannedExec

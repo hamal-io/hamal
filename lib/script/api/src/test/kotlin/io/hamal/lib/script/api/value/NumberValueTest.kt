@@ -2,8 +2,8 @@ package io.hamal.lib.script.api.value
 
 import io.hamal.lib.domain.Tuple3
 import io.hamal.lib.domain.Tuple4
-import io.hamal.lib.script.api.value.ValueOperator.Type.*
-import io.hamal.lib.script.api.value.ValueSerializationFixture.generateTestCases
+import io.hamal.lib.kua.value.ValueOperator.Type.*
+import io.hamal.lib.kua.value.ValueSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*

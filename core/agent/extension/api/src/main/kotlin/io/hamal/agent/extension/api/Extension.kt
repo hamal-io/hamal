@@ -1,9 +1,9 @@
 package io.hamal.agent.extension.api
 
-import io.hamal.lib.script.api.value.EnvValue
+import io.hamal.lib.kua.value.ModuleValue
 
 
 interface Extension {
-    fun create(): EnvValue
+    fun create(): ModuleValue
 }
 

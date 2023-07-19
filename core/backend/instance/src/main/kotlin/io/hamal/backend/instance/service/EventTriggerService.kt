@@ -17,7 +17,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.port.GenerateDomainId
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.TableValue
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
 import java.util.concurrent.ScheduledFuture

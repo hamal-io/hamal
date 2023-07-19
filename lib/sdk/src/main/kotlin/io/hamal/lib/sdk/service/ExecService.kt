@@ -6,7 +6,7 @@ import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.script.api.value.ErrorValue
+import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.sdk.domain.DequeueExecsResponse
 
 interface ExecService {

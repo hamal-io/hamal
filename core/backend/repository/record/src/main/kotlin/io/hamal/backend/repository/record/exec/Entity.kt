@@ -6,8 +6,8 @@ import io.hamal.backend.repository.record.exec.*
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.script.api.value.CodeValue
-import io.hamal.lib.script.api.value.TableValue
+import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.TableValue
 import java.time.Instant
 
 data class Entity(

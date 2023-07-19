@@ -1,6 +1,6 @@
 package io.hamal.lib.script.impl.eval
 
-import io.hamal.lib.script.api.value.*
+import io.hamal.lib.kua.value.*
 import io.hamal.lib.script.impl.ast.expr.*
 
 internal class EvaluateTableKeyLiteral :

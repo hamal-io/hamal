@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.func
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.script.api.value.CodeValue
+import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.domain.ListFuncsResponse
 import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat

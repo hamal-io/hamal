@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     api(project(":lib:common"))
-    api(project(":lib:script:api"))
+    api(project(":lib:kua"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

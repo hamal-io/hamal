@@ -1,7 +1,7 @@
 package io.hamal.lib.script.impl.builtin
 
-import io.hamal.lib.script.api.value.ErrorValue
-import io.hamal.lib.script.api.value.NilValue
+import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.value.NilValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

@@ -10,7 +10,7 @@ archivesName.set("agent-impl")
 dependencies {
     implementation(project(":lib:sdk"))
     implementation(project(":lib:web3"))
-    implementation(project(":lib:script:impl"))
+    implementation(project(":lib:kua"))
 
     implementation(project(":core:agent:extension:api"))
     implementation(project(":core:agent:extension:std:sys"))

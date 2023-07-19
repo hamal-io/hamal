@@ -1,7 +1,7 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.script.api.value.ValueOperator.Type.Eq
-import io.hamal.lib.script.api.value.ValueOperator.Type.Neq
+import io.hamal.lib.kua.value.ValueOperator.Type.Eq
+import io.hamal.lib.kua.value.ValueOperator.Type.Neq
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
