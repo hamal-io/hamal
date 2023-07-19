@@ -5,6 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("ErrorValue")
-data class ErrorValue(val message: String) : Value {
-    override val type = Value.Type.Error
-}
+data class ErrorValue(val message: String) : Value

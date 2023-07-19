@@ -3,8 +3,6 @@ package io.hamal.lib.kua.value
 import io.hamal.lib.kua.Bridge
 
 abstract class FuncValue : Value {
-    override val type = Value.Type.Func
-
     abstract fun invokedByLua(state: Bridge): Int
 //    fun invoke(): Int
 }

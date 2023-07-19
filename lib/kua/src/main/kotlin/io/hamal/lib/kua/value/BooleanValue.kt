@@ -14,13 +14,11 @@ sealed class BooleanValue(
 @Serializable
 @SerialName("TrueValue")
 object TrueValue : BooleanValue(true) {
-    override val type = Value.Type.Boolean
     override fun toString() = "true"
 }
 
 @Serializable
 @SerialName("FalseValue")
 object FalseValue : BooleanValue(false) {
-    override val type = Value.Type.Boolean
     override fun toString() = "false"
 }

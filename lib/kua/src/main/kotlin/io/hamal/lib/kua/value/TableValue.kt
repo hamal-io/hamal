@@ -21,8 +21,6 @@ data class TableValue(
     @Serializable(with = Serializer::class)
     private val entries: MutableMap<StringValue, Value> = mutableMapOf(),
 ) : Value, Collection<TableEntry> {
-    override val type = Value.Type.Table
-
     constructor(vararg pairs: Pair<Any, Value>) : this() {
         pairs.forEach { pair ->
             when (val key = pair.first) {
