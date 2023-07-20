@@ -1,10 +1,10 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.value.Function1Param1Result
+import io.hamal.lib.kua.value.Function1In1Out
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.function.*
 
-class Magic : Function1Param1Result<NumberValue, NumberValue>(
+class Magic : Function1In1Out<NumberValue, NumberValue>(
     FunctionInput1Schema(NumberValue::class),
     FunctionOutput1Schema(NumberValue::class)
 ) {

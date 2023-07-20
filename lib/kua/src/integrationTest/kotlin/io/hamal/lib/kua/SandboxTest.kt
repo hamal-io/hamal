@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.Function0Param0Result
+import io.hamal.lib.kua.value.Function0In0Out
 import io.hamal.lib.kua.value.ModuleValue
 import io.hamal.lib.kua.value.NamedFunctionValue
 import io.hamal.lib.kua.value.function.Context
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 internal class RegisterModuleTest : BaseSandboxTest() {
     @Test
     fun `Register a module and call function`() {
-        class TestFunc : Function0Param0Result() {
+        class TestFunc : Function0In0Out() {
             override fun run(ctx: Context, input: FunctionInput0) {
                 set = true
             }

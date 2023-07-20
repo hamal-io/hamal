@@ -6,8 +6,8 @@ import io.hamal.lib.kua.value.function.*
 data class NamedFunctionValue<
         INPUT_SCHEMA : FunctionInputSchema<INPUT>,
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
-        OUTPUT_SCHEMA : FunctionOutputSchema,
-        OUTPUT : FunctionOutput<OUTPUT_SCHEMA>
+        OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
+        OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
         >
     (
     val name: String,
@@ -17,8 +17,8 @@ data class NamedFunctionValue<
 interface FunctionValue<
         INPUT_SCHEMA : FunctionInputSchema<INPUT>,
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
-        OUTPUT_SCHEMA : FunctionOutputSchema,
-        OUTPUT : FunctionOutput<OUTPUT_SCHEMA>
+        OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
+        OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
         > {
 
     val inputSchema: INPUT_SCHEMA
@@ -27,16 +27,16 @@ interface FunctionValue<
     operator fun invoke(ctx: Context, input: INPUT): OUTPUT
 
     fun invokedByLua(bridge: Bridge): Int {
-        println("pretend this to be a lua call")
-        val input = inputSchema.createInput()
-        val result = invoke(Context(), input)
-        // FIXME ensure result
-        bridge.pushString("temp")
-        return result.size
+        val ctx = Context(bridge)
+
+        val input = inputSchema.createInput(ctx)
+        val output = invoke(ctx, input)
+        outputSchema.pushResult(ctx, output)
+        return output.size
     }
 }
 
-abstract class Function0Param0Result : FunctionValue<
+abstract class Function0In0Out : FunctionValue<
         FunctionInput0Schema,
         FunctionInput0,
         FunctionOutput0Schema,
@@ -54,7 +54,7 @@ abstract class Function0Param0Result : FunctionValue<
     abstract fun run(ctx: Context, input: FunctionInput0)
 }
 
-abstract class Function1Param0Result<
+abstract class Function1In0Out<
         INPUT_ARG_1 : Value
         >(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>
@@ -68,7 +68,7 @@ abstract class Function1Param0Result<
 }
 
 
-abstract class Function0Param1Result<
+abstract class Function0In1Out<
         OUTPUT_ARG_1 : Value
         >(
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>,
@@ -82,8 +82,21 @@ abstract class Function0Param1Result<
     override val inputSchema: FunctionInput0Schema = FunctionInput0Schema
 }
 
+abstract class Function0In2Out<
+        OUTPUT_ARG_1 : Value,
+        OUTPUT_ARG_2 : Value
+        >(
+    override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
+    ) : FunctionValue<
+        FunctionInput0Schema,
+        FunctionInput0,
+        FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
+        FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2>
+        > {
+    override val inputSchema: FunctionInput0Schema = FunctionInput0Schema
+}
 
-abstract class Function1Param1Result<
+abstract class Function1In1Out<
         INPUT_ARG_1 : Value,
         OUTPUT_ARG_1 : Value
         >(

@@ -1,8 +1,8 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.kua.value.Function0Param0Result
-import io.hamal.lib.kua.value.Function1Param0Result
+import io.hamal.lib.kua.value.Function0In0Out
+import io.hamal.lib.kua.value.Function1In0Out
 import io.hamal.lib.kua.value.ModuleValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.function.*
@@ -28,7 +28,7 @@ class TestExtension : Extension {
 }
 
 
-internal class CompleteTest : Function0Param0Result() {
+internal class CompleteTest : Function0In0Out() {
     override fun run(ctx: Context, input: FunctionInput0) {
         TODO("Not yet implemented")
     }
@@ -42,7 +42,7 @@ internal class CompleteTest : Function0Param0Result() {
 //    }
 }
 
-internal class FailTest : Function1Param0Result<StringValue>(
+internal class FailTest : Function1In0Out<StringValue>(
     FunctionInput1Schema(StringValue::class)
 ) {
     override fun invoke(ctx: Context, input: FunctionInput1<StringValue>): FunctionOutput0 {

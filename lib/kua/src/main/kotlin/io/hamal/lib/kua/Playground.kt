@@ -3,8 +3,8 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.value.function.Context
 import io.hamal.lib.kua.value.function.FunctionInput0
-import io.hamal.lib.kua.value.function.FunctionOutput1
-import io.hamal.lib.kua.value.function.FunctionOutput1Schema
+import io.hamal.lib.kua.value.function.FunctionOutput2
+import io.hamal.lib.kua.value.function.FunctionOutput2Schema
 
 
 fun main() {
@@ -25,7 +25,7 @@ fun main() {
             CodeValue(
                 """
       local x, y = test.call()
-      print("result:", x)
+      print("result:", x, y)
       -- test.recv(x, y)
     """.trimIndent()
             )
@@ -35,12 +35,22 @@ fun main() {
 
 }
 
-class ReturnFunc(val stack: Stack) : Function0Param1Result<StringValue>(
-    FunctionOutput1Schema(StringValue::class)
+//class ReturnFunc(val stack: Stack) : Function0In1Out<StringValue>(
+//    FunctionOutput1Schema(StringValue::class)
+//) {
+//    override fun invoke(ctx: Context, input: FunctionInput0): FunctionOutput1<StringValue> {
+//        return FunctionOutput1(
+//            StringValue("It works")
+//        )
+//    }
+
+class ReturnFunc(val stack: Stack) : Function0In2Out<StringValue, StringValue>(
+    FunctionOutput2Schema(StringValue::class, StringValue::class)
 ) {
-    override fun invoke(ctx: Context, input: FunctionInput0): FunctionOutput1<StringValue> {
-        return FunctionOutput1(
-            StringValue("It works")
+    override fun invoke(ctx: Context, input: FunctionInput0): FunctionOutput2<StringValue, StringValue> {
+        return FunctionOutput2(
+            StringValue("It works"),
+            StringValue("It really does")
         )
     }
 
