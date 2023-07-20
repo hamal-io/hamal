@@ -32,7 +32,7 @@ internal fun Bridge.registerModule(module: ModuleValue) {
 
     createTable(0, funcs.size)
     funcs.forEach { namedFunc ->
-        pushFuncValue(namedFunc.func)
+        pushFunctionValue(namedFunc.func)
         setTableField(1, namedFunc.name)
     }
 //    if (global) {

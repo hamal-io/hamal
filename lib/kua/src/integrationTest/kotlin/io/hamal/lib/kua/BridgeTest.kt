@@ -1,6 +1,8 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.value.FuncValue
+import io.hamal.lib.kua.value.Function0Param0Result
+import io.hamal.lib.kua.value.function.Context
+import io.hamal.lib.kua.value.function.FunctionInput0
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -8,12 +10,15 @@ import org.junit.jupiter.api.Test
 internal class InvokeFuncValueTest : BaseStateTest() {
     @Test
     fun `Invoke FuncValue without parameter`() {
-        val testFunc = object : FuncValue() {
-            override fun invokedByLua(bridge: Bridge) = (0).also { called = true }
+        val testFunc = object : Function0Param0Result() {
+            override fun run(ctx: Context, input: FunctionInput0) {
+                called = true
+            }
+
             var called = false
         }
 
-        testInstance.pushFuncValue(testFunc)
+        testInstance.pushFunctionValue(testFunc)
         testInstance.setGlobal("test_func")
         testInstance.loadString("test_func()".trimIndent())
         testInstance.call(0, 0)

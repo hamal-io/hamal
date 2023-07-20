@@ -1,9 +1,11 @@
 package io.hamal.bootstrap
 
 import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.kua.Bridge
-import io.hamal.lib.kua.value.FuncValue
+import io.hamal.lib.kua.value.Function0Param0Result
+import io.hamal.lib.kua.value.Function1Param0Result
 import io.hamal.lib.kua.value.ModuleValue
+import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.function.*
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -26,18 +28,28 @@ class TestExtension : Extension {
 }
 
 
-internal class CompleteTest : FuncValue() {
+internal class CompleteTest : Function0Param0Result() {
+    override fun run(ctx: Context, input: FunctionInput0) {
+        TODO("Not yet implemented")
+    }
+
     //    override fun invoke(ctx: FuncContext): Value {
 //        ActiveTest.completeTest()
 //        throw ExitException(NumberValue.Zero)
 //    }
-    override fun invokedByLua(bridge: Bridge): Int {
-        TODO("Not yet implemented")
-    }
+//    override fun invokedByLua(bridge: Bridge): Int {
+//        TODO("Not yet implemented")
+//    }
 }
 
-internal class FailTest : FuncValue() {
-//    override fun invoke(ctx: FuncContext): Value {
+internal class FailTest : Function1Param0Result<StringValue>(
+    FunctionInput1Schema(StringValue::class)
+) {
+    override fun invoke(ctx: Context, input: FunctionInput1<StringValue>): FunctionOutput0 {
+        TODO("Not yet implemented")
+    }
+
+    //    override fun invoke(ctx: FuncContext): Value {
 //        val reason = ctx.params.firstOrNull()?.value
 //            ?.let { value -> if (value is StringValue) value.value else null }
 //            ?: "Failed"
@@ -46,9 +58,9 @@ internal class FailTest : FuncValue() {
 //        throw ExitException(NumberValue.One)
 //    }
 //
-    override fun invokedByLua(bridge: Bridge): Int {
-        TODO("Not yet implemented")
-    }
+//    override fun invokedByLua(bridge: Bridge): Int {
+//        TODO("Not yet implemented")
+//    }
 }
 
 object ActiveTest {

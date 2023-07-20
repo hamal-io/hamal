@@ -1,9 +1,11 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.FuncValue
+import io.hamal.lib.kua.value.Function0Param0Result
 import io.hamal.lib.kua.value.ModuleValue
-import io.hamal.lib.kua.value.NamedFuncValue
+import io.hamal.lib.kua.value.NamedFunctionValue
+import io.hamal.lib.kua.value.function.Context
+import io.hamal.lib.kua.value.function.FunctionInput0
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -12,10 +14,9 @@ import org.junit.jupiter.api.Test
 internal class RegisterModuleTest : BaseSandboxTest() {
     @Test
     fun `Register a module and call function`() {
-        class TestFunc : FuncValue() {
-            override fun invokedByLua(bridge: Bridge): Int {
+        class TestFunc : Function0Param0Result() {
+            override fun run(ctx: Context, input: FunctionInput0) {
                 set = true
-                return 0
             }
 
             var set = false
@@ -26,7 +27,7 @@ internal class RegisterModuleTest : BaseSandboxTest() {
             ModuleValue(
                 name = "secret_module",
                 namedFuncs = listOf(
-                    NamedFuncValue("magic", func)
+                    NamedFunctionValue("magic", func)
                 )
             )
         )
