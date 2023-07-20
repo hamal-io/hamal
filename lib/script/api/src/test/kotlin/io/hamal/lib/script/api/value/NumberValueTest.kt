@@ -1,7 +1,7 @@
 package io.hamal.lib.script.api.value
 
-import io.hamal.lib.domain.Tuple3
-import io.hamal.lib.domain.Tuple4
+import io.hamal.lib.common.Tuple3
+import io.hamal.lib.common.Tuple4
 import io.hamal.lib.kua.value.ValueOperator.Type.*
 import io.hamal.lib.kua.value.ValueSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat

@@ -4,7 +4,7 @@ import io.hamal.lib.common.SnowflakeId.ElapsedSource.Elapsed
 import io.hamal.lib.common.SnowflakeId.SequenceSource
 import io.hamal.lib.common.SnowflakeId.SequenceSource.*
 import io.hamal.lib.common.util.BitUtils
-import io.hamal.lib.domain.Tuple2
+import io.hamal.lib.common.Tuple2
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind

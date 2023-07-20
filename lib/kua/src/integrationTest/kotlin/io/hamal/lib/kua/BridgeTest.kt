@@ -9,7 +9,7 @@ internal class InvokeFuncValueTest : BaseStateTest() {
     @Test
     fun `Invoke FuncValue without parameter`() {
         val testFunc = object : FuncValue() {
-            override fun invokedByLua(state: Bridge) = (0).also { called = true }
+            override fun invokedByLua(bridge: Bridge) = (0).also { called = true }
             var called = false
         }
 

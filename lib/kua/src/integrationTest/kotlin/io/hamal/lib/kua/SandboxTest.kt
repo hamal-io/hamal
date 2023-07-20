@@ -13,7 +13,7 @@ internal class RegisterModuleTest : BaseSandboxTest() {
     @Test
     fun `Register a module and call function`() {
         class TestFunc : FuncValue() {
-            override fun invokedByLua(state: Bridge): Int {
+            override fun invokedByLua(bridge: Bridge): Int {
                 set = true
                 return 0
             }

@@ -1,4 +1,4 @@
-package io.hamal.lib.domain
+package io.hamal.lib.common
 
 interface Tuple {
     val size: Int

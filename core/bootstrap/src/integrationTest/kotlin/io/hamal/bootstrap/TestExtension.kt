@@ -31,7 +31,7 @@ internal class CompleteTest : FuncValue() {
 //        ActiveTest.completeTest()
 //        throw ExitException(NumberValue.Zero)
 //    }
-    override fun invokedByLua(state: Bridge): Int {
+    override fun invokedByLua(bridge: Bridge): Int {
         TODO("Not yet implemented")
     }
 }
@@ -46,7 +46,7 @@ internal class FailTest : FuncValue() {
 //        throw ExitException(NumberValue.One)
 //    }
 //
-    override fun invokedByLua(state: Bridge): Int {
+    override fun invokedByLua(bridge: Bridge): Int {
         TODO("Not yet implemented")
     }
 }

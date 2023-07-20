@@ -19,15 +19,15 @@ internal class FuncValueTest {
             val sandbox = Sandbox(FixedPathLoader)
 
             val returningFunc = object : FuncValue() {
-                override fun invokedByLua(state: Bridge): Int {
-                    state.pushString(it)
+                override fun invokedByLua(bridge: Bridge): Int {
+                    bridge.pushString(it)
                     return 1
                 }
             }
 
             val receiverFunc = object : FuncValue() {
-                override fun invokedByLua(state: Bridge): Int {
-                    result = state.toString(-1)
+                override fun invokedByLua(bridge: Bridge): Int {
+                    result = bridge.toString(-1)
                     return 0
                 }
 
@@ -64,17 +64,17 @@ internal class FuncValueTest {
             val sandbox = Sandbox(FixedPathLoader)
 
             val returningFunc = object : FuncValue() {
-                override fun invokedByLua(state: Bridge): Int {
-                    state.pushString(it.first)
-                    state.pushString(it.second)
+                override fun invokedByLua(bridge: Bridge): Int {
+                    bridge.pushString(it.first)
+                    bridge.pushString(it.second)
                     return 2
                 }
             }
 
             val receiverFunc = object : FuncValue() {
-                override fun invokedByLua(state: Bridge): Int {
-                    resultOne = state.toString(-2)
-                    resultTwo = state.toString(-1)
+                override fun invokedByLua(bridge: Bridge): Int {
+                    resultOne = bridge.toString(-2)
+                    resultTwo = bridge.toString(-1)
                     return 0
                 }
 

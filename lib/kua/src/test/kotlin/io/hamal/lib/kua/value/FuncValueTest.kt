@@ -23,11 +23,11 @@ internal class FuncValueTest {
     }
 
     private class Swap : FuncValue() {
-        override fun invokedByLua(state: Bridge): Int {
-            val a = state.toNumber(1)
-            val b = state.toNumber(2)
-            state.pushNumber(b)
-            state.pushNumber(a)
+        override fun invokedByLua(bridge: Bridge): Int {
+            val a = bridge.toNumber(1)
+            val b = bridge.toNumber(2)
+            bridge.pushNumber(b)
+            bridge.pushNumber(a)
             return 2
         }
     }
