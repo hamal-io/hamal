@@ -1,11 +1,7 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput2Schema
-import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.table.DefaultTableMap
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.Function0In2Out
-import io.hamal.lib.kua.value.Function2In0Out
 import io.hamal.lib.kua.value.StringValue
 
 
@@ -13,36 +9,35 @@ fun main() {
     FixedPathLoader.load()
 
     Sandbox().use { sb ->
+        val bridge = sb.bridge
+        sb.bridge.tableCreate(0, 0)
+        sb.bridge.pushNil()
+        sb.bridge.tableNext(-2)
+
+        val t = DefaultTableMap(sb.bridge)
+        println(t.set("a", StringValue("b")))
+        println(t.set("b", StringValue("b")))
+        println(t.set("c", StringValue("b")))
+        sb.bridge.setGlobal("t")
+        sb.bridge.getGlobal("t")
+        println(t.set("d", StringValue("b")))
+
+        bridge.pushNil()
+        while (bridge.tableNext(-2)) {
+            println(bridge.toString(-2))
+            println(bridge.toString(-1))
+            bridge.pop(1)
+        }
+        println(bridge.top())
         sb.runCode(
             CodeValue(
                 """
-      local x, y = test.call()
-      print("result:", x, y)
-      test.recv(x, y)
-    """.trimIndent()
+                local x = {test = 23}
+                for k, v in pairs(t) do
+                  print(k..'='..v)
+                end
+                """.trimIndent()
             )
         )
-    }
-
-
-}
-
-class ReturnFunc(val stack: Stack) : Function0In2Out<StringValue, StringValue>(
-    FunctionOutput2Schema(StringValue::class, StringValue::class)
-) {
-    override fun invoke(ctx: FunctionContext): Pair<StringValue, StringValue> {
-        return Pair(
-            StringValue("It works"),
-            StringValue("It really does")
-        )
-    }
-}
-
-class ReceiveFunc : Function2In0Out<StringValue, StringValue>(
-    FunctionInput2Schema(StringValue::class, StringValue::class)
-) {
-    override fun invoke(ctx: FunctionContext, arg1: StringValue, arg2: StringValue) {
-        println(arg1)
-        println(arg2)
     }
 }

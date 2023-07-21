@@ -8,7 +8,7 @@ interface SandboxFactory {
 }
 
 class Sandbox : AutoCloseable {
-    private val bridge: Bridge = Bridge()
+    val bridge: Bridge = Bridge()
     val stack = Stack(bridge)
 
     fun register(extension: ExtensionValue) = bridge.registerExtension(extension)
@@ -31,17 +31,17 @@ internal fun Bridge.runCode(code: String) {
 internal fun Bridge.registerExtension(module: ExtensionValue) {
     val funcs = module.functions
 
-    createTable(0, funcs.size)
+    tableCreate(0, funcs.size)
     funcs.forEach { namedFunc ->
         pushFunctionValue(namedFunc.function)
-        setTableField(1, namedFunc.name)
+        tabletSetField(1, namedFunc.name)
     }
 //    if (global) {
 //        rawGet(REGISTRYINDEX, LuaState.RIDX_GLOBALS)
-    getTableRawIdx(luaRegistryIndex(), 2)
+    tableGetRawIdx(luaRegistryIndex(), 2)
 //        pushValue(-2)
     push(-2)
-    setTableField(-2, module.name)
+    tabletSetField(-2, module.name)
     pop(1)
 //    }
 

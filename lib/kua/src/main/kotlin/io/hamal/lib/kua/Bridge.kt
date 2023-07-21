@@ -27,16 +27,17 @@ class Bridge : AutoCloseable {
     external fun toNumber(idx: Int): Double
     external fun toString(idx: Int): String
 
-    external fun createTable(arrayCount: Int, recordCount: Int): Int
-    external fun setTableField(idx: Int, key: String): Int
-    external fun getTableField(idx: Int, key: String): Int
-    external fun getTableLength(idx: Int): Int
+    external fun tableCreate(arrayCount: Int, recordCount: Int): Int
+    external fun tabletSetField(idx: Int, key: String): Int
+    external fun tableGetField(idx: Int, key: String): Int
+    external fun tableGetLength(idx: Int): Int
 
-    external fun setTableRaw(idx: Int): Int
-    external fun setTableRawIdx(stackIdx: Int, tableIdx: Int): Int
-    external fun getTableRaw(idx: Int): Int
-    external fun getTableRawIdx(stackIdx: Int, tableIdx: Int): Int
-    external fun getSubTable(idx: Int, key: String): Int
+    external fun tableSetRaw(idx: Int): Int
+    external fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableGetRaw(idx: Int): Int
+    external fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableNext(idx: Int): Boolean
+    external fun tableGetSub(idx: Int, key: String): Int
 
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)
