@@ -40,7 +40,10 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
 
 internal sealed class BaseSandboxTest {
-    val testInstance = Sandbox(ResourceLoader)
+    val testInstance = run {
+        ResourceLoader.load()
+        Sandbox()
+    }
 
     fun verifyStackIsEmpty() {
         assertThat("Stack is empty", testInstance.stack.size(), equalTo(0))

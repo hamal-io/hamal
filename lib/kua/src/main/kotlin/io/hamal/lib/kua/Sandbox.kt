@@ -7,18 +7,15 @@ interface SandboxFactory {
     fun create(): Sandbox
 }
 
-class Sandbox(loader: Loader) : AutoCloseable {
-    private val state: Bridge = run {
-        loader.load()
-        Bridge()
-    }
-    val stack = Stack(state)
+class Sandbox : AutoCloseable {
+    private val bridge: Bridge = Bridge()
+    val stack = Stack(bridge)
 
-    fun register(extension: ExtensionValue) = state.registerExtension(extension)
+    fun register(extension: ExtensionValue) = bridge.registerExtension(extension)
 
     fun runCode(code: CodeValue) = runCode(code.value)
 
-    fun runCode(code: String) = state.runCode(code)
+    fun runCode(code: String) = bridge.runCode(code)
 
     override fun close() {
 //        state.close()

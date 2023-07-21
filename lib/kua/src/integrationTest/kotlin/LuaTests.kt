@@ -13,11 +13,12 @@ import kotlin.io.path.name
 class LuaTests {
     @TestFactory
     fun generateTestCases(): List<DynamicTest> {
+        ResourceLoader.load()
         return collectFiles()
             .map { file ->
                 dynamicTest("${file.parent.parent.name}/${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
-                    val testInstance = Sandbox(ResourceLoader)
+                    val testInstance = Sandbox()
                     testInstance.runCode(CodeValue(code))
                 }
             }

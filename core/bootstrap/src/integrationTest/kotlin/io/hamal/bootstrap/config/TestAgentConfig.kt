@@ -16,7 +16,8 @@ class TestAgentConfig {
     @Bean
     fun sandboxFactory(): SandboxFactory = object : SandboxFactory {
         override fun create(): Sandbox {
-            val result = Sandbox(ResourceLoader)
+            ResourceLoader.load()
+            val result = Sandbox()
 
             return result
         }

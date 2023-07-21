@@ -12,8 +12,6 @@ internal class FunctionValueTest {
 
     @Test
     fun `Tests Function0In1Out and Function1In0Out`() {
-        val sandbox = Sandbox(ResourceLoader)
-
         val captor = Captor1()
         val emitter = object : Function0In1Out<StringValue>(FunctionOutput1Schema(StringValue::class)) {
             override fun invoke(ctx: FunctionContext): StringValue {
@@ -36,8 +34,6 @@ internal class FunctionValueTest {
 
     @Test
     fun `Tests Function1In1Out`() {
-        val sandbox = Sandbox(ResourceLoader)
-
         val captor = Captor1()
         val transform = object : Function1In1Out<StringValue, StringValue>(
             FunctionInput1Schema(StringValue::class),
@@ -64,8 +60,6 @@ internal class FunctionValueTest {
 
     @Test
     fun `Tests Function2In2Out`() {
-        val sandbox = Sandbox(ResourceLoader)
-
         val captor = Captor2()
         val transform = object : Function2In2Out<StringValue, NumberValue, StringValue, NumberValue>(
             FunctionInput2Schema(StringValue::class, NumberValue::class),
@@ -96,8 +90,6 @@ internal class FunctionValueTest {
 
     @Test
     fun `Tests Function0In2Out and Function2In0Out`() {
-        val sandbox = Sandbox(ResourceLoader)
-
         val captor = Captor2()
         val emitter = object :
             Function0In2Out<StringValue, NumberValue>(FunctionOutput2Schema(StringValue::class, NumberValue::class)) {
@@ -136,5 +128,10 @@ internal class FunctionValueTest {
         }
 
         var result: String? = null
+    }
+
+    private val sandbox = run {
+        ResourceLoader.load()
+        Sandbox()
     }
 }

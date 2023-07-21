@@ -1,25 +1,18 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.Function0In2Out
+import io.hamal.lib.kua.value.Function2In0Out
+import io.hamal.lib.kua.value.StringValue
 
 
 fun main() {
     FixedPathLoader.load()
 
-    Sandbox(FixedPathLoader).use { sb ->
-        sb.register(
-            ExtensionValue(
-                name = "test",
-                functions = listOf(
-                    NamedFunctionValue("call", ReturnFunc(sb.stack)),
-                    NamedFunctionValue("recv", ReceiveFunc())
-                )
-            )
-        )
-
+    Sandbox().use { sb ->
         sb.runCode(
             CodeValue(
                 """

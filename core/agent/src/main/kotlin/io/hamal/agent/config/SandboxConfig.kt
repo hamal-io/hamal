@@ -11,9 +11,13 @@ import org.springframework.context.annotation.Profile
 @Profile("!test")
 open class SandboxConfig {
 
-    private val instance = Sandbox(FixedPathLoader)
+    private val instance = run {
+        FixedPathLoader.load()
+        Sandbox()
+    }
+
     @Bean
     open fun sandboxFactory(): SandboxFactory = object : SandboxFactory {
-        override fun create() = instance
+        override fun create(): Sandbox = instance
     }
 }
