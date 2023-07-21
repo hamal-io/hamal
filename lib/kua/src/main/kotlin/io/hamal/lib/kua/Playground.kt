@@ -3,7 +3,9 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.table.TableProxy
-import io.hamal.lib.kua.value.*
+import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.Function2In0Out
+import io.hamal.lib.kua.value.StringValue
 
 
 fun main() {
@@ -16,14 +18,24 @@ fun main() {
 //        sb.bridge.tableNext(-2)
 
 
-        sb.register(
-            ExtensionValue(
-                name = "test",
-                functions = listOf(
-                    NamedFunctionValue("call", TableTestFunc())
-                )
-            )
-        )
+//        sb.register(
+//            ExtensionValue(
+//                name = "test",
+//                functions = listOf(
+//                    NamedFunctionValue("call", TableTestFunc())
+//                )
+//            )
+//        )
+//
+        bridge.tableCreate(0,0)
+        bridge.pushString("key")
+//        bridge.pushString("value")
+        bridge.pushNil()
+//        bridge.pushNil()
+        bridge.tableSetRaw(1)
+
+        println(bridge.top())
+        println(bridge.tableGetLength(1))
 
 //        val t = DefaultTableMap(sb.bridge)
 //        println(t.set("a", StringValue("b")))

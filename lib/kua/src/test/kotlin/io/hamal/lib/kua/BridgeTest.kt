@@ -6,8 +6,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.Function2In2Out
 import io.hamal.lib.kua.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.assertThrows
 
 
 @DisplayName("luaVersionNumber()")
-internal class LuaVersionNumberTest : BaseStateTest() {
+internal class LuaVersionNumberTest : BaseBridgeTest() {
     @Test
     fun `Loads current lua version number`() {
         val result = testInstance.luaVersionNumber()
@@ -24,7 +23,7 @@ internal class LuaVersionNumberTest : BaseStateTest() {
 }
 
 @DisplayName("luaIntegerWidth()")
-internal class LuaIntegerWidthTest : BaseStateTest() {
+internal class LuaIntegerWidthTest : BaseBridgeTest() {
     @Test
     fun `Loads integer width from lua`() {
         val result = testInstance.luaIntegerWidth()
@@ -33,7 +32,7 @@ internal class LuaIntegerWidthTest : BaseStateTest() {
 }
 
 @DisplayName("luaRegistryIndex()")
-internal class LuaRegistryIndexTest : BaseStateTest() {
+internal class LuaRegistryIndexTest : BaseBridgeTest() {
     @Test
     fun `Loads integer width from lua`() {
         val result = testInstance.luaRegistryIndex()
@@ -42,7 +41,7 @@ internal class LuaRegistryIndexTest : BaseStateTest() {
 }
 
 @DisplayName("top()")
-internal class TopTest : BaseStateTest() {
+internal class TopTest : BaseBridgeTest() {
     @Test
     fun `Nothing pushed on the stack`() {
         val result = testInstance.top()
@@ -58,8 +57,16 @@ internal class TopTest : BaseStateTest() {
     }
 }
 
+@DisplayName("setTop()")
+internal class SetTopTest : BaseBridgeTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
 @DisplayName("type()")
-internal class TypeTest : BaseStateTest() {
+internal class TypeTest : BaseBridgeTest() {
 
     @Test
     fun `Tries to read boolean with 0 index`() {
@@ -149,7 +156,7 @@ internal class TypeTest : BaseStateTest() {
 }
 
 @DisplayName("setGlobal()")
-internal class SetGlobalTest : BaseStateTest() {
+internal class SetGlobalTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -157,7 +164,7 @@ internal class SetGlobalTest : BaseStateTest() {
 }
 
 @DisplayName("getGlobal()")
-internal class GetGlobalTest : BaseStateTest() {
+internal class GetGlobalTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -165,7 +172,7 @@ internal class GetGlobalTest : BaseStateTest() {
 }
 
 @DisplayName("push()")
-internal class PushTest : BaseStateTest() {
+internal class PushTest : BaseBridgeTest() {
     @Test
     fun `Tries to push with negative idx bigger than stack size`() {
         repeat(999999) { testInstance.pushNil() }
@@ -221,7 +228,7 @@ internal class PushTest : BaseStateTest() {
 }
 
 @DisplayName("pushBoolean()")
-internal class PushBooleanTest : BaseStateTest() {
+internal class PushBooleanTest : BaseBridgeTest() {
     @Test
     fun `Pushes value to stack`() {
         val result = testInstance.pushBoolean(true)
@@ -242,7 +249,7 @@ internal class PushBooleanTest : BaseStateTest() {
 }
 
 @DisplayName("pushFuncValue()")
-internal class PushFuncValueTest : BaseStateTest() {
+internal class PushFuncValueTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -250,7 +257,7 @@ internal class PushFuncValueTest : BaseStateTest() {
 }
 
 @DisplayName("pushNil()")
-internal class PushNilTest : BaseStateTest() {
+internal class PushNilTest : BaseBridgeTest() {
 
     @Test
     fun `Pushes value to stack`() {
@@ -271,7 +278,7 @@ internal class PushNilTest : BaseStateTest() {
 }
 
 @DisplayName("pushNumber()")
-internal class PushNumberTest : BaseStateTest() {
+internal class PushNumberTest : BaseBridgeTest() {
 
     @Test
     fun `Pushes value to stack`() {
@@ -292,7 +299,7 @@ internal class PushNumberTest : BaseStateTest() {
 }
 
 @DisplayName("pushString()")
-internal class PushStringTest : BaseStateTest() {
+internal class PushStringTest : BaseBridgeTest() {
     @Test
     fun `Pushes value to stack`() {
         val result = testInstance.pushString("hamal")
@@ -313,7 +320,7 @@ internal class PushStringTest : BaseStateTest() {
 }
 
 @DisplayName("pop()")
-internal class PopTest : BaseStateTest() {
+internal class PopTest : BaseBridgeTest() {
     @Test
     fun `Tries to pop negative amount from empty`() {
         val exception = assertThrows<IllegalArgumentException> {
@@ -354,7 +361,7 @@ internal class PopTest : BaseStateTest() {
 }
 
 @DisplayName("toBoolean()")
-internal class ToBooleanTest : BaseStateTest() {
+internal class ToBooleanTest : BaseBridgeTest() {
 
     @Test
     fun `Tries to read boolean with 0 index`() {
@@ -416,7 +423,7 @@ internal class ToBooleanTest : BaseStateTest() {
 }
 
 @DisplayName("toNumber()")
-internal class ToNumberTest : BaseStateTest() {
+internal class ToNumberTest : BaseBridgeTest() {
     @Test
     fun `Tries to read Number with 0 index`() {
         testInstance.pushNumber(812.123)
@@ -478,7 +485,7 @@ internal class ToNumberTest : BaseStateTest() {
 }
 
 @DisplayName("toString()")
-internal class ToStringTest : BaseStateTest() {
+internal class ToStringTest : BaseBridgeTest() {
 
     @Test
     fun `Tries to read String with 0 index`() {
@@ -540,7 +547,7 @@ internal class ToStringTest : BaseStateTest() {
 }
 
 @DisplayName("createTableTest()")
-internal class CreateTableTest : BaseStateTest() {
+internal class CreateTableTest : BaseBridgeTest() {
     @Test
     fun `Creates an empty table on empty stack`() {
         val result = testInstance.tableCreate(1, 2)
@@ -568,7 +575,7 @@ internal class CreateTableTest : BaseStateTest() {
 }
 
 @DisplayName("tabletSetField()")
-internal class TabletSetFieldTest : BaseStateTest() {
+internal class TabletSetFieldTest : BaseBridgeTest() {
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(0, 1)
@@ -625,7 +632,7 @@ internal class TabletSetFieldTest : BaseStateTest() {
 }
 
 @DisplayName("tableGetField()")
-internal class TableGetFieldTest : BaseStateTest() {
+internal class TableGetFieldTest : BaseBridgeTest() {
 
     @Test
     fun `Gets value from table`() {
@@ -634,7 +641,8 @@ internal class TableGetFieldTest : BaseStateTest() {
         testInstance.tabletSetField(1, "key")
         assertThat(testInstance.top(), equalTo(1))
 
-        testInstance.tableGetField(1, "key")
+        val result = testInstance.tableGetField(1, "key")
+        assertThat(result, equalTo(4))
         assertThat(testInstance.toString(-1), equalTo("value"))
         assertThat(testInstance.top(), equalTo(2))
     }
@@ -645,7 +653,8 @@ internal class TableGetFieldTest : BaseStateTest() {
         testInstance.pushString("value")
         testInstance.tabletSetField(1, "key")
 
-        testInstance.tableGetField(1, "does-not-find-anything")
+        val result = testInstance.tableGetField(1, "does-not-find-anything")
+        assertThat(result, equalTo(0))
         assertThat(testInstance.type(-1), equalTo(0)) // Nil
         assertThat(testInstance.top(), equalTo(2))
     }
@@ -675,7 +684,7 @@ internal class TableGetFieldTest : BaseStateTest() {
 }
 
 @DisplayName("tableGetLength()")
-internal class TableGetLengthTest : BaseStateTest() {
+internal class TableGetLengthTest : BaseBridgeTest() {
     @Test
     fun `Size of empty table`() {
         testInstance.tableCreate(12, 12)
@@ -736,7 +745,7 @@ internal class TableGetLengthTest : BaseStateTest() {
 }
 
 @DisplayName("tableSetRaw()")
-internal class TableSetRawTest : BaseStateTest() {
+internal class TableSetRawTest : BaseBridgeTest() {
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(0, 1)
@@ -802,7 +811,7 @@ internal class TableSetRawTest : BaseStateTest() {
 }
 
 @DisplayName("tableSetRawIdx()")
-internal class TableSetRawIdxTest : BaseStateTest() {
+internal class TableSetRawIdxTest : BaseBridgeTest() {
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(0, 1)
@@ -863,18 +872,20 @@ internal class TableSetRawIdxTest : BaseStateTest() {
 }
 
 @DisplayName("tableGetRaw()")
-internal class TableGetRawTest : BaseStateTest() {
+internal class TableGetRawTest : BaseBridgeTest() {
     @Test
     fun `Gets value from table`() {
         testInstance.tableCreate(0, 1)
         testInstance.pushString("key")
-        testInstance.pushString("value")
+        testInstance.pushNumber(23.0)
         testInstance.tableSetRaw(1)
         assertThat(testInstance.top(), equalTo(1))
 
         testInstance.pushString("key")
-        testInstance.tableGetRaw(1)
-        assertThat(testInstance.toString(-1), equalTo("value"))
+        val result = testInstance.tableGetRaw(1)
+        assertThat(result, equalTo(3))
+
+        assertThat(testInstance.toNumber(-1), equalTo(23.0))
         assertThat(testInstance.top(), equalTo(2))
     }
 
@@ -886,7 +897,9 @@ internal class TableGetRawTest : BaseStateTest() {
         testInstance.tableSetRaw(1)
 
         testInstance.pushString("does-not-find-anything")
-        testInstance.tableGetRaw(1)
+        val result = testInstance.tableGetRaw(1)
+        assertThat(result, equalTo(0))
+
         assertThat(testInstance.type(-1), equalTo(0)) // Nil
         assertThat(testInstance.top(), equalTo(2))
     }
@@ -919,7 +932,7 @@ internal class TableGetRawTest : BaseStateTest() {
 }
 
 @DisplayName("tableGetRawIdx()")
-internal class TableGetRawIdxTest : BaseStateTest() {
+internal class TableGetRawIdxTest : BaseBridgeTest() {
     @Test
     fun `Gets value from table`() {
         testInstance.tableCreate(0, 1)
@@ -928,7 +941,8 @@ internal class TableGetRawIdxTest : BaseStateTest() {
         testInstance.tableSetRaw(1)
         assertThat(testInstance.top(), equalTo(1))
 
-        testInstance.tableGetRawIdx(1, 5)
+        val result = testInstance.tableGetRawIdx(1, 5)
+        assertThat(result, equalTo(4))
         assertThat(testInstance.toString(-1), equalTo("value"))
         assertThat(testInstance.top(), equalTo(2))
     }
@@ -940,7 +954,8 @@ internal class TableGetRawIdxTest : BaseStateTest() {
         testInstance.pushString("value")
         testInstance.tableSetRaw(1)
 
-        testInstance.tableGetRawIdx(1, 1337)
+        val result = testInstance.tableGetRawIdx(1, 1337)
+        assertThat(result, equalTo(0))
         assertThat(testInstance.type(-1), equalTo(0)) // Nil
         assertThat(testInstance.top(), equalTo(2))
     }
@@ -970,7 +985,7 @@ internal class TableGetRawIdxTest : BaseStateTest() {
 }
 
 @DisplayName("tableNext()")
-internal class TableNextTest : BaseStateTest() {
+internal class TableNextTest : BaseBridgeTest() {
     @Test
     fun `Next on empty table`() {
         testInstance.tableCreate(0, 0)
@@ -1040,7 +1055,7 @@ internal class TableNextTest : BaseStateTest() {
 }
 
 @DisplayName("tableGetSub")
-internal class TableGetSubTest : BaseStateTest() {
+internal class TableGetSubTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -1048,7 +1063,7 @@ internal class TableGetSubTest : BaseStateTest() {
 }
 
 @DisplayName("loadString()")
-internal class LoadStringTest : BaseStateTest() {
+internal class LoadStringTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -1056,7 +1071,7 @@ internal class LoadStringTest : BaseStateTest() {
 }
 
 @DisplayName("call()")
-internal class CallTest : BaseStateTest() {
+internal class CallTest : BaseBridgeTest() {
     @Test
     fun `Calls kotlin function with 2 parameter and 2 receives 2 values back`() {
         testInstance.pushFunctionValue(Magic())
@@ -1086,7 +1101,7 @@ internal class CallTest : BaseStateTest() {
     }
 }
 
-internal sealed class BaseStateTest {
+internal sealed class BaseBridgeTest {
     val testInstance: Bridge = run {
         ResourceLoader.load()
         Bridge()

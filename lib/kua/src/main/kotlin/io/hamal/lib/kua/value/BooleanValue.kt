@@ -8,7 +8,7 @@ fun booleanOf(value: Boolean) = if (value) TrueValue else FalseValue
 @Serializable
 @SerialName("BooleanValue")
 sealed class BooleanValue(
-    val boolean: Boolean,
+    val value: Boolean,
 ) : Value
 
 @Serializable
