@@ -1,7 +1,8 @@
-package io.hamal.lib.kua.value.function
+package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.kua.value.Value
 import kotlin.reflect.KClass
 
@@ -46,6 +47,7 @@ fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, index: Int): ARG {
     return when (this) {
         NumberValue::class -> ctx.stack.getNumber(index) as ARG
         StringValue::class -> ctx.stack.getString(index) as ARG
+        TableValue::class -> TableValue() as ARG //FIXME
         else -> TODO()
     }
 }

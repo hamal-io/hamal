@@ -3,6 +3,10 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ExtensionValue
 
+interface SandboxFactory {
+    fun create(): Sandbox
+}
+
 class Sandbox(loader: Loader) : AutoCloseable {
     private val state: Bridge = run {
         loader.load()
@@ -10,7 +14,7 @@ class Sandbox(loader: Loader) : AutoCloseable {
     }
     val stack = Stack(state)
 
-    fun register(module: ExtensionValue) = state.registerModule(module)
+    fun register(extension: ExtensionValue) = state.registerExtension(extension)
 
     fun runCode(code: CodeValue) = runCode(code.value)
 
@@ -27,7 +31,7 @@ internal fun Bridge.runCode(code: String) {
     call(0, 0)
 }
 
-internal fun Bridge.registerModule(module: ExtensionValue) {
+internal fun Bridge.registerExtension(module: ExtensionValue) {
     val funcs = module.functions
 
     createTable(0, funcs.size)

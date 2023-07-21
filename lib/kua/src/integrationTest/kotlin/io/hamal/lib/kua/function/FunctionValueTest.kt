@@ -1,8 +1,8 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.ResourceLoader
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.value.function.*
+import io.hamal.lib.kua.value.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

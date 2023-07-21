@@ -1,9 +1,9 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.*
-import io.hamal.lib.kua.value.function.FunctionContext
-import io.hamal.lib.kua.value.function.FunctionInput2Schema
-import io.hamal.lib.kua.value.function.FunctionOutput2Schema
+import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.function.FunctionInput2Schema
+import io.hamal.lib.kua.function.FunctionOutput2Schema
 
 
 fun main() {

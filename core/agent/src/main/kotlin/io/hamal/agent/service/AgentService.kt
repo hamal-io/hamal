@@ -1,8 +1,7 @@
 package io.hamal.agent.service
 
 import io.hamal.lib.domain.State
-import io.hamal.lib.kua.ResourceLoader
-import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxFactory
 import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
@@ -13,7 +12,8 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class AgentService(
-    private val httpTemplateSupplier: HttpTemplateSupplier
+    private val httpTemplateSupplier: HttpTemplateSupplier,
+    private val sandboxFactory: SandboxFactory
 ) {
 
     private val sdk by lazy { DefaultHamalSdk(httpTemplateSupplier()) }
@@ -26,9 +26,8 @@ class AgentService(
                 .execs.forEach { request ->
 
                     try {
-                        val sandbox = Sandbox(ResourceLoader)
+                        val sandbox = sandboxFactory.create()
                         sandbox.runCode(request.code)
-
 //                        println("${request.inputs} - ${request.inputs.value}")
 //
 //                        val result = sandbox.eval(request.code.value)

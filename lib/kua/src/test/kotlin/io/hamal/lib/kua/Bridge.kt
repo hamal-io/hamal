@@ -2,9 +2,9 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.Function2In2Out
 import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.function.FunctionContext
-import io.hamal.lib.kua.value.function.FunctionInput2Schema
-import io.hamal.lib.kua.value.function.FunctionOutput2Schema
+import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.function.FunctionInput2Schema
+import io.hamal.lib.kua.function.FunctionOutput2Schema
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled

@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.value.function
+package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.value.Value
 import kotlin.reflect.KClass
