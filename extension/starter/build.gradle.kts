@@ -27,5 +27,5 @@ distributions {
 }
 
 dependencies {
-    implementation(project(":core:agent:extension:api"))
+    implementation(project(":extension:api"))
 }

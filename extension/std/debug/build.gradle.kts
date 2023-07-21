@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-std-log.jar")
+    archiveFileName.set("extension-std-debug.jar")
 }
 
 distributions {
@@ -14,11 +14,11 @@ distributions {
                 fileMode = 644
             }
             from("src/main/kotlin") {  // Contents of this directory are copied by default
-                dirMode = 755;
+                dirMode = 755
                 fileMode = 644
             }
             from("src/main/resources") {  // Contents of this directory are copied by default
-                dirMode = 755;
+                dirMode = 755
                 fileMode = 644
             }
         }
@@ -26,5 +26,6 @@ distributions {
 }
 
 dependencies {
-    implementation(project(":core:agent:extension:api"))
+    implementation(project(":extension:api"))
+    implementation(project(":lib:sdk"))
 }

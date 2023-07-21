@@ -1,11 +1,10 @@
 plugins {
     id("hamal.extension")
-
 }
 
 
 tasks.jar {
-    archiveFileName.set("extension-web3.jar")
+    archiveFileName.set("extension-std-log.jar")
 }
 
 distributions {
@@ -27,7 +26,5 @@ distributions {
 }
 
 dependencies {
-    implementation(project(":core:agent:extension:api"))
-    implementation(project(":lib:common"))
-    implementation(project(":lib:web3"))
+    implementation(project(":extension:api"))
 }

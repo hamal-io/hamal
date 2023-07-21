@@ -108,4 +108,4 @@ lateinit var sdk: HamalSdk
 lateinit var httpTemplate: HttpTemplate
 
 private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
-private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".hs") }
+private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }

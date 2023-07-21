@@ -21,7 +21,7 @@ dependencies {
 
     implementation(project(":core:backend:instance"))
     implementation(project(":core:frontend"))
-    implementation(project(":core:agent:impl"))
+    implementation(project(":core:agent"))
 
     compileOnly(external.spring.devTools)
 }
@@ -48,10 +48,10 @@ testing {
                     implementation(project(":core:backend:instance"))
                     implementation(project(":core:backend:repository:api"))
                     implementation(project(":core:frontend"))
-                    implementation(project(":core:agent:impl"))
-                    implementation(project(":core:agent:extension:api"))
-                    implementation(project(":core:agent:extension:std:sys"))
-                    implementation(project(":core:agent:extension:std:log"))
+                    implementation(project(":core:agent"))
+                    implementation(project(":extension:api"))
+                    implementation(project(":extension:std:sys"))
+                    implementation(project(":extension:std:log"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

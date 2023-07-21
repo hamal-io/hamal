@@ -22,8 +22,8 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":core:agent:extension:api"))
-    implementation(project(":core:agent:extension:std:log"))
+    implementation(project(":extension:api"))
+    implementation(project(":extension:std:log"))
 }
 
 
@@ -45,7 +45,7 @@ testing {
 
                     implementation(project(":core:backend:instance"))
                     implementation(project(":core:frontend"))
-                    implementation(project(":core:agent:impl"))
+                    implementation(project(":core:agent"))
                     implementation(project(":core:backend:repository:api"))
                     implementation(project(":core:backend:repository:memory"))
 

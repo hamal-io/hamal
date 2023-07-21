@@ -36,26 +36,23 @@ dependencyResolutionManagement {
 
 include(":application:proxy")
 
+include(":core:agent")
 include(":core:backend")
-
-include(":core:agent:impl")
-include(":core:agent:extension:api")
-include(":core:agent:extension:std:debug")
-include(":core:agent:extension:std:sys")
-include(":core:agent:extension:std:log")
-include(":core:agent:extension:starter")
-include(":core:agent:extension:web3")
-
-include(":core:backend")
+include(":core:bootstrap")
 include(":core:backend:instance")
 include(":core:backend:repository:api")
 include(":core:backend:repository:memory")
 include(":core:backend:repository:record")
 include(":core:backend:repository:sqlite")
 
-include(":core:bootstrap")
-
 include(":core:frontend")
+
+include(":extension:api")
+include(":extension:std:debug")
+include(":extension:std:sys")
+include(":extension:std:log")
+include(":extension:starter")
+include(":extension:web3")
 
 include(":lib:common")
 include(":lib:domain")

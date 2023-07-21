@@ -8,16 +8,6 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class TestExtension {
-    //    override fun create(): EnvValue {
-//        return EnvValue(
-//            ident = IdentValue("test"),
-//            values = TableValue(
-//                "assert" to TestAssert(),
-//                "complete" to CompleteTest(),
-//                "fail" to FailTest()
-//            )
-//        )
-//    }
     fun create(): ExtensionValue {
         return ExtensionValue(
             name = "test", //FIXME becomes VO
