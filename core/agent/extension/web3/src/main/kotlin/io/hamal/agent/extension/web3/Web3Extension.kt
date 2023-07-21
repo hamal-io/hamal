@@ -1,13 +1,6 @@
 package io.hamal.agent.extension.web3
 
-import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
 //import io.hamal.lib.kua.value.*
-import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthGetBlockResp
-import io.hamal.lib.web3.eth.http.EthHttpBatchService
 //
 //class Web3Extension : Extension {
 //    override fun create(): EnvValue {

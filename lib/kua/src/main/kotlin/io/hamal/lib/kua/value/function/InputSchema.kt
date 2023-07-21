@@ -44,8 +44,8 @@ data class FunctionInput2Schema<ARG_1 : Value, ARG_2 : Value>(
 fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, index: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        NumberValue::class -> NumberValue(index) as ARG
-        StringValue::class -> StringValue("TEST") as ARG
+        NumberValue::class -> ctx.stack.getNumber(index) as ARG
+        StringValue::class -> ctx.stack.getString(index) as ARG
         else -> TODO()
     }
 }

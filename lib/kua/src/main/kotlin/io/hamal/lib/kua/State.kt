@@ -4,12 +4,11 @@ import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 
 
-@JvmInline
-value class StackSize(val value: Int)
-
 class State(
     private val bridge: Bridge
 ) : AutoCloseable {
+
+    val stack = Stack(bridge)
 
     fun push(value: NumberValue): StackSize {
         val result = bridge.pushNumber(value.value)
@@ -25,3 +24,4 @@ class State(
         TODO("Not yet implemented")
     }
 }
+

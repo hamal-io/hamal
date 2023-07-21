@@ -18,7 +18,7 @@ data class FunctionOutput1Schema<ARG_1 : Value>(
 ) : FunctionOutputSchema<FunctionOutput1<ARG_1>> {
     override val size = 1
     override fun pushResult(ctx: FunctionContext, output: FunctionOutput1<ARG_1>) {
-        ctx.push(output.arg1)
+        ctx.stack.push(output.arg1)
     }
 }
 
@@ -28,7 +28,7 @@ data class FunctionOutput2Schema<ARG_1 : Value, ARG_2 : Value>(
 ) : FunctionOutputSchema<FunctionOutput2<ARG_1, ARG_2>> {
     override val size = 2
     override fun pushResult(ctx: FunctionContext, output: FunctionOutput2<ARG_1, ARG_2>) {
-        ctx.push(output.arg1)
-        ctx.push(output.arg2)
+        ctx.stack.push(output.arg1)
+        ctx.stack.push(output.arg2)
     }
 }

@@ -12,7 +12,7 @@ data class NamedFunctionValue<
         >
     (
     val name: String,
-    val func: FunctionValue<INPUT_SCHEMA, INPUT, OUTPUT_SCHEMA, OUTPUT>
+    val function: FunctionValue<INPUT_SCHEMA, INPUT, OUTPUT_SCHEMA, OUTPUT>
 )
 
 interface FunctionValue<
@@ -159,5 +159,32 @@ abstract class Function2In0Out<
     override fun invoke(ctx: FunctionContext, input: FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>): FunctionOutput0 {
         invoke(ctx, input.arg1, input.arg2)
         return FunctionOutput0
+    }
+}
+
+abstract class Function2In2Out<
+        INPUT_ARG_1 : Value,
+        INPUT_ARG_2 : Value,
+        OUTPUT_ARG_1 : Value,
+        OUTPUT_ARG_2 : Value
+        >(
+    override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
+    override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>
+
+) : FunctionValue<
+        FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
+        FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>,
+        FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
+        FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2>
+        > {
+
+    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1, arg2: INPUT_ARG_2): Pair<OUTPUT_ARG_1, OUTPUT_ARG_2>
+
+    override fun invoke(
+        ctx: FunctionContext,
+        input: FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>
+    ): FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2> {
+        val result = invoke(ctx, input.arg1, input.arg2)
+        return FunctionOutput2(result.first, result.second)
     }
 }

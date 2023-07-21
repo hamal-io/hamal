@@ -22,7 +22,7 @@ data class DecimalValue(
     companion object {
         val Zero = DecimalValue(0)
         val One = DecimalValue(1)
-        val mathContext = MathContext.DECIMAL128
+        val mathContext: MathContext = MathContext.DECIMAL128
 
         operator fun invoke(value: Byte): DecimalValue = DecimalValue(BigDecimal.valueOf(value.toLong()))
         operator fun invoke(value: Short): DecimalValue = DecimalValue(BigDecimal.valueOf(value.toLong()))

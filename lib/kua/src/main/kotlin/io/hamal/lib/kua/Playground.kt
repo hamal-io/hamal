@@ -11,9 +11,9 @@ fun main() {
 
     Sandbox(FixedPathLoader).use { sb ->
         sb.register(
-            ModuleValue(
+            ExtensionValue(
                 name = "test",
-                namedFuncs = listOf(
+                functions = listOf(
                     NamedFunctionValue("call", ReturnFunc(sb.stack)),
                     NamedFunctionValue("recv", ReceiveFunc())
                 )

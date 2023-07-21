@@ -1,18 +1,13 @@
 package io.hamal.bootstrap
 
-import io.hamal.agent.extension.api.Extension
-import io.hamal.lib.kua.value.Function0In0Out
-import io.hamal.lib.kua.value.Function1In0Out
-import io.hamal.lib.kua.value.ModuleValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.value.function.FunctionContext
-import io.hamal.lib.kua.value.function.FunctionInput0
 import io.hamal.lib.kua.value.function.FunctionInput1Schema
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class TestExtension : Extension {
+class TestExtension {
     //    override fun create(): EnvValue {
 //        return EnvValue(
 //            ident = IdentValue("test"),
@@ -23,50 +18,40 @@ class TestExtension : Extension {
 //            )
 //        )
 //    }
-    override fun create(): ModuleValue {
-        TODO("Not yet implemented")
+    fun create(): ExtensionValue {
+        return ExtensionValue(
+            name = "test", //FIXME becomes VO
+            functions = listOf(
+                NamedFunctionValue(
+                    name = "complete", //FIXME becomes VO
+                    function = CompleteTestFunction
+                ),
+                NamedFunctionValue(
+                    name = "fail",
+                    function = FailTestFunction
+                )
+            )
+        )
     }
-
 }
 
+class ExitException(status: NumberValue) : Exception(status.toString())
 
-internal class CompleteTest : Function0In0Out() {
-    override fun invoke(ctx: FunctionContext, input: FunctionInput0) {
-        TODO("Not yet implemented")
+
+internal object CompleteTestFunction : Function0In0Out() {
+    override fun invoke(ctx: FunctionContext) {
+        ActiveTest.completeTest()
+        throw ExitException(NumberValue.Zero)
     }
-
-    //    override fun invoke(ctx: FuncContext): Value {
-//        ActiveTest.completeTest()
-//        throw ExitException(NumberValue.Zero)
-//    }
-//    override fun invokedByLua(bridge: Bridge): Int {
-//        TODO("Not yet implemented")
-//    }
 }
 
-internal class FailTest : Function1In0Out<StringValue>(
+internal object FailTestFunction : Function1In0Out<StringValue>(
     FunctionInput1Schema(StringValue::class)
 ) {
-//    override fun invoke(ctx: FunctionContext, input: FunctionInput1<StringValue>): FunctionOutput0 {
-//        TODO("Not yet implemented")
-//    }
-//
     override fun invoke(ctx: FunctionContext, arg1: StringValue) {
-        TODO("Not yet implemented")
+        ActiveTest.failTest(arg1)
+        throw ExitException(NumberValue.One)
     }
-
-    //    override fun invoke(ctx: FuncContext): Value {
-//        val reason = ctx.params.firstOrNull()?.value
-//            ?.let { value -> if (value is StringValue) value.value else null }
-//            ?: "Failed"
-//
-//        ActiveTest.failTest(reason)
-//        throw ExitException(NumberValue.One)
-//    }
-//
-//    override fun invokedByLua(bridge: Bridge): Int {
-//        TODO("Not yet implemented")
-//    }
 }
 
 object ActiveTest {
@@ -79,10 +64,10 @@ object ActiveTest {
         }
     }
 
-    fun failTest(reason: String) {
+    fun failTest(reason: StringValue) {
         lock.withLock {
             condition.signal()
-            failureReason = reason
+            failureReason = reason.value
         }
     }
 
