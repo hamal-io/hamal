@@ -43,7 +43,6 @@ table_raw_set(lua_State *L, int idx) {
 int
 table_raw_set_idx(lua_State *L, int stack_idx, int table_idx) {
     if (check_index(L, stack_idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_index(L, table_idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_rawseti(L, stack_idx, table_idx);
     return table_len(L, stack_idx);
@@ -68,7 +67,6 @@ table_raw_get(lua_State *L, int idx) {
 int
 table_raw_get_idx(lua_State *L, int stack_idx, int table_idx) {
     if (check_index(L, stack_idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_index(L, table_idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_rawgeti(L, stack_idx, table_idx);

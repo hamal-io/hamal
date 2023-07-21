@@ -5,7 +5,7 @@ import io.hamal.lib.kua.value.StringValue
 
 
 class State(
-    private val bridge: Bridge
+    val bridge: Bridge
 ) : AutoCloseable {
 
     val stack = Stack(bridge)

@@ -5,10 +5,12 @@
 
 enum check_result
 check_index(lua_State *L, int idx) {
-    int top = lua_gettop(L);
-    if (abs(idx) > top) {
-        throw_illegal_argument("Index out of bounds");
-        return CHECK_RESULT_ERROR;
+    if (idx != LUA_REGISTRYINDEX) {
+        int top = lua_gettop(L);
+        if (abs(idx) > top) {
+            throw_illegal_argument("Index out of bounds");
+            return CHECK_RESULT_ERROR;
+        }
     }
     return CHECK_RESULT_OK;
 }
