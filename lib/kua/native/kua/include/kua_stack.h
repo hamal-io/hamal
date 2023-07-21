@@ -9,6 +9,9 @@ type(lua_State *L, int idx);
 int
 top(lua_State *L);
 
+void
+set_top(lua_State *L, int idx);
+
 int
 push(lua_State *L, int idx);
 

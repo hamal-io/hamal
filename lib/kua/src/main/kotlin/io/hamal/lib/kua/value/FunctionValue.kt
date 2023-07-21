@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.Bridge
-import io.hamal.lib.kua.State
+import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.function.*
 
 data class NamedFunctionValue<
@@ -29,7 +29,7 @@ interface FunctionValue<
 
     fun invokedByLua(bridge: Bridge): Int {
         val ctx = FunctionContext(
-            State(bridge)
+            ClosableState(bridge)
         )
 
         val input = inputSchema.createInput(ctx)

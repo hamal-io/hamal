@@ -7,9 +7,9 @@ interface SandboxFactory {
     fun create(): Sandbox
 }
 
-class Sandbox : AutoCloseable {
-    val bridge: Bridge = Bridge()
-    val stack = Stack(bridge)
+class Sandbox : State, AutoCloseable {
+    override val bridge: Bridge = Bridge()
+    val state = ClosableState(bridge)
 
     fun register(extension: ExtensionValue) = bridge.registerExtension(extension)
 
@@ -21,6 +21,17 @@ class Sandbox : AutoCloseable {
 //        state.close()
 //        println("Implement me")
     }
+
+    override fun isEmpty() = state.isEmpty()
+    override fun isNotEmpty() = state.isNotEmpty()
+    override fun length() = state.length()
+    override fun setTop(idx: Int) = state.setTop(idx)
+
+    override fun type(idx: Int) = state.type(idx)
+    override fun getNumber(idx: Int) = state.getNumber(idx)
+    override fun pushNumber(value: Double) = state.pushNumber(value)
+    override fun getString(idx: Int) = state.getString(idx)
+    override fun pushString(value: String) = state.pushString(value)
 }
 
 internal fun Bridge.runCode(code: String) {

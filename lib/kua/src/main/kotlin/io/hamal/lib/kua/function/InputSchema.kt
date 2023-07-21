@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.table.TableProxyContext
 import io.hamal.lib.kua.value.NumberValue
@@ -47,10 +49,12 @@ data class FunctionInput2Schema<ARG_1 : Value, ARG_2 : Value>(
 fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, index: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        NumberValue::class -> ctx.stack.getNumber(index) as ARG
-        StringValue::class -> ctx.stack.getString(index) as ARG
+        NumberValue::class -> ctx.getNumber(index) as ARG
+        StringValue::class -> ctx.getStringValue(index) as ARG
         TableValue::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-        TableProxy::class -> TableProxy(TableProxyContext(index, ctx.state.bridge)) as ARG
+        TableProxy::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
+        TableMap::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
+        TableArray::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
         else -> TODO()
     }
 }

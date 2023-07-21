@@ -73,10 +73,10 @@ class TableTestFunc : Function2In0Out<TableProxy, TableProxy>(
 
         arg2["cool"] = StringValue("up")
 
-        arg1.set("test", StringValue("works"))
-        arg1.set("test1", StringValue("works"))
-        arg1.set("test2", StringValue("works"))
-        arg1.set("test3", StringValue("works"))
+        println(arg1.set("test", StringValue("works")))
+        println(arg1.set("test1", StringValue("works")))
+        println(arg1.set("test2", StringValue("works")))
+        println(arg1.set("test3", StringValue("works")))
 
 
     }

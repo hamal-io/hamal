@@ -1,35 +1,34 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.kua.Bridge
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.Value
+import io.hamal.lib.kua.State
 
 @JvmInline
 value class TableLength(val value: Int)
 
 data class TableProxyContext(
     val index: Int,
-    val bridge: Bridge
+    val state: State
 )
 
 class TableProxy(
     ctx: TableProxyContext
-) : Value, TableMap {
+) : TableMap, TableArray {
 
-    override fun set(key: StringValue, value: StringValue) {
-        TODO("Not yet implemented")
-    }
-
-    override fun set(key: String, value: StringValue): TableLength {
-        bridge.pushString(key)
-        bridge.pushString(value.value)
+    override fun set(key: String, value: String): TableLength {
+        state.pushString(key)
+        state.pushString(value)
         return TableLength(bridge.tableSetRaw(index))
     }
 
-    override fun set(key: String, value: String) {
-        TODO("Not yet implemented")
+    override fun set(key: String, value: Double): TableLength {
+        bridge.pushString(key)
+        bridge.pushNumber(value)
+        return TableLength(bridge.tableSetRaw(index))
     }
 
+    fun length(): TableLength = TableLength((bridge.tableGetLength(index)))
+
     private val index = ctx.index
-    private val bridge = ctx.bridge
+    private val state = ctx.state
+    private val bridge = ctx.state.bridge
 }

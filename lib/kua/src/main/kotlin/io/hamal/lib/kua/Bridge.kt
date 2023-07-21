@@ -10,6 +10,7 @@ class Bridge : AutoCloseable {
     external fun luaRegistryIndex(): Int
 
     external fun top(): Int
+    external fun setTop(idx: Int)
     external fun type(idx: Int): Int
     external fun setGlobal(key: String)
     external fun getGlobal(key: String)
