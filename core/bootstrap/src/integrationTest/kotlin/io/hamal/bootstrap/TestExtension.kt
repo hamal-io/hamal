@@ -5,7 +5,9 @@ import io.hamal.lib.kua.value.Function0In0Out
 import io.hamal.lib.kua.value.Function1In0Out
 import io.hamal.lib.kua.value.ModuleValue
 import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.function.*
+import io.hamal.lib.kua.value.function.FunctionContext
+import io.hamal.lib.kua.value.function.FunctionInput0
+import io.hamal.lib.kua.value.function.FunctionInput1Schema
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -29,7 +31,7 @@ class TestExtension : Extension {
 
 
 internal class CompleteTest : Function0In0Out() {
-    override fun run(ctx: Context, input: FunctionInput0) {
+    override fun invoke(ctx: FunctionContext, input: FunctionInput0) {
         TODO("Not yet implemented")
     }
 
@@ -45,7 +47,11 @@ internal class CompleteTest : Function0In0Out() {
 internal class FailTest : Function1In0Out<StringValue>(
     FunctionInput1Schema(StringValue::class)
 ) {
-    override fun invoke(ctx: Context, input: FunctionInput1<StringValue>): FunctionOutput0 {
+//    override fun invoke(ctx: FunctionContext, input: FunctionInput1<StringValue>): FunctionOutput0 {
+//        TODO("Not yet implemented")
+//    }
+//
+    override fun invoke(ctx: FunctionContext, arg1: StringValue) {
         TODO("Not yet implemented")
     }
 

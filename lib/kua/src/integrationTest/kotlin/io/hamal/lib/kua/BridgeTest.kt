@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.Function0In0Out
-import io.hamal.lib.kua.value.function.Context
+import io.hamal.lib.kua.value.function.FunctionContext
 import io.hamal.lib.kua.value.function.FunctionInput0
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -11,7 +11,7 @@ internal class InvokeFuncValueTest : BaseStateTest() {
     @Test
     fun `Invoke FuncValue without parameter`() {
         val testFunc = object : Function0In0Out() {
-            override fun run(ctx: Context, input: FunctionInput0) {
+            override fun invoke(ctx: FunctionContext, input: FunctionInput0) {
                 called = true
             }
 

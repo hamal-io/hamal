@@ -4,7 +4,7 @@ import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.Function0In0Out
 import io.hamal.lib.kua.value.ModuleValue
 import io.hamal.lib.kua.value.NamedFunctionValue
-import io.hamal.lib.kua.value.function.Context
+import io.hamal.lib.kua.value.function.FunctionContext
 import io.hamal.lib.kua.value.function.FunctionInput0
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -15,7 +15,7 @@ internal class RegisterModuleTest : BaseSandboxTest() {
     @Test
     fun `Register a module and call function`() {
         class TestFunc : Function0In0Out() {
-            override fun run(ctx: Context, input: FunctionInput0) {
+            override fun invoke(ctx: FunctionContext, input: FunctionInput0) {
                 set = true
             }
 

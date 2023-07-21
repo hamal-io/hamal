@@ -1,9 +1,8 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.*
-import io.hamal.lib.kua.value.function.Context
-import io.hamal.lib.kua.value.function.FunctionInput0
-import io.hamal.lib.kua.value.function.FunctionOutput2
+import io.hamal.lib.kua.value.function.FunctionContext
+import io.hamal.lib.kua.value.function.FunctionInput2Schema
 import io.hamal.lib.kua.value.function.FunctionOutput2Schema
 
 
@@ -16,7 +15,7 @@ fun main() {
                 name = "test",
                 namedFuncs = listOf(
                     NamedFunctionValue("call", ReturnFunc(sb.stack)),
-//                    NamedFuncValue("recv", ReceiveFunc())
+                    NamedFunctionValue("recv", ReceiveFunc())
                 )
             )
         )
@@ -26,7 +25,7 @@ fun main() {
                 """
       local x, y = test.call()
       print("result:", x, y)
-      -- test.recv(x, y)
+      test.recv(x, y)
     """.trimIndent()
             )
         )
@@ -35,57 +34,22 @@ fun main() {
 
 }
 
-//class ReturnFunc(val stack: Stack) : Function0In1Out<StringValue>(
-//    FunctionOutput1Schema(StringValue::class)
-//) {
-//    override fun invoke(ctx: Context, input: FunctionInput0): FunctionOutput1<StringValue> {
-//        return FunctionOutput1(
-//            StringValue("It works")
-//        )
-//    }
-
 class ReturnFunc(val stack: Stack) : Function0In2Out<StringValue, StringValue>(
     FunctionOutput2Schema(StringValue::class, StringValue::class)
 ) {
-    override fun invoke(ctx: Context, input: FunctionInput0): FunctionOutput2<StringValue, StringValue> {
-        return FunctionOutput2(
+    override fun invoke(ctx: FunctionContext): Pair<StringValue, StringValue> {
+        return Pair(
             StringValue("It works"),
             StringValue("It really does")
         )
     }
-
-//    override fun invokedByLua(bridge: Bridge): Int {
-//        println("Return Func")
-////        println(stack.size())
-//        bridge.pushString("WORKS")
-//        bridge.pushString("WORKS2")
-//
-//        println(bridge.top())
-////        println(stack.state.type(-2))
-//        return 2
-//    }
 }
 
-
-//class ReturnFunc(val stack: Stack) : FuncValue() {
-//    override fun invokedByLua(bridge: Bridge): Int {
-//        println("Return Func")
-////        println(stack.size())
-//        bridge.pushString("WORKS")
-//        bridge.pushString("WORKS2")
-//
-//        println(bridge.top())
-////        println(stack.state.type(-2))
-//        return 2
-//    }
-//}
-//
-//class ReceiveFunc(): FuncValue(){
-//    override fun invokedByLua(bridge: Bridge): Int {
-//        println(bridge.top())
-//        println(bridge.type(-1))
-//        println(bridge.type(-2))
-//        return 0
-//    }
-//
-//}
+class ReceiveFunc : Function2In0Out<StringValue, StringValue>(
+    FunctionInput2Schema(StringValue::class, StringValue::class)
+) {
+    override fun invoke(ctx: FunctionContext, arg1: StringValue, arg2: StringValue) {
+        println(arg1)
+        println(arg2)
+    }
+}
