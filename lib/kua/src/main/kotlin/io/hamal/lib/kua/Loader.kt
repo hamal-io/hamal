@@ -1,5 +1,7 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.domain.Once
+
 
 interface Loader {
     fun load()
@@ -7,17 +9,24 @@ interface Loader {
 
 object FixedPathLoader : Loader {
     override fun load() {
-        System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/lua/liblua.so")
-        System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
+        once {
+            System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/lua/liblua.so")
+            System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
+        }
     }
 }
 
 object ResourceLoader : Loader {
     override fun load() {
-        val classloader = Thread.currentThread().contextClassLoader
-        System.load(classloader.getResource("./liblua.so")!!.file)
-        System.load(classloader.getResource("./libkua.so")!!.file)
+        once {
+            val classloader = Thread.currentThread().contextClassLoader
+            System.load(classloader.getResource("./liblua.so")!!.file)
+            System.load(classloader.getResource("./libkua.so")!!.file)
+        }
     }
+
 }
+
+private val once = Once.default<Unit>()
 
 

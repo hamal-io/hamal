@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("CodeValue")
-data class CodeValue(val value: String) : Value {
+data class CodeValue(val value: String) : SerializableValue {
     constructor(str: StringValue) : this(str.value)
 }

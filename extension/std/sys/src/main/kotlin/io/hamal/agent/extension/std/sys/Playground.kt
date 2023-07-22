@@ -15,7 +15,7 @@ fun main() {
     sandbox.runCode(
         """
             
-        local table = {code = "Hello"}
+        local table = {code = "print('hello')"}
         print(table)
             
         local result = sys.adhoc(table)

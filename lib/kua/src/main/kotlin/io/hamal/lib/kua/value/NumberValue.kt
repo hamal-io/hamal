@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @SerialName("NumberValue")
 data class NumberValue(
     val value: Double
-) : Value {
+) : SerializableValue {
     constructor(value: Int) : this(value.toDouble())
 
     companion object {

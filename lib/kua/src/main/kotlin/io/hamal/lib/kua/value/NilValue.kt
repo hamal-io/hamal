@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("NilValue")
-object NilValue : Value
+object NilValue : SerializableValue

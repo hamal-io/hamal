@@ -17,7 +17,7 @@ import java.math.RoundingMode
 data class DecimalValue(
     @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal
-) : Number(), Value, Comparable<DecimalValue> {
+) : Number(), SerializableValue, Comparable<DecimalValue> {
 
     companion object {
         val Zero = DecimalValue(0)

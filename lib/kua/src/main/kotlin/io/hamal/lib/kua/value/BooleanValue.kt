@@ -9,7 +9,7 @@ fun booleanOf(value: Boolean) = if (value) TrueValue else FalseValue
 @SerialName("BooleanValue")
 sealed class BooleanValue(
     val value: Boolean,
-) : Value
+) : SerializableValue
 
 @Serializable
 @SerialName("TrueValue")

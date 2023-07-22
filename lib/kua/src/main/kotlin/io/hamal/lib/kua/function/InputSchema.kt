@@ -49,7 +49,7 @@ data class FunctionInput2Schema<ARG_1 : Value, ARG_2 : Value>(
 fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, index: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        NumberValue::class -> ctx.getNumber(index) as ARG
+        NumberValue::class -> ctx.getNumberValue(index) as ARG
         StringValue::class -> ctx.getStringValue(index) as ARG
         TableValue::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
         TableProxy::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
