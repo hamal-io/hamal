@@ -3,14 +3,14 @@ package io.hamal.agent.extension.std.sys
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.value.Function0In1Out
 import io.hamal.lib.sdk.domain.ListExecsResponse
 
 class ListExecsFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function0In1Out<TableMap>(
-    FunctionOutput1Schema(TableMap::class)
+) : Function0In1Out<TableArray>(
+    FunctionOutput1Schema(TableArray::class)
 ) {
     //    override fun invoke(ctx: FuncContext): Value {
 //        println("ListExecs")
@@ -28,7 +28,7 @@ class ListExecsFunction(
 //
 //        return TableValue(response)
 //    }
-    override fun invoke(ctx: FunctionContext): TableMap {
+    override fun invoke(ctx: FunctionContext): TableArray {
         println("ListExecs")
 
         val execs = templateSupplier()
@@ -46,9 +46,11 @@ class ListExecsFunction(
 //            }.toMap<IdentValue, Value>()
 
 
-        return ctx.createMapTable(1).also {
-            it.set("test", "xyz")
-            it["answer"] = 42
+        return ctx.createArrayTable(1).also {
+            execs.forEach { exec ->
+                it.append(exec.id.value.value.toString())
+                it.append(exec.status.toString())
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ fun main() {
             print(k,v)
         end
         
+        print(x[1])
 
     """.trimIndent()
     )
