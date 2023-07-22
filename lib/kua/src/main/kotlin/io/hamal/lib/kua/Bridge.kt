@@ -44,14 +44,15 @@ class Bridge : AutoCloseable {
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)
 
-    private external fun init()
+    private external fun initConnection()
+    private external fun closeConnection()
 
     init {
-        init()
+        initConnection()
     }
 
     override fun close() {
-        TODO("Not yet implemented")
+        closeConnection()
     }
 
     override fun toString(): String {

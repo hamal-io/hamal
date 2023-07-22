@@ -93,55 +93,21 @@ STATE_METHOD_NAME(loadString)(JNIEnv *env, jobject K, jstring code) {
 }
 
 
-static int gcjavaobject(lua_State *L) {
-//    jobject obj;
-//
-//    if (!dep_current_env) {
-//        /* Environment has been cleared as the Java VM was destroyed. Nothing to do. */
-//        return 0;
-//    }
-//    obj = *(jobject *) lua_touserdata(L, 1);
-//    if (lua_toboolean(L, lua_upvalueindex(1))) {
-//        (*dep_current_env)->DeleteWeakGlobalRef(dep_current_env, obj);
-//    } else {
-//        (*dep_current_env)->DeleteGlobalRef(dep_current_env, obj);
-//    }
-    return 0;
-}
-
-
 static int newstate_protected(lua_State *L) {
     jobject *ref;
     jobject newstate_obj = (jobject) lua_touserdata(L, 1);
     lua_pop(L, 1);
 
-    /* Set the Java state in the Lua state. */
     ref = lua_newuserdata(L, sizeof(jobject));
     lua_createtable(L, 0, 1);
-    lua_pushboolean(L, 1); /* weak global reference */
-    lua_pushcclosure(L, gcjavaobject, 1);
-    lua_setfield(L, -2, "__gc");
-//    *ref = (*dep_current_env)->NewWeakGlobalRef(dep_current_env, newstate_obj);
-    *ref = (*dep_current_env)->NewWeakGlobalRef(dep_current_env, newstate_obj);
+    *ref = (*dep_current_env)->NewGlobalRef(dep_current_env, newstate_obj);
     if (!*ref) {
         lua_pushliteral(L, "JNI error: NewWeakGlobalRef() failed setting up Lua state");
         return lua_error(L);
     }
-    lua_setmetatable(L, -2);
+    lua_setmetatable(L, -1);
     lua_setfield(L, LUA_REGISTRYINDEX, "__KState");
-
-    /*
-     * Create the meta table for Java objects and return it. Population will
-     * be finished on the Java side.
-     */
     luaL_newmetatable(L, "__KObject");
-    lua_pushboolean(L, 0);
-    lua_setfield(L, -2, "__metatable");
-    lua_pushboolean(L, 0); /* non-weak global reference */
-    lua_pushcclosure(L, gcjavaobject, 1);
-    lua_setfield(L, -2, "__gc");
-
-
     return 1;
 }
 
@@ -160,7 +126,8 @@ setup_references(JNIEnv *env) {
 }
 
 JNIEXPORT void JNICALL
-STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
+STATE_METHOD_NAME(initConnection)(JNIEnv *env, jobject K) {
+    printf("===================INIT\n");
     setup_references(env);
 
     dep_current_env = env;
@@ -181,6 +148,11 @@ STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
 
     luaL_openlibs(L);
     state_to_thread(env, K, L);
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(closeConnection)(JNIEnv *env, jobject K) {
+    printf("===================Close\n");
 }
 
 

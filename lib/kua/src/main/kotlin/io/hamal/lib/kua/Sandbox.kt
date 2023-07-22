@@ -21,8 +21,7 @@ class Sandbox : State, AutoCloseable {
     fun runCode(code: String) = bridge.runCode(code)
 
     override fun close() {
-//        state.close()
-//        println("Implement me")
+        state.close()
     }
 
     override fun isEmpty() = state.isEmpty()

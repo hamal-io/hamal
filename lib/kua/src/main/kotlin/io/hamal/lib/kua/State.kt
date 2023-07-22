@@ -60,7 +60,7 @@ class ClosableState(
     override fun tableGetRaw(idx: Int) = ValueType.ValueType(bridge.tableGetRaw(idx))
 
     override fun close() {
-        TODO("Not yet implemented")
+        bridge.close()
     }
 }
 
