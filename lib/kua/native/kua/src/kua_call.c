@@ -16,7 +16,7 @@ call(lua_State *L, int argsCount, int resultCount) {
 //        && (resultCount == LUA_MULTRET || checkstack(L, resultCount - (argsCount + 1)))) {
     if (lua_pcall(L, argsCount, resultCount, 0) != LUA_OK) {
         //FIXME throw exception
-        luaL_error(L, "error running function `f': %s", lua_tostring(L, -1));
+//        luaL_error(L, "error running function `f': %s", lua_tostring(L, -1));
         return RESULT_ERROR;
     }
     return RESULT_OK;
@@ -57,8 +57,31 @@ call_func_value(lua_State *L) {
         return lua_error(L);
     }
 
+    jthrowable throwable;
+
     JNIEnv *env = current_env();
-    return (*env)->CallIntMethod(env, func_to_call, jni_ref().invoked_by_lua_method_id, kstate);
+    int nresults = (*env)->CallIntMethod(env, func_to_call, jni_ref().invoked_by_lua_method_id, kstate);
+
+
+//    throwable = (*env)->ExceptionOccurred(env);
+//    if (throwable) {
+//        printf("EXCEPTION occurred\n");
+//        /* Push exception & clear */
+////        luaL_where(L, 1);
+////        where = tostring(L, -1);
+////        luaerror = (*thread_env)->NewObject(thread_env, luaerror_class, luaerror_id, where, throwable);
+////        if (luaerror) {
+////            pushjavaobject(L, luaerror);
+////        } else {
+////            lua_pushliteral(L, "JNI error: NewObject() failed creating Lua error");
+////        }
+////        (*env)->ExceptionClear(env);
+//
+//        /* Error out */
+//        return lua_error(L);
+//    }
+
+    return nresults;
 }
 
 

@@ -29,8 +29,9 @@ class AgentService(
                 .execs.forEach { request ->
 
                     try {
-                        val sandbox = sandboxFactory.create()
-                        sandbox.runCode(request.code)
+                        sandboxFactory.create().use {
+                            it.runCode(request.code)
+                        }
 //                        println("${request.inputs} - ${request.inputs.value}")
 //
 //                        val result = sandbox.eval(request.code.value)

@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableArrayValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.Value
@@ -40,7 +40,7 @@ data class FunctionOutput2Schema<ARG_1 : Value, ARG_2 : Value>(
 fun <VALUE : Value> FunctionContext.push(value: VALUE) = when (value) {
     is NumberValue -> pushNumber(value)
     is StringValue -> pushString(value)
-    is TableArray -> pushTop(value.index)
-    is TableMap -> pushTop(value.index)
+    is TableArrayValue -> pushTop(value.index)
+    is TableMapValue -> pushTop(value.index)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")
 }

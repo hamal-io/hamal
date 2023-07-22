@@ -2,8 +2,8 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableArrayValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.table.TableProxyContext
 import io.hamal.lib.kua.value.ValueType
@@ -32,7 +32,7 @@ class FunctionContext(
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
 
     //FIXME move into state?!
-    fun createArrayTable(capacity: Int): TableArray {
+    fun createArrayTable(capacity: Int): TableArrayValue {
         bridge.tableCreate(capacity, 0)
         return TableProxy(
             TableProxyContext(
@@ -43,7 +43,7 @@ class FunctionContext(
     }
 
     //FIXME move into state?!
-    fun createMapTable(capacity: Int): TableMap {
+    fun createMapTable(capacity: Int): TableMapValue {
         bridge.tableCreate(0, capacity)
         return TableProxy(
             TableProxyContext(

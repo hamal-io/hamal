@@ -1,9 +1,9 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.function.Function2In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
-import io.hamal.lib.kua.table.TableMap
-import io.hamal.lib.kua.value.Function2In0Out
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.StringValue
 
 
@@ -16,10 +16,10 @@ fun main() {
 }
 
 
-class TableTestFunc : Function2In0Out<TableMap, TableMap>(
-    FunctionInput2Schema(TableMap::class, TableMap::class)
+class TableTestFunc : Function2In0Out<TableMapValue, TableMapValue>(
+    FunctionInput2Schema(TableMapValue::class, TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMap, arg2: TableMap) {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapValue, arg2: TableMapValue) {
 
         arg2["cool"] = StringValue("up")
 

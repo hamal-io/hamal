@@ -1,8 +1,8 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.Bridge
 import io.hamal.lib.kua.ClosableState
-import io.hamal.lib.kua.function.*
+import io.hamal.lib.kua.value.Value
 
 data class NamedFunctionValue<
         INPUT_SCHEMA : FunctionInputSchema<INPUT>,

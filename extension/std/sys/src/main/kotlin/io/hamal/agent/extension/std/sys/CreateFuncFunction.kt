@@ -6,20 +6,20 @@ import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
+import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.table.TableMap
-import io.hamal.lib.kua.value.Function1In1Out
+import io.hamal.lib.kua.table.TableMapValue
 import java.lang.Thread.sleep
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In1Out<TableMap, TableMap>(
-    FunctionInput1Schema(TableMap::class),
-    FunctionOutput1Schema(TableMap::class)
+) : Function1In1Out<TableMapValue, TableMapValue>(
+    FunctionInput1Schema(TableMapValue::class),
+    FunctionOutput1Schema(TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMap): TableMap {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): TableMapValue {
         try {
 
 //            val name: StringValue = when (val x = arg1["name"]) {

@@ -3,13 +3,14 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.ResourceLoader
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.value.*
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.StringValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
-internal class FunctionValueTest {
+internal class FunctionTest {
 
     @Test
     fun `Tests Function0In1Out and Function1In0Out`() {

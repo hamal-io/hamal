@@ -1,9 +1,9 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.Function0In0Out
-import io.hamal.lib.kua.value.NamedFunctionValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

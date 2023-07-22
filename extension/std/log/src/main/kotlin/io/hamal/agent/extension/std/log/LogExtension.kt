@@ -2,10 +2,10 @@ package io.hamal.agent.extension.std.log
 
 import io.hamal.agent.extension.api.ExtensionFactory
 import io.hamal.lib.kua.Extension
+import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.value.Function1In0Out
-import io.hamal.lib.kua.value.NamedFunctionValue
+import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.value.StringValue
 
 class LogExtensionFactory : ExtensionFactory {

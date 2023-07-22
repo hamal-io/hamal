@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableMapTest {
+internal class TableMapValueTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {

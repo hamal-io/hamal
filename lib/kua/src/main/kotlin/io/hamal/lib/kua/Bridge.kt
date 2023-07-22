@@ -1,6 +1,6 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.value.FunctionValue
+import io.hamal.lib.kua.function.FunctionValue
 
 
 class Bridge : AutoCloseable {

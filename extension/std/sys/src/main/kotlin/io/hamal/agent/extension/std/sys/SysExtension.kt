@@ -2,7 +2,7 @@ package io.hamal.agent.extension.std.sys
 
 import io.hamal.agent.extension.api.ExtensionFactory
 import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.value.NamedFunctionValue
+import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.sdk.HttpTemplateSupplier
 
 class SysExtensionFactory(

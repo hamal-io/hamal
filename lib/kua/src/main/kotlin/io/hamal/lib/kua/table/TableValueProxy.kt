@@ -12,7 +12,7 @@ internal data class TableProxyContext(
 
 internal class TableProxy(
     ctx: TableProxyContext
-) : TableMap, TableArray {
+) : TableMapValue, TableArrayValue {
     override fun unset(key: String): TableLength {
         bridge.pushString(key)
         bridge.pushNil()

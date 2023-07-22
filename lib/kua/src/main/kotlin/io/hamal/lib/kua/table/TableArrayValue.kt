@@ -4,7 +4,7 @@ import io.hamal.lib.kua.value.BooleanValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 
-interface TableArray : Table {
+interface TableArrayValue : Table {
     fun append(value: Boolean): TableLength
     fun append(value: BooleanValue) = append(value.value)
 

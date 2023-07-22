@@ -2,9 +2,9 @@ package io.hamal.bootstrap
 
 import io.hamal.lib.kua.ExitException
 import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.value.*
+import io.hamal.lib.kua.function.*
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.StringValue
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock

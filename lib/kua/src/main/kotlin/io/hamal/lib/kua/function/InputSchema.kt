@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableArrayValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.table.TableProxyContext
 import io.hamal.lib.kua.value.NumberValue
@@ -53,8 +53,8 @@ fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, index: Int): ARG {
         StringValue::class -> ctx.getStringValue(index) as ARG
         TableValue::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
         TableProxy::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
-        TableMap::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
-        TableArray::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
+        TableMapValue::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
+        TableArrayValue::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
         else -> TODO()
     }
 }
