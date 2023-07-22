@@ -1,7 +1,7 @@
 package io.hamal.agent.config
 
+import io.hamal.agent.extension.std.log.LogExtensionFactory
 import io.hamal.agent.extension.std.sys.SysExtensionFactory
-import io.hamal.lib.domain.Once
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.FixedPathLoader
 import io.hamal.lib.kua.Sandbox
@@ -13,10 +13,6 @@ import org.springframework.context.annotation.Profile
 @Configuration
 @Profile("!test")
 open class SandboxConfig {
-    companion object {
-        @JvmStatic
-        val once = Once.default<Unit>()
-    }
 
     @Bean
     open fun sandboxFactory(): SandboxFactory = object : SandboxFactory {
@@ -24,7 +20,11 @@ open class SandboxConfig {
             FixedPathLoader.load()
             val template = HttpTemplate("http://localhost:8084")
             return Sandbox().also {
+                it.register(LogExtensionFactory().create())
                 it.register(SysExtensionFactory { template }.create())
+
+
+
             }
         }
     }

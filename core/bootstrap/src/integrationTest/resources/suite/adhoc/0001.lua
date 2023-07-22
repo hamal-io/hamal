@@ -1,21 +1,16 @@
-local log = require('log')
-local sys = require('sys')
-local test = require('test')
-
--- Remember: Each test is an adhoc invocation
+---- Remember: Each test is an adhoc invocation
 local exec_id = sys.adhoc({
     inputs = {},
     code = [[
-        1 + 1
+        print("inner code execution")
     ]]
 })
 log.info(exec_id)
 
-local execs = sys.execs.list()
-log.info(execs)
-test.assert(execs.length == 2)
+local execs = sys.list_execs()
+assert(#execs == 2)
 
 local exec = execs[1]
-test.assert(exec.id == exec_id)
+assert(exec.id == exec_id)
 
 test.complete()

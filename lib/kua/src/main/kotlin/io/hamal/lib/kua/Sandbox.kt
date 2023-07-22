@@ -50,9 +50,10 @@ internal fun Bridge.registerExtension(module: Extension) {
     val funcs = module.functions
 
     tableCreate(0, funcs.size)
+    val tblIdx = top()
     funcs.forEach { namedFunc ->
         pushFunctionValue(namedFunc.function)
-        tabletSetField(1, namedFunc.name)
+        tabletSetField(tblIdx, namedFunc.name)
     }
 //    if (global) {
 //        rawGet(REGISTRYINDEX, LuaState.RIDX_GLOBALS)

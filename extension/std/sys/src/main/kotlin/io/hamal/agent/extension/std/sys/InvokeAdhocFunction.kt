@@ -12,7 +12,6 @@ import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.Function1In1Out
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.sdk.HttpTemplateSupplier
-import java.lang.Thread.sleep
 
 class InvokeAdhocFunction(
     private val templateSupplier: HttpTemplateSupplier
@@ -32,10 +31,10 @@ class InvokeAdhocFunction(
             .body(r)
             .execute(SubmittedInvokeAdhocReq::class)
 
-        sleep(500)
+//        sleep(500)
 
         println("Invoke code")
 
-        return StringValue(res.execId.toString())
+        return StringValue(res.execId.value.toString())
     }
 }

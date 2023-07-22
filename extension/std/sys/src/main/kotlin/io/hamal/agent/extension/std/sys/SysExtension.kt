@@ -20,6 +20,14 @@ class SysExtensionFactory(
                 NamedFunctionValue(
                     name = "list_execs",
                     function = ListExecsFunction(templateSupplier)
+                ),
+                NamedFunctionValue(
+                    name = "get_exec",
+                    function = GetExecFunction(templateSupplier)
+                ),
+                NamedFunctionValue(
+                    name = "create_func",
+                    function = CreateFuncFunction(templateSupplier)
                 )
             )
         )

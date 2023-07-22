@@ -14,12 +14,9 @@ call(lua_State *L, int argsCount, int resultCount) {
 //        && checknelems(L, argsCount + 1)
 //        && checkarg(resultCount >= 0 || resultCount == LUA_MULTRET, "illegal return count")
 //        && (resultCount == LUA_MULTRET || checkstack(L, resultCount - (argsCount + 1)))) {
-
-
-    int status = lua_pcall(L, argsCount, resultCount, 0);
-//    lua_remove(L, idx);
-    if (status != LUA_OK) {
-        //FIXME
+    if (lua_pcall(L, argsCount, resultCount, 0) != LUA_OK) {
+        //FIXME throw exception
+        luaL_error(L, "error running function `f': %s", lua_tostring(L, -1));
         return RESULT_ERROR;
     }
     return RESULT_OK;

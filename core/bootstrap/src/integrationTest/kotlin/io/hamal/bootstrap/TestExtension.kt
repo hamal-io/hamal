@@ -1,14 +1,15 @@
 package io.hamal.bootstrap
 
+import io.hamal.lib.kua.ExitException
 import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
+import io.hamal.lib.kua.value.*
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class TestExtension {
+class TestExtensionFactory {
     fun create(): Extension {
         return Extension(
             name = "test", //FIXME becomes VO
@@ -25,9 +26,6 @@ class TestExtension {
         )
     }
 }
-
-class ExitException(status: NumberValue) : Exception(status.toString())
-
 
 internal object CompleteTestFunction : Function0In0Out() {
     override fun invoke(ctx: FunctionContext) {
