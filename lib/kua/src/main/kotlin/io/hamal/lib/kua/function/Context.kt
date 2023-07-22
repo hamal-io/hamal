@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.table.TableMap
@@ -12,10 +13,10 @@ class FunctionContext(
     val state: State
 ) : State {
     override val bridge = state.bridge
+    override val top: StackTop get() = state.top
 
     override fun isEmpty() = state.isEmpty()
     override fun isNotEmpty() = state.isNotEmpty()
-    override fun stackSize() = state.stackSize()
     override fun setTop(idx: Int) = state.setTop(idx)
     override fun pushTop(idx: Int) = state.pushTop(idx)
 
@@ -24,7 +25,10 @@ class FunctionContext(
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
+
+    override fun tableInsert(idx: Int) = state.tableInsert(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
+    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
 
     //FIXME move into state?!

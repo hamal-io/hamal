@@ -33,4 +33,7 @@ table_get_sub_table(lua_State *L, int idx, char const *key);
 int
 table_next(lua_State *L, int idx);
 
+int
+table_append(lua_State *L, int idx);
+
 #endif //KUA_TABLE_H

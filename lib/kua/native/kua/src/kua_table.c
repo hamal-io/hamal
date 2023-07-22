@@ -87,3 +87,12 @@ table_next(lua_State *L, int idx) {
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_next(L, idx);
 }
+
+int
+table_append(lua_State *L, int idx) {
+    if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    int len = table_len(L, idx) + 1;
+    lua_rawseti(L, idx, len);
+    return len;
+}

@@ -45,6 +45,6 @@ internal sealed class BaseSandboxTest {
     }
 
     fun verifyStackIsEmpty() {
-        assertThat("Stack is empty", testInstance.stackSize(), equalTo(0))
+        assertThat("Stack is empty", testInstance.top, equalTo(0))
     }
 }

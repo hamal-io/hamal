@@ -752,6 +752,30 @@ internal class TableGetLengthTest : BaseBridgeTest() {
     }
 }
 
+@DisplayName("tableInsert()")
+internal class TableInsertTest : BaseBridgeTest() {
+
+    @Test
+    fun `Insert value to empty table`() {
+        testInstance.tableCreate(0, 0)
+        testInstance.pushNumber(512.0)
+        testInstance.tableInsert(1)
+
+        testInstance.pop(1)
+        verifyStackIsEmpty()
+    }
+
+    @Test
+    fun `Insert multiple values to table`() {
+        testInstance.tableCreate(1000, 0)
+        repeat(1000) { idx ->
+            testInstance.pushNumber(idx.toDouble())
+            val result = testInstance.tableInsert(1)
+            assertThat(result, equalTo(idx + 1))
+        }
+    }
+}
+
 @DisplayName("tableSetRaw()")
 internal class TableSetRawTest : BaseBridgeTest() {
     @Test
@@ -822,7 +846,7 @@ internal class TableSetRawTest : BaseBridgeTest() {
 internal class TableSetRawIdxTest : BaseBridgeTest() {
     @Test
     fun `Sets value to empty table`() {
-        testInstance.tableCreate(0, 1)
+        testInstance.tableCreate(1, 0)
         testInstance.pushString("value")
         testInstance.tableSetRawIdx(1, 23)
         assertThat(testInstance.top(), equalTo(1))

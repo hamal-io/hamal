@@ -10,6 +10,8 @@ interface SandboxFactory {
 
 class Sandbox : State, AutoCloseable {
     override val bridge: Bridge = Bridge()
+    override val top: StackTop get() = state.top
+
     val state = ClosableState(bridge)
 
     fun register(extension: Extension) = bridge.registerExtension(extension)
@@ -25,7 +27,6 @@ class Sandbox : State, AutoCloseable {
 
     override fun isEmpty() = state.isEmpty()
     override fun isNotEmpty() = state.isNotEmpty()
-    override fun stackSize() = state.stackSize()
     override fun setTop(idx: Int) = state.setTop(idx)
     override fun pushTop(idx: Int) = state.pushTop(idx)
     override fun type(idx: Int) = state.type(idx)
@@ -34,7 +35,10 @@ class Sandbox : State, AutoCloseable {
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
+
+    override fun tableInsert(idx: Int) = state.tableInsert(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
+    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int): ValueType = ValueType(bridge.tableGetRaw(idx))
 }
 

@@ -4,8 +4,6 @@ import io.hamal.lib.kua.State
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.value.ValueType.Number
 
-@JvmInline
-value class TableLength(val value: Int)
 
 internal data class TableProxyContext(
     val index: Int,
@@ -68,8 +66,22 @@ internal class TableProxy(
         return StringValue(bridge.toString(-1)).also { bridge.pop(1) }
     }
 
+    override fun length(): TableLength = TableLength((bridge.tableGetLength(index)))
 
-    fun length(): TableLength = TableLength((bridge.tableGetLength(index)))
+    override fun append(value: Boolean): TableLength {
+        bridge.pushBoolean(value)
+        return state.tableInsert(index)
+    }
+
+    override fun append(value: Double): TableLength {
+        bridge.pushNumber(value)
+        return state.tableInsert(index)
+    }
+
+    override fun append(value: String): TableLength {
+        bridge.pushString(value)
+        return state.tableInsert(index)
+    }
 
     override val index = ctx.index
     private val state = ctx.state
