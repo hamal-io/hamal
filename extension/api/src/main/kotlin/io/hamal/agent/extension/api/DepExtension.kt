@@ -1,9 +1,9 @@
 package io.hamal.agent.extension.api
 
-import io.hamal.lib.kua.value.ExtensionValue
+import io.hamal.lib.kua.Extension
 
 
 interface DepExtension {
-    fun create(): ExtensionValue
+    fun create(): Extension
 }
 

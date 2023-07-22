@@ -2,7 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.Function2In0Out
 import io.hamal.lib.kua.value.StringValue
@@ -78,10 +78,10 @@ fun main() {
 }
 
 
-class TableTestFunc : Function2In0Out<TableProxy, TableProxy>(
-    FunctionInput2Schema(TableProxy::class, TableProxy::class)
+class TableTestFunc : Function2In0Out<TableMap, TableMap>(
+    FunctionInput2Schema(TableMap::class, TableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableProxy, arg2: TableProxy) {
+    override fun invoke(ctx: FunctionContext, arg1: TableMap, arg2: TableMap) {
 
         arg2["cool"] = StringValue("up")
 

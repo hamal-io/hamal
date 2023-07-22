@@ -1,5 +1,6 @@
 package io.hamal.bootstrap
 
+import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -8,8 +9,8 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class TestExtension {
-    fun create(): ExtensionValue {
-        return ExtensionValue(
+    fun create(): Extension {
+        return Extension(
             name = "test", //FIXME becomes VO
             functions = listOf(
                 NamedFunctionValue(

@@ -11,6 +11,10 @@ sealed interface SerializableValue : Value // FIXME
 enum class ValueType(
     val value: Int
 ) {
+    Nil(0),
+    Boolean(1),
+    Number(3),
+    String(4),
     Table(5);
 
     companion object {

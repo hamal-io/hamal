@@ -1,7 +1,8 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ExtensionValue
+import io.hamal.lib.kua.value.ValueType
+import io.hamal.lib.kua.value.ValueType.Companion.ValueType
 
 interface SandboxFactory {
     fun create(): Sandbox
@@ -11,7 +12,7 @@ class Sandbox : State, AutoCloseable {
     override val bridge: Bridge = Bridge()
     val state = ClosableState(bridge)
 
-    fun register(extension: ExtensionValue) = bridge.registerExtension(extension)
+    fun register(extension: Extension) = bridge.registerExtension(extension)
 
     fun runCode(code: CodeValue) = runCode(code.value)
 
@@ -32,6 +33,8 @@ class Sandbox : State, AutoCloseable {
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
+    override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
+    override fun tableGetRaw(idx: Int): ValueType = ValueType(bridge.tableGetRaw(idx))
 }
 
 internal fun Bridge.runCode(code: String) {
@@ -39,7 +42,7 @@ internal fun Bridge.runCode(code: String) {
     call(0, 0)
 }
 
-internal fun Bridge.registerExtension(module: ExtensionValue) {
+internal fun Bridge.registerExtension(module: Extension) {
     val funcs = module.functions
 
     tableCreate(0, funcs.size)

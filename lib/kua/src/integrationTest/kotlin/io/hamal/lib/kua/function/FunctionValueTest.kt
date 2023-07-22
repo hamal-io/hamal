@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.ResourceLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.value.*
@@ -19,7 +20,7 @@ internal class FunctionValueTest {
             }
         }
         sandbox.register(
-            ExtensionValue(
+            Extension(
                 name = "test",
                 functions = listOf(
                     NamedFunctionValue("emit", emitter),
@@ -45,7 +46,7 @@ internal class FunctionValueTest {
         }
 
         sandbox.register(
-            ExtensionValue(
+            Extension(
                 name = "test",
                 functions = listOf(
                     NamedFunctionValue("transform", transform),
@@ -75,7 +76,7 @@ internal class FunctionValueTest {
         }
 
         sandbox.register(
-            ExtensionValue(
+            Extension(
                 name = "test",
                 functions = listOf(
                     NamedFunctionValue("transform", transform),
@@ -99,7 +100,7 @@ internal class FunctionValueTest {
         }
 
         sandbox.register(
-            ExtensionValue(
+            Extension(
                 name = "test",
                 functions = listOf(
                     NamedFunctionValue("emit", emitter),

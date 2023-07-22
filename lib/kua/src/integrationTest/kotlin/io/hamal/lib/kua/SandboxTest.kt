@@ -2,7 +2,6 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ExtensionValue
 import io.hamal.lib.kua.value.Function0In0Out
 import io.hamal.lib.kua.value.NamedFunctionValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -23,7 +22,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
         val func = TestFunction()
         testInstance.register(
-            ExtensionValue(
+            Extension(
                 name = "secret_module",
                 functions = listOf(
                     NamedFunctionValue("magic", func)

@@ -14,8 +14,12 @@ fun main() {
 
     sandbox.runCode(
         """
-        local result = sys.adhoc({})
-        print(result)
+            
+        local table = {code = "Hello"}
+        print(table)
+            
+        local result = sys.adhoc(table)
+
     """.trimIndent()
     )
 }

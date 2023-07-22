@@ -1,9 +1,11 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.table.TableLength
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.Value
 import io.hamal.lib.kua.value.ValueType
+import io.hamal.lib.kua.value.ValueType.Companion.ValueType
 
 @JvmInline
 value class StackSize(val value: Int)
@@ -35,6 +37,8 @@ interface State {
         else -> TODO()
     }
 
+    fun tableSetRaw(idx: Int): TableLength
+    fun tableGetRaw(idx: Int): ValueType
 }
 
 class ClosableState(
@@ -53,8 +57,11 @@ class ClosableState(
     override fun pushString(value: String) = StackSize(bridge.pushString(value))
 
     override fun type(idx: Int): ValueType {
-        return ValueType.ValueType(bridge.type(idx))
+        return ValueType(bridge.type(idx))
     }
+
+    override fun tableSetRaw(idx: Int) = TableLength(bridge.tableSetRaw(idx))
+    override fun tableGetRaw(idx: Int) = ValueType.ValueType(bridge.tableGetRaw(idx))
 
     override fun close() {
         TODO("Not yet implemented")

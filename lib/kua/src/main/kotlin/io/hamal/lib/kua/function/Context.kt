@@ -20,6 +20,8 @@ class FunctionContext(
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
     override fun <VALUE : Value> push(value: VALUE) = state.push(value)
+    override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
+    override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
 }
 
 interface FunctionContextFactory {
