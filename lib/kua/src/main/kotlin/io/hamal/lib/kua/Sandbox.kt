@@ -25,10 +25,11 @@ class Sandbox : State, AutoCloseable {
 
     override fun isEmpty() = state.isEmpty()
     override fun isNotEmpty() = state.isNotEmpty()
-    override fun length() = state.length()
+    override fun stackSize() = state.stackSize()
     override fun setTop(idx: Int) = state.setTop(idx)
-
+    override fun pushTop(idx: Int) = state.pushTop(idx)
     override fun type(idx: Int) = state.type(idx)
+
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
@@ -54,7 +55,7 @@ internal fun Bridge.registerExtension(module: Extension) {
 //        rawGet(REGISTRYINDEX, LuaState.RIDX_GLOBALS)
     tableGetRawIdx(luaRegistryIndex(), 2)
 //        pushValue(-2)
-    push(-2)
+    pushTop(-2)
     tabletSetField(-2, module.name)
     pop(1)
 //    }

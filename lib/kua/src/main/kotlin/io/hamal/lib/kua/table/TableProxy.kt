@@ -71,7 +71,7 @@ internal class TableProxy(
 
     fun length(): TableLength = TableLength((bridge.tableGetLength(index)))
 
-    private val index = ctx.index
+    override val index = ctx.index
     private val state = ctx.state
     private val bridge = ctx.state.bridge
 }

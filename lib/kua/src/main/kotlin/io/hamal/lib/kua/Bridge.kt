@@ -11,11 +11,11 @@ class Bridge : AutoCloseable {
 
     external fun top(): Int
     external fun setTop(idx: Int)
+    external fun pushTop(idx: Int): Int
     external fun type(idx: Int): Int
     external fun setGlobal(key: String)
     external fun getGlobal(key: String)
 
-    external fun push(idx: Int): Int
     external fun pushBoolean(value: Boolean): Int
     external fun pushFunctionValue(fn: FunctionValue<*, *, *, *>)
     external fun pushNil(): Int

@@ -44,7 +44,7 @@ internal class TableMapTest {
                 assertThat("item set", testInstance.length(), equalTo(TableLength(1)))
                 assertThat(result, equalTo(TableLength(1)))
 
-                assertThat("One element on stack", state.length(), equalTo(1))
+                assertThat("One element on stack", state.stackSize(), equalTo(1))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
                 state.bridge.pop(1)
@@ -72,7 +72,7 @@ internal class TableMapTest {
                 testFn()
                 assertThat(testInstance.length(), equalTo(TableLength(1)))
 
-                assertThat("One element on stack", state.length(), equalTo(1))
+                assertThat("One element on stack", state.stackSize(), equalTo(1))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
                 state.bridge.tableGetField(1, "another-key")
@@ -105,7 +105,7 @@ internal class TableMapTest {
 
                 assertThat(testInstance.length(), equalTo(TableLength(1)))
 
-                assertThat("One element on stack", state.length(), equalTo(1))
+                assertThat("One element on stack", state.stackSize(), equalTo(1))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
                 state.bridge.pop(1)
@@ -129,7 +129,7 @@ internal class TableMapTest {
                 assertThat(result, equalTo(CodeValue("print('doing something interesting')")))
                 assertThat(testInstance.length(), equalTo(TableLength(1)))
 
-                assertThat("One element on stack", state.length(), equalTo(1))
+                assertThat("One element on stack", state.stackSize(), equalTo(1))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
                 state.bridge.pop(1)
@@ -168,7 +168,7 @@ internal class TableMapTest {
 
                 assertThat(testInstance.length(), equalTo(TableLength(1)))
 
-                assertThat("One element on stack", state.length(), equalTo(1))
+                assertThat("One element on stack", state.stackSize(), equalTo(1))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
                 state.bridge.pop(1)
@@ -198,7 +198,7 @@ internal class TableMapTest {
 
                 assertThat(testInstance.length(), equalTo(TableLength(1)))
 
-                assertThat("One element on stack", state.length(), equalTo(1))
+                assertThat("One element on stack", state.stackSize(), equalTo(1))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
                 state.bridge.pop(1)

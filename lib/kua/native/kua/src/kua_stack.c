@@ -23,7 +23,7 @@ set_top(lua_State *L, int idx) {
 }
 
 int
-push(lua_State *L, int idx) {
+push_top(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushvalue(L, idx);

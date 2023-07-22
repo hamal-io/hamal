@@ -19,6 +19,13 @@ fun main() {
         print(table)
             
         local result = sys.adhoc(table)
+        
+        local x = sys.list_execs()
+        
+        for k,v in pairs(x) do
+            print(k,v)
+        end
+        
 
     """.trimIndent()
     )

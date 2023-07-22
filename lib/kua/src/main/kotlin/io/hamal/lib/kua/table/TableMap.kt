@@ -3,6 +3,8 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.value.*
 
 interface TableMap : Value {
+    val index: Int
+
     fun unset(key: String): TableLength
     fun unset(key: StringValue) = unset(key.value)
     operator fun set(key: String, value: NilValue) = unset(key)

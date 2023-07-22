@@ -14,7 +14,11 @@ object FixedPathLoader : Loader {
             System.load("/home/ddymke/Repo/hamal/lib/kua/native/cmake-build-debug/kua/libkua.so")
         }
     }
+
+    @JvmStatic
+    private val once = Once.default<Unit>()
 }
+
 
 object ResourceLoader : Loader {
     override fun load() {
@@ -25,8 +29,10 @@ object ResourceLoader : Loader {
         }
     }
 
+    @JvmStatic
+    private val once = Once.default<Unit>()
 }
 
-private val once = Once.default<Unit>()
+
 
 

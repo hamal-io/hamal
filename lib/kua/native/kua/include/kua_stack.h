@@ -13,7 +13,7 @@ void
 set_top(lua_State *L, int idx);
 
 int
-push(lua_State *L, int idx);
+push_top(lua_State *L, int idx);
 
 int
 pop(lua_State *L, int total);
@@ -32,7 +32,6 @@ push_string(lua_State *L, char const *value);
 
 int
 push_func_value(lua_State *L, void *func);
-
 
 int
 to_boolean(lua_State *L, int idx);

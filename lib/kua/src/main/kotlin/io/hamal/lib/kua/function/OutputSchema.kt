@@ -1,5 +1,9 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.Value
 import kotlin.reflect.KClass
 
@@ -31,4 +35,12 @@ data class FunctionOutput2Schema<ARG_1 : Value, ARG_2 : Value>(
         ctx.push(output.arg1)
         ctx.push(output.arg2)
     }
+}
+
+fun <VALUE : Value> FunctionContext.push(value: VALUE) = when (value) {
+    is NumberValue -> pushNumber(value)
+    is StringValue -> pushString(value)
+    is TableArray -> pushTop(value.index)
+    is TableMap -> pushTop(value.index)
+    else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")
 }
