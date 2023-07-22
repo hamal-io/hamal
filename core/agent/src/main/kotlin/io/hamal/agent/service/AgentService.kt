@@ -37,6 +37,8 @@ class AgentService(
 //                            sdk.execService().fail(request.id, result)
 //                        }
 ////
+                        //FIXME close sandbox after usage
+
                         sdk.execService().complete(
                             request.id, State(TableValue())
                         )

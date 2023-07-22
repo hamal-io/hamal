@@ -48,8 +48,13 @@ class ListExecsFunction(
 
         return ctx.createArrayTable(1).also {
             execs.forEach { exec ->
-                it.append(exec.id.value.value.toString())
-                it.append(exec.status.toString())
+                val inner = ctx.createMapTable(2)
+                inner["id"] = exec.id.value.value.toString()
+                inner["status"] = exec.status.toString()
+//                it.append(exec.id.value.value.toString())
+//                it.append(exec.status.toString())
+                ctx.state.pushTop(inner.index)
+                ctx.state.tableInsert(1)
             }
         }
     }

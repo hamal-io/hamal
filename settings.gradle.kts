@@ -19,7 +19,6 @@ dependencyResolutionManagement {
 
             library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.0.5")
             library("spring-test", "org.springframework.boot", "spring-boot-starter-test").version("3.0.5")
-            library("spring-devTools", "org.springframework.boot", "spring-boot-devtools").version("3.0.5")
             library("spring-logging", "org.springframework.boot", "spring-boot-starter-logging").version("3.0.5")
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
 

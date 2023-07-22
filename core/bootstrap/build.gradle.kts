@@ -22,8 +22,6 @@ dependencies {
     implementation(project(":core:backend:instance"))
     implementation(project(":core:frontend"))
     implementation(project(":core:agent"))
-
-    compileOnly(external.spring.devTools)
 }
 
 tasks.named<BootJar>("bootJar") {

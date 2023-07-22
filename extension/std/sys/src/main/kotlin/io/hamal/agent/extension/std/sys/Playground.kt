@@ -26,7 +26,8 @@ fun main() {
             print(k,v)
         end
         
-        print(x[1])
+        print("id:", x[1].id)
+        print("status:", x[1].status)
 
     """.trimIndent()
     )

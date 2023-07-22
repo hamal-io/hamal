@@ -122,7 +122,7 @@ static int newstate_protected(lua_State *L) {
     lua_pushcclosure(L, gcjavaobject, 1);
     lua_setfield(L, -2, "__gc");
 //    *ref = (*dep_current_env)->NewWeakGlobalRef(dep_current_env, newstate_obj);
-    *ref = (*dep_current_env)->NewGlobalRef(dep_current_env, newstate_obj);
+    *ref = (*dep_current_env)->NewWeakGlobalRef(dep_current_env, newstate_obj);
     if (!*ref) {
         lua_pushliteral(L, "JNI error: NewWeakGlobalRef() failed setting up Lua state");
         return lua_error(L);
@@ -140,6 +140,8 @@ static int newstate_protected(lua_State *L) {
     lua_pushboolean(L, 0); /* non-weak global reference */
     lua_pushcclosure(L, gcjavaobject, 1);
     lua_setfield(L, -2, "__gc");
+
+
     return 1;
 }
 
@@ -164,6 +166,12 @@ STATE_METHOD_NAME(init)(JNIEnv *env, jobject K) {
     dep_current_env = env;
     lua_State *L;
     L = luaL_newstate();
+
+    /**
+     * FIXME GC causes crash
+     * sweeplist causes crash --> is gc required?!
+     */
+    lua_gc(L, LUA_GCSTOP);
 
     lua_pushcfunction(L, newstate_protected);
     lua_pushlightuserdata(L, (void *) K);
