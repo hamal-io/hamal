@@ -1,5 +1,6 @@
 package io.hamal.agent.service
 
+import io.hamal.agent.component.Async
 import io.hamal.lib.domain.State
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.SandboxFactory
@@ -8,27 +9,29 @@ import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
-import org.springframework.scheduling.annotation.Scheduled
+import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 class AgentService(
     private val httpTemplateSupplier: HttpTemplateSupplier,
-    private val sandboxFactory: SandboxFactory
+    private val sandboxFactory: SandboxFactory,
+    private val async: Async
 ) {
 
     private val sdk by lazy { DefaultHamalSdk(httpTemplateSupplier()) }
 
-    @Scheduled(initialDelay = 1, fixedDelay = 1, timeUnit = TimeUnit.MILLISECONDS)
-    fun run() {
-        CompletableFuture.runAsync {
+    @PostConstruct
+    fun setup() {
+        async.atFixedRate(1.milliseconds) {
             sdk.execService()
                 .poll()
                 .execs.forEach { request ->
 
                     try {
+                        println(Thread.currentThread().name)
+
                         sandboxFactory.create().use {
                             it.runCode(request.code)
                         }

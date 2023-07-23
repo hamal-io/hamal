@@ -141,7 +141,7 @@ STATE_METHOD_NAME(initConnection)(JNIEnv *env, jobject K) {
      * FIXME GC causes crash
      * sweeplist causes crash --> is gc required?!
      */
-//    lua_gc(L, LUA_GCSTOP);
+    lua_gc(L, LUA_GCSTOP);
 
     lua_pushcfunction(L, newstate_protected);
     lua_pushlightuserdata(L, (void *) K);

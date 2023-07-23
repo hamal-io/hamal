@@ -5,11 +5,9 @@ import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAut
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
 @ComponentScan
-@EnableScheduling
 @EnableAutoConfiguration(
     exclude = [
         SpringApplicationAdminJmxAutoConfiguration::class,
