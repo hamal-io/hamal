@@ -1,3 +1,5 @@
+#include <lua.h>
+#include <lauxlib.h>
 #include <jni.h>
 
 #include "kua_info.h"
@@ -221,22 +223,61 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
     call(L, argsCount, resultCount);
 }
 
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(loadString)(JNIEnv *env, jobject K, jstring code) {
+//    lua_State *L;
+
+//    JNLUA_ENV(env);
+//    lua_State *L = get_thread(env, K);
+    lua_State *L = state_from_thread(env, K);
+
+    const char *nativeString = (*env)->GetStringUTFChars(env, code, 0);
+    // use your string
+    int result = luaL_loadstring(L, nativeString);
+
+    (*env)->ReleaseStringUTFChars(env, code, nativeString);
+
+    return (jint) result;
+}
+
+
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[STATE]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(initConnection)(JNIEnv *env, jobject K) {
+    init_connection(env, K);
+}
+
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(closeConnection)(JNIEnv *env, jobject K) {
     ENV_AND_STATE
+    close_connection(L);
+}
 
-    // FIXME should become a separate function
 
-    // removes state reference
-    lua_getfield(L, LUA_REGISTRYINDEX, "__KState");
-    jobject obj = *(jobject *) lua_touserdata(L, -1);
-    if (obj) {
-        (*env)->DeleteWeakGlobalRef(env, obj);
-    }
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(getGlobal)(JNIEnv *env, jobject K, jstring key) {
+    const char *nativeString = (*env)->GetStringUTFChars(env, key, 0);
+    lua_State *L = state_from_thread(env, K);
+    lua_getglobal(L, (const char *) nativeString);
+    (*env)->ReleaseStringUTFChars(env, key, nativeString);
+}
 
-    // FIXME remove/ unload loaded jni references
 
-    lua_close(L);
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(setGlobal)(JNIEnv *env, jobject K, jstring name) {
+    const char *nativeString = (*env)->GetStringUTFChars(env, name, 0);
+    lua_State *L = state_from_thread(env, K);
+
+//    if (checkstack(L, JNLUA_MINSTACK)
+//        && checknelems(L, 1)
+//        && (setglobal_name = getstringchars(name))) {
+    lua_setglobal(L, nativeString);
+
+    (*env)->ReleaseStringUTFChars(env, name, nativeString);
+//    }
+//    if (setglobal_name) {
+//        releasestringchars(name, setglobal_name);
+//    }
 }

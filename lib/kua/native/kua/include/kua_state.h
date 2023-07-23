@@ -19,5 +19,10 @@ struct jni_ref {
 struct jni_ref
 jni_ref(void);
 
+void
+init_connection(JNIEnv *env, jobject K);
+
+void
+close_connection(lua_State *L);
 
 #endif //KUA_STATE_H
