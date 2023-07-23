@@ -24,6 +24,7 @@ class AgentService(
 
     @PostConstruct
     fun setup() {
+        var counter = 0;
         async.atFixedRate(1.milliseconds) {
             sdk.execService()
                 .poll()
@@ -43,6 +44,9 @@ class AgentService(
 //                        if (result is ErrorValue) {
 //                            sdk.execService().fail(request.id, result)
 //                        }
+                        counter++
+
+                        println("Counter: ${counter}")
 ////
                         //FIXME close sandbox after usage
 

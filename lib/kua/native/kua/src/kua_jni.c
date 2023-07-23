@@ -222,3 +222,21 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
 }
 
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[STATE]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(closeConnection)(JNIEnv *env, jobject K) {
+    ENV_AND_STATE
+
+    // FIXME should become a separate function
+
+    // removes state reference
+    lua_getfield(L, LUA_REGISTRYINDEX, "__KState");
+    jobject obj = *(jobject *) lua_touserdata(L, -1);
+    if (obj) {
+        (*env)->DeleteWeakGlobalRef(env, obj);
+    }
+
+    // FIXME remove/ unload loaded jni references
+
+    lua_close(L);
+}

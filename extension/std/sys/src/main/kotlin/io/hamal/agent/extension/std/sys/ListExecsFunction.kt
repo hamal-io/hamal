@@ -14,10 +14,15 @@ class ListExecsFunction(
 ) {
     override fun invoke(ctx: FunctionContext): TableArrayValue {
 
-        val execs = templateSupplier()
-            .get("/v1/execs")
-            .execute(ListExecsResponse::class)
-            .execs
+
+        val execs = try {
+            templateSupplier()
+                .get("/v1/execs")
+                .execute(ListExecsResponse::class)
+                .execs
+        }catch (t: Throwable){
+            listOf<ListExecsResponse.Exec>()
+        }
 
         return ctx.createArrayTable(1).also {
             execs.forEach { exec ->
