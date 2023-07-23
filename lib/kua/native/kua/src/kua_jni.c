@@ -19,7 +19,7 @@ current_env() {
     return current_jni_env;
 }
 
-#define ENV_AND_STATE  current_jni_env = env; lua_State *L = state_from_thread(env, K);
+#define ENV_AND_STATE  current_jni_env = env; lua_State *L = current_state(env, K);
 
 static char const *
 to_raw_string(jstring j_str) {
@@ -225,18 +225,10 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
 
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(loadString)(JNIEnv *env, jobject K, jstring code) {
-//    lua_State *L;
-
-//    JNLUA_ENV(env);
-//    lua_State *L = get_thread(env, K);
-    lua_State *L = state_from_thread(env, K);
-
-    const char *nativeString = (*env)->GetStringUTFChars(env, code, 0);
-    // use your string
-    int result = luaL_loadstring(L, nativeString);
-
-    (*env)->ReleaseStringUTFChars(env, code, nativeString);
-
+    ENV_AND_STATE
+    const char *c_str = to_raw_string(code);
+    int result = luaL_loadstring(L, c_str);
+    release_raw_string(code, c_str);
     return (jint) result;
 }
 
@@ -258,26 +250,21 @@ STATE_METHOD_NAME(closeConnection)(JNIEnv *env, jobject K) {
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(getGlobal)(JNIEnv *env, jobject K, jstring key) {
-    const char *nativeString = (*env)->GetStringUTFChars(env, key, 0);
-    lua_State *L = state_from_thread(env, K);
-    lua_getglobal(L, (const char *) nativeString);
-    (*env)->ReleaseStringUTFChars(env, key, nativeString);
+    const char *c_str = to_raw_string(key);
+    lua_State *L = current_state(env, K);
+    lua_getglobal(L, (const char *) c_str);
+    release_raw_string(key, c_str);
 }
 
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(setGlobal)(JNIEnv *env, jobject K, jstring name) {
-    const char *nativeString = (*env)->GetStringUTFChars(env, name, 0);
-    lua_State *L = state_from_thread(env, K);
+    const char *c_str = to_raw_string(name);
+    lua_State *L = current_state(env, K);
 
 //    if (checkstack(L, JNLUA_MINSTACK)
 //        && checknelems(L, 1)
 //        && (setglobal_name = getstringchars(name))) {
-    lua_setglobal(L, nativeString);
-
-    (*env)->ReleaseStringUTFChars(env, name, nativeString);
-//    }
-//    if (setglobal_name) {
-//        releasestringchars(name, setglobal_name);
-//    }
+    lua_setglobal(L, c_str);
+    release_raw_string(name, c_str);
 }

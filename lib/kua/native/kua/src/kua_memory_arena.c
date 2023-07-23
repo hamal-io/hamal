@@ -26,12 +26,19 @@
 // TODO: instead of accepting specific capacity new_region() should accept the size of the object we want to fit into the region
 // It should be up to new_region() to decide the actual capacity to allocate
 Region
-*new_region(size_t capacity)
-{
-    size_t size_bytes = sizeof(Region) + sizeof(uintptr_t)*capacity;
+*new_region(size_t capacity) {
+    size_t size_bytes = sizeof(Region) + sizeof(uintptr_t) * capacity;
+
+    // FIXME that should be configurable
+    // 20MB hard limit
+    if (size_bytes > 1024 * 1024 * 20) {
+        // causes a big bang
+        return NULL;
+    }
+
     // TODO: it would be nice if we could guarantee that the regions are allocated by ARENA_BACKEND_LIBC_MALLOC are page aligned
     Region *r = malloc(size_bytes);
-    ARENA_ASSERT(r);
+    assert(r);
     r->next = NULL;
     r->count = 0;
     r->capacity = capacity;
@@ -39,8 +46,7 @@ Region
 }
 
 void
-free_region(Region *r)
-{
+free_region(Region *r) {
     free(r);
 }
 
@@ -51,12 +57,11 @@ free_region(Region *r)
 // - How many times allocation exceeded REGION_DEFAULT_CAPACITY
 
 void *
-arena_alloc(Arena *a, size_t size_bytes)
-{
-    size_t size = (size_bytes + sizeof(uintptr_t) - 1)/sizeof(uintptr_t);
+arena_alloc(Arena *a, size_t size_bytes) {
+    size_t size = (size_bytes + sizeof(uintptr_t) - 1) / sizeof(uintptr_t);
 
     if (a->end == NULL) {
-        ARENA_ASSERT(a->begin == NULL);
+        assert(a->begin == NULL);
         size_t capacity = REGION_DEFAULT_CAPACITY;
         if (capacity < size) capacity = size;
         a->end = new_region(capacity);
@@ -68,7 +73,7 @@ arena_alloc(Arena *a, size_t size_bytes)
     }
 
     if (a->end->count + size > a->end->capacity) {
-        ARENA_ASSERT(a->end->next == NULL);
+        assert(a->end->next == NULL);
         size_t capacity = REGION_DEFAULT_CAPACITY;
         if (capacity < size) capacity = size;
         a->end->next = new_region(capacity);
@@ -77,18 +82,18 @@ arena_alloc(Arena *a, size_t size_bytes)
 
     void *result = &a->end->data[a->end->count];
     a->end->count += size;
+
     return result;
 }
 
 void *
-arena_realloc(Arena *a, void *oldptr, size_t oldsz, size_t newsz)
-{
+arena_realloc(Arena *a, void *oldptr, size_t oldsz, size_t newsz) {
     if (newsz <= oldsz) return oldptr;
     void *newptr = arena_alloc(a, newsz);
     char *newptr_char = newptr;
     char *oldptr_char = oldptr;
     for (size_t i = 0; i < oldsz; ++i) {
-        if(oldptr) {
+        if (oldptr) {
             newptr_char[i] = oldptr_char[i];
         }
     }
@@ -96,8 +101,7 @@ arena_realloc(Arena *a, void *oldptr, size_t oldsz, size_t newsz)
 }
 
 void
-arena_reset(Arena *a)
-{
+arena_reset(Arena *a) {
     for (Region *r = a->begin; r != NULL; r = r->next) {
         r->count = 0;
     }
@@ -106,8 +110,7 @@ arena_reset(Arena *a)
 }
 
 void
-arena_free(Arena *a)
-{
+arena_free(Arena *a) {
     Region *r = a->begin;
     while (r) {
         Region *r0 = r;

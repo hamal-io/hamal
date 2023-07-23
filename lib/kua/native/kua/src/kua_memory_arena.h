@@ -3,11 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
-
-#ifndef ARENA_ASSERT
 #include <assert.h>
-#define ARENA_ASSERT assert
-#endif
+
 
 typedef struct Region Region;
 
@@ -22,9 +19,11 @@ typedef struct {
     Region *begin, *end;
 } Arena;
 
-#define REGION_DEFAULT_CAPACITY (8*1024)
+//#define REGION_DEFAULT_CAPACITY (8*1024)
+#define REGION_DEFAULT_CAPACITY (64)
 
 Region *new_region(size_t capacity);
+
 void free_region(Region *r);
 
 // TODO: snapshot/rewind capability for the default_arena
@@ -32,9 +31,11 @@ void free_region(Region *r);
 // - Rewinding should be restoring a->end and a->end->count from the snapshot and
 // setting count-s of all the Region-s after the remembered a->end to 0.
 void *arena_alloc(Arena *a, size_t size_bytes);
+
 void *arena_realloc(Arena *a, void *oldptr, size_t oldsz, size_t newsz);
 
 void arena_reset(Arena *a);
+
 void arena_free(Arena *a);
 
 #endif //KUA_MEMORY_ARENA_H

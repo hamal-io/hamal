@@ -1,9 +1,6 @@
 #ifndef KUA_MEMORY_H
 #define KUA_MEMORY_H
 
-void
-memory_arena_init(size_t max_size);
-
 void *
 memory_arena_allocate(size_t bytes);
 

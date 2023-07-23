@@ -6,7 +6,6 @@
 
 int main(void) {
     lua_State *L = luaL_newstate();
-    memory_arena_init(10000);
     lua_setallocf(L, memory_arena_reallocate, L);
 
     lua_createtable(L, 0, 0);

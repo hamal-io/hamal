@@ -4,11 +4,6 @@
 
 static Arena default_arena = {0};
 
-void
-memory_arena_init(size_t max_size) {
-//    arena_alloc(&default_arena, max_size);
-}
-
 void *
 memory_arena_allocate(size_t bytes) {
     return arena_alloc(&default_arena, bytes);

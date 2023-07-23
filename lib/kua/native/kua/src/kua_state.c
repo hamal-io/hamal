@@ -8,7 +8,6 @@
 #include "kua_state.h"
 #include "kua_memory.h"
 
-static jfieldID current_thread_id = NULL;
 
 static struct jni_ref current_jni_ref = {};
 
@@ -18,8 +17,10 @@ jni_ref(void) {
 }
 
 
+static jfieldID current_thread_id = NULL;
+
 lua_State *
-state_from_thread(JNIEnv *env, jobject K) {
+current_state(JNIEnv *env, jobject K) {
     return (lua_State *) (uintptr_t) (*env)->GetLongField(env, K, current_thread_id);
 }
 
@@ -32,9 +33,9 @@ static void state_to_thread(JNIEnv *env, jobject K, lua_State *L) {
 
 static jclass
 load_class(JNIEnv *env, const char *className) {
-    jclass clazz;
-    clazz = (*env)->FindClass(env, className);
+    jclass clazz = (*env)->FindClass(env, className);
     if (!clazz) {
+        //FIXME PANIC
         return NULL;
     }
     return (*env)->NewGlobalRef(env, clazz);
@@ -53,8 +54,8 @@ setup_references(JNIEnv *env) {
     current_jni_ref.kua_error_class = load_class(env, "io/hamal/lib/kua/KuaError");
     current_jni_ref.kua_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.kua_error_class ,"<init>","(Ljava/lang/String;Ljava/lang/Throwable;)V");
 
-    jclass kua_func_class = load_class(env, "io/hamal/lib/kua/function/FunctionValue");
-    current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/Bridge;)I");
+    current_jni_ref.kua_func_class = load_class(env, "io/hamal/lib/kua/function/FunctionValue");
+    current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, current_jni_ref.kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/Bridge;)I");
     //@formatter:on
 }
 
@@ -76,6 +77,7 @@ cleanup_k_object(lua_State *L) {
 void
 init_connection(JNIEnv *env, jobject K) {
     setup_references(env);
+
 
     lua_State *L;
     L = luaL_newstate();
@@ -104,13 +106,22 @@ init_connection(JNIEnv *env, jobject K) {
     lua_setfield(L, -2, "__metatable");
 
     lua_pushcclosure(L, cleanup_k_object, 0);
-    lua_setfield(L, -2, "__gc");
+    lua_setfield(L, -2, "__close");
+    lua_pop(L, 1);
 
     // FIXME gc should not be required --> use memory default_arena allocator and clean up properly when closing connection
     lua_gc(L, LUA_GCSTOP);
 
     luaL_openlibs(L); // FIXME replace with custom open libs to only import subset of libs/functions
     state_to_thread(env, K, L);
+}
+
+static void unload_jni_ref(JNIEnv *env) {
+    (*env)->DeleteGlobalRef(env, current_jni_ref.illegal_argument_exception_class);
+    (*env)->DeleteGlobalRef(env, current_jni_ref.illegal_state_exception_class);
+    (*env)->DeleteGlobalRef(env, current_jni_ref.error_class);
+    (*env)->DeleteGlobalRef(env, current_jni_ref.kua_error_class);
+    (*env)->DeleteGlobalRef(env, current_jni_ref.kua_func_class);
 }
 
 void
@@ -123,6 +134,8 @@ close_connection(lua_State *L) {
     if (obj) {
         (*env)->DeleteWeakGlobalRef(env, obj);
     }
+
+    unload_jni_ref(env);
 
     // FIXME remove/ unload loaded jni references
     lua_close(L);
