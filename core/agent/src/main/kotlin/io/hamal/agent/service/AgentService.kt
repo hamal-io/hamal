@@ -1,7 +1,7 @@
 package io.hamal.agent.service
 
 import io.hamal.lib.domain.State
-import io.hamal.lib.kua.ExitException
+import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.SandboxFactory
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.NumberValue
@@ -46,7 +46,7 @@ class AgentService(
                         sdk.execService().complete(
                             request.id, State(TableValue())
                         )
-                    } catch (e: ExitException) {
+                    } catch (e: ExitError) {
                         println("Exit ${e.status}")
                         if (e.status == NumberValue(0.0)) {
                             sdk.execService().complete(

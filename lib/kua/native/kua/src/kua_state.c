@@ -120,6 +120,9 @@ setup_references(JNIEnv *env) {
     current_jni_ref.illegal_state_exception_class = referenceclass(env, "java/lang/IllegalStateException");
     current_jni_ref.error_class = referenceclass(env, "java/lang/Error");
 
+    current_jni_ref.kua_error_class = referenceclass(env, "io/hamal/lib/kua/KuaError");
+    current_jni_ref.kua_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.kua_error_class ,"<init>","(Ljava/lang/String;Ljava/lang/Throwable;)V");
+
     jclass kua_func_class = referenceclass(env, "io/hamal/lib/kua/function/FunctionValue");
     current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/Bridge;)I");
     //@formatter:on

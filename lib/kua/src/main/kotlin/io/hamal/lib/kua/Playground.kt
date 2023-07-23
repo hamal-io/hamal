@@ -1,34 +1,49 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.function.Function2In0Out
+import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput2Schema
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.function.NamedFunctionValue
 
 
 fun main() {
     FixedPathLoader.load()
 
     Sandbox().use { sb ->
-        val bridge = sb.bridge
+        val neverCalled = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                called = true
+            }
+
+            var called = false
+        }
+        val throwError = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                throw IllegalArgumentException("some illegal argument")
+            }
+        }
+        sb.register(
+            Extension(
+                name = "test",
+                functions = listOf(
+                    NamedFunctionValue("throw_error", throwError),
+                    NamedFunctionValue("never_called", neverCalled),
+                )
+            )
+        )
+
+        try {
+            sb.runCode(
+                """
+                test.throw_error()
+                test.never_called()
+            """
+            )
+        } catch (t: Throwable) {
+            t.printStackTrace()
+        }
+
+        println("Never called: ${neverCalled.called}")
     }
 }
 
 
-class TableTestFunc : Function2In0Out<TableMapValue, TableMapValue>(
-    FunctionInput2Schema(TableMapValue::class, TableMapValue::class)
-) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapValue, arg2: TableMapValue) {
-
-        arg2["cool"] = StringValue("up")
-
-        println(arg1.set("test", StringValue("works")))
-        println(arg1.set("test1", StringValue("works")))
-        println(arg1.set("test2", StringValue("works")))
-        println(arg1.set("test3", StringValue("works")))
-
-
-    }
-
-}

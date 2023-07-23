@@ -12,11 +12,12 @@ struct jni_ref {
     jclass illegal_argument_exception_class;
     jclass illegal_state_exception_class;
     jclass error_class;
+    jclass kua_error_class;
+    jmethodID kua_error_ctor_id;
 };
 
 struct jni_ref
 jni_ref(void);
-
 
 
 #endif //KUA_STATE_H

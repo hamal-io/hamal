@@ -1,16 +1,94 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.Extension
+import io.hamal.lib.kua.KuaError
 import io.hamal.lib.kua.ResourceLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 
 internal class FunctionTest {
+
+    @Test
+    fun `Functions throws exception`() {
+        val neverCalled = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                called = true
+            }
+
+            var called = false
+        }
+        val throwException = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                throw IllegalArgumentException("you can not win this argument")
+            }
+        }
+        sandbox.register(
+            Extension(
+                name = "test",
+                functions = listOf(
+                    NamedFunctionValue("throw_exception", throwException),
+                    NamedFunctionValue("never_called", neverCalled),
+                )
+            )
+        )
+
+        val exception = assertThrows<KuaError> {
+            sandbox.runCode(
+                """
+                test.throw_exception()
+                test.never_called()
+            """
+            )
+        }
+
+        assertThat(exception.cause, instanceOf(IllegalArgumentException::class.java))
+        assertThat(exception.cause?.message, equalTo("you can not win this argument"))
+        assertThat(neverCalled.called, equalTo(false))
+    }
+
+    @Test
+    fun `Functions throws error`() {
+        val neverCalled = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                called = true
+            }
+
+            var called = false
+        }
+        val throwError = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                throw Error("some error")
+            }
+        }
+        sandbox.register(
+            Extension(
+                name = "test",
+                functions = listOf(
+                    NamedFunctionValue("throw_error", throwError),
+                    NamedFunctionValue("never_called", neverCalled),
+                )
+            )
+        )
+
+        val error = assertThrows<Error> {
+            sandbox.runCode(
+                """
+                test.throw_error()
+                test.never_called()
+            """
+            )
+        }
+        assertThat(error.cause, instanceOf(Error::class.java))
+        assertThat(error.cause?.message, equalTo("some error"))
+        assertThat(neverCalled.called, equalTo(false))
+    }
 
     @Test
     fun `Tests Function0In1Out and Function1In0Out`() {

@@ -1,6 +1,6 @@
 package io.hamal.bootstrap
 
-import io.hamal.lib.kua.ExitException
+import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.value.NumberValue
@@ -30,7 +30,7 @@ class TestExtensionFactory {
 internal object CompleteTestFunction : Function0In0Out() {
     override fun invoke(ctx: FunctionContext) {
         ActiveTest.completeTest()
-        throw ExitException(NumberValue.Zero)
+        throw ExitError(NumberValue.Zero)
     }
 }
 
@@ -39,7 +39,7 @@ internal object FailTestFunction : Function1In0Out<StringValue>(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringValue) {
         ActiveTest.failTest(arg1)
-        throw ExitException(NumberValue.One)
+        throw ExitError(NumberValue.One)
     }
 }
 

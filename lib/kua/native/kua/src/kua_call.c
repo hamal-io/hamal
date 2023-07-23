@@ -7,16 +7,26 @@
 #include "kua_jni_error.h"
 #include "kua_state.h"
 
+static int
+errorHandler(lua_State *L) {
+    JNIEnv *env = current_env();
+    jthrowable throwable = (*env)->ExceptionOccurred(env);
+    if (throwable) {
+        throw_kua_error((*env)->NewStringUTF(env, "TBD"), throwable); //FIXME
+        return 0;
+    }
+    return 1;
+}
+
 enum result
 call(lua_State *L, int argsCount, int resultCount) {
-    //FIXME ensure its actually a function
-//    if (checkarg(argsCount >= 0, "illegal argument count")
-//        && checknelems(L, argsCount + 1)
-//        && checkarg(resultCount >= 0 || resultCount == LUA_MULTRET, "illegal return count")
-//        && (resultCount == LUA_MULTRET || checkstack(L, resultCount - (argsCount + 1)))) {
-    if (lua_pcall(L, argsCount, resultCount, 0) != LUA_OK) {
-        //FIXME throw exception
-//        luaL_error(L, "error running function `f': %s", lua_tostring(L, -1));
+    int error_handler_index = lua_absindex(L, -argsCount - 1);
+    lua_pushcfunction(L, errorHandler);
+    lua_insert(L, error_handler_index);
+    int status = lua_pcall(L, argsCount, resultCount, error_handler_index);
+    lua_remove(L, error_handler_index);
+
+    if (status != LUA_OK) {
         return RESULT_ERROR;
     }
     return RESULT_OK;
@@ -39,6 +49,7 @@ load_func(lua_State *L) {
     return *(jobject *) lua_touserdata(L, -1);
 }
 
+
 int
 call_func_value(lua_State *L) {
     lua_getfield(L, LUA_REGISTRYINDEX, "__KState");
@@ -57,31 +68,14 @@ call_func_value(lua_State *L) {
         return lua_error(L);
     }
 
-    jthrowable throwable;
-
     JNIEnv *env = current_env();
-    int nresults = (*env)->CallIntMethod(env, func_to_call, jni_ref().invoked_by_lua_method_id, kstate);
+    int result = (*env)->CallIntMethod(env, func_to_call, jni_ref().invoked_by_lua_method_id, kstate);
 
+    if ((*env)->ExceptionOccurred(env)) {
+        return lua_error(L);
+    }
 
-//    throwable = (*env)->ExceptionOccurred(env);
-//    if (throwable) {
-//        printf("EXCEPTION occurred\n");
-//        /* Push exception & clear */
-////        luaL_where(L, 1);
-////        where = tostring(L, -1);
-////        luaerror = (*thread_env)->NewObject(thread_env, luaerror_class, luaerror_id, where, throwable);
-////        if (luaerror) {
-////            pushjavaobject(L, luaerror);
-////        } else {
-////            lua_pushliteral(L, "JNI error: NewObject() failed creating Lua error");
-////        }
-////        (*env)->ExceptionClear(env);
-//
-//        /* Error out */
-//        return lua_error(L);
-//    }
-
-    return nresults;
+    return result;
 }
 
 
