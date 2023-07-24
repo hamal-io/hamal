@@ -40,13 +40,8 @@ class FunctionContext(
     override fun setGlobal(name: String, value: TableMapProxyValue) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableArrayProxyValue) = state.setGlobal(name, value)
 
-    override fun tableCreateMap(capacity: Int): TableMapProxyValue {
-        TODO("Not yet implemented")
-    }
-
-    override fun tableCreateArray(capacity: Int): TableArrayProxyValue {
-        TODO("Not yet implemented")
-    }
+    override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
+    override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)
 
     override fun tableInsert(idx: Int) = state.tableInsert(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)

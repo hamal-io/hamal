@@ -15,6 +15,9 @@ interface TableArrayProxyValue : BaseTableProxyValue {
     fun append(value: String): TableLength
     fun append(value: StringValue) = append(value.value)
 
+    fun append(value: TableMapProxyValue): TableLength
+    fun append(value: TableArrayProxyValue): TableLength
+
     fun get(idx: Int): AnyValue
     fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
     fun getBooleanValue(idx: Int): BooleanValue

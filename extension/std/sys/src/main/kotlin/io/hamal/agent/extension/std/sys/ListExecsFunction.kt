@@ -21,16 +21,17 @@ class ListExecsFunction(
                 .execute(ListExecsResponse::class)
                 .execs
         } catch (t: Throwable) {
+            t.printStackTrace()
             listOf<ListExecsResponse.Exec>()
         }
 
-        return ctx.tableCreateArray().also {
+        return ctx.tableCreateArray().also { rs ->
             execs.forEach { exec ->
                 val inner = ctx.tableCreateMap(2)
                 inner["id"] = exec.id.value.value.toString()
                 inner["status"] = exec.status.toString()
-                ctx.state.pushTop(inner.index)
-                ctx.state.tableInsert(1)
+
+                rs.append(inner)
             }
         }
     }

@@ -3,7 +3,7 @@ package io.hamal.bootstrap.config
 import io.hamal.agent.extension.std.log.LogExtensionFactory
 import io.hamal.agent.extension.std.sys.SysExtensionFactory
 import io.hamal.bootstrap.TestExtensionFactory
-import io.hamal.bootstrap.httpTemplate
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.FixedPathLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxFactory
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean
 @TestConfiguration
 class TestAgentConfig {
     @Bean
-    fun httpTemplateSupplier(): HttpTemplateSupplier = { httpTemplate }
+    fun httpTemplateSupplier(): HttpTemplateSupplier = { HttpTemplate("http://localhost:8042") }
 
     @Bean
     fun sandboxFactory(): SandboxFactory = object : SandboxFactory {

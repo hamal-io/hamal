@@ -20,7 +20,6 @@ class InvokeAdhocFunction(
     FunctionOutput1Schema(StringValue::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue): StringValue {
-        println(arg1.getString("code"))
 
         val r = InvokeAdhocReq(
             inputs = InvocationInputs(),

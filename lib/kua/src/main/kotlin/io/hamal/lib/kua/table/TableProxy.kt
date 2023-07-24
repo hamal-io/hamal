@@ -95,6 +95,16 @@ internal data class TableProxyValue(
         return state.tableInsert(index)
     }
 
+    override fun append(value: TableMapProxyValue): TableLength {
+        state.pushTable(value)
+        return state.tableInsert(index)
+    }
+
+    override fun append(value: TableArrayProxyValue): TableLength {
+        state.pushTable(value)
+        return state.tableInsert(index)
+    }
+
     override fun get(idx: Int): AnyValue {
         TODO("Not yet implemented")
     }

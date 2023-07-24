@@ -11,7 +11,6 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.HamalSdk
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.*
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -41,13 +39,13 @@ import kotlin.io.path.name
     ]
 )
 @SpringBootTest(
-    webEnvironment = WebEnvironment.RANDOM_PORT
+    webEnvironment = WebEnvironment.DEFINED_PORT,
+    properties = [
+        "server.port=8042"
+    ]
 )
 @ActiveProfiles("test")
 abstract class BaseHamalTest {
-
-    @LocalServerPort
-    lateinit var localPort: Number
 
     @Autowired
     lateinit var eventBrokerRepository: LogBrokerRepository<*>
@@ -68,29 +66,31 @@ abstract class BaseHamalTest {
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @TestFactory
-    fun run(): List<DynamicTest> = collectFiles().map { testFile ->
-        dynamicTest("${testFile.parent.name}/${testFile.name}") {
-            setupTestEnv()
+    fun run(): List<DynamicTest> {
+        return collectFiles().map { testFile ->
+            dynamicTest("${testFile.parent.name}/${testFile.name}") {
+                setupTestEnv()
 
-            val response = sdk.adhocService().submit(
-                InvokeAdhocReq(
-                    inputs = InvocationInputs(),
-                    code = CodeValue(String(Files.readAllBytes(testFile)))
+                val response = sdk.adhocService().submit(
+                    InvokeAdhocReq(
+                        inputs = InvocationInputs(),
+                        code = CodeValue(String(Files.readAllBytes(testFile)))
+                    )
                 )
-            )
-            ActiveTest.awaitCompletion()
+                ActiveTest.awaitCompletion()
 
-            // Waits until the test exec complete
-            while (execQueryRepository.get(response.execId).status != ExecStatus.Completed) {
-                sleep(1)
+                // Waits until the test exec complete
+                while (execQueryRepository.get(response.execId).status != ExecStatus.Completed) {
+                    sleep(1)
+                }
             }
-        }
-    }.toList()
+        }.toList()
+    }
 
     @PostConstruct
     fun setup() {
-        httpTemplate = HttpTemplate("http://localhost:${localPort}")
-        sdk = DefaultHamalSdk(httpTemplate)
+
+
     }
 
 
@@ -102,10 +102,11 @@ abstract class BaseHamalTest {
         triggerCmdRepository.clear()
     }
 
+    private val httpTemplate = HttpTemplate("http://localhost:8042")
+    private val sdk = DefaultHamalSdk(httpTemplate)
+
 }
 
-lateinit var sdk: HamalSdk
-lateinit var httpTemplate: HttpTemplate
 
 private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
 private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
