@@ -110,7 +110,7 @@ init_connection(JNIEnv *env, jobject K) {
     lua_pop(L, 1);
 
     // FIXME gc should not be required --> use memory default_arena allocator and clean up properly when closing connection
-//    lua_gc(L, LUA_GCSTOP);
+    lua_gc(L, LUA_GCSTOP);
 
     luaL_openlibs(L); // FIXME replace with custom open libs to only import subset of libs/functions
     state_to_thread(env, K, L);

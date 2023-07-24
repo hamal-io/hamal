@@ -50,6 +50,7 @@ interface State {
     fun tableSetRaw(idx: Int): TableLength
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableGetRaw(idx: Int): ValueType
+    fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): ValueType
 
 
 }
@@ -139,6 +140,8 @@ class ClosableState(
     override fun tableSetRaw(idx: Int) = TableLength(bridge.tableSetRaw(idx))
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = TableLength(bridge.tableSetRawIdx(stackIdx, tableIdx))
     override fun tableGetRaw(idx: Int) = ValueType.ValueType(bridge.tableGetRaw(idx))
+    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) =
+        ValueType.ValueType(bridge.tableGetRawIdx(stackIdx, tableIdx))
 
     override fun close() {
         bridge.close()

@@ -10,7 +10,6 @@ import io.hamal.lib.kua.table.TableMapProxyValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
 
 internal class AnyValueTest {
 
@@ -84,7 +83,6 @@ internal class AnyValueTest {
             )
         )
 
-
         sandbox.runCode("test.captor(test.pass_through(test_map))")
 
         val underlying = (captor.result as AnyValue).value
@@ -112,16 +110,14 @@ internal class AnyValueTest {
             )
         )
 
-
         sandbox.runCode("test.captor(test.pass_through(test_array))")
 
         val underlying = (captor.result as AnyValue).value
         require(underlying is TableArrayProxyValue) { "Not a TableArrayProxyValue" }
         assertThat(underlying.length(), equalTo(TableLength(2)))
 
-        fail { "Implement getter / find functions" }
-
-//        assertThat(underlying.getString("key"), equalTo("value"))
+        assertThat(underlying.getInt(1), equalTo(23))
+        assertThat(underlying.getString(2), equalTo("hamal.io"))
     }
 
     private class AnyValuePassThrough : Function1In1Out<AnyValue, AnyValue>(

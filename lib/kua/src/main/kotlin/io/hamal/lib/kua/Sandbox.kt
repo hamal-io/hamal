@@ -5,8 +5,6 @@ import io.hamal.lib.kua.table.TableMapProxyValue
 import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.TableValue
-import io.hamal.lib.kua.value.ValueType
-import io.hamal.lib.kua.value.ValueType.Companion.ValueType
 
 interface SandboxFactory {
     fun create(): Sandbox
@@ -60,7 +58,8 @@ class Sandbox : State, AutoCloseable {
     override fun tableInsert(idx: Int) = state.tableInsert(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
-    override fun tableGetRaw(idx: Int): ValueType = ValueType(bridge.tableGetRaw(idx))
+    override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
+    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
 }
 
 internal fun Bridge.runCode(code: String) {

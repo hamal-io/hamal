@@ -52,6 +52,7 @@ class FunctionContext(
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
+    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
 }
 
 interface FunctionContextFactory {

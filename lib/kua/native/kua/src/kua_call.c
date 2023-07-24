@@ -23,9 +23,7 @@ call(lua_State *L, int argsCount, int resultCount) {
     int error_handler_index = lua_absindex(L, -argsCount - 1);
     lua_pushcfunction(L, errorHandler);
     lua_insert(L, error_handler_index);
-    lua_gc(L, LUA_GCSTOP);
     int status = lua_pcall(L, argsCount, resultCount, error_handler_index);
-    lua_gc(L, LUA_GCRESTART);
 
     lua_remove(L, error_handler_index);
     if (status != LUA_OK) {

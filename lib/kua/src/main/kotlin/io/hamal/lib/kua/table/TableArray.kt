@@ -1,8 +1,6 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.kua.value.BooleanValue
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.value.*
 
 interface TableArrayProxyValue : BaseTableProxyValue {
     fun append(value: Boolean): TableLength
@@ -16,4 +14,15 @@ interface TableArrayProxyValue : BaseTableProxyValue {
 
     fun append(value: String): TableLength
     fun append(value: StringValue) = append(value.value)
+
+    fun get(idx: Int): AnyValue
+    fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
+    fun getBooleanValue(idx: Int): BooleanValue
+    fun getNumberValue(idx: Int): NumberValue
+    fun getInt(idx: Int) = getNumberValue(idx).value.toInt()
+    fun getLong(idx: Int) = getNumberValue(idx).value.toLong()
+    fun getFloat(idx: Int) = getNumberValue(idx).value.toFloat()
+    fun getDouble(idx: Int) = getNumberValue(idx).value.toDouble()
+    fun getString(idx: Int) = getStringValue(idx).value
+    fun getStringValue(idx: Int): StringValue
 }

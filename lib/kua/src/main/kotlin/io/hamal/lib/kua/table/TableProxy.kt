@@ -95,6 +95,28 @@ internal data class TableProxyValue(
         return state.tableInsert(index)
     }
 
+    override fun get(idx: Int): AnyValue {
+        TODO("Not yet implemented")
+    }
+
+    override fun getBooleanValue(idx: Int): BooleanValue {
+        val type = state.tableGetRawIdx(index, idx)
+        type.checkExpectedType(ValueType.Boolean)
+        return state.getBooleanValue(-1)
+    }
+
+    override fun getNumberValue(idx: Int): NumberValue {
+        val type = state.tableGetRawIdx(index, idx)
+        type.checkExpectedType(ValueType.Number)
+        return state.getNumberValue(-1)
+    }
+
+    override fun getStringValue(idx: Int): StringValue {
+        val type = state.tableGetRawIdx(index, idx)
+        type.checkExpectedType(ValueType.String)
+        return state.getStringValue(-1)
+    }
+
     private val bridge = state.bridge
 }
 
