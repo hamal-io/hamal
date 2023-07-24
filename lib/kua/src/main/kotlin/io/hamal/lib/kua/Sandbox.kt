@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ValueType
 import io.hamal.lib.kua.value.ValueType.Companion.ValueType
@@ -28,7 +29,12 @@ class Sandbox : State, AutoCloseable {
     override fun isNotEmpty() = state.isNotEmpty()
     override fun setTop(idx: Int) = state.setTop(idx)
     override fun pushTop(idx: Int) = state.pushTop(idx)
+
     override fun type(idx: Int) = state.type(idx)
+    override fun pushAny(value: AnyValue) = state.pushAny(value)
+    override fun getAnyValue(idx: Int) = state.getAnyValue(idx)
+    override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
+    override fun getBoolean(idx: Int) = state.getBoolean(idx)
 
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)

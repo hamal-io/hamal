@@ -11,11 +11,11 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableArrayValueTest {
+internal class TableArrayProxyValueTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(FalseValue) },

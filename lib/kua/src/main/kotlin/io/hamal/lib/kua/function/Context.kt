@@ -2,10 +2,11 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableArrayProxyValue
+import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableProxyValue
 import io.hamal.lib.kua.table.TableProxyContext
+import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.ValueType
 
 
@@ -21,6 +22,11 @@ class FunctionContext(
     override fun pushTop(idx: Int) = state.pushTop(idx)
 
     override fun type(idx: Int): ValueType = state.type(idx)
+    override fun pushAny(value: AnyValue) = state.pushAny(value)
+    override fun getAnyValue(idx: Int) = state.getAnyValue(idx)
+    override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
+    override fun getBoolean(idx: Int) = state.getBoolean(idx)
+
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
@@ -32,9 +38,9 @@ class FunctionContext(
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
 
     //FIXME move into state?!
-    fun createArrayTable(capacity: Int): TableArrayValue {
+    fun createArrayTable(capacity: Int): TableArrayProxyValue {
         bridge.tableCreate(capacity, 0)
-        return TableProxy(
+        return TableProxyValue(
             TableProxyContext(
                 bridge.top(),
                 state
@@ -43,9 +49,9 @@ class FunctionContext(
     }
 
     //FIXME move into state?!
-    fun createMapTable(capacity: Int): TableMapValue {
+    fun createMapTable(capacity: Int): TableMapProxyValue {
         bridge.tableCreate(0, capacity)
-        return TableProxy(
+        return TableProxyValue(
             TableProxyContext(
                 bridge.top(),
                 state

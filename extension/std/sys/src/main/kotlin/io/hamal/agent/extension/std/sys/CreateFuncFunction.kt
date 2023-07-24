@@ -10,16 +10,16 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.table.TableMapValue
+import io.hamal.lib.kua.table.TableMapProxyValue
 import java.lang.Thread.sleep
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In1Out<TableMapValue, TableMapValue>(
-    FunctionInput1Schema(TableMapValue::class),
-    FunctionOutput1Schema(TableMapValue::class)
+) : Function1In1Out<TableMapProxyValue, TableMapProxyValue>(
+    FunctionInput1Schema(TableMapProxyValue::class),
+    FunctionOutput1Schema(TableMapProxyValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): TableMapValue {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue): TableMapProxyValue {
         try {
 
 //            val name: StringValue = when (val x = arg1["name"]) {

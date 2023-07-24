@@ -1,13 +1,10 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableArrayProxyValue
+import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableProxyValue
 import io.hamal.lib.kua.table.TableProxyContext
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
-import io.hamal.lib.kua.value.Value
+import io.hamal.lib.kua.value.*
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {
@@ -46,15 +43,16 @@ data class FunctionInput2Schema<ARG_1 : Value, ARG_2 : Value>(
     }
 }
 
-fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, index: Int): ARG {
+fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        NumberValue::class -> ctx.getNumberValue(index) as ARG
-        StringValue::class -> ctx.getStringValue(index) as ARG
+        AnyValue::class -> ctx.getAnyValue(idx) as ARG
+        NumberValue::class -> ctx.getNumberValue(idx) as ARG
+        StringValue::class -> ctx.getStringValue(idx) as ARG
         TableValue::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-        TableProxy::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
-        TableMapValue::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
-        TableArrayValue::class -> TableProxy(TableProxyContext(index, ctx.state)) as ARG
+        TableProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
+        TableMapProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
+        TableArrayProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
         else -> TODO()
     }
 }

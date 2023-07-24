@@ -12,11 +12,11 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableMapValueTest {
+internal class TableMapProxyValueTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", TrueValue) },
@@ -56,7 +56,7 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(StringValue("key")) },
@@ -87,7 +87,7 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.getBooleanValue("key") },
             { testInstance.getBooleanValue(StringValue("key")) },
@@ -117,7 +117,7 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.getCodeValue("key") },
             { testInstance.getCodeValue(StringValue("key")) },
@@ -141,7 +141,7 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.getNumberValue("key") },
             { testInstance.getNumberValue(StringValue("key")) },
@@ -180,7 +180,7 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        val testInstance = TableProxy(TableProxyContext(1, state))
+        val testInstance = TableProxyValue(TableProxyContext(1, state))
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringValue("key")) },

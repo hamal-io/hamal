@@ -2,17 +2,24 @@ package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.value.*
-import io.hamal.lib.kua.value.ValueType.Number
 
+@JvmInline
+value class TableLength(val value: Int)
+
+interface BaseTableProxyValue : Value {
+    val index: Int
+
+    fun length(): TableLength
+}
 
 internal data class TableProxyContext(
     val index: Int,
     val state: State
 )
 
-internal class TableProxy(
+internal class TableProxyValue(
     ctx: TableProxyContext
-) : TableMapValue, TableArrayValue {
+) : TableMapProxyValue, TableArrayProxyValue {
     override fun unset(key: String): TableLength {
         bridge.pushString(key)
         bridge.pushNil()
@@ -55,7 +62,7 @@ internal class TableProxy(
     override fun getNumberValue(key: String): NumberValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(Number)
+        type.checkExpectedType(ValueType.Number)
         return NumberValue(bridge.toNumber(-1)).also { bridge.pop(1) }
     }
 
