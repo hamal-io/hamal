@@ -1,6 +1,6 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.table.TableLength
+import io.hamal.lib.kua.table.*
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.value.ValueType.Companion.ValueType
 
@@ -34,10 +34,24 @@ interface State {
     fun pushString(value: String): StackTop
     fun pushString(value: StringValue) = pushString(value.value)
 
+    fun pushTable(value: TableValue): StackTop
+    fun pushTable(proxy: TableMapProxyValue): StackTop
+    fun pushTable(proxy: TableArrayProxyValue): StackTop
+    fun getTable(idx: Int): TableValue
+    fun getTableMapProxy(idx: Int): TableMapProxyValue
+    fun getTableArrayProxy(idx: Int): TableArrayProxyValue
+
+    fun setGlobal(name: String, value: TableMapProxyValue)
+    fun setGlobal(name: String, value: TableArrayProxyValue)
+
+    fun tableCreateMap(capacity: Int = 0): TableMapProxyValue
+    fun tableCreateArray(capacity: Int = 0): TableArrayProxyValue
     fun tableInsert(idx: Int): TableLength
     fun tableSetRaw(idx: Int): TableLength
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableGetRaw(idx: Int): ValueType
+
+
 }
 
 class ClosableState(
@@ -57,6 +71,7 @@ class ClosableState(
             is BooleanValue -> pushBoolean(underlying)
             is NumberValue -> pushNumber(underlying)
             is StringValue -> pushString(underlying)
+            is TableArrayProxyValue -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
@@ -66,6 +81,7 @@ class ClosableState(
             ValueType.Boolean -> AnyValue(getBooleanValue(idx))
             ValueType.Number -> AnyValue(getNumberValue(idx))
             ValueType.String -> AnyValue(getStringValue(idx))
+            ValueType.Table -> AnyValue(getTableMapProxy(idx)) // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
     }
@@ -76,6 +92,48 @@ class ClosableState(
     override fun pushNumber(value: Double) = StackTop(bridge.pushNumber(value))
     override fun getString(idx: Int) = bridge.toString(idx)
     override fun pushString(value: String) = StackTop(bridge.pushString(value))
+
+    override fun pushTable(value: TableValue): StackTop {
+        TODO("Not yet implemented")
+    }
+
+    override fun pushTable(proxy: TableMapProxyValue) = StackTop(bridge.pushTop(proxy.index))
+
+    override fun pushTable(proxy: TableArrayProxyValue) = StackTop(bridge.pushTop(proxy.index))
+
+    override fun getTable(idx: Int): TableValue {
+        TODO("Not yet implemented")
+    }
+
+    override fun getTableMapProxy(idx: Int): TableMapProxyValue = TableProxyValue(idx, this, TableType.Map)
+
+    override fun getTableArrayProxy(idx: Int): TableArrayProxyValue = TableProxyValue(idx, this, TableType.Array)
+
+    override fun setGlobal(name: String, value: TableMapProxyValue) {
+        bridge.pushTop(value.index)
+        bridge.setGlobal(name)
+    }
+
+    override fun setGlobal(name: String, value: TableArrayProxyValue) {
+        bridge.pushTop(value.index)
+        bridge.setGlobal(name)
+    }
+
+    override fun tableCreateMap(capacity: Int): TableMapProxyValue {
+        return TableProxyValue(
+            index = bridge.tableCreate(0, capacity),
+            state = this,
+            type = TableType.Map
+        )
+    }
+
+    override fun tableCreateArray(capacity: Int): TableArrayProxyValue {
+        return TableProxyValue(
+            index = bridge.tableCreate(capacity, 0),
+            state = this,
+            type = TableType.Array
+        )
+    }
 
     override fun tableInsert(idx: Int) = TableLength(bridge.tableInsert(idx))
     override fun tableSetRaw(idx: Int) = TableLength(bridge.tableSetRaw(idx))

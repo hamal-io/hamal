@@ -4,9 +4,8 @@ import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.table.TableArrayProxyValue
 import io.hamal.lib.kua.table.TableMapProxyValue
-import io.hamal.lib.kua.table.TableProxyValue
-import io.hamal.lib.kua.table.TableProxyContext
 import io.hamal.lib.kua.value.AnyValue
+import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.kua.value.ValueType
 
 
@@ -31,33 +30,28 @@ class FunctionContext(
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
+    override fun pushTable(value: TableValue) = state.pushTable(value)
+    override fun pushTable(proxy: TableMapProxyValue) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableArrayProxyValue) = state.pushTable(proxy)
+    override fun getTable(idx: Int) = state.getTable(idx)
+    override fun getTableMapProxy(idx: Int) = state.getTableMapProxy(idx)
+    override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
+
+    override fun setGlobal(name: String, value: TableMapProxyValue) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableArrayProxyValue) = state.setGlobal(name, value)
+
+    override fun tableCreateMap(capacity: Int): TableMapProxyValue {
+        TODO("Not yet implemented")
+    }
+
+    override fun tableCreateArray(capacity: Int): TableArrayProxyValue {
+        TODO("Not yet implemented")
+    }
 
     override fun tableInsert(idx: Int) = state.tableInsert(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
-
-    //FIXME move into state?!
-    fun createArrayTable(capacity: Int): TableArrayProxyValue {
-        bridge.tableCreate(capacity, 0)
-        return TableProxyValue(
-            TableProxyContext(
-                bridge.top(),
-                state
-            )
-        )
-    }
-
-    //FIXME move into state?!
-    fun createMapTable(capacity: Int): TableMapProxyValue {
-        bridge.tableCreate(0, capacity)
-        return TableProxyValue(
-            TableProxyContext(
-                bridge.top(),
-                state
-            )
-        )
-    }
 }
 
 interface FunctionContextFactory {

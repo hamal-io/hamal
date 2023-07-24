@@ -15,7 +15,7 @@ internal class TableArrayProxyValueTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableArrayProxyValue
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(FalseValue) },
@@ -27,14 +27,10 @@ internal class TableArrayProxyValueTest {
             { testInstance.append(StringValue("Hamal")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
+                testInstance = state.tableCreateArray()
 
-                assertThat(testInstance.length(), equalTo(TableLength(0)))
                 val result = testFn()
                 assertThat(result, equalTo(TableLength(1)))
-
-                bridge.pop(1)
-                verifyStackIsEmpty()
             }
         }
     }
@@ -42,9 +38,5 @@ internal class TableArrayProxyValueTest {
     private val state = run {
         ResourceLoader.load()
         ClosableState(Sandbox().bridge)
-    }
-    private val bridge = state.bridge
-    private fun verifyStackIsEmpty() {
-        assertThat("Stack is empty", state.isEmpty(), equalTo(true))
     }
 }

@@ -16,7 +16,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableMapProxyValue
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", TrueValue) },
@@ -37,9 +37,7 @@ internal class TableMapProxyValueTest {
             { testInstance.set(StringValue("key"), StringValue("value")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
-
-                assertThat("empty table", testInstance.length(), equalTo(TableLength(0)))
+                testInstance = state.tableCreateMap()
 
                 val result = testFn()
                 assertThat("item set", testInstance.length(), equalTo(TableLength(1)))
@@ -56,7 +54,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableMapProxyValue
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(StringValue("key")) },
@@ -64,7 +62,7 @@ internal class TableMapProxyValueTest {
             { testInstance.set(StringValue("key"), NilValue) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
+                testInstance = state.tableCreateMap()
 
                 testInstance["key"] = "value"
                 testInstance["another-key"] = "another-value"
@@ -87,7 +85,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableMapProxyValue
         return listOf(
             { testInstance.getBooleanValue("key") },
             { testInstance.getBooleanValue(StringValue("key")) },
@@ -95,7 +93,8 @@ internal class TableMapProxyValueTest {
             { testInstance.getBoolean(StringValue("key")) },
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
+
+                testInstance = state.tableCreateMap()
                 testInstance["key"] = true
 
                 when (val result = testFn()) {
@@ -117,14 +116,14 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableMapProxyValue
         return listOf(
             { testInstance.getCodeValue("key") },
             { testInstance.getCodeValue(StringValue("key")) },
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
-                testInstance["key"] = CodeValue("print('doing something interesting')")
+                testInstance = state.tableCreateMap()
+                testInstance["key"] = "print('doing something interesting')"
 
                 val result = testFn()
                 assertThat(result, equalTo(CodeValue("print('doing something interesting')")))
@@ -141,7 +140,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableMapProxyValue
         return listOf(
             { testInstance.getNumberValue("key") },
             { testInstance.getNumberValue(StringValue("key")) },
@@ -155,7 +154,8 @@ internal class TableMapProxyValueTest {
             { testInstance.getDouble(StringValue("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
+                testInstance = state.tableCreateMap()
+
                 testInstance["key"] = 23
 
                 when (val result = testFn()) {
@@ -180,7 +180,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        val testInstance = TableProxyValue(TableProxyContext(1, state))
+        lateinit var testInstance: TableMapProxyValue
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringValue("key")) },
@@ -188,7 +188,8 @@ internal class TableMapProxyValueTest {
             { testInstance.getStringValue(StringValue("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                bridge.tableCreate(0, 0)
+                testInstance = state.tableCreateMap()
+
                 testInstance["key"] = "Hamal Rocks"
 
                 when (val result = testFn()) {

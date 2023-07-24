@@ -25,11 +25,13 @@ class GetExecFunction(
         if (response is SuccessHttpResponse) {
             return response.result(Exec::class)
                 .let { exec ->
-                    ctx.createMapTable(0).also {
+                    ctx.tableCreateMap(0).also {
                         it["id"] = exec.id.value.value.toString()
                         it["status"] = StringValue(exec.status.name)
 //                        it["inputs"] = exec.inputs.value,
-                        exec.correlation?.correlationId?.value?.let { corId -> it["correlationId"] = corId } // FIXME set nil value to table --> makes the api nicer
+                        exec.correlation?.correlationId?.value?.let { corId ->
+                            it["correlationId"] = corId
+                        } // FIXME set nil value to table --> makes the api nicer
                         it["code"] = exec.code
                     }
 

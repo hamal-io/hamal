@@ -20,13 +20,13 @@ class ListExecsFunction(
                 .get("/v1/execs")
                 .execute(ListExecsResponse::class)
                 .execs
-        }catch (t: Throwable){
+        } catch (t: Throwable) {
             listOf<ListExecsResponse.Exec>()
         }
 
-        return ctx.createArrayTable(1).also {
+        return ctx.tableCreateArray().also {
             execs.forEach { exec ->
-                val inner = ctx.createMapTable(2)
+                val inner = ctx.tableCreateMap(2)
                 inner["id"] = exec.id.value.value.toString()
                 inner["status"] = exec.status.toString()
                 ctx.state.pushTop(inner.index)

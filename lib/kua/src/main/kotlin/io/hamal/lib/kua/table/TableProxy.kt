@@ -8,18 +8,23 @@ value class TableLength(val value: Int)
 
 interface BaseTableProxyValue : Value {
     val index: Int
+    val type: TableType
 
     fun length(): TableLength
 }
 
-internal data class TableProxyContext(
-    val index: Int,
-    val state: State
-)
+enum class TableType {
+    Array,
+    Map
+}
 
-internal class TableProxyValue(
-    ctx: TableProxyContext
+
+internal data class TableProxyValue(
+    override val index: Int,
+    val state: State,
+    override val type: TableType
 ) : TableMapProxyValue, TableArrayProxyValue {
+
     override fun unset(key: String): TableLength {
         bridge.pushString(key)
         bridge.pushNil()
@@ -90,9 +95,7 @@ internal class TableProxyValue(
         return state.tableInsert(index)
     }
 
-    override val index = ctx.index
-    private val state = ctx.state
-    private val bridge = ctx.state.bridge
+    private val bridge = state.bridge
 }
 
 private fun ValueType.checkExpectedType(expected: ValueType) {

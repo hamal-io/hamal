@@ -3,7 +3,7 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.table.TableArrayProxyValue
 import io.hamal.lib.kua.table.TableMapProxyValue
 import io.hamal.lib.kua.table.TableProxyValue
-import io.hamal.lib.kua.table.TableProxyContext
+import io.hamal.lib.kua.table.TableType
 import io.hamal.lib.kua.value.*
 import kotlin.reflect.KClass
 
@@ -50,9 +50,9 @@ fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         NumberValue::class -> ctx.getNumberValue(idx) as ARG
         StringValue::class -> ctx.getStringValue(idx) as ARG
         TableValue::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-        TableProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
-        TableMapProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
-        TableArrayProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
+//        TableProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
+        TableMapProxyValue::class -> TableProxyValue(idx, ctx.state, TableType.Map) as ARG
+        TableArrayProxyValue::class -> TableProxyValue(idx, ctx.state, TableType.Array) as ARG
         else -> TODO()
     }
 }

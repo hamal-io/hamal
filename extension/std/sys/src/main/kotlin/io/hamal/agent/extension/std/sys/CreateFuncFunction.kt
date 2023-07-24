@@ -54,7 +54,7 @@ class CreateFuncFunction(
                 .execute(SubmittedCreateFuncReq::class)
             sleep(500)
 
-            return ctx.createMapTable(1).also {
+            return ctx.tableCreateMap(1).also {
                 it["funcId"] = res.funcId.value.toString()
             }
 
