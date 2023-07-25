@@ -1,5 +1,22 @@
 package io.hamal.agent.extension.web3
 
+import io.hamal.agent.extension.api.ExtensionFactory
+import io.hamal.agent.extension.web3.eth.GetBlockFunction
+import io.hamal.lib.kua.Extension
+import io.hamal.lib.kua.function.NamedFunctionValue
+
+class Web3ExtensionFactory : ExtensionFactory {
+
+    override fun create(): Extension {
+        return Extension(
+            "web3", functions = listOf(
+                NamedFunctionValue("get_block", GetBlockFunction())
+            )
+        )
+    }
+
+}
+
 //import io.hamal.lib.kua.value.*
 //
 //class Web3Extension : Extension {

@@ -141,6 +141,31 @@ abstract class Function1In1Out<
     }
 }
 
+abstract class Function1In2Out<
+        INPUT_ARG_1 : Value,
+        OUTPUT_ARG_1 : Value,
+        OUTPUT_ARG_2 : Value
+        >(
+    override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>,
+    override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>
+) : FunctionValue<
+        FunctionInput1Schema<INPUT_ARG_1>,
+        FunctionInput1<INPUT_ARG_1>,
+        FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
+        FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2>
+        > {
+
+    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1): Pair<OUTPUT_ARG_1, OUTPUT_ARG_2>
+
+    override fun invoke(
+        ctx: FunctionContext,
+        input: FunctionInput1<INPUT_ARG_1>
+    ): FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2> {
+        val result = invoke(ctx, input.arg1)
+        return FunctionOutput2(result.first, result.second)
+    }
+}
+
 abstract class Function2In0Out<
         INPUT_ARG_1 : Value,
         INPUT_ARG_2 : Value

@@ -140,6 +140,32 @@ internal class FunctionTest {
     }
 
     @Test
+    fun `Tests Function1In2Out`() {
+        val captor = Captor2()
+        val transform = object : Function1In2Out<StringValue, StringValue, NumberValue>(
+            FunctionInput1Schema(StringValue::class),
+            FunctionOutput2Schema(StringValue::class, NumberValue::class)
+        ) {
+            override fun invoke(ctx: FunctionContext, arg1: StringValue): Pair<StringValue, NumberValue> {
+                return StringValue(arg1.value.uppercase()) to NumberValue(arg1.value.length)
+            }
+        }
+
+        sandbox.register(
+            Extension(
+                name = "test",
+                functions = listOf(
+                    NamedFunctionValue("transform", transform),
+                    NamedFunctionValue("capture", captor)
+                )
+            )
+        )
+
+        sandbox.runCode("local x,y = test.transform('hamal'); test.capture(x,y)")
+        assertThat(captor.result, equalTo("HAMAL=5.0"))
+    }
+
+    @Test
     fun `Tests Function2In2Out`() {
         val captor = Captor2()
         val transform = object : Function2In2Out<StringValue, NumberValue, StringValue, NumberValue>(

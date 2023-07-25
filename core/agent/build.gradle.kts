@@ -14,6 +14,7 @@ dependencies {
 
     implementation(project(":extension:api"))
     implementation(project(":extension:std:sys"))
+    implementation(project(":extension:web3"))
     implementation(project(":extension:std:log"))
 
     implementation(external.spring.web) {
