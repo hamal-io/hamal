@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -77,7 +78,7 @@ internal class TableTest : BaseStateTest() {
 
 internal sealed class BaseStateTest {
     val testInstance: Bridge = run {
-        ResourceLoader.load()
+        NativeLoader.load(Resources)
         Bridge()
     }
 

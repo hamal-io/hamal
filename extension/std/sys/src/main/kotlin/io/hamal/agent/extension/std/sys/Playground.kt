@@ -1,12 +1,13 @@
 package io.hamal.agent.extension.std.sys
 
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.ResourceLoader
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 
 
 fun main() {
-    ResourceLoader.load()
+    NativeLoader.load(Resources)
     val template = HttpTemplate("http://localhost:8084")
     val sandbox = Sandbox()
 

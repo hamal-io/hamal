@@ -10,6 +10,11 @@ dependencies {
 }
 
 project.sourceSets {
+    main {
+        resources {
+            setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))
+        }
+    }
     integrationTest {
         resources {
             setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))

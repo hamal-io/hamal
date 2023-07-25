@@ -1,11 +1,13 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
+
 
 fun main() {
-    FixedPathLoader.load()
+    NativeLoader.load(BuildDir)
 
 
-        Sandbox().use { sb ->
+    Sandbox().use { sb ->
 
 //            val call = object : Function0In0Out() {
 //                override fun invoke(ctx: FunctionContext) {
@@ -70,7 +72,7 @@ fun main() {
 //        }
 //
 //        println("Never called: ${neverCalled.called}")
-        }
+    }
 
 
 }

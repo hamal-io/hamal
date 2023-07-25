@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.NamedFunctionValue
@@ -40,7 +41,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
 internal sealed class BaseSandboxTest {
     val testInstance = run {
-        ResourceLoader.load()
+        NativeLoader.load(Resources)
         Sandbox()
     }
 

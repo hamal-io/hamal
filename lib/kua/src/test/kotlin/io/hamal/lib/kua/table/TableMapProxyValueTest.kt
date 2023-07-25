@@ -1,7 +1,8 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.ClosableState
-import io.hamal.lib.kua.ResourceLoader
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.value.*
@@ -209,13 +210,10 @@ internal class TableMapProxyValueTest {
         }
     }
 
-
     private val state = run {
-        ResourceLoader.load()
+        NativeLoader.load(Resources)
         ClosableState(Sandbox().bridge)
     }
-
-    private val bridge = state.bridge
 
     private fun verifyStackIsEmpty() {
         assertThat("Stack is empty", state.isEmpty(), equalTo(true))

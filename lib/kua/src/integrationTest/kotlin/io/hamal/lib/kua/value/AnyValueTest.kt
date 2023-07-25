@@ -1,7 +1,8 @@
 package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.ResourceLoader
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableArrayProxyValue
@@ -140,7 +141,7 @@ internal class AnyValueTest {
     }
 
     private val sandbox = run {
-        ResourceLoader.load()
+        NativeLoader.load(Resources)
         Sandbox()
     }
 }

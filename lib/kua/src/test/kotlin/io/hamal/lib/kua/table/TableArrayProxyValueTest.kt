@@ -1,7 +1,8 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.ClosableState
-import io.hamal.lib.kua.ResourceLoader
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.value.FalseValue
 import io.hamal.lib.kua.value.StringValue
@@ -36,7 +37,7 @@ internal class TableArrayProxyValueTest {
     }
 
     private val state = run {
-        ResourceLoader.load()
+        NativeLoader.load(Resources)
         ClosableState(Sandbox().bridge)
     }
 }

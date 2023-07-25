@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
@@ -1135,7 +1136,7 @@ internal class CallTest : BaseBridgeTest() {
 
 internal sealed class BaseBridgeTest {
     val testInstance: Bridge = run {
-        ResourceLoader.load()
+        NativeLoader.load(Resources)
         Bridge()
     }
 

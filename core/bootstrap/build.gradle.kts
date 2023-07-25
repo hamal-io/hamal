@@ -28,6 +28,21 @@ tasks.named<BootJar>("bootJar") {
     launchScript()
 }
 
+project.sourceSets {
+    main {
+        resources {
+            setSrcDirs(project.files("${project.projectDir}/../../lib/kua/src/main/resources/"))
+        }
+    }
+}
+
+tasks.named<Jar>("jar") {
+    from("${project.projectDir}/../../lib/kua/src/main/resources/") {
+        include("*.so")
+        into("$projectDir/build/tmp/")
+    }
+}
+
 @Suppress("UnstableApiUsage")
 testing {
     suites {
