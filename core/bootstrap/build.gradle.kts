@@ -25,8 +25,12 @@ dependencies {
 }
 
 tasks.named<BootJar>("bootJar") {
+    from(project.files("${project.projectDir}/../../lib/kua/src/main/resources/")) {
+        include("*.so")
+    }
     launchScript()
 }
+
 
 val copyKuaLibs = tasks.register<Copy>("copyKuaLibs") {
     from(project.files("${project.projectDir}/../../lib/kua/src/main/resources/")) {
@@ -35,7 +39,9 @@ val copyKuaLibs = tasks.register<Copy>("copyKuaLibs") {
     into(layout.buildDirectory.dir("resources/integrationTest/"))
 }
 
-tasks.named<Test>("integrationTest") { dependsOn(copyKuaLibs) }
+tasks.named<Test>("integrationTest") {
+    dependsOn(copyKuaLibs)
+}
 
 @Suppress("UnstableApiUsage")
 testing {

@@ -89,8 +89,8 @@ internal object JarLoader : Loader {
     override fun load(): Boolean {
         return once {
             try {
-                NativeUtils.loadLibraryFromJar("/BOOT-INF/classes/liblua.so")
-                NativeUtils.loadLibraryFromJar("/BOOT-INF/classes/libkua.so")
+                NativeUtils.loadLibraryFromJar("/liblua.so")
+                NativeUtils.loadLibraryFromJar("/libkua.so")
                 true
             } catch (t: Throwable) {
                 false
