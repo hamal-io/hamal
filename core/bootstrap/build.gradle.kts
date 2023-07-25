@@ -28,20 +28,14 @@ tasks.named<BootJar>("bootJar") {
     launchScript()
 }
 
-project.sourceSets {
-    main {
-        resources {
-            setSrcDirs(project.files("${project.projectDir}/../../lib/kua/src/main/resources/"))
-        }
+val copyKuaLibs = tasks.register<Copy>("copyKuaLibs") {
+    from(project.files("${project.projectDir}/../../lib/kua/src/main/resources/")) {
+        include("*.so")
     }
+    into(layout.buildDirectory.dir("resources/integrationTest/"))
 }
 
-tasks.named<Jar>("jar") {
-    from("${project.projectDir}/../../lib/kua/src/main/resources/") {
-        include("*.so")
-        into("$projectDir/build/tmp/")
-    }
-}
+tasks.named<Test>("integrationTest") { dependsOn(copyKuaLibs) }
 
 @Suppress("UnstableApiUsage")
 testing {

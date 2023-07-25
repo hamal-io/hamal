@@ -9,29 +9,12 @@ dependencies {
     testImplementation(external.hamcrest)
 }
 
-project.sourceSets {
-    main {
-        resources {
-            setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))
-        }
-    }
-    integrationTest {
-        resources {
-            setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))
-        }
-    }
-    test {
-        resources {
-            setSrcDirs(project.files("${project.projectDir}/src/main/resources/"))
-        }
-    }
-}
-
 
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
+@Suppress("UnstableApiUsage")
 testing {
     suites {
         configureEach {

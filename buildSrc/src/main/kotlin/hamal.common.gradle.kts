@@ -23,7 +23,14 @@ testing {
 
             sources {
                 kotlin {
-                    setSrcDirs(listOf("src/integrationTest/kotlin"))
+                    srcDir("src/integrationTest/kotlin")
+                }
+                resources{
+                    setSrcDirs(listOf(
+                        "src/main/resources",
+                        "src/test/resources",
+                        "src/integrationTest/resources"
+                    ))
                 }
             }
 
