@@ -16,7 +16,7 @@ docker {
         maintainer.set("hamal.io docker@hamal.io")
         baseImage.set("openjdk:22-slim-bullseye")
         ports.set(listOf(8081, 8081))
-        images.set(listOf("hamal.io/proxy"))
+        images.set(listOf("hamalio/proxy"))
         jvmArgs.set(listOf("-Dspring.profiles.active=default", "-Xmx2048m"))
     }
 }
