@@ -21,15 +21,15 @@ import io.hamal.lib.web3.eth.http.EthHttpBatchService
 //    }
 //}
 
-class GetBlockFunction : Function1In2Out<NumberValue, TableMapProxyValue, ErrorValue>(
+class GetBlockFunction : Function1In2Out<NumberValue, ErrorValue, TableMapProxyValue>(
     FunctionInput1Schema(NumberValue::class),
-    FunctionOutput2Schema(TableMapProxyValue::class, ErrorValue::class)
+    FunctionOutput2Schema(ErrorValue::class, TableMapProxyValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: NumberValue): Pair<TableMapProxyValue?, ErrorValue?> {
+    override fun invoke(ctx: FunctionContext, arg1: NumberValue): Pair<ErrorValue?, TableMapProxyValue?> {
         println("get block")
         val b = EthHttpBatchService(
             HttpTemplate("http://localhost:8081")
-        ).getBlock(EthUint64(12345678)).execute().first()
+        ).getBlock(EthUint64(arg1.value.toLong())).execute().first()
 
         println(b)
 

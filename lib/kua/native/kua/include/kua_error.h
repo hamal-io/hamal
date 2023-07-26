@@ -4,7 +4,7 @@
 /**
  * Creates a new error table and push it on top of the stack
  * error = {
- *      value = "some error value",
+ *      message = "some error message",
  *      __metatable = {
 *           __type = 9,
  *          __typename = "error",
@@ -13,7 +13,7 @@
  */
 
 int
-error_create(lua_State *L, char const *value);
+error_create(lua_State *L, char const *message);
 
 void
 error_register_metable(lua_State *L);

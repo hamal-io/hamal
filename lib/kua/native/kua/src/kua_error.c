@@ -16,12 +16,12 @@ error_register_metable(lua_State *L) {
 
 
 int
-error_create(lua_State *L, char const *value) {
+error_create(lua_State *L, char const *message) {
     if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
 
     lua_createtable(L, 0, 2);
-    lua_pushstring(L, value);
-    lua_setfield(L, -2, "value");
+    lua_pushstring(L, message);
+    lua_setfield(L, -2, "message");
 
     luaL_getmetatable(L, "__metable_error");
     lua_setmetatable(L, -2);

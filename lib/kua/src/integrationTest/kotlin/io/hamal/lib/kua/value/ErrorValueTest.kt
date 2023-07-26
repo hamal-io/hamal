@@ -29,15 +29,8 @@ internal class ErrorValueTest {
         sandbox.runCode(
             """
             local err = test.error()
-            print(err.value)
-            test.message_captor(err.value)
-            
-            --local x = {
-            --    __type = 20,
-            --    __typename = "error"
-            --}
-            --setmetatable(err,x)
-            
+            test.message_captor(err.message)
+                        
             local mtbl = getmetatable(err)
             test.assert_metatable(mtbl)
         """.trimIndent()
@@ -45,6 +38,32 @@ internal class ErrorValueTest {
 
         assertThat(messageCaptor.result, equalTo(AnyValue(StringValue("Sometimes an error can be a good thing"))))
     }
+
+    @Test
+    fun `Tries to invoke function without argument`() {
+        val errorCaptor = Captor()
+
+        sandbox.register(
+            Extension(
+                name = "test",
+                functions = listOf(
+                    NamedFunctionValue("call", FunctionNeverInvoked()),
+                    NamedFunctionValue("captor", errorCaptor),
+                    NamedFunctionValue("assert_metatable", AssertMetatable)
+                )
+            )
+        )
+
+        sandbox.runCode(
+            """
+            local err = test.call()
+            test.captor(err)
+        """.trimIndent()
+        )
+
+        assertThat(errorCaptor.result, equalTo(AnyValue(ErrorValue("Sometimes an error can be a good thing"))))
+    }
+
 
     private object AssertMetatable : Function1In0Out<TableMapProxyValue>(
         FunctionInput1Schema(TableMapProxyValue::class)
@@ -60,6 +79,15 @@ internal class ErrorValueTest {
     ) {
         override fun invoke(ctx: FunctionContext): ErrorValue {
             return ErrorValue("Sometimes an error can be a good thing")
+        }
+    }
+
+
+    private class FunctionNeverInvoked : Function1In0Out<NumberValue>(
+        FunctionInput1Schema(NumberValue::class)
+    ) {
+        override fun invoke(ctx: FunctionContext, arg1: NumberValue) {
+            TODO("Not yet implemented")
         }
     }
 

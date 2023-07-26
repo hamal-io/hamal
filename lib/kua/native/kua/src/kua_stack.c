@@ -62,9 +62,9 @@ push_nil(lua_State *L) {
 }
 
 int
-push_error(lua_State *L, char const *value) {
+push_error(lua_State *L, char const *message) {
     if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    error_create(L, value);
+    error_create(L, message);
     return top(L);
 }
 
