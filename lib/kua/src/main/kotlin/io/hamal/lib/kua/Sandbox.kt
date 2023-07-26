@@ -4,6 +4,7 @@ import io.hamal.lib.kua.table.TableArrayProxyValue
 import io.hamal.lib.kua.table.TableMapProxyValue
 import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.TableValue
 
 interface SandboxFactory {
@@ -32,11 +33,12 @@ class Sandbox : State, AutoCloseable {
     override fun pushTop(idx: Int) = state.pushTop(idx)
 
     override fun type(idx: Int) = state.type(idx)
+    override fun pushNil() = state.pushNil()
     override fun pushAny(value: AnyValue) = state.pushAny(value)
     override fun getAnyValue(idx: Int) = state.getAnyValue(idx)
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
-
+    override fun pushError(value: ErrorValue) = state.pushError(value)
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)

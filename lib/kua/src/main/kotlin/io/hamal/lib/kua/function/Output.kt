@@ -11,14 +11,14 @@ object FunctionOutput0 : FunctionOutput<FunctionOutput0Schema, FunctionOutput0> 
 }
 
 data class FunctionOutput1<ARG_1 : Value>(
-    val arg1: ARG_1
+    val arg1: ARG_1?
 ) : FunctionOutput<FunctionOutput1Schema<ARG_1>, FunctionOutput1<ARG_1>> {
     override val size = 1
 }
 
 data class FunctionOutput2<ARG_1 : Value, ARG_2 : Value>(
-    val arg1: ARG_1,
-    val arg2: ARG_2
+    val arg1: ARG_1?,
+    val arg2: ARG_2?
 ) : FunctionOutput<FunctionOutput2Schema<ARG_1, ARG_2>, FunctionOutput2<ARG_1, ARG_2>> {
     override val size = 2
 }

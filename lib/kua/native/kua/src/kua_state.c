@@ -4,6 +4,7 @@
 #include <jni.h>
 
 #include "kua_check.h"
+#include "kua_error.h"
 #include "kua_jni.h"
 #include "kua_state.h"
 #include "kua_memory.h"
@@ -111,6 +112,8 @@ init_connection(JNIEnv *env, jobject K) {
 
     // FIXME gc should not be required --> use memory default_arena allocator and clean up properly when closing connection
     lua_gc(L, LUA_GCSTOP);
+
+    error_register_metable(L);
 
     luaL_openlibs(L); // FIXME replace with custom open libs to only import subset of libs/functions
     state_to_thread(env, K, L);

@@ -18,12 +18,14 @@ interface State {
     fun pushTop(idx: Int): StackTop
 
     fun type(idx: Int): ValueType
+    fun pushNil(): StackTop
     fun pushAny(value: AnyValue): StackTop
     fun getAnyValue(idx: Int): AnyValue
     fun pushBoolean(value: Boolean): StackTop
     fun pushBoolean(value: BooleanValue) = pushBoolean(value.value)
     fun getBoolean(idx: Int): Boolean
     fun getBooleanValue(idx: Int) = booleanOf(getBoolean(idx))
+    fun pushError(value: ErrorValue): StackTop
     fun getNumber(idx: Int): Double
     fun getNumberValue(idx: Int) = NumberValue(getNumber(idx))
     fun pushNumber(value: Double): StackTop
@@ -51,8 +53,6 @@ interface State {
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableGetRaw(idx: Int): ValueType
     fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): ValueType
-
-
 }
 
 class ClosableState(
@@ -67,6 +67,8 @@ class ClosableState(
     override fun pushTop(idx: Int): StackTop = StackTop(bridge.pushTop(idx))
 
     override fun type(idx: Int) = ValueType(bridge.type(idx))
+    override fun pushNil() = StackTop(bridge.pushNil())
+
     override fun pushAny(value: AnyValue): StackTop {
         return when (val underlying = value.value) {
             is BooleanValue -> pushBoolean(underlying)
@@ -87,8 +89,11 @@ class ClosableState(
         }
     }
 
+
     override fun pushBoolean(value: Boolean): StackTop = StackTop(bridge.pushBoolean(value))
     override fun getBoolean(idx: Int): Boolean = bridge.toBoolean(idx)
+    override fun pushError(value: ErrorValue) = StackTop(bridge.pushError(value.message))
+
     override fun getNumber(idx: Int) = bridge.toNumber(idx)
     override fun pushNumber(value: Double) = StackTop(bridge.pushNumber(value))
     override fun getString(idx: Int) = bridge.toString(idx)

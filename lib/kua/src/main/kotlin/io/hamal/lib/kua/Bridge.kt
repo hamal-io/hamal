@@ -1,6 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionValue
+import io.hamal.lib.kua.value.ErrorValue
 
 
 class Bridge : AutoCloseable {
@@ -18,6 +19,7 @@ class Bridge : AutoCloseable {
 
     external fun pushBoolean(value: Boolean): Int
     external fun pushFunctionValue(fn: FunctionValue<*, *, *, *>)
+    external fun pushError(message: String): Int
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int
     external fun pushString(value: String): Int
@@ -25,6 +27,7 @@ class Bridge : AutoCloseable {
     external fun pop(total: Int): Int
 
     external fun toBoolean(idx: Int): Boolean
+    external fun toError(idx: Int): ErrorValue
     external fun toNumber(idx: Int): Double
     external fun toString(idx: Int): String
 

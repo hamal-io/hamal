@@ -155,7 +155,7 @@ abstract class Function1In2Out<
         FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2>
         > {
 
-    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1): Pair<OUTPUT_ARG_1, OUTPUT_ARG_2>
+    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1): Pair<OUTPUT_ARG_1?, OUTPUT_ARG_2?>
 
     override fun invoke(
         ctx: FunctionContext,
@@ -203,7 +203,7 @@ abstract class Function2In2Out<
         FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2>
         > {
 
-    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1, arg2: INPUT_ARG_2): Pair<OUTPUT_ARG_1, OUTPUT_ARG_2>
+    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1, arg2: INPUT_ARG_2): Pair<OUTPUT_ARG_1?, OUTPUT_ARG_2?>
 
     override fun invoke(
         ctx: FunctionContext,

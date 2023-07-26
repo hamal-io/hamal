@@ -218,6 +218,12 @@ internal class TypeTest : BaseBridgeTest() {
     fun `Thread`() {
         TODO()
     }
+
+    @Test
+    fun `Error`() {
+        testInstance.pushError("error message")
+        assertThat(testInstance.type(1), equalTo(20))
+    }
 }
 
 @DisplayName("setGlobal()")
@@ -257,11 +263,21 @@ internal class PushBooleanTest : BaseBridgeTest() {
     }
 }
 
-@DisplayName("pushFuncValue()")
-internal class PushFuncValueTest : BaseBridgeTest() {
+@DisplayName("pushFunctionValue()")
+internal class PushFunctionValueTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {
+    }
+}
+
+@DisplayName("pushError()")
+internal class PushErrorTest : BaseBridgeTest() {
+    @Test
+    fun `Pushes error value to stack`() {
+        val result = testInstance.pushError("some error")
+        assertThat(result, equalTo(1))
+        assertThat(testInstance.top(), equalTo(1))
     }
 }
 
@@ -428,6 +444,14 @@ internal class ToBooleanTest : BaseBridgeTest() {
         testInstance.pushBoolean(false)
         assertThat(testInstance.toBoolean(-1), equalTo(false))
         assertThat(testInstance.top(), equalTo(2))
+    }
+}
+
+@DisplayName("toErrorValue()")
+internal class ToErrorValueTest : BaseBridgeTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
     }
 }
 

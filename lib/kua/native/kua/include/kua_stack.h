@@ -22,6 +22,9 @@ int
 push_nil(lua_State *L);
 
 int
+push_error(lua_State *L, char const *message);
+
+int
 push_boolean(lua_State *L, int value);
 
 int
@@ -32,6 +35,9 @@ push_string(lua_State *L, char const *value);
 
 int
 push_func_value(lua_State *L, void *func);
+
+char const *
+to_error(lua_State *L, int idx);
 
 int
 to_boolean(lua_State *L, int idx);

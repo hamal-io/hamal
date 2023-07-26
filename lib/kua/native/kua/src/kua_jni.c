@@ -91,6 +91,15 @@ STATE_METHOD_NAME(pushNil)(JNIEnv *env, jobject K) {
 }
 
 JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushError)(JNIEnv *env, jobject K, jstring value) {
+    ENV_AND_STATE
+    char const *lua_string = to_raw_string(value);
+    jint result = push_error(L, lua_string);
+    release_raw_string(value, lua_string);
+    return result;
+}
+
+JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean value) {
     ENV_AND_STATE
     return (jint) push_boolean(L, value);
@@ -116,6 +125,14 @@ STATE_METHOD_NAME(pushFunctionValue)(JNIEnv *env, jobject K, jobject func) {
     ENV_AND_STATE
     return push_func_value(L, func);
 }
+
+JNIEXPORT jstring JNICALL
+STATE_METHOD_NAME(toError)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    char const *str = to_string(L, idx);
+    return (*env)->NewStringUTF(env, str);
+}
+
 
 JNIEXPORT jboolean JNICALL
 STATE_METHOD_NAME(toBoolean)(JNIEnv *env, jobject K, jint idx) {

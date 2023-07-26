@@ -1,11 +1,12 @@
 package io.hamal.agent.extension.web3.eth
 
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.function.Function1In1Out
+import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.function.FunctionOutput1Schema
+import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
@@ -20,11 +21,11 @@ import io.hamal.lib.web3.eth.http.EthHttpBatchService
 //    }
 //}
 
-class GetBlockFunction : Function1In1Out<NumberValue, TableMapProxyValue>(
+class GetBlockFunction : Function1In2Out<NumberValue, TableMapProxyValue, ErrorValue>(
     FunctionInput1Schema(NumberValue::class),
-    FunctionOutput1Schema(TableMapProxyValue::class)
+    FunctionOutput2Schema(TableMapProxyValue::class, ErrorValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: NumberValue): TableMapProxyValue {
+    override fun invoke(ctx: FunctionContext, arg1: NumberValue): Pair<TableMapProxyValue?, ErrorValue?> {
         println("get block")
         val b = EthHttpBatchService(
             HttpTemplate("http://localhost:8081")
@@ -32,6 +33,7 @@ class GetBlockFunction : Function1In1Out<NumberValue, TableMapProxyValue>(
 
         println(b)
 
-        return ctx.tableCreateMap(0)
+//        return ctx.tableCreateMap(0) to null
+        return null to null
     }
 }

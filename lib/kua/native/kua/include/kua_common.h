@@ -12,7 +12,8 @@ enum type {
     TABLE_TYPE = 5,
     FUNCTION_TYPE = 6,
     USER_DATA_TYPE = 7,
-    THREAD_TYPE = 8
+    THREAD_TYPE = 8,
+    ERROR_TYPE = 20
 };
 
 enum result {
@@ -20,5 +21,8 @@ enum result {
     RESULT_ERROR
 };
 
+
+char const*
+typename(enum type type);
 
 #endif //KUA_COMMON_H
