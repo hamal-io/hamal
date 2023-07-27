@@ -60,7 +60,8 @@ class DefaultEthRequestHandler(
         }
 
         val batchService = EthHttpBatchService(
-            HttpTemplate("https://cloudflare-eth.com")
+//            HttpTemplate("https://cloudflare-eth.com")
+            HttpTemplate("http://localhost:8081")
         )
 
         requests.forEach { request ->

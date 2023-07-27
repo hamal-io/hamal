@@ -1,6 +1,6 @@
 package io.hamal.app.proxy.cache
 
-import io.hamal.app.proxy.repository.BlockRepository
+import io.hamal.app.proxy.repository.DepBlockRepository
 import io.hamal.app.proxy.repository.ReceiptRepository
 import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.web3.eth.abi.type.EthHash
@@ -19,7 +19,7 @@ interface Cache {
 }
 
 class LruCache(
-    private val blockRepository: BlockRepository,
+    private val blockRepository: DepBlockRepository,
     private val receiptRepository: ReceiptRepository
 ) : Cache {
 

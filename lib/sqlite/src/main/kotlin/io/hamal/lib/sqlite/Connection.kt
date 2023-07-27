@@ -36,6 +36,15 @@ class NamedPreparedStatementDelegate(
 
     operator fun set(
         param: String,
+        value: UShort
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value.toInt()
+        return this
+    }
+
+
+    operator fun set(
+        param: String,
         value: BigInteger
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
@@ -55,6 +64,14 @@ class NamedPreparedStatementDelegate(
         value: Long
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
+        return this
+    }
+
+    operator fun set(
+        param: String,
+        value: ULong
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value.toLong()
         return this
     }
 

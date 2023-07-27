@@ -1,0 +1,69 @@
+package io.hamal.app.proxy.repository
+
+import io.hamal.lib.web3.eth.domain.EthBlock
+import io.hamal.lib.web3.eth.encodeRunLength
+import io.hamal.lib.web3.util.Web3Encoding
+
+interface ProxyRepository {
+    fun store(block: EthBlock)
+}
+
+
+class SqliteProxyRepository(
+    val addressRepository: AddressRepository,
+    val blockRepository: BlockRepository,
+    val hashRepository: HashRepository,
+    val transactionRepository: TransactionRepository
+) : ProxyRepository {
+    override fun store(block: EthBlock) {
+// FIXME locking?
+
+        val resolvedHashes = hashRepository.resolve(
+            listOf(
+                block.hash,
+                block.parentHash,
+            )
+        ).toMap()
+
+        val resolvedAddresses = addressRepository.resolve(
+            listOf(block.miner)
+                .plus(block.transactions.map { it.from })
+                .plus(block.transactions.mapNotNull { it.to })
+        ).toMap()
+
+
+        blockRepository.store(
+            PersistedEthBlock(
+                id = block.number.value.toLong().toULong(),
+                hashId = resolvedHashes[block.hash]!!,
+                parentHashId = resolvedHashes[block.parentHash]!!,
+                minerAddressId = resolvedAddresses[block.miner]!!,
+                gasUsed = block.gasUsed.value.toLong().toULong(),
+                timestamp = block.timestamp.value.toLong().toULong()
+            )
+        )
+
+        block.transactions.forEachIndexed { index, tx ->
+            val encoded = Web3Encoding.encodeRunLength(tx.input)
+            val input = if (encoded.size > 2_000) {
+                ByteArray(0)
+            } else {
+                encoded
+            }
+
+            transactionRepository.store(
+                PersistedEthTransaction(
+                    type = tx.type.value.toByte(),
+                    blockId = block.number.value.toLong().toULong(),
+                    blockIndex = index.toUShort(),
+                    fromAddressId = resolvedAddresses[tx.from]!!,
+                    toAddressId = tx.to?.let { resolvedAddresses[it] } ?: 0UL,
+                    input = input,
+                    value = tx.value.value.toByteArray(),
+                    gas = tx.gas.value.toLong().toULong(),
+                )
+            )
+        }
+
+    }
+}

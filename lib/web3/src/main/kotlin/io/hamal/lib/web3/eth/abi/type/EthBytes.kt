@@ -23,11 +23,10 @@ sealed interface EthBytes : EthType<ByteArray> {
 }
 
 @Serializable(with = EthBytes32.Serializer::class)
-data class EthBytes32(
+class EthBytes32(
     override val value: ByteArray
 ) : EthBytes {
     constructor(prefixedHexString: EthPrefixedHexString) : this(prefixedHexString.toByteWindow().next())
-
     override val numberOfBytes = 32
 
     object Serializer : KSerializer<EthBytes32> {
@@ -36,6 +35,20 @@ data class EthBytes32(
         override fun serialize(encoder: Encoder, value: EthBytes32) {
             encoder.encodeString(String(value.value))
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as EthBytes32
+        if (!value.contentEquals(other.value)) return false
+        return numberOfBytes == other.numberOfBytes
+    }
+
+    override fun hashCode(): Int {
+        var result = value.contentHashCode()
+        result = 31 * result + numberOfBytes
+        return result
     }
 }
 

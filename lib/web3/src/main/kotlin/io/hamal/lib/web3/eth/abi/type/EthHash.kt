@@ -14,6 +14,7 @@ data class EthHash(
 ) : EthType<EthBytes32> {
     constructor(byteArray: ByteArray) : this(EthBytes32(byteArray))
     constructor(prefixedHexString: EthPrefixedHexString) : this(EthBytes32(prefixedHexString))
+    constructor(prefixedHexString: String) : this(EthBytes32(EthPrefixedHexString(prefixedHexString)))
 
     override fun toByteArray() = value.toByteArray()
 
@@ -40,5 +41,7 @@ data class EthHash(
             encoder.encodeString(value.toPrefixedHexString().value)
         }
     }
+
+
 
 }

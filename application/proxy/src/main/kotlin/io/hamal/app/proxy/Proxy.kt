@@ -9,3 +9,4 @@ class Proxy
 fun main(args: Array<String>) {
     runApplication<Proxy>(*args)
 }
+

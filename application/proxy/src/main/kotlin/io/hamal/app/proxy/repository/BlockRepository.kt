@@ -2,30 +2,22 @@ package io.hamal.app.proxy.repository
 
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.web3.eth.abi.type.*
-import io.hamal.lib.web3.eth.domain.EthBlock
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromByteArray
-import kotlinx.serialization.encodeToByteArray
-import kotlinx.serialization.protobuf.ProtoBuf
-import java.math.BigInteger
 import java.nio.file.Path
 
 interface BlockRepository {
-    fun findBlock(number: EthUint64): EthBlock?
-    fun findBlock(hash: EthHash): EthBlock?
-    fun findBlockHashOfTransaction(hash: EthHash): EthHash?
-    fun store(block: EthBlock)
+    //    fun findBlock(number: EthUint64): EthBlock?
+//    fun findBlock(hash: EthHash): EthBlock?
+//    fun findBlockHashOfTransaction(hash: EthHash): EthHash?
+    fun store(block: PersistedEthBlock)
 }
 
 @OptIn(ExperimentalSerializationApi::class)
 class SqliteBlockRepository(
     val path: Path,
-    private val protobuf: ProtoBuf
 ) : BaseSqliteRepository(object : Config {
     override val path = path
-    override val filename: String = "blocks.db"
+    override val filename: String = "new-blocks.db"
 }), BlockRepository {
 
     override fun setupConnection(connection: Connection) {
@@ -39,24 +31,26 @@ class SqliteBlockRepository(
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS blocks (
-                 block_number   NUMERIC NOT NULL,
-                 block_hash     BLOB NOT NULL,
-                 block          BLOB NOT NULL,
-                 PRIMARY KEY    (block_hash),
-                 UNIQUE         (block_number)
+                 id               INTEGER PRIMARY KEY,
+                 hash_id          INTEGER NOT NULL,
+                 parent_hash_id   INTEGER NOT NULL,
+                 miner_address_id INTEGER NOT NULL,
+                 gas_used         INTEGER NOT NULL,
+                 timestamp        INTEGER NOT NULL,
+                 UNIQUE             (hash_id)
             );
         """.trimIndent()
         )
 
-        connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS transactions (
-                 tx_hash        BLOB NOT NULL,
-                 block_hash     BLOB NOT NULL,
-                 PRIMARY KEY    (tx_hash)
-            );
-        """.trimIndent()
-        )
+//        connection.execute(
+//            """
+//            CREATE TABLE IF NOT EXISTS transactions (
+//                 tx_hash        BLOB NOT NULL,
+//                 block_hash     BLOB NOT NULL,
+//                 PRIMARY KEY    (tx_hash)
+//            );
+//        """.trimIndent()
+//        )
     }
 
     override fun clear() {
@@ -64,132 +58,54 @@ class SqliteBlockRepository(
         connection.execute("DELETE FROM transactions")
     }
 
-    override fun findBlock(number: EthUint64): EthBlock? {
-        return connection.executeQueryOne("SELECT block FROM blocks WHERE block_number = :blockNumber") {
-            query { set("blockNumber", number) }
-            map { rs ->
-                protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block").zlibDecompress()).decode()
-            }
-        }
-    }
+//    override fun findBlock(number: EthUint64): EthBlock? {
+//        TODO()
+//    }
+//
+//    override fun findBlock(hash: EthHash): EthBlock? {
+////        return connection.executeQueryOne("SELECT block FROM blocks WHERE block_hash = :blockHash") {
+////            query { set("blockHash", hash) }
+////            map { rs ->
+////                protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block").zlibDecompress()).decode()
+////            }
+////        }
+//        TODO()
+//    }
+//
+//    override fun findBlockHashOfTransaction(hash: EthHash): EthHash? {
+////        return connection.executeQueryOne("SELECT block_hash FROM transactions WHERE tx_hash = :txHash") {
+////            query { set("txHash", hash) }
+////            map { rs -> EthHash(EthPrefixedHexString(rs.getString("block_hash"))) }
+////        }
+//        TODO()
+//    }
 
-    override fun findBlock(hash: EthHash): EthBlock? {
-        return connection.executeQueryOne("SELECT block FROM blocks WHERE block_hash = :blockHash") {
-            query { set("blockHash", hash) }
-            map { rs ->
-                protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block").zlibDecompress()).decode()
-            }
-        }
-    }
+    override fun store(
+        block: PersistedEthBlock
+    ) {
 
-    override fun findBlockHashOfTransaction(hash: EthHash): EthHash? {
-        return connection.executeQueryOne("SELECT block_hash FROM transactions WHERE tx_hash = :txHash") {
-            query { set("txHash", hash) }
-            map { rs -> EthHash(EthPrefixedHexString(rs.getString("block_hash"))) }
-        }
-    }
-
-    override fun store(block: EthBlock) {
         connection.tx {
-            execute("INSERT INTO blocks(block_number, block_hash, block) VALUES( :blockNumber, :blockHash, :block )") {
-                set("blockNumber", block.number)
-                set("blockHash", block.hash)
-                set("block", protobuf.encodeToByteArray<PersistedEthBlock>(block.encode()).zlibCompress())
-            }
-
-            block.transactions.forEach { transaction ->
-                execute("INSERT INTO transactions(tx_hash, block_hash) VALUES( :txHash, :blockHash)") {
-                    set("txHash", transaction.hash)
-                    set("blockHash", block.hash)
-                }
+            execute(
+                "INSERT OR IGNORE INTO blocks(id, hash_id, parent_hash_id, miner_address_id,  gas_used, timestamp) " +
+                        "VALUES( :id, :hashId, :parentHashId, :minerAddressId, :gasUsed, :timestamp )"
+            ) {
+                set("id", block.id)
+                set("hashId", block.hashId)
+                set("parentHashId", block.parentHashId)
+                set("minerAddressId", block.minerAddressId)
+                set("gasUsed", block.gasUsed)
+                set("timestamp", block.timestamp)
             }
         }
     }
 }
 
-internal fun EthBlock.encode(): PersistedEthBlock {
-    return PersistedEthBlock(
-        number = number.value.toLong(),
-        hash = hash.value.toByteArray(),
-        parentHash = parentHash.value.toByteArray(),
-        sha3Uncles = sha3Uncles.toByteArray(),
-        miner = miner.value.value.toByteArray(),
-        stateRoot = stateRoot.toByteArray(),
-        transactionsRoot = transactionsRoot.toByteArray(),
-        receiptsRoot = receiptsRoot.toByteArray(),
-        gasLimit = gasLimit.value.toLong(),
-        gasUsed = gasUsed.value.toLong(),
-        timestamp = timestamp.value.toLong(),
-        extraData = extraData.toByteArray(),
-        transactions = transactions.map(EthBlock.Transaction::encode)
-    )
-}
 
-internal fun EthBlock.Transaction.encode(): PersistedEthBlock.Transaction {
-    return PersistedEthBlock.Transaction(
-        type = type.value.toByte(),
-        hash = hash.value.toByteArray(),
-        from = from.value.value.toByteArray(),
-        to = to?.value?.value?.toByteArray() ?: ByteArray(0),
-        input = input.value.toByteArray(),
-        value = value.toByteArray(),
-        gas = gas.value.toLong(),
-        gasPrice = gasPrice.value.toLong(),
-    )
-}
-
-internal fun PersistedEthBlock.decode() = EthBlock(
-    number = EthUint64(number),
-    hash = EthHash(hash),
-    parentHash = EthHash(parentHash),
-    sha3Uncles = EthHash(sha3Uncles),
-    miner = EthAddress(BigInteger(miner)),
-    stateRoot = EthHash(stateRoot),
-    transactionsRoot = EthHash(transactionsRoot),
-    receiptsRoot = EthHash(receiptsRoot),
-    gasLimit = EthUint64(gasLimit),
-    gasUsed = EthUint64(gasUsed),
-    timestamp = EthUint64(timestamp),
-    extraData = EthBytes32(extraData),
-    transactions = transactions.map(PersistedEthBlock.Transaction::decode)
+data class PersistedEthBlock(
+    val id: ULong,
+    val hashId: ULong,
+    val parentHashId: ULong,
+    val minerAddressId: ULong,
+    val gasUsed: ULong,
+    val timestamp: ULong
 )
-
-internal fun PersistedEthBlock.Transaction.decode() = EthBlock.Transaction(
-    type = EthUint8(type),
-    hash = EthHash(hash),
-    from = EthAddress(BigInteger(from)),
-    to = if (to.isEmpty()) null else EthAddress(BigInteger(to)),
-    input = EthPrefixedHexString(input),
-    value = EthUint256(BigInteger(value)),
-    gas = EthUint64(gas),
-    gasPrice = EthUint64(gasPrice),
-)
-
-@Serializable
-internal data class PersistedEthBlock(
-    val number: Long,
-    val hash: ByteArray,
-    val parentHash: ByteArray,
-    val sha3Uncles: ByteArray,
-    val miner: ByteArray,
-    val stateRoot: ByteArray,
-    val transactionsRoot: ByteArray,
-    val receiptsRoot: ByteArray,
-    val gasLimit: Long,
-    val gasUsed: Long,
-    val timestamp: Long,
-    val extraData: ByteArray,
-    val transactions: List<Transaction>
-) {
-    @Serializable
-    data class Transaction(
-        val type: Byte,
-        val hash: ByteArray,
-        val from: ByteArray,
-        val to: ByteArray,
-        val input: ByteArray,
-        val value: ByteArray,
-        val gas: Long,
-        val gasPrice: Long,
-    )
-}
