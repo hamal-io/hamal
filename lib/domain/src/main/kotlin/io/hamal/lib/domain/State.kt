@@ -13,5 +13,9 @@ class State(override val value: TableValue = TableValue()) : Inputs() {
 @Serializable
 data class CorrelatedState(
     val correlation: Correlation,
-    val state: State
-)
+    val value: State
+) {
+
+    operator fun get(key: String) = value.value[key]
+
+}

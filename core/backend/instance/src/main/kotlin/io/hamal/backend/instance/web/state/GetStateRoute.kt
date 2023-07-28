@@ -7,14 +7,16 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class GetStateRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val stateQueryRepository: StateQueryRepository
 ) {
-    @GetMapping("/v1/funcs/{funcId}/state/{correlationId}")
+    @GetMapping("/v1/funcs/{funcId}/states/{correlationId}")
     fun getState(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("correlationId") correlationId: CorrelationId,

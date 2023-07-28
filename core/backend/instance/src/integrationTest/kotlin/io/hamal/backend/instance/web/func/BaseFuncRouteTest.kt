@@ -12,12 +12,12 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseFuncRouteTest : BaseRouteTest() {
     fun createFunc(req: CreateFuncReq): SubmittedCreateFuncReq {
-        val createTopicResponse = httpTemplate.post("/v1/funcs").body(req).execute()
+        val response = httpTemplate.post("/v1/funcs").body(req).execute()
 
-        assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(response is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(SubmittedCreateFuncReq::class)
+        return response.result(SubmittedCreateFuncReq::class)
     }
 
     fun listFuncs(): ListFuncsResponse {

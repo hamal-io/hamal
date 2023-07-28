@@ -50,7 +50,7 @@ class CompleteExecHandler(
             stateCmdRepository.set(
                 cmdId, CorrelatedState(
                     correlation = correlation,
-                    state = state
+                    value = state
                 )
             )
         }

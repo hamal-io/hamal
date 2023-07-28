@@ -10,7 +10,9 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = CorrelationId.Serializer::class)
-class CorrelationId(override val value: String) : ValueObject.ComparableImpl<String>() {
+class CorrelationId(
+    override val value: String
+) : ValueObject.ComparableImpl<String>() {
     init {
         CorrelationIdValidator.validate(value)
     }

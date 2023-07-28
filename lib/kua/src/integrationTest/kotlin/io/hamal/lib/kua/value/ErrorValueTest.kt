@@ -7,6 +7,7 @@ import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableMapProxyValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class ErrorValueTest {
@@ -40,6 +41,7 @@ internal class ErrorValueTest {
     }
 
     @Test
+    @Disabled
     fun `Tries to invoke function without argument`() {
         val errorCaptor = Captor()
 

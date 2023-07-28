@@ -8,3 +8,4 @@ import kotlinx.serialization.Serializable
 data class FuncCreatedEvent(
     val func: Func,
 ) : SystemEvent()
+

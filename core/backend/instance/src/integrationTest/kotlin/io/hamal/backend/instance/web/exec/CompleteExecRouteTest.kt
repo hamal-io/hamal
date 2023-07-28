@@ -99,7 +99,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         val exec = (execQueryRepository.get(execId) as CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(state, equalTo(State(TableValue("value" to NumberValue(13.37)))))
+            assertThat(value, equalTo(State(TableValue("value" to NumberValue(13.37)))))
         }
     }
 
@@ -107,7 +107,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         val exec = (execQueryRepository.get(execId))
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(state, equalTo(State()))
+            assertThat(value, equalTo(State()))
         }
     }
 

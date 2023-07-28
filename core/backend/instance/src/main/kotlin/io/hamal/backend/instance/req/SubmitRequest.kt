@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.req
 
 import io.hamal.backend.repository.api.ReqCmdRepository
+import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
@@ -121,9 +122,10 @@ class SubmitRequest(
         SubmittedSetStateReq(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            funcId = setStateReq.funcId,
-            correlationId = setStateReq.correlationId,
-            state = setStateReq.state
+            state = CorrelatedState(
+                correlation = setStateReq.correlation,
+                value = setStateReq.value
+            )
         ).also(reqCmdRepository::queue)
 }
 
