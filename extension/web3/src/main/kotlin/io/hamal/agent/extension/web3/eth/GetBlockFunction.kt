@@ -29,7 +29,7 @@ class GetBlockFunction : Function1In2Out<NumberValue, ErrorValue, TableMapProxyV
     override fun invoke(ctx: FunctionContext, arg1: NumberValue): Pair<ErrorValue?, TableMapProxyValue?> {
         println("get block")
         val b = EthHttpBatchService(
-            HttpTemplate("http://localhost:8081")
+            HttpTemplate("http://proxy:8000")
         ).getBlock(EthUint64(arg1.value.toLong())).execute().first() as EthGetBlockResp
 
 //        println(b)

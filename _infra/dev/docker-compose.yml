@@ -1,7 +1,21 @@
+version: "3.5"
+networks:
+  hamalnet:
+    ipam:
+      config:
+        - subnet: 10.42.0.0/16
 services:
   proxy:
     image: hamalio/proxy
     ports:
-      - "8081:8081"
+      - "0.0.0.0:8000:8000"
     volumes:
-      - "/hamal:/tmp/hamal"
+      - "/hamal/proxy/eth:/tmp/hamal/db"
+    networks:
+      - hamalnet
+  core:
+    image: hamalio/core
+    ports:
+      - "0.0.0.0:8008:8008"
+    networks:
+      - hamalnet
