@@ -18,7 +18,7 @@ class EthExtensionFactory : ExtensionFactory {
             name = "eth",
             config = config,
             functions = listOf(
-                NamedFunctionValue("get_block", GetBlockFunction()),
+                NamedFunctionValue("get_block", GetBlockFunction(config)),
             ),
         )
     }
