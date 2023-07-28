@@ -6,9 +6,20 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
     kotlin("plugin.spring").version("1.8.10")
+    id("com.bmuschko.docker-spring-boot-application") version "9.3.1"
 }
 
 apply(plugin = "io.spring.dependency-management")
+
+docker {
+    springBootApplication {
+        maintainer.set("hamal.io docker@hamal.io")
+        baseImage.set("openjdk:22-slim-bullseye")
+        ports.set(listOf(8008, 8008))
+        images.set(listOf("hamalio/core"))
+        jvmArgs.set(listOf("-Dspring.profiles.active=default,memory", "-Xmx2048m"))
+    }
+}
 
 dependencies {
     implementation(project(":lib:sdk"))

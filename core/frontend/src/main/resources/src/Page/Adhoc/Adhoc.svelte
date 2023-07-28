@@ -55,7 +55,7 @@
     onMount(getExecutions);
 
     async function getExecutions() {
-        fetch("http://localhost:8084/v1/execs?limit=100")
+        fetch("http://localhost:8008/v1/execs?limit=100")
             .then(response => response.json())
             .then(data => {
                 execs.set(data.execs);
@@ -67,7 +67,7 @@
 
     function adhoc() {
         console.log("adhoc execution")
-        fetch("http://localhost:8084/v1/adhoc", {
+        fetch("http://localhost:8008/v1/adhoc", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

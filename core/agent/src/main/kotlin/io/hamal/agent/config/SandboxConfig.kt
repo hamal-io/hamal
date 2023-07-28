@@ -19,7 +19,7 @@ open class SandboxConfig {
     open fun sandboxFactory(): SandboxFactory = object : SandboxFactory {
         override fun create(): Sandbox {
             NativeLoader.load(Jar)
-            val template = HttpTemplate("http://localhost:8084")
+            val template = HttpTemplate("http://localhost:8008")
             return Sandbox().also {
                 it.register(LogExtensionFactory().create())
                 it.register(SysExtensionFactory { template }.create())

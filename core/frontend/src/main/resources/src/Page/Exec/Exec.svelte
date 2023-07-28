@@ -6,7 +6,7 @@
     onMount(getFuncs);
 
     async function getFuncs() {
-        fetch("http://localhost:8084/v1/execs")
+        fetch("http://localhost:8008/v1/execs")
             .then(response => response.json<ApiExec>())
             .then(data => {
                 execs.set(data.execs);

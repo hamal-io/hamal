@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Profile
 @Profile("!test")
 open class BackendConfig {
     @Bean
-    open fun httpTemplate(): HttpTemplateSupplier = { HttpTemplate("http://localhost:8084") }
+    open fun httpTemplate(): HttpTemplateSupplier = { HttpTemplate("http://localhost:8008") }
 }

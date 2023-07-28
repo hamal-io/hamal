@@ -52,7 +52,7 @@
     onMount(getFuncs);
 
     async function getFuncs() {
-        fetch("http://localhost:8084/v1/funcs")
+        fetch("http://localhost:8008/v1/funcs")
             .then(response => response.text())
             .then(text => {
                 text = text.replace(/:\s*(-?\d+),/g, ': "$1",')
@@ -70,7 +70,7 @@
 
     function save() {
         console.log("adhoc func")
-        fetch("http://localhost:8084/v1/funcs", {
+        fetch("http://localhost:8008/v1/funcs", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

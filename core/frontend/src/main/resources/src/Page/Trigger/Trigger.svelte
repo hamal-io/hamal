@@ -10,7 +10,7 @@
     let fixedRate = 'PT5S'
 
     async function getTriggers() {
-        fetch("http://localhost:8084/v1/triggers")
+        fetch("http://localhost:8008/v1/triggers")
             .then(response => response.json<ApiTrigger>())
             .then(data => {
                 triggers.set(data.triggers);
@@ -22,7 +22,7 @@
 
     function save() {
         console.log("adhoc trigger")
-        fetch("http://localhost:8084/v1/triggers", {
+        fetch("http://localhost:8008/v1/triggers", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

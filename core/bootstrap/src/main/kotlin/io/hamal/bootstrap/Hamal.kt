@@ -43,7 +43,7 @@ fun main(args: Array<String>) {
             .parent(parent)
             .child(BackendConfig::class.java)
             .web(WebApplicationType.SERVLET)
-            .properties("server.port=8084")
+            .properties("server.port=8008")
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
                 out.println("")
                 out.println("")
@@ -97,7 +97,7 @@ fun main(args: Array<String>) {
             .parent(parent)
             .child(FrontendConfig::class.java)
             .web(WebApplicationType.SERVLET)
-            .properties("server.port=8085")
+            .properties("server.port=8009")
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
                 out.println("")
                 out.println("")

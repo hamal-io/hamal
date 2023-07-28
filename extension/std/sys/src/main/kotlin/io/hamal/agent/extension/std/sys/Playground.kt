@@ -8,7 +8,7 @@ import io.hamal.lib.kua.Sandbox
 
 fun main() {
     NativeLoader.load(Resources)
-    val template = HttpTemplate("http://localhost:8084")
+    val template = HttpTemplate("http://localhost:8008")
     val sandbox = Sandbox()
 
     sandbox.register(SysExtensionFactory { template }.create())
