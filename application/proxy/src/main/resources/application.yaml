@@ -9,4 +9,9 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
 server:
-  port: 9001
+  port: 8000
+
+io:
+  hamal:
+    proxy:
+      upstream: ${PROXY_UPSTREAM:https://cloudflare-eth.com}

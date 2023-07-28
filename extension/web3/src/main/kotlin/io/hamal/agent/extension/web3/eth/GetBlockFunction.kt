@@ -9,6 +9,7 @@ import io.hamal.lib.kua.table.TableMapProxyValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.eth.domain.EthGetBlockResp
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 //class GetBlockFunction : Function1In2Out<NumberValue, TableMapProxyValue, ErrorValue>(
@@ -29,11 +30,18 @@ class GetBlockFunction : Function1In2Out<NumberValue, ErrorValue, TableMapProxyV
         println("get block")
         val b = EthHttpBatchService(
             HttpTemplate("http://localhost:8081")
-        ).getBlock(EthUint64(arg1.value.toLong())).execute().first()
+        ).getBlock(EthUint64(arg1.value.toLong())).execute().first() as EthGetBlockResp
 
-        println(b)
+//        println(b)
 
-//        return ctx.tableCreateMap(0) to null
-        return null to null
+        return null to ctx.tableCreateMap(0).also { table ->
+            table["id"] = b.result.number.value.toLong()
+            table["hash"] = b.result.hash.toPrefixedHexString().value
+            table["parent_hash"] = b.result.parentHash.toPrefixedHexString().value
+            table["transaction_count"] = b.result.transactions.size
+            table["gas_used"] = b.result.gasUsed.value.toLong()
+            table["gas_limit"] = b.result.gasLimit.value.toLong()
+        }
+//        return null to null
     }
 }

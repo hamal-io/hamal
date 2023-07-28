@@ -49,10 +49,11 @@ class DefaultEthRequestHandler(
                 }
 
                 EthMethod.GetTransactionReceipt -> {
-                    val hash = json.decodeFromJsonElement(EthHash.serializer(), request.params[0])
-                    cache.findReceipt(hash)?.let { receipt ->
-                        resultMapping[request.id] = EthGetReceiptResp(request.id, receipt)
-                    }
+//                    val hash = json.decodeFromJsonElement(EthHash.serializer(), request.params[0])
+//                    cache.findReceipt(hash)?.let { receipt ->
+//                        resultMapping[request.id] = EthGetReceiptResp(request.id, receipt)
+//                    }
+                    TODO()
                 }
 
                 else -> TODO()
@@ -60,8 +61,8 @@ class DefaultEthRequestHandler(
         }
 
         val batchService = EthHttpBatchService(
-//            HttpTemplate("https://cloudflare-eth.com")
-            HttpTemplate("http://localhost:8081")
+            HttpTemplate("https://cloudflare-eth.com")
+//            HttpTemplate("http://localhost:8081")
         )
 
         requests.forEach { request ->

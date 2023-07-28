@@ -3,27 +3,39 @@ package io.hamal.app.proxy.repository
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.web3.util.Web3Encoding
-import kotlinx.serialization.ExperimentalSerializationApi
 import java.nio.file.Path
 
 
 interface TransactionRepository {
-    //    fun findTransaction(number: EthUint64): EthTransaction?
-//    fun findTransaction(hash: EthHash): EthTransaction?
-//    fun findTransactionHashOfTransaction(hash: EthHash): EthHash?
     fun store(transaction: PersistedEthTransaction)
-
     fun find(blockId: ULong, blockIndex: UShort): PersistedEthTransaction?
 }
 
-@OptIn(ExperimentalSerializationApi::class)
 class SqliteTransactionRepository(
+    path: Path
+) : TransactionRepository {
+
+    private val partitions = (0..9)
+        .map { partition -> SqliteTransactionPartitionRepository(path, partition) }
+        .associateBy { it.partition }
+
+    override fun store(transaction: PersistedEthTransaction) {
+        partitions[resolvePartition(transaction.blockId)]!!.store(transaction)
+    }
+
+    override fun find(blockId: ULong, blockIndex: UShort): PersistedEthTransaction? {
+        return partitions[resolvePartition(blockId)]!!.find(blockId, blockIndex)
+    }
+
+    private fun resolvePartition(blockId: ULong) = (blockId % 10UL).toInt()
+}
+
+class SqliteTransactionPartitionRepository(
     val path: Path,
+    val partition: Int
 ) : BaseSqliteRepository(object : Config {
     override val path = path
-
-    // FIXME partitionise data
-    override val filename: String = "new-transactions.db"
+    override val filename: String = "transactions-${partition}.db"
 }), TransactionRepository {
 
     override fun setupConnection(connection: Connection) {
@@ -56,28 +68,6 @@ class SqliteTransactionRepository(
         connection.execute("DELETE FROM transactions")
         connection.execute("DELETE FROM transactions")
     }
-
-//    override fun findTransaction(number: EthUint64): EthTransaction? {
-//        TODO()
-//    }
-//
-//    override fun findTransaction(hash: EthHash): EthTransaction? {
-////        return connection.executeQueryOne("SELECT transaction FROM transactions WHERE transaction_hash = :transactionHash") {
-////            query { set("transactionHash", hash) }
-////            map { rs ->
-////                protobuf.decodeFromByteArray<PersistedEthTransaction>(rs.getBytes("transaction").zlibDecompress()).decode()
-////            }
-////        }
-//        TODO()
-//    }
-//
-//    override fun findTransactionHashOfTransaction(hash: EthHash): EthHash? {
-////        return connection.executeQueryOne("SELECT transaction_hash FROM transactions WHERE tx_hash = :txHash") {
-////            query { set("txHash", hash) }
-////            map { rs -> EthHash(EthPrefixedHexString(rs.getString("transaction_hash"))) }
-////        }
-//        TODO()
-//    }
 
     override fun store(
         transaction: PersistedEthTransaction

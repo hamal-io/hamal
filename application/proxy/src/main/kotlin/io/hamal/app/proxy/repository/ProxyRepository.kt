@@ -12,19 +12,13 @@ interface ProxyRepository {
 class SqliteProxyRepository(
     val addressRepository: AddressRepository,
     val blockRepository: BlockRepository,
-    val hashRepository: HashRepository,
     val transactionRepository: TransactionRepository
 ) : ProxyRepository {
+
+
+
     override fun store(block: EthBlock) {
 // FIXME locking?
-
-        val resolvedHashes = hashRepository.resolve(
-            listOf(
-                block.hash,
-                block.parentHash,
-            )
-        ).toMap()
-
         val resolvedAddresses = addressRepository.resolve(
             listOf(block.miner)
                 .plus(block.transactions.map { it.from })
@@ -35,8 +29,7 @@ class SqliteProxyRepository(
         blockRepository.store(
             PersistedEthBlock(
                 id = block.number.value.toLong().toULong(),
-                hashId = resolvedHashes[block.hash]!!,
-                parentHashId = resolvedHashes[block.parentHash]!!,
+                hash = block.hash.toByteArray(),
                 minerAddressId = resolvedAddresses[block.miner]!!,
                 gasUsed = block.gasUsed.value.toLong().toULong(),
                 timestamp = block.timestamp.value.toLong().toULong()

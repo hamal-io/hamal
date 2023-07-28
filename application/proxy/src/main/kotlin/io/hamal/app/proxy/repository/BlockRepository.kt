@@ -2,22 +2,18 @@ package io.hamal.app.proxy.repository
 
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
-import kotlinx.serialization.ExperimentalSerializationApi
 import java.nio.file.Path
 
 interface BlockRepository {
-    //    fun findBlock(number: EthUint64): EthBlock?
-//    fun findBlock(hash: EthHash): EthBlock?
-//    fun findBlockHashOfTransaction(hash: EthHash): EthHash?
     fun store(block: PersistedEthBlock)
+    fun find(blockId: ULong): PersistedEthBlock?
 }
 
-@OptIn(ExperimentalSerializationApi::class)
 class SqliteBlockRepository(
     val path: Path,
 ) : BaseSqliteRepository(object : Config {
     override val path = path
-    override val filename: String = "new-blocks.db"
+    override val filename: String = "blocks.db"
 }), BlockRepository {
 
     override fun setupConnection(connection: Connection) {
@@ -32,53 +28,20 @@ class SqliteBlockRepository(
             """
             CREATE TABLE IF NOT EXISTS blocks (
                  id               INTEGER PRIMARY KEY,
-                 hash_id          INTEGER NOT NULL,
-                 parent_hash_id   INTEGER NOT NULL,
+                 hash             BLOB NOT NULL,
                  miner_address_id INTEGER NOT NULL,
                  gas_used         INTEGER NOT NULL,
                  timestamp        INTEGER NOT NULL,
-                 UNIQUE             (hash_id)
+                 UNIQUE           (hash)
             );
         """.trimIndent()
         )
 
-//        connection.execute(
-//            """
-//            CREATE TABLE IF NOT EXISTS transactions (
-//                 tx_hash        BLOB NOT NULL,
-//                 block_hash     BLOB NOT NULL,
-//                 PRIMARY KEY    (tx_hash)
-//            );
-//        """.trimIndent()
-//        )
     }
 
     override fun clear() {
         connection.execute("DELETE FROM blocks")
-        connection.execute("DELETE FROM transactions")
     }
-
-//    override fun findBlock(number: EthUint64): EthBlock? {
-//        TODO()
-//    }
-//
-//    override fun findBlock(hash: EthHash): EthBlock? {
-////        return connection.executeQueryOne("SELECT block FROM blocks WHERE block_hash = :blockHash") {
-////            query { set("blockHash", hash) }
-////            map { rs ->
-////                protobuf.decodeFromByteArray<PersistedEthBlock>(rs.getBytes("block").zlibDecompress()).decode()
-////            }
-////        }
-//        TODO()
-//    }
-//
-//    override fun findBlockHashOfTransaction(hash: EthHash): EthHash? {
-////        return connection.executeQueryOne("SELECT block_hash FROM transactions WHERE tx_hash = :txHash") {
-////            query { set("txHash", hash) }
-////            map { rs -> EthHash(EthPrefixedHexString(rs.getString("block_hash"))) }
-////        }
-//        TODO()
-//    }
 
     override fun store(
         block: PersistedEthBlock
@@ -86,15 +49,33 @@ class SqliteBlockRepository(
 
         connection.tx {
             execute(
-                "INSERT OR IGNORE INTO blocks(id, hash_id, parent_hash_id, miner_address_id,  gas_used, timestamp) " +
-                        "VALUES( :id, :hashId, :parentHashId, :minerAddressId, :gasUsed, :timestamp )"
+                "INSERT OR IGNORE INTO blocks(id, hash, miner_address_id,  gas_used, timestamp) " +
+                        "VALUES( :id, :hash, :minerAddressId, :gasUsed, :timestamp )"
             ) {
                 set("id", block.id)
-                set("hashId", block.hashId)
-                set("parentHashId", block.parentHashId)
+                set("hash", block.hash)
                 set("minerAddressId", block.minerAddressId)
                 set("gasUsed", block.gasUsed)
                 set("timestamp", block.timestamp)
+            }
+        }
+    }
+
+    override fun find(blockId: ULong): PersistedEthBlock? {
+        return connection.tx {
+            executeQueryOne("SELECT * FROM blocks WHERE id = :blockId") {
+                query {
+                    set("blockId", blockId)
+                }
+                map { rs ->
+                    PersistedEthBlock(
+                        id = rs.getLong("id").toULong(),
+                        hash = rs.getBytes("hash"),
+                        minerAddressId = rs.getLong("miner_address_id").toULong(),
+                        gasUsed = rs.getLong("gas_used").toULong(),
+                        timestamp = rs.getLong("timestamp").toULong()
+                    )
+                }
             }
         }
     }
@@ -103,8 +84,7 @@ class SqliteBlockRepository(
 
 data class PersistedEthBlock(
     val id: ULong,
-    val hashId: ULong,
-    val parentHashId: ULong,
+    val hash: ByteArray,
     val minerAddressId: ULong,
     val gasUsed: ULong,
     val timestamp: ULong
