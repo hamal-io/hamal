@@ -37,11 +37,12 @@ class FunctionContext(
     override fun pushTable(proxy: TableMapProxyValue) = state.pushTable(proxy)
     override fun pushTable(proxy: TableArrayProxyValue) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
-    override fun getTableMapProxy(idx: Int) = state.getTableMapProxy(idx)
-    override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
+    override fun getTableMap(idx: Int) = state.getTableMap(idx)
+    override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
     override fun setGlobal(name: String, value: TableMapProxyValue) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableArrayProxyValue) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableMapProxyValue = state.getGlobalTableMap(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
     override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)

@@ -14,6 +14,7 @@ sealed class Trigger : DomainObject<TriggerId> {
     abstract val cmdId: CmdId
     abstract val name: TriggerName
     abstract val funcId: FuncId
+    abstract val correlationId: CorrelationId?
     abstract val type: TriggerType
     abstract val inputs: TriggerInputs
 }
@@ -25,7 +26,8 @@ class FixedRateTrigger(
     override val name: TriggerName,
     override val funcId: FuncId,
     override val inputs: TriggerInputs,
-    val duration: Duration
+    val duration: Duration,
+    override val correlationId: CorrelationId? = null
 ) : Trigger() {
     override val type = FixedRate
 }
@@ -37,7 +39,8 @@ class EventTrigger(
     override val name: TriggerName,
     override val funcId: FuncId,
     override val inputs: TriggerInputs,
-    val topicId: TopicId
+    val topicId: TopicId,
+    override val correlationId: CorrelationId? = null
 ) : Trigger() {
     override val type = Event
 }

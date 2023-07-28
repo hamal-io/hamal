@@ -21,6 +21,7 @@ data class Entity(
     var name: TriggerName? = null,
     var type: TriggerType? = null,
     var inputs: TriggerInputs? = null,
+    var correlationId: CorrelationId? = null,
 
     var topicId: TopicId? = null,
     var duration: Duration? = null
@@ -37,6 +38,7 @@ data class Entity(
                 funcId = rec.funcId,
                 type = FixedRate,
                 inputs = rec.inputs,
+                correlationId = rec.correlationId,
                 duration = rec.duration
             )
 
@@ -48,6 +50,7 @@ data class Entity(
                 funcId = rec.funcId,
                 type = Event,
                 inputs = rec.inputs,
+                correlationId = rec.correlationId,
                 topicId = rec.topicId
             )
         }
@@ -59,6 +62,7 @@ data class Entity(
                 cmdId = cmdId,
                 id = id,
                 funcId = funcId!!,
+                correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
                 duration = duration!!
@@ -68,6 +72,7 @@ data class Entity(
                 cmdId = cmdId,
                 id = id,
                 funcId = funcId!!,
+                correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
                 topicId = topicId!!

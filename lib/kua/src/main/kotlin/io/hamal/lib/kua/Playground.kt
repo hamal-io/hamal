@@ -1,80 +1,66 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
+import io.hamal.lib.kua.function.Function0In0Out
+import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.function.NamedFunctionValue
+import io.hamal.lib.kua.value.StringValue
 
 
 fun main() {
     NativeLoader.load(BuildDir)
 
-
     Sandbox().use { sb ->
+        val config = ExtensionConfig(
+            mutableMapOf(
+                "host" to StringValue("http://test")
+            )
+        )
 
-//            val call = object : Function0In0Out() {
-//                override fun invoke(ctx: FunctionContext) {
-//                    println("CALLED")
-//                }
-//            }
+        val ext = Extension(
+            name = "ctx",
+            extensions = listOf(),
+            config = config,
+            functions = listOf(
+                NamedFunctionValue(
+                    name = "get_config",
+                    function = ExtensionGetConfigFunction(config)
+                ),
+                NamedFunctionValue(
+                    name = "update_config",
+                    function = ExtensionUpdateConfigFunction(config)
+                ),
+                NamedFunctionValue(
+                    name = "invoke",
+                    function = object : Function0In0Out() {
+                        override fun invoke(ctx: FunctionContext) {
+                            println("calling host: ${config.value["host"]}")
+                        }
+                    }
+                )
+            )
+        )
 
-//        sb.bridge.pushFunctionValue(call)
-//        sb.bridge.call(0, 0)
+        sb.registerExtension(ext)
 
+        sb.runCode(
+            """
+            ctx.update_config({
+                host = 'http//localhost:8000',
+            })
+            
+            local cfg = ctx.get_config()
+                
+            print(cfg)
+            for k,v in pairs(cfg) do
+                print(k.."=",v)
+            end
+            
+            ctx.invoke()
+            
+        """.trimIndent()
+        )
 
-//        val neverCalled = object : Function0In0Out() {
-//            override fun invoke(ctx: FunctionContext) {
-//                called = true
-//            }
-//
-//            var called = false
-//        }
-//        val throwError = object : Function0In0Out() {
-//            override fun invoke(ctx: FunctionContext) {
-//                throw IllegalArgumentException("some illegal argument")
-//            }
-//        }
-//        sb.register(
-//            Extension(
-//                name = "test",
-//                functions = listOf(
-//                    NamedFunctionValue("call", call)
-////                    NamedFunctionValue("throw_error", throwError),
-////                    NamedFunctionValue("never_called", neverCalled),
-//                )
-//            )
-//        )
-
-
-//
-//            try {
-//                sb.runCode(
-//                    """
-//for x=1,1000 do
-//
-//        local table = {code = "print('hello')"}
-//        print(table)
-//
-//        -- local result = sys.adhoc(table)
-//
-//        local x = sys.list_execs()
-//
-//        for k,v in pairs(x) do
-//            print(k,v)
-//        end
-//
-//        print("id:", x[1].id)
-//        print("status:", x[1].status)
-//
-//    end
-//            """
-//                )
-//            } catch (t: Throwable) {
-//                t.printStackTrace()
-//            }
-//        }
-//
-//        println("Never called: ${neverCalled.called}")
     }
-
-
 }
-
 

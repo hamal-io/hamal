@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.table.TableArrayProxyValue
 import io.hamal.lib.kua.table.TableMapProxyValue
 import io.hamal.lib.kua.value.AnyValue
@@ -11,17 +12,22 @@ interface SandboxFactory {
     fun create(): Sandbox
 }
 
+
 class Sandbox : State, AutoCloseable {
     override val bridge: Bridge = Bridge()
     override val top: StackTop get() = state.top
 
     val state = ClosableState(bridge)
 
-    fun register(extension: Extension) = bridge.registerExtension(extension)
+    fun register(extension: Extension) = state.registerExtension(extension)
 
     fun runCode(code: CodeValue) = runCode(code.value)
 
     fun runCode(code: String) = bridge.runCode(code)
+
+    fun run(fn: (State) -> Unit) {
+        fn(state)
+    }
 
     override fun close() {
         state.close()
@@ -48,11 +54,12 @@ class Sandbox : State, AutoCloseable {
     override fun pushTable(proxy: TableMapProxyValue) = state.pushTable(proxy)
     override fun pushTable(proxy: TableArrayProxyValue) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
-    override fun getTableMapProxy(idx: Int) = state.getTableMapProxy(idx)
-    override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
+    override fun getTableMap(idx: Int) = state.getTableMap(idx)
+    override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
     override fun setGlobal(name: String, value: TableMapProxyValue) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableArrayProxyValue) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableMapProxyValue = state.getGlobalTableMap(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
     override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)
@@ -69,22 +76,47 @@ internal fun Bridge.runCode(code: String) {
     call(0, 0)
 }
 
-internal fun Bridge.registerExtension(module: Extension) {
-    val funcs = module.functions
+internal fun State.registerExtension(extension: Extension) {
+    val funcs = extension.functions
 
-    tableCreate(0, funcs.size)
-    val tblIdx = top()
+    val r = tableCreateMap(1)
     funcs.forEach { namedFunc ->
-        pushFunctionValue(namedFunc.function)
-        tabletSetField(tblIdx, namedFunc.name)
+        bridge.pushFunctionValue(namedFunc.function)
+        bridge.tabletSetField(r.index, namedFunc.name)
     }
-//    if (global) {
-//        rawGet(REGISTRYINDEX, LuaState.RIDX_GLOBALS)
-    tableGetRawIdx(luaRegistryIndex(), 2)
-//        pushValue(-2)
-    pushTop(-2)
-    tabletSetField(-2, module.name)
-    pop(1)
-//    }
 
+    extension.extensions.forEach { nestedExt ->
+        val nested = tableCreateMap(1)
+        nestedExt.functions.forEach { namedFunc ->
+            bridge.pushFunctionValue(namedFunc.function)
+            bridge.tabletSetField(nested.index, namedFunc.name)
+        }
+
+        createConfig(nestedExt.config)
+        bridge.tabletSetField(nested.index, "__config")
+
+        bridge.tabletSetField(r.index, nestedExt.name)
+    }
+
+    createConfig(extension.config)
+    bridge.tabletSetField(r.index, "__config")
+
+    setGlobal(extension.name, r)
+}
+
+fun State.createConfig(config: ExtensionConfig): TableMapProxyValue {
+
+    val result = tableCreateMap(1)
+
+    val fns = listOf<NamedFunctionValue<*, *, *, *>>(
+        NamedFunctionValue("get", ExtensionGetConfigFunction(config)),
+        NamedFunctionValue("update", ExtensionUpdateConfigFunction(config))
+    )
+
+    fns.forEach { namedFunc ->
+        bridge.pushFunctionValue(namedFunc.function)
+        bridge.tabletSetField(result.index, namedFunc.name)
+    }
+
+    return result
 }

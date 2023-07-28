@@ -40,11 +40,12 @@ interface State {
     fun pushTable(proxy: TableMapProxyValue): StackTop
     fun pushTable(proxy: TableArrayProxyValue): StackTop
     fun getTable(idx: Int): TableValue
-    fun getTableMapProxy(idx: Int): TableMapProxyValue
-    fun getTableArrayProxy(idx: Int): TableArrayProxyValue
+    fun getTableMap(idx: Int): TableMapProxyValue
+    fun getTableArray(idx: Int): TableArrayProxyValue
 
     fun setGlobal(name: String, value: TableMapProxyValue)
     fun setGlobal(name: String, value: TableArrayProxyValue)
+    fun getGlobalTableMap(name: String): TableMapProxyValue
 
     fun tableCreateMap(capacity: Int = 0): TableMapProxyValue
     fun tableCreateArray(capacity: Int = 0): TableArrayProxyValue
@@ -84,11 +85,10 @@ class ClosableState(
             ValueType.Boolean -> AnyValue(getBooleanValue(idx))
             ValueType.Number -> AnyValue(getNumberValue(idx))
             ValueType.String -> AnyValue(getStringValue(idx))
-            ValueType.Table -> AnyValue(getTableMapProxy(idx)) // FIXME what about table and array ?
+            ValueType.Table -> AnyValue(getTableMap(idx)) // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
     }
-
 
     override fun pushBoolean(value: Boolean): StackTop = StackTop(bridge.pushBoolean(value))
     override fun getBoolean(idx: Int): Boolean = bridge.toBoolean(idx)
@@ -111,9 +111,11 @@ class ClosableState(
         TODO("Not yet implemented")
     }
 
-    override fun getTableMapProxy(idx: Int): TableMapProxyValue = TableProxyValue(idx, this, TableType.Map)
+    //FIXME type check
+    override fun getTableMap(idx: Int): TableMapProxyValue = TableProxyValue(idx, this, TableType.Map)
 
-    override fun getTableArrayProxy(idx: Int): TableArrayProxyValue = TableProxyValue(idx, this, TableType.Array)
+    //FIXME type check
+    override fun getTableArray(idx: Int): TableArrayProxyValue = TableProxyValue(idx, this, TableType.Array)
 
     override fun setGlobal(name: String, value: TableMapProxyValue) {
         bridge.pushTop(value.index)
@@ -123,6 +125,11 @@ class ClosableState(
     override fun setGlobal(name: String, value: TableArrayProxyValue) {
         bridge.pushTop(value.index)
         bridge.setGlobal(name)
+    }
+
+    override fun getGlobalTableMap(name: String): TableMapProxyValue {
+        bridge.getGlobal(name)
+        return getTableMap(top.value)
     }
 
     override fun tableCreateMap(capacity: Int): TableMapProxyValue {

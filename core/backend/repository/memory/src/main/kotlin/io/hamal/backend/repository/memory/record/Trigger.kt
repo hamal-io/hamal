@@ -7,9 +7,9 @@ import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.record.trigger.createEntity
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
@@ -55,7 +55,8 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
                     funcId = cmd.funcId,
                     name = cmd.name,
                     inputs = cmd.inputs,
-                    duration = cmd.duration
+                    duration = cmd.duration,
+                    correlationId = cmd.correlationId
                 )
             )
             (currentVersion(triggerId) as FixedRateTrigger).also(CurrentTriggerProjection::apply)
@@ -75,7 +76,8 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
                         funcId = cmd.funcId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        topicId = cmd.topicId
+                        topicId = cmd.topicId,
+                        correlationId = cmd.correlationId
                     )
                 )
                 (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)

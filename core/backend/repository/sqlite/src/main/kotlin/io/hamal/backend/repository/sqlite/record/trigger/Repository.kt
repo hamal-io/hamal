@@ -70,7 +70,8 @@ class SqliteTriggerRepository(
                         funcId = cmd.funcId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        duration = cmd.duration
+                        duration = cmd.duration,
+                        correlationId = cmd.correlationId
                     )
                 )
 
@@ -94,7 +95,8 @@ class SqliteTriggerRepository(
                         funcId = cmd.funcId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        topicId = cmd.topicId
+                        topicId = cmd.topicId,
+                        correlationId = cmd.correlationId
                     )
                 )
 

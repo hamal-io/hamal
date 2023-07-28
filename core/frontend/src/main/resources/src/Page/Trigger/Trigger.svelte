@@ -32,6 +32,7 @@
                     name,
                     funcId,
                     type: 'FixedRate',
+                    correlationId: 'test',
                     inputs: {},
                     duration: fixedRate
                 }

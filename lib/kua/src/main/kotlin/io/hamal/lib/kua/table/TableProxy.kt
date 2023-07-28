@@ -50,32 +50,45 @@ internal data class TableProxyValue(
         return state.tableSetRaw(index)
     }
 
+    override fun set(key: String, value: TableMapProxyValue): TableLength {
+        state.pushString(key)
+        state.pushTable(value)
+        return state.tableSetRaw(index)
+    }
+
     override fun getBooleanValue(key: String): BooleanValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Boolean)
-        return booleanOf(bridge.toBoolean(-1)).also { bridge.pop(1) }
+        return booleanOf(bridge.toBoolean(state.top.value)).also { bridge.pop(1) }
     }
 
     override fun getCodeValue(key: String): CodeValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)
-        return CodeValue(bridge.toString(-1)).also { bridge.pop(1) }
+        return CodeValue(bridge.toString(state.top.value)).also { bridge.pop(1) }
     }
 
     override fun getNumberValue(key: String): NumberValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Number)
-        return NumberValue(bridge.toNumber(-1)).also { bridge.pop(1) }
+        return NumberValue(bridge.toNumber(state.top.value)).also { bridge.pop(1) }
     }
 
     override fun getStringValue(key: String): StringValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)
-        return StringValue(bridge.toString(-1)).also { bridge.pop(1) }
+        return StringValue(bridge.toString(state.top.value)).also { bridge.pop(1) }
+    }
+
+    override fun getTableMap(key: String): TableMapProxyValue {
+        state.pushString(key)
+        val type = state.tableGetRaw(index)
+        type.checkExpectedType(ValueType.Table)
+        return state.getTableMap(state.top.value)
     }
 
     override fun length(): TableLength = TableLength((bridge.tableGetLength(index)))

@@ -29,6 +29,7 @@ class CreateTriggerHandler(
                     id = req.cmdId(),
                     triggerId = req.triggerId,
                     name = req.triggerName,
+                    correlationId = req.correlationId,
                     funcId = req.funcId,
                     inputs = req.inputs,
                     duration = requireNotNull(req.duration) { "duration must not be null" }
@@ -43,9 +44,10 @@ class CreateTriggerHandler(
                         id = req.cmdId(),
                         triggerId = req.triggerId,
                         name = req.triggerName,
+                        correlationId = req.correlationId,
                         funcId = req.funcId,
                         inputs = req.inputs,
-                        topicId = requireNotNull(req.topicId) { "topicId must not be null" }
+                        topicId = requireNotNull(req.topicId) { "topicId must not be null" },
                     )
                 )
             }

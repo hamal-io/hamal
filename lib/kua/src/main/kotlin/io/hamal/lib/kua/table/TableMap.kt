@@ -27,6 +27,8 @@ interface TableMapProxyValue : BaseTableProxyValue {
     operator fun set(key: String, value: StringValue) = set(key, value.value)
     operator fun set(key: StringValue, value: StringValue) = set(key.value, value.value)
 
+    operator fun set(key: String, value: TableMapProxyValue): TableLength
+
     fun getBooleanValue(key: String): BooleanValue
     fun getBooleanValue(key: StringValue): BooleanValue = getBooleanValue(key.value)
     fun getBoolean(key: String): Boolean = getBooleanValue(key).value
@@ -50,4 +52,6 @@ interface TableMapProxyValue : BaseTableProxyValue {
     fun getStringValue(key: StringValue): StringValue = getStringValue(key.value)
     fun getString(key: String): String = getStringValue(key).value
     fun getString(key: StringValue): String = getString(key.value)
+
+    fun getTableMap(key: String): TableMapProxyValue
 }

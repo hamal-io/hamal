@@ -24,7 +24,8 @@ data class FixedRateTriggerCreationRecord(
     val funcId: FuncId,
     val name: TriggerName,
     val inputs: TriggerInputs,
-    val duration: Duration
+    val duration: Duration,
+    val correlationId: CorrelationId? = null
 ) : TriggerRecord()
 
 @Serializable
@@ -35,5 +36,6 @@ data class EventTriggerCreationRecord(
     val funcId: FuncId,
     val name: TriggerName,
     val inputs: TriggerInputs,
-    val topicId: TopicId
+    val topicId: TopicId,
+    val correlationId: CorrelationId? = null
 ) : TriggerRecord()

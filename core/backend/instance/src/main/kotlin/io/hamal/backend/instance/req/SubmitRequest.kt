@@ -98,6 +98,7 @@ class SubmitRequest(
             triggerName = createTriggerReq.name,
             funcId = createTriggerReq.funcId,
             inputs = createTriggerReq.inputs,
+            correlationId = createTriggerReq.correlationId,
             duration = createTriggerReq.duration,
             topicId = createTriggerReq.topicId
         ).also(reqCmdRepository::queue)

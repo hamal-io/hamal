@@ -20,7 +20,8 @@ interface TriggerCmdRepository {
         val name: TriggerName,
         val funcId: FuncId,
         val inputs: TriggerInputs,
-        val duration: Duration
+        val duration: Duration,
+        val correlationId: CorrelationId? = null
     )
 
     data class CreateEventCmd(
@@ -29,7 +30,8 @@ interface TriggerCmdRepository {
         val name: TriggerName,
         val funcId: FuncId,
         val inputs: TriggerInputs,
-        val topicId: TopicId
+        val topicId: TopicId,
+        val correlationId: CorrelationId? = null
     )
 }
 

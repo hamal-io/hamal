@@ -9,10 +9,9 @@ data class NamedFunctionValue<
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
         OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
         OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
-        >
-    (
+        >(
     val name: String,
-    val function: FunctionValue<INPUT_SCHEMA, INPUT, OUTPUT_SCHEMA, OUTPUT>
+    val function: FunctionValue<*, *, *, *>
 )
 
 interface FunctionValue<

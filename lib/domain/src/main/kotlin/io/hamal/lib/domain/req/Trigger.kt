@@ -12,6 +12,7 @@ data class CreateTriggerReq(
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
+    val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null,
 )
@@ -25,6 +26,7 @@ data class SubmittedCreateTriggerReq(
     val triggerName: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
+    val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null
 ) : SubmittedReq
