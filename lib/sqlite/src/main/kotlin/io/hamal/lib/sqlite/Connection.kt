@@ -36,6 +36,14 @@ class NamedPreparedStatementDelegate(
 
     operator fun set(
         param: String,
+        value: UInt
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value.toInt()
+        return this
+    }
+
+    operator fun set(
+        param: String,
         value: UShort
     ): NamedPreparedStatementDelegate {
         delegate[param] = value.toInt()

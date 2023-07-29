@@ -1,20 +1,22 @@
 package io.hamal.app.proxy.repository
 
+import io.hamal.app.proxy.domain.EthCall
 import io.hamal.lib.web3.eth.domain.EthBlock
 import io.hamal.lib.web3.eth.encodeRunLength
 import io.hamal.lib.web3.util.Web3Encoding
 
 interface ProxyRepository {
     fun store(block: EthBlock)
+    fun store(call: EthCall)
 }
 
 
 class SqliteProxyRepository(
     val addressRepository: AddressRepository,
     val blockRepository: BlockRepository,
+    val callRepository: CallRepository,
     val transactionRepository: TransactionRepository
 ) : ProxyRepository {
-
 
 
     override fun store(block: EthBlock) {
@@ -58,5 +60,16 @@ class SqliteProxyRepository(
             )
         }
 
+    }
+
+    override fun store(call: EthCall) {
+        callRepository.store(
+            PersistedEthCall(
+                blockId = call.blockId.value.toLong().toULong(),
+                toAddressId = addressRepository.resolve(listOf(call.to)).values.first(),
+                data = call.data.toByteArray(),
+                result = call.result.toByteArray()
+            )
+        )
     }
 }

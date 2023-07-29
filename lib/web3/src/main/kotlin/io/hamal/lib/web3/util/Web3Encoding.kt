@@ -1,6 +1,6 @@
 package io.hamal.lib.web3.util
 
-object Web3Encoding{
+object Web3Encoding {
 
     fun encodeRunLength(binary: ByteArray): ByteArray {
         val compressed = ArrayList<Byte>()
@@ -46,14 +46,12 @@ object Web3Encoding{
         return toPrimitives(decompressed.toTypedArray())
     }
 
-    private fun toPrimitives(oBytes: Array<Any>): ByteArray {
-        val bytes = ByteArray(oBytes.size)
-        for (i in oBytes.indices) {
-            bytes[i] = oBytes[i] as Byte
+    private fun toPrimitives(otherBytes: Array<Byte>): ByteArray {
+        val bytes = ByteArray(otherBytes.size)
+        for (idx in otherBytes.indices) {
+            bytes[idx] = otherBytes[idx]
         }
         return bytes
     }
-
-
 
 }

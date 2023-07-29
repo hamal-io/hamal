@@ -1,45 +1,36 @@
 package io.hamal.app.proxy.cache
 
+import io.hamal.app.proxy.domain.EthCall
+import io.hamal.app.proxy.repository.AddressRepository
 import io.hamal.app.proxy.repository.BlockRepository
+import io.hamal.app.proxy.repository.CallRepository
 import io.hamal.app.proxy.repository.ProxyRepository
 import io.hamal.lib.common.DefaultLruCache
-import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthBytes32
-import io.hamal.lib.web3.eth.abi.type.EthHash
-import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.eth.domain.EthBlock
-import io.hamal.lib.web3.eth.domain.EthReceipt
+import io.hamal.lib.web3.util.Web3Formatter
 import java.math.BigInteger
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 interface Cache {
-    fun findBlock(number: EthUint64): EthBlock?
-    fun findBlock(hash: EthHash): EthBlock?
-    fun findReceipt(hash: EthHash): EthReceipt?
-    fun store(block: EthBlock)
-    fun store(receipt: EthReceipt)
+    fun findBlock(blockId: EthUint64): EthBlock?
+    fun store(block: EthBlock) // FIXME Ethblock domain object of the stripped down version
+    fun store(call: EthCall)
+    fun findCall(blockId: EthUint64, to: EthAddress, data: EthPrefixedHexString): EthCall?
 }
 
 class LruCache(
     private val proxyRepository: ProxyRepository,
-    private val blockRepository: BlockRepository
+    private val addressRepository: AddressRepository,
+    private val blockRepository: BlockRepository,
+    private val callRepository: CallRepository
 ) : Cache {
 
-    override fun findBlock(number: EthUint64): EthBlock? {
-        return blockStore.find(number) ?: loadBlockFromDb(number)
+    override fun findBlock(blockId: EthUint64): EthBlock? {
+        return blockStore.find(blockId) ?: loadBlockFromDb(blockId)
     }
 
-    override fun findBlock(hash: EthHash): EthBlock? {
-        return when (val number = blockNumberMapping[hash]) {
-            is EthUint64 -> findBlock(number)
-            else -> loadBlockFromDb(hash)
-        }
-    }
-
-    override fun findReceipt(hash: EthHash): EthReceipt? {
-        TODO("Not yet implemented")
-    }
 
     override fun store(block: EthBlock) {
         return lock.withLock {
@@ -49,8 +40,29 @@ class LruCache(
         }
     }
 
-    override fun store(receipt: EthReceipt) {
-        TODO()
+    override fun store(call: EthCall) {
+        return lock.withLock {
+            proxyRepository.store(call)
+        }
+    }
+
+    override fun findCall(
+        blockId: EthUint64,
+        to: EthAddress,
+        data: EthPrefixedHexString
+    ): EthCall? {
+        return callRepository.find(
+            blockId.value.toLong().toULong(),
+            addressRepository.resolve(to),
+            data.toByteArray()
+        )?.let { persistedEthCall ->
+            EthCall(
+                blockId = EthUint64(BigInteger(persistedEthCall.blockId.toString())),
+                to = EthAddress(BigInteger.ZERO),
+                data = EthPrefixedHexString("0x" + Web3Formatter.formatToHex(persistedEthCall.data)),
+                result = EthPrefixedHexString("0x" + Web3Formatter.formatToHex(persistedEthCall.result))
+            )
+        }
     }
 
     private fun loadBlockFromDb(number: EthUint64): EthBlock? {
@@ -80,17 +92,6 @@ class LruCache(
                 )
             }
     }
-
-    private fun loadBlockFromDb(hash: EthHash): EthBlock? {
-        TODO()
-//        return lock.withLock {
-//            blockRepository.findBlock(hash)?.also { block ->
-////                blockStore[block.number] = block
-////                blockNumberMapping[block.hash] = block.number
-//            }
-//        }
-    }
-
 
     private val blockStore = DefaultLruCache<EthUint64, EthBlock>(1000)
     private val blockNumberMapping = mutableMapOf<EthHash, EthUint64>()

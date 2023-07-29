@@ -4,6 +4,7 @@ import io.hamal.lib.web3.eth.abi.EthFunction
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.eth.domain.EthReqId
 import io.hamal.lib.web3.eth.domain.EthResp
 
 
@@ -13,6 +14,8 @@ interface EthBatchService<SERVICE : EthBatchService<SERVICE>> {
     fun getBlock(number: EthUint64): SERVICE
     fun getLiteBlock(number: EthUint64): SERVICE
     fun call(callRequest: EthCallRequest): SERVICE
+
+    fun lastRequestId(): EthReqId
 
     fun callFunction(
         to: EthAddress,

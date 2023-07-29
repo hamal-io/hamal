@@ -6,6 +6,8 @@ import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import java.nio.file.Path
 
+// FIXME have interface
+// FIXME renmae to sqlite address repo
 class AddressRepository(
     path: Path
 ) : BaseSqliteRepository(object : Config {
@@ -31,6 +33,10 @@ class AddressRepository(
             );
         """.trimIndent()
         )
+    }
+
+    fun resolve(address: EthAddress): ULong {
+        return resolve(listOf(address)).entries.first().value
     }
 
     fun resolve(addresses: List<EthAddress>): Map<EthAddress, ULong> {

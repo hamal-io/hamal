@@ -2,7 +2,6 @@ package io.hamal.app.proxy.config
 
 import io.hamal.app.proxy.repository.*
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import kotlin.io.path.Path
@@ -10,13 +9,15 @@ import kotlin.io.path.Path
 @Configuration
 @OptIn(ExperimentalSerializationApi::class)
 class RepositoryConfig {
-    @Bean
-    fun protobuf() = ProtoBuf {}
 
     @Bean
-    fun blockRepository(
-        protoBuf: ProtoBuf
-    ): BlockRepository = SqliteBlockRepository(path)
+    fun addressRepository(): AddressRepository = AddressRepository(path)
+
+    @Bean
+    fun blockRepository(): BlockRepository = SqliteBlockRepository(path)
+
+    @Bean
+    fun callRepository(): CallRepository = SqliteCallRepository(path)
 
 //    @Bean
 //    fun receiptRepository(
@@ -25,10 +26,13 @@ class RepositoryConfig {
 
     @Bean
     fun proxyRepository(
-        blockRepository: BlockRepository
+        addressRepository: AddressRepository,
+        blockRepository: BlockRepository,
+        callRepository: CallRepository
     ): ProxyRepository = SqliteProxyRepository(
-        addressRepository = AddressRepository(path),
+        addressRepository = addressRepository,
         blockRepository = blockRepository,
+        callRepository = callRepository,
         transactionRepository = SqliteTransactionRepository(path)
     )
 

@@ -8,15 +8,15 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = EthReqId.Serializer::class)
-class EthReqId(val value: Long) {
+data class EthReqId(val value: Int) {
     internal object Serializer : KSerializer<EthReqId> {
-        override val descriptor = PrimitiveSerialDescriptor("EthReqId", PrimitiveKind.LONG)
+        override val descriptor = PrimitiveSerialDescriptor("EthReqId", PrimitiveKind.INT)
         override fun deserialize(decoder: Decoder): EthReqId {
-            return EthReqId(decoder.decodeLong())
+            return EthReqId(decoder.decodeInt())
         }
 
         override fun serialize(encoder: Encoder, value: EthReqId) {
-            encoder.encodeLong(value.value)
+            encoder.encodeInt(value.value)
         }
     }
 }

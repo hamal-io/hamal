@@ -67,6 +67,10 @@ class EthHttpBatchService(
         resultClass = EthCallResp::class
     )
 
+    override fun lastRequestId(): EthReqId {
+        return EthReqId(requests.size)
+    }
+
     @OptIn(InternalSerializationApi::class)
     override fun execute(): List<EthResp> {
         return lock.withLock {
