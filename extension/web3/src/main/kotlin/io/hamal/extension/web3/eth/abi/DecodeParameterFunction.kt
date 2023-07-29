@@ -21,6 +21,19 @@ class DecodeParameterFunction : Function2In2Out<StringValue, StringValue, ErrorV
         println(type)
         println(value)
 
+        if (type.value == "string") {
+            return null to AnyValue(
+                //FIXME must be decimal value
+                StringValue(
+                    EthTypeDecoder.String.decode(
+                        ByteWindow.Companion.of(
+                            EthPrefixedHexString(value.value)
+                        )
+                    ).value
+                )
+            )
+        }
+
         if (type.value == "uint256") {
             return null to AnyValue(
                 //FIXME must be decimal value

@@ -31,3 +31,20 @@ dependencies {
     implementation(project(":lib:kua"))
     implementation(project(":lib:web3"))
 }
+
+
+@Suppress("UnstableApiUsage")
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(project(":lib:kua"))
+                    implementation(project(":lib:web3"))
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                }
+            }
+        }
+    }
+}
