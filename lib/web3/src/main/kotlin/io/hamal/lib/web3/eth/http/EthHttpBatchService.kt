@@ -3,7 +3,6 @@ package io.hamal.lib.web3.eth.http
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.*
 import kotlinx.serialization.InternalSerializationApi
@@ -30,17 +29,6 @@ class EthHttpBatchService(
         resultClass = EthGetBlockNumberResp::class
     )
 
-    override fun getBlock(hash: EthHash) = request(
-        method = "eth_getBlockByHash",
-        params = JsonArray(
-            listOf(
-                JsonPrimitive(hash.toPrefixedHexString().value),
-                JsonPrimitive(true)
-            )
-        ),
-        resultClass = EthGetBlockResp::class
-    )
-
     override fun getBlock(number: EthUint64) = request(
         method = "eth_getBlockByNumber",
         params = JsonArray(
@@ -52,37 +40,6 @@ class EthHttpBatchService(
         resultClass = EthGetBlockResp::class
     )
 
-    override fun getTransaction(hash: EthHash) = request(
-        method = "eth_getTransactionByHash",
-        params = JsonArray(
-            listOf(
-                JsonPrimitive(hash.toPrefixedHexString().value)
-            )
-        ),
-        resultClass = EthGetTransactionResp::class
-    )
-
-    override fun getTransactionReceipt(hash: EthHash) = request(
-        method = "eth_getTransactionReceipt",
-        params = JsonArray(
-            listOf(
-                JsonPrimitive(hash.toPrefixedHexString().value)
-            )
-        ),
-        resultClass = EthGetReceiptResp::class
-    )
-
-    override fun getLiteBlock(hash: EthHash) = request(
-        method = "eth_getBlockByHash",
-        params = JsonArray(
-            listOf(
-                JsonPrimitive(hash.toPrefixedHexString().value),
-                JsonPrimitive(false)
-            )
-        ),
-        resultClass = EthGetLiteBlockResp::class
-    )
-
     override fun getLiteBlock(number: EthUint64) = request(
         method = "eth_getBlockByNumber",
         params = JsonArray(
@@ -92,6 +49,22 @@ class EthHttpBatchService(
             )
         ),
         resultClass = EthGetLiteBlockResp::class
+    )
+
+    override fun call(callRequest: EthBatchService.EthCallRequest) = request(
+        method = "eth_call",
+        params = JsonArray(
+            listOf(
+                JsonObject(
+                    mapOf(
+                        "to" to JsonPrimitive(callRequest.to.toPrefixedHexString().value),
+                        "data" to JsonPrimitive(callRequest.data.value)
+                    )
+                ),
+                JsonPrimitive(callRequest.blockNumber.toPrefixedHexString().value),
+            )
+        ),
+        resultClass = EthCallResp::class
     )
 
     @OptIn(InternalSerializationApi::class)

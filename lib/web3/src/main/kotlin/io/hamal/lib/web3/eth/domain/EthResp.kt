@@ -1,5 +1,6 @@
 package io.hamal.lib.web3.eth.domain
 
+import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import kotlinx.serialization.Serializable
 
@@ -17,27 +18,6 @@ data class EthGetBlockResp(
         return "EthGetBlockResp($result)"
     }
 }
-
-@Serializable
-data class EthGetTransactionResp(
-    override val id: EthReqId,
-    val result: EthTransaction
-) : EthResp {
-    override fun toString(): String {
-        return "EthGetTransactionResp($result)"
-    }
-}
-
-@Serializable
-data class EthGetReceiptResp(
-    override val id: EthReqId,
-    val result: EthReceipt
-) : EthResp {
-    override fun toString(): String {
-        return "EthGetReceiptResp($result)"
-    }
-}
-
 
 @Serializable
 data class EthGetLiteBlockResp(
@@ -60,3 +40,12 @@ class EthGetBlockNumberResp(
 }
 
 
+@Serializable
+data class EthCallResp(
+    override val id: EthReqId,
+    val result: EthPrefixedHexString
+) : EthResp {
+    override fun toString(): String {
+        return "EthCallResp($result)"
+    }
+}

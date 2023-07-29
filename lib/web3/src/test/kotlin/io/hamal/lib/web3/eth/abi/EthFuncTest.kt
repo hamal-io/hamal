@@ -14,7 +14,7 @@ internal object EthFuncTest {
         val someData = EthPrefixedHexString(
             "0x0000000000000000000000000000000000000000000000c18146ba0b7fb26e350000000000000000000000000000000000000000000e720af711d2090dc245c2000000000000000000000000000000000000000000000000000000006212aa48"
         )
-        val testInstance = EthFunc(
+        val testInstance = EthFunction(
             "getReserves",
             EthInput.Tuple0(),
             EthOutput.Tuple3(
@@ -41,7 +41,7 @@ internal object EthFuncTest {
         val someData = EthPrefixedHexString(
             "0x0000000000000000000000000000000000000000000000c18146ba0b7fb26e350000000000000000000000000000000000000000000e720af711d2090dc245c2000000000000000000000000000000000000000000000000000000006212aa48"
         )
-        val testInstance = EthFunc(
+        val testInstance = EthFunction(
             "getReserves",
             EthInput.Tuple0(),
             EthOutput.Tuple3(
