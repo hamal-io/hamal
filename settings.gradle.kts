@@ -46,7 +46,6 @@ include(":core:backend:repository:sqlite")
 
 include(":core:frontend")
 
-include(":extension:api")
 include(":extension:std:debug")
 include(":extension:std:sys")
 include(":extension:std:log")

@@ -26,6 +26,6 @@ distributions {
     }
 }
 
-dependencies {
-    implementation(project(":extension:api"))
+dependencies{
+    implementation(project(":lib:kua"))
 }

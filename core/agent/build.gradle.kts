@@ -12,7 +12,6 @@ dependencies {
     implementation(project(":lib:web3"))
     implementation(project(":lib:kua"))
 
-    implementation(project(":extension:api"))
     implementation(project(":extension:std:sys"))
     implementation(project(":extension:web3"))
     implementation(project(":extension:std:log"))

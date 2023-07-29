@@ -1,7 +1,7 @@
 package io.hamal.bootstrap.config
 
-import io.hamal.agent.extension.std.log.LogExtensionFactory
-import io.hamal.agent.extension.std.sys.SysExtensionFactory
+import io.hamal.extension.std.log.LogExtensionFactory
+import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.bootstrap.TestExtensionFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader

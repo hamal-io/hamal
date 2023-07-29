@@ -32,6 +32,7 @@ interface EthTypeDecoder<out VALUE_TYPE : EthType<*>> {
 
         val String: EthTypeDecoder<EthString> = object : EthTypeDecoder<EthString> {
             override fun decode(window: ByteWindow): EthString {
+                window.next()
                 val length = Uint32.decode(window).value.toInt()
                 val padding = padding(length)
                 val bytes = window.next(length + padding)

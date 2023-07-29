@@ -17,7 +17,7 @@ interface EthBatchService<SERVICE : EthBatchService<SERVICE>> {
 
     fun lastRequestId(): EthReqId
 
-    fun callFunction(
+    fun call(
         to: EthAddress,
         function: EthFunction<*, *>,
         blockNumber: EthUint64

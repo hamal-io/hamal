@@ -19,7 +19,7 @@ class Sandbox : State, AutoCloseable {
 
     val state = ClosableState(bridge)
 
-    fun register(extension: Extension) = state.registerExtension(extension)
+    fun register(extension: Extension) = state.registerGlobalExtension(extension)
 
     fun runCode(code: CodeValue) = runCode(code.value)
 
@@ -76,7 +76,12 @@ internal fun Bridge.runCode(code: String) {
     call(0, 0)
 }
 
-internal fun State.registerExtension(extension: Extension) {
+internal fun State.registerGlobalExtension(extension: Extension) {
+    val result = registerExtension(extension)
+    setGlobal(extension.name, result)
+}
+
+fun State.registerExtension(extension: Extension): TableMapValue {
     val funcs = extension.functions
 
     val r = tableCreateMap(1)
@@ -86,22 +91,14 @@ internal fun State.registerExtension(extension: Extension) {
     }
 
     extension.extensions.forEach { nestedExt ->
-        val nested = tableCreateMap(1)
-        nestedExt.functions.forEach { namedFunc ->
-            bridge.pushFunctionValue(namedFunc.function)
-            bridge.tabletSetField(nested.index, namedFunc.name)
-        }
-
-        createConfig(nestedExt.config)
-        bridge.tabletSetField(nested.index, "__config")
-
+        registerExtension(nestedExt)
         bridge.tabletSetField(r.index, nestedExt.name)
     }
 
     createConfig(extension.config)
     bridge.tabletSetField(r.index, "__config")
 
-    setGlobal(extension.name, r)
+    return r
 }
 
 fun State.createConfig(config: ExtensionConfig): TableMapValue {

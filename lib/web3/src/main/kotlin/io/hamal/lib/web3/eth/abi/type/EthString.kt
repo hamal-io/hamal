@@ -29,7 +29,7 @@ sealed interface EthBaseString : EthType<String> {
 data class EthString(
     override val value: String
 ) : EthBaseString {
-    override fun toByteArray(): ByteArray = value.toByteArray(Charset.defaultCharset())
+    override fun toByteArray(): ByteArray = value.toByteArray()
     override fun toByteWindow() = ByteWindow.of(toByteArray())
     override fun toString(): String = value
 }

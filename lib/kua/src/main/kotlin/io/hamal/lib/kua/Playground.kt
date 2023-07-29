@@ -41,7 +41,7 @@ fun main() {
             )
         )
 
-        sb.registerExtension(ext)
+        sb.registerGlobalExtension(ext)
 
         sb.runCode(
             """

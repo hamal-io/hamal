@@ -27,7 +27,7 @@ distributions {
 }
 
 dependencies {
-    implementation(project(":extension:api"))
     implementation(project(":lib:common"))
+    implementation(project(":lib:kua"))
     implementation(project(":lib:web3"))
 }

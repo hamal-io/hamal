@@ -26,6 +26,6 @@ distributions {
 }
 
 dependencies {
-    implementation(project(":extension:api"))
+    implementation(project(":lib:kua"))
     implementation(project(":lib:sdk"))
 }

@@ -1,8 +1,8 @@
 package io.hamal.agent.config
 
-import io.hamal.agent.extension.std.log.LogExtensionFactory
-import io.hamal.agent.extension.std.sys.SysExtensionFactory
-import io.hamal.agent.extension.web3.Web3ExtensionFactory
+import io.hamal.extension.std.log.LogExtensionFactory
+import io.hamal.extension.std.sys.SysExtensionFactory
+import io.hamal.extension.web3.Web3ExtensionFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar

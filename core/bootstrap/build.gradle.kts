@@ -73,7 +73,6 @@ testing {
                     implementation(project(":core:backend:repository:api"))
                     implementation(project(":core:frontend"))
                     implementation(project(":core:agent"))
-                    implementation(project(":extension:api"))
                     implementation(project(":extension:std:sys"))
                     implementation(project(":extension:std:log"))
 

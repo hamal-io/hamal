@@ -5,6 +5,11 @@ import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.Value
 
+interface ExtensionFactory {
+    fun create(): Extension
+}
+
+
 
 class ExtensionConfig(
     val value: MutableMap<String, Value>

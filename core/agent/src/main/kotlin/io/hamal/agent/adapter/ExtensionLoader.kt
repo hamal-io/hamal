@@ -1,6 +1,6 @@
 package io.hamal.agent.adapter
 
-import io.hamal.agent.extension.api.ExtensionFactory
+import io.hamal.lib.kua.ExtensionFactory
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
