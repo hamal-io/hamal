@@ -12,7 +12,7 @@ interface ExtensionFactory {
 
 
 class ExtensionConfig(
-    val value: MutableMap<String, Value>
+    val value: MutableMap<String, Value> = mutableMapOf()
 )
 
 class Extension(

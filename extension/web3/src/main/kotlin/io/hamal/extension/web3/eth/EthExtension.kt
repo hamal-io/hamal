@@ -20,9 +20,11 @@ class EthExtensionFactory : ExtensionFactory {
             config = config,
             functions = listOf(
                 NamedFunctionValue("get_block", GetBlockFunction(config)),
-                NamedFunctionValue("call", CallFunction(config))
+                NamedFunctionValue("call", CallFunction(config)),
+                NamedFunctionValue("execute", ExecuteFunction(config))
             ),
             extensions = listOf(
+                EthRequestExtensionFactory().create(),
                 EthAbiExtensionFactory(config).create()
             )
         )

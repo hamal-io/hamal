@@ -15,6 +15,7 @@ interface State {
     fun isEmpty(): Boolean
     fun isNotEmpty(): Boolean
     fun setTop(idx: Int)
+    fun absIndex(idx: Int): Int
     fun pushTop(idx: Int): StackTop
 
     fun type(idx: Int): ValueType
@@ -65,6 +66,8 @@ class ClosableState(
     override fun isEmpty() = bridge.top() == 0
     override fun isNotEmpty() = !isEmpty()
     override fun setTop(idx: Int) = bridge.setTop(idx)
+    override fun absIndex(idx: Int) = bridge.absIndex(idx)
+
     override fun pushTop(idx: Int): StackTop = StackTop(bridge.pushTop(idx))
 
     override fun type(idx: Int) = ValueType(bridge.type(idx))
@@ -112,10 +115,10 @@ class ClosableState(
     }
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableMapValue = TableProxyValue(idx, this, TableType.Map)
+    override fun getTableMap(idx: Int): TableMapValue = TableProxyValue(absIndex(idx), this, TableType.Map)
 
     //FIXME type check
-    override fun getTableArray(idx: Int): TableArrayValue = TableProxyValue(idx, this, TableType.Array)
+    override fun getTableArray(idx: Int): TableArrayValue = TableProxyValue(absIndex(idx), this, TableType.Array)
 
     override fun setGlobal(name: String, value: TableMapValue) {
         bridge.pushTop(value.index)

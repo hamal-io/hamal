@@ -7,7 +7,8 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.NumberValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -59,6 +60,14 @@ internal class TopTest : BaseBridgeTest() {
 
 @DisplayName("setTop()")
 internal class SetTopTest : BaseBridgeTest() {
+    @Test
+    @Disabled
+    fun implementMe() {
+    }
+}
+
+@DisplayName("absIndex()")
+internal class AbsIndexTest : BaseBridgeTest() {
     @Test
     @Disabled
     fun implementMe() {

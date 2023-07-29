@@ -13,6 +13,7 @@ class Bridge : AutoCloseable {
     external fun top(): Int
     external fun setTop(idx: Int)
     external fun pushTop(idx: Int): Int
+    external fun absIndex(idx: Int): Int
     external fun type(idx: Int): Int
     external fun setGlobal(key: String)
     external fun getGlobal(key: String)

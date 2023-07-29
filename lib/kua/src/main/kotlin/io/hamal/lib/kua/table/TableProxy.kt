@@ -19,7 +19,7 @@ enum class TableType {
 }
 
 
-internal data class TableProxyValue(
+data class TableProxyValue(
     override val index: Int,
     val state: State,
     override val type: TableType

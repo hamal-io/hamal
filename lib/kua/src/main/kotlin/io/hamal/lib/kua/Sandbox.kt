@@ -36,6 +36,8 @@ class Sandbox : State, AutoCloseable {
     override fun isEmpty() = state.isEmpty()
     override fun isNotEmpty() = state.isNotEmpty()
     override fun setTop(idx: Int) = state.setTop(idx)
+    override fun absIndex(idx: Int) = state.absIndex(idx)
+
     override fun pushTop(idx: Int) = state.pushTop(idx)
 
     override fun type(idx: Int) = state.type(idx)

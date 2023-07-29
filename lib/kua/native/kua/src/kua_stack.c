@@ -32,6 +32,12 @@ top(lua_State *L) {
     return lua_gettop(L);
 }
 
+int
+abs_index(lua_State *L, int idx) {
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
+    return lua_absindex(L, idx);
+}
+
 void
 set_top(lua_State *L, int idx) {
     if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return;

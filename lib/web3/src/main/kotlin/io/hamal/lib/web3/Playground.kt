@@ -1,6 +1,7 @@
 package io.hamal.lib.web3
 
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.web3.Erc20.decimals
 import io.hamal.lib.web3.Erc20.name
 import io.hamal.lib.web3.eth.abi.EthFunction
 import io.hamal.lib.web3.eth.abi.EthInputTuple0
@@ -90,8 +91,8 @@ fun main() {
 //            blockNumber = EthUint64(12040752L)
 //        )
         .call(
-            to = EthAddress(EthPrefixedHexString("0x9a9b2f87835fb1918186d32ec7e18af797430142")),
-            function = name,
+            to = EthAddress(EthPrefixedHexString("0x570febdf89c07f256c75686caca215289bb11cfc")),
+            function = decimals,
             blockNumber = EthUint64(12040752L)
         )
         .execute().first()
@@ -100,7 +101,7 @@ fun main() {
 
     require(response is EthCallResp)
 
-    val x = name.outputs.decodeToMap(response.result)
+    val x = decimals.outputs.decodeToMap(response.result)
 
     println(x)
 

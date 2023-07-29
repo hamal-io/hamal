@@ -13,6 +13,9 @@ void
 set_top(lua_State *L, int idx);
 
 int
+abs_index(lua_State *L, int idx);
+
+int
 push_top(lua_State *L, int idx);
 
 int
