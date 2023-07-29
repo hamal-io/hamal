@@ -2,6 +2,7 @@ package io.hamal.backend.instance.req
 
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.lib.domain.CorrelatedState
+import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
@@ -22,6 +23,7 @@ data class InvokeEvent(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
+    val invocation: EventInvocation
 )
 
 @Component
@@ -60,14 +62,15 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
 
 
-    operator fun invoke(evt: InvokeEvent) =
+    operator fun invoke(invoke: InvokeEvent) =
         SubmittedInvokeEventReq(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
-            funcId = evt.funcId,
-            correlationId = evt.correlationId,
-            inputs = evt.inputs,
+            funcId = invoke.funcId,
+            correlationId = invoke.correlationId,
+            inputs = invoke.inputs,
+            invocation = invoke.invocation
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(execId: ExecId, complete: CompleteExecReq) =

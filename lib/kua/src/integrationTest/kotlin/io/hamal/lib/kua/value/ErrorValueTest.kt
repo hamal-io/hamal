@@ -4,7 +4,7 @@ import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableMapValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -67,10 +67,10 @@ internal class ErrorValueTest {
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableMapProxyValue>(
-        FunctionInput1Schema(TableMapProxyValue::class)
+    private object AssertMetatable : Function1In0Out<TableMapValue>(
+        FunctionInput1Schema(TableMapValue::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue) {
+        override fun invoke(ctx: FunctionContext, arg1: TableMapValue) {
             assertThat(arg1.getInt("__type"), equalTo(20))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }

@@ -34,6 +34,7 @@ class InvokeEventHandler(
                 ),
                 inputs = merge(func.inputs, req.inputs),
                 code = func.code,
+                invocation = req.invocation
             )
         )
     }

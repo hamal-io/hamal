@@ -8,6 +8,7 @@ import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.FixedRateInvocation
 import io.hamal.lib.domain.PlannedExec
 import io.hamal.lib.domain.req.SubmittedInvokeFixedRateReq
 import org.springframework.stereotype.Component
@@ -34,6 +35,7 @@ class InvokeFixedRateHandler(
                 ),
                 inputs = merge(func.inputs, req.inputs),
                 code = func.code,
+                invocation = FixedRateInvocation()
             )
         )
     }

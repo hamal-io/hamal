@@ -23,7 +23,7 @@ internal data class TableProxyValue(
     override val index: Int,
     val state: State,
     override val type: TableType
-) : TableMapProxyValue, TableArrayProxyValue {
+) : TableMapValue, TableArrayValue {
 
     override fun unset(key: String): TableLength {
         bridge.pushString(key)
@@ -50,7 +50,13 @@ internal data class TableProxyValue(
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableMapProxyValue): TableLength {
+    override fun set(key: String, value: TableMapValue): TableLength {
+        state.pushString(key)
+        state.pushTable(value)
+        return state.tableSetRaw(index)
+    }
+
+    override fun set(key: String, value: TableArrayValue): TableLength {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
@@ -84,7 +90,7 @@ internal data class TableProxyValue(
         return StringValue(bridge.toString(state.top.value)).also { bridge.pop(1) }
     }
 
-    override fun getTableMap(key: String): TableMapProxyValue {
+    override fun getTableMap(key: String): TableMapValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Table)
@@ -108,12 +114,12 @@ internal data class TableProxyValue(
         return state.tableInsert(index)
     }
 
-    override fun append(value: TableMapProxyValue): TableLength {
+    override fun append(value: TableMapValue): TableLength {
         state.pushTable(value)
         return state.tableInsert(index)
     }
 
-    override fun append(value: TableArrayProxyValue): TableLength {
+    override fun append(value: TableArrayValue): TableLength {
         state.pushTable(value)
         return state.tableInsert(index)
     }

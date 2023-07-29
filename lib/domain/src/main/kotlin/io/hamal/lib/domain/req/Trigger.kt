@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.req
 
+import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
@@ -50,5 +51,6 @@ data class SubmittedInvokeEventReq(
     val funcId: FuncId,
     val correlationId: CorrelationId,
     val inputs: InvocationInputs,
+    val invocation: EventInvocation
 ) : SubmittedReq
 

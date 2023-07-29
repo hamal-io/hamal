@@ -4,6 +4,7 @@ import io.hamal.backend.repository.record.Record
 import io.hamal.backend.repository.record.RecordSequence
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.kua.value.CodeValue
@@ -24,7 +25,8 @@ data class ExecPlannedRecord(
     override val cmdId: CmdId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val code: CodeValue
+    val code: CodeValue,
+    val invocation: Invocation
 ) : ExecRecord()
 
 @Serializable

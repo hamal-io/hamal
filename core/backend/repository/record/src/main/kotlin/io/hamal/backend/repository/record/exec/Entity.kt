@@ -15,12 +15,14 @@ data class Entity(
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
 
+
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
     var code: CodeValue? = null,
     var plannedAt: Instant? = null,
-    var scheduledAt: Instant? = null
+    var scheduledAt: Instant? = null,
+    var invocation: Invocation? = null
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
 
@@ -34,6 +36,7 @@ data class Entity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
+                invocation = rec.invocation,
                 plannedAt = Instant.now(), // FIXME
             )
 
@@ -42,6 +45,7 @@ data class Entity(
                 sequence = rec.sequence(),
                 status = ExecStatus.Scheduled,
                 scheduledAt = Instant.now() // FIXME
+
             )
 
             is ExecQueuedRecord -> copy(
@@ -84,7 +88,8 @@ data class Entity(
             id = id,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(TableValue()),
-            code = code!!
+            code = code!!,
+            invocation = invocation!!
         )
 
         if (status == ExecStatus.Planned) return plannedExec

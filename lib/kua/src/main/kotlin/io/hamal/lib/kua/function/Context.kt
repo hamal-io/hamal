@@ -2,8 +2,8 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableArrayProxyValue
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableArrayValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.TableValue
@@ -34,15 +34,15 @@ class FunctionContext(
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
     override fun pushTable(value: TableValue) = state.pushTable(value)
-    override fun pushTable(proxy: TableMapProxyValue) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableArrayProxyValue) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableMapValue) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableArrayValue) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
-    override fun setGlobal(name: String, value: TableMapProxyValue) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableArrayProxyValue) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableMapProxyValue = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: TableMapValue) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableArrayValue) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableMapValue = state.getGlobalTableMap(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
     override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)

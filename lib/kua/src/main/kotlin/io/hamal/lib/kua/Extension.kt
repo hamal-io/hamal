@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.Value
 
@@ -20,10 +20,10 @@ class Extension(
 
 class ExtensionGetConfigFunction(
     val config: ExtensionConfig
-) : Function0In1Out<TableMapProxyValue>(
-    FunctionOutput1Schema(TableMapProxyValue::class)
+) : Function0In1Out<TableMapValue>(
+    FunctionOutput1Schema(TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext): TableMapProxyValue {
+    override fun invoke(ctx: FunctionContext): TableMapValue {
         val result = ctx.state.tableCreateMap(1)
         config.value.forEach { config ->
             val v = config.value
@@ -36,10 +36,10 @@ class ExtensionGetConfigFunction(
 
 class ExtensionUpdateConfigFunction(
     val config: ExtensionConfig
-) : Function1In0Out<TableMapProxyValue>(
-    FunctionInput1Schema(TableMapProxyValue::class)
+) : Function1In0Out<TableMapValue>(
+    FunctionInput1Schema(TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue) {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapValue) {
         val state = ctx.state
         state.bridge.pushNil()
         while (state.bridge.tableNext(arg1.index)) {

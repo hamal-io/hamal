@@ -22,7 +22,8 @@ interface ExecCmdRepository {
         val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val code: CodeValue
+        val code: CodeValue,
+        val invocation: Invocation
     )
 
     data class ScheduleCmd(

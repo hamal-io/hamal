@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
@@ -16,11 +16,11 @@ import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 class GetBlockFunction(
     val config: ExtensionConfig
-) : Function1In2Out<NumberValue, ErrorValue, TableMapProxyValue>(
+) : Function1In2Out<NumberValue, ErrorValue, TableMapValue>(
     FunctionInput1Schema(NumberValue::class),
-    FunctionOutput2Schema(ErrorValue::class, TableMapProxyValue::class)
+    FunctionOutput2Schema(ErrorValue::class, TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: NumberValue): Pair<ErrorValue?, TableMapProxyValue?> {
+    override fun invoke(ctx: FunctionContext, arg1: NumberValue): Pair<ErrorValue?, TableMapValue?> {
         println("get block from - ${config.value["host"]}")
 
         val b = EthHttpBatchService(

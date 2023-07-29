@@ -3,7 +3,7 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.value.*
 
 
-interface TableMapProxyValue : BaseTableProxyValue {
+interface TableMapValue : BaseTableProxyValue {
     fun unset(key: String): TableLength
     fun unset(key: StringValue) = unset(key.value)
     operator fun set(key: String, value: NilValue) = unset(key)
@@ -27,7 +27,8 @@ interface TableMapProxyValue : BaseTableProxyValue {
     operator fun set(key: String, value: StringValue) = set(key, value.value)
     operator fun set(key: StringValue, value: StringValue) = set(key.value, value.value)
 
-    operator fun set(key: String, value: TableMapProxyValue): TableLength
+    operator fun set(key: String, value: TableMapValue): TableLength
+    operator fun set(key: String, value: TableArrayValue): TableLength
 
     fun getBooleanValue(key: String): BooleanValue
     fun getBooleanValue(key: StringValue): BooleanValue = getBooleanValue(key.value)
@@ -53,5 +54,5 @@ interface TableMapProxyValue : BaseTableProxyValue {
     fun getString(key: String): String = getStringValue(key).value
     fun getString(key: StringValue): String = getString(key.value)
 
-    fun getTableMap(key: String): TableMapProxyValue
+    fun getTableMap(key: String): TableMapValue
 }

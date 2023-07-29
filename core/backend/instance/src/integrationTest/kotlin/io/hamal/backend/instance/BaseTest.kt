@@ -4,13 +4,14 @@ import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Exec
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.CodeValue
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
@@ -96,7 +97,8 @@ internal abstract class BaseTest {
                 execId = execId,
                 correlation = correlation,
                 inputs = ExecInputs(),
-                code = code
+                code = code,
+                invocation = AdhocInvocation()
             )
         )
 

@@ -17,7 +17,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        lateinit var testInstance: TableMapProxyValue
+        lateinit var testInstance: TableMapValue
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", TrueValue) },
@@ -55,7 +55,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        lateinit var testInstance: TableMapProxyValue
+        lateinit var testInstance: TableMapValue
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(StringValue("key")) },
@@ -86,7 +86,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapProxyValue
+        lateinit var testInstance: TableMapValue
         return listOf(
             { testInstance.getBooleanValue("key") },
             { testInstance.getBooleanValue(StringValue("key")) },
@@ -117,7 +117,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapProxyValue
+        lateinit var testInstance: TableMapValue
         return listOf(
             { testInstance.getCodeValue("key") },
             { testInstance.getCodeValue(StringValue("key")) },
@@ -141,7 +141,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapProxyValue
+        lateinit var testInstance: TableMapValue
         return listOf(
             { testInstance.getNumberValue("key") },
             { testInstance.getNumberValue(StringValue("key")) },
@@ -181,7 +181,7 @@ internal class TableMapProxyValueTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapProxyValue
+        lateinit var testInstance: TableMapValue
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringValue("key")) },

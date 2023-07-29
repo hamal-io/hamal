@@ -8,18 +8,18 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.sdk.HttpTemplateSupplier
 
 class InvokeAdhocFunction(
     private val templateSupplier: HttpTemplateSupplier
-) : Function1In1Out<TableMapProxyValue, StringValue>(
-    FunctionInput1Schema(TableMapProxyValue::class),
+) : Function1In1Out<TableMapValue, StringValue>(
+    FunctionInput1Schema(TableMapValue::class),
     FunctionOutput1Schema(StringValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue): StringValue {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): StringValue {
 
         val r = InvokeAdhocReq(
             inputs = InvocationInputs(),

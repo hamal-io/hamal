@@ -2,6 +2,7 @@ package io.hamal.agent.service
 
 import io.hamal.agent.component.AgentAsync
 import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.State
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.KuaError
@@ -9,7 +10,7 @@ import io.hamal.lib.kua.SandboxFactory
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
@@ -36,17 +37,16 @@ class AgentService(
                     try {
 
                         lateinit var stateResult: State
-                        val events = mutableListOf<Event>()
+                        val eventsToEmit = mutableListOf<Event>()
 
                         sandboxFactory.create().use { sb ->
                             sb.run { state ->
                                 val ctx = state.tableCreateMap(1)
 
-                                sb.bridge.pushFunctionValue(EmitEventFunction(events))
+                                sb.bridge.pushFunctionValue(EmitEventFunction(eventsToEmit))
                                 sb.bridge.tabletSetField(ctx.index, "emit")
 
                                 val funcState = state.tableCreateMap(1)
-
                                 request.state.value.forEach { entry ->
                                     when (val value = entry.value) {
                                         is BooleanValue -> funcState[entry.key] = value
@@ -58,6 +58,18 @@ class AgentService(
                                     }
                                 }
                                 ctx["state"] = funcState
+
+
+                                val invocation = request.invocation
+                                val events = state.tableCreateArray(0)
+                                if (invocation is EventInvocation) {
+                                    invocation.events.forEach {
+                                        val evt = state.tableCreateMap(1)
+                                        evt["topic"] = it.value.get("topic") as StringValue
+                                        sb.bridge.tableInsert(events.index)
+                                    }
+                                }
+                                ctx["events"] = events
                                 state.setGlobal("ctx", ctx)
                             }
 
@@ -90,7 +102,7 @@ class AgentService(
                         }
 
                         sdk.execService().complete(
-                            request.id, stateResult, events
+                            request.id, stateResult, eventsToEmit
                         )
                     } catch (kua: KuaError) {
                         val e = kua.cause
@@ -120,10 +132,10 @@ class AgentService(
 
 class EmitEventFunction(
     val eventsCollector: MutableList<Event>
-) : Function1In0Out<TableMapProxyValue>(
-    FunctionInput1Schema(TableMapProxyValue::class)
+) : Function1In0Out<TableMapValue>(
+    FunctionInput1Schema(TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue) {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapValue) {
         ctx.pushNil()
 
         val eventMap = mutableMapOf<StringValue, SerializableValue>()

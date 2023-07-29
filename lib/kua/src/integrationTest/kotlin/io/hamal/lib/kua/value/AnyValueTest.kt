@@ -5,9 +5,9 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableArrayProxyValue
+import io.hamal.lib.kua.table.TableArrayValue
 import io.hamal.lib.kua.table.TableLength
-import io.hamal.lib.kua.table.TableMapProxyValue
+import io.hamal.lib.kua.table.TableMapValue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -87,7 +87,7 @@ internal class AnyValueTest {
         sandbox.runCode("test.captor(test.pass_through(test_map))")
 
         val underlying = (captor.result as AnyValue).value
-        require(underlying is TableMapProxyValue) { "Not a TableMapProxyValue" }
+        require(underlying is TableMapValue) { "Not a TableMapProxyValue" }
         assertThat(underlying.length(), equalTo(TableLength(1)))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
@@ -114,7 +114,7 @@ internal class AnyValueTest {
         sandbox.runCode("test.captor(test.pass_through(test_array))")
 
         val underlying = (captor.result as AnyValue).value
-        require(underlying is TableArrayProxyValue) { "Not a TableArrayProxyValue" }
+        require(underlying is TableArrayValue) { "Not a TableArrayProxyValue" }
         assertThat(underlying.length(), equalTo(TableLength(2)))
 
         assertThat(underlying.getInt(1), equalTo(23))

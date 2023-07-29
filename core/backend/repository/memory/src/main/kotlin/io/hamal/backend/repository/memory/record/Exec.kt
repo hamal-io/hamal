@@ -74,7 +74,8 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
                         cmdId = cmd.id,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
-                        code = cmd.code
+                        code = cmd.code,
+                        invocation = cmd.invocation
                     )
                 )
                 (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)

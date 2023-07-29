@@ -10,6 +10,7 @@ import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
@@ -65,6 +66,7 @@ class EventTriggerService<TOPIC : LogTopic>(
                                     funcId = trigger.funcId,
                                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                                     inputs = InvocationInputs(TableValue()),
+                                    invocation = EventInvocation(evts)
                                 )
                             )
                         }

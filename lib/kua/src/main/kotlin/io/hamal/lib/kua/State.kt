@@ -37,18 +37,18 @@ interface State {
     fun pushString(value: StringValue) = pushString(value.value)
 
     fun pushTable(value: TableValue): StackTop
-    fun pushTable(proxy: TableMapProxyValue): StackTop
-    fun pushTable(proxy: TableArrayProxyValue): StackTop
+    fun pushTable(proxy: TableMapValue): StackTop
+    fun pushTable(proxy: TableArrayValue): StackTop
     fun getTable(idx: Int): TableValue
-    fun getTableMap(idx: Int): TableMapProxyValue
-    fun getTableArray(idx: Int): TableArrayProxyValue
+    fun getTableMap(idx: Int): TableMapValue
+    fun getTableArray(idx: Int): TableArrayValue
 
-    fun setGlobal(name: String, value: TableMapProxyValue)
-    fun setGlobal(name: String, value: TableArrayProxyValue)
-    fun getGlobalTableMap(name: String): TableMapProxyValue
+    fun setGlobal(name: String, value: TableMapValue)
+    fun setGlobal(name: String, value: TableArrayValue)
+    fun getGlobalTableMap(name: String): TableMapValue
 
-    fun tableCreateMap(capacity: Int = 0): TableMapProxyValue
-    fun tableCreateArray(capacity: Int = 0): TableArrayProxyValue
+    fun tableCreateMap(capacity: Int = 0): TableMapValue
+    fun tableCreateArray(capacity: Int = 0): TableArrayValue
     fun tableInsert(idx: Int): TableLength
     fun tableSetRaw(idx: Int): TableLength
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
@@ -75,7 +75,7 @@ class ClosableState(
             is BooleanValue -> pushBoolean(underlying)
             is NumberValue -> pushNumber(underlying)
             is StringValue -> pushString(underlying)
-            is TableArrayProxyValue -> pushTable(underlying)
+            is TableArrayValue -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
@@ -103,36 +103,36 @@ class ClosableState(
         TODO("Not yet implemented")
     }
 
-    override fun pushTable(proxy: TableMapProxyValue) = StackTop(bridge.pushTop(proxy.index))
+    override fun pushTable(proxy: TableMapValue) = StackTop(bridge.pushTop(proxy.index))
 
-    override fun pushTable(proxy: TableArrayProxyValue) = StackTop(bridge.pushTop(proxy.index))
+    override fun pushTable(proxy: TableArrayValue) = StackTop(bridge.pushTop(proxy.index))
 
     override fun getTable(idx: Int): TableValue {
         TODO("Not yet implemented")
     }
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableMapProxyValue = TableProxyValue(idx, this, TableType.Map)
+    override fun getTableMap(idx: Int): TableMapValue = TableProxyValue(idx, this, TableType.Map)
 
     //FIXME type check
-    override fun getTableArray(idx: Int): TableArrayProxyValue = TableProxyValue(idx, this, TableType.Array)
+    override fun getTableArray(idx: Int): TableArrayValue = TableProxyValue(idx, this, TableType.Array)
 
-    override fun setGlobal(name: String, value: TableMapProxyValue) {
+    override fun setGlobal(name: String, value: TableMapValue) {
         bridge.pushTop(value.index)
         bridge.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: TableArrayProxyValue) {
+    override fun setGlobal(name: String, value: TableArrayValue) {
         bridge.pushTop(value.index)
         bridge.setGlobal(name)
     }
 
-    override fun getGlobalTableMap(name: String): TableMapProxyValue {
+    override fun getGlobalTableMap(name: String): TableMapValue {
         bridge.getGlobal(name)
         return getTableMap(top.value)
     }
 
-    override fun tableCreateMap(capacity: Int): TableMapProxyValue {
+    override fun tableCreateMap(capacity: Int): TableMapValue {
         return TableProxyValue(
             index = bridge.tableCreate(0, capacity),
             state = this,
@@ -140,7 +140,7 @@ class ClosableState(
         )
     }
 
-    override fun tableCreateArray(capacity: Int): TableArrayProxyValue {
+    override fun tableCreateArray(capacity: Int): TableArrayValue {
         return TableProxyValue(
             index = bridge.tableCreate(capacity, 0),
             state = this,

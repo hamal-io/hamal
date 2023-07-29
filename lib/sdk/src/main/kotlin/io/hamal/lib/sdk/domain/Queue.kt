@@ -1,6 +1,7 @@
 package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -18,6 +19,7 @@ data class DequeueExecsResponse(
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val state: State,
-        val code: CodeValue
+        val code: CodeValue,
+        val invocation: Invocation
     )
 }

@@ -2,6 +2,7 @@ package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeEventReq
@@ -81,7 +82,8 @@ internal class InvokeEventHandlerTest : BaseReqHandlerTest() {
                 StringValue("invocation") to StringValue("invocation")
             )
         ),
-        funcId = FuncId(4444)
+        funcId = FuncId(4444),
+        invocation = EventInvocation(listOf())
     )
     //@formatter:on
 }

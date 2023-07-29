@@ -16,7 +16,7 @@ internal class TableArrayProxyValueTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        lateinit var testInstance: TableArrayProxyValue
+        lateinit var testInstance: TableArrayValue
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(FalseValue) },

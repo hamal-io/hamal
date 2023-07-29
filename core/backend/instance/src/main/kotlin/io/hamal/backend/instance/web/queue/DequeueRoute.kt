@@ -39,7 +39,8 @@ class DequeueRoute(
                         correlation = exec.correlation,
                         inputs = exec.inputs,
                         state = state,
-                        code = exec.code
+                        code = exec.code,
+                        invocation = exec.invocation
                     )
                 }), HttpStatus.OK
         )
