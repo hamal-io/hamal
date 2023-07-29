@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = Event.Serializer::class)
 class Event(override val value: TableValue = TableValue()) : Inputs() {
-    internal object Serializer : InputsSerializer<Event>(::Event)
+    internal object Serializer : InputsSerializer<Event>(::Event) // FIXME custom event serializer
 }
 
 

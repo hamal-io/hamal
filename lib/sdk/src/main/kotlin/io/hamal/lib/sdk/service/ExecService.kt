@@ -1,5 +1,6 @@
 package io.hamal.lib.sdk.service
 
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.req.FailExecReq
@@ -13,8 +14,13 @@ interface ExecService {
     fun poll(): DequeueExecsResponse
 
     //FIXME list of events to publish
-    fun complete(execId: ExecId, stateAfterCompletion: State)
+    fun complete(
+        execId: ExecId,
+        stateAfterCompletion: State,
+        events: List<Event>
+    )
 
+    // able to emit events on failure
     fun fail(execId: ExecId, error: ErrorValue)
 }
 
@@ -25,13 +31,17 @@ data class DefaultExecService(val template: HttpTemplate) : ExecService {
             .execute(DequeueExecsResponse::class)
     }
 
-    override fun complete(execId: ExecId, stateAfterCompletion: State) {
+    override fun complete(
+        execId: ExecId,
+        stateAfterCompletion: State,
+        events: List<Event>
+    ) {
         template
             .post("/v1/execs/${execId.value.value}/complete")
             .body(
                 CompleteExecReq(
                     state = stateAfterCompletion,
-                    events = listOf()
+                    events = events
                 )
             )
             .execute()

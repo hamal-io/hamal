@@ -1,10 +1,15 @@
 package io.hamal.agent.service
 
 import io.hamal.agent.component.AgentAsync
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.KuaError
 import io.hamal.lib.kua.SandboxFactory
+import io.hamal.lib.kua.function.Function1In0Out
+import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.function.FunctionInput1Schema
+import io.hamal.lib.kua.table.TableMapProxyValue
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
@@ -31,10 +36,15 @@ class AgentService(
                     try {
 
                         lateinit var stateResult: State
+                        val events = mutableListOf<Event>()
 
                         sandboxFactory.create().use { sb ->
                             sb.run { state ->
                                 val ctx = state.tableCreateMap(1)
+
+                                sb.bridge.pushFunctionValue(EmitEventFunction(events))
+                                sb.bridge.tabletSetField(ctx.index, "emit")
+
                                 val funcState = state.tableCreateMap(1)
 
                                 request.state.value.forEach { entry ->
@@ -50,6 +60,7 @@ class AgentService(
                                 ctx["state"] = funcState
                                 state.setGlobal("ctx", ctx)
                             }
+
                             sb.runCode(request.code)
 
                             sb.run { state ->
@@ -79,7 +90,7 @@ class AgentService(
                         }
 
                         sdk.execService().complete(
-                            request.id, stateResult
+                            request.id, stateResult, events
                         )
                     } catch (kua: KuaError) {
                         val e = kua.cause
@@ -87,7 +98,7 @@ class AgentService(
                             println("Exit ${e.status.value}")
                             if (e.status == NumberValue(0.0)) {
                                 sdk.execService().complete(
-                                    request.id, State()
+                                    request.id, State(), listOf()
                                 )
                             } else {
                                 sdk.execService().fail(request.id, ErrorValue(e.message ?: "Unknown error"))
@@ -104,4 +115,34 @@ class AgentService(
         }
     }
 
+
+}
+
+class EmitEventFunction(
+    val eventsCollector: MutableList<Event>
+) : Function1In0Out<TableMapProxyValue>(
+    FunctionInput1Schema(TableMapProxyValue::class)
+) {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapProxyValue) {
+        ctx.pushNil()
+
+        val eventMap = mutableMapOf<StringValue, SerializableValue>()
+
+        while (ctx.state.bridge.tableNext(arg1.index)) {
+            val k = ctx.getStringValue(-2)
+            val v = ctx.getAnyValue(-1)
+            when (val n = v.value) {
+                is NumberValue -> eventMap[k] = n
+                is StringValue -> eventMap[k] = n
+                else -> TODO()
+            }
+            ctx.bridge.pop(1)
+        }
+
+
+        // FIXME make sure topic is set and string
+        require(eventMap.containsKey(StringValue("topic")))
+
+        eventsCollector.add(Event(TableValue(eventMap)))
+    }
 }
