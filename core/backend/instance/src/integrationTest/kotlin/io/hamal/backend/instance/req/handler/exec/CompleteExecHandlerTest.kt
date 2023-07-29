@@ -65,7 +65,12 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         execId = ExecId(1234),
         state = State(TableValue("counter" to NumberValue(1))),
         events = listOf(
-            Event(TableValue("ich" to StringValue("habFertsch")))
+            Event(
+                TableValue(
+                    "topic" to StringValue("test-completion"),
+                    "ich" to StringValue("habFertsch")
+                )
+            )
         ),
     )
 

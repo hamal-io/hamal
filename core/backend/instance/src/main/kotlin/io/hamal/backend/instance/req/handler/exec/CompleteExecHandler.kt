@@ -36,7 +36,6 @@ class CompleteExecHandler<TOPIC : LogTopic>(
         val exec = execQueryRepository.get(req.execId)
         require(exec is StartedExec) { "Exec not in status Started" }
 
-
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
             .also { setState(cmdId, it, req.state) }

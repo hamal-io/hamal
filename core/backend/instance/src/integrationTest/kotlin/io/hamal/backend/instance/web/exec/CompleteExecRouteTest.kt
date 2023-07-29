@@ -11,6 +11,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.TableValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -116,7 +117,14 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
             .body(
                 CompleteExecReq(
                     state = State(TableValue("value" to NumberValue(13.37))),
-                    events = listOf(Event(TableValue("value" to NumberValue(42))))
+                    events = listOf(
+                        Event(
+                            TableValue(
+                                "topic" to StringValue("test-completion"),
+                                "value" to NumberValue(42)
+                            )
+                        )
+                    )
                 )
             )
             .execute()
