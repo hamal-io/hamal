@@ -39,35 +39,31 @@ class EventTriggerService<TOPIC : LogTopic>(
 
     @PostConstruct
     fun setup() {
-        triggerQueryRepository.list {
-            afterId = TriggerId(0)
-            types = setOf(TriggerType.Event)
-            limit = Limit(10)
-        }.forEach { trigger ->
-            println("start $trigger")
-            require(trigger is EventTrigger)
+        scheduledTasks.add(
+            async.atFixedRate(1000.milliseconds) {
+                triggerQueryRepository.list {
+                    afterId = TriggerId(0)
+                    types = setOf(TriggerType.Event)
+                    limit = Limit(10)
+                }.forEach { trigger ->
+                    require(trigger is EventTrigger)
 
-            val topic = eventBrokerRepository.getTopic(trigger.topicId)
-            val consumer = ProtobufBatchConsumer(
-                groupId = GroupId(trigger.id.value.value.toString(16)),
-                topic = topic,
-                repository = eventBrokerRepository,
-                valueClass = Event::class
-            )
+                    val topic = eventBrokerRepository.getTopic(trigger.topicId)
+                    val consumer = ProtobufBatchConsumer(
+                        groupId = GroupId(trigger.id.value.value.toString(16)),
+                        topic = topic,
+                        repository = eventBrokerRepository,
+                        valueClass = Event::class
+                    )
 
-            triggerConsumers[trigger.id] = consumer
-
-            scheduledTasks.add(
-                async.atFixedRate(1000.milliseconds) {
-                    println(trigger.name)
-
+                    triggerConsumers[trigger.id] = consumer
                     try {
                         consumer.consumeBatch(1) { evts ->
                             submitRequest(
                                 InvokeEvent(
                                     execId = generateDomainId(::ExecId),
                                     funcId = trigger.funcId,
-                                    correlationId = CorrelationId("__TBD__"),
+                                    correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                                     inputs = InvocationInputs(TableValue()),
                                 )
                             )
@@ -75,9 +71,8 @@ class EventTriggerService<TOPIC : LogTopic>(
                     } catch (t: Throwable) {
                         t.printStackTrace()
                     }
-                },
-            )
-        }
+                }
+            },
+        )
     }
-
 }

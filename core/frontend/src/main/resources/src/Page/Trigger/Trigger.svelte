@@ -8,6 +8,7 @@
     let name = 'some-trigger-name'
     let funcId = ''
     let fixedRate = 'PT5S'
+    let topicId = null
 
     async function getTriggers() {
         fetch("http://localhost:8008/v1/triggers")
@@ -31,10 +32,14 @@
             body: JSON.stringify({
                     name,
                     funcId,
-                    type: 'FixedRate',
+                    // type: 'FixedRate',
+                    // correlationId: 'test',
+                    // inputs: {},
+                    // duration: fixedRate
+                    type: 'Event',
                     correlationId: 'test',
                     inputs: {},
-                    duration: fixedRate
+                    topicId: topicId
                 }
             )
         })
@@ -65,6 +70,11 @@
             <div class="flex-content py-2">
                 <label for="fixed-rate">fixed rate</label>
                 <input bind:value={fixedRate} id="fixed-rate" style="background: red"/>
+            </div>
+
+            <div class="flex-content py-2">
+                <label for="fixed-rate">topic id</label>
+                <input bind:value={topicId} id="topic-id" style="background: red"/>
             </div>
 
             <div class="flex-content py-2">
