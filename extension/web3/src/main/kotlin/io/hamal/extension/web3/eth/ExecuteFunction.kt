@@ -25,20 +25,10 @@ class ExecuteFunction(
     override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
 
         val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
-
         ctx.pushNil()
-
         while (ctx.state.bridge.tableNext(arg1.index)) {
             val i = ctx.state.getNumber(-2)
             val v = ctx.state.getTableMap(-1)
-
-            ctx.pushNil()
-            while (ctx.state.bridge.tableNext(v.index)) {
-                val nk = ctx.state.getString(-2)
-                val nv = ctx.state.getAnyValue(-1)
-                println("$nk $nv")
-                ctx.state.bridge.pop(1)
-            }
 
             when (v.getString("req_type")) {
                 "get_block" -> {
@@ -49,19 +39,8 @@ class ExecuteFunction(
                     )
                 }
             }
-
             ctx.state.bridge.pop(1)
         }
-
-//        val b = EthHttpBatchService(HttpTemplate("https://cloudflare-eth.com"))
-//            .getBlock(EthUint64(1))
-//            .getBlock(EthUint64(2))
-//            .call(
-//                to = EthAddress(EthPrefixedHexString("0x570febdf89c07f256c75686caca215289bb11cfc")),
-//                function = Erc20.decimals,
-//                blockNumber = EthUint64(12040752L)
-//            )
-
 
         val result = ctx.tableCreateArray(0)
         batchService.execute().forEach { ethRes ->

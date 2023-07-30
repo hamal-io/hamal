@@ -32,14 +32,14 @@
             body: JSON.stringify({
                     name,
                     funcId,
-                    // type: 'FixedRate',
-                    // correlationId: 'test',
-                    // inputs: {},
-                    // duration: fixedRate
-                    type: 'Event',
+                    type: 'FixedRate',
                     correlationId: 'test',
                     inputs: {},
-                    topicId: topicId
+                    duration: fixedRate
+                    // type: 'Event',
+                    // correlationId: 'test',
+                    // inputs: {},
+                    // topicId: topicId
                 }
             )
         })

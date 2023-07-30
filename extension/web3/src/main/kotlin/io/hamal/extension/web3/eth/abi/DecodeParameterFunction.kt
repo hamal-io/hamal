@@ -18,8 +18,6 @@ class DecodeParameterFunction : Function2In2Out<StringValue, StringValue, ErrorV
 ) {
     override fun invoke(ctx: FunctionContext, type: StringValue, value: StringValue): Pair<ErrorValue?, AnyValue?> {
 //        EthTypeDecoder.Uint256.decode(arg1.value.)
-        println(type)
-        println(value)
 
         if (type.value == "string") {
             return null to AnyValue(

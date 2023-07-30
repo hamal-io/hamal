@@ -25,7 +25,6 @@ data class EthEvent<INDEXED : EthOutputTuple, NOT_INDEXED : EthOutputTuple>(
         val result = mutableListOf<DecodedEthType<*>>()
         if (topics.size > 1) {
             val remainingTopics = topics.subList(1, topics.size)
-            println()
             val topicData = EthPrefixedHexString("0x${
                 remainingTopics.joinToString("") {
                     it.toHexString().toString()

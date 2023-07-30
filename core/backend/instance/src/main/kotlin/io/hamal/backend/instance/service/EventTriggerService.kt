@@ -44,36 +44,37 @@ class EventTriggerService<TOPIC : LogTopic>(
             async.atFixedRate(1000.milliseconds) {
                 triggerQueryRepository.list {
                     afterId = TriggerId(0)
-                    types = setOf(TriggerType.Event)
+                    types = setOf(TriggerType.Event) // FIXME doesn ot work
                     limit = Limit(10)
-                }.forEach { trigger ->
-                    require(trigger is EventTrigger)
+                }.filterIsInstance<EventTrigger>()
+                    .forEach { trigger ->
+                        require(trigger is EventTrigger)
 
-                    val topic = eventBrokerRepository.getTopic(trigger.topicId)
-                    val consumer = ProtobufBatchConsumer(
-                        groupId = GroupId(trigger.id.value.value.toString(16)),
-                        topic = topic,
-                        repository = eventBrokerRepository,
-                        valueClass = Event::class
-                    )
+                        val topic = eventBrokerRepository.getTopic(trigger.topicId)
+                        val consumer = ProtobufBatchConsumer(
+                            groupId = GroupId(trigger.id.value.value.toString(16)),
+                            topic = topic,
+                            repository = eventBrokerRepository,
+                            valueClass = Event::class
+                        )
 
-                    triggerConsumers[trigger.id] = consumer
-                    try {
-                        consumer.consumeBatch(1) { evts ->
-                            submitRequest(
-                                InvokeEvent(
-                                    execId = generateDomainId(::ExecId),
-                                    funcId = trigger.funcId,
-                                    correlationId = trigger.correlationId ?: CorrelationId("__default__"),
-                                    inputs = InvocationInputs(TableValue()),
-                                    invocation = EventInvocation(evts)
+                        triggerConsumers[trigger.id] = consumer
+                        try {
+                            consumer.consumeBatch(1) { evts ->
+                                submitRequest(
+                                    InvokeEvent(
+                                        execId = generateDomainId(::ExecId),
+                                        funcId = trigger.funcId,
+                                        correlationId = trigger.correlationId ?: CorrelationId("__default__"),
+                                        inputs = InvocationInputs(TableValue()),
+                                        invocation = EventInvocation(evts)
+                                    )
                                 )
-                            )
+                            }
+                        } catch (t: Throwable) {
+                            t.printStackTrace()
                         }
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
                     }
-                }
             },
         )
     }
