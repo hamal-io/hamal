@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.error
+package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.NativeLoader
@@ -14,19 +14,28 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.fail
 
-class ScriptErrorTest {
+class ErrorTest {
+
     @Test
-    fun `Throws an error if script error occurs`() {
+    fun `Throws an error`() {
         val error = assertThrows<ScriptError> {
-            sandbox.load("""local x = does.not.exist""")
+            sandbox.load("""error("this should not have happened")""")
         }
-        assertThat(error.message, equalTo("[string \"local x = does.not.exist\"]:1: <name> expected near 'not'"))
+        assertThat(
+            error.message,
+            equalTo("[string \"error(\"this should not have happened\")\"]:1: this should not have happened")
+        )
     }
 
     @Test
-    fun `Script error interrupts execution`() {
+    fun `Assertion failure interrupts script execution`() {
         assertThrows<ScriptError> {
-            sandbox.load("""local x = does.not.exist; test.call()""")
+            sandbox.load(
+                """
+                error("terminate here")
+                test.call()
+                """.trimIndent()
+            )
         }
     }
 
@@ -39,7 +48,12 @@ class ScriptErrorTest {
     private val sandbox = run {
         NativeLoader.load(Resources)
         Sandbox().also {
-            it.register(Extension("test", listOf(NamedFunctionValue("call", CallbackFunction()))))
+            it.register(
+                Extension(
+                    "test",
+                    functions = listOf(NamedFunctionValue("call", CallbackFunction()))
+                )
+            )
         }
     }
 }

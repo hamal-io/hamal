@@ -30,9 +30,25 @@ kua_assert(lua_State *L) {
     }
 }
 
+static int
+kua_error(lua_State *L) {
+    int level = (int) luaL_optinteger(L, 2, 1);
+    lua_settop(L, 1);
+    if (lua_type(L, 1) == LUA_TSTRING && level > 0) {
+        luaL_where(L, level);   /* add extra information */
+        lua_pushvalue(L, 1);
+        lua_concat(L, 2);
+    }
+
+    char const *error_c_str = lua_tostring(L, -1);
+    throw_script_error(error_c_str);
+    return lua_error(L);
+}
+
 
 static const luaL_Reg base_funcs[] = {
         {"assert", kua_assert},
+        {"error",  kua_error},
         {"next",   luaB_next},
         {"pairs",  luaB_pairs},
         {"print",  luaB_print}, // FIXME replace with some logger
