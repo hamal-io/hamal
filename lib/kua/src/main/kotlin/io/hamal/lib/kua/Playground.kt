@@ -5,11 +5,13 @@ import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
 
 fun main() {
     NativeLoader.load(BuildDir)
-    Sandbox().use { sb ->
+
+    Sandbox().also {
+        it.register(Extension("test", listOf()))
+    }.use { sb ->
         sb.load(
             """
-            assert(1 == 1)
-            assert(1 == 2)
+            local x = does.not.exist
             """.trimIndent()
         )
 

@@ -11,8 +11,10 @@ struct jni_ref {
     jclass illegal_argument_exception_class;
     jclass illegal_state_exception_class;
     jclass error_class;
-    jclass kua_error_class;
-    jmethodID kua_error_ctor_id;
+    jclass extension_error_class;
+    jmethodID extension_error_ctor_id;
+    jclass script_error_class;
+    jmethodID script_error_ctor_id;
     jclass assertion_error_class;
     jclass kua_func_class;
     jmethodID invoked_by_lua_method_id;

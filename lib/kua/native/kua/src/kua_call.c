@@ -16,11 +16,13 @@ errorHandler(lua_State *L) {
         /**
          * Its an assertion error -> it does not need to be handled here
          */
-        if ((*env)->IsInstanceOf(env, throwable, jni_ref().assertion_error_class)) {
+        if ((*env)->IsInstanceOf(env, throwable, jni_ref().assertion_error_class) ||
+            (*env)->IsInstanceOf(env, throwable, jni_ref().script_error_class)) {
             return 0;
         }
 
-        throw_kua_error((*env)->NewStringUTF(env, "TBD"), throwable); // FIXME
+
+        throw_extension_error((*env)->NewStringUTF(env, "TBD"), throwable); // FIXME
         return 0;
     }
     return 1;

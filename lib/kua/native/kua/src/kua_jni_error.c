@@ -28,16 +28,22 @@ throw_assert_error(char const *message) {
 
 
 int
-throw_kua_error(jstring message, jthrowable throwable) {
+throw_extension_error(jstring message, jthrowable throwable) {
     JNIEnv *env = current_env();
 
     jthrowable kua_error = (*env)->NewObject(
             env,
-            jni_ref().kua_error_class,
-            jni_ref().kua_error_ctor_id,
+            jni_ref().extension_error_class,
+            jni_ref().extension_error_ctor_id,
             message,
             throwable
     );
 
     return (*env)->Throw(env, kua_error);
+}
+
+int
+throw_script_error(char const *message) {
+    JNIEnv *env = current_env();
+    return (*env)->ThrowNew(env, jni_ref().script_error_class, message);
 }

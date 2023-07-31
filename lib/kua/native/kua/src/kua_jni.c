@@ -2,11 +2,12 @@
 #include <lauxlib.h>
 #include <jni.h>
 
+#include "kua_call.h"
 #include "kua_info.h"
+#include "kua_load.h"
 #include "kua_stack.h"
 #include "kua_state.h"
 #include "kua_table.h"
-#include "kua_call.h"
 
 
 #define UNUSED __attribute__((unused))
@@ -249,9 +250,9 @@ STATE_METHOD_NAME(call)(JNIEnv *env, jobject K, jint argsCount, jint resultCount
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(loadString)(JNIEnv *env, jobject K, jstring code) {
     ENV_AND_STATE
-    const char *c_str = to_raw_string(code);
-    int result = luaL_loadstring(L, c_str);
-    release_raw_string(code, c_str);
+    const char *code_c_str = to_raw_string(code);
+    int result = load_string(L, code_c_str);
+    release_raw_string(code, code_c_str);
     return (jint) result;
 }
 

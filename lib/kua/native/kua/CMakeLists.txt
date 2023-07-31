@@ -13,14 +13,15 @@ endif ()
 include_directories(${JNI_INCLUDE_DIRS})
 
 set(KUA_LIB_SRCS
+        src/kua_builtin.c
+        src/kua_builtin_base.c
         src/kua_call.c
         src/kua_check.c
         src/kua_error.c
         src/kua_info.c
         src/kua_jni.c
         src/kua_jni_error.c
-        src/kua_builtin.c
-        src/kua_builtin_base.c
+        src/kua_load.c
         src/kua_memory.c
         src/kua_memory_arena.c
         src/kua_stack.c

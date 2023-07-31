@@ -5,7 +5,7 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.State
 import io.hamal.lib.kua.ExitError
-import io.hamal.lib.kua.KuaError
+import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.SandboxFactory
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -104,7 +104,7 @@ class AgentService(
                         sdk.execService().complete(
                             request.id, stateResult, eventsToEmit
                         )
-                    } catch (kua: KuaError) {
+                    } catch (kua: ExtensionError) {
                         val e = kua.cause
                         if (e is ExitError) {
                             println("Exit ${e.status.value}")

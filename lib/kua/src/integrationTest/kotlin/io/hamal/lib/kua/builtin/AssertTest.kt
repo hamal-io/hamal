@@ -3,6 +3,7 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -28,11 +29,11 @@ class AssertTest {
     fun `Assertion fails`() {
         val error = assertThrows<AssertionError> {
             sandbox.load(
-                """
-            local provide_answer = function() return 24 end
-            
-            assert(provide_answer() == 42)
-        """.trimIndent()
+            """
+                local provide_answer = function() return 24 end
+                
+                assert(provide_answer() == 42)
+            """.trimIndent()
             )
         }
         assertThat(error.message, equalTo("Line 3: assertion failed!"))
@@ -43,9 +44,9 @@ class AssertTest {
         assertThrows<AssertionError> {
             sandbox.load(
                 """
-            assert(true == false)
-            test.call()
-        """.trimIndent()
+                assert(true == false)
+                test.call()
+                """.trimIndent()
             )
         }
     }
@@ -57,7 +58,7 @@ class AssertTest {
     }
 
     private val sandbox = run {
-        NativeLoader.load(NativeLoader.Preference.Resources)
+        NativeLoader.load(Resources)
         Sandbox().also {
             it.register(
                 Extension(
