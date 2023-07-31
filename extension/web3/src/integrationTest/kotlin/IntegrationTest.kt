@@ -1,3 +1,4 @@
+import io.hamal.extension.web3.Web3ExtensionFactory
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -13,12 +14,12 @@ object IntegrationTest {
     @TestFactory
     fun run(): List<DynamicTest> {
         NativeLoader.load(Resources)
-
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
                 val luaCode = String(Files.readAllBytes(testFile))
                 Sandbox().use { sb ->
-                    sb.runCode(luaCode)
+                    sb.register(Web3ExtensionFactory().create())
+                    sb.load(luaCode)
                 }
             }
         }.toList()

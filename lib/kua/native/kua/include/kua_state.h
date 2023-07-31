@@ -13,6 +13,7 @@ struct jni_ref {
     jclass error_class;
     jclass kua_error_class;
     jmethodID kua_error_ctor_id;
+    jclass assertion_error_class;
     jclass kua_func_class;
     jmethodID invoked_by_lua_method_id;
 };

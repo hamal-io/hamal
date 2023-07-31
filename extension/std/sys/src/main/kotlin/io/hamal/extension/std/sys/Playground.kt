@@ -13,7 +13,7 @@ fun main() {
 
     sandbox.register(SysExtensionFactory { template }.create())
 
-    sandbox.runCode(
+    sandbox.load(
         """
             
         local table = {code = "print('hello')"}

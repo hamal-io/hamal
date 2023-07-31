@@ -41,7 +41,7 @@ internal class FunctionTest {
         )
 
         val exception = assertThrows<KuaError> {
-            sandbox.runCode(
+            sandbox.load(
                 """
                 test.throw_exception()
                 test.never_called()
@@ -79,7 +79,7 @@ internal class FunctionTest {
         )
 
         val error = assertThrows<Error> {
-            sandbox.runCode(
+            sandbox.load(
                 """
                 test.throw_error()
                 test.never_called()
@@ -109,7 +109,7 @@ internal class FunctionTest {
             )
         )
 
-        sandbox.runCode("test.capture(test.emit())")
+        sandbox.load("test.capture(test.emit())")
         assertThat(captor.result, equalTo("Hamal Rocks"))
     }
 
@@ -135,7 +135,7 @@ internal class FunctionTest {
             )
         )
 
-        sandbox.runCode("test.capture(test.transform('some message'))")
+        sandbox.load("test.capture(test.transform('some message'))")
         assertThat(captor.result, equalTo("SOME MESSAGE"))
     }
 
@@ -161,7 +161,7 @@ internal class FunctionTest {
             )
         )
 
-        sandbox.runCode("local x,y = test.transform('hamal'); test.capture(x,y)")
+        sandbox.load("local x,y = test.transform('hamal'); test.capture(x,y)")
         assertThat(captor.result, equalTo("HAMAL=5.0"))
     }
 
@@ -191,7 +191,7 @@ internal class FunctionTest {
             )
         )
 
-        sandbox.runCode("test.capture(test.transform('lazy', 42))")
+        sandbox.load("test.capture(test.transform('lazy', 42))")
         assertThat(captor.result, equalTo("yzal=-42.0"))
     }
 
@@ -215,7 +215,7 @@ internal class FunctionTest {
             )
         )
 
-        sandbox.runCode("test.capture(test.emit())")
+        sandbox.load("test.capture(test.emit())")
         assertThat(captor.result, equalTo("answer=42.0"))
     }
 

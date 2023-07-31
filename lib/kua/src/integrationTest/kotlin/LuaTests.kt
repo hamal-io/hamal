@@ -20,7 +20,7 @@ class LuaTests {
                 dynamicTest("${file.parent.parent.name}/${file.parent.name}/${file.name}") {
                     val code = String(Files.readAllBytes(file))
                     val testInstance = Sandbox()
-                    testInstance.runCode(CodeValue(code))
+                    testInstance.load(CodeValue(code))
                 }
             }
             .toList()

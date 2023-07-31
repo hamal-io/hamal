@@ -41,6 +41,7 @@ testing {
                 dependencies {
                     implementation(project(":lib:kua"))
                     implementation(project(":lib:web3"))
+                    implementation(project(":extension:web3"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
                 }

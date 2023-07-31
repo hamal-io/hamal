@@ -31,7 +31,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
             )
         )
 
-        testInstance.runCode(
+        testInstance.load(
             CodeValue("""secret_module.magic()""")
         )
         assertThat(func.set, equalTo(true))

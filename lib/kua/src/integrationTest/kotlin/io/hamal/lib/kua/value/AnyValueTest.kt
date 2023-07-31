@@ -27,7 +27,7 @@ internal class AnyValueTest {
             )
         )
 
-        sandbox.runCode("test.captor(test.pass_through(true))")
+        sandbox.load("test.captor(test.pass_through(true))")
         assertThat(captor.result, equalTo(AnyValue(TrueValue)))
     }
 
@@ -44,7 +44,7 @@ internal class AnyValueTest {
             )
         )
 
-        sandbox.runCode("test.captor(test.pass_through(23))")
+        sandbox.load("test.captor(test.pass_through(23))")
 
         assertThat(captor.result, equalTo(AnyValue(NumberValue(23))))
     }
@@ -62,7 +62,7 @@ internal class AnyValueTest {
             )
         )
 
-        sandbox.runCode("test.captor(test.pass_through(\"hamal.io\"))")
+        sandbox.load("test.captor(test.pass_through(\"hamal.io\"))")
 
         assertThat(captor.result, equalTo(AnyValue(StringValue("hamal.io"))))
     }
@@ -84,7 +84,7 @@ internal class AnyValueTest {
             )
         )
 
-        sandbox.runCode("test.captor(test.pass_through(test_map))")
+        sandbox.load("test.captor(test.pass_through(test_map))")
 
         val underlying = (captor.result as AnyValue).value
         require(underlying is TableMapValue) { "Not a TableMapProxyValue" }
@@ -111,7 +111,7 @@ internal class AnyValueTest {
             )
         )
 
-        sandbox.runCode("test.captor(test.pass_through(test_array))")
+        sandbox.load("test.captor(test.pass_through(test_array))")
 
         val underlying = (captor.result as AnyValue).value
         require(underlying is TableArrayValue) { "Not a TableArrayProxyValue" }

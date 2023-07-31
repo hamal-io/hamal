@@ -73,7 +73,7 @@ class AgentService(
                                 state.setGlobal("ctx", ctx)
                             }
 
-                            sb.runCode(request.code)
+                            sb.load(request.code)
 
                             sb.run { state ->
                                 val ctx = state.getGlobalTableMap("ctx")

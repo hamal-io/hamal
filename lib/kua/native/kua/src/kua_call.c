@@ -12,7 +12,15 @@ errorHandler(lua_State *L) {
     JNIEnv *env = current_env();
     jthrowable throwable = (*env)->ExceptionOccurred(env);
     if (throwable) {
-        throw_kua_error((*env)->NewStringUTF(env, "TBD"), throwable); //FIXME
+
+        /**
+         * Its an assertion error -> it does not need to be handled here
+         */
+        if ((*env)->IsInstanceOf(env, throwable, jni_ref().assertion_error_class)) {
+            return 0;
+        }
+
+        throw_kua_error((*env)->NewStringUTF(env, "TBD"), throwable); // FIXME
         return 0;
     }
     return 1;

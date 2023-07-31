@@ -21,9 +21,9 @@ class Sandbox : State, AutoCloseable {
 
     fun register(extension: Extension) = state.registerGlobalExtension(extension)
 
-    fun runCode(code: CodeValue) = runCode(code.value)
+    fun load(code: CodeValue) = load(code.value)
 
-    fun runCode(code: String) = bridge.runCode(code)
+    fun load(code: String) = bridge.load(code)
 
     fun run(fn: (State) -> Unit) {
         fn(state)
@@ -73,7 +73,7 @@ class Sandbox : State, AutoCloseable {
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
 }
 
-internal fun Bridge.runCode(code: String) {
+internal fun Bridge.load(code: String) {
     loadString(code)
     call(0, 0)
 }

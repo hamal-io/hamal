@@ -1,11 +1,11 @@
 #include <lua.h>
-#include "lualib.h"
 #include <lauxlib.h>
 #include <jni.h>
 
 #include "kua_check.h"
 #include "kua_error.h"
 #include "kua_jni.h"
+#include "kua_builtin.h"
 #include "kua_state.h"
 #include "kua_memory.h"
 
@@ -54,6 +54,8 @@ setup_references(JNIEnv *env) {
 
     current_jni_ref.kua_error_class = load_class(env, "io/hamal/lib/kua/KuaError");
     current_jni_ref.kua_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.kua_error_class ,"<init>","(Ljava/lang/String;Ljava/lang/Throwable;)V");
+
+    current_jni_ref.assertion_error_class = load_class(env, "io/hamal/lib/kua/AssertionError");
 
     current_jni_ref.kua_func_class = load_class(env, "io/hamal/lib/kua/function/FunctionValue");
     current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, current_jni_ref.kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/Bridge;)I");
@@ -114,8 +116,8 @@ init_connection(JNIEnv *env, jobject K) {
     lua_gc(L, LUA_GCSTOP);
 
     error_register_metable(L);
+    kua_builtin_register(L);
 
-    luaL_openlibs(L); // FIXME replace with custom open libs to only import subset of libs/functions
     state_to_thread(env, K, L);
 }
 

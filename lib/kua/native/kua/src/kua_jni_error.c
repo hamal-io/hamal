@@ -21,6 +21,13 @@ throw_error(char const *message) {
 }
 
 int
+throw_assert_error(char const *message) {
+    JNIEnv *env = current_env();
+    return (*env)->ThrowNew(env, jni_ref().assertion_error_class, message);
+}
+
+
+int
 throw_kua_error(jstring message, jthrowable throwable) {
     JNIEnv *env = current_env();
 
@@ -31,5 +38,6 @@ throw_kua_error(jstring message, jthrowable throwable) {
             message,
             throwable
     );
-    (*env)->Throw(env, kua_error);
+
+    return (*env)->Throw(env, kua_error);
 }

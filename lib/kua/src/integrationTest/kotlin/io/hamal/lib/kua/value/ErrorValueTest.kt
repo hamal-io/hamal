@@ -27,7 +27,7 @@ internal class ErrorValueTest {
             )
         )
 
-        sandbox.runCode(
+        sandbox.load(
             """
             local err = test.error()
             test.message_captor(err.message)
@@ -56,7 +56,7 @@ internal class ErrorValueTest {
             )
         )
 
-        sandbox.runCode(
+        sandbox.load(
             """
             local err = test.call()
             test.captor(err)
