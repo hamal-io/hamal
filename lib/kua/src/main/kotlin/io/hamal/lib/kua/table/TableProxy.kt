@@ -101,27 +101,27 @@ data class TableProxyValue(
 
     override fun append(value: Boolean): TableLength {
         bridge.pushBoolean(value)
-        return state.tableInsert(index)
+        return state.tableAppend(index)
     }
 
     override fun append(value: Double): TableLength {
         bridge.pushNumber(value)
-        return state.tableInsert(index)
+        return state.tableAppend(index)
     }
 
     override fun append(value: String): TableLength {
         bridge.pushString(value)
-        return state.tableInsert(index)
+        return state.tableAppend(index)
     }
 
     override fun append(value: TableMapValue): TableLength {
         state.pushTable(value)
-        return state.tableInsert(index)
+        return state.tableAppend(index)
     }
 
     override fun append(value: TableArrayValue): TableLength {
         state.pushTable(value)
-        return state.tableInsert(index)
+        return state.tableAppend(index)
     }
 
     override fun get(idx: Int): AnyValue {

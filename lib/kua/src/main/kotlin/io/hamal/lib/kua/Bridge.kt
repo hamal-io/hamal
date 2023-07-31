@@ -37,7 +37,7 @@ class Bridge : AutoCloseable {
     external fun tableGetField(idx: Int, key: String): Int
     external fun tableGetLength(idx: Int): Int
 
-    external fun tableInsert(idx: Int): Int
+    external fun tableAppend(idx: Int): Int
     external fun tableSetRaw(idx: Int): Int
     external fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
     external fun tableGetRaw(idx: Int): Int

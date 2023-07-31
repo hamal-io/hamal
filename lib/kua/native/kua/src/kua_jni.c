@@ -178,7 +178,7 @@ STATE_METHOD_NAME(tabletSetField)(JNIEnv *env, jobject K, jint idx, jstring key)
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableInsert)(JNIEnv *env, jobject K, jint idx) {
+STATE_METHOD_NAME(tableAppend)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return table_append(L, idx);
 }

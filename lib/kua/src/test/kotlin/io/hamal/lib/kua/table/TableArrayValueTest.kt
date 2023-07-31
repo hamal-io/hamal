@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableArrayProxyValueTest {
+internal class TableArrayValueTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {

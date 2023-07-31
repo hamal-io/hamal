@@ -793,7 +793,7 @@ internal class TableInsertTest : BaseBridgeTest() {
     fun `Insert value to empty table`() {
         testInstance.tableCreate(0, 0)
         testInstance.pushNumber(512.0)
-        testInstance.tableInsert(1)
+        testInstance.tableAppend(1)
 
         testInstance.pop(1)
         verifyStackIsEmpty()
@@ -804,7 +804,7 @@ internal class TableInsertTest : BaseBridgeTest() {
         testInstance.tableCreate(1000, 0)
         repeat(1000) { idx ->
             testInstance.pushNumber(idx.toDouble())
-            val result = testInstance.tableInsert(1)
+            val result = testInstance.tableAppend(1)
             assertThat(result, equalTo(idx + 1))
         }
     }

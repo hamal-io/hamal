@@ -50,7 +50,7 @@ interface State {
 
     fun tableCreateMap(capacity: Int = 0): TableMapValue
     fun tableCreateArray(capacity: Int = 0): TableArrayValue
-    fun tableInsert(idx: Int): TableLength
+    fun tableAppend(idx: Int): TableLength
     fun tableSetRaw(idx: Int): TableLength
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableGetRaw(idx: Int): ValueType
@@ -151,7 +151,7 @@ class ClosableState(
         )
     }
 
-    override fun tableInsert(idx: Int) = TableLength(bridge.tableInsert(idx))
+    override fun tableAppend(idx: Int) = TableLength(bridge.tableAppend(idx))
     override fun tableSetRaw(idx: Int) = TableLength(bridge.tableSetRaw(idx))
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = TableLength(bridge.tableSetRawIdx(stackIdx, tableIdx))
     override fun tableGetRaw(idx: Int) = ValueType.ValueType(bridge.tableGetRaw(idx))

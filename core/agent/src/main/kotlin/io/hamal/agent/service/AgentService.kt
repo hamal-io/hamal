@@ -66,7 +66,7 @@ class AgentService(
                                     invocation.events.forEach {
                                         val evt = state.tableCreateMap(1)
                                         evt["topic"] = it.value.get("topic") as StringValue
-                                        sb.bridge.tableInsert(events.index)
+                                        sb.bridge.tableAppend(events.index)
                                     }
                                 }
                                 ctx["events"] = events

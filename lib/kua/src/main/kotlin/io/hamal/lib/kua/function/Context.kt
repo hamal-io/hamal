@@ -49,7 +49,7 @@ class FunctionContext(
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
     override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)
 
-    override fun tableInsert(idx: Int) = state.tableInsert(idx)
+    override fun tableAppend(idx: Int) = state.tableAppend(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
