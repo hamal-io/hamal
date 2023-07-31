@@ -12,9 +12,14 @@ luaB_print(lua_State *L);
 int
 luaB_warn(lua_State *L);
 
-
 int
 luaB_tonumber(lua_State *L);
+
+int
+luaB_dofile(lua_State *L);
+
+int
+luaB_error(lua_State *L);
 
 int
 luaB_getmetatable(lua_State *L);
@@ -23,12 +28,16 @@ int
 luaB_setmetatable(lua_State *L);
 
 int
-luaB_rawequal(lua_State *L);
+luaB_loadfile(lua_State *L);
 
+int
+luaB_load(lua_State *L);
+
+int
+luaB_rawequal(lua_State *L);
 
 int
 luaB_rawlen(lua_State *L);
-
 
 int
 luaB_rawget(lua_State *L);

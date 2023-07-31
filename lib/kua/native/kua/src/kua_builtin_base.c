@@ -36,23 +36,17 @@ static const luaL_Reg base_funcs[] = {
         {"next",   luaB_next},
         {"pairs",  luaB_pairs},
         {"print",  luaB_print}, // FIXME replace with some logger
-        /* placeholders */
-        {LUA_GNAME,  NULL},
-        {"_VERSION", NULL},
-        {NULL,       NULL}
+        {NULL, NULL}
 };
 
 
 int
-kua_lib_base_open(lua_State *L) {
+kua_lib_base_register(lua_State *L) {
     /* open lib into global table */
     lua_pushglobaltable(L);
     luaL_setfuncs(L, base_funcs, 0);
     /* set global _G */
     lua_pushvalue(L, -1);
     lua_setfield(L, -2, LUA_GNAME);
-    /* set global _VERSION */
-    lua_pushliteral(L, LUA_VERSION);
-    lua_setfield(L, -2, "_VERSION");
     return 1;
 }

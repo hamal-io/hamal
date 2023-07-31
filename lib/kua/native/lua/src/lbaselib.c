@@ -115,7 +115,8 @@ luaB_tonumber(lua_State *L) {
 }
 
 
-static int luaB_error(lua_State *L) {
+int
+luaB_error(lua_State *L) {
     int level = (int) luaL_optinteger(L, 2, 1);
     lua_settop(L, 1);
     if (lua_type(L, 1) == LUA_TSTRING && level > 0) {
@@ -353,7 +354,8 @@ static int load_aux(lua_State *L, int status, int envidx) {
 }
 
 
-static int luaB_loadfile(lua_State *L) {
+int
+luaB_loadfile(lua_State *L) {
     const char *fname = luaL_optstring(L, 1, NULL);
     const char *mode = luaL_optstring(L, 2, NULL);
     int env = (!lua_isnone(L, 3) ? 3 : 0);  /* 'env' index or 0 if no 'env' */
@@ -399,7 +401,8 @@ static const char *generic_reader(lua_State *L, void *ud, size_t *size) {
 }
 
 
-static int luaB_load(lua_State *L) {
+int
+luaB_load(lua_State *L) {
     int status;
     size_t l;
     const char *s = lua_tolstring(L, 1, &l);
@@ -427,7 +430,8 @@ static int dofilecont(lua_State *L, int d1, lua_KContext d2) {
 }
 
 
-static int luaB_dofile(lua_State *L) {
+int
+luaB_dofile(lua_State *L) {
     const char *fname = luaL_optstring(L, 1, NULL);
     lua_settop(L, 1);
     if (l_unlikely(luaL_loadfile(L, fname) != LUA_OK))
