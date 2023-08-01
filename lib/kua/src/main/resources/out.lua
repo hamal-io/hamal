@@ -1,9 +1,10 @@
 print("out")
 
-local eth = test.require('web3/eth')
+local eth = require('web3/eth')
 print(eth.call(23))
 
 print("done")
+
 
 --local x = ethFactory()
 --x.call(1)

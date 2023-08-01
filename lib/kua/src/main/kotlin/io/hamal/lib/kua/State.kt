@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.table.*
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.value.ValueType.Companion.ValueType
@@ -44,6 +45,7 @@ interface State {
     fun getTableMap(idx: Int): TableMapValue
     fun getTableArray(idx: Int): TableArrayValue
 
+    fun setGlobal(name: String, value: FunctionValue<*, *, *, *>)
     fun setGlobal(name: String, value: TableMapValue)
     fun setGlobal(name: String, value: TableArrayValue)
     fun getGlobalTableMap(name: String): TableMapValue
@@ -55,6 +57,8 @@ interface State {
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableGetRaw(idx: Int): ValueType
     fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): ValueType
+
+    fun load(code: String) // FIXME add return value
 }
 
 class ClosableState(
@@ -120,6 +124,11 @@ class ClosableState(
     //FIXME type check
     override fun getTableArray(idx: Int): TableArrayValue = TableProxyValue(absIndex(idx), this, TableType.Array)
 
+    override fun setGlobal(name: String, value: FunctionValue<*, *, *, *>) {
+        bridge.pushFunctionValue(value)
+        bridge.setGlobal(name)
+    }
+
     override fun setGlobal(name: String, value: TableMapValue) {
         bridge.pushTop(value.index)
         bridge.setGlobal(name)
@@ -157,6 +166,10 @@ class ClosableState(
     override fun tableGetRaw(idx: Int) = ValueType.ValueType(bridge.tableGetRaw(idx))
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) =
         ValueType.ValueType(bridge.tableGetRawIdx(stackIdx, tableIdx))
+
+    override fun load(code: String) {
+        bridge.load(code)
+    }
 
     override fun close() {
         bridge.close()

@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.table.TableArrayValue
 import io.hamal.lib.kua.table.TableMapValue
@@ -23,7 +24,7 @@ class Sandbox : State, AutoCloseable {
 
     fun load(code: CodeValue) = load(code.value)
 
-    fun load(code: String) = bridge.load(code)
+    override fun load(code: String) = bridge.load(code)
 
     fun run(fn: (State) -> Unit) {
         fn(state)
@@ -59,6 +60,7 @@ class Sandbox : State, AutoCloseable {
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
+    override fun setGlobal(name: String, value: FunctionValue<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableMapValue) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableArrayValue) = state.setGlobal(name, value)
     override fun getGlobalTableMap(name: String): TableMapValue = state.getGlobalTableMap(name)

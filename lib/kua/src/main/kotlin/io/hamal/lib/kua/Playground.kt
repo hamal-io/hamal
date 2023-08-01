@@ -1,6 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
+import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.StringValue
@@ -34,6 +35,11 @@ fun Sandbox.registerModule(module: Module) {
     // unload internals from _G
 }
 
+fun Sandbox.registerGlobalFunction(namedFn: NamedFunctionValue<*, *, *, *>) {
+//    bridge.pushFunctionValue(namedFn.function)
+    setGlobal(namedFn.name, namedFn.function)
+}
+
 fun main() {
     NativeLoader.load(BuildDir)
     Sandbox().also { sb ->
@@ -65,34 +71,39 @@ fun main() {
             )
         )
 
-        sb.registerGlobalExtension(
-            Extension(
-                name = "test",
-                functions = listOf(
-                    NamedFunctionValue(
-                        "require", object : Function1In1Out<StringValue, TableMapValue>(
-                            FunctionInput1Schema(StringValue::class),
-                            FunctionOutput1Schema(TableMapValue::class)
-                        ) {
-                            override fun invoke(ctx: FunctionContext, arg1: StringValue): TableMapValue {
-                                println("importing module ${arg1}")
+        val registry = Registry()
+        sb.registerGlobalFunction(NamedFunctionValue("require", Require(registry)))
 
-                                sb.load(String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))))
-                                sb.load("""
-                                    instance = ethFactory()
-                                """.trimIndent())
-
-                                return ctx.getGlobalTableMap("instance")
-
-//                                val result = ctx.tableCreateMap(1)
+//        sb.registerGlobalExtension(
+//            Extension(
+//                name = "test",
+//                functions = listOf(
+//                    NamedFunctionValue(
+//                        "require", object : Function1In1Out<StringValue, TableMapValue>(
+//                            FunctionInput1Schema(StringValue::class),
+//                            FunctionOutput1Schema(TableMapValue::class)
+//                        ) {
+//                            override fun invoke(ctx: FunctionContext, arg1: StringValue): TableMapValue {
+//                                println("importing module ${arg1}")
 //
-//                                return result
-                            }
-                        }
-                    )
-                )
-            )
-        )
+//                                sb.load(String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))))
+//                                sb.load(
+//                                    """
+//                                    instance = ethFactory()
+//                                """.trimIndent()
+//                                )
+//
+//                                return ctx.getGlobalTableMap("instance")
+//
+////                                val result = ctx.tableCreateMap(1)
+////
+////                                return result
+//                            }
+//                        }
+//                    )
+//                )
+//            )
+//        )
 
     }.use { sb ->
 

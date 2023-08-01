@@ -42,6 +42,7 @@ class FunctionContext(
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
+    override fun setGlobal(name: String, value: FunctionValue<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableMapValue) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableArrayValue) = state.setGlobal(name, value)
     override fun getGlobalTableMap(name: String): TableMapValue = state.getGlobalTableMap(name)
@@ -54,6 +55,8 @@ class FunctionContext(
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
+
+    override fun load(code: String) = state.load(code)
 }
 
 interface FunctionContextFactory {
