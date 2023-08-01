@@ -10,7 +10,6 @@ interface ExtensionFactory {
 }
 
 
-
 class ExtensionConfig(
     val value: MutableMap<String, Value> = mutableMapOf()
 )
@@ -21,6 +20,24 @@ class Extension(
     val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
     val extensions: List<Extension> = listOf()
 ) : Value
+
+
+data class NewExt(
+    val name: String, // FIXME VO
+    val init: String,
+    val internals: Map<String, Value>,
+    val config: ExtensionConfig = ExtensionConfig(
+        mutableMapOf(
+            "host" to StringValue("http://localhost:8008")
+        )
+    ),
+) {
+
+    fun getConfigFunction() = ExtensionGetConfigFunction(config)
+
+    fun updateConfigFunction() = ExtensionUpdateConfigFunction(config)
+
+}
 
 
 class ExtensionGetConfigFunction(
