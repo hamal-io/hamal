@@ -28,6 +28,8 @@ interface State {
     fun getBoolean(idx: Int): Boolean
     fun getBooleanValue(idx: Int) = booleanOf(getBoolean(idx))
     fun pushError(value: ErrorValue): StackTop
+    fun pushFunction(value: FunctionValue<*, *, *, *>): StackTop
+
     fun getNumber(idx: Int): Double
     fun getNumberValue(idx: Int) = NumberValue(getNumber(idx))
     fun pushNumber(value: Double): StackTop
@@ -101,6 +103,7 @@ class ClosableState(
     override fun pushBoolean(value: Boolean): StackTop = StackTop(bridge.pushBoolean(value))
     override fun getBoolean(idx: Int): Boolean = bridge.toBoolean(idx)
     override fun pushError(value: ErrorValue) = StackTop(bridge.pushError(value.message))
+    override fun pushFunction(value: FunctionValue<*, *, *, *>) = StackTop(bridge.pushFunctionValue(value))
 
     override fun getNumber(idx: Int) = bridge.toNumber(idx)
     override fun pushNumber(value: Double) = StackTop(bridge.pushNumber(value))

@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.table
 
+import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.value.*
 
 
@@ -26,6 +27,9 @@ interface TableMapValue : BaseTableProxyValue {
     operator fun set(key: String, value: String): TableLength
     operator fun set(key: String, value: StringValue) = set(key, value.value)
     operator fun set(key: StringValue, value: StringValue) = set(key.value, value.value)
+
+    operator fun set(key: String, value: FunctionValue<*, *, *, *>): TableLength
+    operator fun set(key: StringValue, value: FunctionValue<*, *, *, *>) = set(key.value, value)
 
     operator fun set(key: String, value: TableMapValue): TableLength
     operator fun set(key: String, value: TableArrayValue): TableLength

@@ -19,7 +19,7 @@ interface FunctionValue<
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
         OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
         OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
-        > {
+        > : Value {
 
     val inputSchema: INPUT_SCHEMA
     val outputSchema: OUTPUT_SCHEMA

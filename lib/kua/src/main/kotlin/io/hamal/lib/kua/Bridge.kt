@@ -19,7 +19,7 @@ class Bridge : AutoCloseable {
     external fun getGlobal(key: String)
 
     external fun pushBoolean(value: Boolean): Int
-    external fun pushFunctionValue(fn: FunctionValue<*, *, *, *>)
+    external fun pushFunctionValue(value: FunctionValue<*, *, *, *>): Int
     external fun pushError(message: String): Int
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int

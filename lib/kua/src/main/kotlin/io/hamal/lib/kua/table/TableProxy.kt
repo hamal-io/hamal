@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.State
+import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.value.*
 
 @JvmInline
@@ -47,6 +48,12 @@ data class TableProxyValue(
     override fun set(key: String, value: String): TableLength {
         state.pushString(key)
         state.pushString(value)
+        return state.tableSetRaw(index)
+    }
+
+    override fun set(key: String, value: FunctionValue<*, *, *, *>): TableLength {
+        state.pushString(key)
+        state.pushFunction(value)
         return state.tableSetRaw(index)
     }
 

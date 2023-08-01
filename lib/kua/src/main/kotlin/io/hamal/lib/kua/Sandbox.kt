@@ -48,6 +48,8 @@ class Sandbox : State, AutoCloseable {
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
     override fun pushError(value: ErrorValue) = state.pushError(value)
+    override fun pushFunction(value: FunctionValue<*, *, *, *>) = state.pushFunction(value)
+
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
