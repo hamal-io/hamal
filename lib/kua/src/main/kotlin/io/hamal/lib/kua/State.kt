@@ -49,6 +49,7 @@ interface State {
     fun setGlobal(name: String, value: TableMapValue)
     fun setGlobal(name: String, value: TableArrayValue)
     fun getGlobalTableMap(name: String): TableMapValue
+    fun unsetGlobal(name: String)
 
     fun tableCreateMap(capacity: Int = 0): TableMapValue
     fun tableCreateArray(capacity: Int = 0): TableArrayValue
@@ -142,6 +143,11 @@ class ClosableState(
     override fun getGlobalTableMap(name: String): TableMapValue {
         bridge.getGlobal(name)
         return getTableMap(top.value)
+    }
+
+    override fun unsetGlobal(name: String) {
+        bridge.pushNil()
+        bridge.setGlobal(name)
     }
 
     override fun tableCreateMap(capacity: Int): TableMapValue {

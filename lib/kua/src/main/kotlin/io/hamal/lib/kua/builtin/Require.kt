@@ -17,19 +17,24 @@ class Require(
     FunctionOutput1Schema(TableMapValue::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringValue): TableMapValue {
-        println("importing module ${arg1}")
-
         ctx.load(String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))))
-        ctx.load(
-            """
-                                    instance = ethFactory()
-                                """.trimIndent()
-        )
+        // FIXME throw if create_extension is nil
+        ctx.load("_factory = create_extension_factory(); _instance = _factory()")
 
-        return ctx.getGlobalTableMap("instance")
+        val factory = ctx.getGlobalTableMap("_instance")
+        ctx.setGlobal("_factory", factory)
 
-//                                val result = ctx.tableCreateMap(1)
-//
-//                                return result
+        ctx.load(" _instance = _factory()")
+
+
+//        ctx.load("_instance = _factory()")
+        val result = ctx.getGlobalTableMap("_instance")
+
+        ctx.unsetGlobal("_factory")
+        ctx.unsetGlobal("_instance")
+        ctx.unsetGlobal("extension")
+        ctx.unsetGlobal("createExtension")
+
+        return result
     }
 }

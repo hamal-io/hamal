@@ -64,6 +64,7 @@ class Sandbox : State, AutoCloseable {
     override fun setGlobal(name: String, value: TableMapValue) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableArrayValue) = state.setGlobal(name, value)
     override fun getGlobalTableMap(name: String): TableMapValue = state.getGlobalTableMap(name)
+    override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
     override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)
