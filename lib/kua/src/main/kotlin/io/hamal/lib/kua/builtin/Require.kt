@@ -7,8 +7,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.StringValue
-import java.nio.file.Files
-import kotlin.io.path.Path
 
 class Require(
     val registry: Registry
@@ -17,19 +15,22 @@ class Require(
     FunctionOutput1Schema(TableMapValue::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringValue): TableMapValue {
-        ctx.load(String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))))
-        // FIXME throw if create_extension is nil
-        ctx.load("_factory = create_extension_factory(); _instance = _factory()")
+//        ctx.load(String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))))
+//        // FIXME throw if create_extension is nil
+//        ctx.load("_factory = create_extension_factory(); _instance = _factory()")
+//
+//        val factory = ctx.getGlobalTableMap("_instance")
+//        ctx.setGlobal("_factory", factory)
+//
+//        ctx.load(" _instance = _factory()")
 
-        val factory = ctx.getGlobalTableMap("_instance")
+        val factory = registry.loadFactory(arg1.value)
         ctx.setGlobal("_factory", factory)
 
-        ctx.load(" _instance = _factory()")
-
-
-//        ctx.load("_instance = _factory()")
+        ctx.load("_instance = _factory()")
         val result = ctx.getGlobalTableMap("_instance")
 
+//        ctx.unsetGlobal("_factory")
         ctx.unsetGlobal("_factory")
         ctx.unsetGlobal("_instance")
         ctx.unsetGlobal("extension")

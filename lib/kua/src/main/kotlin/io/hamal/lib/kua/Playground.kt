@@ -44,9 +44,45 @@ fun main() {
     NativeLoader.load(BuildDir)
     Sandbox().also { sb ->
 
-        sb.registerGlobalExtension(
-            Extension(
-                "extension", functions = listOf(
+
+
+        val registry = Registry(
+            sb.state,
+            sb
+        )
+
+
+//        sb.registerGlobalExtension(
+//            Extension(
+//                "extension", functions = listOf(
+//                    NamedFunctionValue("test",
+//                        object : Function0In0Out() {
+//                            override fun invoke(ctx: FunctionContext) {
+//                                println("Called - kotlin")
+//                            }
+//                        }),
+//                    NamedFunctionValue(
+//                        "import",
+//                        object : Function1In1Out<StringValue, TableMapValue>(
+//                            FunctionInput1Schema(StringValue::class),
+//                            FunctionOutput1Schema(TableMapValue::class)
+//                        ) {
+//                            override fun invoke(ctx: FunctionContext, arg1: StringValue): TableMapValue {
+//                                println("importing internals ${arg1.value}")
+//                                val result = ctx.tableCreateMap(1)
+//                                result["get_block"] = "placeholder"
+//                                return result
+//                            }
+//                        }
+//                    )
+//                )
+//            )
+//        )
+        registry.register(
+            NewExt(
+                name = "web3/eth",
+                init = String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))),
+                internals = listOf(
                     NamedFunctionValue("test",
                         object : Function0In0Out() {
                             override fun invoke(ctx: FunctionContext) {
@@ -70,8 +106,6 @@ fun main() {
                 )
             )
         )
-
-        val registry = Registry()
         sb.registerGlobalFunction(NamedFunctionValue("require", Require(registry)))
 
 //        sb.registerGlobalExtension(
