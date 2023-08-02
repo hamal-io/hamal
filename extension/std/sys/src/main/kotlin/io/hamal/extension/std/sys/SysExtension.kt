@@ -29,8 +29,13 @@ class SysExtensionFactory(
     override fun create(): ScriptExtension {
         return ScriptExtension(
             name = "sys",
-            internals = mapOf(),
-            init = ""
+            internals = mapOf(
+                "adhoc" to InvokeAdhocFunction(templateSupplier),
+                "list_execs" to ListExecsFunction(templateSupplier),
+                "get_exec" to GetExecFunction(templateSupplier),
+                "create_func" to CreateFuncFunction(templateSupplier)
+            ),
+            init = ScriptExtension.loadInitFromResources("extension.lua")
         )
     }
 }

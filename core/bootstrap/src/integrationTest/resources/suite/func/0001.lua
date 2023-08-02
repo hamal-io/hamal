@@ -1,5 +1,5 @@
 --local sys = require('sys')
---local test = require('test')
+local test = require('test')
 --
 --local func_id = sys.funcs.create({
 --    name = 'empty-test-func',

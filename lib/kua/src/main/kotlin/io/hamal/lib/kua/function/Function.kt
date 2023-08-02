@@ -101,7 +101,7 @@ abstract class Function0In2Out<
         > {
     override val inputSchema: FunctionInput0Schema = FunctionInput0Schema
 
-    abstract fun invoke(ctx: FunctionContext): Pair<OUTPUT_ARG_1, OUTPUT_ARG_2>
+    abstract fun invoke(ctx: FunctionContext): Pair<OUTPUT_ARG_1?, OUTPUT_ARG_2?>
 
     override fun invoke(ctx: FunctionContext, input: FunctionInput0): FunctionOutput2<OUTPUT_ARG_1, OUTPUT_ARG_2> {
         val result = invoke(ctx)

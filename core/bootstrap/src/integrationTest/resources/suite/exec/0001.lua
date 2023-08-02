@@ -1,9 +1,9 @@
---local log = require('log')
---local sys = require('sys')
---local test = require('test')
+local sys = require('sys')
+local test = require('test')
 --
----- Remember: Each test is an adhoc invoked exec
---local execs = sys.execs.list()
---test.assert(execs.length == 1)
+-- Remember: Each test is an adhoc invoked exec
+local err, execs = sys.exec.list()
+assert(err == nil)
+assert(#execs == 2)
 
 test.complete()

@@ -4,10 +4,12 @@ function create_extension_factory()
         return {
 
             adhoc = function(arg)
-                return internal.adhoc({
+                local err, res = internal.adhoc({
                     inputs = arg.inputs or {},
                     code = arg.code or ""
                 })
+
+                return err, res
             end,
 
             exec = {
@@ -15,7 +17,7 @@ function create_extension_factory()
                     print("get exec")
                 end,
                 list = function()
-                    print("list execs")
+                    return internal.list_execs()
                 end
             },
             func = {

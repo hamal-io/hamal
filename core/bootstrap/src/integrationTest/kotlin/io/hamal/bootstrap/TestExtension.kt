@@ -1,7 +1,8 @@
 package io.hamal.bootstrap
 
 import io.hamal.lib.kua.ExitError
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.ScriptExtension
+import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -12,11 +13,26 @@ import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class TestExtensionFactory {
-    fun create(): NativeExtension {
-        return NativeExtension(
-            name = "test", //FIXME becomes VO
-            values = mapOf(
+class TestExtensionFactory : ScriptExtensionFactory {
+    override fun create(): ScriptExtension {
+        return ScriptExtension(
+            name = "test",
+            init = """
+                function create_extension_factory()
+                    local internal = _internal
+                    return function()
+                        return {
+                            complete = function()
+                                return internal.complete()
+                            end,
+                            fail = function()
+                                return internal.fail()
+                            end
+                        }
+                    end
+                end
+            """.trimIndent(),
+            internals = mapOf(
                 "complete" to CompleteTestFunction,
                 "fail" to FailTestFunction
             )

@@ -10,7 +10,7 @@ local next_block_number = ctx.state.next_block_number
 
 if next_block_number == nil then
     --    next_block_number = 10000000
-    next_block_number = 10390254
+    next_block_number = 10621128
 end
 
 local err, batch_result = eth.execute({

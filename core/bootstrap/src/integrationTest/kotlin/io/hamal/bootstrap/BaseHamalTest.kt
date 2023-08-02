@@ -5,6 +5,7 @@ import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.bootstrap.config.TestAgentConfig
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -13,9 +14,10 @@ import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.DefaultHamalSdk
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.DynamicTest.*
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
@@ -76,11 +78,25 @@ abstract class BaseHamalTest {
                         code = CodeValue(String(Files.readAllBytes(testFile)))
                     )
                 )
-                ActiveTest.awaitCompletion()
+//                ActiveTest.awaitCompletion()
 
                 // Waits until the test exec complete
-                while (execQueryRepository.get(response.execId).status != ExecStatus.Completed) {
+                var wait = true
+                val startedAt = TimeUtils.now()
+                while (wait) {
                     sleep(1)
+                    with(execQueryRepository.get(response.execId)) {
+                        if (status == ExecStatus.Completed) {
+                            wait = false
+                        }
+                        if (status == ExecStatus.Failed) {
+                            fail { "Execution failed" }
+                        }
+
+                        if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
+                            fail("Timeout")
+                        }
+                    }
                 }
             }
         }.toList()

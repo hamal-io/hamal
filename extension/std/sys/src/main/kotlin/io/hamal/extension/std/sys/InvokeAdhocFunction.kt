@@ -24,6 +24,7 @@ class InvokeAdhocFunction(
             inputs = InvocationInputs(),
             code = CodeValue(arg1.getString("code"))
         )
+
         val res = templateSupplier()
             .post("/v1/adhoc")
             .body(r)

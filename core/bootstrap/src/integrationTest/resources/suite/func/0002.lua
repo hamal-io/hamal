@@ -1,6 +1,6 @@
 --local log = require('log')
 --local sys = require('sys')
---local test = require('test')
+local test = require('test')
 --
 --local funcs = sys.funcs.list()
 --test.assert(funcs.length == 0)
