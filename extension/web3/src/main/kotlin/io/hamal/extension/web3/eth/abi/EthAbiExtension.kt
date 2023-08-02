@@ -1,20 +1,17 @@
 package io.hamal.extension.web3.eth.abi
 
-import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.ExtensionFactory
-import io.hamal.lib.kua.function.NamedFunctionValue
+import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.NativeExtensionFactory
 
 class EthAbiExtensionFactory(
     val config: ExtensionConfig
-) : ExtensionFactory {
-    override fun create(): Extension {
-        return Extension(
+) : NativeExtensionFactory {
+    override fun create(): NativeExtension {
+        return NativeExtension(
             name = "abi",
             config = config,
-            functions = listOf(
-                NamedFunctionValue("decode_parameter", DecodeParameterFunction()),
-            ),
+            values = mapOf()
         )
     }
 }

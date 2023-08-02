@@ -1,10 +1,9 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.value.CodeValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,11 +23,9 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
         val func = TestFunction()
         testInstance.register(
-            Extension(
+            NativeExtension(
                 name = "secret_module",
-                functions = listOf(
-                    NamedFunctionValue("magic", func)
-                )
+                values = mapOf("magic" to func)
             )
         )
 

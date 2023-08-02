@@ -8,8 +8,8 @@ import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Files.readAllBytes
+import kotlin.io.path.Path
 
 internal class ExtensionTest {
 
@@ -41,9 +41,9 @@ internal class ExtensionTest {
         NativeLoader.load(Resources)
         Sandbox().also { sb ->
             sb.register(
-                NewExt(
+                ScriptExtension(
                     name = "test/extension",
-                    init = String(Files.readAllBytes(Paths.get("src/integrationTest/resources/test-extension.lua"))),
+                    init = String(readAllBytes(Path("src/integrationTest/resources/test-extension.lua"))),
                     internals = mapOf(
                         "test_extension_call" to TestCall0In0OutFunction
                     )

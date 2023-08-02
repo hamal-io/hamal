@@ -1,6 +1,6 @@
 package io.hamal.agent.adapter
 
-import io.hamal.lib.kua.extension.ExtensionFactory
+import io.hamal.lib.kua.extension.NativeExtensionFactory
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
@@ -8,11 +8,11 @@ import java.util.*
 
 
 internal interface ExtensionLoader {
-    fun load(extensionFile: File): ExtensionFactory
+    fun load(extensionFile: File): NativeExtensionFactory
 
     class DefaultImpl() : ExtensionLoader {
 
-        override fun load(entryPointFile: File): ExtensionFactory {
+        override fun load(entryPointFile: File): NativeExtensionFactory {
             println("load ExtensionEntryPoint from ${entryPointFile.absolutePath}")
             ensureIsFile(entryPointFile)
             val extensionClassLoader = createWorkerExtensionClassLoader(entryPointFile)
@@ -20,7 +20,7 @@ internal interface ExtensionLoader {
             try {
                 Thread.currentThread().contextClassLoader = extensionClassLoader
                 for (entryPoint in ServiceLoader.load(
-                    ExtensionFactory::class.java,
+                    NativeExtensionFactory::class.java,
                     extensionClassLoader
                 )) {
                     return entryPoint

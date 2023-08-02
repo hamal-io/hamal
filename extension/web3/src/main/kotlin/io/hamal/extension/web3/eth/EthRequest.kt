@@ -1,21 +1,21 @@
 package io.hamal.extension.web3.eth
 
-import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.ExtensionFactory
-import io.hamal.lib.kua.function.*
+import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.NativeExtensionFactory
+import io.hamal.lib.kua.function.Function1In1Out
+import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.function.FunctionInput1Schema
+import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.NumberValue
 
-class EthRequestExtensionFactory : ExtensionFactory {
-    override fun create(): Extension {
-        return Extension(
+class EthRequestExtensionFactory : NativeExtensionFactory {
+    override fun create(): NativeExtension {
+        return NativeExtension(
             name = "request",
             config = ExtensionConfig(),
-            functions = listOf(
-                NamedFunctionValue("get_block", EthRequestGetBlockFunction)
-            ),
-            extensions = listOf()
+            values = mapOf()
         )
     }
 }

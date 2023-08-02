@@ -1,32 +1,22 @@
 package io.hamal.extension.web3.eth
 
-import io.hamal.extension.web3.eth.abi.EthAbiExtensionFactory
-import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.ExtensionFactory
-import io.hamal.lib.kua.function.NamedFunctionValue
+import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.NativeExtensionFactory
 import io.hamal.lib.kua.value.StringValue
 
-class EthExtensionFactory : ExtensionFactory {
+class EthExtensionFactory : NativeExtensionFactory {
 
-    override fun create(): Extension {
+    override fun create(): NativeExtension {
         val config = ExtensionConfig(
             mutableMapOf(
                 "host" to StringValue("http://proxy:8000")
             )
         )
-        return Extension(
+        return NativeExtension(
             name = "eth",
             config = config,
-            functions = listOf(
-                NamedFunctionValue("get_block", GetBlockFunction(config)),
-                NamedFunctionValue("call", CallFunction(config)),
-                NamedFunctionValue("execute", ExecuteFunction(config))
-            ),
-            extensions = listOf(
-                EthRequestExtensionFactory().create(),
-                EthAbiExtensionFactory(config).create()
-            )
+            values = mapOf()
         )
     }
 }

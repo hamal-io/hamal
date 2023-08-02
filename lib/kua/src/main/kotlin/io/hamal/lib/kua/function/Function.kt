@@ -4,16 +4,6 @@ import io.hamal.lib.kua.Bridge
 import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.value.Value
 
-data class NamedFunctionValue<
-        INPUT_SCHEMA : FunctionInputSchema<INPUT>,
-        INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
-        OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
-        OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
-        >(
-    val name: String,
-    val function: FunctionValue<*, *, *, *>
-)
-
 interface FunctionValue<
         INPUT_SCHEMA : FunctionInputSchema<INPUT>,
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,

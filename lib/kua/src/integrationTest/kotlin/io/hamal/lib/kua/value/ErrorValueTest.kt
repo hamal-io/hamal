@@ -2,7 +2,7 @@ package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableMapValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,12 +17,12 @@ internal class ErrorValueTest {
         val messageCaptor = Captor()
 
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("error", FunctionReturnsError()),
-                    NamedFunctionValue("message_captor", messageCaptor),
-                    NamedFunctionValue("assert_metatable", AssertMetatable)
+                values = mapOf(
+                    "error" to FunctionReturnsError(),
+                    "message_captor" to messageCaptor,
+                    "assert_metatable" to AssertMetatable
                 )
             )
         )
@@ -46,12 +46,12 @@ internal class ErrorValueTest {
         val errorCaptor = Captor()
 
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("call", FunctionNeverInvoked()),
-                    NamedFunctionValue("captor", errorCaptor),
-                    NamedFunctionValue("assert_metatable", AssertMetatable)
+                values = mapOf(
+                    "call" to FunctionNeverInvoked(),
+                    "captor" to errorCaptor,
+                    "assert_metatable" to AssertMetatable
                 )
             )
         )

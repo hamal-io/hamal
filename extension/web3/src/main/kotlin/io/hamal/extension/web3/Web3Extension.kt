@@ -1,18 +1,14 @@
 package io.hamal.extension.web3
 
-import io.hamal.extension.web3.eth.EthExtensionFactory
-import io.hamal.lib.kua.extension.Extension
-import io.hamal.lib.kua.extension.ExtensionFactory
+import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.NativeExtensionFactory
 
-class Web3ExtensionFactory : ExtensionFactory {
+class Web3ExtensionFactory : NativeExtensionFactory {
 
-    override fun create(): Extension {
-        return Extension(
+    override fun create(): NativeExtension {
+        return NativeExtension(
             name = "web3",
-            functions = listOf(),
-            extensions = listOf(
-                EthExtensionFactory().create()
-            )
+            values = mapOf()
         )
     }
 

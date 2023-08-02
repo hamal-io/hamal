@@ -3,11 +3,10 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.error.ScriptErrorTest
-import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
@@ -42,7 +41,7 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(Extension("test", listOf(NamedFunctionValue("invoke", TestIteratorFunction()))))
+        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
         sandbox.load(
             """
             local table = {
@@ -76,7 +75,7 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(Extension("test", listOf(NamedFunctionValue("invoke", TestIteratorFunction()))))
+        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
         sandbox.load(
             """
             local table = { }
@@ -109,7 +108,7 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(Extension("test", listOf(NamedFunctionValue("invoke", TestIteratorFunction()))))
+        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
         sandbox.load(
             """
             local table = {
@@ -143,7 +142,7 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(Extension("test", listOf(NamedFunctionValue("invoke", TestIteratorFunction()))))
+        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
         sandbox.load(
             """
             local table = {}
@@ -155,7 +154,7 @@ internal class TableEntryIteratorTest {
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox().also {
-            it.register(Extension("test", listOf(NamedFunctionValue("call", ScriptErrorTest.CallbackFunction()))))
+            it.register(NativeExtension("test", mapOf("call" to ScriptErrorTest.CallbackFunction())))
         }
     }
 }

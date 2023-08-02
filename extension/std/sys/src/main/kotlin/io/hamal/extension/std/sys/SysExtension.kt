@@ -1,34 +1,21 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.kua.extension.Extension
-import io.hamal.lib.kua.extension.ExtensionFactory
-import io.hamal.lib.kua.function.NamedFunctionValue
+import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.NativeExtensionFactory
 import io.hamal.lib.sdk.HttpTemplateSupplier
 
 class SysExtensionFactory(
     private val templateSupplier: HttpTemplateSupplier
-) : ExtensionFactory {
+) : NativeExtensionFactory {
 
-    override fun create(): Extension {
-        return Extension(
+    override fun create(): NativeExtension {
+        return NativeExtension(
             name = "sys",
-            functions = listOf(
-                NamedFunctionValue(
-                    name = "adhoc",
-                    function = InvokeAdhocFunction(templateSupplier)
-                ),
-                NamedFunctionValue(
-                    name = "list_execs",
-                    function = ListExecsFunction(templateSupplier)
-                ),
-                NamedFunctionValue(
-                    name = "get_exec",
-                    function = GetExecFunction(templateSupplier)
-                ),
-                NamedFunctionValue(
-                    name = "create_func",
-                    function = CreateFuncFunction(templateSupplier)
-                )
+            values = mapOf(
+                "adhoc" to InvokeAdhocFunction(templateSupplier),
+                "list_execs" to ListExecsFunction(templateSupplier),
+                "get_exec" to GetExecFunction(templateSupplier),
+                "create_func" to CreateFuncFunction(templateSupplier)
             )
         )
     }

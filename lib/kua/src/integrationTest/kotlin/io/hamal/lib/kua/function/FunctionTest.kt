@@ -4,7 +4,7 @@ import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 import org.hamcrest.CoreMatchers.equalTo
@@ -31,11 +31,11 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("throw_exception", throwException),
-                    NamedFunctionValue("never_called", neverCalled),
+                values = mapOf(
+                    "throw_exception" to throwException,
+                    "never_called" to neverCalled,
                 )
             )
         )
@@ -69,11 +69,11 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("throw_error", throwError),
-                    NamedFunctionValue("never_called", neverCalled),
+                values = mapOf(
+                    "throw_error" to throwError,
+                    "never_called" to neverCalled,
                 )
             )
         )
@@ -100,11 +100,11 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("emit", emitter),
-                    NamedFunctionValue("capture", captor)
+                values = mapOf(
+                    "emit" to emitter,
+                    "capture" to captor
                 )
             )
         )
@@ -126,11 +126,11 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("transform", transform),
-                    NamedFunctionValue("capture", captor)
+                values = mapOf(
+                    "transform" to transform,
+                    "capture" to captor
                 )
             )
         )
@@ -152,11 +152,11 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("transform", transform),
-                    NamedFunctionValue("capture", captor)
+                values = mapOf(
+                    "transform" to transform,
+                    "capture" to captor
                 )
             )
         )
@@ -182,11 +182,11 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("transform", transform),
-                    NamedFunctionValue("capture", captor)
+                values = mapOf(
+                    "transform" to transform,
+                    "capture" to captor
                 )
             )
         )
@@ -206,11 +206,11 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Extension(
+            NativeExtension(
                 name = "test",
-                functions = listOf(
-                    NamedFunctionValue("emit", emitter),
-                    NamedFunctionValue("capture", captor)
+                values = mapOf(
+                    "emit" to emitter,
+                    "capture" to captor
                 )
             )
         )

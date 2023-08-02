@@ -4,10 +4,9 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
-import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.NamedFunctionValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -49,9 +48,9 @@ class ErrorTest {
         NativeLoader.load(Resources)
         Sandbox().also {
             it.register(
-                Extension(
+                NativeExtension(
                     "test",
-                    functions = listOf(NamedFunctionValue("call", CallbackFunction()))
+                    values = mapOf("call" to CallbackFunction())
                 )
             )
         }

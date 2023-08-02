@@ -1,22 +1,18 @@
 package io.hamal.extension.std.log
 
-import io.hamal.lib.kua.extension.Extension
-import io.hamal.lib.kua.extension.ExtensionFactory
+import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.NativeExtensionFactory
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.value.AnyValue
 
-class LogExtensionFactory : ExtensionFactory {
-    override fun create(): Extension {
-        return Extension(
+class LogExtensionFactory : NativeExtensionFactory {
+    override fun create(): NativeExtension {
+        return NativeExtension(
             name = "log",
-            functions = listOf(
-                NamedFunctionValue(
-                    name = "info",
-                    function = InfoFunction()
-                )
+            values = mapOf(
+                "info" to InfoFunction()
             )
         )
     }

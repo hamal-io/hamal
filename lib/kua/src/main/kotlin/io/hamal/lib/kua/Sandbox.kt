@@ -3,7 +3,6 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.extension.*
 import io.hamal.lib.kua.function.FunctionValue
-import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.table.TableArrayValue
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.AnyValue
@@ -25,10 +24,10 @@ class Sandbox : State, AutoCloseable {
     val registry: ExtensionRegistry = ExtensionRegistry(this)
 
     init {
-        registerGlobalFunction(NamedFunctionValue("require", Require(registry)))
+        registerGlobalFunction("require", Require(registry))
     }
 
-    fun register(extension: Extension) = state.registerGlobalExtension(extension)
+    fun register(extension: NativeExtension) = state.registerGlobalExtension(extension)
 
     fun load(code: CodeValue) = load(code.value)
 
@@ -38,7 +37,7 @@ class Sandbox : State, AutoCloseable {
         fn(state)
     }
 
-    fun register(extension: NewExt) {
+    fun register(extension: ScriptExtension) {
         registry.register(extension)
     }
 
@@ -95,24 +94,21 @@ internal fun Bridge.load(code: String) {
     call(0, 0)
 }
 
-internal fun State.registerGlobalExtension(extension: Extension) {
+internal fun State.registerGlobalExtension(extension: NativeExtension) {
     val result = registerExtension(extension)
     setGlobal(extension.name, result)
 }
 
-fun State.registerExtension(extension: Extension): TableMapValue {
-    val funcs = extension.functions
+fun State.registerExtension(extension: NativeExtension): TableMapValue {
 
     val r = tableCreateMap(1)
-    funcs.forEach { namedFunc ->
-        bridge.pushFunctionValue(namedFunc.function)
-        bridge.tabletSetField(r.index, namedFunc.name)
-    }
-
-    extension.extensions.forEach { nestedExt ->
-        registerExtension(nestedExt)
-        bridge.tabletSetField(r.index, nestedExt.name)
-    }
+    extension.values
+        .filter { entry -> entry.value is FunctionValue<*, *, *, *> }
+        .forEach { (name, value) ->
+            require(value is FunctionValue<*, *, *, *>)
+            bridge.pushFunctionValue(value)
+            bridge.tabletSetField(r.index, name)
+        }
 
     createConfig(extension.config)
     bridge.tabletSetField(r.index, "__config")
@@ -124,14 +120,14 @@ fun State.createConfig(config: ExtensionConfig): TableMapValue {
 
     val result = tableCreateMap(1)
 
-    val fns = listOf<NamedFunctionValue<*, *, *, *>>(
-        NamedFunctionValue("get", ExtensionGetConfigFunction(config)),
-        NamedFunctionValue("update", ExtensionUpdateConfigFunction(config))
+    val fns = mapOf(
+        "get" to ExtensionGetConfigFunction(config),
+        "update" to ExtensionUpdateConfigFunction(config)
     )
 
-    fns.forEach { namedFunc ->
-        bridge.pushFunctionValue(namedFunc.function)
-        bridge.tabletSetField(result.index, namedFunc.name)
+    fns.forEach { (name, value) ->
+        bridge.pushFunctionValue(value)
+        bridge.tabletSetField(result.index, name)
     }
 
     return result

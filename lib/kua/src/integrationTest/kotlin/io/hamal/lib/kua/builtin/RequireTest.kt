@@ -2,7 +2,7 @@ package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.NewExt
+import io.hamal.lib.kua.extension.ScriptExtension
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -30,7 +30,7 @@ internal class ExtensionTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox().also { sb ->
             sb.register(
-                NewExt(
+                ScriptExtension(
                     name = "test/extension",
                     init = String(Files.readAllBytes(Paths.get("src/integrationTest/resources/test-extension.lua"))),
                     internals = mapOf()

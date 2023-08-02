@@ -1,3 +1,6 @@
+import gradle.kotlin.dsl.accessors._4062691b52bb2ae8e3287a873466e0d9.main
+import gradle.kotlin.dsl.accessors._4062691b52bb2ae8e3287a873466e0d9.sourceSets
+
 plugins {
     `java-library`
     `jvm-test-suite`

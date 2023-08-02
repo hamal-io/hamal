@@ -3,18 +3,13 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.extension.ExtensionRegistry
-import io.hamal.lib.kua.extension.NewExt
+import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.NumberValue
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import kotlin.io.path.Path
-import kotlin.io.path.name
 
-fun Sandbox.registerGlobalFunction(namedFn: NamedFunctionValue<*, *, *, *>) {
-    setGlobal(namedFn.name, namedFn.function)
+fun Sandbox.registerGlobalFunction(name: String, function: FunctionValue<*, *, *, *>) {
+    setGlobal(name, function)
 }
 
 fun main() {
@@ -23,9 +18,25 @@ fun main() {
 
         val registry = ExtensionRegistry(sb)
         registry.register(
-            NewExt(
+            ScriptExtension(
                 name = "web3/eth",
-                init = String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/extension.lua"))),
+                init = """
+                    function create_extension_factory()
+                        local internal = _internal
+                        return function()
+                            return {
+                                abi = {
+                                    decode = function(type, value)
+                                        print("decoding", type, value)
+                                    end
+                                },
+                                call = function(arg1)
+                                    return internal.get_block_by_id(arg1)
+                                end
+                            }
+                        end
+                    end
+                """.trimIndent(),
                 internals = mapOf(
                     "get_block_by_id" to object : Function1In1Out<NumberValue, TableMapValue>(
                         FunctionInput1Schema(NumberValue::class),
@@ -40,14 +51,22 @@ fun main() {
             )
         )
 
-        sb.registerGlobalFunction(NamedFunctionValue("require", Require(registry)))
+        sb.registerGlobalFunction("require", Require(registry))
 
     }.use { sb ->
         sb.load(
-            String(Files.readAllBytes(Path("/home/ddymke/Repo/hamal/lib/kua/src/main/resources/out.lua")))
+            """
+                local eth = require('web3/eth')
+
+                eth.config.update({host = "http://proxy"})
+                print(eth.config.get())
+
+                for k,v in pairs(eth.config.get()) do
+                    print(k,v)
+                end
+
+                print(eth.call(23).id)
+            """.trimIndent()
         )
     }
 }
-
-private val testPath = Paths.get("src", "main", "resources")
-private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name == "test.lua" }
