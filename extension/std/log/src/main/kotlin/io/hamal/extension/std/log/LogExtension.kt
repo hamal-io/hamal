@@ -1,7 +1,7 @@
 package io.hamal.extension.std.log
 
-import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.ExtensionFactory
+import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.ExtensionFactory
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema

@@ -1,5 +1,7 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.kua.builtin.Require
+import io.hamal.lib.kua.extension.*
 import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.table.TableArrayValue
@@ -15,10 +17,16 @@ interface SandboxFactory {
 
 
 class Sandbox : State, AutoCloseable {
+
     override val bridge: Bridge = Bridge()
     override val top: StackTop get() = state.top
 
     val state = ClosableState(bridge)
+    val registry: ExtensionRegistry = ExtensionRegistry(this)
+
+    init {
+        registerGlobalFunction(NamedFunctionValue("require", Require(registry)))
+    }
 
     fun register(extension: Extension) = state.registerGlobalExtension(extension)
 
@@ -28,6 +36,10 @@ class Sandbox : State, AutoCloseable {
 
     fun run(fn: (State) -> Unit) {
         fn(state)
+    }
+
+    fun register(extension: NewExt) {
+        registry.register(extension)
     }
 
     override fun close() {

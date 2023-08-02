@@ -1,10 +1,10 @@
 package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.AssertionError
-import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.NamedFunctionValue
@@ -29,7 +29,7 @@ class AssertTest {
     fun `Assertion fails`() {
         val error = assertThrows<AssertionError> {
             sandbox.load(
-            """
+                """
                 local provide_answer = function() return 24 end
                 
                 assert(provide_answer() == 42)

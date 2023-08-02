@@ -1,14 +1,15 @@
-package io.hamal.lib.kua
+package io.hamal.lib.kua.extension
 
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.table.TableMapValue
 
 
-class Registry(
+class ExtensionRegistry(
     val sb: Sandbox
 ) {
 
-     val state = sb.state
+    val state = sb.state
     val extensions = mutableMapOf<String, NewExt>()
     val extensionFactories = mutableMapOf<String, TableMapValue>()
 

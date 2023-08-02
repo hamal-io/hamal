@@ -3,7 +3,7 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.value.ErrorValue
 
-
+// FIXME renmae to Native
 class Bridge : AutoCloseable {
 
     external fun luaVersionNumber(): Int

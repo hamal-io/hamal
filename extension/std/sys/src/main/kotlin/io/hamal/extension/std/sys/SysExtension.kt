@@ -1,7 +1,7 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.ExtensionFactory
+import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.ExtensionFactory
 import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.sdk.HttpTemplateSupplier
 

@@ -1,9 +1,9 @@
 package io.hamal.lib.kua.value
 
-import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableArrayValue
 import io.hamal.lib.kua.table.TableLength

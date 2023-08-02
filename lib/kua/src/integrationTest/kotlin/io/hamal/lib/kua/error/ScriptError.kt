@@ -1,10 +1,10 @@
 package io.hamal.lib.kua.error
 
-import io.hamal.lib.kua.Extension
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
+import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.NamedFunctionValue

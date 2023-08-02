@@ -1,7 +1,7 @@
 package io.hamal.extension.web3.eth
 
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.ExtensionConfig
+import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema

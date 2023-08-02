@@ -1,9 +1,9 @@
 package io.hamal.extension.web3.eth
 
 import io.hamal.extension.web3.eth.abi.EthAbiExtensionFactory
-import io.hamal.lib.kua.Extension
-import io.hamal.lib.kua.ExtensionConfig
-import io.hamal.lib.kua.ExtensionFactory
+import io.hamal.lib.kua.extension.Extension
+import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extension.ExtensionFactory
 import io.hamal.lib.kua.function.NamedFunctionValue
 import io.hamal.lib.kua.value.StringValue
 

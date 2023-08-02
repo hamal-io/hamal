@@ -1,7 +1,7 @@
 package io.hamal.bootstrap
 
 import io.hamal.lib.kua.ExitError
-import io.hamal.lib.kua.Extension
+import io.hamal.lib.kua.extension.Extension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue

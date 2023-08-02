@@ -2,6 +2,8 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
 import io.hamal.lib.kua.builtin.Require
+import io.hamal.lib.kua.extension.ExtensionRegistry
+import io.hamal.lib.kua.extension.NewExt
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.NumberValue
@@ -19,7 +21,7 @@ fun main() {
     NativeLoader.load(BuildDir)
     Sandbox().also { sb ->
 
-        val registry = Registry(sb)
+        val registry = ExtensionRegistry(sb)
         registry.register(
             NewExt(
                 name = "web3/eth",
