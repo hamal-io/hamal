@@ -12,7 +12,8 @@ assert(err == nil)
 local exec_id = res.exec_id
 
 -- Remember: Each test is an adhoc invocation
-local execs = sys.exec.list()
+local err, execs = sys.exec.list()
+assert(err == nil)
 assert(#execs == 2)
 
 local exec = execs[1]

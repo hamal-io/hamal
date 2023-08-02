@@ -18,6 +18,7 @@ class DepSysExtensionFactory(
                 "list_execs" to ListExecsFunction(templateSupplier),
                 "get_exec" to GetExecFunction(templateSupplier),
                 "create_func" to CreateFuncFunction(templateSupplier)
+
             )
         )
     }
@@ -33,7 +34,9 @@ class SysExtensionFactory(
                 "adhoc" to InvokeAdhocFunction(templateSupplier),
                 "list_execs" to ListExecsFunction(templateSupplier),
                 "get_exec" to GetExecFunction(templateSupplier),
-                "create_func" to CreateFuncFunction(templateSupplier)
+                "create_func" to CreateFuncFunction(templateSupplier),
+                "get_func" to GetFuncFunction(templateSupplier),
+                "list_func" to ListFuncsFunction(templateSupplier)
             ),
             init = ScriptExtension.loadInitFromResources("extension.lua")
         )

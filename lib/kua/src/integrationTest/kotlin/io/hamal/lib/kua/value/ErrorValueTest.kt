@@ -31,7 +31,7 @@ internal class ErrorValueTest {
             """
             local err = test.error()
             test.message_captor(err.message)
-                        
+               
             local mtbl = getmetatable(err)
             test.assert_metatable(mtbl)
         """.trimIndent()

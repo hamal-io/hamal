@@ -3,26 +3,41 @@ function create_extension_factory()
     return function()
         return {
 
-            adhoc = function(arg)
+            adhoc = function(cmd)
                 local err, res = internal.adhoc({
-                    inputs = arg.inputs or {},
-                    code = arg.code or ""
+                    inputs = cmd.inputs or {},
+                    code = cmd.code or ""
                 })
 
                 return err, res
             end,
 
             exec = {
-                get = function()
-                    print("get exec")
+
+                get = function(exec_id)
+                    return internal.get_exec(exec_id)
                 end,
+
                 list = function()
                     return internal.list_execs()
                 end
             },
             func = {
-                create = function()
-                    print("create func")
+
+                create = function(cmd)
+                    return internal.create_func({
+                        name = cmd.name or "",
+                        inputs = cmd.inputs or {},
+                        code = cmd.code or ""
+                    })
+                end,
+
+                get = function(func_id)
+                    return internal.get_func(func_id)
+                end,
+
+                list = function()
+                    return internal.list_func()
                 end
             }
         }

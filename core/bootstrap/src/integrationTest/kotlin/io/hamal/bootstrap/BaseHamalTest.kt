@@ -78,7 +78,7 @@ abstract class BaseHamalTest {
                         code = CodeValue(String(Files.readAllBytes(testFile)))
                     )
                 )
-//                ActiveTest.awaitCompletion()
+                ActiveTest.awaitCompletion()
 
                 // Waits until the test exec complete
                 var wait = true

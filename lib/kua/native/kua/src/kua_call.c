@@ -21,10 +21,12 @@ errorHandler(lua_State *L) {
             return 0;
         }
 
-
         throw_extension_error((*env)->NewStringUTF(env, "TBD"), throwable); // FIXME
         return 0;
     }
+
+    char const *error_c_str = lua_tostring(L, -1);
+    throw_script_error(error_c_str);
     return 1;
 }
 

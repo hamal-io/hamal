@@ -1,6 +1,6 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.domain.Exec
+import io.hamal.lib.domain.Func
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.SuccessHttpResponse
@@ -12,7 +12,7 @@ import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.StringValue
 
-class GetExecFunction(
+class GetFuncFunction(
     private val templateSupplier: () -> HttpTemplate
 ) : Function1In2Out<StringValue, ErrorValue, TableMapValue>(
     FunctionInput1Schema(StringValue::class),
@@ -20,23 +20,17 @@ class GetExecFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringValue): Pair<ErrorValue?, TableMapValue?> {
         val response = templateSupplier()
-            .get("/v1/execs/${arg1.value}")
+            .get("/v1/funcs/${arg1.value}")
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(Exec::class)
-                .let { exec ->
-
-                    val inputs = ctx.tableCreateMap(0)
-
+            return null to response.result(Func::class)
+                .let { func ->
                     ctx.tableCreateMap(0).also {
-                        it["id"] = exec.id.value.value.toString()
-                        it["status"] = StringValue(exec.status.name)
-                        it["inputs"] = inputs
-                        exec.correlation?.correlationId?.value?.let { corId ->
-                            it["correlationId"] = corId
-                        } // FIXME set nil value to table --> makes the api nicer
-                        it["code"] = exec.code
+                        it["id"] = func.id.value.value.toString()
+                        it["name"] = func.name.value
+//                        it["inputs"] = exec.inputs.value
+                        it["code"] = func.code
                     }
 
                 }

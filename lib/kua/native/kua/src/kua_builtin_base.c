@@ -52,6 +52,8 @@ static const luaL_Reg base_funcs[] = {
         {"next",   luaB_next},
         {"pairs",  luaB_pairs},
         {"print",  luaB_print}, // FIXME replace with some logger
+        {"getmetatable",   luaB_getmetatable},
+        {"setmetatable",   luaB_setmetatable},
         {NULL, NULL}
 };
 

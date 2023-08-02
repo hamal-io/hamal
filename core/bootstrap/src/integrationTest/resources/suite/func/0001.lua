@@ -1,19 +1,23 @@
---local sys = require('sys')
 local test = require('test')
---
---local func_id = sys.funcs.create({
---    name = 'empty-test-func',
---    inputs = {
---        hamal = 'rockz'
---    },
---    code = [[4 + 2]]
---})
---
---local func = sys.funcs.get(func_id)
---test.assert(func.id == func_id)
---test.assert(func.name == 'empty-test-func')
---test.assert(func.inputs == { hamal = 'rockz' })
---test.assert(func.code == [[4 + 2]])
---test.assert(func.length == 4)
+local sys = require('sys')
+
+local err, func_res = sys.func.create({
+    name = 'empty-test-func',
+    inputs = {},
+    code = [[4 + 2]]
+})
+
+assert(err == nil)
+
+assert(func_res.id ~= nil)
+assert(func_res.status == 'Submitted')
+assert(func_res.func_id ~= nil)
+
+local err, func = sys.func.get(func_res.func_id)
+assert(err == nil)
+
+assert(func.id == func_res.func_id)
+assert(func.name == 'empty-test-func')
+assert(func.code == [[4 + 2]])
 
 test.complete()

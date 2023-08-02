@@ -6,20 +6,21 @@ import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.function.Function1In1Out
+import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.function.FunctionOutput1Schema
+import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMapValue
+import io.hamal.lib.kua.value.ErrorValue
 import java.lang.Thread.sleep
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In1Out<TableMapValue, TableMapValue>(
+) : Function1In2Out<TableMapValue, ErrorValue, TableMapValue>(
     FunctionInput1Schema(TableMapValue::class),
-    FunctionOutput1Schema(TableMapValue::class)
+    FunctionOutput2Schema(ErrorValue::class, TableMapValue::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): TableMapValue {
+    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): Pair<ErrorValue?, TableMapValue> {
         try {
 
 //            val name: StringValue = when (val x = arg1["name"]) {
@@ -54,8 +55,10 @@ class CreateFuncFunction(
                 .execute(SubmittedCreateFuncReq::class)
             sleep(500)
 
-            return ctx.tableCreateMap(1).also {
-                it["funcId"] = res.funcId.value.toString()
+            return null to ctx.tableCreateMap(1).also {
+                it["id"] = res.id.value.toString()
+                it["status"] = res.status.name
+                it["func_id"] = res.funcId.value.toString()
             }
 
         } catch (t: Throwable) {
