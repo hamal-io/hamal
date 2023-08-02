@@ -12,7 +12,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.ErrorValue
-import java.lang.Thread.sleep
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -53,7 +52,6 @@ class CreateFuncFunction(
                 .post("/v1/funcs")
                 .body(r)
                 .execute(SubmittedCreateFuncReq::class)
-            sleep(500)
 
             return null to ctx.tableCreateMap(1).also {
                 it["id"] = res.id.value.toString()
