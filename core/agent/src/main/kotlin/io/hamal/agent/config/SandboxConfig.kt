@@ -1,7 +1,7 @@
 package io.hamal.agent.config
 
 import io.hamal.extension.std.log.LogExtensionFactory
-import io.hamal.extension.std.sys.SysExtensionFactory
+import io.hamal.extension.std.sys.DepSysExtensionFactory
 import io.hamal.extension.web3.Web3ExtensionFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
@@ -22,7 +22,7 @@ open class SandboxConfig {
             val template = HttpTemplate("http://localhost:8008")
             return Sandbox().also {
                 it.register(LogExtensionFactory().create())
-                it.register(SysExtensionFactory { template }.create())
+                it.register(DepSysExtensionFactory { template }.create())
                 it.register(Web3ExtensionFactory().create())
             }
         }

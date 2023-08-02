@@ -4,32 +4,37 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.extension.ScriptExtension
+import io.hamal.lib.kua.extension.ScriptExtension.Companion.loadInitFromResources
 
 
 fun main() {
     NativeLoader.load(Resources)
-    val template = HttpTemplate("http://localhost:8008")
-    val sandbox = Sandbox()
 
-    sandbox.register(SysExtensionFactory { template }.create())
+    val templateSupplier = { HttpTemplate("http://localhost:8008") }
 
-    sandbox.load(
-        """
+    Sandbox().use {
+        it.register(
+            ScriptExtension(
+                name = "sys",
+                init = loadInitFromResources("extension.lua"),
+                internals = mapOf(
+                    "adhoc" to InvokeAdhocFunction(templateSupplier)
+                )
+            )
+        )
+
+        it.load(
+            """
+            local sys = require("sys")
+            print(sys)
+            local err, result = sys.adhoc({})
+            print(err)
+            print(result.id, result.status, result.exec_id)
             
-        local table = {code = "print('hello')"}
-        print(table)
-            
-        local result = sys.adhoc(table)
-        
-        local x = sys.list_execs()
-        
-        for k,v in pairs(x) do
-            print(k,v)
-        end
-        
-        print("id:", x[1].id)
-        print("status:", x[1].status)
+        """.trimIndent()
+        )
+    }
 
-    """.trimIndent()
-    )
+
 }
