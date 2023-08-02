@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.ErrorValue
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -131,7 +132,8 @@ class FailedExec(
     override val id: ExecId,
     val startedExec: StartedExec,
     //FIXME failedAt
-    val failedAt: FailedAt
+    val failedAt: FailedAt,
+    val cause: ErrorValue
 ) : Exec() {
     override val status = ExecStatus.Failed
     override val correlation get() = startedExec.correlation

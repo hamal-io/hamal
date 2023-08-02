@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.TableValue
 import java.time.Instant
 
@@ -22,7 +23,8 @@ data class Entity(
     var code: CodeValue? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
-    var invocation: Invocation? = null
+    var invocation: Invocation? = null,
+    var cause: ErrorValue? = null
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
 
@@ -74,8 +76,8 @@ data class Entity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Failed,
-
-                )
+                cause = rec.cause
+            )
 
             else -> TODO()
         }
@@ -105,7 +107,7 @@ data class Entity(
 
         return when (status) {
             ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now())
-            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now())
+            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), cause!!)
             else -> TODO()
         }
     }

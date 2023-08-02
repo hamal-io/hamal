@@ -169,7 +169,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCm
             } else {
                 check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
 
-                addRecord(ExecFailedRecord(execId, cmdId))
+                addRecord(ExecFailedRecord(execId, cmdId, cmd.cause))
 
                 (versionOf(execId, cmdId) as FailedExec).also(CurrentExecProjection::apply)
             }

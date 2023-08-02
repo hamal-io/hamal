@@ -82,6 +82,14 @@ class SubmitRequest(
             events = complete.events
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(execId: ExecId, fail: FailExecReq) =
+        SubmittedFailExecReq(
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            execId = execId,
+            cause = fail.cause
+        ).also(reqCmdRepository::queue)
+
     operator fun invoke(createFuncReq: CreateFuncReq) =
         SubmittedCreateFuncReq(
             id = generateDomainId(::ReqId),

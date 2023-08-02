@@ -12,6 +12,7 @@ import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.value.ErrorValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
@@ -143,7 +144,8 @@ internal abstract class BaseTest {
             ExecStatus.Failed -> execCmdRepository.fail(
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
-                    execId = startedExec.id
+                    execId = startedExec.id,
+                    cause = ErrorValue("BaseTest.kt")
                 )
             )
 

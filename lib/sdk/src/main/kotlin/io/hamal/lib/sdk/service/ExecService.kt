@@ -50,7 +50,7 @@ data class DefaultExecService(val template: HttpTemplate) : ExecService {
     override fun fail(execId: ExecId, error: ErrorValue) {
         template
             .post("/v1/execs/${execId.value.value}/fail")
-            .body(FailExecReq(reason = error))
+            .body(FailExecReq(cause = error))
             .execute()
     }
 }

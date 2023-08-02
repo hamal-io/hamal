@@ -66,10 +66,10 @@ object ActiveTest {
         }
     }
 
-    fun failTest(reason: StringValue) {
+    fun failTest(cause: StringValue) {
         lock.withLock {
             condition.signal()
-            failureReason = reason.value
+            failureReason = cause.value
         }
     }
 

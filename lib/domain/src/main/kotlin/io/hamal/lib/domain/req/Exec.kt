@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FailExecReq(
-    val reason: ErrorValue
+    val cause: ErrorValue
 )
 
 @Serializable
@@ -17,7 +17,7 @@ data class SubmittedFailExecReq(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
-    val reason: ErrorValue
+    val cause: ErrorValue
 ) : SubmittedReq
 
 

@@ -176,7 +176,8 @@ class SqliteExecRepository(
                 storeRecord(
                     ExecFailedRecord(
                         entityId = execId,
-                        cmdId = cmdId
+                        cmdId = cmdId,
+                        cause = cmd.cause
                     )
                 )
                 (currentVersion(execId) as FailedExec)

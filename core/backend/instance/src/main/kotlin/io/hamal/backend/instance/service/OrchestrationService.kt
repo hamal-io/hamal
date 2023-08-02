@@ -72,7 +72,7 @@ class OrchestrationService(
     fun failed(cmdId: CmdId, failedExec: FailedExec) {
         lock.withLock {
             // FIXME retry or permanent fail or maybe do not fail at all...
-            TODO()
+            execs[failedExec.id] = failedExec
         }
     }
 
