@@ -23,45 +23,49 @@ class ExecuteFunction(
     FunctionOutput2Schema(ErrorValue::class, TableArrayValue::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
+        try {
+            val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
+            ctx.pushNil()
+            while (ctx.state.bridge.tableNext(arg1.index)) {
+                val i = ctx.state.getNumber(-2)
+                val v = ctx.state.getTableMap(-1)
 
-        val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
-        ctx.pushNil()
-        while (ctx.state.bridge.tableNext(arg1.index)) {
-            val i = ctx.state.getNumber(-2)
-            val v = ctx.state.getTableMap(-1)
-
-            when (v.getString("req_type")) {
-                "get_block" -> {
-                    batchService.getBlock(
-                        EthUint64(
-                            v.getLong("block")
+                when (v.getString("type")) {
+                    "get_block" -> {
+                        batchService.getBlock(
+                            EthUint64(
+                                v.getLong("block")
+                            )
                         )
-                    )
+                    }
+                }
+                ctx.state.bridge.pop(1)
+            }
+
+            val result = ctx.tableCreateArray(0)
+            batchService.execute().forEach { ethRes ->
+                when (ethRes) {
+                    is EthGetBlockNumberResp -> TODO()
+                    is EthGetLiteBlockResp -> TODO()
+                    is EthGetBlockResp -> {
+                        val res = ctx.tableCreateMap()
+                        res["id"] = ethRes.result.number.value.toLong()
+                        res["hash"] = ethRes.result.hash.toPrefixedHexString().value
+                        res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
+                        res["gas_used"] = ethRes.result.gasUsed.value.toLong()
+                        res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
+                        result.append(res)
+                    }
+
+                    is EthCallResp -> {
+                        result.append(ethRes.result.value)
+                    }
                 }
             }
-            ctx.state.bridge.pop(1)
+            return null to result
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            return ErrorValue(t.message ?: "Unknown error") to null
         }
-
-        val result = ctx.tableCreateArray(0)
-        batchService.execute().forEach { ethRes ->
-            when (ethRes) {
-                is EthGetBlockNumberResp -> TODO()
-                is EthGetLiteBlockResp -> TODO()
-                is EthGetBlockResp -> {
-                    val res = ctx.tableCreateMap()
-                    res["id"] = ethRes.result.number.value.toLong()
-                    res["hash"] = ethRes.result.hash.toPrefixedHexString().value
-                    res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
-                    res["gas_used"] = ethRes.result.gasUsed.value.toLong()
-                    res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
-                    result.append(res)
-                }
-
-                is EthCallResp -> {
-                    result.append(ethRes.result.value)
-                }
-            }
-        }
-        return null to result
     }
 }

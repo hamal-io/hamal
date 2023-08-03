@@ -1,4 +1,4 @@
-package io.hamal.extension.web3.eth.abi
+package io.hamal.extension.web3.eth.dep.abi
 
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext

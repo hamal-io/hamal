@@ -1,31 +1,27 @@
-local eth = web3.eth
+local eth = require("web3/eth")
 
---eth.__config.update({
---    host = 'http://localhost:8000'
---})
+eth.config.update({
+    host = 'http://localhost:9000'
+})
 
-local step_size = 6
+local step_size = 2
 
 local next_block_number = ctx.state.next_block_number
 
 if next_block_number == nil then
-    --    next_block_number = 10000000
-    next_block_number = 10624992
+    next_block_number = 10726626
 end
 
 local err, batch_result = eth.execute({
-    eth.request.get_block(next_block_number + 1),
-    eth.request.get_block(next_block_number + 2),
-    eth.request.get_block(next_block_number + 3),
-    eth.request.get_block(next_block_number + 4),
-    eth.request.get_block(next_block_number + 5),
-    eth.request.get_block(next_block_number + 6)
+    {type="get_block", block = next_block_number + 1},
+    {type="get_block", block = next_block_number + 2},
 })
 
-for _, block in pairs(batch_result) do
-    print(block.id, block.hash)
-end
-
-if err == nil then
+if err ~= nil then
+    print("ERROR:", err.message)
+else
+    for _, block in pairs(batch_result) do
+        print(block.id, block.hash)
+    end
     ctx.state.next_block_number = next_block_number + step_size
 end

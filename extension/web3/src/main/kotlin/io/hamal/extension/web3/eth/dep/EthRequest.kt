@@ -1,4 +1,4 @@
-package io.hamal.extension.web3.eth
+package io.hamal.extension.web3.eth.dep
 
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.extension.NativeExtension
