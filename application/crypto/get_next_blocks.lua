@@ -1,4 +1,4 @@
-local eth = require("web3/eth")
+local eth = require("web3.eth")
 
 eth.config.update({
     host = 'http://localhost:9000'

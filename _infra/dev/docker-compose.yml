@@ -10,7 +10,7 @@ services:
     ports:
       - "0.0.0.0:8000:8000"
     volumes:
-      - "/hamal/proxy/eth:/tmp/hamal/db"
+      - "/mnt/proxy/eth:/tmp/hamal/db"
     networks:
       - hamalnet
 

@@ -32,7 +32,7 @@ class ScriptExtension(
     companion object {
         @JvmStatic
         private fun loadInitFromResources(extensionName: String): String { // FIXME extension name VO
-            val path = "$extensionName/extension.lua"
+            val path = "${extensionName.replace(".", "/")}/extension.lua"
             val classLoader = this::class.java.classLoader
             val resource = classLoader.getResource(path)
             checkNotNull(resource) { "Unable to load: $path" }

@@ -14,7 +14,7 @@ class EthExtensionFactory : ScriptExtensionFactory {
 
     override fun create(): ScriptExtension {
         return ScriptExtension(
-            name = "web3/eth",
+            name = "web3.eth",
             config = config,
             internals = mapOf(
                 "execute" to ExecuteFunction(config)

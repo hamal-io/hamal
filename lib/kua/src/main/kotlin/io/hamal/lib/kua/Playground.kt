@@ -14,7 +14,7 @@ fun main() {
 //        val registry = ExtensionRegistry(sb)
 //        registry.register(
 //            ScriptExtension(
-//                name = "web3/eth",
+//                name = "web3.eth",
 //                init = """
 //                    function create_extension_factory()
 //                        local internal = _internal
