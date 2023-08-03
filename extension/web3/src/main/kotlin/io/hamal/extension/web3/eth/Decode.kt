@@ -1,4 +1,4 @@
-package io.hamal.extension.web3.eth.dep.abi
+package io.hamal.extension.web3.eth
 
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -12,7 +12,7 @@ import io.hamal.lib.web3.eth.abi.EthTypeDecoder
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.util.ByteWindow
 
-class DecodeParameterFunction : Function2In2Out<StringValue, StringValue, ErrorValue, AnyValue>(
+object DecodeParameterFunction : Function2In2Out<StringValue, StringValue, ErrorValue, AnyValue>(
     FunctionInput2Schema(StringValue::class, StringValue::class),
     FunctionOutput2Schema(ErrorValue::class, AnyValue::class)
 ) {

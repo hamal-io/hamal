@@ -2,8 +2,18 @@ function create_extension_factory()
     local internal = _internal
     return function()
         local result = {
+            abi = {
+                types = {
+                    UINT_8 = 'uint256',
+                    UINT_256 = 'uint256'
+                }
+            },
             request = {}
         }
+
+        function result.abi.decode_parameter(type, value)
+            return internal.decode_parameter(type, value)
+        end
 
         function result.request.get_block(block)
             -- FIXME make sure its a number

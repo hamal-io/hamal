@@ -8,8 +8,6 @@ import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import java.nio.file.Files.readAllBytes
-import kotlin.io.path.Path
 
 internal class ExtensionTest {
 
@@ -17,7 +15,7 @@ internal class ExtensionTest {
     fun `Invokes function of test extension`() {
         sandbox.load(
             """
-            local test_extension = require('test/extension')
+            local test_extension = require('test')
             for x=1,10 do
                 test_extension.call()
             end
@@ -30,7 +28,7 @@ internal class ExtensionTest {
     fun `Able to access fields of extension`() {
         sandbox.load(
             """
-            local test_extension = require('test/extension')
+            local test_extension = require('test')
             assert( test_extension.some_number == 42 )
             assert( test_extension.some_boolean == true)
         """.trimIndent()
@@ -42,8 +40,7 @@ internal class ExtensionTest {
         Sandbox().also { sb ->
             sb.register(
                 ScriptExtension(
-                    name = "test/extension",
-                    init = String(readAllBytes(Path("src/integrationTest/resources/test-extension.lua"))),
+                    name = "test",
                     internals = mapOf(
                         "test_extension_call" to TestCall0In0OutFunction
                     )

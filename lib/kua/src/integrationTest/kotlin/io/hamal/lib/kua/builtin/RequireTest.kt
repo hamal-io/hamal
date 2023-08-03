@@ -4,8 +4,6 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Paths
 
 
 internal class ExtensionTest {
@@ -14,11 +12,11 @@ internal class ExtensionTest {
     fun `Creates a new instance - everytime it gets invoked`() {
         sandbox.load(
             """
-            local ext_one = require('test/extension')
+            local ext_one = require('test')
             assert( ext_one.some_number == 42 )
             ext_one.some_number = 1337
             
-            local ext_two = require('test/extension')
+            local ext_two = require('test')
             assert( ext_two.some_number == 42 )
             
             assert( ext_one.some_number == 1337 )
@@ -31,8 +29,7 @@ internal class ExtensionTest {
         Sandbox().also { sb ->
             sb.register(
                 ScriptExtension(
-                    name = "test/extension",
-                    init = String(Files.readAllBytes(Paths.get("src/integrationTest/resources/test-extension.lua"))),
+                    name = "test",
                     internals = mapOf()
                 )
             )

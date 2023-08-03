@@ -16,6 +16,8 @@ import io.hamal.lib.web3.eth.domain.EthGetBlockResp
 import io.hamal.lib.web3.eth.domain.EthGetLiteBlockResp
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
+object  o
+
 class ExecuteFunction(
     private val config: ExtensionConfig
 ) : Function1In2Out<TableArrayValue, ErrorValue, TableArrayValue>(
