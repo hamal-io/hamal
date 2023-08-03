@@ -1,4 +1,4 @@
-package io.hamal.agent.config
+package io.hamal.runner.config
 
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory

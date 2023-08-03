@@ -1,6 +1,6 @@
-package io.hamal.agent.service
+package io.hamal.runner.service
 
-import io.hamal.agent.component.AgentAsync
+import io.hamal.runner.component.RunnerAsync
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.State
@@ -23,7 +23,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class AgentService(
     private val httpTemplateSupplier: HttpTemplateSupplier,
     private val sandboxFactory: SandboxFactory,
-    private val async: AgentAsync
+    private val async: RunnerAsync
 ) {
 
 

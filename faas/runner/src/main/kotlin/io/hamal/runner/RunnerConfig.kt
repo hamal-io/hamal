@@ -1,4 +1,4 @@
-package io.hamal.agent
+package io.hamal.runner
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
@@ -18,7 +18,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
         JmxAutoConfiguration::class
     ]
 )
-open class AgentConfig {
+open class RunnerConfig {
 
     @Bean
     open fun agentExecutor(): ThreadPoolTaskScheduler {

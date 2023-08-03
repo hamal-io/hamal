@@ -1,8 +1,8 @@
 package io.hamal.bootstrap
 
-import io.hamal.agent.AgentConfig
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.frontend.FrontendConfig
+import io.hamal.runner.RunnerConfig
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -68,7 +68,7 @@ fun main(args: Array<String>) {
         applicationBuilder
             .parent(parent)
             .child(
-                AgentConfig::class.java,
+                RunnerConfig::class.java,
             )
             .web(WebApplicationType.NONE)
             .banner { _: Environment?, _: Class<*>?, out: PrintStream ->
@@ -76,14 +76,12 @@ fun main(args: Array<String>) {
                 out.println("")
                 out.println(
                     """
-                           _   
-     /\                   | |  
-    /  \   __ _  ___ _ __ | |_ 
-   / /\ \ / _` |/ _ \ '_ \| __|
-  / ____ \ (_| |  __/ | | | |_ 
- /_/    \_\__, |\___|_| |_|\__|
-           __/ |               
-          |___/                
+  _____                             
+ |  __ \                            
+ | |__) |   _ _ __  _ __   ___ _ __ 
+ |  _  / | | | '_ \| '_ \ / _ \ '__|
+ | | \ \ |_| | | | | | | |  __/ |   
+ |_|  \_\__,_|_| |_|_| |_|\___|_| 
                 """.trimIndent()
                 )
                 out.println("")

@@ -1,4 +1,4 @@
-package io.hamal.agent.adapter
+package io.hamal.runner.adapter
 
 import io.hamal.lib.kua.extension.NativeExtensionFactory
 import java.io.File

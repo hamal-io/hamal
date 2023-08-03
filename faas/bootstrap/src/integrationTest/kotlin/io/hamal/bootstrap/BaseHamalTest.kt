@@ -1,6 +1,6 @@
 package io.hamal.bootstrap
 
-import io.hamal.agent.AgentConfig
+import io.hamal.runner.RunnerConfig
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -36,7 +36,7 @@ import kotlin.io.path.name
     classes = [
         TestAgentConfig::class,
         BackendConfig::class,
-        AgentConfig::class
+        RunnerConfig::class
     ]
 )
 @SpringBootTest(

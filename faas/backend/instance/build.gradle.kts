@@ -44,7 +44,7 @@ testing {
 
                     implementation(project(":faas:backend:instance"))
                     implementation(project(":faas:frontend"))
-                    implementation(project(":faas:agent"))
+                    implementation(project(":faas:runner"))
                     implementation(project(":faas:backend:repository:api"))
                     implementation(project(":faas:backend:repository:memory"))
 

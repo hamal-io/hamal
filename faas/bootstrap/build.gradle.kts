@@ -32,7 +32,7 @@ dependencies {
 
     implementation(project(":faas:backend:instance"))
     implementation(project(":faas:frontend"))
-    implementation(project(":faas:agent"))
+    implementation(project(":faas:runner"))
 }
 
 tasks.named<BootJar>("bootJar") {
@@ -72,7 +72,7 @@ testing {
                     implementation(project(":faas:backend:instance"))
                     implementation(project(":faas:backend:repository:api"))
                     implementation(project(":faas:frontend"))
-                    implementation(project(":faas:agent"))
+                    implementation(project(":faas:runner"))
                     implementation(project(":extension:std:sys"))
                     implementation(project(":extension:std:log"))
 

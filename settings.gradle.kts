@@ -35,7 +35,7 @@ dependencyResolutionManagement {
 
 include(":application:proxy")
 
-include(":faas:agent")
+include(":faas:runner")
 include(":faas:backend")
 include(":faas:bootstrap")
 include(":faas:backend:instance")

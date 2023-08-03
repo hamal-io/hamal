@@ -1,4 +1,4 @@
-package io.hamal.agent.config
+package io.hamal.runner.config
 
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.HttpTemplateSupplier
