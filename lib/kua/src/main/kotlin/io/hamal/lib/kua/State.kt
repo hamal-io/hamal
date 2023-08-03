@@ -10,7 +10,7 @@ value class StackTop(val value: Int)
 
 interface State {
     //FIXME probably not a good idea to expose this internal - only for development / prototyping
-    val bridge: Bridge
+    val bridge: Native
     val top: StackTop
 
     fun isEmpty(): Boolean
@@ -65,7 +65,7 @@ interface State {
 }
 
 class ClosableState(
-    override val bridge: Bridge
+    override val bridge: Native
 ) : State, AutoCloseable {
     override val top: StackTop get() = StackTop(bridge.top())
 

@@ -1,103 +1,64 @@
 package io.hamal.lib.kua
 
-import cz.adamh.utils.NativeUtils
-import io.hamal.lib.domain.Once
+import io.hamal.lib.kua.function.FunctionValue
+import io.hamal.lib.kua.value.ErrorValue
 
-object NativeLoader {
+class Native : AutoCloseable {
 
-    enum class Preference {
-        Jar,
-        Resources,
-        BuildDir
+    external fun luaVersionNumber(): Int
+    external fun luaIntegerWidth(): Int
+    external fun luaRegistryIndex(): Int
+
+    external fun top(): Int
+    external fun setTop(idx: Int)
+    external fun pushTop(idx: Int): Int
+    external fun absIndex(idx: Int): Int
+    external fun type(idx: Int): Int
+    external fun setGlobal(key: String)
+    external fun getGlobal(key: String)
+
+    external fun pushBoolean(value: Boolean): Int
+    external fun pushFunctionValue(value: FunctionValue<*, *, *, *>): Int
+    external fun pushError(message: String): Int
+    external fun pushNil(): Int
+    external fun pushNumber(value: Double): Int
+    external fun pushString(value: String): Int
+
+    external fun pop(total: Int): Int
+
+    external fun toBoolean(idx: Int): Boolean
+    external fun toError(idx: Int): ErrorValue
+    external fun toNumber(idx: Int): Double
+    external fun toString(idx: Int): String
+
+    external fun tableCreate(arrayCount: Int, recordCount: Int): Int
+    external fun tabletSetField(idx: Int, key: String): Int
+    external fun tableGetField(idx: Int, key: String): Int
+    external fun tableGetLength(idx: Int): Int
+
+    external fun tableAppend(idx: Int): Int
+    external fun tableSetRaw(idx: Int): Int
+    external fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableGetRaw(idx: Int): Int
+    external fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableNext(idx: Int): Boolean
+    external fun tableGetSub(idx: Int, key: String): Int
+
+    external fun loadString(code: String): Int
+    external fun call(argCount: Int, returnCount: Int)
+
+    private external fun initConnection()
+    private external fun closeConnection()
+
+    init {
+        initConnection()
     }
 
-    fun load(preference: Preference) {
-        if (tryToLoad(preference)) {
-            return
-        }
-
-        while (loaders.isNotEmpty()) {
-            val next = loaders.keys.first()
-            if (tryToLoad(next)) {
-                return
-            }
-            loaders.remove(next)
-        }
-
-        throw IllegalStateException("Unable to load shared libraries")
+    override fun close() {
+        closeConnection()
     }
 
-    private fun tryToLoad(preference: Preference) = loaders[preference]!!.load()
-
-    private val loaders = mutableMapOf(
-        Preference.Jar to JarLoader,
-        Preference.Resources to ResourcesLoader,
-        Preference.BuildDir to BuildDirLoader,
-    )
-}
-
-private interface Loader {
-    fun load(): Boolean
-}
-
-internal object BuildDirLoader : Loader {
-    override fun load(): Boolean {
-        return once {
-            val baseDir = System.getProperty("user.dir")
-            try {
-                System.load("$baseDir/lib/kua/native/cmake-build-debug/lua/liblua.so")
-                System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/libkua.so")
-                true
-            } catch (t: Throwable) {
-                false
-            }
-        }
+    override fun toString(): String {
+        return "State"
     }
-
-    @JvmStatic
-    private val once = Once.default<Boolean>()
-}
-
-
-fun main() {
-    BuildDirLoader.load()
-}
-
-internal object ResourcesLoader : Loader {
-    override fun load(): Boolean {
-        return once {
-            val classloader = Thread.currentThread().contextClassLoader
-            val result = classloader.getResource("./liblua.so")
-                ?.let { System.load(it.file); true }
-                ?: false
-            if (result) {
-                classloader.getResource("./libkua.so")
-                    ?.let { System.load(it.file); true }
-                    ?: false
-            } else {
-                false
-            }
-        }
-    }
-
-    @JvmStatic
-    private val once = Once.default<Boolean>()
-}
-
-
-internal object JarLoader : Loader {
-    override fun load(): Boolean {
-        return once {
-            try {
-                NativeUtils.loadLibraryFromJar("/liblua.so")
-                NativeUtils.loadLibraryFromJar("/libkua.so")
-                true
-            } catch (t: Throwable) {
-                false
-            }
-        }
-    }
-
-    @JvmStatic
-    private val once = Once.default<Boolean>()
 }

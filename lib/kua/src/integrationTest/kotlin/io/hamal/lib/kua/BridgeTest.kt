@@ -77,9 +77,9 @@ internal class TableTest : BaseStateTest() {
 }
 
 internal sealed class BaseStateTest {
-    val testInstance: Bridge = run {
+    val testInstance: Native = run {
         NativeLoader.load(Resources)
-        Bridge()
+        Native()
     }
 
     fun verifyStackIsEmpty() {

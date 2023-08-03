@@ -1168,9 +1168,9 @@ internal class CallTest : BaseBridgeTest() {
 }
 
 internal sealed class BaseBridgeTest {
-    val testInstance: Bridge = run {
+    val testInstance: Native = run {
         NativeLoader.load(Resources)
-        Bridge()
+        Native()
     }
 
     fun verifyStackIsEmpty() {

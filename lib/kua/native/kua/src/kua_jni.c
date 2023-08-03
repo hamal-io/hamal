@@ -11,7 +11,7 @@
 
 
 #define UNUSED __attribute__((unused))
-#define STATE_METHOD_NAME(method) Java_io_hamal_lib_kua_Bridge_##method
+#define STATE_METHOD_NAME(method) Java_io_hamal_lib_kua_Native_##method
 
 JNIEnv *current_jni_env = NULL;
 

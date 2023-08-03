@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.Bridge
+import io.hamal.lib.kua.Native
 import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.value.Value
 
@@ -16,7 +16,7 @@ interface FunctionValue<
 
     operator fun invoke(ctx: FunctionContext, input: INPUT): OUTPUT
 
-    fun invokedByLua(bridge: Bridge): Int {
+    fun invokedByLua(bridge: Native): Int {
         val ctx = FunctionContext(
             ClosableState(bridge)
         )

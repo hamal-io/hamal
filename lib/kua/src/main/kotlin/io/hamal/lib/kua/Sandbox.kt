@@ -17,7 +17,7 @@ interface SandboxFactory {
 
 class Sandbox : State, AutoCloseable {
 
-    override val bridge: Bridge = Bridge()
+    override val bridge: Native = Native()
     override val top: StackTop get() = state.top
 
     val state = ClosableState(bridge)
@@ -89,7 +89,7 @@ class Sandbox : State, AutoCloseable {
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
 }
 
-internal fun Bridge.load(code: String) {
+internal fun Native.load(code: String) {
     loadString(code)
     call(0, 0)
 }
