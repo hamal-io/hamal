@@ -27,7 +27,7 @@ class ExecuteFunction(
             val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
             ctx.pushNil()
             while (ctx.state.bridge.tableNext(arg1.index)) {
-                val i = ctx.state.getNumber(-2)
+//                val i = ctx.state.getNumber(-2)
                 val v = ctx.state.getTableMap(-1)
 
                 when (v.getString("type")) {
