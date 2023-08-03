@@ -5,7 +5,6 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
-import io.hamal.lib.kua.extension.ScriptExtension.Companion.loadInitFromResources
 
 
 fun main() {
@@ -17,7 +16,6 @@ fun main() {
         it.register(
             ScriptExtension(
                 name = "sys",
-                init = loadInitFromResources("extension.lua"),
                 internals = mapOf(
                     "adhoc" to InvokeAdhocFunction(templateSupplier)
                 )

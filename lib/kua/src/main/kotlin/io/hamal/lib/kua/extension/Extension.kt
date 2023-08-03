@@ -1,8 +1,6 @@
 package io.hamal.lib.kua.extension
 
 import io.hamal.lib.kua.value.Value
-import java.nio.file.Path
-import kotlin.io.path.Path
 
 sealed interface ExtensionFactory<EXTENSION : Extension> {
     fun create(): EXTENSION
@@ -26,19 +24,17 @@ interface ScriptExtensionFactory : ExtensionFactory<ScriptExtension>
 
 class ScriptExtension(
     override val name: String,
-    val init: String,
+    val init: String = loadInitFromResources(name),
     val internals: Map<String, Value>,
     override val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
 ) : Extension {
 
     companion object {
-        fun loadInitFromResources(filename: String): String {
-            return loadInitFromResources(Path(filename))
-        }
-
-        fun loadInitFromResources(path: Path): String {
+        @JvmStatic
+        private fun loadInitFromResources(extensionName: String): String { // FIXME extension name VO
+            val path = "$extensionName/extension.lua"
             val classLoader = this::class.java.classLoader
-            val resource = classLoader.getResource(path.toString())
+            val resource = classLoader.getResource(path)
             checkNotNull(resource) { "Unable to load: $path" }
             return String(resource.readBytes())
         }
@@ -47,7 +43,6 @@ class ScriptExtension(
     fun getConfigFunction() = ExtensionGetConfigFunction(config)
 
     fun updateConfigFunction() = ExtensionUpdateConfigFunction(config)
-
 }
 
 

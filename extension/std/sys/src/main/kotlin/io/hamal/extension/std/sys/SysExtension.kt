@@ -37,8 +37,7 @@ class SysExtensionFactory(
                 "create_func" to CreateFuncFunction(templateSupplier),
                 "get_func" to GetFuncFunction(templateSupplier),
                 "list_func" to ListFuncsFunction(templateSupplier)
-            ),
-            init = ScriptExtension.loadInitFromResources("extension.lua")
+            )
         )
     }
 }
