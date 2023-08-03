@@ -4,24 +4,26 @@ plugins {
     id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
-archivesName.set("backend-repository-memory")
+archivesName.set("backend-repository-sqlite")
 
 dependencies {
-    api(project(":core:backend:repository:record"))
+    api(project(":lib:sqlite"))
+    api(project(":faas:backend:repository:record"))
 
-    testImplementation(project(":core:backend:repository:memory"))
+    testImplementation(project(":faas:backend:repository:sqlite"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
+
 
 testing {
     suites {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(external.sqlite)
+                    implementation(project(":lib:sqlite"))
 
-                    implementation(project(":core:backend:repository:memory"))
+                    implementation(project(":faas:backend:repository:sqlite"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
                 }

@@ -62,7 +62,7 @@ data class Entity(
                 sequence = rec.sequence(),
                 status = ExecStatus.Started,
 //                startedAt = Instant.now() // FIXME
-                //picked by :core:agent id..
+                //picked by :faas:agent id..
             )
 
             is ExecCompletedRecord -> copy(

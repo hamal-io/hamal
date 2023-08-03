@@ -13,8 +13,9 @@ services:
       - "/hamal/proxy/eth:/tmp/hamal/db"
     networks:
       - hamalnet
-  core:
-    image: hamalio/core
+
+  faas:
+    image: hamalio/faas
     ports:
       - "0.0.0.0:8008:8008"
     networks:

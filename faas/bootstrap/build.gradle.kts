@@ -16,7 +16,7 @@ docker {
         maintainer.set("hamal.io docker@hamal.io")
         baseImage.set("openjdk:22-slim-bullseye")
         ports.set(listOf(8008, 8008))
-        images.set(listOf("hamalio/core"))
+        images.set(listOf("hamalio/faas"))
         jvmArgs.set(listOf("-Dspring.profiles.active=default,memory", "-Xmx2048m"))
     }
 }
@@ -30,9 +30,9 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":core:backend:instance"))
-    implementation(project(":core:frontend"))
-    implementation(project(":core:agent"))
+    implementation(project(":faas:backend:instance"))
+    implementation(project(":faas:frontend"))
+    implementation(project(":faas:agent"))
 }
 
 tasks.named<BootJar>("bootJar") {
@@ -69,10 +69,10 @@ testing {
                     }
 
                     implementation(project(":lib:kua"))
-                    implementation(project(":core:backend:instance"))
-                    implementation(project(":core:backend:repository:api"))
-                    implementation(project(":core:frontend"))
-                    implementation(project(":core:agent"))
+                    implementation(project(":faas:backend:instance"))
+                    implementation(project(":faas:backend:repository:api"))
+                    implementation(project(":faas:frontend"))
+                    implementation(project(":faas:agent"))
                     implementation(project(":extension:std:sys"))
                     implementation(project(":extension:std:log"))
 

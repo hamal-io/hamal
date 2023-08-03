@@ -12,9 +12,9 @@ dependencies {
     implementation(project(":lib:sdk"))
     implementation(project(":lib:kua"))
 
-    implementation(project(":core:backend:repository:api"))
-    implementation(project(":core:backend:repository:memory"))
-    implementation(project(":core:backend:repository:sqlite"))
+    implementation(project(":faas:backend:repository:api"))
+    implementation(project(":faas:backend:repository:memory"))
+    implementation(project(":faas:backend:repository:sqlite"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
@@ -42,11 +42,11 @@ testing {
                         exclude("com.fasterxml.jackson.core", "jackson-annotations")
                     }
 
-                    implementation(project(":core:backend:instance"))
-                    implementation(project(":core:frontend"))
-                    implementation(project(":core:agent"))
-                    implementation(project(":core:backend:repository:api"))
-                    implementation(project(":core:backend:repository:memory"))
+                    implementation(project(":faas:backend:instance"))
+                    implementation(project(":faas:frontend"))
+                    implementation(project(":faas:agent"))
+                    implementation(project(":faas:backend:repository:api"))
+                    implementation(project(":faas:backend:repository:memory"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

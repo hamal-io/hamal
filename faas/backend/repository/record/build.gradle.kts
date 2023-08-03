@@ -7,7 +7,7 @@ plugins {
 archivesName.set("backend-repository-record")
 
 dependencies {
-    api(project(":core:backend:repository:api"))
+    api(project(":faas:backend:repository:api"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

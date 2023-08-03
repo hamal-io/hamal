@@ -35,16 +35,16 @@ dependencyResolutionManagement {
 
 include(":application:proxy")
 
-include(":core:agent")
-include(":core:backend")
-include(":core:bootstrap")
-include(":core:backend:instance")
-include(":core:backend:repository:api")
-include(":core:backend:repository:memory")
-include(":core:backend:repository:record")
-include(":core:backend:repository:sqlite")
+include(":faas:agent")
+include(":faas:backend")
+include(":faas:bootstrap")
+include(":faas:backend:instance")
+include(":faas:backend:repository:api")
+include(":faas:backend:repository:memory")
+include(":faas:backend:repository:record")
+include(":faas:backend:repository:sqlite")
 
-include(":core:frontend")
+include(":faas:frontend")
 
 include(":extension:std:debug")
 include(":extension:std:sys")
