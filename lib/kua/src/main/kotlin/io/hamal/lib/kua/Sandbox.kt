@@ -25,8 +25,8 @@ class Sandbox : State, AutoCloseable {
 
     init {
         registerGlobalFunction("require", Require(registry))
-        val classLoader = Sandbox::class.java.classLoader
 
+        val classLoader = Sandbox::class.java.classLoader
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
 

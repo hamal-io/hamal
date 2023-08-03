@@ -3,7 +3,7 @@
 #include <jni.h>
 
 #include "kua_check.h"
-#include "kua_error.h"
+#include "kua_builtin_error.h"
 #include "kua_jni.h"
 #include "kua_builtin.h"
 #include "kua_state.h"
@@ -119,7 +119,7 @@ init_connection(JNIEnv *env, jobject K) {
     // FIXME gc should not be required --> use memory default_arena allocator and clean up properly when closing connection
     lua_gc(L, LUA_GCSTOP);
 
-    error_register_metable(L);
+    builtin_error_register_metable(L);
     kua_builtin_register(L);
 
     state_to_thread(env, K, L);

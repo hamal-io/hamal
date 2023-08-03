@@ -49,10 +49,9 @@ fun main() {
 //        sb.registerGlobalFunction("require", Require(registry))
 
     }.use { sb ->
+
         sb.load(
-        """
-        local x = nil
-        local a = #x
+            """
         """.trimIndent()
         )
     }

@@ -1,7 +1,7 @@
 #include <lua.h>
 
 #include "kua_check.h"
-#include "kua_error.h"
+#include "kua_builtin_error.h"
 #include "kua_stack.h"
 #include "kua_call.h"
 
@@ -70,7 +70,7 @@ push_nil(lua_State *L) {
 int
 push_error(lua_State *L, char const *message) {
     if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    error_create(L, message);
+    builtin_error_create(L, message);
     return top(L);
 }
 

@@ -17,7 +17,7 @@ set(KUA_LIB_SRCS
         src/kua_builtin_base.c
         src/kua_call.c
         src/kua_check.c
-        src/kua_error.c
+        src/kua_builtin_error.c
         src/kua_info.c
         src/kua_jni.c
         src/kua_jni_error.c

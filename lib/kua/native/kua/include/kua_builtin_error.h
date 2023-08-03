@@ -13,9 +13,9 @@
  */
 
 int
-error_create(lua_State *L, char const *message);
+builtin_error_create(lua_State *L, char const *message);
 
 void
-error_register_metable(lua_State *L);
+builtin_error_register_metable(lua_State *L);
 
 #endif //KUA_ERROR_H

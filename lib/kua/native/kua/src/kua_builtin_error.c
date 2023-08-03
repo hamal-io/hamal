@@ -2,10 +2,10 @@
 #include "lauxlib.h"
 
 #include "kua_check.h"
-#include "kua_error.h"
+#include "kua_builtin_error.h"
 
 void
-error_register_metable(lua_State *L) {
+builtin_error_register_metable(lua_State *L) {
     luaL_newmetatable(L, "__metable_error");
     lua_pushnumber(L, 20);
     lua_setfield(L, 1, "__type");
@@ -16,7 +16,7 @@ error_register_metable(lua_State *L) {
 
 
 int
-error_create(lua_State *L, char const *message) {
+builtin_error_create(lua_State *L, char const *message) {
     if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
 
     lua_createtable(L, 0, 2);
