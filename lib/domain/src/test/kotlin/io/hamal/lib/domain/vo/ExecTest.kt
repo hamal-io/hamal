@@ -56,5 +56,5 @@ class ExecIdTest {
     }
 
     @TestFactory
-    fun serialization() = generateTestCases(ExecId(SnowflakeId(23)), "23")
+    fun serialization() = generateTestCases(ExecId(SnowflakeId(23)), "\"23\"")
 }
