@@ -3,6 +3,7 @@ package io.hamal.runner.config
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.extension.web3.eth.EthExtensionFactory
+import io.hamal.extension.web3.hml.HmlExtensionFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
@@ -24,6 +25,7 @@ open class SandboxConfig {
                 it.register(LogExtensionFactory().create())
                 it.register(SysExtensionFactory { template }.create())
                 it.register(EthExtensionFactory().create())
+                it.register(HmlExtensionFactory().create())
             }
         }
     }

@@ -1,4 +1,4 @@
-package io.hamal.extension.web3.eth
+package io.hamal.extension.web3.hml
 
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.extension.ExtensionConfig
@@ -10,11 +10,9 @@ import io.hamal.lib.kua.table.TableArrayValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthCallResponse
-import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResponse
-import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.eth.domain.EthGetLiteBlockResponse
-import io.hamal.lib.web3.eth.http.EthHttpBatchService
+import io.hamal.lib.web3.hml.domain.HmlCallResponse
+import io.hamal.lib.web3.hml.domain.HmlGetBlockResponse
+import io.hamal.lib.web3.hml.http.HmlHttpBatchService
 
 
 class ExecuteFunction(
@@ -25,7 +23,7 @@ class ExecuteFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
         try {
-            val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
+            val batchService = HmlHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
             ctx.pushNil()
             while (ctx.state.bridge.tableNext(arg1.index)) {
 //                val i = ctx.state.getNumber(-2)
@@ -46,19 +44,16 @@ class ExecuteFunction(
             val result = ctx.tableCreateArray(0)
             batchService.execute().forEach { ethRes ->
                 when (ethRes) {
-                    is EthGetBlockNumberResponse -> TODO()
-                    is EthGetLiteBlockResponse -> TODO()
-                    is EthGetBlockResponse -> {
+                    is HmlGetBlockResponse -> {
                         val res = ctx.tableCreateMap()
                         res["id"] = ethRes.result.number.value.toLong()
                         res["hash"] = ethRes.result.hash.toPrefixedHexString().value
-                        res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
                         res["gas_used"] = ethRes.result.gasUsed.value.toLong()
                         res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
                         result.append(res)
                     }
 
-                    is EthCallResponse -> {
+                    is HmlCallResponse -> {
                         result.append(ethRes.result.value)
                     }
                 }

@@ -4,7 +4,7 @@ local eth = require("web3.eth")
 --    host = 'http://localhost:9000'
 --})
 
-local step_size = 10
+local step_size = 25
 
 local next_block_number = ctx.state.next_block_number
 
@@ -22,7 +22,22 @@ local err, batch_result = eth.execute({
     {type="get_block", block = next_block_number + 7},
     {type="get_block", block = next_block_number + 8},
     {type="get_block", block = next_block_number + 9},
-    {type="get_block", block = next_block_number + 10}
+    {type="get_block", block = next_block_number + 10},
+    {type="get_block", block = next_block_number + 11},
+    {type="get_block", block = next_block_number + 12},
+    {type="get_block", block = next_block_number + 13},
+    {type="get_block", block = next_block_number + 14},
+    {type="get_block", block = next_block_number + 15},
+    {type="get_block", block = next_block_number + 16},
+    {type="get_block", block = next_block_number + 17},
+    {type="get_block", block = next_block_number + 18},
+    {type="get_block", block = next_block_number + 19},
+    {type="get_block", block = next_block_number + 20},
+    {type="get_block", block = next_block_number + 21},
+    {type="get_block", block = next_block_number + 22},
+    {type="get_block", block = next_block_number + 23},
+    {type="get_block", block = next_block_number + 24},
+    {type="get_block", block = next_block_number + 25},
 })
 
 if err ~= nil then

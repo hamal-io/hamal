@@ -10,20 +10,21 @@ import java.math.BigInteger
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-interface Cache {
+//FIXME single cache which stores persisted objects and convertion happens on controller level
+interface EthCache {
     fun findBlock(blockId: EthUint64): EthBlock?
     fun store(block: EthBlock) // FIXME Ethblock domain object of the stripped down version
     fun store(call: EthCall)
     fun findCall(blockId: EthUint64, to: EthAddress, data: EthPrefixedHexString): EthCall?
 }
 
-class LruCache(
+class EthLruCache(
     private val proxyRepository: ProxyRepository,
     private val addressRepository: AddressRepository,
     private val blockRepository: BlockRepository,
     private val callRepository: CallRepository,
     private val transactionRepository: TransactionRepository
-) : Cache {
+) : EthCache {
 
     override fun findBlock(blockId: EthUint64): EthBlock? {
         return blockStore.find(blockId) ?: loadBlockFromDb(blockId)

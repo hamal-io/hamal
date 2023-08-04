@@ -1,7 +1,7 @@
 package io.hamal.app.proxy.web
 
-import io.hamal.app.proxy.handler.EthRequestHandler
-import io.hamal.lib.web3.eth.domain.EthResp
+import io.hamal.app.proxy.handler.HmlRequestHandler
+import io.hamal.lib.web3.hml.domain.HmlResponse
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -12,33 +12,33 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class RequestController(
+class HmlRequestController(
     private val json: Json,
-    private val requestHandler: EthRequestHandler
+    private val hmlRequestHandler: HmlRequestHandler
 ) {
-    @PostMapping("/")
-    fun eth(
+    @PostMapping("/hml")
+    fun hml(
         @RequestBody body: JsonElement
     ): ResponseEntity<JsonElement> {
 
         when (body) {
             is JsonArray -> {
-                val requests = body.map { json.decodeFromJsonElement(EthRequestHandler.Request.serializer(), it) }
-                val result = requestHandler.handle(requests)
+                val requests = body.map { json.decodeFromJsonElement(HmlRequestHandler.Request.serializer(), it) }
+                val result = hmlRequestHandler.handle(requests)
 
                 return ResponseEntity.ok(JsonArray(
                     result.map {
-                        json.encodeToJsonElement(EthResp.serializer(), it)
+                        json.encodeToJsonElement(HmlResponse.serializer(), it)
                     }
                 ))
             }
 
             is JsonObject -> {
-                val result = requestHandler.handle(
-                    listOf(json.decodeFromJsonElement(EthRequestHandler.Request.serializer(), body))
+                val result = hmlRequestHandler.handle(
+                    listOf(json.decodeFromJsonElement(HmlRequestHandler.Request.serializer(), body))
                 )
 
-                return ResponseEntity.ok(json.encodeToJsonElement(EthResp.serializer(), result.first()))
+                return ResponseEntity.ok(json.encodeToJsonElement(HmlResponse.serializer(), result.first()))
             }
 
             else -> throw NotImplementedError()

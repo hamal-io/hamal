@@ -2,7 +2,6 @@ package io.hamal.lib.web3
 
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.Erc20.decimals
-import io.hamal.lib.web3.Erc20.name
 import io.hamal.lib.web3.eth.abi.EthFunction
 import io.hamal.lib.web3.eth.abi.EthInputTuple0
 import io.hamal.lib.web3.eth.abi.EthOutput
@@ -10,7 +9,7 @@ import io.hamal.lib.web3.eth.abi.EthOutputTuple1
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthCallResp
+import io.hamal.lib.web3.eth.domain.EthCallResponse
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 
@@ -40,7 +39,6 @@ object Erc20 {
         )
     )
 }
-
 
 
 fun main() {
@@ -99,13 +97,11 @@ fun main() {
 
     println(response)
 
-    require(response is EthCallResp)
+    require(response is EthCallResponse)
 
     val x = decimals.outputs.decodeToMap(response.result)
 
     println(x)
-
-
 
 
 }

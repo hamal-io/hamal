@@ -1,10 +1,14 @@
-package io.hamal.lib.web3.eth.http
+package io.hamal.lib.web3.hml.http
 
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.*
+import io.hamal.lib.web3.eth.domain.EthRequestId
+import io.hamal.lib.web3.hml.HmlBatchService
+import io.hamal.lib.web3.hml.domain.Chain
+import io.hamal.lib.web3.hml.domain.HmlCallResponse
+import io.hamal.lib.web3.hml.domain.HmlGetBlockResponse
+import io.hamal.lib.web3.hml.domain.HmlResponse
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -15,44 +19,28 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
-class EthHttpBatchService(
-    private val httpTemplate: HttpTemplate
-) : EthBatchService<EthHttpBatchService> {
+class HmlHttpBatchService(
+    private val httpTemplate: HttpTemplate,
+    override val chain: Chain = Chain.Eth
+) : HmlBatchService<HmlHttpBatchService> {
 
     private val lock = ReentrantLock()
     private val resultClasses = mutableListOf<KClass<*>>()
     private val requests = mutableListOf<JsonObject>()
 
-    override fun getBlockNumber() = request(
-        method = "eth_blockNumber",
-        params = JsonArray(listOf()),
-        resultClass = EthGetBlockNumberResponse::class
-    )
-
     override fun getBlock(number: EthUint64) = request(
-        method = "eth_getBlockByNumber",
+        method = "${chain.name.lowercase()}_get_block_by_number",
         params = JsonArray(
             listOf(
                 JsonPrimitive(number.toPrefixedHexString().value),
                 JsonPrimitive(true)
             )
         ),
-        resultClass = EthGetBlockResponse::class
+        resultClass = HmlGetBlockResponse::class
     )
 
-    override fun getLiteBlock(number: EthUint64) = request(
-        method = "eth_getBlockByNumber",
-        params = JsonArray(
-            listOf(
-                JsonPrimitive(number.toPrefixedHexString().value),
-                JsonPrimitive(false)
-            )
-        ),
-        resultClass = EthGetLiteBlockResponse::class
-    )
-
-    override fun call(callRequest: EthBatchService.EthCallRequest) = request(
-        method = "eth_call",
+    override fun call(callRequest: HmlBatchService.CallRequest) = request(
+        method = "${chain.name.lowercase()}_call",
         params = JsonArray(
             listOf(
                 JsonObject(
@@ -64,7 +52,7 @@ class EthHttpBatchService(
                 JsonPrimitive(callRequest.blockNumber.toPrefixedHexString().value),
             )
         ),
-        resultClass = EthCallResponse::class
+        resultClass = HmlCallResponse::class
     )
 
     override fun lastRequestId(): EthRequestId {
@@ -72,7 +60,7 @@ class EthHttpBatchService(
     }
 
     @OptIn(InternalSerializationApi::class)
-    override fun execute(): List<EthResponse> {
+    override fun execute(): List<HmlResponse> {
         return lock.withLock {
 
             if (requests.isEmpty()) {
@@ -86,7 +74,7 @@ class EthHttpBatchService(
 
             response.zip(resultClasses)
                 .map { (response, resultClass) -> json.decodeFromJsonElement(resultClass.serializer(), response) }
-                .filterIsInstance<EthResponse>()
+                .filterIsInstance<HmlResponse>()
                 .also {
                     requests.clear()
                     resultClasses.clear()
@@ -94,11 +82,11 @@ class EthHttpBatchService(
         }
     }
 
-    private fun <RESPONSE : EthResponse> request(
+    private fun <RESPONSE : HmlResponse> request(
         method: String,
         params: JsonArray,
         resultClass: KClass<RESPONSE>
-    ): EthHttpBatchService {
+    ): HmlHttpBatchService {
         addRequest(
             createReq = { id ->
                 JsonObject(
@@ -115,7 +103,7 @@ class EthHttpBatchService(
         return this
     }
 
-    private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> JsonObject, resultClass: KClass<RESPONSE>) {
+    private fun <RESPONSE : HmlResponse> addRequest(createReq: (Int) -> JsonObject, resultClass: KClass<RESPONSE>) {
         lock.withLock {
             val reqId = requests.size + 1
             resultClasses.add(resultClass)

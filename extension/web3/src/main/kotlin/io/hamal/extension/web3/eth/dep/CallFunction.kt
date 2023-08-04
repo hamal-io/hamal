@@ -13,7 +13,7 @@ import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthCallResp
+import io.hamal.lib.web3.eth.domain.EthCallResponse
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 import java.math.BigInteger
 
@@ -33,7 +33,7 @@ class CallFunction(
                 data = EthPrefixedHexString(arg1.getString("data")),
                 blockNumber = EthUint64(BigInteger.valueOf(arg1.getLong("block")))
             )
-        ).execute().first() as EthCallResp
+        ).execute().first() as EthCallResponse
 
         return null to StringValue(b.result.value)
     }

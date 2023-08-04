@@ -1,6 +1,6 @@
 package io.hamal.app.proxy.handler
 
-import io.hamal.app.proxy.cache.Cache
+import io.hamal.app.proxy.cache.EthCache
 import io.hamal.app.proxy.domain.EthCall
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.eth.EthBatchService
@@ -14,11 +14,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 interface EthRequestHandler {
-    fun handle(requests: List<Request>): List<EthResp>
+    fun handle(requests: List<Request>): List<EthResponse>
 
     @Serializable
     data class Request(
-        val id: EthReqId,
+        val id: EthRequestId,
         val method: EthMethod,
         val params: JsonArray,
     )
@@ -26,11 +26,11 @@ interface EthRequestHandler {
 
 class DefaultEthRequestHandler(
     private val json: Json,
-    private val cache: Cache,
+    private val ethCache: EthCache,
     private val httpTemplate: HttpTemplate
 ) : EthRequestHandler {
 
-    override fun handle(requests: List<EthRequestHandler.Request>): List<EthResp> {
+    override fun handle(requests: List<EthRequestHandler.Request>): List<EthResponse> {
         // fixme assert each req id is unique
 
         // find requests which can not be served by cache / repository
@@ -38,15 +38,15 @@ class DefaultEthRequestHandler(
         // populate cache
         // result
 
-        val resultMapping = mutableMapOf<EthReqId, EthResp>()
-        val callReqMapping = mutableMapOf<EthReqId, EthBatchService.EthCallRequest>()
+        val resultMapping = mutableMapOf<EthRequestId, EthResponse>()
+        val callReqMapping = mutableMapOf<EthRequestId, EthBatchService.EthCallRequest>()
 
         requests.forEach { request ->
             when (request.method) {
                 EthMethod.GetBlockByNumber -> {
                     val blockId = json.decodeFromJsonElement(EthUint64.serializer(), request.params[0])
-                    cache.findBlock(blockId)?.let { block ->
-                        resultMapping[request.id] = EthGetBlockResp(request.id, block)
+                    ethCache.findBlock(blockId)?.let { block ->
+                        resultMapping[request.id] = EthGetBlockResponse(request.id, block)
                     }
                 }
 
@@ -55,8 +55,8 @@ class DefaultEthRequestHandler(
                     val to = EthAddress(EthPrefixedHexString(params.get("to")!!.jsonPrimitive.content))
                     val data = EthPrefixedHexString(params.get("data")!!.jsonPrimitive.content)
                     val blockId = json.decodeFromJsonElement(EthUint64.serializer(), request.params[1])
-                    cache.findCall(blockId, to, data)?.let { call ->
-                        resultMapping[request.id] = EthCallResp(request.id, call.result)
+                    ethCache.findCall(blockId, to, data)?.let { call ->
+                        resultMapping[request.id] = EthCallResponse(request.id, call.result)
                     }
                 }
 
@@ -104,11 +104,11 @@ class DefaultEthRequestHandler(
 
         result.forEach { ethResp ->
             when (ethResp) {
-                is EthGetBlockResp -> cache.store(ethResp.result)
-                is EthCallResp -> {
+                is EthGetBlockResponse -> ethCache.store(ethResp.result)
+                is EthCallResponse -> {
                     val call = callReqMapping[ethResp.id]!!
 
-                    cache.store(
+                    ethCache.store(
                         EthCall(
                             blockId = call.blockNumber,
                             to = call.to,
