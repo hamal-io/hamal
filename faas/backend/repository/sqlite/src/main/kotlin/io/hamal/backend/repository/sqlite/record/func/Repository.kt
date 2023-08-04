@@ -48,7 +48,7 @@ class SqliteFuncRepository(
     data class Config(
         override val path: Path
     ) : BaseSqliteRepository.Config {
-        override val filename = "func"
+        override val filename = "func.db"
     }
 
     override fun create(cmd: CreateCmd): Func {

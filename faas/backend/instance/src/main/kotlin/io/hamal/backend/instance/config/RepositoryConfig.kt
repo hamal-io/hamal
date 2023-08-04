@@ -2,12 +2,14 @@ package io.hamal.backend.instance.config
 
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.memory.*
+import io.hamal.backend.repository.memory.MemoryReqRepository
+import io.hamal.backend.repository.memory.MemoryStateRepository
 import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
 import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
 import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
+import io.hamal.backend.repository.sqlite.SqliteStateRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogTopic
@@ -23,23 +25,19 @@ import kotlin.io.path.Path
 @Profile("sqlite")
 @Configuration
 open class SqliteRepositoryConfig {
+
     @Bean
     open fun systemEventBrokerRepository(): LogBrokerRepository<SqliteLogTopic> {
-        return SqliteLogBrokerRepository(SqliteLogBroker(Path("/tmp/hamal/system")))
+        return SqliteLogBrokerRepository(SqliteLogBroker(path))
     }
 
     @Bean
     open fun eventBrokerRepository(): LogBrokerRepository<SqliteLogTopic> {
-        return SqliteLogBrokerRepository(SqliteLogBroker(Path("/tmp/hamal")))
+        return SqliteLogBrokerRepository(SqliteLogBroker(path))
     }
 
     @Bean
-    open fun sqliteFuncRepository() =
-        SqliteFuncRepository(
-            SqliteFuncRepository.Config(
-                path = Path("/tmp/hamal")
-            )
-        )
+    open fun sqliteFuncRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
 
     @Bean
     open fun funcCmdRepository(): FuncCmdRepository = sqliteFuncRepository()
@@ -47,14 +45,8 @@ open class SqliteRepositoryConfig {
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = sqliteFuncRepository()
 
-
     @Bean
-    open fun sqliteExecRepository() =
-        SqliteExecRepository(
-            SqliteExecRepository.Config(
-                path = Path("/tmp/hamal")
-            )
-        )
+    open fun sqliteExecRepository() = SqliteExecRepository(SqliteExecRepository.Config(path))
 
     @Bean
     open fun execCmdRepository(): ExecCmdRepository = sqliteExecRepository()
@@ -62,15 +54,8 @@ open class SqliteRepositoryConfig {
     @Bean
     open fun execQueryRepository(): ExecQueryRepository = sqliteExecRepository()
 
-
     @Bean
-    open fun sqliteTriggerRepository() =
-        SqliteTriggerRepository(
-            SqliteTriggerRepository.Config(
-                path = Path("/tmp/hamal")
-            )
-        )
-
+    open fun sqliteTriggerRepository() = SqliteTriggerRepository(SqliteTriggerRepository.Config(path))
 
     @Bean
     open fun triggerCmdRepository(): TriggerCmdRepository = sqliteTriggerRepository()
@@ -78,17 +63,23 @@ open class SqliteRepositoryConfig {
     @Bean
     open fun triggerQueryRepository(): TriggerQueryRepository = sqliteTriggerRepository()
 
-    @Bean
-    open fun stateCmdRepository(): StateCmdRepository = MemoryStateRepository
 
     @Bean
-    open fun stateQueryRepository(): StateQueryRepository = MemoryStateRepository
+    open fun sqliteStateRepository() = SqliteStateRepository(path)
+
+    @Bean
+    open fun stateCmdRepository(): StateCmdRepository = sqliteStateRepository()
+
+    @Bean
+    open fun stateQueryRepository(): StateQueryRepository = sqliteStateRepository()
 
     @Bean
     open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
 
     @Bean
     open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+
+    private val path = Path("/tmp/hamal/faas")
 }
 
 @Profile("memory")

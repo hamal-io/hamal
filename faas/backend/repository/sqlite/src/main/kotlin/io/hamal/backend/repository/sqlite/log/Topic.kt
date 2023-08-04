@@ -28,7 +28,7 @@ class SqliteLogTopicRepository(
 ) : BaseSqliteRepository(
     object : Config {
         override val path: Path get() = topic.path
-        override val filename: String get() = String.format("topic-%08d", topic.id.value.value)
+        override val filename: String get() = String.format("topics/%08d", topic.id.value.value)
 
     }
 ), LogTopicRepository {

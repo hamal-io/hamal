@@ -53,7 +53,7 @@ class SqliteTriggerRepository(
     data class Config(
         override val path: Path,
     ) : BaseSqliteRepository.Config {
-        override val filename = "trigger"
+        override val filename = "trigger.db"
     }
 
     override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {

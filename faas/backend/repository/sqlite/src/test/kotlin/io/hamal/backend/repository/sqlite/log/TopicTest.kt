@@ -3,9 +3,9 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -43,7 +43,7 @@ class SqliteLogTopicRepositoryTest {
             ).use { }
 
             assertTrue(FileUtils.exists(targetDir))
-            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topic-00000023")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics/00000023")))
         }
     }
 

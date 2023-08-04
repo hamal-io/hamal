@@ -13,7 +13,7 @@ class ListExecsRoute(
 ) {
     @GetMapping("/v1/execs")
     fun list(
-        @RequestParam(required = false, name = "after_id", defaultValue = "${Long.MAX_VALUE}") afterId: ExecId,
+        @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ListExecsResponse> {
         val execs = execQueryRepository.list {

@@ -49,7 +49,7 @@ class SqliteExecRepository(
     data class Config(
         override val path: Path
     ) : BaseSqliteRepository.Config {
-        override val filename = "exec"
+        override val filename = "exec.db"
     }
 
     override fun plan(cmd: PlanCmd): PlannedExec {
