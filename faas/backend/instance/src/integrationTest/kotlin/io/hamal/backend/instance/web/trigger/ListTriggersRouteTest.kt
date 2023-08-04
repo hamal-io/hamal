@@ -41,7 +41,7 @@ internal class ListTriggersRouteTest : BaseTriggerRouteTest() {
         assertThat(listResponse.triggers, hasSize(12))
 
         listResponse.triggers.forEachIndexed { idx, trigger ->
-            assertThat(trigger.name, equalTo(TriggerName("trigger-${(11 - idx)}")))
+            assertThat(trigger.name, equalTo(TriggerName("trigger-${(20 - idx)}")))
         }
     }
 
@@ -59,7 +59,7 @@ internal class ListTriggersRouteTest : BaseTriggerRouteTest() {
 
         with(listResponse) {
             assertThat(triggers, hasSize(1))
-            assertThat(triggers.first().name, equalTo(TriggerName("trigger-16")))
+            assertThat(triggers.first().name, equalTo(TriggerName("trigger-14")))
         }
     }
 }

@@ -45,8 +45,8 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
              FROM
                 current
             WHERE
-                id > :afterId
-            ORDER BY id ASC
+                id < :afterId
+            ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
         ) {

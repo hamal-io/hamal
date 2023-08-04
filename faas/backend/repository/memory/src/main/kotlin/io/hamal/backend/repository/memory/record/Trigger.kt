@@ -27,10 +27,10 @@ internal object CurrentTriggerProjection {
 
     fun list(afterId: TriggerId, limit: Limit): List<Trigger> {
         return projection.keys.sorted()
-            .dropWhile { it <= afterId }
+            .reversed()
+            .dropWhile { it >= afterId }
             .take(limit.value)
             .mapNotNull { find(it) }
-            .reversed()
     }
 
     fun clear() {

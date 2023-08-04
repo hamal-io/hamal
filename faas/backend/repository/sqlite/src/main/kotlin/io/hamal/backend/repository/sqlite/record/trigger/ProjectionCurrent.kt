@@ -49,9 +49,9 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
              FROM
                 current
             WHERE
-                id > :afterId AND
+                id < :afterId AND
                 ${unsafeInCriteria("type", query.types.map { it.value })}
-            ORDER BY id ASC
+            ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
         ) {

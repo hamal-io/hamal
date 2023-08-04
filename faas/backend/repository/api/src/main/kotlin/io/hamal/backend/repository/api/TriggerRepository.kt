@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.api
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.EventTrigger
@@ -42,7 +43,7 @@ interface TriggerQueryRepository {
     fun list(block: TriggerQuery.() -> Unit): List<Trigger>
 
     data class TriggerQuery(
-        var afterId: TriggerId = TriggerId(0),
+        var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
         var types: Set<TriggerType> = TriggerType.values().toSet(),
         var limit: Limit = Limit(1)
     )

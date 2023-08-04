@@ -14,6 +14,8 @@
     let editor: monaco.editor.IStandaloneCodeEditor;
     let Monaco;
 
+    let name = 'function-name'
+
     onMount(async () => {
         // @ts-ignore
         self.MonacoEnvironment = {
@@ -77,7 +79,7 @@
             },
             method: "POST",
             body: JSON.stringify({
-                    name: "name123",
+                    name,
                     inputs: {},
                     code: {"value": editor.getValue()}
                 }
@@ -93,6 +95,12 @@
 </script>
 
 <div class="w-full">
+
+    <div class="flex-content py-2">
+        <label for="name">name</label>
+        <input bind:value={name} id="name" style="background: red"/>
+    </div>
+
     <div class="columns-2">
         <button
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
