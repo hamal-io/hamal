@@ -26,7 +26,8 @@ interface EthRequestHandler {
 
 class DefaultEthRequestHandler(
     private val json: Json,
-    private val cache: Cache
+    private val cache: Cache,
+    private val httpTemplate: HttpTemplate
 ) : EthRequestHandler {
 
     override fun handle(requests: List<EthRequestHandler.Request>): List<EthResp> {
@@ -63,10 +64,7 @@ class DefaultEthRequestHandler(
             }
         }
 
-        val batchService = EthHttpBatchService(
-            HttpTemplate("https://cloudflare-eth.com")
-//            HttpTemplate("http://localhost:8081")
-        )
+        val batchService = EthHttpBatchService(httpTemplate)
 
         requests.forEach { request ->
             when (request.method) {

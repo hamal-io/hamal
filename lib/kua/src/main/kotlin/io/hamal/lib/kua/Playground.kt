@@ -7,6 +7,7 @@ fun Sandbox.registerGlobalFunction(name: String, function: FunctionValue<*, *, *
     setGlobal(name, function)
 }
 
+
 fun main() {
     NativeLoader.load(BuildDir)
     Sandbox().also { sb ->

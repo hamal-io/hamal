@@ -13,5 +13,5 @@ server:
 
 io:
   hamal:
-    proxy:
-      upstream: ${PROXY_UPSTREAM:https://cloudflare-eth.com}
+    upstream:
+      host: ${UPSTREAM_HOST:https://cloudflare-eth.com}
