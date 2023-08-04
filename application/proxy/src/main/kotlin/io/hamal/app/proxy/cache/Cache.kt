@@ -82,8 +82,6 @@ class LruCache(
 
                 val addresses = addressRepository.find(addressIds)
 
-                check(addresses.size == addressIds.size)
-
 
                 EthBlock(
                     number = EthUint64(BigInteger(persistedEthBlock.id.toString())),
@@ -103,7 +101,7 @@ class LruCache(
                             type = EthUint8(tx.type),
                             hash = EthHash(EthBytes32(ByteArray(0))),
                             from = addresses[tx.fromAddressId]!!,
-                            to = addresses[tx.toAddressId]!!,
+                            to = addresses[tx.toAddressId],
                             input = EthPrefixedHexString("0x" + Web3Formatter.formatToHex(tx.input)),
                             value = EthUint256(BigInteger(tx.value)),
                             gas = EthUint64(tx.gas.toLong()),
