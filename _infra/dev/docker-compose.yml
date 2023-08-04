@@ -9,6 +9,8 @@ services:
     image: hamalio/proxy
     ports:
       - "0.0.0.0:8000:8000"
+    environment:
+      - UPSTREAM_HOST=https://cloudflare-eth.com
     volumes:
       - "/mnt/proxy/eth:/tmp/hamal/db"
     networks:

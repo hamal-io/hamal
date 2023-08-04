@@ -62,6 +62,18 @@ class AddressRepository(
 
     }
 
+    fun find(addressIds: Iterable<ULong>): Map<ULong, EthAddress> {
+        val inClause = "(${addressIds.map { "$it" }.joinToString(",")})"
+
+        return connection.tx {
+            executeQuery("""SELECT * FROM addresses WHERE id in $inClause""") {
+                map { rs ->
+                    rs.getLong("id").toULong() to EthAddress(EthPrefixedHexString(rs.getString("address")))
+                }
+            }
+        }.toMap()
+    }
+
     override fun clear() {
         TODO("Not yet implemented")
     }

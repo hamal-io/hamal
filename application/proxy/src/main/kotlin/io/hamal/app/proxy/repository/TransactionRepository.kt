@@ -8,6 +8,7 @@ import java.nio.file.Path
 
 interface TransactionRepository {
     fun store(transaction: PersistedEthTransaction)
+    fun list(blockId: ULong): List<PersistedEthTransaction>
     fun find(blockId: ULong, blockIndex: UShort): PersistedEthTransaction?
 }
 
@@ -21,6 +22,10 @@ class SqliteTransactionRepository(
 
     override fun store(transaction: PersistedEthTransaction) {
         partitions[resolvePartition(transaction.blockId)]!!.store(transaction)
+    }
+
+    override fun list(blockId: ULong): List<PersistedEthTransaction> {
+        return partitions[resolvePartition(blockId)]!!.list(blockId);
     }
 
     override fun find(blockId: ULong, blockIndex: UShort): PersistedEthTransaction? {
@@ -86,6 +91,28 @@ class SqliteTransactionPartitionRepository(
                 set("value", transaction.value)
                 set("input", transaction.input)
                 set("gas", transaction.gas)
+            }
+        }
+    }
+
+    override fun list(blockId: ULong): List<PersistedEthTransaction> {
+        return connection.tx {
+            executeQuery("SELECT * FROM transactions WHERE block_id = :blockId ORDER BY block_index") {
+                query {
+                    set("blockId", blockId)
+                }
+                map { rs ->
+                    PersistedEthTransaction(
+                        type = rs.getInt("type").toByte(),
+                        blockId = rs.getLong("block_id").toULong(),
+                        blockIndex = rs.getInt("block_index").toUShort(),
+                        fromAddressId = rs.getLong("from_address_id").toULong(),
+                        toAddressId = rs.getLong("to_address_id").toULong(),
+                        input = Web3Encoding.decodeRunLength(rs.getBytes("input")),
+                        value = rs.getBytes("value"),
+                        gas = rs.getLong("gas").toULong()
+                    )
+                }
             }
         }
     }

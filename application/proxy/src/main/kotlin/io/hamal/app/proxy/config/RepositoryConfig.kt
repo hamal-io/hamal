@@ -19,6 +19,9 @@ class RepositoryConfig {
     @Bean
     fun callRepository(): CallRepository = SqliteCallRepository(path)
 
+    @Bean
+    fun transactionRepository(): TransactionRepository = SqliteTransactionRepository(path)
+
 //    @Bean
 //    fun receiptRepository(
 //        protoBuf: ProtoBuf
@@ -28,12 +31,13 @@ class RepositoryConfig {
     fun proxyRepository(
         addressRepository: AddressRepository,
         blockRepository: BlockRepository,
-        callRepository: CallRepository
+        callRepository: CallRepository,
+        transactionRepository: TransactionRepository
     ): ProxyRepository = SqliteProxyRepository(
         addressRepository = addressRepository,
         blockRepository = blockRepository,
         callRepository = callRepository,
-        transactionRepository = SqliteTransactionRepository(path)
+        transactionRepository = transactionRepository
     )
 
 //    @Bean

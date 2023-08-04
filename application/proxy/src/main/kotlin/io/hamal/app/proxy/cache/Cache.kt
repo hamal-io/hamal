@@ -1,10 +1,7 @@
 package io.hamal.app.proxy.cache
 
 import io.hamal.app.proxy.domain.EthCall
-import io.hamal.app.proxy.repository.AddressRepository
-import io.hamal.app.proxy.repository.BlockRepository
-import io.hamal.app.proxy.repository.CallRepository
-import io.hamal.app.proxy.repository.ProxyRepository
+import io.hamal.app.proxy.repository.*
 import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.eth.domain.EthBlock
@@ -24,7 +21,8 @@ class LruCache(
     private val proxyRepository: ProxyRepository,
     private val addressRepository: AddressRepository,
     private val blockRepository: BlockRepository,
-    private val callRepository: CallRepository
+    private val callRepository: CallRepository,
+    private val transactionRepository: TransactionRepository
 ) : Cache {
 
     override fun findBlock(blockId: EthUint64): EthBlock? {
@@ -75,20 +73,43 @@ class LruCache(
         // FIXME
         return blockRepository.find(number.value.toLong().toULong())
             ?.let { persistedEthBlock ->
+                val transactions = transactionRepository.list(persistedEthBlock.id)
+
+                val addressIds = transactions.map { it.fromAddressId }
+                    .plus(transactions.map { it.toAddressId })
+                    .plus(persistedEthBlock.minerAddressId)
+                    .toSet()
+
+                val addresses = addressRepository.find(addressIds)
+
+                check(addresses.size == addressIds.size)
+
+
                 EthBlock(
                     number = EthUint64(BigInteger(persistedEthBlock.id.toString())),
                     hash = EthHash(EthBytes32(persistedEthBlock.hash)),
                     parentHash = EthHash(EthBytes32(ByteArray(0))),
                     sha3Uncles = EthHash(EthBytes32(ByteArray(0))),
-                    miner = EthAddress(BigInteger.ONE),
+                    miner = addresses[persistedEthBlock.minerAddressId]!!,
                     stateRoot = EthHash(ByteArray(0)),
                     transactionsRoot = EthHash(ByteArray(0)),
                     receiptsRoot = EthHash(ByteArray(0)),
                     gasLimit = EthUint64(0),
-                    gasUsed = EthUint64(0),
-                    timestamp = EthUint64(0),
+                    gasUsed = EthUint64(BigInteger.valueOf(persistedEthBlock.gasUsed.toLong())),
+                    timestamp = EthUint64(BigInteger.valueOf(persistedEthBlock.timestamp.toLong())),
                     extraData = EthBytes32(ByteArray(0)),
-                    transactions = listOf()
+                    transactions = transactions.map { tx ->
+                        EthBlock.Transaction(
+                            type = EthUint8(tx.type),
+                            hash = EthHash(EthBytes32(ByteArray(0))),
+                            from = addresses[tx.fromAddressId]!!,
+                            to = addresses[tx.toAddressId]!!,
+                            input = EthPrefixedHexString("0x" + Web3Formatter.formatToHex(tx.input)),
+                            value = EthUint256(BigInteger(tx.value)),
+                            gas = EthUint64(tx.gas.toLong()),
+                            gasPrice = EthUint64(0)
+                        )
+                    }
                 )
             }
     }
