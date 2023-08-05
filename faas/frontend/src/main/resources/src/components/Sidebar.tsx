@@ -1,9 +1,7 @@
 import React, {useState} from "react";
 import SimpleBar from 'simplebar-react';
-import {Link, useLocation} from "react-router-dom";
+import {Link, NavLink, useLocation} from "react-router-dom";
 import {CSSTransition} from 'react-transition-group';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faAddressBook, faChartPie, faHandHoldingUsd} from "@fortawesome/free-solid-svg-icons";
 import {Accordion, Badge, Button, Dropdown, Image, Nav, Navbar} from '@themesberg/react-bootstrap';
 
 import {Routes} from "../routes";
@@ -16,7 +14,7 @@ export default (props = {}) => {
 
     const onCollapse = () => setShow(!show);
 
-    const CollapsableNavItem = (props) => {
+    const CollapsableNavItem = (props: any) => {
         const {eventKey, title, icon, children = null} = props;
         const defaultKey = pathname.indexOf(eventKey) !== -1 ? eventKey : "";
 
@@ -25,7 +23,6 @@ export default (props = {}) => {
                 <Accordion.Item eventKey={eventKey}>
                     <Accordion.Button as={Nav.Link} className="d-flex justify-content-between align-items-center">
             <span>
-              <span className="sidebar-icon"><FontAwesomeIcon icon={icon}/> </span>
               <span className="sidebar-text">{title}</span>
             </span>
                     </Accordion.Button>
@@ -39,13 +36,11 @@ export default (props = {}) => {
         );
     };
 
-    const NavItem = (props) => {
+    const NavItem = (props: any) => {
         const {
             title,
             link,
-            external,
             target,
-            icon,
             image,
             badgeText,
             badgeBg = "secondary",
@@ -53,22 +48,19 @@ export default (props = {}) => {
         } = props;
         const classNames = badgeText ? "d-flex justify-content-start align-items-center justify-content-between" : "";
         const navItemClassName = link === pathname ? "active" : "";
-        const linkProps = external ? {href: link} : {as: Link, to: link};
 
         return (
             <Nav.Item className={navItemClassName} onClick={() => setShow(false)}>
-                <Nav.Link {...linkProps} target={target} className={classNames}>
+                <NavLink to={link} target={target} className={classNames}>
           <span>
-            {icon ? <span className="sidebar-icon"><FontAwesomeIcon icon={icon}/> </span> : null}
               {image ? <Image src={image} width={20} height={20} className="sidebar-icon svg-icon"/> : null}
-
               <span className="sidebar-text">{title}</span>
           </span>
                     {badgeText ? (
                         <Badge pill bg={badgeBg} text={badgeColor}
                                className="badge-md notification-count ms-2">{badgeText}</Badge>
                     ) : null}
-                </Nav.Link>
+                </NavLink>
             </Nav.Item>
         );
     };
@@ -88,10 +80,10 @@ export default (props = {}) => {
                     <div className="sidebar-inner px-4 pt-3">
                         <Nav className="flex-column pt-3 pt-md-0">
 
-                            <NavItem title="Overview" link={Routes.Dashboard.path} icon={faChartPie}/>
-                            <NavItem title="Adhoc" icon={faHandHoldingUsd} link={Routes.Adhoc.path}/>
-                            <NavItem title="Execution" icon={faHandHoldingUsd} link={Routes.Executions.path}/>
-                            <NavItem title="Log" icon={faAddressBook} link={Routes.Executions.path}/>
+                            <NavItem title="Overview" link={Routes.Dashboard.path}/>
+                            <NavItem title="Adhoc" link={Routes.Adhoc.path}/>
+                            <NavItem title="Execution" link={Routes.Executions.path}/>
+                            <NavItem title="Log" link={Routes.Executions.path}/>
 
                             <Dropdown.Divider className="my-3 border-indigo"/>
 

@@ -7,20 +7,30 @@
 // =========================================================
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { HashRouter } from "react-router-dom";
+import React, {StrictMode} from 'react';
+import {createBrowserRouter, HashRouter, RouterProvider} from "react-router-dom";
+import {createRoot} from 'react-dom/client';
 
 // core styles
 import "./scss/volt.scss";
+import AdhocPage from "./pages/adhoc/AdhocPage";
+import {RouteWithSidebar} from "./components/Route";
+import ExecutionListPage from "./pages/execution/ExecutionListPage";
+import DashboardPage from "./pages/dashboard/DashboardPage";
 
-import HomePage from "./pages/HomePage";
-import ScrollToTop from "./components/ScrollToTop";
 
-ReactDOM.render(
-  <HashRouter>
-    <ScrollToTop />
-    <HomePage />
-  </HashRouter>,
-  document.getElementById("root")
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+const router = createBrowserRouter([
+    {path: "/", element: <RouteWithSidebar component={<DashboardPage/>}></RouteWithSidebar>,},
+    {path: "/adhoc", element: <RouteWithSidebar component={<AdhocPage/>}></RouteWithSidebar>,},
+    {path: "/executions", element: <RouteWithSidebar component={<ExecutionListPage/>}></RouteWithSidebar>,},
+]);
+
+
+root.render(
+    <StrictMode>
+        <RouterProvider router={router}/>
+    </StrictMode>
 );

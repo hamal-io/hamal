@@ -1,6 +1,11 @@
 import React from "react";
 
-export default (props: unknown) => {
+interface FooterProps {
+    toggleSettings: () => void;
+    showSettings: boolean;
+}
+
+export default (props: FooterProps) => {
     return (
         <div>
 
