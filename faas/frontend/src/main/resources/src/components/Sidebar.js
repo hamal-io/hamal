@@ -3,7 +3,7 @@ import SimpleBar from 'simplebar-react';
 import {Link, useLocation} from "react-router-dom";
 import {CSSTransition} from 'react-transition-group';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faChartPie, faHandHoldingUsd} from "@fortawesome/free-solid-svg-icons";
+import {faAddressBook, faChartPie, faHandHoldingUsd} from "@fortawesome/free-solid-svg-icons";
 import {Accordion, Badge, Button, Dropdown, Image, Nav, Navbar} from '@themesberg/react-bootstrap';
 
 import {Routes} from "../routes";
@@ -89,9 +89,9 @@ export default (props = {}) => {
                         <Nav className="flex-column pt-3 pt-md-0">
 
                             <NavItem title="Overview" link={Routes.Dashboard.path} icon={faChartPie}/>
-                            <NavItem title="Adhoc" icon={faHandHoldingUsd} link={Routes.Executions.path}/>
+                            <NavItem title="Adhoc" icon={faHandHoldingUsd} link={Routes.Adhoc.path}/>
                             <NavItem title="Execution" icon={faHandHoldingUsd} link={Routes.Executions.path}/>
-                            <NavItem title="Log" icon={faHandHoldingUsd} link={Routes.Executions.path}/>
+                            <NavItem title="Log" icon={faAddressBook} link={Routes.Executions.path}/>
 
                             <Dropdown.Divider className="my-3 border-indigo"/>
 
