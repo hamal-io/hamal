@@ -1,6 +1,5 @@
 package io.hamal.runner.service
 
-import io.hamal.runner.component.RunnerAsync
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.State
@@ -14,6 +13,7 @@ import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
+import io.hamal.runner.component.RunnerAsync
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
@@ -63,11 +63,24 @@ class AgentService(
                                 val invocation = request.invocation
                                 val events = state.tableCreateArray(0)
                                 if (invocation is EventInvocation) {
-                                    invocation.events.forEach {
-                                        val evt = state.tableCreateMap(1)
-                                        evt["topic"] = it.value.get("topic") as StringValue
+                                    invocation.events.forEach { evt ->
+                                        val evtTable = state.tableCreateMap(1)
+                                        evt.value.forEach { payload ->
+                                            when (val v = payload.value) {
+                                                is StringValue -> evtTable[payload.key] = v
+                                                is NumberValue -> evtTable[payload.key] = v
+                                                else -> TODO()
+                                            }
+                                        }
+
                                         sb.bridge.tableAppend(events.index)
                                     }
+
+//                                    invocation.events.forEach { evt ->
+//                                        val emittedEvent = state.tableCreateMap(1)
+//                                        emittedEvent["topic"] = evt.value.get("topic") as StringValue
+//                                        sb.bridge.tableAppend(events.index)
+//                                    }
                                 }
                                 ctx["events"] = events
                                 state.setGlobal("ctx", ctx)
