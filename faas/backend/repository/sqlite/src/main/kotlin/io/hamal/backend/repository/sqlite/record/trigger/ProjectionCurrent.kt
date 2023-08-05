@@ -6,7 +6,10 @@ import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
 import io.hamal.lib.common.DefaultLruCache
+import io.hamal.lib.domain.EventTrigger
+import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.unsafeInCriteria
@@ -75,7 +78,12 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("type", obj.type.value)
+            set(
+                "type", when (obj) {
+                    is FixedRateTrigger -> TriggerType.FixedRate
+                    is EventTrigger -> TriggerType.Event
+                }.value
+            )
             set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
         }
     }

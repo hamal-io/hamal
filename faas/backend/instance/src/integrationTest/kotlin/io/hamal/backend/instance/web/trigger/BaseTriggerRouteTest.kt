@@ -62,6 +62,20 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         return creationResponse.result(SubmittedCreateTriggerReq::class)
     }
 
+    fun createTrigger(req: CreateTriggerReq): SubmittedCreateTriggerReq {
+        val funcResponse = awaitCompleted(createFunc(FuncName("some-func-to-trigger")))
+
+        val creationResponse = httpTemplate.post("/v1/triggers")
+            .body(req)
+            .execute()
+
+        assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+
+        return creationResponse.result(SubmittedCreateTriggerReq::class)
+    }
+
+
     fun listTriggers(): ListTriggersResponse {
         val listTriggersResponse = httpTemplate.get("/v1/triggers").execute()
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))

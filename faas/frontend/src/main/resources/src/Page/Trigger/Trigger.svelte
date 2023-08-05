@@ -3,6 +3,14 @@
     import {triggers} from "./store";
     import {onMount} from 'svelte';
 
+
+    let triggerTypes = [
+        'FixedRate',
+        'Event',
+    ]
+    let selectedTriggerType = triggers[0];
+
+
     onMount(getTriggers);
 
     let name = 'some-trigger-name'
@@ -32,14 +40,11 @@
             body: JSON.stringify({
                     name,
                     funcId,
-                    type: 'FixedRate',
-                    correlationId: 'test',
+                    type: selectedTriggerType,
+                    correlationId: '__default__',
                     inputs: {},
-                    duration: fixedRate
-                    // type: 'Event',
-                    // correlationId: 'test',
-                    // inputs: {},
-                    // topicId: topicId
+                    duration: fixedRate,
+                    topicId: topicId
                 }
             )
         })
@@ -59,7 +64,6 @@
             <div class="flex-content py-2">
                 <label for="name">name</label>
                 <input bind:value={name} id="name" style="background: red"/>
-
             </div>
 
             <div class="flex-content py-2">
@@ -67,15 +71,27 @@
                 <input bind:value={funcId} id="func-id" style="background: red"/>
             </div>
 
-            <div class="flex-content py-2">
-                <label for="fixed-rate">fixed rate</label>
-                <input bind:value={fixedRate} id="fixed-rate" style="background: red"/>
-            </div>
+            <select bind:value={selectedTriggerType}>
+                {#each triggerTypes as value}
+                    <option {value}>{value}</option>
+                {/each}
+            </select>
 
-            <div class="flex-content py-2">
-                <label for="fixed-rate">topic id</label>
-                <input bind:value={topicId} id="topic-id" style="background: red"/>
-            </div>
+            {#if selectedTriggerType == "FixedRate"}
+
+                <div class="flex-content py-2">
+                    <label for="fixed-rate">fixed rate</label>
+                    <input bind:value={fixedRate} id="fixed-rate" style="background: red"/>
+                </div>
+
+            {:else}
+
+                <div class="flex-content py-2">
+                    <label for="fixed-rate">topic id</label>
+                    <input bind:value={topicId} id="topic-id" style="background: red"/>
+                </div>
+
+            {/if}
 
             <div class="flex-content py-2">
                 <button
