@@ -68,7 +68,7 @@ class HmlHttpBatchService(
             }
 
             val response = httpTemplate
-                .post("/")
+                .post("/hml")
                 .body(JsonArray(requests))
                 .execute(JsonArray::class)
 

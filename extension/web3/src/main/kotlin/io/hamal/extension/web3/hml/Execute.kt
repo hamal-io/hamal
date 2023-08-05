@@ -23,7 +23,7 @@ class ExecuteFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
         try {
-            val batchService = HmlHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
+            val batchService = HmlHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value) )
             ctx.pushNil()
             while (ctx.state.bridge.tableNext(arg1.index)) {
 //                val i = ctx.state.getNumber(-2)
