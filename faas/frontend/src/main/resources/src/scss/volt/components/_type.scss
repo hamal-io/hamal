@@ -46,6 +46,13 @@ a, .text-action {
 	font-size: $font-size-sm;
 }
 
+// underline on hover
+
+.hover\:underline{
+	&:hover{
+		text-decoration: underline;
+	}
+}
 // Headings
 
 .heading {
@@ -137,16 +144,18 @@ code[class*="language-"], pre[class*="language-"]{
 
 
 article {
-	p, ul, ol, blockquote {
-		margin-bottom: 10px;
+	img {
+		margin: 40px 0;
 	}
-
+	p, ul, ol, blockquote {
+		margin-bottom: 20px;
+	}
 	p, ul li, ol li {
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 	}
 	h1, h2, h3, h4, h5, h6,
 	.h1, .h2, .h3, .h4, .h5, .h6 {
-		margin-bottom: 10px;
+		margin-bottom: 30px;
 	}
 }
 
@@ -158,27 +167,4 @@ article {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-.hero-title{
-	font-size: 3rem;
-	@include media-breakpoint-up(lg) {
-		font-size: 4.275rem;
-	}
-}
-
-p, .docs-list li {
-	a {
-		color: $blue;
-		text-decoration: underline;
-
-		&:hover {
-			color: $blue;
-			text-decoration: none;
-		}
-	}
-}
-
-.code-editor-error pre {
-	margin-bottom: 0;
 }

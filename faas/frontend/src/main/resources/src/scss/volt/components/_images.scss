@@ -1,7 +1,7 @@
 /**
  * = Images
  */
-.image-xl {
+ .image-xl {
     height: 20rem;
     img{
         height: 20rem;
@@ -43,25 +43,10 @@
     }
 }
 
-
-
-.img-thumbnail {
-    border-width: $border-width-md;
-    box-shadow: none;
-}
-
 .full-image{
     height:100%;
 }
 
-.gallery-feed{
-    img{
-        width: 20%;
-        margin-right: .5rem;
-        margin-bottom: .5rem;
-        float: left;
-    }
-}
 
 .language-flag{
     width: auto;
@@ -71,25 +56,12 @@
     top: -2px;
 }
 
-@include media-breakpoint-up(sm){
-    .effect-img-2 {
-        position: absolute;
-        right: 5rem;
-        top: 19%;
-        z-index: 2;
-        margin: 0;
-    }
-
-    .effect-img-1, .effect-img-2 {
-        margin: 0 0 3rem;
-        width: 350px;
-        height: auto;
-    }
+.home-pattern{
+    fill: $gray-100;
 }
 
-@include media-breakpoint-down(md){
-    .effect-img-2{
-        right:.425rem;
-        top:0;
-    }
+.form-bg-image {
+    background-repeat: no-repeat!important;
+    background-position: top center!important;
 }
+

@@ -1,20 +1,32 @@
 /**
  * = Accordions
- */
+*/
 
- .accordion-button {
+
+.accordion-button {
     text-align: left;
-
-    .btn-check:focus + .btn, .btn:focus {
-        outline: 0;
-        box-shadow: none;
+    &:not(.collapsed) {
+        &::after {
+          background-image: none;
+          @include transform(rotateZ(45deg));
+        }
     }
-    
+
+    // Accordion icon
+    &::after {
+        background-image: none;
+        content: '\f067';
+        font-family: $font-awesome-5;
+        font-size: $font-size-base;
+        font-weight: 900;
+    }
+
     &:hover{
         background-color: $gray-200;
     }
 }
-
+  
+  
 // Flush accordion items
 //
 // Remove borders and border-radius to keep accordion items edge-to-edge.
@@ -23,7 +35,7 @@
     .accordion-button {
         background-color: transparent;
         &:not(.collapsed) {
-            color: $secondary;
+            color: $tertiary;
         }
         &:focus {
             border-color: $gray-300;
@@ -34,5 +46,7 @@
         border: 0;
     }
 }
+
+
 
 
