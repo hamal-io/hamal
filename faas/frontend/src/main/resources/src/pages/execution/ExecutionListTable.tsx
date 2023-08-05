@@ -91,7 +91,7 @@ export const ExecutionListTable = () => {
 
     const totalTransactions = transactions.length;
 
-    const TableRow = (props) => {
+    const TableRow = (props: any) => {
         const {id, func, correlationId, lastUpdatedAt, dueDate, status} = props;
         const statusVariant = status === "Completed" ? "success" : status === "Canceled" ? "warning" : status === "Failed" ? "danger" : "primary";
 

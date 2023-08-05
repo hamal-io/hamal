@@ -27,22 +27,16 @@
     "react-live": "^2.2.3",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.3.1",
-    "react-scripts": "3.4.3",
     "react-transition-group": "^4.4.1",
     "sass": "^1.50.0",
-    "simplebar-react": "^2.3.0"
+    "simplebar-react": "^2.3.0",
+    "vite-plugin-svgr": "^3.2.0",
+    "vite-tsconfig-paths": "^4.2.0"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
-    "build-local": "PUBLIC_URL=./ react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -55,5 +49,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-dom": "^18.2.7",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.0.4",
+    "vite": "^4.4.8"
   }
 }
