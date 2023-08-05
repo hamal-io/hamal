@@ -6,22 +6,9 @@ import DashboardPage from "./dashboard/DashboardPage";
 import ExecutionListPage from "./execution/ExecutionListPage";
 
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
 
-const RouteWithLoader = ({ component: Component, ...rest }) => {
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <Route {...rest} render={props => ( <> <Preloader show={!loaded} /> <Component {...props} /> </> ) } />
-  );
-};
 
 const RouteWithSidebar = ({ component: Component, ...rest }) => {
   const [loaded, setLoaded] = useState(false);
@@ -49,7 +36,6 @@ const RouteWithSidebar = ({ component: Component, ...rest }) => {
         <Sidebar />
 
         <main className="content">
-          <Navbar />
           <Component {...props} />
           <Footer toggleSettings={toggleSettings} showSettings={showSettings} />
         </main>

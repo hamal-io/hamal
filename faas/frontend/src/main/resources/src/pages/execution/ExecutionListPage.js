@@ -1,7 +1,8 @@
 import React from "react";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCheck, faCog, faHome, faSearch} from '@fortawesome/free-solid-svg-icons';
-import {Breadcrumb, Button, ButtonGroup, Col, Dropdown, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
+import {faHome, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {Breadcrumb, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
+import {ExecutionListTable} from "./ExecutionListTable";
 
 export default () => {
     return (
@@ -11,18 +12,9 @@ export default () => {
                     <Breadcrumb className="d-none d-md-inline-block"
                                 listProps={{className: "breadcrumb-dark breadcrumb-transparent"}}>
                         <Breadcrumb.Item><FontAwesomeIcon icon={faHome}/></Breadcrumb.Item>
-                        <Breadcrumb.Item>Volt</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Transactions</Breadcrumb.Item>
-                    </Breadcrumb>
+                        <Breadcrumb.Item>Executions</Breadcrumb.Item></Breadcrumb>
                     <h4>Executions</h4>
                     <p className="mb-0">Your function executions.</p>
-                </div>
-
-                <div className="btn-toolbar mb-2 mb-md-0">
-                    <ButtonGroup>
-                        <Button variant="outline-primary" size="sm">Share</Button>
-                        <Button variant="outline-primary" size="sm">Export</Button>
-                    </ButtonGroup>
                 </div>
             </div>
 
@@ -36,22 +28,13 @@ export default () => {
                             <Form.Control type="text" placeholder="Search"/>
                         </InputGroup>
                     </Col>
-                    <Col xs={4} md={2} xl={1} className="ps-md-0 text-end">
-                        <Dropdown as={ButtonGroup}>
-                            <Dropdown.Toggle split as={Button} variant="link" className="text-dark m-0 p-0">
-                                <span className="icon icon-sm icon-gray"><FontAwesomeIcon icon={faCog}/> </span>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown-menu-xs dropdown-menu-right">
-                                <Dropdown.Item className="fw-bold text-dark">Show</Dropdown.Item>
-                                <Dropdown.Item className="d-flex fw-bold">10 <span className="icon icon-small ms-auto"><FontAwesomeIcon icon={faCheck}/></span>
-                                </Dropdown.Item>
-                                <Dropdown.Item className="fw-bold">20</Dropdown.Item>
-                                <Dropdown.Item className="fw-bold">30</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </Col>
                 </Row>
             </div>
+
+            <ExecutionListTable/>
         </>
     );
 };
+
+
+

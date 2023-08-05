@@ -7,7 +7,6 @@ import {faChartPie, faHandHoldingUsd} from "@fortawesome/free-solid-svg-icons";
 import {Accordion, Badge, Button, Dropdown, Image, Nav, Navbar} from '@themesberg/react-bootstrap';
 
 import {Routes} from "../routes";
-import ReactHero from "../assets/img/technologies/react-hero-logo.svg";
 
 export default (props = {}) => {
     const location = useLocation();
@@ -78,7 +77,7 @@ export default (props = {}) => {
         <>
             <Navbar expand={false} collapseOnSelect variant="dark" className="navbar-theme-primary px-4 d-md-none">
                 <Navbar.Brand className="me-lg-5" as={Link} to={Routes.Dashboard.path}>
-                    <Image src={ReactHero} className="navbar-brand-light"/>
+                    {/*<Image src={ReactHero} className="navbar-brand-light"/>*/}
                 </Navbar.Brand>
                 <Navbar.Toggle as={Button} aria-controls="main-navbar" onClick={onCollapse}>
                     <span className="navbar-toggler-icon"/>
