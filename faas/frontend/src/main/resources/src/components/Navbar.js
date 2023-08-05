@@ -1,7 +1,5 @@
 import React, {useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSearch} from "@fortawesome/free-solid-svg-icons";
-import {Container, Form, InputGroup, Nav, Navbar} from '@themesberg/react-bootstrap';
+import {Container, Nav, Navbar} from '@themesberg/react-bootstrap';
 
 
 export default (props) => {
