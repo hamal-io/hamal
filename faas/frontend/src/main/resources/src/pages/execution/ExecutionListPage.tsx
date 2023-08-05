@@ -1,6 +1,8 @@
 import React from "react";
 import {Breadcrumb, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
 import {ExecutionListTable} from "./ExecutionListTable";
+import {faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default () => {
     return (
@@ -9,6 +11,7 @@ export default () => {
                 <div className="d-block mb-4 mb-md-0">
                     <Breadcrumb className="d-none d-md-inline-block"
                                 listProps={{className: "breadcrumb-dark breadcrumb-transparent"}}>
+                        <Breadcrumb.Item><FontAwesomeIcon icon={faHome}/></Breadcrumb.Item>
                         <Breadcrumb.Item>Executions</Breadcrumb.Item></Breadcrumb>
                     <h4>Executions</h4>
                     <p className="mb-0">Your function executions.</p>
@@ -20,6 +23,7 @@ export default () => {
                     <Col xs={8} md={6} lg={3} xl={4}>
                         <InputGroup>
                             <InputGroup.Text>
+                                <FontAwesomeIcon icon={faSearch}/>
                             </InputGroup.Text>
                             <Form.Control type="text" placeholder="Search"/>
                         </InputGroup>

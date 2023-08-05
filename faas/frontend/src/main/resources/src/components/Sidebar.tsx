@@ -1,8 +1,25 @@
 import React, {useState} from "react";
 import SimpleBar from 'simplebar-react';
-import {Link, NavLink, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {CSSTransition} from 'react-transition-group';
-import {Accordion, Badge, Button, Dropdown, Image, Nav, Navbar} from '@themesberg/react-bootstrap';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+    faBook,
+    faBoxOpen,
+    faChartPie,
+    faCog,
+    faFileAlt,
+    faHandHoldingUsd,
+    faSignOutAlt,
+    faTable,
+    faTimes,
+    faCalendarAlt,
+    faMapPin,
+    faInbox,
+    faRocket, faBinoculars
+} from "@fortawesome/free-solid-svg-icons";
+import {Nav, Badge, Image, Button, Dropdown, Accordion, Navbar} from '@themesberg/react-bootstrap';
+import {Link} from 'react-router-dom';
 
 import {Routes} from "../routes";
 
@@ -14,7 +31,7 @@ export default (props = {}) => {
 
     const onCollapse = () => setShow(!show);
 
-    const CollapsableNavItem = (props: any) => {
+    const CollapsableNavItem = (props) => {
         const {eventKey, title, icon, children = null} = props;
         const defaultKey = pathname.indexOf(eventKey) !== -1 ? eventKey : "";
 
@@ -23,6 +40,7 @@ export default (props = {}) => {
                 <Accordion.Item eventKey={eventKey}>
                     <Accordion.Button as={Nav.Link} className="d-flex justify-content-between align-items-center">
             <span>
+              <span className="sidebar-icon"><FontAwesomeIcon icon={icon}/> </span>
               <span className="sidebar-text">{title}</span>
             </span>
                     </Accordion.Button>
@@ -40,7 +58,9 @@ export default (props = {}) => {
         const {
             title,
             link,
+            external,
             target,
+            icon,
             image,
             badgeText,
             badgeBg = "secondary",
@@ -48,19 +68,22 @@ export default (props = {}) => {
         } = props;
         const classNames = badgeText ? "d-flex justify-content-start align-items-center justify-content-between" : "";
         const navItemClassName = link === pathname ? "active" : "";
+        const linkProps = external ? {href: link} : {as: Link, to: link};
 
         return (
             <Nav.Item className={navItemClassName} onClick={() => setShow(false)}>
-                <NavLink to={link} target={target} className={classNames}>
+                <Nav.Link {...linkProps} target={target} className={classNames}>
           <span>
+            {icon ? <span className="sidebar-icon"><FontAwesomeIcon icon={icon}/> </span> : null}
               {image ? <Image src={image} width={20} height={20} className="sidebar-icon svg-icon"/> : null}
+
               <span className="sidebar-text">{title}</span>
           </span>
                     {badgeText ? (
                         <Badge pill bg={badgeBg} text={badgeColor}
                                className="badge-md notification-count ms-2">{badgeText}</Badge>
                     ) : null}
-                </NavLink>
+                </Nav.Link>
             </Nav.Item>
         );
     };
@@ -69,7 +92,6 @@ export default (props = {}) => {
         <>
             <Navbar expand={false} collapseOnSelect variant="dark" className="navbar-theme-primary px-4 d-md-none">
                 <Navbar.Brand className="me-lg-5" as={Link} to={Routes.Dashboard.path}>
-                    {/*<Image src={ReactHero} className="navbar-brand-light"/>*/}
                 </Navbar.Brand>
                 <Navbar.Toggle as={Button} aria-controls="main-navbar" onClick={onCollapse}>
                     <span className="navbar-toggler-icon"/>
@@ -78,20 +100,22 @@ export default (props = {}) => {
             <CSSTransition timeout={300} in={show} classNames="sidebar-transition">
                 <SimpleBar className={`collapse ${showClass} sidebar d-md-block bg-primary text-white`}>
                     <div className="sidebar-inner px-4 pt-3">
+                        <div
+                            className="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
+                            <div className="d-flex align-items-center">
+                                <div className="user-avatar lg-avatar me-4">
+                                </div>
+                                <div className="d-block">
+                                </div>
+                            </div>
+                            <Nav.Link className="collapse-close d-md-none" onClick={onCollapse}>
+                                <FontAwesomeIcon icon={faTimes}/>
+                            </Nav.Link>
+                        </div>
                         <Nav className="flex-column pt-3 pt-md-0">
-
-                            <NavItem title="Overview" link={Routes.Dashboard.path}/>
-                            <NavItem title="Adhoc" link={Routes.Adhoc.path}/>
-                            <NavItem title="Execution" link={Routes.Executions.path}/>
-                            <NavItem title="Log" link={Routes.Executions.path}/>
-
-                            <Dropdown.Divider className="my-3 border-indigo"/>
-
-                            <NavItem external title="Extension"
-                                     link="https://demo.themesberg.com/volt-pro-react/#/plugins/datatable"
-                                     target="_blank"/>
-
-
+                            <NavItem title="Overview" link={Routes.Dashboard.path} icon={faChartPie}/>
+                            <NavItem title="Adhoc" link={Routes.Adhoc.path} icon={faRocket}/>
+                            <NavItem title="Executions" link={Routes.Executions.path} icon={faBinoculars}/>
                         </Nav>
                     </div>
                 </SimpleBar>
