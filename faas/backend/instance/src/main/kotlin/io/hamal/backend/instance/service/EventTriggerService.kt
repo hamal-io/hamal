@@ -8,6 +8,7 @@ import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
@@ -41,40 +42,39 @@ class EventTriggerService<TOPIC : LogTopic>(
     @PostConstruct
     fun setup() {
         scheduledTasks.add(
-            async.atFixedRate(1000.milliseconds) {
+            async.atFixedRate(1.milliseconds) {
                 triggerQueryRepository.list {
-                    afterId = TriggerId(0)
-                    types = setOf(TriggerType.Event) // FIXME doesn ot work
+                    afterId = TriggerId(SnowflakeId(Long.MAX_VALUE))
+                    types = setOf(TriggerType.Event)
                     limit = Limit(10)
-                }.filterIsInstance<EventTrigger>()
-                    .forEach { trigger ->
-                        require(trigger is EventTrigger)
+                }.forEach { trigger ->
+                    require(trigger is EventTrigger)
 
-                        val topic = eventBrokerRepository.getTopic(trigger.topicId)
-                        val consumer = ProtobufBatchConsumer(
-                            groupId = GroupId(trigger.id.value.value.toString(16)),
-                            topic = topic,
-                            repository = eventBrokerRepository,
-                            valueClass = Event::class
-                        )
+                    val topic = eventBrokerRepository.getTopic(trigger.topicId)
+                    val consumer = ProtobufBatchConsumer(
+                        groupId = GroupId(trigger.id.value.value.toString(16)),
+                        topic = topic,
+                        repository = eventBrokerRepository,
+                        valueClass = Event::class
+                    )
 
-                        triggerConsumers[trigger.id] = consumer
-                        try {
-                            consumer.consumeBatch(1) { evts ->
-                                submitRequest(
-                                    InvokeEvent(
-                                        execId = generateDomainId(::ExecId),
-                                        funcId = trigger.funcId,
-                                        correlationId = trigger.correlationId ?: CorrelationId("__default__"),
-                                        inputs = InvocationInputs(TableValue()),
-                                        invocation = EventInvocation(evts)
-                                    )
+                    triggerConsumers[trigger.id] = consumer
+                    try {
+                        consumer.consumeBatch(1) { evts ->
+                            submitRequest(
+                                InvokeEvent(
+                                    execId = generateDomainId(::ExecId),
+                                    funcId = trigger.funcId,
+                                    correlationId = trigger.correlationId ?: CorrelationId("__default__"),
+                                    inputs = InvocationInputs(TableValue()),
+                                    invocation = EventInvocation(evts)
                                 )
-                            }
-                        } catch (t: Throwable) {
-                            t.printStackTrace()
+                            )
                         }
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
                     }
+                }
             },
         )
     }

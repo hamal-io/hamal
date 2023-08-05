@@ -18,7 +18,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger> {
-    internal val lruCache = DefaultLruCache<TriggerId, Trigger>(10_000)
     fun find(connection: Connection, triggerId: TriggerId): Trigger? {
         return lruCache.computeIfAbsent(triggerId) {
             connection.executeQueryOne(
@@ -108,4 +107,7 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
     override fun invalidate() {
         lruCache.clear()
     }
+
+    private val lruCache = DefaultLruCache<TriggerId, Trigger>(10_000)
+
 }

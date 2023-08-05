@@ -1,6 +1,8 @@
 package io.hamal.backend.repository.memory.record
 
 import io.hamal.backend.repository.api.TriggerCmdRepository
+import io.hamal.backend.repository.api.TriggerCmdRepository.CreateEventCmd
+import io.hamal.backend.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
@@ -18,7 +20,9 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 internal object CurrentTriggerProjection {
+
     private val projection = mutableMapOf<TriggerId, Trigger>()
+
     fun apply(trigger: Trigger) {
         projection[trigger.id] = trigger
     }
@@ -42,7 +46,8 @@ internal object CurrentTriggerProjection {
 object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(),
     TriggerCmdRepository, TriggerQueryRepository {
     private val lock = ReentrantLock()
-    override fun create(cmd: TriggerCmdRepository.CreateFixedRateCmd): FixedRateTrigger {
+
+    override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (contains(triggerId)) {
@@ -63,7 +68,7 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
         }
     }
 
-    override fun create(cmd: TriggerCmdRepository.CreateEventCmd): EventTrigger {
+    override fun create(cmd: CreateEventCmd): EventTrigger {
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (contains(triggerId)) {
@@ -103,9 +108,6 @@ private fun MemoryTriggerRepository.currentVersion(id: TriggerId): Trigger {
         .createEntity()
         .toDomainObject()
 }
-
-private fun MemoryTriggerRepository.commandAlreadyApplied(id: TriggerId, cmdId: CmdId) =
-    listRecords(id).any { it.cmdId == cmdId }
 
 private fun MemoryTriggerRepository.versionOf(id: TriggerId, cmdId: CmdId): Trigger {
     return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }

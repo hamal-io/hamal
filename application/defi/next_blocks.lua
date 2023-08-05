@@ -45,6 +45,7 @@ if err ~= nil then
 else
     for _, block in pairs(batch_result) do
         print(block.id, block.hash)
+        ctx.emit({topic="eth::block_available", block = block.id})
     end
     ctx.state.next_block_number = next_block_number + step_size
 end
