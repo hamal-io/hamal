@@ -27,7 +27,7 @@ internal class SqliteLogSegmentRepository(
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {
         connection.tx {
-            execute("INSERT OR IGNORE INTO chunks (req_id,bytes,instant) VALUES (:cmdId, :bytes,:now)") {
+            execute("INSERT OR IGNORE INTO chunks (cmd_id,bytes,instant) VALUES (:cmdId, :bytes,:now)") {
                 set("cmdId", cmdId)
                 set("bytes", bytes)
                 set("now", TimeUtils.now())
@@ -71,7 +71,7 @@ internal class SqliteLogSegmentRepository(
                 """
              CREATE TABLE IF NOT EXISTS chunks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT ,
-                req_id INTEGER NOT NULL UNIQUE,
+                cmd_id VARCHAR(255) NOT NULL UNIQUE,
                 bytes BLOB NOT NULL ,
                 instant DATETIME NOT NULL
             );

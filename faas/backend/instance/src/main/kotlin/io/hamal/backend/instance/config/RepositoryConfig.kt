@@ -12,7 +12,6 @@ import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.SqliteStateRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
-import io.hamal.backend.repository.sqlite.log.SqliteLogTopic
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.backend.repository.sqlite.record.trigger.SqliteTriggerRepository
@@ -27,14 +26,13 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
 
     @Bean
-    open fun systemEventBrokerRepository(): LogBrokerRepository<SqliteLogTopic> {
-        return SqliteLogBrokerRepository(SqliteLogBroker(path))
-    }
+    open fun sqliteBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path))
 
     @Bean
-    open fun eventBrokerRepository(): LogBrokerRepository<SqliteLogTopic> {
-        return SqliteLogBrokerRepository(SqliteLogBroker(path))
-    }
+    open fun systemEventBrokerRepository() = sqliteBrokerRepository()
+
+    @Bean
+    open fun eventBrokerRepository() = sqliteBrokerRepository()
 
     @Bean
     open fun sqliteFuncRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))

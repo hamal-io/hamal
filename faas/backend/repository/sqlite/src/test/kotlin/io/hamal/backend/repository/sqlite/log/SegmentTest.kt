@@ -52,7 +52,7 @@ class SqliteLogSegmentRepositoryTest {
         @Test
         fun `Does not create chunks table if already exists`() {
             SqliteLogSegmentRepository(testSegment()).use {
-                it.connection.execute("""INSERT INTO chunks (req_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
+                it.connection.execute("""INSERT INTO chunks (cmd_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
             }
 
 

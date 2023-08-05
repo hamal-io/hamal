@@ -9,18 +9,21 @@ import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
 
 @Serializable(with = CmdId.Serializer::class)
-data class CmdId(val value: BigInteger) : Comparable<CmdId> {
-    constructor(value: ByteArray) : this(BigInteger(value))
-    constructor(value: Int) : this(value.toBigInteger())
-    constructor(value: Long) : this(value.toBigInteger())
-    constructor(value: String) : this(BigInteger(value, 16))
+data class CmdId(val value: String) : Comparable<CmdId> {
+
+    // FIXME make sure its max 255 chars
+
+    constructor(value: ByteArray) : this(String(value))
+    constructor(value: Int) : this(value.toString())
+    constructor(value: Long) : this(value.toString())
+    constructor(value: BigInteger) : this(value.toString())
     constructor(value: DomainId) : this(value.value.value)
 
     object Serializer : KSerializer<CmdId> {
-        override val descriptor = PrimitiveSerialDescriptor("CommandId", PrimitiveKind.STRING)
+        override val descriptor = PrimitiveSerialDescriptor("CmdId", PrimitiveKind.STRING)
         override fun deserialize(decoder: Decoder) = CmdId(decoder.decodeString())
         override fun serialize(encoder: Encoder, value: CmdId) {
-            encoder.encodeString(value.value.toString(16))
+            encoder.encodeString(value.value)
         }
     }
 

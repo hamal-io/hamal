@@ -93,9 +93,6 @@ class SqliteLogBrokerTopicsRepository(
 
     override fun list(): List<SqliteLogTopic> {
         return connection.executeQuery<SqliteLogTopic>("SELECT id,name FROM topics") {
-            query {
-                set("some_value", true)
-            }
             map { rs ->
                 SqliteLogTopic(
                     id = rs.getDomainId("id", ::TopicId),

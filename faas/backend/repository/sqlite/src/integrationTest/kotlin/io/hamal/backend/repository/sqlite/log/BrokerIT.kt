@@ -2,8 +2,8 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.lib.common.util.HashUtils.sha256
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.HashUtils.sha256
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -65,7 +65,6 @@ class BrokerIT {
                 assertThat(result.first().bytes, equalTo("$thread 1".toByteArray()))
                 assertThat(result.last().bytes, equalTo("$thread 100".toByteArray()))
             }
-
         }
     }
 }

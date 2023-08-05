@@ -72,7 +72,6 @@ class CompleteExecHandler<TOPIC : LogTopic>(
                     name = topicName
                 )
             )
-            println(topic.id)
             appender.append(cmdId, topic, evt)
         }
     }

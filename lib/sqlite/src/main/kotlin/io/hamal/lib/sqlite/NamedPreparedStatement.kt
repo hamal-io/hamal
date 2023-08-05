@@ -97,7 +97,7 @@ class DefaultNamedPreparedStatement(
 
     override fun set(parameter: String, value: CmdId): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
-        parseResult.parameterIndexesOf(parameter).forEach { delegate.setBigDecimal(it, value.value.toBigDecimal()) }
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value.value) }
         return this
     }
 
