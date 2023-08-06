@@ -20,6 +20,8 @@ import ExecutionListPage from "./page/execution-list";
 import ExecutionDetailPage from "./page/execution-detail";
 import FunctionListPage from "./page/function-list";
 import FunctionDetailPage from "./page/function-detail";
+import TriggerListPage from "./page/trigger-list";
+import TriggerDetailPage from "./page/trigger-detail";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -33,6 +35,8 @@ const router = createBrowserRouter([
     {path: "/executions/:execId", element: <RouteWithSidebar component={<ExecutionDetailPage/>}></RouteWithSidebar>,},
     {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}></RouteWithSidebar>,},
     {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}></RouteWithSidebar>,},
+    {path: "/triggers", element: <RouteWithSidebar component={<TriggerListPage/>}></RouteWithSidebar>,},
+    {path: "/triggers/:funcId", element: <RouteWithSidebar component={<TriggerDetailPage/>}></RouteWithSidebar>,},
 ]);
 
 

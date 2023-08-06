@@ -2,9 +2,9 @@ import {
     ApiExecution,
     ApiFunction,
     ApiListExecutions,
-    ApiListFunctions,
+    ApiListFunctions, ApiListTriggers,
     ApiSubmittedAdhocInvocation,
-    ApiSubmittedFunctionCreation
+    ApiSubmittedFunctionCreation, ApiSubmittedTriggerCreation, ApiTrigger, TriggerType
 } from "./types";
 
 
@@ -116,3 +116,59 @@ export async function getExecution(id: string): Promise<ApiExecution> {
     return await response.json() as ApiExecution;
 }
 
+
+export interface ListTriggersQuery {
+    limit: number;
+}
+
+export async function listTriggers(query: ListTriggersQuery): Promise<ApiListTriggers> {
+    const response = await fetch("http://localhost:8008/v1/triggers", {
+        headers: defaultHeaders,
+        method: "GET",
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiListTriggers;
+}
+
+export interface SubmitCreateTriggerRequest {
+    name: string;
+    type: TriggerType;
+    funcId: string;
+    duration: string;
+}
+
+export async function createTrigger(req: SubmitCreateTriggerRequest): Promise<ApiSubmittedTriggerCreation> {
+    const response = await fetch("http://localhost:8008/v1/triggers", {
+        headers: defaultHeaders,
+        method: "POST",
+        body: JSON.stringify({
+                name: req.name,
+                type: req.type,
+                inputs: {},
+                funcId: req.funcId,
+                duration: req.duration,
+            }
+        )
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiSubmittedTriggerCreation;
+}
+
+
+export async function getTrigger(id: string): Promise<ApiTrigger> {
+    const response = await fetch(`http://localhost:8008/v1/triggers/${id}`, {
+        headers: defaultHeaders,
+        method: "GET",
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiTrigger;
+}

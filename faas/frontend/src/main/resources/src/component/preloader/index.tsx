@@ -1,7 +1,5 @@
 import React from 'react';
-
-
-export default (props) => {
+export default (props: any) => {
 
     const {show} = props;
 

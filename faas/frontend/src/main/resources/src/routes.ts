@@ -5,4 +5,6 @@ export const Routes = {
     Executions: {path: "/executions"},
     Functions: {path: "/functions"},
     Function: {path: "/functions/:funcId"},
+    Triggers: {path: "/triggers"},
+    Trigger: {path: "/triggers/:triggerId"},
 };

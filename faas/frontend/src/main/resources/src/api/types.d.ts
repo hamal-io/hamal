@@ -40,3 +40,29 @@ export interface ApiFunction {
 export interface ApiExecution {
     id: string;
 }
+
+interface ApiSubmittedTriggerCreation {
+    id: string;
+    status: string;
+    triggerId: string;
+}
+
+
+type TriggerType = "FixedRate" | "Event";
+
+export interface ApiSimpleTrigger {
+    id: string;
+    name: string;
+    type: TriggerType;
+}
+
+export interface ApiListTriggers {
+    triggers: Array<ApiSimpleTrigger>;
+}
+
+
+export interface ApiTrigger {
+    id: string;
+    name: string;
+    type: TriggerType;
+}

@@ -16,7 +16,7 @@ import {
     faCalendarAlt,
     faMapPin,
     faInbox,
-    faRocket, faBinoculars, faCode
+    faRocket, faBinoculars, faCode, faGears, faClock
 } from "@fortawesome/free-solid-svg-icons";
 import {Nav, Badge, Image, Button, Dropdown, Accordion, Navbar} from '@themesberg/react-bootstrap';
 import {Link} from 'react-router-dom';
@@ -114,6 +114,7 @@ export default (props = {}) => {
                             <NavItem title="Adhoc" link={Routes.Adhoc.path} icon={faRocket}/>
                             <NavItem title="Executions" link={Routes.Executions.path} icon={faBinoculars}/>
                             <NavItem title="Functions" link={Routes.Functions.path} icon={faCode}/>
+                            <NavItem title="Triggers" link={Routes.Triggers.path} icon={faClock}/>
                         </Nav>
                     </div>
                 </SimpleBar>
