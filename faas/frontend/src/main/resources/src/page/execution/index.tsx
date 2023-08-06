@@ -1,22 +1,30 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Breadcrumb, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
-import {ExecutionTable} from "./execution-table";
+import {ExecutionTable} from "./table";
 import {faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {listExecutions} from "../../api";
+
+import {ApiSimpleExecution} from "../../api/types";
+import {State} from "./state";
+
 
 export default () => {
-    const [executions, setExecutions] = useState([])
+    const [executions, setExecutions] = useState([] as Array<ApiSimpleExecution>)
+    useEffect(() => {
+        listExecutions({limit: 1000}).then(response => {
+            setExecutions(response.execs)
+        })
+    }, []);
 
     return (
-        <>
-            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <State.Provider value={executions}>
+            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
                 <div className="d-block mb-4 mb-md-0">
                     <Breadcrumb className="d-none d-md-inline-block"
                                 listProps={{className: "breadcrumb-dark breadcrumb-transparent"}}>
                         <Breadcrumb.Item><FontAwesomeIcon icon={faHome}/></Breadcrumb.Item>
                         <Breadcrumb.Item>Executions</Breadcrumb.Item></Breadcrumb>
-                    <h4>Executions</h4>
-                    <p className="mb-0">Your function executions.</p>
                 </div>
             </div>
 
@@ -33,8 +41,8 @@ export default () => {
                 </Row>
             </div>
 
-            <ExecutionTable executions={executions}/>
-        </>
+            <ExecutionTable/>
+        </State.Provider>
     );
 };
 

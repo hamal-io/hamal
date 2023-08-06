@@ -5,89 +5,12 @@ import {Routes} from "../../routes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import React from "react";
 
-const executions = [
-    {
-        "id": 300500,
-        "status": "Completed",
-        "func": "Platinum function Plan",
-        "lastUpdatedAt": moment().subtract(1, "days").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(1, "days").add(1, "month").format("DD MMM YYYY")
-    },
-    {
-        "id": 300499,
-        "status": "Completed",
-        "func": "Platinum function Plan",
-        "lastUpdatedAt": moment().subtract(2, "days").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(2, "days").add(1, "month").format("DD MMM YYYY")
-    },
-    {
-        "id": 300498,
-        "status": "Completed",
-        "func": "Platinum function Plan",
-        "correlationId": "test",
-        "issulastUpdatedAteDate": moment().subtract(2, "days").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(2, "days").add(1, "month").format("DD MMM YYYY")
-    },
-    {
-        "id": 300497,
-        "status": "Completed",
-        "func": "Flexible function Plan",
-        "issueDate": moment().subtract(3, "days").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(3, "days").add(1, "month").format("DD MMM YYYY")
-    },
-    {
-        "id": 300496,
-        "status": "Failed",
-        "func": "Gold function Plan",
-        "correlationId": "test",
-        "lastUpdatedAt": moment().subtract(1, "day").subtract(1, "month").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(1, "day").format("DD MMM YYYY")
-    },
-    {
-        "id": 300495,
-        "status": "Failed",
-        "func": "Gold function Plan",
-        "correlationId": "test",
-        "lastUpdatedAt": moment().subtract(3, "days").subtract(1, "month").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(3, "days").format("DD MMM YYYY")
-    },
-    {
-        "id": 300494,
-        "status": "In Progress",
-        "func": "Flexible function Plan",
-        "correlationId": "test",
-        "lastUpdatedAt": moment().subtract(4, "days").subtract(1, "month").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(4, "days").format("DD MMM YYYY")
-    },
-    {
-        "id": 300493,
-        "status": "Canceled",
-        "func": "Gold function Plan",
-        "correlationId": "test",
-        "lastUpdatedAt": moment().subtract(20, "days").subtract(1, "month").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(20, "days").format("DD MMM YYYY")
-    },
-    {
-        "id": 300492,
-        "status": "Canceled",
-        "func": "Platinum function Plan",
-        "correlationId": "test",
-        "lastUpdatedAt": moment().subtract(2, "months").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(3, "months").format("DD MMM YYYY")
-    },
-    {
-        "id": 300491,
-        "status": "Completed",
-        "func": "Platinum function Plan",
-        "correlationId": "test",
-        "lastUpdatedAt": moment().subtract(6, "days").format("DD MMM YYYY"),
-        "dueDate": moment().subtract(6, "days").add(1, "month").format("DD MMM YYYY")
-    }
-]
+import {useContext} from 'react';
+import {State} from './state';
 
 
 export const ExecutionTable = () => {
-
+    const executions = useContext(State)
     const totalExecutions = executions.length;
 
     const TableRow = (props: any) => {

@@ -7,7 +7,7 @@
 // =========================================================
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
 
-import React, {StrictMode} from 'react';
+import React from 'react';
 import {createBrowserRouter, HashRouter, RouterProvider} from "react-router-dom";
 import {createRoot} from 'react-dom/client';
 
@@ -31,9 +31,7 @@ const router = createBrowserRouter([
 
 
 root.render(
-    <StrictMode>
-        <RouterProvider router={router}/>
-    </StrictMode>
+    <RouterProvider router={router}/>
 );
 
 serviceWorker.unregister();

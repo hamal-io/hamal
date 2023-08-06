@@ -1,7 +1,10 @@
 package io.hamal.lib.sdk.domain
 
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,7 +27,15 @@ data class ListExecsResponse(
     @Serializable
     data class Exec(
         val id: ExecId,
-        val status: ExecStatus
+        val status: ExecStatus,
+        val correlation: Correlation?,
+        val func: Func?
+    )
+
+    @Serializable
+    data class Func(
+        val id: FuncId,
+        val name: FuncName
     )
 }
 
