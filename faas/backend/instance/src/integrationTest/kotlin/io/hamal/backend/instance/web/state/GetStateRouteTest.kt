@@ -21,7 +21,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
 
     @Test
     fun `Get state`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val execId = createExec(
             execId = ExecId(123),
@@ -46,7 +46,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
 
     @Test
     fun `Get state for function which was never set before`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val response = httpTemplate.get("/v1/funcs/${funcId.value.value}/states/__1__").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))

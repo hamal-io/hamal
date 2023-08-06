@@ -37,9 +37,9 @@ internal class InvokeAdhocHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: InvokeAdhocHandler
 
     private val submittedInvocationReq = SubmittedInvokeAdhocReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         status = ReqStatus.Submitted,
-        execId = ExecId(3333),
+        id = ExecId(3333),
         inputs = InvocationInputs(TableValue(StringValue("hamal") to StringValue("justworks"))),
         code = CodeValue("code")
     )

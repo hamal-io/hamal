@@ -14,7 +14,7 @@ internal class CreateTopicRouteTest : BaseEventRouteTest() {
         val result = awaitCompleted(
             createTopic(TopicName("namespace::topics_one"))
         )
-        verifyTopicCreated(result.topicId)
+        verifyTopicCreated(result.id)
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
@@ -28,7 +28,7 @@ internal class CreateTopicRouteTest : BaseEventRouteTest() {
         awaitCompleted(createTopic(TopicName("namespace::topics_one")))
 
         with(createTopic(TopicName("namespace::topics_one"))) {
-            awaitFailed(id)
+            awaitFailed(reqId)
         }
 
         with(listTopics()) {

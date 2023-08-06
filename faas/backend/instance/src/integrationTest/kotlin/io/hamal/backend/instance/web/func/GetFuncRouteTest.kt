@@ -38,12 +38,12 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val getFuncResponse = httpTemplate.get("/v1/funcs/${result.funcId.value.value}").execute()
+        val getFuncResponse = httpTemplate.get("/v1/funcs/${result.id.value.value}").execute()
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
         with(getFuncResponse.result(Func::class)) {
-            assertThat(id, equalTo(result.funcId))
+            assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(FuncName("func-one")))
             assertThat(inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("rockz")))))
             assertThat(code, equalTo(CodeValue("1+1")))

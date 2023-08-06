@@ -27,8 +27,8 @@ class CreateTriggerHandler(
             TriggerType.FixedRate -> triggerCmdRepository.create(
                 TriggerCmdRepository.CreateFixedRateCmd(
                     id = req.cmdId(),
-                    triggerId = req.triggerId,
-                    name = req.triggerName,
+                    triggerId = req.id,
+                    name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
                     inputs = req.inputs,
@@ -42,8 +42,8 @@ class CreateTriggerHandler(
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateEventCmd(
                         id = req.cmdId(),
-                        triggerId = req.triggerId,
-                        name = req.triggerName,
+                        triggerId = req.id,
+                        name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
                         inputs = req.inputs,

@@ -41,7 +41,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
 
                 val result = failureResponse.result(SubmittedFailExecReq::class)
 
-                awaitFailed(result.id)
+                awaitFailed(result.reqId)
             }
         }
 
@@ -61,9 +61,9 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = failureResponse.result(SubmittedFailExecReq::class)
-        awaitCompleted(result.id)
+        awaitCompleted(result.reqId)
 
-        verifyExecFailed(result.execId)
+        verifyExecFailed(result.id)
         //FIXME events
     }
 
@@ -78,7 +78,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         val result = response.result(SubmittedFailExecReq::class)
-        awaitFailed(result.id)
+        awaitFailed(result.reqId)
     }
 
     private fun verifyExecFailed(execId: ExecId) {

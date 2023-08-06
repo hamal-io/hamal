@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Breadcrumb} from '@themesberg/react-bootstrap';
+import {Breadcrumb, Button, Col, Row} from '@themesberg/react-bootstrap';
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useNavigate, useParams} from "react-router-dom";
-import {getFunction, listFunctions} from "../../api";
+import {getFunction, invokeAdhoc, listFunctions} from "../../api";
 import {Simulate} from "react-dom/test-utils";
 import Spinner from "../../component/spinner";
 import {ApiFunction} from "../../api/types";
+import Editor from "../../component/editor";
 
 
 export default () => {
@@ -14,6 +15,7 @@ export default () => {
     const {funcId} = useParams()
     const [func, setFunc] = useState<ApiFunction>({} as ApiFunction)
 
+    const [code, setCode] = useState('')
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -21,6 +23,7 @@ export default () => {
             setLoading(true)
             getFunction(funcId).then(response => {
                 setFunc((response))
+                setCode(response.code.value)
                 setLoading(false)
             })
         }
@@ -58,7 +61,25 @@ export default () => {
                 </div>
             </div>
             <h1> Function Detail</h1>
-            {JSON.stringify(func)}
+            <Row>
+                <Col xs={12} xl={8}>
+                    <Editor
+                        code={code}
+                        onChange={code => setCode(code || '')}
+                    />
+                </Col>
+                <Col xs={12} xl={4}>
+                    <Row>
+                        <Col xs={12}>
+                            <h1>Inputs Placeholder</h1>
+                            <h1>Events Placeholder</h1>
+                            <h1>State Placeholder</h1>
+                            <h1>Execution Logs Placeholder</h1>
+                            <Button onClick={_ => invokeAdhoc({code})} variant="primary" size="sm">Update</Button>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
         </>
     );
 };

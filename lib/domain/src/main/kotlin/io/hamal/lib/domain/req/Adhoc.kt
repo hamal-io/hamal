@@ -14,9 +14,9 @@ data class InvokeAdhocReq(
 
 @Serializable
 data class SubmittedInvokeAdhocReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
-    val execId: ExecId,
+    val id: ExecId,
     val inputs: InvocationInputs,
     val code: CodeValue
 ) : SubmittedReq

@@ -27,7 +27,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
             assertThat(reqs, hasSize(1))
 
             with(reqs.first()) {
-                assertThat(id, equalTo(adhocResponse.id))
+                assertThat(reqId, equalTo(adhocResponse.reqId))
                 assertThat(status, equalTo(ReqStatus.Completed))
                 assertThat(this, instanceOf(SubmittedInvokeAdhocReq::class.java))
             }
@@ -47,7 +47,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         listResponse.reqs
             .map { it as SubmittedInvokeAdhocReq }
             .forEachIndexed { idx, req ->
-                val code = execQueryRepository.get(req.execId).code
+                val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(CodeValue("${22 - idx}")))
             }
     }
@@ -60,7 +60,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         val request70 = requests[70]
 
         val listResponse = httpTemplate.get("/v1/reqs")
-            .parameter("after_id", request70.id)
+            .parameter("after_id", request70.reqId)
             .parameter("limit", 1)
             .execute(ListSubmittedReqsResponse::class)
 
@@ -69,7 +69,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         listResponse.reqs
             .map { it as SubmittedInvokeAdhocReq }
             .forEach { req ->
-                val code = execQueryRepository.get(req.execId).code
+                val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(CodeValue("71")))
             }
     }

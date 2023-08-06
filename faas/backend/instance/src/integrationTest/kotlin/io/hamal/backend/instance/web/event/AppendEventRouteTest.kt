@@ -22,12 +22,12 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
 
         awaitCompleted(
             appendEvent(
-                topicResponse.topicId,
+                topicResponse.id,
                 TableValue("hamal" to StringValue("rocks"))
             )
         )
 
-        with(listEvents(topicResponse.topicId)) {
+        with(listEvents(topicResponse.id)) {
             assertThat(events, hasSize(1))
 
             val event = events.first()
@@ -44,13 +44,13 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
         awaitCompleted(
             IntRange(1, 10).map {
                 appendEvent(
-                    topicResponse.topicId,
+                    topicResponse.id,
                     TableValue("hamal" to StringValue("rocks"))
                 )
             }
         )
 
-        with(listEvents(topicResponse.topicId)) {
+        with(listEvents(topicResponse.id)) {
             assertThat(events, hasSize(10))
             events.forEach { event ->
                 assertThat(event.value, equalTo(TableValue("hamal" to StringValue("rocks"))))

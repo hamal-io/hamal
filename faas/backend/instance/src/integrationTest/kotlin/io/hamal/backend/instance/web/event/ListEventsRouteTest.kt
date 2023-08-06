@@ -19,7 +19,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
             createTopic(TopicName("test-topic"))
         )
 
-        val result = listEvents(topicResponse.topicId)
+        val result = listEvents(topicResponse.id)
         assertThat(result.events, empty())
     }
 
@@ -30,11 +30,11 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
         )
 
         awaitCompleted(
-            appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(1)))
+            appendEvent(topicResponse.id, TableValue("counter" to NumberValue(1)))
         )
 
-        with(listEvents(topicResponse.topicId)) {
-            assertThat(topicId, equalTo(topicResponse.topicId))
+        with(listEvents(topicResponse.id)) {
+            assertThat(topicId, equalTo(topicResponse.id))
             assertThat(topicName, equalTo(TopicName("test-topic")))
             assertThat(events, hasSize(1))
 
@@ -48,16 +48,16 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
     @Test
     fun `Limit events`() {
         val topicResponse = awaitCompleted(
-            createTopic(TopicName("test-topic")).also { awaitCompleted(it.id) }
+            createTopic(TopicName("test-topic")).also { awaitCompleted(it.reqId) }
         )
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(it)))
+                appendEvent(topicResponse.id, TableValue("counter" to NumberValue(it)))
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/topics/${topicResponse.topicId.value}/events")
+        val listResponse = httpTemplate.get("/v1/topics/${topicResponse.id.value}/events")
             .parameter("limit", 23)
             .execute(ListEventsResponse::class)
 
@@ -76,11 +76,11 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(it)))
+                appendEvent(topicResponse.id, TableValue("counter" to NumberValue(it)))
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/topics/${topicResponse.topicId.value}/events")
+        val listResponse = httpTemplate.get("/v1/topics/${topicResponse.id.value}/events")
             .parameter("after_id", 95)
             .parameter("limit", 1)
             .execute(ListEventsResponse::class)
@@ -103,11 +103,11 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
         )
 
         awaitCompleted(
-            appendEvent(topicResponse.topicId, TableValue("counter" to NumberValue(1)))
+            appendEvent(topicResponse.id, TableValue("counter" to NumberValue(1)))
         )
 
-        with(listEvents(anotherTopicResponse.topicId)) {
-            assertThat(topicId, equalTo(anotherTopicResponse.topicId))
+        with(listEvents(anotherTopicResponse.id)) {
+            assertThat(topicId, equalTo(anotherTopicResponse.id))
             assertThat(topicName, equalTo(TopicName("another-test-topic")))
             assertThat(events, empty())
         }

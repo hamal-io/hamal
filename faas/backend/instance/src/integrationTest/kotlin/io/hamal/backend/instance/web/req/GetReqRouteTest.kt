@@ -18,7 +18,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
             adhoc()
         )
 
-        val response = httpTemplate.get("/v1/reqs/${request.id.value}").execute()
+        val response = httpTemplate.get("/v1/reqs/${request.reqId.value}").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 

@@ -33,7 +33,7 @@ class CompleteExecHandler<TOPIC : LogTopic>(
     override fun invoke(req: SubmittedCompleteExecReq) {
         val cmdId = req.cmdId()
 
-        val exec = execQueryRepository.get(req.execId)
+        val exec = execQueryRepository.get(req.id)
         require(exec is StartedExec) { "Exec not in status Started" }
 
         completeExec(req)
@@ -44,7 +44,7 @@ class CompleteExecHandler<TOPIC : LogTopic>(
     }
 
     private fun completeExec(req: SubmittedCompleteExecReq) =
-        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.execId))
+        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.id))
 
     private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
         eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))

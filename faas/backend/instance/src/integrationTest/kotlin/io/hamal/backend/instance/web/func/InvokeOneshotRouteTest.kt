@@ -31,7 +31,7 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.funcId.value.value}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value.value}/exec")
             .body(
                 InvokeOneshotReq(
                     correlationId = CorrelationId("some-correlation-id"),
@@ -43,11 +43,11 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = invocationResponse.result(SubmittedInvokeOneshotReq::class)
-        assertThat(result.funcId, equalTo(createResponse.funcId))
+        assertThat(result.funcId, equalTo(createResponse.id))
         assertThat(result.inputs, equalTo(InvocationInputs()))
         assertThat(result.correlationId, equalTo(CorrelationId("some-correlation-id")))
 
-        awaitCompleted(result.id)
+        awaitCompleted(result.reqId)
     }
 
     @Test
@@ -62,7 +62,7 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.funcId.value.value}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value.value}/exec")
             .body(
                 InvokeOneshotReq(
                     inputs = InvocationInputs(),
@@ -74,11 +74,11 @@ internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = invocationResponse.result(SubmittedInvokeOneshotReq::class)
-        assertThat(result.funcId, equalTo(createResponse.funcId))
+        assertThat(result.funcId, equalTo(createResponse.id))
         assertThat(result.inputs, equalTo(InvocationInputs()))
         assertThat(result.correlationId, equalTo(CorrelationId("__default__")))
 
-        awaitCompleted(result.id)
+        awaitCompleted(result.reqId)
     }
 
     @Test

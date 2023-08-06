@@ -14,9 +14,9 @@ data class FailExecReq(
 
 @Serializable
 data class SubmittedFailExecReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
-    val execId: ExecId,
+    val id: ExecId,
     val cause: ErrorValue
 ) : SubmittedReq
 
@@ -29,9 +29,9 @@ data class CompleteExecReq(
 
 @Serializable
 data class SubmittedCompleteExecReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
-    val execId: ExecId,
+    val id: ExecId,
     val state: State,
     val events: List<Event>
 ) : SubmittedReq

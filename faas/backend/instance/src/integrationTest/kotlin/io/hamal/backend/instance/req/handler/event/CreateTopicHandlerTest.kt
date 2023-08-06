@@ -29,9 +29,9 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
                 SubmittedCreateTopicReq(
-                    id = ReqId(2),
+                    reqId = ReqId(2),
                     status = ReqStatus.Submitted,
-                    topicId = TopicId(2345),
+                    id = TopicId(2345),
                     name = TopicName("another-topic-name")
                 )
             )
@@ -48,9 +48,9 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
                 SubmittedCreateTopicReq(
-                    id = ReqId(2),
+                    reqId = ReqId(2),
                     status = ReqStatus.Submitted,
-                    topicId = TopicId(3456),
+                    id = TopicId(3456),
                     name = TopicName("some-topic-name")
                 )
             )
@@ -74,9 +74,9 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateTopicHandler<MemoryLogTopic>
 
     private val submittedCreateTopicReq = SubmittedCreateTopicReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         status = ReqStatus.Submitted,
-        topicId = TopicId(2345),
+        id = TopicId(2345),
         name = TopicName("some-topic-name")
     )
 }

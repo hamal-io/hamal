@@ -31,10 +31,10 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             SubmittedCreateFuncReq(
-                id = ReqId(2),
+                reqId = ReqId(2),
                 status = ReqStatus.Submitted,
-                funcId = FuncId(12345),
-                funcName = FuncName("another-func"),
+                id = FuncId(12345),
+                name = FuncName("another-func"),
                 inputs = FuncInputs(),
                 code = CodeValue("")
             )
@@ -60,10 +60,10 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateFuncHandler
 
     private val submitCreateFuncReq = SubmittedCreateFuncReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         status = ReqStatus.Submitted,
-        funcId = FuncId(12345),
-        funcName = FuncName("awesome-func"),
+        id = FuncId(12345),
+        name = FuncName("awesome-func"),
         inputs = FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
         code = CodeValue("some code")
     )

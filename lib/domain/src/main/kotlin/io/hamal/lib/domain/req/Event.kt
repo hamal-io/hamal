@@ -13,9 +13,9 @@ data class CreateTopicReq(
 
 @Serializable
 data class SubmittedCreateTopicReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
-    val topicId: TopicId,
+    val id: TopicId,
     val name: TopicName
 ) : SubmittedReq
 
@@ -28,8 +28,8 @@ data class AppendEventReq(
 
 @Serializable
 data class SubmittedAppendEventReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
-    val topicId: TopicId,
+    val id: TopicId,
     val event: Event
 ) : SubmittedReq

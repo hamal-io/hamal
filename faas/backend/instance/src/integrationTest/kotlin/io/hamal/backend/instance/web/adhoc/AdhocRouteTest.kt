@@ -38,8 +38,8 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
         Thread.sleep(10)
 
-        verifyReqCompleted(result.id)
-        verifyExecQueued(result.execId)
+        verifyReqCompleted(result.reqId)
+        verifyExecQueued(result.id)
     }
 
 

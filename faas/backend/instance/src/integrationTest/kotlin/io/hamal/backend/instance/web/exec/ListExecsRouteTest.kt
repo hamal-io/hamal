@@ -33,7 +33,7 @@ internal class ListExecsRouteTest : BaseExecRouteTest() {
         with(response.result(ListExecsResponse::class)) {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
-                assertThat(id, equalTo(createAdhocResponse.execId))
+                assertThat(id, equalTo(createAdhocResponse.id))
                 assertThat(status, equalTo(ExecStatus.Queued))
             }
         }
@@ -69,7 +69,7 @@ internal class ListExecsRouteTest : BaseExecRouteTest() {
 
         val response = httpTemplate.get("/v1/execs")
             .parameter("limit", 1)
-            .parameter("after_id", fortySixthRequest.execId)
+            .parameter("after_id", fortySixthRequest.id)
             .execute()
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
@@ -78,7 +78,7 @@ internal class ListExecsRouteTest : BaseExecRouteTest() {
         with(response.result(ListExecsResponse::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
-                assertThat(exec.id, equalTo(fortyFifthRequest.execId))
+                assertThat(exec.id, equalTo(fortyFifthRequest.id))
                 assertThat(exec.status, equalTo(ExecStatus.Queued))
             }
         }

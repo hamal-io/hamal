@@ -110,24 +110,24 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateTriggerHandler
 
     private val submitCreateFixedRateTriggerReq = SubmittedCreateTriggerReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         status = ReqStatus.Submitted,
         type = TriggerType.FixedRate,
         funcId = FuncId(2222),
-        triggerId = TriggerId(1234),
-        triggerName = TriggerName("FixedRateTrigger"),
+        id = TriggerId(1234),
+        name = TriggerName("FixedRateTrigger"),
         duration = 42.seconds,
         inputs = TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
     )
 
     private val submitCreateEventTriggerReq = SubmittedCreateTriggerReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         status = ReqStatus.Submitted,
         type = TriggerType.Event,
         funcId = FuncId(2222),
         topicId = TopicId(1111),
-        triggerId = TriggerId(1234),
-        triggerName = TriggerName("EventTrigger"),
+        id = TriggerId(1234),
+        name = TriggerName("EventTrigger"),
         inputs = TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
     )
 }

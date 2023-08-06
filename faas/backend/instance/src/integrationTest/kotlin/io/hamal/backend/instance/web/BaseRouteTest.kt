@@ -48,16 +48,16 @@ internal abstract class BaseRouteTest : BaseTest() {
     }
 
     fun <REQ : SubmittedReq> awaitCompleted(req: REQ): REQ {
-        awaitCompleted(req.id)
+        awaitCompleted(req.reqId)
         return req
     }
 
     fun <REQ : SubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
-        return reqs.toList().onEach { awaitCompleted(it.id) }
+        return reqs.toList().onEach { awaitCompleted(it.reqId) }
     }
 
     fun <REQ : SubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
-        return reqs.onEach { awaitCompleted(it.id) }
+        return reqs.onEach { awaitCompleted(it.reqId) }
     }
 
     fun awaitFailed(id: ReqId) {
@@ -76,12 +76,12 @@ internal abstract class BaseRouteTest : BaseTest() {
     }
 
     fun <REQ : SubmittedReq> awaitFailed(req: REQ): REQ {
-        awaitFailed(req.id)
+        awaitFailed(req.reqId)
         return req
     }
 
     fun <REQ : SubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
-        return reqs.onEach { awaitFailed(it.id) }
+        return reqs.onEach { awaitFailed(it.reqId) }
     }
 
 

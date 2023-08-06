@@ -33,9 +33,9 @@ class SubmitRequest(
 ) {
     operator fun invoke(adhoc: InvokeAdhocReq) =
         SubmittedInvokeAdhocReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(::ExecId),
+            id = generateDomainId(::ExecId),
             inputs = adhoc.inputs,
             code = adhoc.code
         ).also(reqCmdRepository::queue)
@@ -43,7 +43,7 @@ class SubmitRequest(
 
     operator fun invoke(funcId: FuncId, oneshot: InvokeOneshotReq) =
         SubmittedInvokeOneshotReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = funcId,
@@ -53,7 +53,7 @@ class SubmitRequest(
 
     operator fun invoke(fixedRate: InvokeFixedRate) =
         SubmittedInvokeFixedRateReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = fixedRate.funcId,
@@ -64,7 +64,7 @@ class SubmitRequest(
 
     operator fun invoke(invoke: InvokeEvent) =
         SubmittedInvokeEventReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             execId = generateDomainId(::ExecId),
             funcId = invoke.funcId,
@@ -75,27 +75,27 @@ class SubmitRequest(
 
     operator fun invoke(execId: ExecId, complete: CompleteExecReq) =
         SubmittedCompleteExecReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            execId = execId,
+            id = execId,
             state = complete.state,
             events = complete.events
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(execId: ExecId, fail: FailExecReq) =
         SubmittedFailExecReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            execId = execId,
+            id = execId,
             cause = fail.cause
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(createFuncReq: CreateFuncReq) =
         SubmittedCreateFuncReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            funcId = generateDomainId(::FuncId),
-            funcName = createFuncReq.name,
+            id = generateDomainId(::FuncId),
+            name = createFuncReq.name,
             inputs = createFuncReq.inputs,
             code = createFuncReq.code
         ).also(reqCmdRepository::queue)
@@ -103,10 +103,10 @@ class SubmitRequest(
     operator fun invoke(createTriggerReq: CreateTriggerReq) =
         SubmittedCreateTriggerReq(
             type = createTriggerReq.type,
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            triggerId = generateDomainId(::TriggerId),
-            triggerName = createTriggerReq.name,
+            id = generateDomainId(::TriggerId),
+            name = createTriggerReq.name,
             funcId = createTriggerReq.funcId,
             inputs = createTriggerReq.inputs,
             correlationId = createTriggerReq.correlationId,
@@ -116,23 +116,23 @@ class SubmitRequest(
 
     operator fun invoke(createTopic: CreateTopicReq) =
         SubmittedCreateTopicReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            topicId = generateDomainId(::TopicId),
+            id = generateDomainId(::TopicId),
             name = createTopic.name
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(appendEvent: AppendEventReq) =
         SubmittedAppendEventReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            topicId = appendEvent.topicId,
+            id = appendEvent.topicId,
             event = appendEvent.event
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(setStateReq: SetStateReq) =
         SubmittedSetStateReq(
-            id = generateDomainId(::ReqId),
+            reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             state = CorrelatedState(
                 correlation = setStateReq.correlation,

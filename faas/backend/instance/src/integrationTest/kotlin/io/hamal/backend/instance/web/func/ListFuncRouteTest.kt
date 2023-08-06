@@ -32,7 +32,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))
             with(funcs.first()) {
-                assertThat(id, equalTo(result.funcId))
+                assertThat(id, equalTo(result.id))
                 assertThat(name, equalTo(FuncName("func-one")))
             }
         }
@@ -79,7 +79,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/funcs")
-            .parameter("after_id", fortyNinth.funcId)
+            .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(ListFuncsResponse::class)
 

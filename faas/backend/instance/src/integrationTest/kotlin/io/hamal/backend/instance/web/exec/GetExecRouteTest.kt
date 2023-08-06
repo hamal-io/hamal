@@ -21,12 +21,12 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
         )
         Thread.sleep(10)
 
-        val response = httpTemplate.get("/v1/execs/${createAdhocResponse.execId.value}").execute()
+        val response = httpTemplate.get("/v1/execs/${createAdhocResponse.id.value}").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
         with(response.result(Exec::class)) {
-            assertThat(id, equalTo(createAdhocResponse.execId))
+            assertThat(id, equalTo(createAdhocResponse.id))
             assertThat(status, equalTo(ExecStatus.Queued))
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(code, equalTo(CodeValue("40 + 2")))

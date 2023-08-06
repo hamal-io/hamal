@@ -71,7 +71,7 @@ internal class InvokeOneshotHandlerTest : BaseReqHandlerTest() {
 
     //@formatter:off
     private val submittedInvocationReq = SubmittedInvokeOneshotReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         correlationId = CorrelationId("some-correlation"),
         status = ReqStatus.Submitted,
         execId = ExecId(3333),

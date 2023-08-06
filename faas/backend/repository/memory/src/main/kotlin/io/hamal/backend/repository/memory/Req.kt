@@ -19,8 +19,8 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
 
     override fun queue(req: SubmittedReq) {
         return lock.withLock {
-            store[req.id] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req)
-            queue.add(req.id)
+            store[req.reqId] = ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req)
+            queue.add(req.reqId)
         }
     }
 
@@ -40,7 +40,7 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun complete(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.withLock {
-            store[req.id] =
+            store[req.reqId] =
                 ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Completed })
         }
     }
@@ -48,7 +48,7 @@ object MemoryReqRepository : ReqCmdRepository, ReqQueryRepository {
     override fun fail(reqId: ReqId) {
         val req = find(reqId) ?: return
         lock.withLock {
-            store[req.id] =
+            store[req.reqId] =
                 ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Failed })
         }
     }

@@ -54,9 +54,9 @@ class CreateFuncFunction(
                 .execute(SubmittedCreateFuncReq::class)
 
             return null to ctx.tableCreateMap(1).also {
-                it["id"] = res.id.value.toString()
+                it["id"] = res.reqId.value.toString()
                 it["status"] = res.status.name
-                it["func_id"] = res.funcId.value.toString()
+                it["func_id"] = res.id.value.toString()
             }
 
         } catch (t: Throwable) {

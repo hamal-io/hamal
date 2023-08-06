@@ -85,7 +85,7 @@ abstract class BaseHamalTest {
                 val startedAt = TimeUtils.now()
                 while (wait) {
                     sleep(1)
-                    with(execQueryRepository.get(response.execId)) {
+                    with(execQueryRepository.get(response.id)) {
                         if (status == ExecStatus.Completed) {
                             wait = false
                         }

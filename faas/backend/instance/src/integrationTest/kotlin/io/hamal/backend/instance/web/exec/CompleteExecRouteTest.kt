@@ -41,8 +41,8 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
 
                 val result = completionResponse.result(SubmittedCompleteExecReq::class)
 
-                awaitFailed(result.id)
-                verifyNoStateSet(result.execId)
+                awaitFailed(result.reqId)
+                verifyNoStateSet(result.id)
                 // FIXME verify event not emitted
             }
         }
@@ -63,10 +63,10 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = completionResponse.result(SubmittedCompleteExecReq::class)
-        awaitCompleted(result.id)
+        awaitCompleted(result.reqId)
 
-        verifyExecCompleted(result.execId)
-        verifyStateSet(result.execId)
+        verifyExecCompleted(result.id)
+        verifyStateSet(result.id)
         //FIXME events
     }
 
@@ -86,7 +86,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         val result = response.result(SubmittedCompleteExecReq::class)
-        awaitFailed(result.id)
+        awaitFailed(result.reqId)
     }
 
     private fun verifyExecCompleted(execId: ExecId) {

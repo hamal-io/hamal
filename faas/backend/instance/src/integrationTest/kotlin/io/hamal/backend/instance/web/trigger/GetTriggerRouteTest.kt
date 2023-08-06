@@ -33,7 +33,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
 
     @Test
     fun `Get fixed rate trigger`() {
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
         val trigger = awaitCompleted(
             createTrigger(
                 CreateTriggerReq(
@@ -47,13 +47,13 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
             )
         )
 
-        val getTriggerResponse = httpTemplate.get("/v1/triggers/${trigger.triggerId.value.value}").execute()
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/${trigger.id.value.value}").execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(FixedRateTrigger::class)) {
-            assertThat(id, equalTo(trigger.triggerId))
+            assertThat(id, equalTo(trigger.id))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(TableValue("hamal" to StringValue("rockz")))))
             assertThat(duration, equalTo(10.seconds))
@@ -63,8 +63,8 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
 
     @Test
     fun `Get event trigger`() {
-        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).topicId
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).id
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
 
         val trigger = awaitCompleted(
             createTrigger(
@@ -79,13 +79,13 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
             )
         )
 
-        val getTriggerResponse = httpTemplate.get("/v1/triggers/${trigger.triggerId.value.value}").execute()
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/${trigger.id.value.value}").execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(EventTrigger::class)) {
-            assertThat(id, equalTo(trigger.triggerId))
+            assertThat(id, equalTo(trigger.id))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(TableValue("hamal" to StringValue("rockz")))))
             assertThat(funcId, equalTo(someFuncId))

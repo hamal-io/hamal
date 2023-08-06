@@ -72,7 +72,7 @@ internal class InvokeEventHandlerTest : BaseReqHandlerTest() {
 
     //@formatter:off
     private val submittedInvocationReq = SubmittedInvokeEventReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         correlationId = CorrelationId("some-correlation"),
         status = ReqStatus.Submitted,
         execId = ExecId(3333),

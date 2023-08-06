@@ -24,7 +24,7 @@ class InvokeAdhocHandler(
         return execCmdRepository.plan(
             ExecCmdRepository.PlanCmd(
                 id = req.cmdId(),
-                execId = req.execId,
+                execId = req.id,
                 correlation = null,
                 inputs = req.inputs.toExecInputs(),
                 code = req.code,

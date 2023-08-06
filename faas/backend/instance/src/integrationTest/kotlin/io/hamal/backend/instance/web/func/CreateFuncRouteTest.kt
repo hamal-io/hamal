@@ -21,8 +21,8 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
                 code = CodeValue("13 + 37")
             )
         )
-        awaitCompleted(result.id)
-        verifyFuncCreated(result.funcId)
+        awaitCompleted(result.reqId)
+        verifyFuncCreated(result.id)
     }
 }
 

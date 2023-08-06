@@ -72,7 +72,7 @@ internal class InvokeFixedRateHandlerTest : BaseReqHandlerTest() {
 
     //@formatter:off
     private val submittedInvocationReq = SubmittedInvokeFixedRateReq(
-        id = ReqId(1),
+        reqId = ReqId(1),
         correlationId = CorrelationId("some-correlation"),
         status = ReqStatus.Submitted,
         execId = ExecId(3333),

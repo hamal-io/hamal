@@ -16,10 +16,10 @@ class ReqInvoker private constructor(
             .forEach { req ->
                 try {
                     regRegistry[req::class](req)
-                    reqCmdRepository.complete(req.id)
+                    reqCmdRepository.complete(req.reqId)
                 } catch (t: Throwable) {
                     t.printStackTrace()
-                    reqCmdRepository.fail(req.id)
+                    reqCmdRepository.fail(req.reqId)
                 }
             }
     }

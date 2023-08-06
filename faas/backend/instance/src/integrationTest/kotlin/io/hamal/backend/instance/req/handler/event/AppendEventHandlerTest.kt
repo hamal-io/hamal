@@ -29,9 +29,9 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             SubmittedAppendEventReq(
-                id = ReqId(SnowflakeId(123)),
+                reqId = ReqId(SnowflakeId(123)),
                 status = ReqStatus.Submitted,
-                topicId = TopicId(4444),
+                id = TopicId(4444),
                 event = Event(TableValue("hamal" to StringValue("rockz")))
             )
         )
@@ -56,9 +56,9 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
                 SubmittedAppendEventReq(
-                    id = ReqId(SnowflakeId(123)),
+                    reqId = ReqId(SnowflakeId(123)),
                     status = ReqStatus.Submitted,
-                    topicId = TopicId(123),
+                    id = TopicId(123),
                     event = Event(TableValue("hamal" to StringValue("rockz")))
                 )
             )

@@ -14,10 +14,10 @@ data class CreateFuncReq(
 
 @Serializable
 data class SubmittedCreateFuncReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
-    val funcId: FuncId,
-    val funcName: FuncName,
+    val id: FuncId,
+    val name: FuncName,
     val inputs: FuncInputs,
     val code: CodeValue
 ) : SubmittedReq
@@ -30,7 +30,7 @@ data class InvokeOneshotReq(
 
 @Serializable
 data class SubmittedInvokeOneshotReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
     val funcId: FuncId,

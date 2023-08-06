@@ -27,7 +27,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                 CreateTriggerReq(
                     type = TriggerType.FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
-                    funcId = funcResponse.funcId,
+                    funcId = funcResponse.id,
                     inputs = TriggerInputs(),
                     duration = 10.seconds,
                 )
@@ -38,13 +38,13 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = creationResponse.result(SubmittedCreateTriggerReq::class)
-        awaitCompleted(result.id)
+        awaitCompleted(result.reqId)
 
-        with(triggerQueryRepository.get(result.triggerId)) {
-            assertThat(id, equalTo(result.triggerId))
+        with(triggerQueryRepository.get(result.id)) {
+            assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
             assertThat(inputs, equalTo(TriggerInputs()))
-            assertThat(funcId, equalTo(funcResponse.funcId))
+            assertThat(funcId, equalTo(funcResponse.id))
             require(this is FixedRateTrigger) { "not FixedRateTrigger" }
             assertThat(duration, equalTo(10.seconds))
         }
@@ -82,9 +82,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
-                    funcId = funcResponse.funcId,
+                    funcId = funcResponse.id,
                     inputs = TriggerInputs(),
-                    topicId = topicResponse.topicId
+                    topicId = topicResponse.id
                 )
             )
             .execute()
@@ -93,15 +93,15 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = creationResponse.result(SubmittedCreateTriggerReq::class)
-        awaitCompleted(result.id)
+        awaitCompleted(result.reqId)
 
-        with(triggerQueryRepository.get(result.triggerId)) {
-            assertThat(id, equalTo(result.triggerId))
+        with(triggerQueryRepository.get(result.id)) {
+            assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(TriggerName("event-trigger")))
             assertThat(inputs, equalTo(TriggerInputs()))
-            assertThat(funcId, equalTo(funcResponse.funcId))
+            assertThat(funcId, equalTo(funcResponse.id))
             require(this is EventTrigger) { "not EventTrigger" }
-            assertThat(topicId, equalTo(topicResponse.topicId))
+            assertThat(topicId, equalTo(topicResponse.id))
         }
     }
 
@@ -114,7 +114,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
-                    funcId = funcResponse.funcId,
+                    funcId = funcResponse.id,
                     inputs = TriggerInputs()
                 )
             )
@@ -137,7 +137,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
-                    funcId = funcResponse.funcId,
+                    funcId = funcResponse.id,
                     inputs = TriggerInputs(),
                     topicId = TopicId(12345)
                 )
@@ -163,7 +163,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
                     name = TriggerName("event-trigger"),
                     funcId = FuncId(1234),
                     inputs = TriggerInputs(),
-                    topicId = topicResponse.topicId
+                    topicId = topicResponse.id
                 )
             )
             .execute()

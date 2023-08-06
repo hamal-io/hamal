@@ -20,11 +20,11 @@ data class CreateTriggerReq(
 
 @Serializable
 data class SubmittedCreateTriggerReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
     val type: TriggerType,
-    val triggerId: TriggerId,
-    val triggerName: TriggerName,
+    val id: TriggerId,
+    val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
     val correlationId: CorrelationId? = null,
@@ -35,7 +35,7 @@ data class SubmittedCreateTriggerReq(
 
 @Serializable
 data class SubmittedInvokeFixedRateReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
     val funcId: FuncId,
@@ -45,7 +45,7 @@ data class SubmittedInvokeFixedRateReq(
 
 @Serializable
 data class SubmittedInvokeEventReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
     val funcId: FuncId,

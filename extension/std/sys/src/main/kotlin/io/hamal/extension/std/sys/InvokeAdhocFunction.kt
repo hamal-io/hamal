@@ -31,9 +31,9 @@ class InvokeAdhocFunction(
             .execute(SubmittedInvokeAdhocReq::class)
 
         return null to ctx.tableCreateMap(2).also {
-            it["id"] = res.id.value.value.toString()
+            it["id"] = res.reqId.value.value.toString()
             it["status"] = res.status.name
-            it["exec_id"] = res.execId.value.value.toString()
+            it["exec_id"] = res.id.value.value.toString()
         }
     }
 }

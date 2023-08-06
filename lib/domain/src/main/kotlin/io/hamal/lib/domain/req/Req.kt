@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface SubmittedReq {
-    val id: ReqId
+    val reqId: ReqId
     var status: ReqStatus
 }
 

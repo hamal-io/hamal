@@ -48,7 +48,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
                 createExec(execId, execStatus)
 
                 val exception = assertThrows<IllegalArgumentException> {
-                    testInstance(submittedCompleteExecReq.copy(execId = execId))
+                    testInstance(submittedCompleteExecReq.copy(id = execId))
                 }
                 assertThat(exception.message, equalTo("Exec not in status Started"))
 
@@ -60,9 +60,9 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CompleteExecHandler<*>
 
     private val submittedCompleteExecReq = SubmittedCompleteExecReq(
-        id = ReqId(10),
+        reqId = ReqId(10),
         status = ReqStatus.Submitted,
-        execId = ExecId(1234),
+        id = ExecId(1234),
         state = State(TableValue("counter" to NumberValue(1))),
         events = listOf(
             Event(

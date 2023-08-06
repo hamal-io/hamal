@@ -49,7 +49,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
                 CreateTriggerReq(
                     type = TriggerType.FixedRate,
                     name = name,
-                    funcId = funcResponse.funcId,
+                    funcId = funcResponse.id,
                     inputs = TriggerInputs(),
                     duration = 10.seconds,
                 )

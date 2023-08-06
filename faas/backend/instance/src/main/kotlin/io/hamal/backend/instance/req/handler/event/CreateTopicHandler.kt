@@ -16,7 +16,7 @@ class CreateTopicHandler<TOPIC : LogTopic>(
         eventBrokerRepository.create(
             req.cmdId(),
             CreateTopic.TopicToCreate(
-                id = req.topicId,
+                id = req.id,
                 name = req.name
             )
         )

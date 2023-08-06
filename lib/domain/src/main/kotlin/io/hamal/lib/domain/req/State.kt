@@ -14,7 +14,7 @@ data class SetStateReq(
 
 @Serializable
 data class SubmittedSetStateReq(
-    override val id: ReqId,
+    override val reqId: ReqId,
     override var status: ReqStatus,
     val state: CorrelatedState
 ) : SubmittedReq
