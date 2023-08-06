@@ -6,12 +6,11 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-import kotlin.time.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class CreateTriggerRoute(
@@ -27,7 +26,7 @@ class CreateTriggerRoute(
         ensureTopicExists(createTrigger)
 
         val result = request(createTrigger)
-        return ResponseEntity(result, HttpStatus.ACCEPTED)
+        return ResponseEntity(result, ACCEPTED)
     }
 
     private fun ensureFuncExists(createTrigger: CreateTriggerReq) {

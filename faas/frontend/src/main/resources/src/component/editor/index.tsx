@@ -11,7 +11,7 @@ const EditorOptions = {
     acceptSuggestionOnCommitCharacter: true,
     acceptSuggestionOnEnter: 'on',
     accessibilitySupport: 'auto',
-    autoIndent: false,
+    autoIndent: true,
     automaticLayout: true,
     codeLens: true,
     colorDecorators: true,
@@ -31,6 +31,9 @@ const EditorOptions = {
     hideCursorInOverviewRuler: false,
     highlightActiveIndentGuide: true,
     links: true,
+    minimap: {
+        enabled: false,
+    },
     mouseWheelZoom: false,
     multiCursorMergeOverlapping: true,
     multiCursorModifier: 'alt',

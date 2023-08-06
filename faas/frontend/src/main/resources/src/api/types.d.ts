@@ -10,6 +10,13 @@ interface ApiSubmittedFunctionCreation {
     id: string;
 }
 
+interface ApiSubmittedFunctionUpdating {
+    reqId: string;
+    status: string;
+    id: string;
+}
+
+
 export interface ApiSimpleExecution {
     id: string;
     status: string;
