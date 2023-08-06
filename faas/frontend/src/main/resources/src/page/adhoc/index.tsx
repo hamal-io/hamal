@@ -14,27 +14,7 @@ import {
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Editor from "../../component/editor";
-
-const invokeAdhoc = (code: string) => {
-    console.log("adhoc execution")
-    fetch("http://localhost:8008/v1/adhoc", {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-                inputs: {},
-                code: {"value": code}
-            }
-        )
-    })
-        .then(response => console.log(response))
-        .catch(error => {
-            console.log(error);
-            return [];
-        });
-}
+import {invokeAdhoc} from "../../api";
 
 export default function () {
     const [code, setCode] = useState(`print("hello hamal")`)
@@ -50,7 +30,7 @@ export default function () {
             </div>
             <Row>
                 <Col xs={12} xl={8}>
-                    <Button onClick={_ => invokeAdhoc(code)} variant="primary" size="sm">Run Code</Button>
+                    <Button onClick={_ => invokeAdhoc({code})} variant="primary" size="sm">Run Code</Button>
 
                     <Editor
                         code={code}

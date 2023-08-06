@@ -5,7 +5,7 @@ import {Routes} from "../../routes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import React from "react";
 
-const transactions = [
+const executions = [
     {
         "id": 300500,
         "status": "Completed",
@@ -88,7 +88,7 @@ const transactions = [
 
 export const ExecutionTable = () => {
 
-    const totalTransactions = transactions.length;
+    const totalExecutions = executions.length;
 
     const TableRow = (props: any) => {
         const {id, func, correlationId, lastUpdatedAt, dueDate, status} = props;
@@ -124,24 +124,24 @@ export const ExecutionTable = () => {
           </span>
                 </td>
                 <td>
-              {/*      <Dropdown as={ButtonGroup}>*/}
-              {/*          <Dropdown.Toggle as={Button} split variant="link" className="text-dark m-0 p-0">*/}
-              {/*<span className="icon icon-sm">*/}
-              {/*  <FontAwesomeIcon icon={faEllipsisH} className="icon-dark"/>*/}
-              {/*</span>*/}
-              {/*          </Dropdown.Toggle>*/}
-              {/*          <Dropdown.Menu>*/}
-              {/*              <Dropdown.Item>*/}
-              {/*                  <FontAwesomeIcon className="me-2"/> View Details*/}
-              {/*              </Dropdown.Item>*/}
-              {/*              <Dropdown.Item>*/}
-              {/*                  <FontAwesomeIcon icon={faEdit} className="me-2"/> Edit*/}
-              {/*              </Dropdown.Item>*/}
-              {/*              <Dropdown.Item className="text-danger">*/}
-              {/*                  <FontAwesomeIcon icon={faTrashAlt} className="me-2"/> Remove*/}
-              {/*              </Dropdown.Item>*/}
-              {/*          </Dropdown.Menu>*/}
-              {/*      </Dropdown>*/}
+                    {/*      <Dropdown as={ButtonGroup}>*/}
+                    {/*          <Dropdown.Toggle as={Button} split variant="link" className="text-dark m-0 p-0">*/}
+                    {/*<span className="icon icon-sm">*/}
+                    {/*  <FontAwesomeIcon icon={faEllipsisH} className="icon-dark"/>*/}
+                    {/*</span>*/}
+                    {/*          </Dropdown.Toggle>*/}
+                    {/*          <Dropdown.Menu>*/}
+                    {/*              <Dropdown.Item>*/}
+                    {/*                  <FontAwesomeIcon className="me-2"/> View Details*/}
+                    {/*              </Dropdown.Item>*/}
+                    {/*              <Dropdown.Item>*/}
+                    {/*                  <FontAwesomeIcon icon={faEdit} className="me-2"/> Edit*/}
+                    {/*              </Dropdown.Item>*/}
+                    {/*              <Dropdown.Item className="text-danger">*/}
+                    {/*                  <FontAwesomeIcon icon={faTrashAlt} className="me-2"/> Remove*/}
+                    {/*              </Dropdown.Item>*/}
+                    {/*          </Dropdown.Menu>*/}
+                    {/*      </Dropdown>*/}
                 </td>
             </tr>
         );
@@ -162,7 +162,7 @@ export const ExecutionTable = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {transactions.map(t => <TableRow key={`execution-${t.id}`} {...t} />)}
+                    {executions.map(t => <TableRow key={`execution-${t.id}`} {...t} />)}
                     </tbody>
                 </Table>
                 <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">
@@ -182,7 +182,7 @@ export const ExecutionTable = () => {
                         </Pagination>
                     </Nav>
                     <small className="fw-bold">
-                        Showing <b>{totalTransactions}</b> out of <b>25</b> entries
+                        Showing <b>{totalExecutions}</b> out of <b>25</b> entries
                     </small>
                 </Card.Footer>
             </Card.Body>

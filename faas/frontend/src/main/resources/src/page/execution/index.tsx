@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import {Breadcrumb, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
 import {ExecutionTable} from "./execution-table";
 import {faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default () => {
+    const [executions, setExecutions] = useState([])
+
     return (
         <>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -31,7 +33,7 @@ export default () => {
                 </Row>
             </div>
 
-            <ExecutionTable/>
+            <ExecutionTable executions={executions}/>
         </>
     );
 };
