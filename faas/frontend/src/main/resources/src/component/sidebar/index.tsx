@@ -16,7 +16,7 @@ import {
     faCalendarAlt,
     faMapPin,
     faInbox,
-    faRocket, faBinoculars
+    faRocket, faBinoculars, faCode
 } from "@fortawesome/free-solid-svg-icons";
 import {Nav, Badge, Image, Button, Dropdown, Accordion, Navbar} from '@themesberg/react-bootstrap';
 import {Link} from 'react-router-dom';
@@ -58,7 +58,6 @@ export default (props = {}) => {
         const {
             title,
             link,
-            external,
             target,
             icon,
             image,
@@ -68,11 +67,9 @@ export default (props = {}) => {
         } = props;
         const classNames = badgeText ? "d-flex justify-content-start align-items-center justify-content-between" : "";
         const navItemClassName = link === pathname ? "active" : "";
-        const linkProps = external ? {href: link} : {as: Link, to: link};
-
         return (
             <Nav.Item className={navItemClassName} onClick={() => setShow(false)}>
-                <Nav.Link {...linkProps} target={target} className={classNames}>
+                <Nav.Link as={Link} to={link} target={target} className={classNames}>
           <span>
             {icon ? <span className="sidebar-icon"><FontAwesomeIcon icon={icon}/> </span> : null}
               {image ? <Image src={image} width={20} height={20} className="sidebar-icon svg-icon"/> : null}
@@ -116,6 +113,7 @@ export default (props = {}) => {
                             <NavItem title="Overview" link={Routes.Dashboard.path} icon={faChartPie}/>
                             <NavItem title="Adhoc" link={Routes.Adhoc.path} icon={faRocket}/>
                             <NavItem title="Executions" link={Routes.Executions.path} icon={faBinoculars}/>
+                            <NavItem title="Functions" link={Routes.Functions.path} icon={faCode}/>
                         </Nav>
                     </div>
                 </SimpleBar>

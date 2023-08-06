@@ -14,9 +14,11 @@ import {createRoot} from 'react-dom/client';
 // core styles
 import "./scss/volt.scss";
 import AdhocPage from "./page/adhoc";
-import {RouteWithSidebar} from "./component/route";
-import ExecutionListPage from "./page/execution";
 import DashboardPage from "./page/dashboard";
+import {RouteWithSidebar} from "./component/route";
+import ExecutionListPage from "./page/execution-list";
+import FunctionListPage from "./page/function-list";
+import FunctionDetailPage from "./page/function-detail";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -27,6 +29,8 @@ const router = createBrowserRouter([
     {path: "/", element: <RouteWithSidebar component={<DashboardPage/>}></RouteWithSidebar>,},
     {path: "/adhoc", element: <RouteWithSidebar component={<AdhocPage/>}></RouteWithSidebar>,},
     {path: "/executions", element: <RouteWithSidebar component={<ExecutionListPage/>}></RouteWithSidebar>,},
+    {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}></RouteWithSidebar>,},
+    {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}></RouteWithSidebar>,},
 ]);
 
 
