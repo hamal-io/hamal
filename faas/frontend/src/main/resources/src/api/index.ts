@@ -136,7 +136,7 @@ export async function listTriggers(query: ListTriggersQuery): Promise<ApiListTri
 export interface SubmitCreateTriggerRequest {
     name: string;
     type: TriggerType;
-    funcId: string;
+    id: string;
     duration: string;
 }
 
@@ -148,7 +148,7 @@ export async function createTrigger(req: SubmitCreateTriggerRequest): Promise<Ap
                 name: req.name,
                 type: req.type,
                 inputs: {},
-                funcId: req.funcId,
+                funcId: req.id,
                 duration: req.duration,
             }
         )

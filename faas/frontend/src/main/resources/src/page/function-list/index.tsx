@@ -74,7 +74,7 @@ const CreateFunctionModal = (props: CreateFunctionModalProps) => {
     const submit = () => {
         createFunction({name}).then(response => {
             console.log(response)
-            navigate(`/functions/${response.funcId}`)
+            navigate(`/functions/${response.id}`)
         })
     }
 

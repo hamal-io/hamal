@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.adhoc
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -18,6 +18,6 @@ class AdhocRoute(
         @RequestBody adhocInvocation: InvokeAdhocReq
     ): ResponseEntity<SubmittedInvokeAdhocReq> {
         val result = submitRequest(adhocInvocation)
-        return ResponseEntity(result, HttpStatus.ACCEPTED)
+        return ResponseEntity(result, ACCEPTED)
     }
 }

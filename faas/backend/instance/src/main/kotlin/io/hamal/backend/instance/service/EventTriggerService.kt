@@ -38,7 +38,6 @@ class EventTriggerService<TOPIC : LogTopic>(
 
     val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, Event>>()
 
-
     @PostConstruct
     fun setup() {
         scheduledTasks.add(

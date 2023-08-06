@@ -3,10 +3,11 @@ package io.hamal.backend.instance.web.func
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.SubmittedCreateFuncReq
-import io.hamal.lib.domain.vo.*
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class CreateFuncRoute(
@@ -17,6 +18,6 @@ class CreateFuncRoute(
         @RequestBody createFunc: CreateFuncReq
     ): ResponseEntity<SubmittedCreateFuncReq> {
         val result = request(createFunc)
-        return ResponseEntity(result, HttpStatus.ACCEPTED)
+        return ResponseEntity(result, ACCEPTED)
     }
 }

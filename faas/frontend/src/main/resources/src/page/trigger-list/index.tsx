@@ -74,9 +74,9 @@ const CreateTriggerModal = (props: CreateTriggerModalProps) => {
     const navigate = useNavigate()
 
     const submit = () => {
-        createTrigger({name, funcId, duration, type: "FixedRate"}).then(response => {
+        createTrigger({name, id: funcId, duration, type: "FixedRate"}).then(response => {
             console.log(response)
-            navigate(`/triggers/${response.triggerId}`)
+            navigate(`/triggers/${response.id}`)
         })
     }
 

@@ -1,13 +1,13 @@
 interface ApiSubmittedAdhocInvocation {
-    id: string;
+    reqId: string;
     status: string;
-    execId: string;
+    id: string;
 }
 
 interface ApiSubmittedFunctionCreation {
-    id: string;
+    reqId: string;
     status: string;
-    funcId: string;
+    id: string;
 }
 
 export interface ApiSimpleExecution {
@@ -42,9 +42,9 @@ export interface ApiExecution {
 }
 
 interface ApiSubmittedTriggerCreation {
-    id: string;
+    reqId: string;
     status: string;
-    triggerId: string;
+    id: string;
 }
 
 
