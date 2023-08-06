@@ -1,4 +1,5 @@
 import {
+    ApiExecution,
     ApiFunction,
     ApiListExecutions,
     ApiListFunctions,
@@ -102,6 +103,16 @@ export async function getFunction(id: string): Promise<ApiFunction> {
     return await response.json() as ApiFunction;
 }
 
-export interface SubmitCreateFunctionRequest {
-    name: string;
+
+export async function getExecution(id: string): Promise<ApiExecution> {
+    const response = await fetch(`http://localhost:8008/v1/execs/${id}`, {
+        headers: defaultHeaders,
+        method: "GET",
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiExecution;
 }
+

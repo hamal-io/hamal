@@ -17,6 +17,7 @@ import AdhocPage from "./page/adhoc";
 import DashboardPage from "./page/dashboard";
 import {RouteWithSidebar} from "./component/route";
 import ExecutionListPage from "./page/execution-list";
+import ExecutionDetailPage from "./page/execution-detail";
 import FunctionListPage from "./page/function-list";
 import FunctionDetailPage from "./page/function-detail";
 
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
     {path: "/", element: <RouteWithSidebar component={<DashboardPage/>}></RouteWithSidebar>,},
     {path: "/adhoc", element: <RouteWithSidebar component={<AdhocPage/>}></RouteWithSidebar>,},
     {path: "/executions", element: <RouteWithSidebar component={<ExecutionListPage/>}></RouteWithSidebar>,},
+    {path: "/executions/:execId", element: <RouteWithSidebar component={<ExecutionDetailPage/>}></RouteWithSidebar>,},
     {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}></RouteWithSidebar>,},
     {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}></RouteWithSidebar>,},
 ]);
