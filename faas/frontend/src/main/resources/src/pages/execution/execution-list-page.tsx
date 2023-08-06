@@ -1,6 +1,6 @@
 import React from "react";
 import {Breadcrumb, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
-import {ExecutionListTable} from "./ExecutionListTable";
+import {ExecutionListTable} from "./execution-list-table";
 import {faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 

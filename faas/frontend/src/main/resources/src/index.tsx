@@ -13,11 +13,12 @@ import {createRoot} from 'react-dom/client';
 
 // core styles
 import "./scss/volt.scss";
-import AdhocPage from "./pages/adhoc/AdhocPage";
-import {RouteWithSidebar} from "./components/Route";
-import ExecutionListPage from "./pages/execution/ExecutionListPage";
-import DashboardPage from "./pages/dashboard/DashboardPage";
+import AdhocPage from "./pages/adhoc/adhoc-page";
+import {RouteWithSidebar} from "./components/route";
+import ExecutionListPage from "./pages/execution/execution-list-page";
+import DashboardPage from "./pages/dashboard/dashboard-page";
 
+import * as serviceWorker from "./serviceWorker";
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -34,3 +35,5 @@ root.render(
         <RouterProvider router={router}/>
     </StrictMode>
 );
+
+serviceWorker.unregister();

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 
 import {Route} from "react-router-dom";
-import Preloader from "./Preloader";
-import Sidebar from "./Sidebar";
-import Footer from "./Footer";
+import Preloader from "./preloader";
+import Sidebar from "./sidebar";
+import Footer from "./footer";
 
 export const RouteWithSidebar = (props: any) => {
     const [loaded, setLoaded] = useState(false);

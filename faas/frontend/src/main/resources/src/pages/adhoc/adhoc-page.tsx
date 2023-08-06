@@ -1,8 +1,7 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Breadcrumb} from '@themesberg/react-bootstrap';
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Editor from "../../components/Editor";
 
 
 export default function () {
@@ -15,7 +14,6 @@ export default function () {
                         <Breadcrumb.Item><FontAwesomeIcon icon={faHome}/></Breadcrumb.Item>
                         <Breadcrumb.Item>Adhoc</Breadcrumb.Item></Breadcrumb>
                     <h4>Adhoc</h4>
-                    <Editor code={"print('hello world')"}/>
                 </div>
             </div>
         </>
