@@ -1,5 +1,5 @@
 import com.github.gradle.node.npm.proxy.ProxySettings
-import com.github.gradle.node.yarn.task.YarnTask
+import com.github.gradle.node.npm.task.NpmTask
 
 plugins {
     id("hamal.common")
@@ -20,28 +20,23 @@ dependencies {
     implementation(external.spring.web)
 }
 
-val yarnBuild = tasks.register<YarnTask>("yarnBuild") {
+val npmBuild = tasks.register<NpmTask>("npmBuild") {
     description = "Creates the frontend build"
-    group = "Yarn"
-    yarnCommand.set(listOf("run", "build"))
+    group = "Npm"
+    npmCommand.set(listOf("run", "build"))
 }
 
-tasks.register<YarnTask>("yarnInstall") {
-    description = "Installs dependencies"
-    group = "Yarn"
-    yarnCommand.set(listOf("install"))
-}
 
-val yarnClean = tasks.register<YarnTask>("yarnClean") {
+val npmClean = tasks.register<NpmTask>("npmClean") {
     description = "Installs dependencies"
-    group = "Yarn"
-    yarnCommand.set(listOf("cache", "clean"))
+    group = "Npm"
+    npmCommand.set(listOf("cache", "clean"))
     delete("${project.projectDir}/src/main/resources/dist")
 }
 
 
-tasks.register<YarnTask>("yarnDev") {
+tasks.register<NpmTask>("npmDev") {
     description = "Runs the application in dev mode"
-    group = "Yarn"
-    yarnCommand.set(listOf("run", "dev"))
+    group = "Npm"
+    npmCommand.set(listOf("run", "dev"))
 }

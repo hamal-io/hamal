@@ -23,8 +23,6 @@ import FunctionDetailPage from "./page/function-detail";
 import TriggerListPage from "./page/trigger-list";
 import TriggerDetailPage from "./page/trigger-detail";
 
-import * as serviceWorker from "./serviceWorker";
-
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
@@ -43,5 +41,3 @@ const router = createBrowserRouter([
 root.render(
     <RouterProvider router={router}/>
 );
-
-serviceWorker.unregister();
