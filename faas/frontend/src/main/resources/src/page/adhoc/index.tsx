@@ -13,7 +13,7 @@ import {
 } from '@themesberg/react-bootstrap';
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Editor from "../../components/editor";
+import Editor from "../../component/editor";
 
 const invokeAdhoc = (code: string) => {
     console.log("adhoc execution")

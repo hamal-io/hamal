@@ -1,6 +1,6 @@
 import React from "react";
 import {Breadcrumb, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
-import {ExecutionListTable} from "./execution-list-table";
+import {ExecutionTable} from "./execution-table";
 import {faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
@@ -31,7 +31,7 @@ export default () => {
                 </Row>
             </div>
 
-            <ExecutionListTable/>
+            <ExecutionTable/>
         </>
     );
 };

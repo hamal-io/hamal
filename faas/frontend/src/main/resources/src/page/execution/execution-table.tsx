@@ -86,7 +86,7 @@ const transactions = [
 ]
 
 
-export const ExecutionListTable = () => {
+export const ExecutionTable = () => {
 
     const totalTransactions = transactions.length;
 
@@ -155,7 +155,7 @@ export const ExecutionListTable = () => {
                     <tr>
                         <th className="border-bottom">#</th>
                         <th className="border-bottom">Function</th>
-                        <th className="border-bottom">CorrelationId</th>
+                        <th className="border-bottom">Correlation</th>
                         <th className="border-bottom">Last Update At</th>
                         <th className="border-bottom">Status</th>
                         <th className="border-bottom">Action</th>

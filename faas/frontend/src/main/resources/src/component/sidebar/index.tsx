@@ -21,7 +21,7 @@ import {
 import {Nav, Badge, Image, Button, Dropdown, Accordion, Navbar} from '@themesberg/react-bootstrap';
 import {Link} from 'react-router-dom';
 
-import {Routes} from "../routes";
+import {Routes} from "../../routes";
 
 export default (props = {}) => {
     const location = useLocation();
@@ -31,7 +31,7 @@ export default (props = {}) => {
 
     const onCollapse = () => setShow(!show);
 
-    const CollapsableNavItem = (props) => {
+    const CollapsableNavItem = (props: any) => {
         const {eventKey, title, icon, children = null} = props;
         const defaultKey = pathname.indexOf(eventKey) !== -1 ? eventKey : "";
 

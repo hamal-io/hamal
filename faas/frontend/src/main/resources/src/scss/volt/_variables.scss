@@ -296,7 +296,7 @@ $enable-important-utilities : true !default;
 
 // Gradient
 //
-// The gradient which is added to components if `$enable-gradients` is `true`
+// The gradient which is added to component if `$enable-gradients` is `true`
 // This gradient is also added to elements with `.bg-gradient`
 $gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0)) !default;
 
@@ -1038,7 +1038,7 @@ $form-validation-states: ("valid": ("color": $form-feedback-valid-color,
 // Z-index master list
 //
 // Warning: Avoid customizing these values. They're used for a bird's eye view
-// of components dependent on the z-axis and are designed to all work together.
+// of component dependent on the z-axis and are designed to all work together.
 
 // scss-docs-start zindex-stack
 $zindex-dropdown      : 1000 !default;

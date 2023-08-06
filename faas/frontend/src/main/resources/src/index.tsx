@@ -13,10 +13,10 @@ import {createRoot} from 'react-dom/client';
 
 // core styles
 import "./scss/volt.scss";
-import AdhocPage from "./pages/adhoc/adhoc-page";
-import {RouteWithSidebar} from "./components/route";
-import ExecutionListPage from "./pages/execution/execution-list-page";
-import DashboardPage from "./pages/dashboard/dashboard-page";
+import AdhocPage from "./page/adhoc";
+import {RouteWithSidebar} from "./component/route";
+import ExecutionListPage from "./page/execution";
+import DashboardPage from "./page/dashboard";
 
 import * as serviceWorker from "./serviceWorker";
 
