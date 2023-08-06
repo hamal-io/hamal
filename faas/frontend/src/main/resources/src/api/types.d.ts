@@ -29,3 +29,12 @@ export interface ApiSimpleFunction {
 export interface ApiListFunctions {
     funcs: Array<ApiSimpleFunction>;
 }
+
+export interface ApiFunction {
+    id: string;
+    name: string;
+    inputs: any;
+    code: {
+        value: string
+    }
+}

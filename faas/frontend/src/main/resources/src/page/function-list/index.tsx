@@ -67,6 +67,7 @@ interface CreateFunctionModalProps {
 }
 
 const CreateFunctionModal = (props: CreateFunctionModalProps) => {
+
     const [name, setName] = useState('')
     const navigate = useNavigate()
 

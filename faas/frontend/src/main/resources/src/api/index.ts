@@ -1,4 +1,10 @@
-import {ApiListExecutions, ApiListFunctions, ApiSubmittedAdhocInvocation, ApiSubmittedFunctionCreation} from "./types";
+import {
+    ApiFunction,
+    ApiListExecutions,
+    ApiListFunctions,
+    ApiSubmittedAdhocInvocation,
+    ApiSubmittedFunctionCreation
+} from "./types";
 
 
 const defaultHeaders = {
@@ -81,4 +87,21 @@ export async function createFunction(req: SubmitCreateFunctionRequest): Promise<
         throw new Error(message);
     }
     return await response.json() as ApiSubmittedFunctionCreation;
+}
+
+
+export async function getFunction(id: string): Promise<ApiFunction> {
+    const response = await fetch(`http://localhost:8008/v1/funcs/${id}`, {
+        headers: defaultHeaders,
+        method: "GET",
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiFunction;
+}
+
+export interface SubmitCreateFunctionRequest {
+    name: string;
 }
