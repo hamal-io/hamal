@@ -29,7 +29,6 @@ class ListFuncsFunction(
                 val inner = ctx.tableCreateMap(2)
                 inner["id"] = func.id.value.value.toString()
                 inner["name"] = func.name.value
-
                 rs.append(inner)
             }
         }

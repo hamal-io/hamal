@@ -9,7 +9,7 @@ local err, res = sys.adhoc({
 })
 
 assert(err == nil)
-local exec_id = res.exec_id
+local exec_id = res.id
 
 -- Remember: Each test is an adhoc invocation
 local err, execs = sys.exec.list()
