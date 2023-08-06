@@ -5,6 +5,7 @@ import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.backend.repository.record.func.FuncCreationRecord
 import io.hamal.backend.repository.record.func.FuncRecord
+import io.hamal.backend.repository.record.func.FuncUpdatedRecord
 import io.hamal.backend.repository.record.func.createEntity
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
@@ -45,6 +46,26 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
             } else {
                 addRecord(
                     FuncCreationRecord(
+                        entityId = funcId,
+                        cmdId = cmd.id,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        code = cmd.code
+                    )
+                )
+                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+            }
+        }
+    }
+
+    override fun update(cmd: FuncCmdRepository.UpdateCmd): Func {
+        return lock.withLock {
+            val funcId = cmd.funcId
+            if (commandAlreadyApplied(funcId, cmd.id)) {
+                versionOf(funcId, cmd.id)
+            } else {
+                addRecord(
+                    FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmd.id,
                         name = cmd.name,

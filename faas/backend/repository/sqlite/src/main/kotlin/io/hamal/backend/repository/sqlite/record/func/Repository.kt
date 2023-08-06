@@ -8,6 +8,7 @@ import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.func.Entity
 import io.hamal.backend.repository.record.func.FuncCreationRecord
 import io.hamal.backend.repository.record.func.FuncRecord
+import io.hamal.backend.repository.record.func.FuncUpdatedRecord
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
@@ -68,6 +69,28 @@ class SqliteFuncRepository(
                     )
                 )
 
+                currentVersion(funcId)
+                    .also { ProjectionCurrent.update(this, it) }
+            }
+        }
+    }
+
+    override fun update(cmd: FuncCmdRepository.UpdateCmd): Func {
+        val funcId = cmd.funcId
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(funcId, cmdId)) {
+                versionOf(funcId, cmdId)
+            } else {
+                storeRecord(
+                    FuncUpdatedRecord(
+                        entityId = funcId,
+                        cmdId = cmdId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        code = cmd.code,
+                    )
+                )
                 currentVersion(funcId)
                     .also { ProjectionCurrent.update(this, it) }
             }

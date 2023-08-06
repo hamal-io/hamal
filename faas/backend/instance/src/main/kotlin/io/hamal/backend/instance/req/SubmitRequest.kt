@@ -100,6 +100,16 @@ class SubmitRequest(
             code = createFuncReq.code
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(funcId: FuncId, updateFuncReq: UpdateFuncReq) =
+        SubmittedUpdateFuncReq(
+            reqId = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            id = funcId,
+            name = updateFuncReq.name,
+            inputs = updateFuncReq.inputs,
+            code = updateFuncReq.code
+        ).also(reqCmdRepository::queue)
+
     operator fun invoke(createTriggerReq: CreateTriggerReq) =
         SubmittedCreateTriggerReq(
             type = createTriggerReq.type,

@@ -30,6 +30,15 @@ data class Entity(
                 inputs = rec.inputs,
                 code = rec.code
             )
+
+            is FuncUpdatedRecord -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                inputs = rec.inputs,
+                code = rec.code
+            )
         }
     }
 

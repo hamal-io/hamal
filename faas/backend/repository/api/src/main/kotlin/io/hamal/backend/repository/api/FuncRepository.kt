@@ -12,8 +12,20 @@ import io.hamal.lib.kua.value.CodeValue
 
 interface FuncCmdRepository {
     fun create(cmd: CreateCmd): Func
+
+    fun update(cmd: UpdateCmd): Func
+
     fun clear()
+
     data class CreateCmd(
+        val id: CmdId,
+        val funcId: FuncId,
+        val name: FuncName,
+        val inputs: FuncInputs,
+        val code: CodeValue,
+    )
+
+    data class UpdateCmd(
         val id: CmdId,
         val funcId: FuncId,
         val name: FuncName,

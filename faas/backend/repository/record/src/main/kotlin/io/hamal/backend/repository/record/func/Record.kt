@@ -27,3 +27,13 @@ data class FuncCreationRecord(
     val inputs: FuncInputs,
     val code: CodeValue
 ) : FuncRecord()
+
+@Serializable
+@SerialName("FUR")
+data class FuncUpdatedRecord(
+    override val entityId: FuncId,
+    override val cmdId: CmdId,
+    val name: FuncName,
+    val inputs: FuncInputs,
+    val code: CodeValue
+) : FuncRecord()
