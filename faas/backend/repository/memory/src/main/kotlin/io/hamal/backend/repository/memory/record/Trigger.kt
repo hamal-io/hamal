@@ -10,11 +10,12 @@ import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.record.trigger.createEntity
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
+import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.TriggerId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -29,12 +30,19 @@ internal object CurrentTriggerProjection {
 
     fun find(triggerId: TriggerId): Trigger? = projection[triggerId]
 
-    fun list(afterId: TriggerId, limit: Limit): List<Trigger> {
+    fun list(query: TriggerQuery): List<Trigger> {
         return projection.keys.sorted()
             .reversed()
-            .dropWhile { it >= afterId }
-            .take(limit.value)
+            .dropWhile { it >= query.afterId }
             .mapNotNull { find(it) }
+            .filter {
+                when (it) {
+                    is FixedRateTrigger -> query.types.contains(FixedRate)
+                    is EventTrigger -> query.types.contains(Event)
+                }
+            }
+            .take(query.limit.value)
+
     }
 
     fun clear() {
@@ -94,7 +102,7 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
 
     override fun list(block: TriggerQuery.() -> Unit): List<Trigger> {
         val query = TriggerQuery().also(block)
-        return CurrentTriggerProjection.list(query.afterId, query.limit)
+        return CurrentTriggerProjection.list(query)
     }
 
     override fun clear() {
