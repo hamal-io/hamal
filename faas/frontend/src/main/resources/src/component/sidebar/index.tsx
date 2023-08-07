@@ -110,11 +110,11 @@ export default (props = {}) => {
                             </Nav.Link>
                         </div>
                         <Nav className="flex-column pt-3 pt-md-0">
-                            <NavItem title="Overview" link={Routes.Dashboard.path} icon={faChartPie}/>
-                            <NavItem title="Adhoc" link={Routes.Adhoc.path} icon={faRocket}/>
-                            <NavItem title="Executions" link={Routes.Executions.path} icon={faBinoculars}/>
-                            <NavItem title="Functions" link={Routes.Functions.path} icon={faCode}/>
-                            <NavItem title="Triggers" link={Routes.Triggers.path} icon={faClock}/>
+                            <NavItem title="Overview" link={Routes.Dashboard.path}/>
+                            <NavItem title="Adhoc" link={Routes.Adhoc.path}/>
+                            <NavItem title="Executions" link={Routes.Executions.path}/>
+                            <NavItem title="Functions" link={Routes.Functions.path}/>
+                            <NavItem title="Triggers" link={Routes.Triggers.path}/>
                         </Nav>
                     </div>
                 </SimpleBar>
