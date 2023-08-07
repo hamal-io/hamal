@@ -11,11 +11,10 @@ import kotlin.concurrent.write
 
 object MemoryExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository {
     private val lock = ReentrantReadWriteLock()
-    private val store = HashMap<ExecId, MutableList<ExecLog>>()
+    private val store = mutableListOf<ExecLog>()
 
     override fun append(cmd: ExecLogCmdRepository.LogCmd): ExecLog {
         return lock.write {
-            store.putIfAbsent(cmd.execId, mutableListOf())
             ExecLog(
                 id = cmd.id,
                 execId = cmd.execId,
@@ -23,7 +22,7 @@ object MemoryExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository {
                 message = cmd.message,
                 localAt = cmd.localAt,
                 remoteAt = RemoteAt.now()
-            ).also { store[it.execId]!!.add(it) }
+            ).also { store.add(it) }
         }
     }
 
@@ -34,9 +33,25 @@ object MemoryExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository {
     override fun list(execId: ExecId, block: ExecLogQueryRepository.ExecLogQuery.() -> Unit): List<ExecLog> {
         val query = ExecLogQueryRepository.ExecLogQuery().also(block)
         return lock.read {
-            store[execId]?.reversed()?.dropWhile { it.id >= query.afterId }
-                ?.take(query.limit.value)
-        } ?: listOf()
+            store.reversed()
+                .asSequence()
+                .filter {
+                    it.execId == execId
+                }
+                .dropWhile { it.id >= query.afterId }
+                .take(query.limit.value)
+                .toList()
+        }
     }
 
+    override fun list(block: ExecLogQueryRepository.ExecLogQuery.() -> Unit): List<ExecLog> {
+        val query = ExecLogQueryRepository.ExecLogQuery().also(block)
+        return lock.read {
+            store.reversed()
+                .asSequence()
+                .dropWhile { it.id >= query.afterId }
+                .take(query.limit.value)
+                .toList()
+        }
+    }
 }

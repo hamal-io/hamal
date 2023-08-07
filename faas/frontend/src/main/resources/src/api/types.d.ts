@@ -31,6 +31,7 @@ export interface ApiSimpleFunction {
     name: string;
 }
 
+
 export interface ApiListFunctions {
     funcs: Array<ApiSimpleFunction>;
 }
@@ -72,4 +73,18 @@ export interface ApiTrigger {
     id: string;
     name: string;
     type: TriggerType;
+}
+
+
+export interface ApiExecutionLog {
+    id: string;
+    execId: string;
+    level: string;
+    message: string;
+    localAt: number,
+    remoteAt: number
+}
+
+export interface ApiListExecutionLogs {
+    logs: Array<ApiExecutionLog>;
 }
