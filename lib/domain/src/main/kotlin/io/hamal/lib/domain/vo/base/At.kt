@@ -5,7 +5,6 @@ package io.hamal.lib.domain.vo.base
 import io.hamal.lib.common.domain.ValueObject
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -22,8 +21,7 @@ abstract class DomainAt : ValueObject.ComparableImpl<Instant>() {
 abstract class DomainAtSerializer<AT : DomainAt>(
     val fn: (Instant) -> AT
 ) : KSerializer<AT> {
-    override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
+    override val descriptor = PrimitiveSerialDescriptor("At", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): AT {
         return fn(InstantSerializer.deserialize(decoder))
@@ -35,7 +33,7 @@ abstract class DomainAtSerializer<AT : DomainAt>(
 }
 
 
-@Serializer(forClass = Instant::class)
+//@Serializer(forClass = Instant::class)
 object InstantSerializer : KSerializer<Instant> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Instant", PrimitiveKind.LONG)
     override fun serialize(encoder: Encoder, value: Instant) = encoder.encodeLong(value.toEpochMilli())

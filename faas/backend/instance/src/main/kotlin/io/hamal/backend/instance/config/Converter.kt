@@ -19,6 +19,7 @@ object CorrelationIdConverter : Converter<String, CorrelationId> {
 
 object EventIdConverter : DomainIdConverter<EventId>(EventId::class, ::EventId)
 object ExecIdConverter : DomainIdConverter<ExecId>(ExecId::class, ::ExecId)
+object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)
 object ReqIdConverter : DomainIdConverter<ReqId>(ReqId::class, ::ReqId)
 object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)
