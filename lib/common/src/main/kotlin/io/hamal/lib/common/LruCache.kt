@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.withLock
 
+// FIXME needs a complete overhaul
 interface LruCache<KEY : Any, VALUE : Any> {
 
     operator fun set(key: KEY, value: VALUE)

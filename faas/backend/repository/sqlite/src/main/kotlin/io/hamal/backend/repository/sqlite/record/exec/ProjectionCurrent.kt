@@ -4,7 +4,6 @@ import io.hamal.backend.repository.record.exec.ExecRecord
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
-import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.vo.ExecId
@@ -14,11 +13,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
-    internal val lruCache = DefaultLruCache<ExecId, Exec>(10_000)
     fun find(connection: Connection, execId: ExecId): Exec? {
-        return lruCache.computeIfAbsent(execId) {
-            connection.executeQueryOne(
-                """
+        return connection.executeQueryOne(
+            """
             SELECT 
                 data
              FROM
@@ -26,13 +23,12 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
             WHERE
                 id  = :id
         """.trimIndent()
-            ) {
-                query {
-                    set("id", it)
-                }
-                map { rs ->
-                    protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
-                }
+        ) {
+            query {
+                set("id", execId)
+            }
+            map { rs ->
+                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
             }
         }
     }
@@ -93,6 +89,5 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
     }
 
     override fun invalidate() {
-        lruCache.clear()
     }
 }

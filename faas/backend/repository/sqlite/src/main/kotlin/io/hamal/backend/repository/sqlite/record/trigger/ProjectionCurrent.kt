@@ -5,7 +5,6 @@ import io.hamal.backend.repository.record.trigger.TriggerRecord
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.backend.repository.sqlite.record.protobuf
-import io.hamal.lib.common.DefaultLruCache
 import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
@@ -19,9 +18,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 @OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger> {
     fun find(connection: Connection, triggerId: TriggerId): Trigger? {
-        return lruCache.computeIfAbsent(triggerId) {
-            connection.executeQueryOne(
-                """
+        return connection.executeQueryOne(
+            """
             SELECT 
                 data
              FROM
@@ -29,13 +27,12 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
             WHERE
                 id  = :id
         """.trimIndent()
-            ) {
-                query {
-                    set("id", it)
-                }
-                map { rs ->
-                    protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
-                }
+        ) {
+            query {
+                set("id", triggerId)
+            }
+            map { rs ->
+                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
             }
         }
     }
@@ -105,9 +102,6 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
     }
 
     override fun invalidate() {
-        lruCache.clear()
     }
-
-    private val lruCache = DefaultLruCache<TriggerId, Trigger>(10_000)
 
 }
