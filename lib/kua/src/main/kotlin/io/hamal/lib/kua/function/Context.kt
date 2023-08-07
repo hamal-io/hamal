@@ -13,6 +13,7 @@ import io.hamal.lib.kua.value.ValueType
 class FunctionContext(
     val state: State
 ) : State {
+
     override val bridge = state.bridge
     override val top: StackTop get() = state.top
 

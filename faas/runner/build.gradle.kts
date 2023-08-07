@@ -12,9 +12,9 @@ dependencies {
     implementation(project(":lib:web3"))
     implementation(project(":lib:kua"))
 
+    implementation(project(":extension:std:log"))
     implementation(project(":extension:std:sys"))
     implementation(project(":extension:web3"))
-    implementation(project(":extension:std:log"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")

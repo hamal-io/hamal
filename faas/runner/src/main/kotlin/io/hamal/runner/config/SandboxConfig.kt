@@ -22,7 +22,7 @@ open class SandboxConfig {
             NativeLoader.load(Jar)
             val template = HttpTemplate("http://localhost:8008")
             return Sandbox().also {
-                it.register(LogExtensionFactory().create())
+                it.register(LogExtensionFactory { template }.create())
                 it.register(SysExtensionFactory { template }.create())
                 it.register(EthExtensionFactory().create())
                 it.register(HmlExtensionFactory().create())

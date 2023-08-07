@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ExecLog
 import io.hamal.lib.domain.ExecLogLevel
 import io.hamal.lib.domain.LocalAt
-import io.hamal.lib.domain.LogMessage
+import io.hamal.lib.domain.ExecLogMessage
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
 
@@ -16,7 +16,7 @@ interface ExecLogCmdRepository {
         val id: ExecLogId,
         val level: ExecLogLevel,
         val execId: ExecId,
-        val message: LogMessage,
+        val message: ExecLogMessage,
         val localAt: LocalAt
     )
 }

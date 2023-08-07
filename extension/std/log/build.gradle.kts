@@ -25,6 +25,7 @@ distributions {
     }
 }
 
-dependencies{
+dependencies {
     implementation(project(":lib:kua"))
+    implementation(project(":lib:sdk"))
 }

@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.Native
 import io.hamal.lib.kua.ClosableState
+import io.hamal.lib.kua.Native
 import io.hamal.lib.kua.value.Value
 
 interface FunctionValue<
@@ -175,6 +175,33 @@ abstract class Function2In0Out<
         return FunctionOutput0
     }
 }
+
+abstract class Function2In1Out<
+        INPUT_ARG_1 : Value,
+        INPUT_ARG_2 : Value,
+        OUTPUT_ARG_1 : Value,
+        >(
+    override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
+    override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>
+
+) : FunctionValue<
+        FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
+        FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>,
+        FunctionOutput1Schema<OUTPUT_ARG_1>,
+        FunctionOutput1<OUTPUT_ARG_1>
+        > {
+
+    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1, arg2: INPUT_ARG_2): OUTPUT_ARG_1?
+
+    override fun invoke(
+        ctx: FunctionContext,
+        input: FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>
+    ): FunctionOutput1<OUTPUT_ARG_1> {
+        val result = invoke(ctx, input.arg1, input.arg2)
+        return FunctionOutput1(result)
+    }
+}
+
 
 abstract class Function2In2Out<
         INPUT_ARG_1 : Value,

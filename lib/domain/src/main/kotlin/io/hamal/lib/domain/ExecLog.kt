@@ -18,7 +18,7 @@ data class ExecLog(
     val id: ExecLogId,
     val execId: ExecId,
     val level: ExecLogLevel,
-    val message: LogMessage,
+    val message: ExecLogMessage,
     val localAt: LocalAt,
     val remoteAt: RemoteAt
 )
@@ -32,12 +32,12 @@ enum class ExecLogLevel {
     Fatal
 }
 
-@Serializable(with = LogMessage.Serializer::class)
-data class LogMessage(val value: String) {
-    object Serializer : KSerializer<LogMessage> {
+@Serializable(with = ExecLogMessage.Serializer::class)
+data class ExecLogMessage(val value: String) {
+    object Serializer : KSerializer<ExecLogMessage> {
         override val descriptor = PrimitiveSerialDescriptor("LogMessage", STRING)
-        override fun deserialize(decoder: Decoder) = LogMessage(decoder.decodeString())
-        override fun serialize(encoder: Encoder, value: LogMessage) {
+        override fun deserialize(decoder: Decoder) = ExecLogMessage(decoder.decodeString())
+        override fun serialize(encoder: Encoder, value: ExecLogMessage) {
             encoder.encodeString(value.value)
         }
     }

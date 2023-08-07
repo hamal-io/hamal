@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class ListExecLogsRoute(
     private val execLogQueryRepository: ExecLogQueryRepository
 ) {
-    @GetMapping("/v1/exec/{execId}/logs")
+    @GetMapping("/v1/execs/{execId}/logs")
     fun getExecLogs(
         @PathVariable("execId") execId: ExecId,
         @RequestParam(required = false, name = "after_id", defaultValue = "${Long.MAX_VALUE}") afterId: ExecLogId,
