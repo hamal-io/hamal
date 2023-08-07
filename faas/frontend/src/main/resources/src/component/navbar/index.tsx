@@ -1,27 +1,29 @@
-import React, {useState} from "react";
-import {Container, Nav, Navbar} from '@themesberg/react-bootstrap';
+import React from "react";
+import {Container, Navbar} from '@themesberg/react-bootstrap';
+import {Nav,} from '@themesberg/react-bootstrap';
 
 
-export default (props) => {
-    const [notifications, setNotifications] = useState([]);
-    const areNotificationsRead = notifications.reduce((acc, notif) => acc && notif.read, true);
-
-    const markNotificationsAsRead = () => {
-        setTimeout(() => {
-            setNotifications(notifications.map(n => ({...n, read: true})));
-        }, 300);
-    };
-
-
+export default (props: any) => {
     return (
-        <Navbar variant="dark" expanded className="ps-0 pe-2 pb-0">
-            <Container fluid className="px-0">
-                <div className="d-flex justify-content-between w-100">
-                    <div className="d-flex align-items-center">
-                    </div>
-                    <Nav className="align-items-center">
-                    </Nav>
-                </div>
+        <Navbar className="bg-body-tertiary">
+            <Container>
+                <Nav className="me-auto">
+                    <Nav.Item>
+                        <Nav.Link href="/">Dashboard</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/adhoc">Adhoc</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/executions">Executions</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/functions">Functions</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/triggers">Triggers</Nav.Link>
+                    </Nav.Item>
+                </Nav>
             </Container>
         </Navbar>
     );

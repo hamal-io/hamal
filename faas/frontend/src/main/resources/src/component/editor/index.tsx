@@ -43,7 +43,7 @@ const EditorOptions = {
     quickSuggestionsDelay: 100,
     readOnly: false,
     renderControlCharacters: false,
-    renderFinalNewline: true,
+    renderFinalNewline: "on",
     renderIndentGuides: true,
     renderLineHighlight: 'all',
     renderWhitespace: 'none',
