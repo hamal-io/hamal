@@ -18,6 +18,9 @@ export default (props: any) => {
                         <Nav.Link href="/executions">Executions</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
+                        <Nav.Link href="/logs">Logs</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
                         <Nav.Link href="/functions">Functions</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>

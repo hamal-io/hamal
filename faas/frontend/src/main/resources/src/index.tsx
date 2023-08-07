@@ -13,11 +13,13 @@ import {createRoot} from 'react-dom/client';
 
 // core styles
 import "./scss/volt.scss";
+import {RouteWithNavbar} from "./component/route";
+
 import AdhocPage from "./page/adhoc";
 import DashboardPage from "./page/dashboard";
-import {RouteWithSidebar} from "./component/route";
 import ExecutionListPage from "./page/execution-list";
 import ExecutionDetailPage from "./page/execution-detail";
+import LogsPage from "./page/logs";
 import FunctionListPage from "./page/function-list";
 import FunctionDetailPage from "./page/function-detail";
 import TriggerListPage from "./page/trigger-list";
@@ -27,14 +29,15 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 const router = createBrowserRouter([
-    {path: "/", element: <RouteWithSidebar component={<DashboardPage/>}></RouteWithSidebar>,},
-    {path: "/adhoc", element: <RouteWithSidebar component={<AdhocPage/>}></RouteWithSidebar>,},
-    {path: "/executions", element: <RouteWithSidebar component={<ExecutionListPage/>}></RouteWithSidebar>,},
-    {path: "/executions/:execId", element: <RouteWithSidebar component={<ExecutionDetailPage/>}></RouteWithSidebar>,},
-    {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}></RouteWithSidebar>,},
-    {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}></RouteWithSidebar>,},
-    {path: "/triggers", element: <RouteWithSidebar component={<TriggerListPage/>}></RouteWithSidebar>,},
-    {path: "/triggers/:funcId", element: <RouteWithSidebar component={<TriggerDetailPage/>}></RouteWithSidebar>,},
+    {path: "/", element: <RouteWithNavbar component={<DashboardPage/>}></RouteWithNavbar>,},
+    {path: "/adhoc", element: <RouteWithNavbar component={<AdhocPage/>}></RouteWithNavbar>,},
+    {path: "/executions", element: <RouteWithNavbar component={<ExecutionListPage/>}></RouteWithNavbar>,},
+    {path: "/executions/:execId", element: <RouteWithNavbar component={<ExecutionDetailPage/>}></RouteWithNavbar>,},
+    {path: "/logs", element: <RouteWithNavbar component={<LogsPage/>}></RouteWithNavbar>,},
+    {path: "/functions", element: <RouteWithNavbar component={<FunctionListPage/>}></RouteWithNavbar>,},
+    {path: "/functions/:funcId", element: <RouteWithNavbar component={<FunctionDetailPage/>}></RouteWithNavbar>,},
+    {path: "/triggers", element: <RouteWithNavbar component={<TriggerListPage/>}></RouteWithNavbar>,},
+    {path: "/triggers/:funcId", element: <RouteWithNavbar component={<TriggerDetailPage/>}></RouteWithNavbar>,},
 ]);
 
 
