@@ -19,5 +19,9 @@ services:
     ports:
       - "0.0.0.0:8008:8008"
       - "0.0.0.0:8009:8009"
+    environment:
+      - ACTIVE_PROFILES=default,sqlite
+    volumes:
+      - "/mnt/faas:/tmp/hamal/faas"
     networks:
       - hamalnet
