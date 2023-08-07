@@ -4,6 +4,7 @@ import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.req.InvokeFixedRate
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.repository.api.TriggerQueryRepository
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.FixedRateTrigger
@@ -35,7 +36,7 @@ class FixedRateTriggerService
     @PostConstruct
     fun setup() {
         triggerQueryRepository.list {
-            afterId = TriggerId(0)
+            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE))
             limit = Limit(10)
         }.filterIsInstance<FixedRateTrigger>().forEach {
             plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
