@@ -1,4 +1,5 @@
 local eth = require("web3.eth")
+local log = require("log")
 
 eth.config.update({
     host = 'http://eth-proxy:8000'
@@ -41,10 +42,10 @@ local err, batch_result = eth.execute({
 })
 
 if err ~= nil then
-    print("ERROR:", err.message)
+    log.error( err.message)
 else
     for _, block in pairs(batch_result) do
-        print(block.id, block.hash)
+        log.info("Added: " .. block.id .. " " .. block.hash)
         ctx.emit({ topic = "eth::block_available", block = block.id })
     end
     ctx.state.next_block_number = next_block_number + step_size

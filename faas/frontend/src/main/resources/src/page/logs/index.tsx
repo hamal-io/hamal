@@ -32,7 +32,6 @@ export default () => {
                         <Breadcrumb.Item>Functions</Breadcrumb.Item></Breadcrumb>
                 </div>
             </div>
-
             <ExecutionLogsTable/>
         </State.Provider>
     );
