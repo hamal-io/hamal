@@ -72,6 +72,21 @@ class OrchestrationService(
     fun failed(cmdId: CmdId, failedExec: FailedExec) {
         lock.withLock {
             // FIXME retry or permanent fail or maybe do not fail at all...
+            // remove from inflight
+            if (failedExec.correlation != null) {
+                inflight.remove(failedExec.correlation)
+
+                // if backlog - pick next
+                backlog[failedExec.correlation]
+                    ?.removeFirstOrNull()
+                    ?.let { plannedExec ->
+                        if (plannedExec.correlation != null) {
+                            inflight[plannedExec.correlation!!] = plannedExec.id
+                            scheduleExec(cmdId, plannedExec)
+                        }
+                    }
+            }
+
             execs[failedExec.id] = failedExec
         }
     }

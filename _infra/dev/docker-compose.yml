@@ -5,12 +5,10 @@ networks:
       config:
         - subnet: 10.42.0.0/16
 services:
-  proxy:
+  eth-proxy:
     image: hamalio/proxy
     ports:
       - "0.0.0.0:8000:8000"
-    environment:
-      - UPSTREAM_HOST=https://cloudflare-eth.com
     volumes:
       - "/mnt/proxy/eth:/tmp/hamal/db"
     networks:

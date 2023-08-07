@@ -8,7 +8,7 @@ import io.hamal.lib.kua.value.StringValue
 class EthExtensionFactory : ScriptExtensionFactory {
     val config = ExtensionConfig(
         mutableMapOf(
-            "host" to StringValue("http://proxy:8000")
+            "host" to StringValue("http://localhost:8000")
         )
     )
 
