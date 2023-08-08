@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.table.TableArrayValue
@@ -8,11 +9,12 @@ import io.hamal.lib.kua.value.AnyValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.kua.value.ValueType
+import kotlin.reflect.KClass
 
 
 class FunctionContext(
     val state: State
-) : State {
+) : State, SandboxContext {
 
     override val native = state.native
     override val top: StackTop get() = state.top
@@ -60,6 +62,10 @@ class FunctionContext(
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
 
     override fun load(code: String) = state.load(code)
+
+    override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
+        return native.sandbox.ctx[clazz]
+    }
 }
 
 interface FunctionContextFactory {

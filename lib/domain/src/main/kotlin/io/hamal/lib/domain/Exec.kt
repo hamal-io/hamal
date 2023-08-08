@@ -7,6 +7,8 @@ import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ErrorValue
 import kotlinx.serialization.Serializable
 
+// FIXME do not nest execs
+
 @Serializable
 sealed class Exec : DomainObject<ExecId> {
     abstract override val id: ExecId

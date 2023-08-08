@@ -10,13 +10,8 @@ import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.TableValue
 
-interface SandboxFactory {
-    fun create(): Sandbox
-}
-
-
 class Sandbox(
-    private val ctx: SandboxContext
+    val ctx: SandboxContext
 ) : State, AutoCloseable {
 
     override val native: Native = Native(this)

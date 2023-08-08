@@ -16,15 +16,13 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.TableValue
 import jakarta.annotation.PostConstruct
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 @Service
-class FixedRateTriggerService
-@Autowired constructor(
+class FixedRateTriggerService(
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val eventEmitter: SystemEventEmitter<*>,
     internal val submitRequest: SubmitRequest,

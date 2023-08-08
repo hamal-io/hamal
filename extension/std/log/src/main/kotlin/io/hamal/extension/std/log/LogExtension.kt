@@ -43,7 +43,8 @@ class LogFunction(
 
         DefaultExecLogService(templateSupplier())
             .append(
-                ExecId(1), AppendExecLogCmd(
+                ctx[ExecId::class],
+                AppendExecLogCmd(
                     level = level,
                     message = message,
                     localAt = LocalAt.now()

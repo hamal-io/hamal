@@ -5,7 +5,6 @@ import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.State
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.SandboxFactory
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -14,6 +13,7 @@ import io.hamal.lib.kua.value.*
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.runner.component.RunnerAsync
+import io.hamal.runner.config.SandboxFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
@@ -39,9 +39,7 @@ class AgentService(
                         lateinit var stateResult: State
                         val eventsToEmit = mutableListOf<Event>()
 
-
-
-                        sandboxFactory.create().use { sb ->
+                        sandboxFactory.create(request).use { sb ->
                             sb.run { state ->
                                 val ctx = state.tableCreateMap(1)
 

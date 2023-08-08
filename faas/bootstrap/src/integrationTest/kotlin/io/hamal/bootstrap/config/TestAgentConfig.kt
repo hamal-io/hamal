@@ -8,8 +8,9 @@ import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.SandboxFactory
 import io.hamal.lib.sdk.HttpTemplateSupplier
+import io.hamal.lib.sdk.domain.DequeueExecsResponse
+import io.hamal.runner.config.SandboxFactory
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
@@ -20,7 +21,7 @@ class TestAgentConfig {
 
     @Bean
     fun sandboxFactory(): SandboxFactory = object : SandboxFactory {
-        override fun create(): Sandbox {
+        override fun create(exec: DequeueExecsResponse.Exec): Sandbox {
             NativeLoader.load(Resources)
             val result = Sandbox(DefaultSandboxContext())
             result.register(TestExtensionFactory().create())
