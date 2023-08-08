@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Configuration
 open class EventConfig {
     @Bean
     open fun systemEventEmitter(
-        systemEventBrokerRepository: LogBrokerRepository<*>,
+        systemEventBrokerRepository: LogBrokerRepository,
         generateDomainId: GenerateDomainId
-    ): SystemEventEmitter<*> = SystemEventEmitter(
+    ): SystemEventEmitter = SystemEventEmitter(
         generateDomainId,
         systemEventBrokerRepository
     )
@@ -24,7 +24,7 @@ open class EventConfig {
     open fun systemEventProcessorFactory(
         async: Async,
         generateDomainId: GenerateDomainId,
-        systemEventBrokerRepository: LogBrokerRepository<*>
+        systemEventBrokerRepository: LogBrokerRepository
     ): SystemEventServiceFactory = DefaultSystemEventService(
         async,
         generateDomainId,

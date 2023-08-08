@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class GetTopicRoute(
-    private val eventBrokerRepository: LogBrokerRepository<*>
+    private val eventBrokerRepository: LogBrokerRepository
 ) {
     @GetMapping("/v1/topics/{topicId}")
     fun getTopic(

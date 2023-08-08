@@ -9,12 +9,15 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.kua.value.TableValue
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AppendEventRoute(
     private val submitRequest: SubmitRequest,
-    private val eventBrokerRepository: LogBrokerRepository<*>
+    private val eventBrokerRepository: LogBrokerRepository
 ) {
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(

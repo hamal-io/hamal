@@ -21,7 +21,7 @@ import java.security.SecureRandom
 class DequeueRoute(
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
-    private val eventEmitter: SystemEventEmitter<*>
+    private val eventEmitter: SystemEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<DequeueExecsResponse> {

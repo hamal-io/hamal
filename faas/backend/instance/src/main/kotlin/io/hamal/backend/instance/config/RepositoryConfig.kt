@@ -6,7 +6,6 @@ import io.hamal.backend.repository.memory.MemoryExecLogRepository
 import io.hamal.backend.repository.memory.MemoryReqRepository
 import io.hamal.backend.repository.memory.MemoryStateRepository
 import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
-import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
 import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
@@ -90,12 +89,12 @@ open class SqliteRepositoryConfig {
 @Configuration
 open class MemoryRepositoryConfig {
     @Bean
-    open fun systemEventBrokerRepository(): LogBrokerRepository<MemoryLogTopic> {
+    open fun systemEventBrokerRepository(): LogBrokerRepository {
         return MemoryLogBrokerRepository()
     }
 
     @Bean
-    open fun eventBrokerRepository(): LogBrokerRepository<MemoryLogTopic> {
+    open fun eventBrokerRepository(): LogBrokerRepository {
         return MemoryLogBrokerRepository()
     }
 

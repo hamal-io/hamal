@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 class FailExecHandler(
     private val execQueryRepository: ExecQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter<*>
+    private val eventEmitter: SystemEventEmitter
 ) : ReqHandler<SubmittedFailExecReq>(SubmittedFailExecReq::class) {
 
     override fun invoke(req: SubmittedFailExecReq) {

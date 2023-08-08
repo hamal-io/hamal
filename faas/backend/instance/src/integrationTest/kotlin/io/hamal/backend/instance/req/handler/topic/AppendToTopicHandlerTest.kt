@@ -3,7 +3,6 @@ package io.hamal.backend.instance.req.handler.topic
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
@@ -67,5 +66,5 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: AppendToTopicHandler<MemoryLogTopic>
+    private lateinit var testInstance: AppendToTopicHandler
 }

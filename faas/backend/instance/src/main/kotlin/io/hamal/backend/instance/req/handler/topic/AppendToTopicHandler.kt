@@ -10,8 +10,8 @@ import io.hamal.lib.domain.req.SubmittedAppendToTopicReq
 import org.springframework.stereotype.Component
 
 @Component
-class AppendToTopicHandler<TOPIC : LogTopic>(
-    private val eventBrokerRepository: LogBrokerRepository<TOPIC>
+class AppendToTopicHandler(
+    private val eventBrokerRepository: LogBrokerRepository
 ) : ReqHandler<SubmittedAppendToTopicReq>(SubmittedAppendToTopicReq::class) {
 
     override fun invoke(req: SubmittedAppendToTopicReq) {

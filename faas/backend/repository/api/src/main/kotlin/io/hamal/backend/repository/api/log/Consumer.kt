@@ -29,10 +29,10 @@ interface BatchConsumer<VALUE : Any> {
 }
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufLogConsumer<TOPIC : LogTopic, Value : Any>(
+class ProtobufLogConsumer<Value : Any>(
     override val groupId: GroupId,
-    private val topic: TOPIC,
-    private val repository: LogBrokerRepository<TOPIC>,
+    private val topic: LogTopic,
+    private val repository: LogBrokerRepository,
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
@@ -52,10 +52,10 @@ class ProtobufLogConsumer<TOPIC : LogTopic, Value : Any>(
 }
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufBatchConsumer<TOPIC : LogTopic, Value : Any>(
+class ProtobufBatchConsumer<Value : Any>(
     override val groupId: GroupId,
-    private val topic: TOPIC,
-    private val repository: LogBrokerRepository<TOPIC>,
+    private val topic: LogTopic,
+    private val repository: LogBrokerRepository,
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 

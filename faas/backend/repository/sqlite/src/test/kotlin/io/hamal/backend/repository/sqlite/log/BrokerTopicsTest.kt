@@ -123,7 +123,6 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
             assertThat(result.id, equalTo(TopicId(1)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
-            assertThat(result.path, equalTo(Path(testDir)))
 
             assertThat(testInstance.count(), equalTo(1UL))
         }
@@ -147,7 +146,6 @@ class SqliteLogBrokerTopicsRepositoryTest {
             )
             assertThat(result.id, equalTo(TopicId(2)))
             assertThat(result.name, equalTo(TopicName("func::created")))
-            assertThat(result.path, equalTo(Path(testDir)))
 
             assertThat(testInstance.count(), equalTo(2UL))
         }

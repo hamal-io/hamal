@@ -57,7 +57,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         }
 
     @Autowired
-    private lateinit var testInstance: CompleteExecHandler<*>
+    private lateinit var testInstance: CompleteExecHandler
 
     private val submittedCompleteExecReq = SubmittedCompleteExecReq(
         reqId = ReqId(10),

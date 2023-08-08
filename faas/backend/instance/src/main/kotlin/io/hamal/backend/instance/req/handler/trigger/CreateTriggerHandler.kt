@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component
 @Component
 class CreateTriggerHandler(
     private val triggerCmdRepository: TriggerCmdRepository,
-    private val eventEmitter: SystemEventEmitter<*>,
+    private val eventEmitter: SystemEventEmitter,
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: LogBrokerRepository<*>
+    private val eventBrokerRepository: LogBrokerRepository
 ) : ReqHandler<SubmittedCreateTriggerReq>(SubmittedCreateTriggerReq::class) {
     override fun invoke(req: SubmittedCreateTriggerReq) {
         funcQueryRepository.get(req.funcId)

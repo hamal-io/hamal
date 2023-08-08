@@ -7,7 +7,6 @@ import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufBatchConsumer
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
@@ -27,8 +26,8 @@ import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-class EventTriggerService<TOPIC : LogTopic>(
-    internal val eventBrokerRepository: LogBrokerRepository<TOPIC>,
+class EventTriggerService(
+    internal val eventBrokerRepository: LogBrokerRepository,
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
@@ -38,7 +37,7 @@ class EventTriggerService<TOPIC : LogTopic>(
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
-    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TOPIC, Event>>()
+    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<Event>>()
 
     @PostConstruct
     fun setup() {

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class SetStateHandler(
     val stateCmdRepository: StateCmdRepository,
-    val eventEmitter: SystemEventEmitter<*>
+    val eventEmitter: SystemEventEmitter
 ) : ReqHandler<SubmittedSetStateReq>(SubmittedSetStateReq::class) {
     override fun invoke(req: SubmittedSetStateReq) {
         updateState(req).also { emitEvent(req.cmdId(), req.state) }

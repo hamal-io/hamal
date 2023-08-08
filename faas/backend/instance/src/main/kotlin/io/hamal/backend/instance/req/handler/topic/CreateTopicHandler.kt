@@ -9,8 +9,8 @@ import io.hamal.lib.domain.req.SubmittedCreateTopicReq
 import org.springframework.stereotype.Component
 
 @Component
-class CreateTopicHandler<TOPIC : LogTopic>(
-    private val eventBrokerRepository: LogBrokerRepository<TOPIC>
+class CreateTopicHandler(
+    private val eventBrokerRepository: LogBrokerRepository
 ) : ReqHandler<SubmittedCreateTopicReq>(SubmittedCreateTopicReq::class) {
     override fun invoke(req: SubmittedCreateTopicReq) {
         eventBrokerRepository.create(

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class CreateTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: LogBrokerRepository<*>,
+    private val eventBrokerRepository: LogBrokerRepository,
     private val request: SubmitRequest
 ) {
     @PostMapping("/v1/triggers")

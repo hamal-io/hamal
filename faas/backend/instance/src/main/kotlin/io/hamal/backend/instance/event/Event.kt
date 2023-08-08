@@ -10,11 +10,11 @@ sealed class SystemEvent {
 }
 
 fun <EVENT : SystemEvent> KClass<EVENT>.topic() =
-    (annotations.find { annotation -> annotation.annotationClass == SystemEventTopic::class }
+    (annotations.find { annotation -> annotation.annotationClass == SystemTopic::class }
         ?: throw IllegalStateException("SystemEvent not annotated with @SystemEventTopic"))
-        .let { it as SystemEventTopic }.value
+        .let { it as SystemTopic }.value
 
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class SystemEventTopic(val value: String)
+annotation class SystemTopic(val value: String)

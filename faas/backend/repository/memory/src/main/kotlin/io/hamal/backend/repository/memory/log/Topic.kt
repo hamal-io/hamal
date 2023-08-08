@@ -2,20 +2,13 @@ package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
-
-data class MemoryLogTopic(
-    override val id: TopicId,
-    override val name: TopicName,
-) : LogTopic
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, partitioning by key
 // keeping track of consumer group ids
 class MemoryLogTopicRepository(
-    internal val topic: MemoryLogTopic
+    internal val topic: LogTopic
 ) : LogTopicRepository {
 
     private var activeSegment: MemoryLogSegment

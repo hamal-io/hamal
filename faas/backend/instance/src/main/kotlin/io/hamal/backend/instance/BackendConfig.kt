@@ -44,7 +44,7 @@ open class BackendConfig : ApplicationListener<ContextRefreshedEvent> {
         execCmdRepository: ExecCmdRepository,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
-        eventEmitter: SystemEventEmitter<*>
+        eventEmitter: SystemEventEmitter
     ) = eventServiceFactory
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
 

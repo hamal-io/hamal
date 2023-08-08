@@ -1,6 +1,5 @@
 package io.hamal.bootstrap
 
-import io.hamal.runner.RunnerConfig
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -12,6 +11,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.DefaultHamalSdk
+import io.hamal.runner.RunnerConfig
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -49,7 +49,7 @@ import kotlin.io.path.name
 abstract class BaseHamalTest {
 
     @Autowired
-    lateinit var eventBrokerRepository: LogBrokerRepository<*>
+    lateinit var eventBrokerRepository: LogBrokerRepository
 
     @Autowired
     lateinit var execCmdRepository: ExecCmdRepository

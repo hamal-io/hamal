@@ -2,18 +2,9 @@ package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import java.nio.file.Path
-
-data class SqliteLogTopic(
-    override val id: TopicId,
-    override val name: TopicName,
-    val path: Path
-) : LogTopic
-
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, partitioning by key
@@ -24,10 +15,11 @@ data class SqliteLogTopic(
 // like supporting multiple segments, roll over etc
 
 class SqliteLogTopicRepository(
-    internal val topic: SqliteLogTopic
+    internal val topic: LogTopic,
+    internal val path: Path
 ) : BaseSqliteRepository(
     object : Config {
-        override val path: Path get() = topic.path
+        override val path: Path get() = path
         override val filename: String get() = String.format("topics/%08d", topic.id.value.value)
 
     }
@@ -39,7 +31,7 @@ class SqliteLogTopicRepository(
     init {
         activeSegment = SqliteLogSegment(
             LogSegment.Id(0),
-            path = topic.path.resolve(config.filename),
+            path = path.resolve(config.filename),
             topicId = topic.id
         )
         activeLogSegmentRepository = SqliteLogSegmentRepository(activeSegment)

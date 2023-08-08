@@ -3,7 +3,7 @@ package io.hamal.backend.instance.req.handler
 import io.hamal.backend.instance.BaseTest
 import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.log.CreateTopic
-import io.hamal.backend.repository.memory.log.MemoryLogTopic
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.*
@@ -37,7 +37,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
         )
     }
 
-    fun createTopic(id: TopicId, name: TopicName): MemoryLogTopic {
+    fun createTopic(id: TopicId, name: TopicName): LogTopic {
         return eventBrokerRepository.create(
             NextCommandId(), CreateTopic.TopicToCreate(
                 id = id,

@@ -8,14 +8,14 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 
 
-class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
+class MemoryLogBrokerRepository : LogBrokerRepository {
 
     private val consumersRepository: MemoryLogBrokerConsumersRepository = MemoryLogBrokerConsumersRepository()
     private val topicsRepository: MemoryLogBrokerTopicsRepository = MemoryLogBrokerTopicsRepository()
 
-    private val repositoryMapping = KeyedOnce.default<MemoryLogTopic, LogTopicRepository>()
+    private val repositoryMapping = KeyedOnce.default<LogTopic, LogTopicRepository>()
 
-    override fun append(cmdId: CmdId, topic: MemoryLogTopic, bytes: ByteArray) {
+    override fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
     }
 
@@ -28,12 +28,12 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
             }
     }
 
-    override fun consume(groupId: GroupId, topic: MemoryLogTopic, limit: Int): List<LogChunk> {
+    override fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk> {
         val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(groupId: GroupId, topic: MemoryLogTopic, chunkId: LogChunkId) {
+    override fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId) {
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
@@ -46,7 +46,7 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
             }
     }
 
-    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): MemoryLogTopic =
+    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): LogTopic =
         topicsRepository.create(
             cmdId,
             TopicToCreate(
@@ -57,15 +57,15 @@ class MemoryLogBrokerRepository : LogBrokerRepository<MemoryLogTopic> {
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
     override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
-    override fun listTopics(): List<MemoryLogTopic> {
+    override fun listTopics(): List<LogTopic> {
         return topicsRepository.list()
     }
 
-    override fun read(firstId: LogChunkId, topic: MemoryLogTopic, limit: Int): List<LogChunk> {
+    override fun read(firstId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk> {
         return resolveRepository(topic).read(firstId, limit)
     }
 
-    private fun resolveRepository(topic: MemoryLogTopic) = repositoryMapping(topic) {
+    private fun resolveRepository(topic: LogTopic) = repositoryMapping(topic) {
         MemoryLogTopicRepository(topic)
     }
 }

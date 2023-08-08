@@ -8,12 +8,12 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.port.GenerateDomainId
 
-class SystemEventEmitter<TOPIC : LogTopic>(
+class SystemEventEmitter(
     private val generateDomainId: GenerateDomainId,
-    private val brokerRepository: LogBrokerRepository<TOPIC>
+    private val brokerRepository: LogBrokerRepository
 ) {
 
-    private val local: ThreadLocal<List<Pair<TOPIC, SystemEvent>>> = ThreadLocal<List<Pair<TOPIC, SystemEvent>>>()
+    private val local: ThreadLocal<List<Pair<LogTopic, SystemEvent>>> = ThreadLocal<List<Pair<LogTopic, SystemEvent>>>()
 
     private val appender = ProtobufAppender(SystemEvent::class, brokerRepository)
 

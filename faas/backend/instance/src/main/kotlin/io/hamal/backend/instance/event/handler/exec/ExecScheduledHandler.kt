@@ -10,7 +10,7 @@ import io.hamal.lib.domain.QueuedExec
 
 class ExecScheduledHandler(
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter<*>
+    private val eventEmitter: SystemEventEmitter
 ) : SystemEventHandler<ExecScheduledEvent> {
     override fun handle(cmdId: CmdId, evt: ExecScheduledEvent) {
         queue(cmdId, evt).also { emitEvent(cmdId, it) }

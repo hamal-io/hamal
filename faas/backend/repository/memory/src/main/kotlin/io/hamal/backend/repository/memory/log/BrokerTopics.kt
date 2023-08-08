@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -8,15 +9,15 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository<MemoryLogTopic> {
+class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
 
     private val lock = ReentrantLock()
-    private val topicMapping = mutableMapOf<TopicName, MemoryLogTopic>()
-    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): MemoryLogTopic {
+    private val topicMapping = mutableMapOf<TopicName, LogTopic>()
+    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): LogTopic {
         return lock.withLock {
             require(topicMapping.values.none { it.id == toCreate.id }) { "Topic already exists" }
             require(!topicMapping.containsKey(toCreate.name)) { "Topic already exists" }
-            topicMapping[toCreate.name] = MemoryLogTopic(
+            topicMapping[toCreate.name] = LogTopic(
                 id = toCreate.id,
                 name = toCreate.name
             )
@@ -24,17 +25,17 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository<MemoryLogTopic
         }
     }
 
-    override fun find(name: TopicName): MemoryLogTopic? {
+    override fun find(name: TopicName): LogTopic? {
         return lock.withLock {
             topicMapping[name]
         }
     }
 
-    override fun find(id: TopicId): MemoryLogTopic? = lock.withLock {
+    override fun find(id: TopicId): LogTopic? = lock.withLock {
         topicMapping.values.find { it.id == id }
     }
 
-    override fun list(): List<MemoryLogTopic> = lock.withLock {
+    override fun list(): List<LogTopic> = lock.withLock {
         topicMapping.values.toList()
     }
 

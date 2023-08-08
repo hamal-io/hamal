@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.CreateTopic
-import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -49,7 +49,6 @@ class SqliteLogBrokerRepositoryTest {
 
             assertThat(result.id, equalTo(TopicId(234)))
             assertThat(result.name, equalTo(TopicName("scheduler::flow_enqueued")))
-            assertThat(result.path, equalTo(testPath))
         }
     }
 

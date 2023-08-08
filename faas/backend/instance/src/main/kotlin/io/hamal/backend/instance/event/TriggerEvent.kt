@@ -4,7 +4,7 @@ import io.hamal.lib.domain.Trigger
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("trigger::created")
+@SystemTopic("trigger::created")
 data class TriggerCreatedEvent(
     val trigger: Trigger
 ) : SystemEvent()

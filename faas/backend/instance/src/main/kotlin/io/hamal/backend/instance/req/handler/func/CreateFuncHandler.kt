@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class CreateFuncHandler(
     val funcCmdRepository: FuncCmdRepository,
-    val eventEmitter: SystemEventEmitter<*>
+    val eventEmitter: SystemEventEmitter
 ) : ReqHandler<SubmittedCreateFuncReq>(SubmittedCreateFuncReq::class) {
     override fun invoke(req: SubmittedCreateFuncReq) {
         createFunc(req).also { emitEvent(req.cmdId(), it) }

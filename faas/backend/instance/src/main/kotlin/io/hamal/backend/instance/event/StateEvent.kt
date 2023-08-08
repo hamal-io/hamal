@@ -4,7 +4,7 @@ import io.hamal.lib.domain.CorrelatedState
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("state::updated")
+@SystemTopic("state::updated")
 data class StateUpdatedEvent(
     val state: CorrelatedState,
 ) : SystemEvent()

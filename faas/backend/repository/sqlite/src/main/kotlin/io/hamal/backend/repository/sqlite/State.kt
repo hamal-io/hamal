@@ -2,7 +2,6 @@ package io.hamal.backend.repository.sqlite
 
 import io.hamal.backend.repository.api.StateCmdRepository
 import io.hamal.backend.repository.api.StateQueryRepository
-import io.hamal.backend.repository.sqlite.log.SqliteLogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
@@ -46,7 +45,7 @@ class SqliteStateRepository(
     }
 
     override fun set(cmdId: CmdId, correlatedState: CorrelatedState) {
-        connection.execute<SqliteLogTopic>(
+        connection.execute<Unit>(
             """
             INSERT INTO correlated_states (func_id, correlation_id, value)
                 VALUES(:funcId, :correlationId, :value) 

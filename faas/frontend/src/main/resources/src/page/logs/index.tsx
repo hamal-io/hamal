@@ -29,7 +29,7 @@ export default () => {
                     <Breadcrumb className="d-none d-md-inline-block"
                                 listProps={{className: "breadcrumb-dark breadcrumb-transparent"}}>
                         <Breadcrumb.Item><FontAwesomeIcon icon={faHome}/></Breadcrumb.Item>
-                        <Breadcrumb.Item>Functions</Breadcrumb.Item></Breadcrumb>
+                        <Breadcrumb.Item>Logs</Breadcrumb.Item></Breadcrumb>
                 </div>
             </div>
             <ExecutionLogsTable/>

@@ -4,43 +4,43 @@ import io.hamal.lib.domain.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemEventTopic("exec::invoked")
+@SystemTopic("exec::invoked")
 data class ExecInvokedEvent(
     val scheduledExec: ScheduledExec
 ) : SystemEvent()
 
 @Serializable
-@SystemEventTopic("exec::planned")
+@SystemTopic("exec::planned")
 data class ExecPlannedEvent(
     val plannedExec: PlannedExec
 ) : SystemEvent()
 
 @Serializable
-@SystemEventTopic("exec::scheduled")
+@SystemTopic("exec::scheduled")
 data class ExecScheduledEvent(
     val scheduledExec: ScheduledExec
 ) : SystemEvent()
 
 @Serializable
-@SystemEventTopic("exec::queued")
+@SystemTopic("exec::queued")
 data class ExecutionQueuedEvent(
     val queuedExec: QueuedExec
 ) : SystemEvent()
 
 @Serializable
-@SystemEventTopic("exec::started")
+@SystemTopic("exec::started")
 data class ExecutionStartedEvent(
     val startedExec: StartedExec
 ) : SystemEvent()
 
 @Serializable
-@SystemEventTopic("exec::completed")
+@SystemTopic("exec::completed")
 data class ExecutionCompletedEvent(
     val completedExec: CompletedExec
 ) : SystemEvent()
 
 @Serializable
-@SystemEventTopic("exec::failed")
+@SystemTopic("exec::failed")
 data class ExecutionFailedEvent(
     val failedExec: FailedExec
 ) : SystemEvent()

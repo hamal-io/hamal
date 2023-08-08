@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
 @Component
 class InvokeExecHandler(
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter<*>,
+    private val eventEmitter: SystemEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
 ) : ReqHandler<SubmittedInvokeExecReq>(SubmittedInvokeExecReq::class) {
 

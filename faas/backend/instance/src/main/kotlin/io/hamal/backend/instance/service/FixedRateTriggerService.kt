@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 @Service
 class FixedRateTriggerService(
     internal val triggerQueryRepository: TriggerQueryRepository,
-    internal val eventEmitter: SystemEventEmitter<*>,
+    internal val eventEmitter: SystemEventEmitter,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
     internal val funcQueryRepository: FuncQueryRepository

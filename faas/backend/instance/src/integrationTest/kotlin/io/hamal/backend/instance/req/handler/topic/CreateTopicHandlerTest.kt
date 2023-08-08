@@ -1,7 +1,6 @@
 package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.backend.repository.memory.log.MemoryLogTopic
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
@@ -71,7 +70,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: CreateTopicHandler<MemoryLogTopic>
+    private lateinit var testInstance: CreateTopicHandler
 
     private val submittedCreateTopicReq = SubmittedCreateTopicReq(
         reqId = ReqId(1),

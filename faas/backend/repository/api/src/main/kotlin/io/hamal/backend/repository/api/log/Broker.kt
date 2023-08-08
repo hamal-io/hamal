@@ -12,8 +12,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.io.Closeable
 
-interface CreateTopic<TOPIC : LogTopic> {
-    fun create(cmdId: CmdId, topicToCreate: TopicToCreate): TOPIC
+interface CreateTopic {
+    fun create(cmdId: CmdId, topicToCreate: TopicToCreate): LogTopic
 
     data class TopicToCreate(
         val id: TopicId,
@@ -21,40 +21,40 @@ interface CreateTopic<TOPIC : LogTopic> {
     )
 }
 
-interface AppendToTopic<TOPIC : LogTopic> {
-    fun append(cmdId: CmdId, topic: TOPIC, bytes: ByteArray)
+interface AppendToTopic {
+    fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray)
 }
 
-interface ConsumeFromTopic<TOPIC : LogTopic> {
-    fun consume(groupId: GroupId, topic: TOPIC, limit: Int): List<LogChunk>
+interface ConsumeFromTopic {
+    fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk>
 
-    fun commit(groupId: GroupId, topic: TOPIC, chunkId: LogChunkId)
+    fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId)
 }
 
-interface ReadFromTopic<TOPIC : LogTopic> {
-    fun read(firstId: LogChunkId, topic: TOPIC, limit: Int): List<LogChunk>
+interface ReadFromTopic {
+    fun read(firstId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk>
 }
 
-interface FindTopic<TOPIC : LogTopic> {
-    fun getTopic(topicId: TopicId): TOPIC = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
+interface FindTopic {
+    fun getTopic(topicId: TopicId): LogTopic = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
 
-    fun findTopic(topicId: TopicId): TOPIC?
+    fun findTopic(topicId: TopicId): LogTopic?
 
-    fun findTopic(topicName: TopicName): TOPIC?
+    fun findTopic(topicName: TopicName): LogTopic?
 }
 
-interface LogBrokerRepository<TOPIC : LogTopic> :
-    CreateTopic<TOPIC>,
-    AppendToTopic<TOPIC>,
-    ConsumeFromTopic<TOPIC>,
-    FindTopic<TOPIC>,
-    ReadFromTopic<TOPIC>,
+interface LogBrokerRepository :
+    CreateTopic,
+    AppendToTopic,
+    ConsumeFromTopic,
+    FindTopic,
+    ReadFromTopic,
     Closeable {
 
-    fun listTopics(): List<TOPIC>
+    fun listTopics(): List<LogTopic>
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun listEvents(topic: TOPIC, block: EventQuery.() -> Unit): List<EventWithId> {
+    fun listEvents(topic: LogTopic, block: EventQuery.() -> Unit): List<EventWithId> {
         val query = EventQuery().also(block)
         val firstId = LogChunkId(SnowflakeId(query.afterId.value.value + 1))
         return read(firstId, topic, query.limit.value)

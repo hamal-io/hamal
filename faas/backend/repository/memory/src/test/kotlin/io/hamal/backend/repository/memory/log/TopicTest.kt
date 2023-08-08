@@ -3,8 +3,9 @@ package io.hamal.backend.repository.memory.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.lib.common.util.TimeUtils.withEpochMilli
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
@@ -63,7 +64,7 @@ class MemoryLogTopicRepositoryTest {
         }
 
         private val testInstance = MemoryLogTopicRepository(
-            MemoryLogTopic(
+            LogTopic(
                 TopicId(23),
                 TopicName("test-topic")
             )
@@ -101,7 +102,7 @@ class MemoryLogTopicRepositoryTest {
         }
 
         private val testInstance = MemoryLogTopicRepository(
-            MemoryLogTopic(
+            LogTopic(
                 TopicId(23),
                 TopicName("test-topic")
             )

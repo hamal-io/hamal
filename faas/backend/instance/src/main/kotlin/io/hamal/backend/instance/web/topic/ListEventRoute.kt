@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class ListEventRoute<TOPIC : LogTopic>(
-    private val eventBrokerRepository: LogBrokerRepository<TOPIC>
+class ListEventRoute(
+    private val eventBrokerRepository: LogBrokerRepository
 ) {
     @GetMapping("/v1/topics/{topicId}/events")
     fun listEvents(

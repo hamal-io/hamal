@@ -12,8 +12,8 @@ data class SqliteLogBroker(
 )
 
 class SqliteLogBrokerRepository(
-    logBroker: SqliteLogBroker
-) : LogBrokerRepository<SqliteLogTopic> {
+    val logBroker: SqliteLogBroker
+) : LogBrokerRepository {
 
     private val consumersRepository: SqliteLogBrokerConsumersRepository
     private val topicsRepository: SqliteLogBrokerTopicsRepository
@@ -31,10 +31,10 @@ class SqliteLogBrokerRepository(
         )
     }
 
-    private val topicRepositoryMapping = KeyedOnce.default<SqliteLogTopic, LogTopicRepository>()
+    private val topicRepositoryMapping = KeyedOnce.default<LogTopic, LogTopicRepository>()
 
 
-    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): SqliteLogTopic =
+    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): LogTopic =
         topicsRepository.create(
             cmdId,
             LogBrokerTopicsRepository.TopicToCreate(
@@ -43,7 +43,7 @@ class SqliteLogBrokerRepository(
             )
         )
 
-    override fun append(cmdId: CmdId, topic: SqliteLogTopic, bytes: ByteArray) {
+    override fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
     }
 
@@ -55,18 +55,18 @@ class SqliteLogBrokerRepository(
         }
     }
 
-    override fun consume(groupId: GroupId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
+    override fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk> {
         val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(groupId: GroupId, topic: SqliteLogTopic, chunkId: LogChunkId) {
+    override fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId) {
         consumersRepository.commit(groupId, topic.id, chunkId)
     }
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
     override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
-    override fun listTopics(): List<SqliteLogTopic> {
+    override fun listTopics(): List<LogTopic> {
         return topicsRepository.list()
     }
 
@@ -79,11 +79,11 @@ class SqliteLogBrokerRepository(
     }
 
 
-    override fun read(firstId: LogChunkId, topic: SqliteLogTopic, limit: Int): List<LogChunk> {
+    override fun read(firstId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk> {
         return resolveRepository(topic).read(firstId, limit)
     }
 
-    private fun resolveRepository(topic: SqliteLogTopic) = topicRepositoryMapping(topic) {
-        SqliteLogTopicRepository(topic)
+    private fun resolveRepository(topic: LogTopic) = topicRepositoryMapping(topic) {
+        SqliteLogTopicRepository(topic, path = logBroker.path)
     }
 }

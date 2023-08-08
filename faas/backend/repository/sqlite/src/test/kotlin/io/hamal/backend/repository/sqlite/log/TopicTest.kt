@@ -3,6 +3,7 @@ package io.hamal.backend.repository.sqlite.log
 import io.hamal.backend.repository.api.log.LogChunk
 import io.hamal.backend.repository.api.log.LogChunkId
 import io.hamal.backend.repository.api.log.LogSegment
+import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
@@ -35,11 +36,11 @@ class SqliteLogTopicRepositoryTest {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
             SqliteLogTopicRepository(
-                SqliteLogTopic(
+                LogTopic(
                     id = TopicId(23),
-                    name = TopicName("test-topic"),
-                    path = targetDir
-                )
+                    name = TopicName("test-topic")
+                ),
+                targetDir
             ).use { }
 
             assertTrue(FileUtils.exists(targetDir))
@@ -92,11 +93,11 @@ class SqliteLogTopicRepositoryTest {
         }
 
         private val testInstance = SqliteLogTopicRepository(
-            SqliteLogTopic(
+            LogTopic(
                 TopicId(23),
                 TopicName("test-topic"),
-                Path(testDir)
-            )
+            ),
+            Path(testDir)
         )
     }
 
@@ -131,11 +132,11 @@ class SqliteLogTopicRepositoryTest {
         }
 
         private val testInstance = SqliteLogTopicRepository(
-            SqliteLogTopic(
+            LogTopic(
                 TopicId(23),
-                TopicName("test-topic"),
-                Path(testDir)
-            )
+                TopicName("test-topic")
+            ),
+            Path(testDir)
         )
     }
 
