@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class ListTriggersRoute(
+class ListTriggerRoute(
     private val triggerQueryRepository: TriggerQueryRepository
 ) {
     @GetMapping("/v1/triggers")

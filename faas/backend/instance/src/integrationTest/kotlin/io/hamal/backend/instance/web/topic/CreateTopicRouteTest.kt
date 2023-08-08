@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.event
+package io.hamal.backend.instance.web.topic
 
 
 import io.hamal.lib.domain.vo.TopicId
@@ -8,7 +8,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
-internal class CreateTopicRouteTest : BaseEventRouteTest() {
+internal class CreateTopicRouteTest : BaseTopicRouteTest() {
     @Test
     fun `Create topic`() {
         val result = awaitCompleted(

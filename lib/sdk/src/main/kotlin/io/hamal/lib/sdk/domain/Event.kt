@@ -14,6 +14,13 @@ data class ListEventsResponse(
 
 
 @Serializable
+data class ApiTopic(
+    val id: TopicId,
+    val name: TopicName
+)
+
+
+@Serializable
 data class ListTopicsResponse(
     val topics: List<Topic>
 ) {

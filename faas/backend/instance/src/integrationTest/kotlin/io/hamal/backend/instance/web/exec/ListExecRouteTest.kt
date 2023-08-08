@@ -9,7 +9,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListExecsRouteTest : BaseExecRouteTest() {
+internal class ListExecRouteTest : BaseExecRouteTest() {
     @Test
     fun `No execs`() {
         val response = httpTemplate.get("/v1/execs").execute()

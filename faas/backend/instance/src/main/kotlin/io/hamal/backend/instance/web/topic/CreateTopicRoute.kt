@@ -1,10 +1,8 @@
-package io.hamal.backend.instance.web.event
+package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
-import io.hamal.lib.sdk.domain.*
-import io.hamal.lib.sdk.domain.ListTopicsResponse.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

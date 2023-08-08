@@ -125,7 +125,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(appendEvent: AppendEventReq) =
-        SubmittedAppendEventReq(
+        SubmittedAppendToTopicReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = appendEvent.topicId,

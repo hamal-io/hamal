@@ -118,3 +118,4 @@ export async function getTrigger(id: string): Promise<ApiTrigger> {
 }
 
 export * from './func';
+export * from './topic';

@@ -27,7 +27,7 @@ data class AppendEventReq(
 )
 
 @Serializable
-data class SubmittedAppendEventReq(
+data class SubmittedAppendToTopicReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: TopicId,

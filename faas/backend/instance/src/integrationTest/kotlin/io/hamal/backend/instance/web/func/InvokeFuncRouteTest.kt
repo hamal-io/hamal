@@ -19,7 +19,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
-internal class InvokeOneshotRouteTest : BaseFuncRouteTest() {
+internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
 
     @Test
     fun `Invokes func`() {

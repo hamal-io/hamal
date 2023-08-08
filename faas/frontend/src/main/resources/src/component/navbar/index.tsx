@@ -26,6 +26,9 @@ export default (props: any) => {
                     <Nav.Item>
                         <Nav.Link href="/triggers">Triggers</Nav.Link>
                     </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/topics">Topics</Nav.Link>
+                    </Nav.Item>
                 </Nav>
             </Container>
         </Navbar>

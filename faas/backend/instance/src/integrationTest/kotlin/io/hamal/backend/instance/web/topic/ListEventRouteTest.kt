@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.event
+package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.vo.EventId
@@ -12,14 +12,14 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListEventsRouteTest : BaseEventRouteTest() {
+internal class ListEventRouteTest : BaseTopicRouteTest() {
     @Test
     fun `No events`() {
         val topicResponse = awaitCompleted(
             createTopic(TopicName("test-topic"))
         )
 
-        val result = listEvents(topicResponse.id)
+        val result = listTopicEvents(topicResponse.id)
         assertThat(result.events, empty())
     }
 
@@ -33,7 +33,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
             appendEvent(topicResponse.id, TableValue("counter" to NumberValue(1)))
         )
 
-        with(listEvents(topicResponse.id)) {
+        with(listTopicEvents(topicResponse.id)) {
             assertThat(topicId, equalTo(topicResponse.id))
             assertThat(topicName, equalTo(TopicName("test-topic")))
             assertThat(events, hasSize(1))
@@ -106,7 +106,7 @@ internal class ListEventsRouteTest : BaseEventRouteTest() {
             appendEvent(topicResponse.id, TableValue("counter" to NumberValue(1)))
         )
 
-        with(listEvents(anotherTopicResponse.id)) {
+        with(listTopicEvents(anotherTopicResponse.id)) {
             assertThat(topicId, equalTo(anotherTopicResponse.id))
             assertThat(topicName, equalTo(TopicName("another-test-topic")))
             assertThat(events, empty())

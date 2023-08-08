@@ -1,4 +1,4 @@
-export const Routes= {
+export const Routes = {
     Dashboard: {path: "/"},
     Adhoc: {path: "/adhoc"},
     Execution: {path: "/executions/:execId"},
@@ -6,6 +6,7 @@ export const Routes= {
     Functions: {path: "/functions"},
     Function: {path: "/functions/:funcId"},
     Logs: {path: "/logs"},
+    Topics: {path: "/topics"},
     Triggers: {path: "/triggers"},
     Trigger: {path: "/triggers/:triggerId"},
 };

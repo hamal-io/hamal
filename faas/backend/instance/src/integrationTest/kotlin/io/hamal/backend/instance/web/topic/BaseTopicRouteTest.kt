@@ -1,25 +1,27 @@
-package io.hamal.backend.instance.web.event
+package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.CreateTopicReq
-import io.hamal.lib.domain.req.SubmittedAppendEventReq
+import io.hamal.lib.domain.req.SubmittedAppendToTopicReq
 import io.hamal.lib.domain.req.SubmittedCreateTopicReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.sdk.domain.ApiTopic
 import io.hamal.lib.sdk.domain.ListEventsResponse
 import io.hamal.lib.sdk.domain.ListTopicsResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseEventRouteTest : BaseRouteTest() {
+internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
-    fun listEvents(topicId: TopicId): ListEventsResponse {
+    fun listTopicEvents(topicId: TopicId): ListEventsResponse {
         val listTopicsResponse = httpTemplate.get("/v1/topics/${topicId.value.value}/events").execute()
-        assertThat(listTopicsResponse.statusCode, equalTo(HttpStatusCode.Ok))
+        assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
         return listTopicsResponse.result(ListEventsResponse::class)
     }
@@ -27,10 +29,18 @@ internal sealed class BaseEventRouteTest : BaseRouteTest() {
 
     fun listTopics(): ListTopicsResponse {
         val listTopicsResponse = httpTemplate.get("/v1/topics").execute()
-        assertThat(listTopicsResponse.statusCode, equalTo(HttpStatusCode.Ok))
+        assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
         return listTopicsResponse.result(ListTopicsResponse::class)
     }
+
+    fun getTopic(topicId: TopicId): ApiTopic {
+        val getTopicResponse = httpTemplate.get("/v1/topics/${topicId.value.value}").execute()
+        assertThat(getTopicResponse.statusCode, equalTo(Ok))
+        require(getTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        return getTopicResponse.result(ApiTopic::class)
+    }
+
 
     fun createTopic(topicName: TopicName): SubmittedCreateTopicReq {
         val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
@@ -41,7 +51,7 @@ internal sealed class BaseEventRouteTest : BaseRouteTest() {
         return createTopicResponse.result(SubmittedCreateTopicReq::class)
     }
 
-    fun appendEvent(topicId: TopicId, value: TableValue): SubmittedAppendEventReq {
+    fun appendEvent(topicId: TopicId, value: TableValue): SubmittedAppendToTopicReq {
         val createTopicResponse = httpTemplate.post("/v1/topics/${topicId.value.value}/events")
             .body(value)
             .execute()
@@ -49,6 +59,6 @@ internal sealed class BaseEventRouteTest : BaseRouteTest() {
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(SubmittedAppendEventReq::class)
+        return createTopicResponse.result(SubmittedAppendToTopicReq::class)
     }
 }

@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.req.handler.event
+package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId

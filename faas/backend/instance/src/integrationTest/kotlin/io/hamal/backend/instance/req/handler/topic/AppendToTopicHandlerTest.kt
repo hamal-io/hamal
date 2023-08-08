@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.req.handler.event
+package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.backend.repository.api.log.LogChunkId
@@ -8,7 +8,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.req.ReqStatus
-import io.hamal.lib.domain.req.SubmittedAppendEventReq
+import io.hamal.lib.domain.req.SubmittedAppendToTopicReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.value.StringValue
@@ -22,13 +22,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class AppendEventHandlerTest : BaseReqHandlerTest() {
+internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Appends event to topic`() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
-            SubmittedAppendEventReq(
+            SubmittedAppendToTopicReq(
                 reqId = ReqId(SnowflakeId(123)),
                 status = ReqStatus.Submitted,
                 id = TopicId(4444),
@@ -55,7 +55,7 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
     fun `Tries to append event to topic which does not exists`() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
-                SubmittedAppendEventReq(
+                SubmittedAppendToTopicReq(
                     reqId = ReqId(SnowflakeId(123)),
                     status = ReqStatus.Submitted,
                     id = TopicId(123),
@@ -67,5 +67,5 @@ internal class AppendEventHandlerTest : BaseReqHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: AppendEventHandler<MemoryLogTopic>
+    private lateinit var testInstance: AppendToTopicHandler<MemoryLogTopic>
 }

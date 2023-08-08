@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.req.handler.event
+package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.backend.repository.memory.log.MemoryLogTopic

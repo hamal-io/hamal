@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.event
+package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
@@ -13,7 +13,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
-internal class AppendEventRouteTest : BaseEventRouteTest() {
+internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
     @Test
     fun `Append event`() {
         val topicResponse = awaitCompleted(
@@ -27,7 +27,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
             )
         )
 
-        with(listEvents(topicResponse.id)) {
+        with(listTopicEvents(topicResponse.id)) {
             assertThat(events, hasSize(1))
 
             val event = events.first()
@@ -50,7 +50,7 @@ internal class AppendEventRouteTest : BaseEventRouteTest() {
             }
         )
 
-        with(listEvents(topicResponse.id)) {
+        with(listTopicEvents(topicResponse.id)) {
             assertThat(events, hasSize(10))
             events.forEach { event ->
                 assertThat(event.value, equalTo(TableValue("hamal" to StringValue("rocks"))))

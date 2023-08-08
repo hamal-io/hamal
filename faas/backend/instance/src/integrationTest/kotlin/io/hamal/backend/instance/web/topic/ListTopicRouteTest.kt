@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.event
+package io.hamal.backend.instance.web.topic
 
 
 import io.hamal.lib.domain.vo.TopicName
@@ -7,7 +7,7 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
 
-internal class ListTopicsRouteTest : BaseEventRouteTest() {
+internal class ListTopicRouteTest : BaseTopicRouteTest() {
     @Test
     fun `No topics`() {
         val result = listTopics()

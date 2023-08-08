@@ -24,6 +24,8 @@ import FunctionListPage from "./page/function-list";
 import FunctionDetailPage from "./page/function-detail";
 import TriggerListPage from "./page/trigger-list";
 import TriggerDetailPage from "./page/trigger-detail";
+import TopicListPage from "./page/topic-list";
+import TopicDetailPage from "./page/topic-detail";
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -36,6 +38,8 @@ const router = createBrowserRouter([
     {path: "/logs", element: <RouteWithNavbar component={<LogsPage/>}></RouteWithNavbar>,},
     {path: "/functions", element: <RouteWithNavbar component={<FunctionListPage/>}></RouteWithNavbar>,},
     {path: "/functions/:funcId", element: <RouteWithNavbar component={<FunctionDetailPage/>}></RouteWithNavbar>,},
+    {path: "/topics", element: <RouteWithNavbar component={<TopicListPage/>}></RouteWithNavbar>,},
+    {path: "/topics/:topicId", element: <RouteWithNavbar component={<TopicDetailPage/>}></RouteWithNavbar>,},
     {path: "/triggers", element: <RouteWithNavbar component={<TriggerListPage/>}></RouteWithNavbar>,},
     {path: "/triggers/:funcId", element: <RouteWithNavbar component={<TriggerDetailPage/>}></RouteWithNavbar>,},
 ]);
