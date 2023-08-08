@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.value
 
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
@@ -105,6 +106,6 @@ internal class ErrorValueTest {
 
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox()
+        Sandbox(DefaultSandboxContext())
     }
 }

@@ -5,6 +5,7 @@ import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.extension.web3.eth.EthExtensionFactory
 import io.hamal.extension.web3.hml.HmlExtensionFactory
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
@@ -21,7 +22,7 @@ open class SandboxConfig {
         override fun create(): Sandbox {
             NativeLoader.load(Jar)
             val template = HttpTemplate("http://localhost:8008")
-            return Sandbox().also {
+            return Sandbox(DefaultSandboxContext()).also {
                 it.register(LogExtensionFactory { template }.create())
                 it.register(SysExtensionFactory { template }.create())
                 it.register(EthExtensionFactory().create())

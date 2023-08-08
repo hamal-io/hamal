@@ -1,4 +1,5 @@
 import io.hamal.extension.web3.eth.EthExtensionFactory
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -17,7 +18,7 @@ object IntegrationTest {
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
                 val luaCode = String(Files.readAllBytes(testFile))
-                Sandbox().use { sb ->
+                Sandbox(DefaultSandboxContext()).use { sb ->
                     sb.register(EthExtensionFactory().create())
                     sb.load(luaCode)
                 }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName("luaVersionNumber()")
-internal class LuaVersionNumberTest : BaseBridgeTest() {
+internal class LuaVersionNumberTest : NativeTest() {
     @Test
     fun `Loads current lua version number`() {
         val result = testInstance.luaVersionNumber()
@@ -24,7 +24,7 @@ internal class LuaVersionNumberTest : BaseBridgeTest() {
 }
 
 @DisplayName("luaIntegerWidth()")
-internal class LuaIntegerWidthTest : BaseBridgeTest() {
+internal class LuaIntegerWidthTest : NativeTest() {
     @Test
     fun `Loads integer width from lua`() {
         val result = testInstance.luaIntegerWidth()
@@ -33,7 +33,7 @@ internal class LuaIntegerWidthTest : BaseBridgeTest() {
 }
 
 @DisplayName("luaRegistryIndex()")
-internal class LuaRegistryIndexTest : BaseBridgeTest() {
+internal class LuaRegistryIndexTest : NativeTest() {
     @Test
     fun `Loads integer width from lua`() {
         val result = testInstance.luaRegistryIndex()
@@ -42,7 +42,7 @@ internal class LuaRegistryIndexTest : BaseBridgeTest() {
 }
 
 @DisplayName("top()")
-internal class TopTest : BaseBridgeTest() {
+internal class TopTest : NativeTest() {
     @Test
     fun `Nothing pushed on the stack`() {
         val result = testInstance.top()
@@ -59,7 +59,7 @@ internal class TopTest : BaseBridgeTest() {
 }
 
 @DisplayName("setTop()")
-internal class SetTopTest : BaseBridgeTest() {
+internal class SetTopTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -67,7 +67,7 @@ internal class SetTopTest : BaseBridgeTest() {
 }
 
 @DisplayName("absIndex()")
-internal class AbsIndexTest : BaseBridgeTest() {
+internal class AbsIndexTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -75,7 +75,7 @@ internal class AbsIndexTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushTop()")
-internal class PushTopTest : BaseBridgeTest() {
+internal class PushTopTest : NativeTest() {
 
     @Test
     fun `Pushes value at the top of stack which is already at the top`() {
@@ -140,7 +140,7 @@ internal class PushTopTest : BaseBridgeTest() {
 }
 
 @DisplayName("type()")
-internal class TypeTest : BaseBridgeTest() {
+internal class TypeTest : NativeTest() {
 
     @Test
     fun `Tries to read boolean with 0 index`() {
@@ -236,7 +236,7 @@ internal class TypeTest : BaseBridgeTest() {
 }
 
 @DisplayName("setGlobal()")
-internal class SetGlobalTest : BaseBridgeTest() {
+internal class SetGlobalTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -244,7 +244,7 @@ internal class SetGlobalTest : BaseBridgeTest() {
 }
 
 @DisplayName("getGlobal()")
-internal class GetGlobalTest : BaseBridgeTest() {
+internal class GetGlobalTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -252,7 +252,7 @@ internal class GetGlobalTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushBoolean()")
-internal class PushBooleanTest : BaseBridgeTest() {
+internal class PushBooleanTest : NativeTest() {
     @Test
     fun `Pushes value to stack`() {
         val result = testInstance.pushBoolean(true)
@@ -273,7 +273,7 @@ internal class PushBooleanTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushFunctionValue()")
-internal class PushFunctionValueTest : BaseBridgeTest() {
+internal class PushFunctionValueTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -281,7 +281,7 @@ internal class PushFunctionValueTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushError()")
-internal class PushErrorTest : BaseBridgeTest() {
+internal class PushErrorTest : NativeTest() {
     @Test
     fun `Pushes error value to stack`() {
         val result = testInstance.pushError("some error")
@@ -291,7 +291,7 @@ internal class PushErrorTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushNil()")
-internal class PushNilTest : BaseBridgeTest() {
+internal class PushNilTest : NativeTest() {
 
     @Test
     fun `Pushes value to stack`() {
@@ -312,7 +312,7 @@ internal class PushNilTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushNumber()")
-internal class PushNumberTest : BaseBridgeTest() {
+internal class PushNumberTest : NativeTest() {
 
     @Test
     fun `Pushes value to stack`() {
@@ -333,7 +333,7 @@ internal class PushNumberTest : BaseBridgeTest() {
 }
 
 @DisplayName("pushString()")
-internal class PushStringTest : BaseBridgeTest() {
+internal class PushStringTest : NativeTest() {
     @Test
     fun `Pushes value to stack`() {
         val result = testInstance.pushString("hamal")
@@ -354,7 +354,7 @@ internal class PushStringTest : BaseBridgeTest() {
 }
 
 @DisplayName("pop()")
-internal class PopTest : BaseBridgeTest() {
+internal class PopTest : NativeTest() {
     @Test
     fun `Tries to pop negative amount from empty`() {
         val exception = assertThrows<IllegalArgumentException> {
@@ -395,7 +395,7 @@ internal class PopTest : BaseBridgeTest() {
 }
 
 @DisplayName("toBoolean()")
-internal class ToBooleanTest : BaseBridgeTest() {
+internal class ToBooleanTest : NativeTest() {
 
     @Test
     fun `Tries to read boolean with 0 index`() {
@@ -457,7 +457,7 @@ internal class ToBooleanTest : BaseBridgeTest() {
 }
 
 @DisplayName("toErrorValue()")
-internal class ToErrorValueTest : BaseBridgeTest() {
+internal class ToErrorValueTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -465,7 +465,7 @@ internal class ToErrorValueTest : BaseBridgeTest() {
 }
 
 @DisplayName("toNumber()")
-internal class ToNumberTest : BaseBridgeTest() {
+internal class ToNumberTest : NativeTest() {
     @Test
     fun `Tries to read Number with 0 index`() {
         testInstance.pushNumber(812.123)
@@ -527,7 +527,7 @@ internal class ToNumberTest : BaseBridgeTest() {
 }
 
 @DisplayName("toString()")
-internal class ToStringTest : BaseBridgeTest() {
+internal class ToStringTest : NativeTest() {
 
     @Test
     fun `Tries to read String with 0 index`() {
@@ -589,7 +589,7 @@ internal class ToStringTest : BaseBridgeTest() {
 }
 
 @DisplayName("createTableTest()")
-internal class CreateTableTest : BaseBridgeTest() {
+internal class CreateTableTest : NativeTest() {
     @Test
     fun `Creates an empty table on empty stack`() {
         val result = testInstance.tableCreate(1, 2)
@@ -617,7 +617,7 @@ internal class CreateTableTest : BaseBridgeTest() {
 }
 
 @DisplayName("tabletSetField()")
-internal class TabletSetFieldTest : BaseBridgeTest() {
+internal class TabletSetFieldTest : NativeTest() {
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(0, 1)
@@ -674,7 +674,7 @@ internal class TabletSetFieldTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableGetField()")
-internal class TableGetFieldTest : BaseBridgeTest() {
+internal class TableGetFieldTest : NativeTest() {
 
     @Test
     fun `Gets value from table`() {
@@ -726,7 +726,7 @@ internal class TableGetFieldTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableGetLength()")
-internal class TableGetLengthTest : BaseBridgeTest() {
+internal class TableGetLengthTest : NativeTest() {
     @Test
     fun `Size of empty table`() {
         testInstance.tableCreate(12, 12)
@@ -787,7 +787,7 @@ internal class TableGetLengthTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableInsert()")
-internal class TableInsertTest : BaseBridgeTest() {
+internal class TableInsertTest : NativeTest() {
 
     @Test
     fun `Insert value to empty table`() {
@@ -811,7 +811,7 @@ internal class TableInsertTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableSetRaw()")
-internal class TableSetRawTest : BaseBridgeTest() {
+internal class TableSetRawTest : NativeTest() {
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(0, 1)
@@ -877,7 +877,7 @@ internal class TableSetRawTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableSetRawIdx()")
-internal class TableSetRawIdxTest : BaseBridgeTest() {
+internal class TableSetRawIdxTest : NativeTest() {
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(1, 0)
@@ -938,7 +938,7 @@ internal class TableSetRawIdxTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableGetRaw()")
-internal class TableGetRawTest : BaseBridgeTest() {
+internal class TableGetRawTest : NativeTest() {
     @Test
     fun `Gets value from table`() {
         testInstance.tableCreate(0, 1)
@@ -998,7 +998,7 @@ internal class TableGetRawTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableGetRawIdx()")
-internal class TableGetRawIdxTest : BaseBridgeTest() {
+internal class TableGetRawIdxTest : NativeTest() {
     @Test
     fun `Gets value from table`() {
         testInstance.tableCreate(0, 1)
@@ -1051,7 +1051,7 @@ internal class TableGetRawIdxTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableNext()")
-internal class TableNextTest : BaseBridgeTest() {
+internal class TableNextTest : NativeTest() {
     @Test
     fun `Next on empty table`() {
         testInstance.tableCreate(0, 0)
@@ -1121,7 +1121,7 @@ internal class TableNextTest : BaseBridgeTest() {
 }
 
 @DisplayName("tableGetSub")
-internal class TableGetSubTest : BaseBridgeTest() {
+internal class TableGetSubTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -1129,7 +1129,7 @@ internal class TableGetSubTest : BaseBridgeTest() {
 }
 
 @DisplayName("loadString()")
-internal class LoadStringTest : BaseBridgeTest() {
+internal class LoadStringTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -1137,7 +1137,7 @@ internal class LoadStringTest : BaseBridgeTest() {
 }
 
 @DisplayName("call()")
-internal class CallTest : BaseBridgeTest() {
+internal class CallTest : NativeTest() {
     @Test
     fun `Calls kotlin function with 2 parameter and 2 receives 2 values back`() {
         testInstance.pushFunctionValue(Magic())
@@ -1167,10 +1167,11 @@ internal class CallTest : BaseBridgeTest() {
     }
 }
 
-internal sealed class BaseBridgeTest {
+internal sealed class NativeTest {
+
     val testInstance: Native = run {
         NativeLoader.load(Resources)
-        Native()
+        Native(Sandbox(DefaultSandboxContext()))
     }
 
     fun verifyStackIsEmpty() {

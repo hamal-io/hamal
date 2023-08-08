@@ -3,7 +3,9 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.function.FunctionValue
 import io.hamal.lib.kua.value.ErrorValue
 
-class Native : AutoCloseable {
+class Native(
+    val sandbox: Sandbox
+) : AutoCloseable {
 
     external fun luaVersionNumber(): Int
     external fun luaIntegerWidth(): Int

@@ -10,7 +10,7 @@ fun Sandbox.registerGlobalFunction(name: String, function: FunctionValue<*, *, *
 
 fun main() {
     NativeLoader.load(BuildDir)
-    Sandbox().also { sb ->
+    Sandbox(DefaultSandboxContext()).also { sb ->
 
 //        val registry = ExtensionRegistry(sb)
 //        registry.register(

@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.ClosableState
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -38,6 +39,6 @@ internal class TableArrayValueTest {
 
     private val state = run {
         NativeLoader.load(Resources)
-        ClosableState(Sandbox().bridge)
+        ClosableState(Sandbox(DefaultSandboxContext()).native)
     }
 }

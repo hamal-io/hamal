@@ -15,12 +15,14 @@ interface SandboxFactory {
 }
 
 
-class Sandbox : State, AutoCloseable {
+class Sandbox(
+    private val ctx: SandboxContext
+) : State, AutoCloseable {
 
-    override val bridge: Native = Native()
+    override val native: Native = Native(this)
     override val top: StackTop get() = state.top
 
-    val state = ClosableState(bridge)
+    val state = ClosableState(native)
     val registry: ExtensionRegistry = ExtensionRegistry(this)
 
     init {
@@ -34,7 +36,7 @@ class Sandbox : State, AutoCloseable {
 
     fun load(code: CodeValue) = load(code.value)
 
-    override fun load(code: String) = bridge.load(code)
+    override fun load(code: String) = native.load(code)
 
     fun run(fn: (State) -> Unit) {
         fn(state)
@@ -109,12 +111,12 @@ fun State.registerExtension(extension: NativeExtension): TableMapValue {
         .filter { entry -> entry.value is FunctionValue<*, *, *, *> }
         .forEach { (name, value) ->
             require(value is FunctionValue<*, *, *, *>)
-            bridge.pushFunctionValue(value)
-            bridge.tabletSetField(r.index, name)
+            native.pushFunctionValue(value)
+            native.tabletSetField(r.index, name)
         }
 
     createConfig(extension.config)
-    bridge.tabletSetField(r.index, "__config")
+    native.tabletSetField(r.index, "__config")
 
     return r
 }
@@ -129,8 +131,8 @@ fun State.createConfig(config: ExtensionConfig): TableMapValue {
     )
 
     fns.forEach { (name, value) ->
-        bridge.pushFunctionValue(value)
-        bridge.tabletSetField(result.index, name)
+        native.pushFunctionValue(value)
+        native.tabletSetField(result.index, name)
     }
 
     return result

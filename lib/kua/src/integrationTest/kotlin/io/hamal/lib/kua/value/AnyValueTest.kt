@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.value
 
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -142,6 +143,6 @@ internal class AnyValueTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox()
+        Sandbox(DefaultSandboxContext())
     }
 }

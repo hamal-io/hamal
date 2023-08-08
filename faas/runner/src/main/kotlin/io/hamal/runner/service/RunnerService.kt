@@ -39,12 +39,14 @@ class AgentService(
                         lateinit var stateResult: State
                         val eventsToEmit = mutableListOf<Event>()
 
+
+
                         sandboxFactory.create().use { sb ->
                             sb.run { state ->
                                 val ctx = state.tableCreateMap(1)
 
-                                sb.bridge.pushFunctionValue(EmitEventFunction(eventsToEmit))
-                                sb.bridge.tabletSetField(ctx.index, "emit")
+                                sb.native.pushFunctionValue(EmitEventFunction(eventsToEmit))
+                                sb.native.tabletSetField(ctx.index, "emit")
 
                                 val funcState = state.tableCreateMap(1)
                                 request.state.value.forEach { entry ->
@@ -73,7 +75,7 @@ class AgentService(
                                             }
                                         }
 
-                                        sb.bridge.tableAppend(events.index)
+                                        sb.native.tableAppend(events.index)
                                     }
 
 //                                    invocation.events.forEach { evt ->
@@ -94,8 +96,8 @@ class AgentService(
 
                                 val stateMap = mutableMapOf<StringValue, SerializableValue>()
 
-                                state.bridge.pushNil()
-                                while (state.bridge.tableNext(funcState.index)) {
+                                state.native.pushNil()
+                                while (state.native.tableNext(funcState.index)) {
                                     val k = state.getStringValue(-2)
                                     val v = state.getAnyValue(-1)
 
@@ -105,7 +107,7 @@ class AgentService(
                                         else -> TODO()
                                     }
 
-                                    state.bridge.pop(1)
+                                    state.native.pop(1)
                                 }
 
                                 stateResult = State(
@@ -153,7 +155,7 @@ class EmitEventFunction(
 
         val eventMap = mutableMapOf<StringValue, SerializableValue>()
 
-        while (ctx.state.bridge.tableNext(arg1.index)) {
+        while (ctx.state.native.tableNext(arg1.index)) {
             val k = ctx.getStringValue(-2)
             val v = ctx.getAnyValue(-1)
             when (val n = v.value) {
@@ -161,7 +163,7 @@ class EmitEventFunction(
                 is StringValue -> eventMap[k] = n
                 else -> TODO()
             }
-            ctx.bridge.pop(1)
+            ctx.native.pop(1)
         }
 
 

@@ -40,6 +40,7 @@ class LogFunction(
         val level = ExecLogLevel.valueOf(arg1.value)
         val message = ExecLogMessage(arg2.value)
 
+
         DefaultExecLogService(templateSupplier())
             .append(
                 ExecId(1), AppendExecLogCmd(

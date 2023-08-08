@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.ClosableState
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.value.NumberValue
@@ -13,7 +14,7 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Empty table`() {
-        val emptyTableIndex = state.bridge.tableCreate(0, 0)
+        val emptyTableIndex = state.native.tableCreate(0, 0)
         val testInstance = TableEntryIterator(
             index = emptyTableIndex,
             state = state,
@@ -85,6 +86,6 @@ internal class TableEntryIteratorTest {
 
     private val state = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        ClosableState(Sandbox().bridge)
+        ClosableState(Sandbox(DefaultSandboxContext()).native)
     }
 }

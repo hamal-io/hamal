@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.table
 
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.error.ScriptErrorTest
@@ -153,7 +154,7 @@ internal class TableEntryIteratorTest {
 
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox().also {
+        Sandbox(DefaultSandboxContext()).also {
             it.register(NativeExtension("test", mapOf("call" to ScriptErrorTest.CallbackFunction())))
         }
     }

@@ -33,8 +33,8 @@ class ExtensionUpdateConfigFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableMapValue) {
         val state = ctx.state
-        state.bridge.pushNil()
-        while (state.bridge.tableNext(arg1.index)) {
+        state.native.pushNil()
+        while (state.native.tableNext(arg1.index)) {
             val k = state.getString(-2)
             val v = state.getAnyValue(-1)
 
@@ -42,7 +42,7 @@ class ExtensionUpdateConfigFunction(
                 is StringValue -> config.value[k] = n
                 else -> TODO()
             }
-            state.bridge.pop(1)
+            state.native.pop(1)
         }
     }
 }

@@ -4,6 +4,7 @@ import io.hamal.bootstrap.TestExtensionFactory
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -21,9 +22,9 @@ class TestAgentConfig {
     fun sandboxFactory(): SandboxFactory = object : SandboxFactory {
         override fun create(): Sandbox {
             NativeLoader.load(Resources)
-            val result = Sandbox()
+            val result = Sandbox(DefaultSandboxContext())
             result.register(TestExtensionFactory().create())
-            result.register(LogExtensionFactory().create())
+            result.register(LogExtensionFactory(httpTemplateSupplier()).create())
             result.register(SysExtensionFactory(httpTemplateSupplier()).create())
             return result
         }

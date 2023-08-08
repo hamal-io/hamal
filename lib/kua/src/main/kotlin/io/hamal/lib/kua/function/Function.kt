@@ -16,9 +16,9 @@ interface FunctionValue<
 
     operator fun invoke(ctx: FunctionContext, input: INPUT): OUTPUT
 
-    fun invokedByLua(bridge: Native): Int {
+    fun invokedByLua(native: Native): Int {
         val ctx = FunctionContext(
-            ClosableState(bridge)
+            ClosableState(native)
         )
 
         val input = inputSchema.createInput(ctx)

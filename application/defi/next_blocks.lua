@@ -10,7 +10,7 @@ local step_size = 25
 local next_block_number = ctx.state.next_block_number
 
 if next_block_number == nil then
-    next_block_number = 11199729
+    next_block_number = 11310000
 end
 
 local err, batch_result = eth.execute({

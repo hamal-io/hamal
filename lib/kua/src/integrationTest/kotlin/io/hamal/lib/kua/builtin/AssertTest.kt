@@ -1,10 +1,7 @@
 package io.hamal.lib.kua.builtin
 
-import io.hamal.lib.kua.AssertionError
-import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.ScriptError
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -61,7 +58,10 @@ class AssertTest {
             """.trimIndent()
             )
         }
-        assertThat(error.message, equalTo("""[string "local value = nil..."]:2: attempt to get length of a nil value (local 'value')"""))
+        assertThat(
+            error.message,
+            equalTo("""[string "local value = nil..."]:2: attempt to get length of a nil value (local 'value')""")
+        )
     }
 
     class CallbackFunction : Function0In0Out() {
@@ -72,7 +72,7 @@ class AssertTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox().also {
+        Sandbox(DefaultSandboxContext()).also {
             it.register(
                 NativeExtension(
                     "test",

@@ -14,7 +14,7 @@ class FunctionContext(
     val state: State
 ) : State {
 
-    override val bridge = state.bridge
+    override val native = state.native
     override val top: StackTop get() = state.top
 
     override fun isEmpty() = state.isEmpty()

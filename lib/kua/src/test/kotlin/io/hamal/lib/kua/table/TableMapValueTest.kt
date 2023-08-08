@@ -1,10 +1,7 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.kua.ClosableState
-import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.value.*
 import io.hamal.lib.kua.value.ValueType.Table
 import org.hamcrest.MatcherAssert.assertThat
@@ -47,7 +44,7 @@ internal class TableMapValueTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
-                state.bridge.pop(1)
+                state.native.pop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -75,10 +72,10 @@ internal class TableMapValueTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
-                state.bridge.tableGetField(1, "another-key")
+                state.native.tableGetField(1, "another-key")
                 assertThat(state.getString(-1), equalTo("another-value"))
 
-                state.bridge.pop(2)
+                state.native.pop(2)
                 verifyStackIsEmpty()
             }
         }
@@ -109,7 +106,7 @@ internal class TableMapValueTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
-                state.bridge.pop(1)
+                state.native.pop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -133,7 +130,7 @@ internal class TableMapValueTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
-                state.bridge.pop(1)
+                state.native.pop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -173,7 +170,7 @@ internal class TableMapValueTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
-                state.bridge.pop(1)
+                state.native.pop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -204,7 +201,7 @@ internal class TableMapValueTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
 
-                state.bridge.pop(1)
+                state.native.pop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -212,7 +209,7 @@ internal class TableMapValueTest {
 
     private val state = run {
         NativeLoader.load(Resources)
-        ClosableState(Sandbox().bridge)
+        ClosableState(Sandbox(DefaultSandboxContext()).native)
     }
 
     private fun verifyStackIsEmpty() {

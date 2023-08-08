@@ -27,21 +27,21 @@ data class TableProxyValue(
 ) : TableMapValue, TableArrayValue {
 
     override fun unset(key: String): TableLength {
-        bridge.pushString(key)
-        bridge.pushNil()
+        native.pushString(key)
+        native.pushNil()
         return state.tableSetRaw(index)
     }
 
     override fun set(key: String, value: Boolean): TableLength {
-        bridge.pushString(key)
-        bridge.pushBoolean(value)
+        native.pushString(key)
+        native.pushBoolean(value)
         return state.tableSetRaw(index)
     }
 
 
     override fun set(key: String, value: Double): TableLength {
-        bridge.pushString(key)
-        bridge.pushNumber(value)
+        native.pushString(key)
+        native.pushNumber(value)
         return state.tableSetRaw(index)
     }
 
@@ -73,28 +73,28 @@ data class TableProxyValue(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Boolean)
-        return booleanOf(bridge.toBoolean(state.top.value)).also { bridge.pop(1) }
+        return booleanOf(native.toBoolean(state.top.value)).also { native.pop(1) }
     }
 
     override fun getCodeValue(key: String): CodeValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)
-        return CodeValue(bridge.toString(state.top.value)).also { bridge.pop(1) }
+        return CodeValue(native.toString(state.top.value)).also { native.pop(1) }
     }
 
     override fun getNumberValue(key: String): NumberValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Number)
-        return NumberValue(bridge.toNumber(state.top.value)).also { bridge.pop(1) }
+        return NumberValue(native.toNumber(state.top.value)).also { native.pop(1) }
     }
 
     override fun getStringValue(key: String): StringValue {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)
-        return StringValue(bridge.toString(state.top.value)).also { bridge.pop(1) }
+        return StringValue(native.toString(state.top.value)).also { native.pop(1) }
     }
 
     override fun getTableMap(key: String): TableMapValue {
@@ -104,20 +104,20 @@ data class TableProxyValue(
         return state.getTableMap(state.top.value)
     }
 
-    override fun length(): TableLength = TableLength((bridge.tableGetLength(index)))
+    override fun length(): TableLength = TableLength((native.tableGetLength(index)))
 
     override fun append(value: Boolean): TableLength {
-        bridge.pushBoolean(value)
+        native.pushBoolean(value)
         return state.tableAppend(index)
     }
 
     override fun append(value: Double): TableLength {
-        bridge.pushNumber(value)
+        native.pushNumber(value)
         return state.tableAppend(index)
     }
 
     override fun append(value: String): TableLength {
-        bridge.pushString(value)
+        native.pushString(value)
         return state.tableAppend(index)
     }
 
@@ -153,7 +153,7 @@ data class TableProxyValue(
         return state.getStringValue(-1)
     }
 
-    private val bridge = state.bridge
+    private val native = state.native
 }
 
 private fun ValueType.checkExpectedType(expected: ValueType) {

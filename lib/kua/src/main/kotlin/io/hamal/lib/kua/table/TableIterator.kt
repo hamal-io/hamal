@@ -21,11 +21,11 @@ class TableEntryIterator<KEY : Value, VALUE : Value>(
     }
 
     override fun hasNext(): Boolean {
-        hasNext = state.bridge.tableNext(index)
+        hasNext = state.native.tableNext(index)
         return if (hasNext) {
             val k = keyExtractor(state, -2)
             val v = valueExtractor(state, -1)
-            state.bridge.pop(1)
+            state.native.pop(1)
             nextTableEntry = TableEntry(k, v)
             true
         } else {

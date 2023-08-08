@@ -1,6 +1,7 @@
 package io.hamal.extension.std.sys
 
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -12,7 +13,7 @@ fun main() {
 
     val templateSupplier = { HttpTemplate("http://localhost:8008") }
 
-    Sandbox().use {
+    Sandbox(DefaultSandboxContext()).use {
         it.register(
             ScriptExtension(
                 name = "sys",

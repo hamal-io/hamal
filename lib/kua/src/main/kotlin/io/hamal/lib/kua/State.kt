@@ -10,7 +10,7 @@ value class StackTop(val value: Int)
 
 interface State {
     //FIXME probably not a good idea to expose this internal - only for development / prototyping
-    val bridge: Native
+    val native: Native
     val top: StackTop
 
     fun isEmpty(): Boolean
@@ -65,20 +65,20 @@ interface State {
 }
 
 class ClosableState(
-    override val bridge: Native
+    override val native: Native
 ) : State, AutoCloseable {
-    override val top: StackTop get() = StackTop(bridge.top())
+    override val top: StackTop get() = StackTop(native.top())
 
 
-    override fun isEmpty() = bridge.top() == 0
+    override fun isEmpty() = native.top() == 0
     override fun isNotEmpty() = !isEmpty()
-    override fun setTop(idx: Int) = bridge.setTop(idx)
-    override fun absIndex(idx: Int) = bridge.absIndex(idx)
+    override fun setTop(idx: Int) = native.setTop(idx)
+    override fun absIndex(idx: Int) = native.absIndex(idx)
 
-    override fun pushTop(idx: Int): StackTop = StackTop(bridge.pushTop(idx))
+    override fun pushTop(idx: Int): StackTop = StackTop(native.pushTop(idx))
 
-    override fun type(idx: Int) = ValueType(bridge.type(idx))
-    override fun pushNil() = StackTop(bridge.pushNil())
+    override fun type(idx: Int) = ValueType(native.type(idx))
+    override fun pushNil() = StackTop(native.pushNil())
 
     override fun pushAny(value: AnyValue): StackTop {
         return when (val underlying = value.value) {
@@ -100,23 +100,23 @@ class ClosableState(
         }
     }
 
-    override fun pushBoolean(value: Boolean): StackTop = StackTop(bridge.pushBoolean(value))
-    override fun getBoolean(idx: Int): Boolean = bridge.toBoolean(idx)
-    override fun pushError(value: ErrorValue) = StackTop(bridge.pushError(value.message))
-    override fun pushFunction(value: FunctionValue<*, *, *, *>) = StackTop(bridge.pushFunctionValue(value))
+    override fun pushBoolean(value: Boolean): StackTop = StackTop(native.pushBoolean(value))
+    override fun getBoolean(idx: Int): Boolean = native.toBoolean(idx)
+    override fun pushError(value: ErrorValue) = StackTop(native.pushError(value.message))
+    override fun pushFunction(value: FunctionValue<*, *, *, *>) = StackTop(native.pushFunctionValue(value))
 
-    override fun getNumber(idx: Int) = bridge.toNumber(idx)
-    override fun pushNumber(value: Double) = StackTop(bridge.pushNumber(value))
-    override fun getString(idx: Int) = bridge.toString(idx)
-    override fun pushString(value: String) = StackTop(bridge.pushString(value))
+    override fun getNumber(idx: Int) = native.toNumber(idx)
+    override fun pushNumber(value: Double) = StackTop(native.pushNumber(value))
+    override fun getString(idx: Int) = native.toString(idx)
+    override fun pushString(value: String) = StackTop(native.pushString(value))
 
     override fun pushTable(value: TableValue): StackTop {
         TODO("Not yet implemented")
     }
 
-    override fun pushTable(proxy: TableMapValue) = StackTop(bridge.pushTop(proxy.index))
+    override fun pushTable(proxy: TableMapValue) = StackTop(native.pushTop(proxy.index))
 
-    override fun pushTable(proxy: TableArrayValue) = StackTop(bridge.pushTop(proxy.index))
+    override fun pushTable(proxy: TableArrayValue) = StackTop(native.pushTop(proxy.index))
 
     override fun getTable(idx: Int): TableValue {
         TODO("Not yet implemented")
@@ -129,33 +129,33 @@ class ClosableState(
     override fun getTableArray(idx: Int): TableArrayValue = TableProxyValue(absIndex(idx), this, TableType.Array)
 
     override fun setGlobal(name: String, value: FunctionValue<*, *, *, *>) {
-        bridge.pushFunctionValue(value)
-        bridge.setGlobal(name)
+        native.pushFunctionValue(value)
+        native.setGlobal(name)
     }
 
     override fun setGlobal(name: String, value: TableMapValue) {
-        bridge.pushTop(value.index)
-        bridge.setGlobal(name)
+        native.pushTop(value.index)
+        native.setGlobal(name)
     }
 
     override fun setGlobal(name: String, value: TableArrayValue) {
-        bridge.pushTop(value.index)
-        bridge.setGlobal(name)
+        native.pushTop(value.index)
+        native.setGlobal(name)
     }
 
     override fun getGlobalTableMap(name: String): TableMapValue {
-        bridge.getGlobal(name)
+        native.getGlobal(name)
         return getTableMap(top.value)
     }
 
     override fun unsetGlobal(name: String) {
-        bridge.pushNil()
-        bridge.setGlobal(name)
+        native.pushNil()
+        native.setGlobal(name)
     }
 
     override fun tableCreateMap(capacity: Int): TableMapValue {
         return TableProxyValue(
-            index = bridge.tableCreate(0, capacity),
+            index = native.tableCreate(0, capacity),
             state = this,
             type = TableType.Map
         )
@@ -163,25 +163,25 @@ class ClosableState(
 
     override fun tableCreateArray(capacity: Int): TableArrayValue {
         return TableProxyValue(
-            index = bridge.tableCreate(capacity, 0),
+            index = native.tableCreate(capacity, 0),
             state = this,
             type = TableType.Array
         )
     }
 
-    override fun tableAppend(idx: Int) = TableLength(bridge.tableAppend(idx))
-    override fun tableSetRaw(idx: Int) = TableLength(bridge.tableSetRaw(idx))
-    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = TableLength(bridge.tableSetRawIdx(stackIdx, tableIdx))
-    override fun tableGetRaw(idx: Int) = ValueType.ValueType(bridge.tableGetRaw(idx))
+    override fun tableAppend(idx: Int) = TableLength(native.tableAppend(idx))
+    override fun tableSetRaw(idx: Int) = TableLength(native.tableSetRaw(idx))
+    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableSetRawIdx(stackIdx, tableIdx))
+    override fun tableGetRaw(idx: Int) = ValueType.ValueType(native.tableGetRaw(idx))
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) =
-        ValueType.ValueType(bridge.tableGetRawIdx(stackIdx, tableIdx))
+        ValueType.ValueType(native.tableGetRawIdx(stackIdx, tableIdx))
 
     override fun load(code: String) {
-        bridge.load(code)
+        native.load(code)
     }
 
     override fun close() {
-        bridge.close()
+        native.close()
     }
 }
 
