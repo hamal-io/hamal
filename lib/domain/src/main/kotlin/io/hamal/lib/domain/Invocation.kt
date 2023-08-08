@@ -12,25 +12,25 @@ sealed class Invocation {
 }
 
 @Serializable
-@SerialName("Adhoc")
+@SerialName("AdhocInvocation")
 data class AdhocInvocation(
     override val invokedAt: InvokedAt = InvokedAt.now()
 ) : Invocation()
 
 @Serializable
-@SerialName("FixedRate")
+@SerialName("FixedRateInvocation")
 data class FixedRateInvocation(
     override val invokedAt: InvokedAt = InvokedAt.now()
 ) : Invocation()
 
 @Serializable
-@SerialName("OneShot")
-data class OneShotInvocation(
+@SerialName("FuncInvocation")
+data class FuncInvocation(
     override val invokedAt: InvokedAt = InvokedAt.now()
 ) : Invocation()
 
 @Serializable
-@SerialName("Event")
+@SerialName("EventInvocation")
 data class EventInvocation(
     val events: List<Event>,
     override val invokedAt: InvokedAt = InvokedAt.now()

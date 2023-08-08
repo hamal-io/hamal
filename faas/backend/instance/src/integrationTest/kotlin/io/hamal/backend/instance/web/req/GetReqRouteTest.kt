@@ -2,7 +2,7 @@ package io.hamal.backend.instance.web.req
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.ReqStatus
-import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
+import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -22,7 +22,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(SubmittedInvokeAdhocReq::class)
+        val result = response.result(SubmittedInvokeExecReq::class)
         assertThat(result.status, equalTo(ReqStatus.Completed))
     }
 

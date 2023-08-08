@@ -3,6 +3,11 @@ package io.hamal.backend.instance.event
 import io.hamal.lib.domain.*
 import kotlinx.serialization.Serializable
 
+@Serializable
+@SystemEventTopic("exec::invoked")
+data class ExecInvokedEvent(
+    val scheduledExec: ScheduledExec
+) : SystemEvent()
 
 @Serializable
 @SystemEventTopic("exec::planned")

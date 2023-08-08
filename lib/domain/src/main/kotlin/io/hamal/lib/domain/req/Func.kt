@@ -40,17 +40,7 @@ data class SubmittedUpdateFuncReq(
 ) : SubmittedReq
 
 @Serializable
-data class InvokeOneshotReq(
+data class InvokeFuncReq(
     val correlationId: CorrelationId?,
-    val inputs: InvocationInputs,
+    val inputs: InvocationInputs?,
 )
-
-@Serializable
-data class SubmittedInvokeOneshotReq(
-    override val reqId: ReqId,
-    override var status: ReqStatus,
-    val execId: ExecId,
-    val funcId: FuncId,
-    val correlationId: CorrelationId,
-    val inputs: InvocationInputs,
-) : SubmittedReq

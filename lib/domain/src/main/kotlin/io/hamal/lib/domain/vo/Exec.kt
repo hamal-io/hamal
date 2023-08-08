@@ -21,7 +21,6 @@ class ExecInputs(override val value: TableValue = TableValue()) : Inputs() {
 }
 
 enum class ExecStatus(val value: Int) {
-
     Planned(1),
     Scheduled(2),
     Queued(3),

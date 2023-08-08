@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.adhoc
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.req.ReqStatus
-import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
+import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus
@@ -30,7 +30,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        val result = response.result(SubmittedInvokeAdhocReq::class)
+        val result = response.result(SubmittedInvokeExecReq::class)
 
         assertThat(result.status, equalTo(ReqStatus.Submitted))
         assertThat(result.inputs, equalTo(InvocationInputs()))

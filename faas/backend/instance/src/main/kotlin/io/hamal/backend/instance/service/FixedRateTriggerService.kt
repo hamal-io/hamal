@@ -1,12 +1,14 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.event.SystemEventEmitter
-import io.hamal.backend.instance.req.InvokeFixedRate
+import io.hamal.backend.instance.req.InvokeExec
 import io.hamal.backend.instance.req.SubmitRequest
+import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.now
+import io.hamal.lib.domain.FixedRateInvocation
 import io.hamal.lib.domain.FixedRateTrigger
 import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain.vo.CorrelationId
@@ -26,7 +28,8 @@ class FixedRateTriggerService(
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val eventEmitter: SystemEventEmitter<*>,
     internal val submitRequest: SubmitRequest,
-    internal val generateDomainId: GenerateDomainId
+    internal val generateDomainId: GenerateDomainId,
+    internal val funcQueryRepository: FuncQueryRepository
 ) {
 
     private val plannedInvocations = mutableMapOf<Trigger, Instant>()
@@ -61,11 +64,13 @@ class FixedRateTriggerService(
 
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
     submitRequest(
-        InvokeFixedRate(
+        InvokeExec(
             execId = generateDomainId(::ExecId),
             funcId = trigger.funcId,
             correlationId = trigger.correlationId ?: CorrelationId("__default__"),
             inputs = InvocationInputs(TableValue()),
+            invocation = FixedRateInvocation(),
+            code = funcQueryRepository.get(trigger.funcId).code
         )
     )
 }

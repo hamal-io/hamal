@@ -8,3 +8,4 @@ import kotlinx.serialization.Serializable
 data class TriggerCreatedEvent(
     val trigger: Trigger
 ) : SystemEvent()
+

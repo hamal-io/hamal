@@ -1,9 +1,10 @@
 package io.hamal.lib.domain.req
 
-import io.hamal.lib.domain.EventInvocation
+import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.value.CodeValue
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -34,23 +35,13 @@ data class SubmittedCreateTriggerReq(
 
 
 @Serializable
-data class SubmittedInvokeFixedRateReq(
+data class SubmittedInvokeExecReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    val execId: ExecId,
-    val funcId: FuncId,
-    val correlationId: CorrelationId,
+    val id: ExecId,
+    val funcId: FuncId?,
+    val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
+    val invocation: Invocation,
+    val code: CodeValue?
 ) : SubmittedReq
-
-@Serializable
-data class SubmittedInvokeEventReq(
-    override val reqId: ReqId,
-    override var status: ReqStatus,
-    val execId: ExecId,
-    val funcId: FuncId,
-    val correlationId: CorrelationId,
-    val inputs: InvocationInputs,
-    val invocation: EventInvocation
-) : SubmittedReq
-

@@ -1,77 +1,69 @@
 package io.hamal.backend.instance.req
 
+import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.ReqCmdRepository
-import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.EventInvocation
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.*
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.port.GenerateDomainId
-import org.springframework.beans.factory.annotation.Autowired
+import io.hamal.lib.kua.value.CodeValue
 import org.springframework.stereotype.Component
 
 
-data class InvokeFixedRate(
+data class InvokeExec(
     val execId: ExecId,
     val funcId: FuncId,
-    val correlationId: CorrelationId,
+    val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-)
-
-data class InvokeEvent(
-    val execId: ExecId,
-    val funcId: FuncId,
-    val correlationId: CorrelationId,
-    val inputs: InvocationInputs,
-    val invocation: EventInvocation
+    val invocation: Invocation,
+    val code: CodeValue
 )
 
 @Component
 class SubmitRequest(
-    @Autowired private val generateDomainId: GenerateDomainId,
-    @Autowired private val reqCmdRepository: ReqCmdRepository,
+    private val generateDomainId: GenerateDomainId,
+    private val reqCmdRepository: ReqCmdRepository,
+    private val funcQueryRepository: FuncQueryRepository
 ) {
     operator fun invoke(adhoc: InvokeAdhocReq) =
-        SubmittedInvokeAdhocReq(
+        SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = generateDomainId(::ExecId),
             inputs = adhoc.inputs,
-            code = adhoc.code
+            code = adhoc.code,
+            funcId = null,
+            correlationId = null,
+            invocation = AdhocInvocation()
         ).also(reqCmdRepository::queue)
 
 
-    operator fun invoke(funcId: FuncId, oneshot: InvokeOneshotReq) =
-        SubmittedInvokeOneshotReq(
+    operator fun invoke(funcId: FuncId, invokeFunc: InvokeFuncReq): SubmittedInvokeExecReq {
+        val func = funcQueryRepository.get(funcId)
+        return SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(::ExecId),
+            id = generateDomainId(::ExecId),
             funcId = funcId,
-            correlationId = oneshot.correlationId ?: CorrelationId("__default__"),
-            inputs = oneshot.inputs,
+            correlationId = invokeFunc.correlationId,
+            inputs = invokeFunc.inputs ?: InvocationInputs(),
+            invocation = FuncInvocation(),
+            code = func.code
         ).also(reqCmdRepository::queue)
+    }
 
-    operator fun invoke(fixedRate: InvokeFixedRate) =
-        SubmittedInvokeFixedRateReq(
+    operator fun invoke(invokeExec: InvokeExec) =
+        SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            execId = generateDomainId(::ExecId),
-            funcId = fixedRate.funcId,
-            correlationId = fixedRate.correlationId,
-            inputs = fixedRate.inputs,
+            id = generateDomainId(::ExecId),
+            funcId = invokeExec.funcId,
+            correlationId = invokeExec.correlationId,
+            inputs = invokeExec.inputs,
+            invocation = invokeExec.invocation,
+            code = invokeExec.code
         ).also(reqCmdRepository::queue)
 
-
-    operator fun invoke(invoke: InvokeEvent) =
-        SubmittedInvokeEventReq(
-            reqId = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
-            execId = generateDomainId(::ExecId),
-            funcId = invoke.funcId,
-            correlationId = invoke.correlationId,
-            inputs = invoke.inputs,
-            invocation = invoke.invocation
-        ).also(reqCmdRepository::queue)
 
     operator fun invoke(execId: ExecId, complete: CompleteExecReq) =
         SubmittedCompleteExecReq(

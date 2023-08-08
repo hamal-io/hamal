@@ -1,8 +1,9 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.req.InvokeEvent
+import io.hamal.backend.instance.req.InvokeExec
 import io.hamal.backend.instance.req.SubmitRequest
+import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
@@ -31,7 +32,8 @@ class EventTriggerService<TOPIC : LogTopic>(
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
-    internal val async: Async
+    internal val async: Async,
+    private val funcQueryRepository: FuncQueryRepository
 ) {
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
@@ -61,12 +63,13 @@ class EventTriggerService<TOPIC : LogTopic>(
                     try {
                         consumer.consumeBatch(1) { evts ->
                             submitRequest(
-                                InvokeEvent(
+                                InvokeExec(
                                     execId = generateDomainId(::ExecId),
                                     funcId = trigger.funcId,
                                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                                     inputs = InvocationInputs(TableValue()),
-                                    invocation = EventInvocation(evts)
+                                    invocation = EventInvocation(evts),
+                                    code = funcQueryRepository.get(trigger.funcId).code
                                 )
                             )
                         }

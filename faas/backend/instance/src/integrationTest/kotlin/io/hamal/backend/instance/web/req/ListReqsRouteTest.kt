@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.req
 
 import io.hamal.lib.domain.req.ReqStatus
-import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
+import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.domain.ListSubmittedReqsResponse
 import io.hamal.lib.sdk.extension.parameter
@@ -29,7 +29,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
             with(reqs.first()) {
                 assertThat(reqId, equalTo(adhocResponse.reqId))
                 assertThat(status, equalTo(ReqStatus.Completed))
-                assertThat(this, instanceOf(SubmittedInvokeAdhocReq::class.java))
+                assertThat(this, instanceOf(SubmittedInvokeExecReq::class.java))
             }
         }
     }
@@ -45,7 +45,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         assertThat(listResponse.reqs, hasSize(23))
 
         listResponse.reqs
-            .map { it as SubmittedInvokeAdhocReq }
+            .map { it as SubmittedInvokeExecReq }
             .forEachIndexed { idx, req ->
                 val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(CodeValue("${22 - idx}")))
@@ -67,7 +67,7 @@ internal class ListReqsRouteTest : BaseReqRouteTest() {
         assertThat(listResponse.reqs, hasSize(1))
 
         listResponse.reqs
-            .map { it as SubmittedInvokeAdhocReq }
+            .map { it as SubmittedInvokeExecReq }
             .forEach { req ->
                 val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(CodeValue("71")))

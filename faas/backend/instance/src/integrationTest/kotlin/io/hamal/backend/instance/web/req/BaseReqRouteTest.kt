@@ -2,7 +2,7 @@ package io.hamal.backend.instance.web.req
 
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.req.SubmittedInvokeAdhocReq
+import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -22,13 +22,13 @@ internal sealed class BaseReqRouteTest : BaseRouteTest() {
         return listResponse.result(ListSubmittedReqsResponse::class)
     }
 
-    fun adhoc(code: CodeValue = CodeValue("")): SubmittedInvokeAdhocReq {
+    fun adhoc(code: CodeValue = CodeValue("")): SubmittedInvokeExecReq {
         return httpTemplate.post("/v1/adhoc").body(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),
                 code = code
             )
-        ).execute(SubmittedInvokeAdhocReq::class)
+        ).execute(SubmittedInvokeExecReq::class)
     }
 
 }
