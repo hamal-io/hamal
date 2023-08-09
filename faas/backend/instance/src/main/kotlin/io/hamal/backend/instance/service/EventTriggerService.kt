@@ -3,6 +3,7 @@ package io.hamal.backend.instance.service
 import io.hamal.backend.instance.component.Async
 import io.hamal.backend.instance.req.InvokeExec
 import io.hamal.backend.instance.req.SubmitRequest
+import io.hamal.backend.repository.api.EventTrigger
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.backend.repository.api.log.GroupId
@@ -12,7 +13,6 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
-import io.hamal.lib.domain.EventTrigger
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId

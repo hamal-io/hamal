@@ -8,7 +8,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.sdk.domain.ListTriggersResponse
+import io.hamal.lib.sdk.domain.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import kotlin.time.Duration.Companion.seconds
@@ -76,11 +76,11 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     }
 
 
-    fun listTriggers(): ListTriggersResponse {
+    fun listTriggers(): ApiTriggerList {
         val listTriggersResponse = httpTemplate.get("/v1/triggers").execute()
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTriggersResponse.result(ListTriggersResponse::class)
+        return listTriggersResponse.result(ApiTriggerList::class)
     }
 
 }

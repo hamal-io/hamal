@@ -5,10 +5,10 @@ import io.hamal.backend.instance.event.TriggerCreatedEvent
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.Trigger
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.Trigger
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import org.springframework.stereotype.Component

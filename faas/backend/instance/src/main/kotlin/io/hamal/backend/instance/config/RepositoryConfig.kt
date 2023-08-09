@@ -26,13 +26,13 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
 
     @Bean
-    open fun sqliteBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path))
+    open fun logBrokerRepository(): LogBrokerRepository = SqliteLogBrokerRepository(SqliteLogBroker(path))
 
     @Bean
-    open fun systemEventBrokerRepository() = sqliteBrokerRepository()
+    open fun systemEventBrokerRepository() = logBrokerRepository()
 
     @Bean
-    open fun eventBrokerRepository() = sqliteBrokerRepository()
+    open fun eventBrokerRepository() = logBrokerRepository()
 
     @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
@@ -88,15 +88,15 @@ open class SqliteRepositoryConfig {
 @Profile("memory")
 @Configuration
 open class MemoryRepositoryConfig {
-    @Bean
-    open fun systemEventBrokerRepository(): LogBrokerRepository {
-        return MemoryLogBrokerRepository()
-    }
 
     @Bean
-    open fun eventBrokerRepository(): LogBrokerRepository {
-        return MemoryLogBrokerRepository()
-    }
+    open fun logBrokerRepository(): LogBrokerRepository = MemoryLogBrokerRepository()
+
+    @Bean
+    open fun systemEventBrokerRepository() = MemoryLogBrokerRepository()
+
+    @Bean
+    open fun eventBrokerRepository() = MemoryLogBrokerRepository()
 
     @Bean
     open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository
