@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.ReqQueryRepository
 import io.hamal.backend.repository.memory.record.CurrentExecProjection
 import io.hamal.backend.repository.memory.record.QueueProjection
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.req.SubmittedReq
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.util.concurrent.locks.ReentrantLock

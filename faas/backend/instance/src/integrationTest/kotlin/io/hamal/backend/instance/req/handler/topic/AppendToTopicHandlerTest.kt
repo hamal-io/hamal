@@ -6,7 +6,7 @@ import io.hamal.backend.repository.api.log.LogSegment
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.SubmittedAppendToTopicReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -29,7 +29,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
         testInstance(
             SubmittedAppendToTopicReq(
                 reqId = ReqId(SnowflakeId(123)),
-                status = ReqStatus.Submitted,
+                status = Submitted,
                 id = TopicId(4444),
                 event = Event(TableValue("hamal" to StringValue("rockz")))
             )
@@ -56,7 +56,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
             testInstance(
                 SubmittedAppendToTopicReq(
                     reqId = ReqId(SnowflakeId(123)),
-                    status = ReqStatus.Submitted,
+                    status = Submitted,
                     id = TopicId(123),
                     event = Event(TableValue("hamal" to StringValue("rockz")))
                 )

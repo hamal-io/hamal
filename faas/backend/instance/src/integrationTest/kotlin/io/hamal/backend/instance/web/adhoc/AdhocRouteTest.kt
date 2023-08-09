@@ -1,14 +1,14 @@
 package io.hamal.backend.instance.web.adhoc
 
 import io.hamal.backend.instance.web.BaseRouteTest
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.CodeValue
@@ -28,11 +28,11 @@ internal class AdhocRouteTest : BaseRouteTest() {
             )
         )
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
         val result = response.result(SubmittedInvokeExecReq::class)
 
-        assertThat(result.status, equalTo(ReqStatus.Submitted))
+        assertThat(result.status, equalTo(Submitted))
         assertThat(result.inputs, equalTo(InvocationInputs()))
         assertThat(result.code, equalTo(CodeValue("40 + 2")))
 
@@ -53,7 +53,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
     private fun verifyExecQueued(execId: ExecId) {
         with(execQueryRepository.find(execId)!!) {
             assertThat(id, equalTo(execId))
-            assertThat(status, equalTo(ExecStatus.Queued))
+            assertThat(status, equalTo(Queued))
 
             assertThat(correlation, nullValue())
             assertThat(inputs, equalTo(ExecInputs()))

@@ -4,8 +4,8 @@ import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.backend.repository.api.EventTrigger
 import io.hamal.backend.repository.api.FixedRateTrigger
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.ReqStatus
 import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.value.StringValue
@@ -111,7 +111,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateFixedRateTriggerReq = SubmittedCreateTriggerReq(
         reqId = ReqId(1),
-        status = ReqStatus.Submitted,
+        status = Submitted,
         type = TriggerType.FixedRate,
         funcId = FuncId(2222),
         id = TriggerId(1234),
@@ -122,7 +122,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateEventTriggerReq = SubmittedCreateTriggerReq(
         reqId = ReqId(1),
-        status = ReqStatus.Submitted,
+        status = Submitted,
         type = TriggerType.Event,
         funcId = FuncId(2222),
         topicId = TopicId(1111),

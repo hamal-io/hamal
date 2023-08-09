@@ -2,7 +2,7 @@ package io.hamal.backend.instance.req.handler.func
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.SubmittedCreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
@@ -32,7 +32,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
         testInstance(
             SubmittedCreateFuncReq(
                 reqId = ReqId(2),
-                status = ReqStatus.Submitted,
+                status = Submitted,
                 id = FuncId(12345),
                 name = FuncName("another-func"),
                 inputs = FuncInputs(),
@@ -61,7 +61,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateFuncReq = SubmittedCreateFuncReq(
         reqId = ReqId(1),
-        status = ReqStatus.Submitted,
+        status = Submitted,
         id = FuncId(12345),
         name = FuncName("awesome-func"),
         inputs = FuncInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),

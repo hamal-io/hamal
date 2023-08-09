@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.req
 
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.domain.ListSubmittedReqsResponse
@@ -28,7 +28,7 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
 
             with(reqs.first()) {
                 assertThat(reqId, equalTo(adhocResponse.reqId))
-                assertThat(status, equalTo(ReqStatus.Completed))
+                assertThat(status, equalTo(Completed))
                 assertThat(this, instanceOf(SubmittedInvokeExecReq::class.java))
             }
         }

@@ -2,7 +2,8 @@ package io.hamal.backend.instance.web
 
 import io.hamal.backend.instance.BaseTest
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Completed
+import io.hamal.lib.domain._enum.ReqStatus.Failed
 import io.hamal.lib.domain.req.SubmittedReq
 import io.hamal.lib.http.HttpTemplate
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,14 +22,14 @@ internal abstract class BaseRouteTest : BaseTest() {
     fun verifyReqCompleted(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
-            assertThat(status, equalTo(ReqStatus.Completed))
+            assertThat(status, equalTo(Completed))
         }
     }
 
     fun verifyReqFailed(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
-            assertThat(status, equalTo(ReqStatus.Failed))
+            assertThat(status, equalTo(Failed))
         }
     }
 
@@ -36,10 +37,10 @@ internal abstract class BaseRouteTest : BaseTest() {
     fun awaitCompleted(id: ReqId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Completed) {
+                if (it.status == Completed) {
                     return
                 }
-                if (it.status == ReqStatus.Failed) {
+                if (it.status == Failed) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -63,11 +64,11 @@ internal abstract class BaseRouteTest : BaseTest() {
     fun awaitFailed(id: ReqId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Failed) {
+                if (it.status == Failed) {
                     return
                 }
 
-                if (it.status == ReqStatus.Completed) {
+                if (it.status == Completed) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }

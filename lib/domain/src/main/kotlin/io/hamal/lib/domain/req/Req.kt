@@ -1,6 +1,7 @@
 package io.hamal.lib.domain.req
 
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.ReqStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,8 +10,3 @@ sealed interface SubmittedReq {
     var status: ReqStatus
 }
 
-enum class ReqStatus {
-    Submitted,
-    Completed,
-    Failed;
-}

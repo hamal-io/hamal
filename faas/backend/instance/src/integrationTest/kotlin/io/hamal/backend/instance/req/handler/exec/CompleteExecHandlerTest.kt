@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.CompletedExec
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.req.SubmittedCompleteExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus

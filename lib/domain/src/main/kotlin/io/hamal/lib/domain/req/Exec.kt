@@ -3,6 +3,7 @@ package io.hamal.lib.domain.req
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.value.ErrorValue
 import kotlinx.serialization.Serializable

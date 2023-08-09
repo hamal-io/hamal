@@ -2,7 +2,7 @@ package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.*
-import io.hamal.lib.domain.req.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.value.CodeValue
@@ -21,7 +21,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
         testInstance(
             SubmittedInvokeExecReq(
                 reqId = ReqId(1),
-                status = ReqStatus.Submitted,
+                status = Submitted,
                 id = ExecId(3333),
                 inputs = InvocationInputs(TableValue(StringValue("hamal") to StringValue("justworks"))),
                 code = CodeValue("code"),
@@ -60,7 +60,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             SubmittedInvokeExecReq(
                 reqId = ReqId(1),
                 correlationId = CorrelationId("some-correlation"),
-                status = ReqStatus.Submitted,
+                status = Submitted,
                 id = ExecId(3333),
                 inputs = InvocationInputs(
                     TableValue(
@@ -120,7 +120,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(1),
                 id = ExecId(3333),
                 correlationId = CorrelationId("some-correlation"),
-                status = ReqStatus.Submitted,
+                status = Submitted,
                 inputs = InvocationInputs(
                     TableValue(
                         StringValue("override") to StringValue("true"),
@@ -215,7 +215,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     private val submittedFixedRateInvocationReq = SubmittedInvokeExecReq(
         reqId = ReqId(1),
         correlationId = CorrelationId("some-correlation"),
-        status = ReqStatus.Submitted,
+        status = Submitted,
         id = ExecId(3333),
         inputs = InvocationInputs(
             TableValue(
