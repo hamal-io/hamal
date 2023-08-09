@@ -3,7 +3,7 @@ package io.hamal.bootstrap
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.bootstrap.config.TestAgentConfig
+import io.hamal.bootstrap.config.TestRunnerConfig
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecStatus
@@ -34,7 +34,7 @@ import kotlin.io.path.name
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(
     classes = [
-        TestAgentConfig::class,
+        TestRunnerConfig::class,
         BackendConfig::class,
         RunnerConfig::class
     ]

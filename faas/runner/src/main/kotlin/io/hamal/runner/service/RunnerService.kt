@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-class AgentService(
+class RunnerService(
     private val httpTemplateSupplier: HttpTemplateSupplier,
     private val sandboxFactory: SandboxFactory,
     private val async: RunnerAsync
@@ -115,7 +115,7 @@ class AgentService(
                         }
 
                         sdk.execService().complete(request.id, stateResult, eventsToEmit)
-                        
+
                     } catch (kua: ExtensionError) {
                         kua.printStackTrace()
 

@@ -19,7 +19,9 @@ class StaticContentFilter : Filter {
 
     private fun doFilter(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val path = request.servletPath
-        if (fileExtensions.stream().anyMatch { path.contains(it) }) {
+        if (path.startsWith("/v1")) {
+            chain.doFilter(request, response)
+        } else if (fileExtensions.stream().anyMatch { path.contains(it) }) {
             resourceToResponse("static$path", response)
         } else {
             resourceToResponse("static/index.html", response)
