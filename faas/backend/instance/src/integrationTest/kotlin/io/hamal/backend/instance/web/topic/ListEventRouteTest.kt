@@ -2,6 +2,7 @@ package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.vo.EventId
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -15,26 +16,25 @@ import org.junit.jupiter.api.Test
 internal class ListEventRouteTest : BaseTopicRouteTest() {
     @Test
     fun `No events`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("test-topic"))
-        )
+        ).id(::TopicId)
 
-        val result = listTopicEvents(topicResponse.id)
+        val result = listTopicEvents(topicId)
         assertThat(result.events, empty())
     }
 
     @Test
     fun `Single event`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("test-topic"))
-        )
+        ).id(::TopicId)
 
         awaitCompleted(
-            appendEvent(topicResponse.id, TableValue("counter" to NumberValue(1)))
+            appendEvent(topicId, TableValue("counter" to NumberValue(1)))
         )
 
-        with(listTopicEvents(topicResponse.id)) {
-            assertThat(topicId, equalTo(topicResponse.id))
+        with(listTopicEvents(topicId)) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
             assertThat(events, hasSize(1))
 
@@ -47,17 +47,17 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
     @Test
     fun `Limit events`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("test-topic")).also { awaitCompleted(it.reqId) }
-        )
+        ).id(::TopicId)
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicResponse.id, TableValue("counter" to NumberValue(it)))
+                appendEvent(topicId, TableValue("counter" to NumberValue(it)))
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/topics/${topicResponse.id.value}/events")
+        val listResponse = httpTemplate.get("/v1/topics/${topicId.value}/events")
             .parameter("limit", 23)
             .execute(ListEventsResponse::class)
 
@@ -70,17 +70,17 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
     @Test
     fun `Skip and limit events`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("test-topic"))
-        )
+        ).id(::TopicId)
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicResponse.id, TableValue("counter" to NumberValue(it)))
+                appendEvent(topicId, TableValue("counter" to NumberValue(it)))
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/topics/${topicResponse.id.value}/events")
+        val listResponse = httpTemplate.get("/v1/topics/${topicId.value}/events")
             .parameter("after_id", 95)
             .parameter("limit", 1)
             .execute(ListEventsResponse::class)
@@ -94,20 +94,19 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
     @Test
     fun `Does not show events of different topic`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("test-topic"))
-        )
+        ).id(::TopicId)
 
-        val anotherTopicResponse = awaitCompleted(
+        val anotherTopicId = awaitCompleted(
             createTopic(TopicName("another-test-topic"))
-        )
+        ).id(::TopicId)
 
         awaitCompleted(
-            appendEvent(topicResponse.id, TableValue("counter" to NumberValue(1)))
+            appendEvent(topicId, TableValue("counter" to NumberValue(1)))
         )
 
-        with(listTopicEvents(anotherTopicResponse.id)) {
-            assertThat(topicId, equalTo(anotherTopicResponse.id))
+        with(listTopicEvents(anotherTopicId)) {
             assertThat(topicName, equalTo(TopicName("another-test-topic")))
             assertThat(events, empty())
         }

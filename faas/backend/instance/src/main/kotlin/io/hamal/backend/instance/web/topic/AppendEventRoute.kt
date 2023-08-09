@@ -4,9 +4,9 @@ import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.req.AppendEventReq
-import io.hamal.lib.domain.req.SubmittedAppendToTopicReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,7 +23,7 @@ class AppendEventRoute(
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,
         @RequestBody value: TableValue
-    ): ResponseEntity<SubmittedAppendToTopicReq> {
+    ): ResponseEntity<ApiSubmittedReqWithDomainId> {
         val topic = eventBrokerRepository.getTopic(topicId)
         val result = submitRequest(
             AppendEventReq(
@@ -31,6 +31,12 @@ class AppendEventRoute(
                 event = Event(value)
             )
         )
-        return ResponseEntity(result, HttpStatus.ACCEPTED)
+        return ResponseEntity(result.let {
+            ApiSubmittedReqWithDomainId(
+                reqId = it.reqId,
+                status = it.status,
+                id = it.id.value
+            )
+        }, HttpStatus.ACCEPTED)
     }
 }

@@ -3,7 +3,6 @@ package io.hamal.backend.instance.web.func
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.InvokeFuncReq
-import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -14,9 +13,9 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
 internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
@@ -33,7 +32,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value.value}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value}/exec")
             .body(
                 InvokeFuncReq(
                     correlationId = CorrelationId("some-correlation-id"),
@@ -44,11 +43,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(SubmittedInvokeExecReq::class)
-        assertThat(result.funcId, equalTo(createResponse.id))
-        assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.correlationId, equalTo(CorrelationId("some-correlation-id")))
-
+        val result = invocationResponse.result(ApiSubmittedReqWithDomainId::class)
         awaitCompleted(result.reqId)
     }
 
@@ -64,7 +59,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value.value}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value}/exec")
             .body(
                 InvokeFuncReq(
                     inputs = InvocationInputs(),
@@ -75,11 +70,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(SubmittedInvokeExecReq::class)
-        assertThat(result.funcId, equalTo(createResponse.id))
-        assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.correlationId, nullValue())
-
+        val result = invocationResponse.result(ApiSubmittedReqWithDomainId::class)
         awaitCompleted(result.reqId)
     }
 

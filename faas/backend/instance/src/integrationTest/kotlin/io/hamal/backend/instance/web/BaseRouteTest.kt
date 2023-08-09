@@ -1,11 +1,12 @@
 package io.hamal.backend.instance.web
 
 import io.hamal.backend.instance.BaseTest
+import io.hamal.backend.repository.api.submitted_req.SubmittedReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain._enum.ReqStatus.Failed
-import io.hamal.lib.domain.req.SubmittedReq
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -48,16 +49,16 @@ internal abstract class BaseRouteTest : BaseTest() {
         }
     }
 
-    fun <REQ : SubmittedReq> awaitCompleted(req: REQ): REQ {
+    fun <REQ : ApiSubmittedReq> awaitCompleted(req: REQ): REQ {
         awaitCompleted(req.reqId)
         return req
     }
 
-    fun <REQ : SubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
+    fun <REQ : ApiSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
         return reqs.toList().onEach { awaitCompleted(it.reqId) }
     }
 
-    fun <REQ : SubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
+    fun <REQ : ApiSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
         return reqs.onEach { awaitCompleted(it.reqId) }
     }
 
@@ -76,12 +77,12 @@ internal abstract class BaseRouteTest : BaseTest() {
         }
     }
 
-    fun <REQ : SubmittedReq> awaitFailed(req: REQ): REQ {
+    fun <REQ : ApiSubmittedReq> awaitFailed(req: REQ): REQ {
         awaitFailed(req.reqId)
         return req
     }
 
-    fun <REQ : SubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
+    fun <REQ : ApiSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
         return reqs.onEach { awaitFailed(it.reqId) }
     }
 

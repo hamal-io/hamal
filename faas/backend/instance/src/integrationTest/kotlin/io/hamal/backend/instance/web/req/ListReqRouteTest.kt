@@ -1,9 +1,11 @@
 package io.hamal.backend.instance.web.req
 
 import io.hamal.lib.domain._enum.ReqStatus.Completed
-import io.hamal.lib.domain.req.SubmittedInvokeExecReq
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.sdk.domain.ListSubmittedReqsResponse
+import io.hamal.lib.sdk.domain.ApiReqList
+import io.hamal.lib.sdk.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -19,9 +21,7 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
 
     @Test
     fun `Single req`() {
-        val adhocResponse = awaitCompleted(
-            adhoc()
-        )
+        val adhocResponse = awaitCompleted(adhoc())
 
         with(list()) {
             assertThat(reqs, hasSize(1))
@@ -29,7 +29,7 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
             with(reqs.first()) {
                 assertThat(reqId, equalTo(adhocResponse.reqId))
                 assertThat(status, equalTo(Completed))
-                assertThat(this, instanceOf(SubmittedInvokeExecReq::class.java))
+                assertThat(this, instanceOf(ApiSubmittedReq::class.java))
             }
         }
     }
@@ -40,14 +40,14 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
 
         val listResponse = httpTemplate.get("/v1/reqs")
             .parameter("limit", 23)
-            .execute(ListSubmittedReqsResponse::class)
+            .execute(ApiReqList::class)
 
         assertThat(listResponse.reqs, hasSize(23))
 
         listResponse.reqs
-            .map { it as SubmittedInvokeExecReq }
+            .map { it as ApiSubmittedReqWithDomainId }
             .forEachIndexed { idx, req ->
-                val code = execQueryRepository.get(req.id).code
+                val code = execQueryRepository.get(req.id(::ExecId)).code
                 assertThat(code, equalTo(CodeValue("${22 - idx}")))
             }
     }
@@ -62,14 +62,14 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
         val listResponse = httpTemplate.get("/v1/reqs")
             .parameter("after_id", request70.reqId)
             .parameter("limit", 1)
-            .execute(ListSubmittedReqsResponse::class)
+            .execute(ApiReqList::class)
 
         assertThat(listResponse.reqs, hasSize(1))
 
         listResponse.reqs
-            .map { it as SubmittedInvokeExecReq }
+            .map { it as ApiSubmittedReqWithDomainId }
             .forEach { req ->
-                val code = execQueryRepository.get(req.id).code
+                val code = execQueryRepository.get(req.id(::ExecId)).code
                 assertThat(code, equalTo(CodeValue("71")))
             }
     }

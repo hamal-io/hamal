@@ -2,9 +2,9 @@ package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.backend.repository.api.FailedExec
+import io.hamal.backend.repository.api.submitted_req.SubmittedFailExecReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.req.SubmittedFailExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed

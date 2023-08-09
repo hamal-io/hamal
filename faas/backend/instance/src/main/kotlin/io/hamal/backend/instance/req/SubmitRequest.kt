@@ -2,6 +2,7 @@ package io.hamal.backend.instance.req
 
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.ReqCmdRepository
+import io.hamal.backend.repository.api.submitted_req.*
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.*

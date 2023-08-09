@@ -1,11 +1,11 @@
 package io.hamal.backend.instance.web.func
 
 import io.hamal.lib.domain.req.CreateFuncReq
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.sdk.domain.ApiFuncList
-import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -19,7 +19,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
 
     @Test
     fun `Single func`() {
-        val result = awaitCompleted(
+        val funcId = awaitCompleted(
             createFunc(
                 CreateFuncReq(
                     name = FuncName("func-one"),
@@ -27,12 +27,12 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
                     code = CodeValue("")
                 )
             )
-        )
+        ).id(::FuncId)
 
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))
             with(funcs.first()) {
-                assertThat(id, equalTo(result.id))
+                assertThat(id, equalTo(funcId))
                 assertThat(name, equalTo(FuncName("func-one")))
             }
         }

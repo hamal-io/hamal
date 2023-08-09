@@ -1,7 +1,6 @@
 package io.hamal.extension.std.sys
 
 import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.req.SubmittedCreateFuncReq
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpTemplate
@@ -12,6 +11,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -51,7 +51,7 @@ class CreateFuncFunction(
             val res = templateSupplier()
                 .post("/v1/funcs")
                 .body(r)
-                .execute(SubmittedCreateFuncReq::class)
+                .execute(ApiSubmittedReqWithDomainId::class)
 
             return null to ctx.tableCreateMap(1).also {
                 it["req_id"] = res.reqId.value.toString()

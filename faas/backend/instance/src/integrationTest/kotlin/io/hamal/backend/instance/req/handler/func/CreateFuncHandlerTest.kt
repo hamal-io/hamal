@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.req.handler.func
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
+import io.hamal.backend.repository.api.submitted_req.SubmittedCreateFuncReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.req.SubmittedCreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName

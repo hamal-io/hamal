@@ -8,9 +8,9 @@ import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.Trigger
 import io.hamal.backend.repository.api.TriggerCmdRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
 import org.springframework.stereotype.Component
 
 @Component

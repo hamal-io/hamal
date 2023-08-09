@@ -3,7 +3,6 @@ package io.hamal.backend.instance.web.adhoc
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Queued
@@ -12,6 +11,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -30,16 +30,13 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        val result = response.result(SubmittedInvokeExecReq::class)
-
+        val result = response.result(ApiSubmittedReqWithDomainId::class)
         assertThat(result.status, equalTo(Submitted))
-        assertThat(result.inputs, equalTo(InvocationInputs()))
-        assertThat(result.code, equalTo(CodeValue("40 + 2")))
 
         Thread.sleep(10)
 
         verifyReqCompleted(result.reqId)
-        verifyExecQueued(result.id)
+        verifyExecQueued(result.id(::ExecId))
     }
 
 

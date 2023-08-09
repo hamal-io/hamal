@@ -1,10 +1,10 @@
 package io.hamal.backend.instance.web.exec
 
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.sdk.domain.ApiExecList
-import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -22,9 +22,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
 
     @Test
     fun `Single exec`() {
-        val createAdhocResponse = awaitCompleted(
-            createAdhocExec()
-        )
+        val execId = awaitCompleted(createAdhocExec()).id(::ExecId)
 
         val response = httpTemplate.get("/v1/execs").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
@@ -33,7 +31,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
-                assertThat(id, equalTo(createAdhocResponse.id))
+                assertThat(id, equalTo(execId))
                 assertThat(status, equalTo(ExecStatus.Queued))
             }
         }
@@ -78,7 +76,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
-                assertThat(exec.id, equalTo(fortyFifthRequest.id))
+                assertThat(exec.id, equalTo(fortyFifthRequest.id(::ExecId)))
                 assertThat(exec.status, equalTo(ExecStatus.Queued))
             }
         }

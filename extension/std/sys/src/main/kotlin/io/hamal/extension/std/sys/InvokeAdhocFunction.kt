@@ -1,7 +1,6 @@
 package io.hamal.extension.std.sys
 
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.function.Function1In2Out
@@ -12,6 +11,7 @@ import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.sdk.HttpTemplateSupplier
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 
 class InvokeAdhocFunction(
     private val templateSupplier: HttpTemplateSupplier
@@ -28,12 +28,12 @@ class InvokeAdhocFunction(
         val res = templateSupplier()
             .post("/v1/adhoc")
             .body(r)
-            .execute(SubmittedInvokeExecReq::class)
+            .execute(ApiSubmittedReqWithDomainId::class)
 
         return null to ctx.tableCreateMap(2).also {
             it["req_id"] = res.reqId.value.value.toString()
             it["status"] = res.status.name
-            it["id"] = res.id.value.value.toString()
+            it["id"] = res.id.value.toString()
         }
     }
 }

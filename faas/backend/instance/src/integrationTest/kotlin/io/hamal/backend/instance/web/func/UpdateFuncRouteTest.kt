@@ -2,8 +2,8 @@ package io.hamal.backend.instance.web.func
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.req.SubmittedUpdateFuncReq
 import io.hamal.lib.domain.req.UpdateFuncReq
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
@@ -14,6 +14,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -51,7 +52,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val updateFuncResponse = httpTemplate.put("/v1/funcs/${func.id.value.value}")
+        val updateFuncResponse = httpTemplate.put("/v1/funcs/${func.id.value}")
             .body(
                 UpdateFuncReq(
                     name = FuncName("updatedName"),
@@ -63,14 +64,10 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = updateFuncResponse.result(SubmittedUpdateFuncReq::class)
-        assertThat(result.id, equalTo(result.id))
-        assertThat(result.name, equalTo(FuncName("updatedName")))
-        assertThat(result.inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("updatedInputs")))))
-        assertThat(result.code, equalTo(CodeValue("updatedCode")))
+        val funcId = updateFuncResponse.result(ApiSubmittedReqWithDomainId::class).id(::FuncId)
 
-        with(getFunc(result.id)) {
-            assertThat(id, equalTo(result.id))
+        with(getFunc(funcId)) {
+            assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("updatedInputs")))))
             assertThat(code, equalTo(CodeValue("updatedCode")))

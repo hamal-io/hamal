@@ -4,7 +4,6 @@ import io.hamal.backend.repository.api.FailedExec
 import io.hamal.backend.repository.api.StartedExec
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.FailExecReq
-import io.hamal.lib.domain.req.SubmittedFailExecReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
@@ -13,6 +12,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -39,7 +39,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
                 assertThat(failureResponse.statusCode, equalTo(HttpStatusCode.Accepted))
                 require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = failureResponse.result(SubmittedFailExecReq::class)
+                val result = failureResponse.result(ApiSubmittedReqWithDomainId::class)
 
                 awaitFailed(result.reqId)
             }
@@ -60,10 +60,10 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         assertThat(failureResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = failureResponse.result(SubmittedFailExecReq::class)
+        val result = failureResponse.result(ApiSubmittedReqWithDomainId::class)
         awaitCompleted(result.reqId)
 
-        verifyExecFailed(result.id)
+        verifyExecFailed(result.id(::ExecId))
         //FIXME events
     }
 
@@ -77,7 +77,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(SubmittedFailExecReq::class)
+        val result = response.result(ApiSubmittedReqWithDomainId::class)
         awaitFailed(result.reqId)
     }
 

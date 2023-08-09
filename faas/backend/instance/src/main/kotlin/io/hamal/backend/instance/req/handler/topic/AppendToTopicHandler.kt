@@ -3,10 +3,9 @@ package io.hamal.backend.instance.req.handler.topic
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.backend.repository.api.log.ProtobufAppender
+import io.hamal.backend.repository.api.submitted_req.SubmittedAppendToTopicReq
 import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.req.SubmittedAppendToTopicReq
 import org.springframework.stereotype.Component
 
 @Component

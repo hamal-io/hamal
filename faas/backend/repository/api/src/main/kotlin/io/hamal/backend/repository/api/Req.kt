@@ -1,8 +1,8 @@
 package io.hamal.backend.repository.api
 
+import io.hamal.backend.repository.api.submitted_req.SubmittedReq
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain.req.SubmittedReq
 
 interface ReqCmdRepository {
     fun queue(req: SubmittedReq)

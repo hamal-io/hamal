@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.req
+package io.hamal.backend.repository.api.submitted_req
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
@@ -9,4 +9,3 @@ sealed interface SubmittedReq {
     val reqId: ReqId
     var status: ReqStatus
 }
-

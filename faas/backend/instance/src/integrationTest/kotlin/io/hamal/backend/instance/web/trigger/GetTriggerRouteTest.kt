@@ -4,10 +4,7 @@ import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.domain.vo.TriggerInputs
-import io.hamal.lib.domain.vo.TriggerName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
@@ -34,8 +31,8 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
 
     @Test
     fun `Get fixed rate trigger`() {
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
-        val trigger = awaitCompleted(
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id(::FuncId)
+        val triggerId = awaitCompleted(
             createTrigger(
                 CreateTriggerReq(
                     type = FixedRate,
@@ -46,15 +43,15 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
                     duration = 10.seconds
                 )
             )
-        )
+        ).id(::TriggerId)
 
-        val getTriggerResponse = httpTemplate.get("/v1/triggers/${trigger.id.value.value}").execute()
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/${triggerId.value}").execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(ApiFixedRateTrigger::class)) {
-            assertThat(id, equalTo(trigger.id))
+            assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(TableValue("hamal" to StringValue("rockz")))))
             assertThat(duration, equalTo(10.seconds))
@@ -65,10 +62,10 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
 
     @Test
     fun `Get event trigger`() {
-        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).id
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
+        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).id(::TopicId)
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id(::FuncId)
 
-        val trigger = awaitCompleted(
+        val triggerId = awaitCompleted(
             createTrigger(
                 CreateTriggerReq(
                     type = Event,
@@ -79,15 +76,15 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
                     topicId = someTopicId
                 )
             )
-        )
+        ).id(::TriggerId)
 
-        val getTriggerResponse = httpTemplate.get("/v1/triggers/${trigger.id.value.value}").execute()
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/${triggerId.value}").execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(ApiEventTrigger::class)) {
-            assertThat(id, equalTo(trigger.id))
+            assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(TableValue("hamal" to StringValue("rockz")))))
             assertThat(func.id, equalTo(someFuncId))

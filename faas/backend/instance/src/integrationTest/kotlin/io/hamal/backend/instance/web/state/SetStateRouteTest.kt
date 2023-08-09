@@ -4,8 +4,8 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.SubmittedSetStateReq
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -15,6 +15,7 @@ import io.hamal.lib.kua.value.FalseValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.kua.value.TrueValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.Test
 internal class SetStateRouteTest : BaseStateRouteTest() {
     @Test
     fun `Sets state for a function first time`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
         val response = httpTemplate.post("/v1/funcs/${funcId.value.value}/states/__CORRELATION__")
             .body(State(TableValue("answer" to NumberValue(42))))
@@ -31,9 +32,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(SubmittedSetStateReq::class)
-        assertThat(result.state.correlation.funcId, equalTo(funcId))
-        assertThat(result.state.correlation.correlationId, equalTo(CorrelationId("__CORRELATION__")))
+        response.result(ApiSubmittedReq::class)
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
         assertThat(correlatedState["answer"], equalTo(NumberValue(42)))
@@ -41,7 +40,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
 
     @Test
     fun `Sets state for a function with multiple correlations`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
@@ -63,7 +62,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
     @Test
     fun `Updates a state multiple times`() {
 
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
         val correlation = Correlation(
             correlationId = CorrelationId("SOME_CORRELATION"),

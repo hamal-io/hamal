@@ -1,7 +1,8 @@
 package io.hamal.backend.instance.web.topic
 
+import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.HamalError
-import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -16,18 +17,18 @@ import org.junit.jupiter.api.Test
 internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
     @Test
     fun `Append event`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("namespace::topics_one"))
-        )
+        ).id(::TopicId)
 
         awaitCompleted(
             appendEvent(
-                topicResponse.id,
+                topicId,
                 TableValue("hamal" to StringValue("rocks"))
             )
         )
 
-        with(listTopicEvents(topicResponse.id)) {
+        with(listTopicEvents(topicId)) {
             assertThat(events, hasSize(1))
 
             val event = events.first()
@@ -37,20 +38,20 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
 
     @Test
     fun `Append event multiple times`() {
-        val topicResponse = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("namespace::topics_one"))
-        )
+        ).id(::TopicId)
 
         awaitCompleted(
             IntRange(1, 10).map {
                 appendEvent(
-                    topicResponse.id,
+                    topicId,
                     TableValue("hamal" to StringValue("rocks"))
                 )
             }
         )
 
-        with(listTopicEvents(topicResponse.id)) {
+        with(listTopicEvents(topicId)) {
             assertThat(events, hasSize(10))
             events.forEach { event ->
                 assertThat(event.value, equalTo(TableValue("hamal" to StringValue("rocks"))))

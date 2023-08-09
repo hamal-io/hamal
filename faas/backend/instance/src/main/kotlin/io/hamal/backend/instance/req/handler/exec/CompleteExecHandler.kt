@@ -8,11 +8,11 @@ import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.api.log.ProtobufAppender
+import io.hamal.backend.repository.api.submitted_req.SubmittedCompleteExecReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.SubmittedCompleteExecReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.domain.vo.port.GenerateDomainId

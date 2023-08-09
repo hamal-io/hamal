@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.web.exec
 
 import io.hamal.lib.domain.HamalError
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.http.ErrorHttpResponse
@@ -26,7 +27,7 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
         require(response is SuccessHttpResponse)
 
         with(response.result(ApiExec::class)) {
-            assertThat(id, equalTo(createAdhocResponse.id))
+            assertThat(id, equalTo(createAdhocResponse.id(::ExecId)))
             assertThat(status, equalTo(Queued))
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(code, equalTo(CodeValue("40 + 2")))

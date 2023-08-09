@@ -1,8 +1,8 @@
 package io.hamal.backend.instance.web.trigger
 
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.sdk.domain.ApiTriggerList
-import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -17,12 +17,12 @@ internal class ListTriggerRouteTest : BaseTriggerRouteTest() {
 
     @Test
     fun `Single trigger`() {
-        val creationResponse = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one")))
+        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).id(::TriggerId)
 
         with(listTriggers()) {
             assertThat(triggers, hasSize(1))
             with(triggers.first()) {
-                assertThat(id, equalTo(creationResponse.id))
+                assertThat(id, equalTo(triggerId))
                 assertThat(name, equalTo(TriggerName("trigger-one")))
             }
         }

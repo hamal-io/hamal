@@ -5,9 +5,10 @@ import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SetStateReq
-import io.hamal.lib.domain.req.SubmittedSetStateReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.sdk.domain.ApiDefaultSubmittedReq
+import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -25,7 +26,7 @@ class SetStateRoute(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("correlationId") correlationId: CorrelationId,
         @RequestBody state: State
-    ): ResponseEntity<SubmittedSetStateReq> {
+    ): ResponseEntity<ApiSubmittedReq> {
         ensureFuncExists(funcId)
 
         val result = request(
@@ -37,7 +38,12 @@ class SetStateRoute(
                 value = state
             )
         )
-        return ResponseEntity(result, HttpStatus.ACCEPTED)
+        return ResponseEntity(result.let {
+            ApiDefaultSubmittedReq(
+                reqId = it.reqId,
+                status = it.status
+            )
+        }, HttpStatus.ACCEPTED)
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

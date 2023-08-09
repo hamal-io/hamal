@@ -1,5 +1,6 @@
 package io.hamal.lib.http
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import kotlin.reflect.KClass
 
@@ -12,6 +13,7 @@ interface HttpRequest {
     fun header(key: String, value: String): HttpRequest
     fun parameter(key: String, value: String): HttpRequest
     fun parameter(key: String, value: Number): HttpRequest
+    fun parameter(key: String, value: SnowflakeId): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
@@ -91,6 +93,11 @@ class DefaultHttpRequest(
 
     override fun parameter(key: String, value: Number): DefaultHttpRequest {
         parameters.add(HttpParameter(key, value))
+        return this
+    }
+
+    override fun parameter(key: String, value: SnowflakeId): HttpRequest {
+        parameters.add(HttpParameter(key, value.value))
         return this
     }
 

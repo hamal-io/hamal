@@ -6,6 +6,7 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.bootstrap.config.TestRunnerConfig
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.req.InvokeAdhocReq
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
@@ -72,12 +73,13 @@ abstract class BaseHamalTest {
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
-                val response = sdk.adhocService().submit(
+                val execId = sdk.adhocService().submit(
                     InvokeAdhocReq(
                         inputs = InvocationInputs(),
                         code = CodeValue(String(Files.readAllBytes(testFile)))
                     )
-                )
+                ).id(::ExecId)
+
                 ActiveTest.awaitCompletion()
 
                 // Waits until the test exec complete
@@ -85,7 +87,7 @@ abstract class BaseHamalTest {
                 val startedAt = TimeUtils.now()
                 while (wait) {
                     sleep(1)
-                    with(execQueryRepository.get(response.id)) {
+                    with(execQueryRepository.get(execId)) {
                         if (status == ExecStatus.Completed) {
                             wait = false
                         }

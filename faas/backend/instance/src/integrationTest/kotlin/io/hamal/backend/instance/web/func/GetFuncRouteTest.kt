@@ -2,6 +2,7 @@ package io.hamal.backend.instance.web.func
 
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.CreateFuncReq
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
@@ -28,7 +29,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
 
     @Test
     fun `Get func`() {
-        val result = awaitCompleted(
+        val funcId = awaitCompleted(
             createFunc(
                 CreateFuncReq(
                     name = FuncName("func-one"),
@@ -36,14 +37,14 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
                     code = CodeValue("1+1")
                 )
             )
-        )
+        ).id(::FuncId)
 
-        val getFuncResponse = httpTemplate.get("/v1/funcs/${result.id.value.value}").execute()
+        val getFuncResponse = httpTemplate.get("/v1/funcs/${funcId.value}").execute()
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
         with(getFuncResponse.result(ApiFunc::class)) {
-            assertThat(id, equalTo(result.id))
+            assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
             assertThat(inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("rockz")))))
             assertThat(code, equalTo(CodeValue("1+1")))

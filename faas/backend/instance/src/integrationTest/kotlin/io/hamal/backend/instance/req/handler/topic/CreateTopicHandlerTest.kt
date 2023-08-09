@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
+import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTopicReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.req.SubmittedCreateTopicReq
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat

@@ -88,7 +88,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 
     object Serializer : KSerializer<SnowflakeId> {
         override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.LONG)
+            get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.STRING)
 
         override fun deserialize(decoder: Decoder) = SnowflakeId(decoder.decodeLong())
 

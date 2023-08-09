@@ -4,10 +4,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -21,7 +18,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
 
     @Test
     fun `Get state`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
         val execId = createExec(
             execId = ExecId(123),
@@ -46,9 +43,9 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
 
     @Test
     fun `Get state for function which was never set before`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
-        val response = httpTemplate.get("/v1/funcs/${funcId.value.value}/states/__1__").execute()
+        val response = httpTemplate.get("/v1/funcs/${funcId.value}/states/__1__").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 

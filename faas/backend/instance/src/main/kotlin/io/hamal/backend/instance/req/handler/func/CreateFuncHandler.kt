@@ -6,8 +6,8 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.repository.api.Func
 import io.hamal.backend.repository.api.FuncCmdRepository
+import io.hamal.backend.repository.api.submitted_req.SubmittedCreateFuncReq
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.req.SubmittedCreateFuncReq
 import org.springframework.stereotype.Component
 
 @Component

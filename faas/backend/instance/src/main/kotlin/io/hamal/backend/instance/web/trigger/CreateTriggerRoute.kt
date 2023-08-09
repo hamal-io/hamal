@@ -5,7 +5,7 @@ import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.domain.req.SubmittedCreateTriggerReq
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,12 +21,18 @@ class CreateTriggerRoute(
     @PostMapping("/v1/triggers")
     fun createTrigger(
         @RequestBody createTrigger: CreateTriggerReq
-    ): ResponseEntity<SubmittedCreateTriggerReq> {
+    ): ResponseEntity<ApiSubmittedReqWithDomainId> {
         ensureFuncExists(createTrigger)
         ensureTopicExists(createTrigger)
 
         val result = request(createTrigger)
-        return ResponseEntity(result, ACCEPTED)
+        return ResponseEntity(result.let {
+            ApiSubmittedReqWithDomainId(
+                reqId = it.reqId,
+                status = it.status,
+                id = it.id.value
+            )
+        }, ACCEPTED)
     }
 
     private fun ensureFuncExists(createTrigger: CreateTriggerReq) {

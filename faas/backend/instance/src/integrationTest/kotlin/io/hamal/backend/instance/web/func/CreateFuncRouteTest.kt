@@ -22,7 +22,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
             )
         )
         awaitCompleted(result.reqId)
-        verifyFuncCreated(result.id)
+        verifyFuncCreated(result.id(::FuncId))
     }
 }
 

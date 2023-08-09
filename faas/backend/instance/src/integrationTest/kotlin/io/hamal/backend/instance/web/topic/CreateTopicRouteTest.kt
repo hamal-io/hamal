@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test
 internal class CreateTopicRouteTest : BaseTopicRouteTest() {
     @Test
     fun `Create topic`() {
-        val result = awaitCompleted(
+        val topicId = awaitCompleted(
             createTopic(TopicName("namespace::topics_one"))
-        )
-        verifyTopicCreated(result.id)
+        ).id(::TopicId)
+        verifyTopicCreated(topicId)
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))

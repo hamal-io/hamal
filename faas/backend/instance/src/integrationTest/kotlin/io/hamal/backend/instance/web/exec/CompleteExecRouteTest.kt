@@ -6,7 +6,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
-import io.hamal.lib.domain.req.SubmittedCompleteExecReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
@@ -17,6 +16,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -43,10 +43,10 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
                 require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = completionResponse.result(SubmittedCompleteExecReq::class)
+                val result = completionResponse.result(ApiSubmittedReqWithDomainId::class)
 
                 awaitFailed(result.reqId)
-                verifyNoStateSet(result.id)
+                verifyNoStateSet(result.id(::ExecId))
                 // FIXME verify event not emitted
             }
         }
@@ -66,11 +66,11 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = completionResponse.result(SubmittedCompleteExecReq::class)
+        val result = completionResponse.result(ApiSubmittedReqWithDomainId::class)
         awaitCompleted(result.reqId)
 
-        verifyExecCompleted(result.id)
-        verifyStateSet(result.id)
+        verifyExecCompleted(result.id(::ExecId))
+        verifyStateSet(result.id(::ExecId))
         //FIXME events
     }
 
@@ -89,7 +89,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(SubmittedCompleteExecReq::class)
+        val result = response.result(ApiSubmittedReqWithDomainId::class)
         awaitFailed(result.reqId)
     }
 
