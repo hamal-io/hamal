@@ -114,33 +114,29 @@ class AgentService(
                             }
                         }
 
-                        sdk.execService().complete(
-                            request.id, stateResult, eventsToEmit
-                        )
+                        sdk.execService().complete(request.id, stateResult, eventsToEmit)
+                        
                     } catch (kua: ExtensionError) {
+                        kua.printStackTrace()
+
+
                         val e = kua.cause
                         if (e is ExitError) {
-                            println("Exit ${e.status.value}")
                             if (e.status == NumberValue(0.0)) {
-                                sdk.execService().complete(
-                                    request.id, State(), listOf()
-                                )
+                                sdk.execService().complete(request.id, State(), listOf())
                             } else {
-                                sdk.execService().fail(request.id, ErrorValue(e.message ?: "Unknown error"))
+                                sdk.execService().fail(request.id, ErrorValue(e.message ?: "Unknown reason"))
                             }
                         } else {
-                            throw kua
+                            sdk.execService().fail(request.id, ErrorValue(kua.message ?: "Unknown reason"))
                         }
                     } catch (t: Throwable) {
                         t.printStackTrace()
-
-                        sdk.execService().fail(request.id, ErrorValue(t.message ?: "Unknown error"))
+                        sdk.execService().fail(request.id, ErrorValue(t.message ?: "Unknown reason"))
                     }
                 }
         }
     }
-
-
 }
 
 class EmitEventFunction(
