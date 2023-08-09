@@ -14,10 +14,13 @@ import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.runner.component.RunnerAsync
 import io.hamal.runner.config.SandboxFactory
+import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
+
+private val logger = LoggerFactory.getLogger(RunnerService::class.java)
 
 @Service
 class RunnerService(
@@ -33,13 +36,14 @@ class RunnerService(
         async.atFixedRate(1.milliseconds) {
             sdk.execService()
                 .poll()
-                .execs.forEach { request ->
+                .execs.forEach { exec ->
                     try {
+                        logger.debug("Picked up: {}", exec.id)
 
                         lateinit var stateResult: State
                         val eventsToEmit = mutableListOf<Event>()
 
-                        sandboxFactory.create(request).use { sb ->
+                        sandboxFactory.create(exec).use { sb ->
                             sb.run { state ->
                                 val ctx = state.tableCreateMap(1)
 
@@ -47,7 +51,7 @@ class RunnerService(
                                 sb.native.tabletSetField(ctx.index, "emit")
 
                                 val funcState = state.tableCreateMap(1)
-                                request.state.value.forEach { entry ->
+                                exec.state.value.forEach { entry ->
                                     when (val value = entry.value) {
                                         is BooleanValue -> funcState[entry.key] = value
                                         is NumberValue -> funcState[entry.key] = value
@@ -60,7 +64,7 @@ class RunnerService(
                                 ctx["state"] = funcState
 
 
-                                val invocation = request.invocation
+                                val invocation = exec.invocation
                                 val events = state.tableCreateArray(0)
                                 if (invocation is EventInvocation) {
                                     invocation.events.forEach { evt ->
@@ -86,7 +90,7 @@ class RunnerService(
                                 state.setGlobal("ctx", ctx)
                             }
 
-                            sb.load(request.code)
+                            sb.load(exec.code)
 
                             sb.run { state ->
                                 val ctx = state.getGlobalTableMap("ctx")
@@ -114,25 +118,29 @@ class RunnerService(
                             }
                         }
 
-                        sdk.execService().complete(request.id, stateResult, eventsToEmit)
+                        sdk.execService().complete(exec.id, stateResult, eventsToEmit)
+                        logger.debug("Completed exec: {}", exec.id)
 
                     } catch (kua: ExtensionError) {
                         kua.printStackTrace()
 
-
                         val e = kua.cause
                         if (e is ExitError) {
                             if (e.status == NumberValue(0.0)) {
-                                sdk.execService().complete(request.id, State(), listOf())
+                                sdk.execService().complete(exec.id, State(), listOf())
+                                logger.debug("Completed exec: {}", exec.id)
                             } else {
-                                sdk.execService().fail(request.id, ErrorValue(e.message ?: "Unknown reason"))
+                                sdk.execService().fail(exec.id, ErrorValue(e.message ?: "Unknown reason"))
+                                logger.debug("Failed exec: {}", exec.id)
                             }
                         } else {
-                            sdk.execService().fail(request.id, ErrorValue(kua.message ?: "Unknown reason"))
+                            sdk.execService().fail(exec.id, ErrorValue(kua.message ?: "Unknown reason"))
+                            logger.debug("Failed exec: {}", exec.id)
                         }
                     } catch (t: Throwable) {
                         t.printStackTrace()
-                        sdk.execService().fail(request.id, ErrorValue(t.message ?: "Unknown reason"))
+                        sdk.execService().fail(exec.id, ErrorValue(t.message ?: "Unknown reason"))
+                        logger.debug("Failed exec: {}", exec.id)
                     }
                 }
         }
