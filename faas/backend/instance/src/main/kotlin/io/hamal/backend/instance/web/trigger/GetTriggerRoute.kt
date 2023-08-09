@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class GetTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
-    private val logBrokerRepository: LogBrokerRepository,
+    private val eventBrokerRepository: LogBrokerRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
 ) {
     @GetMapping("/v1/triggers/{triggerId}")
@@ -48,7 +48,7 @@ class GetTriggerRoute(
                     inputs = trigger.inputs,
                     topic = ApiEventTrigger.Topic(
                         id = trigger.topicId,
-                        name = logBrokerRepository.getTopic(trigger.topicId).name
+                        name = eventBrokerRepository.getTopic(trigger.topicId).name
                     )
                 )
             }

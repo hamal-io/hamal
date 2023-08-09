@@ -1,7 +1,6 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.backend.repository.api.*
-import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.backend.repository.memory.MemoryExecLogRepository
 import io.hamal.backend.repository.memory.MemoryReqRepository
 import io.hamal.backend.repository.memory.MemoryStateRepository
@@ -26,13 +25,10 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
 
     @Bean
-    open fun logBrokerRepository(): LogBrokerRepository = SqliteLogBrokerRepository(SqliteLogBroker(path))
+    open fun systemEventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("system-event")))
 
     @Bean
-    open fun systemEventBrokerRepository() = logBrokerRepository()
-
-    @Bean
-    open fun eventBrokerRepository() = logBrokerRepository()
+    open fun eventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("event")))
 
     @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
@@ -88,9 +84,6 @@ open class SqliteRepositoryConfig {
 @Profile("memory")
 @Configuration
 open class MemoryRepositoryConfig {
-
-    @Bean
-    open fun logBrokerRepository(): LogBrokerRepository = MemoryLogBrokerRepository()
 
     @Bean
     open fun systemEventBrokerRepository() = MemoryLogBrokerRepository()
