@@ -1,13 +1,13 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.sdk.domain.ApiExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -25,9 +25,9 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(Exec::class)) {
+        with(response.result(ApiExec::class)) {
             assertThat(id, equalTo(createAdhocResponse.id))
-            assertThat(status, equalTo(ExecStatus.Queued))
+            assertThat(status, equalTo(Queued))
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(code, equalTo(CodeValue("40 + 2")))
             assertThat(correlation, nullValue())

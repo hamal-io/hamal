@@ -5,8 +5,8 @@ import io.hamal.backend.instance.event.ExecutionQueuedEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.event.handler.SystemEventHandler
 import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.backend.repository.api.QueuedExec
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.QueuedExec
 
 class ExecScheduledHandler(
     private val execCmdRepository: ExecCmdRepository,

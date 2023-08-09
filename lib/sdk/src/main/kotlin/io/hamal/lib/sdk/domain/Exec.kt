@@ -1,10 +1,9 @@
 package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.Invocation
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.value.CodeValue
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,11 +20,11 @@ data class ApiSimpleExecutionModels(
 )
 
 @Serializable
-data class ListExecsResponse(
-    val execs: List<Exec>
+data class ApiExecList(
+    val execs: List<SimpleExec>
 ) {
     @Serializable
-    data class Exec(
+    data class SimpleExec(
         val id: ExecId,
         val status: ExecStatus,
         val correlation: Correlation?,
@@ -39,4 +38,12 @@ data class ListExecsResponse(
     )
 }
 
-
+@Serializable
+data class ApiExec(
+    val id: ExecId,
+    val status: ExecStatus,
+    val correlation: Correlation?,
+    val inputs: ExecInputs,
+    val code: CodeValue,
+    val invocation: Invocation
+)

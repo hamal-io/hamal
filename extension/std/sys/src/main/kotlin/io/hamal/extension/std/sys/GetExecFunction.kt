@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.domain.Exec
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.SuccessHttpResponse
@@ -11,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.sdk.domain.ApiExec
 
 class GetExecFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -24,7 +24,7 @@ class GetExecFunction(
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(Exec::class)
+            return null to response.result(ApiExec::class)
                 .let { exec ->
 
                     val inputs = ctx.tableCreateMap(0)

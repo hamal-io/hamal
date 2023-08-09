@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.exec
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.domain.ListExecsResponse
+import io.hamal.lib.sdk.domain.ApiExecList
 import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -16,7 +16,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
-        val result = response.result(ListExecsResponse::class)
+        val result = response.result(ApiExecList::class)
         assertThat(result.execs, empty())
     }
 
@@ -30,7 +30,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(ListExecsResponse::class)) {
+        with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(id, equalTo(createAdhocResponse.id))
@@ -52,7 +52,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(ListExecsResponse::class)) {
+        with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(42))
             execs.forEach { exec ->
                 assertThat(exec.status, equalTo(ExecStatus.Queued))
@@ -75,7 +75,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(ListExecsResponse::class)) {
+        with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
                 assertThat(exec.id, equalTo(fortyFifthRequest.id))

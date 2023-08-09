@@ -5,7 +5,6 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Exec
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus

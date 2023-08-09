@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.CompletedExec
+import io.hamal.backend.repository.api.CompletedExec
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State

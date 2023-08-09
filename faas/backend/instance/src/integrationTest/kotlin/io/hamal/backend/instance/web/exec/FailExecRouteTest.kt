@@ -1,8 +1,8 @@
 package io.hamal.backend.instance.web.exec
 
+import io.hamal.backend.repository.api.FailedExec
+import io.hamal.backend.repository.api.StartedExec
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.FailedExec
-import io.hamal.lib.domain.StartedExec
 import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.req.SubmittedFailExecReq
 import io.hamal.lib.domain.vo.CorrelationId
