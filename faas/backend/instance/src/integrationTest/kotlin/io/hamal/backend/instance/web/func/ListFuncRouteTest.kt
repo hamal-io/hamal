@@ -4,7 +4,7 @@ import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.sdk.domain.ListFuncsResponse
+import io.hamal.lib.sdk.domain.ApiFuncList
 import io.hamal.lib.sdk.extension.parameter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -54,7 +54,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
 
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("limit", 12)
-            .execute(ListFuncsResponse::class)
+            .execute(ApiFuncList::class)
 
         assertThat(listResponse.funcs, hasSize(12))
 
@@ -81,7 +81,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
-            .execute(ListFuncsResponse::class)
+            .execute(ApiFuncList::class)
 
         assertThat(listResponse.funcs, hasSize(1))
 

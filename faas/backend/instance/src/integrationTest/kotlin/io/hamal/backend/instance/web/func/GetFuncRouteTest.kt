@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncInputs
@@ -11,6 +10,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.sdk.domain.ApiFunc
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -42,7 +42,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getFuncResponse.result(Func::class)) {
+        with(getFuncResponse.result(ApiFunc::class)) {
             assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(FuncName("func-one")))
             assertThat(inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("rockz")))))

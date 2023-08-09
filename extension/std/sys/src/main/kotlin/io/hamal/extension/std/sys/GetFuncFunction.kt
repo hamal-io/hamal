@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.HamalError
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
@@ -12,6 +11,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMapValue
 import io.hamal.lib.kua.value.ErrorValue
 import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.sdk.domain.ApiFunc
 
 class GetFuncFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -25,7 +25,7 @@ class GetFuncFunction(
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(Func::class)
+            return null to response.result(ApiFunc::class)
                 .let { func ->
                     ctx.tableCreateMap(0).also {
                         it["id"] = func.id.value.value.toString()

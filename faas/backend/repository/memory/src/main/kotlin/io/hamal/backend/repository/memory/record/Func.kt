@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.memory.record
 
+import io.hamal.backend.repository.api.Func
 import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
@@ -10,7 +11,6 @@ import io.hamal.backend.repository.record.func.createEntity
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock

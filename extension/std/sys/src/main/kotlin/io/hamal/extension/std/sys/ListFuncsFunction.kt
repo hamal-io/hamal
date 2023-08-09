@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableArrayValue
 import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.sdk.domain.ListFuncsResponse
+import io.hamal.lib.sdk.domain.ApiFuncList
 
 class ListFuncsFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -17,11 +17,11 @@ class ListFuncsFunction(
         val funcs = try {
             templateSupplier()
                 .get("/v1/funcs")
-                .execute(ListFuncsResponse::class)
+                .execute(ApiFuncList::class)
                 .funcs
         } catch (t: Throwable) {
             t.printStackTrace()
-            listOf<ListFuncsResponse.Func>()
+            listOf<ApiFuncList.ApiSimpleFunc>()
         }
 
         return null to ctx.tableCreateArray().also { rs ->

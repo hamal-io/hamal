@@ -2,12 +2,13 @@ package io.hamal.backend.repository.api
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.Func
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.kua.value.CodeValue
+import kotlinx.serialization.Serializable
 
 
 interface FuncCmdRepository {
@@ -43,3 +44,13 @@ interface FuncQueryRepository {
         var limit: Limit = Limit(1)
     )
 }
+
+
+@Serializable
+data class Func(
+    override val id: FuncId,
+    val cmdId: CmdId,
+    val name: FuncName,
+    val inputs: FuncInputs,
+    val code: CodeValue
+) : DomainObject<FuncId>
