@@ -11,3 +11,9 @@ spring:
 
   profiles:
     active: ${ACTIVE_PROFILES:default}
+
+server:
+  tomcat:
+    threads:
+      max: 2
+      min-spare: 1
