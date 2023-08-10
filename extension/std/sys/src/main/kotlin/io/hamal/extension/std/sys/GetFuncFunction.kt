@@ -1,6 +1,6 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.SuccessHttpResponse
@@ -37,7 +37,7 @@ class GetFuncFunction(
                 }
         } else {
             require(response is ErrorHttpResponse)
-            return response.error(HamalError::class)
+            return response.error(ApiError::class)
                 .let { error ->
                     ErrorValue(error.message ?: "An unknown error occurred")
                 } to null

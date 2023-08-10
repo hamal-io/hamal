@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Queued
@@ -41,7 +41,7 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HamalError::class)
+        val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Exec not found"))
     }
 }

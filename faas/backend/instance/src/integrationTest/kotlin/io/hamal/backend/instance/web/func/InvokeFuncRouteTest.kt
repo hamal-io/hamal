@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.InvokeFuncReq
 import io.hamal.lib.domain.vo.CorrelationId
@@ -87,7 +87,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(NotFound))
         require(invocationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = invocationResponse.error(HamalError::class)
+        val error = invocationResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))
 
         verifyNoRequests()

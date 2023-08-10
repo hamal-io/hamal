@@ -1,8 +1,8 @@
-package io.hamal.lib.domain
+package io.hamal.lib.sdk.domain
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HamalError(
+data class ApiError(
     val message: String?
 )

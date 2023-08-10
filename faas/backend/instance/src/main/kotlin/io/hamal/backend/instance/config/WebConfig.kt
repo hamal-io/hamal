@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.config
 
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
@@ -43,33 +43,33 @@ open class WebConfig : WebMvcConfigurer {
     class ErrorHandler {
 
         @ExceptionHandler(Exception::class)
-        fun handle(e: Exception): ResponseEntity<HamalError> {
+        fun handle(e: Exception): ResponseEntity<ApiError> {
             return when (e) {
                 is IllegalArgumentException -> ResponseEntity(
-                    HamalError(
+                    ApiError(
                         message = e.message
                     ), HttpStatus.BAD_REQUEST
                 )
 
                 is NoSuchElementException -> ResponseEntity(
-                    HamalError(
+                    ApiError(
                         message = e.message
                     ), HttpStatus.NOT_FOUND
                 )
 
                 is IllegalStateException -> ResponseEntity(
-                    HamalError(
+                    ApiError(
                         message = e.message
                     ), HttpStatus.INTERNAL_SERVER_ERROR
                 )
 
                 is MethodArgumentTypeMismatchException -> ResponseEntity(
-                    HamalError(
+                    ApiError(
                         message = e.cause?.message
                     ), HttpStatus.BAD_REQUEST
                 )
 
-                else -> ResponseEntity(HamalError(e.message), HttpStatus.INTERNAL_SERVER_ERROR)
+                else -> ResponseEntity(ApiError(e.message), HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
     }

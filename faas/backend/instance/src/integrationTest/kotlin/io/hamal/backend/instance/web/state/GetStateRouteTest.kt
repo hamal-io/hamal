@@ -2,7 +2,7 @@ package io.hamal.backend.instance.web.state
 
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
@@ -61,7 +61,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HamalError::class)
+        val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 }

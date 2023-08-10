@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
@@ -68,7 +68,7 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
         assertThat(topicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(topicResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = topicResponse.error(HamalError::class)
+        val error = topicResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Topic not found"))
 
         verifyNoRequests(SubmittedCreateTriggerReq::class)

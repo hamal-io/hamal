@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.req
 
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -33,7 +33,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HamalError::class)
+        val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Req not found"))
     }
 

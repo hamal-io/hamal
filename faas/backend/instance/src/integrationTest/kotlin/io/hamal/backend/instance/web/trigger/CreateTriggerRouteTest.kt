@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.trigger
 import io.hamal.backend.repository.api.EventTrigger
 import io.hamal.backend.repository.api.FixedRateTrigger
 import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.*
@@ -68,7 +68,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HamalError::class)
+        val result = creationResponse.error(ApiError::class)
         assertThat(result.message, equalTo("Func not found"))
         verifyNoRequests()
     }
@@ -124,7 +124,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.BadRequest))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HamalError::class)
+        val result = creationResponse.error(ApiError::class)
         assertThat(result.message, equalTo("topicId is missing"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
@@ -148,7 +148,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HamalError::class)
+        val result = creationResponse.error(ApiError::class)
         assertThat(result.message, equalTo("Topic not found"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
@@ -172,7 +172,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HamalError::class)
+        val result = creationResponse.error(ApiError::class)
         assertThat(result.message, equalTo("Func not found"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }

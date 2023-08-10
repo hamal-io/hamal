@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.trigger
 
-import io.hamal.lib.domain.HamalError
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.req.CreateTriggerReq
@@ -25,7 +25,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(NotFound))
         require(getTriggerResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getTriggerResponse.error(HamalError::class)
+        val error = getTriggerResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Trigger not found"))
     }
 
