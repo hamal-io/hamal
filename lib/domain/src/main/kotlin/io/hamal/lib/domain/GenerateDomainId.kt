@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.vo.port
+package io.hamal.lib.domain
 
 import io.hamal.lib.common.*
 import io.hamal.lib.common.domain.DomainId

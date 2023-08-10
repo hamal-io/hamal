@@ -12,10 +12,10 @@ import io.hamal.backend.repository.api.submitted_req.SubmittedCompleteExecReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.StringValue
 import org.springframework.stereotype.Component
 

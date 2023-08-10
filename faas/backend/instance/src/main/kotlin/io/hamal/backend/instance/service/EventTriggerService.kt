@@ -13,12 +13,12 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.TableValue
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service

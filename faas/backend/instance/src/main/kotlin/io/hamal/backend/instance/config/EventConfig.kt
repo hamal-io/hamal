@@ -5,7 +5,7 @@ import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.service.DefaultSystemEventService
 import io.hamal.backend.instance.service.SystemEventServiceFactory
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.lib.domain.vo.port.GenerateDomainId
+import io.hamal.lib.domain.GenerateDomainId
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

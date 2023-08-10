@@ -2,9 +2,9 @@ package io.hamal.backend.instance.web.exec
 
 import io.hamal.backend.repository.api.ExecLogCmdRepository
 import io.hamal.backend.repository.api.ExecLogCmdRepository.LogCmd
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.sdk.domain.AppendExecLogCmd
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable

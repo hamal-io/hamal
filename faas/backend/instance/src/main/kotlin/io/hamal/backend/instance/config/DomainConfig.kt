@@ -1,8 +1,8 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.lib.common.Partition
-import io.hamal.lib.domain.vo.port.DefaultDomainIdGenerator
-import io.hamal.lib.domain.vo.port.GenerateDomainId
+import io.hamal.lib.domain.DefaultDomainIdGenerator
+import io.hamal.lib.domain.GenerateDomainId
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

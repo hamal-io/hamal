@@ -5,10 +5,10 @@ import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.CodeValue
 import io.hamal.lib.kua.value.ErrorValue
 import org.junit.jupiter.api.BeforeEach

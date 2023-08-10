@@ -11,11 +11,11 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.FixedRateInvocation
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.TableValue
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled

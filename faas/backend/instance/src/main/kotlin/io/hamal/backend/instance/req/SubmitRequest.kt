@@ -7,7 +7,6 @@ import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.port.GenerateDomainId
 import io.hamal.lib.kua.value.CodeValue
 import org.springframework.stereotype.Component
 
