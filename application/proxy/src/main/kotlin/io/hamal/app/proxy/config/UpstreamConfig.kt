@@ -14,11 +14,11 @@ class UpstreamConfig {
     fun upstreamTemplate(
         @Value("\${io.hamal.upstream.host}") upstreamHost: String
     ): HttpTemplate {
-        logger.info("${upstreamHost.substring(0, min(upstreamHost.length, 25))}...")
+        log.info("${upstreamHost.substring(0, min(upstreamHost.length, 25))}...")
         return HttpTemplate(
             baseUrl = upstreamHost
         )
     }
 
-    private val logger = LoggerFactory.getLogger(UpstreamConfig::class.java)
+    private val log = LoggerFactory.getLogger(UpstreamConfig::class.java)
 }

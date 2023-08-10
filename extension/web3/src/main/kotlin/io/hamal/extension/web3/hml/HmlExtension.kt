@@ -17,7 +17,7 @@ class HmlExtensionFactory : ScriptExtensionFactory {
             name = "web3.hml",
             config = config,
             internals = mapOf(
-                "execute" to ExecuteFunction(config),
+                "execute" to HmlExecuteFunction(config),
             )
         )
     }

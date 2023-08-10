@@ -61,6 +61,6 @@ class Native(
     }
 
     override fun toString(): String {
-        return "State"
+        return "Native"
     }
 }

@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.sdk.domain.DequeueExecsResponse
 import org.springframework.context.annotation.Bean
@@ -27,12 +28,12 @@ interface SandboxFactory {
 
 class RunnerSandboxFactory : SandboxFactory {
     override fun create(exec: DequeueExecsResponse.Exec): Sandbox {
-        NativeLoader.load(NativeLoader.Preference.Jar)
-        val template = HttpTemplate("http://localhost:8008")
+        NativeLoader.load(Jar)
+
+        val template = HttpTemplate("http://localhost:8008") // FIXME sdk instead
 
         val ctx = DefaultSandboxContext()
         ctx[ExecId::class] = exec.id
-
 
         return Sandbox(ctx).also {
             it.register(LogExtensionFactory { template }.create())

@@ -15,9 +15,11 @@ import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResponse
 import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.eth.domain.EthGetLiteBlockResponse
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
+import logger
 
+private val log = logger(EthExecuteFunction::class)
 
-class ExecuteFunction(
+class EthExecuteFunction(
     private val config: ExtensionConfig
 ) : Function1In2Out<TableArrayValue, ErrorValue, TableArrayValue>(
     FunctionInput1Schema(TableArrayValue::class),
@@ -25,6 +27,7 @@ class ExecuteFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
         try {
+            log.trace("Setting up batch service")
             val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
             ctx.pushNil()
             while (ctx.state.native.tableNext(arg1.index)) {
@@ -33,11 +36,9 @@ class ExecuteFunction(
 
                 when (v.getString("type")) {
                     "get_block" -> {
-                        batchService.getBlock(
-                            EthUint64(
-                                v.getLong("block")
-                            )
-                        )
+                        val block = v.getLong("block")
+                        batchService.getBlock(EthUint64(block))
+                        log.trace("Requesting block $block")
                     }
                 }
                 ctx.state.native.pop(1)
@@ -56,10 +57,12 @@ class ExecuteFunction(
                         res["gas_used"] = ethRes.result.gasUsed.value.toLong()
                         res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
                         result.append(res)
+                        log.trace("${ethRes.id} - block response: $res")
                     }
 
                     is EthCallResponse -> {
                         result.append(ethRes.result.value)
+                        log.trace("${ethRes.id} - call response: ${ethRes.result.value}")
                     }
                 }
             }

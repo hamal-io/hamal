@@ -12,7 +12,7 @@ import io.hamal.lib.web3.eth.abi.EthTypeDecoder
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.util.ByteWindow
 
-object DecodeParameterFunction : Function2In2Out<StringValue, StringValue, ErrorValue, AnyValue>(
+object EthDecodeParameterFunction : Function2In2Out<StringValue, StringValue, ErrorValue, AnyValue>(
     FunctionInput2Schema(StringValue::class, StringValue::class),
     FunctionOutput2Schema(ErrorValue::class, AnyValue::class)
 ) {

@@ -16,7 +16,7 @@ import io.hamal.lib.web3.hml.domain.HmlGetBlockResponse
 import io.hamal.lib.web3.hml.http.HmlHttpBatchService
 
 
-class ExecuteFunction(
+class HmlExecuteFunction(
     private val config: ExtensionConfig
 ) : Function1In2Out<TableArrayValue, ErrorValue, TableArrayValue>(
     FunctionInput1Schema(TableArrayValue::class),

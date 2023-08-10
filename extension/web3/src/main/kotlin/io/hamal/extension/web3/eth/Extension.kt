@@ -17,8 +17,8 @@ class EthExtensionFactory : ScriptExtensionFactory {
             name = "web3.eth",
             config = config,
             internals = mapOf(
-                "execute" to ExecuteFunction(config),
-                "decode_parameter" to DecodeParameterFunction
+                "execute" to EthExecuteFunction(config),
+                "decode_parameter" to EthDecodeParameterFunction
             )
         )
     }
