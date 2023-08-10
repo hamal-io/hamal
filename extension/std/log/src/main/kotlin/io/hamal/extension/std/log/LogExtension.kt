@@ -1,9 +1,9 @@
 package io.hamal.extension.std.log
 
-import io.hamal.lib.domain.ExecLogLevel
-import io.hamal.lib.domain.ExecLogMessage
-import io.hamal.lib.domain.LocalAt
+import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecLogMessage
+import io.hamal.lib.domain.vo.LocalAt
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.kua.function.Function2In1Out

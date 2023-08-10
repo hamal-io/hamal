@@ -2,12 +2,9 @@ package io.hamal.backend.repository.api
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.ExecLog
-import io.hamal.lib.domain.ExecLogLevel
-import io.hamal.lib.domain.ExecLogMessage
-import io.hamal.lib.domain.LocalAt
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecLogId
+import io.hamal.lib.domain._enum.ExecLogLevel
+import io.hamal.lib.domain.vo.*
+import kotlinx.serialization.Serializable
 
 interface ExecLogCmdRepository {
     fun append(cmd: LogCmd): ExecLog
@@ -31,3 +28,13 @@ interface ExecLogQueryRepository {
         var limit: Limit = Limit(1)
     )
 }
+
+@Serializable
+data class ExecLog(
+    val id: ExecLogId,
+    val execId: ExecId,
+    val level: ExecLogLevel,
+    val message: ExecLogMessage,
+    val localAt: LocalAt,
+    val remoteAt: RemoteAt
+)

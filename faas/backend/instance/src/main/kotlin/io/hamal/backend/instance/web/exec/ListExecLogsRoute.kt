@@ -4,7 +4,8 @@ import io.hamal.backend.repository.api.ExecLogQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
-import io.hamal.lib.sdk.domain.ListExecLogsResponse
+import io.hamal.lib.sdk.domain.ApiExcLogList
+import io.hamal.lib.sdk.domain.ApiExecLog
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,13 +21,22 @@ class ListExecLogsRoute(
         @PathVariable("execId") execId: ExecId,
         @RequestParam(required = false, name = "after_id", defaultValue = "${Long.MAX_VALUE}") afterId: ExecLogId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ListExecLogsResponse> {
+    ): ResponseEntity<ApiExcLogList> {
         val logs = execLogQueryRepository.list(execId) {
             this.afterId = afterId
             this.limit = limit
         }
         return ResponseEntity.ok(
-            ListExecLogsResponse(logs)
+            ApiExcLogList(logs.map {
+                ApiExecLog(
+                    id = it.id,
+                    execId = it.execId,
+                    level = it.level,
+                    message = it.message,
+                    localAt = it.localAt,
+                    remoteAt = it.remoteAt
+                )
+            })
         )
     }
 }
