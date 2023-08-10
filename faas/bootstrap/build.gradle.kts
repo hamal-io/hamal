@@ -17,7 +17,7 @@ docker {
         baseImage.set("openjdk:22-slim-bullseye")
         ports.set(listOf(8008, 8008))
         images.set(listOf("hamalio/faas"))
-        jvmArgs.set(listOf("-Xmx2048m"))
+        jvmArgs.set(listOf("-Xmx4096m", "-XX:+ExitOnOutOfMemoryError"))
     }
 }
 
