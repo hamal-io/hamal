@@ -11,6 +11,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.sdk.domain.ApiCorrelatedState
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
@@ -49,12 +50,12 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
 
     fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.correlationId)
 
-    fun getState(funcId: FuncId, correlationId: CorrelationId): CorrelatedState {
+    fun getState(funcId: FuncId, correlationId: CorrelationId): ApiCorrelatedState {
         val response = httpTemplate.get("/v1/funcs/${funcId.value.value}/states/${correlationId.value}").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        return response.result(CorrelatedState::class)
+        return response.result(ApiCorrelatedState::class)
     }
 
     fun setState(correlatedState: CorrelatedState): ApiSubmittedReq {

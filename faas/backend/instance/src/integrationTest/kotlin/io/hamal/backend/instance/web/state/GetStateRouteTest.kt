@@ -1,8 +1,6 @@
 package io.hamal.backend.instance.web.state
 
-import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
@@ -10,6 +8,9 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.sdk.domain.ApiCorrelatedState
+import io.hamal.lib.sdk.domain.ApiError
+import io.hamal.lib.sdk.domain.ApiState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -35,10 +36,11 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val correlatedState = response.result(CorrelatedState::class)
-        assertThat(correlatedState.correlation.funcId, equalTo(funcId))
+        val correlatedState = response.result(ApiCorrelatedState::class)
+        assertThat(correlatedState.correlation.func.id, equalTo(funcId))
+        assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.value, equalTo(State(TableValue("hamal" to StringValue("rocks")))))
+        assertThat(correlatedState.value, equalTo(ApiState(TableValue("hamal" to StringValue("rocks")))))
     }
 
     @Test
@@ -49,10 +51,11 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val correlatedState = response.result(CorrelatedState::class)
-        assertThat(correlatedState.correlation.funcId, equalTo(funcId))
+        val correlatedState = response.result(ApiCorrelatedState::class)
+        assertThat(correlatedState.correlation.func.id, equalTo(funcId))
+        assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.value, equalTo(State()))
+        assertThat(correlatedState.value, equalTo(ApiState()))
     }
 
     @Test

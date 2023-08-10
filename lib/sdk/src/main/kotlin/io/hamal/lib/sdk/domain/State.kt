@@ -1,19 +1,34 @@
 package io.hamal.lib.sdk.domain
 
-import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.base.Inputs
+import io.hamal.lib.domain.vo.base.InputsSerializer
+import io.hamal.lib.kua.value.TableValue
 import kotlinx.serialization.Serializable
 
-@Serializable
-@Deprecated("do not have separate dto")
-data class ApiGetStateResponse(
-    val correlation: Correlation,
-    val contentType: String
-)
-
+@Serializable(with = ApiState.Serializer::class)
+class ApiState(override val value: TableValue = TableValue()) : Inputs() {
+    internal object Serializer : InputsSerializer<ApiState>(::ApiState)
+}
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiSetStateResponse(
-    val correlation: Correlation,
-    val contentType: String
-)
+data class ApiCorrelation(
+    val correlationId: CorrelationId,
+    val func: ApiFunc
+) {
+    @Serializable
+    data class ApiFunc(
+        val id: FuncId,
+        val name: FuncName
+    )
+}
+
+@Serializable
+data class ApiCorrelatedState(
+    val correlation: ApiCorrelation,
+    val value: ApiState
+) {
+    operator fun get(key: String) = value.value[key]
+}

@@ -2,19 +2,21 @@ package io.hamal.backend.instance.web.state
 
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Accepted
+import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.value.FalseValue
 import io.hamal.lib.kua.value.NumberValue
 import io.hamal.lib.kua.value.TableValue
 import io.hamal.lib.kua.value.TrueValue
+import io.hamal.lib.sdk.domain.ApiError
+import io.hamal.lib.sdk.domain.ApiState
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -29,7 +31,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
             .body(State(TableValue("answer" to NumberValue(42))))
             .execute()
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         response.result(ApiSubmittedReq::class)
@@ -50,12 +52,12 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(value, equalTo(State(TableValue("result" to TrueValue))))
+            assertThat(value, equalTo(ApiState(TableValue("result" to TrueValue))))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(value, equalTo(State(TableValue("result" to FalseValue))))
+            assertThat(value, equalTo(ApiState(TableValue("result" to FalseValue))))
         }
     }
 
@@ -94,7 +96,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
             .body(State(TableValue("answer" to NumberValue(42))))
             .execute()
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
+        assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)

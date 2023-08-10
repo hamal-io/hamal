@@ -8,6 +8,7 @@ import io.hamal.lib.domain.req.SetStateReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiDefaultSubmittedReq
+import io.hamal.lib.sdk.domain.ApiState
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,7 +26,7 @@ class SetStateRoute(
     fun setState(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("correlationId") correlationId: CorrelationId,
-        @RequestBody state: State
+        @RequestBody state: ApiState
     ): ResponseEntity<ApiSubmittedReq> {
         ensureFuncExists(funcId)
 
@@ -35,7 +36,7 @@ class SetStateRoute(
                     funcId = funcId,
                     correlationId = correlationId,
                 ),
-                value = state
+                value = State(state.value)
             )
         )
         return ResponseEntity(result.let {
