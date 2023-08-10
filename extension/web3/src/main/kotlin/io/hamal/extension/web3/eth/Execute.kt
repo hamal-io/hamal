@@ -44,29 +44,32 @@ class EthExecuteFunction(
                 ctx.state.native.pop(1)
             }
 
-            val result = ctx.tableCreateArray(0)
-            batchService.execute().forEach { ethRes ->
-                when (ethRes) {
-                    is EthGetBlockNumberResponse -> TODO()
-                    is EthGetLiteBlockResponse -> TODO()
-                    is EthGetBlockResponse -> {
-                        val res = ctx.tableCreateMap()
-                        res["id"] = ethRes.result.number.value.toLong()
-                        res["hash"] = ethRes.result.hash.toPrefixedHexString().value
-                        res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
-                        res["gas_used"] = ethRes.result.gasUsed.value.toLong()
-                        res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
-                        result.append(res)
-                        log.trace("${ethRes.id} - block response: $res")
-                    }
+            return null to batchService.execute().let {
+                val result = ctx.tableCreateArray(0)
+                it.forEach { ethRes ->
+                    when (ethRes) {
+                        is EthGetBlockNumberResponse -> TODO()
+                        is EthGetLiteBlockResponse -> TODO()
+                        is EthGetBlockResponse -> {
+                            val res = ctx.tableCreateMap()
+                            res["id"] = ethRes.result.number.value.toLong()
+                            res["hash"] = ethRes.result.hash.toPrefixedHexString().value
+                            res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
+                            res["gas_used"] = ethRes.result.gasUsed.value.toLong()
+                            res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
+                            result.append(res)
+                            log.trace("${ethRes.id} - block response: $res")
+                        }
 
-                    is EthCallResponse -> {
-                        result.append(ethRes.result.value)
-                        log.trace("${ethRes.id} - call response: ${ethRes.result.value}")
+                        is EthCallResponse -> {
+                            result.append(ethRes.result.value)
+                            log.trace("${ethRes.id} - call response: ${ethRes.result.value}")
+                        }
                     }
                 }
+                result
             }
-            return null to result
+
         } catch (t: Throwable) {
             t.printStackTrace()
             return ErrorValue(t.message ?: "Unknown error") to null
