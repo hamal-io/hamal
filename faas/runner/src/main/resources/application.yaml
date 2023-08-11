@@ -1,0 +1,4 @@
+io:
+  hamal:
+    runner:
+      host: ${INSTANCE_HOST:http://0.0.0.0:8008}

@@ -16,8 +16,8 @@ services:
     networks:
       - hamalnet
 
-  faas:
-    image: hamalio/faas
+  faas-instance:
+    image: hamalio/faas-instance
     restart:
       unless-stopped
     ports:
@@ -25,6 +25,18 @@ services:
     environment:
       - ACTIVE_PROFILES=default,sqlite
     volumes:
-      - "/mnt/faas:/tmp/hamal/faas"
+      - "/mnt/faas-instance:/tmp/hamal/faas-instance"
+    networks:
+      - hamalnet
+
+  faas-runner:
+    image: hamalio/faas-runner
+    restart:
+      unless-stopped
+    environment:
+      - ACTIVE_PROFILES=default
+      - INSTANCE_HOST=http://faas-instance:8008
+    volumes:
+      - "/mnt/faas-runner:/tmp/hamal/faas-runner"
     networks:
       - hamalnet

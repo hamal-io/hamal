@@ -11,26 +11,29 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.sdk.domain.DequeueExecsResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 
 @Configuration
 @Profile("!test")
-open class SandboxConfig {
+class SandboxConfig {
     @Bean
-    open fun sandboxFactory(): SandboxFactory = RunnerSandboxFactory()
+    fun sandboxFactory(
+        @Value("\${io.hamal.runner.host}") host: String
+    ): SandboxFactory = RunnerSandboxFactory(host)
 }
 
 interface SandboxFactory {
     fun create(exec: DequeueExecsResponse.Exec): Sandbox
 }
 
-class RunnerSandboxFactory : SandboxFactory {
+class RunnerSandboxFactory(val instanceHost: String) : SandboxFactory {
     override fun create(exec: DequeueExecsResponse.Exec): Sandbox {
         NativeLoader.load(Jar)
 
-        val template = HttpTemplate("http://localhost:8008") // FIXME sdk instead
+        val template = HttpTemplate(instanceHost) // FIXME sdk instead
 
         val ctx = DefaultSandboxContext()
         ctx[ExecId::class] = exec.id

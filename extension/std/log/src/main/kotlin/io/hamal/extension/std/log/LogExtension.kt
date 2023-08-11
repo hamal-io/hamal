@@ -15,6 +15,10 @@ import io.hamal.lib.kua.value.StringValue
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.lib.sdk.domain.AppendExecLogCmd
 import io.hamal.lib.sdk.service.DefaultExecLogService
+import logger
+
+
+val log = logger(LogFunction::class)
 
 class LogExtensionFactory(
     private val templateSupplier: HttpTemplateSupplier
@@ -39,6 +43,11 @@ class LogFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringValue, arg2: StringValue): ErrorValue? {
         val level = ExecLogLevel.valueOf(arg1.value)
         val message = ExecLogMessage(arg2.value)
+
+
+        if (level == ExecLogLevel.Info) {
+            log.info(message.value)
+        }
 
 
         DefaultExecLogService(templateSupplier())
