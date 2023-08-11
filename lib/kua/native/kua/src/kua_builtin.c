@@ -6,8 +6,9 @@
 #include "kua_builtin_base.h"
 
 static const luaL_Reg standard_builtin[] = {
-        {LUA_GNAME,     kua_lib_base_register},
-        {LUA_DBLIBNAME, luaopen_debug},
+        {LUA_GNAME,      kua_lib_base_register},
+        {LUA_DBLIBNAME,  luaopen_debug},
+        {LUA_TABLIBNAME, luaopen_table},
         {NULL, NULL}
 };
 
