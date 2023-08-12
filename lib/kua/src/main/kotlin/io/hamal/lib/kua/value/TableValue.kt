@@ -10,10 +10,9 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlin.collections.Map.Entry
 
-@Serializable
-@SerialName("TableEntry")
-data class TableEntry(val key: StringValue, val value: SerializableValue)
+typealias TableEntry = Entry<StringValue, SerializableValue>
 
 @SerialName("TableValue")
 @Serializable
@@ -21,6 +20,7 @@ data class TableValue(
     @Serializable(with = Serializer::class)
     private val entries: MutableMap<StringValue, SerializableValue> = mutableMapOf(),
 ) : SerializableValue, Collection<TableEntry> {
+
     constructor(vararg pairs: Pair<Any, SerializableValue>) : this() {
         pairs.forEach { pair ->
             when (val key = pair.first) {
@@ -71,7 +71,7 @@ data class TableValue(
     override fun isEmpty() = entries.isEmpty()
 
     override fun iterator(): Iterator<TableEntry> {
-        return entries.asIterable().map { entry -> TableEntry(entry.key, entry.value) }.iterator()
+        return entries.asIterable().iterator()
     }
 
     override fun containsAll(elements: Collection<TableEntry>) = elements.all(::contains)
@@ -123,4 +123,4 @@ data class TableValue(
 }
 
 infix fun String.to(that: String): Pair<String, StringValue> = Pair(this, StringValue(that))
-infix fun String.to(that: Number): Pair<String, DecimalValue> = Pair(this, DecimalValue(that))
+infix fun String.to(that: Number): Pair<String, NumberValue> = Pair(this, NumberValue(that.toDouble()))
