@@ -1,8 +1,8 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.type.DoubleType
 
-data class ExitError(val status: NumberValue) : Error(status.toString())
+data class ExitError(val status: DoubleType) : Error(status.toString())
 
 class AssertionError(message: String) : Error(message)
 

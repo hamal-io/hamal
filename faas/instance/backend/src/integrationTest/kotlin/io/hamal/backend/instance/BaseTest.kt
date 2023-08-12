@@ -9,8 +9,8 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.ErrorType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
@@ -87,7 +87,7 @@ internal abstract class BaseTest {
         execId: ExecId,
         status: ExecStatus,
         correlation: Correlation? = null,
-        code: CodeValue = CodeValue("")
+        code: CodeType = CodeType("")
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
@@ -143,7 +143,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    cause = ErrorValue("BaseTest.kt")
+                    cause = ErrorType("BaseTest.kt")
                 )
             )
 

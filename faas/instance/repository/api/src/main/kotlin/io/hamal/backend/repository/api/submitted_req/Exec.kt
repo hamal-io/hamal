@@ -5,7 +5,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +13,7 @@ data class SubmittedFailExecReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,
-    val cause: ErrorValue
+    val cause: ErrorType
 ) : SubmittedReq
 
 @Serializable

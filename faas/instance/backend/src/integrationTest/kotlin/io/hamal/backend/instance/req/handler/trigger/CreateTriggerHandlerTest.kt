@@ -8,8 +8,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -80,7 +80,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(duration, equalTo(42.seconds))
-                assertThat(inputs, equalTo(TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks")))))
+                assertThat(inputs, equalTo(TriggerInputs(TableType(StringType("hamal") to StringType("rocks")))))
             }
         }
     }
@@ -95,7 +95,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(TriggerName("EventTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(topicId, equalTo(TopicId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks")))))
+                assertThat(inputs, equalTo(TriggerInputs(TableType(StringType("hamal") to StringType("rocks")))))
             }
         }
     }
@@ -117,7 +117,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         id = TriggerId(1234),
         name = TriggerName("FixedRateTrigger"),
         duration = 42.seconds,
-        inputs = TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
+        inputs = TriggerInputs(TableType(StringType("hamal") to StringType("rocks"))),
     )
 
     private val submitCreateEventTriggerReq = SubmittedCreateTriggerReq(
@@ -128,6 +128,6 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         topicId = TopicId(1111),
         id = TriggerId(1234),
         name = TriggerName("EventTrigger"),
-        inputs = TriggerInputs(TableValue(StringValue("hamal") to StringValue("rocks"))),
+        inputs = TriggerInputs(TableType(StringType("hamal") to StringType("rocks"))),
     )
 }

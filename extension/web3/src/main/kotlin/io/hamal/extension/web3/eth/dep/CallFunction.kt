@@ -6,9 +6,9 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
@@ -19,14 +19,14 @@ import java.math.BigInteger
 
 class CallFunction(
     val config: ExtensionConfig
-) : Function1In2Out<TableMapValue, ErrorValue, StringValue>(
-    FunctionInput1Schema(TableMapValue::class),
-    FunctionOutput2Schema(ErrorValue::class, StringValue::class)
+) : Function1In2Out<TableMap, ErrorType, StringType>(
+    FunctionInput1Schema(TableMap::class),
+    FunctionOutput2Schema(ErrorType::class, StringType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): Pair<ErrorValue?, StringValue?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableMap): Pair<ErrorType?, StringType?> {
 
         val b = EthHttpBatchService(
-            HttpTemplate((config.value["host"] as StringValue).value)
+            HttpTemplate((config.value["host"] as StringType).value)
         ).call(
             EthBatchService.EthCallRequest(
                 to = EthAddress(EthPrefixedHexString(arg1.getString("to"))),
@@ -35,6 +35,6 @@ class CallFunction(
             )
         ).execute().first() as EthCallResponse
 
-        return null to StringValue(b.result.value)
+        return null to StringType(b.result.value)
     }
 }

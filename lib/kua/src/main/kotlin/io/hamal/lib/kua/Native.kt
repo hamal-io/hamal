@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.function.FunctionValue
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.type.ErrorType
 
 class Native(
     val sandbox: Sandbox
@@ -20,7 +20,7 @@ class Native(
     external fun getGlobal(key: String)
 
     external fun pushBoolean(value: Boolean): Int
-    external fun pushFunctionValue(value: FunctionValue<*, *, *, *>): Int
+    external fun pushFunction(value: FunctionType<*, *, *, *>): Int
     external fun pushError(message: String): Int
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int
@@ -29,7 +29,7 @@ class Native(
     external fun pop(total: Int): Int
 
     external fun toBoolean(idx: Int): Boolean
-    external fun toError(idx: Int): ErrorValue
+    external fun toError(idx: Int): ErrorType
     external fun toNumber(idx: Int): Double
     external fun toString(idx: Int): String
 

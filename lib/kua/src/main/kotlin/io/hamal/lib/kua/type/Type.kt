@@ -1,11 +1,11 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import kotlinx.serialization.Serializable
 
-interface Value
+interface Type
 
 @Serializable
-sealed interface SerializableValue : Value
+sealed interface SerializableType : Type
 
 enum class ValueType(
     val value: Int

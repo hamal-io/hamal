@@ -3,9 +3,9 @@ package io.hamal.backend.instance.req.handler.exec
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -21,18 +21,18 @@ class ToExecInputsTest {
     @Test
     fun ok() {
         val invocationInputs = InvocationInputs(
-            TableValue(
-                StringValue("key") to NumberValue(2810),
-                StringValue("invoke") to StringValue("invoke")
+            TableType(
+                StringType("key") to DoubleType(2810),
+                StringType("invoke") to StringType("invoke")
             )
         )
         val result = invocationInputs.toExecInputs()
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    TableValue(
-                        StringValue("key") to NumberValue(2810),
-                        StringValue("invoke") to StringValue("invoke")
+                    TableType(
+                        StringType("key") to DoubleType(2810),
+                        StringType("invoke") to StringType("invoke")
                     )
                 )
             )
@@ -52,25 +52,25 @@ class MergeTest {
     @Test
     fun `invocation inputs overrides func inputs`() {
         val funcInputs = FuncInputs(
-            TableValue(
-                StringValue("key") to NumberValue(1),
-                StringValue("func") to StringValue("func")
+            TableType(
+                StringType("key") to DoubleType(1),
+                StringType("func") to StringType("func")
             )
         )
         val invocationInputs = InvocationInputs(
-            TableValue(
-                StringValue("key") to NumberValue(2810),
-                StringValue("invoke") to StringValue("invoke")
+            TableType(
+                StringType("key") to DoubleType(2810),
+                StringType("invoke") to StringType("invoke")
             )
         )
         val result = merge(funcInputs, invocationInputs)
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    TableValue(
-                        StringValue("key") to NumberValue(2810),
-                        StringValue("func") to StringValue("func"),
-                        StringValue("invoke") to StringValue("invoke")
+                    TableType(
+                        StringType("key") to DoubleType(2810),
+                        StringType("func") to StringType("func"),
+                        StringType("invoke") to StringType("invoke")
                     )
                 )
             )

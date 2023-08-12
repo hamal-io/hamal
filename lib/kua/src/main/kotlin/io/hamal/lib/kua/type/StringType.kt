@@ -1,10 +1,10 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("StringValue")
-data class StringValue(val value: String) : SerializableValue {
+@SerialName("StringType")
+data class StringType(val value: String) : SerializableType {
     override fun toString(): String = value
 }

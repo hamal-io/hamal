@@ -10,7 +10,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,7 +24,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
         val response = request(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),
-                code = CodeValue("40 + 2")
+                code = CodeType("40 + 2")
             )
         )
 
@@ -54,7 +54,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
             assertThat(correlation, nullValue())
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(code, equalTo(CodeValue("40 + 2")))
+            assertThat(code, equalTo(CodeType("40 + 2")))
         }
     }
 }

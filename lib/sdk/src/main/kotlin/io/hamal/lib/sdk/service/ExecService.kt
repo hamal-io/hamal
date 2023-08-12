@@ -7,7 +7,7 @@ import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.domain.DequeueExecsResponse
 
 interface ExecService {
@@ -21,7 +21,7 @@ interface ExecService {
     )
 
     // able to emit events on failure
-    fun fail(execId: ExecId, error: ErrorValue)
+    fun fail(execId: ExecId, error: ErrorType)
 }
 
 data class DefaultExecService(val template: HttpTemplate) : ExecService {
@@ -47,7 +47,7 @@ data class DefaultExecService(val template: HttpTemplate) : ExecService {
             .execute()
     }
 
-    override fun fail(execId: ExecId, error: ErrorValue) {
+    override fun fail(execId: ExecId, error: ErrorType) {
         template
             .post("/v1/execs/${execId.value.value}/fail")
             .body(FailExecReq(cause = error))

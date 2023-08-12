@@ -2,13 +2,13 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.extension.*
-import io.hamal.lib.kua.function.FunctionValue
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.AnyValue
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.type.AnyType
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.TableType
 
 class Sandbox(
     val ctx: SandboxContext
@@ -29,7 +29,7 @@ class Sandbox(
 
     fun register(extension: NativeExtension) = state.registerGlobalExtension(extension)
 
-    fun load(code: CodeValue) = load(code.value)
+    fun load(code: CodeType) = load(code.value)
 
     override fun load(code: String) = native.load(code)
 
@@ -54,29 +54,29 @@ class Sandbox(
 
     override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()
-    override fun pushAny(value: AnyValue) = state.pushAny(value)
-    override fun getAnyValue(idx: Int) = state.getAnyValue(idx)
+    override fun pushAny(value: AnyType) = state.pushAny(value)
+    override fun getAny(idx: Int) = state.getAny(idx)
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
-    override fun pushError(value: ErrorValue) = state.pushError(value)
-    override fun pushFunction(value: FunctionValue<*, *, *, *>) = state.pushFunction(value)
+    override fun pushError(value: ErrorType) = state.pushError(value)
+    override fun pushFunction(value: FunctionType<*, *, *, *>) = state.pushFunction(value)
 
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
 
-    override fun pushTable(value: TableValue) = state.pushTable(value)
-    override fun pushTable(proxy: TableMapValue) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableArrayValue) = state.pushTable(proxy)
+    override fun pushTable(value: TableType) = state.pushTable(value)
+    override fun pushTable(proxy: TableMap) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableArray) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
-    override fun setGlobal(name: String, value: FunctionValue<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableMapValue) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableArrayValue) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableMapValue = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableMap) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableArray) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableMap = state.getGlobalTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
@@ -99,14 +99,14 @@ internal fun State.registerGlobalExtension(extension: NativeExtension) {
     setGlobal(extension.name, result)
 }
 
-fun State.registerExtension(extension: NativeExtension): TableMapValue {
+fun State.registerExtension(extension: NativeExtension): TableMap {
 
     val r = tableCreateMap(1)
     extension.values
-        .filter { entry -> entry.value is FunctionValue<*, *, *, *> }
+        .filter { entry -> entry.value is FunctionType<*, *, *, *> }
         .forEach { (name, value) ->
-            require(value is FunctionValue<*, *, *, *>)
-            native.pushFunctionValue(value)
+            require(value is FunctionType<*, *, *, *>)
+            native.pushFunction(value)
             native.tabletSetField(r.index, name)
         }
 
@@ -116,7 +116,7 @@ fun State.registerExtension(extension: NativeExtension): TableMapValue {
     return r
 }
 
-fun State.createConfig(config: ExtensionConfig): TableMapValue {
+fun State.createConfig(config: ExtensionConfig): TableMap {
 
     val result = tableCreateMap(1)
 
@@ -126,7 +126,7 @@ fun State.createConfig(config: ExtensionConfig): TableMapValue {
     )
 
     fns.forEach { (name, value) ->
-        native.pushFunctionValue(value)
+        native.pushFunction(value)
         native.tabletSetField(result.index, name)
     }
 

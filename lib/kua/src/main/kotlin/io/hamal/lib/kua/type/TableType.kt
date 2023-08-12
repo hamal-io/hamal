@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -12,57 +12,57 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.collections.Map.Entry
 
-typealias TableEntry = Entry<StringValue, SerializableValue>
+typealias TableEntry = Entry<StringType, SerializableType>
 
-@SerialName("TableValue")
+@SerialName("TableType")
 @Serializable
-data class TableValue(
+data class TableType(
     @Serializable(with = Serializer::class)
-    private val entries: MutableMap<StringValue, SerializableValue> = mutableMapOf(),
-) : SerializableValue, Collection<TableEntry> {
+    private val entries: MutableMap<StringType, SerializableType> = mutableMapOf(),
+) : SerializableType, Collection<TableEntry> {
 
-    constructor(vararg pairs: Pair<Any, SerializableValue>) : this() {
+    constructor(vararg pairs: Pair<Any, SerializableType>) : this() {
         pairs.forEach { pair ->
             when (val key = pair.first) {
-                is String -> entries[StringValue(key)] = pair.second
-                is Number -> entries[StringValue(key.toString())] = pair.second
-                is StringValue -> entries[key] = pair.second
+                is String -> entries[StringType(key)] = pair.second
+                is Number -> entries[StringType(key.toString())] = pair.second
+                is StringType -> entries[key] = pair.second
             }
         }
     }
 
-    operator fun set(key: Int, value: SerializableValue) {
-        this[StringValue(key.toString())] = value
+    operator fun set(key: Int, value: SerializableType) {
+        this[StringType(key.toString())] = value
     }
 
-    operator fun set(key: StringValue, value: SerializableValue) {
+    operator fun set(key: StringType, value: SerializableType) {
         entries[key] = value
     }
 
-    fun setAll(tableValue: TableValue) {
+    fun setAll(tableValue: TableType) {
         tableValue.entries.forEach { entry ->
             entries[entry.key] = entry.value
         }
     }
 
-    operator fun get(key: Int): Value = get(StringValue(key.toString()))
-    operator fun get(key: String): Value = get(StringValue(key))
-    operator fun get(key: Value): Value = when (key) {
-        is StringValue -> get(key)
-        is DecimalValue -> get(StringValue(key.value.toString()))
+    operator fun get(key: Int): Type = get(StringType(key.toString()))
+    operator fun get(key: String): Type = get(StringType(key))
+    operator fun get(key: Type): Type = when (key) {
+        is StringType -> get(key)
+        is DoubleType -> get(StringType(key.value.toString()))
         else -> TODO()
     }
 
-    operator fun get(key: StringValue): Value {
+    operator fun get(key: StringType): Type {
         return entries[key]!!
     }
 
 
     fun remove(key: Int) {
-        remove(DecimalValue(key))
+        remove(DoubleType(key))
     }
 
-    fun remove(key: Value) {
+    fun remove(key: Type) {
         entries.remove(key)
     }
 
@@ -80,7 +80,7 @@ data class TableValue(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TableValue
+        other as TableType
 
         return entries == other.entries
     }
@@ -94,33 +94,33 @@ data class TableValue(
         return "{$valueString}"
     }
 
-    object Serializer : KSerializer<MutableMap<StringValue, SerializableValue>> {
-        private val delegate = MapSerializer(KeySerializer, SerializableValue.serializer())
+    object Serializer : KSerializer<MutableMap<StringType, SerializableType>> {
+        private val delegate = MapSerializer(KeySerializer, SerializableType.serializer())
 
         @OptIn(ExperimentalSerializationApi::class)
-        override val descriptor = SerialDescriptor("TableValue", delegate.descriptor)
+        override val descriptor = SerialDescriptor("TableType", delegate.descriptor)
 
-        override fun deserialize(decoder: Decoder): MutableMap<StringValue, SerializableValue> {
+        override fun deserialize(decoder: Decoder): MutableMap<StringType, SerializableType> {
             return delegate.deserialize(decoder).toMutableMap()
         }
 
-        override fun serialize(encoder: Encoder, value: MutableMap<StringValue, SerializableValue>) {
+        override fun serialize(encoder: Encoder, value: MutableMap<StringType, SerializableType>) {
             return delegate.serialize(encoder, value)
         }
     }
 
-    object KeySerializer : KSerializer<StringValue> {
+    object KeySerializer : KSerializer<StringType> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("KeyValue", PrimitiveKind.STRING)
 
-        override fun deserialize(decoder: Decoder): StringValue {
-            return StringValue(decoder.decodeString())
+        override fun deserialize(decoder: Decoder): StringType {
+            return StringType(decoder.decodeString())
         }
 
-        override fun serialize(encoder: Encoder, value: StringValue) {
+        override fun serialize(encoder: Encoder, value: StringType) {
             return encoder.encodeString(value.value)
         }
     }
 }
 
-infix fun String.to(that: String): Pair<String, StringValue> = Pair(this, StringValue(that))
-infix fun String.to(that: Number): Pair<String, NumberValue> = Pair(this, NumberValue(that.toDouble()))
+infix fun String.to(that: String): Pair<String, StringType> = Pair(this, StringType(that))
+infix fun String.to(that: Number): Pair<String, DoubleType> = Pair(this, DoubleType(that.toDouble()))

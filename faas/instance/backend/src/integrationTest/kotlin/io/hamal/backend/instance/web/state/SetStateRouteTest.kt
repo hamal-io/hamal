@@ -11,10 +11,10 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.FalseValue
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.TableValue
-import io.hamal.lib.kua.value.TrueValue
+import io.hamal.lib.kua.type.FalseValue
+import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.TrueValue
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiState
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
@@ -28,7 +28,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
         val response = httpTemplate.post("/v1/funcs/${funcId.value.value}/states/__CORRELATION__")
-            .body(State(TableValue("answer" to NumberValue(42))))
+            .body(State(TableType("answer" to DoubleType(42))))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
@@ -37,7 +37,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         response.result(ApiSubmittedReq::class)
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
-        assertThat(correlatedState["answer"], equalTo(NumberValue(42)))
+        assertThat(correlatedState["answer"], equalTo(DoubleType(42)))
     }
 
     @Test
@@ -47,17 +47,17 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
 
-        setState(CorrelatedState(correlationOne, State(TableValue("result" to TrueValue))))
-        setState(CorrelatedState(correlationTwo, State(TableValue("result" to FalseValue))))
+        setState(CorrelatedState(correlationOne, State(TableType("result" to TrueValue))))
+        setState(CorrelatedState(correlationTwo, State(TableType("result" to FalseValue))))
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(value, equalTo(ApiState(TableValue("result" to TrueValue))))
+            assertThat(value, equalTo(ApiState(TableType("result" to TrueValue))))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(value, equalTo(ApiState(TableValue("result" to FalseValue))))
+            assertThat(value, equalTo(ApiState(TableType("result" to FalseValue))))
         }
     }
 
@@ -77,8 +77,8 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
                     CorrelatedState(
                         correlation = correlation,
                         value = State(
-                            TableValue(
-                                "count" to NumberValue(currentCount)
+                            TableType(
+                                "count" to DoubleType(currentCount)
                             )
                         )
                     )
@@ -86,14 +86,14 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
             )
 
             val correlatedState = getState(correlation)
-            assertThat(correlatedState["count"], equalTo(NumberValue(currentCount)))
+            assertThat(correlatedState["count"], equalTo(DoubleType(currentCount)))
         }
     }
 
     @Test
     fun `Tries to set state but func does not exists`() {
         val response = httpTemplate.post("/v1/funcs/0/states/__CORRELATION__")
-            .body(State(TableValue("answer" to NumberValue(42))))
+            .body(State(TableType("answer" to DoubleType(42))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

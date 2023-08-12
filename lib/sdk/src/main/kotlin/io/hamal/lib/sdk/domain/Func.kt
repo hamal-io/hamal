@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.domain
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,5 +22,5 @@ data class ApiFunc(
     val id: FuncId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeValue
+    val code: CodeType
 )

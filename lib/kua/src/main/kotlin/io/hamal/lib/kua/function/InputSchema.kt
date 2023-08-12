@@ -1,10 +1,13 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.table.TableProxyValue
-import io.hamal.lib.kua.table.TableType
-import io.hamal.lib.kua.value.*
+import io.hamal.lib.kua.table.DefaultTableProxy
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.type.AnyType
+import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.Type
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {
@@ -19,7 +22,7 @@ object FunctionInput0Schema : FunctionInputSchema<FunctionInput0> {
     }
 }
 
-data class FunctionInput1Schema<ARG_1 : Value>(
+data class FunctionInput1Schema<ARG_1 : Type>(
     val arg1Class: KClass<ARG_1>
 ) : FunctionInputSchema<FunctionInput1<ARG_1>> {
     override val size = 1
@@ -30,7 +33,7 @@ data class FunctionInput1Schema<ARG_1 : Value>(
     }
 }
 
-data class FunctionInput2Schema<ARG_1 : Value, ARG_2 : Value>(
+data class FunctionInput2Schema<ARG_1 : Type, ARG_2 : Type>(
     val arg1Class: KClass<ARG_1>,
     val arg2Class: KClass<ARG_2>
 ) : FunctionInputSchema<FunctionInput2<ARG_1, ARG_2>> {
@@ -43,16 +46,15 @@ data class FunctionInput2Schema<ARG_1 : Value, ARG_2 : Value>(
     }
 }
 
-fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
+fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        AnyValue::class -> ctx.getAnyValue(idx) as ARG
-        NumberValue::class -> ctx.getNumberValue(idx) as ARG
-        StringValue::class -> ctx.getStringValue(idx) as ARG
-        TableValue::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-//        TableProxyValue::class -> TableProxyValue(TableProxyContext(idx, ctx.state)) as ARG
-        TableMapValue::class -> TableProxyValue(idx, ctx.state, TableType.Map) as ARG
-        TableArrayValue::class -> TableProxyValue(idx, ctx.state, TableType.Array) as ARG
+        AnyType::class -> ctx.getAny(idx) as ARG
+        DoubleType::class -> ctx.getNumberValue(idx) as ARG
+        StringType::class -> ctx.getStringValue(idx) as ARG
+        Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
+        TableMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Type.Map) as ARG
+        TableArray::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Type.Array) as ARG
         else -> TODO()
     }
 }

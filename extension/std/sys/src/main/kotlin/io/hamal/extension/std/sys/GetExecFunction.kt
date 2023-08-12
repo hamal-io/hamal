@@ -7,18 +7,18 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiExec
 
 class GetExecFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<StringValue, ErrorValue, TableMapValue>(
-    FunctionInput1Schema(StringValue::class),
-    FunctionOutput2Schema(ErrorValue::class, TableMapValue::class)
+) : Function1In2Out<StringType, ErrorType, TableMap>(
+    FunctionInput1Schema(StringType::class),
+    FunctionOutput2Schema(ErrorType::class, TableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringValue): Pair<ErrorValue?, TableMapValue?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableMap?> {
         val response = templateSupplier()
             .get("/v1/execs/${arg1.value}")
             .execute()
@@ -31,7 +31,7 @@ class GetExecFunction(
 
                     ctx.tableCreateMap(0).also {
                         it["id"] = exec.id.value.value.toString()
-                        it["status"] = StringValue(exec.status.name)
+                        it["status"] = StringType(exec.status.name)
                         it["inputs"] = inputs
                         exec.correlation?.correlationId?.value?.let { corId ->
                             it["correlationId"] = corId

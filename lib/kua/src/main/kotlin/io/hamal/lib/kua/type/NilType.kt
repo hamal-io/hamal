@@ -1,8 +1,8 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("NilValue")
-object NilValue : SerializableValue
+@SerialName("NilType")
+object NilType : SerializableType

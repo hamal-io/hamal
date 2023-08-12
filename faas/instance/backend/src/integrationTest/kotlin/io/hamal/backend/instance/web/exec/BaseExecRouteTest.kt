@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,7 +18,7 @@ internal sealed class BaseExecRouteTest : BaseRouteTest() {
             .body(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    code = CodeValue("40 + 2")
+                    code = CodeType("40 + 2")
                 )
             )
             .execute()

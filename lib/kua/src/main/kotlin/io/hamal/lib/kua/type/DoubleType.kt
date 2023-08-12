@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -10,23 +10,23 @@ import kotlinx.serialization.encoding.Encoder
 import java.text.DecimalFormat
 
 @Serializable
-@SerialName("NumberValue")
-data class NumberValue(
+@SerialName("DoubleType")
+data class DoubleType(
     @Serializable(with = Serializer::class)
     val value: Double
-) : SerializableValue {
+) : SerializableType {
     constructor(value: Int) : this(value.toDouble())
 
     companion object {
-        val Zero = NumberValue(0.0)
-        val One = NumberValue(1.0)
+        val Zero = DoubleType(0.0)
+        val One = DoubleType(1.0)
     }
 
-    operator fun times(value: Int) = NumberValue(this.value * value)
-    operator fun times(value: Double) = NumberValue(this.value * value)
+    operator fun times(value: Int) = DoubleType(this.value * value)
+    operator fun times(value: Double) = DoubleType(this.value * value)
 
     object Serializer : KSerializer<Double> {
-        override val descriptor = PrimitiveSerialDescriptor("NV", PrimitiveKind.STRING)
+        override val descriptor = PrimitiveSerialDescriptor("DT", PrimitiveKind.STRING)
 
         override fun deserialize(decoder: Decoder): Double {
             return decoder.decodeString().toDouble()

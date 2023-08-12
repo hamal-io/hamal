@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.type.ErrorType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -59,7 +59,7 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(10),
         status = ReqStatus.Submitted,
         id = ExecId(1234),
-        cause = ErrorValue("You have not tried hard enough")
+        cause = ErrorType("You have not tried hard enough")
     )
 
     private fun verifyFailed() {

@@ -4,7 +4,7 @@ import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.type.DoubleType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -43,8 +43,8 @@ internal class TableEntryIteratorTest {
         assertThat(testInstance.hasNext(), equalTo(true))
 
         val entry = testInstance.next()
-        assertThat(entry.key, equalTo(NumberValue(1)))
-        assertThat(entry.value, equalTo(NumberValue(21)))
+        assertThat(entry.key, equalTo(DoubleType(1)))
+        assertThat(entry.value, equalTo(DoubleType(21)))
 
         assertThat(testInstance.hasNext(), equalTo(false))
 
@@ -73,8 +73,8 @@ internal class TableEntryIteratorTest {
         repeat(10) { idx ->
             assertThat(testInstance.hasNext(), equalTo(true))
             val entry = testInstance.next()
-            assertThat(entry.key, equalTo(NumberValue(idx + 1)))
-            assertThat(entry.value, equalTo(NumberValue(idx)))
+            assertThat(entry.key, equalTo(DoubleType(idx + 1)))
+            assertThat(entry.value, equalTo(DoubleType(idx)))
         }
 
         assertThat(testInstance.hasNext(), equalTo(false))

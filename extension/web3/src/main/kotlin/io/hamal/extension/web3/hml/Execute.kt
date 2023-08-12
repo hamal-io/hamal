@@ -6,10 +6,10 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.hml.domain.HmlCallResponse
 import io.hamal.lib.web3.hml.domain.HmlGetBlockResponse
@@ -18,13 +18,13 @@ import io.hamal.lib.web3.hml.http.HmlHttpBatchService
 
 class HmlExecuteFunction(
     private val config: ExtensionConfig
-) : Function1In2Out<TableArrayValue, ErrorValue, TableArrayValue>(
-    FunctionInput1Schema(TableArrayValue::class),
-    FunctionOutput2Schema(ErrorValue::class, TableArrayValue::class)
+) : Function1In2Out<TableArray, ErrorType, TableArray>(
+    FunctionInput1Schema(TableArray::class),
+    FunctionOutput2Schema(ErrorType::class, TableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableArray): Pair<ErrorType?, TableArray?> {
         try {
-            val batchService = HmlHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
+            val batchService = HmlHttpBatchService(HttpTemplate((config.value["host"] as StringType).value))
             ctx.pushNil()
             while (ctx.state.native.tableNext(arg1.index)) {
 //                val i = ctx.state.getNumber(-2)
@@ -55,14 +55,14 @@ class HmlExecuteFunction(
                         val txs = ctx.tableCreateArray(r.result.transactions.size)
                         r.result.transactions.forEach {
                             val tx = ctx.tableCreateMap()
-                            tx["type"] = NumberValue(it.type.value.toDouble())
-                            tx["from"] = StringValue(it.from.toPrefixedHexString().value)
-                            tx["fromId"] = NumberValue(it.fromId.value.toDouble())
+                            tx["type"] = DoubleType(it.type.value.toDouble())
+                            tx["from"] = StringType(it.from.toPrefixedHexString().value)
+                            tx["fromId"] = DoubleType(it.fromId.value.toDouble())
 //FIXME                            tx["to"] = it.to?.let { StringValue(it.toPrefixedHexString().value) } ?: NilValue
-                            tx["to"] = it.to?.let { StringValue(it.toPrefixedHexString().value) } ?: StringValue("")
-                            tx["input"] = StringValue(it.input.value)
-                            tx["value"] = NumberValue(it.value.value.toDouble()) // FIXME decimal value
-                            tx["gas"] = NumberValue(it.gas.value.toDouble()) // FIXME decimal value
+                            tx["to"] = it.to?.let { StringType(it.toPrefixedHexString().value) } ?: StringType("")
+                            tx["input"] = StringType(it.input.value)
+                            tx["value"] = DoubleType(it.value.value.toDouble()) // FIXME decimal value
+                            tx["gas"] = DoubleType(it.gas.value.toDouble()) // FIXME decimal value
                             txs.append(tx)
                         }
 
@@ -78,7 +78,7 @@ class HmlExecuteFunction(
             return null to result
         } catch (t: Throwable) {
             t.printStackTrace()
-            return ErrorValue(t.message ?: "Unknown error") to null
+            return ErrorType(t.message ?: "Unknown error") to null
         }
     }
 }

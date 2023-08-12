@@ -8,9 +8,9 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiFunc
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -33,8 +33,8 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("func-one"),
-                    inputs = FuncInputs(TableValue("hamal" to StringValue("rockz"))),
-                    code = CodeValue("1+1")
+                    inputs = FuncInputs(TableType("hamal" to StringType("rockz"))),
+                    code = CodeType("1+1")
                 )
             )
         ).id(::FuncId)
@@ -46,8 +46,8 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
         with(getFuncResponse.result(ApiFunc::class)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
-            assertThat(inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("rockz")))))
-            assertThat(code, equalTo(CodeValue("1+1")))
+            assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("rockz")))))
+            assertThat(code, equalTo(CodeType("1+1")))
         }
     }
 }

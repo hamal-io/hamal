@@ -16,7 +16,7 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.type.StringType
 import org.springframework.stereotype.Component
 
 @Component
@@ -64,7 +64,7 @@ class CompleteExecHandler(
     private fun appendEvents(cmdId: CmdId, events: List<Event>) {
         events.forEach { evt ->
             //FIXME create topic if not exists
-            val topicName = TopicName((evt.value["topic"] as StringValue).value)
+            val topicName = TopicName((evt.value["topic"] as StringType).value)
             val topic = eventBrokerRepository.findTopic(topicName) ?: eventBrokerRepository.create(
                 cmdId, TopicToCreate(
                     id = generateDomainId(::TopicId),

@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiReqList
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,7 +22,7 @@ internal sealed class BaseReqRouteTest : BaseRouteTest() {
         return listResponse.result(ApiReqList::class)
     }
 
-    fun adhoc(code: CodeValue = CodeValue("")): ApiSubmittedReqWithDomainId {
+    fun adhoc(code: CodeType = CodeType("")): ApiSubmittedReqWithDomainId {
         return httpTemplate.post("/v1/adhoc").body(
             InvokeAdhocReq(
                 inputs = InvocationInputs(),

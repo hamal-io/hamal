@@ -1,11 +1,11 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableMapValue
+import io.hamal.lib.kua.table.TableMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -38,7 +38,7 @@ internal class ErrorValueTest {
         """.trimIndent()
         )
 
-        assertThat(messageCaptor.result, equalTo(AnyValue(StringValue("Sometimes an error can be a good thing"))))
+        assertThat(messageCaptor.result, equalTo(AnyType(StringType("Sometimes an error can be a good thing"))))
     }
 
     @Test
@@ -64,44 +64,44 @@ internal class ErrorValueTest {
         """.trimIndent()
         )
 
-        assertThat(errorCaptor.result, equalTo(AnyValue(ErrorValue("Sometimes an error can be a good thing"))))
+        assertThat(errorCaptor.result, equalTo(AnyType(ErrorType("Sometimes an error can be a good thing"))))
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableMapValue>(
-        FunctionInput1Schema(TableMapValue::class)
+    private object AssertMetatable : Function1In0Out<TableMap>(
+        FunctionInput1Schema(TableMap::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableMapValue) {
+        override fun invoke(ctx: FunctionContext, arg1: TableMap) {
             assertThat(arg1.getInt("__type"), equalTo(20))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }
     }
 
-    private class FunctionReturnsError : Function0In1Out<ErrorValue>(
-        FunctionOutput1Schema(ErrorValue::class)
+    private class FunctionReturnsError : Function0In1Out<ErrorType>(
+        FunctionOutput1Schema(ErrorType::class)
     ) {
-        override fun invoke(ctx: FunctionContext): ErrorValue {
-            return ErrorValue("Sometimes an error can be a good thing")
+        override fun invoke(ctx: FunctionContext): ErrorType {
+            return ErrorType("Sometimes an error can be a good thing")
         }
     }
 
 
-    private class FunctionNeverInvoked : Function1In0Out<NumberValue>(
-        FunctionInput1Schema(NumberValue::class)
+    private class FunctionNeverInvoked : Function1In0Out<DoubleType>(
+        FunctionInput1Schema(DoubleType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: NumberValue) {
+        override fun invoke(ctx: FunctionContext, arg1: DoubleType) {
             TODO("Not yet implemented")
         }
     }
 
-    private class Captor : Function1In0Out<AnyValue>(
-        FunctionInput1Schema(AnyValue::class)
+    private class Captor : Function1In0Out<AnyType>(
+        FunctionInput1Schema(AnyType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: AnyValue) {
+        override fun invoke(ctx: FunctionContext, arg1: AnyType) {
             result = arg1
         }
 
-        var result: AnyValue? = null
+        var result: AnyType? = null
     }
 
     private val sandbox = run {

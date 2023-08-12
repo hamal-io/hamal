@@ -1,9 +1,9 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
-import io.hamal.lib.kua.function.FunctionValue
+import io.hamal.lib.kua.function.FunctionType
 
-fun Sandbox.registerGlobalFunction(name: String, function: FunctionValue<*, *, *, *>) {
+fun Sandbox.registerGlobalFunction(name: String, function: FunctionType<*, *, *, *>) {
     setGlobal(name, function)
 }
 

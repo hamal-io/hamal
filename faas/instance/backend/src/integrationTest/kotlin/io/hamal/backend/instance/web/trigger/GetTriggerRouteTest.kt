@@ -9,8 +9,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiEventTrigger
 import io.hamal.lib.sdk.domain.ApiFixedRateTrigger
 import org.hamcrest.MatcherAssert.assertThat
@@ -38,7 +38,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
                     type = FixedRate,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(TableValue("hamal" to StringValue("rockz"))),
+                    inputs = TriggerInputs(TableType("hamal" to StringType("rockz"))),
                     funcId = someFuncId,
                     duration = 10.seconds
                 )
@@ -53,7 +53,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         with(getTriggerResponse.result(ApiFixedRateTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(TableValue("hamal" to StringValue("rockz")))))
+            assertThat(inputs, equalTo(TriggerInputs(TableType("hamal" to StringType("rockz")))))
             assertThat(duration, equalTo(10.seconds))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
@@ -71,7 +71,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
                     type = Event,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(TableValue("hamal" to StringValue("rockz"))),
+                    inputs = TriggerInputs(TableType("hamal" to StringType("rockz"))),
                     funcId = someFuncId,
                     topicId = someTopicId
                 )
@@ -86,7 +86,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         with(getTriggerResponse.result(ApiEventTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(TableValue("hamal" to StringValue("rockz")))))
+            assertThat(inputs, equalTo(TriggerInputs(TableType("hamal" to StringType("rockz")))))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(topic.id, equalTo(someTopicId))

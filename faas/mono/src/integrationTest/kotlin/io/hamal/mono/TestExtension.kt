@@ -7,8 +7,8 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.StringType
 import org.junit.jupiter.api.fail
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -43,16 +43,16 @@ class TestExtensionFactory : ScriptExtensionFactory {
 internal object CompleteTestFunction : Function0In0Out() {
     override fun invoke(ctx: FunctionContext) {
         ActiveTest.completeTest()
-        throw ExitError(NumberValue.Zero)
+        throw ExitError(DoubleType.Zero)
     }
 }
 
-internal object FailTestFunction : Function1In0Out<StringValue>(
-    FunctionInput1Schema(StringValue::class)
+internal object FailTestFunction : Function1In0Out<StringType>(
+    FunctionInput1Schema(StringType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringValue) {
+    override fun invoke(ctx: FunctionContext, arg1: StringType) {
         ActiveTest.failTest(arg1)
-        throw ExitError(NumberValue.One)
+        throw ExitError(DoubleType.One)
     }
 }
 
@@ -66,7 +66,7 @@ object ActiveTest {
         }
     }
 
-    fun failTest(cause: StringValue) {
+    fun failTest(cause: StringType) {
         lock.withLock {
             condition.signal()
             failureReason = cause.value

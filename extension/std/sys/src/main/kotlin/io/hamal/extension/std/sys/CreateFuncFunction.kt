@@ -9,17 +9,17 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<TableMapValue, ErrorValue, TableMapValue>(
-    FunctionInput1Schema(TableMapValue::class),
-    FunctionOutput2Schema(ErrorValue::class, TableMapValue::class)
+) : Function1In2Out<TableMap, ErrorType, TableMap>(
+    FunctionInput1Schema(TableMap::class),
+    FunctionOutput2Schema(ErrorType::class, TableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapValue): Pair<ErrorValue?, TableMapValue> {
+    override fun invoke(ctx: FunctionContext, arg1: TableMap): Pair<ErrorType?, TableMap> {
         try {
 
 //            val name: StringValue = when (val x = arg1["name"]) {

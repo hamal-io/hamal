@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiCorrelatedState
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiState
@@ -30,7 +30,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
             )
         ).id
 
-        awaitCompleted(completeExec(execId, State(TableValue("hamal" to StringValue("rocks")))))
+        awaitCompleted(completeExec(execId, State(TableType("hamal" to StringType("rocks")))))
 
         val response = httpTemplate.get("/v1/funcs/${funcId.value.value}/states/__1__").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
@@ -40,7 +40,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.value, equalTo(ApiState(TableValue("hamal" to StringValue("rocks")))))
+        assertThat(correlatedState.value, equalTo(ApiState(TableType("hamal" to StringType("rocks")))))
     }
 
     @Test

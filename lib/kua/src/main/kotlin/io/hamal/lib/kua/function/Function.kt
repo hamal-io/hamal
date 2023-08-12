@@ -2,14 +2,14 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.Native
-import io.hamal.lib.kua.value.Value
+import io.hamal.lib.kua.type.Type
 
-interface FunctionValue<
+interface FunctionType<
         INPUT_SCHEMA : FunctionInputSchema<INPUT>,
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
         OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
         OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
-        > : Value {
+        > : Type {
 
     val inputSchema: INPUT_SCHEMA
     val outputSchema: OUTPUT_SCHEMA
@@ -26,7 +26,7 @@ interface FunctionValue<
     }
 }
 
-abstract class Function0In0Out : FunctionValue<
+abstract class Function0In0Out : FunctionType<
         FunctionInput0Schema,
         FunctionInput0,
         FunctionOutput0Schema,
@@ -46,10 +46,10 @@ abstract class Function0In0Out : FunctionValue<
 }
 
 abstract class Function1In0Out<
-        INPUT_ARG_1 : Value
+        INPUT_ARG_1 : Type
         >(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>
-) : FunctionValue<
+) : FunctionType<
         FunctionInput1Schema<INPUT_ARG_1>,
         FunctionInput1<INPUT_ARG_1>,
         FunctionOutput0Schema,
@@ -67,11 +67,11 @@ abstract class Function1In0Out<
 
 
 abstract class Function0In1Out<
-        OUTPUT_ARG_1 : Value
+        OUTPUT_ARG_1 : Type
         >(
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>,
 
-    ) : FunctionValue<
+    ) : FunctionType<
         FunctionInput0Schema,
         FunctionInput0,
         FunctionOutput1Schema<OUTPUT_ARG_1>,
@@ -87,11 +87,11 @@ abstract class Function0In1Out<
 }
 
 abstract class Function0In2Out<
-        OUTPUT_ARG_1 : Value,
-        OUTPUT_ARG_2 : Value
+        OUTPUT_ARG_1 : Type,
+        OUTPUT_ARG_2 : Type
         >(
     override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
-) : FunctionValue<
+) : FunctionType<
         FunctionInput0Schema,
         FunctionInput0,
         FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
@@ -108,12 +108,12 @@ abstract class Function0In2Out<
 }
 
 abstract class Function1In1Out<
-        INPUT_ARG_1 : Value,
-        OUTPUT_ARG_1 : Value
+        INPUT_ARG_1 : Type,
+        OUTPUT_ARG_1 : Type
         >(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>,
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>
-) : FunctionValue<
+) : FunctionType<
         FunctionInput1Schema<INPUT_ARG_1>,
         FunctionInput1<INPUT_ARG_1>,
         FunctionOutput1Schema<OUTPUT_ARG_1>,
@@ -129,13 +129,13 @@ abstract class Function1In1Out<
 }
 
 abstract class Function1In2Out<
-        INPUT_ARG_1 : Value,
-        OUTPUT_ARG_1 : Value,
-        OUTPUT_ARG_2 : Value
+        INPUT_ARG_1 : Type,
+        OUTPUT_ARG_1 : Type,
+        OUTPUT_ARG_2 : Type
         >(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>,
     override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>
-) : FunctionValue<
+) : FunctionType<
         FunctionInput1Schema<INPUT_ARG_1>,
         FunctionInput1<INPUT_ARG_1>,
         FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
@@ -154,11 +154,11 @@ abstract class Function1In2Out<
 }
 
 abstract class Function2In0Out<
-        INPUT_ARG_1 : Value,
-        INPUT_ARG_2 : Value
+        INPUT_ARG_1 : Type,
+        INPUT_ARG_2 : Type
         >(
     override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>
-) : FunctionValue<
+) : FunctionType<
         FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
         FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>,
         FunctionOutput0Schema,
@@ -175,14 +175,14 @@ abstract class Function2In0Out<
 }
 
 abstract class Function2In1Out<
-        INPUT_ARG_1 : Value,
-        INPUT_ARG_2 : Value,
-        OUTPUT_ARG_1 : Value,
+        INPUT_ARG_1 : Type,
+        INPUT_ARG_2 : Type,
+        OUTPUT_ARG_1 : Type,
         >(
     override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>
 
-) : FunctionValue<
+) : FunctionType<
         FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
         FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>,
         FunctionOutput1Schema<OUTPUT_ARG_1>,
@@ -202,15 +202,15 @@ abstract class Function2In1Out<
 
 
 abstract class Function2In2Out<
-        INPUT_ARG_1 : Value,
-        INPUT_ARG_2 : Value,
-        OUTPUT_ARG_1 : Value,
-        OUTPUT_ARG_2 : Value
+        INPUT_ARG_1 : Type,
+        INPUT_ARG_2 : Type,
+        OUTPUT_ARG_1 : Type,
+        OUTPUT_ARG_2 : Type
         >(
     override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
     override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>
 
-) : FunctionValue<
+) : FunctionType<
         FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
         FunctionInput2<INPUT_ARG_1, INPUT_ARG_2>,
         FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,

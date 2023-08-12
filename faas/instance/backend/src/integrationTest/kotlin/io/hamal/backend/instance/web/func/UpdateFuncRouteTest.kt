@@ -11,9 +11,9 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -28,7 +28,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
                 UpdateFuncReq(
                     name = FuncName("update"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeType("")
                 )
             )
             .execute()
@@ -46,8 +46,8 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("createdName"),
-                    inputs = FuncInputs(TableValue("hamal" to StringValue("createdInputs"))),
-                    code = CodeValue("createdCode")
+                    inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
+                    code = CodeType("createdCode")
                 )
             )
         )
@@ -56,8 +56,8 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             .body(
                 UpdateFuncReq(
                     name = FuncName("updatedName"),
-                    inputs = FuncInputs(TableValue("hamal" to StringValue("updatedInputs"))),
-                    code = CodeValue("updatedCode")
+                    inputs = FuncInputs(TableType("hamal" to StringType("updatedInputs"))),
+                    code = CodeType("updatedCode")
                 )
             )
             .execute()
@@ -69,8 +69,8 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("updatedName")))
-            assertThat(inputs, equalTo(FuncInputs(TableValue("hamal" to StringValue("updatedInputs")))))
-            assertThat(code, equalTo(CodeValue("updatedCode")))
+            assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("updatedInputs")))))
+            assertThat(code, equalTo(CodeType("updatedCode")))
         }
     }
 }

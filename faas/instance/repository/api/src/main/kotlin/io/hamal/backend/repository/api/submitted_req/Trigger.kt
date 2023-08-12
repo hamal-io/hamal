@@ -5,7 +5,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -33,5 +33,5 @@ data class SubmittedInvokeExecReq(
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
     val invocation: Invocation,
-    val code: CodeValue?
+    val code: CodeType?
 ) : SubmittedReq

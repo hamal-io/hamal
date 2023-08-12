@@ -3,12 +3,12 @@ package io.hamal.extension.web3.hml
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.type.StringType
 
 class HmlExtensionFactory : ScriptExtensionFactory {
     val config = ExtensionConfig(
         mutableMapOf(
-            "host" to StringValue("http://localhost:8000")
+            "host" to StringType("http://localhost:8000")
         )
     )
 

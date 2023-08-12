@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,19 +6,19 @@ import kotlinx.serialization.Serializable
 fun booleanOf(value: Boolean) = if (value) TrueValue else FalseValue
 
 @Serializable
-@SerialName("BooleanValue")
-sealed class BooleanValue(
+@SerialName("BooleanType")
+sealed class BooleanType(
     val value: Boolean,
-) : SerializableValue
+) : SerializableType
 
 @Serializable
-@SerialName("TrueValue")
-object TrueValue : BooleanValue(true) {
+@SerialName("TrueType")
+object TrueValue : BooleanType(true) {
     override fun toString() = "true"
 }
 
 @Serializable
-@SerialName("FalseValue")
-object FalseValue : BooleanValue(false) {
+@SerialName("FalseType")
+object FalseValue : BooleanType(false) {
     override fun toString() = "false"
 }

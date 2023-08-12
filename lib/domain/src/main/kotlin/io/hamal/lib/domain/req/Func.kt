@@ -4,14 +4,14 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateFuncReq(
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeValue
+    val code: CodeType
 )
 
 
@@ -19,7 +19,7 @@ data class CreateFuncReq(
 data class UpdateFuncReq(
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeValue
+    val code: CodeType
 )
 
 @Serializable

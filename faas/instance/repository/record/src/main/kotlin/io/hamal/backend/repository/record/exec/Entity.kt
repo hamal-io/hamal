@@ -8,9 +8,9 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.TableType
 import java.time.Instant
 
 data class Entity(
@@ -22,11 +22,11 @@ data class Entity(
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
-    var code: CodeValue? = null,
+    var code: CodeType? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
     var invocation: Invocation? = null,
-    var cause: ErrorValue? = null
+    var cause: ErrorType? = null
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
 
@@ -91,7 +91,7 @@ data class Entity(
             cmdId = cmdId,
             id = id,
             correlation = correlation,
-            inputs = inputs ?: ExecInputs(TableValue()),
+            inputs = inputs ?: ExecInputs(TableType()),
             code = code!!,
             invocation = invocation!!
         )

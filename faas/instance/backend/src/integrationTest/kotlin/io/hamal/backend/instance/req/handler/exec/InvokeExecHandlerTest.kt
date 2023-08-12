@@ -5,9 +5,9 @@ import io.hamal.backend.repository.api.submitted_req.SubmittedInvokeExecReq
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -23,8 +23,8 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(1),
                 status = Submitted,
                 id = ExecId(3333),
-                inputs = InvocationInputs(TableValue(StringValue("hamal") to StringValue("justworks"))),
-                code = CodeValue("code"),
+                inputs = InvocationInputs(TableType(StringType("hamal") to StringType("justworks"))),
+                code = CodeType("code"),
                 funcId = null,
                 correlationId = null,
                 invocation = AdhocInvocation()
@@ -39,9 +39,9 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(correlation, nullValue())
                 assertThat(
                     inputs,
-                    equalTo(ExecInputs(TableValue(StringValue("hamal") to StringValue("justworks"))))
+                    equalTo(ExecInputs(TableType(StringType("hamal") to StringType("justworks"))))
                 )
-                assertThat(code, equalTo(CodeValue("code")))
+                assertThat(code, equalTo(CodeType("code")))
             }
         }
     }
@@ -49,10 +49,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes event execution`() {
         createFunc(
-            id = FuncId(4444), code = CodeValue("SomeCode"), inputs = FuncInputs(
-                TableValue(
-                    StringValue("override") to StringValue("false"),
-                    StringValue("func") to StringValue("func")
+            id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
+                TableType(
+                    StringType("override") to StringType("false"),
+                    StringType("func") to StringType("func")
                 )
             )
         )
@@ -63,14 +63,14 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 id = ExecId(3333),
                 inputs = InvocationInputs(
-                    TableValue(
-                        StringValue("override") to StringValue("true"),
-                        StringValue("invocation") to StringValue("invocation")
+                    TableType(
+                        StringType("override") to StringType("true"),
+                        StringType("invocation") to StringType("invocation")
                     )
                 ),
                 funcId = FuncId(4444),
                 invocation = EventInvocation(listOf()),
-                code = CodeValue("some-code")
+                code = CodeType("some-code")
             )
         )
 
@@ -90,15 +90,15 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            TableValue(
-                                StringValue("func") to StringValue("func"),
-                                StringValue("invocation") to StringValue("invocation"),
-                                StringValue("override") to StringValue("true"),
+                            TableType(
+                                StringType("func") to StringType("func"),
+                                StringType("invocation") to StringType("invocation"),
+                                StringType("override") to StringType("true"),
                             ),
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeValue("SomeCode")))
+                assertThat(code, equalTo(CodeType("SomeCode")))
             }
         }
     }
@@ -107,11 +107,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     fun `Invokes func execution`() {
         createFunc(
             id = FuncId(4444),
-            code = CodeValue("SomeCode"),
+            code = CodeType("SomeCode"),
             inputs = FuncInputs(
-                TableValue(
-                    StringValue("override") to StringValue("false"),
-                    StringValue("func") to StringValue("func")
+                TableType(
+                    StringType("override") to StringType("false"),
+                    StringType("func") to StringType("func")
                 )
             )
         )
@@ -122,13 +122,13 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
                 inputs = InvocationInputs(
-                    TableValue(
-                        StringValue("override") to StringValue("true"),
-                        StringValue("invocation") to StringValue("invocation")
+                    TableType(
+                        StringType("override") to StringType("true"),
+                        StringType("invocation") to StringType("invocation")
                     )
                 ),
                 funcId = FuncId(4444),
-                code = CodeValue("Some func code"),
+                code = CodeType("Some func code"),
                 invocation = FuncInvocation()
             )
         )
@@ -149,15 +149,15 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            TableValue(
-                                StringValue("func") to StringValue("func"),
-                                StringValue("invocation") to StringValue("invocation"),
-                                StringValue("override") to StringValue("true"),
+                            TableType(
+                                StringType("func") to StringType("func"),
+                                StringType("invocation") to StringType("invocation"),
+                                StringType("override") to StringType("true"),
                             ),
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeValue("SomeCode")))
+                assertThat(code, equalTo(CodeType("SomeCode")))
             }
         }
     }
@@ -166,11 +166,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     fun `Invokes fixed rate execution`() {
         createFunc(
             id = FuncId(4444),
-            code = CodeValue("SomeCode"),
+            code = CodeType("SomeCode"),
             inputs = FuncInputs(
-                TableValue(
-                    StringValue("override") to StringValue("false"),
-                    StringValue("func") to StringValue("func")
+                TableType(
+                    StringType("override") to StringType("false"),
+                    StringType("func") to StringType("func")
                 )
             )
         )
@@ -185,15 +185,15 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            TableValue(
-                                StringValue("func") to StringValue("func"),
-                                StringValue("invocation") to StringValue("invocation"),
-                                StringValue("override") to StringValue("true"),
+                            TableType(
+                                StringType("func") to StringType("func"),
+                                StringType("invocation") to StringType("invocation"),
+                                StringType("override") to StringType("true"),
                             ),
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeValue("SomeCode")))
+                assertThat(code, equalTo(CodeType("SomeCode")))
                 assertThat(invocation, instanceOf(FixedRateInvocation::class.java))
             }
         }
@@ -218,14 +218,14 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
         status = Submitted,
         id = ExecId(3333),
         inputs = InvocationInputs(
-            TableValue(
-                StringValue("override") to StringValue("true"),
-                StringValue("invocation") to StringValue("invocation")
+            TableType(
+                StringType("override") to StringType("true"),
+                StringType("invocation") to StringType("invocation")
             )
         ),
         funcId = FuncId(4444),
         invocation = FixedRateInvocation(),
-        code = CodeValue("")
+        code = CodeType("")
     )
     //@formatter:on
 }

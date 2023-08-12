@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -30,7 +30,7 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
             assertThat(id, equalTo(createAdhocResponse.id(::ExecId)))
             assertThat(status, equalTo(Queued))
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(code, equalTo(CodeValue("40 + 2")))
+            assertThat(code, equalTo(CodeType("40 + 2")))
             assertThat(correlation, nullValue())
         }
     }

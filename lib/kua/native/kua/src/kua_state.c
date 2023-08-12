@@ -61,7 +61,7 @@ setup_references(JNIEnv *env) {
 
     current_jni_ref.assertion_error_class = load_class(env, "io/hamal/lib/kua/AssertionError");
 
-    current_jni_ref.kua_func_class = load_class(env, "io/hamal/lib/kua/function/FunctionValue");
+    current_jni_ref.kua_func_class = load_class(env, "io/hamal/lib/kua/function/FunctionType");
     current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, current_jni_ref.kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/Native;)I");
     //@formatter:on
 }

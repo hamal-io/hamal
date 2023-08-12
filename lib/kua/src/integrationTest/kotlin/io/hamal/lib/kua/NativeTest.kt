@@ -18,7 +18,7 @@ internal class InvokeFuncValueTest : BaseStateTest() {
             var called = false
         }
 
-        testInstance.pushFunctionValue(testFunc)
+        testInstance.pushFunction(testFunc)
         testInstance.setGlobal("test_func")
         testInstance.loadString("test_func()".trimIndent())
         testInstance.call(0, 0)

@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -30,7 +30,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         )
 
         testInstance.load(
-            CodeValue("""secret_module.magic()""")
+            CodeType("""secret_module.magic()""")
         )
         assertThat(func.set, equalTo(true))
     }

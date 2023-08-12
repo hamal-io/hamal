@@ -8,8 +8,8 @@ import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.*
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.runner.component.RunnerAsync
@@ -45,17 +45,15 @@ class RunnerService(
                             sb.run { state ->
                                 val ctx = state.tableCreateMap(1)
 
-                                sb.native.pushFunctionValue(EmitEventFunction(eventsToEmit))
+                                sb.native.pushFunction(EmitEventFunction(eventsToEmit))
                                 sb.native.tabletSetField(ctx.index, "emit")
 
                                 val funcState = state.tableCreateMap(1)
                                 exec.state.value.forEach { entry ->
                                     when (val value = entry.value) {
-                                        is BooleanValue -> funcState[entry.key] = value
-                                        is NumberValue -> funcState[entry.key] = value
-                                        is DecimalValue -> funcState[entry.key] =
-                                            NumberValue(value.value.toDouble()) // FIXME!
-                                        is StringValue -> funcState[entry.key] = value
+                                        is BooleanType -> funcState[entry.key] = value
+                                        is DoubleType -> funcState[entry.key] = value
+                                        is StringType -> funcState[entry.key] = value
                                         else -> TODO()
                                     }
                                 }
@@ -70,8 +68,8 @@ class RunnerService(
                                         val evtTable = state.tableCreateMap(1)
                                         evt.value.forEach { payload ->
                                             when (val v = payload.value) {
-                                                is StringValue -> evtTable[payload.key] = v
-                                                is NumberValue -> evtTable[payload.key] = v
+                                                is StringType -> evtTable[payload.key] = v
+                                                is DoubleType -> evtTable[payload.key] = v
                                                 else -> TODO()
                                             }
                                         }
@@ -94,23 +92,23 @@ class RunnerService(
                                 val ctx = state.getGlobalTableMap("ctx")
                                 val funcState = ctx.getTableMap("state")
 
-                                val stateMap = mutableMapOf<StringValue, SerializableValue>()
+                                val stateMap = mutableMapOf<StringType, SerializableType>()
 
                                 state.native.pushNil()
                                 while (state.native.tableNext(funcState.index)) {
                                     val k = state.getStringValue(-2)
-                                    val v = state.getAnyValue(-1)
+                                    val v = state.getAny(-1)
 
                                     when (val n = v.value) {
-                                        is NumberValue -> stateMap[k] = n
-                                        is StringValue -> stateMap[k] = n
+                                        is DoubleType -> stateMap[k] = n
+                                        is StringType -> stateMap[k] = n
                                         else -> TODO()
                                     }
 
                                     state.native.pop(1)
                                 }
 
-                                stateResult = State(TableValue(stateMap))
+                                stateResult = State(TableType(stateMap))
                             }
                         }
 
@@ -122,20 +120,20 @@ class RunnerService(
 
                         val e = kua.cause
                         if (e is ExitError) {
-                            if (e.status == NumberValue(0.0)) {
+                            if (e.status == DoubleType(0.0)) {
                                 sdk.execService().complete(exec.id, State(), listOf())
                                 log.debug("Completed exec: {}", exec.id)
                             } else {
-                                sdk.execService().fail(exec.id, ErrorValue(e.message ?: "Unknown reason"))
+                                sdk.execService().fail(exec.id, ErrorType(e.message ?: "Unknown reason"))
                                 log.debug("Failed exec: {}", exec.id)
                             }
                         } else {
-                            sdk.execService().fail(exec.id, ErrorValue(kua.message ?: "Unknown reason"))
+                            sdk.execService().fail(exec.id, ErrorType(kua.message ?: "Unknown reason"))
                             log.debug("Failed exec: {}", exec.id)
                         }
                     } catch (t: Throwable) {
                         t.printStackTrace()
-                        sdk.execService().fail(exec.id, ErrorValue(t.message ?: "Unknown reason"))
+                        sdk.execService().fail(exec.id, ErrorType(t.message ?: "Unknown reason"))
                         log.debug("Failed exec: {}", exec.id)
                     }
                 }
@@ -145,20 +143,20 @@ class RunnerService(
 
 class EmitEventFunction(
     val eventsCollector: MutableList<Event>
-) : Function1In0Out<TableMapValue>(
-    FunctionInput1Schema(TableMapValue::class)
+) : Function1In0Out<TableMap>(
+    FunctionInput1Schema(TableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMapValue) {
+    override fun invoke(ctx: FunctionContext, arg1: TableMap) {
         ctx.pushNil()
 
-        val eventMap = mutableMapOf<StringValue, SerializableValue>()
+        val eventMap = mutableMapOf<StringType, SerializableType>()
 
         while (ctx.state.native.tableNext(arg1.index)) {
             val k = ctx.getStringValue(-2)
-            val v = ctx.getAnyValue(-1)
+            val v = ctx.getAny(-1)
             when (val n = v.value) {
-                is NumberValue -> eventMap[k] = n
-                is StringValue -> eventMap[k] = n
+                is DoubleType -> eventMap[k] = n
+                is StringType -> eventMap[k] = n
                 else -> TODO()
             }
             ctx.native.pop(1)
@@ -166,8 +164,8 @@ class EmitEventFunction(
 
 
         // FIXME make sure topic is set and string
-        require(eventMap.containsKey(StringValue("topic")))
+        require(eventMap.containsKey(StringType("topic")))
 
-        eventsCollector.add(Event(TableValue(eventMap)))
+        eventsCollector.add(Event(TableType(eventMap)))
     }
 }

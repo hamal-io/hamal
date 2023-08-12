@@ -96,7 +96,7 @@ push_string(lua_State *L, char const *value) {
 }
 
 int
-push_func_value(lua_State *L, void *func) {
+push_func(lua_State *L, void *func) {
     //FIXME figure required stack size
     if (check_stack_overflow(L, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushcfunction(L, call_func_value_closure);

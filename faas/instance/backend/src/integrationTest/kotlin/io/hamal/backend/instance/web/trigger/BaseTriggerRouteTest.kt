@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import io.hamal.lib.sdk.domain.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
@@ -24,7 +24,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
                 CreateFuncReq(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeType("")
                 )
             )
             .execute()

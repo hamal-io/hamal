@@ -10,7 +10,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.runner.RunnerConfig
 import jakarta.annotation.PostConstruct
@@ -76,7 +76,7 @@ abstract class BaseHamalTest {
                 val execId = sdk.adhocService().submit(
                     InvokeAdhocReq(
                         inputs = InvocationInputs(),
-                        code = CodeValue(String(Files.readAllBytes(testFile)))
+                        code = CodeType(String(Files.readAllBytes(testFile)))
                     )
                 ).id(::ExecId)
 

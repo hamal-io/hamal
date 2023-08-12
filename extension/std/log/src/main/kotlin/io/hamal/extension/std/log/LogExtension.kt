@@ -10,8 +10,8 @@ import io.hamal.lib.kua.function.Function2In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.lib.sdk.domain.AppendExecLogCmd
 import io.hamal.lib.sdk.service.DefaultExecLogService
@@ -35,12 +35,12 @@ class LogExtensionFactory(
 
 class LogFunction(
     private val templateSupplier: HttpTemplateSupplier
-) : Function2In1Out<StringValue, StringValue, ErrorValue>(
-    FunctionInput2Schema(StringValue::class, StringValue::class),
-    FunctionOutput1Schema(ErrorValue::class)
+) : Function2In1Out<StringType, StringType, ErrorType>(
+    FunctionInput2Schema(StringType::class, StringType::class),
+    FunctionOutput1Schema(ErrorType::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: StringValue, arg2: StringValue): ErrorValue? {
+    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: StringType): ErrorType? {
         val level = ExecLogLevel.valueOf(arg1.value)
         val message = ExecLogMessage(arg2.value)
 

@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.value.NumberValue
+import io.hamal.lib.kua.type.DoubleType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -272,8 +272,8 @@ internal class PushBooleanTest : NativeTest() {
     }
 }
 
-@DisplayName("pushFunctionValue()")
-internal class PushFunctionValueTest : NativeTest() {
+@DisplayName("pushFunction()")
+internal class PushFunctionTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -456,8 +456,8 @@ internal class ToBooleanTest : NativeTest() {
     }
 }
 
-@DisplayName("toErrorValue()")
-internal class ToErrorValueTest : NativeTest() {
+@DisplayName("toError()")
+internal class ToErrorTest : NativeTest() {
     @Test
     @Disabled
     fun implementMe() {
@@ -1140,7 +1140,7 @@ internal class LoadStringTest : NativeTest() {
 internal class CallTest : NativeTest() {
     @Test
     fun `Calls kotlin function with 2 parameter and 2 receives 2 values back`() {
-        testInstance.pushFunctionValue(Magic())
+        testInstance.pushFunction(Magic())
         testInstance.pushNumber(1.0)
         testInstance.pushNumber(5.0)
         testInstance.call(2, 2)
@@ -1152,16 +1152,16 @@ internal class CallTest : NativeTest() {
         verifyStackIsEmpty()
     }
 
-    private class Magic : Function2In2Out<NumberValue, NumberValue, NumberValue, NumberValue>(
-        FunctionInput2Schema(NumberValue::class, NumberValue::class),
-        FunctionOutput2Schema(NumberValue::class, NumberValue::class)
+    private class Magic : Function2In2Out<DoubleType, DoubleType, DoubleType, DoubleType>(
+        FunctionInput2Schema(DoubleType::class, DoubleType::class),
+        FunctionOutput2Schema(DoubleType::class, DoubleType::class)
     ) {
 
         override fun invoke(
             ctx: FunctionContext,
-            arg1: NumberValue,
-            arg2: NumberValue
-        ): Pair<NumberValue, NumberValue> {
+            arg1: DoubleType,
+            arg2: DoubleType
+        ): Pair<DoubleType, DoubleType> {
             return Pair(arg2 * 4, arg1 * 2)
         }
     }

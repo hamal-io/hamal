@@ -12,7 +12,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -27,7 +27,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeType("")
                 )
             )
         )
@@ -54,7 +54,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeType("")
                 )
             )
         )

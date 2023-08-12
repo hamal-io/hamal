@@ -13,9 +13,9 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.NumberValue
-import io.hamal.lib.kua.value.StringValue
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -104,7 +104,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         val exec = (execQueryRepository.get(execId) as CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(value, equalTo(State(TableValue("value" to NumberValue(13.37)))))
+            assertThat(value, equalTo(State(TableType("value" to DoubleType(13.37)))))
         }
     }
 
@@ -120,12 +120,12 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         httpTemplate.post("/v1/execs/${execId.value}/complete")
             .body(
                 CompleteExecReq(
-                    state = State(TableValue("value" to NumberValue(13.37))),
+                    state = State(TableType("value" to DoubleType(13.37))),
                     events = listOf(
                         Event(
-                            TableValue(
-                                "topic" to StringValue("test-completion"),
-                                "value" to NumberValue(42)
+                            TableType(
+                                "topic" to StringType("test-completion"),
+                                "value" to DoubleType(42)
                             )
                         )
                     )

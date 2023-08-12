@@ -1,30 +1,30 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.function.FunctionValue
-import io.hamal.lib.kua.value.*
+import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.type.*
 
 @JvmInline
 value class TableLength(val value: Int)
 
-interface BaseTableProxyValue : Value {
+interface TableProxy : Type {
     val index: Int
-    val type: TableType
+    val type: Type
 
     fun length(): TableLength
+
+    enum class Type {
+        Array,
+        Map
+    }
 }
 
-enum class TableType {
-    Array,
-    Map
-}
 
-
-data class TableProxyValue(
+data class DefaultTableProxy(
     override val index: Int,
     val state: State,
-    override val type: TableType
-) : TableMapValue, TableArrayValue {
+    override val type: TableProxy.Type
+) : TableMap, TableArray {
 
     override fun unset(key: String): TableLength {
         native.pushString(key)
@@ -51,53 +51,53 @@ data class TableProxyValue(
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: FunctionValue<*, *, *, *>): TableLength {
+    override fun set(key: String, value: FunctionType<*, *, *, *>): TableLength {
         state.pushString(key)
         state.pushFunction(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableMapValue): TableLength {
+    override fun set(key: String, value: TableMap): TableLength {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableArrayValue): TableLength {
+    override fun set(key: String, value: TableArray): TableLength {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
 
-    override fun getBooleanValue(key: String): BooleanValue {
+    override fun getBooleanValue(key: String): BooleanType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Boolean)
         return booleanOf(native.toBoolean(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getCodeValue(key: String): CodeValue {
+    override fun getCodeValue(key: String): CodeType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)
-        return CodeValue(native.toString(state.top.value)).also { native.pop(1) }
+        return CodeType(native.toString(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getNumberValue(key: String): NumberValue {
+    override fun getNumberValue(key: String): DoubleType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Number)
-        return NumberValue(native.toNumber(state.top.value)).also { native.pop(1) }
+        return DoubleType(native.toNumber(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getStringValue(key: String): StringValue {
+    override fun getStringValue(key: String): StringType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)
-        return StringValue(native.toString(state.top.value)).also { native.pop(1) }
+        return StringType(native.toString(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getTableMap(key: String): TableMapValue {
+    override fun getTableMap(key: String): TableMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.Table)
@@ -121,33 +121,33 @@ data class TableProxyValue(
         return state.tableAppend(index)
     }
 
-    override fun append(value: TableMapValue): TableLength {
+    override fun append(value: TableMap): TableLength {
         state.pushTable(value)
         return state.tableAppend(index)
     }
 
-    override fun append(value: TableArrayValue): TableLength {
+    override fun append(value: TableArray): TableLength {
         state.pushTable(value)
         return state.tableAppend(index)
     }
 
-    override fun get(idx: Int): AnyValue {
+    override fun get(idx: Int): AnyType {
         TODO("Not yet implemented")
     }
 
-    override fun getBooleanValue(idx: Int): BooleanValue {
+    override fun getBooleanValue(idx: Int): BooleanType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(ValueType.Boolean)
         return state.getBooleanValue(-1)
     }
 
-    override fun getNumberValue(idx: Int): NumberValue {
+    override fun getNumberValue(idx: Int): DoubleType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(ValueType.Number)
         return state.getNumberValue(-1)
     }
 
-    override fun getStringValue(idx: Int): StringValue {
+    override fun getStringValue(idx: Int): StringType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(ValueType.String)
         return state.getStringValue(-1)

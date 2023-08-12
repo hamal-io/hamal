@@ -7,7 +7,7 @@ import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import java.util.concurrent.atomic.AtomicInteger
 
 internal object NextCommandId {
@@ -24,7 +24,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
         id: FuncId = generateDomainId(::FuncId),
         name: FuncName = FuncName("SomeFuncName"),
         inputs: FuncInputs = FuncInputs(),
-        code: CodeValue = CodeValue("")
+        code: CodeType = CodeType("")
     ): Func {
         return funcCmdRepository.create(
             FuncCmdRepository.CreateCmd(

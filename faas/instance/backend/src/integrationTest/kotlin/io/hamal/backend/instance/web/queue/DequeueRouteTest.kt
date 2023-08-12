@@ -2,7 +2,7 @@ package io.hamal.backend.instance.web.queue
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
         createExec(
             execId = generateDomainId(::ExecId),
             status = ExecStatus.Queued,
-            code = CodeValue("40 + 2")
+            code = CodeType("40 + 2")
         )
         with(dequeue()) {
             assertThat(execs, hasSize(1))
@@ -28,7 +28,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
             with(execs.first()) {
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
-                assertThat(code, equalTo(CodeValue("40 + 2")))
+                assertThat(code, equalTo(CodeType("40 + 2")))
 
                 verifyExecStarted(id)
             }
@@ -44,7 +44,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
                 funcId = FuncId(123),
                 correlationId = CorrelationId("_some_chosen_correlation_@")
             ),
-            code = CodeValue("40 + 2")
+            code = CodeType("40 + 2")
         )
         with(dequeue()) {
             assertThat(execs, hasSize(1))
@@ -59,7 +59,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeValue("40 + 2")))
+                assertThat(code, equalTo(CodeType("40 + 2")))
 
                 verifyExecStarted(id)
             }

@@ -128,9 +128,9 @@ STATE_METHOD_NAME(pushString)(JNIEnv *env, jobject K, jstring value) {
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(pushFunctionValue)(JNIEnv *env, jobject K, jobject func) {
+STATE_METHOD_NAME(pushFunction)(JNIEnv *env, jobject K, jobject func) {
     ENV_AND_STATE
-    return push_func_value(L, func);
+    return push_func(L, func);
 }
 
 JNIEXPORT jstring JNICALL

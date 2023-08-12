@@ -1,9 +1,9 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.value.Value
+import io.hamal.lib.kua.type.Type
 
-class TableEntryIterator<KEY : Value, VALUE : Value>(
+class TableEntryIterator<KEY : Type, VALUE : Type>(
     index: Int,
     val state: State,
     val keyExtractor: (State, Int) -> KEY,

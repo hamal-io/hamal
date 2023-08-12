@@ -6,9 +6,9 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.StringValue
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthCallResponse
 import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResponse
@@ -21,14 +21,14 @@ private val log = logger(EthExecuteFunction::class)
 
 class EthExecuteFunction(
     private val config: ExtensionConfig
-) : Function1In2Out<TableArrayValue, ErrorValue, TableArrayValue>(
-    FunctionInput1Schema(TableArrayValue::class),
-    FunctionOutput2Schema(ErrorValue::class, TableArrayValue::class)
+) : Function1In2Out<TableArray, ErrorType, TableArray>(
+    FunctionInput1Schema(TableArray::class),
+    FunctionOutput2Schema(ErrorType::class, TableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableArrayValue): Pair<ErrorValue?, TableArrayValue?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableArray): Pair<ErrorType?, TableArray?> {
         try {
             log.trace("Setting up batch service")
-            val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringValue).value))
+            val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringType).value))
             ctx.pushNil()
             while (ctx.state.native.tableNext(arg1.index)) {
 //                val i = ctx.state.getNumber(-2)
@@ -72,7 +72,7 @@ class EthExecuteFunction(
 
         } catch (t: Throwable) {
             t.printStackTrace()
-            return ErrorValue(t.message ?: "Unknown error") to null
+            return ErrorType(t.message ?: "Unknown error") to null
         }
     }
 }

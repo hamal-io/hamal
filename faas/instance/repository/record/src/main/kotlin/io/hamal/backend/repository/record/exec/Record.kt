@@ -7,8 +7,8 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -26,7 +26,7 @@ data class ExecPlannedRecord(
     override val cmdId: CmdId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val code: CodeValue,
+    val code: CodeType,
     val invocation: Invocation
 ) : ExecRecord()
 
@@ -64,5 +64,5 @@ data class ExecCompletedRecord(
 data class ExecFailedRecord(
     override val entityId: ExecId,
     override val cmdId: CmdId,
-    val cause: ErrorValue
+    val cause: ErrorType
 ) : ExecRecord()

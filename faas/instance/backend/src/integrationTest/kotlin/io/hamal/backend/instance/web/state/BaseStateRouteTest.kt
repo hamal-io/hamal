@@ -10,7 +10,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.value.CodeValue
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiCorrelatedState
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
@@ -24,7 +24,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
                 CreateFuncReq(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeType("")
                 )
             )
             .execute()

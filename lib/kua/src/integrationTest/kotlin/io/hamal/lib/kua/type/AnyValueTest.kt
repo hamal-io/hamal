@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.value
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
@@ -6,9 +6,9 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableArrayValue
+import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.table.TableLength
-import io.hamal.lib.kua.table.TableMapValue
+import io.hamal.lib.kua.table.TableMap
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ internal class AnyValueTest {
         )
 
         sandbox.load("test.captor(test.pass_through(true))")
-        assertThat(captor.result, equalTo(AnyValue(TrueValue)))
+        assertThat(captor.result, equalTo(AnyType(TrueValue)))
     }
 
     @Test
@@ -47,7 +47,7 @@ internal class AnyValueTest {
 
         sandbox.load("test.captor(test.pass_through(23))")
 
-        assertThat(captor.result, equalTo(AnyValue(NumberValue(23))))
+        assertThat(captor.result, equalTo(AnyType(DoubleType(23))))
     }
 
     @Test
@@ -65,7 +65,7 @@ internal class AnyValueTest {
 
         sandbox.load("test.captor(test.pass_through(\"hamal.io\"))")
 
-        assertThat(captor.result, equalTo(AnyValue(StringValue("hamal.io"))))
+        assertThat(captor.result, equalTo(AnyType(StringType("hamal.io"))))
     }
 
     @Test
@@ -87,8 +87,8 @@ internal class AnyValueTest {
 
         sandbox.load("test.captor(test.pass_through(test_map))")
 
-        val underlying = (captor.result as AnyValue).value
-        require(underlying is TableMapValue) { "Not a TableMapProxyValue" }
+        val underlying = (captor.result as AnyType).value
+        require(underlying is TableMap) { "Not a TableMapProxyValue" }
         assertThat(underlying.length(), equalTo(TableLength(1)))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
@@ -114,31 +114,31 @@ internal class AnyValueTest {
 
         sandbox.load("test.captor(test.pass_through(test_array))")
 
-        val underlying = (captor.result as AnyValue).value
-        require(underlying is TableArrayValue) { "Not a TableArrayProxyValue" }
+        val underlying = (captor.result as AnyType).value
+        require(underlying is TableArray) { "Not a TableArrayProxyValue" }
         assertThat(underlying.length(), equalTo(TableLength(2)))
 
         assertThat(underlying.getInt(1), equalTo(23))
         assertThat(underlying.getString(2), equalTo("hamal.io"))
     }
 
-    private class AnyValuePassThrough : Function1In1Out<AnyValue, AnyValue>(
-        FunctionInput1Schema(AnyValue::class),
-        FunctionOutput1Schema(AnyValue::class)
+    private class AnyValuePassThrough : Function1In1Out<AnyType, AnyType>(
+        FunctionInput1Schema(AnyType::class),
+        FunctionOutput1Schema(AnyType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: AnyValue): AnyValue {
+        override fun invoke(ctx: FunctionContext, arg1: AnyType): AnyType {
             return arg1
         }
     }
 
-    private class AnyValueResultCaptor : Function1In0Out<AnyValue>(
-        FunctionInput1Schema(AnyValue::class)
+    private class AnyValueResultCaptor : Function1In0Out<AnyType>(
+        FunctionInput1Schema(AnyType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: AnyValue) {
+        override fun invoke(ctx: FunctionContext, arg1: AnyType) {
             result = arg1
         }
 
-        var result: Value = NilValue
+        var result: Type = NilType
     }
 
     private val sandbox = run {

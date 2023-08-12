@@ -2,37 +2,37 @@ package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.value.*
-import io.hamal.lib.kua.value.ValueType.Table
+import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.ValueType.Table
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableMapValueTest {
+internal class TableMapTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        lateinit var testInstance: TableMapValue
+        lateinit var testInstance: TableMap
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", TrueValue) },
-            { testInstance.set(StringValue("key"), TrueValue) },
+            { testInstance.set(StringType("key"), TrueValue) },
 
-            { testInstance.set("key", CodeValue("print('hacked')")) },
-            { testInstance.set(StringValue("key"), CodeValue("print('hacked')")) },
+            { testInstance.set("key", CodeType("print('hacked')")) },
+            { testInstance.set(StringType("key"), CodeType("print('hacked')")) },
 
             { testInstance.set("key", 23) },
             { testInstance.set("key", 23f) },
             { testInstance.set("key", 23L) },
             { testInstance.set("key", 23.23) },
-            { testInstance.set("key", NumberValue(23.23)) },
-            { testInstance.set(StringValue("key"), NumberValue(23.23)) },
+            { testInstance.set("key", DoubleType(23.23)) },
+            { testInstance.set(StringType("key"), DoubleType(23.23)) },
 
             { testInstance.set("key", "value") },
-            { testInstance.set("key", StringValue("value")) },
-            { testInstance.set(StringValue("key"), StringValue("value")) }
+            { testInstance.set("key", StringType("value")) },
+            { testInstance.set(StringType("key"), StringType("value")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()
@@ -52,12 +52,12 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        lateinit var testInstance: TableMapValue
+        lateinit var testInstance: TableMap
         return listOf(
             { testInstance.unset("key") },
-            { testInstance.unset(StringValue("key")) },
-            { testInstance.set("key", NilValue) },
-            { testInstance.set(StringValue("key"), NilValue) }
+            { testInstance.unset(StringType("key")) },
+            { testInstance.set("key", NilType) },
+            { testInstance.set(StringType("key"), NilType) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()
@@ -83,12 +83,12 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapValue
+        lateinit var testInstance: TableMap
         return listOf(
             { testInstance.getBooleanValue("key") },
-            { testInstance.getBooleanValue(StringValue("key")) },
+            { testInstance.getBooleanValue(StringType("key")) },
             { testInstance.getBoolean("key") },
-            { testInstance.getBoolean(StringValue("key")) },
+            { testInstance.getBoolean(StringType("key")) },
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
 
@@ -96,7 +96,7 @@ internal class TableMapValueTest {
                 testInstance["key"] = true
 
                 when (val result = testFn()) {
-                    is BooleanValue -> assertThat(result, equalTo(TrueValue))
+                    is BooleanType -> assertThat(result, equalTo(TrueValue))
                     is Boolean -> assertThat(result, equalTo(true))
                     else -> TODO()
                 }
@@ -114,17 +114,17 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapValue
+        lateinit var testInstance: TableMap
         return listOf(
             { testInstance.getCodeValue("key") },
-            { testInstance.getCodeValue(StringValue("key")) },
+            { testInstance.getCodeValue(StringType("key")) },
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()
                 testInstance["key"] = "print('doing something interesting')"
 
                 val result = testFn()
-                assertThat(result, equalTo(CodeValue("print('doing something interesting')")))
+                assertThat(result, equalTo(CodeType("print('doing something interesting')")))
                 assertThat(testInstance.length(), equalTo(TableLength(1)))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
@@ -138,18 +138,18 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapValue
+        lateinit var testInstance: TableMap
         return listOf(
             { testInstance.getNumberValue("key") },
-            { testInstance.getNumberValue(StringValue("key")) },
+            { testInstance.getNumberValue(StringType("key")) },
             { testInstance.getInt("key") },
-            { testInstance.getInt(StringValue("key")) },
+            { testInstance.getInt(StringType("key")) },
             { testInstance.getLong("key") },
-            { testInstance.getLong(StringValue("key")) },
+            { testInstance.getLong(StringType("key")) },
             { testInstance.getFloat("key") },
-            { testInstance.getFloat(StringValue("key")) },
+            { testInstance.getFloat(StringType("key")) },
             { testInstance.getDouble("key") },
-            { testInstance.getDouble(StringValue("key")) }
+            { testInstance.getDouble(StringType("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()
@@ -157,7 +157,7 @@ internal class TableMapValueTest {
                 testInstance["key"] = 23
 
                 when (val result = testFn()) {
-                    is NumberValue -> assertThat(result, equalTo(NumberValue(23.0)))
+                    is DoubleType -> assertThat(result, equalTo(DoubleType(23.0)))
                     is Int -> assertThat(result, equalTo(23))
                     is Long -> assertThat(result, equalTo(23L))
                     is Float -> assertThat(result, equalTo(23.0f))
@@ -178,12 +178,12 @@ internal class TableMapValueTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMapValue
+        lateinit var testInstance: TableMap
         return listOf(
             { testInstance.getString("key") },
-            { testInstance.getString(StringValue("key")) },
+            { testInstance.getString(StringType("key")) },
             { testInstance.getStringValue("key") },
-            { testInstance.getStringValue(StringValue("key")) }
+            { testInstance.getStringValue(StringType("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()
@@ -191,7 +191,7 @@ internal class TableMapValueTest {
                 testInstance["key"] = "Hamal Rocks"
 
                 when (val result = testFn()) {
-                    is StringValue -> assertThat(result, equalTo(StringValue("Hamal Rocks")))
+                    is StringType -> assertThat(result, equalTo(StringType("Hamal Rocks")))
                     is String -> assertThat(result, equalTo("Hamal Rocks"))
                     else -> TODO()
                 }

@@ -3,12 +3,12 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.table.TableMapValue
-import io.hamal.lib.kua.value.AnyValue
-import io.hamal.lib.kua.value.ErrorValue
-import io.hamal.lib.kua.value.TableValue
-import io.hamal.lib.kua.value.ValueType
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.type.AnyType
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.ValueType
 import kotlin.reflect.KClass
 
 
@@ -28,28 +28,28 @@ class FunctionContext(
 
     override fun type(idx: Int): ValueType = state.type(idx)
     override fun pushNil() = state.pushNil()
-    override fun pushAny(value: AnyValue) = state.pushAny(value)
-    override fun getAnyValue(idx: Int) = state.getAnyValue(idx)
+    override fun pushAny(value: AnyType) = state.pushAny(value)
+    override fun getAny(idx: Int) = state.getAny(idx)
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
-    override fun pushError(value: ErrorValue) = state.pushError(value)
-    override fun pushFunction(value: FunctionValue<*, *, *, *>) = state.pushFunction(value)
+    override fun pushError(value: ErrorType) = state.pushError(value)
+    override fun pushFunction(value: FunctionType<*, *, *, *>) = state.pushFunction(value)
 
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
-    override fun pushTable(value: TableValue) = state.pushTable(value)
-    override fun pushTable(proxy: TableMapValue) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableArrayValue) = state.pushTable(proxy)
+    override fun pushTable(value: TableType) = state.pushTable(value)
+    override fun pushTable(proxy: TableMap) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableArray) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
-    override fun setGlobal(name: String, value: FunctionValue<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableMapValue) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableArrayValue) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableMapValue = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableMap) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableArray) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableMap = state.getGlobalTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)

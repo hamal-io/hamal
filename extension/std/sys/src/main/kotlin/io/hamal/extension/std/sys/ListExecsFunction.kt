@@ -4,16 +4,16 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableArrayValue
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.domain.ApiExecList
 
 class ListExecsFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function0In2Out<ErrorValue, TableArrayValue>(
-    FunctionOutput2Schema(ErrorValue::class, TableArrayValue::class)
+) : Function0In2Out<ErrorType, TableArray>(
+    FunctionOutput2Schema(ErrorType::class, TableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorValue?, TableArrayValue?> {
+    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableArray?> {
         val execs = try {
             templateSupplier()
                 .get("/v1/execs")

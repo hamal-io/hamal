@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.extension
 
-import io.hamal.lib.kua.value.Value
+import io.hamal.lib.kua.type.Type
 
 sealed interface ExtensionFactory<EXTENSION : Extension> {
     fun create(): EXTENSION
@@ -15,7 +15,7 @@ interface NativeExtensionFactory : ExtensionFactory<NativeExtension>
 
 class NativeExtension(
     override val name: String,
-    val values: Map<String, Value>,
+    val values: Map<String, Type>,
     override val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
 ) : Extension
 
@@ -25,7 +25,7 @@ interface ScriptExtensionFactory : ExtensionFactory<ScriptExtension>
 class ScriptExtension(
     override val name: String,
     val init: String = loadInitFromResources(name),
-    val internals: Map<String, Value>,
+    val internals: Map<String, Type>,
     override val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
 ) : Extension {
 

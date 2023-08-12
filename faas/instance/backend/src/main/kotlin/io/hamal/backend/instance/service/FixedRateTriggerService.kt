@@ -16,7 +16,7 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.kua.value.TableValue
+import io.hamal.lib.kua.type.TableType
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -68,7 +68,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger
             execId = generateDomainId(::ExecId),
             funcId = trigger.funcId,
             correlationId = trigger.correlationId ?: CorrelationId("__default__"),
-            inputs = InvocationInputs(TableValue()),
+            inputs = InvocationInputs(TableType()),
             invocation = FixedRateInvocation(),
             code = funcQueryRepository.get(trigger.funcId).code
         )

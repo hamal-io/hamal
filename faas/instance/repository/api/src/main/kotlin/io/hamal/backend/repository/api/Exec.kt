@@ -7,8 +7,8 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.value.CodeValue
-import io.hamal.lib.kua.value.ErrorValue
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
 interface ExecCmdRepository {
@@ -25,7 +25,7 @@ interface ExecCmdRepository {
         val execId: ExecId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val code: CodeValue,
+        val code: CodeType,
         val invocation: Invocation
     )
 
@@ -51,7 +51,7 @@ interface ExecCmdRepository {
     data class FailCmd(
         val id: CmdId,
         val execId: ExecId,
-        val cause: ErrorValue
+        val cause: ErrorType
     )
 }
 
@@ -73,7 +73,7 @@ sealed class Exec : DomainObject<ExecId> {
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
-    abstract val code: CodeValue
+    abstract val code: CodeType
     abstract val invocation: Invocation
 
     override fun equals(other: Any?): Boolean {
@@ -101,7 +101,7 @@ class PlannedExec(
     override val id: ExecId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
-    override val code: CodeValue,
+    override val code: CodeType,
     override val invocation: Invocation
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
@@ -191,7 +191,7 @@ class FailedExec(
     val startedExec: StartedExec,
     //FIXME failedAt
     val failedAt: FailedAt,
-    val cause: ErrorValue
+    val cause: ErrorType
 ) : Exec() {
     override val status = ExecStatus.Failed
     override val correlation get() = startedExec.correlation
