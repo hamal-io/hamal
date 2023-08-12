@@ -2,16 +2,18 @@ logging:
   level:
     root: WARN
     io.hamal: INFO
-    #    io.hamal.backend.repository: DEBUG
-    io.hamal.backend.repository: INFO
-    io.hamal.backend.repository.sqlite.log: INFO
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
 server:
+  tomcat:
+    threads:
+      max: 2
+      min-spare: 1
   port: 8000
 
 io:
   hamal:
-    upstream:
-      host: ${UPSTREAM_HOST:http://localhost:9000}
+    proxy:
+      upstream:
+        host: ${UPSTREAM_HOST:http://localhost:9000}

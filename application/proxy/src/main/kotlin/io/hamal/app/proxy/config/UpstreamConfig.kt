@@ -12,7 +12,7 @@ class UpstreamConfig {
 
     @Bean
     fun upstreamTemplate(
-        @Value("\${io.hamal.upstream.host}") upstreamHost: String
+        @Value("\${io.hamal.proxy.upstream.host}") upstreamHost: String
     ): HttpTemplate {
         log.info("${upstreamHost.substring(0, min(upstreamHost.length, 25))}...")
         return HttpTemplate(
