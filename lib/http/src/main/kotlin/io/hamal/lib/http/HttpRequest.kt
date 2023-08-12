@@ -1,6 +1,7 @@
 package io.hamal.lib.http
 
 import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import kotlin.reflect.KClass
 
@@ -10,10 +11,16 @@ interface HttpRequest {
     val serdeFactory: HttpSerdeFactory
     val headers: HttpMutableHeaders
     val client: org.apache.http.client.HttpClient
+
+    fun path(key: String, value: String): HttpRequest
+    fun path(key: String, value: SnowflakeId) = path(key, value.value.toString(16))
+    fun path(key: String, value: DomainId) = path(key, value.value)
+
     fun header(key: String, value: String): HttpRequest
     fun parameter(key: String, value: String): HttpRequest
     fun parameter(key: String, value: Number): HttpRequest
     fun parameter(key: String, value: SnowflakeId): HttpRequest
+    fun parameter(key: String, value: DomainId): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
@@ -28,6 +35,10 @@ interface HttpRequest {
 }
 
 interface HttpRequestWithBody : HttpRequest {
+    override fun path(key: String, value: String): HttpRequestWithBody
+    override fun path(key: String, value: SnowflakeId) = path(key, value.value.toString(16))
+    override fun path(key: String, value: DomainId) = path(key, value.value)
+
     override fun header(key: String, value: String): HttpRequestWithBody
     fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): HttpRequestWithBody
     fun body(str: String): HttpRequestWithBody
@@ -38,7 +49,7 @@ inline fun <reified BODY_TYPE : Any> HttpRequestWithBody.body(body: BODY_TYPE): 
     body(body, BODY_TYPE::class)
 
 class DefaultHttpRequest(
-    override val url: String,
+    override var url: String,
     override val method: HttpRequest.HttpMethod,
     override val serdeFactory: HttpSerdeFactory,
     override val headers: HttpMutableHeaders,
@@ -81,6 +92,11 @@ class DefaultHttpRequest(
         return this
     }
 
+    override fun path(key: String, value: String): DefaultHttpRequest {
+        url = url.replace("{${key}}", value)
+        return this
+    }
+
     override fun header(key: String, value: String): DefaultHttpRequest {
         headers[key] = value
         return this
@@ -97,7 +113,12 @@ class DefaultHttpRequest(
     }
 
     override fun parameter(key: String, value: SnowflakeId): HttpRequest {
-        parameters.add(HttpParameter(key, value.value))
+        parameters.add(HttpParameter(key, value.value.toString(16)))
+        return this
+    }
+
+    override fun parameter(key: String, value: DomainId): HttpRequest {
+        parameters.add(HttpParameter(key, value.value.value.toString(16)))
         return this
     }
 

@@ -29,7 +29,9 @@ internal sealed class BaseFuncRouteTest : BaseRouteTest() {
     }
 
     fun getFunc(funcId: FuncId): ApiFunc {
-        val getFuncResponse = httpTemplate.get("/v1/funcs/${funcId.value.value}").execute()
+        val getFuncResponse = httpTemplate.get("/v1/funcs/{funcId}")
+            .path("funcId", funcId)
+            .execute()
         assertThat(getFuncResponse.statusCode, equalTo(Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
         return getFuncResponse.result(ApiFunc::class)

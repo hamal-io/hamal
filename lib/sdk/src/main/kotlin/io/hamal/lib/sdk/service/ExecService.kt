@@ -15,9 +15,7 @@ interface ExecService {
 
     //FIXME list of events to publish
     fun complete(
-        execId: ExecId,
-        stateAfterCompletion: State,
-        events: List<Event>
+        execId: ExecId, stateAfterCompletion: State, events: List<Event>
     )
 
     // able to emit events on failure
@@ -26,31 +24,20 @@ interface ExecService {
 
 data class DefaultExecService(val template: HttpTemplate) : ExecService {
     override fun poll(): DequeueExecsResponse {
-        return template
-            .post("/v1/dequeue")
-            .execute(DequeueExecsResponse::class)
+        return template.post("/v1/dequeue").execute(DequeueExecsResponse::class)
     }
 
     override fun complete(
-        execId: ExecId,
-        stateAfterCompletion: State,
-        events: List<Event>
+        execId: ExecId, stateAfterCompletion: State, events: List<Event>
     ) {
-        template
-            .post("/v1/execs/${execId.value.value}/complete")
-            .body(
+        template.post("/v1/execs/{execId}/complete").path("execId", execId).body(
                 CompleteExecReq(
-                    state = stateAfterCompletion,
-                    events = events
+                    state = stateAfterCompletion, events = events
                 )
-            )
-            .execute()
+            ).execute()
     }
 
     override fun fail(execId: ExecId, error: ErrorType) {
-        template
-            .post("/v1/execs/${execId.value.value}/fail")
-            .body(FailExecReq(cause = error))
-            .execute()
+        template.post("/v1/execs/${execId}/fail").path("execId", execId).body(FailExecReq(cause = error)).execute()
     }
 }

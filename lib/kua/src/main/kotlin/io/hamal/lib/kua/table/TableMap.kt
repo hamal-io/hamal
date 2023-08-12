@@ -1,38 +1,45 @@
 package io.hamal.lib.kua.table
 
+import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
 
 
 interface TableMap : TableProxy {
-    fun unset(key: String): TableLength
+    fun unset(key: String): Int
     fun unset(key: StringType) = unset(key.value)
     operator fun set(key: String, value: NilType) = unset(key)
     operator fun set(key: StringType, value: NilType) = unset(key.value)
 
-    operator fun set(key: String, value: Boolean): TableLength
+    operator fun set(key: String, value: Boolean): Int
     operator fun set(key: String, value: BooleanType) = set(key, value.value)
     operator fun set(key: StringType, value: BooleanType) = set(key.value, value.value)
 
-    operator fun set(key: String, value: CodeType): TableLength = set(key, value.value)
-    operator fun set(key: StringType, value: CodeType): TableLength = set(key.value, value)
+    operator fun set(key: String, value: CodeType) = set(key, value.value)
+    operator fun set(key: StringType, value: CodeType) = set(key.value, value)
 
     operator fun set(key: String, value: Int) = set(key, value.toDouble())
-    operator fun set(key: String, value: Long): TableLength = set(key, value.toDouble())
+    operator fun set(key: String, value: Long) = set(key, value.toDouble())
     operator fun set(key: String, value: Float) = set(key, value.toDouble())
-    operator fun set(key: String, value: Double): TableLength
+    operator fun set(key: String, value: Double): Int
     operator fun set(key: String, value: DoubleType) = set(key, value.value)
     operator fun set(key: StringType, value: DoubleType) = set(key.value, value.value)
 
-    operator fun set(key: String, value: String): TableLength
+    operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
+    operator fun set(key: StringType, value: DomainId) = set(key.value, value.value.value.toString(16))
+    operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
+    operator fun set(key: StringType, value: SnowflakeId) = set(key.value, value.value.toString(16))
+
+    operator fun set(key: String, value: String): Int
     operator fun set(key: String, value: StringType) = set(key, value.value)
     operator fun set(key: StringType, value: StringType) = set(key.value, value.value)
 
-    operator fun set(key: String, value: FunctionType<*, *, *, *>): TableLength
+    operator fun set(key: String, value: FunctionType<*, *, *, *>): Int
     operator fun set(key: StringType, value: FunctionType<*, *, *, *>) = set(key.value, value)
 
-    operator fun set(key: String, value: TableMap): TableLength
-    operator fun set(key: String, value: TableArray): TableLength
+    operator fun set(key: String, value: TableMap): Int
+    operator fun set(key: String, value: TableArray): Int
 
     fun getBooleanValue(key: String): BooleanType
     fun getBooleanValue(key: StringType): BooleanType = getBooleanValue(key.value)

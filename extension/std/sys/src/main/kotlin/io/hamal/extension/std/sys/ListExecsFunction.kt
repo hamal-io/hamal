@@ -27,7 +27,7 @@ class ListExecsFunction(
         return null to ctx.tableCreateArray().also { rs ->
             execs.forEach { exec ->
                 val inner = ctx.tableCreateMap(2)
-                inner["id"] = exec.id.value.value.toString()
+                inner["id"] = exec.id
                 inner["status"] = exec.status.toString()
 
                 rs.append(inner)

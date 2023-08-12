@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
@@ -11,6 +10,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiFunc
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -39,7 +39,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
             )
         ).id(::FuncId)
 
-        val getFuncResponse = httpTemplate.get("/v1/funcs/${funcId.value}").execute()
+        val getFuncResponse = httpTemplate.get("/v1/funcs/{funcId}").path("funcId", funcId).execute()
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
 

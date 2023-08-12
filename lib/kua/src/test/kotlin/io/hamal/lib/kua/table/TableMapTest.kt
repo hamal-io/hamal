@@ -38,8 +38,8 @@ internal class TableMapTest {
                 testInstance = state.tableCreateMap()
 
                 val result = testFn()
-                assertThat("item set", testInstance.length(), equalTo(TableLength(1)))
-                assertThat(result, equalTo(TableLength(1)))
+                assertThat("item set", testInstance.length(), equalTo(1))
+                assertThat(result, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
@@ -64,10 +64,10 @@ internal class TableMapTest {
 
                 testInstance["key"] = "value"
                 testInstance["another-key"] = "another-value"
-                assertThat(testInstance.length(), equalTo(TableLength(2)))
+                assertThat(testInstance.length(), equalTo(2))
 
                 testFn()
-                assertThat(testInstance.length(), equalTo(TableLength(1)))
+                assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
@@ -101,7 +101,7 @@ internal class TableMapTest {
                     else -> TODO()
                 }
 
-                assertThat(testInstance.length(), equalTo(TableLength(1)))
+                assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
@@ -125,7 +125,7 @@ internal class TableMapTest {
 
                 val result = testFn()
                 assertThat(result, equalTo(CodeType("print('doing something interesting')")))
-                assertThat(testInstance.length(), equalTo(TableLength(1)))
+                assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
@@ -165,7 +165,7 @@ internal class TableMapTest {
                     else -> TODO()
                 }
 
-                assertThat(testInstance.length(), equalTo(TableLength(1)))
+                assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))
@@ -196,7 +196,7 @@ internal class TableMapTest {
                     else -> TODO()
                 }
 
-                assertThat(testInstance.length(), equalTo(TableLength(1)))
+                assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(Table))

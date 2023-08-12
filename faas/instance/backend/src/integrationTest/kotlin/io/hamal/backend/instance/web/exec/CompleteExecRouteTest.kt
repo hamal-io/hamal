@@ -10,7 +10,7 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.DoubleType
@@ -40,7 +40,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 )
 
                 val completionResponse = requestCompletion(exec.id)
-                assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+                assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
                 val result = completionResponse.result(ApiSubmittedReqWithDomainId::class)
@@ -63,7 +63,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         ) as StartedExec
 
         val completionResponse = requestCompletion(startedExec.id)
-        assertThat(completionResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = completionResponse.result(ApiSubmittedReqWithDomainId::class)
@@ -86,7 +86,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
             )
             .execute()
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         val result = response.result(ApiSubmittedReqWithDomainId::class)
@@ -117,7 +117,8 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
     }
 
     private fun requestCompletion(execId: ExecId) =
-        httpTemplate.post("/v1/execs/${execId.value}/complete")
+        httpTemplate.post("/v1/execs/{execId}/complete")
+            .path("execId", execId)
             .body(
                 CompleteExecReq(
                     state = State(TableType("value" to DoubleType(13.37))),

@@ -27,7 +27,7 @@ class ListFuncsFunction(
         return null to ctx.tableCreateArray().also { rs ->
             funcs.forEach { func ->
                 val inner = ctx.tableCreateMap(2)
-                inner["id"] = func.id.value.value.toString()
+                inner["id"] = func.id
                 inner["name"] = func.name.value
                 rs.append(inner)
             }

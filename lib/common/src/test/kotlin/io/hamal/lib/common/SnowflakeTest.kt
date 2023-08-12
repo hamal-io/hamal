@@ -248,7 +248,7 @@ class SnowflakeTest {
         fun `Is Serializable`() {
             val testInstance = SnowflakeId(12345678)
             val encoded = ProtoBuf.encodeToByteArray(testInstance)
-            assertThat(encoded.size, equalTo(4))
+            assertThat(encoded.size, equalTo(7))
             val decoded = ProtoBuf.decodeFromByteArray<SnowflakeId>(encoded)
             assertThat(decoded, equalTo(SnowflakeId(12345678)))
         }

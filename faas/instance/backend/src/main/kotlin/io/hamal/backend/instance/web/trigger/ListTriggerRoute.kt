@@ -17,7 +17,7 @@ class ListTriggerRoute(
 ) {
     @GetMapping("/v1/triggers")
     fun listTrigger(
-        @RequestParam(required = false, name = "after_id", defaultValue = "${Long.MAX_VALUE}") triggerId: TriggerId,
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiTriggerList> {
         val result = triggerQueryRepository.list {

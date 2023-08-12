@@ -1,7 +1,10 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.*
+import io.hamal.lib.kua.table.DefaultTableProxy
+import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.ValueType.Companion.ValueType
 
@@ -55,9 +58,9 @@ interface State {
 
     fun tableCreateMap(capacity: Int = 0): TableMap
     fun tableCreateArray(capacity: Int = 0): TableArray
-    fun tableAppend(idx: Int): TableLength
-    fun tableSetRaw(idx: Int): TableLength
-    fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): TableLength
+    fun tableAppend(idx: Int): Int
+    fun tableSetRaw(idx: Int): Int
+    fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
     fun tableGetRaw(idx: Int): ValueType
     fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): ValueType
 
@@ -169,9 +172,9 @@ class ClosableState(
         )
     }
 
-    override fun tableAppend(idx: Int) = TableLength(native.tableAppend(idx))
-    override fun tableSetRaw(idx: Int) = TableLength(native.tableSetRaw(idx))
-    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableSetRawIdx(stackIdx, tableIdx))
+    override fun tableAppend(idx: Int) = native.tableAppend(idx)
+    override fun tableSetRaw(idx: Int) = native.tableSetRaw(idx)
+    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = native.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = ValueType.ValueType(native.tableGetRaw(idx))
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) =
         ValueType.ValueType(native.tableGetRawIdx(stackIdx, tableIdx))

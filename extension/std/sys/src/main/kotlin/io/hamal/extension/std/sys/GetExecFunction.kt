@@ -20,7 +20,8 @@ class GetExecFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableMap?> {
         val response = templateSupplier()
-            .get("/v1/execs/${arg1.value}")
+            .get("/v1/execs/{execId}")
+            .path("execId", arg1.value)
             .execute()
 
         if (response is SuccessHttpResponse) {
@@ -30,7 +31,7 @@ class GetExecFunction(
                     val inputs = ctx.tableCreateMap(0)
 
                     ctx.tableCreateMap(0).also {
-                        it["id"] = exec.id.value.value.toString()
+                        it["id"] = exec.id
                         it["status"] = StringType(exec.status.name)
                         it["inputs"] = inputs
                         exec.correlation?.correlationId?.value?.let { corId ->

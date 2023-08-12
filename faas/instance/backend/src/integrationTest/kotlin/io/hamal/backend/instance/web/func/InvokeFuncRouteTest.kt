@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.InvokeFuncReq
 import io.hamal.lib.domain.vo.CorrelationId
@@ -13,6 +12,7 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -32,7 +32,8 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
+            .path("funcId", createResponse.id)
             .body(
                 InvokeFuncReq(
                     correlationId = CorrelationId("some-correlation-id"),
@@ -59,7 +60,8 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/${createResponse.id.value}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
+            .path("funcId", createResponse.id)
             .body(
                 InvokeFuncReq(
                     inputs = InvocationInputs(),

@@ -11,8 +11,8 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.FalseValue
 import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.FalseValue
 import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.kua.type.TrueValue
 import io.hamal.lib.sdk.domain.ApiError
@@ -27,7 +27,8 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
     fun `Sets state for a function first time`() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
 
-        val response = httpTemplate.post("/v1/funcs/${funcId.value.value}/states/__CORRELATION__")
+        val response = httpTemplate.post("/v1/funcs/{funcId}/states/__CORRELATION__")
+            .path("funcId", funcId)
             .body(State(TableType("answer" to DoubleType(42))))
             .execute()
 

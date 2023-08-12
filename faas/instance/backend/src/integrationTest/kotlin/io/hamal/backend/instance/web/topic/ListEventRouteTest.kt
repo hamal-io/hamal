@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.topic
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -8,6 +7,7 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.kua.type.DoubleType
 import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ListEventsResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -57,7 +57,8 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/topics/${topicId.value}/events")
+        val listResponse = httpTemplate.get("/v1/topics/{topicId}/events")
+            .path("topicId", topicId)
             .parameter("limit", 23)
             .execute(ListEventsResponse::class)
 
@@ -80,8 +81,9 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/topics/${topicId.value}/events")
-            .parameter("after_id", 95)
+        val listResponse = httpTemplate.get("/v1/topics/{topicId}/events")
+            .path("topicId", topicId)
+            .parameter("after_id", TopicId(95))
             .parameter("limit", 1)
             .execute(ListEventsResponse::class)
 

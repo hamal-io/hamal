@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Queued
@@ -8,6 +7,7 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -22,7 +22,7 @@ internal class GetExecRouteTest : BaseExecRouteTest() {
         )
         Thread.sleep(10)
 
-        val response = httpTemplate.get("/v1/execs/${createAdhocResponse.id.value}").execute()
+        val response = httpTemplate.get("/v1/execs/{execId}").path("execId", createAdhocResponse.id).execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 

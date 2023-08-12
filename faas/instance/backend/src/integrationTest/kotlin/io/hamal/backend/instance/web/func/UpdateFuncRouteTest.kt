@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.UpdateFuncReq
 import io.hamal.lib.domain.vo.FuncId
@@ -14,6 +13,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -52,7 +52,8 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
-        val updateFuncResponse = httpTemplate.put("/v1/funcs/${func.id.value}")
+        val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
+            .path("funcId", func.id)
             .body(
                 UpdateFuncReq(
                     name = FuncName("updatedName"),

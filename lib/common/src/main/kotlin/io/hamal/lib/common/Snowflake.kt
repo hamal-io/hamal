@@ -5,6 +5,7 @@ import io.hamal.lib.common.SnowflakeId.SequenceSource
 import io.hamal.lib.common.SnowflakeId.SequenceSource.*
 import io.hamal.lib.common.util.BitUtils
 import io.hamal.lib.common.Tuple2
+import io.hamal.lib.common.domain.DomainId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -20,6 +21,8 @@ import kotlin.concurrent.withLock
 @JvmInline
 @Serializable(with = SnowflakeId.Serializer::class)
 value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
+
+    constructor(value: String) : this(value.toLong(16))
 
     interface ElapsedSource {
         fun elapsed(): Elapsed
@@ -90,10 +93,10 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.STRING)
 
-        override fun deserialize(decoder: Decoder) = SnowflakeId(decoder.decodeLong())
+        override fun deserialize(decoder: Decoder) = SnowflakeId(decoder.decodeString().toLong(16))
 
         override fun serialize(encoder: Encoder, value: SnowflakeId) {
-            encoder.encodeLong(value.value)
+            encoder.encodeString(value.value.toString(16))
         }
     }
 }

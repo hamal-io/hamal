@@ -35,6 +35,7 @@ open class WebConfig : WebMvcConfigurer {
         registry.addConverter(LimitConverter)
         registry.addConverter(ReqIdConverter)
         registry.addConverter(TopicIdConverter)
+        registry.addConverter(TriggerIdConverter)
     }
 
 

@@ -16,7 +16,10 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
     fun listTopicEvents(topicId: TopicId): ListEventsResponse {
-        val listTopicsResponse = httpTemplate.get("/v1/topics/${topicId.value.value}/events").execute()
+        val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/events")
+            .path("topicId", topicId)
+            .execute()
+
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
         return listTopicsResponse.result(ListEventsResponse::class)
@@ -25,13 +28,17 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
     fun listTopics(): ListTopicsResponse {
         val listTopicsResponse = httpTemplate.get("/v1/topics").execute()
+
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
         return listTopicsResponse.result(ListTopicsResponse::class)
     }
 
     fun getTopic(topicId: TopicId): ApiTopic {
-        val getTopicResponse = httpTemplate.get("/v1/topics/${topicId.value.value}").execute()
+        val getTopicResponse = httpTemplate.get("/v1/topics/{topicId}")
+            .path("topicId", topicId)
+            .execute()
+
         assertThat(getTopicResponse.statusCode, equalTo(Ok))
         require(getTopicResponse is SuccessHttpResponse) { "request was not successful" }
         return getTopicResponse.result(ApiTopic::class)
@@ -48,7 +55,8 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
     }
 
     fun appendEvent(topicId: TopicId, value: TableType): ApiSubmittedReq {
-        val createTopicResponse = httpTemplate.post("/v1/topics/${topicId.value.value}/events")
+        val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/events")
+            .path("topicId", topicId)
             .body(value)
             .execute()
 

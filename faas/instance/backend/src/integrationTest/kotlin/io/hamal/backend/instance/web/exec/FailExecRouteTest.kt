@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
@@ -36,7 +36,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
                 )
 
                 val failureResponse = requestFailure(exec.id)
-                assertThat(failureResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+                assertThat(failureResponse.statusCode, equalTo(Accepted))
                 require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
                 val result = failureResponse.result(ApiSubmittedReqWithDomainId::class)
@@ -57,7 +57,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         ) as StartedExec
 
         val failureResponse = requestFailure(startedExec.id)
-        assertThat(failureResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(failureResponse.statusCode, equalTo(Accepted))
         require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
         val result = failureResponse.result(ApiSubmittedReqWithDomainId::class)
@@ -74,7 +74,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
             .body(FailExecReq(ErrorType("SomeErrorValue")))
             .execute()
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         val result = response.result(ApiSubmittedReqWithDomainId::class)
@@ -90,7 +90,8 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
     }
 
     private fun requestFailure(execId: ExecId) =
-        httpTemplate.post("/v1/execs/${execId.value}/fail")
+        httpTemplate.post("/v1/execs/{execId}/fail")
+            .path("execId", execId)
             .body(FailExecReq(ErrorType("SomeErrorCause")))
             .execute()
 

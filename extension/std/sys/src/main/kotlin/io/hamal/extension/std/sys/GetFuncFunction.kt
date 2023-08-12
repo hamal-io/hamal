@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.SuccessHttpResponse
@@ -11,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiFunc
 
 class GetFuncFunction(
@@ -28,7 +28,7 @@ class GetFuncFunction(
             return null to response.result(ApiFunc::class)
                 .let { func ->
                     ctx.tableCreateMap(0).also {
-                        it["id"] = func.id.value.value.toString()
+                        it["id"] = func.id
                         it["name"] = func.name.value
 //                        it["inputs"] = exec.inputs.value
                         it["code"] = func.code

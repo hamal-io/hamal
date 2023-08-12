@@ -4,14 +4,12 @@ import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
 
-@JvmInline
-value class TableLength(val value: Int)
 
 interface TableProxy : Type {
     val index: Int
     val type: Type
 
-    fun length(): TableLength
+    fun length(): Int
 
     enum class Type {
         Array,
@@ -26,44 +24,44 @@ data class DefaultTableProxy(
     override val type: TableProxy.Type
 ) : TableMap, TableArray {
 
-    override fun unset(key: String): TableLength {
+    override fun unset(key: String): Int {
         native.pushString(key)
         native.pushNil()
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: Boolean): TableLength {
+    override fun set(key: String, value: Boolean): Int {
         native.pushString(key)
         native.pushBoolean(value)
         return state.tableSetRaw(index)
     }
 
 
-    override fun set(key: String, value: Double): TableLength {
+    override fun set(key: String, value: Double): Int {
         native.pushString(key)
         native.pushNumber(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: String): TableLength {
+    override fun set(key: String, value: String): Int {
         state.pushString(key)
         state.pushString(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: FunctionType<*, *, *, *>): TableLength {
+    override fun set(key: String, value: FunctionType<*, *, *, *>): Int {
         state.pushString(key)
         state.pushFunction(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableMap): TableLength {
+    override fun set(key: String, value: TableMap): Int {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableArray): TableLength {
+    override fun set(key: String, value: TableArray): Int {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
@@ -104,29 +102,29 @@ data class DefaultTableProxy(
         return state.getTableMap(state.top.value)
     }
 
-    override fun length(): TableLength = TableLength((native.tableGetLength(index)))
+    override fun length() = native.tableGetLength(index)
 
-    override fun append(value: Boolean): TableLength {
+    override fun append(value: Boolean): Int {
         native.pushBoolean(value)
         return state.tableAppend(index)
     }
 
-    override fun append(value: Double): TableLength {
+    override fun append(value: Double): Int {
         native.pushNumber(value)
         return state.tableAppend(index)
     }
 
-    override fun append(value: String): TableLength {
+    override fun append(value: String): Int {
         native.pushString(value)
         return state.tableAppend(index)
     }
 
-    override fun append(value: TableMap): TableLength {
+    override fun append(value: TableMap): Int {
         state.pushTable(value)
         return state.tableAppend(index)
     }
 
-    override fun append(value: TableArray): TableLength {
+    override fun append(value: TableArray): Int {
         state.pushTable(value)
         return state.tableAppend(index)
     }

@@ -35,7 +35,8 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
     }
 
     fun completeExec(execId: ExecId, state: State): ApiSubmittedReqWithDomainId {
-        val response = httpTemplate.post("/v1/execs/${execId.value}/complete")
+        val response = httpTemplate.post("/v1/execs/{execId}/complete")
+            .path("execId", execId)
             .body(
                 CompleteExecReq(
                     state = state,
@@ -51,7 +52,10 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
     fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.correlationId)
 
     fun getState(funcId: FuncId, correlationId: CorrelationId): ApiCorrelatedState {
-        val response = httpTemplate.get("/v1/funcs/${funcId.value.value}/states/${correlationId.value}").execute()
+        val response = httpTemplate.get("/v1/funcs/{funcId}/states/{correlationId}")
+            .path("funcId", funcId)
+            .path("correlationId", correlationId.value)
+            .execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
@@ -59,10 +63,11 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
     }
 
     fun setState(correlatedState: CorrelatedState): ApiSubmittedReq {
-        val response =
-            httpTemplate.post("/v1/funcs/${correlatedState.correlation.funcId.value}/states/${correlatedState.correlation.correlationId.value}")
-                .body(correlatedState.value)
-                .execute()
+        val response = httpTemplate.post("/v1/funcs/{funcId}/states/{correlationId}")
+            .path("funcId", correlatedState.correlation.funcId)
+            .path("correlationId", correlatedState.correlation.correlationId.value)
+            .body(correlatedState.value)
+            .execute()
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }

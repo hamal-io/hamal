@@ -23,12 +23,13 @@ object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::Exe
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)
 object ReqIdConverter : DomainIdConverter<ReqId>(ReqId::class, ::ReqId)
 object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)
+object TriggerIdConverter : DomainIdConverter<TriggerId>(TriggerId::class, ::TriggerId)
 
 sealed class DomainIdConverter<ID : DomainId>(
     val clazz: KClass<ID>,
     val ctor: (SnowflakeId) -> ID,
 ) : Converter<String, ID> {
     override fun convert(source: String): ID {
-        return ctor(SnowflakeId(source.toLong()))
+        return ctor(SnowflakeId(source))
     }
 }

@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.trigger
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.req.CreateTriggerReq
@@ -11,6 +10,7 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiEventTrigger
 import io.hamal.lib.sdk.domain.ApiFixedRateTrigger
 import org.hamcrest.MatcherAssert.assertThat
@@ -45,7 +45,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
             )
         ).id(::TriggerId)
 
-        val getTriggerResponse = httpTemplate.get("/v1/triggers/${triggerId.value}").execute()
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
@@ -78,7 +78,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
             )
         ).id(::TriggerId)
 
-        val getTriggerResponse = httpTemplate.get("/v1/triggers/${triggerId.value}").execute()
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }

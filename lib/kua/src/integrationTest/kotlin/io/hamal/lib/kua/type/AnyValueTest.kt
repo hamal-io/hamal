@@ -7,7 +7,6 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableLength
 import io.hamal.lib.kua.table.TableMap
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -89,7 +88,7 @@ internal class AnyValueTest {
 
         val underlying = (captor.result as AnyType).value
         require(underlying is TableMap) { "Not a TableMapProxyValue" }
-        assertThat(underlying.length(), equalTo(TableLength(1)))
+        assertThat(underlying.length(), equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
 
@@ -116,7 +115,7 @@ internal class AnyValueTest {
 
         val underlying = (captor.result as AnyType).value
         require(underlying is TableArray) { "Not a TableArrayProxyValue" }
-        assertThat(underlying.length(), equalTo(TableLength(2)))
+        assertThat(underlying.length(), equalTo(2))
 
         assertThat(underlying.getInt(1), equalTo(23))
         assertThat(underlying.getString(2), equalTo("hamal.io"))

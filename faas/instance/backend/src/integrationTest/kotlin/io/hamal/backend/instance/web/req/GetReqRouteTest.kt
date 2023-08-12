@@ -1,11 +1,11 @@
 package io.hamal.backend.instance.web.req
 
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -19,7 +19,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
             adhoc()
         )
 
-        val response = httpTemplate.get("/v1/reqs/${request.reqId.value}").execute()
+        val response = httpTemplate.get("/v1/reqs/{reqId}").path("reqId", request.reqId).execute()
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 

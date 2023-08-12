@@ -25,10 +25,10 @@ abstract class DomainIdSerializer<ID : DomainId>(
     override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): ID {
-        return fn(SnowflakeId(decoder.decodeString().toLong()))
+        return fn(SnowflakeId(decoder.decodeString().toLong(16)))
     }
 
     override fun serialize(encoder: Encoder, value: ID) {
-        encoder.encodeString(value.value.value.toString())
+        encoder.encodeString(value.value.value.toString(16))
     }
 }

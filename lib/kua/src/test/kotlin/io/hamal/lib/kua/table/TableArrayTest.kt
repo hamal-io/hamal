@@ -32,7 +32,7 @@ internal class TableArrayTest {
                 testInstance = state.tableCreateArray()
 
                 val result = testFn()
-                assertThat(result, equalTo(TableLength(1)))
+                assertThat(result, equalTo(1))
             }
         }
     }
