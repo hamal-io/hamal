@@ -75,8 +75,7 @@ class SqliteFuncRepository(
         }
     }
 
-    override fun update(cmd: FuncCmdRepository.UpdateCmd): Func {
-        val funcId = cmd.funcId
+    override fun update(funcId: FuncId, cmd: FuncCmdRepository.UpdateCmd): Func {
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(funcId, cmdId)) {

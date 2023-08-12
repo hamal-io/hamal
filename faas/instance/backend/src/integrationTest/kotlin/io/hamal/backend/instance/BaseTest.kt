@@ -52,6 +52,12 @@ internal abstract class BaseTest {
     lateinit var funcCmdRepository: FuncCmdRepository
 
     @Autowired
+    lateinit var namespaceQueryRepository: NamespaceQueryRepository
+
+    @Autowired
+    lateinit var namespaceCmdRepository: NamespaceCmdRepository
+
+    @Autowired
     lateinit var reqQueryRepository: ReqQueryRepository
 
     @Autowired
@@ -77,6 +83,7 @@ internal abstract class BaseTest {
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
+        namespaceCmdRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
         triggerCmdRepository.clear()

@@ -10,11 +10,10 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
-
 interface FuncCmdRepository {
     fun create(cmd: CreateCmd): Func
 
-    fun update(cmd: UpdateCmd): Func
+    fun update(funcId: FuncId, cmd: UpdateCmd): Func
 
     fun clear()
 
@@ -28,7 +27,6 @@ interface FuncCmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val funcId: FuncId,
         val name: FuncName,
         val inputs: FuncInputs,
         val code: CodeType,

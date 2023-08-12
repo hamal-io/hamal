@@ -103,6 +103,24 @@ class SubmitRequest(
             code = updateFuncReq.code
         ).also(reqCmdRepository::queue)
 
+    operator fun invoke(createNamespaceReq: CreateNamespaceReq) =
+        SubmittedCreateNamespaceReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            id = generateDomainId(::NamespaceId),
+            name = createNamespaceReq.name,
+            inputs = createNamespaceReq.inputs
+        ).also(reqCmdRepository::queue)
+
+    operator fun invoke(namespaceId: NamespaceId, updateNamespaceReq: UpdateNamespaceReq) =
+        SubmittedUpdateNamespaceReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            id = namespaceId,
+            name = updateNamespaceReq.name,
+            inputs = updateNamespaceReq.inputs
+        ).also(reqCmdRepository::queue)
+
     operator fun invoke(createTriggerReq: CreateTriggerReq) =
         SubmittedCreateTriggerReq(
             type = createTriggerReq.type,

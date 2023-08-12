@@ -58,9 +58,8 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
         }
     }
 
-    override fun update(cmd: FuncCmdRepository.UpdateCmd): Func {
+    override fun update(funcId: FuncId, cmd: FuncCmdRepository.UpdateCmd): Func {
         return lock.withLock {
-            val funcId = cmd.funcId
             if (commandAlreadyApplied(funcId, cmd.id)) {
                 versionOf(funcId, cmd.id)
             } else {

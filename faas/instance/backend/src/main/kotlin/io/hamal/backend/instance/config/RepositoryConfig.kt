@@ -7,12 +7,14 @@ import io.hamal.backend.repository.memory.MemoryStateRepository
 import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
 import io.hamal.backend.repository.memory.record.MemoryExecRepository
 import io.hamal.backend.repository.memory.record.MemoryFuncRepository
+import io.hamal.backend.repository.memory.record.MemoryNamespaceRepository
 import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.SqliteStateRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
 import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
+import io.hamal.backend.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import io.hamal.backend.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -38,6 +40,15 @@ open class SqliteRepositoryConfig {
 
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
+
+    @Bean
+    open fun namespaceRepository() = SqliteNamespaceRepository(SqliteNamespaceRepository.Config(path))
+
+    @Bean
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = namespaceRepository()
+
+    @Bean
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
 
     @Bean
     open fun execRepository() = SqliteExecRepository(SqliteExecRepository.Config(path))
@@ -96,6 +107,12 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
+
+    @Bean
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = MemoryNamespaceRepository
+
+    @Bean
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = MemoryNamespaceRepository
 
     @Bean
     open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository

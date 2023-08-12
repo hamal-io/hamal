@@ -46,6 +46,12 @@ class ListReqRoute(
                     id = r.id.value
                 )
 
+                is SubmittedCreateNamespaceReq -> ApiSubmittedReqWithDomainId(
+                    reqId = r.reqId,
+                    status = r.status,
+                    id = r.id.value
+                )
+
                 is SubmittedCreateTopicReq -> ApiSubmittedReqWithDomainId(
                     reqId = r.reqId,
                     status = r.status,
@@ -75,6 +81,13 @@ class ListReqRoute(
                     status = r.status,
                     id = r.id.value
                 )
+
+                is SubmittedUpdateNamespaceReq -> ApiSubmittedReqWithDomainId(
+                    reqId = r.reqId,
+                    status = r.status,
+                    id = r.id.value
+                )
+
 
                 is SubmittedSetStateReq -> ApiDefaultSubmittedReq(
                     reqId = r.reqId,
