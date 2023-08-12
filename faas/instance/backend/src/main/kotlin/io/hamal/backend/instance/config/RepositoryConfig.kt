@@ -78,7 +78,7 @@ open class SqliteRepositoryConfig {
     @Bean
     open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
 
-    private val path = Path("/tmp/hamal/faas")
+    private val path = Path("/tmp/hamal/faas-instance")
 }
 
 @Profile("memory")
