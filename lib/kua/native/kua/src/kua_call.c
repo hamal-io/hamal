@@ -18,6 +18,7 @@ errorHandler(lua_State *L) {
          */
         if ((*env)->IsInstanceOf(env, throwable, jni_ref().assertion_error_class) ||
             (*env)->IsInstanceOf(env, throwable, jni_ref().script_error_class)) {
+            throw(throwable);
             return 0;
         }
 

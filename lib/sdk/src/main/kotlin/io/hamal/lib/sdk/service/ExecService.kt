@@ -31,13 +31,13 @@ data class DefaultExecService(val template: HttpTemplate) : ExecService {
         execId: ExecId, stateAfterCompletion: State, events: List<Event>
     ) {
         template.post("/v1/execs/{execId}/complete").path("execId", execId).body(
-                CompleteExecReq(
-                    state = stateAfterCompletion, events = events
-                )
-            ).execute()
+            CompleteExecReq(
+                state = stateAfterCompletion, events = events
+            )
+        ).execute()
     }
 
     override fun fail(execId: ExecId, error: ErrorType) {
-        template.post("/v1/execs/${execId}/fail").path("execId", execId).body(FailExecReq(cause = error)).execute()
+        template.post("/v1/execs/{execId}/fail").path("execId", execId).body(FailExecReq(cause = error)).execute()
     }
 }

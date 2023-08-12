@@ -1,5 +1,4 @@
 local sys = require('sys')
-local test = require('test')
 
 local err, namespaces = sys.namespace.list()
 assert(err == nil)
@@ -21,5 +20,3 @@ sys.namespace.create({})
 
 _, namespaces = sys.namespace.list()
 assert(#namespaces == 2)
-
-test.complete()

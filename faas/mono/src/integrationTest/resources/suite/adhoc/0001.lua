@@ -1,4 +1,3 @@
-local test = require("test")
 local sys = require('sys')
 
 local err, res = sys.adhoc({
@@ -18,5 +17,3 @@ assert(#execs == 2)
 
 local exec = execs[1]
 assert(exec.id == exec_id)
-
-test.complete()

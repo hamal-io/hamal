@@ -1,5 +1,4 @@
 local sys = require('sys')
-local test = require('test')
 
 local err, funcs = sys.func.list()
 assert(err == nil)
@@ -21,5 +20,3 @@ sys.func.create({})
 
 _, funcs = sys.func.list()
 assert(#funcs == 2)
-
-test.complete()

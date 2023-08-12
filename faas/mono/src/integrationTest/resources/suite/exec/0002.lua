@@ -1,5 +1,4 @@
 local sys = require('sys')
-local test = require('test')
 --
 ---- Remember: Each test is an adhoc invoked exec
 local err, execs = sys.exec.list()
@@ -15,5 +14,3 @@ assert(exec.id == test_exec.id)
 assert(exec.status == 'Started')
 assert(exec.correlationId == nil)
 assert(#exec.inputs == 0)
-
-test.complete()

@@ -1,4 +1,3 @@
-local test = require('test')
 local sys = require('sys')
 
 local err, namespace_res = sys.namespace.create({
@@ -18,5 +17,3 @@ assert(err == nil)
 
 assert(namespace.id == namespace_res.id)
 assert(namespace.name == 'empty-test-namespace')
-
-test.complete()

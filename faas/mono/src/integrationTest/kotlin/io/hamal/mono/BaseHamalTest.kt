@@ -11,6 +11,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.DefaultHamalSdk
+import io.hamal.lib.sdk.domain.ApiExec
 import io.hamal.mono.config.TestRunnerConfig
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DynamicTest
@@ -28,6 +29,7 @@ import java.lang.Thread.sleep
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.concurrent.CompletableFuture
 import kotlin.io.path.name
 
 
@@ -82,7 +84,17 @@ abstract class BaseHamalTest {
                     )
                 ).id(::ExecId)
 
-                ActiveTest.awaitCompletion()
+                CompletableFuture.runAsync {
+                    while (true) {
+                        val exec = httpTemplate.get("/v1/execs/{execId}")
+                            .path("execId", execId)
+                            .execute(ApiExec::class)
+                        if (setOf(ExecStatus.Completed, ExecStatus.Failed).contains(exec.status)) {
+                            break
+                        }
+                        sleep(1)
+                    }
+                }
 
                 // Waits until the test exec complete
                 var wait = true

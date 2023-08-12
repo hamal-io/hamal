@@ -1,2 +1,1 @@
-local test = require('test')
-test.complete()
+print("[X] Test")

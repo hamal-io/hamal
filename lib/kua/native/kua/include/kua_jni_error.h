@@ -22,4 +22,8 @@ throw_extension_error(jstring message, jthrowable throwable);
 int
 throw_script_error(char const *message);
 
+int
+throw(jthrowable throwable);
+
+
 #endif //KUA_EXCEPTION_H

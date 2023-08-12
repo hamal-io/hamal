@@ -3,6 +3,7 @@ package io.hamal.runner.service
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventInvocation
 import io.hamal.lib.domain.State
+import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.Function1In0Out
@@ -131,6 +132,10 @@ class RunnerService(
                             sdk.execService().fail(exec.id, ErrorType(kua.message ?: "Unknown reason"))
                             log.debug("Failed exec: {}", exec.id)
                         }
+                    } catch (a: AssertionError) {
+                        a.printStackTrace()
+                        sdk.execService().fail(exec.id, ErrorType(a.message ?: "Unknown reason"))
+                        log.debug("Assertion error: {} - {}", exec.id, a.message)
                     } catch (t: Throwable) {
                         t.printStackTrace()
                         sdk.execService().fail(exec.id, ErrorType(t.message ?: "Unknown reason"))

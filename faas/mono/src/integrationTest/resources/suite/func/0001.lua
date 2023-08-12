@@ -1,4 +1,3 @@
-local test = require('test')
 local sys = require('sys')
 
 local err, func_res = sys.func.create({
@@ -19,5 +18,3 @@ assert(err == nil)
 assert(func.id == func_res.id)
 assert(func.name == 'empty-test-func')
 assert(func.code == [[4 + 2]])
-
-test.complete()

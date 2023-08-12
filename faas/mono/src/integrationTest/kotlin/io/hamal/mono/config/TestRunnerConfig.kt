@@ -1,6 +1,5 @@
 package io.hamal.mono.config
 
-import io.hamal.mono.TestExtensionFactory
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.lib.http.HttpTemplate
@@ -24,11 +23,9 @@ class TestRunnerConfig {
         override fun create(exec: DequeueExecsResponse.Exec): Sandbox {
             NativeLoader.load(Resources)
             val result = Sandbox(DefaultSandboxContext())
-            result.register(TestExtensionFactory().create())
             result.register(LogExtensionFactory(httpTemplateSupplier()).create())
             result.register(SysExtensionFactory(httpTemplateSupplier()).create())
             return result
         }
     }
-
 }
