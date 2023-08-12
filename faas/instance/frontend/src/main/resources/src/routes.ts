@@ -5,7 +5,7 @@ export const Routes = {
     Executions: {path: "/executions"},
     Functions: {path: "/functions"},
     Function: {path: "/functions/:funcId"},
-    Logs: {path: "/logs"},
+    Logs: {path: "/log-list"},
     Topics: {path: "/topics"},
     Triggers: {path: "/triggers"},
     Trigger: {path: "/triggers/:triggerId"},

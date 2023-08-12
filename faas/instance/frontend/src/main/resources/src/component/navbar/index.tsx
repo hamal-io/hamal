@@ -29,6 +29,9 @@ export default (props: any) => {
                     <Nav.Item>
                         <Nav.Link href="/topics">Topics</Nav.Link>
                     </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/settings">Settings</Nav.Link>
+                    </Nav.Item>
                 </Nav>
             </Container>
         </Navbar>
