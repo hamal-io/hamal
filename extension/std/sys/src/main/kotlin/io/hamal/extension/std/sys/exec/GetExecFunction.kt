@@ -1,4 +1,4 @@
-package io.hamal.extension.std.sys
+package io.hamal.extension.std.sys.exec
 
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplate
@@ -10,10 +10,9 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiFunc
+import io.hamal.lib.sdk.domain.ApiExec
 
-class GetFuncFunction(
+class GetExecFunction(
     private val templateSupplier: () -> HttpTemplate
 ) : Function1In2Out<StringType, ErrorType, TableMap>(
     FunctionInput1Schema(StringType::class),
@@ -21,26 +20,36 @@ class GetFuncFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableMap?> {
         val response = templateSupplier()
-            .get("/v1/funcs/${arg1.value}")
+            .get("/v1/execs/{execId}")
+            .path("execId", arg1.value)
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(ApiFunc::class)
-                .let { func ->
+            return null to response.result(ApiExec::class)
+                .let { exec ->
+
+                    val inputs = ctx.tableCreateMap(0)
+
                     ctx.tableCreateMap(0).also {
-                        it["id"] = func.id
-                        it["name"] = func.name.value
-//                        it["inputs"] = exec.inputs.value
-                        it["code"] = func.code
+                        it["id"] = exec.id
+                        it["status"] = StringType(exec.status.name)
+                        it["inputs"] = inputs
+                        exec.correlation?.correlationId?.value?.let { corId ->
+                            it["correlationId"] = corId
+                        } // FIXME set nil value to table --> makes the api nicer
+                        it["code"] = exec.code
                     }
 
                 }
         } else {
             require(response is ErrorHttpResponse)
-            return response.error(ApiError::class)
-                .let { error ->
-                    ErrorType(error.message ?: "An unknown error occurred")
-                } to null
+//            return response.error(HamalError::class)
+//                .let { error ->
+//                    ErrorValue(error.message ?: "An unknown error occurred")
+//                }
+
+            TODO()
         }
+//
     }
 }

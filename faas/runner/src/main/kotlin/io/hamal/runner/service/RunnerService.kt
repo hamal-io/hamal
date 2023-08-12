@@ -31,7 +31,7 @@ class RunnerService(
     @Scheduled(initialDelay = 1, timeUnit = TimeUnit.SECONDS, fixedRate = Int.MAX_VALUE.toLong())
     fun run() {
         val sdk = DefaultHamalSdk(httpTemplateSupplier())
-        async.atFixedRate(100.milliseconds) {
+        async.atFixedRate(1.milliseconds) {
             sdk.execService()
                 .poll()
                 .execs.forEach { exec ->

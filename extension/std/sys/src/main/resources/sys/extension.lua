@@ -3,7 +3,8 @@ function create_extension_factory()
     return function()
         local export = {
             exec = { },
-            func = { }
+            func = { },
+            namespace = { }
         }
 
         function export.adhoc(cmd)
@@ -36,6 +37,21 @@ function create_extension_factory()
 
         function export.func.list()
             return internal.list_func()
+        end
+
+        function export.namespace.create(cmd)
+            return internal.create_namespace({
+                name = cmd.name or "",
+                inputs = cmd.inputs or {}
+            })
+        end
+
+        function export.namespace.get(namespace_id)
+            return internal.get_namespace(namespace_id)
+        end
+
+        function export.namespace.list()
+            return internal.list_namespace()
         end
 
         return export

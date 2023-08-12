@@ -1,4 +1,4 @@
-package io.hamal.extension.std.sys
+package io.hamal.extension.std.sys.exec
 
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.InvocationInputs

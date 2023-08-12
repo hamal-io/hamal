@@ -3,7 +3,6 @@ package io.hamal.mono
 import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.mono.config.TestRunnerConfig
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecId
@@ -12,8 +11,8 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.DefaultHamalSdk
+import io.hamal.mono.config.TestRunnerConfig
 import io.hamal.runner.RunnerConfig
-import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -62,6 +61,9 @@ abstract class BaseHamalTest {
     lateinit var funcCmdRepository: FuncCmdRepository
 
     @Autowired
+    lateinit var namespaceCmdRepository: NamespaceCmdRepository
+
+    @Autowired
     lateinit var reqCmdRepository: ReqCmdRepository
 
     @Autowired
@@ -104,18 +106,12 @@ abstract class BaseHamalTest {
         }.toList()
     }
 
-    @PostConstruct
-    fun setup() {
-
-
-    }
-
-
     private fun setupTestEnv() {
         eventBrokerRepository.clear()
         reqCmdRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
+        namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
     }
 
