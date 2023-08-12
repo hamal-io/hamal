@@ -39,7 +39,7 @@ jobs:
       - run: |
           cd code-cov
           rm -rf *
-          cp -r ${{github.workspace}}/faas/bootstrap/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
+          cp -r ${{github.workspace}}/faas/mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
           git add -A
           git config user.email "code-cov@hamal.io"
           git config user.name "code cov"
