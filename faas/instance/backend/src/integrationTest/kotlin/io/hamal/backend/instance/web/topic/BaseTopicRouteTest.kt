@@ -45,13 +45,13 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiSubmittedReqWithDomainId {
+    fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithDomainId::class)
+        return createTopicResponse.result(ApiSubmittedReqWithId::class)
     }
 
     fun appendEvent(topicId: TopicId, value: TableType): ApiSubmittedReq {

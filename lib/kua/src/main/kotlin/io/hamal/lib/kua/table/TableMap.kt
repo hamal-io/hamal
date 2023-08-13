@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
 
-
+//FIXME fix this interface
 interface TableMap : TableProxy {
     fun unset(key: String): Int
     fun unset(key: StringType) = unset(key.value)
@@ -46,8 +46,8 @@ interface TableMap : TableProxy {
     fun getBoolean(key: String): Boolean = getBooleanValue(key).value
     fun getBoolean(key: StringType): Boolean = getBoolean(key.value)
 
-    fun getCodeValue(key: String): CodeType
-    fun getCodeValue(key: StringType): CodeType = getCodeValue(key.value)
+    fun getCode(key: String): CodeType
+    fun getCode(key: StringType): CodeType = getCode(key.value)
 
     fun getNumberValue(key: String): DoubleType
     fun getNumberValue(key: StringType): DoubleType = getNumberValue(key.value)

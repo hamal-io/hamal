@@ -116,8 +116,8 @@ internal class TableMapTest {
     fun getCodeValue(): List<DynamicTest> {
         lateinit var testInstance: TableMap
         return listOf(
-            { testInstance.getCodeValue("key") },
-            { testInstance.getCodeValue(StringType("key")) },
+            { testInstance.getCode("key") },
+            { testInstance.getCode(StringType("key")) },
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()

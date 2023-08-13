@@ -11,7 +11,7 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -38,7 +38,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithDomainId::class)
+        val result = creationResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(triggerQueryRepository.get(result.id(::TriggerId))) {
@@ -93,7 +93,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithDomainId::class)
+        val result = creationResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(triggerQueryRepository.get(result.id(::TriggerId))) {

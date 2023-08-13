@@ -11,7 +11,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 
 class CreateNamespaceFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -30,7 +30,7 @@ class CreateNamespaceFunction(
             val res = templateSupplier()
                 .post("/v1/namespaces")
                 .body(r)
-                .execute(ApiSubmittedReqWithDomainId::class)
+                .execute(ApiSubmittedReqWithId::class)
 
             return null to ctx.tableCreateMap(1).also {
                 it["req_id"] = res.reqId

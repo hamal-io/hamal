@@ -10,7 +10,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import io.hamal.lib.sdk.domain.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.seconds
 
 internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
 
-    fun createFunc(name: FuncName): ApiSubmittedReqWithDomainId {
+    fun createFunc(name: FuncName): ApiSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/funcs")
             .body(
                 CreateFuncReq(
@@ -32,19 +32,19 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithDomainId::class)
+        return createTopicResponse.result(ApiSubmittedReqWithId::class)
     }
 
-    fun createTopic(topicName: TopicName): ApiSubmittedReqWithDomainId {
+    fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithDomainId::class)
+        return createTopicResponse.result(ApiSubmittedReqWithId::class)
     }
 
-    fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqWithDomainId {
+    fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqWithId {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
 
         val creationResponse = httpTemplate.post("/v1/triggers")
@@ -62,10 +62,10 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiSubmittedReqWithDomainId::class)
+        return creationResponse.result(ApiSubmittedReqWithId::class)
     }
 
-    fun createTrigger(req: CreateTriggerReq): ApiSubmittedReqWithDomainId {
+    fun createTrigger(req: CreateTriggerReq): ApiSubmittedReqWithId {
         val funcResponse = awaitCompleted(createFunc(FuncName("some-func-to-trigger")))
 
         val creationResponse = httpTemplate.post("/v1/triggers")
@@ -75,7 +75,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiSubmittedReqWithDomainId::class)
+        return creationResponse.result(ApiSubmittedReqWithId::class)
     }
 
 

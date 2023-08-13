@@ -5,7 +5,7 @@ import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import io.hamal.lib.sdk.domain.DequeueExecsResponse
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
@@ -19,9 +19,9 @@ internal sealed class BaseQueueRouteTest : BaseRouteTest() {
         return dequeueResponse.result(DequeueExecsResponse::class)
     }
 
-    fun adhoc(req: InvokeAdhocReq): ApiSubmittedReqWithDomainId =
+    fun adhoc(req: InvokeAdhocReq): ApiSubmittedReqWithId =
         httpTemplate
             .post("/v1/adhoc")
             .body(req)
-            .execute(ApiSubmittedReqWithDomainId::class)
+            .execute(ApiSubmittedReqWithId::class)
 }

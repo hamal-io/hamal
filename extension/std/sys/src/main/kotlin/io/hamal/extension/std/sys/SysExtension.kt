@@ -16,6 +16,7 @@ class SysExtensionFactory(
         return ScriptExtension(
             name = "sys",
             internals = mapOf(
+                "await" to AwaitFunction(templateSupplier),
                 "adhoc" to InvokeAdhocFunction(templateSupplier),
 
                 "list_execs" to ListExecsFunction(templateSupplier),

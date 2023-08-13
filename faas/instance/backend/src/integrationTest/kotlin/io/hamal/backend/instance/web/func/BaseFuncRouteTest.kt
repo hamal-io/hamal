@@ -9,16 +9,16 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.domain.ApiFunc
 import io.hamal.lib.sdk.domain.ApiFuncList
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseFuncRouteTest : BaseRouteTest() {
-    fun createFunc(req: CreateFuncReq): ApiSubmittedReqWithDomainId {
+    fun createFunc(req: CreateFuncReq): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/funcs").body(req).execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithDomainId::class)
+        return response.result(ApiSubmittedReqWithId::class)
     }
 
     fun listFuncs(): ApiFuncList {

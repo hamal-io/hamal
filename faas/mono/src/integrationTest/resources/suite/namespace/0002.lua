@@ -7,6 +7,9 @@ assert(#namespaces == 0)
 local err, namespace_one = sys.namespace.create({
     name = 'namespace-1'
 })
+
+sys.await(namespace_one)
+
 assert(err == nil)
 assert(namespace_one ~= nil)
 --

@@ -12,7 +12,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -39,7 +39,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
                 assertThat(failureResponse.statusCode, equalTo(Accepted))
                 require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = failureResponse.result(ApiSubmittedReqWithDomainId::class)
+                val result = failureResponse.result(ApiSubmittedReqWithId::class)
 
                 awaitFailed(result.reqId)
             }
@@ -60,7 +60,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         assertThat(failureResponse.statusCode, equalTo(Accepted))
         require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = failureResponse.result(ApiSubmittedReqWithDomainId::class)
+        val result = failureResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         verifyExecFailed(result.id(::ExecId))
@@ -77,7 +77,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(ApiSubmittedReqWithDomainId::class)
+        val result = response.result(ApiSubmittedReqWithId::class)
         awaitFailed(result.reqId)
     }
 

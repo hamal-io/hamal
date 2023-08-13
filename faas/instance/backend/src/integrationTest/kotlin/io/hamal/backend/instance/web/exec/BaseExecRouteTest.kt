@@ -7,12 +7,12 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseExecRouteTest : BaseRouteTest() {
-    fun createAdhocExec(): ApiSubmittedReqWithDomainId {
+    fun createAdhocExec(): ApiSubmittedReqWithId {
         val createAdhocExecResponse = httpTemplate
             .post("/v1/adhoc")
             .body(
@@ -26,6 +26,6 @@ internal sealed class BaseExecRouteTest : BaseRouteTest() {
         assertThat(createAdhocExecResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createAdhocExecResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createAdhocExecResponse.result(ApiSubmittedReqWithDomainId::class)
+        return createAdhocExecResponse.result(ApiSubmittedReqWithId::class)
     }
 }

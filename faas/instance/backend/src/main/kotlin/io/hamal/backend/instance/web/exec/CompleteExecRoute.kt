@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.exec
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,13 +19,13 @@ class CompleteExecRoute(
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
         @RequestBody complete: CompleteExecReq
-    ): ResponseEntity<ApiSubmittedReqWithDomainId> {
+    ): ResponseEntity<ApiSubmittedReqWithId> {
         val result = request(execId, complete)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithDomainId(
+            ApiSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
-                id = it.id.value
+                id = it.id
             )
         }, HttpStatus.ACCEPTED)
     }

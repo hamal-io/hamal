@@ -14,7 +14,7 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -65,7 +65,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val funcId = updateFuncResponse.result(ApiSubmittedReqWithDomainId::class).id(::FuncId)
+        val funcId = updateFuncResponse.result(ApiSubmittedReqWithId::class).id(::FuncId)
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))

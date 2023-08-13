@@ -25,11 +25,14 @@ data class ApiDefaultSubmittedReq(
 
 
 @Serializable
-data class ApiSubmittedReqWithDomainId(
+data class ApiSubmittedReqWithId(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: SnowflakeId,
 ) : ApiSubmittedReq {
+
+    constructor(reqId: ReqId, status: ReqStatus, id: DomainId) : this(reqId, status, id.value)
+
     fun <DOMAIN_ID : DomainId> id(block: SnowflakeId.() -> DOMAIN_ID): DOMAIN_ID {
         return block(id)
     }

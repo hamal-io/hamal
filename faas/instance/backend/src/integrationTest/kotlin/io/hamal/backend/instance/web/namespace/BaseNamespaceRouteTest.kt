@@ -9,16 +9,16 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.domain.ApiNamespace
 import io.hamal.lib.sdk.domain.ApiNamespaceList
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseNamespaceRouteTest : BaseRouteTest() {
-    fun createNamespace(req: CreateNamespaceReq): ApiSubmittedReqWithDomainId {
+    fun createNamespace(req: CreateNamespaceReq): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/namespaces").body(req).execute()
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithDomainId::class)
+        return response.result(ApiSubmittedReqWithId::class)
     }
 
     fun listNamespaces(): ApiNamespaceList {

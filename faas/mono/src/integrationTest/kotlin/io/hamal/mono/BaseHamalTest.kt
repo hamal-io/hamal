@@ -86,13 +86,13 @@ abstract class BaseHamalTest {
 
                 CompletableFuture.runAsync {
                     while (true) {
+                        sleep(10)
                         val exec = httpTemplate.get("/v1/execs/{execId}")
                             .path("execId", execId)
                             .execute(ApiExec::class)
                         if (setOf(ExecStatus.Completed, ExecStatus.Failed).contains(exec.status)) {
                             break
                         }
-                        sleep(1)
                     }
                 }
 

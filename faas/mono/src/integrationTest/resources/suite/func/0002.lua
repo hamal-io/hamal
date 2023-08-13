@@ -7,6 +7,9 @@ assert(#funcs == 0)
 local err, func_one = sys.func.create({
     name = 'func-1'
 })
+
+sys.await(func_one)
+
 assert(err == nil)
 assert(func_one ~= nil)
 --

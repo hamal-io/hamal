@@ -11,7 +11,7 @@ import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.HttpTemplateSupplier
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 
 class InvokeAdhocFunction(
     private val templateSupplier: HttpTemplateSupplier
@@ -28,7 +28,7 @@ class InvokeAdhocFunction(
         val res = templateSupplier()
             .post("/v1/adhoc")
             .body(r)
-            .execute(ApiSubmittedReqWithDomainId::class)
+            .execute(ApiSubmittedReqWithId::class)
 
         return null to ctx.tableCreateMap(2).also {
             it["req_id"] = res.reqId

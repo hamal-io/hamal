@@ -5,8 +5,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiReqList
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
-import io.hamal.lib.sdk.extension.parameter
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -45,7 +44,7 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
         assertThat(listResponse.reqs, hasSize(23))
 
         listResponse.reqs
-            .map { it as ApiSubmittedReqWithDomainId }
+            .map { it as ApiSubmittedReqWithId }
             .forEachIndexed { idx, req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
                 assertThat(code, equalTo(CodeType("${22 - idx}")))
@@ -67,7 +66,7 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
         assertThat(listResponse.reqs, hasSize(1))
 
         listResponse.reqs
-            .map { it as ApiSubmittedReqWithDomainId }
+            .map { it as ApiSubmittedReqWithId }
             .forEach { req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
                 assertThat(code, equalTo(CodeType("71")))

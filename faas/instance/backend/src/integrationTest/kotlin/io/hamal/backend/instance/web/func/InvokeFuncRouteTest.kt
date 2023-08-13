@@ -13,7 +13,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -44,7 +44,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(ApiSubmittedReqWithDomainId::class)
+        val result = invocationResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
     }
 
@@ -72,7 +72,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(ApiSubmittedReqWithDomainId::class)
+        val result = invocationResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
     }
 

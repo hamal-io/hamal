@@ -11,7 +11,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 
 class CreateFuncFunction(
     private val templateSupplier: () -> HttpTemplate
@@ -24,13 +24,13 @@ class CreateFuncFunction(
             val r = CreateFuncReq(
                 name = FuncName(arg1.getString("name")),
                 inputs = FuncInputs(),
-                code = arg1.getCodeValue("code")
+                code = arg1.getCode("code")
             )
 
             val res = templateSupplier()
                 .post("/v1/funcs")
                 .body(r)
-                .execute(ApiSubmittedReqWithDomainId::class)
+                .execute(ApiSubmittedReqWithId::class)
 
             return null to ctx.tableCreateMap(1).also {
                 it["req_id"] = res.reqId

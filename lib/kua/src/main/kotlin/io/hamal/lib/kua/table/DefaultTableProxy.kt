@@ -74,7 +74,7 @@ data class DefaultTableProxy(
         return booleanOf(native.toBoolean(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getCodeValue(key: String): CodeType {
+    override fun getCode(key: String): CodeType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(ValueType.String)

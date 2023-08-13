@@ -13,12 +13,12 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiCorrelatedState
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithDomainId
+import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseStateRouteTest : BaseRouteTest() {
-    fun createFunc(name: FuncName): ApiSubmittedReqWithDomainId {
+    fun createFunc(name: FuncName): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/funcs")
             .body(
                 CreateFuncReq(
@@ -31,10 +31,10 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithDomainId::class)
+        return response.result(ApiSubmittedReqWithId::class)
     }
 
-    fun completeExec(execId: ExecId, state: State): ApiSubmittedReqWithDomainId {
+    fun completeExec(execId: ExecId, state: State): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
@@ -46,7 +46,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
             .execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithDomainId::class)
+        return response.result(ApiSubmittedReqWithId::class)
     }
 
     fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.correlationId)

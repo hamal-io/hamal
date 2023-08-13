@@ -120,7 +120,7 @@ abstract class Function1In1Out<
         FunctionOutput1<OUTPUT_ARG_1>
         > {
 
-    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1): OUTPUT_ARG_1
+    abstract fun invoke(ctx: FunctionContext, arg1: INPUT_ARG_1): OUTPUT_ARG_1?
 
     override fun invoke(ctx: FunctionContext, input: FunctionInput1<INPUT_ARG_1>): FunctionOutput1<OUTPUT_ARG_1> {
         val result = invoke(ctx, input.arg1)
