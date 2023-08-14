@@ -5,6 +5,7 @@ import io.hamal.extension.std.sys.exec.InvokeAdhocFunction
 import io.hamal.extension.std.sys.exec.ListExecsFunction
 import io.hamal.extension.std.sys.func.*
 import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
+import io.hamal.extension.std.sys.req.GetReqFunction
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.sdk.HttpTemplateSupplier
@@ -18,6 +19,8 @@ class SysExtensionFactory(
             internals = mapOf(
                 "await" to AwaitFunction(templateSupplier),
                 "adhoc" to InvokeAdhocFunction(templateSupplier),
+
+                "get_req" to GetReqFunction(templateSupplier),
 
                 "list_execs" to ListExecsFunction(templateSupplier),
                 "get_exec" to GetExecFunction(templateSupplier),
