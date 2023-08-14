@@ -17,6 +17,7 @@ import kotlin.concurrent.withLock
 
 internal object CurrentNamespaceProjection {
     private val projection = mutableMapOf<NamespaceId, Namespace>()
+
     fun apply(namespace: Namespace) {
         projection[namespace.id] = namespace
     }

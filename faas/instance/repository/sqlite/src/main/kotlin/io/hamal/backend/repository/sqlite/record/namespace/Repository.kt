@@ -41,9 +41,7 @@ class SqliteNamespaceRepository(
     config = config,
     createDomainObject = CreateNamespace,
     recordClass = NamespaceRecord::class,
-    projections = listOf(
-        ProjectionCurrent
-    )
+    projections = listOf(ProjectionCurrent)
 ), NamespaceCmdRepository, NamespaceQueryRepository {
 
     data class Config(

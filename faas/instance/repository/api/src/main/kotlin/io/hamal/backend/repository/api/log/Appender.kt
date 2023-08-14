@@ -20,6 +20,6 @@ class ProtobufAppender<VALUE : Any>(
     @OptIn(InternalSerializationApi::class)
     override fun append(cmdId: CmdId, topic: LogTopic, value: VALUE) {
         val encoded = ProtoBuf.encodeToByteArray(valueClass.serializer(), value)
-        repository.append(CmdId(cmdId.value + "_" + encoded.contentHashCode()), topic, encoded)
+        repository.append(cmdId + encoded.contentHashCode(), topic, encoded)
     }
 }

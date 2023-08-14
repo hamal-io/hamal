@@ -28,4 +28,6 @@ data class CmdId(val value: String) : Comparable<CmdId> {
     }
 
     override fun compareTo(other: CmdId) = value.compareTo(other.value)
+
+    operator fun plus(hashcode: Int): CmdId = CmdId("${value}_$hashcode")
 }

@@ -1,6 +1,6 @@
 local sys = require('sys')
 
-local err, namespace_res = sys.namespace.create({
+local err, namespace_req = sys.namespace.create({
     name = 'empty-test-namespace',
     inputs = {},
     code = [[4 + 2]]
@@ -8,12 +8,14 @@ local err, namespace_res = sys.namespace.create({
 
 assert(err == nil)
 
-assert(namespace_res.req_id ~= nil)
-assert(namespace_res.status == 'Submitted')
-assert(namespace_res.id ~= nil)
+assert(namespace_req.req_id ~= nil)
+assert(namespace_req.status == 'Submitted')
+assert(namespace_req.id ~= nil)
 
-local err, namespace = sys.namespace.get(namespace_res.id)
+sys.await(namespace_req)
+
+local err, namespace = sys.namespace.get(namespace_req.id)
 assert(err == nil)
 
-assert(namespace.id == namespace_res.id)
+assert(namespace.id == namespace_req.id)
 assert(namespace.name == 'empty-test-namespace')

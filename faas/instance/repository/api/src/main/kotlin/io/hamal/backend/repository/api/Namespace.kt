@@ -47,3 +47,4 @@ data class Namespace(
     val name: NamespaceName,
     val inputs: NamespaceInputs
 ) : DomainObject<NamespaceId>
+

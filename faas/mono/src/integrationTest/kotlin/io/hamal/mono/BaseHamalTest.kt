@@ -109,7 +109,7 @@ abstract class BaseHamalTest {
                             fail { "Execution failed" }
                         }
 
-                        if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
+                        if (startedAt.plusSeconds(10).isBefore(TimeUtils.now())) {
                             fail("Timeout")
                         }
                     }

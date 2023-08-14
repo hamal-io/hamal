@@ -18,9 +18,24 @@ class NamespaceId(override val value: SnowflakeId) : DomainId() {
 }
 
 
+//FIXME make sure namespace name does not contain any whitespaces and does not end with ::
 @Serializable(with = NamespaceName.Serializer::class)
 class NamespaceName(override val value: String) : DomainName() {
     internal object Serializer : DomainNameSerializer<NamespaceName>(::NamespaceName)
+
+    fun allNamespaceNames(): List<NamespaceName> {
+        val parts = value.split("::")
+        val result = mutableListOf<NamespaceName>()
+        for (x in IntRange(0, parts.size - 1)) {
+            val builder = StringBuilder()
+            for (y in IntRange(0, x)) {
+                builder.append(parts[y])
+                builder.append("::")
+            }
+            result.add(NamespaceName(builder.toString().let { it.substring(0, it.length - 2) }))
+        }
+        return result
+    }
 }
 
 @Serializable(with = NamespaceInputs.Serializer::class)
