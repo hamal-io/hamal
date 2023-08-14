@@ -3,11 +3,17 @@ package io.hamal.backend.instance
 import io.hamal.backend.instance.event.*
 import io.hamal.backend.instance.event.handler.exec.*
 import io.hamal.backend.instance.event.handler.trigger.TriggerCreatedHandler
+import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.instance.service.FixedRateTriggerService
 import io.hamal.backend.instance.service.OrchestrationService
 import io.hamal.backend.instance.service.SystemEventServiceFactory
 import io.hamal.backend.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.lib.domain.req.CreateNamespaceReq
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -54,6 +60,22 @@ open class BackendConfig {
 
         .create()
 
+
+    @Bean
+    open fun commandLineRunner() = object : CommandLineRunner {
+
+        @Autowired
+        lateinit var submitRequest: SubmitRequest
+
+        override fun run(vararg args: String?) {
+            submitRequest(
+                CreateNamespaceReq(
+                    name = NamespaceName("hamal"),
+                    inputs = NamespaceInputs()
+                )
+            )
+        }
+    }
 }
 
 

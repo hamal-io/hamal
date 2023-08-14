@@ -32,16 +32,19 @@ class CreateNamespaceHandler(
 }
 
 private fun CreateNamespaceHandler.createNamespace(req: SubmittedCreateNamespaceReq): Namespace {
-    val existingNamespaceNames = namespaceQueryRepository.list { limit = Limit(Int.MAX_VALUE) }.map(Namespace::name)
+    val existingNamespaces = namespaceQueryRepository.list { limit = Limit(Int.MAX_VALUE) }
+    existingNamespaces.find { it.name == req.name }?.let { return it }
+
+    val existingNamespaceNames = existingNamespaces.map(Namespace::name)
 
     val allNames = req.name.allNamespaceNames()
     allNames.take(allNames.size - 1).filter { name -> !existingNamespaceNames.contains(name) }.forEach { name ->
-            namespaceCmdRepository.create(
-                CreateCmd(
-                    id = req.cmdId(), namespaceId = generateDomainId(::NamespaceId), name = name, inputs = req.inputs
-                )
+        namespaceCmdRepository.create(
+            CreateCmd(
+                id = req.cmdId(), namespaceId = generateDomainId(::NamespaceId), name = name, inputs = req.inputs
             )
-        }
+        )
+    }
 
     return namespaceCmdRepository.create(
         CreateCmd(

@@ -19,4 +19,4 @@ sys.await(namespace_req)
 
 local err, result = sys.req.get(namespace_req.req_id)
 assert(err == nil)
-assert(result.status == 'Failed')
+assert(result.status == 'Completed')
