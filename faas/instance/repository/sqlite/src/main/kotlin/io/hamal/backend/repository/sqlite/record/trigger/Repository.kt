@@ -72,7 +72,7 @@ class SqliteTriggerRepository(
                 )
 
                 (currentVersion(triggerId) as FixedRateTrigger)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -97,7 +97,7 @@ class SqliteTriggerRepository(
                 )
 
                 (currentVersion(triggerId) as EventTrigger)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }

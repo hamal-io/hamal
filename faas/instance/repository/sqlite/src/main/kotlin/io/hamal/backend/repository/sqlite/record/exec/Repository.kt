@@ -69,7 +69,7 @@ class SqliteExecRepository(
                 )
 
                 (currentVersion(execId) as PlannedExec)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -88,7 +88,7 @@ class SqliteExecRepository(
                     )
                 )
                 (currentVersion(execId) as ScheduledExec)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -108,8 +108,8 @@ class SqliteExecRepository(
                 )
 
                 (currentVersion(execId) as QueuedExec)
-                    .also { ProjectionCurrent.update(this, it) }
-                    .also { ProjectionQueue.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionQueue.upsert(this, it) }
             }
         }
     }
@@ -135,7 +135,7 @@ class SqliteExecRepository(
                     )
                     result.add(
                         (currentVersion(execId) as StartedExec)
-                            .also { ProjectionCurrent.update(this, it) }
+                            .also { ProjectionCurrent.upsert(this, it) }
                     )
                 }
             }
@@ -159,7 +159,7 @@ class SqliteExecRepository(
                     )
                 )
                 (currentVersion(execId) as CompletedExec)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -179,7 +179,7 @@ class SqliteExecRepository(
                     )
                 )
                 (currentVersion(execId) as FailedExec)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }

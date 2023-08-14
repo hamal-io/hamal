@@ -41,7 +41,7 @@ class SqliteNamespaceRepository(
     config = config,
     createDomainObject = CreateNamespace,
     recordClass = NamespaceRecord::class,
-    projections = listOf(ProjectionCurrent)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), NamespaceCmdRepository, NamespaceQueryRepository {
 
     data class Config(
@@ -67,7 +67,8 @@ class SqliteNamespaceRepository(
                 )
 
                 currentVersion(namespaceId)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
@@ -87,7 +88,8 @@ class SqliteNamespaceRepository(
                     )
                 )
                 currentVersion(namespaceId)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }

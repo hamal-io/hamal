@@ -70,7 +70,7 @@ class SqliteFuncRepository(
                 )
 
                 currentVersion(funcId)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -91,7 +91,7 @@ class SqliteFuncRepository(
                     )
                 )
                 currentVersion(funcId)
-                    .also { ProjectionCurrent.update(this, it) }
+                    .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }

@@ -9,7 +9,7 @@ interface ExecLogService {
     fun append(execId: ExecId, cmd: AppendExecLogCmd)
 }
 
-data class DefaultExecLogService(val template: HttpTemplate) : ExecLogService {
+class DefaultExecLogService(val template: HttpTemplate) : ExecLogService {
 
     override fun append(execId: ExecId, cmd: AppendExecLogCmd) {
         template

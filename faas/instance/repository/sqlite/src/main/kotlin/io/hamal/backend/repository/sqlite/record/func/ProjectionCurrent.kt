@@ -57,7 +57,7 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
         }
     }
 
-    override fun update(tx: RecordTransaction<FuncId, FuncRecord, Func>, obj: Func) {
+    override fun upsert(tx: RecordTransaction<FuncId, FuncRecord, Func>, obj: Func) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

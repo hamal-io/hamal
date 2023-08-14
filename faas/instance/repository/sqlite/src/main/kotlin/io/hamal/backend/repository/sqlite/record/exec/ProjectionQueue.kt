@@ -31,7 +31,7 @@ internal object ProjectionQueue : Projection<ExecId, ExecRecord, Exec> {
         }
     }
 
-    override fun update(tx: RecordTransaction<ExecId, ExecRecord, Exec>, obj: Exec) {
+    override fun upsert(tx: RecordTransaction<ExecId, ExecRecord, Exec>, obj: Exec) {
         require(obj is QueuedExec) { "exec not in status queued" }
         tx.execute(
             """

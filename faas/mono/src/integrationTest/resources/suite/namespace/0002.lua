@@ -4,22 +4,23 @@ local err, namespaces = sys.namespace.list()
 assert(err == nil)
 assert(#namespaces == 0)
 
-local err, namespace_one = sys.namespace.create({
+local err, namespace_one_req = sys.namespace.create({
     name = 'namespace-1'
 })
 
-sys.await(namespace_one)
+sys.await(namespace_one_req)
 
 assert(err == nil)
-assert(namespace_one ~= nil)
+assert(namespace_one_req ~= nil)
 --
 local _, namespaces = sys.namespace.list()
 assert(#namespaces == 1)
 
-assert(namespace_one.id == namespaces[1].id)
+assert(namespace_one_req.id == namespaces[1].id)
 assert(namespaces[1].name == 'namespace-1')
 
-sys.namespace.create({})
+_, namespace_two_req = sys.namespace.create({ name = 'another-namespace' })
+sys.await(namespace_two_req)
 
 _, namespaces = sys.namespace.list()
 assert(#namespaces == 2)
