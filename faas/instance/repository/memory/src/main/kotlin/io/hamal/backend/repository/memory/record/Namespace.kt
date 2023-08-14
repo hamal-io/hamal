@@ -12,6 +12,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -28,6 +29,7 @@ internal object CurrentNamespaceProjection {
     }
 
     fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
+    fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }
 
     fun list(afterId: NamespaceId, limit: Limit): List<Namespace> {
         return projection.keys.sorted()
@@ -44,7 +46,7 @@ internal object CurrentNamespaceProjection {
 
 object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceCmdRepository,
     NamespaceQueryRepository {
-    private val lock = ReentrantLock()
+
     override fun create(cmd: NamespaceCmdRepository.CreateCmd): Namespace {
         return lock.withLock {
             val namespaceId = cmd.namespaceId
@@ -84,6 +86,8 @@ object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRe
 
     override fun find(namespaceId: NamespaceId): Namespace? = CurrentNamespaceProjection.find(namespaceId)
 
+    override fun find(namespaceName: NamespaceName): Namespace? = CurrentNamespaceProjection.find(namespaceName)
+
     override fun list(block: NamespaceQuery.() -> Unit): List<Namespace> {
         val query = NamespaceQuery().also(block)
         return CurrentNamespaceProjection.list(query.afterId, query.limit)
@@ -93,6 +97,8 @@ object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRe
         super.clear()
         CurrentNamespaceProjection.clear()
     }
+
+    private val lock = ReentrantLock()
 }
 
 private fun MemoryNamespaceRepository.currentVersion(id: NamespaceId): Namespace {

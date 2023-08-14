@@ -33,6 +33,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("func-one"),
+                    namespaceId = null,
                     inputs = FuncInputs(TableType("hamal" to StringType("rockz"))),
                     code = CodeType("1+1")
                 )

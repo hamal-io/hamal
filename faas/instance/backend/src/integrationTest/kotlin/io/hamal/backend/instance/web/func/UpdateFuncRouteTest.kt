@@ -1,10 +1,10 @@
 package io.hamal.backend.instance.web.func
 
+import io.hamal.backend.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.UpdateFuncReq
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -26,6 +26,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         val getFuncResponse = httpTemplate.put("/v1/funcs/33333333")
             .body(
                 UpdateFuncReq(
+                    namespaceId = null,
                     name = FuncName("update"),
                     inputs = FuncInputs(),
                     code = CodeType("")
@@ -42,9 +43,19 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
 
     @Test
     fun `Updates func`() {
+        val createdNamespace = namespaceCmdRepository.create(
+            CreateCmd(
+                id = CmdId(1),
+                namespaceId = NamespaceId(1),
+                name = NamespaceName("createdNamespace"),
+                inputs = NamespaceInputs()
+            )
+        )
+
         val func = awaitCompleted(
             createFunc(
                 CreateFuncReq(
+                    namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
                     code = CodeType("createdCode")
@@ -52,10 +63,20 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             )
         )
 
+        val updateNamespace = namespaceCmdRepository.create(
+            CreateCmd(
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
+                name = NamespaceName("updatedNamespace"),
+                inputs = NamespaceInputs()
+            )
+        )
+
         val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
                 UpdateFuncReq(
+                    namespaceId = updateNamespace.id,
                     name = FuncName("updatedName"),
                     inputs = FuncInputs(TableType("hamal" to StringType("updatedInputs"))),
                     code = CodeType("updatedCode")
@@ -69,9 +90,57 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
+            assertThat(namespace.name, equalTo(NamespaceName("updatedNamespace")))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("updatedInputs")))))
             assertThat(code, equalTo(CodeType("updatedCode")))
+        }
+    }
+
+    @Test
+    fun `Updates func without updating values`() {
+        val createdNamespace = namespaceCmdRepository.create(
+            CreateCmd(
+                id = CmdId(1),
+                namespaceId = NamespaceId(1),
+                name = NamespaceName("createdNamespace"),
+                inputs = NamespaceInputs()
+            )
+        )
+
+        val func = awaitCompleted(
+            createFunc(
+                CreateFuncReq(
+                    namespaceId = createdNamespace.id,
+                    name = FuncName("createdName"),
+                    inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
+                    code = CodeType("createdCode")
+                )
+            )
+        )
+
+        val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
+            .path("funcId", func.id)
+            .body(
+                UpdateFuncReq(
+                    namespaceId = null,
+                    name = null,
+                    inputs = null,
+                    code = null
+                )
+            )
+            .execute()
+        assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
+        require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
+
+        val funcId = updateFuncResponse.result(ApiSubmittedReqWithId::class).id(::FuncId)
+
+        with(getFunc(funcId)) {
+            assertThat(id, equalTo(funcId))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(name, equalTo(FuncName("createdName")))
+            assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("createdInputs")))))
+            assertThat(code, equalTo(CodeType("createdCode")))
         }
     }
 }

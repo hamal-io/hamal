@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
@@ -20,6 +21,7 @@ interface FuncCmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val funcId: FuncId,
+        val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
         val code: CodeType,
@@ -27,6 +29,7 @@ interface FuncCmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
+        val namespaceId: NamespaceId?,
         val name: FuncName?,
         val inputs: FuncInputs?,
         val code: CodeType?,
@@ -48,6 +51,7 @@ interface FuncQueryRepository {
 data class Func(
     override val id: FuncId,
     val cmdId: CmdId,
+    val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: CodeType

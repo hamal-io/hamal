@@ -48,6 +48,7 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
                     FuncCreationRecord(
                         entityId = funcId,
                         cmdId = cmd.id,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         code = cmd.code
@@ -68,6 +69,7 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
                     FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmd.id,
+                        namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
                         code = cmd.code ?: currentVersion.code

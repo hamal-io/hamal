@@ -22,6 +22,7 @@ class CreateFuncFunction(
     override fun invoke(ctx: FunctionContext, arg1: TableMap): Pair<ErrorType?, TableMap> {
         try {
             val r = CreateFuncReq(
+                namespaceId = null, //FIXME
                 name = FuncName(arg1.getString("name")),
                 inputs = FuncInputs(),
                 code = arg1.getCode("code")

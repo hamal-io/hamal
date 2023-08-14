@@ -26,6 +26,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("test"),
+                    namespaceId = null,
                     inputs = FuncInputs(),
                     code = CodeType("")
                 )
@@ -54,6 +55,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
             createFunc(
                 CreateFuncReq(
                     name = FuncName("test"),
+                    namespaceId = null,
                     inputs = FuncInputs(),
                     code = CodeType("")
                 )

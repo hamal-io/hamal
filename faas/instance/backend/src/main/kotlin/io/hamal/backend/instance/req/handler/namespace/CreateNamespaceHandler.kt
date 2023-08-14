@@ -39,17 +39,11 @@ private fun CreateNamespaceHandler.createNamespace(req: SubmittedCreateNamespace
 
     val allNames = req.name.allNamespaceNames()
     allNames.take(allNames.size - 1).filter { name -> !existingNamespaceNames.contains(name) }.forEach { name ->
-        namespaceCmdRepository.create(
-            CreateCmd(
-                id = req.cmdId(), namespaceId = generateDomainId(::NamespaceId), name = name, inputs = req.inputs
-            )
-        )
+        namespaceCmdRepository.create(CreateCmd(req.cmdId(), generateDomainId(::NamespaceId), name, req.inputs))
     }
 
     return namespaceCmdRepository.create(
-        CreateCmd(
-            id = req.cmdId(), namespaceId = req.id, name = req.name, inputs = req.inputs
-        )
+        CreateCmd(req.cmdId(), req.id, req.name, req.inputs)
     )
 }
 

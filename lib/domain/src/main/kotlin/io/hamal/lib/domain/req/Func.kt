@@ -1,14 +1,12 @@
 package io.hamal.lib.domain.req
 
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateFuncReq(
+    val namespaceId: NamespaceId?,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: CodeType
@@ -17,6 +15,7 @@ data class CreateFuncReq(
 
 @Serializable
 data class UpdateFuncReq(
+    val namespaceId: NamespaceId?,
     val name: FuncName?,
     val inputs: FuncInputs?,
     val code: CodeType?

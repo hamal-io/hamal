@@ -23,13 +23,15 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
     fun createFunc(
         id: FuncId = generateDomainId(::FuncId),
         name: FuncName = FuncName("SomeFuncName"),
+        namespaceId: NamespaceId = generateDomainId(::NamespaceId),
         inputs: FuncInputs = FuncInputs(),
-        code: CodeType = CodeType("")
+        code: CodeType = CodeType(""),
     ): Func {
         return funcCmdRepository.create(
             FuncCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 funcId = id,
+                namespaceId = namespaceId,
                 name = name,
                 inputs = inputs,
                 code = code

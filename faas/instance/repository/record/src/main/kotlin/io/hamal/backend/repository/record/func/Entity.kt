@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 
 data class Entity(
@@ -14,6 +15,7 @@ data class Entity(
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
 
+    var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
     var code: CodeType? = null
@@ -26,6 +28,7 @@ data class Entity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
                 code = rec.code
@@ -35,6 +38,7 @@ data class Entity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
                 code = rec.code
@@ -46,6 +50,7 @@ data class Entity(
         return Func(
             cmdId = cmdId,
             id = id,
+            namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
             code = code!!,

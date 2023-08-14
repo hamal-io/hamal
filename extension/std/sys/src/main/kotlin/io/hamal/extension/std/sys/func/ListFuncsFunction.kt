@@ -30,6 +30,10 @@ class ListFuncsFunction(
                 val inner = ctx.tableCreateMap(2)
                 inner["id"] = func.id
                 inner["name"] = func.name.value
+                inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
+                    nt["id"] = func.namespace.id
+                    nt["name"] = func.namespace.name.value
+                }
                 rs.append(inner)
             }
         }

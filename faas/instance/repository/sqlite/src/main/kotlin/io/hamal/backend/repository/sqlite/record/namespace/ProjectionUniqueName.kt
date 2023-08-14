@@ -5,9 +5,28 @@ import io.hamal.backend.repository.record.namespace.NamespaceRecord
 import io.hamal.backend.repository.sqlite.record.Projection
 import io.hamal.backend.repository.sqlite.record.RecordTransaction
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sqlite.Connection
 
 internal object ProjectionUniqueName : Projection<NamespaceId, NamespaceRecord, Namespace> {
+
+    fun find(connection: Connection, namespaceName: NamespaceName): NamespaceId? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                id
+             FROM
+                unique_names
+            WHERE
+                name  = :name
+        """.trimIndent()
+        ) {
+            query {
+                set("name", namespaceName)
+            }
+            map { rs -> rs.getDomainId("id", ::NamespaceId) }
+        }
+    }
 
     override fun upsert(tx: RecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         tx.execute(
@@ -39,6 +58,5 @@ internal object ProjectionUniqueName : Projection<NamespaceId, NamespaceRecord, 
         connection.execute("""DELETE FROM unique_names""")
     }
 
-    override fun invalidate() {
-    }
+    override fun invalidate() {}
 }

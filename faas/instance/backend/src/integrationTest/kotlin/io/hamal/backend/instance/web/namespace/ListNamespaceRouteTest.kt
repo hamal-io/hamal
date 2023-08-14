@@ -6,14 +6,19 @@ import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sdk.domain.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
 internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
     @Test
-    fun `No namespaces`() {
+    fun `Only default namespaces`() {
         val result = listNamespaces()
-        assertThat(result.namespaces, empty())
+        assertThat(result.namespaces, hasSize(1))
+
+        with(result.namespaces.first()) {
+            assertThat(name, equalTo(NamespaceName("hamal")))
+        }
     }
 
     @Test
@@ -28,7 +33,7 @@ internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
         ).id(::NamespaceId)
 
         with(listNamespaces()) {
-            assertThat(namespaces, hasSize(1))
+            assertThat(namespaces, hasSize(2))
             with(namespaces.first()) {
                 assertThat(id, equalTo(namespaceId))
                 assertThat(name, equalTo(NamespaceName("namespace-one")))

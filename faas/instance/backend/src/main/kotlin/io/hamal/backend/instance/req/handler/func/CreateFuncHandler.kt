@@ -6,14 +6,17 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.backend.repository.api.Func
 import io.hamal.backend.repository.api.FuncCmdRepository
+import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.backend.repository.api.submitted_req.SubmittedCreateFuncReq
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.NamespaceName
 import org.springframework.stereotype.Component
 
 @Component
 class CreateFuncHandler(
     val funcCmdRepository: FuncCmdRepository,
-    val eventEmitter: SystemEventEmitter
+    val eventEmitter: SystemEventEmitter,
+    val namespaceQueryRepository: NamespaceQueryRepository
 ) : ReqHandler<SubmittedCreateFuncReq>(SubmittedCreateFuncReq::class) {
     override fun invoke(req: SubmittedCreateFuncReq) {
         createFunc(req).also { emitEvent(req.cmdId(), it) }
@@ -25,6 +28,7 @@ private fun CreateFuncHandler.createFunc(req: SubmittedCreateFuncReq): Func {
         FuncCmdRepository.CreateCmd(
             id = req.cmdId(),
             funcId = req.id,
+            namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
             name = req.name,
             inputs = req.inputs,
             code = req.code

@@ -22,6 +22,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         val createTopicResponse = httpTemplate.post("/v1/funcs")
             .body(
                 CreateFuncReq(
+                    namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeType("")

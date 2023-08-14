@@ -26,6 +26,7 @@ private fun UpdateFuncHandler.updateFunc(req: SubmittedUpdateFuncReq): Func {
         req.id,
         FuncCmdRepository.UpdateCmd(
             id = req.cmdId(),
+            namespaceId = req.namespaceId,
             name = req.name,
             inputs = req.inputs,
             code = req.code

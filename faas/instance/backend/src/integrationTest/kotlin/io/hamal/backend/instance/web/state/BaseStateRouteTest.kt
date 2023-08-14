@@ -7,7 +7,8 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Accepted
+import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
@@ -22,6 +23,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
         val response = httpTemplate.post("/v1/funcs")
             .body(
                 CreateFuncReq(
+                    namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeType("")
@@ -29,7 +31,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
             )
             .execute()
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
         return response.result(ApiSubmittedReqWithId::class)
     }
@@ -44,7 +46,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
                 )
             )
             .execute()
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
         return response.result(ApiSubmittedReqWithId::class)
     }
@@ -56,7 +58,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
             .path("funcId", funcId)
             .path("correlationId", correlationId.value)
             .execute()
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
+        assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         return response.result(ApiCorrelatedState::class)
@@ -69,7 +71,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
             .body(correlatedState.value)
             .execute()
 
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         return response.result(ApiSubmittedReq::class)

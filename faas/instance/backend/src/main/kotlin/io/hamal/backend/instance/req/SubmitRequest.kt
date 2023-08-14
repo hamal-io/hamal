@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.req
 
 import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.backend.repository.api.ReqCmdRepository
 import io.hamal.backend.repository.api.submitted_req.*
 import io.hamal.lib.domain.*
@@ -24,7 +25,8 @@ data class InvokeExec(
 class SubmitRequest(
     private val generateDomainId: GenerateDomainId,
     private val reqCmdRepository: ReqCmdRepository,
-    private val funcQueryRepository: FuncQueryRepository
+    private val funcQueryRepository: FuncQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     operator fun invoke(adhoc: InvokeAdhocReq) =
         SubmittedInvokeExecReq(
@@ -88,6 +90,7 @@ class SubmitRequest(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::FuncId),
+            namespaceId = createFuncReq.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
             name = createFuncReq.name,
             inputs = createFuncReq.inputs,
             code = createFuncReq.code
@@ -98,6 +101,7 @@ class SubmitRequest(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = funcId,
+            namespaceId = updateFuncReq.namespaceId,
             name = updateFuncReq.name,
             inputs = updateFuncReq.inputs,
             code = updateFuncReq.code

@@ -12,6 +12,7 @@ import io.hamal.backend.repository.record.namespace.NamespaceRecord
 import io.hamal.backend.repository.record.namespace.NamespaceUpdatedRecord
 import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path
 
@@ -96,6 +97,10 @@ class SqliteNamespaceRepository(
 
     override fun find(namespaceId: NamespaceId): Namespace? {
         return ProjectionCurrent.find(connection, namespaceId)
+    }
+
+    override fun find(namespaceName: NamespaceName): Namespace? {
+        return ProjectionUniqueName.find(connection, namespaceName)?.let { find((it)) }
     }
 
     override fun list(block: NamespaceQuery.() -> Unit): List<Namespace> {

@@ -12,10 +12,16 @@ import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
+
+    @BeforeEach
+    fun beforeEach() {
+        namespaceCmdRepository.clear()
+    }
 
     @Test
     fun `Creates namespace`() {

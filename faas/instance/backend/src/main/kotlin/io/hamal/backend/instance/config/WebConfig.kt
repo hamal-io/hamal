@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.lib.sdk.domain.ApiError
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
@@ -17,9 +18,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 open class WebConfig : WebMvcConfigurer {
+    @OptIn(ExperimentalSerializationApi::class)
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         super.configureMessageConverters(converters)
         converters.add(KotlinSerializationJsonHttpMessageConverter(Json {
+            explicitNulls = false
             ignoreUnknownKeys = true
             encodeDefaults = true
         }))

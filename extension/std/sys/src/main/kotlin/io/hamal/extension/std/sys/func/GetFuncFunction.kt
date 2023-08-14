@@ -29,6 +29,10 @@ class GetFuncFunction(
                 .let { func ->
                     ctx.tableCreateMap(0).also {
                         it["id"] = func.id
+                        it["namespace"] = ctx.tableCreateMap(2).also { nt ->
+                            nt["id"] = func.namespace.id
+                            nt["name"] = func.namespace.name.value
+                        }
                         it["name"] = func.name.value
 //                        it["inputs"] = exec.inputs.value
                         it["code"] = func.code

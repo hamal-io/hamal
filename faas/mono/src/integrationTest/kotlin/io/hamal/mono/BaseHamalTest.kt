@@ -1,5 +1,6 @@
 package io.hamal.mono
 
+import io.hamal.backend.instance.component.BootstrapBackend
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.util.TimeUtils
@@ -44,6 +45,9 @@ abstract class BaseHamalTest {
     @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
+    @Autowired
+    lateinit var backendBootstrap: BootstrapBackend
+
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
@@ -87,6 +91,8 @@ abstract class BaseHamalTest {
         funcCmdRepository.clear()
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
+
+        backendBootstrap.bootstrap()
     }
 
     abstract val httpTemplate: HttpTemplate

@@ -6,9 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import org.junit.jupiter.api.BeforeEach
@@ -87,6 +85,15 @@ internal abstract class BaseTest {
         reqCmdRepository.clear()
         stateCmdRepository.clear()
         triggerCmdRepository.clear()
+
+        namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(1),
+                namespaceId = generateDomainId(::NamespaceId),
+                name = NamespaceName("hamal"),
+                inputs = NamespaceInputs()
+            )
+        )
     }
 
 

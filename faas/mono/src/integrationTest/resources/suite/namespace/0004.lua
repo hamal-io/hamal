@@ -2,7 +2,8 @@ local sys = require('sys')
 
 local err, namespaces = sys.namespace.list()
 assert(err == nil)
-assert(#namespaces == 0)
+-- hamal as default namespace
+assert(#namespaces == 1)
 
 local err, namespace_req = sys.namespace.create({
     name = 'io::hamal::web3::eth'
@@ -12,7 +13,7 @@ sys.await(namespace_req)
 
 local err, namespaces = sys.namespace.list()
 assert(err == nil)
-assert(#namespaces == 4)
+assert(#namespaces == 5)
 
 
 -- tries to create namespace which is already there
@@ -25,4 +26,4 @@ sys.await(namespace_req)
 -- nothing has changed
 err, namespaces = sys.namespace.list()
 assert(err == nil)
-assert(#namespaces == 4)
+assert(#namespaces == 5)

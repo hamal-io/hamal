@@ -4,6 +4,7 @@ import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,6 +23,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         val funcId = awaitCompleted(
             createFunc(
                 CreateFuncReq(
+                    namespaceId = null,
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
                     code = CodeType("")
@@ -44,6 +46,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
             IntRange(0, 20).map {
                 createFunc(
                     CreateFuncReq(
+                        namespaceId = null,
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
                         code = CodeType("")
@@ -68,6 +71,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         val requests = IntRange(0, 99).map {
             createFunc(
                 CreateFuncReq(
+                    namespaceId = null,
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
                     code = CodeType("")
@@ -86,6 +90,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         assertThat(listResponse.funcs, hasSize(1))
 
         val func = listResponse.funcs.first()
+        assertThat(func.namespace.name, equalTo(NamespaceName("hamal")))
         assertThat(func.name, equalTo(FuncName("func-48")))
     }
 }

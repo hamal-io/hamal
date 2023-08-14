@@ -7,6 +7,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
@@ -34,6 +35,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(2),
                 status = Submitted,
                 id = FuncId(12345),
+                namespaceId = NamespaceId(23456),
                 name = FuncName("another-func"),
                 inputs = FuncInputs(),
                 code = CodeType("")
@@ -63,6 +65,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(1),
         status = Submitted,
         id = FuncId(12345),
+        namespaceId = NamespaceId(23456),
         name = FuncName("awesome-func"),
         inputs = FuncInputs(TableType(StringType("hamal") to StringType("rocks"))),
         code = CodeType("some code")
