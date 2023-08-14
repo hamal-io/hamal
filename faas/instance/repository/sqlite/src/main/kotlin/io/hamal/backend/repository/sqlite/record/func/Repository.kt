@@ -81,13 +81,14 @@ class SqliteFuncRepository(
             if (commandAlreadyApplied(funcId, cmdId)) {
                 versionOf(funcId, cmdId)
             } else {
+                val currentVersion = versionOf(funcId, cmdId)
                 storeRecord(
                     FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmdId,
-                        name = cmd.name,
-                        inputs = cmd.inputs,
-                        code = cmd.code,
+                        name = cmd.name ?: currentVersion.name,
+                        inputs = cmd.inputs ?: currentVersion.inputs,
+                        code = cmd.code ?: currentVersion.code,
                     )
                 )
                 currentVersion(funcId)

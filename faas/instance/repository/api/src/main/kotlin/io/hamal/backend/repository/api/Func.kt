@@ -27,9 +27,9 @@ interface FuncCmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val name: FuncName,
-        val inputs: FuncInputs,
-        val code: CodeType,
+        val name: FuncName?,
+        val inputs: FuncInputs?,
+        val code: CodeType?,
     )
 }
 

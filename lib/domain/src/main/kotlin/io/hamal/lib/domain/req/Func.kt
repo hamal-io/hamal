@@ -17,9 +17,9 @@ data class CreateFuncReq(
 
 @Serializable
 data class UpdateFuncReq(
-    val name: FuncName,
-    val inputs: FuncInputs,
-    val code: CodeType
+    val name: FuncName?,
+    val inputs: FuncInputs?,
+    val code: CodeType?
 )
 
 @Serializable

@@ -63,13 +63,14 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCm
             if (commandAlreadyApplied(funcId, cmd.id)) {
                 versionOf(funcId, cmd.id)
             } else {
+                val currentVersion = versionOf(funcId, cmd.id)
                 addRecord(
                     FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmd.id,
-                        name = cmd.name,
-                        inputs = cmd.inputs,
-                        code = cmd.code
+                        name = cmd.name ?: currentVersion.name,
+                        inputs = cmd.inputs ?: currentVersion.inputs,
+                        code = cmd.code ?: currentVersion.code
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
