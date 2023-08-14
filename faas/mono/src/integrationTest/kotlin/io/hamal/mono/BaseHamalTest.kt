@@ -1,6 +1,5 @@
 package io.hamal.mono
 
-import io.hamal.backend.instance.BackendConfig
 import io.hamal.backend.repository.api.*
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.util.TimeUtils
@@ -10,44 +9,18 @@ import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.domain.ApiExec
-import io.hamal.mono.config.TestRunnerConfig
-import io.hamal.runner.RunnerConfig
+import io.hamal.lib.sdk.HamalSdk
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
-import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.lang.Thread.sleep
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.concurrent.CompletableFuture
 import kotlin.io.path.name
 
-
-@ExtendWith(SpringExtension::class)
-@ContextConfiguration(
-    classes = [
-        TestRunnerConfig::class,
-        BackendConfig::class,
-        RunnerConfig::class
-    ]
-)
-@SpringBootTest(
-    webEnvironment = WebEnvironment.DEFINED_PORT,
-    properties = [
-        "server.port=8042"
-    ]
-)
-@ActiveProfiles("test")
 abstract class BaseHamalTest {
 
     @Autowired
@@ -77,31 +50,20 @@ abstract class BaseHamalTest {
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
-                val execId = sdk.adhocService().submit(
+                val execReq = sdk.adhocService().submit(
                     InvokeAdhocReq(
-                        inputs = InvocationInputs(),
-                        code = CodeType(String(Files.readAllBytes(testFile)))
+                        inputs = InvocationInputs(), code = CodeType(String(Files.readAllBytes(testFile)))
                     )
-                ).id(::ExecId)
+                )
 
-                CompletableFuture.runAsync {
-                    while (true) {
-                        sleep(10)
-                        val exec = httpTemplate.get("/v1/execs/{execId}")
-                            .path("execId", execId)
-                            .execute(ApiExec::class)
-                        if (setOf(ExecStatus.Completed, ExecStatus.Failed).contains(exec.status)) {
-                            break
-                        }
-                    }
-                }
+                sdk.awaitService.await(execReq)
 
                 // Waits until the test exec complete
                 var wait = true
                 val startedAt = TimeUtils.now()
                 while (wait) {
                     sleep(1)
-                    with(execQueryRepository.get(execId)) {
+                    with(execQueryRepository.get(execReq.id(::ExecId))) {
                         if (status == ExecStatus.Completed) {
                             wait = false
                         }
@@ -109,7 +71,7 @@ abstract class BaseHamalTest {
                             fail { "Execution failed" }
                         }
 
-                        if (startedAt.plusSeconds(10).isBefore(TimeUtils.now())) {
+                        if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
                             fail("Timeout")
                         }
                     }
@@ -127,9 +89,8 @@ abstract class BaseHamalTest {
         triggerCmdRepository.clear()
     }
 
-    private val httpTemplate = HttpTemplate("http://localhost:8042")
-    private val sdk = DefaultHamalSdk(httpTemplate)
-
+    abstract val httpTemplate: HttpTemplate
+    abstract val sdk: HamalSdk
 }
 
 

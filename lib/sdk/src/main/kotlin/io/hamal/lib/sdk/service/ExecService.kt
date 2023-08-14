@@ -22,7 +22,7 @@ interface ExecService {
     fun fail(execId: ExecId, error: ErrorType)
 }
 
-data class DefaultExecService(val template: HttpTemplate) : ExecService {
+class DefaultExecService(val template: HttpTemplate) : ExecService {
     override fun poll(): DequeueExecsResponse {
         return template.post("/v1/dequeue").execute(DequeueExecsResponse::class)
     }

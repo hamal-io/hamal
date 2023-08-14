@@ -19,6 +19,11 @@ internal object CurrentNamespaceProjection {
     private val projection = mutableMapOf<NamespaceId, Namespace>()
 
     fun apply(namespace: Namespace) {
+        val unique = projection.values
+            .none { namespace.name == it.name }
+
+        check(unique) { "Namespace name ${namespace.name.value} not unique" }
+
         projection[namespace.id] = namespace
     }
 

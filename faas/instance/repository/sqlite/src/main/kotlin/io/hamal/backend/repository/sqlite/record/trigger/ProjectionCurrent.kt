@@ -64,7 +64,7 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
         }
     }
 
-    override fun update(tx: RecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
+    override fun upsert(tx: RecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

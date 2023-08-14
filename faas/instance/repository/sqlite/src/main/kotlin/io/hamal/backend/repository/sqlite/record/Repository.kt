@@ -13,10 +13,9 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     config: Config,
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
-    private val recordCache: RecordCache<ID, RECORD, OBJ> = RecordCache(
-        RecordLoader(recordClass)
-    ),
+    private val recordCache: RecordCache<ID, RECORD, OBJ> = RecordCache(RecordLoader(recordClass)),
     private val projections: List<Projection<ID, RECORD, OBJ>>
+
 ) : BaseSqliteRepository(object : Config {
     override val path = config.path
     override val filename = config.filename

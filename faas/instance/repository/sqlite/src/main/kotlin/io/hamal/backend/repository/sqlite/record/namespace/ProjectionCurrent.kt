@@ -57,7 +57,7 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
         }
     }
 
-    override fun update(tx: RecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
+    override fun upsert(tx: RecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

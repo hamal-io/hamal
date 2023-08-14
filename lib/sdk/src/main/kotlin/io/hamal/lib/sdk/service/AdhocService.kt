@@ -9,7 +9,7 @@ interface AdhocService {
     fun submit(req: InvokeAdhocReq): ApiSubmittedReqWithId
 }
 
-data class DefaultAdhocService(val template: HttpTemplate) : AdhocService {
+class DefaultAdhocService(val template: HttpTemplate) : AdhocService {
     override fun submit(req: InvokeAdhocReq): ApiSubmittedReqWithId {
         return template
             .post("/v1/adhoc")
