@@ -25,5 +25,4 @@ sys.await(namespace_req)
 -- nothing has changed
 err, namespaces = sys.namespace.list()
 assert(err == nil)
-print(#namespaces)
 assert(#namespaces == 4)
