@@ -5,7 +5,8 @@ function create_extension_factory()
             exec = { },
             func = { },
             namespace = { },
-            req = { }
+            req = { },
+            trigger = { }
         }
 
         function export.adhoc(cmd)
@@ -76,6 +77,21 @@ function create_extension_factory()
 
         function export.req.get(req_id)
             return internal.get_req(req_id)
+        end
+
+        function export.trigger.create_fixed_rate(cmd)
+            return internal.create_trigger({
+                type = "FixedRate",
+                namespace_id = cmd.namespace_id,
+                name = cmd.name,
+                func_id = cmd.func_id,
+                inputs = cmd.inputs or {},
+                duration = cmd.duration
+            })
+        end
+
+        function export.trigger.get(trigger_id)
+            return internal.get_trigger(trigger_id)
         end
 
         return export

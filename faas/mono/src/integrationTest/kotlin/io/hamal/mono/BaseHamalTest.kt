@@ -91,7 +91,6 @@ abstract class BaseHamalTest {
         funcCmdRepository.clear()
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
-
         backendBootstrap.bootstrap()
     }
 

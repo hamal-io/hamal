@@ -1,10 +1,12 @@
-package io.hamal.extension.std.sys.func
+package io.hamal.extension.std.sys.trigger
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.req.CreateTriggerReq
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.TriggerInputs
+import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.function.Function1In2Out
@@ -15,8 +17,9 @@ import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import kotlin.time.Duration
 
-class CreateFuncFunction(
+class CreateTriggerFunction(
     private val templateSupplier: () -> HttpTemplate
 ) : Function1In2Out<TableMap, ErrorType, TableMap>(
     FunctionInput1Schema(TableMap::class),
@@ -24,21 +27,26 @@ class CreateFuncFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: TableMap): Pair<ErrorType?, TableMap> {
         try {
+
+            val type = TriggerType.valueOf(arg1.getString("type"))
+
             val namespaceId = if (arg1.type("namespace_id") == StringType::class) {
                 NamespaceId(SnowflakeId(arg1.getString("namespace_id")))
             } else {
                 null
             }
 
-            val r = CreateFuncReq(
+            val r = CreateTriggerReq(
+                type = type,
                 namespaceId = namespaceId,
-                name = FuncName(arg1.getString("name")),
-                inputs = FuncInputs(),
-                code = arg1.getCode("code")
+                funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
+                name = TriggerName(arg1.getString("name")),
+                inputs = TriggerInputs(),
+                duration = Duration.parseIsoString(arg1.getString("duration"))
             )
 
             val res = templateSupplier()
-                .post("/v1/funcs")
+                .post("/v1/triggers")
                 .body(r)
                 .execute(ApiSubmittedReqWithId::class)
 
