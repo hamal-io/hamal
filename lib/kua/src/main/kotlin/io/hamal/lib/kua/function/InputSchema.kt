@@ -53,8 +53,8 @@ fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         NumberType::class -> ctx.getNumberValue(idx) as ARG
         StringType::class -> ctx.getStringValue(idx) as ARG
         Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-        TableMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Type.Map) as ARG
-        TableArray::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Type.Array) as ARG
+        TableMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Map) as ARG
+        TableArray::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Array) as ARG
         else -> TODO()
     }
 }

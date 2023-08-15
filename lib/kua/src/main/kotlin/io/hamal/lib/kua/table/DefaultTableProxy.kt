@@ -8,11 +8,11 @@ import kotlin.reflect.KClass
 
 interface TableProxy : Type {
     val index: Int
-    val type: Type
+    val mode: Mode
 
     fun length(): Int
 
-    enum class Type {
+    enum class Mode {
         Array,
         Map
     }
@@ -22,7 +22,7 @@ interface TableProxy : Type {
 data class DefaultTableProxy(
     override val index: Int,
     val state: State,
-    override val type: TableProxy.Type
+    override val mode: TableProxy.Mode
 ) : TableMap, TableArray {
 
     override fun unset(key: String): Int {
@@ -103,6 +103,11 @@ data class DefaultTableProxy(
         return state.getTableMap(state.top.value)
     }
 
+    override fun type(key: String): KClass<out Type> {
+        state.pushString(key)
+        return state.tableGetRaw(index)
+    }
+
     override fun length() = native.tableGetLength(index)
 
     override fun append(value: Boolean): Int {
@@ -157,6 +162,6 @@ data class DefaultTableProxy(
 
 private fun KClass<out Type>.checkExpectedType(expected: KClass<out Type>) {
     check(this == expected) {
-        "Expected type to be ${expected.toString().lowercase()} but was ${this.toString().lowercase()}"
+        "Expected type to be $expected but was $this"
     }
 }

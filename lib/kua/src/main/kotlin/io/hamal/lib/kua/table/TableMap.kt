@@ -4,6 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
+import kotlin.reflect.KClass
 
 //FIXME fix this interface
 interface TableMap : TableProxy {
@@ -66,4 +67,6 @@ interface TableMap : TableProxy {
     fun getString(key: StringType): String = getString(key.value)
 
     fun getTableMap(key: String): TableMap
+
+    fun type(key: String): KClass<out Type>
 }

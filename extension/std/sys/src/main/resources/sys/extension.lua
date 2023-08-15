@@ -32,7 +32,8 @@ function create_extension_factory()
 
         function export.func.create(cmd)
             return internal.create_func({
-                name = cmd.name or "",
+                namespace_id = cmd.namespace_id or nil,
+                name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
             })

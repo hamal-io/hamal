@@ -127,10 +127,10 @@ class ClosableState(
     }
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableMap = DefaultTableProxy(absIndex(idx), this, TableProxy.Type.Map)
+    override fun getTableMap(idx: Int): TableMap = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Map)
 
     //FIXME type check
-    override fun getTableArray(idx: Int): TableArray = DefaultTableProxy(absIndex(idx), this, TableProxy.Type.Array)
+    override fun getTableArray(idx: Int): TableArray = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Array)
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) {
         native.pushFunction(value)
@@ -161,7 +161,7 @@ class ClosableState(
         return DefaultTableProxy(
             index = native.tableCreate(0, capacity),
             state = this,
-            type = TableProxy.Type.Map
+            mode = TableProxy.Mode.Map
         )
     }
 
@@ -169,7 +169,7 @@ class ClosableState(
         return DefaultTableProxy(
             index = native.tableCreate(capacity, 0),
             state = this,
-            type = TableProxy.Type.Array
+            mode = TableProxy.Mode.Array
         )
     }
 
