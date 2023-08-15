@@ -21,7 +21,7 @@ data class ApiTopic(
 
 
 @Serializable
-data class ListTopicsResponse(
+data class ApiTopicList(
     val topics: List<Topic>
 ) {
     @Serializable

@@ -6,6 +6,8 @@ import io.hamal.extension.std.sys.exec.ListExecFunction
 import io.hamal.extension.std.sys.func.*
 import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
 import io.hamal.extension.std.sys.req.GetReqFunction
+import io.hamal.extension.std.sys.topic.CreateTopicFunction
+import io.hamal.extension.std.sys.topic.ListTopicFunction
 import io.hamal.extension.std.sys.trigger.CreateTriggerFunction
 import io.hamal.extension.std.sys.trigger.GetTriggerFunction
 import io.hamal.extension.std.sys.trigger.ListTriggerFunction
@@ -38,6 +40,9 @@ class SysExtensionFactory(
                 "create_namespace" to CreateNamespaceFunction(templateSupplier),
                 "get_namespace" to GetNamespaceFunction(templateSupplier),
                 "list_namespace" to ListNamespaceFunction(templateSupplier),
+
+                "create_topic" to CreateTopicFunction(templateSupplier),
+                "list_topic" to ListTopicFunction(templateSupplier),
 
                 "create_trigger" to CreateTriggerFunction(templateSupplier),
                 "get_trigger" to GetTriggerFunction(templateSupplier),

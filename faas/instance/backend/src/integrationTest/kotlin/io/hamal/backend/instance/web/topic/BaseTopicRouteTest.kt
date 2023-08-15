@@ -26,12 +26,12 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
     }
 
 
-    fun listTopics(): ListTopicsResponse {
+    fun listTopics(): ApiTopicList {
         val listTopicsResponse = httpTemplate.get("/v1/topics").execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTopicsResponse.result(ListTopicsResponse::class)
+        return listTopicsResponse.result(ApiTopicList::class)
     }
 
     fun getTopic(topicId: TopicId): ApiTopic {

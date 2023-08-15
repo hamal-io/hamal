@@ -16,10 +16,10 @@ data class DequeueExecsResponse(
     @Serializable
     data class Exec(
         val id: ExecId,
-        val correlation: Correlation?,
         val inputs: ExecInputs,
         val state: State,
         val code: CodeType,
-        val invocation: Invocation
+        val invocation: Invocation,
+        val correlation: Correlation? = null
     )
 }

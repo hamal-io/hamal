@@ -6,6 +6,7 @@ function create_extension_factory()
             func = { },
             namespace = { },
             req = { },
+            topic = { },
             trigger = { }
         }
 
@@ -77,6 +78,16 @@ function create_extension_factory()
 
         function export.req.get(req_id)
             return internal.get_req(req_id)
+        end
+
+        function export.topic.create(cmd)
+            return internal.create_topic({
+                name = cmd.name
+            })
+        end
+
+        function export.topic.list()
+            return internal.list_topic()
         end
 
         function export.trigger.create_fixed_rate(cmd)
