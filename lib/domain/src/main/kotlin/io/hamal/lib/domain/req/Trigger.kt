@@ -10,6 +10,7 @@ data class CreateTriggerReq(
     val type: TriggerType,
     val name: TriggerName,
     val funcId: FuncId,
+    val namespaceId: NamespaceId? = null,
     val inputs: TriggerInputs,
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,

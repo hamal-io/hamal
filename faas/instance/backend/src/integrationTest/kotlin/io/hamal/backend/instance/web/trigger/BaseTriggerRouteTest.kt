@@ -11,6 +11,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.domain.ApiTrigger
 import io.hamal.lib.sdk.domain.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -77,7 +78,6 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         return creationResponse.result(ApiSubmittedReqWithId::class)
     }
 
-
     fun listTriggers(): ApiTriggerList {
         val listTriggersResponse = httpTemplate.get("/v1/triggers").execute()
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
@@ -85,4 +85,13 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         return listTriggersResponse.result(ApiTriggerList::class)
     }
 
+    fun getTrigger(triggerId: TriggerId): ApiTrigger {
+        val listTriggersResponse = httpTemplate.get("/v1/triggers/{triggerId}")
+            .path("triggerId", triggerId)
+            .execute()
+
+        assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
+        require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
+        return listTriggersResponse.result(ApiTrigger::class)
+    }
 }

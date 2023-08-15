@@ -19,6 +19,7 @@ interface TriggerCmdRepository {
         val triggerId: TriggerId,
         val name: TriggerName,
         val funcId: FuncId,
+        val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val duration: Duration,
         val correlationId: CorrelationId? = null
@@ -29,6 +30,7 @@ interface TriggerCmdRepository {
         val triggerId: TriggerId,
         val name: TriggerName,
         val funcId: FuncId,
+        val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val topicId: TopicId,
         val correlationId: CorrelationId? = null
@@ -55,6 +57,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
     val cmdId: CmdId
     val name: TriggerName
     val funcId: FuncId
+    val namespaceId: NamespaceId
     val correlationId: CorrelationId?
     val inputs: TriggerInputs
 }
@@ -65,6 +68,7 @@ class FixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val funcId: FuncId,
+    override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     val duration: Duration,
     override val correlationId: CorrelationId? = null
@@ -76,6 +80,7 @@ class EventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val funcId: FuncId,
+    override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     val topicId: TopicId,
     override val correlationId: CorrelationId? = null

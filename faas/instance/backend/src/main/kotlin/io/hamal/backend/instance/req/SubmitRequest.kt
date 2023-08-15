@@ -133,6 +133,7 @@ class SubmitRequest(
             id = generateDomainId(::TriggerId),
             name = createTriggerReq.name,
             funcId = createTriggerReq.funcId,
+            namespaceId = createTriggerReq.namespaceId,
             inputs = createTriggerReq.inputs,
             correlationId = createTriggerReq.correlationId,
             duration = createTriggerReq.duration,

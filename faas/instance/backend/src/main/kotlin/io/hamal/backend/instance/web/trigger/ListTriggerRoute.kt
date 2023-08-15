@@ -1,5 +1,6 @@
 package io.hamal.backend.instance.web.trigger
 
+import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.backend.repository.api.TriggerQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ListTriggerRoute(
-    private val triggerQueryRepository: TriggerQueryRepository
+    private val triggerQueryRepository: TriggerQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @GetMapping("/v1/triggers")
     fun listTrigger(
@@ -25,12 +27,20 @@ class ListTriggerRoute(
             this.types = TriggerType.values().toSet()
             this.limit = limit
         }
+
+        val namespaces = namespaceQueryRepository.list(result.map { it.namespaceId })
+            .associateBy { it.id }
+
         return ResponseEntity.ok(
             ApiTriggerList(
                 result.map {
                     ApiTriggerList.ApiSimpleTrigger(
                         id = it.id,
-                        name = it.name
+                        name = it.name,
+                        namespace = ApiTriggerList.ApiSimpleTrigger.Namespace(
+                            id = it.namespaceId,
+                            name = namespaces[it.namespaceId]!!.name
+                        )
                     )
                 }
             )

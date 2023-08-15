@@ -38,7 +38,6 @@ internal object CurrentTriggerProjection {
                 }
             }
             .take(query.limit.value)
-
     }
 
     fun clear() {
@@ -62,6 +61,7 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
                     entityId = triggerId,
                     cmdId = cmd.id,
                     funcId = cmd.funcId,
+                    namespaceId = cmd.namespaceId,
                     name = cmd.name,
                     inputs = cmd.inputs,
                     duration = cmd.duration,
@@ -83,6 +83,7 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
                         entityId = triggerId,
                         cmdId = cmd.id,
                         funcId = cmd.funcId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         topicId = cmd.topicId,

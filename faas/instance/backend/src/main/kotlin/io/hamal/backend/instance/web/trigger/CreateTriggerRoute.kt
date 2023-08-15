@@ -2,6 +2,7 @@ package io.hamal.backend.instance.web.trigger
 
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 class CreateTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: LogBrokerRepository,
-    private val request: SubmitRequest
+    private val request: SubmitRequest,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @PostMapping("/v1/triggers")
     fun createTrigger(
@@ -24,6 +26,7 @@ class CreateTriggerRoute(
     ): ResponseEntity<ApiSubmittedReqWithId> {
         ensureFuncExists(createTrigger)
         ensureTopicExists(createTrigger)
+        ensureNamespaceExist(createTrigger)
 
         val result = request(createTrigger)
         return ResponseEntity(result.let {
@@ -44,5 +47,9 @@ class CreateTriggerRoute(
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
             eventBrokerRepository.getTopic(createTrigger.topicId!!)
         }
+    }
+
+    private fun ensureNamespaceExist(createTriggerReq: CreateTriggerReq) {
+        createTriggerReq.namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

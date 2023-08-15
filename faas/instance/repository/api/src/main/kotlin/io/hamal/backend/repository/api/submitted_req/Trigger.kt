@@ -18,6 +18,7 @@ data class SubmittedCreateTriggerReq(
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
+    var namespaceId: NamespaceId? = null,
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null
