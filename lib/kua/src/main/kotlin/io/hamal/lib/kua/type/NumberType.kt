@@ -11,19 +11,19 @@ import java.text.DecimalFormat
 
 @Serializable
 @SerialName("DoubleType")
-data class DoubleType(
+data class NumberType(
     @Serializable(with = Serializer::class)
     val value: Double
 ) : SerializableType {
     constructor(value: Int) : this(value.toDouble())
 
     companion object {
-        val Zero = DoubleType(0.0)
-        val One = DoubleType(1.0)
+        val Zero = NumberType(0.0)
+        val One = NumberType(1.0)
     }
 
-    operator fun times(value: Int) = DoubleType(this.value * value)
-    operator fun times(value: Double) = DoubleType(this.value * value)
+    operator fun times(value: Int) = NumberType(this.value * value)
+    operator fun times(value: Double) = NumberType(this.value * value)
 
     object Serializer : KSerializer<Double> {
         override val descriptor = PrimitiveSerialDescriptor("DT", PrimitiveKind.STRING)

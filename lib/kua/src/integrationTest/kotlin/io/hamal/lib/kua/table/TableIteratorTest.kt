@@ -9,7 +9,7 @@ import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.type.AnyType
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TrueValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -37,7 +37,7 @@ internal class TableEntryIteratorTest {
 
                 assertThat(resultCollector.keys, hasSize(3))
                 assertThat(resultCollector[StringType("key")], equalTo(AnyType(StringType("value"))))
-                assertThat(resultCollector[StringType("answer")], equalTo(AnyType(DoubleType(42))))
+                assertThat(resultCollector[StringType("answer")], equalTo(AnyType(NumberType(42))))
                 assertThat(resultCollector[StringType("result")], equalTo(AnyType(TrueValue)))
             }
         }
@@ -99,13 +99,13 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
-                val resultCollector = mutableMapOf<DoubleType, AnyType>()
+                val resultCollector = mutableMapOf<NumberType, AnyType>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 
                 assertThat(resultCollector.keys, hasSize(3))
-                assertThat(resultCollector[DoubleType(1)], equalTo(AnyType(StringType("value"))))
-                assertThat(resultCollector[DoubleType(2)], equalTo(AnyType(DoubleType(42))))
-                assertThat(resultCollector[DoubleType(3)], equalTo(AnyType(TrueValue)))
+                assertThat(resultCollector[NumberType(1)], equalTo(AnyType(StringType("value"))))
+                assertThat(resultCollector[NumberType(2)], equalTo(AnyType(NumberType(42))))
+                assertThat(resultCollector[NumberType(3)], equalTo(AnyType(TrueValue)))
             }
         }
 
@@ -136,7 +136,7 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
-                val resultCollector = mutableMapOf<DoubleType, AnyType>()
+                val resultCollector = mutableMapOf<NumberType, AnyType>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 
                 assertThat(resultCollector.keys, empty())

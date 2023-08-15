@@ -3,7 +3,7 @@ package io.hamal.backend.instance.req.handler.exec
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,7 +22,7 @@ class ToExecInputsTest {
     fun ok() {
         val invocationInputs = InvocationInputs(
             TableType(
-                StringType("key") to DoubleType(2810),
+                StringType("key") to NumberType(2810),
                 StringType("invoke") to StringType("invoke")
             )
         )
@@ -31,7 +31,7 @@ class ToExecInputsTest {
             result, equalTo(
                 ExecInputs(
                     TableType(
-                        StringType("key") to DoubleType(2810),
+                        StringType("key") to NumberType(2810),
                         StringType("invoke") to StringType("invoke")
                     )
                 )
@@ -53,13 +53,13 @@ class MergeTest {
     fun `invocation inputs overrides func inputs`() {
         val funcInputs = FuncInputs(
             TableType(
-                StringType("key") to DoubleType(1),
+                StringType("key") to NumberType(1),
                 StringType("func") to StringType("func")
             )
         )
         val invocationInputs = InvocationInputs(
             TableType(
-                StringType("key") to DoubleType(2810),
+                StringType("key") to NumberType(2810),
                 StringType("invoke") to StringType("invoke")
             )
         )
@@ -68,7 +68,7 @@ class MergeTest {
             result, equalTo(
                 ExecInputs(
                     TableType(
-                        StringType("key") to DoubleType(2810),
+                        StringType("key") to NumberType(2810),
                         StringType("func") to StringType("func"),
                         StringType("invoke") to StringType("invoke")
                     )

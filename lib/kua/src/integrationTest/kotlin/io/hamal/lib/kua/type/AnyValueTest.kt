@@ -46,7 +46,7 @@ internal class AnyValueTest {
 
         sandbox.load("test.captor(test.pass_through(23))")
 
-        assertThat(captor.result, equalTo(AnyType(DoubleType(23))))
+        assertThat(captor.result, equalTo(AnyType(NumberType(23))))
     }
 
     @Test

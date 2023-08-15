@@ -23,8 +23,8 @@ interface TableMap : TableProxy {
     operator fun set(key: String, value: Long) = set(key, value.toDouble())
     operator fun set(key: String, value: Float) = set(key, value.toDouble())
     operator fun set(key: String, value: Double): Int
-    operator fun set(key: String, value: DoubleType) = set(key, value.value)
-    operator fun set(key: StringType, value: DoubleType) = set(key.value, value.value)
+    operator fun set(key: String, value: NumberType) = set(key, value.value)
+    operator fun set(key: StringType, value: NumberType) = set(key.value, value.value)
 
     operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
     operator fun set(key: StringType, value: DomainId) = set(key.value, value.value.value.toString(16))
@@ -49,8 +49,8 @@ interface TableMap : TableProxy {
     fun getCode(key: String): CodeType
     fun getCode(key: StringType): CodeType = getCode(key.value)
 
-    fun getNumberValue(key: String): DoubleType
-    fun getNumberValue(key: StringType): DoubleType = getNumberValue(key.value)
+    fun getNumberValue(key: String): NumberType
+    fun getNumberValue(key: StringType): NumberType = getNumberValue(key.value)
     fun getInt(key: String): Int = getNumberValue(key).value.toInt()
     fun getInt(key: StringType) = getInt(key.value)
     fun getLong(key: String): Long = getNumberValue(key).value.toLong()

@@ -8,7 +8,6 @@ import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.AnyType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.TableType
-import io.hamal.lib.kua.type.ValueType
 import kotlin.reflect.KClass
 
 
@@ -26,7 +25,7 @@ class FunctionContext(
 
     override fun pushTop(idx: Int) = state.pushTop(idx)
 
-    override fun type(idx: Int): ValueType = state.type(idx)
+    override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()
     override fun pushAny(value: AnyType) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)

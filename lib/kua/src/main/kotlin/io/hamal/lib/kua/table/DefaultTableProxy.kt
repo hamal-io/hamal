@@ -3,6 +3,7 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
+import kotlin.reflect.KClass
 
 
 interface TableProxy : Type {
@@ -70,35 +71,35 @@ data class DefaultTableProxy(
     override fun getBooleanValue(key: String): BooleanType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(ValueType.Boolean)
+        type.checkExpectedType(BooleanType::class)
         return booleanOf(native.toBoolean(state.top.value)).also { native.pop(1) }
     }
 
     override fun getCode(key: String): CodeType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(ValueType.String)
+        type.checkExpectedType(StringType::class)
         return CodeType(native.toString(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getNumberValue(key: String): DoubleType {
+    override fun getNumberValue(key: String): NumberType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(ValueType.Number)
-        return DoubleType(native.toNumber(state.top.value)).also { native.pop(1) }
+        type.checkExpectedType(NumberType::class)
+        return NumberType(native.toNumber(state.top.value)).also { native.pop(1) }
     }
 
     override fun getStringValue(key: String): StringType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(ValueType.String)
+        type.checkExpectedType(StringType::class)
         return StringType(native.toString(state.top.value)).also { native.pop(1) }
     }
 
     override fun getTableMap(key: String): TableMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(ValueType.Table)
+        type.checkExpectedType(TableType::class)
         return state.getTableMap(state.top.value)
     }
 
@@ -135,26 +136,26 @@ data class DefaultTableProxy(
 
     override fun getBooleanValue(idx: Int): BooleanType {
         val type = state.tableGetRawIdx(index, idx)
-        type.checkExpectedType(ValueType.Boolean)
+        type.checkExpectedType(BooleanType::class)
         return state.getBooleanValue(-1)
     }
 
-    override fun getNumberValue(idx: Int): DoubleType {
+    override fun getNumberValue(idx: Int): NumberType {
         val type = state.tableGetRawIdx(index, idx)
-        type.checkExpectedType(ValueType.Number)
+        type.checkExpectedType(NumberType::class)
         return state.getNumberValue(-1)
     }
 
     override fun getStringValue(idx: Int): StringType {
         val type = state.tableGetRawIdx(index, idx)
-        type.checkExpectedType(ValueType.String)
+        type.checkExpectedType(StringType::class)
         return state.getStringValue(-1)
     }
 
     private val native = state.native
 }
 
-private fun ValueType.checkExpectedType(expected: ValueType) {
+private fun KClass<out Type>.checkExpectedType(expected: KClass<out Type>) {
     check(this == expected) {
         "Expected type to be ${expected.toString().lowercase()} but was ${this.toString().lowercase()}"
     }

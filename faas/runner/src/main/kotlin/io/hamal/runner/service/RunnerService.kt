@@ -53,7 +53,7 @@ class RunnerService(
                                 exec.state.value.forEach { entry ->
                                     when (val value = entry.value) {
                                         is BooleanType -> funcState[entry.key] = value
-                                        is DoubleType -> funcState[entry.key] = value
+                                        is NumberType -> funcState[entry.key] = value
                                         is StringType -> funcState[entry.key] = value
                                         else -> TODO()
                                     }
@@ -70,7 +70,7 @@ class RunnerService(
                                         evt.value.forEach { payload ->
                                             when (val v = payload.value) {
                                                 is StringType -> evtTable[payload.key] = v
-                                                is DoubleType -> evtTable[payload.key] = v
+                                                is NumberType -> evtTable[payload.key] = v
                                                 else -> TODO()
                                             }
                                         }
@@ -101,7 +101,7 @@ class RunnerService(
                                     val v = state.getAny(-1)
 
                                     when (val n = v.value) {
-                                        is DoubleType -> stateMap[k] = n
+                                        is NumberType -> stateMap[k] = n
                                         is StringType -> stateMap[k] = n
                                         else -> TODO()
                                     }
@@ -121,7 +121,7 @@ class RunnerService(
 
                         val e = kua.cause
                         if (e is ExitError) {
-                            if (e.status == DoubleType(0.0)) {
+                            if (e.status == NumberType(0.0)) {
                                 sdk.execService().complete(exec.id, State(), listOf())
                                 log.debug("Completed exec: {}", exec.id)
                             } else {
@@ -160,7 +160,7 @@ class EmitEventFunction(
             val k = ctx.getStringValue(-2)
             val v = ctx.getAny(-1)
             when (val n = v.value) {
-                is DoubleType -> eventMap[k] = n
+                is NumberType -> eventMap[k] = n
                 is StringType -> eventMap[k] = n
                 else -> TODO()
             }

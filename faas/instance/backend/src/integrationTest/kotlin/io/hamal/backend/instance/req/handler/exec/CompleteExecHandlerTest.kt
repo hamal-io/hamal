@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
@@ -63,7 +63,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(10),
         status = ReqStatus.Submitted,
         id = ExecId(1234),
-        state = State(TableType("counter" to DoubleType(1))),
+        state = State(TableType("counter" to NumberType(1))),
         events = listOf(
             Event(
                 TableType(

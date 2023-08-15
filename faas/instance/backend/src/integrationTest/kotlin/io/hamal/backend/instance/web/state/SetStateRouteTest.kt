@@ -11,7 +11,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.FalseValue
 import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.kua.type.TrueValue
@@ -29,7 +29,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
 
         val response = httpTemplate.post("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
-            .body(State(TableType("answer" to DoubleType(42))))
+            .body(State(TableType("answer" to NumberType(42))))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
@@ -38,7 +38,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         response.result(ApiSubmittedReq::class)
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
-        assertThat(correlatedState["answer"], equalTo(DoubleType(42)))
+        assertThat(correlatedState["answer"], equalTo(NumberType(42)))
     }
 
     @Test
@@ -79,7 +79,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
                         correlation = correlation,
                         value = State(
                             TableType(
-                                "count" to DoubleType(currentCount)
+                                "count" to NumberType(currentCount)
                             )
                         )
                     )
@@ -87,14 +87,14 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
             )
 
             val correlatedState = getState(correlation)
-            assertThat(correlatedState["count"], equalTo(DoubleType(currentCount)))
+            assertThat(correlatedState["count"], equalTo(NumberType(currentCount)))
         }
     }
 
     @Test
     fun `Tries to set state but func does not exists`() {
         val response = httpTemplate.post("/v1/funcs/0/states/__CORRELATION__")
-            .body(State(TableType("answer" to DoubleType(42))))
+            .body(State(TableType("answer" to NumberType(42))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

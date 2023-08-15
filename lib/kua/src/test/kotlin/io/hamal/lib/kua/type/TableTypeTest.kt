@@ -15,7 +15,7 @@ class TableTypeTest {
         ),
         generateTestCases(
             TableType(
-                23 to DoubleType(34)
+                23 to NumberType(34)
             ),
             """{"type":"TableType","entries":{"23":{"type":"DoubleType","value":"34"}}}"""
         ),

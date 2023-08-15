@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -1152,16 +1152,16 @@ internal class CallTest : NativeTest() {
         verifyStackIsEmpty()
     }
 
-    private class Magic : Function2In2Out<DoubleType, DoubleType, DoubleType, DoubleType>(
-        FunctionInput2Schema(DoubleType::class, DoubleType::class),
-        FunctionOutput2Schema(DoubleType::class, DoubleType::class)
+    private class Magic : Function2In2Out<NumberType, NumberType, NumberType, NumberType>(
+        FunctionInput2Schema(NumberType::class, NumberType::class),
+        FunctionOutput2Schema(NumberType::class, NumberType::class)
     ) {
 
         override fun invoke(
             ctx: FunctionContext,
-            arg1: DoubleType,
-            arg2: DoubleType
-        ): Pair<DoubleType, DoubleType> {
+            arg1: NumberType,
+            arg2: NumberType
+        ): Pair<NumberType, NumberType> {
             return Pair(arg2 * 4, arg1 * 2)
         }
     }

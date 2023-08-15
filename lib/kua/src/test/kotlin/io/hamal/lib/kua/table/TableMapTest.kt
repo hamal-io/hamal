@@ -3,7 +3,6 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.ValueType.Table
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
@@ -27,8 +26,8 @@ internal class TableMapTest {
             { testInstance.set("key", 23f) },
             { testInstance.set("key", 23L) },
             { testInstance.set("key", 23.23) },
-            { testInstance.set("key", DoubleType(23.23)) },
-            { testInstance.set(StringType("key"), DoubleType(23.23)) },
+            { testInstance.set("key", NumberType(23.23)) },
+            { testInstance.set(StringType("key"), NumberType(23.23)) },
 
             { testInstance.set("key", "value") },
             { testInstance.set("key", StringType("value")) },
@@ -42,7 +41,7 @@ internal class TableMapTest {
                 assertThat(result, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(Table))
+                assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -70,7 +69,7 @@ internal class TableMapTest {
                 assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(Table))
+                assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
 
                 state.native.tableGetField(1, "another-key")
                 assertThat(state.getString(-1), equalTo("another-value"))
@@ -104,7 +103,7 @@ internal class TableMapTest {
                 assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(Table))
+                assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -128,7 +127,7 @@ internal class TableMapTest {
                 assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(Table))
+                assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -157,7 +156,7 @@ internal class TableMapTest {
                 testInstance["key"] = 23
 
                 when (val result = testFn()) {
-                    is DoubleType -> assertThat(result, equalTo(DoubleType(23.0)))
+                    is NumberType -> assertThat(result, equalTo(NumberType(23.0)))
                     is Int -> assertThat(result, equalTo(23))
                     is Long -> assertThat(result, equalTo(23L))
                     is Float -> assertThat(result, equalTo(23.0f))
@@ -168,7 +167,7 @@ internal class TableMapTest {
                 assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(Table))
+                assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -199,7 +198,7 @@ internal class TableMapTest {
                 assertThat(testInstance.length(), equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(Table))
+                assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()

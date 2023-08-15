@@ -200,7 +200,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     }
 
     @Test
-    fun `Tries to invoke execution but func does not exists`() {
+    fun `Tries to invoke exec but func does not exists`() {
         val exception = assertThrows<NoSuchElementException> { testInstance(submittedFixedRateInvocationReq) }
         assertThat(exception.message, equalTo("Func not found"))
         execQueryRepository.list { }.also {

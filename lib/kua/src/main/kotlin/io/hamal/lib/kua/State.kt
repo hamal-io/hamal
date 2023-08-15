@@ -6,7 +6,7 @@ import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.ValueType.Companion.ValueType
+import kotlin.reflect.KClass
 
 @JvmInline
 value class StackTop(val value: Int)
@@ -22,7 +22,7 @@ interface State {
     fun absIndex(idx: Int): Int
     fun pushTop(idx: Int): StackTop
 
-    fun type(idx: Int): ValueType
+    fun type(idx: Int): KClass<out Type>
     fun pushNil(): StackTop
     fun pushAny(value: AnyType): StackTop
     fun getAny(idx: Int): AnyType
@@ -34,9 +34,9 @@ interface State {
     fun pushFunction(value: FunctionType<*, *, *, *>): StackTop
 
     fun getNumber(idx: Int): Double
-    fun getNumberValue(idx: Int) = DoubleType(getNumber(idx))
+    fun getNumberValue(idx: Int) = NumberType(getNumber(idx))
     fun pushNumber(value: Double): StackTop
-    fun pushNumber(value: DoubleType) = pushNumber(value.value)
+    fun pushNumber(value: NumberType) = pushNumber(value.value)
 
     fun getString(idx: Int): String
     fun getStringValue(idx: Int) = StringType(getString(idx))
@@ -61,8 +61,8 @@ interface State {
     fun tableAppend(idx: Int): Int
     fun tableSetRaw(idx: Int): Int
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
-    fun tableGetRaw(idx: Int): ValueType
-    fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): ValueType
+    fun tableGetRaw(idx: Int): KClass<out Type>
+    fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): KClass<out Type>
 
     fun load(code: String) // FIXME add return value
 }
@@ -80,13 +80,14 @@ class ClosableState(
 
     override fun pushTop(idx: Int): StackTop = StackTop(native.pushTop(idx))
 
-    override fun type(idx: Int) = ValueType(native.type(idx))
+    override fun type(idx: Int) = luaToType(native.type(idx))
+
     override fun pushNil() = StackTop(native.pushNil())
 
     override fun pushAny(value: AnyType): StackTop {
         return when (val underlying = value.value) {
             is BooleanType -> pushBoolean(underlying)
-            is DoubleType -> pushNumber(underlying)
+            is NumberType -> pushNumber(underlying)
             is StringType -> pushString(underlying)
             is TableArray -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
@@ -95,10 +96,10 @@ class ClosableState(
 
     override fun getAny(idx: Int): AnyType {
         return when (val type = type(idx)) {
-            ValueType.Boolean -> AnyType(getBooleanValue(idx))
-            ValueType.Number -> AnyType(getNumberValue(idx))
-            ValueType.String -> AnyType(getStringValue(idx))
-            ValueType.Table -> AnyType(getTableMap(idx)) // FIXME what about table and array ?
+            BooleanType::class -> AnyType(getBooleanValue(idx))
+            NumberType::class -> AnyType(getNumberValue(idx))
+            StringType::class -> AnyType(getStringValue(idx))
+            TableType::class -> AnyType(getTableMap(idx)) // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
     }
@@ -175,9 +176,8 @@ class ClosableState(
     override fun tableAppend(idx: Int) = native.tableAppend(idx)
     override fun tableSetRaw(idx: Int) = native.tableSetRaw(idx)
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = native.tableSetRawIdx(stackIdx, tableIdx)
-    override fun tableGetRaw(idx: Int) = ValueType.ValueType(native.tableGetRaw(idx))
-    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) =
-        ValueType.ValueType(native.tableGetRawIdx(stackIdx, tableIdx))
+    override fun tableGetRaw(idx: Int) = luaToType(native.tableGetRaw(idx))
+    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableGetRawIdx(stackIdx, tableIdx))
 
     override fun load(code: String) {
         native.load(code)
@@ -188,3 +188,11 @@ class ClosableState(
     }
 }
 
+private fun luaToType(value: Int) = when (value) {
+    0 -> NilType::class
+    1 -> BooleanType::class
+    3 -> NumberType::class
+    4 -> StringType::class
+    5 -> TableType::class
+    else -> TODO()
+}

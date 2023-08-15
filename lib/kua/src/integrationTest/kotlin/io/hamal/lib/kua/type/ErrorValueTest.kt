@@ -86,10 +86,10 @@ internal class ErrorValueTest {
     }
 
 
-    private class FunctionNeverInvoked : Function1In0Out<DoubleType>(
-        FunctionInput1Schema(DoubleType::class)
+    private class FunctionNeverInvoked : Function1In0Out<NumberType>(
+        FunctionInput1Schema(NumberType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: DoubleType) {
+        override fun invoke(ctx: FunctionContext, arg1: NumberType) {
             TODO("Not yet implemented")
         }
     }

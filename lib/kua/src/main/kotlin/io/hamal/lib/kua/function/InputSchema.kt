@@ -5,7 +5,7 @@ import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.AnyType
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.Type
 import kotlin.reflect.KClass
@@ -50,7 +50,7 @@ fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
         AnyType::class -> ctx.getAny(idx) as ARG
-        DoubleType::class -> ctx.getNumberValue(idx) as ARG
+        NumberType::class -> ctx.getNumberValue(idx) as ARG
         StringType::class -> ctx.getStringValue(idx) as ARG
         Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
         TableMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Type.Map) as ARG

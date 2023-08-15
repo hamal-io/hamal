@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.hml.domain.HmlCallResponse
@@ -55,14 +55,14 @@ class HmlExecuteFunction(
                         val txs = ctx.tableCreateArray(r.result.transactions.size)
                         r.result.transactions.forEach {
                             val tx = ctx.tableCreateMap()
-                            tx["type"] = DoubleType(it.type.value.toDouble())
+                            tx["type"] = NumberType(it.type.value.toDouble())
                             tx["from"] = StringType(it.from.toPrefixedHexString().value)
-                            tx["fromId"] = DoubleType(it.fromId.value.toDouble())
+                            tx["fromId"] = NumberType(it.fromId.value.toDouble())
 //FIXME                            tx["to"] = it.to?.let { StringValue(it.toPrefixedHexString().value) } ?: NilValue
                             tx["to"] = it.to?.let { StringType(it.toPrefixedHexString().value) } ?: StringType("")
                             tx["input"] = StringType(it.input.value)
-                            tx["value"] = DoubleType(it.value.value.toDouble()) // FIXME decimal value
-                            tx["gas"] = DoubleType(it.gas.value.toDouble()) // FIXME decimal value
+                            tx["value"] = NumberType(it.value.value.toDouble()) // FIXME decimal value
+                            tx["gas"] = NumberType(it.gas.value.toDouble()) // FIXME decimal value
                             txs.append(tx)
                         }
 

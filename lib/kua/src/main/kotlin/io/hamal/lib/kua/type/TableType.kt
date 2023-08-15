@@ -49,7 +49,7 @@ data class TableType(
     operator fun get(key: String): Type = get(StringType(key))
     operator fun get(key: Type): Type = when (key) {
         is StringType -> get(key)
-        is DoubleType -> get(StringType(key.value.toString()))
+        is NumberType -> get(StringType(key.value.toString()))
         else -> TODO()
     }
 
@@ -59,7 +59,7 @@ data class TableType(
 
 
     fun remove(key: Int) {
-        remove(DoubleType(key))
+        remove(NumberType(key))
     }
 
     fun remove(key: Type) {
@@ -123,4 +123,4 @@ data class TableType(
 }
 
 infix fun String.to(that: String): Pair<String, StringType> = Pair(this, StringType(that))
-infix fun String.to(that: Number): Pair<String, DoubleType> = Pair(this, DoubleType(that.toDouble()))
+infix fun String.to(that: Number): Pair<String, NumberType> = Pair(this, NumberType(that.toDouble()))

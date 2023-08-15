@@ -6,7 +6,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.instanceOf
@@ -143,12 +143,12 @@ internal class FunctionTest {
     @Test
     fun `Tests Function1In2Out`() {
         val captor = Captor2()
-        val transform = object : Function1In2Out<StringType, StringType, DoubleType>(
+        val transform = object : Function1In2Out<StringType, StringType, NumberType>(
             FunctionInput1Schema(StringType::class),
-            FunctionOutput2Schema(StringType::class, DoubleType::class)
+            FunctionOutput2Schema(StringType::class, NumberType::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<StringType, DoubleType> {
-                return StringType(arg1.value.uppercase()) to DoubleType(arg1.value.length)
+            override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<StringType, NumberType> {
+                return StringType(arg1.value.uppercase()) to NumberType(arg1.value.length)
             }
         }
 
@@ -169,15 +169,15 @@ internal class FunctionTest {
     @Test
     fun `Tests Function2In2Out`() {
         val captor = Captor2()
-        val transform = object : Function2In2Out<StringType, DoubleType, StringType, DoubleType>(
-            FunctionInput2Schema(StringType::class, DoubleType::class),
-            FunctionOutput2Schema(StringType::class, DoubleType::class)
+        val transform = object : Function2In2Out<StringType, NumberType, StringType, NumberType>(
+            FunctionInput2Schema(StringType::class, NumberType::class),
+            FunctionOutput2Schema(StringType::class, NumberType::class)
         ) {
             override fun invoke(
                 ctx: FunctionContext,
                 arg1: StringType,
-                arg2: DoubleType
-            ): Pair<StringType, DoubleType> {
+                arg2: NumberType
+            ): Pair<StringType, NumberType> {
                 return StringType(arg1.value.reversed()) to (arg2 * -1)
             }
         }
@@ -200,9 +200,9 @@ internal class FunctionTest {
     fun `Tests Function0In2Out and Function2In0Out`() {
         val captor = Captor2()
         val emitter = object :
-            Function0In2Out<StringType, DoubleType>(FunctionOutput2Schema(StringType::class, DoubleType::class)) {
-            override fun invoke(ctx: FunctionContext): Pair<StringType, DoubleType> {
-                return StringType("answer") to DoubleType(42)
+            Function0In2Out<StringType, NumberType>(FunctionOutput2Schema(StringType::class, NumberType::class)) {
+            override fun invoke(ctx: FunctionContext): Pair<StringType, NumberType> {
+                return StringType("answer") to NumberType(42)
             }
         }
 
@@ -228,10 +228,10 @@ internal class FunctionTest {
         var result: String? = null
     }
 
-    private class Captor2 : Function2In0Out<StringType, DoubleType>(
-        FunctionInput2Schema(StringType::class, DoubleType::class)
+    private class Captor2 : Function2In0Out<StringType, NumberType>(
+        FunctionInput2Schema(StringType::class, NumberType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: DoubleType) {
+        override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: NumberType) {
             result = "${arg1.value}=${arg2.value}"
         }
 

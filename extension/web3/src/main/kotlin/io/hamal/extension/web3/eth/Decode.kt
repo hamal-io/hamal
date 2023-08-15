@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.AnyType
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.DoubleType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.web3.eth.abi.EthTypeDecoder
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
@@ -35,7 +35,7 @@ object EthDecodeParameterFunction : Function2In2Out<StringType, StringType, Erro
         if (type.value == "uint256") {
             return null to AnyType(
                 //FIXME must be decimal value
-                DoubleType(
+                NumberType(
                     EthTypeDecoder.Uint256.decode(
                         ByteWindow.Companion.of(
                             EthPrefixedHexString(value.value)

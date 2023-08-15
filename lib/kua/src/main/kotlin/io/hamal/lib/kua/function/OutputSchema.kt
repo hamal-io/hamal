@@ -37,7 +37,7 @@ data class FunctionOutput2Schema<ARG_1 : Type, ARG_2 : Type>(
 
 fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
     is NilType -> pushNil()
-    is DoubleType -> pushNumber(value)
+    is NumberType -> pushNumber(value)
     is StringType -> pushString(value)
     is TableArray -> pushTop(value.index)
     is TableMap -> pushTop(value.index)
