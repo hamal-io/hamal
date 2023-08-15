@@ -6,7 +6,7 @@ local err, create_func_req = sys.func.create({
     code = [[4 + 2]]
 })
 
-sys.await(create_func_req)
+sys.await_completed(create_func_req)
 
 assert(err == nil)
 

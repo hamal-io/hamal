@@ -18,6 +18,9 @@ class SysExtensionFactory(
             name = "sys",
             internals = mapOf(
                 "await" to AwaitFunction(templateSupplier),
+                "await_completed" to AwaitCompletedFunction(templateSupplier),
+                "await_failed" to AwaitFailedFunction(templateSupplier),
+
                 "adhoc" to InvokeAdhocFunction(templateSupplier),
 
                 "get_req" to GetReqFunction(templateSupplier),

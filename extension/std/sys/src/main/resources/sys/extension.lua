@@ -22,6 +22,18 @@ function create_extension_factory()
             return err, res
         end
 
+        function export.await_completed(cmd)
+            -- FIXME if cmd is string use it directly
+            local err, res = internal.await_completed(cmd.req_id)
+            return err, res
+        end
+
+        function export.await_failed(cmd)
+            -- FIXME if cmd is string use it directly
+            local err, res = internal.await_failed(cmd.req_id)
+            return err, res
+        end
+
         function export.exec.get(exec_id)
             return internal.get_exec(exec_id)
         end

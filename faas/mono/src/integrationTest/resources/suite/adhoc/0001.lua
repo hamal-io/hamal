@@ -7,7 +7,7 @@ local err, res = sys.adhoc({
     ]]
 })
 
-sys.await(res)
+sys.await_completed(res)
 
 assert(err == nil)
 local exec_id = res.id

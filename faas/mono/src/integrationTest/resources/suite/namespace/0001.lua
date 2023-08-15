@@ -12,7 +12,7 @@ assert(namespace_req.req_id ~= nil)
 assert(namespace_req.status == 'Submitted')
 assert(namespace_req.id ~= nil)
 
-sys.await(namespace_req)
+sys.await_completed(namespace_req)
 
 local err, namespace = sys.namespace.get(namespace_req.id)
 assert(err == nil)

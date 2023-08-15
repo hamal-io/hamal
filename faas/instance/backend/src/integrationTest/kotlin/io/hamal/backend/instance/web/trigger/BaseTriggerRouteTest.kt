@@ -67,8 +67,6 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     }
 
     fun createTrigger(req: CreateTriggerReq): ApiSubmittedReqWithId {
-        val funcResponse = awaitCompleted(createFunc(FuncName("some-func-to-trigger")))
-
         val creationResponse = httpTemplate.post("/v1/triggers")
             .body(req)
             .execute()

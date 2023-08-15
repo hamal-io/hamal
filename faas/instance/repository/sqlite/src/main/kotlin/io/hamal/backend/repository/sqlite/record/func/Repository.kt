@@ -42,7 +42,8 @@ class SqliteFuncRepository(
     createDomainObject = CreateFunc,
     recordClass = FuncRecord::class,
     projections = listOf(
-        ProjectionCurrent
+        ProjectionCurrent,
+        ProjectionUniqueName
     )
 ), FuncCmdRepository, FuncQueryRepository {
 
@@ -72,6 +73,7 @@ class SqliteFuncRepository(
 
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
@@ -95,6 +97,7 @@ class SqliteFuncRepository(
                 )
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
