@@ -90,6 +90,10 @@ function create_extension_factory()
             return internal.list_topic()
         end
 
+        function export.topic.get(topic_id)
+            return internal.get_topic(topic_id)
+        end
+
         function export.trigger.create_fixed_rate(cmd)
             return internal.create_trigger({
                 type = "FixedRate",
