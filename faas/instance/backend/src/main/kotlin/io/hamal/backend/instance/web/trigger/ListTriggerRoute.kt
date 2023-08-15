@@ -1,13 +1,14 @@
 package io.hamal.backend.instance.web.trigger
 
-import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.NamespaceQueryRepository
-import io.hamal.backend.repository.api.TriggerQueryRepository
+import io.hamal.backend.repository.api.*
+import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.sdk.domain.ApiSimpleEventTrigger
+import io.hamal.lib.sdk.domain.ApiSimpleFixedRateTrigger
+import io.hamal.lib.sdk.domain.ApiSimpleTrigger
 import io.hamal.lib.sdk.domain.ApiTriggerList
-import io.hamal.lib.sdk.domain.ApiTriggerList.ApiSimpleTrigger.Func
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController
 class ListTriggerRoute(
     private val triggerQueryRepository: TriggerQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val funcQueryRepository: FuncQueryRepository
+    private val funcQueryRepository: FuncQueryRepository,
+    private val eventBrokerRepository: LogBrokerRepository
 ) {
     @GetMapping("/v1/triggers")
     fun listTrigger(
@@ -37,21 +39,50 @@ class ListTriggerRoute(
         val funcs = funcQueryRepository.list(result.map { it.funcId })
             .associateBy { it.id }
 
+        val topics = eventBrokerRepository.list(result.filterIsInstance<EventTrigger>().map { it.topicId })
+            .associateBy { it.id }
+
         return ResponseEntity.ok(
             ApiTriggerList(
-                result.map {
-                    ApiTriggerList.ApiSimpleTrigger(
-                        id = it.id,
-                        name = it.name,
-                        func = Func(
-                            id = it.funcId,
-                            name = funcs[it.funcId]!!.name
-                        ),
-                        namespace = ApiTriggerList.ApiSimpleTrigger.Namespace(
-                            id = it.namespaceId,
-                            name = namespaces[it.namespaceId]!!.name
-                        )
-                    )
+                result.map { trigger ->
+                    when (val t = trigger) {
+                        is FixedRateTrigger -> {
+                            ApiSimpleFixedRateTrigger(
+                                id = t.id,
+                                name = t.name,
+                                func = ApiSimpleTrigger.Func(
+                                    id = t.funcId,
+                                    name = funcs[t.funcId]!!.name
+                                ),
+                                namespace = ApiSimpleTrigger.Namespace(
+                                    id = t.namespaceId,
+                                    name = namespaces[t.namespaceId]!!.name
+                                ),
+                                duration = t.duration
+                            )
+                        }
+
+                        is EventTrigger -> {
+                            ApiSimpleEventTrigger(
+                                id = t.id,
+                                name = t.name,
+                                func = ApiSimpleTrigger.Func(
+                                    id = t.funcId,
+                                    name = funcs[t.funcId]!!.name
+                                ),
+                                namespace = ApiSimpleTrigger.Namespace(
+                                    id = t.namespaceId,
+                                    name = namespaces[t.namespaceId]!!.name
+                                ),
+                                topic = ApiSimpleEventTrigger.Topic(
+                                    id = t.topicId,
+                                    name = topics[t.topicId]!!.name
+                                )
+                            )
+                        }
+
+                        else -> TODO()
+                    }
                 }
             )
         )

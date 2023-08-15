@@ -5,7 +5,6 @@ assert(err == nil)
 assert(topic_one_req.req_id ~= nil)
 assert(topic_one_req.status == 'Submitted')
 assert(topic_one_req.id ~= nil)
-
 sys.await(topic_one_req)
 
 err, topic = sys.topic.get(topic_one_req.id)

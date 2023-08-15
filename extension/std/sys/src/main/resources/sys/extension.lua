@@ -105,6 +105,17 @@ function create_extension_factory()
             })
         end
 
+        function export.trigger.create_event(cmd)
+            return internal.create_trigger({
+                type = "Event",
+                namespace_id = cmd.namespace_id,
+                name = cmd.name,
+                func_id = cmd.func_id,
+                inputs = cmd.inputs or {},
+                topic_id = cmd.topic_id
+            })
+        end
+
         function export.trigger.get(trigger_id)
             return internal.get_trigger(trigger_id)
         end

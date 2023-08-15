@@ -3,10 +3,7 @@ package io.hamal.extension.std.sys.trigger
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.TriggerInputs
-import io.hamal.lib.domain.vo.TriggerName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.function.Function1In2Out
@@ -36,13 +33,26 @@ class CreateTriggerFunction(
                 null
             }
 
+            val duration = if (arg1.type("duration") == StringType::class) {
+                Duration.parseIsoString(arg1.getString("duration"))
+            } else {
+                null
+            }
+
+            val topicId = if (arg1.type("topic_id") == StringType::class) {
+                TopicId(SnowflakeId(arg1.getString("topic_id")))
+            } else {
+                null
+            }
+
             val r = CreateTriggerReq(
                 type = type,
                 namespaceId = namespaceId,
                 funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                 name = TriggerName(arg1.getString("name")),
                 inputs = TriggerInputs(),
-                duration = Duration.parseIsoString(arg1.getString("duration"))
+                duration = duration,
+                topicId = topicId
             )
 
             val res = templateSupplier()

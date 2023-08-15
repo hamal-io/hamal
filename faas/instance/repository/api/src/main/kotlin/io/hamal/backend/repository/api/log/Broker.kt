@@ -52,6 +52,7 @@ interface LogBrokerRepository :
     Closeable {
 
     fun listTopics(): List<LogTopic>
+    fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)
     fun listEvents(topic: LogTopic, block: EventQuery.() -> Unit): List<EventWithId> {

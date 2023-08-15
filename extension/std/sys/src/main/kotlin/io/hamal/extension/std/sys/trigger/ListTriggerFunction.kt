@@ -6,6 +6,9 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.sdk.domain.ApiSimpleEventTrigger
+import io.hamal.lib.sdk.domain.ApiSimpleFixedRateTrigger
+import io.hamal.lib.sdk.domain.ApiSimpleTrigger
 import io.hamal.lib.sdk.domain.ApiTriggerList
 
 class ListTriggerFunction(
@@ -21,23 +24,52 @@ class ListTriggerFunction(
                 .triggers
         } catch (t: Throwable) {
             t.printStackTrace()
-            listOf<ApiTriggerList.ApiSimpleTrigger>()
+            listOf<ApiSimpleTrigger>()
         }
 
         return null to ctx.tableCreateArray().also { rs ->
             triggers.forEach { trigger ->
-                val inner = ctx.tableCreateMap(2)
-                inner["id"] = trigger.id
-                inner["name"] = trigger.name.value
-                inner["func"] = ctx.tableCreateMap(2).also { nt ->
-                    nt["id"] = trigger.func.id
-                    nt["name"] = trigger.func.name.value
+
+                when (val t = trigger) {
+                    is ApiSimpleFixedRateTrigger -> {
+                        val inner = ctx.tableCreateMap(6)
+                        inner["id"] = t.id
+                        inner["type"] = "FixedRate"
+                        inner["name"] = t.name.value
+                        inner["func"] = ctx.tableCreateMap(2).also { nt ->
+                            nt["id"] = t.func.id
+                            nt["name"] = t.func.name.value
+                        }
+                        inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
+                            nt["id"] = t.namespace.id
+                            nt["name"] = t.namespace.name.value
+                        }
+                        inner["duration"] = t.duration.toIsoString()
+                        rs.append(inner)
+                    }
+
+                    is ApiSimpleEventTrigger -> {
+                        val inner = ctx.tableCreateMap(6)
+                        inner["id"] = t.id
+                        inner["type"] = "Event"
+                        inner["name"] = t.name.value
+                        inner["func"] = ctx.tableCreateMap(2).also { nt ->
+                            nt["id"] = t.func.id
+                            nt["name"] = t.func.name.value
+                        }
+                        inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
+                            nt["id"] = t.namespace.id
+                            nt["name"] = t.namespace.name.value
+                        }
+                        inner["topic"] = ctx.tableCreateMap(2).also { nt ->
+                            nt["id"] = t.topic.id
+                            nt["name"] = t.topic.name.value
+                        }
+                        rs.append(inner)
+                    }
+
+                    is ApiSimpleEventTrigger -> TODO()
                 }
-                inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
-                    nt["id"] = trigger.namespace.id
-                    nt["name"] = trigger.namespace.name.value
-                }
-                rs.append(inner)
             }
         }
     }

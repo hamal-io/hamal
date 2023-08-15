@@ -11,6 +11,7 @@ import io.hamal.lib.kua.table.TableMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiError
+import io.hamal.lib.sdk.domain.ApiEventTrigger
 import io.hamal.lib.sdk.domain.ApiFixedRateTrigger
 import io.hamal.lib.sdk.domain.ApiTrigger
 
@@ -31,7 +32,7 @@ class GetTriggerFunction(
 
                     when (val t = trigger) {
                         is ApiFixedRateTrigger ->
-                            ctx.tableCreateMap(0).also {
+                            ctx.tableCreateMap(6).also {
                                 it["id"] = t.id
                                 it["type"] = "FixedRate"
                                 it["name"] = t.name.value
@@ -45,6 +46,26 @@ class GetTriggerFunction(
                                 }
                                 it["duration"] = t.duration.toIsoString()
                             }
+
+                        is ApiEventTrigger -> {
+                            ctx.tableCreateMap(6).also {
+                                it["id"] = t.id
+                                it["type"] = "Event"
+                                it["name"] = t.name.value
+                                it["namespace"] = ctx.tableCreateMap(2).also { nt ->
+                                    nt["id"] = t.namespace.id
+                                    nt["name"] = t.namespace.name.value
+                                }
+                                it["func"] = ctx.tableCreateMap(2).also { nt ->
+                                    nt["id"] = t.func.id
+                                    nt["name"] = t.func.name.value
+                                }
+                                it["topic"] = ctx.tableCreateMap(2).also { nt ->
+                                    nt["id"] = t.topic.id
+                                    nt["name"] = t.topic.name.value
+                                }
+                            }
+                        }
 
                         else -> TODO()
                     }

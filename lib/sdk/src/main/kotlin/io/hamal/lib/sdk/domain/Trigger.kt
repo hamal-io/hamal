@@ -7,27 +7,52 @@ import kotlin.time.Duration
 @Serializable
 data class ApiTriggerList(
     val triggers: List<ApiSimpleTrigger>
-) {
-    @Serializable
-    data class ApiSimpleTrigger(
-        val id: TriggerId,
-        val name: TriggerName,
-        val func: Func,
-        val namespace: Namespace
-    ) {
-        @Serializable
-        data class Func(
-            val id: FuncId,
-            val name: FuncName
-        )
+)
 
-        @Serializable
-        data class Namespace(
-            val id: NamespaceId,
-            val name: NamespaceName
-        )
-    }
+@Serializable
+sealed interface ApiSimpleTrigger {
+    val id: TriggerId
+    val name: TriggerName
+    val func: Func
+    val namespace: Namespace
+
+    @Serializable
+    data class Func(
+        val id: FuncId,
+        val name: FuncName
+    )
+
+    @Serializable
+    data class Namespace(
+        val id: NamespaceId,
+        val name: NamespaceName
+    )
 }
+
+@Serializable
+class ApiSimpleFixedRateTrigger(
+    override val id: TriggerId,
+    override val name: TriggerName,
+    override val func: ApiSimpleTrigger.Func,
+    override val namespace: ApiSimpleTrigger.Namespace,
+    val duration: Duration
+) : ApiSimpleTrigger
+
+@Serializable
+class ApiSimpleEventTrigger(
+    override val id: TriggerId,
+    override val name: TriggerName,
+    override val func: ApiSimpleTrigger.Func,
+    override val namespace: ApiSimpleTrigger.Namespace,
+    val topic: Topic
+) : ApiSimpleTrigger {
+    @Serializable
+    data class Topic(
+        val id: TopicId,
+        val name: TopicName
+    )
+}
+
 
 @Serializable
 sealed interface ApiTrigger {
