@@ -68,7 +68,7 @@ class ListTriggerFunction(
                         rs.append(inner)
                     }
 
-                    is ApiSimpleEventTrigger -> TODO()
+                    else -> TODO()
                 }
             }
         }

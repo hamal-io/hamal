@@ -18,7 +18,6 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
 
-
         check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord)
 
         var result = Entity(
@@ -41,9 +40,7 @@ class SqliteTriggerRepository(
     config = config,
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(
-        ProjectionCurrent
-    )
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), TriggerCmdRepository, TriggerQueryRepository {
 
     data class Config(
@@ -74,6 +71,7 @@ class SqliteTriggerRepository(
 
                 (currentVersion(triggerId) as FixedRateTrigger)
                     .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
@@ -100,6 +98,7 @@ class SqliteTriggerRepository(
 
                 (currentVersion(triggerId) as EventTrigger)
                     .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }

@@ -21,6 +21,11 @@ internal object CurrentTriggerProjection {
     private val projection = mutableMapOf<TriggerId, Trigger>()
 
     fun apply(trigger: Trigger) {
+        val values = projection.values.groupBy({ it.namespaceId }, { it.name }).toMutableMap()
+        values[trigger.namespaceId] = values[trigger.namespaceId]?.plus(trigger.name) ?: listOf(trigger.name)
+        val unique = values.all { it.value.size == it.value.toSet().size }
+        check(unique) { "Trigger name ${trigger.name} not unique in namespace ${trigger.namespaceId}" }
+
         projection[trigger.id] = trigger
     }
 
