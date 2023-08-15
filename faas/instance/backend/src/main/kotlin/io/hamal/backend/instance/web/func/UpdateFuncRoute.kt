@@ -2,6 +2,7 @@ package io.hamal.backend.instance.web.func
 
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.UpdateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class UpdateFuncRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val request: SubmitRequest,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @PutMapping("/v1/funcs/{funcId}")
     fun createFunc(
@@ -23,6 +25,7 @@ class UpdateFuncRoute(
         @RequestBody updateFunc: UpdateFuncReq
     ): ResponseEntity<ApiSubmittedReqWithId> {
         ensureFuncExists(funcId)
+        ensureNamespaceIdExists(updateFunc)
         val result = request(funcId, updateFunc)
         return ResponseEntity(result.let {
             ApiSubmittedReqWithId(
@@ -35,5 +38,9 @@ class UpdateFuncRoute(
 
     private fun ensureFuncExists(funcId: FuncId) {
         funcQueryRepository.get(funcId)
+    }
+
+    private fun ensureNamespaceIdExists(updateFunc: UpdateFuncReq) {
+        updateFunc.namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

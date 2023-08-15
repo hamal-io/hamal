@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.web.func
 
 import io.hamal.backend.instance.req.SubmitRequest
+import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -12,11 +13,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class CreateFuncRoute(
     private val request: SubmitRequest,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @PostMapping("/v1/funcs")
     fun createFunc(
         @RequestBody createFunc: CreateFuncReq
     ): ResponseEntity<ApiSubmittedReqWithId> {
+        ensureNamespaceIdExists(createFunc)
+
         val result = request(createFunc)
         return ResponseEntity(
             result.let {
@@ -27,5 +31,9 @@ class CreateFuncRoute(
                 )
             }, ACCEPTED
         )
+    }
+
+    private fun ensureNamespaceIdExists(createFunc: CreateFuncReq) {
+        createFunc.namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

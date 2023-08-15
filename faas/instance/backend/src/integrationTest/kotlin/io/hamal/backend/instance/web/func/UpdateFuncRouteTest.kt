@@ -6,8 +6,8 @@ import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.UpdateFuncReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
+import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
@@ -34,7 +34,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             )
             .execute()
 
-        assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.NotFound))
+        assertThat(getFuncResponse.statusCode, equalTo(NotFound))
         require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
 
         val error = getFuncResponse.error(ApiError::class)
@@ -94,6 +94,45 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("updatedInputs")))))
             assertThat(code, equalTo(CodeType("updatedCode")))
+        }
+    }
+
+    @Test
+    fun `Tries to update namespace id which does not exists`() {
+        val createdNamespace = namespaceCmdRepository.create(
+            CreateCmd(
+                id = CmdId(1),
+                namespaceId = NamespaceId(1),
+                name = NamespaceName("createdNamespace"),
+                inputs = NamespaceInputs()
+            )
+        )
+
+        val func = awaitCompleted(
+            createFunc(
+                CreateFuncReq(
+                    namespaceId = createdNamespace.id,
+                    name = FuncName("createdName"),
+                    inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
+                    code = CodeType("createdCode")
+                )
+            )
+        )
+
+        val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
+            .path("funcId", func.id)
+            .body(UpdateFuncReq(NamespaceId(12345)))
+            .execute()
+
+        assertThat(updateFuncResponse.statusCode, equalTo(NotFound))
+        require(updateFuncResponse is ErrorHttpResponse) { "request was successful" }
+
+        val error = updateFuncResponse.error(ApiError::class)
+        assertThat(error.message, equalTo("Namespace not found"))
+
+        with(getFunc(func.id(::FuncId))) {
+            assertThat(namespace.id, equalTo(createdNamespace.id))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
         }
     }
 

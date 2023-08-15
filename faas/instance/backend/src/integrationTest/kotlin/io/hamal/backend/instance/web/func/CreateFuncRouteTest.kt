@@ -4,10 +4,15 @@ import io.hamal.backend.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpStatusCode.NotFound
+import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.sdk.domain.ApiError
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
@@ -66,5 +71,28 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
                 assertThat(it.name, equalTo(NamespaceName("hamal::name::space")))
             }
         }
+    }
+
+    @Test
+    fun `Tries to create func with namespace which does not exist`() {
+
+        val response = httpTemplate.post("/v1/funcs")
+            .body(
+                CreateFuncReq(
+                    name = FuncName("test-func"),
+                    namespaceId = NamespaceId(12345),
+                    inputs = FuncInputs(TableType(StringType("hamal") to StringType("rocks"))),
+                    code = CodeType("13 + 37")
+                )
+            )
+            .execute()
+
+        assertThat(response.statusCode, equalTo(NotFound))
+        require(response is ErrorHttpResponse) { "request was successful" }
+
+        val error = response.error(ApiError::class)
+        assertThat(error.message, equalTo("Namespace not found"))
+
+        assertThat(listFuncs().funcs, empty())
     }
 }

@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.func
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
@@ -16,7 +16,7 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class BaseFuncRouteTest : BaseRouteTest() {
     fun createFunc(req: CreateFuncReq): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/funcs").body(req).execute()
-        assertThat(response.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
         return response.result(ApiSubmittedReqWithId::class)
     }
