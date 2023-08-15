@@ -40,6 +40,7 @@ interface FuncQueryRepository {
     fun get(funcId: FuncId) = find(funcId) ?: throw NoSuchElementException("Func not found")
     fun find(funcId: FuncId): Func?
     fun list(block: FuncQuery.() -> Unit): List<Func>
+    fun list(funcIds: List<FuncId>): List<Func> = funcIds.map(::get)
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1)

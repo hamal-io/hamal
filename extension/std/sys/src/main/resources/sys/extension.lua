@@ -94,6 +94,10 @@ function create_extension_factory()
             return internal.get_trigger(trigger_id)
         end
 
+        function export.trigger.list()
+            return internal.list_trigger()
+        end
+
         return export
     end
 end

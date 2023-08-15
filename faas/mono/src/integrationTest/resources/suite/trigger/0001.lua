@@ -22,6 +22,14 @@ local err, trigger = sys.trigger.get(create_trigger_req.id)
 assert(err == nil)
 
 assert(trigger.name == 'trigger-to-create')
+assert(trigger.func.name == "empty-test-func")
 assert(trigger.namespace.name == "hamal")
 assert(trigger.duration == "PT5S")
-assert(trigger.func.name == "empty-test-func")
+
+local err, triggers = sys.trigger.list()
+assert(err == nil)
+assert(#triggers == 1)
+
+assert(triggers[1].name == 'trigger-to-create')
+assert(triggers[1].func.name == 'empty-test-func')
+assert(triggers[1].namespace.name == "hamal")

@@ -6,30 +6,34 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableArray
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.ApiNamespaceList
+import io.hamal.lib.sdk.domain.ApiFuncList
 
-class ListNamespacesFunction(
+class ListFuncFunction(
     private val templateSupplier: () -> HttpTemplate
 ) : Function0In2Out<ErrorType, TableArray>(
     FunctionOutput2Schema(ErrorType::class, TableArray::class)
 ) {
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableArray?> {
-        val namespaces = try {
+        val funcs = try {
             templateSupplier()
-                .get("/v1/namespaces")
-                .execute(ApiNamespaceList::class)
-                .namespaces
-
+                .get("/v1/funcs")
+                .execute(ApiFuncList::class)
+                .funcs
         } catch (t: Throwable) {
             t.printStackTrace()
-            listOf()
+            listOf<ApiFuncList.ApiSimpleFunc>()
         }
 
+
         return null to ctx.tableCreateArray().also { rs ->
-            namespaces.forEach { namespace ->
+            funcs.forEach { func ->
                 val inner = ctx.tableCreateMap(2)
-                inner["id"] = namespace.id
-                inner["name"] = namespace.name.value
+                inner["id"] = func.id
+                inner["name"] = func.name.value
+                inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
+                    nt["id"] = func.namespace.id
+                    nt["name"] = func.namespace.name.value
+                }
                 rs.append(inner)
             }
         }

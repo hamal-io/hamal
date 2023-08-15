@@ -12,8 +12,15 @@ data class ApiTriggerList(
     data class ApiSimpleTrigger(
         val id: TriggerId,
         val name: TriggerName,
+        val func: Func,
         val namespace: Namespace
     ) {
+        @Serializable
+        data class Func(
+            val id: FuncId,
+            val name: FuncName
+        )
+
         @Serializable
         data class Namespace(
             val id: NamespaceId,
