@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableArray
+import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -18,11 +18,11 @@ import io.hamal.lib.web3.hml.http.HmlHttpBatchService
 
 class HmlExecuteFunction(
     private val config: ExtensionConfig
-) : Function1In2Out<TableArray, ErrorType, TableArray>(
-    FunctionInput1Schema(TableArray::class),
-    FunctionOutput2Schema(ErrorType::class, TableArray::class)
+) : Function1In2Out<TableTypeArray, ErrorType, TableTypeArray>(
+    FunctionInput1Schema(TableTypeArray::class),
+    FunctionOutput2Schema(ErrorType::class, TableTypeArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableArray): Pair<ErrorType?, TableArray?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableTypeArray): Pair<ErrorType?, TableTypeArray?> {
         try {
             val batchService = HmlHttpBatchService(HttpTemplate((config.value["host"] as StringType).value))
             ctx.pushNil()

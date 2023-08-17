@@ -21,10 +21,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over table map`() {
-        class TestIteratorFunction : Function1In0Out<TableMap>(
-            FunctionInput1Schema(TableMap::class)
+        class TestIteratorFunction : Function1In0Out<TableTypeMap>(
+            FunctionInput1Schema(TableTypeMap::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableMap) {
+            override fun invoke(ctx: FunctionContext, arg1: TableTypeMap) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -58,10 +58,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over empty table map`() {
-        class TestIteratorFunction : Function1In0Out<TableMap>(
-            FunctionInput1Schema(TableMap::class)
+        class TestIteratorFunction : Function1In0Out<TableTypeMap>(
+            FunctionInput1Schema(TableTypeMap::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableMap) {
+            override fun invoke(ctx: FunctionContext, arg1: TableTypeMap) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -88,10 +88,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over table array`() {
-        class TestIteratorFunction : Function1In0Out<TableArray>(
-            FunctionInput1Schema(TableArray::class)
+        class TestIteratorFunction : Function1In0Out<TableTypeArray>(
+            FunctionInput1Schema(TableTypeArray::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableArray) {
+            override fun invoke(ctx: FunctionContext, arg1: TableTypeArray) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -125,10 +125,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over empty table array`() {
-        class TestIteratorFunction : Function1In0Out<TableArray>(
-            FunctionInput1Schema(TableArray::class)
+        class TestIteratorFunction : Function1In0Out<TableTypeArray>(
+            FunctionInput1Schema(TableTypeArray::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableArray) {
+            override fun invoke(ctx: FunctionContext, arg1: TableTypeArray) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,

@@ -7,7 +7,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.HttpTemplateSupplier
@@ -15,11 +15,11 @@ import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 
 class InvokeAdhocFunction(
     private val templateSupplier: HttpTemplateSupplier
-) : Function1In2Out<TableMap, ErrorType, TableMap>(
-    FunctionInput1Schema(TableMap::class),
-    FunctionOutput2Schema(ErrorType::class, TableMap::class)
+) : Function1In2Out<TableTypeMap, ErrorType, TableTypeMap>(
+    FunctionInput1Schema(TableTypeMap::class),
+    FunctionOutput2Schema(ErrorType::class, TableTypeMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMap): Pair<ErrorType?, TableMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableTypeMap): Pair<ErrorType?, TableTypeMap?> {
         val r = InvokeAdhocReq(
             inputs = InvocationInputs(),
             code = CodeType(arg1.getString("code"))

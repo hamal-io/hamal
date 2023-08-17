@@ -3,8 +3,8 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.extension.*
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.AnyType
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
@@ -67,16 +67,16 @@ class Sandbox(
     override fun pushString(value: String) = state.pushString(value)
 
     override fun pushTable(value: TableType) = state.pushTable(value)
-    override fun pushTable(proxy: TableMap) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableArray) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableTypeMap) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableTypeArray) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableMap) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableArray) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableMap = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: TableTypeMap) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableTypeArray) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableTypeMap = state.getGlobalTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
@@ -99,7 +99,7 @@ internal fun State.registerGlobalExtension(extension: NativeExtension) {
     setGlobal(extension.name, result)
 }
 
-fun State.registerExtension(extension: NativeExtension): TableMap {
+fun State.registerExtension(extension: NativeExtension): TableTypeMap {
 
     val r = tableCreateMap(1)
     extension.values
@@ -116,7 +116,7 @@ fun State.registerExtension(extension: NativeExtension): TableMap {
     return r
 }
 
-fun State.createConfig(config: ExtensionConfig): TableMap {
+fun State.createConfig(config: ExtensionConfig): TableTypeMap {
 
     val result = tableCreateMap(1)
 

@@ -17,7 +17,7 @@ internal class TableArrayTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        lateinit var testInstance: TableArray
+        lateinit var testInstance: TableTypeArray
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(FalseValue) },

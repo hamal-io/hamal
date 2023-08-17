@@ -13,7 +13,7 @@ internal class TableMapTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        lateinit var testInstance: TableMap
+        lateinit var testInstance: TableTypeMap
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", TrueValue) },
@@ -51,7 +51,7 @@ internal class TableMapTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        lateinit var testInstance: TableMap
+        lateinit var testInstance: TableTypeMap
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(StringType("key")) },
@@ -82,7 +82,7 @@ internal class TableMapTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMap
+        lateinit var testInstance: TableTypeMap
         return listOf(
             { testInstance.getBooleanValue("key") },
             { testInstance.getBooleanValue(StringType("key")) },
@@ -113,7 +113,7 @@ internal class TableMapTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMap
+        lateinit var testInstance: TableTypeMap
         return listOf(
             { testInstance.getCode("key") },
             { testInstance.getCode(StringType("key")) },
@@ -137,7 +137,7 @@ internal class TableMapTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMap
+        lateinit var testInstance: TableTypeMap
         return listOf(
             { testInstance.getNumberValue("key") },
             { testInstance.getNumberValue(StringType("key")) },
@@ -177,7 +177,7 @@ internal class TableMapTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        lateinit var testInstance: TableMap
+        lateinit var testInstance: TableTypeMap
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringType("key")) },

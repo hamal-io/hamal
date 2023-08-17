@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.extension
 
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.Type
 
@@ -12,10 +12,10 @@ class ExtensionConfig(
 
 class ExtensionGetConfigFunction(
     val config: ExtensionConfig
-) : Function0In1Out<TableMap>(
-    FunctionOutput1Schema(TableMap::class)
+) : Function0In1Out<TableTypeMap>(
+    FunctionOutput1Schema(TableTypeMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext): TableMap {
+    override fun invoke(ctx: FunctionContext): TableTypeMap {
         val result = ctx.state.tableCreateMap(1)
         config.value.forEach { config ->
             val v = config.value
@@ -28,10 +28,10 @@ class ExtensionGetConfigFunction(
 
 class ExtensionUpdateConfigFunction(
     val config: ExtensionConfig
-) : Function1In0Out<TableMap>(
-    FunctionInput1Schema(TableMap::class)
+) : Function1In0Out<TableTypeMap>(
+    FunctionInput1Schema(TableTypeMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMap) {
+    override fun invoke(ctx: FunctionContext, arg1: TableTypeMap) {
         val state = ctx.state
         state.native.pushNil()
         while (state.native.tableNext(arg1.index)) {

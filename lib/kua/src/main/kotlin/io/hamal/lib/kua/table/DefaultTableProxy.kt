@@ -23,7 +23,7 @@ data class DefaultTableProxy(
     override val index: Int,
     val state: State,
     override val mode: TableProxy.Mode
-) : TableMap, TableArray {
+) : TableTypeMap, TableTypeArray {
 
     override fun unset(key: String): Int {
         native.pushString(key)
@@ -56,13 +56,13 @@ data class DefaultTableProxy(
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableMap): Int {
+    override fun set(key: String, value: TableTypeMap): Int {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
 
-    override fun set(key: String, value: TableArray): Int {
+    override fun set(key: String, value: TableTypeArray): Int {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
@@ -96,7 +96,7 @@ data class DefaultTableProxy(
         return StringType(native.toString(state.top.value)).also { native.pop(1) }
     }
 
-    override fun getTableMap(key: String): TableMap {
+    override fun getTableMap(key: String): TableTypeMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(TableType::class)
@@ -125,12 +125,12 @@ data class DefaultTableProxy(
         return state.tableAppend(index)
     }
 
-    override fun append(value: TableMap): Int {
+    override fun append(value: TableTypeMap): Int {
         state.pushTable(value)
         return state.tableAppend(index)
     }
 
-    override fun append(value: TableArray): Int {
+    override fun append(value: TableTypeArray): Int {
         state.pushTable(value)
         return state.tableAppend(index)
     }

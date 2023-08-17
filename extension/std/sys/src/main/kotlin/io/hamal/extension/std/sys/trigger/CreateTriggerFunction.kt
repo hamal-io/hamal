@@ -10,7 +10,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
@@ -18,11 +18,11 @@ import kotlin.time.Duration
 
 class CreateTriggerFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<TableMap, ErrorType, TableMap>(
-    FunctionInput1Schema(TableMap::class),
-    FunctionOutput2Schema(ErrorType::class, TableMap::class)
+) : Function1In2Out<TableTypeMap, ErrorType, TableTypeMap>(
+    FunctionInput1Schema(TableTypeMap::class),
+    FunctionOutput2Schema(ErrorType::class, TableTypeMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableMap): Pair<ErrorType?, TableMap> {
+    override fun invoke(ctx: FunctionContext, arg1: TableTypeMap): Pair<ErrorType?, TableTypeMap> {
         try {
 
             val type = TriggerType.valueOf(arg1.getString("type"))

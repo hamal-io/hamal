@@ -7,18 +7,18 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 
 class GetReqFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<StringType, ErrorType, TableMap>(
+) : Function1In2Out<StringType, ErrorType, TableTypeMap>(
     FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, TableMap::class)
+    FunctionOutput2Schema(ErrorType::class, TableTypeMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableTypeMap?> {
         val response = templateSupplier()
             .get("/v1/reqs/{reqId}")
             .path("reqId", arg1.value)

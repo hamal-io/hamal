@@ -2,8 +2,8 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.DefaultTableProxy
-import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
@@ -44,20 +44,20 @@ interface State {
     fun pushString(value: StringType) = pushString(value.value)
 
     fun pushTable(value: TableType): StackTop
-    fun pushTable(proxy: TableMap): StackTop
-    fun pushTable(proxy: TableArray): StackTop
+    fun pushTable(proxy: TableTypeMap): StackTop
+    fun pushTable(proxy: TableTypeArray): StackTop
     fun getTable(idx: Int): TableType
-    fun getTableMap(idx: Int): TableMap
-    fun getTableArray(idx: Int): TableArray
+    fun getTableMap(idx: Int): TableTypeMap
+    fun getTableArray(idx: Int): TableTypeArray
 
     fun setGlobal(name: String, value: FunctionType<*, *, *, *>)
-    fun setGlobal(name: String, value: TableMap)
-    fun setGlobal(name: String, value: TableArray)
-    fun getGlobalTableMap(name: String): TableMap
+    fun setGlobal(name: String, value: TableTypeMap)
+    fun setGlobal(name: String, value: TableTypeArray)
+    fun getGlobalTableMap(name: String): TableTypeMap
     fun unsetGlobal(name: String)
 
-    fun tableCreateMap(capacity: Int = 0): TableMap
-    fun tableCreateArray(capacity: Int = 0): TableArray
+    fun tableCreateMap(capacity: Int = 0): TableTypeMap
+    fun tableCreateArray(capacity: Int = 0): TableTypeArray
     fun tableAppend(idx: Int): Int
     fun tableSetRaw(idx: Int): Int
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
@@ -89,7 +89,7 @@ class ClosableState(
             is BooleanType -> pushBoolean(underlying)
             is NumberType -> pushNumber(underlying)
             is StringType -> pushString(underlying)
-            is TableArray -> pushTable(underlying)
+            is TableTypeArray -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
@@ -118,36 +118,36 @@ class ClosableState(
         TODO("Not yet implemented")
     }
 
-    override fun pushTable(proxy: TableMap) = StackTop(native.pushTop(proxy.index))
+    override fun pushTable(proxy: TableTypeMap) = StackTop(native.pushTop(proxy.index))
 
-    override fun pushTable(proxy: TableArray) = StackTop(native.pushTop(proxy.index))
+    override fun pushTable(proxy: TableTypeArray) = StackTop(native.pushTop(proxy.index))
 
     override fun getTable(idx: Int): TableType {
         TODO("Not yet implemented")
     }
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableMap = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Map)
+    override fun getTableMap(idx: Int): TableTypeMap = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Map)
 
     //FIXME type check
-    override fun getTableArray(idx: Int): TableArray = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Array)
+    override fun getTableArray(idx: Int): TableTypeArray = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Array)
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) {
         native.pushFunction(value)
         native.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: TableMap) {
+    override fun setGlobal(name: String, value: TableTypeMap) {
         native.pushTop(value.index)
         native.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: TableArray) {
+    override fun setGlobal(name: String, value: TableTypeArray) {
         native.pushTop(value.index)
         native.setGlobal(name)
     }
 
-    override fun getGlobalTableMap(name: String): TableMap {
+    override fun getGlobalTableMap(name: String): TableTypeMap {
         native.getGlobal(name)
         return getTableMap(top.value)
     }
@@ -157,7 +157,7 @@ class ClosableState(
         native.setGlobal(name)
     }
 
-    override fun tableCreateMap(capacity: Int): TableMap {
+    override fun tableCreateMap(capacity: Int): TableTypeMap {
         return DefaultTableProxy(
             index = native.tableCreate(0, capacity),
             state = this,
@@ -165,7 +165,7 @@ class ClosableState(
         )
     }
 
-    override fun tableCreateArray(capacity: Int): TableArray {
+    override fun tableCreateArray(capacity: Int): TableTypeArray {
         return DefaultTableProxy(
             index = native.tableCreate(capacity, 0),
             state = this,

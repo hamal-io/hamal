@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -68,10 +68,10 @@ internal class ErrorValueTest {
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableMap>(
-        FunctionInput1Schema(TableMap::class)
+    private object AssertMetatable : Function1In0Out<TableTypeMap>(
+        FunctionInput1Schema(TableTypeMap::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableMap) {
+        override fun invoke(ctx: FunctionContext, arg1: TableTypeMap) {
             assertThat(arg1.getInt("__type"), equalTo(20))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }

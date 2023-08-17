@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.table.TableArray
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -39,8 +39,8 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
     is NilType -> pushNil()
     is NumberType -> pushNumber(value)
     is StringType -> pushString(value)
-    is TableArray -> pushTop(value.index)
-    is TableMap -> pushTop(value.index)
+    is TableTypeArray -> pushTop(value.index)
+    is TableTypeMap -> pushTop(value.index)
     is AnyType -> pushAny(value)
     is ErrorType -> pushError(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")

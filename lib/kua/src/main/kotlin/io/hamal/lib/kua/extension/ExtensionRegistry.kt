@@ -2,7 +2,7 @@ package io.hamal.lib.kua.extension
 
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.TableMap
+import io.hamal.lib.kua.table.TableTypeMap
 
 
 class ExtensionRegistry(
@@ -11,7 +11,7 @@ class ExtensionRegistry(
 
     val state = sb.state
     val extensions = mutableMapOf<String, ScriptExtension>()
-    val extensionFactories = mutableMapOf<String, TableMap>()
+    val extensionFactories = mutableMapOf<String, TableTypeMap>()
 
     fun register(extension: ScriptExtension) {
         extensions[extension.name] = extension
@@ -21,7 +21,7 @@ class ExtensionRegistry(
 
     }
 
-    fun loadFactory(name: String): TableMap {
+    fun loadFactory(name: String): TableTypeMap {
         val extension = extensions[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreateMap(internals.size)
