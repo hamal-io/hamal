@@ -10,7 +10,7 @@ local step_size = 2
 local next_block_number = ctx.state.next_block_number
 
 if next_block_number == nil then
-    next_block_number = 17919151
+    next_block_number = 17932175
 end
 
 local requests = {}

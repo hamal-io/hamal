@@ -5,6 +5,17 @@ networks:
       config:
         - subnet: 10.42.0.0/16
 services:
+  bsc-proxy:
+    image: hamalio/proxy
+    restart:
+      unless-stopped
+    ports:
+      - "0.0.0.0:8001:8000"
+    volumes:
+      - "/mnt/proxy/bsc:/tmp/hamal/db"
+    networks:
+      - hamalnet
+
   eth-proxy:
     image: hamalio/proxy
     restart:
