@@ -19,7 +19,7 @@ class ListExecLogsRoute(
     @GetMapping("/v1/execs/{execId}/logs")
     fun getExecLogs(
         @PathVariable("execId") execId: ExecId,
-        @RequestParam(required = false, name = "after_id", defaultValue = "${Long.MAX_VALUE}") afterId: ExecLogId,
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecLogId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiExcLogList> {
         val logs = execLogQueryRepository.list(execId) {

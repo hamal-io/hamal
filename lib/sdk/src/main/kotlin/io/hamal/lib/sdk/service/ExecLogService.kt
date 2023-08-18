@@ -13,7 +13,8 @@ class DefaultExecLogService(val template: HttpTemplate) : ExecLogService {
 
     override fun append(execId: ExecId, cmd: AppendExecLogCmd) {
         template
-            .post("/v1/execs/${execId.value.value}/logs")
+            .post("/v1/execs/{execId}/logs")
+            .path("execId", execId)
             .body(cmd)
             .execute()
     }
