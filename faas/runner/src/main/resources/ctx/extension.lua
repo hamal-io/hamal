@@ -7,7 +7,7 @@ function create_extension_factory()
 
         function export.emit(event)
             -- FIXME topic must be separate from payload
-            internal.emit(event.topic, event)
+            internal.emit(event.topic or "", event)
         end
 
         return export

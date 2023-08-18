@@ -4,6 +4,7 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.kua.type.*
+import io.hamal.runner.TestFailConnector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.execute.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,6 +23,20 @@ internal class EmitTest : AbstractExecuteTest() {
         val eventsToEmit = executor.executionContext.emittedEvents
         assertThat(eventsToEmit, hasSize(0))
     }
+
+    @Test
+    fun `Emit event without topic`() {
+        val execute = createTestExecutor(
+            connector = TestFailConnector { err ->
+                assertThat(err, equalTo(ErrorType("Topic not present")))
+            }
+        )
+        execute(unitOfWork("ctx.emit({value='test-value'})"))
+
+        val eventsToEmit = execute.executionContext.emittedEvents
+        assertThat(eventsToEmit, hasSize(0))
+    }
+
 
     @Test
     fun `Emit event without payload`() {

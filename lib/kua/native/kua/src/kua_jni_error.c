@@ -31,14 +31,13 @@ throw_assert_error(char const *message) {
 
 
 int
-throw_extension_error(jstring message, jthrowable throwable) {
+throw_extension_error(jthrowable throwable) {
     JNIEnv *env = current_env();
 
     jthrowable kua_error = (*env)->NewObject(
             env,
             jni_ref().extension_error_class,
             jni_ref().extension_error_ctor_id,
-            message,
             throwable
     );
 

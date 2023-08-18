@@ -22,7 +22,7 @@ errorHandler(lua_State *L) {
             return 0;
         }
 
-        throw_extension_error((*env)->NewStringUTF(env, "TBD"), throwable); // FIXME
+        throw_extension_error(throwable);
         return 0;
     }
 

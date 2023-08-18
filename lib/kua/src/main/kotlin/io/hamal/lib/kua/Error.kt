@@ -8,5 +8,5 @@ class AssertionError(message: String) : Error(message)
 
 class ScriptError(message: String) : Error(message)
 
-class ExtensionError(message: String, cause: Throwable) : Error(message, cause)
+class ExtensionError(cause: Throwable) : Error(cause.message, cause)
 

@@ -53,7 +53,7 @@ setup_references(JNIEnv *env) {
     current_jni_ref.error_class = load_class(env, "java/lang/Error");
 
     current_jni_ref.extension_error_class = load_class(env, "io/hamal/lib/kua/ExtensionError");
-    current_jni_ref.extension_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.extension_error_class ,"<init>","(Ljava/lang/String;Ljava/lang/Throwable;)V");
+    current_jni_ref.extension_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.extension_error_class ,"<init>","(Ljava/lang/Throwable;)V");
 
     current_jni_ref.script_error_class = load_class(env, "io/hamal/lib/kua/ScriptError");
     current_jni_ref.script_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.script_error_class ,"<init>","(Ljava/lang/String;)V");

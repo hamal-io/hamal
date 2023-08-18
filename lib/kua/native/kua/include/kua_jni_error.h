@@ -17,7 +17,7 @@ int
 throw_assert_error(char const *message);
 
 int
-throw_extension_error(jstring message, jthrowable throwable);
+throw_extension_error(jthrowable throwable);
 
 int
 throw_script_error(char const *message);
