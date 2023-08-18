@@ -1,4 +1,4 @@
-package io.hamal.runner.execute
+package io.hamal.runner.run
 
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.extension.ScriptExtension
@@ -6,8 +6,8 @@ import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.kua.type.StringType
 import io.hamal.runner.extension.ctx.function.EmitFunction
 
-class ExecutionContextFactory(
-    private val executionContext: SandboxExecutionContext
+class RunnerContextFactory(
+    private val executionContext: RunnerSandboxContext
 ) : ScriptExtensionFactory {
     override fun create(): ScriptExtension {
         return ScriptExtension(

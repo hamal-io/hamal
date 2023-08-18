@@ -1,4 +1,4 @@
-package io.hamal.runner.execute
+package io.hamal.runner.run
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
@@ -18,7 +18,7 @@ internal abstract class AbstractExecuteTest(
     fun createTestExecutor(
         vararg testExtensions: Pair<String, Type>,
         connector: Connector = TestConnector()
-    ) = DefaultExecutor(
+    ) = DefaultCodeRunner(
         connector, object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)

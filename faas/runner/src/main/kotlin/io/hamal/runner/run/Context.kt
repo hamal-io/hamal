@@ -1,10 +1,10 @@
-package io.hamal.runner.execute
+package io.hamal.runner.run
 
 import io.hamal.lib.domain.Event
 import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
-class SandboxExecutionContext : SandboxContext {
+class RunnerSandboxContext : SandboxContext {
 
     val emittedEvents get() : List<Event> = eventsToEmit
 

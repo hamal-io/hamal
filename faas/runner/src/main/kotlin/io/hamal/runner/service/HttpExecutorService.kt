@@ -5,7 +5,7 @@ import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.connector.UnitOfWork
-import io.hamal.runner.execute.DefaultExecutor
+import io.hamal.runner.run.DefaultCodeRunner
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -25,7 +25,7 @@ class HttpExecutorService(
         val template = httpTemplateSupplier()
         val sdk = DefaultHamalSdk(template)
         val connector = HttpConnector(sdk)
-        val execute = DefaultExecutor(connector, sandboxFactory)
+        val execute = DefaultCodeRunner(connector, sandboxFactory)
         runnerExecutor.scheduleAtFixedRate({
             connector.poll().forEach { uow ->
 

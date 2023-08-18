@@ -6,10 +6,10 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.*
-import io.hamal.runner.execute.SandboxExecutionContext
+import io.hamal.runner.run.RunnerSandboxContext
 
 class EmitFunction(
-    private val executionCtx: SandboxExecutionContext
+    private val executionCtx: RunnerSandboxContext
 ) : Function2In0Out<StringType, TableTypeMap>(
     FunctionInput2Schema(StringType::class, TableTypeMap::class)
 ) {

@@ -1,4 +1,4 @@
-package io.hamal.runner.execute
+package io.hamal.runner.run
 
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
@@ -14,16 +14,16 @@ import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
 import logger
 
-interface Executor {
+interface CodeRunner {
     operator fun invoke(unitOfWork: UnitOfWork)
 }
 
-class DefaultExecutor(
+class DefaultCodeRunner(
     private val connector: Connector,
     private val sandboxFactory: SandboxFactory
-) : Executor {
+) : CodeRunner {
 
-    val executionContext = SandboxExecutionContext()
+    val executionContext = RunnerSandboxContext()
 
     override fun invoke(unitOfWork: UnitOfWork) {
         val execId = unitOfWork.id
@@ -35,7 +35,7 @@ class DefaultExecutor(
             sandboxFactory.create(executionContext)
                 .use { sandbox ->
 
-                    val ctxExtension = ExecutionContextFactory(executionContext).create()
+                    val ctxExtension = RunnerContextFactory(executionContext).create()
 
                     val internalTable = sandbox.state.tableCreateMap(ctxExtension.internals.size)
                     ctxExtension.internals.forEach { entry ->
@@ -82,6 +82,6 @@ class DefaultExecutor(
     }
 
     companion object {
-        private val log = logger(DefaultExecutor::class)
+        private val log = logger(DefaultCodeRunner::class)
     }
 }
