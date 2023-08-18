@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.builtin
 
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import org.junit.jupiter.api.Test
@@ -27,7 +27,7 @@ internal class ExtensionTest {
 
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox(DefaultSandboxContext()).also { sb ->
+        Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
                 ScriptExtension(
                     name = "test",

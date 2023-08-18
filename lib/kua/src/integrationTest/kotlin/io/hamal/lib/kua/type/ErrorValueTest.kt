@@ -1,7 +1,8 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
@@ -105,7 +106,7 @@ internal class ErrorValueTest {
     }
 
     private val sandbox = run {
-        NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox(DefaultSandboxContext())
+        NativeLoader.load(Resources)
+        Sandbox(NopSandboxContext())
     }
 }

@@ -62,3 +62,21 @@ val copyKuaLibs = tasks.register<Copy>("copyKuaLibs") {
 tasks.named<Test>("integrationTest") {
     dependsOn(copyKuaLibs)
 }
+
+@Suppress("UnstableApiUsage")
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(project(":lib:sdk"))
+                    implementation(project(":lib:kua"))
+                    implementation(project(":faas:runner"))
+
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                }
+            }
+        }
+    }
+}

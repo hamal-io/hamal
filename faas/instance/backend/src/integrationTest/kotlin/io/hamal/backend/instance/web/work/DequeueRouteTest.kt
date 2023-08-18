@@ -11,7 +11,7 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
     @Test
     fun `Nothing to dequeue`() {
         with(dequeue()) {
-            assertThat(execs, empty())
+            assertThat(work, empty())
         }
     }
 
@@ -23,9 +23,9 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
             code = CodeType("40 + 2")
         )
         with(dequeue()) {
-            assertThat(execs, hasSize(1))
+            assertThat(work, hasSize(1))
 
-            with(execs.first()) {
+            with(work.first()) {
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
                 assertThat(code, equalTo(CodeType("40 + 2")))
@@ -47,9 +47,9 @@ internal class DequeueRouteTest : BaseQueueRouteTest() {
             code = CodeType("40 + 2")
         )
         with(dequeue()) {
-            assertThat(execs, hasSize(1))
+            assertThat(work, hasSize(1))
 
-            with(execs.first()) {
+            with(work.first()) {
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(
                     correlation, equalTo(

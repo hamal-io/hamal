@@ -1171,7 +1171,7 @@ internal sealed class NativeTest {
 
     val testInstance: Native = run {
         NativeLoader.load(Resources)
-        Native(Sandbox(DefaultSandboxContext()))
+        Native(Sandbox(NopSandboxContext()))
     }
 
     fun verifyStackIsEmpty() {

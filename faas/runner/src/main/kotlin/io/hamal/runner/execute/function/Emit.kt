@@ -9,10 +9,10 @@ import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.SerializableType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
-import io.hamal.runner.execute.ExecutionContext
+import io.hamal.runner.execute.SandboxExecutionContext
 
 class EmitFunction(
-    private val executionCtx: ExecutionContext
+    private val executionCtx: SandboxExecutionContext
 ) : Function2In0Out<StringType, TableTypeMap>(
     FunctionInput2Schema(StringType::class, TableTypeMap::class)
 ) {

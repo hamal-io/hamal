@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.error
 
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
 import io.hamal.lib.kua.extension.NativeExtension
@@ -38,7 +38,7 @@ class ScriptErrorTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(DefaultSandboxContext()).also {
+        Sandbox(NopSandboxContext()).also {
             it.register(NativeExtension("test", mapOf("call" to CallbackFunction())))
         }
     }

@@ -72,7 +72,7 @@ class AssertTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(DefaultSandboxContext()).also {
+        Sandbox(NopSandboxContext()).also {
             it.register(
                 NativeExtension(
                     "test",

@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.ClosableState
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.type.NumberType
 import org.hamcrest.MatcherAssert.assertThat
@@ -86,6 +86,6 @@ internal class TableEntryIteratorTest {
 
     private val state = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        ClosableState(Sandbox(DefaultSandboxContext()).native)
+        ClosableState(Sandbox(NopSandboxContext()).native)
     }
 }

@@ -4,7 +4,7 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
-class ExecutionContext : SandboxContext {
+class SandboxExecutionContext : SandboxContext {
 
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
         store[clazz] = obj

@@ -1,9 +1,9 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.type.NumberType
@@ -240,6 +240,6 @@ internal class FunctionTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(DefaultSandboxContext())
+        Sandbox(NopSandboxContext())
     }
 }

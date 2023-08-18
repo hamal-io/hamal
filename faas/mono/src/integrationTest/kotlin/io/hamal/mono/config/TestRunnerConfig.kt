@@ -3,12 +3,12 @@ package io.hamal.mono.config
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.HttpTemplateSupplier
-import io.hamal.lib.sdk.domain.DequeueExecsResponse
 import io.hamal.runner.config.SandboxFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
@@ -27,9 +27,9 @@ class TestRunnerConfig {
     fun sandboxFactory(
         httpTemplateSupplier: HttpTemplateSupplier
     ): SandboxFactory = object : SandboxFactory {
-        override fun create(exec: DequeueExecsResponse.Exec): Sandbox {
+        override fun create(ctx: SandboxContext): Sandbox {
             NativeLoader.load(Resources)
-            val result = Sandbox(DefaultSandboxContext())
+            val result = Sandbox(NopSandboxContext())
             result.register(LogExtensionFactory(httpTemplateSupplier).create())
             result.register(SysExtensionFactory(httpTemplateSupplier).create())
             return result

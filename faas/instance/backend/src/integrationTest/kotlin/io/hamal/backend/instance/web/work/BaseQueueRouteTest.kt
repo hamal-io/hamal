@@ -6,17 +6,17 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
-import io.hamal.lib.sdk.domain.DequeueExecsResponse
+import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 
 internal sealed class BaseQueueRouteTest : BaseRouteTest() {
-    fun dequeue(): DequeueExecsResponse {
+    fun dequeue(): ApiUnitOfWorkList {
         val dequeueResponse = httpTemplate.post("/v1/dequeue").execute()
         MatcherAssert.assertThat(dequeueResponse.statusCode, Matchers.equalTo(HttpStatusCode.Ok))
 
         require(dequeueResponse is SuccessHttpResponse) { "request was not successful" }
-        return dequeueResponse.result(DequeueExecsResponse::class)
+        return dequeueResponse.result(ApiUnitOfWorkList::class)
     }
 
     fun adhoc(req: InvokeAdhocReq): ApiSubmittedReqWithId =

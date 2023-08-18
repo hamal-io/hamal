@@ -19,14 +19,15 @@ interface Executor {
 }
 
 class DefaultExecutor(
-    private val connector: Connector, private val sandboxFactory: SandboxFactory
+    private val connector: Connector,
+    private val sandboxFactory: SandboxFactory
 ) : Executor {
 
     override fun invoke(unitOfWork: UnitOfWork) {
         val execId = unitOfWork.id
         try {
             log.debug("Start execution: $execId")
-            val runnerContext = ExecutionContext()
+            val runnerContext = SandboxExecutionContext()
             runnerContext[ExecId::class] = unitOfWork.id
 
             sandboxFactory.create(runnerContext).use { sandbox ->

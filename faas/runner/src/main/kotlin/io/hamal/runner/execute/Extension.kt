@@ -7,7 +7,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.runner.extension.ctx.function.EmitFunction
 
 class ExecutionContextFactory(
-    private val executionContext: ExecutionContext
+    private val executionContext: SandboxExecutionContext
 ) : ScriptExtensionFactory {
     override fun create(): ScriptExtension {
         return ScriptExtension(

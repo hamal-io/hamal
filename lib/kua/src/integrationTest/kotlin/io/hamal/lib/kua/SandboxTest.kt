@@ -40,7 +40,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 internal sealed class BaseSandboxTest {
     val testInstance = run {
         NativeLoader.load(Resources)
-        Sandbox(DefaultSandboxContext())
+        Sandbox(NopSandboxContext())
     }
 
     fun verifyStackIsEmpty() {

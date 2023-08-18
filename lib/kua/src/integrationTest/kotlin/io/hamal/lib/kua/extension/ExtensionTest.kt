@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.extension
 
-import io.hamal.lib.kua.DefaultSandboxContext
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -38,7 +38,7 @@ internal class ExtensionTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(DefaultSandboxContext()).also { sb ->
+        Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
                 ScriptExtension(
                     name = "test",

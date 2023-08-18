@@ -208,7 +208,7 @@ internal class TableMapTest {
 
     private val state = run {
         NativeLoader.load(Resources)
-        ClosableState(Sandbox(DefaultSandboxContext()).native)
+        ClosableState(Sandbox(NopSandboxContext()).native)
     }
 
     private fun verifyStackIsEmpty() {
