@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.queue
+package io.hamal.backend.instance.web.work
 
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.InvokeAdhocReq

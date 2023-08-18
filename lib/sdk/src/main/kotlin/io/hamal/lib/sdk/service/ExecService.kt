@@ -8,10 +8,10 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.DequeueExecsResponse
+import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
 
 interface ExecService {
-    fun poll(): DequeueExecsResponse
+    fun poll(): ApiUnitOfWorkList
 
     //FIXME list of events to publish
     fun complete(
@@ -23,8 +23,8 @@ interface ExecService {
 }
 
 class DefaultExecService(val template: HttpTemplate) : ExecService {
-    override fun poll(): DequeueExecsResponse {
-        return template.post("/v1/dequeue").execute(DequeueExecsResponse::class)
+    override fun poll(): ApiUnitOfWorkList {
+        return template.post("/v1/dequeue").execute(ApiUnitOfWorkList::class)
     }
 
     override fun complete(

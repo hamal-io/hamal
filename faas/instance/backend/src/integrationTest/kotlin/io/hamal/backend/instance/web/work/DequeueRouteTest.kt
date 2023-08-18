@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.queue
+package io.hamal.backend.instance.web.work
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*

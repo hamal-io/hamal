@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class DequeueExecsResponse(
-    val execs: List<Exec>
+data class ApiUnitOfWorkList(
+    val work: List<ApiUnitOfWork>
 ) {
     @Serializable
-    data class Exec(
+    data class ApiUnitOfWork(
         val id: ExecId,
         val inputs: ExecInputs,
         val state: State,

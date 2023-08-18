@@ -1,4 +1,4 @@
-package io.hamal.runner.ctx.function
+package io.hamal.runner.extension.ctx.function
 
 import io.hamal.lib.domain.Event
 import io.hamal.lib.kua.function.Function2In0Out
@@ -9,9 +9,10 @@ import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.SerializableType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.TableType
+import io.hamal.runner.execute.ExecutionContext
 
 class EmitFunction(
-    val eventsCollector: MutableList<Event>
+    private val executionCtx: ExecutionContext
 ) : Function2In0Out<StringType, TableTypeMap>(
     FunctionInput2Schema(StringType::class, TableTypeMap::class)
 ) {
@@ -35,6 +36,6 @@ class EmitFunction(
         // FIXME make sure topic is set and string
         require(eventMap.containsKey(StringType("topic")))
 
-        eventsCollector.add(Event(TableType(eventMap)))
+        executionCtx.emit(Event(TableType(eventMap)))
     }
 }

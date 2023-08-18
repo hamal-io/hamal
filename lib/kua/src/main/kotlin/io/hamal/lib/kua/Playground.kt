@@ -2,6 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
 import io.hamal.lib.kua.function.FunctionType
+import kotlin.reflect.KClass
 
 fun Sandbox.registerGlobalFunction(name: String, function: FunctionType<*, *, *, *>) {
     setGlobal(name, function)
@@ -10,7 +11,11 @@ fun Sandbox.registerGlobalFunction(name: String, function: FunctionType<*, *, *,
 
 fun main() {
     NativeLoader.load(BuildDir)
-    Sandbox(DefaultSandboxContext()).also { sb ->
+    Sandbox(object : SandboxContext {
+        override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
+            TODO("Not yet implemented")
+        }
+    }).also { sb ->
 
 //        val registry = ExtensionRegistry(sb)
 //        registry.register(

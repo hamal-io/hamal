@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.web.queue
+package io.hamal.backend.instance.web.work
 
 import io.hamal.backend.instance.event.ExecutionStartedEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
@@ -8,8 +8,8 @@ import io.hamal.backend.repository.api.StartedExec
 import io.hamal.backend.repository.api.StateQueryRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
-import io.hamal.lib.sdk.domain.DequeueExecsResponse
-import io.hamal.lib.sdk.domain.DequeueExecsResponse.Exec
+import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
+import io.hamal.lib.sdk.domain.ApiUnitOfWorkList.ApiUnitOfWork
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,23 +18,23 @@ import java.math.BigInteger
 import java.security.SecureRandom
 
 @RestController
-class DequeueRoute(
+class PollRoute(
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
     private val eventEmitter: SystemEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
-    fun dequeue(): ResponseEntity<DequeueExecsResponse> {
+    fun dequeue(): ResponseEntity<ApiUnitOfWorkList> {
         val cmdId = CmdId(BigInteger(128, rnd))
         val result = execCmdRepository.start(StartCmd(cmdId)).also {
             emitEvents(cmdId, it)
         }
 
         return ResponseEntity(
-            DequeueExecsResponse(
-                execs = result.map { exec ->
+            ApiUnitOfWorkList(
+                work = result.map { exec ->
                     val state = exec.correlation?.let { stateQueryRepository.find(it)?.value } ?: State()
-                    Exec(
+                    ApiUnitOfWork(
                         id = exec.id,
                         correlation = exec.correlation,
                         inputs = exec.inputs,

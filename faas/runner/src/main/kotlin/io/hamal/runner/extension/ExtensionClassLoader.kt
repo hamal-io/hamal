@@ -1,4 +1,4 @@
-package io.hamal.runner.adapter
+package io.hamal.runner.extension
 
 import java.net.URL
 import java.net.URLClassLoader
