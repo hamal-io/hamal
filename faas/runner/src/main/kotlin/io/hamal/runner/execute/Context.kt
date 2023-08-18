@@ -6,6 +6,8 @@ import kotlin.reflect.KClass
 
 class SandboxExecutionContext : SandboxContext {
 
+    val emittedEvents get() : List<Event> = eventsToEmit
+
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
         store[clazz] = obj
     }
@@ -19,5 +21,5 @@ class SandboxExecutionContext : SandboxContext {
     }
 
     private val store = mutableMapOf<KClass<*>, Any>()
-    val eventsToEmit = mutableListOf<Event>()
+    private val eventsToEmit = mutableListOf<Event>()
 }

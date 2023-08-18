@@ -5,10 +5,7 @@ import io.hamal.lib.kua.function.Function2In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.table.TableTypeMap
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.SerializableType
-import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.*
 import io.hamal.runner.execute.SandboxExecutionContext
 
 class EmitFunction(
@@ -25,8 +22,11 @@ class EmitFunction(
             val k = ctx.getStringValue(-2)
             val v = ctx.getAny(-1)
             when (val n = v.value) {
+                is NilType -> eventMap[k] = n
                 is NumberType -> eventMap[k] = n
                 is StringType -> eventMap[k] = n
+                is BooleanType -> eventMap[k] = n
+
                 else -> TODO()
             }
             ctx.native.pop(1)

@@ -23,16 +23,19 @@ class DefaultExecutor(
     private val sandboxFactory: SandboxFactory
 ) : Executor {
 
+    val executionContext = SandboxExecutionContext()
+
     override fun invoke(unitOfWork: UnitOfWork) {
         val execId = unitOfWork.id
         try {
             log.debug("Start execution: $execId")
-            val runnerContext = SandboxExecutionContext()
-            runnerContext[ExecId::class] = unitOfWork.id
 
-            sandboxFactory.create(runnerContext).use { sandbox ->
+            executionContext[ExecId::class] = unitOfWork.id
 
-                    val ctxExtension = ExecutionContextFactory(runnerContext).create()
+            sandboxFactory.create(executionContext)
+                .use { sandbox ->
+
+                    val ctxExtension = ExecutionContextFactory(executionContext).create()
 
                     val internalTable = sandbox.state.tableCreateMap(ctxExtension.internals.size)
                     ctxExtension.internals.forEach { entry ->
@@ -52,7 +55,7 @@ class DefaultExecutor(
                     sandbox.load(unitOfWork.code)
                 }
 
-            connector.complete(execId, State(), runnerContext.eventsToEmit)
+            connector.complete(execId, State(), executionContext.emittedEvents)
             log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {
