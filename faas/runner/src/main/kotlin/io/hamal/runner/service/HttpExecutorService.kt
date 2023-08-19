@@ -35,6 +35,7 @@ class HttpExecutorService(
                         inputs = uow.inputs,
                         state = uow.state,
                         code = uow.code,
+                        invocation = uow.invocation,
                         correlation = uow.correlation
                     )
                 )

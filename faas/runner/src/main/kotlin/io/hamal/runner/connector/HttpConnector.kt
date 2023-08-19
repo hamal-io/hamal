@@ -1,5 +1,6 @@
 package io.hamal.runner.connector
 
+import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
@@ -17,6 +18,7 @@ class HttpConnector(
                 inputs = it.inputs,
                 state = it.state,
                 code = it.code,
+                invocation = AdhocInvocation(),
                 correlation = it.correlation
             )
         }
