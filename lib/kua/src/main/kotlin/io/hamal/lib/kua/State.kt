@@ -2,9 +2,9 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.DefaultTableProxy
+import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.table.TableTypeMap
-import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -39,7 +39,7 @@ interface State {
     fun pushNumber(value: NumberType) = pushNumber(value.value)
 
     fun getString(idx: Int): String
-    fun getStringValue(idx: Int) = StringType(getString(idx))
+    fun getStringType(idx: Int) = StringType(getString(idx))
     fun pushString(value: String): StackTop
     fun pushString(value: StringType) = pushString(value.value)
 
@@ -98,7 +98,7 @@ class ClosableState(
         return when (val type = type(idx)) {
             BooleanType::class -> AnyType(getBooleanValue(idx))
             NumberType::class -> AnyType(getNumberValue(idx))
-            StringType::class -> AnyType(getStringValue(idx))
+            StringType::class -> AnyType(getStringType(idx))
             TableType::class -> AnyType(getTableMap(idx)) // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
@@ -194,5 +194,5 @@ private fun luaToType(value: Int) = when (value) {
     3 -> NumberType::class
     4 -> StringType::class
     5 -> TableType::class
-    else -> TODO()
+    else -> TODO("$value not implemented yet")
 }

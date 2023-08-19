@@ -8,10 +8,7 @@ import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.type.AnyType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TrueValue
+import io.hamal.lib.kua.type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -28,7 +25,7 @@ internal class TableEntryIteratorTest {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getStringValue(index) },
+                    keyExtractor = { state, index -> state.getStringType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
@@ -65,7 +62,7 @@ internal class TableEntryIteratorTest {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getStringValue(index) },
+                    keyExtractor = { state, index -> state.getStringType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
@@ -118,6 +115,47 @@ internal class TableEntryIteratorTest {
                 [3] = true
             }
             
+            test.invoke(table)
+        """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `Iterate over nested table array`() {
+        class TestIteratorFunction : Function1In0Out<TableTypeArray>(
+            FunctionInput1Schema(TableTypeArray::class)
+        ) {
+            override fun invoke(ctx: FunctionContext, arg1: TableTypeArray) {
+                val testInstance = TableEntryIterator(
+                    -1,
+                    ctx,
+                    keyExtractor = { state, index -> state.getNumberValue(index) },
+                    valueExtractor = { state, index -> state.toTableType(state.getTableMap(index)) }
+                )
+
+                val resultCollector = mutableMapOf<NumberType, TableType>()
+                testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
+                assertThat(resultCollector.keys, hasSize(3))
+
+                val first = resultCollector[NumberType(1)]!!
+                assertThat(first.getStringType("type"), equalTo(StringType("call")))
+
+                val second = resultCollector[NumberType(2)]!!
+                assertThat(second.getStringType("type"), equalTo(StringType("get_block")))
+
+                val third = resultCollector[NumberType(3)]!!
+                assertThat(third.getStringType("type"), equalTo(StringType("version")))
+            }
+        }
+
+        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
+        sandbox.load(
+            """
+            local table = {
+                { type = 'call' },
+                { type = 'get_block' },
+                { type = 'version' }
+            }
             test.invoke(table)
         """.trimIndent()
         )

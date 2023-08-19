@@ -1,10 +1,11 @@
 import {
     ApiExecution,
-    ApiFunction,
     ApiListExecutions,
-    ApiListFunctions, ApiListTriggers,
+    ApiListTriggers,
     ApiSubmittedAdhocInvocation,
-    ApiSubmittedFunctionCreation, ApiSubmittedTriggerCreation, ApiTrigger, TriggerType
+    ApiSubmittedTriggerCreation,
+    ApiTrigger,
+    TriggerType
 } from "./types";
 
 
@@ -81,7 +82,8 @@ export interface SubmitCreateTriggerRequest {
     name: string;
     type: TriggerType;
     id: string;
-    duration: string;
+    duration?: string;
+    topicId?: string;
 }
 
 export async function createTrigger(req: SubmitCreateTriggerRequest): Promise<ApiSubmittedTriggerCreation> {
@@ -94,6 +96,7 @@ export async function createTrigger(req: SubmitCreateTriggerRequest): Promise<Ap
                 inputs: {},
                 funcId: req.id,
                 duration: req.duration,
+                topicId: req.topicId
             }
         )
     })

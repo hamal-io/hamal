@@ -154,7 +154,7 @@ data class DefaultTableProxy(
     override fun getStringValue(idx: Int): StringType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(StringType::class)
-        return state.getStringValue(-1)
+        return state.getStringType(-1)
     }
 
     private val native = state.native

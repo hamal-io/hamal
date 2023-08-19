@@ -18,8 +18,8 @@ internal class TableEntryIteratorTest {
         val testInstance = TableEntryIterator(
             index = emptyTableIndex,
             state = state,
-            keyExtractor = { state, index -> state.getStringValue(index) },
-            valueExtractor = { state, index -> state.getStringValue(index) }
+            keyExtractor = { state, index -> state.getStringType(index) },
+            valueExtractor = { state, index -> state.getStringType(index) }
         )
         assertThat(testInstance.hasNext(), equalTo(false))
 

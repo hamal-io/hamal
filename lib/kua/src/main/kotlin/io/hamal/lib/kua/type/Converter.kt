@@ -1,10 +1,13 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.table.TableEntryIterator
 import io.hamal.lib.kua.table.TableTypeMap
 
-fun Sandbox.convertTableMap(table: TableType): TableTypeMap =
+// FIXME State instead of Sandbox
+fun Sandbox.toTableMap(table: TableType): TableTypeMap =
     tableCreateMap(table.size).apply {
         table.forEach { entry ->
             when (val value = entry.value) {
@@ -17,3 +20,27 @@ fun Sandbox.convertTableMap(table: TableType): TableTypeMap =
             }
         }
     }
+
+
+fun State.toTableType(map: TableTypeMap): TableType {
+    val store = mutableMapOf<StringType, SerializableType>()
+
+    TableEntryIterator(
+        map.index,
+        this,
+        keyExtractor = { state, index ->
+            state.getStringType(index)
+        },
+        valueExtractor = { state, index ->
+            state.getAny(index)
+        }
+    ).forEach { (key, value) ->
+        when (value.value) {
+            is StringType -> store[key] = value.value
+            is NumberType -> store[key] = value.value
+            else -> TODO()
+        }
+    }
+
+    return TableType(store)
+}

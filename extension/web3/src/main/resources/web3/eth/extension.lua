@@ -20,6 +20,11 @@ function create_extension_factory()
             return { type = "get_block", block = block }
         end
 
+        function export.request.call(cmd)
+            cmd.type = "call"
+            return cmd
+        end
+
         function export.execute(requests)
             -- FIXME validate
             return internal.execute(requests)

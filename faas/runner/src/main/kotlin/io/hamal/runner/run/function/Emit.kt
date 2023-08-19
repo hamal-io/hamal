@@ -19,7 +19,7 @@ class EmitFunction(
         val eventMap = mutableMapOf<StringType, SerializableType>()
 
         while (ctx.state.native.tableNext(arg2.index)) {
-            val k = ctx.getStringValue(-2)
+            val k = ctx.getStringType(-2)
             val v = ctx.getAny(-1)
             when (val n = v.value) {
                 is NilType -> eventMap[k] = n

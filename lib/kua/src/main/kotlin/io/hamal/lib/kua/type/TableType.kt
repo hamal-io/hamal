@@ -58,6 +58,10 @@ data class TableType(
     }
 
 
+    fun getStringType(key: String) = entries[(StringType(key))]!! as StringType
+    fun getString(key: String) = (entries[(StringType(key))]!! as StringType).value
+    fun getLong(key: String) = (entries[(StringType(key))]!! as NumberType).value.toLong()
+
     fun remove(key: Int) {
         remove(NumberType(key))
     }
