@@ -1,5 +1,8 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventInvocation
+import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
@@ -17,5 +20,13 @@ class RunnerContextFactory(
                 "emit" to EmitFunction(executionContext)
             )
         )
+    }
+}
+
+private fun Invocation.triggerEvents(): List<Event> {
+    return if (this is EventInvocation) {
+        events
+    } else {
+        listOf()
     }
 }

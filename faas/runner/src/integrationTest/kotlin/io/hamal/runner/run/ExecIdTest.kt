@@ -20,11 +20,10 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 id = ExecId(1234),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeType("test.capture_string(ctx.exec_id)"),
+                code = CodeType("assert(ctx.exec_id == '4d2')"),
                 correlation = null
             )
         )
-        assertThat(stringCaptor.result, equalTo("4d2"))
     }
 
     @Test

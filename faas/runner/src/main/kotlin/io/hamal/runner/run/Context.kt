@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 class RunnerSandboxContext : SandboxContext {
 
-    val emittedEvents get() : List<Event> = eventsToEmit
+    val runnerEvents get() : List<Event> = eventsToEmit
 
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
         store[clazz] = obj
