@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.*
@@ -39,6 +40,19 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
     is NilType -> pushNil()
     is NumberType -> pushNumber(value)
     is StringType -> pushString(value)
+    is MapType -> {
+        val t = tableCreateMap(0)
+        value.entries.forEach { (mapKey, mapValue) ->
+            when (mapValue) {
+                is NilType -> t[mapKey] = NilType
+                is NumberType -> t[mapKey] = mapValue
+                is StringType -> t[mapKey] = mapValue
+                else -> TODO()
+            }
+        }
+        StackTop(t.index)
+    }
+
     is TableTypeArray -> pushTop(value.index)
     is TableTypeMap -> pushTop(value.index)
     is AnyType -> pushAny(value)

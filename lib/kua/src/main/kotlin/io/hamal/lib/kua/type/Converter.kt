@@ -44,3 +44,23 @@ fun State.toTableType(map: TableTypeMap): TableType {
 
     return TableType(store)
 }
+
+fun State.toMapType(map: TableTypeMap): MapType {
+    val store = mutableMapOf<String, SerializableType>()
+
+    TableEntryIterator(
+        index = map.index,
+        state = this,
+        keyExtractor = { state, index -> state.getStringType(index) },
+        valueExtractor = { state, index -> state.getAny(index) }
+    ).forEach { (key, value) ->
+        when (value.value) {
+            is NumberType -> store[key.value] = value.value
+            is StringType -> store[key.value] = value.value
+            is TableTypeMap -> store[key.value] = MapType()
+            else -> TODO("$value not implemented")
+        }
+    }
+
+    return MapType(store)
+}

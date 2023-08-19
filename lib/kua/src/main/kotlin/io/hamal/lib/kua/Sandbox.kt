@@ -81,6 +81,7 @@ class Sandbox(
     override fun getTable(idx: Int) = state.getTable(idx)
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
+    override fun getMapType(idx: Int) = state.getMapType(idx)
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableTypeMap) = state.setGlobal(name, value)

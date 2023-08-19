@@ -11,10 +11,6 @@ import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.toTableType
-import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
-import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthCallResponse
 import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResponse
 import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
@@ -50,26 +46,26 @@ class EthExecuteFunction(
 
                 val v = entry.value
 
-
-                when (v.getString("type")) {
-                    "get_block" -> {
-                        val block = v.getLong("block")
-                        batchService.getBlock(EthUint64(block))
-                        log.trace("Requesting block $block")
-                    }
-
-                    "call" -> {
-                        val block = v.getLong("block")
-                        batchService.call(
-                            EthBatchService.EthCallRequest(
-                                to = EthAddress(EthPrefixedHexString(v.getString("to"))),
-                                data = EthPrefixedHexString(v.getString("data")),
-                                blockNumber = EthUint64(block),
-                            )
-                        )
-                        log.trace("Requesting block $block")
-                    }
-                }
+                TODO()
+//                when (v.getString("type")) {
+//                    "get_block" -> {
+//                        val block = v.getLong("block")
+//                        batchService.getBlock(EthUint64(block))
+//                        log.trace("Requesting block $block")
+//                    }
+//
+//                    "call" -> {
+//                        val block = v.getLong("block")
+//                        batchService.call(
+//                            EthBatchService.EthCallRequest(
+//                                to = EthAddress(EthPrefixedHexString(v.getString("to"))),
+//                                data = EthPrefixedHexString(v.getString("data")),
+//                                blockNumber = EthUint64(block),
+//                            )
+//                        )
+//                        log.trace("Requesting block $block")
+//                    }
+//                }
             }
 
 //            ctx.pushNil()

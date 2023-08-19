@@ -7,19 +7,19 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 
 class InvokeAdhocFunction(
     private val templateSupplier: HttpTemplateSupplier
-) : Function1In2Out<TableTypeMap, ErrorType, TableTypeMap>(
-    FunctionInput1Schema(TableTypeMap::class),
-    FunctionOutput2Schema(ErrorType::class, TableTypeMap::class)
+) : Function1In2Out<MapType, ErrorType, MapType>(
+    FunctionInput1Schema(MapType::class),
+    FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableTypeMap): Pair<ErrorType?, TableTypeMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         val r = InvokeAdhocReq(
             inputs = InvocationInputs(),
             code = CodeType(arg1.getString("code"))
@@ -30,10 +30,10 @@ class InvokeAdhocFunction(
             .body(r)
             .execute(ApiSubmittedReqWithId::class)
 
-        return null to ctx.tableCreateMap(2).also {
-            it["req_id"] = res.reqId
-            it["status"] = res.status.name
-            it["id"] = res.id
+        return null to MapType().apply {
+            this["req_id"] = res.reqId
+            this["status"] = res.status.name
+            this["id"] = res.id
         }
     }
 }

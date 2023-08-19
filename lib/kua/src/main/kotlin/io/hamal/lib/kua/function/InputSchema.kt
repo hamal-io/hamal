@@ -1,13 +1,10 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.table.DefaultTableProxy
+import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.table.TableTypeMap
-import io.hamal.lib.kua.table.TableProxy
-import io.hamal.lib.kua.type.AnyType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.Type
+import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {
@@ -50,6 +47,7 @@ fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
         AnyType::class -> ctx.getAny(idx) as ARG
+        MapType::class -> ctx.getMapType(idx) as ARG
         NumberType::class -> ctx.getNumberValue(idx) as ARG
         StringType::class -> ctx.getStringType(idx) as ARG
         Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!

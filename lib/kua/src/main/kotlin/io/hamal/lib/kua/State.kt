@@ -3,6 +3,7 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.DefaultTableProxy
 import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableProxy.Mode.Map
 import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.*
@@ -49,6 +50,8 @@ interface State {
     fun getTable(idx: Int): TableType
     fun getTableMap(idx: Int): TableTypeMap
     fun getTableArray(idx: Int): TableTypeArray
+
+    fun getMapType(idx: Int): MapType
 
     fun setGlobal(name: String, value: FunctionType<*, *, *, *>)
     fun setGlobal(name: String, value: TableTypeMap)
@@ -127,10 +130,15 @@ class ClosableState(
     }
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableTypeMap = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Map)
+    override fun getTableMap(idx: Int): TableTypeMap = DefaultTableProxy(absIndex(idx), this, Map)
 
     //FIXME type check
     override fun getTableArray(idx: Int): TableTypeArray = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Array)
+
+    override fun getMapType(idx: Int): MapType {
+        val ref = DefaultTableProxy(absIndex(idx), this, Map)
+        return toMapType(ref)
+    }
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) {
         native.pushFunction(value)
@@ -161,7 +169,7 @@ class ClosableState(
         return DefaultTableProxy(
             index = native.tableCreate(0, capacity),
             state = this,
-            mode = TableProxy.Mode.Map
+            mode = Map
         )
     }
 
