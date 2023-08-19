@@ -20,7 +20,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val executor = createTestExecutor()
         executor(unitOfWork(""))
 
-        val eventsToEmit = executor.context.runnerEvents
+        val eventsToEmit = executor.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(0))
     }
 
@@ -33,7 +33,7 @@ internal class EmitTest : AbstractExecuteTest() {
         )
         execute(unitOfWork("ctx.emit({value='test-value'})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(0))
     }
 
@@ -43,7 +43,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val execute = createTestExecutor()
         execute(unitOfWork("ctx.emit({topic='test-topic'})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
@@ -56,7 +56,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val execute = createTestExecutor()
         execute(unitOfWork("ctx.emit({topic='test-topic', hamal=nil})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
@@ -75,7 +75,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val execute = createTestExecutor()
         execute(unitOfWork("ctx.emit({topic='test-topic', hamal='rocks'})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
@@ -95,7 +95,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val execute = createTestExecutor()
         execute(unitOfWork("ctx.emit({topic='test-topic', answer=42})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
@@ -115,7 +115,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val execute = createTestExecutor()
         execute(unitOfWork("ctx.emit({topic='test-topic', true_value=true, false_value=false})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
@@ -137,7 +137,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val execute = createTestExecutor()
         execute(unitOfWork("ctx.emit({topic='test-topic', nested_table = { value = 23 }})"))
 
-        val eventsToEmit = execute.context.runnerEvents
+        val eventsToEmit = execute.context.runnerEmittedEvents
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {

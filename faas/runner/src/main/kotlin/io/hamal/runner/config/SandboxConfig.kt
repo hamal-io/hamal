@@ -37,12 +37,11 @@ class RunnerSandboxFactory(
         val template = HttpTemplate(instanceHost) // FIXME sdk instead
         val sdk = DefaultHamalSdk(template)
 
-        return Sandbox(ctx).also {
-            it.register(LogExtensionFactory(sdk.execLogService).create())
-            it.register(SysExtensionFactory { template }.create())
-            it.register(EthExtensionFactory().create())
-            it.register(HmlExtensionFactory().create())
-        }
+        return Sandbox(ctx).register(
+            LogExtensionFactory(sdk.execLogService),
+            SysExtensionFactory { template },
+            EthExtensionFactory(),
+            HmlExtensionFactory()
+        )
     }
-
 }

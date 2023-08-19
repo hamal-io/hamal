@@ -1,5 +1,6 @@
 package io.hamal.extension.web3.eth
 
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
@@ -12,7 +13,7 @@ class EthExtensionFactory : ScriptExtensionFactory {
         )
     )
 
-    override fun create(): ScriptExtension {
+    override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
             name = "web3.eth",
             config = config,

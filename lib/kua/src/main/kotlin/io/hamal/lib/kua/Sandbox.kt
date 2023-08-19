@@ -29,6 +29,14 @@ class Sandbox(
 
     fun register(extension: NativeExtension) = state.registerGlobalExtension(extension)
 
+    fun register(vararg factories: ExtensionFactory<*>): Sandbox {
+        factories.map { it.create(this) }.forEach { extension ->
+            check(extension is ScriptExtension)
+            this.register(extension)
+        }
+        return this
+    }
+
     fun load(code: CodeType) = load(code.value)
 
     override fun load(code: String) = native.load(code)
@@ -40,6 +48,7 @@ class Sandbox(
     fun register(extension: ScriptExtension) {
         registry.register(extension)
     }
+
 
     override fun close() {
         state.close()

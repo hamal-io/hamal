@@ -31,10 +31,10 @@ class TestRunnerConfig {
         override fun create(ctx: SandboxContext): Sandbox {
             NativeLoader.load(Resources)
             val sdk = DefaultHamalSdk(httpTemplateSupplier())
-            val result = Sandbox(NopSandboxContext())
-            result.register(LogExtensionFactory(sdk.execLogService).create())
-            result.register(SysExtensionFactory(httpTemplateSupplier).create())
-            return result
+            return Sandbox(NopSandboxContext()).register(
+                LogExtensionFactory(sdk.execLogService),
+                SysExtensionFactory(httpTemplateSupplier)
+            )
         }
     }
 }

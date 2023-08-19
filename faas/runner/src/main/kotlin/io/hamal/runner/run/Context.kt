@@ -5,8 +5,7 @@ import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
 class RunnerSandboxContext : SandboxContext {
-
-    val runnerEvents get() : List<Event> = eventsToEmit
+    val runnerEmittedEvents get() : List<Event> = eventsToEmit
 
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
         store[clazz] = obj

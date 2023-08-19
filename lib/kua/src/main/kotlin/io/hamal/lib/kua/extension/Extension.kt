@@ -1,9 +1,10 @@
 package io.hamal.lib.kua.extension
 
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.type.Type
 
 sealed interface ExtensionFactory<EXTENSION : Extension> {
-    fun create(): EXTENSION
+    fun create(sandbox: Sandbox): EXTENSION
 }
 
 sealed interface Extension {

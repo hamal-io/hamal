@@ -15,7 +15,7 @@ internal class LogTest : AbstractExtensionTest() {
     @Test
     fun `Log Trace`() {
         val testService = TestExecLogService()
-        val execute = createTestExecutor(LogExtensionFactory(testService).create())
+        val execute = createTestExecutor(LogExtensionFactory(testService))
         execute(unitOfWork("local log = require('log'); log.trace('a trace message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
@@ -28,7 +28,7 @@ internal class LogTest : AbstractExtensionTest() {
     @Test
     fun `Log Debug`() {
         val testService = TestExecLogService()
-        val execute = createTestExecutor(LogExtensionFactory(testService).create())
+        val execute = createTestExecutor(LogExtensionFactory(testService))
         execute(unitOfWork("local log = require('log'); log.debug('a debug message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
@@ -41,7 +41,7 @@ internal class LogTest : AbstractExtensionTest() {
     @Test
     fun `Log Info`() {
         val testService = TestExecLogService()
-        val execute = createTestExecutor(LogExtensionFactory(testService).create())
+        val execute = createTestExecutor(LogExtensionFactory(testService))
         execute(unitOfWork("local log = require('log'); log.info('an info message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
@@ -54,7 +54,7 @@ internal class LogTest : AbstractExtensionTest() {
     @Test
     fun `Log Warn`() {
         val testService = TestExecLogService()
-        val execute = createTestExecutor(LogExtensionFactory(testService).create())
+        val execute = createTestExecutor(LogExtensionFactory(testService))
         execute(unitOfWork("local log = require('log'); log.warn('a warning message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
@@ -67,7 +67,7 @@ internal class LogTest : AbstractExtensionTest() {
     @Test
     fun `Log Error`() {
         val testService = TestExecLogService()
-        val execute = createTestExecutor(LogExtensionFactory(testService).create())
+        val execute = createTestExecutor(LogExtensionFactory(testService))
         execute(unitOfWork("local log = require('log'); log.error('an error message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
@@ -80,7 +80,7 @@ internal class LogTest : AbstractExtensionTest() {
     @Test
     fun `Log Fatal`() {
         val testService = TestExecLogService()
-        val execute = createTestExecutor(LogExtensionFactory(testService).create())
+        val execute = createTestExecutor(LogExtensionFactory(testService))
         execute(unitOfWork("local log = require('log'); log.fatal('a fatal message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))

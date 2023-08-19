@@ -4,6 +4,7 @@ import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
 import io.hamal.lib.domain.vo.LocalAt
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.kua.function.Function2In1Out
@@ -22,7 +23,7 @@ val log = logger(LogFunction::class)
 class LogExtensionFactory(
     private val execLogService: ExecLogService
 ) : ScriptExtensionFactory {
-    override fun create(): ScriptExtension {
+    override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
             name = "log",
             internals = mapOf(

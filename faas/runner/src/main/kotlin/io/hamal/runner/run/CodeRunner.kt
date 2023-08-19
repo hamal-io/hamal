@@ -7,6 +7,8 @@ import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -40,7 +42,7 @@ class DefaultCodeRunner(
             sandboxFactory.create(executionContext)
                 .use { sandbox ->
 
-                    val ctxExtension = RunnerContextFactory(executionContext).create()
+                    val ctxExtension = RunnerContextFactory(executionContext).create(sandbox)
 
                     val internalTable = sandbox.state.tableCreateMap(ctxExtension.internals.size)
                     ctxExtension.internals.forEach { entry ->
@@ -48,9 +50,13 @@ class DefaultCodeRunner(
                             is StringType -> internalTable[entry.key] = value
                             is NumberType -> internalTable[entry.key] = value
                             is FunctionType<*, *, *, *> -> internalTable[entry.key] = value
+                            is TableTypeArray -> internalTable[entry.key] = value
+                            is TableTypeMap -> internalTable[entry.key] = value
+
                             else -> TODO()
                         }
                     }
+
 
                     sandbox.setGlobal("_internal", internalTable)
                     sandbox.state.load(ctxExtension.init)
@@ -60,10 +66,11 @@ class DefaultCodeRunner(
                     sandbox.load(unitOfWork.code)
                 }
 
-            connector.complete(execId, State(), executionContext.runnerEvents)
+            connector.complete(execId, State(), executionContext.runnerEmittedEvents)
             log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {
+            e.printStackTrace()
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {
@@ -78,9 +85,11 @@ class DefaultCodeRunner(
                 log.debug("Failed exec: $execId")
             }
         } catch (a: AssertionError) {
+            a.printStackTrace()
             connector.fail(execId, ErrorType(a.message ?: "Unknown reason"))
             log.debug("Assertion error: $execId - ${a.message}")
         } catch (t: Throwable) {
+            t.printStackTrace()
             connector.fail(execId, ErrorType(t.message ?: "Unknown reason"))
             log.debug("Failed exec: $execId")
         }

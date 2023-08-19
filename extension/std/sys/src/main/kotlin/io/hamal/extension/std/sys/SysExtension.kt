@@ -12,6 +12,7 @@ import io.hamal.extension.std.sys.topic.ListTopicFunction
 import io.hamal.extension.std.sys.trigger.CreateTriggerFunction
 import io.hamal.extension.std.sys.trigger.GetTriggerFunction
 import io.hamal.extension.std.sys.trigger.ListTriggerFunction
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.sdk.HttpTemplateSupplier
@@ -19,7 +20,7 @@ import io.hamal.lib.sdk.HttpTemplateSupplier
 class SysExtensionFactory(
     private val templateSupplier: HttpTemplateSupplier
 ) : ScriptExtensionFactory {
-    override fun create(): ScriptExtension {
+    override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
             name = "sys",
             internals = mapOf(
