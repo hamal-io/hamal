@@ -1,0 +1,67 @@
+import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContext
+import io.hamal.lib.kua.extension.ScriptExtension
+import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.runner.config.SandboxFactory
+import io.hamal.runner.connector.Connector
+import io.hamal.runner.connector.UnitOfWork
+import io.hamal.runner.run.DefaultCodeRunner
+
+class TestConnector : Connector {
+    override fun poll(): List<UnitOfWork> {
+        TODO()
+    }
+
+    override fun complete(execId: ExecId, state: State, events: List<Event>) {}
+    override fun fail(execId: ExecId, error: ErrorType) {
+        org.junit.jupiter.api.fail { error.message }
+    }
+}
+
+class TestFailConnector(
+    val block: (ErrorType) -> Unit = {}
+) : Connector {
+    override fun poll(): List<UnitOfWork> {
+        TODO()
+    }
+
+    override fun complete(execId: ExecId, state: State, events: List<Event>) {
+        org.junit.jupiter.api.fail { "Test expected to fail" }
+    }
+
+    override fun fail(execId: ExecId, error: ErrorType) {
+        block(error)
+    }
+}
+
+
+abstract class AbstractExtensionTest {
+    fun createTestExecutor(
+        testInstance: ScriptExtension,
+        connector: Connector = TestConnector()
+    ) = DefaultCodeRunner(
+        connector, object : SandboxFactory {
+            override fun create(ctx: SandboxContext): Sandbox {
+                NativeLoader.load(Resources)
+                return Sandbox(ctx).also {
+                    it.register(testInstance)
+                }
+            }
+        }
+    )
+
+    fun unitOfWork(code: String) = UnitOfWork(
+        id = ExecId(1234),
+        inputs = ExecInputs(),
+        state = State(),
+        code = CodeType(code),
+        correlation = null
+    )
+}

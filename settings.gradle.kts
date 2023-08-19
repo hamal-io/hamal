@@ -48,8 +48,9 @@ include(":faas:mono")
 include(":faas:runner")
 
 include(":extension:std:debug")
-include(":extension:std:sys")
 include(":extension:std:log")
+include(":extension:std:test")
+include(":extension:std:sys")
 include(":extension:starter")
 include(":extension:web3")
 

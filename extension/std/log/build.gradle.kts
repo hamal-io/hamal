@@ -14,11 +14,11 @@ distributions {
                 fileMode = 644
             }
             from("src/main/kotlin") {  // Contents of this directory are copied by default
-                dirMode = 755;
+                dirMode = 755
                 fileMode = 644
             }
             from("src/main/resources") {  // Contents of this directory are copied by default
-                dirMode = 755;
+                dirMode = 755
                 fileMode = 644
             }
         }
@@ -28,4 +28,19 @@ distributions {
 dependencies {
     implementation(project(":lib:kua"))
     implementation(project(":lib:sdk"))
+}
+
+
+@Suppress("UnstableApiUsage")
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(project(":extension:std:test"))
+                    implementation(project(":extension:std:log"))
+                }
+            }
+        }
+    }
 }

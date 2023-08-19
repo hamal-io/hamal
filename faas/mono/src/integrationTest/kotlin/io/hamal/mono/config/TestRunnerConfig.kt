@@ -8,6 +8,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
+import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.runner.config.SandboxFactory
 import org.springframework.beans.factory.annotation.Value
@@ -29,8 +30,9 @@ class TestRunnerConfig {
     ): SandboxFactory = object : SandboxFactory {
         override fun create(ctx: SandboxContext): Sandbox {
             NativeLoader.load(Resources)
+            val sdk = DefaultHamalSdk(httpTemplateSupplier())
             val result = Sandbox(NopSandboxContext())
-            result.register(LogExtensionFactory(httpTemplateSupplier).create())
+            result.register(LogExtensionFactory(sdk.execLogService).create())
             result.register(SysExtensionFactory(httpTemplateSupplier).create())
             return result
         }

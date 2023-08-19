@@ -12,29 +12,29 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HttpTemplateSupplier
 import io.hamal.lib.sdk.domain.AppendExecLogCmd
-import io.hamal.lib.sdk.service.DefaultExecLogService
+import io.hamal.lib.sdk.service.ExecLogService
 import logger
 
 
 val log = logger(LogFunction::class)
 
 class LogExtensionFactory(
-    private val templateSupplier: HttpTemplateSupplier
+    private val execLogService: ExecLogService
 ) : ScriptExtensionFactory {
     override fun create(): ScriptExtension {
         return ScriptExtension(
             name = "log",
             internals = mapOf(
-                "log" to LogFunction(templateSupplier),
+                "log" to LogFunction(execLogService),
             )
         )
     }
 }
 
 class LogFunction(
-    private val templateSupplier: HttpTemplateSupplier
+//    private val templateSupplier: HttpTemplateSupplier
+    private val execLogService: ExecLogService
 ) : Function2In1Out<StringType, StringType, ErrorType>(
     FunctionInput2Schema(StringType::class, StringType::class),
     FunctionOutput1Schema(ErrorType::class)
@@ -44,21 +44,18 @@ class LogFunction(
         val level = ExecLogLevel.valueOf(arg1.value)
         val message = ExecLogMessage(arg2.value)
 
-
         if (level == ExecLogLevel.Info) {
             log.info(message.value)
         }
 
-
-        DefaultExecLogService(templateSupplier())
-            .append(
-                ctx[ExecId::class],
-                AppendExecLogCmd(
-                    level = level,
-                    message = message,
-                    localAt = LocalAt.now()
-                )
+        execLogService.append(
+            ctx[ExecId::class],
+            AppendExecLogCmd(
+                level = level,
+                message = message,
+                localAt = LocalAt.now()
             )
+        )
 
         return null
     }
