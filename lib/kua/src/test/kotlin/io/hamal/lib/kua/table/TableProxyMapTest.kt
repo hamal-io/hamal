@@ -13,7 +13,7 @@ internal class TableProxyMapTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeMap
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", TrueValue) },
@@ -51,7 +51,7 @@ internal class TableProxyMapTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeMap
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(StringType("key")) },
@@ -82,7 +82,7 @@ internal class TableProxyMapTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeMap
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getBooleanValue("key") },
             { testInstance.getBooleanValue(StringType("key")) },
@@ -113,7 +113,7 @@ internal class TableProxyMapTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeMap
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getCode("key") },
             { testInstance.getCode(StringType("key")) },
@@ -137,7 +137,7 @@ internal class TableProxyMapTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeMap
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getNumberValue("key") },
             { testInstance.getNumberValue(StringType("key")) },
@@ -177,7 +177,7 @@ internal class TableProxyMapTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeMap
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringType("key")) },

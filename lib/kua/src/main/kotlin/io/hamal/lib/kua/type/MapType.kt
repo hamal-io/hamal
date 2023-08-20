@@ -18,12 +18,16 @@ data class MapType(
     val entries: MutableMap<String, SerializableType> = mutableMapOf(),
 ) : SerializableType {
 
+    val size get() = entries.size
+
+    operator fun get(key: String): SerializableType = entries[key] ?: NilType
+
     fun unset(key: StringType) = unset(key.value)
     operator fun set(key: String, value: NilType) = unset(key)
     operator fun set(key: StringType, value: NilType) = unset(key.value)
     fun unset(key: String): Int {
         entries.remove(key)
-        return entries.size
+        return size
     }
 
     fun getBooleanValue(key: StringType) = getBooleanValue(key.value)
@@ -39,14 +43,14 @@ data class MapType(
     operator fun set(key: String, value: Boolean) = set(key, booleanOf(value))
     operator fun set(key: String, value: BooleanType): Int {
         entries[key] = value
-        return entries.size
+        return size
     }
 
 
     operator fun set(key: StringType, value: CodeType) = set(key.value, value)
     operator fun set(key: String, value: CodeType): Int {
         entries[key] = value
-        return entries.size
+        return size
     }
 
     operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
@@ -54,7 +58,6 @@ data class MapType(
     operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
     operator fun set(key: StringType, value: SnowflakeId) = set(key.value, value.value.toString(16))
 
-    fun getNumberValue(key: StringType): NumberType = getNumberValue(key.value)
     fun getInt(key: String): Int = getNumberValue(key).value.toInt()
     fun getInt(key: StringType) = getInt(key.value)
     fun getLong(key: String): Long = getNumberValue(key).value.toLong()
@@ -63,6 +66,7 @@ data class MapType(
     fun getFloat(key: StringType): Float = getFloat(key.value)
     fun getDouble(key: String): Double = getNumberValue(key).value
     fun getDouble(key: StringType): Double = getDouble(key.value)
+    fun getNumberValue(key: StringType): NumberType = getNumberValue(key.value)
     fun getNumberValue(key: String): NumberType {
         checkExpectedType(key, NumberType::class)
         return entries[key]!! as NumberType
@@ -75,12 +79,12 @@ data class MapType(
     operator fun set(key: StringType, value: NumberType) = set(key.value, value.value)
     operator fun set(key: String, value: NumberType): Int {
         entries[key] = value
-        return entries.size
+        return size
     }
 
     operator fun set(key: String, value: MapType): Int {
         entries[key] = value
-        return entries.size
+        return size
     }
 
     fun getStringValue(key: StringType) = getStringValue(key.value)
@@ -95,7 +99,7 @@ data class MapType(
     operator fun set(key: StringType, value: StringType) = set(key.value, value.value)
     operator fun set(key: String, value: StringType): Int {
         entries[key] = value
-        return entries.size
+        return size
     }
 
     fun type(key: String): KClass<out Type> {

@@ -6,7 +6,7 @@ import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -69,10 +69,10 @@ internal class ErrorValueTest {
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableTypeMap>(
-        FunctionInput1Schema(TableTypeMap::class)
+    private object AssertMetatable : Function1In0Out<TableProxyMap>(
+        FunctionInput1Schema(TableProxyMap::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableTypeMap) {
+        override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
             assertThat(arg1.getInt("__type"), equalTo(20))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }

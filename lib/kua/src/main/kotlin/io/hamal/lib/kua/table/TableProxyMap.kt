@@ -7,7 +7,7 @@ import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
 //FIXME fix this interface
-interface TableTypeMap : TableProxy {
+interface TableProxyMap : TableProxy {
     fun unset(key: String): Int
     fun unset(key: StringType) = unset(key.value)
     operator fun set(key: String, value: NilType) = unset(key)
@@ -39,7 +39,7 @@ interface TableTypeMap : TableProxy {
     operator fun set(key: String, value: FunctionType<*, *, *, *>): Int
     operator fun set(key: StringType, value: FunctionType<*, *, *, *>) = set(key.value, value)
 
-    operator fun set(key: String, value: TableTypeMap): Int
+    operator fun set(key: String, value: TableProxyMap): Int
     operator fun set(key: String, value: TableProxyArray): Int
 
     fun getBooleanValue(key: String): BooleanType
@@ -66,7 +66,7 @@ interface TableTypeMap : TableProxy {
     fun getString(key: String): String = getStringValue(key).value
     fun getString(key: StringType): String = getString(key.value)
 
-    fun getTableMap(key: String): TableTypeMap
+    fun getTableMap(key: String): TableProxyMap
 
     fun type(key: String): KClass<out Type>
 }

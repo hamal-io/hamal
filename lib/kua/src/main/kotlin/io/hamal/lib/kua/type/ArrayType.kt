@@ -18,9 +18,11 @@ data class ArrayType(
     val entries: MutableMap<Int, SerializableType> = mutableMapOf(),
 ) : SerializableType {
 
+    val size get() = entries.size
+
     fun append(value: ArrayType): Int {
         entries[entries.size + 1] = value
-        return entries.size
+        return size
     }
 
     fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
@@ -32,15 +34,19 @@ data class ArrayType(
     fun append(value: Boolean) = append(booleanOf(value))
     fun append(value: BooleanType): Int {
         entries[entries.size + 1] = value
-        return entries.size
+        return size
     }
 
-    //
-//    fun getNumberValue(idx: Int): NumberType
-//    fun getInt(idx: Int) = getNumberValue(idx).value.toInt()
-//    fun getLong(idx: Int) = getNumberValue(idx).value.toLong()
-//    fun getFloat(idx: Int) = getNumberValue(idx).value.toFloat()
-//    fun getDouble(idx: Int) = getNumberValue(idx).value.toDouble()
+
+    fun getInt(idx: Int) = getNumberType(idx).value.toInt()
+    fun getLong(idx: Int) = getNumberType(idx).value.toLong()
+    fun getFloat(idx: Int) = getNumberType(idx).value.toFloat()
+    fun getDouble(idx: Int) = getNumberType(idx).value.toDouble()
+    fun getNumberType(idx: Int): NumberType {
+        checkExpectedType(idx, NumberType::class)
+        return entries[idx]!! as NumberType
+    }
+
 
     fun append(value: Int) = append(value.toDouble())
     fun append(value: Long) = append(value.toDouble())
@@ -48,7 +54,7 @@ data class ArrayType(
     fun append(value: Double) = append(NumberType(value))
     fun append(value: NumberType): Int {
         entries[entries.size + 1] = value
-        return entries.size
+        return size
     }
 
     fun append(value: SnowflakeId) = append(value.value.toString(16))
@@ -60,14 +66,14 @@ data class ArrayType(
 
     fun append(value: MapType): Int {
         entries[entries.size + 1] = value
-        return entries.size
+        return size
     }
 
 
     fun append(value: String) = append(StringType(value))
     fun append(value: StringType): Int {
         entries[entries.size + 1] = value
-        return entries.size
+        return size
     }
 
     fun type(idx: Int): KClass<out Type> {

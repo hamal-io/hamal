@@ -7,7 +7,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -87,7 +87,7 @@ internal class AnyValueTest {
         sandbox.load("test.captor(test.pass_through(test_map))")
 
         val underlying = (captor.result as AnyType).value
-        require(underlying is TableTypeMap) { "Not a TableMapProxyValue" }
+        require(underlying is TableProxyMap) { "Not a TableMapProxyValue" }
         assertThat(underlying.length(), equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }

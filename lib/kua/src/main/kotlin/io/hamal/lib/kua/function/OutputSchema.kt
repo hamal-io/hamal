@@ -2,7 +2,7 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -70,7 +70,7 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
     }
 
     is TableProxyArray -> pushTop(value.index)
-    is TableTypeMap -> pushTop(value.index)
+    is TableProxyMap -> pushTop(value.index)
     is AnyType -> pushAny(value)
     is ErrorType -> pushError(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")

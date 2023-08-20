@@ -7,7 +7,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiError
@@ -15,11 +15,11 @@ import io.hamal.lib.sdk.domain.ApiNamespace
 
 class GetNamespaceFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<StringType, ErrorType, TableTypeMap>(
+) : Function1In2Out<StringType, ErrorType, TableProxyMap>(
     FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, TableTypeMap::class)
+    FunctionOutput2Schema(ErrorType::class, TableProxyMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableTypeMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableProxyMap?> {
         val response = templateSupplier()
             .get("/v1/namespaces/${arg1.value}")
             .execute()

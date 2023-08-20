@@ -5,16 +5,16 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.StringType
 
 class Require(
     val registry: ExtensionRegistry
-) : Function1In1Out<StringType, TableTypeMap>(
+) : Function1In1Out<StringType, TableProxyMap>(
     FunctionInput1Schema(StringType::class),
-    FunctionOutput1Schema(TableTypeMap::class)
+    FunctionOutput1Schema(TableProxyMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): TableTypeMap {
+    override fun invoke(ctx: FunctionContext, arg1: StringType): TableProxyMap {
         ctx.setGlobal("_factory", registry.loadFactory(arg1.value))
         ctx.load(
             """

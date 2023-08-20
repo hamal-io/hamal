@@ -20,7 +20,7 @@ interface TableProxyArray : TableProxy {
     fun append(value: String): Int
     fun append(value: StringType) = append(value.value)
 
-    fun append(value: TableTypeMap): Int
+    fun append(value: TableProxyMap): Int
     fun append(value: TableProxyArray): Int
 
     fun get(idx: Int): AnyType

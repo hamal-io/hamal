@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.web3.eth.EthBatchService
@@ -19,11 +19,11 @@ import java.math.BigInteger
 
 class CallFunction(
     val config: ExtensionConfig
-) : Function1In2Out<TableTypeMap, ErrorType, StringType>(
-    FunctionInput1Schema(TableTypeMap::class),
+) : Function1In2Out<TableProxyMap, ErrorType, StringType>(
+    FunctionInput1Schema(TableProxyMap::class),
     FunctionOutput2Schema(ErrorType::class, StringType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableTypeMap): Pair<ErrorType?, StringType?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableProxyMap): Pair<ErrorType?, StringType?> {
 
         val b = EthHttpBatchService(
             HttpTemplate((config.value["host"] as StringType).value)

@@ -4,16 +4,16 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.kua.function.Function2In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
-import io.hamal.lib.kua.table.TableTypeMap
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.run.RunnerSandboxContext
 
 class EmitFunction(
     private val executionCtx: RunnerSandboxContext
-) : Function2In0Out<StringType, TableTypeMap>(
-    FunctionInput2Schema(StringType::class, TableTypeMap::class)
+) : Function2In0Out<StringType, TableProxyMap>(
+    FunctionInput2Schema(StringType::class, TableProxyMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: TableTypeMap) {
+    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: TableProxyMap) {
         ctx.pushNil()
 
         val eventMap = mutableMapOf<StringType, SerializableType>()
