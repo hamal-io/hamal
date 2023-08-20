@@ -2,35 +2,79 @@ package io.hamal.lib.kua.table
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.kua.State
 import io.hamal.lib.kua.type.*
+import kotlin.reflect.KClass
 
-interface TableProxyArray : TableProxy {
-    fun append(value: Boolean): Int
-    fun append(value: BooleanType) = append(value.value)
+class TableProxyArray(
+    val index: Int,
+    val state: State
+) : Type {
 
-    fun append(value: Double): Int
-    fun append(value: Int) = append(value.toDouble())
-    fun append(value: Long) = append(value.toDouble())
-    fun append(value: Float) = append(value.toDouble())
-    fun append(value: NumberType) = append(value.value)
+    val length get() = state.native.tableGetLength(index)
 
-    fun append(value: SnowflakeId) = append(value.value.toString(16))
-    fun append(value: DomainId) = append(value.value.value)
-
-    fun append(value: String): Int
-    fun append(value: StringType) = append(value.value)
-
-    fun append(value: TableProxyMap): Int
-    fun append(value: TableProxyArray): Int
-
-    fun get(idx: Int): AnyType
     fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
-    fun getBooleanValue(idx: Int): BooleanType
-    fun getNumberValue(idx: Int): NumberType
+    fun getBooleanValue(idx: Int): BooleanType {
+        val type = state.tableGetRawIdx(index, idx)
+        type.checkExpectedType(BooleanType::class)
+        return state.getBooleanValue(-1)
+    }
+
+    fun append(value: BooleanType) = append(value.value)
+    fun append(value: Boolean): Int {
+        state.native.pushBoolean(value)
+        return state.tableAppend(index)
+    }
+
+
     fun getInt(idx: Int) = getNumberValue(idx).value.toInt()
     fun getLong(idx: Int) = getNumberValue(idx).value.toLong()
     fun getFloat(idx: Int) = getNumberValue(idx).value.toFloat()
     fun getDouble(idx: Int) = getNumberValue(idx).value.toDouble()
+    fun getNumberValue(idx: Int): NumberType {
+        val type = state.tableGetRawIdx(index, idx)
+        type.checkExpectedType(NumberType::class)
+        return state.getNumberType(-1)
+    }
+
+    fun append(value: Int) = append(value.toDouble())
+    fun append(value: Long) = append(value.toDouble())
+    fun append(value: Float) = append(value.toDouble())
+    fun append(value: NumberType) = append(value.value)
+    fun append(value: Double): Int {
+        state.native.pushNumber(value)
+        return state.tableAppend(index)
+    }
+
+    fun append(value: DomainId) = append(value.value.value)
+    fun append(value: SnowflakeId) = append(value.value.toString(16))
+
     fun getString(idx: Int) = getStringValue(idx).value
-    fun getStringValue(idx: Int): StringType
+    fun getStringValue(idx: Int): StringType {
+        val type = state.tableGetRawIdx(index, idx)
+        type.checkExpectedType(StringType::class)
+        return state.getStringType(-1)
+    }
+
+    fun append(value: StringType) = append(value.value)
+    fun append(value: String): Int {
+        state.native.pushString(value)
+        return state.tableAppend(index)
+    }
+
+    fun append(value: TableProxyMap): Int {
+        state.pushTable(value)
+        return state.tableAppend(index)
+    }
+
+    fun append(value: TableProxyArray): Int {
+        state.pushTable(value)
+        return state.tableAppend(index)
+    }
+}
+
+private fun KClass<out Type>.checkExpectedType(expected: KClass<out Type>) {
+    check(this == expected) {
+        "Expected type to be $expected but was $this"
+    }
 }

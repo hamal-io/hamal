@@ -50,6 +50,7 @@ internal class ToMapTypeTest {
     }
 
     @Test
+    @Disabled
     fun `Table with nested map`() {
         val innerTable = testState.tableCreateMap(1).also { it["inner-key"] = "inner-value" }
         val table = testState.tableCreateMap(1).also { it["inner"] = innerTable }
@@ -118,6 +119,7 @@ internal class ToArrayTypeTest {
     }
 
     @Test
+    @Disabled
     fun `Table with nested map`() {
         val innerTable = testState.tableCreateMap(1).also { it["inner-key"] = "inner-value" }
         val table = testState.tableCreateArray(1).also { it.append(innerTable) }

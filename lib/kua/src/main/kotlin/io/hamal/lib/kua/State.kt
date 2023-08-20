@@ -1,9 +1,6 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.DefaultTableProxy
-import io.hamal.lib.kua.table.TableProxy.Mode.Array
-import io.hamal.lib.kua.table.TableProxy.Mode.Map
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
@@ -96,6 +93,7 @@ class ClosableState(
             is NumberType -> pushNumber(underlying)
             is StringType -> pushString(underlying)
             is TableProxyArray -> pushTable(underlying)
+            is TableProxyMap -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
@@ -111,7 +109,7 @@ class ClosableState(
     }
 
     override fun getArrayType(idx: Int): ArrayType {
-        val ref = DefaultTableProxy(absIndex(idx), this, Array)
+        val ref = TableProxyArray(absIndex(idx), this)
         return toArrayType(ref)
     }
 
@@ -138,13 +136,13 @@ class ClosableState(
     }
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableProxyMap = DefaultTableProxy(absIndex(idx), this, Map)
+    override fun getTableMap(idx: Int): TableProxyMap = TableProxyMap(absIndex(idx), this)
 
     //FIXME type check
-    override fun getTableArray(idx: Int): TableProxyArray = DefaultTableProxy(absIndex(idx), this, Array)
+    override fun getTableArray(idx: Int): TableProxyArray = TableProxyArray(absIndex(idx), this)
 
     override fun getMapType(idx: Int): MapType {
-        val ref = DefaultTableProxy(absIndex(idx), this, Map)
+        val ref = TableProxyMap(absIndex(idx), this)
         return toMapType(ref)
     }
 
@@ -174,18 +172,16 @@ class ClosableState(
     }
 
     override fun tableCreateMap(capacity: Int): TableProxyMap {
-        return DefaultTableProxy(
+        return TableProxyMap(
             index = native.tableCreate(0, capacity),
-            state = this,
-            mode = Map
+            state = this
         )
     }
 
     override fun tableCreateArray(capacity: Int): TableProxyArray {
-        return DefaultTableProxy(
+        return TableProxyArray(
             index = native.tableCreate(capacity, 0),
-            state = this,
-            mode = Array
+            state = this
         )
     }
 

@@ -68,7 +68,7 @@ internal class AnyValueTest {
     }
 
     @Test
-    fun `AnyValue can be used with TableMapValue`() {
+    fun `AnyValue can be used with TableProxyMap`() {
         val map = sandbox.tableCreateMap(2)
         map["key"] = "value"
         sandbox.setGlobal("test_map", map)
@@ -87,14 +87,14 @@ internal class AnyValueTest {
         sandbox.load("test.captor(test.pass_through(test_map))")
 
         val underlying = (captor.result as AnyType).value
-        require(underlying is TableProxyMap) { "Not a TableMapProxyValue" }
-        assertThat(underlying.length(), equalTo(1))
+        require(underlying is TableProxyMap) { "Not a TableProxyMap" }
+        assertThat(underlying.length, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
 
 
     @Test
-    fun `AnyValue can be used with TableArrayValue`() {
+    fun `AnyValue can be used with TableProxyArray`() {
         val array = sandbox.tableCreateArray(2)
         array.append(23)
         array.append("hamal.io")
@@ -114,8 +114,8 @@ internal class AnyValueTest {
         sandbox.load("test.captor(test.pass_through(test_array))")
 
         val underlying = (captor.result as AnyType).value
-        require(underlying is TableProxyArray) { "Not a TableArrayProxyValue" }
-        assertThat(underlying.length(), equalTo(2))
+        require(underlying is TableProxyArray) { "Not a TableProxyArray" }
+        assertThat(underlying.length, equalTo(2))
 
         assertThat(underlying.getInt(1), equalTo(23))
         assertThat(underlying.getString(2), equalTo("hamal.io"))
