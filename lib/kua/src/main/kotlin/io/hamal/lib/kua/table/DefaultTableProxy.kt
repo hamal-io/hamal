@@ -148,7 +148,7 @@ data class DefaultTableProxy(
     override fun getNumberValue(idx: Int): NumberType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(NumberType::class)
-        return state.getNumberValue(-1)
+        return state.getNumberType(-1)
     }
 
     override fun getStringValue(idx: Int): StringType {

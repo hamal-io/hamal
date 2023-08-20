@@ -65,6 +65,8 @@ class Sandbox(
     override fun pushNil() = state.pushNil()
     override fun pushAny(value: AnyType) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
+    override fun getArrayType(idx: Int) = state.getArrayType(idx)
+
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
     override fun pushError(value: ErrorType) = state.pushError(value)

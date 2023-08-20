@@ -47,8 +47,9 @@ fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
         AnyType::class -> ctx.getAny(idx) as ARG
+        ArrayType::class -> ctx.getArrayType(idx) as ARG
         MapType::class -> ctx.getMapType(idx) as ARG
-        NumberType::class -> ctx.getNumberValue(idx) as ARG
+        NumberType::class -> ctx.getNumberType(idx) as ARG
         StringType::class -> ctx.getStringType(idx) as ARG
         Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
         TableTypeMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Map) as ARG

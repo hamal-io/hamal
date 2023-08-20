@@ -92,7 +92,7 @@ internal class TableEntryIteratorTest {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getNumberValue(index) },
+                    keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
@@ -129,7 +129,7 @@ internal class TableEntryIteratorTest {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getNumberValue(index) },
+                    keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.toTableType(state.getTableMap(index)) }
                 )
 
@@ -170,7 +170,7 @@ internal class TableEntryIteratorTest {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getNumberValue(index) },
+                    keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 

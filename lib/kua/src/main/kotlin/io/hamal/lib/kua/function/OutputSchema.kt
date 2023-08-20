@@ -40,6 +40,20 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
     is NilType -> pushNil()
     is NumberType -> pushNumber(value)
     is StringType -> pushString(value)
+    is ArrayType -> {
+        val t = tableCreateArray(0)
+        value.entries.forEach { (arrayIdx, arrayValue) ->
+            when (arrayValue) {
+//                is NilType -> t.append(NilType)
+                is NumberType -> t.append(arrayValue)
+                is StringType -> t.append(arrayValue)
+                else -> TODO()
+            }
+        }
+
+        StackTop(t.index)
+    }
+
     is MapType -> {
         val t = tableCreateMap(0)
         value.entries.forEach { (mapKey, mapValue) ->

@@ -2,7 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.DefaultTableProxy
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableProxy.Mode.Array
 import io.hamal.lib.kua.table.TableProxy.Mode.Map
 import io.hamal.lib.kua.table.TableTypeArray
 import io.hamal.lib.kua.table.TableTypeMap
@@ -27,6 +27,9 @@ interface State {
     fun pushNil(): StackTop
     fun pushAny(value: AnyType): StackTop
     fun getAny(idx: Int): AnyType
+
+    fun getArrayType(idx: Int): ArrayType
+
     fun pushBoolean(value: Boolean): StackTop
     fun pushBoolean(value: BooleanType) = pushBoolean(value.value)
     fun getBoolean(idx: Int): Boolean
@@ -35,7 +38,7 @@ interface State {
     fun pushFunction(value: FunctionType<*, *, *, *>): StackTop
 
     fun getNumber(idx: Int): Double
-    fun getNumberValue(idx: Int) = NumberType(getNumber(idx))
+    fun getNumberType(idx: Int) = NumberType(getNumber(idx))
     fun pushNumber(value: Double): StackTop
     fun pushNumber(value: NumberType) = pushNumber(value.value)
 
@@ -100,11 +103,16 @@ class ClosableState(
     override fun getAny(idx: Int): AnyType {
         return when (val type = type(idx)) {
             BooleanType::class -> AnyType(getBooleanValue(idx))
-            NumberType::class -> AnyType(getNumberValue(idx))
+            NumberType::class -> AnyType(getNumberType(idx))
             StringType::class -> AnyType(getStringType(idx))
             TableType::class -> AnyType(getTableMap(idx)) // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
+    }
+
+    override fun getArrayType(idx: Int): ArrayType {
+        val ref = DefaultTableProxy(absIndex(idx), this, Array)
+        return toArrayType(ref)
     }
 
     override fun pushBoolean(value: Boolean): StackTop = StackTop(native.pushBoolean(value))
@@ -133,7 +141,7 @@ class ClosableState(
     override fun getTableMap(idx: Int): TableTypeMap = DefaultTableProxy(absIndex(idx), this, Map)
 
     //FIXME type check
-    override fun getTableArray(idx: Int): TableTypeArray = DefaultTableProxy(absIndex(idx), this, TableProxy.Mode.Array)
+    override fun getTableArray(idx: Int): TableTypeArray = DefaultTableProxy(absIndex(idx), this, Array)
 
     override fun getMapType(idx: Int): MapType {
         val ref = DefaultTableProxy(absIndex(idx), this, Map)
@@ -177,7 +185,7 @@ class ClosableState(
         return DefaultTableProxy(
             index = native.tableCreate(capacity, 0),
             state = this,
-            mode = TableProxy.Mode.Array
+            mode = Array
         )
     }
 

@@ -37,8 +37,8 @@ internal class TableEntryIteratorTest {
         val testInstance = TableEntryIterator(
             index = table.index,
             state = state,
-            keyExtractor = { state, index -> state.getNumberValue(index) },
-            valueExtractor = { state, index -> state.getNumberValue(index) }
+            keyExtractor = { state, index -> state.getNumberType(index) },
+            valueExtractor = { state, index -> state.getNumberType(index) }
         )
         assertThat(testInstance.hasNext(), equalTo(true))
 
@@ -66,8 +66,8 @@ internal class TableEntryIteratorTest {
         val testInstance = TableEntryIterator(
             index = table.index,
             state = state,
-            keyExtractor = { state, index -> state.getNumberValue(index) },
-            valueExtractor = { state, index -> state.getNumberValue(index) }
+            keyExtractor = { state, index -> state.getNumberType(index) },
+            valueExtractor = { state, index -> state.getNumberType(index) }
         )
 
         repeat(10) { idx ->
