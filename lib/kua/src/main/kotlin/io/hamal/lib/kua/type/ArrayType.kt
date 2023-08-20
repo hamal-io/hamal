@@ -25,6 +25,15 @@ data class ArrayType(
         return size
     }
 
+    fun append(value: SerializableType): Int {
+        entries[entries.size + 1] = value
+        return size
+    }
+
+    operator fun get(idx: Int): SerializableType {
+        return entries[idx]!!
+    }
+
     fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
     fun getBooleanValue(idx: Int): BooleanType {
         checkExpectedType(idx, BooleanType::class)

@@ -47,31 +47,23 @@ fun State.toTableType(map: TableProxyMap): TableType {
 }
 
 fun State.toArrayType(array: TableProxyArray): ArrayType {
-//    val store = mutableMapOf<Int, SerializableType>()
     val result = ArrayType()
-
     TableEntryIterator(
         index = array.index,
         state = this,
         keyExtractor = { state, index -> state.getNumberType(index) },
         valueExtractor = { state, index ->
-            val anyValue = state.getAny(index)
-            when (anyValue.value) {
-                is NumberType -> anyValue.value
-                is StringType -> anyValue.value
-                is TableProxyMap -> toMapType(anyValue.value)
-                else -> TODO("${anyValue.value}")
+            when (val value = state.getAny(index).value) {
+                is BooleanType,
+                is NumberType,
+                is StringType -> value as SerializableType
+
+                is TableProxyMap -> toMapType(value)
+                is TableProxyArray -> toArrayType(value)
+                else -> TODO("$value")
             }
         }
-    ).forEach { (key, value) ->
-        println("$key $value")
-        when (value) {
-            is NumberType -> result.append(value)
-            is StringType -> result.append(value)
-            is MapType -> result.append(value)
-            else -> TODO("${value} not implemented")
-        }
-    }
+    ).forEach { (_, value) -> result.append(value) }
 
     return result
 }
@@ -91,7 +83,7 @@ internal fun State.toMapType(map: TableProxyMap): MapType {
 
                 is TableProxyMap -> toMapType(value)
                 is TableProxyArray -> toArrayType(value)
-                else -> TODO()
+                else -> TODO("$value")
             }
         }
     ).forEach { (key, value) -> store[key.value] = value }
