@@ -13,11 +13,11 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableArrayTest {
+internal class TableProxyArrayTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        lateinit var testInstance: TableTypeArray
+        lateinit var testInstance: TableProxyArray
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(FalseValue) },

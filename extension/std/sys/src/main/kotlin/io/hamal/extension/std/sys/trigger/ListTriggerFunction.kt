@@ -4,7 +4,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.domain.ApiSimpleEventTrigger
 import io.hamal.lib.sdk.domain.ApiSimpleFixedRateTrigger
@@ -13,10 +13,10 @@ import io.hamal.lib.sdk.domain.ApiTriggerList
 
 class ListTriggerFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function0In2Out<ErrorType, TableTypeArray>(
-    FunctionOutput2Schema(ErrorType::class, TableTypeArray::class)
+) : Function0In2Out<ErrorType, TableProxyArray>(
+    FunctionOutput2Schema(ErrorType::class, TableProxyArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableTypeArray?> {
+    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableProxyArray?> {
         val triggers = try {
             templateSupplier()
                 .get("/v1/triggers")

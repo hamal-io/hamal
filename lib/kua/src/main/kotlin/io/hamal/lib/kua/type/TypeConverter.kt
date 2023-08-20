@@ -4,7 +4,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableEntryIterator
-import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableTypeMap
 
 // FIXME State instead of Sandbox
@@ -46,7 +46,7 @@ fun State.toTableType(map: TableTypeMap): TableType {
     return TableType(store)
 }
 
-fun State.toArrayType(array: TableTypeArray): ArrayType {
+fun State.toArrayType(array: TableProxyArray): ArrayType {
 //    val store = mutableMapOf<Int, SerializableType>()
     val result = ArrayType()
 

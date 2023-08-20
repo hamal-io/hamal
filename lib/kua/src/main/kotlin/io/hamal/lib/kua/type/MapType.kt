@@ -42,6 +42,13 @@ data class MapType(
         return entries.size
     }
 
+
+    operator fun set(key: StringType, value: CodeType) = set(key.value, value)
+    operator fun set(key: String, value: CodeType): Int {
+        entries[key] = value
+        return entries.size
+    }
+
     operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
     operator fun set(key: StringType, value: DomainId) = set(key.value, value.value.value.toString(16))
     operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
@@ -67,6 +74,11 @@ data class MapType(
     operator fun set(key: String, value: Double) = set(key, NumberType(value))
     operator fun set(key: StringType, value: NumberType) = set(key.value, value.value)
     operator fun set(key: String, value: NumberType): Int {
+        entries[key] = value
+        return entries.size
+    }
+
+    operator fun set(key: String, value: MapType): Int {
         entries[key] = value
         return entries.size
     }

@@ -85,10 +85,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over table array`() {
-        class TestIteratorFunction : Function1In0Out<TableTypeArray>(
-            FunctionInput1Schema(TableTypeArray::class)
+        class TestIteratorFunction : Function1In0Out<TableProxyArray>(
+            FunctionInput1Schema(TableProxyArray::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableTypeArray) {
+            override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -122,10 +122,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over nested table array`() {
-        class TestIteratorFunction : Function1In0Out<TableTypeArray>(
-            FunctionInput1Schema(TableTypeArray::class)
+        class TestIteratorFunction : Function1In0Out<TableProxyArray>(
+            FunctionInput1Schema(TableProxyArray::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableTypeArray) {
+            override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -163,10 +163,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over empty table array`() {
-        class TestIteratorFunction : Function1In0Out<TableTypeArray>(
-            FunctionInput1Schema(TableTypeArray::class)
+        class TestIteratorFunction : Function1In0Out<TableProxyArray>(
+            FunctionInput1Schema(TableProxyArray::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableTypeArray) {
+            override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,

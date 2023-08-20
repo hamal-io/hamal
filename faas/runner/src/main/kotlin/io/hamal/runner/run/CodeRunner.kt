@@ -7,7 +7,7 @@ import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.NumberType
@@ -50,7 +50,7 @@ class DefaultCodeRunner(
                             is StringType -> internalTable[entry.key] = value
                             is NumberType -> internalTable[entry.key] = value
                             is FunctionType<*, *, *, *> -> internalTable[entry.key] = value
-                            is TableTypeArray -> internalTable[entry.key] = value
+                            is TableProxyArray -> internalTable[entry.key] = value
                             is TableTypeMap -> internalTable[entry.key] = value
 
                             else -> TODO()

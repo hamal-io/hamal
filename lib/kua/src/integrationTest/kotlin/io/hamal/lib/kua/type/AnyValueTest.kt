@@ -6,7 +6,7 @@ import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableTypeMap
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -114,7 +114,7 @@ internal class AnyValueTest {
         sandbox.load("test.captor(test.pass_through(test_array))")
 
         val underlying = (captor.result as AnyType).value
-        require(underlying is TableTypeArray) { "Not a TableArrayProxyValue" }
+        require(underlying is TableProxyArray) { "Not a TableArrayProxyValue" }
         assertThat(underlying.length(), equalTo(2))
 
         assertThat(underlying.getInt(1), equalTo(23))

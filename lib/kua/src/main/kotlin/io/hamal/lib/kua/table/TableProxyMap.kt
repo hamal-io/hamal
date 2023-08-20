@@ -40,7 +40,7 @@ interface TableTypeMap : TableProxy {
     operator fun set(key: StringType, value: FunctionType<*, *, *, *>) = set(key.value, value)
 
     operator fun set(key: String, value: TableTypeMap): Int
-    operator fun set(key: String, value: TableTypeArray): Int
+    operator fun set(key: String, value: TableProxyArray): Int
 
     fun getBooleanValue(key: String): BooleanType
     fun getBooleanValue(key: StringType): BooleanType = getBooleanValue(key.value)

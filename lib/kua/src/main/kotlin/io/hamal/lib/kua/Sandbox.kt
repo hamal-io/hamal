@@ -3,7 +3,7 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.extension.*
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.AnyType
 import io.hamal.lib.kua.type.CodeType
@@ -79,7 +79,7 @@ class Sandbox(
 
     override fun pushTable(value: TableType) = state.pushTable(value)
     override fun pushTable(proxy: TableTypeMap) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableTypeArray) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableProxyArray) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
     override fun getTableMap(idx: Int) = state.getTableMap(idx)
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
@@ -87,7 +87,7 @@ class Sandbox(
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableTypeMap) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableTypeArray) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: TableProxyArray) = state.setGlobal(name, value)
     override fun getGlobalTableMap(name: String): TableTypeMap = state.getGlobalTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 

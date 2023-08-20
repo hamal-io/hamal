@@ -4,7 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.kua.type.*
 
-interface TableTypeArray : TableProxy {
+interface TableProxyArray : TableProxy {
     fun append(value: Boolean): Int
     fun append(value: BooleanType) = append(value.value)
 
@@ -21,7 +21,7 @@ interface TableTypeArray : TableProxy {
     fun append(value: StringType) = append(value.value)
 
     fun append(value: TableTypeMap): Int
-    fun append(value: TableTypeArray): Int
+    fun append(value: TableProxyArray): Int
 
     fun get(idx: Int): AnyType
     fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue

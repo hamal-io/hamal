@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.table.TableTypeArray
+import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableTypeMap
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
@@ -47,7 +47,7 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
 //                is NilType -> t.append(NilType)
                 is NumberType -> t.append(arrayValue)
                 is StringType -> t.append(arrayValue)
-                else -> TODO()
+                else -> TODO("$arrayValue")
             }
         }
 
@@ -61,13 +61,15 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
                 is NilType -> t[mapKey] = NilType
                 is NumberType -> t[mapKey] = mapValue
                 is StringType -> t[mapKey] = mapValue
-                else -> TODO()
+                is CodeType -> t[mapKey] = StringType(mapValue.value)
+                is MapType -> t[mapKey] = t //FIXME
+                else -> TODO("$mapValue")
             }
         }
         StackTop(t.index)
     }
 
-    is TableTypeArray -> pushTop(value.index)
+    is TableProxyArray -> pushTop(value.index)
     is TableTypeMap -> pushTop(value.index)
     is AnyType -> pushAny(value)
     is ErrorType -> pushError(value)
