@@ -45,8 +45,8 @@ internal object BuildDirLoader : Loader {
         return once {
             val baseDir = System.getProperty("user.dir")
             try {
-                System.load("$baseDir/lib/kua/native/cmake-build-debug/lua/liblua.so")
-                System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/libkua.so")
+                System.load("$baseDir/lib/kua/native/cmake-build-debug/lua/$luaFile")
+                System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/$kuaFile")
                 true
             } catch (t: Throwable) {
                 false
@@ -67,11 +67,11 @@ internal object ResourcesLoader : Loader {
     override fun load(): Boolean {
         return once {
             val classloader = Thread.currentThread().contextClassLoader
-            val result = classloader.getResource("./liblua.so")
+            val result = classloader.getResource("./$luaFile")
                 ?.let { System.load(it.file); true }
                 ?: false
             if (result) {
-                classloader.getResource("./libkua.so")
+                classloader.getResource("./${kuaFile}")
                     ?.let { System.load(it.file); true }
                     ?: false
             } else {
@@ -89,8 +89,8 @@ internal object JarLoader : Loader {
     override fun load(): Boolean {
         return once {
             try {
-                NativeUtils.loadLibraryFromJar("/liblua.so")
-                NativeUtils.loadLibraryFromJar("/libkua.so")
+                NativeUtils.loadLibraryFromJar("/$luaFile")
+                NativeUtils.loadLibraryFromJar("/$kuaFile")
                 true
             } catch (t: Throwable) {
                 false
@@ -100,4 +100,32 @@ internal object JarLoader : Loader {
 
     @JvmStatic
     private val once = Once.default<Boolean>()
+}
+
+private val kuaFile by lazy {
+    when (detectSystem()) {
+        HostSystem.Linux64 -> "libkua.so"
+        HostSystem.MacArm64 -> "libkua.dylib"
+    }
+}
+
+private val luaFile by lazy {
+    when (detectSystem()) {
+        HostSystem.Linux64 -> "liblua.so"
+        HostSystem.MacArm64 -> "liblua.dylib"
+    }
+}
+
+enum class HostSystem {
+    Linux64,
+    MacArm64
+}
+
+private fun detectSystem(): HostSystem {
+    val os = System.getProperty("os.name").lowercase()
+    return if (os.startsWith("mac")) {
+        HostSystem.MacArm64
+    } else {
+        HostSystem.Linux64
+    }
 }
