@@ -8,9 +8,18 @@ plugins {
     id("com.github.node-gradle.node").version("5.0.0")
 }
 
-kotlin {
-    jvmToolchain(19)
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
+
+
+kotlin {
+    jvmToolchain(17)
+}
+
 
 archivesName.set("instance-frontend")
 

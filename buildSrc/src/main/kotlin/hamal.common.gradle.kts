@@ -1,6 +1,3 @@
-import gradle.kotlin.dsl.accessors._4062691b52bb2ae8e3287a873466e0d9.main
-import gradle.kotlin.dsl.accessors._4062691b52bb2ae8e3287a873466e0d9.sourceSets
-
 plugins {
     `java-library`
     `jvm-test-suite`
@@ -9,9 +6,18 @@ plugins {
     id("jacoco-report-aggregation")
 }
 
-kotlin {
-    jvmToolchain(19)
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
+
+
+kotlin {
+    jvmToolchain(17)
+}
+
 
 testing {
     suites {
@@ -28,12 +34,14 @@ testing {
                 kotlin {
                     srcDir("src/integrationTest/kotlin")
                 }
-                resources{
-                    setSrcDirs(listOf(
-                        "src/main/resources",
-                        "src/test/resources",
-                        "src/integrationTest/resources"
-                    ))
+                resources {
+                    setSrcDirs(
+                        listOf(
+                            "src/main/resources",
+                            "src/test/resources",
+                            "src/integrationTest/resources"
+                        )
+                    )
                 }
             }
 
