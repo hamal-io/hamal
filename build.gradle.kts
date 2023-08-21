@@ -8,5 +8,6 @@ buildscript {
     }
 }
 
+
 apply(plugin = "org.jetbrains.kotlin.jvm")
 apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
