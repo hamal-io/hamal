@@ -10,7 +10,7 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -52,7 +52,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
             with(funcs.first()) {
                 assertThat(id, equalTo(FuncId(12345)))
                 assertThat(name, equalTo(FuncName("awesome-func")))
-                assertThat(inputs, equalTo(FuncInputs(TableType(StringType("hamal") to StringType("rocks")))))
+                assertThat(inputs, equalTo(FuncInputs(DepTableType(StringType("hamal") to StringType("rocks")))))
                 assertThat(code, equalTo(CodeType("some code")))
             }
         }
@@ -67,7 +67,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
         id = FuncId(12345),
         namespaceId = NamespaceId(23456),
         name = FuncName("awesome-func"),
-        inputs = FuncInputs(TableType(StringType("hamal") to StringType("rocks"))),
+        inputs = FuncInputs(DepTableType(StringType("hamal") to StringType("rocks"))),
         code = CodeType("some code")
     )
 }

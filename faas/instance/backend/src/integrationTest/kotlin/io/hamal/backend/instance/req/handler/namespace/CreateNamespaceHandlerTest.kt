@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -54,7 +54,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
             with(namespaces.first()) {
                 assertThat(id, equalTo(NamespaceId(12345)))
                 assertThat(name, equalTo(NamespaceName("awesome-namespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(TableType(StringType("hamal") to StringType("rocks")))))
+                assertThat(inputs, equalTo(NamespaceInputs(DepTableType(StringType("hamal") to StringType("rocks")))))
             }
         }
     }
@@ -67,6 +67,6 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
         status = Submitted,
         id = NamespaceId(12345),
         name = NamespaceName("awesome-namespace"),
-        inputs = NamespaceInputs(TableType(StringType("hamal") to StringType("rocks")))
+        inputs = NamespaceInputs(DepTableType(StringType("hamal") to StringType("rocks")))
     )
 }

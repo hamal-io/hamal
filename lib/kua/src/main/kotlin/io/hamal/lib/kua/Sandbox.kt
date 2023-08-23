@@ -8,7 +8,7 @@ import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.AnyType
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 
 class Sandbox(
     val ctx: SandboxContext
@@ -77,12 +77,12 @@ class Sandbox(
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
 
-    override fun pushTable(value: TableType) = state.pushTable(value)
+    override fun pushTable(value: DepTableType) = state.pushTable(value)
     override fun pushTable(proxy: TableProxyMap) = state.pushTable(proxy)
     override fun pushTable(proxy: TableProxyArray) = state.pushTable(proxy)
     override fun getTable(idx: Int) = state.getTable(idx)
-    override fun getTableMap(idx: Int) = state.getTableMap(idx)
-    override fun getTableArray(idx: Int) = state.getTableArray(idx)
+    override fun getTableMapProxy(idx: Int) = state.getTableMapProxy(idx)
+    override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
     override fun getMapType(idx: Int) = state.getMapType(idx)
 
     override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)

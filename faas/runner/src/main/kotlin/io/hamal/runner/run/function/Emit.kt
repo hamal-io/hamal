@@ -36,6 +36,6 @@ class EmitFunction(
         // FIXME make sure topic is set and string
         require(eventMap.containsKey(StringType("topic"))) { "Topic not present" }
 
-        executionCtx.emit(Event(TableType(eventMap)))
+        executionCtx.emit(Event(DepTableType(eventMap)))
     }
 }

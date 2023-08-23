@@ -84,8 +84,8 @@ internal class TableProxyMapTest {
     fun getBooleanValue(): List<DynamicTest> {
         lateinit var testInstance: TableProxyMap
         return listOf(
-            { testInstance.getBooleanValue("key") },
-            { testInstance.getBooleanValue(StringType("key")) },
+            { testInstance.getBooleanType("key") },
+            { testInstance.getBooleanType(StringType("key")) },
             { testInstance.getBoolean("key") },
             { testInstance.getBoolean(StringType("key")) },
         ).mapIndexed { idx, testFn ->
@@ -139,8 +139,8 @@ internal class TableProxyMapTest {
     fun getNumberValue(): List<DynamicTest> {
         lateinit var testInstance: TableProxyMap
         return listOf(
-            { testInstance.getNumberValue("key") },
-            { testInstance.getNumberValue(StringType("key")) },
+            { testInstance.getNumberType("key") },
+            { testInstance.getNumberType(StringType("key")) },
             { testInstance.getInt("key") },
             { testInstance.getInt(StringType("key")) },
             { testInstance.getLong("key") },
@@ -181,8 +181,8 @@ internal class TableProxyMapTest {
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringType("key")) },
-            { testInstance.getStringValue("key") },
-            { testInstance.getStringValue(StringType("key")) }
+            { testInstance.getStringType("key") },
+            { testInstance.getStringType(StringType("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()

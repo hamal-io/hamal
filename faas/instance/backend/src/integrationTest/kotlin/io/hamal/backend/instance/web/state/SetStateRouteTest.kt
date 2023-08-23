@@ -13,7 +13,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.FalseValue
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import io.hamal.lib.kua.type.TrueValue
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiState
@@ -29,7 +29,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
 
         val response = httpTemplate.post("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
-            .body(State(TableType("answer" to NumberType(42))))
+            .body(State(DepTableType("answer" to NumberType(42))))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
@@ -48,17 +48,17 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
 
-        setState(CorrelatedState(correlationOne, State(TableType("result" to TrueValue))))
-        setState(CorrelatedState(correlationTwo, State(TableType("result" to FalseValue))))
+        setState(CorrelatedState(correlationOne, State(DepTableType("result" to TrueValue))))
+        setState(CorrelatedState(correlationTwo, State(DepTableType("result" to FalseValue))))
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(value, equalTo(ApiState(TableType("result" to TrueValue))))
+            assertThat(value, equalTo(ApiState(DepTableType("result" to TrueValue))))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(value, equalTo(ApiState(TableType("result" to FalseValue))))
+            assertThat(value, equalTo(ApiState(DepTableType("result" to FalseValue))))
         }
     }
 
@@ -78,7 +78,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
                     CorrelatedState(
                         correlation = correlation,
                         value = State(
-                            TableType(
+                            DepTableType(
                                 "count" to NumberType(currentCount)
                             )
                         )
@@ -94,7 +94,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
     @Test
     fun `Tries to set state but func does not exists`() {
         val response = httpTemplate.post("/v1/funcs/0/states/__CORRELATION__")
-            .body(State(TableType("answer" to NumberType(42))))
+            .body(State(DepTableType("answer" to NumberType(42))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

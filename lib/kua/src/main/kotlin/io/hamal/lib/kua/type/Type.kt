@@ -6,3 +6,6 @@ interface Type
 
 @Serializable
 sealed interface SerializableType : Type
+
+@Serializable
+sealed interface TableType : SerializableType

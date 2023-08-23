@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 data class MapType(
     @Serializable(with = Serializer::class)
     val entries: MutableMap<String, SerializableType> = mutableMapOf(),
-) : SerializableType {
+) : TableType {
 
     val size get() = entries.size
 

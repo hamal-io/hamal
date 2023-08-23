@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ internal class CreateNamespaceRouteTest : BaseNamespaceRouteTest() {
         val result = createNamespace(
             CreateNamespaceReq(
                 name = NamespaceName("test-namespace"),
-                inputs = NamespaceInputs(TableType(StringType("hamal") to StringType("rocks")))
+                inputs = NamespaceInputs(DepTableType(StringType("hamal") to StringType("rocks")))
             )
         )
         awaitCompleted(result.reqId)
@@ -28,6 +28,6 @@ private fun CreateNamespaceRouteTest.verifyNamespaceCreated(namespaceId: Namespa
     with(namespaceQueryRepository.get(namespaceId)) {
         assertThat(id, equalTo(namespaceId))
         assertThat(name, equalTo(NamespaceName("test-namespace")))
-        assertThat(inputs, equalTo(NamespaceInputs(TableType(StringType("hamal") to StringType("rocks")))))
+        assertThat(inputs, equalTo(NamespaceInputs(DepTableType(StringType("hamal") to StringType("rocks")))))
     }
 }

@@ -52,8 +52,8 @@ fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
 //        TableProxyMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Map) as ARG
 //        TableProxyArray::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Array) as ARG
-        TableProxyMap::class -> ctx.getTableMap(idx) as ARG
-        TableProxyArray::class -> ctx.getTableArray(idx) as ARG
+        TableProxyMap::class -> ctx.getTableMapProxy(idx) as ARG
+        TableProxyArray::class -> ctx.getTableArrayProxy(idx) as ARG
         else -> TODO()
     }
 }

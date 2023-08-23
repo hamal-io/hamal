@@ -8,7 +8,8 @@ import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 
 // FIXME State instead of Sandbox
-fun Sandbox.toTableProxyMap(table: TableType): TableProxyMap =
+@Deprecated("remove me")
+fun Sandbox.toTableProxyMap(table: DepTableType): TableProxyMap =
     tableCreateMap(table.size).apply {
         table.forEach { entry ->
             when (val value = entry.value) {
@@ -22,8 +23,8 @@ fun Sandbox.toTableProxyMap(table: TableType): TableProxyMap =
         }
     }
 
-
-fun State.toTableType(map: TableProxyMap): TableType {
+@Deprecated("remove me")
+fun State.toTableType(map: TableProxyMap): DepTableType {
     val store = mutableMapOf<StringType, SerializableType>()
 
     TableEntryIterator(
@@ -43,7 +44,7 @@ fun State.toTableType(map: TableProxyMap): TableType {
         }
     }
 
-    return TableType(store)
+    return DepTableType(store)
 }
 
 fun State.toArrayType(array: TableProxyArray): ArrayType {
@@ -54,7 +55,9 @@ fun State.toArrayType(array: TableProxyArray): ArrayType {
         keyExtractor = { state, index -> state.getNumberType(index) },
         valueExtractor = { state, index ->
             when (val value = state.getAny(index).value) {
+                is ArrayType,
                 is BooleanType,
+                is MapType,
                 is NumberType,
                 is StringType -> value as SerializableType
 
@@ -68,6 +71,22 @@ fun State.toArrayType(array: TableProxyArray): ArrayType {
     return result
 }
 
+internal fun State.toProxyArray(array: ArrayType): TableProxyArray {
+    return tableCreateArray(array.size).also {
+        // FIXME probably instead of of appending it should be set to keep the index
+        array.entries.forEach { (_, value) ->
+            when (value) {
+                is BooleanType -> it.append(value)
+                is NumberType -> it.append(value)
+                is StringType -> it.append(value)
+                is MapType -> it.append(toProxyMap(value))
+                is ArrayType -> it.append(toProxyArray(value))
+                else -> TODO("$value")
+            }
+        }
+    }
+}
+
 internal fun State.toMapType(map: TableProxyMap): MapType {
     val store = mutableMapOf<String, SerializableType>()
 
@@ -77,7 +96,9 @@ internal fun State.toMapType(map: TableProxyMap): MapType {
         keyExtractor = { state, index -> state.getStringType(index) },
         valueExtractor = { state, index ->
             when (val value = state.getAny(index).value) {
+                is ArrayType,
                 is BooleanType,
+                is MapType,
                 is NumberType,
                 is StringType -> value as SerializableType
 
@@ -91,3 +112,17 @@ internal fun State.toMapType(map: TableProxyMap): MapType {
     return MapType(store)
 }
 
+internal fun State.toProxyMap(map: MapType): TableProxyMap {
+    return tableCreateMap(map.size).also {
+        map.entries.forEach { (key, value) ->
+            when (value) {
+                is BooleanType -> it[key] = value
+                is NumberType -> it[key] = value
+                is StringType -> it[key] = value
+                is MapType -> it[key] = toProxyMap(value)
+                is ArrayType -> it[key] = toProxyArray(value)
+                else -> TODO("$value")
+            }
+        }
+    }
+}

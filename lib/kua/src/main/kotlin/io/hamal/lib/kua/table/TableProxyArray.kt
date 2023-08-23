@@ -13,8 +13,8 @@ class TableProxyArray(
 
     val length get() = state.native.tableGetLength(index)
 
-    fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
-    fun getBooleanValue(idx: Int): BooleanType {
+    fun getBoolean(idx: Int) = getBooleanType(idx) == TrueValue
+    fun getBooleanType(idx: Int): BooleanType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(BooleanType::class)
         return state.getBooleanValue(-1)
@@ -27,11 +27,11 @@ class TableProxyArray(
     }
 
 
-    fun getInt(idx: Int) = getNumberValue(idx).value.toInt()
-    fun getLong(idx: Int) = getNumberValue(idx).value.toLong()
-    fun getFloat(idx: Int) = getNumberValue(idx).value.toFloat()
-    fun getDouble(idx: Int) = getNumberValue(idx).value.toDouble()
-    fun getNumberValue(idx: Int): NumberType {
+    fun getInt(idx: Int) = getNumberType(idx).value.toInt()
+    fun getLong(idx: Int) = getNumberType(idx).value.toLong()
+    fun getFloat(idx: Int) = getNumberType(idx).value.toFloat()
+    fun getDouble(idx: Int) = getNumberType(idx).value.toDouble()
+    fun getNumberType(idx: Int): NumberType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(NumberType::class)
         return state.getNumberType(-1)
@@ -49,8 +49,8 @@ class TableProxyArray(
     fun append(value: DomainId) = append(value.value.value)
     fun append(value: SnowflakeId) = append(value.value.toString(16))
 
-    fun getString(idx: Int) = getStringValue(idx).value
-    fun getStringValue(idx: Int): StringType {
+    fun getString(idx: Int) = getStringType(idx).value
+    fun getStringType(idx: Int): StringType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(StringType::class)
         return state.getStringType(-1)

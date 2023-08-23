@@ -47,7 +47,7 @@ internal class EmitTest : AbstractExecuteTest() {
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
-            assertThat(value, equalTo(TableType("topic" to StringType("test-topic"))))
+            assertThat(value, equalTo(DepTableType("topic" to StringType("test-topic"))))
         }
     }
 
@@ -62,7 +62,7 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
+                    DepTableType(
                         "topic" to StringType("test-topic")
                     )
                 )
@@ -81,7 +81,7 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
+                    DepTableType(
                         "topic" to StringType("test-topic"),
                         "hamal" to StringType("rocks")
                     )
@@ -101,7 +101,7 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
+                    DepTableType(
                         "topic" to StringType("test-topic"),
                         "answer" to NumberType(42)
                     )
@@ -121,7 +121,7 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
+                    DepTableType(
                         "topic" to StringType("test-topic"),
                         "true_value" to TrueValue,
                         "false_value" to FalseValue
@@ -143,9 +143,9 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
+                    DepTableType(
                         "topic" to StringType("test-topic"),
-                        "nested_table" to TableType(
+                        "nested_table" to DepTableType(
                             "value" to NumberType(23)
                         ),
                     )

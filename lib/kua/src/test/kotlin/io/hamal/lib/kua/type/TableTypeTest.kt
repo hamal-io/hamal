@@ -6,15 +6,15 @@ import org.junit.jupiter.api.TestFactory
 class TableTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(TableType(), """{"type":"TableType"}"""),
+        generateTestCases(DepTableType(), """{"type":"TableType"}"""),
         generateTestCases(
-            TableType(
+            DepTableType(
                 "key" to StringType("value")
             ),
             """{"type":"TableType","entries":{"key":{"type":"StringType","value":"value"}}}""".trimIndent()
         ),
         generateTestCases(
-            TableType(
+            DepTableType(
                 23 to NumberType(34)
             ),
             """{"type":"TableType","entries":{"23":{"type":"DoubleType","value":"34"}}}"""

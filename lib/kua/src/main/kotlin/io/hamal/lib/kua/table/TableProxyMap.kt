@@ -76,7 +76,14 @@ class TableProxyMap(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(TableType::class)
-        return state.getTableMap(state.top.value)
+        return state.getTableMapProxy(state.top.value)
+    }
+
+    fun getTableArray(key: String): TableProxyArray {
+        state.pushString(key)
+        val type = state.tableGetRaw(index)
+        type.checkExpectedType(TableType::class)
+        return state.getTableArrayProxy(state.top.value)
     }
 
     operator fun set(key: String, value: TableProxyArray): Int {
@@ -85,10 +92,10 @@ class TableProxyMap(
         return state.tableSetRaw(index)
     }
 
-    fun getBooleanValue(key: StringType): BooleanType = getBooleanValue(key.value)
-    fun getBoolean(key: String): Boolean = getBooleanValue(key).value
+    fun getBooleanType(key: StringType): BooleanType = getBooleanType(key.value)
+    fun getBoolean(key: String): Boolean = getBooleanType(key).value
     fun getBoolean(key: StringType): Boolean = getBoolean(key.value)
-    fun getBooleanValue(key: String): BooleanType {
+    fun getBooleanType(key: String): BooleanType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(BooleanType::class)
@@ -103,26 +110,26 @@ class TableProxyMap(
         return CodeType(state.getString(state.top.value)).also { state.native.pop(1) }
     }
 
-    fun getNumberValue(key: StringType): NumberType = getNumberValue(key.value)
-    fun getInt(key: String): Int = getNumberValue(key).value.toInt()
+    fun getNumberType(key: StringType): NumberType = getNumberType(key.value)
+    fun getInt(key: String): Int = getNumberType(key).value.toInt()
     fun getInt(key: StringType) = getInt(key.value)
-    fun getLong(key: String): Long = getNumberValue(key).value.toLong()
+    fun getLong(key: String): Long = getNumberType(key).value.toLong()
     fun getLong(key: StringType): Long = getLong(key.value)
-    fun getFloat(key: String): Float = getNumberValue(key).value.toFloat()
+    fun getFloat(key: String): Float = getNumberType(key).value.toFloat()
     fun getFloat(key: StringType): Float = getFloat(key.value)
-    fun getDouble(key: String): Double = getNumberValue(key).value
+    fun getDouble(key: String): Double = getNumberType(key).value
     fun getDouble(key: StringType): Double = getDouble(key.value)
-    fun getNumberValue(key: String): NumberType {
+    fun getNumberType(key: String): NumberType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(NumberType::class)
         return NumberType(state.native.toNumber(state.top.value)).also { state.native.pop(1) }
     }
 
-    fun getStringValue(key: StringType): StringType = getStringValue(key.value)
-    fun getString(key: String): String = getStringValue(key).value
+    fun getStringType(key: StringType): StringType = getStringType(key.value)
+    fun getString(key: String): String = getStringType(key).value
     fun getString(key: StringType): String = getString(key.value)
-    fun getStringValue(key: String): StringType {
+    fun getStringType(key: String): StringType {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(StringType::class)

@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -21,7 +21,7 @@ class ToExecInputsTest {
     @Test
     fun ok() {
         val invocationInputs = InvocationInputs(
-            TableType(
+            DepTableType(
                 StringType("key") to NumberType(2810),
                 StringType("invoke") to StringType("invoke")
             )
@@ -30,7 +30,7 @@ class ToExecInputsTest {
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    TableType(
+                    DepTableType(
                         StringType("key") to NumberType(2810),
                         StringType("invoke") to StringType("invoke")
                     )
@@ -52,13 +52,13 @@ class MergeTest {
     @Test
     fun `invocation inputs overrides func inputs`() {
         val funcInputs = FuncInputs(
-            TableType(
+            DepTableType(
                 StringType("key") to NumberType(1),
                 StringType("func") to StringType("func")
             )
         )
         val invocationInputs = InvocationInputs(
-            TableType(
+            DepTableType(
                 StringType("key") to NumberType(2810),
                 StringType("invoke") to StringType("invoke")
             )
@@ -67,7 +67,7 @@ class MergeTest {
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    TableType(
+                    DepTableType(
                         StringType("key") to NumberType(2810),
                         StringType("func") to StringType("func"),
                         StringType("invoke") to StringType("invoke")

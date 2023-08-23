@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class ErrorValueTest {
+internal class ErrorTypeTest {
 
     @Test
     fun `Function value returns error value`() {

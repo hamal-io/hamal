@@ -11,7 +11,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import io.hamal.runner.connector.UnitOfWork
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -67,7 +67,7 @@ internal class EventTest : AbstractExecuteTest() {
     }
 
     private val events = listOf(
-        Event(TableType("topic" to StringType("Topic-One"), "block" to NumberType(43))),
-        Event(TableType("topic" to StringType("Topic-Two"), "block" to NumberType(44)))
+        Event(DepTableType("topic" to StringType("Topic-One"), "block" to NumberType(43))),
+        Event(DepTableType("topic" to StringType("Topic-Two"), "block" to NumberType(44)))
     )
 }

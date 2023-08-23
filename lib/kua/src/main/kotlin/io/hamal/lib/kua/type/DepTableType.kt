@@ -16,7 +16,7 @@ typealias TableEntry = Entry<StringType, SerializableType>
 
 @SerialName("TableType")
 @Serializable
-data class TableType(
+data class DepTableType(
     @Serializable(with = Serializer::class)
     private val entries: MutableMap<StringType, SerializableType> = mutableMapOf(),
 ) : SerializableType, Collection<TableEntry> {
@@ -39,7 +39,7 @@ data class TableType(
         entries[key] = value
     }
 
-    fun setAll(tableValue: TableType) {
+    fun setAll(tableValue: DepTableType) {
         tableValue.entries.forEach { entry ->
             entries[entry.key] = entry.value
         }
@@ -82,7 +82,7 @@ data class TableType(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TableType
+        other as DepTableType
 
         return entries == other.entries
     }

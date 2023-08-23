@@ -15,7 +15,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.DepTableType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -104,7 +104,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         val exec = (execQueryRepository.get(execId) as CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(value, equalTo(State(TableType("value" to NumberType(13.37)))))
+            assertThat(value, equalTo(State(DepTableType("value" to NumberType(13.37)))))
         }
     }
 
@@ -121,10 +121,10 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
             .path("execId", execId)
             .body(
                 CompleteExecReq(
-                    state = State(TableType("value" to NumberType(13.37))),
+                    state = State(DepTableType("value" to NumberType(13.37))),
                     events = listOf(
                         Event(
-                            TableType(
+                            DepTableType(
                                 "topic" to StringType("test-completion"),
                                 "value" to NumberType(42)
                             )
