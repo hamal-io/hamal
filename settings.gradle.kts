@@ -52,6 +52,7 @@ include(":faas:instance:repository:api")
 include(":faas:instance:repository:memory")
 include(":faas:instance:repository:record")
 include(":faas:instance:repository:sqlite")
+include(":faas:instance:repository:testbed")
 include(":faas:mono")
 include(":faas:runner")
 
