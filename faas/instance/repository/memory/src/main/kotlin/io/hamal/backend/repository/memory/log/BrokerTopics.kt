@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicToCreate
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -13,7 +14,7 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
 
     private val lock = ReentrantLock()
     private val topicMapping = mutableMapOf<TopicName, LogTopic>()
-    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): LogTopic {
+    override fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic {
         return lock.withLock {
             require(topicMapping.values.none { it.id == toCreate.id }) { "Topic already exists" }
             require(!topicMapping.containsKey(toCreate.name)) { "Topic already exists" }
@@ -35,7 +36,7 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
         topicMapping.values.find { it.id == id }
     }
 
-    override fun list(): List<LogTopic> = lock.withLock {
+    override fun list(block: LogBrokerTopicsRepository.TopicQuery.() -> Unit): List<LogTopic> = lock.withLock {
         topicMapping.values.toList()
     }
 

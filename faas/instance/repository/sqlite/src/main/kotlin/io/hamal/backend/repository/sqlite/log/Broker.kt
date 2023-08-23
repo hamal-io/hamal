@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicQuery
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -66,8 +67,8 @@ class SqliteLogBrokerRepository(
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
     override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
-    override fun listTopics(): List<LogTopic> {
-        return topicsRepository.list()
+    override fun listTopics(block: TopicQuery.() -> Unit): List<LogTopic> {
+        return topicsRepository.list(block)
     }
 
     override fun clear() {

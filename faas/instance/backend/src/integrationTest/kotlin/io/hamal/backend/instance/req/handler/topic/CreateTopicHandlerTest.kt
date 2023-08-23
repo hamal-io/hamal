@@ -60,7 +60,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleTopicExists() {
-        eventBrokerRepository.listTopics().also { topics ->
+        eventBrokerRepository.listTopics {}.also { topics ->
             assertThat(topics, hasSize(1))
             with(topics.first()) {
                 assertThat(id, equalTo(TopicId(2345)))

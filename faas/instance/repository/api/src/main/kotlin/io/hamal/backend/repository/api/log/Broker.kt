@@ -1,5 +1,6 @@
 package io.hamal.backend.repository.api.log
 
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicQuery
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
@@ -51,7 +52,7 @@ interface LogBrokerRepository :
     ReadFromTopic,
     Closeable {
 
-    fun listTopics(): List<LogTopic>
+    fun listTopics(block: TopicQuery.() -> Unit): List<LogTopic>
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -69,6 +70,7 @@ interface LogBrokerRepository :
     }
 
     fun clear()
+
 
     data class EventQuery(
         var afterId: EventId = EventId(0),

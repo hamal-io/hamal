@@ -8,6 +8,7 @@ interface HamalSdk {
     val awaitService: AwaitService
     fun execService(): ExecService
     val execLogService: ExecLogService
+    val topicService: TopicService
 }
 
 data class DefaultHamalSdk(
@@ -27,6 +28,10 @@ data class DefaultHamalSdk(
 
     override val execLogService by lazy {
         DefaultExecLogService(httpTemplate)
+    }
+
+    override val topicService by lazy {
+        DefaultTopicService(httpTemplate)
     }
 }
 

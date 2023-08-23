@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicQuery
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -20,7 +21,6 @@ class SqliteLogBrokerTopicsRepository(
 ) : BaseSqliteRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
-
 }), LogBrokerTopicsRepository {
 
     private val topicMapping = ConcurrentHashMap<TopicName, LogTopic>()
@@ -89,7 +89,7 @@ class SqliteLogBrokerTopicsRepository(
                 }
             }?.also { topicMapping[it.name] = it }
 
-    override fun list(): List<LogTopic> {
+    override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
         return connection.executeQuery<LogTopic>("SELECT id,name FROM topics") {
             map { rs ->
                 LogTopic(
