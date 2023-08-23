@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.domain.vo.EventId
+import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
@@ -31,7 +32,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
         ).id(::TopicId)
 
         awaitCompleted(
-            appendEvent(topicId, MapType(mutableMapOf("counter" to NumberType(1))))
+            appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
         )
 
         with(listTopicEvents(topicId)) {
@@ -53,7 +54,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicId, MapType(mutableMapOf("counter" to NumberType(it))))
+                appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(it)))))
             }
         )
 
@@ -77,7 +78,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicId, MapType(mutableMapOf("counter" to NumberType(it))))
+                appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(it)))))
             }
         )
 
@@ -105,7 +106,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
         ).id(::TopicId)
 
         awaitCompleted(
-            appendEvent(topicId, MapType(mutableMapOf("counter" to NumberType(1))))
+            appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
         )
 
         with(listTopicEvents(anotherTopicId)) {

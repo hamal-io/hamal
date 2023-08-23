@@ -2,12 +2,11 @@ package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.req.AppendEventReq
+import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,13 +21,13 @@ class AppendEventRoute(
     @PostMapping("/v1/topics/{topicId}/events")
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,
-        @RequestBody value: MapType
+        @RequestBody topAppend: EventPayload
     ): ResponseEntity<ApiSubmittedReqWithId> {
         val topic = eventBrokerRepository.getTopic(topicId)
         val result = submitRequest(
             AppendEventReq(
                 topicId = topic.id,
-                event = Event(value)
+                payload = topAppend
             )
         )
         return ResponseEntity(result.let {
@@ -37,6 +36,6 @@ class AppendEventRoute(
                 status = it.status,
                 id = it.id
             )
-        }, HttpStatus.ACCEPTED)
+        }, ACCEPTED)
     }
 }
