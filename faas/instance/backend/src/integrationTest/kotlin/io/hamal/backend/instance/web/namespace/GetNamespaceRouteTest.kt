@@ -8,8 +8,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.DepTableType
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiNamespace
 import org.hamcrest.MatcherAssert.assertThat
@@ -33,7 +33,7 @@ internal class GetNamespaceRouteTest : BaseNamespaceRouteTest() {
             createNamespace(
                 CreateNamespaceReq(
                     name = NamespaceName("namespace-one"),
-                    inputs = NamespaceInputs(DepTableType("hamal" to StringType("rockz")))
+                    inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )
             )
         ).id(::NamespaceId)
@@ -48,7 +48,7 @@ internal class GetNamespaceRouteTest : BaseNamespaceRouteTest() {
         with(getNamespaceResponse.result(ApiNamespace::class)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("namespace-one")))
-            assertThat(inputs, equalTo(NamespaceInputs(DepTableType("hamal" to StringType("rockz")))))
+            assertThat(inputs, equalTo(NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
         }
     }
 }

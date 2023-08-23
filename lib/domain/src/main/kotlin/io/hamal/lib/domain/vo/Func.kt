@@ -7,7 +7,7 @@ import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.kua.type.DepTableType
+import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
 @Serializable(with = FuncId.Serializer::class)
@@ -24,6 +24,6 @@ class FuncName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = FuncInputs.Serializer::class)
-class FuncInputs(override val value: DepTableType = DepTableType()) : Inputs() {
+class FuncInputs(override val value: MapType = MapType()) : Inputs() {
     internal object Serializer : InputsSerializer<FuncInputs>(::FuncInputs)
 }

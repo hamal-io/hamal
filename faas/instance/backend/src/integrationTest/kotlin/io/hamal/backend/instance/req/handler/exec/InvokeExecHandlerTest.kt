@@ -6,8 +6,8 @@ import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.DepTableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(1),
                 status = Submitted,
                 id = ExecId(3333),
-                inputs = InvocationInputs(DepTableType(StringType("hamal") to StringType("justworks"))),
+                inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
                 code = CodeType("code"),
                 funcId = null,
                 correlationId = null,
@@ -39,7 +39,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(correlation, nullValue())
                 assertThat(
                     inputs,
-                    equalTo(ExecInputs(DepTableType(StringType("hamal") to StringType("justworks"))))
+                    equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))))
                 )
                 assertThat(code, equalTo(CodeType("code")))
             }
@@ -50,9 +50,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     fun `Invokes event execution`() {
         createFunc(
             id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
-                DepTableType(
-                    StringType("override") to StringType("false"),
-                    StringType("func") to StringType("func")
+                MapType(
+                    mutableMapOf(
+                        "override" to StringType("false"),
+                        "func" to StringType("func")
+                    )
                 )
             )
         )
@@ -63,9 +65,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 id = ExecId(3333),
                 inputs = InvocationInputs(
-                    DepTableType(
-                        StringType("override") to StringType("true"),
-                        StringType("invocation") to StringType("invocation")
+                    MapType(
+                        mutableMapOf(
+                            "override" to StringType("true"),
+                            "invocation" to StringType("invocation")
+                        )
                     )
                 ),
                 funcId = FuncId(4444),
@@ -90,10 +94,12 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            DepTableType(
-                                StringType("func") to StringType("func"),
-                                StringType("invocation") to StringType("invocation"),
-                                StringType("override") to StringType("true"),
+                            MapType(
+                                mutableMapOf(
+                                    "func" to StringType("func"),
+                                    "invocation" to StringType("invocation"),
+                                    "override" to StringType("true"),
+                                )
                             ),
                         )
                     )
@@ -109,9 +115,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             id = FuncId(4444),
             code = CodeType("SomeCode"),
             inputs = FuncInputs(
-                DepTableType(
-                    StringType("override") to StringType("false"),
-                    StringType("func") to StringType("func")
+                MapType(
+                    mutableMapOf(
+                        "override" to StringType("false"),
+                        "func" to StringType("func")
+                    )
                 )
             )
         )
@@ -122,9 +130,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
                 inputs = InvocationInputs(
-                    DepTableType(
-                        StringType("override") to StringType("true"),
-                        StringType("invocation") to StringType("invocation")
+                    MapType(
+                        mutableMapOf(
+                            "override" to StringType("true"),
+                            "invocation" to StringType("invocation")
+                        )
                     )
                 ),
                 funcId = FuncId(4444),
@@ -149,10 +159,12 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            DepTableType(
-                                StringType("func") to StringType("func"),
-                                StringType("invocation") to StringType("invocation"),
-                                StringType("override") to StringType("true"),
+                            MapType(
+                                mutableMapOf(
+                                    "func" to StringType("func"),
+                                    "invocation" to StringType("invocation"),
+                                    "override" to StringType("true"),
+                                )
                             ),
                         )
                     )
@@ -168,9 +180,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             id = FuncId(4444),
             code = CodeType("SomeCode"),
             inputs = FuncInputs(
-                DepTableType(
-                    StringType("override") to StringType("false"),
-                    StringType("func") to StringType("func")
+                MapType(
+                    mutableMapOf(
+                        "override" to StringType("false"),
+                        "func" to StringType("func")
+                    )
                 )
             )
         )
@@ -185,10 +199,12 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            DepTableType(
-                                StringType("func") to StringType("func"),
-                                StringType("invocation") to StringType("invocation"),
-                                StringType("override") to StringType("true"),
+                            MapType(
+                                mutableMapOf(
+                                    "func" to StringType("func"),
+                                    "invocation" to StringType("invocation"),
+                                    "override" to StringType("true"),
+                                )
                             ),
                         )
                     )
@@ -218,9 +234,11 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
         status = Submitted,
         id = ExecId(3333),
         inputs = InvocationInputs(
-            DepTableType(
-                StringType("override") to StringType("true"),
-                StringType("invocation") to StringType("invocation")
+            MapType(
+                mutableMapOf(
+                "override" to StringType("true"),
+                "invocation" to StringType("invocation")
+                )
             )
         ),
         funcId = FuncId(4444),

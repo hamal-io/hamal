@@ -1,51 +1,9 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableEntryIterator
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
-
-// FIXME State instead of Sandbox
-@Deprecated("remove me")
-fun Sandbox.toTableProxyMap(table: DepTableType): TableProxyMap =
-    tableCreateMap(table.size).apply {
-        table.forEach { entry ->
-            when (val value = entry.value) {
-                is StringType -> set(entry.key, value)
-                is NumberType -> set(entry.key, value)
-                is FunctionType<*, *, *, *> -> set(entry.key, value)
-//                is TableTypeArray -> set(entry.key, value)
-//                is TableTypeMap -> set(entry.key, value)
-                else -> TODO()
-            }
-        }
-    }
-
-@Deprecated("remove me")
-fun State.toTableType(map: TableProxyMap): DepTableType {
-    val store = mutableMapOf<StringType, SerializableType>()
-
-    TableEntryIterator(
-        map.index,
-        this,
-        keyExtractor = { state, index ->
-            state.getStringType(index)
-        },
-        valueExtractor = { state, index ->
-            state.getAny(index)
-        }
-    ).forEach { (key, value) ->
-        when (value.value) {
-            is StringType -> store[key] = value.value
-            is NumberType -> store[key] = value.value
-            else -> TODO()
-        }
-    }
-
-    return DepTableType(store)
-}
 
 fun State.toArrayType(array: TableProxyArray): ArrayType {
     val result = ArrayType()
@@ -71,7 +29,7 @@ fun State.toArrayType(array: TableProxyArray): ArrayType {
     return result
 }
 
-internal fun State.toProxyArray(array: ArrayType): TableProxyArray {
+fun State.toProxyArray(array: ArrayType): TableProxyArray {
     return tableCreateArray(array.size).also {
         // FIXME probably instead of of appending it should be set to keep the index
         array.entries.forEach { (_, value) ->
@@ -87,7 +45,7 @@ internal fun State.toProxyArray(array: ArrayType): TableProxyArray {
     }
 }
 
-internal fun State.toMapType(map: TableProxyMap): MapType {
+fun State.toMapType(map: TableProxyMap): MapType {
     val store = mutableMapOf<String, SerializableType>()
 
     TableEntryIterator(
@@ -112,7 +70,7 @@ internal fun State.toMapType(map: TableProxyMap): MapType {
     return MapType(store)
 }
 
-internal fun State.toProxyMap(map: MapType): TableProxyMap {
+fun State.toProxyMap(map: MapType): TableProxyMap {
     return tableCreateMap(map.size).also {
         map.entries.forEach { (key, value) ->
             when (value) {

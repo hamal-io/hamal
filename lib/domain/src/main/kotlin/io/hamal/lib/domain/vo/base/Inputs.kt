@@ -1,23 +1,23 @@
 package io.hamal.lib.domain.vo.base
 
 import io.hamal.lib.common.domain.ValueObject
-import io.hamal.lib.kua.type.DepTableType
+import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable
-abstract class Inputs : ValueObject.BaseImpl<DepTableType>() {
+abstract class Inputs : ValueObject.BaseImpl<MapType>() {
     override fun toString(): String {
         return "${this::class.simpleName}(${value})"
     }
 }
 
 abstract class InputsSerializer<INPUT : Inputs>(
-    val fn: (DepTableType) -> INPUT
+    val fn: (MapType) -> INPUT
 ) : KSerializer<INPUT> {
-    private val delegate = DepTableType.serializer()
+    private val delegate = MapType.serializer()
     override val descriptor = delegate.descriptor
 
     override fun deserialize(decoder: Decoder): INPUT {

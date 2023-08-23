@@ -10,7 +10,7 @@ import io.hamal.lib.domain.Invocation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.DepTableType
+import io.hamal.lib.kua.type.MapType
 import java.time.Instant
 
 data class Entity(
@@ -91,7 +91,7 @@ data class Entity(
             cmdId = cmdId,
             id = id,
             correlation = correlation,
-            inputs = inputs ?: ExecInputs(DepTableType()),
+            inputs = inputs ?: ExecInputs(MapType()),
             code = code!!,
             invocation = invocation!!
         )

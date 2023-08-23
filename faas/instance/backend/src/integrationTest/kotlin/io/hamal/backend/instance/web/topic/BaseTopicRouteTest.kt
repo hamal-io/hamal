@@ -8,7 +8,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.DepTableType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.sdk.domain.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -54,7 +54,7 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
         return createTopicResponse.result(ApiSubmittedReqWithId::class)
     }
 
-    fun appendEvent(topicId: TopicId, value: DepTableType): ApiSubmittedReq {
+    fun appendEvent(topicId: TopicId, value: MapType): ApiSubmittedReq {
         val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .body(value)

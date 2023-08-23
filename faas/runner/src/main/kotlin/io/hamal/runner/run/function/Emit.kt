@@ -16,16 +16,16 @@ class EmitFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: TableProxyMap) {
         ctx.pushNil()
 
-        val eventMap = mutableMapOf<StringType, SerializableType>()
+        val eventMap = mutableMapOf<String, SerializableType>()
 
         while (ctx.state.native.tableNext(arg2.index)) {
             val k = ctx.getStringType(-2)
             val v = ctx.getAny(-1)
             when (val n = v.value) {
-                is NilType -> eventMap[k] = n
-                is NumberType -> eventMap[k] = n
-                is StringType -> eventMap[k] = n
-                is BooleanType -> eventMap[k] = n
+                is NilType -> eventMap[k.value] = n
+                is NumberType -> eventMap[k.value] = n
+                is StringType -> eventMap[k.value] = n
+                is BooleanType -> eventMap[k.value] = n
 
                 else -> TODO()
             }
@@ -34,8 +34,8 @@ class EmitFunction(
 
 
         // FIXME make sure topic is set and string
-        require(eventMap.containsKey(StringType("topic"))) { "Topic not present" }
+        require(eventMap.containsKey("topic")) { "Topic not present" }
 
-        executionCtx.emit(Event(DepTableType(eventMap)))
+        executionCtx.emit(Event(MapType(eventMap)))
     }
 }

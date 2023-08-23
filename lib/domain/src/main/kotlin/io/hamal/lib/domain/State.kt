@@ -4,11 +4,11 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.kua.type.DepTableType
+import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
 @Serializable(with = State.Serializer::class)
-class State(override val value: DepTableType = DepTableType()) : Inputs() {
+class State(override val value: MapType = MapType()) : Inputs() {
     internal object Serializer : InputsSerializer<State>(::State)
 }
 

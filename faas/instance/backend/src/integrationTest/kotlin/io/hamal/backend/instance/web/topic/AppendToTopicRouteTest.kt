@@ -1,14 +1,14 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
-import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.body
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.DepTableType
+import io.hamal.lib.sdk.domain.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -24,7 +24,7 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
         awaitCompleted(
             appendEvent(
                 topicId,
-                DepTableType("hamal" to StringType("rocks"))
+                MapType(mutableMapOf("hamal" to StringType("rocks")))
             )
         )
 
@@ -32,7 +32,7 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
             assertThat(events, hasSize(1))
 
             val event = events.first()
-            assertThat(event.value, equalTo(DepTableType("hamal" to StringType("rocks"))))
+            assertThat(event.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rocks")))))
         }
     }
 
@@ -46,7 +46,7 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
             IntRange(1, 10).map {
                 appendEvent(
                     topicId,
-                    DepTableType("hamal" to StringType("rocks"))
+                    MapType(mutableMapOf("hamal" to StringType("rocks")))
                 )
             }
         )
@@ -54,7 +54,7 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
         with(listTopicEvents(topicId)) {
             assertThat(events, hasSize(10))
             events.forEach { event ->
-                assertThat(event.value, equalTo(DepTableType("hamal" to StringType("rocks"))))
+                assertThat(event.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rocks")))))
             }
         }
     }
@@ -62,7 +62,7 @@ internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
     @Test
     fun `Tries to append to topic which does not exists`() {
         val topicResponse = httpTemplate.post("/v1/topics/1234/events")
-            .body(DepTableType("hamal" to StringType("rocks")))
+            .body(MapType(mutableMapOf("hamal" to StringType("rocks"))))
             .execute()
 
         assertThat(topicResponse.statusCode, equalTo(HttpStatusCode.NotFound))

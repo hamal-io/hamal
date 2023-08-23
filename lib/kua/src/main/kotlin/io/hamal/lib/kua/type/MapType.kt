@@ -4,6 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -13,6 +14,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlin.reflect.KClass
 
 @Serializable
+@SerialName("MapType")
 data class MapType(
     @Serializable(with = Serializer::class)
     val entries: MutableMap<String, SerializableType> = mutableMapOf(),
@@ -21,6 +23,10 @@ data class MapType(
     val size get() = entries.size
 
     operator fun get(key: String): SerializableType = entries[key] ?: NilType
+    operator fun set(key: String, value: SerializableType): Int {
+        entries[key] = value
+        return size
+    }
 
     fun unset(key: StringType) = unset(key.value)
     operator fun set(key: String, value: NilType) = unset(key)
@@ -87,10 +93,10 @@ data class MapType(
         return size
     }
 
-    fun getStringValue(key: StringType) = getStringValue(key.value)
-    fun getString(key: String): String = getStringValue(key).value
+    fun getStringType(key: StringType) = getStringType(key.value)
+    fun getString(key: String): String = getStringType(key).value
     fun getString(key: StringType): String = getString(key.value)
-    fun getStringValue(key: String): StringType {
+    fun getStringType(key: String): StringType {
         checkExpectedType(key, StringType::class)
         return entries[key]!! as StringType
     }

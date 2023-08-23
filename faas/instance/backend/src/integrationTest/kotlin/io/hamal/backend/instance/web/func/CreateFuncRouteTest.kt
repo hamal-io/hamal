@@ -8,8 +8,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.DepTableType
 import io.hamal.lib.sdk.domain.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -23,7 +23,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
             CreateFuncReq(
                 name = FuncName("test-func"),
                 namespaceId = null,
-                inputs = FuncInputs(DepTableType(StringType("hamal") to StringType("rocks"))),
+                inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeType("13 + 37")
             )
         )
@@ -31,7 +31,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
 
         with(funcQueryRepository.get(result.id(::FuncId))) {
             assertThat(name, equalTo(FuncName("test-func")))
-            assertThat(inputs, equalTo(FuncInputs(DepTableType(StringType("hamal") to StringType("rocks")))))
+            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             assertThat(code, equalTo(CodeType("13 + 37")))
 
             val namespace = namespaceQueryRepository.get(namespaceId)
@@ -55,7 +55,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
             CreateFuncReq(
                 name = FuncName("test-func"),
                 namespaceId = namespace.id,
-                inputs = FuncInputs(DepTableType(StringType("hamal") to StringType("rocks"))),
+                inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeType("13 + 37")
             )
         )
@@ -63,7 +63,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
 
         with(funcQueryRepository.get(result.id(::FuncId))) {
             assertThat(name, equalTo(FuncName("test-func")))
-            assertThat(inputs, equalTo(FuncInputs(DepTableType(StringType("hamal") to StringType("rocks")))))
+            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             assertThat(code, equalTo(CodeType("13 + 37")))
 
             namespaceQueryRepository.get(namespaceId).let {
@@ -81,7 +81,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     name = FuncName("test-func"),
                     namespaceId = NamespaceId(12345),
-                    inputs = FuncInputs(DepTableType(StringType("hamal") to StringType("rocks"))),
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                     code = CodeType("13 + 37")
                 )
             )

@@ -10,8 +10,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.DepTableType
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,7 +31,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(SnowflakeId(123)),
                 status = Submitted,
                 id = TopicId(4444),
-                event = Event(DepTableType("hamal" to StringType("rockz")))
+                event = Event(MapType(mutableMapOf("hamal" to StringType("rockz"))))
             )
         )
 
@@ -45,7 +45,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
                 assertThat(topicId, equalTo(TopicId(4444)))
 
                 val evt = ProtoBuf { }.decodeFromByteArray(Event.serializer(), bytes)
-                assertThat(evt.value, equalTo(DepTableType("hamal" to StringType("rockz"))))
+                assertThat(evt.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
             }
         }
     }
@@ -58,7 +58,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
                     reqId = ReqId(SnowflakeId(123)),
                     status = Submitted,
                     id = TopicId(123),
-                    event = Event(DepTableType("hamal" to StringType("rockz")))
+                    event = Event(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )
             )
         }

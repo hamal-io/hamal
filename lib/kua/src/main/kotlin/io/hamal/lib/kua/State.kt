@@ -45,10 +45,8 @@ interface State {
     fun pushString(value: String): StackTop
     fun pushString(value: StringType) = pushString(value.value)
 
-    fun pushTable(value: DepTableType): StackTop
     fun pushTable(proxy: TableProxyMap): StackTop
     fun pushTable(proxy: TableProxyArray): StackTop
-    fun getTable(idx: Int): DepTableType
     fun getTableMapProxy(idx: Int): TableProxyMap
     fun getTableArrayProxy(idx: Int): TableProxyArray
 
@@ -136,17 +134,8 @@ class ClosableState(
     override fun getString(idx: Int) = native.toString(idx)
     override fun pushString(value: String) = StackTop(native.pushString(value))
 
-    override fun pushTable(value: DepTableType): StackTop {
-        TODO("Not yet implemented")
-    }
-
     override fun pushTable(proxy: TableProxyMap) = StackTop(native.pushTop(proxy.index))
-
     override fun pushTable(proxy: TableProxyArray) = StackTop(native.pushTop(proxy.index))
-
-    override fun getTable(idx: Int): DepTableType {
-        TODO("Not yet implemented")
-    }
 
     //FIXME type check
     override fun getTableMapProxy(idx: Int): TableProxyMap = TableProxyMap(absIndex(idx), this)

@@ -4,6 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -13,6 +14,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlin.reflect.KClass
 
 @Serializable
+@SerialName("ArrayType")
 data class ArrayType(
     @Serializable(with = Serializer::class)
     val entries: MutableMap<Int, SerializableType> = mutableMapOf(),

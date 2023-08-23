@@ -13,9 +13,9 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.DepTableType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -104,7 +104,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         val exec = (execQueryRepository.get(execId) as CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(value, equalTo(State(DepTableType("value" to NumberType(13.37)))))
+            assertThat(value, equalTo(State(MapType(mutableMapOf("value" to NumberType(13.37))))))
         }
     }
 
@@ -121,12 +121,14 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
             .path("execId", execId)
             .body(
                 CompleteExecReq(
-                    state = State(DepTableType("value" to NumberType(13.37))),
+                    state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     events = listOf(
                         Event(
-                            DepTableType(
-                                "topic" to StringType("test-completion"),
-                                "value" to NumberType(42)
+                            MapType(
+                                mutableMapOf(
+                                    "topic" to StringType("test-completion"),
+                                    "value" to NumberType(42)
+                                )
                             )
                         )
                     )
