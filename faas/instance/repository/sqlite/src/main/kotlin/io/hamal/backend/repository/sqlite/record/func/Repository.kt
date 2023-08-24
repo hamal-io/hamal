@@ -1,10 +1,10 @@
 package io.hamal.backend.repository.sqlite.record.func
 
 import io.hamal.backend.repository.api.Func
-import io.hamal.backend.repository.api.FuncCmdRepository
 import io.hamal.backend.repository.api.FuncCmdRepository.CreateCmd
-import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.backend.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.func.Entity
 import io.hamal.backend.repository.record.func.FuncCreationRecord
@@ -45,7 +45,7 @@ class SqliteFuncRepository(
         ProjectionCurrent,
         ProjectionUniqueName
     )
-), FuncCmdRepository, FuncQueryRepository {
+), FuncRepository {
 
     data class Config(
         override val path: Path
@@ -78,7 +78,7 @@ class SqliteFuncRepository(
         }
     }
 
-    override fun update(funcId: FuncId, cmd: FuncCmdRepository.UpdateCmd): Func {
+    override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(funcId, cmdId)) {

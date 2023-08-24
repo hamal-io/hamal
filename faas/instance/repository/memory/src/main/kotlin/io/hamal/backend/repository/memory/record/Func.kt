@@ -2,8 +2,8 @@ package io.hamal.backend.repository.memory.record
 
 import io.hamal.backend.repository.api.Func
 import io.hamal.backend.repository.api.FuncCmdRepository
-import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.backend.repository.api.FuncRepository
 import io.hamal.backend.repository.record.func.FuncCreationRecord
 import io.hamal.backend.repository.record.func.FuncRecord
 import io.hamal.backend.repository.record.func.FuncUpdatedRecord
@@ -19,7 +19,7 @@ internal object CurrentFuncProjection {
     private val projection = mutableMapOf<FuncId, Func>()
     fun apply(func: Func) {
 
-        
+
         val values = projection.values.groupBy({ it.namespaceId }, { it.name }).toMutableMap()
         values[func.namespaceId] = values[func.namespaceId]?.plus(func.name) ?: listOf(func.name)
         val unique = values.all { it.value.size == it.value.toSet().size }
@@ -43,7 +43,7 @@ internal object CurrentFuncProjection {
     }
 }
 
-object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncCmdRepository, FuncQueryRepository {
+object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRepository {
     private val lock = ReentrantLock()
     override fun create(cmd: FuncCmdRepository.CreateCmd): Func {
         return lock.withLock {

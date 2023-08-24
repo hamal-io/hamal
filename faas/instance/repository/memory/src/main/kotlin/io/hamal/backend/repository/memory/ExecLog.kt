@@ -3,13 +3,14 @@ package io.hamal.backend.repository.memory
 import io.hamal.backend.repository.api.ExecLog
 import io.hamal.backend.repository.api.ExecLogCmdRepository
 import io.hamal.backend.repository.api.ExecLogQueryRepository
+import io.hamal.backend.repository.api.ExecLogRepository
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.RemoteAt
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
 
-object MemoryExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository {
+object MemoryExecLogRepository : ExecLogRepository {
     private val lock = ReentrantReadWriteLock()
     private val store = mutableListOf<ExecLog>()
 

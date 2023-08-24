@@ -1,9 +1,12 @@
 package io.hamal.backend.repository.memory.record
 
-import io.hamal.backend.repository.api.*
+import io.hamal.backend.repository.api.EventTrigger
+import io.hamal.backend.repository.api.FixedRateTrigger
+import io.hamal.backend.repository.api.Trigger
 import io.hamal.backend.repository.api.TriggerCmdRepository.CreateEventCmd
 import io.hamal.backend.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.backend.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.backend.repository.api.TriggerRepository
 import io.hamal.backend.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.backend.repository.record.trigger.TriggerRecord
@@ -51,8 +54,7 @@ internal object CurrentTriggerProjection {
 }
 
 
-object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(),
-    TriggerCmdRepository, TriggerQueryRepository {
+object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(), TriggerRepository {
     private val lock = ReentrantLock()
 
     override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {

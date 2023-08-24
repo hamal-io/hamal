@@ -6,6 +6,8 @@ import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
+interface ExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository
+
 interface ExecLogCmdRepository {
     fun append(cmd: LogCmd): ExecLog
     fun clear()

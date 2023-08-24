@@ -41,7 +41,7 @@ class SqliteTriggerRepository(
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
     projections = listOf(ProjectionCurrent, ProjectionUniqueName)
-), TriggerCmdRepository, TriggerQueryRepository {
+), TriggerRepository {
 
     data class Config(
         override val path: Path,

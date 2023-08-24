@@ -9,6 +9,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
+interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
 
 interface TriggerCmdRepository {
     fun create(cmd: CreateFixedRateCmd): FixedRateTrigger

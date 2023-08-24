@@ -5,6 +5,8 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 
+interface StateRepository : StateCmdRepository, StateQueryRepository
+
 interface StateCmdRepository {
     fun set(cmdId: CmdId, correlatedState: CorrelatedState)
     fun clear()

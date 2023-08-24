@@ -3,8 +3,8 @@ package io.hamal.backend.repository.sqlite.record.namespace
 import io.hamal.backend.repository.api.Namespace
 import io.hamal.backend.repository.api.NamespaceCmdRepository
 import io.hamal.backend.repository.api.NamespaceCmdRepository.CreateCmd
-import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.backend.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.backend.repository.api.NamespaceRepository
 import io.hamal.backend.repository.record.CreateDomainObject
 import io.hamal.backend.repository.record.namespace.Entity
 import io.hamal.backend.repository.record.namespace.NamespaceCreationRecord
@@ -43,7 +43,7 @@ class SqliteNamespaceRepository(
     createDomainObject = CreateNamespace,
     recordClass = NamespaceRecord::class,
     projections = listOf(ProjectionCurrent, ProjectionUniqueName)
-), NamespaceCmdRepository, NamespaceQueryRepository {
+), NamespaceRepository {
 
     data class Config(
         override val path: Path

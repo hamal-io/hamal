@@ -11,6 +11,8 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
+interface ExecRepository : ExecCmdRepository, ExecQueryRepository
+
 interface ExecCmdRepository {
     fun plan(cmd: PlanCmd): PlannedExec
     fun schedule(cmd: ScheduleCmd): ScheduledExec
