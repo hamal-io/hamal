@@ -12,7 +12,7 @@ interface BrokerTopicsRepository : Closeable {
     fun find(name: TopicName): LogTopic?
     fun find(id: TopicId): LogTopic?
     fun list(block: TopicQuery.() -> Unit): List<LogTopic>
-    fun count(): ULong
+    fun count(block: TopicQuery.() -> Unit): ULong
     data class TopicToCreate(
         val id: TopicId,
         val name: TopicName
@@ -20,7 +20,7 @@ interface BrokerTopicsRepository : Closeable {
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
-        var names: List<TopicName>,
+        var names: List<TopicName> = listOf(),
         var limit: Limit = Limit(1)
     )
 }

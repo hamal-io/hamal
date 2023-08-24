@@ -35,7 +35,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
 
             assertThat(result.id, equalTo(TopicId(1)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
         @Test
@@ -58,7 +58,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
             assertThat(result.id, equalTo(TopicId(2)))
             assertThat(result.name, equalTo(TopicName("func::created")))
 
-            assertThat(testInstance.count(), equalTo(2UL))
+            assertThat(testInstance.count {}, equalTo(2UL))
         }
 
         @Test
@@ -82,7 +82,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
             }
             assertThat(throwable.message, equalTo("Topic already exists"))
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
         private val testInstance = MemoryBrokerTopicsRepository()

@@ -9,13 +9,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.sqlite.SQLiteException
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
 class SqliteLogBrokerTopicsRepositoryTest {
+
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -124,7 +124,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
             assertThat(result.id, equalTo(TopicId(1)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
         @Test
@@ -147,7 +147,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
             assertThat(result.id, equalTo(TopicId(2)))
             assertThat(result.name, equalTo(TopicName("func::created")))
 
-            assertThat(testInstance.count(), equalTo(2UL))
+            assertThat(testInstance.count {}, equalTo(2UL))
         }
 
         @Test
@@ -160,7 +160,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
                 )
             )
 
-            val throwable = assertThrows<SQLiteException> {
+            val throwable = assertThrows<IllegalArgumentException> {
                 testInstance.create(
                     CmdId(2),
                     BrokerTopicsRepository.TopicToCreate(
@@ -171,10 +171,10 @@ class SqliteLogBrokerTopicsRepositoryTest {
             }
             assertThat(
                 throwable.message,
-                equalTo("[SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: topics.name)")
+                equalTo("Topic already exists")
             )
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
         private val testInstance = SqliteBrokerTopicsRepository(

@@ -2,6 +2,7 @@ package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sdk.domain.ApiTopicList
 import io.hamal.lib.sdk.domain.ApiTopicList.Topic
@@ -16,10 +17,12 @@ class ListTopicsRoute(
 ) {
     @GetMapping("/v1/topics")
     fun listTopics(
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
         @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiTopicList> {
         val topics = eventBrokerRepository.listTopics {
+            this.afterId = afterId
             this.names = topicNames
             this.limit = limit
         }

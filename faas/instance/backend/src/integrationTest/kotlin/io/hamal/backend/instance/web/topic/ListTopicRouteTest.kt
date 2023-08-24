@@ -39,13 +39,13 @@ internal class ListTopicRouteTest : BaseTopicRouteTest() {
             assertThat(topics, hasSize(3))
 
             val topicOne = topics[0]
-            assertThat(topicOne.name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(topicOne.name, equalTo(TopicName("namespace::topics_three")))
 
             val topicTwo = topics[1]
             assertThat(topicTwo.name, equalTo(TopicName("namespace::topics_two")))
 
             val topicThree = topics[2]
-            assertThat(topicThree.name, equalTo(TopicName("namespace::topics_three")))
+            assertThat(topicThree.name, equalTo(TopicName("namespace::topics_one")))
         }
     }
 }

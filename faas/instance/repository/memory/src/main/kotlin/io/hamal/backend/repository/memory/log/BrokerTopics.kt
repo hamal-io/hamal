@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
@@ -14,6 +15,8 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
     private val topicMapping = mutableMapOf<TopicName, LogTopic>()
+    private val topics = mutableMapOf<TopicId, LogTopic>()
+
     override fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic {
         return lock.withLock {
             require(topicMapping.values.none { it.id == toCreate.id }) { "Topic already exists" }
@@ -22,6 +25,7 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
                 id = toCreate.id,
                 name = toCreate.name
             )
+            topics[toCreate.id] = topicMapping[toCreate.name]!!
             topicMapping[toCreate.name]!!
         }
     }
@@ -33,19 +37,34 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
     }
 
     override fun find(id: TopicId): LogTopic? = lock.withLock {
-        topicMapping.values.find { it.id == id }
+        topics[id]
     }
 
-    override fun list(block: BrokerTopicsRepository.TopicQuery.() -> Unit): List<LogTopic> = lock.withLock {
-        topicMapping.values.toList()
+    override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
+        val query = TopicQuery().also(block)
+        return lock.withLock {
+            topics.keys.sorted()
+                .reversed()
+                .dropWhile { it >= query.afterId }
+                .take(query.limit.value)
+                .mapNotNull { find(it) }
+        }
     }
 
-    override fun count(): ULong {
-        return lock.withLock { topicMapping.size.toULong() }
+    override fun count(block: TopicQuery.() -> Unit): ULong {
+        val query = TopicQuery().also(block)
+        return lock.withLock {
+            topics.keys.sorted()
+                .reversed()
+                .dropWhile { it >= query.afterId }
+                .count()
+                .toULong()
+        }
     }
 
     fun clear() {
         topicMapping.clear()
+        topics.clear()
     }
 
     override fun close() {
