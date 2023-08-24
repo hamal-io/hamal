@@ -5,11 +5,11 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.kua.type.TableType
+import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
 @Serializable(with = ApiState.Serializer::class)
-class ApiState(override val value: TableType = TableType()) : Inputs() {
+class ApiState(override val value: MapType = MapType()) : Inputs() {
     internal object Serializer : InputsSerializer<ApiState>(::ApiState)
 }
 

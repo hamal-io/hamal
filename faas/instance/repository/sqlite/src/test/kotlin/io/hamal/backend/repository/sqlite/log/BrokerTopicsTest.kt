@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
@@ -9,13 +9,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.sqlite.SQLiteException
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
 class SqliteLogBrokerTopicsRepositoryTest {
+
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -27,7 +27,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "some-path", "another-path")
-            SqliteLogBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
+            SqliteBrokerTopicsRepository(testBrokerTopics(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics.db")))
@@ -35,7 +35,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Creates topics table`() {
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'topics' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -44,16 +44,16 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Does not create topics table if already exists`() {
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.execute("""INSERT INTO topics (name,instant) VALUES ('some-topic',unixepoch());""")
             }
 
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use { }
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use { }
 
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM topics") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -62,7 +62,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -71,7 +71,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -80,7 +80,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -89,7 +89,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            SqliteLogBrokerTopicsRepository(testBrokerTopics()).use {
+            SqliteBrokerTopicsRepository(testBrokerTopics()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
@@ -115,7 +115,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
         fun `Creates a new entry if topic does not exists`() {
             val result = testInstance.create(
                 CmdId(1),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(1),
                     TopicName("very-first-topic")
                 )
@@ -124,14 +124,14 @@ class SqliteLogBrokerTopicsRepositoryTest {
             assertThat(result.id, equalTo(TopicId(1)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
         @Test
         fun `Bug - able to create realistic topic name`() {
             testInstance.create(
                 CmdId(1),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(1),
                     TopicName("very-first-topic")
                 )
@@ -139,7 +139,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
 
             val result = testInstance.create(
                 CmdId(2),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(2),
                     TopicName("func::created")
                 )
@@ -147,23 +147,23 @@ class SqliteLogBrokerTopicsRepositoryTest {
             assertThat(result.id, equalTo(TopicId(2)))
             assertThat(result.name, equalTo(TopicName("func::created")))
 
-            assertThat(testInstance.count(), equalTo(2UL))
+            assertThat(testInstance.count {}, equalTo(2UL))
         }
 
         @Test
         fun `Throws if topic already exists`() {
             testInstance.create(
                 CmdId(1),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(1),
                     TopicName("very-first-topic")
                 )
             )
 
-            val throwable = assertThrows<SQLiteException> {
+            val throwable = assertThrows<IllegalArgumentException> {
                 testInstance.create(
                     CmdId(2),
-                    LogBrokerTopicsRepository.TopicToCreate(
+                    BrokerTopicsRepository.TopicToCreate(
                         TopicId(2),
                         TopicName("very-first-topic")
                     )
@@ -171,13 +171,13 @@ class SqliteLogBrokerTopicsRepositoryTest {
             }
             assertThat(
                 throwable.message,
-                equalTo("[SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: topics.name)")
+                equalTo("Topic already exists")
             )
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
-        private val testInstance = SqliteLogBrokerTopicsRepository(
+        private val testInstance = SqliteBrokerTopicsRepository(
             SqliteBrokerTopics(Path(testDir))
         )
     }

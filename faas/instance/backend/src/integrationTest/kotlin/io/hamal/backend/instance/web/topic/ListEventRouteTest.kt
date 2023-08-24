@@ -1,12 +1,13 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.domain.vo.EventId
+import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ListEventsResponse
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,7 +32,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
         ).id(::TopicId)
 
         awaitCompleted(
-            appendEvent(topicId, TableType("counter" to NumberType(1)))
+            appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
         )
 
         with(listTopicEvents(topicId)) {
@@ -40,7 +41,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
             with(events.first()) {
                 assertThat(id, equalTo(EventId(1)))
-                assertThat(value, equalTo(TableType("counter" to NumberType(1))))
+                assertThat(value, equalTo(MapType(mutableMapOf("counter" to NumberType(1)))))
             }
         }
     }
@@ -53,7 +54,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicId, TableType("counter" to NumberType(it)))
+                appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(it)))))
             }
         )
 
@@ -65,7 +66,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
         assertThat(listResponse.events, hasSize(23))
 
         listResponse.events.forEachIndexed { idx, event ->
-            assertThat(event.value, equalTo(TableType("counter" to NumberType(idx + 1))))
+            assertThat(event.value, equalTo(MapType(mutableMapOf("counter" to NumberType(idx + 1)))))
         }
     }
 
@@ -77,7 +78,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendEvent(topicId, TableType("counter" to NumberType(it)))
+                appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(it)))))
             }
         )
 
@@ -91,7 +92,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
 
         val event = listResponse.events.first()
         assertThat(event.id, equalTo(EventId(96)))
-        assertThat(event.value, equalTo(TableType("counter" to NumberType(96))))
+        assertThat(event.value, equalTo(MapType(mutableMapOf("counter" to NumberType(96)))))
     }
 
     @Test
@@ -105,7 +106,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
         ).id(::TopicId)
 
         awaitCompleted(
-            appendEvent(topicId, TableType("counter" to NumberType(1)))
+            appendToTopic(topicId, EventPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
         )
 
         with(listTopicEvents(anotherTopicId)) {

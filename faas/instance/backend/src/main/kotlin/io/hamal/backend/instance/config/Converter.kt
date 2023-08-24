@@ -17,6 +17,11 @@ object CorrelationIdConverter : Converter<String, CorrelationId> {
     override fun convert(source: String) = CorrelationId(source)
 }
 
+object TopicNameConverter : Converter<String, TopicName> {
+    override fun convert(source: String) = TopicName(source)
+}
+
+
 object EventIdConverter : DomainIdConverter<EventId>(EventId::class, ::EventId)
 object ExecIdConverter : DomainIdConverter<ExecId>(ExecId::class, ::ExecId)
 object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)

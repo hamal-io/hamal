@@ -1,7 +1,6 @@
 package io.hamal.backend.repository.sqlite
 
-import io.hamal.backend.repository.api.StateCmdRepository
-import io.hamal.backend.repository.api.StateQueryRepository
+import io.hamal.backend.repository.api.StateRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
@@ -20,7 +19,7 @@ class SqliteStateRepository(
         override val path = path
         override val filename = "correlated-state.db"
     },
-), StateCmdRepository, StateQueryRepository {
+), StateRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

@@ -6,16 +6,14 @@ import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class AnyValueTest {
+internal class AnyTypeTest {
 
     @Test
-    fun `AnyValue can be used with BooleanValue`() {
+    fun `AnyValue can be used with BooleanType`() {
         val captor = AnyValueResultCaptor()
         sandbox.register(
             NativeExtension(
@@ -32,7 +30,7 @@ internal class AnyValueTest {
     }
 
     @Test
-    fun `AnyValue can be used with NumberValue`() {
+    fun `AnyValue can be used with NumberType`() {
         val captor = AnyValueResultCaptor()
         sandbox.register(
             NativeExtension(
@@ -50,7 +48,7 @@ internal class AnyValueTest {
     }
 
     @Test
-    fun `AnyValue can be used with StringValue`() {
+    fun `AnyValue can be used with StringType`() {
         val captor = AnyValueResultCaptor()
         sandbox.register(
             NativeExtension(
@@ -68,7 +66,7 @@ internal class AnyValueTest {
     }
 
     @Test
-    fun `AnyValue can be used with TableMapValue`() {
+    fun `AnyValue can be used with MapType`() {
         val map = sandbox.tableCreateMap(2)
         map["key"] = "value"
         sandbox.setGlobal("test_map", map)
@@ -87,14 +85,14 @@ internal class AnyValueTest {
         sandbox.load("test.captor(test.pass_through(test_map))")
 
         val underlying = (captor.result as AnyType).value
-        require(underlying is TableProxyMap) { "Not a TableMapProxyValue" }
-        assertThat(underlying.length(), equalTo(1))
+        require(underlying is MapType) { "Not a MapType" }
+        assertThat(underlying.size, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
 
 
     @Test
-    fun `AnyValue can be used with TableArrayValue`() {
+    fun `AnyValue can be used with ArrayType`() {
         val array = sandbox.tableCreateArray(2)
         array.append(23)
         array.append("hamal.io")
@@ -114,8 +112,8 @@ internal class AnyValueTest {
         sandbox.load("test.captor(test.pass_through(test_array))")
 
         val underlying = (captor.result as AnyType).value
-        require(underlying is TableProxyArray) { "Not a TableArrayProxyValue" }
-        assertThat(underlying.length(), equalTo(2))
+        require(underlying is ArrayType) { "Not a ArrayType" }
+        assertThat(underlying.size, equalTo(2))
 
         assertThat(underlying.getInt(1), equalTo(23))
         assertThat(underlying.getString(2), equalTo("hamal.io"))

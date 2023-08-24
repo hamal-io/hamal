@@ -4,6 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -13,10 +14,11 @@ import kotlinx.serialization.encoding.Encoder
 import kotlin.reflect.KClass
 
 @Serializable
+@SerialName("ArrayType")
 data class ArrayType(
     @Serializable(with = Serializer::class)
     val entries: MutableMap<Int, SerializableType> = mutableMapOf(),
-) : SerializableType {
+) : TableType {
 
     val size get() = entries.size
 
@@ -69,15 +71,26 @@ data class ArrayType(
     fun append(value: SnowflakeId) = append(value.value.toString(16))
     fun append(value: DomainId) = append(value.value.value)
 
-    //
-//    fun getString(idx: Int) = getStringValue(idx).value
-//    fun getStringValue(idx: Int): StringType
-
     fun append(value: MapType): Int {
         entries[entries.size + 1] = value
         return size
     }
 
+    fun getMap(idx: Int): MapType {
+        checkExpectedType(idx, MapType::class)
+        return entries[idx]!! as MapType
+    }
+
+    fun getArray(idx: Int): ArrayType {
+        checkExpectedType(idx, ArrayType::class)
+        return entries[idx]!! as ArrayType
+    }
+
+    fun getString(idx: Int) = getStringType(idx).value
+    fun getStringType(idx: Int): StringType {
+        checkExpectedType(idx, StringType::class)
+        return entries[idx]!! as StringType
+    }
 
     fun append(value: String) = append(StringType(value))
     fun append(value: StringType): Int {

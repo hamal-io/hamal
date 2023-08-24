@@ -37,7 +37,7 @@ internal class TableProxyMapTest {
                 testInstance = state.tableCreateMap()
 
                 val result = testFn()
-                assertThat("item set", testInstance.length(), equalTo(1))
+                assertThat("item set", testInstance.length, equalTo(1))
                 assertThat(result, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
@@ -63,10 +63,10 @@ internal class TableProxyMapTest {
 
                 testInstance["key"] = "value"
                 testInstance["another-key"] = "another-value"
-                assertThat(testInstance.length(), equalTo(2))
+                assertThat(testInstance.length, equalTo(2))
 
                 testFn()
-                assertThat(testInstance.length(), equalTo(1))
+                assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
@@ -84,8 +84,8 @@ internal class TableProxyMapTest {
     fun getBooleanValue(): List<DynamicTest> {
         lateinit var testInstance: TableProxyMap
         return listOf(
-            { testInstance.getBooleanValue("key") },
-            { testInstance.getBooleanValue(StringType("key")) },
+            { testInstance.getBooleanType("key") },
+            { testInstance.getBooleanType(StringType("key")) },
             { testInstance.getBoolean("key") },
             { testInstance.getBoolean(StringType("key")) },
         ).mapIndexed { idx, testFn ->
@@ -100,7 +100,7 @@ internal class TableProxyMapTest {
                     else -> TODO()
                 }
 
-                assertThat(testInstance.length(), equalTo(1))
+                assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
@@ -124,7 +124,7 @@ internal class TableProxyMapTest {
 
                 val result = testFn()
                 assertThat(result, equalTo(CodeType("print('doing something interesting')")))
-                assertThat(testInstance.length(), equalTo(1))
+                assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
@@ -139,8 +139,8 @@ internal class TableProxyMapTest {
     fun getNumberValue(): List<DynamicTest> {
         lateinit var testInstance: TableProxyMap
         return listOf(
-            { testInstance.getNumberValue("key") },
-            { testInstance.getNumberValue(StringType("key")) },
+            { testInstance.getNumberType("key") },
+            { testInstance.getNumberType(StringType("key")) },
             { testInstance.getInt("key") },
             { testInstance.getInt(StringType("key")) },
             { testInstance.getLong("key") },
@@ -164,7 +164,7 @@ internal class TableProxyMapTest {
                     else -> TODO()
                 }
 
-                assertThat(testInstance.length(), equalTo(1))
+                assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(TableType::class))
@@ -181,8 +181,8 @@ internal class TableProxyMapTest {
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(StringType("key")) },
-            { testInstance.getStringValue("key") },
-            { testInstance.getStringValue(StringType("key")) }
+            { testInstance.getStringType("key") },
+            { testInstance.getStringType(StringType("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateMap()
@@ -195,7 +195,7 @@ internal class TableProxyMapTest {
                     else -> TODO()
                 }
 
-                assertThat(testInstance.length(), equalTo(1))
+                assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(TableType::class))

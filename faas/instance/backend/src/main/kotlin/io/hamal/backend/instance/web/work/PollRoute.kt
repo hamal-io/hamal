@@ -10,7 +10,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
 import io.hamal.lib.sdk.domain.ApiUnitOfWorkList.ApiUnitOfWork
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -42,7 +42,7 @@ class PollRoute(
                         code = exec.code,
                         invocation = exec.invocation
                     )
-                }), HttpStatus.OK
+                }), OK
         )
     }
 

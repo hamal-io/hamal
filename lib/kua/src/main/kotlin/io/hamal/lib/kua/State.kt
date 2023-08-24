@@ -1,11 +1,9 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.table.DefaultTableProxy
-import io.hamal.lib.kua.table.TableProxy.Mode.Array
-import io.hamal.lib.kua.table.TableProxy.Mode.Map
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.table.tableKeyType
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -47,12 +45,10 @@ interface State {
     fun pushString(value: String): StackTop
     fun pushString(value: StringType) = pushString(value.value)
 
-    fun pushTable(value: TableType): StackTop
     fun pushTable(proxy: TableProxyMap): StackTop
     fun pushTable(proxy: TableProxyArray): StackTop
-    fun getTable(idx: Int): TableType
-    fun getTableMap(idx: Int): TableProxyMap
-    fun getTableArray(idx: Int): TableProxyArray
+    fun getTableMapProxy(idx: Int): TableProxyMap
+    fun getTableArrayProxy(idx: Int): TableProxyArray
 
     fun getMapType(idx: Int): MapType
 
@@ -92,10 +88,13 @@ class ClosableState(
 
     override fun pushAny(value: AnyType): StackTop {
         return when (val underlying = value.value) {
+            is ArrayType -> pushTable(toProxyArray(underlying))
             is BooleanType -> pushBoolean(underlying)
+            is MapType -> pushTable(toProxyMap(underlying))
             is NumberType -> pushNumber(underlying)
             is StringType -> pushString(underlying)
             is TableProxyArray -> pushTable(underlying)
+            is TableProxyMap -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
@@ -105,13 +104,23 @@ class ClosableState(
             BooleanType::class -> AnyType(getBooleanValue(idx))
             NumberType::class -> AnyType(getNumberType(idx))
             StringType::class -> AnyType(getStringType(idx))
-            TableType::class -> AnyType(getTableMap(idx)) // FIXME what about table and array ?
+            TableType::class -> {
+                if (native.tableGetLength(idx) > 0) {
+                    when (tableKeyType(idx)) {
+                        StringType::class -> AnyType(getMapType(idx))
+                        NumberType::class -> AnyType(getArrayType(idx))
+                        else -> throw IllegalStateException("Must either be number or string")
+                    }
+                } else {
+                    AnyType(ArrayType())
+                }
+            } // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
     }
 
     override fun getArrayType(idx: Int): ArrayType {
-        val ref = DefaultTableProxy(absIndex(idx), this, Array)
+        val ref = TableProxyArray(absIndex(idx), this)
         return toArrayType(ref)
     }
 
@@ -125,26 +134,17 @@ class ClosableState(
     override fun getString(idx: Int) = native.toString(idx)
     override fun pushString(value: String) = StackTop(native.pushString(value))
 
-    override fun pushTable(value: TableType): StackTop {
-        TODO("Not yet implemented")
-    }
-
     override fun pushTable(proxy: TableProxyMap) = StackTop(native.pushTop(proxy.index))
-
     override fun pushTable(proxy: TableProxyArray) = StackTop(native.pushTop(proxy.index))
 
-    override fun getTable(idx: Int): TableType {
-        TODO("Not yet implemented")
-    }
+    //FIXME type check
+    override fun getTableMapProxy(idx: Int): TableProxyMap = TableProxyMap(absIndex(idx), this)
 
     //FIXME type check
-    override fun getTableMap(idx: Int): TableProxyMap = DefaultTableProxy(absIndex(idx), this, Map)
-
-    //FIXME type check
-    override fun getTableArray(idx: Int): TableProxyArray = DefaultTableProxy(absIndex(idx), this, Array)
+    override fun getTableArrayProxy(idx: Int): TableProxyArray = TableProxyArray(absIndex(idx), this)
 
     override fun getMapType(idx: Int): MapType {
-        val ref = DefaultTableProxy(absIndex(idx), this, Map)
+        val ref = TableProxyMap(absIndex(idx), this)
         return toMapType(ref)
     }
 
@@ -165,7 +165,7 @@ class ClosableState(
 
     override fun getGlobalTableMap(name: String): TableProxyMap {
         native.getGlobal(name)
-        return getTableMap(top.value)
+        return getTableMapProxy(top.value)
     }
 
     override fun unsetGlobal(name: String) {
@@ -174,18 +174,16 @@ class ClosableState(
     }
 
     override fun tableCreateMap(capacity: Int): TableProxyMap {
-        return DefaultTableProxy(
+        return TableProxyMap(
             index = native.tableCreate(0, capacity),
-            state = this,
-            mode = Map
+            state = this
         )
     }
 
     override fun tableCreateArray(capacity: Int): TableProxyArray {
-        return DefaultTableProxy(
+        return TableProxyArray(
             index = native.tableCreate(capacity, 0),
-            state = this,
-            mode = Array
+            state = this
         )
     }
 

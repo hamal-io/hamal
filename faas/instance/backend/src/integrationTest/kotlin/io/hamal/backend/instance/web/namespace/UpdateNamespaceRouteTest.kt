@@ -10,8 +10,8 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
@@ -44,7 +44,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
             createNamespace(
                 CreateNamespaceReq(
                     name = NamespaceName("createdName"),
-                    inputs = NamespaceInputs(TableType("hamal" to StringType("createdInputs")))
+                    inputs = NamespaceInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs")))))
                 )
             )
         )
@@ -54,7 +54,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
             .body(
                 UpdateNamespaceReq(
                     name = NamespaceName("updatedName"),
-                    inputs = NamespaceInputs(TableType("hamal" to StringType("updatedInputs")))
+                    inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))
                 )
             )
             .execute()
@@ -66,7 +66,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("updatedName")))
-            assertThat(inputs, equalTo(NamespaceInputs(TableType("hamal" to StringType("updatedInputs")))))
+            assertThat(inputs, equalTo(NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
         }
     }
 }

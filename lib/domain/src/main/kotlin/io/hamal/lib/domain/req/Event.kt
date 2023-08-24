@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.req
 
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
@@ -13,5 +13,5 @@ data class CreateTopicReq(
 @Serializable
 data class AppendEventReq(
     val topicId: TopicId,
-    val event: Event
+    val payload: EventPayload
 )

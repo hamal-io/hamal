@@ -8,7 +8,6 @@ import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.AnyType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.TableType
 import kotlin.reflect.KClass
 
 
@@ -41,12 +40,10 @@ class FunctionContext(
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
-    override fun pushTable(value: TableType) = state.pushTable(value)
     override fun pushTable(proxy: TableProxyMap) = state.pushTable(proxy)
     override fun pushTable(proxy: TableProxyArray) = state.pushTable(proxy)
-    override fun getTable(idx: Int) = state.getTable(idx)
-    override fun getTableMap(idx: Int) = state.getTableMap(idx)
-    override fun getTableArray(idx: Int) = state.getTableArray(idx)
+    override fun getTableMapProxy(idx: Int) = state.getTableMapProxy(idx)
+    override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
 
     override fun getMapType(idx: Int): MapType = state.getMapType(idx)
 

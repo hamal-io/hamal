@@ -80,6 +80,14 @@ function create_extension_factory()
             return internal.get_req(req_id)
         end
 
+        function export.topic.resolve(topic_name)
+            return internal.resolve_topic(topic_name)
+        end
+
+        function export.topic.append(topic_id, payload)
+            return internal.append_event(topic_id, payload)
+        end
+
         function export.topic.create(cmd)
             return internal.create_topic({
                 name = cmd.name

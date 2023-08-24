@@ -56,7 +56,7 @@ internal object QueueProjection {
     }
 }
 
-object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecCmdRepository, ExecQueryRepository {
+object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRepository {
     private val lock = ReentrantLock()
 
     override fun plan(cmd: PlanCmd): PlannedExec {

@@ -89,9 +89,7 @@ internal class TableEntryIteratorTest {
             FunctionInput1Schema(TableProxyArray::class)
         ) {
             override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
-                val testInstance = TableEntryIterator(
-                    -1,
-                    ctx,
+                val testInstance = TableEntryIterator(-1, ctx,
                     keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
@@ -130,10 +128,10 @@ internal class TableEntryIteratorTest {
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.getNumberType(index) },
-                    valueExtractor = { state, index -> state.toTableType(state.getTableMap(index)) }
+                    valueExtractor = { state, index -> state.toMapType(state.getTableMapProxy(index)) }
                 )
 
-                val resultCollector = mutableMapOf<NumberType, TableType>()
+                val resultCollector = mutableMapOf<NumberType, MapType>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
                 assertThat(resultCollector.keys, hasSize(3))
 

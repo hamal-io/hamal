@@ -1,6 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -15,13 +16,12 @@ data class SqliteBrokerTopics(
     val path: Path
 )
 
-class SqliteLogBrokerTopicsRepository(
+class SqliteBrokerTopicsRepository(
     internal val brokerTopics: SqliteBrokerTopics,
 ) : BaseSqliteRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
-
-}), LogBrokerTopicsRepository {
+}), BrokerTopicsRepository {
 
     private val topicMapping = ConcurrentHashMap<TopicName, LogTopic>()
     override fun setupConnection(connection: Connection) {
@@ -46,20 +46,27 @@ class SqliteLogBrokerTopicsRepository(
         }
     }
 
-    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): LogTopic {
-        return connection.execute<LogTopic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
-            query {
-                set("id", toCreate.id)
-                set("name", toCreate.name)
-                set("now", TimeUtils.now())
+    override fun create(cmdId: CmdId, toCreate: BrokerTopicsRepository.TopicToCreate): LogTopic {
+        try {
+            return connection.execute<LogTopic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
+                query {
+                    set("id", toCreate.id)
+                    set("name", toCreate.name)
+                    set("now", TimeUtils.now())
+                }
+                map { rs ->
+                    LogTopic(
+                        id = rs.getDomainId("id", ::TopicId),
+                        name = TopicName(rs.getString("name")),
+                    )
+                }
+            }!!
+        } catch (t: Throwable) {
+            if (t.message!!.contains("(UNIQUE constraint failed: topics.name)")) {
+                throw IllegalArgumentException("Topic already exists")
             }
-            map { rs ->
-                LogTopic(
-                    id = rs.getDomainId("id", ::TopicId),
-                    name = TopicName(rs.getString("name")),
-                )
-            }
-        }!!
+            throw t
+        }
     }
 
     override fun find(name: TopicName): LogTopic? =
@@ -69,35 +76,71 @@ class SqliteLogBrokerTopicsRepository(
             }
             map { rs ->
                 LogTopic(
-                    id = rs.getDomainId("id", ::TopicId),
-                    name = TopicName(rs.getString("name"))
+                    id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
                 )
             }
         }?.also { topicMapping[it.name] = it }
 
-    override fun find(id: TopicId): LogTopic? =
-        topicMapping.values.find { it.id == id }
-            ?: connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
-                query {
-                    set("id", id)
-                }
-                map { rs ->
-                    LogTopic(
-                        id = rs.getDomainId("id", ::TopicId),
-                        name = TopicName(rs.getString("name"))
-                    )
-                }
-            }?.also { topicMapping[it.name] = it }
-
-    override fun list(): List<LogTopic> {
-        return connection.executeQuery<LogTopic>("SELECT id,name FROM topics") {
+    override fun find(id: TopicId): LogTopic? = topicMapping.values.find { it.id == id }
+        ?: connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
+            query {
+                set("id", id)
+            }
             map { rs ->
                 LogTopic(
-                    id = rs.getDomainId("id", ::TopicId),
-                    name = TopicName(rs.getString("name"))
+                    id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
+                )
+            }
+        }?.also { topicMapping[it.name] = it }
+
+    override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
+        val query = TopicQuery().also(block)
+        return connection.executeQuery<LogTopic>(
+            """
+                SELECT
+                    id, name 
+                FROM 
+                    topics
+                WHERE
+                    id < :afterId
+                    ${query.names()}
+                ORDER BY id DESC
+                LIMIT :limit
+            """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+                set("limit", query.limit)
+            }
+            map { rs ->
+                LogTopic(
+                    id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
                 )
             }
         }
+    }
+
+    override fun count(block: TopicQuery.() -> Unit): ULong {
+        val query = TopicQuery().also(block)
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                topics
+            WHERE
+                id < :afterId
+                ${query.names()}
+            ORDER BY id DESC
+        """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+            }
+            map {
+                it.getLong("count").toULong()
+            }
+        } ?: 0UL
     }
 
     override fun clear() {
@@ -110,9 +153,13 @@ class SqliteLogBrokerTopicsRepository(
         connection.close()
     }
 
-    override fun count() = connection.executeQueryOne("SELECT COUNT(*) as count from topics") {
-        map {
-            it.getLong("count").toULong()
+
+    private fun TopicQuery.names(): String {
+        return if (names.isEmpty()) {
+            ""
+        } else {
+            "AND name IN (${names.joinToString(",") { "'${it.value}'" }})"
         }
-    } ?: 0UL
+    }
+
 }

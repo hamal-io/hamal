@@ -28,7 +28,7 @@ class HmlExecuteFunction(
             ctx.pushNil()
             while (ctx.state.native.tableNext(arg1.index)) {
 //                val i = ctx.state.getNumber(-2)
-                val v = ctx.state.getTableMap(-1)
+                val v = ctx.state.getTableMapProxy(-1)
 
                 when (v.getString("type")) {
                     "get_block" -> {

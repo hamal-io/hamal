@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.memory.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -27,7 +27,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
         fun `Creates a new topic if topic does not exists`() {
             val result = testInstance.create(
                 CmdId(1),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(1),
                     TopicName("very-first-topic")
                 )
@@ -35,14 +35,14 @@ class MemoryLogBrokerTopicsRepositoryTest {
 
             assertThat(result.id, equalTo(TopicId(1)))
             assertThat(result.name, equalTo(TopicName("very-first-topic")))
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
         @Test
         fun `Bug - able to create realistic topic name`() {
             testInstance.create(
                 CmdId(1),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(1),
                     TopicName("very-first-topic")
                 )
@@ -50,7 +50,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
 
             val result = testInstance.create(
                 CmdId(2),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(2),
                     TopicName("func::created")
                 )
@@ -58,14 +58,14 @@ class MemoryLogBrokerTopicsRepositoryTest {
             assertThat(result.id, equalTo(TopicId(2)))
             assertThat(result.name, equalTo(TopicName("func::created")))
 
-            assertThat(testInstance.count(), equalTo(2UL))
+            assertThat(testInstance.count {}, equalTo(2UL))
         }
 
         @Test
         fun `Does not creat a new entry if topic already exists`() {
             testInstance.create(
                 CmdId(1),
-                LogBrokerTopicsRepository.TopicToCreate(
+                BrokerTopicsRepository.TopicToCreate(
                     TopicId(1),
                     TopicName("very-first-topic")
                 )
@@ -74,7 +74,7 @@ class MemoryLogBrokerTopicsRepositoryTest {
             val throwable = assertThrows<IllegalArgumentException> {
                 testInstance.create(
                     CmdId(2),
-                    LogBrokerTopicsRepository.TopicToCreate(
+                    BrokerTopicsRepository.TopicToCreate(
                         TopicId(2),
                         TopicName("very-first-topic")
                     )
@@ -82,10 +82,10 @@ class MemoryLogBrokerTopicsRepositoryTest {
             }
             assertThat(throwable.message, equalTo("Topic already exists"))
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(testInstance.count {}, equalTo(1UL))
         }
 
-        private val testInstance = MemoryLogBrokerTopicsRepository()
+        private val testInstance = MemoryBrokerTopicsRepository()
     }
 
 }

@@ -11,9 +11,9 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -63,12 +63,14 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(10),
         status = ReqStatus.Submitted,
         id = ExecId(1234),
-        state = State(TableType("counter" to NumberType(1))),
+        state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
         events = listOf(
             Event(
-                TableType(
-                    "topic" to StringType("test-completion"),
-                    "ich" to StringType("habFertsch")
+                MapType(
+                    mutableMapOf(
+                        "topic" to StringType("test-completion"),
+                        "ich" to StringType("habFertsch")
+                    )
                 )
             )
         ),

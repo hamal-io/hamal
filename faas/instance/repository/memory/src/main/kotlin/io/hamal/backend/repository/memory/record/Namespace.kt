@@ -2,8 +2,8 @@ package io.hamal.backend.repository.memory.record
 
 import io.hamal.backend.repository.api.Namespace
 import io.hamal.backend.repository.api.NamespaceCmdRepository
-import io.hamal.backend.repository.api.NamespaceQueryRepository
 import io.hamal.backend.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.backend.repository.api.NamespaceRepository
 import io.hamal.backend.repository.record.namespace.NamespaceCreationRecord
 import io.hamal.backend.repository.record.namespace.NamespaceRecord
 import io.hamal.backend.repository.record.namespace.NamespaceUpdatedRecord
@@ -43,8 +43,7 @@ internal object CurrentNamespaceProjection {
     }
 }
 
-object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceCmdRepository,
-    NamespaceQueryRepository {
+object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceRepository {
 
     override fun create(cmd: NamespaceCmdRepository.CreateCmd): Namespace {
         return lock.withLock {

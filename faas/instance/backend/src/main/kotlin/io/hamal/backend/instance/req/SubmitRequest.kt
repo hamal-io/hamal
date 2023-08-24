@@ -153,7 +153,7 @@ class SubmitRequest(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = appendEvent.topicId,
-            event = appendEvent.event
+            payload = appendEvent.payload
         ).also(reqCmdRepository::queue)
 
     operator fun invoke(setStateReq: SetStateReq) =

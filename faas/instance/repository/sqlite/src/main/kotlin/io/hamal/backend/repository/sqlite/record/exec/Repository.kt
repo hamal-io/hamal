@@ -41,8 +41,7 @@ class SqliteExecRepository(
         ProjectionCurrent,
         ProjectionQueue
     )
-), ExecCmdRepository,
-    ExecQueryRepository {
+), ExecRepository {
 
     data class Config(
         override val path: Path

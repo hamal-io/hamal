@@ -9,6 +9,8 @@ import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import kotlinx.serialization.Serializable
 
+interface NamespaceRepository : NamespaceCmdRepository, NamespaceQueryRepository
+
 interface NamespaceCmdRepository {
     fun create(cmd: CreateCmd): Namespace
 

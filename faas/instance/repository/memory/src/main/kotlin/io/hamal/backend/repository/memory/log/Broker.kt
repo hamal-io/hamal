@@ -1,7 +1,8 @@
 package io.hamal.backend.repository.memory.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicToCreate
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -11,7 +12,7 @@ import io.hamal.lib.domain.vo.TopicName
 class MemoryLogBrokerRepository : LogBrokerRepository {
 
     private val consumersRepository: MemoryLogBrokerConsumersRepository = MemoryLogBrokerConsumersRepository()
-    private val topicsRepository: MemoryLogBrokerTopicsRepository = MemoryLogBrokerTopicsRepository()
+    private val topicsRepository: MemoryBrokerTopicsRepository = MemoryBrokerTopicsRepository()
 
     private val repositoryMapping = KeyedOnce.default<LogTopic, LogTopicRepository>()
 
@@ -57,8 +58,8 @@ class MemoryLogBrokerRepository : LogBrokerRepository {
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
     override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
-    override fun listTopics(): List<LogTopic> {
-        return topicsRepository.list()
+    override fun listTopics(block: TopicQuery.() -> Unit): List<LogTopic> {
+        return topicsRepository.list(block)
     }
 
     override fun read(firstId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk> {

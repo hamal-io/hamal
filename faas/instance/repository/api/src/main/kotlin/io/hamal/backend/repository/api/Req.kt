@@ -4,6 +4,8 @@ import io.hamal.backend.repository.api.submitted_req.SubmittedReq
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ReqId
 
+interface ReqRepository : ReqCmdRepository, ReqQueryRepository
+
 interface ReqCmdRepository {
     fun queue(req: SubmittedReq)
     fun next(limit: Int): List<SubmittedReq>

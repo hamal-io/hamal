@@ -1,6 +1,8 @@
 package io.hamal.backend.repository.memory.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -9,11 +11,13 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
+class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
     private val topicMapping = mutableMapOf<TopicName, LogTopic>()
-    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): LogTopic {
+    private val topics = mutableMapOf<TopicId, LogTopic>()
+
+    override fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic {
         return lock.withLock {
             require(topicMapping.values.none { it.id == toCreate.id }) { "Topic already exists" }
             require(!topicMapping.containsKey(toCreate.name)) { "Topic already exists" }
@@ -21,6 +25,7 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
                 id = toCreate.id,
                 name = toCreate.name
             )
+            topics[toCreate.id] = topicMapping[toCreate.name]!!
             topicMapping[toCreate.name]!!
         }
     }
@@ -32,19 +37,36 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
     }
 
     override fun find(id: TopicId): LogTopic? = lock.withLock {
-        topicMapping.values.find { it.id == id }
+        topics[id]
     }
 
-    override fun list(): List<LogTopic> = lock.withLock {
-        topicMapping.values.toList()
+    override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
+        val query = TopicQuery().also(block)
+        return lock.withLock {
+            topics.entries.sortedBy { it.key }
+                .reversed()
+                .filter { if (query.names.isEmpty()) true else query.names.contains(it.value.name) }
+                .dropWhile { it.key >= query.afterId }
+                .take(query.limit.value)
+                .map { it.value }
+        }
     }
 
-    override fun count(): ULong {
-        return lock.withLock { topicMapping.size.toULong() }
+    override fun count(block: TopicQuery.() -> Unit): ULong {
+        val query = TopicQuery().also(block)
+        return lock.withLock {
+            topics.entries.sortedBy { it.key }
+                .reversed()
+                .filter { if (query.names.isEmpty()) true else query.names.contains(it.value.name) }
+                .dropWhile { it.key >= query.afterId }
+                .count()
+                .toULong()
+        }
     }
 
     fun clear() {
         topicMapping.clear()
+        topics.clear()
     }
 
     override fun close() {

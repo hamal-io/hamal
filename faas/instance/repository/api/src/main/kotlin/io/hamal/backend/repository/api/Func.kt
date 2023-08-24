@@ -11,6 +11,8 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
+interface FuncRepository : FuncCmdRepository, FuncQueryRepository
+
 interface FuncCmdRepository {
     fun create(cmd: CreateCmd): Func
 

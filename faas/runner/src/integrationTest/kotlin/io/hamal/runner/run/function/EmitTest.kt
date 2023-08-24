@@ -47,7 +47,7 @@ internal class EmitTest : AbstractExecuteTest() {
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
-            assertThat(value, equalTo(TableType("topic" to StringType("test-topic"))))
+            assertThat(value, equalTo(MapType(mutableMapOf("topic" to StringType("test-topic")))))
         }
     }
 
@@ -62,9 +62,7 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
-                        "topic" to StringType("test-topic")
-                    )
+                    MapType(mutableMapOf("topic" to StringType("test-topic")))
                 )
             )
         }
@@ -81,9 +79,11 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
-                        "topic" to StringType("test-topic"),
-                        "hamal" to StringType("rocks")
+                    MapType(
+                        mutableMapOf(
+                            "topic" to StringType("test-topic"),
+                            "hamal" to StringType("rocks")
+                        )
                     )
                 )
             )
@@ -101,9 +101,11 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
-                        "topic" to StringType("test-topic"),
-                        "answer" to NumberType(42)
+                    MapType(
+                        mutableMapOf(
+                            "topic" to StringType("test-topic"),
+                            "answer" to NumberType(42)
+                        )
                     )
                 )
             )
@@ -121,10 +123,12 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
-                        "topic" to StringType("test-topic"),
-                        "true_value" to TrueValue,
-                        "false_value" to FalseValue
+                    MapType(
+                        mutableMapOf(
+                            "topic" to StringType("test-topic"),
+                            "true_value" to TrueValue,
+                            "false_value" to FalseValue
+                        )
                     )
                 )
             )
@@ -143,11 +147,15 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(
                 value, equalTo(
-                    TableType(
-                        "topic" to StringType("test-topic"),
-                        "nested_table" to TableType(
-                            "value" to NumberType(23)
-                        ),
+                    MapType(
+                        mutableMapOf(
+                            "topic" to StringType("test-topic"),
+                            "nested_table" to MapType(
+                                mutableMapOf(
+                                    "value" to NumberType(23)
+                                ),
+                            )
+                        )
                     )
                 )
             )

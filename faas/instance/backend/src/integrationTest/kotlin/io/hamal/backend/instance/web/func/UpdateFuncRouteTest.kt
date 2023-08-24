@@ -11,8 +11,8 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.kua.type.TableType
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
@@ -57,7 +57,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
-                    inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeType("createdCode")
                 )
             )
@@ -78,7 +78,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
                 UpdateFuncReq(
                     namespaceId = updateNamespace.id,
                     name = FuncName("updatedName"),
-                    inputs = FuncInputs(TableType("hamal" to StringType("updatedInputs"))),
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeType("updatedCode")
                 )
             )
@@ -92,7 +92,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             assertThat(id, equalTo(funcId))
             assertThat(namespace.name, equalTo(NamespaceName("updatedNamespace")))
             assertThat(name, equalTo(FuncName("updatedName")))
-            assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("updatedInputs")))))
+            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
             assertThat(code, equalTo(CodeType("updatedCode")))
         }
     }
@@ -113,7 +113,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
-                    inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeType("createdCode")
                 )
             )
@@ -152,7 +152,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
                 CreateFuncReq(
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
-                    inputs = FuncInputs(TableType("hamal" to StringType("createdInputs"))),
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeType("createdCode")
                 )
             )
@@ -178,7 +178,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             assertThat(id, equalTo(funcId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("createdName")))
-            assertThat(inputs, equalTo(FuncInputs(TableType("hamal" to StringType("createdInputs")))))
+            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
             assertThat(code, equalTo(CodeType("createdCode")))
         }
     }
