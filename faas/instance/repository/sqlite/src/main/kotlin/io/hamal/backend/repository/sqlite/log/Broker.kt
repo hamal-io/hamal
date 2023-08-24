@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicQuery
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -13,14 +13,14 @@ data class SqliteLogBroker(
 )
 
 class SqliteLogBrokerRepository(
-    val logBroker: SqliteLogBroker
+    private val logBroker: SqliteLogBroker
 ) : LogBrokerRepository {
 
     private val consumersRepository: SqliteLogBrokerConsumersRepository
-    private val topicsRepository: SqliteLogBrokerTopicsRepository
+    private val topicsRepository: SqliteBrokerTopicsRepository
 
     init {
-        topicsRepository = SqliteLogBrokerTopicsRepository(
+        topicsRepository = SqliteBrokerTopicsRepository(
             SqliteBrokerTopics(
                 path = logBroker.path
             )
@@ -38,7 +38,7 @@ class SqliteLogBrokerRepository(
     override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): LogTopic =
         topicsRepository.create(
             cmdId,
-            LogBrokerTopicsRepository.TopicToCreate(
+            BrokerTopicsRepository.TopicToCreate(
                 topicToCreate.id,
                 topicToCreate.name
             )

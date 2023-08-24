@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
 
-interface LogBrokerTopicsRepository : Closeable {
+interface BrokerTopicsRepository : Closeable {
     fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic
     fun find(name: TopicName): LogTopic?
     fun find(id: TopicId): LogTopic?
@@ -23,5 +23,4 @@ interface LogBrokerTopicsRepository : Closeable {
         var names: List<TopicName>,
         var limit: Limit = Limit(1)
     )
-
 }

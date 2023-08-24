@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicQuery
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -16,12 +16,12 @@ data class SqliteBrokerTopics(
     val path: Path
 )
 
-class SqliteLogBrokerTopicsRepository(
+class SqliteBrokerTopicsRepository(
     internal val brokerTopics: SqliteBrokerTopics,
 ) : BaseSqliteRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
-}), LogBrokerTopicsRepository {
+}), BrokerTopicsRepository {
 
     private val topicMapping = ConcurrentHashMap<TopicName, LogTopic>()
     override fun setupConnection(connection: Connection) {
@@ -46,7 +46,7 @@ class SqliteLogBrokerTopicsRepository(
         }
     }
 
-    override fun create(cmdId: CmdId, toCreate: LogBrokerTopicsRepository.TopicToCreate): LogTopic {
+    override fun create(cmdId: CmdId, toCreate: BrokerTopicsRepository.TopicToCreate): LogTopic {
         return connection.execute<LogTopic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
             query {
                 set("id", toCreate.id)

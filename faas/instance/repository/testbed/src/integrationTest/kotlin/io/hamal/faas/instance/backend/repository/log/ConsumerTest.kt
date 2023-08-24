@@ -1,7 +1,7 @@
 package io.hamal.faas.instance.backend.repository.log
 
 import io.hamal.backend.repository.api.log.*
-import io.hamal.faas.instance.backend.repository.AbstractTest
+import io.hamal.faas.instance.backend.repository.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.TopicId
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.TestFactory
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
-class ConsumerTest : AbstractTest() {
+class ConsumerTest : AbstractIntegrationTest() {
     @TestFactory
     fun `Late consumer starts at the beginning`() = runWith(LogBrokerRepository::class) { testInstance ->
 

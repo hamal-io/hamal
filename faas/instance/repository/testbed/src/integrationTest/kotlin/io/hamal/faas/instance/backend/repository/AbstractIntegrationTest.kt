@@ -1,8 +1,7 @@
 package io.hamal.faas.instance.backend.repository
 
-import io.hamal.backend.repository.api.FuncCmdRepository
-import io.hamal.backend.repository.api.FuncQueryRepository
 import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
 import io.hamal.faas.instance.backend.repository.fixture.BaseTestFixture
 import io.hamal.faas.instance.backend.repository.fixture.MemoryFixture
 import io.hamal.faas.instance.backend.repository.fixture.SqliteFixture
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import kotlin.reflect.KClass
 
-abstract class AbstractTest {
+abstract class AbstractIntegrationTest {
 
     fun <REPO : AutoCloseable> runWith(
         interfaceClass: KClass<out REPO>,
@@ -23,7 +22,6 @@ abstract class AbstractTest {
         }
     }
 
-
     private fun <REPO : Any> provideTestInstances(interfaceClass: KClass<out REPO>): List<REPO> {
         return fixtures[interfaceClass]!!
             .map { fixture -> fixture.provideImplementation(interfaceClass) }
@@ -34,11 +32,9 @@ abstract class AbstractTest {
             MemoryFixture,
             SqliteFixture
         ),
-        FuncQueryRepository::class to listOf(
-
-        ),
-        FuncCmdRepository::class to listOf(
-
+        BrokerTopicsRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
         )
     )
 }

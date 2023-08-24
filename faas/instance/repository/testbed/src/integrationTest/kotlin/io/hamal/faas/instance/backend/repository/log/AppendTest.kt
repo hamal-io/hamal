@@ -3,7 +3,7 @@ package io.hamal.faas.instance.backend.repository.log
 import io.hamal.backend.repository.api.log.CreateTopic
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.faas.instance.backend.repository.AbstractTest
+import io.hamal.faas.instance.backend.repository.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -12,7 +12,7 @@ import org.hamcrest.Matchers
 import org.junit.jupiter.api.TestFactory
 import java.math.BigInteger
 
-class AppendTest : AbstractTest() {
+class AppendTest : AbstractIntegrationTest() {
 
     @TestFactory
     fun `Append value to topic with long cmd id`() = runWith(LogBrokerRepository::class) { testInstance ->

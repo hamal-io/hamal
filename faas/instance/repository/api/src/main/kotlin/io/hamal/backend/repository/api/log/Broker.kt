@@ -1,6 +1,6 @@
 package io.hamal.backend.repository.api.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicQuery
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit

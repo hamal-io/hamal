@@ -1,7 +1,7 @@
 package io.hamal.backend.repository.memory.log
 
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository
-import io.hamal.backend.repository.api.log.LogBrokerTopicsRepository.TopicToCreate
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
+class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
     private val topicMapping = mutableMapOf<TopicName, LogTopic>()
@@ -36,7 +36,7 @@ class MemoryLogBrokerTopicsRepository : LogBrokerTopicsRepository {
         topicMapping.values.find { it.id == id }
     }
 
-    override fun list(block: LogBrokerTopicsRepository.TopicQuery.() -> Unit): List<LogTopic> = lock.withLock {
+    override fun list(block: BrokerTopicsRepository.TopicQuery.() -> Unit): List<LogTopic> = lock.withLock {
         topicMapping.values.toList()
     }
 

@@ -3,7 +3,7 @@ package io.hamal.faas.instance.backend.repository.log
 import io.hamal.backend.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.backend.repository.api.log.GroupId
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.faas.instance.backend.repository.AbstractTest
+import io.hamal.faas.instance.backend.repository.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.TopicId
@@ -12,9 +12,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.TestFactory
-import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletableFuture.runAsync
 
-class BrokerTest : AbstractTest() {
+class BrokerTest : AbstractIntegrationTest() {
 
     @TestFactory
     fun `Concurrent safe - 10 threads add to the same topic`() = runWith(LogBrokerRepository::class) { testInstance ->
@@ -25,7 +25,7 @@ class BrokerTest : AbstractTest() {
         )
 
         val futures = IntRange(1, 10).map { thread ->
-            CompletableFuture.runAsync {
+            runAsync {
                 IntRange(1, 1_000).forEach {
                     testInstance.append(
                         CmdId(HashUtils.sha256("$thread $it")),
@@ -47,7 +47,7 @@ class BrokerTest : AbstractTest() {
         runWith(LogBrokerRepository::class) { testInstance ->
 
             val futures = IntRange(1, 100).map { thread ->
-                CompletableFuture.runAsync {
+                runAsync {
                     val topic = testInstance.create(
                         CmdId(1),
                         TopicToCreate(TopicId(thread), TopicName("topic-$thread"))
