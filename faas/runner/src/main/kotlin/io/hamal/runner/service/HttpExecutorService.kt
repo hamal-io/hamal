@@ -161,7 +161,7 @@ class HttpExecutorService(
 //                    }
 //                }
             }
-        }, 1.milliseconds.toJavaDuration())
+        }, 10.milliseconds.toJavaDuration())
     }
 
     companion object {
