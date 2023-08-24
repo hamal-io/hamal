@@ -48,4 +48,27 @@ internal class ListTopicRouteTest : BaseTopicRouteTest() {
             assertThat(topicThree.name, equalTo(TopicName("namespace::topics_one")))
         }
     }
+
+    @Test
+    fun `List topics by names`() {
+        awaitCompleted(
+            createTopic(TopicName("some::topics_one")),
+            createTopic(TopicName("some::topics_two")),
+            createTopic(TopicName("some::topics_three"))
+        )
+
+        with(
+            listTopics(
+                names = listOf(
+                    TopicName("some::topics_two"),
+                    TopicName("some::topics_hundred")
+                )
+            )
+        ) {
+            assertThat(topics, hasSize(1))
+
+            val topicTwo = topics[0]
+            assertThat(topicTwo.name, equalTo(TopicName("some::topics_two")))
+        }
+    }
 }

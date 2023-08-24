@@ -103,6 +103,7 @@ class SqliteBrokerTopicsRepository(
                     topics
                 WHERE
                     id < :afterId
+                    ${query.names()}
                 ORDER BY id DESC
                 LIMIT :limit
             """.trimIndent()
@@ -129,6 +130,7 @@ class SqliteBrokerTopicsRepository(
                 topics
             WHERE
                 id < :afterId
+                ${query.names()}
             ORDER BY id DESC
         """.trimIndent()
         ) {
@@ -149,6 +151,15 @@ class SqliteBrokerTopicsRepository(
 
     override fun close() {
         connection.close()
+    }
+
+
+    private fun TopicQuery.names(): String {
+        return if (names.isEmpty()) {
+            ""
+        } else {
+            "AND name IN (${names.joinToString(",") { "'${it.value}'" }})"
+        }
     }
 
 }

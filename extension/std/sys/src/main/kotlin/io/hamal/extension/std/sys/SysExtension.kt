@@ -6,16 +6,14 @@ import io.hamal.extension.std.sys.exec.ListExecFunction
 import io.hamal.extension.std.sys.func.*
 import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
 import io.hamal.extension.std.sys.req.GetReqFunction
-import io.hamal.extension.std.sys.topic.AppendToTopicFunction
-import io.hamal.extension.std.sys.topic.CreateTopicFunction
-import io.hamal.extension.std.sys.topic.GetTopicFunction
-import io.hamal.extension.std.sys.topic.ListTopicFunction
+import io.hamal.extension.std.sys.topic.*
 import io.hamal.extension.std.sys.trigger.CreateTriggerFunction
 import io.hamal.extension.std.sys.trigger.GetTriggerFunction
 import io.hamal.extension.std.sys.trigger.ListTriggerFunction
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
+import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.lib.sdk.HttpTemplateSupplier
 
 class SysExtensionFactory(
@@ -45,6 +43,7 @@ class SysExtensionFactory(
                 "list_namespace" to ListNamespaceFunction(templateSupplier),
 
                 "create_topic" to CreateTopicFunction(templateSupplier),
+                "resolve_topic" to ResolveTopicFunction(DefaultHamalSdk(templateSupplier())),
                 "list_topic" to ListTopicFunction(templateSupplier),
                 "get_topic" to GetTopicFunction(templateSupplier),
                 "append_event" to AppendToTopicFunction(templateSupplier),

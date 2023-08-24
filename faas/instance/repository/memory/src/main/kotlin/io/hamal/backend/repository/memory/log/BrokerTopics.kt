@@ -43,20 +43,22 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
     override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
         val query = TopicQuery().also(block)
         return lock.withLock {
-            topics.keys.sorted()
+            topics.entries.sortedBy { it.key }
                 .reversed()
-                .dropWhile { it >= query.afterId }
+                .filter { if (query.names.isEmpty()) true else query.names.contains(it.value.name) }
+                .dropWhile { it.key >= query.afterId }
                 .take(query.limit.value)
-                .mapNotNull { find(it) }
+                .map { it.value }
         }
     }
 
     override fun count(block: TopicQuery.() -> Unit): ULong {
         val query = TopicQuery().also(block)
         return lock.withLock {
-            topics.keys.sorted()
+            topics.entries.sortedBy { it.key }
                 .reversed()
-                .dropWhile { it >= query.afterId }
+                .filter { if (query.names.isEmpty()) true else query.names.contains(it.value.name) }
+                .dropWhile { it.key >= query.afterId }
                 .count()
                 .toULong()
         }

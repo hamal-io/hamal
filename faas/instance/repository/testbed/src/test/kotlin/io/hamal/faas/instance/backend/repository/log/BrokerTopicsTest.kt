@@ -117,6 +117,34 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
         assertThat(resultCount, equalTo(4UL))
     }
 
+    @TestFactory
+    fun `List and count by providing topic names`() = runWith(BrokerTopicsRepository::class) { testInstance ->
+        testInstance.setupTopics()
+
+        val resultList = testInstance.list {
+            limit = Limit(10)
+            names = listOf(
+                TopicName("topic-five"),
+                TopicName("topic-eight"),
+                TopicName("topic-ten")
+            )
+        }
+        assertThat(resultList, hasSize(2))
+
+        assertThat(resultList[0].name, equalTo(TopicName("topic-eight")))
+        assertThat(resultList[1].name, equalTo(TopicName("topic-five")))
+
+        val resultCount = testInstance.count {
+            limit = Limit(1)
+            names = listOf(
+                TopicName("topic-five"),
+                TopicName("topic-eight"),
+                TopicName("topic-ten")
+            )
+        }
+        assertThat(resultCount, equalTo(2UL))
+    }
+
     private fun BrokerTopicsRepository.setupTopic() {
         create(
             CmdId(1), TopicToCreate(

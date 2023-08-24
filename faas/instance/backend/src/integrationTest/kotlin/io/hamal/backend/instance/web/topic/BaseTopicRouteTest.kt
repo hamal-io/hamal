@@ -26,8 +26,12 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
     }
 
 
-    fun listTopics(): ApiTopicList {
-        val listTopicsResponse = httpTemplate.get("/v1/topics").execute()
+    fun listTopics(
+        names: List<TopicName> = listOf()
+    ): ApiTopicList {
+        val listTopicsResponse = httpTemplate.get("/v1/topics")
+            .parameter("names", names.joinToString(",") { it.value })
+            .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
