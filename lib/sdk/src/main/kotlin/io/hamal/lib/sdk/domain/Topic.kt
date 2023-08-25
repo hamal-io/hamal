@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.TopicName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ListEventsResponse(
+data class ApiTopicEventList(
     val topicId: TopicId,
     val topicName: TopicName,
     val events: List<EventWithId>

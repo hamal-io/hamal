@@ -15,14 +15,14 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
-    fun listTopicEvents(topicId: TopicId): ListEventsResponse {
+    fun listTopicEvents(topicId: TopicId): ApiTopicEventList {
         val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTopicsResponse.result(ListEventsResponse::class)
+        return listTopicsResponse.result(ApiTopicEventList::class)
     }
 
 

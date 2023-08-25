@@ -47,6 +47,7 @@ class SysExtensionFactory(
                 "list_topic" to ListTopicFunction(templateSupplier),
                 "get_topic" to GetTopicFunction(templateSupplier),
                 "append_event" to AppendToTopicFunction(templateSupplier),
+                "list_topic_event" to ListTopicEventFunction(templateSupplier),
 
                 "create_trigger" to CreateTriggerFunction(templateSupplier),
                 "get_trigger" to GetTriggerFunction(templateSupplier),

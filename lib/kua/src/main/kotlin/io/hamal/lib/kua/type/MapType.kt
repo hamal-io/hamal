@@ -53,6 +53,8 @@ data class MapType(
     }
 
 
+    fun getCodeType(key: String) = CodeType(getString(key))
+    fun getCodeType(key: StringType) = getCodeType(key.value)
     operator fun set(key: StringType, value: CodeType) = set(key.value, value)
     operator fun set(key: String, value: CodeType): Int {
         entries[key] = value

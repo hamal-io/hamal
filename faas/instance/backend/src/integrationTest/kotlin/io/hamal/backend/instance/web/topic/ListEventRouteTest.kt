@@ -9,7 +9,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ListEventsResponse
+import io.hamal.lib.sdk.domain.ApiTopicEventList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -61,7 +61,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
         val listResponse = httpTemplate.get("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .parameter("limit", 23)
-            .execute(ListEventsResponse::class)
+            .execute(ApiTopicEventList::class)
 
         assertThat(listResponse.events, hasSize(23))
 
@@ -86,7 +86,7 @@ internal class ListEventRouteTest : BaseTopicRouteTest() {
             .path("topicId", topicId)
             .parameter("after_id", TopicId(95))
             .parameter("limit", 1)
-            .execute(ListEventsResponse::class)
+            .execute(ApiTopicEventList::class)
 
         assertThat(listResponse.events, hasSize(1))
 

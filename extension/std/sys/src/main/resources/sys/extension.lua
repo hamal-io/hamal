@@ -98,6 +98,10 @@ function create_extension_factory()
             return internal.list_topic()
         end
 
+        function export.topic.list_events(topic_id)
+            return internal.list_topic_event(topic_id)
+        end
+
         function export.topic.get(topic_id)
             return internal.get_topic(topic_id)
         end

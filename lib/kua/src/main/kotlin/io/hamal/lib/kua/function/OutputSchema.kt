@@ -68,7 +68,7 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
         }
         StackTop(t.index)
     }
-
+//    is MapType -> pushTable(toProxyMap(value))
     is TableProxyArray -> pushTop(value.index)
     is TableProxyMap -> pushTop(value.index)
     is AnyType -> pushAny(value)

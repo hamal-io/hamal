@@ -1,13 +1,15 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.domain.*
+import io.hamal.lib.sdk.domain.ApiTopicEventList
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ListEventRoute(
@@ -18,14 +20,14 @@ class ListEventRoute(
         @PathVariable("topicId") topicId: TopicId,
         @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: EventId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ListEventsResponse> {
+    ): ResponseEntity<ApiTopicEventList> {
         val topic = eventBrokerRepository.getTopic(topicId)
         val events = eventBrokerRepository.listEvents(topic) {
             this.afterId = afterId
             this.limit = limit
         }
         return ResponseEntity.ok(
-            ListEventsResponse(
+            ApiTopicEventList(
                 topicId = topic.id,
                 topicName = topic.name,
                 events = events

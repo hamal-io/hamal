@@ -98,6 +98,8 @@ data class ArrayType(
         return size
     }
 
+    fun getCodeType(idx: Int) = CodeType(getString(idx))
+
     fun type(idx: Int): KClass<out Type> {
         return entries[idx]?.let { it::class } ?: NilType::class
     }
