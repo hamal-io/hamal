@@ -27,11 +27,13 @@ class AppendToTopicFunction(
                 .body(EventPayload(arg2))
                 .execute(ApiSubmittedReqWithId::class)
 
-            return null to MapType().also {
-                it["req_id"] = res.reqId
-                it["status"] = res.status.name
-                it["id"] = res.id
-            }
+            return null to MapType(
+                mutableMapOf(
+                    "req_id" to StringType(res.reqId.value.value.toString(16)),
+                    "status" to StringType(res.status.name),
+                    "id" to StringType(res.id.value.toString(16))
+                )
+            )
         } catch (t: Throwable) {
             t.printStackTrace()
             throw t
