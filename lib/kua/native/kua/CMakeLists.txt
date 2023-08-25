@@ -15,6 +15,7 @@ include_directories(${JNI_INCLUDE_DIRS})
 set(KUA_LIB_SRCS
         src/kua_builtin.c
         src/kua_builtin_base.c
+        src/kua_builtin_decimal.c
         src/kua_call.c
         src/kua_check.c
         src/kua_builtin_error.c
@@ -27,12 +28,12 @@ set(KUA_LIB_SRCS
         src/kua_stack.c
         src/kua_state.c
         src/kua_table.c
-        )
+)
 
 
 add_library(kua SHARED ${KUA_LIB_SRCS})
 target_include_directories(kua PUBLIC include)
-target_link_libraries(kua PUBLIC lua)
+target_link_libraries(kua PUBLIC lua lmpdecimal_100)
 
 add_executable(playground src/playground.c)
 target_include_directories(playground PUBLIC include)

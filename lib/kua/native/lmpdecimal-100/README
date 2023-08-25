@@ -1,0 +1,37 @@
+This is a multiple precision library for Lua providing correctly-rounded
+arbitrary precision decimal floating point arithmetic. It is based on
+the mpdecimal library available at
+	http://www.bytereef.org/mpdecimal/
+
+To build the library and run a simple test, just do make.
+If Lua is not installed in /usr/local, tell make:
+	make LUA_TOPDIR=/var/tmp/lhf/lua-5.3.5/install
+
+To install the library where Lua can find it, use a variant of these:
+	make install
+	sudo make install
+	sudo make install LIBDIR=/usr/local/lib/lua/5.3
+
+For detailed installation instructions, see
+	http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/install.html
+
+The library is simple and intuitive; see the summary below.
+Read test.lua to see the library in action.
+
+This code is hereby placed in the public domain and also under the MIT license.
+The mpdecimal code in src/ has its own license. See src/LICENSE.txt.
+
+Please send comments, suggestions, and bug reports to lhf@tecgraf.puc-rio.br .
+
+mpdecimal library:
+__add(x,y)	__unm(x)	floor(x)	log10(x)	prev(x)
+__div(x,y)	abs(x)		fma(x,y,z)	logb(x)		quotrem(x,y)
+__eq(x,y)	add(x,y)	format(x,f)	max(x,y)	scaleb(x,y)
+__idiv(x,y)	ceil(x)		idiv(x,y)	min(x,y)	sign(x)
+__le(x,y)	class(x)	invsqrt(x)	mod(x,y)	sqrt(x)
+__lt(x,y)	compare(x,y)	isfinite	mul(x,y)	sub(x,y)
+__mod(x,y)	context(s)	isinf(x)	neg(x)		tonumber(x)
+__mul(x,y)	copysign(x,y)	isinteger(x)	new(x)		tostring(x)
+__pow(x,y)	digits([n])	isnan(x)	next(x)		trunc(x)
+__sub(x,y)	div(x,y)	ln(x)		nextafter(x)	version
+__tostring(x)	exp(x)		log(x)		pow(x)

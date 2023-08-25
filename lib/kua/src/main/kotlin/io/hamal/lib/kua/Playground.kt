@@ -15,49 +15,14 @@ fun main() {
         override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
             TODO("Not yet implemented")
         }
-    }).also { sb ->
-
-//        val registry = ExtensionRegistry(sb)
-//        registry.register(
-//            ScriptExtension(
-//                name = "web3.eth",
-//                init = """
-//                    function create_extension_factory()
-//                        local internal = _internal
-//                        return function()
-//                            return {
-//                                abi = {
-//                                    decode = function(type, value)
-//                                        print("decoding", type, value)
-//                                    end
-//                                },
-//                                call = function(arg1)
-//                                    return internal.get_block_by_id(arg1)
-//                                end
-//                            }
-//                        end
-//                    end
-//                """.trimIndent(),
-//                internals = mapOf(
-//                    "get_block_by_id" to object : Function1In1Out<NumberValue, TableMapValue>(
-//                        FunctionInput1Schema(NumberValue::class),
-//                        FunctionOutput1Schema(TableMapValue::class)
-//                    ) {
-//                        override fun invoke(ctx: FunctionContext, arg1: NumberValue): TableMapValue {
-//                            println("getting the block - ${arg1}")
-//                            return ctx.tableCreateMap(1).also { it["id"] = 42 }
-//                        }
-//                    }
-//                )
-//            )
-//        )
-//
-//        sb.registerGlobalFunction("require", Require(registry))
-
-    }.use { sb ->
+    }).use { sb ->
 
         sb.load(
             """
+            _D.digits(100)
+            _D.pi=_D.new("3.1415926535897932384626433832795028841971693993751058209749445923078164062862090")
+            print(_D.pi)
+
         """.trimIndent()
         )
     }

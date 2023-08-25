@@ -116,6 +116,13 @@ private val luaFile by lazy {
     }
 }
 
+private val lmpdecimal by lazy {
+    when (detectSystem()) {
+        HostSystem.Linux64 -> "liblmpdecimal_100.so"
+        HostSystem.MacArm64 -> "liblmpdecimal_100.dylib"
+    }
+}
+
 enum class HostSystem {
     Linux64,
     MacArm64
