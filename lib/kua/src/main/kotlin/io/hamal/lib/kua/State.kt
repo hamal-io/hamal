@@ -15,6 +15,8 @@ interface State {
     val native: Native
     val top: StackTop
 
+    fun pop(len: Int): StackTop
+
     fun isEmpty(): Boolean
     fun isNotEmpty(): Boolean
     fun setTop(idx: Int)
@@ -73,7 +75,7 @@ class ClosableState(
     override val native: Native
 ) : State, AutoCloseable {
     override val top: StackTop get() = StackTop(native.top())
-
+    override fun pop(len: Int) = StackTop(native.pop(len))
 
     override fun isEmpty() = native.top() == 0
     override fun isNotEmpty() = !isEmpty()

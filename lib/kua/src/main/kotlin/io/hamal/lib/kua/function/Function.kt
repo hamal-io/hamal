@@ -45,9 +45,7 @@ abstract class Function0In0Out : FunctionType<
 
 }
 
-abstract class Function1In0Out<
-        INPUT_ARG_1 : Type
-        >(
+abstract class Function1In0Out<INPUT_ARG_1 : Type>(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>
 ) : FunctionType<
         FunctionInput1Schema<INPUT_ARG_1>,
@@ -66,9 +64,7 @@ abstract class Function1In0Out<
 }
 
 
-abstract class Function0In1Out<
-        OUTPUT_ARG_1 : Type
-        >(
+abstract class Function0In1Out<OUTPUT_ARG_1 : Type>(
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>,
 
     ) : FunctionType<
@@ -79,7 +75,7 @@ abstract class Function0In1Out<
         > {
     override val inputSchema: FunctionInput0Schema = FunctionInput0Schema
 
-    abstract fun invoke(ctx: FunctionContext): OUTPUT_ARG_1
+    abstract fun invoke(ctx: FunctionContext): OUTPUT_ARG_1?
 
     override fun invoke(ctx: FunctionContext, input: FunctionInput0): FunctionOutput1<OUTPUT_ARG_1> {
         return FunctionOutput1(invoke(ctx))

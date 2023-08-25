@@ -15,6 +15,7 @@ class Sandbox(
 
     override val native: Native = Native(this)
     override val top: StackTop get() = state.top
+    override fun pop(len: Int) = state.pop(len)
 
     val state = ClosableState(native)
     val registry: ExtensionRegistry = ExtensionRegistry(this)

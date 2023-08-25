@@ -40,37 +40,14 @@ fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
     is NilType -> pushNil()
     is NumberType -> pushNumber(value)
     is StringType -> pushString(value)
-    is ArrayType -> {
-        val t = tableCreateArray(0)
-        value.entries.forEach { (arrayIdx, arrayValue) ->
-            when (arrayValue) {
-//                is NilType -> t.append(NilType)
-                is NumberType -> t.append(arrayValue)
-                is StringType -> t.append(arrayValue)
-                else -> TODO("$arrayValue")
-            }
-        }
-
-        StackTop(t.index)
-    }
-
-    is MapType -> {
-        val t = tableCreateMap(0)
-        value.entries.forEach { (mapKey, mapValue) ->
-            when (mapValue) {
-                is NilType -> t[mapKey] = NilType
-                is NumberType -> t[mapKey] = mapValue
-                is StringType -> t[mapKey] = mapValue
-                is CodeType -> t[mapKey] = StringType(mapValue.value)
-                is MapType -> t[mapKey] = t //FIXME
-                else -> TODO("$mapValue")
-            }
-        }
-        StackTop(t.index)
-    }
-//    is MapType -> pushTable(toProxyMap(value))
-    is TableProxyArray -> pushTop(value.index)
-    is TableProxyMap -> pushTop(value.index)
+    is ArrayType -> StackTop(toProxyArray(value).index)
+    is MapType -> StackTop(toProxyMap(value).index)
+    /// FIXME ???????????????????
+    is TableProxyArray -> pushTable(value)
+//    is TableProxyArray -> StackTop(value.index)
+    is TableProxyMap -> pushTable(value)
+//    is TableProxyMap -> StackTop(value.index)
+    // ??????????????????????
     is AnyType -> pushAny(value)
     is ErrorType -> pushError(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")

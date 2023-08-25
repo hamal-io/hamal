@@ -37,8 +37,14 @@ fun State.toProxyArray(array: ArrayType): TableProxyArray {
                 is BooleanType -> it.append(value)
                 is NumberType -> it.append(value)
                 is StringType -> it.append(value)
-                is MapType -> it.append(toProxyMap(value))
-                is ArrayType -> it.append(toProxyArray(value))
+                is MapType -> {
+                    it.append(toProxyMap(value)); pop(1)
+                }
+
+                is ArrayType -> {
+                    it.append(toProxyArray(value)); pop(1)
+                }
+
                 else -> TODO("$value")
             }
         }
@@ -77,8 +83,14 @@ fun State.toProxyMap(map: MapType): TableProxyMap {
                 is BooleanType -> it[key] = value
                 is NumberType -> it[key] = value
                 is StringType -> it[key] = value
-                is MapType -> it[key] = toProxyMap(value)
-                is ArrayType -> it[key] = toProxyArray(value)
+                is MapType -> {
+                    it[key] = toProxyMap(value); pop(1)
+                }
+
+                is ArrayType -> {
+                    it[key] = toProxyArray(value); pop(1)
+                }
+
                 else -> TODO("$value")
             }
         }

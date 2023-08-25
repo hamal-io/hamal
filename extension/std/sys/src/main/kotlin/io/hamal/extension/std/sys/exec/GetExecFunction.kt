@@ -29,7 +29,7 @@ class GetExecFunction(
                 .let { exec ->
 
                     MapType().also {
-                        it["id"] = exec.id
+                        it["id"] = exec.id.value.value.toString(16)
                         it["status"] = StringType(exec.status.name)
                         it["inputs"] = MapType() // FIXME
                         exec.correlation?.correlationId?.value?.let { corId ->
