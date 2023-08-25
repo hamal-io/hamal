@@ -36,14 +36,6 @@ class EthExecuteFunction(
 
             val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringType).value))
 
-
-//            val iterator = TableEntryIterator(
-//                arg1.index,
-//                ctx,
-//                keyExtractor = { state, index -> state.getNumberValue(ctx.absIndex(index)) },
-//                valueExtractor = { state, index -> state.toTableType(state.getTableMap(ctx.absIndex(index))) }
-//            )
-
             arg1.entries.forEach { entry ->
                 println(entry.key)
                 println(entry.value)

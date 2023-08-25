@@ -95,8 +95,6 @@ class ClosableState(
             is MapType -> pushTable(toProxyMap(underlying))
             is NumberType -> pushNumber(underlying)
             is StringType -> pushString(underlying)
-            is TableProxyArray -> pushTable(underlying)
-            is TableProxyMap -> pushTable(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }

@@ -37,18 +37,14 @@ data class FunctionOutput2Schema<ARG_1 : Type, ARG_2 : Type>(
 }
 
 fun <VALUE : Type> FunctionContext.push(value: VALUE) = when (value) {
+    is AnyType -> pushAny(value)
+    is ArrayType -> StackTop(toProxyArray(value).index)
     is NilType -> pushNil()
     is NumberType -> pushNumber(value)
     is StringType -> pushString(value)
-    is ArrayType -> StackTop(toProxyArray(value).index)
     is MapType -> StackTop(toProxyMap(value).index)
-    /// FIXME ???????????????????
-    is TableProxyArray -> pushTable(value)
-//    is TableProxyArray -> StackTop(value.index)
-    is TableProxyMap -> pushTable(value)
-//    is TableProxyMap -> StackTop(value.index)
-    // ??????????????????????
-    is AnyType -> pushAny(value)
     is ErrorType -> pushError(value)
+    is TableProxyArray -> pushTable(value)
+    is TableProxyMap -> pushTable(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")
 }
