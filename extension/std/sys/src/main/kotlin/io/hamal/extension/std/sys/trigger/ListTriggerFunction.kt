@@ -4,8 +4,10 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableProxyArray
+import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiSimpleEventTrigger
 import io.hamal.lib.sdk.domain.ApiSimpleFixedRateTrigger
 import io.hamal.lib.sdk.domain.ApiSimpleTrigger
@@ -13,10 +15,10 @@ import io.hamal.lib.sdk.domain.ApiTriggerList
 
 class ListTriggerFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function0In2Out<ErrorType, TableProxyArray>(
-    FunctionOutput2Schema(ErrorType::class, TableProxyArray::class)
+) : Function0In2Out<ErrorType, ArrayType>(
+    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableProxyArray?> {
+    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val triggers = try {
             templateSupplier()
                 .get("/v1/triggers")
@@ -27,50 +29,61 @@ class ListTriggerFunction(
             listOf<ApiSimpleTrigger>()
         }
 
-        return null to ctx.tableCreateArray().also { rs ->
-            triggers.forEach { trigger ->
-
-                when (val t = trigger) {
+        return null to ArrayType(
+            triggers.mapIndexed { index, trigger ->
+                index to when (val t = trigger) {
                     is ApiSimpleFixedRateTrigger -> {
-                        val inner = ctx.tableCreateMap(6)
-                        inner["id"] = t.id
-                        inner["type"] = "FixedRate"
-                        inner["name"] = t.name.value
-                        inner["func"] = ctx.tableCreateMap(2).also { nt ->
-                            nt["id"] = t.func.id
-                            nt["name"] = t.func.name.value
-                        }
-                        inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
-                            nt["id"] = t.namespace.id
-                            nt["name"] = t.namespace.name.value
-                        }
-                        inner["duration"] = t.duration.toIsoString()
-                        rs.append(inner)
+                        MapType(
+                            mutableMapOf(
+                                "id" to StringType(t.id.value.value.toString(16)),
+                                "type" to StringType("FixedRate"),
+                                "name" to StringType(t.name.value),
+                                "namespace" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(t.namespace.id.value.value.toString(16)),
+                                        "name" to StringType(t.namespace.name.value)
+                                    )
+                                ),
+                                "func" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(t.func.id.value.value.toString(16)),
+                                        "name" to StringType(t.func.name.value)
+                                    )
+                                ),
+                                "duration" to StringType(t.duration.toIsoString())
+                            )
+                        )
                     }
 
                     is ApiSimpleEventTrigger -> {
-                        val inner = ctx.tableCreateMap(6)
-                        inner["id"] = t.id
-                        inner["type"] = "Event"
-                        inner["name"] = t.name.value
-                        inner["func"] = ctx.tableCreateMap(2).also { nt ->
-                            nt["id"] = t.func.id
-                            nt["name"] = t.func.name.value
-                        }
-                        inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
-                            nt["id"] = t.namespace.id
-                            nt["name"] = t.namespace.name.value
-                        }
-                        inner["topic"] = ctx.tableCreateMap(2).also { nt ->
-                            nt["id"] = t.topic.id
-                            nt["name"] = t.topic.name.value
-                        }
-                        rs.append(inner)
+                        MapType(
+                            mutableMapOf(
+                                "id" to StringType(t.id.value.value.toString(16)),
+                                "type" to StringType("Event"),
+                                "name" to StringType(t.name.value),
+                                "namespace" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(t.namespace.id.value.value.toString(16)),
+                                        "name" to StringType(t.namespace.name.value)
+                                    )
+                                ),
+                                "func" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(t.func.id.value.value.toString(16)),
+                                        "name" to StringType(t.func.name.value)
+                                    )
+                                ),
+                                "topic" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(t.topic.id.value.value.toString(16)),
+                                        "name" to StringType(t.topic.name.value)
+                                    )
+                                ),
+                            )
+                        )
                     }
-
-                    else -> TODO()
                 }
-            }
-        }
+            }.toMap().toMutableMap()
+        )
     }
 }

@@ -4,16 +4,18 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableProxyArray
+import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiNamespaceList
 
 class ListNamespaceFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function0In2Out<ErrorType, TableProxyArray>(
-    FunctionOutput2Schema(ErrorType::class, TableProxyArray::class)
+) : Function0In2Out<ErrorType, ArrayType>(
+    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableProxyArray?> {
+    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val namespaces = try {
             templateSupplier()
                 .get("/v1/namespaces")
@@ -25,13 +27,15 @@ class ListNamespaceFunction(
             listOf()
         }
 
-        return null to ctx.tableCreateArray().also { rs ->
-            namespaces.forEach { namespace ->
-                val inner = ctx.tableCreateMap(2)
-                inner["id"] = namespace.id
-                inner["name"] = namespace.name.value
-                rs.append(inner)
-            }
-        }
+        return null to ArrayType(
+            namespaces.mapIndexed { index, namespace ->
+                index to MapType(
+                    mutableMapOf(
+                        "id" to StringType(namespace.id.value.value.toString(16)),
+                        "name" to StringType(namespace.name.value),
+                    )
+                )
+            }.toMap().toMutableMap()
+        )
     }
 }

@@ -7,8 +7,8 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiEventTrigger
@@ -17,11 +17,11 @@ import io.hamal.lib.sdk.domain.ApiTrigger
 
 class GetTriggerFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<StringType, ErrorType, TableProxyMap>(
+) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, TableProxyMap::class)
+    FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableProxyMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
         val response = templateSupplier()
             .get("/v1/triggers/${arg1.value}")
             .execute()
@@ -32,45 +32,57 @@ class GetTriggerFunction(
 
                     when (val t = trigger) {
                         is ApiFixedRateTrigger ->
-                            ctx.tableCreateMap(6).also {
-                                it["id"] = t.id
-                                it["type"] = "FixedRate"
-                                it["name"] = t.name.value
-                                it["namespace"] = ctx.tableCreateMap(2).also { nt ->
-                                    nt["id"] = t.namespace.id
-                                    nt["name"] = t.namespace.name.value
-                                }
-                                it["func"] = ctx.tableCreateMap(2).also { nt ->
-                                    nt["id"] = t.func.id
-                                    nt["name"] = t.func.name.value
-                                }
-                                it["duration"] = t.duration.toIsoString()
-                            }
+                            MapType(
+                                mutableMapOf(
+                                    "id" to StringType(t.id.value.value.toString(16)),
+                                    "type" to StringType("FixedRate"),
+                                    "name" to StringType(t.name.value),
+                                    "namespace" to MapType(
+                                        mutableMapOf(
+                                            "id" to StringType(t.namespace.id.value.value.toString(16)),
+                                            "name" to StringType(t.namespace.name.value)
+                                        )
+                                    ),
+                                    "func" to MapType(
+                                        mutableMapOf(
+                                            "id" to StringType(t.func.id.value.value.toString(16)),
+                                            "name" to StringType(t.func.name.value)
+                                        )
+                                    ),
+                                    "duration" to StringType(t.duration.toIsoString())
+                                )
+                            )
 
                         is ApiEventTrigger -> {
-                            ctx.tableCreateMap(6).also {
-                                it["id"] = t.id
-                                it["type"] = "Event"
-                                it["name"] = t.name.value
-                                it["namespace"] = ctx.tableCreateMap(2).also { nt ->
-                                    nt["id"] = t.namespace.id
-                                    nt["name"] = t.namespace.name.value
-                                }
-                                it["func"] = ctx.tableCreateMap(2).also { nt ->
-                                    nt["id"] = t.func.id
-                                    nt["name"] = t.func.name.value
-                                }
-                                it["topic"] = ctx.tableCreateMap(2).also { nt ->
-                                    nt["id"] = t.topic.id
-                                    nt["name"] = t.topic.name.value
-                                }
-                            }
+                            MapType(
+                                mutableMapOf(
+                                    "id" to StringType(t.id.value.value.toString(16)),
+                                    "type" to StringType("Event"),
+                                    "name" to StringType(t.name.value),
+                                    "namespace" to MapType(
+                                        mutableMapOf(
+                                            "id" to StringType(t.namespace.id.value.value.toString(16)),
+                                            "name" to StringType(t.namespace.name.value)
+                                        )
+                                    ),
+                                    "func" to MapType(
+                                        mutableMapOf(
+                                            "id" to StringType(t.func.id.value.value.toString(16)),
+                                            "name" to StringType(t.func.name.value)
+                                        )
+                                    ),
+                                    "topic" to MapType(
+                                        mutableMapOf(
+                                            "id" to StringType(t.topic.id.value.value.toString(16)),
+                                            "name" to StringType(t.topic.name.value)
+                                        )
+                                    ),
+                                )
+                            )
                         }
 
                         else -> TODO()
                     }
-
-
                 }
         } else {
             require(response is ErrorHttpResponse)

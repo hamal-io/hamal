@@ -7,19 +7,19 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiError
 import io.hamal.lib.sdk.domain.ApiTopic
 
 class GetTopicFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function1In2Out<StringType, ErrorType, TableProxyMap>(
+) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, TableProxyMap::class)
+    FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, TableProxyMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
         val response = templateSupplier()
             .get("/v1/topics/${arg1.value}")
             .execute()
@@ -27,10 +27,12 @@ class GetTopicFunction(
         if (response is SuccessHttpResponse) {
             return null to response.result(ApiTopic::class)
                 .let { topic ->
-                    ctx.tableCreateMap(2).also {
-                        it["id"] = topic.id
-                        it["name"] = topic.name.value
-                    }
+                    MapType(
+                        mutableMapOf(
+                            "id" to StringType(topic.id.value.value.toString(16)),
+                            "name" to StringType(topic.name.value),
+                        )
+                    )
                 }
         } else {
             require(response is ErrorHttpResponse)

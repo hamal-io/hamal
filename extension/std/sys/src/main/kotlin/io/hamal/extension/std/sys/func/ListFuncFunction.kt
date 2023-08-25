@@ -4,16 +4,18 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableProxyArray
+import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiFuncList
 
 class ListFuncFunction(
     private val templateSupplier: () -> HttpTemplate
-) : Function0In2Out<ErrorType, TableProxyArray>(
-    FunctionOutput2Schema(ErrorType::class, TableProxyArray::class)
+) : Function0In2Out<ErrorType, ArrayType>(
+    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, TableProxyArray?> {
+    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val funcs = try {
             templateSupplier()
                 .get("/v1/funcs")
@@ -24,18 +26,21 @@ class ListFuncFunction(
             listOf<ApiFuncList.ApiSimpleFunc>()
         }
 
-
-        return null to ctx.tableCreateArray().also { rs ->
-            funcs.forEach { func ->
-                val inner = ctx.tableCreateMap(2)
-                inner["id"] = func.id
-                inner["name"] = func.name.value
-                inner["namespace"] = ctx.tableCreateMap(2).also { nt ->
-                    nt["id"] = func.namespace.id
-                    nt["name"] = func.namespace.name.value
-                }
-                rs.append(inner)
-            }
-        }
+        return null to ArrayType(
+            funcs.mapIndexed { index, func ->
+                index to MapType(
+                    mutableMapOf(
+                        "id" to StringType(func.id.value.value.toString(16)),
+                        "namespace" to MapType(
+                            mutableMapOf(
+                                "id" to StringType(func.namespace.id.value.value.toString(16)),
+                                "name" to StringType(func.namespace.name.value)
+                            )
+                        ),
+                        "name" to StringType(func.name.value),
+                    )
+                )
+            }.toMap().toMutableMap()
+        )
     }
 }
