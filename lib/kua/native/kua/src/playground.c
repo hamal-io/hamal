@@ -10,7 +10,7 @@ int main(void) {
 
     luaL_newmetatable(L, "__metatable_error");
     lua_pushnumber(L, 20);
-    lua_setfield(L, 1, "__type");
+    lua_setfield(L, 1, "__type_id");
     lua_pushstring(L, "error");
     lua_setfield(L, 1, "__typename");
     lua_pop(L, 1);

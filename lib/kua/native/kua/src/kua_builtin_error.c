@@ -5,13 +5,16 @@
 #include "kua_builtin_error.h"
 
 void
-builtin_error_register_metable(lua_State *L) {
-    luaL_newmetatable(L, "__metable_error");
+builtin_error_register(lua_State *L) {
+    luaL_newmetatable(L, KUA_BUILTIN_ERROR);
+
+    lua_pushstring(L, "__type_id");
     lua_pushnumber(L, 20);
-    lua_setfield(L, 1, "__type");
+    lua_settable(L, -3);
+
+    lua_pushstring(L, "__typename");
     lua_pushstring(L, "error");
-    lua_setfield(L, 1, "__typename");
-    lua_pop(L, 1);
+    lua_settable(L, -3);
 }
 
 

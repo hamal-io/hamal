@@ -16,13 +16,21 @@ fun main() {
             TODO("Not yet implemented")
         }
     }).use { sb ->
-
         sb.load(
             """
-            _D.digits(100)
-            _D.pi=_D.new("3.1415926535897932384626433832795028841971693993751058209749445923078164062862090")
-            print(_D.pi)
-
+            -- print(_G)
+            -- for k,v in pairs(_G) do print(k,v) end
+            
+            
+            print(__decimal__)
+            local x = __decimal__.new("3.1415926535897932384626433832795028841971693993751058209749445923078164062862090")
+            print(x)
+            --for k,v in pairs(__decimal__) do print(k,v) end
+            -- for k,v in pairs(_G) do print(k,v) end
+            
+            -- _decimal.digits(100)
+            -- _decimal.pi=_decimal.new("3.1415926535897932384626433832795028841971693993751058209749445923078164062862090")
+            -- print(_decimal.pi)
         """.trimIndent()
         )
     }

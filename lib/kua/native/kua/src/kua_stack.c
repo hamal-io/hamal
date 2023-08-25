@@ -16,7 +16,7 @@ type(lua_State *L, int idx) {
             pop(L, 2);
             return TABLE_TYPE;
         }
-        lua_getfield(L, -1, "__type");
+        lua_getfield(L, -1, "__type_id");
         result = TABLE_TYPE;
         if (lua_type(L, -1) == NUMBER_TYPE) {
             result = lua_tonumber(L, -1);

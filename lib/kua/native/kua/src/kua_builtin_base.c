@@ -83,7 +83,7 @@ static const luaL_Reg base_funcs[] = {
 
 
 int
-kua_builtin_base_register(lua_State *L) {
+builtin_base_register(lua_State *L) {
     /* open lib into global table */
     lua_pushglobaltable(L);
     luaL_setfuncs(L, base_funcs, 0);
