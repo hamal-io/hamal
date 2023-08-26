@@ -98,6 +98,21 @@ STATE_METHOD_NAME(pushNil)(JNIEnv *env, jobject K) {
 }
 
 JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean value) {
+    ENV_AND_STATE
+    return (jint) push_boolean(L, value);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(pushDecimal)(JNIEnv *env, jobject K, jstring value) {
+    ENV_AND_STATE
+    char const *lua_string = to_raw_string(value);
+    jint result = push_decimal(L, lua_string);
+    release_raw_string(value, lua_string);
+    return result;
+}
+
+JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(pushError)(JNIEnv *env, jobject K, jstring value) {
     ENV_AND_STATE
     char const *lua_string = to_raw_string(value);
@@ -106,11 +121,6 @@ STATE_METHOD_NAME(pushError)(JNIEnv *env, jobject K, jstring value) {
     return result;
 }
 
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(pushBoolean)(JNIEnv *env, jobject K, jboolean value) {
-    ENV_AND_STATE
-    return (jint) push_boolean(L, value);
-}
 
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(pushNumber)(JNIEnv *env, jobject K, jdouble value) {
@@ -132,6 +142,14 @@ STATE_METHOD_NAME(pushFunction)(JNIEnv *env, jobject K, jobject func) {
     ENV_AND_STATE
     return push_func(L, func);
 }
+
+JNIEXPORT jstring JNICALL
+STATE_METHOD_NAME(toDecimalString)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    char const *str = to_decimal(L, idx);
+    return (*env)->NewStringUTF(env, str);
+}
+
 
 JNIEXPORT jstring JNICALL
 STATE_METHOD_NAME(toError)(JNIEnv *env, jobject K, jint idx) {
@@ -285,7 +303,7 @@ JNIEXPORT void JNICALL
 STATE_METHOD_NAME(setGlobal)(JNIEnv *env, jobject K, jstring name) {
     const char *c_str = to_raw_string(name);
     lua_State *L = current_state(env, K);
-
+    //FIXME
 //    if (checkstack(L, JNLUA_MINSTACK)
 //        && checknelems(L, 1)
 //        && (setglobal_name = getstringchars(name))) {

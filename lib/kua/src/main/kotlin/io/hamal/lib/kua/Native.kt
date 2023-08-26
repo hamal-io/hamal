@@ -1,7 +1,9 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.type.DecimalType
 import io.hamal.lib.kua.type.ErrorType
+import java.math.BigDecimal
 
 class Native(
     val sandbox: Sandbox
@@ -20,8 +22,11 @@ class Native(
     external fun getGlobal(key: String)
 
     external fun pushBoolean(value: Boolean): Int
-    external fun pushFunction(value: FunctionType<*, *, *, *>): Int
+    fun pushDecimal(value: DecimalType): Int = pushDecimal(value.toBigDecimal().toString())
+    external fun pushDecimal(value: String): Int
+    fun pushError(error: ErrorType): Int = pushError(error.message)
     external fun pushError(message: String): Int
+    external fun pushFunction(value: FunctionType<*, *, *, *>): Int
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int
     external fun pushString(value: String): Int
@@ -29,6 +34,8 @@ class Native(
     external fun pop(total: Int): Int
 
     external fun toBoolean(idx: Int): Boolean
+    fun toDecimal(idx: Int) = DecimalType(BigDecimal(toDecimalString(idx)))
+    external fun toDecimalString(idx: Int): String
     external fun toError(idx: Int): ErrorType
     external fun toNumber(idx: Int): Double
     external fun toString(idx: Int): String

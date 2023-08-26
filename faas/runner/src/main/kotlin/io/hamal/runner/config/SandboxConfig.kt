@@ -1,5 +1,6 @@
 package io.hamal.runner.config
 
+import io.hamal.extension.std.log.DecimalExtensionFactory
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.extension.web3.eth.EthExtensionFactory
@@ -38,6 +39,7 @@ class RunnerSandboxFactory(
         val sdk = DefaultHamalSdk(template)
 
         return Sandbox(ctx).register(
+            DecimalExtensionFactory,
             LogExtensionFactory(sdk.execLogService),
             SysExtensionFactory { template },
             EthExtensionFactory(),

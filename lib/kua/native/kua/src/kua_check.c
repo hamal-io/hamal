@@ -43,13 +43,13 @@ check_stack_underflow(lua_State *L, int total) {
 }
 
 enum check_result
-check_type_at(lua_State *L, int idx, enum type expected_type) {
-    int current_type = lua_type(L, idx);
-    if (current_type != expected_type) {
+check_lua_type_at(lua_State *L, int idx, enum type expected_lua_type) {
+    enum type current_type = lua_type_at(L, idx);
+    if (current_type != expected_lua_type) {
         lua_pushstring(L, "Expected type to be ");
-        lua_pushstring(L, lua_typename(L, expected_type));
+        lua_pushstring(L, typename(expected_lua_type));
         lua_pushstring(L, " but was ");
-        lua_pushstring(L, lua_typename(L, current_type));
+        lua_pushstring(L, typename(current_type));
 
         lua_concat(L, 4);
 
@@ -58,3 +58,21 @@ check_type_at(lua_State *L, int idx, enum type expected_type) {
     }
     return CHECK_RESULT_OK;
 }
+
+enum check_result
+check_type_at(lua_State *L, int idx, enum type expected_type) {
+    int current_type = type_at(L, idx);
+    if (current_type != expected_type) {
+        lua_pushstring(L, "Expected type to be ");
+        lua_pushstring(L, typename(expected_type));
+        lua_pushstring(L, " but was ");
+        lua_pushstring(L, typename(current_type));
+
+        lua_concat(L, 4);
+
+        throw_illegal_state(lua_tostring(L, lua_gettop(L)));
+        return CHECK_RESULT_ERROR;
+    }
+    return CHECK_RESULT_OK;
+}
+

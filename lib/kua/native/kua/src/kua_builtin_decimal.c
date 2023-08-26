@@ -69,7 +69,7 @@ mpdecimal_bifunction(lua_State *L, void (*fn)(mpd_t *z, const mpd_t *x, const mp
     return 1;
 }
 
-static int
+int
 decimal_new(lua_State *L) {
     mpdecimal_get(L, 1);
     luaL_setmetatable(L, KUA_BUILTIN_DECIMAL);
@@ -77,13 +77,27 @@ decimal_new(lua_State *L) {
     return 1;
 }
 
-static int
-decimal_tostring(lua_State *L) {
-    mpd_t *x = mpdecimal_get(L, 1);
+int
+decimal_new_from_string(lua_State *L, char const *value) {
+    mpd_t *x = mpdecimal_new(L);
+    mpd_set_string(x, value, &global_ctx);
+    luaL_setmetatable(L, KUA_BUILTIN_DECIMAL);
+    return 1;
+}
+
+
+int
+decimal_as_string(lua_State *L, int idx) {
+    mpd_t *x = mpdecimal_get(L, idx);
     char *s = mpd_to_sci(x, 0);
     lua_pushstring(L, s);
     free(s);
     return 1;
+}
+
+static int
+decimal_tostring(lua_State *L) {
+    return decimal_as_string(L, 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +137,7 @@ builtin_decimal_register(lua_State *L) {
     lua_settable(L, -3);
 
     lua_pushstring(L, "__type_id");
-    lua_pushnumber(L, 10);
+    lua_pushnumber(L, DECIMAL_TYPE);
     lua_settable(L, -3);
 
     lua_pushstring(L, "__typename");

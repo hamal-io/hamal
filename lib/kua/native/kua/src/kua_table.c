@@ -27,7 +27,7 @@ table_len(lua_State *L, int idx) {
 int
 table_set(lua_State *L, int idx, char const *key) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_setfield(L, idx, key);
     return table_len(L, idx);
 }
@@ -35,7 +35,7 @@ table_set(lua_State *L, int idx, char const *key) {
 int
 table_raw_set(lua_State *L, int idx) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_rawset(L, idx);
     return table_len(L, idx);
 }
@@ -43,7 +43,7 @@ table_raw_set(lua_State *L, int idx) {
 int
 table_raw_set_idx(lua_State *L, int stack_idx, int table_idx) {
     if (check_index(L, stack_idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_rawseti(L, stack_idx, table_idx);
     return table_len(L, stack_idx);
 }
@@ -51,7 +51,7 @@ table_raw_set_idx(lua_State *L, int stack_idx, int table_idx) {
 int
 table_get(lua_State *L, int idx, char const *key) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_getfield(L, idx, key);
 }
@@ -59,7 +59,7 @@ table_get(lua_State *L, int idx, char const *key) {
 int
 table_raw_get(lua_State *L, int idx) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_rawget(L, idx);
 }
@@ -67,7 +67,7 @@ table_raw_get(lua_State *L, int idx) {
 int
 table_raw_get_idx(lua_State *L, int stack_idx, int table_idx) {
     if (check_index(L, stack_idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, stack_idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_rawgeti(L, stack_idx, table_idx);
 }
@@ -75,7 +75,7 @@ table_raw_get_idx(lua_State *L, int stack_idx, int table_idx) {
 int
 table_get_sub_table(lua_State *L, int idx, char const *key) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return luaL_getsubtable(L, idx, key);
 }
@@ -83,7 +83,7 @@ table_get_sub_table(lua_State *L, int idx, char const *key) {
 int
 table_next(lua_State *L, int idx) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_next(L, idx);
 }
@@ -91,7 +91,7 @@ table_next(lua_State *L, int idx) {
 int
 table_append(lua_State *L, int idx) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     int len = table_len(L, idx) + 1;
     lua_rawseti(L, idx, len);
     return len;

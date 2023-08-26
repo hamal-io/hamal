@@ -50,7 +50,8 @@ static int
 kua_type(lua_State *L) {
     int t = lua_type(L, 1);
     luaL_argcheck(L, t != LUA_TNONE, 1, "value expected");
-    lua_pushstring(L, lua_typename(L, t));
+    enum type type = type_at(L, 1);
+    lua_pushstring(L, typename(type));
     return 1;
 }
 
@@ -63,21 +64,21 @@ kua_tostring(lua_State *L) {
 
 
 static const luaL_Reg base_funcs[] = {
-        {"assert", kua_assert},
-        {"error", kua_error},
-        {"next", luaB_next},
-        {"pairs", luaB_pairs},
-        {"ipairs",         luaB_ipairs},
-        {"print", luaB_print}, // FIXME replace with some logger
+        {"assert",       kua_assert},
+        {"error",        kua_error},
+        {"next",         luaB_next},
+        {"pairs",        luaB_pairs},
+        {"ipairs",       luaB_ipairs},
+        {"print",        luaB_print}, // FIXME replace with some logger
         {"getmetatable", luaB_getmetatable},
         {"setmetatable", luaB_setmetatable},
-        {"rawequal",       luaB_rawequal},
-        {"rawlen",         luaB_rawlen},
-        {"rawget",         luaB_rawget},
-        {"rawset",         luaB_rawset},
-        {"select",         luaB_select},
-        {"type", kua_type},
-        {"tostring", kua_tostring},
+        {"rawequal",     luaB_rawequal},
+        {"rawlen",       luaB_rawlen},
+        {"rawget",       luaB_rawget},
+        {"rawset",       luaB_rawset},
+        {"select",       luaB_select},
+        {"type",         kua_type},
+        {"tostring",     kua_tostring},
         {NULL, NULL}
 };
 

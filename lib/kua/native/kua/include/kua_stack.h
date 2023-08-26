@@ -25,10 +25,13 @@ int
 push_nil(lua_State *L);
 
 int
-push_error(lua_State *L, char const *message);
+push_boolean(lua_State *L, int value);
 
 int
-push_boolean(lua_State *L, int value);
+push_decimal(lua_State *L, char const *message);
+
+int
+push_error(lua_State *L, char const *message);
 
 int
 push_number(lua_State *L, double value);
@@ -41,6 +44,9 @@ push_func(lua_State *L, void *func);
 
 char const *
 to_error(lua_State *L, int idx);
+
+char const *
+to_decimal(lua_State *L, int idx);
 
 int
 to_boolean(lua_State *L, int idx);

@@ -2,29 +2,13 @@
 
 #include "kua_check.h"
 #include "kua_builtin_error.h"
+#include "kua_builtin_decimal.h"
 #include "kua_stack.h"
 #include "kua_call.h"
 
 int
 type(lua_State *L, int idx) {
-    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    int result = lua_type(L, idx);
-    if (result == TABLE_TYPE) {
-        lua_getmetatable(L, idx);
-        if (lua_type(L, -1) == NIL_TYPE) {
-            pop(L, 2);
-            return TABLE_TYPE;
-        }
-        lua_getfield(L, -1, "__type_id");
-        result = TABLE_TYPE;
-        if (lua_type(L, -1) == NUMBER_TYPE) {
-            result = lua_tonumber(L, -1);
-        }
-        pop(L, 1);
-        return result;
-    }
-    return result;
+    return type_at(L, idx);
 }
 
 int
@@ -68,16 +52,23 @@ push_nil(lua_State *L) {
 }
 
 int
-push_error(lua_State *L, char const *message) {
-    if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    builtin_error_create(L, message);
+push_boolean(lua_State *L, int value) {
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    lua_pushboolean(L, value);
     return top(L);
 }
 
 int
-push_boolean(lua_State *L, int value) {
-    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    lua_pushboolean(L, value);
+push_decimal(lua_State *L, char const *value) {
+    if (check_stack_overflow(L, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    decimal_new_from_string(L, value);
+    return top(L);
+}
+
+int
+push_error(lua_State *L, char const *message) {
+    if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    builtin_error_create(L, message);
     return top(L);
 }
 
@@ -105,14 +96,6 @@ push_func(lua_State *L, void *func) {
     return top(L);
 }
 
-char const *
-to_error(lua_State *L, int idx) {
-    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
-    if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
-    if (check_type_at(L, idx, STRING_TYPE) == CHECK_RESULT_ERROR) return NULL;
-    return lua_tostring(L, idx);
-}
-
 int
 to_boolean(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
@@ -121,6 +104,24 @@ to_boolean(lua_State *L, int idx) {
     return lua_toboolean(L, idx);
 }
 
+char const *
+to_decimal(lua_State *L, int idx) {
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
+    if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
+    if (check_type_at(L, idx, DECIMAL_TYPE) == CHECK_RESULT_ERROR) return NULL;
+    decimal_as_string(L, idx);
+    char const *result = lua_tostring(L, -1);
+    lua_pop(L, 1);
+    return result;
+}
+
+char const *
+to_error(lua_State *L, int idx) {
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
+    if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
+    if (check_type_at(L, idx, STRING_TYPE) == CHECK_RESULT_ERROR) return NULL;
+    return lua_tostring(L, idx);
+}
 
 double
 to_number(lua_State *L, int idx) {

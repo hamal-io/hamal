@@ -13,8 +13,8 @@ enum type {
     FUNCTION_TYPE = 6,
     USER_DATA_TYPE = 7,
     THREAD_TYPE = 8,
-    DECIMAL_TYPE = 10,
-    ERROR_TYPE = 20
+    ERROR_TYPE = 10,
+    DECIMAL_TYPE = 11,
 };
 
 enum result {
@@ -22,6 +22,11 @@ enum result {
     RESULT_ERROR
 };
 
+enum type
+type_at(lua_State *L, int idx);
+
+enum type
+lua_type_at(lua_State *L, int idx);
 
 char const *
 typename(enum type type);
