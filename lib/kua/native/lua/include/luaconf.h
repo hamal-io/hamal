@@ -636,7 +636,7 @@
 
 
 /*
-@@ LUA_KCONTEXT is the type of the context ('ctx') for continuation
+@@ LUA_KCONTEXT is the type of the context ('global_ctx') for continuation
 ** functions.  It must be a numerical type; Lua will use 'intptr_t' if
 ** available, otherwise it will use 'ptrdiff_t' (the nearest thing to
 ** 'intptr_t' in C89)

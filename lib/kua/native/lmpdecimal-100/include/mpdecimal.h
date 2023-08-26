@@ -148,7 +148,7 @@ typedef uint64_t mpd_uuint_t; /* double width unsigned mod type */
 #define MPD_SIZE_MAX SIZE_MAX
 typedef size_t mpd_size_t; /* unsigned size type */
 
-/* type for dec->len, dec->exp, ctx->prec */
+/* type for dec->len, dec->exp, global_ctx->prec */
 #define MPD_SSIZE_MAX INT32_MAX
 #define MPD_SSIZE_MIN INT32_MIN
 typedef int32_t mpd_ssize_t;

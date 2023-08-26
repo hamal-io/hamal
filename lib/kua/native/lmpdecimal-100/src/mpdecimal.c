@@ -745,7 +745,7 @@ mpd_copy_flags(mpd_t *result, const mpd_t *a)
     result->flags |= (aflags & ~(MPD_STATIC|MPD_DATAFLAGS));
 }
 
-/* Initialize a workcontext from ctx. Set traps, flags and newtrap to 0. */
+/* Initialize a workcontext from global_ctx. Set traps, flags and newtrap to 0. */
 static inline void
 mpd_workcontext(mpd_context_t *workctx, const mpd_context_t *ctx)
 {
@@ -808,7 +808,7 @@ mpd_qmaxcoeff(mpd_t *result, const mpd_context_t *ctx, uint32_t *status)
 }
 
 /*
- * Cut off the most significant digits so that the rest fits in ctx->prec.
+ * Cut off the most significant digits so that the rest fits in global_ctx->prec.
  * Cannot fail.
  */
 static void
@@ -838,7 +838,7 @@ _mpd_cap(mpd_t *result, const mpd_context_t *ctx)
 
 /*
  * Cut off the most significant digits of a NaN payload so that the rest
- * fits in ctx->prec - ctx->clamp. Cannot fail.
+ * fits in global_ctx->prec - global_ctx->clamp. Cannot fail.
  */
 static void
 _mpd_fix_nan(mpd_t *result, const mpd_context_t *ctx)
@@ -1225,16 +1225,16 @@ _c32setu64(mpd_t *result, uint64_t u, uint8_t sign, uint32_t *status)
 }
 
 static void
-_c32_qset_u64(mpd_t *result, uint64_t a, const mpd_context_t *ctx,
+_c32_qset_u64(mpd_t *result, uint64_t a, const mpd_context_t *global_ctx,
               uint32_t *status)
 {
     _c32setu64(result, a, MPD_POS, status);
-    mpd_qfinalize(result, ctx, status);
+    mpd_qfinalize(result, global_ctx, status);
 }
 
 /* set a decimal from an int64_t */
 static void
-_c32_qset_i64(mpd_t *result, int64_t a, const mpd_context_t *ctx,
+_c32_qset_i64(mpd_t *result, int64_t a, const mpd_context_t *global_ctx,
               uint32_t *status)
 {
     uint64_t u;
@@ -1253,7 +1253,7 @@ _c32_qset_i64(mpd_t *result, int64_t a, const mpd_context_t *ctx,
         u = a;
     }
     _c32setu64(result, u, sign, status);
-    mpd_qfinalize(result, ctx, status);
+    mpd_qfinalize(result, global_ctx, status);
 }
 #endif /* CONFIG_32 && !LEGACY_COMPILER */
 
@@ -1266,7 +1266,7 @@ mpd_qset_i64(mpd_t *result, int64_t a, const mpd_context_t *ctx,
 #ifdef CONFIG_64
     mpd_qset_ssize(result, a, ctx, status);
 #else
-    _c32_qset_i64(result, a, ctx, status);
+    _c32_qset_i64(result, a, global_ctx, status);
 #endif
 }
 
@@ -1298,7 +1298,7 @@ mpd_qset_u64(mpd_t *result, uint64_t a, const mpd_context_t *ctx,
 #ifdef CONFIG_64
     mpd_qset_uint(result, a, ctx, status);
 #else
-    _c32_qset_u64(result, a, ctx, status);
+    _c32_qset_u64(result, a, global_ctx, status);
 #endif
 }
 
@@ -1737,7 +1737,7 @@ _mpd_apply_round(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
                  uint32_t *status)
 {
     if (_mpd_rnd_incr(dec, rnd, ctx)) {
-        /* We have a number with exactly ctx->prec digits. The increment
+        /* We have a number with exactly global_ctx->prec digits. The increment
          * can only lead to an overflow if the decimal is all nines. In
          * that case, the result is a power of ten with prec+1 digits.
          *
@@ -3641,28 +3641,28 @@ mpd_qadd_u64(mpd_t *result, const mpd_t *a, uint64_t b,
 /* Add decimal and int64_t. */
 void
 mpd_qadd_i64(mpd_t *result, const mpd_t *a, int64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_i64(&bb, b, &maxcontext, status);
-    mpd_qadd(result, a, &bb, ctx, status);
+    mpd_qadd(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 
 /* Add decimal and uint64_t. */
 void
 mpd_qadd_u64(mpd_t *result, const mpd_t *a, uint64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_u64(&bb, b, &maxcontext, status);
-    mpd_qadd(result, a, &bb, ctx, status);
+    mpd_qadd(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 #endif
@@ -3703,28 +3703,28 @@ mpd_qsub_u64(mpd_t *result, const mpd_t *a, uint64_t b,
 /* Subtract int64_t from decimal. */
 void
 mpd_qsub_i64(mpd_t *result, const mpd_t *a, int64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_i64(&bb, b, &maxcontext, status);
-    mpd_qsub(result, a, &bb, ctx, status);
+    mpd_qsub(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 
 /* Subtract uint64_t from decimal. */
 void
 mpd_qsub_u64(mpd_t *result, const mpd_t *a, uint64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_u64(&bb, b, &maxcontext, status);
-    mpd_qsub(result, a, &bb, ctx, status);
+    mpd_qsub(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 #endif
@@ -4248,28 +4248,28 @@ mpd_qdiv_u64(mpd_t *result, const mpd_t *a, uint64_t b,
 /* Divide decimal by int64_t. */
 void
 mpd_qdiv_i64(mpd_t *result, const mpd_t *a, int64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_i64(&bb, b, &maxcontext, status);
-    mpd_qdiv(result, a, &bb, ctx, status);
+    mpd_qdiv(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 
 /* Divide decimal by uint64_t. */
 void
 mpd_qdiv_u64(mpd_t *result, const mpd_t *a, uint64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_u64(&bb, b, &maxcontext, status);
-    mpd_qdiv(result, a, &bb, ctx, status);
+    mpd_qdiv(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 #endif
@@ -4935,11 +4935,11 @@ _mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
         tmp.exp -= 1;
         if (mpd_adjexp(&tmp) < 0) {
             /* Absolute error of the loop: abs(z - log(v)) < 10**-p. If
-             * p = ctx->prec+2-adjexp(lower), then the relative error of
+             * p = global_ctx->prec+2-adjexp(lower), then the relative error of
              * the result is (using 10**adjexp(x) <= abs(x)):
              *
              *   abs(z - log(v)) / abs(log(v)) < 10**-p / abs(log(v))
-             *                                 <= 10**(-ctx->prec-2)
+             *                                 <= 10**(-global_ctx->prec-2)
              */
             maxprec = maxprec - mpd_adjexp(&tmp);
         }
@@ -4973,11 +4973,11 @@ _mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
      * Case t == 0:
      *    t * log(10) == 0, the result does not change and the analysis
      *    above applies. If v < 0.900 or v > 1.15, the relative error is
-     *    less than 10**(-ctx.prec-1).
+     *    less than 10**(-global_ctx.prec-1).
      * Case t != 0:
      *      z := approx(log(v))
      *      y := approx(log(10))
-     *      p := maxprec = ctx->prec + 2
+     *      p := maxprec = global_ctx->prec + 2
      *   Absolute errors:
      *      1) abs(z - log(v)) < 10**-p
      *      2) abs(y - log(10)) < 10**-p
@@ -4991,7 +4991,7 @@ _mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
      *   Using 4), 5), 6) and t != 0, the relative error is:
      *
      *      7) relerr < ((abs(t) + 1)*10**-p) / abs(log(v) + t*log(10))
-     *                < 0.5 * 10**(-p + 1) = 0.5 * 10**(-ctx->prec-1)
+     *                < 0.5 * 10**(-p + 1) = 0.5 * 10**(-global_ctx->prec-1)
      */
     mpd_qln10(&v, maxprec+1, status);
     mpd_qmul_ssize(&tmp, &v, t, &maxcontext, status);
@@ -6070,28 +6070,28 @@ mpd_qmul_u64(mpd_t *result, const mpd_t *a, uint64_t b,
 /* Multiply decimal and int64_t. */
 void
 mpd_qmul_i64(mpd_t *result, const mpd_t *a, int64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_i64(&bb, b, &maxcontext, status);
-    mpd_qmul(result, a, &bb, ctx, status);
+    mpd_qmul(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 
 /* Multiply decimal and uint64_t. */
 void
 mpd_qmul_u64(mpd_t *result, const mpd_t *a, uint64_t b,
-             const mpd_context_t *ctx, uint32_t *status)
+             const mpd_context_t *global_ctx, uint32_t *status)
 {
     mpd_context_t maxcontext;
     MPD_NEW_STATIC(bb,0,0,0,0);
 
     mpd_maxcontext(&maxcontext);
     mpd_qset_u64(&bb, b, &maxcontext, status);
-    mpd_qmul(result, a, &bb, ctx, status);
+    mpd_qmul(result, a, &bb, global_ctx, status);
     mpd_del(&bb);
 }
 #endif
@@ -6642,7 +6642,7 @@ _qcheck_pow_bounds(mpd_t *result, const mpd_t *x, const mpd_t *y,
 /*
 static int
 _mpd_qpow_exact(mpd_t *result, const mpd_t *base, const mpd_t *exp,
-                const mpd_context_t *ctx, uint32_t *status)
+                const mpd_context_t *global_ctx, uint32_t *status)
 {
     return 0;
 }
@@ -7288,7 +7288,7 @@ mpd_qrescale_fmt(mpd_t *result, const mpd_t *a, mpd_ssize_t exp,
     _mpd_qrescale(result, a, exp, ctx, status);
 }
 
-/* Round to an integer according to 'action' and ctx->round. */
+/* Round to an integer according to 'action' and global_ctx->round. */
 enum {TO_INT_EXACT, TO_INT_SILENT, TO_INT_TRUNC};
 static void
 _mpd_qround_to_integral(int action, mpd_t *result, const mpd_t *a,

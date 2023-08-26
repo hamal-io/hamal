@@ -26,17 +26,11 @@ trap_handler(mpd_context_t *ctx) {
     throw_error(err_msg); //FIXME maybe own error class? DecimalError?!
 }
 
-static mpd_context_t *
-mpdecimal_get_context(lua_State *L) {
-    lua_getglobal(L, MPDECIMAL_CTX_NAME);
-    if (check_type_at(L, -1, USER_DATA_TYPE) == CHECK_RESULT_ERROR) return NULL;
-    return (mpd_context_t *) lua_touserdata(L, -1);
-}
+static mpd_context_t global_ctx;
 
 static mpd_t *
 mpdecimal_new(lua_State *L) {
-    mpd_context_t *ctx = mpdecimal_get_context(L);
-    mpd_t *x = mpd_new(ctx);
+    mpd_t *x = mpd_new(&global_ctx);
     luaL_boxpointer(L, x);
     luaL_setmetatable(L, KUA_BUILTIN_DECIMAL);
     return x;
@@ -48,9 +42,8 @@ mpdecimal_get(lua_State *L, int idx) {
     switch (lua_type(L, idx)) {
         case LUA_TNUMBER:
         case LUA_TSTRING: {
-            mpd_context_t *ctx = mpdecimal_get_context(L);
             mpd_t *x = mpdecimal_new(L);
-            mpd_set_string(x, lua_tostring(L, idx), ctx);
+            mpd_set_string(x, lua_tostring(L, idx), &global_ctx);
             lua_replace(L, idx);
             return x;
         }
@@ -61,20 +54,18 @@ mpdecimal_get(lua_State *L, int idx) {
 
 static int
 mpdecimal_function(lua_State *L, void (*fn)(mpd_t *z, const mpd_t *x, mpd_context_t *ctx)) {
-    mpd_context_t *ctx = mpdecimal_get_context(L);
     mpd_t *x = mpdecimal_get(L, 1);
     mpd_t *z = mpdecimal_new(L);
-    fn(z, x, ctx);
+    fn(z, x, &global_ctx);
     return 1;
 }
 
 static int
 mpdecimal_bifunction(lua_State *L, void (*fn)(mpd_t *z, const mpd_t *x, const mpd_t *y, mpd_context_t *ctx)) {
-    mpd_context_t *ctx = mpdecimal_get_context(L);
     mpd_t *x = mpdecimal_get(L, 1);
     mpd_t *y = mpdecimal_get(L, 2);
     mpd_t *z = mpdecimal_new(L);
-    fn(z, x, y, ctx);
+    fn(z, x, y, &global_ctx);
     return 1;
 }
 
@@ -109,6 +100,8 @@ BI_FUNCTION(div)                    /** div(x,y) */
 
 static const luaL_Reg R[] = {
         {"new", decimal_new},
+        {"__div", decimal_div},
+        {"__tostring", decimal_tostring},
 #define DECLARE(f)    { #f, decimal_##f },
         DECLARE(div)
         DECLARE(tostring)
@@ -118,24 +111,10 @@ static const luaL_Reg R[] = {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static mpd_context_t global_ctx;
-
-static void init_once(void) {
-
-}
 
 int
 builtin_decimal_register(lua_State *L) {
-    static int initialised = 0;
-//    if (initialised == 0) {
-//        mpd_init(&global_ctx, 30);
-//        mpd_traphandler = trap_handler;
-//        initialised = 1;
-//    }
-
-    mpd_context_t *ctx = lua_newuserdata(L, sizeof(mpd_context_t));
-    mpd_basiccontext(ctx);
-    lua_setglobal(L, MPDECIMAL_CTX_NAME);
+    mpd_ieee_context(&global_ctx, 128);
 
     luaL_newmetatable(L, KUA_BUILTIN_DECIMAL);
     luaL_setfuncs(L, R, 0);

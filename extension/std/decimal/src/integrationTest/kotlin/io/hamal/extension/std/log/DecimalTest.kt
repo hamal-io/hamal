@@ -41,7 +41,7 @@ internal class DecimalTest : AbstractExtensionTest() {
                 """
             local decimal = require('decimal')
             local a = decimal.new(42.24)
-            assert(a.to_string() == '42.24')
+            assert(decimal.to_string(a) == '42.24')
             """
             )
         )
@@ -55,7 +55,7 @@ internal class DecimalTest : AbstractExtensionTest() {
                 """
             local decimal = require('decimal')
             local b = decimal.new('3.14')
-            assert(b.to_string() == '3.14')
+            assert(decimal.to_string(b) == '3.14')
         """
             )
         )
@@ -64,21 +64,19 @@ internal class DecimalTest : AbstractExtensionTest() {
     @Nested
     @DisplayName("Operations:")
     inner class OperationTest {
-
         @Test
-        fun div() {
+        fun `Divides decimal by number`() {
             val execute = createTestExecutor(DecimalExtensionFactory)
             execute(
                 unitOfWork(
                     """
             local decimal = require('decimal')
-            local b = decimal.new('3.14')
-            print(b/2)
-        """
+            local x = decimal.new('3.14')
+            assert(decimal.to_string(x/2) == '1.57')
+            """
                 )
             )
         }
 
     }
-
 }
