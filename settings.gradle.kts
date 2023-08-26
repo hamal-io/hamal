@@ -57,6 +57,7 @@ include(":faas:mono")
 include(":faas:runner")
 
 include(":extension:std:debug")
+include(":extension:std:decimal")
 include(":extension:std:log")
 include(":extension:std:test")
 include(":extension:std:sys")

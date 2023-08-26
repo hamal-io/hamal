@@ -73,7 +73,7 @@ internal class ErrorTypeTest {
         FunctionInput1Schema(TableProxyMap::class)
     ) {
         override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
-            assertThat(arg1.getInt("__type"), equalTo(20))
+            assertThat(arg1.getInt("__type_id"), equalTo(20))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }
     }

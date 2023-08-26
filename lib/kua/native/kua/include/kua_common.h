@@ -13,6 +13,7 @@ enum type {
     FUNCTION_TYPE = 6,
     USER_DATA_TYPE = 7,
     THREAD_TYPE = 8,
+    DECIMAL_TYPE = 10,
     ERROR_TYPE = 20
 };
 
@@ -22,7 +23,7 @@ enum result {
 };
 
 
-char const*
+char const *
 typename(enum type type);
 
 #endif //KUA_COMMON_H

@@ -7,14 +7,11 @@
 void
 builtin_error_register(lua_State *L) {
     luaL_newmetatable(L, KUA_BUILTIN_ERROR);
-
-    lua_pushstring(L, "__type_id");
     lua_pushnumber(L, 20);
-    lua_settable(L, -3);
-
-    lua_pushstring(L, "__typename");
+    lua_setfield(L, 1, "__type_id");
     lua_pushstring(L, "error");
-    lua_settable(L, -3);
+    lua_setfield(L, 1, "__typename");
+    lua_pop(L, 1);
 }
 
 
@@ -26,7 +23,7 @@ builtin_error_create(lua_State *L, char const *message) {
     lua_pushstring(L, message);
     lua_setfield(L, -2, "message");
 
-    luaL_getmetatable(L, "__metable_error");
+    luaL_getmetatable(L, KUA_BUILTIN_ERROR);
     lua_setmetatable(L, -2);
     return LUA_OK;
 }

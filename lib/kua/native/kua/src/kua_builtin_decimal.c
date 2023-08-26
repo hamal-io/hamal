@@ -81,6 +81,7 @@ mpdecimal_bifunction(lua_State *L, void (*fn)(mpd_t *z, const mpd_t *x, const mp
 static int
 decimal_new(lua_State *L) {
     mpdecimal_get(L, 1);
+    luaL_setmetatable(L, KUA_BUILTIN_DECIMAL);
     lua_settop(L, 1);
     return 1;
 }
@@ -108,23 +109,32 @@ BI_FUNCTION(div)                    /** div(x,y) */
 
 static const luaL_Reg R[] = {
         {"new", decimal_new},
-        {"__tostring", decimal_tostring},
-        {"__div", decimal_div},
 #define DECLARE(f)    { #f, decimal_##f },
         DECLARE(div)
+        DECLARE(tostring)
         {NULL, NULL}
 #undef DECLARE
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static mpd_context_t global_ctx;
+
+static void init_once(void) {
+
+}
 
 int
 builtin_decimal_register(lua_State *L) {
-    mpd_traphandler = trap_handler;
+    static int initialised = 0;
+//    if (initialised == 0) {
+//        mpd_init(&global_ctx, 30);
+//        mpd_traphandler = trap_handler;
+//        initialised = 1;
+//    }
 
     mpd_context_t *ctx = lua_newuserdata(L, sizeof(mpd_context_t));
-    mpd_init(ctx, 30);
+    mpd_basiccontext(ctx);
     lua_setglobal(L, MPDECIMAL_CTX_NAME);
 
     luaL_newmetatable(L, KUA_BUILTIN_DECIMAL);

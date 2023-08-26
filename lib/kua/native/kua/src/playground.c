@@ -4,11 +4,12 @@
 
 #include "kua_common.h"
 #include "kua_memory.h"
+#include "kua_builtin_error.h"
 
 int main(void) {
     lua_State *L = luaL_newstate();
 
-    luaL_newmetatable(L, "__metatable_error");
+    luaL_newmetatable(L, KUA_BUILTIN_ERROR);
     lua_pushnumber(L, 20);
     lua_setfield(L, 1, "__type_id");
     lua_pushstring(L, "error");
@@ -21,7 +22,7 @@ int main(void) {
 
     printf("top: %d\n", lua_gettop(L));
 
-    luaL_getmetatable(L, "__metatable_error");
+    luaL_getmetatable(L, KUA_BUILTIN_ERROR);
     printf("top: %d\n", lua_gettop(L));
 
     lua_setmetatable(L, 1);

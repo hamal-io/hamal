@@ -22,10 +22,29 @@ fun main() {
             -- for k,v in pairs(_G) do print(k,v) end
             
             
-            print(__decimal__)
-            local x = __decimal__.new("3.1415926535897932384626433832795028841971693993751058209749445923078164062862090")
-            print(x / 2)
-            --for k,v in pairs(__decimal__) do print(k,v) end
+            -- print(__decimal__)
+            -- local x = __decimal__.new("3.1415926535897932384626433832795028841971693993751058209749445923078164062862090")
+            -- print(x / 2)
+            
+            local decimal = { }
+            local mt = {
+                __tostring = function(self) return __decimal__.tostring(self.data) end,
+            }
+            function decimal.new(value)
+                local result =  {
+                    data = __decimal__.new(value)
+                }
+                setmetatable(result, mt)
+                return result
+            end
+            
+            
+            local x = decimal.new(3.141)
+            print(x)
+            
+            -- print(__decimal__.tostring(x))
+            
+            -- for k,v in pairs(__decimal__) do print(k,v) end
             -- for k,v in pairs(_G) do print(k,v) end
             
             -- _decimal.digits(100)
