@@ -17,13 +17,12 @@
 
 #define luaL_boxpointer(L, u) (*(void **)(lua_newuserdata(L, sizeof(void *))) = (u))
 #define luaL_unboxpointer(L, i, t) *((void**)luaL_checkudata(L,i,t))
-#define MPDECIMAL_CTX_NAME "__mpdecimal_ctx__"
 
 static void
 trap_handler(mpd_context_t *ctx) {
     char err_msg[MPD_MAX_FLAG_STRING];
     mpd_snprint_flags(err_msg, sizeof(err_msg), ctx->status);
-    throw_error(err_msg); //FIXME maybe own error class? DecimalError?!
+    throw_decimal_error(err_msg);
 }
 
 static mpd_context_t global_ctx;
@@ -128,7 +127,8 @@ static const luaL_Reg R[] = {
 
 int
 builtin_decimal_register(lua_State *L) {
-    mpd_ieee_context(&global_ctx, 128);
+    mpd_traphandler = trap_handler;
+    mpd_defaultcontext(&global_ctx);
 
     luaL_newmetatable(L, KUA_BUILTIN_DECIMAL);
     luaL_setfuncs(L, R, 0);

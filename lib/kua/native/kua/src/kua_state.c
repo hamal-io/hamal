@@ -58,6 +58,8 @@ setup_references(JNIEnv *env) {
     current_jni_ref.script_error_class = load_class(env, "io/hamal/lib/kua/ScriptError");
     current_jni_ref.script_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.script_error_class ,"<init>","(Ljava/lang/String;)V");
 
+    current_jni_ref.decimal_error_class = load_class(env, "io/hamal/lib/kua/DecimalError");
+    current_jni_ref.decimal_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.decimal_error_class ,"<init>","(Ljava/lang/String;)V");
 
     current_jni_ref.assertion_error_class = load_class(env, "io/hamal/lib/kua/AssertionError");
 

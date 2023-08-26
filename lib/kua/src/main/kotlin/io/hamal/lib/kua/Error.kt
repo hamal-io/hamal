@@ -2,11 +2,15 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.type.NumberType
 
-data class ExitError(val status: NumberType) : Error(status.toString())
+abstract class KuaError(message: String, throwable: Throwable? = null) : Error(message, throwable)
 
-class AssertionError(message: String) : Error(message)
+class ExitError(val status: NumberType) : KuaError(status.toString())
 
-class ScriptError(message: String) : Error(message)
+class AssertionError(message: String) : KuaError(message)
 
-class ExtensionError(cause: Throwable) : Error(cause.message, cause)
+class ScriptError(message: String) : KuaError(message)
+
+class DecimalError(message: String) : KuaError(message)
+
+class ExtensionError(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
 

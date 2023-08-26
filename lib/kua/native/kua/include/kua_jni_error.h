@@ -23,6 +23,9 @@ int
 throw_script_error(char const *message);
 
 int
+throw_decimal_error(char const *message);
+
+int
 throw(jthrowable throwable);
 
 

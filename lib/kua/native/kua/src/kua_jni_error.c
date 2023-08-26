@@ -51,6 +51,12 @@ throw_script_error(char const *message) {
 }
 
 int
+throw_decimal_error(char const *message){
+    JNIEnv *env = current_env();
+    return (*env)->ThrowNew(env, jni_ref().decimal_error_class, message);
+}
+
+int
 throw(jthrowable throwable) {
     JNIEnv *env = current_env();
     return (*env)->Throw(env, throwable);

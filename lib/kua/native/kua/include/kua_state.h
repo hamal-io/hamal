@@ -15,6 +15,8 @@ struct jni_ref {
     jmethodID extension_error_ctor_id;
     jclass script_error_class;
     jmethodID script_error_ctor_id;
+    jclass decimal_error_class;
+    jmethodID decimal_error_ctor_id;
     jclass assertion_error_class;
     jclass kua_func_class;
     jmethodID invoked_by_lua_method_id;

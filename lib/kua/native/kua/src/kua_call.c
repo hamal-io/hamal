@@ -17,7 +17,8 @@ errorHandler(lua_State *L) {
          * Its an assertion error -> it does not need to be handled here
          */
         if ((*env)->IsInstanceOf(env, throwable, jni_ref().assertion_error_class) ||
-            (*env)->IsInstanceOf(env, throwable, jni_ref().script_error_class)) {
+            (*env)->IsInstanceOf(env, throwable, jni_ref().script_error_class) ||
+            (*env)->IsInstanceOf(env, throwable, jni_ref().decimal_error_class)) {
             throw(throwable);
             return 0;
         }
