@@ -54,18 +54,9 @@ type_at(lua_State *L, int idx) {
                 lua_pop(L, 2);
                 return result;
             }
-
-//            if (result == TABLE_TYPE) {
-                if (lua_type(L, -1) == NUMBER_TYPE) {
-                    result = lua_tonumber(L, -1);
-                }
-//                lua_pop(L, 1);
-//            } else {
-//                if (lua_type(L, -1) == NUMBER_TYPE) {
-//                    result = lua_tonumber(L, -1);
-//                }
-////                lua_pop(L, 2);
-//            }
+            if (lua_type(L, -1) == NUMBER_TYPE) {
+                result = lua_tonumber(L, -1);
+            }
             lua_pop(L, 2);
         }
     }
