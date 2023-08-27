@@ -1,7 +1,0 @@
-local log = require('log')
-log.trace("Trace Log Message")
-log.debug("Debug Log Message")
-log.info("Info Log Message")
-log.warn("Warn Log Message")
-log.error("Error Log Message")
-log.fatal("Fatal Log Message")

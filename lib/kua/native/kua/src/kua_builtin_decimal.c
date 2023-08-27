@@ -85,7 +85,6 @@ decimal_new(lua_State *L) {
 
 static int
 decimal_eq(lua_State *L) {
-    printf("decimal_eq\n");
     lua_pushboolean(L, mpdecimal_compare(L) == 0);
     return 1;
 }
@@ -137,9 +136,19 @@ decimal_tostring(lua_State *L) {
 #define FUNCTION(f)    DO(mpdecimal_function,f)
 #define BI_FUNCTION(f)    DO(mpdecimal_bifunction,f)
 
+#define mpd_neg        mpd_minus
+
+FUNCTION(abs)
 BI_FUNCTION(add)
 BI_FUNCTION(div)
+BI_FUNCTION(max)
+BI_FUNCTION(rem)
+BI_FUNCTION(min)
+BI_FUNCTION(mul)
+FUNCTION(neg)
+BI_FUNCTION(pow)
 BI_FUNCTION(sub)
+FUNCTION(sqrt)
 
 #undef DO
 #undef FUNCTION
@@ -152,14 +161,27 @@ static const luaL_Reg R[] = {
         {"__div", decimal_div},
         {"__le", decimal_le},
         {"__lt", decimal_lt},
+        {"__mod", decimal_rem},
+        {"__mul", decimal_mul},
+        {"__pow", decimal_pow},
         {"__sub", decimal_sub},
         {"__tostring", decimal_tostring},
+        {"__unm", decimal_neg},
 #define DECLARE(f)    { #f, decimal_##f },
+        DECLARE(abs)
         DECLARE(add)
         DECLARE(div)
+        DECLARE(max)
+        DECLARE(min)
+        DECLARE(pow)
+        DECLARE(rem)
+        DECLARE(mul)
+        DECLARE(neg)
+        DECLARE(neg)
         DECLARE(sub)
+        DECLARE(sqrt)
         DECLARE(tostring)
-        {NULL, NULL}
+        { NULL, NULL }
 #undef DECLARE
 };
 
