@@ -68,11 +68,44 @@ mpdecimal_bifunction(lua_State *L, void (*fn)(mpd_t *z, const mpd_t *x, const mp
     return 1;
 }
 
+static int
+mpdecimal_compare(lua_State *L) {
+    mpd_t *x = mpdecimal_get(L, 1);
+    mpd_t *y = mpdecimal_get(L, 2);
+    return mpd_cmp(x, y, &global_ctx);
+}
+
 int
 decimal_new(lua_State *L) {
     mpdecimal_get(L, 1);
     luaL_setmetatable(L, KUA_BUILTIN_DECIMAL);
     lua_settop(L, 1);
+    return 1;
+}
+
+static int
+decimal_eq(lua_State *L) {
+    printf("decimal_eq\n");
+    lua_pushboolean(L, mpdecimal_compare(L) == 0);
+    return 1;
+}
+
+static int
+decimal_le(lua_State *L) {
+    lua_pushboolean(L, mpdecimal_compare(L) <= 0);
+    return 1;
+}
+
+static int
+decimal_lt(lua_State *L) {
+    lua_pushboolean(L, mpdecimal_compare(L) < 0);
+    return 1;
+}
+
+
+static int
+decimal_gt(lua_State *L) {
+    lua_pushboolean(L, mpdecimal_compare(L) > 0);
     return 1;
 }
 
@@ -83,7 +116,6 @@ decimal_new_from_string(lua_State *L, char const *value) {
     luaL_setmetatable(L, KUA_BUILTIN_DECIMAL);
     return 1;
 }
-
 
 int
 decimal_as_string(lua_State *L, int idx) {
@@ -105,7 +137,9 @@ decimal_tostring(lua_State *L) {
 #define FUNCTION(f)    DO(mpdecimal_function,f)
 #define BI_FUNCTION(f)    DO(mpdecimal_bifunction,f)
 
-BI_FUNCTION(div)                    /** div(x,y) */
+BI_FUNCTION(add)
+BI_FUNCTION(div)
+BI_FUNCTION(sub)
 
 #undef DO
 #undef FUNCTION
@@ -113,10 +147,17 @@ BI_FUNCTION(div)                    /** div(x,y) */
 
 static const luaL_Reg R[] = {
         {"new", decimal_new},
+        {"__add", decimal_add},
+        {"__eq", decimal_eq},
         {"__div", decimal_div},
+        {"__le", decimal_le},
+        {"__lt", decimal_lt},
+        {"__sub", decimal_sub},
         {"__tostring", decimal_tostring},
 #define DECLARE(f)    { #f, decimal_##f },
+        DECLARE(add)
         DECLARE(div)
+        DECLARE(sub)
         DECLARE(tostring)
         {NULL, NULL}
 #undef DECLARE

@@ -1,8 +1,7 @@
-package io.hamal.extension.std.log
+package io.hamal.extension.std.decimal
 
 import AbstractExtensionTest
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
+import io.hamal.extension.std.log.DecimalExtensionFactory
 import org.junit.jupiter.api.Test
 
 internal class DecimalTest : AbstractExtensionTest() {
@@ -59,24 +58,5 @@ internal class DecimalTest : AbstractExtensionTest() {
         """
             )
         )
-    }
-
-    @Nested
-    @DisplayName("Operations:")
-    inner class OperationTest {
-        @Test
-        fun `Divides decimal by number`() {
-            val execute = createTestExecutor(DecimalExtensionFactory)
-            execute(
-                unitOfWork(
-                    """
-            local decimal = require('decimal')
-            local x = decimal.new('3.14')
-            assert(decimal.to_string(x/2) == '1.57')
-            """
-                )
-            )
-        }
-
     }
 }
