@@ -1,6 +1,6 @@
 package io.hamal.lib.http
 
-import io.hamal.lib.http.HttpRequest.*
+import io.hamal.lib.http.HttpRequest.HttpMethod
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.fixture.TestWebConfig
@@ -9,13 +9,15 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @Serializable
 sealed interface BodyResponse
@@ -47,15 +49,8 @@ open class TestBodyController {
     }
 }
 
-@Nested
-@SpringBootTest(
-    classes = [TestWebConfig::class, TestBodyController::class],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = []
-)
-class BodyIT(
-    @LocalServerPort var localServerPort: Int
-) {
+@SpringBootTest(classes = [TestWebConfig::class, TestBodyController::class], webEnvironment = RANDOM_PORT)
+class BodyTest(@LocalServerPort var localServerPort: Int) {
     @TestFactory
     fun `Request without body`(): List<DynamicTest> =
         HttpMethod.values()

@@ -56,6 +56,7 @@ include(":faas:instance:repository:testbed")
 include(":faas:mono")
 include(":faas:runner")
 
+include(":extension:net:http")
 include(":extension:std:debug")
 include(":extension:std:decimal")
 include(":extension:std:log")

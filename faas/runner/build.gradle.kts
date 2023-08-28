@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":lib:web3"))
     implementation(project(":lib:kua"))
 
+    implementation(project(":extension:net:http"))
     implementation(project(":extension:std:decimal"))
     implementation(project(":extension:std:log"))
     implementation(project(":extension:std:sys"))
