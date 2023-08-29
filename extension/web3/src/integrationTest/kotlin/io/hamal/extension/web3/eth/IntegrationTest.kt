@@ -1,8 +1,7 @@
-import io.hamal.extension.web3.eth.EthExtensionFactory
+package io.hamal.extension.web3.eth
+
+import AbstractExtensionTest
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
-import io.hamal.lib.kua.Sandbox
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -11,18 +10,14 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.name
 
-object IntegrationTest {
+object IntegrationTest : AbstractExtensionTest() {
     @TestFactory
     fun run(): List<DynamicTest> {
-        NativeLoader.load(Resources)
+        NativeLoader.load(NativeLoader.Preference.Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
-                val luaCode = String(Files.readAllBytes(testFile))
-                Sandbox(NopSandboxContext()).register(
-                    EthExtensionFactory()
-                ).use { sb ->
-                    sb.load(luaCode)
-                }
+                val execute = createTestExecutor(EthExtensionFactory())
+                execute(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()
     }
