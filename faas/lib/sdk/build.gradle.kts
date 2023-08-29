@@ -1,14 +1,12 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-
 plugins {
     id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("instance-repository-api")
 
 dependencies {
+    api(project(":faas:lib:http"))
     api(project(":faas:lib:domain"))
-    testImplementation(external.hamcrest)
     testImplementation(external.junit)
+    testImplementation(external.hamcrest)
 }

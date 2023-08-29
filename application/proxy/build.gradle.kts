@@ -22,8 +22,8 @@ docker {
 }
 
 dependencies {
-    implementation(project(":lib:sqlite"))
-    implementation(project(":lib:web3"))
+    implementation(project(":faas:lib:sqlite"))
+    implementation(project(":faas:lib:web3"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
@@ -42,8 +42,8 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":lib:sqlite"))
-                    implementation(project(":lib:web3"))
+                    implementation(project(":faas:lib:sqlite"))
+                    implementation(project(":faas:lib:web3"))
 
                     implementation(external.spring.web) {
                         exclude("com.fasterxml.jackson.core", "jackson-core")

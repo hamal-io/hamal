@@ -8,8 +8,8 @@ plugins {
 archivesName.set("instance-backend")
 
 dependencies {
-    implementation(project(":lib:sdk"))
-    implementation(project(":lib:kua"))
+    implementation(project(":faas:lib:sdk"))
+    implementation(project(":faas:lib:kua"))
 
     implementation(project(":faas:instance:repository:api"))
     implementation(project(":faas:instance:repository:memory"))
@@ -21,7 +21,7 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":extension:std:log"))
+    implementation(project(":faas:extension:std:log"))
 }
 
 
@@ -33,7 +33,7 @@ testing {
 
                 dependencies {
                     implementation(project())
-                    implementation(project(":lib:sdk"))
+                    implementation(project(":faas:lib:sdk"))
 
                     implementation(external.spring.web) {
                         exclude("com.fasterxml.jackson.core", "jackson-core")

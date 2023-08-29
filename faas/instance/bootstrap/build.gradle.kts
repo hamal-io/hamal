@@ -24,7 +24,7 @@ docker {
 }
 
 dependencies {
-    implementation(project(":lib:sdk"))
+    implementation(project(":faas:lib:sdk"))
 
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
@@ -42,7 +42,7 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":lib:sdk"))
+                    implementation(project(":faas:lib:sdk"))
 
                     implementation(external.spring.web) {
                         exclude("com.fasterxml.jackson.core", "jackson-core")
@@ -50,7 +50,7 @@ testing {
                         exclude("com.fasterxml.jackson.core", "jackson-annotations")
                     }
 
-                    implementation(project(":lib:kua"))
+                    implementation(project(":faas:lib:kua"))
                     implementation(project(":faas:instance:backend"))
                     implementation(project(":faas:instance:repository:api"))
                     implementation(project(":faas:instance:frontend"))

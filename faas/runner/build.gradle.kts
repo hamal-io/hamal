@@ -24,15 +24,15 @@ docker {
 }
 
 dependencies {
-    implementation(project(":lib:sdk"))
-    implementation(project(":lib:web3"))
-    implementation(project(":lib:kua"))
+    implementation(project(":faas:lib:sdk"))
+    implementation(project(":faas:lib:web3"))
+    implementation(project(":faas:lib:kua"))
 
-    implementation(project(":extension:net:http"))
-    implementation(project(":extension:std:decimal"))
-    implementation(project(":extension:std:log"))
-    implementation(project(":extension:std:sys"))
-    implementation(project(":extension:web3"))
+    implementation(project(":faas:extension:net:http"))
+    implementation(project(":faas:extension:std:decimal"))
+    implementation(project(":faas:extension:std:log"))
+    implementation(project(":faas:extension:std:sys"))
+    implementation(project(":faas:extension:web3"))
 
     implementation(external.spring.web) {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
@@ -71,8 +71,8 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":lib:sdk"))
-                    implementation(project(":lib:kua"))
+                    implementation(project(":faas:lib:sdk"))
+                    implementation(project(":faas:lib:kua"))
                     implementation(project(":faas:runner"))
 
                     implementation(external.junit)

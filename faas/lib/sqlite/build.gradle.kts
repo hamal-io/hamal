@@ -1,17 +1,12 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-
 plugins {
     id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("instance-repository-sqlite")
-
 dependencies {
-    api(project(":faas:lib:sqlite"))
-    api(project(":faas:instance:repository:record"))
+    implementation(project(":faas:lib:common"))
+    api(external.sqlite)
 
-    testImplementation(project(":faas:instance:repository:sqlite"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
@@ -21,9 +16,9 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
+                    implementation(project(":faas:lib:common"))
+                    implementation(external.sqlite)
                     implementation(project(":faas:lib:sqlite"))
-
-                    implementation(project(":faas:instance:repository:sqlite"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
                 }
