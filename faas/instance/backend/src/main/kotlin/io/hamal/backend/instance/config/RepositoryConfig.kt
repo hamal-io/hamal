@@ -1,14 +1,14 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.backend.repository.api.*
-import io.hamal.backend.repository.memory.MemoryExecLogRepository
-import io.hamal.backend.repository.memory.MemoryReqRepository
-import io.hamal.backend.repository.memory.MemoryStateRepository
-import io.hamal.backend.repository.memory.log.MemoryLogBrokerRepository
-import io.hamal.backend.repository.memory.record.MemoryExecRepository
-import io.hamal.backend.repository.memory.record.MemoryFuncRepository
-import io.hamal.backend.repository.memory.record.MemoryNamespaceRepository
-import io.hamal.backend.repository.memory.record.MemoryTriggerRepository
+import io.hamal.repository.memory.MemoryExecLogRepository
+import io.hamal.repository.memory.MemoryReqRepository
+import io.hamal.repository.memory.MemoryStateRepository
+import io.hamal.repository.memory.log.MemoryLogBrokerRepository
+import io.hamal.repository.memory.record.MemoryExecRepository
+import io.hamal.repository.memory.record.MemoryFuncRepository
+import io.hamal.repository.memory.record.MemoryNamespaceRepository
+import io.hamal.repository.memory.record.MemoryTriggerRepository
 import io.hamal.backend.repository.sqlite.SqliteStateRepository
 import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
 import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
@@ -54,10 +54,10 @@ open class SqliteRepositoryConfig {
     open fun execRepository() = SqliteExecRepository(SqliteExecRepository.Config(path))
 
     @Bean
-    open fun execCmdRepository(): ExecCmdRepository = execRepository()
+    open fun execCmdRepository(): io.hamal.repository.api.ExecCmdRepository = execRepository()
 
     @Bean
-    open fun execQueryRepository(): ExecQueryRepository = execRepository()
+    open fun execQueryRepository(): io.hamal.repository.api.ExecQueryRepository = execRepository()
 
     @Bean
     open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
@@ -115,10 +115,10 @@ open class MemoryRepositoryConfig {
     open fun namespaceQueryRepository(): NamespaceQueryRepository = MemoryNamespaceRepository
 
     @Bean
-    open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository
+    open fun execCmdRepository(): io.hamal.repository.api.ExecCmdRepository = MemoryExecRepository
 
     @Bean
-    open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
+    open fun execQueryRepository(): io.hamal.repository.api.ExecQueryRepository = MemoryExecRepository
 
     @Bean
     open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository

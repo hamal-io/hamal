@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.backend.repository.api.ExecQueryRepository
+import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiExec
 import org.springframework.http.ResponseEntity
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class GetExecRoute(
-    private val execQueryRepository: ExecQueryRepository,
+    private val execQueryRepository: io.hamal.repository.api.ExecQueryRepository,
 ) {
     @GetMapping("/v1/execs/{execId}")
     fun get(

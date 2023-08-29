@@ -12,21 +12,21 @@ import kotlin.concurrent.withLock
 
 @Service
 class OrchestrationService(
-    private val execCmdRepository: ExecCmdRepository,
+    private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
     private val eventEmitter: SystemEventEmitter
 ) {
 
     internal val lock: ReentrantLock = ReentrantLock()
-    internal val backlog = mutableMapOf<Correlation, MutableList<PlannedExec>>()
+    internal val backlog = mutableMapOf<Correlation, MutableList<io.hamal.repository.api.PlannedExec>>()
 
     // all execs in state of scheduled or greater
-    internal val execs = mutableMapOf<ExecId, Exec>()
+    internal val execs = mutableMapOf<ExecId, io.hamal.repository.api.Exec>()
 
     // mapping of correlations being inflight
     internal val inflight = mutableMapOf<Correlation, ExecId>()
 
 
-    fun schedule(cmdId: CmdId, plannedExec: PlannedExec) {
+    fun schedule(cmdId: CmdId, plannedExec: io.hamal.repository.api.PlannedExec) {
         lock.withLock {
             val correlation = plannedExec.correlation
 
@@ -48,7 +48,7 @@ class OrchestrationService(
         }
     }
 
-    fun completed(cmdId: CmdId, completedExec: CompletedExec) {
+    fun completed(cmdId: CmdId, completedExec: io.hamal.repository.api.CompletedExec) {
         lock.withLock {
             if (completedExec.correlation != null) {
                 // remove from inflight
@@ -69,7 +69,7 @@ class OrchestrationService(
         }
     }
 
-    fun failed(cmdId: CmdId, failedExec: FailedExec) {
+    fun failed(cmdId: CmdId, failedExec: io.hamal.repository.api.FailedExec) {
         lock.withLock {
             // FIXME retry or permanent fail or maybe do not fail at all...
             // remove from inflight
@@ -91,14 +91,14 @@ class OrchestrationService(
         }
     }
 
-    fun scheduleExec(cmdId: CmdId, plannedExec: PlannedExec) {
-        val scheduledExec = execCmdRepository.schedule(ExecCmdRepository.ScheduleCmd(cmdId, plannedExec.id))
+    fun scheduleExec(cmdId: CmdId, plannedExec: io.hamal.repository.api.PlannedExec) {
+        val scheduledExec = execCmdRepository.schedule(io.hamal.repository.api.ExecCmdRepository.ScheduleCmd(cmdId, plannedExec.id))
             .also { emitEvent(cmdId, it) }
 
         execs[scheduledExec.id] = scheduledExec
     }
 
-    fun emitEvent(cmdId: CmdId, exec: ScheduledExec) {
+    fun emitEvent(cmdId: CmdId, exec: io.hamal.repository.api.ScheduledExec) {
         eventEmitter.emit(cmdId, ExecScheduledEvent(exec))
     }
 }

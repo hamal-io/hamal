@@ -38,10 +38,10 @@ internal abstract class BaseTest {
     lateinit var eventBrokerRepository: LogBrokerRepository
 
     @Autowired
-    lateinit var execCmdRepository: ExecCmdRepository
+    lateinit var execCmdRepository: io.hamal.repository.api.ExecCmdRepository
 
     @Autowired
-    lateinit var execQueryRepository: ExecQueryRepository
+    lateinit var execQueryRepository: io.hamal.repository.api.ExecQueryRepository
 
     @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
@@ -102,10 +102,10 @@ internal abstract class BaseTest {
         status: ExecStatus,
         correlation: Correlation? = null,
         code: CodeType = CodeType("")
-    ): Exec {
+    ): io.hamal.repository.api.Exec {
 
         val planedExec = execCmdRepository.plan(
-            ExecCmdRepository.PlanCmd(
+            io.hamal.repository.api.ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
                 correlation = correlation,
@@ -120,7 +120,7 @@ internal abstract class BaseTest {
         }
 
         val scheduled = execCmdRepository.schedule(
-            ExecCmdRepository.ScheduleCmd(
+            io.hamal.repository.api.ExecCmdRepository.ScheduleCmd(
                 id = CmdId(2),
                 execId = planedExec.id,
             )
@@ -131,7 +131,7 @@ internal abstract class BaseTest {
         }
 
         val queued = execCmdRepository.queue(
-            ExecCmdRepository.QueueCmd(
+            io.hamal.repository.api.ExecCmdRepository.QueueCmd(
                 id = CmdId(3),
                 execId = scheduled.id
             )
@@ -140,21 +140,21 @@ internal abstract class BaseTest {
             return queued
         }
 
-        val startedExec = execCmdRepository.start(ExecCmdRepository.StartCmd(CmdId(4))).first()
+        val startedExec = execCmdRepository.start(io.hamal.repository.api.ExecCmdRepository.StartCmd(CmdId(4))).first()
         if (status == ExecStatus.Started) {
             return startedExec
         }
 
         return when (status) {
             ExecStatus.Completed -> execCmdRepository.complete(
-                ExecCmdRepository.CompleteCmd(
+                io.hamal.repository.api.ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id
                 )
             )
 
             ExecStatus.Failed -> execCmdRepository.fail(
-                ExecCmdRepository.FailCmd(
+                io.hamal.repository.api.ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
                     cause = ErrorType("BaseTest.kt")

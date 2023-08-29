@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.backend.repository.api.CompletedExec
-import io.hamal.backend.repository.api.StartedExec
+import io.hamal.repository.api.CompletedExec
+import io.hamal.repository.api.StartedExec
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State
@@ -60,7 +60,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
             )
-        ) as StartedExec
+        ) as io.hamal.repository.api.StartedExec
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(Accepted))
@@ -94,14 +94,14 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
     }
 
     private fun verifyExecCompleted(execId: ExecId) {
-        with(execQueryRepository.get(execId) as CompletedExec) {
+        with(execQueryRepository.get(execId) as io.hamal.repository.api.CompletedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
         }
     }
 
     private fun verifyStateSet(execId: ExecId) {
-        val exec = (execQueryRepository.get(execId) as CompletedExec)
+        val exec = (execQueryRepository.get(execId) as io.hamal.repository.api.CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
             assertThat(value, equalTo(State(MapType(mutableMapOf("value" to NumberType(13.37))))))

@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class CompleteExecHandler(
-    private val execQueryRepository: ExecQueryRepository,
-    private val execCmdRepository: ExecCmdRepository,
+    private val execQueryRepository: io.hamal.repository.api.ExecQueryRepository,
+    private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
     private val eventEmitter: SystemEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
     private val eventBrokerRepository: LogBrokerRepository,
@@ -33,7 +33,7 @@ class CompleteExecHandler(
         val cmdId = req.cmdId()
 
         val exec = execQueryRepository.get(req.id)
-        require(exec is StartedExec) { "Exec not in status Started" }
+        require(exec is io.hamal.repository.api.StartedExec) { "Exec not in status Started" }
 
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
@@ -43,13 +43,13 @@ class CompleteExecHandler(
     }
 
     private fun completeExec(req: SubmittedCompleteExecReq) =
-        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.id))
+        execCmdRepository.complete(io.hamal.repository.api.ExecCmdRepository.CompleteCmd(req.cmdId(), req.id))
 
-    private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
+    private fun emitCompletionEvent(cmdId: CmdId, exec: io.hamal.repository.api.CompletedExec) {
         eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))
     }
 
-    private fun setState(cmdId: CmdId, exec: CompletedExec, state: State) {
+    private fun setState(cmdId: CmdId, exec: io.hamal.repository.api.CompletedExec, state: State) {
         val correlation = exec.correlation
         if (correlation != null) {
             stateCmdRepository.set(

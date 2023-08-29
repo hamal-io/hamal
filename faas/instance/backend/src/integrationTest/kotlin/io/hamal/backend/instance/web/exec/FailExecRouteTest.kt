@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.backend.repository.api.FailedExec
-import io.hamal.backend.repository.api.StartedExec
+import io.hamal.repository.api.FailedExec
+import io.hamal.repository.api.StartedExec
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.CorrelationId
@@ -54,7 +54,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
             )
-        ) as StartedExec
+        ) as io.hamal.repository.api.StartedExec
 
         val failureResponse = requestFailure(startedExec.id)
         assertThat(failureResponse.statusCode, equalTo(Accepted))
@@ -82,7 +82,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
     }
 
     private fun verifyExecFailed(execId: ExecId) {
-        with(execQueryRepository.get(execId) as FailedExec) {
+        with(execQueryRepository.get(execId) as io.hamal.repository.api.FailedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Failed))
             assertThat(cause, equalTo(ErrorType("SomeErrorCause")))

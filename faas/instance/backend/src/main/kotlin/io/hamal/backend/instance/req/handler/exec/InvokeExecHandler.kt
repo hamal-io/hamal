@@ -4,9 +4,9 @@ import io.hamal.backend.instance.event.ExecPlannedEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.backend.repository.api.ExecCmdRepository
+import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.PlannedExec
+import io.hamal.repository.api.PlannedExec
 import io.hamal.backend.repository.api.submitted_req.SubmittedInvokeExecReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class InvokeExecHandler(
-    private val execCmdRepository: ExecCmdRepository,
+    private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
     private val eventEmitter: SystemEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
 ) : ReqHandler<SubmittedInvokeExecReq>(SubmittedInvokeExecReq::class) {
@@ -26,7 +26,7 @@ class InvokeExecHandler(
         planExec(req).also { emitEvent(req.cmdId(), it) }
     }
 
-    private fun planExec(req: SubmittedInvokeExecReq): PlannedExec {
+    private fun planExec(req: SubmittedInvokeExecReq): io.hamal.repository.api.PlannedExec {
         val correlationId = req.correlationId
         val func = req.funcId?.let { funcQueryRepository.get(it) }
 
@@ -37,7 +37,7 @@ class InvokeExecHandler(
         }
 
         return execCmdRepository.plan(
-            ExecCmdRepository.PlanCmd(
+            io.hamal.repository.api.ExecCmdRepository.PlanCmd(
                 id = req.cmdId(),
                 execId = req.id,
                 correlation = correlation,
@@ -48,7 +48,7 @@ class InvokeExecHandler(
         )
     }
 
-    private fun emitEvent(cmdId: CmdId, exec: PlannedExec) {
+    private fun emitEvent(cmdId: CmdId, exec: io.hamal.repository.api.PlannedExec) {
         eventEmitter.emit(cmdId, ExecPlannedEvent(exec))
     }
 }

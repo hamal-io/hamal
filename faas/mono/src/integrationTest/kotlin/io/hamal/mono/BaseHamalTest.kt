@@ -28,10 +28,10 @@ abstract class BaseHamalTest {
     lateinit var eventBrokerRepository: LogBrokerRepository
 
     @Autowired
-    lateinit var execCmdRepository: ExecCmdRepository
+    lateinit var execCmdRepository: io.hamal.repository.api.ExecCmdRepository
 
     @Autowired
-    lateinit var execQueryRepository: ExecQueryRepository
+    lateinit var execQueryRepository: io.hamal.repository.api.ExecQueryRepository
 
     @Autowired
     lateinit var funcCmdRepository: FuncCmdRepository

@@ -2,9 +2,9 @@ package io.hamal.backend.instance.web.work
 
 import io.hamal.backend.instance.event.ExecutionStartedEvent
 import io.hamal.backend.instance.event.SystemEventEmitter
-import io.hamal.backend.repository.api.ExecCmdRepository
-import io.hamal.backend.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.backend.repository.api.StartedExec
+import io.hamal.repository.api.ExecCmdRepository
+import io.hamal.repository.api.ExecCmdRepository.StartCmd
+import io.hamal.repository.api.StartedExec
 import io.hamal.backend.repository.api.StateQueryRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
@@ -19,7 +19,7 @@ import java.security.SecureRandom
 
 @RestController
 class PollRoute(
-    private val execCmdRepository: ExecCmdRepository,
+    private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
     private val eventEmitter: SystemEventEmitter
 ) {
@@ -46,7 +46,7 @@ class PollRoute(
         )
     }
 
-    private fun emitEvents(cmdId: CmdId, execs: List<StartedExec>) {
+    private fun emitEvents(cmdId: CmdId, execs: List<io.hamal.repository.api.StartedExec>) {
         execs.forEach { eventEmitter.emit(cmdId, ExecutionStartedEvent(it)) }
     }
 

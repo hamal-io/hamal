@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.backend.repository.api.FailedExec
+import io.hamal.repository.api.FailedExec
 import io.hamal.backend.repository.api.submitted_req.SubmittedFailExecReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
@@ -66,7 +66,7 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
         execQueryRepository.list { }.also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
-                require(this is FailedExec)
+                require(this is io.hamal.repository.api.FailedExec)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Failed))
             }
