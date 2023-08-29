@@ -15,11 +15,11 @@ distributions {
                 fileMode = 644
             }
             from("src/main/kotlin") {  // Contents of this directory are copied by default
-                dirMode = 755;
+                dirMode = 755
                 fileMode = 644
             }
             from("src/main/resources") {  // Contents of this directory are copied by default
-                dirMode = 755;
+                dirMode = 755
                 fileMode = 644
             }
         }
@@ -27,7 +27,6 @@ distributions {
 }
 
 dependencies {
-    implementation(project(":lib:common"))
     implementation(project(":lib:kua"))
     implementation(project(":lib:web3"))
 }
