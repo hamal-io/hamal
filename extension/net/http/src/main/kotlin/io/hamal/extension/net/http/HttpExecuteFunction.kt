@@ -15,6 +15,7 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: ArrayType): Pair<ErrorType?, ArrayType?> {
+        val results = mutableListOf<MapType>()
         for (idx in 0 until arg1.size) {
             val map = arg1.getMap(idx + 1)
 
@@ -25,11 +26,10 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                 try {
                     val response = HttpTemplate().get(url).execute()
 
-                    return null to ArrayType().also {
-                        it.append(MapType().also { map ->
-                            map["statusCode"] = NumberType(response.statusCode.value)
-                        })
-                    }
+                    results.add(MapType().also {
+                        it["statusCode"] = NumberType(response.statusCode.value)
+                    })
+
                 } catch (t: Throwable) {
                     // FIXME
                 }
@@ -38,12 +38,9 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
             if (method == "POST") {
                 try {
                     val response = HttpTemplate().post(url).execute()
-
-                    return null to ArrayType().also {
-                        it.append(MapType().also { map ->
-                            map["statusCode"] = NumberType(response.statusCode.value)
-                        })
-                    }
+                    results.add(MapType().also {
+                        it["statusCode"] = NumberType(response.statusCode.value)
+                    })
                 } catch (t: Throwable) {
                     // FIXME
                 }
@@ -53,12 +50,9 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
             if (method == "PATCH") {
                 try {
                     val response = HttpTemplate().patch(url).execute()
-
-                    return null to ArrayType().also {
-                        it.append(MapType().also { map ->
-                            map["statusCode"] = NumberType(response.statusCode.value)
-                        })
-                    }
+                    results.add(MapType().also {
+                        it["statusCode"] = NumberType(response.statusCode.value)
+                    })
                 } catch (t: Throwable) {
                     // FIXME
                 }
@@ -67,12 +61,9 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
             if (method == "PUT") {
                 try {
                     val response = HttpTemplate().put(url).execute()
-
-                    return null to ArrayType().also {
-                        it.append(MapType().also { map ->
-                            map["statusCode"] = NumberType(response.statusCode.value)
-                        })
-                    }
+                    results.add(MapType().also {
+                        it["statusCode"] = NumberType(response.statusCode.value)
+                    })
                 } catch (t: Throwable) {
                     // FIXME
                 }
@@ -82,11 +73,9 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                 try {
                     val response = HttpTemplate().delete(url).execute()
 
-                    return null to ArrayType().also {
-                        it.append(MapType().also { map ->
-                            map["statusCode"] = NumberType(response.statusCode.value)
-                        })
-                    }
+                    results.add(MapType().also {
+                        it["statusCode"] = NumberType(response.statusCode.value)
+                    })
                 } catch (t: Throwable) {
                     // FIXME
                 }
@@ -94,7 +83,6 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
 
         }
 
-        return null to null
+        return null to ArrayType(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMutableMap())
     }
-
 }

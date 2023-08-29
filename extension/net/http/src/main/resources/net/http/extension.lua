@@ -2,55 +2,75 @@ function create_extension_factory()
     local internal = _internal
 
     return function()
-        local export = { }
+        local export = {
+            requests = { }
+        }
 
         function export.execute(requests)
             return internal.execute(requests)
         end
 
-        function export.get(url, args)
-            return single_request({
+        function export.requests.get(url, args)
+            return {
                 method = "GET",
                 url = url,
-                headers = {},
-                data = {}
-            })
+                headers = {}
+            }
         end
 
-        function export.post(url, args)
-            return single_request({
+        function export.get(url, args)
+            return single_request(export.requests.get(url, args))
+        end
+
+        function export.requests.post(url, args)
+            return {
                 method = "POST",
                 url = url,
                 headers = {},
                 data = {}
-            })
+            }
         end
 
-        function export.patch(url, args)
-            return single_request({
+        function export.post(url, args)
+            return single_request(export.requests.post(url, args))
+        end
+
+        function export.requests.patch(url, args)
+            return {
                 method = "PATCH",
                 url = url,
                 headers = {},
                 data = {}
-            })
+            }
         end
 
-        function export.put(url, args)
-            return single_request({
+        function export.patch(url, args)
+            return single_request(export.requests.patch(url, args))
+        end
+
+        function export.requests.put(url, args)
+            return {
                 method = "PUT",
                 url = url,
                 headers = {},
                 data = {}
-            })
+            }
+        end
+
+        function export.put(url, args)
+            return single_request(export.requests.put(url, args))
+        end
+
+        function export.requests.delete(url, args)
+            return {
+                method = "DELETE",
+                url = url,
+                headers = {}
+            }
         end
 
         function export.delete(url, args)
-            return single_request({
-                method = "DELETE",
-                url = url,
-                headers = {},
-                data = {}
-            })
+            return single_request(export.requests.delete(url, args))
         end
 
         function single_request(request)

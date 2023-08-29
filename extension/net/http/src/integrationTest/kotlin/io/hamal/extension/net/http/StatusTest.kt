@@ -38,6 +38,40 @@ open class TestStatusController {
 class StatusTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTest() {
 
     @TestFactory
+    fun `Batch requests`(): List<DynamicTest> =
+        listOf(Ok, Created, BadGateway, InternalServerError)
+            .map { httpStatusCode ->
+
+                dynamicTest("$httpStatusCode") {
+                    val execute = createTestExecutor(HttpExtensionFactory())
+                    execute(
+                        unitOfWork(
+                            """
+            local http = require('net.http')
+            local err, response = http.execute({
+                http.requests.get("http://localhost:$localServerPort/v1/status?code=${httpStatusCode.value}"),
+                http.requests.post("http://localhost:$localServerPort/v1/status?code=${httpStatusCode.value}"),
+                http.requests.patch("http://localhost:$localServerPort/v1/status?code=${httpStatusCode.value}"),
+                http.requests.put("http://localhost:$localServerPort/v1/status?code=${httpStatusCode.value}"),
+                http.requests.delete("http://localhost:$localServerPort/v1/status?code=${httpStatusCode.value}"),
+            })
+            
+            assert( err == nil )
+            assert( response ~= nil)
+            assert( #response == 5)
+
+            assert(response[1].statusCode == ${httpStatusCode.value})
+            assert(response[2].statusCode == ${httpStatusCode.value})
+            assert(response[3].statusCode == ${httpStatusCode.value})
+            assert(response[4].statusCode == ${httpStatusCode.value})
+            assert(response[5].statusCode == ${httpStatusCode.value})
+                    """.trimIndent()
+                        )
+                    )
+                }
+            }
+
+    @TestFactory
     fun `Get requests`(): List<DynamicTest> =
         listOf(Ok, Created, BadGateway, InternalServerError)
             .map { httpStatusCode ->
