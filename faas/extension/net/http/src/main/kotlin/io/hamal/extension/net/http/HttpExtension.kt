@@ -4,14 +4,11 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
-import io.hamal.lib.kua.type.StringType
 
-class HttpExtensionFactory : ScriptExtensionFactory {
-    val config = ExtensionConfig(
-        mutableMapOf(
-            "host" to StringType("http://localhost:8000")
-        )
-    )
+class HttpExtensionFactory(
+    val config: ExtensionConfig = ExtensionConfig(mutableMapOf())
+) : ScriptExtensionFactory {
+
 
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(

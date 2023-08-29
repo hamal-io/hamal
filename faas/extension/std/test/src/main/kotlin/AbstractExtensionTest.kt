@@ -57,7 +57,10 @@ abstract class AbstractExtensionTest {
         }
     )
 
-    fun unitOfWork(code: String) = UnitOfWork(
+    fun unitOfWork(
+        code: String,
+        inputs: ExecInputs = ExecInputs()
+    ) = UnitOfWork(
         id = ExecId(1234),
         inputs = ExecInputs(),
         state = State(),
