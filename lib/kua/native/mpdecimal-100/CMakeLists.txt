@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(lmpdecimal_100 C)
+project(mpdecimal_100 C)
 
 set(CMAKE_C_STANDARD 23)
 
@@ -25,6 +25,6 @@ set(SRCS
 add_compile_definitions(CONFIG_64)
 add_compile_definitions(ASM)
 
-add_library(lmpdecimal_100 SHARED ${SRCS})
-target_include_directories(lmpdecimal_100 PUBLIC include)
-target_link_libraries(lmpdecimal_100 PUBLIC lua)
+add_library(mpdecimal_100 SHARED ${SRCS})
+target_include_directories(mpdecimal_100 PUBLIC include)
+target_link_libraries(mpdecimal_100 PUBLIC lua)

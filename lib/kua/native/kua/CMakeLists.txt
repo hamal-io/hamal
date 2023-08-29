@@ -34,7 +34,7 @@ set(KUA_LIB_SRCS
 
 add_library(kua SHARED ${KUA_LIB_SRCS})
 target_include_directories(kua PUBLIC include)
-target_link_libraries(kua PUBLIC lua lmpdecimal_100)
+target_link_libraries(kua PUBLIC lua mpdecimal_100)
 
 add_executable(playground src/playground.c)
 target_include_directories(playground PUBLIC include)

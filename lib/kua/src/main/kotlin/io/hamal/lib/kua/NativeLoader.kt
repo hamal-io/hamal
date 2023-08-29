@@ -47,6 +47,7 @@ internal object BuildDirLoader : Loader {
             try {
                 System.load("$baseDir/lib/kua/native/cmake-build-debug/lua/$luaFile")
                 System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/$kuaFile")
+                System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/$mpdecimal")
                 true
             } catch (t: Throwable) {
                 false
@@ -74,6 +75,12 @@ internal object ResourcesLoader : Loader {
                 classloader.getResource("./${kuaFile}")
                     ?.let { System.load(it.file); true }
                     ?: false
+
+                classloader.getResource("./${mpdecimal}")
+                    ?.let { System.load(it.file) }
+                    ?: throw IllegalStateException("unable to load mpdecimal")
+
+                true
             } else {
                 false
             }
@@ -91,6 +98,7 @@ internal object JarLoader : Loader {
             try {
                 NativeUtils.loadLibraryFromJar("/$luaFile")
                 NativeUtils.loadLibraryFromJar("/$kuaFile")
+                NativeUtils.loadLibraryFromJar("/$mpdecimal")
                 true
             } catch (t: Throwable) {
                 false
@@ -116,10 +124,10 @@ private val luaFile by lazy {
     }
 }
 
-private val lmpdecimal by lazy {
+private val mpdecimal by lazy {
     when (detectSystem()) {
-        HostSystem.Linux64 -> "liblmpdecimal_100.so"
-        HostSystem.MacArm64 -> "liblmpdecimal_100.dylib"
+        HostSystem.Linux64 -> "libmpdecimal_100.so"
+        HostSystem.MacArm64 -> "libmpdecimal_100.dylib"
     }
 }
 
