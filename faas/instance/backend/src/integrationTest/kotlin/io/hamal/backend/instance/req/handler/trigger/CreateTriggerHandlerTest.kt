@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.req.handler.trigger
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.backend.repository.api.EventTrigger
-import io.hamal.backend.repository.api.FixedRateTrigger
-import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType

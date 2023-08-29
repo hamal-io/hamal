@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web
 
 import io.hamal.backend.instance.BaseTest
-import io.hamal.backend.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain._enum.ReqStatus.Failed

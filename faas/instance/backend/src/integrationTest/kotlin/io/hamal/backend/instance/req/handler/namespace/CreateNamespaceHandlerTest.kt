@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.namespace
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.backend.repository.api.submitted_req.SubmittedCreateNamespaceReq
+import io.hamal.repository.api.submitted_req.SubmittedCreateNamespaceReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.NamespaceId

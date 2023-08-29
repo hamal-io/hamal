@@ -1,7 +1,7 @@
 package io.hamal.repository
 
-import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.fixture.BaseTestFixture
 import io.hamal.repository.fixture.MemoryFixture
 import io.hamal.repository.fixture.SqliteFixture

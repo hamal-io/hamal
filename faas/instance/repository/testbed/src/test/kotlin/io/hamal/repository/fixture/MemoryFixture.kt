@@ -1,6 +1,6 @@
 package io.hamal.repository.fixture
 
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.memory.log.MemoryBrokerTopicsRepository
 import kotlin.reflect.KClass
 

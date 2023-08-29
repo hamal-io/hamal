@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.web.trigger
 
-import io.hamal.backend.repository.api.EventTrigger
-import io.hamal.backend.repository.api.FixedRateTrigger
-import io.hamal.backend.repository.api.NamespaceCmdRepository
-import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.FixedRate

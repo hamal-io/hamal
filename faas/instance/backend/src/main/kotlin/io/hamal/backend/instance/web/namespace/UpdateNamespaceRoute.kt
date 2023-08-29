@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.namespace
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.UpdateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId

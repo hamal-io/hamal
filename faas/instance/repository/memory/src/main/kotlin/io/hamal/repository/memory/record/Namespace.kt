@@ -1,9 +1,9 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.backend.repository.api.Namespace
-import io.hamal.backend.repository.api.NamespaceCmdRepository
-import io.hamal.backend.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.backend.repository.api.NamespaceRepository
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.namespace.NamespaceCreationRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord

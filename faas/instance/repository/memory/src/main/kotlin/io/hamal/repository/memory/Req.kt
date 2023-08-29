@@ -1,8 +1,8 @@
 package io.hamal.repository.memory
 
-import io.hamal.backend.repository.api.ReqQueryRepository
-import io.hamal.backend.repository.api.ReqRepository
-import io.hamal.backend.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.ReqQueryRepository
+import io.hamal.repository.api.ReqRepository
+import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.repository.memory.record.CurrentExecProjection
 import io.hamal.repository.memory.record.QueueProjection
 import io.hamal.lib.domain.ReqId

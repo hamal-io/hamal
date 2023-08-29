@@ -1,6 +1,6 @@
 package io.hamal.repository.sqlite
 
-import io.hamal.backend.repository.api.StateRepository
+import io.hamal.repository.api.StateRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation

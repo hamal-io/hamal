@@ -1,9 +1,9 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.LogChunk
-import io.hamal.backend.repository.api.log.LogChunkId
-import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.api.log.LogTopic
+import io.hamal.repository.api.log.LogChunk
+import io.hamal.repository.api.log.LogChunkId
+import io.hamal.repository.api.log.LogSegment
+import io.hamal.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli

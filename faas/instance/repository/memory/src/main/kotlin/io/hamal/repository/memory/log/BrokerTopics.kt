@@ -1,9 +1,9 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicToCreate
-import io.hamal.backend.repository.api.log.LogTopic
+import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
+import io.hamal.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName

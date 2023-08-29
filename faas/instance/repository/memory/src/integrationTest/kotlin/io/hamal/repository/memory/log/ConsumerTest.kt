@@ -1,9 +1,9 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.backend.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.api.log.ProtobufAppender
-import io.hamal.backend.repository.api.log.ProtobufLogConsumer
+import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.ProtobufAppender
+import io.hamal.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName

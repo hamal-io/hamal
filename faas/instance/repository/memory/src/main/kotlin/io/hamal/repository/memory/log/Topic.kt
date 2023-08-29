@@ -1,6 +1,6 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.backend.repository.api.log.*
+import io.hamal.repository.api.log.*
 import io.hamal.lib.common.domain.CmdId
 
 

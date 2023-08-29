@@ -1,10 +1,10 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.backend.repository.api.*
+import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.backend.repository.api.record.exec.createEntity
-import io.hamal.backend.repository.record.exec.*
+import io.hamal.repository.api.record.exec.createEntity
+import io.hamal.repository.record.exec.*
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive

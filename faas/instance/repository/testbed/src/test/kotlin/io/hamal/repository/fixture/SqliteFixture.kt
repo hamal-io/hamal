@@ -1,8 +1,8 @@
 package io.hamal.repository.fixture
 
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
-import io.hamal.backend.repository.sqlite.log.SqliteBrokerTopics
-import io.hamal.backend.repository.sqlite.log.SqliteBrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.sqlite.log.SqliteBrokerTopics
+import io.hamal.repository.sqlite.log.SqliteBrokerTopicsRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
 

@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.req.AppendEventReq
 import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.TopicId

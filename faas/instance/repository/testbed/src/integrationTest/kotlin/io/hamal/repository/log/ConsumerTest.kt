@@ -1,6 +1,6 @@
 package io.hamal.repository.log
 
-import io.hamal.backend.repository.api.log.*
+import io.hamal.repository.api.log.*
 import io.hamal.repository.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils

@@ -1,12 +1,12 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.backend.repository.api.EventTrigger
-import io.hamal.backend.repository.api.FixedRateTrigger
-import io.hamal.backend.repository.api.Trigger
-import io.hamal.backend.repository.api.TriggerCmdRepository.CreateEventCmd
-import io.hamal.backend.repository.api.TriggerCmdRepository.CreateFixedRateCmd
-import io.hamal.backend.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.backend.repository.api.TriggerRepository
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.Trigger
+import io.hamal.repository.api.TriggerCmdRepository.CreateEventCmd
+import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.api.TriggerRepository
 import io.hamal.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.repository.record.trigger.TriggerRecord

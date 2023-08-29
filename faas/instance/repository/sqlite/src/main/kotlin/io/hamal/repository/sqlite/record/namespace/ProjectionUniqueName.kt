@@ -1,9 +1,9 @@
 package io.hamal.repository.sqlite.record.namespace
 
-import io.hamal.backend.repository.api.Namespace
+import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.namespace.NamespaceRecord
-import io.hamal.backend.repository.sqlite.record.Projection
-import io.hamal.backend.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.Projection
+import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sqlite.Connection

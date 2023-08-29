@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SetStateReq

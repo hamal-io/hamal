@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.event
 
-import io.hamal.backend.repository.api.Trigger
+import io.hamal.repository.api.Trigger
 import kotlinx.serialization.Serializable
 
 @Serializable

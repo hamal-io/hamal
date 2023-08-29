@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.req
 
-import io.hamal.backend.repository.api.ReqQueryRepository
+import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import org.springframework.http.ResponseEntity

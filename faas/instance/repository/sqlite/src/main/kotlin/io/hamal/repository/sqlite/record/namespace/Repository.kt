@@ -1,16 +1,16 @@
 package io.hamal.repository.sqlite.record.namespace
 
-import io.hamal.backend.repository.api.Namespace
-import io.hamal.backend.repository.api.NamespaceCmdRepository
-import io.hamal.backend.repository.api.NamespaceCmdRepository.CreateCmd
-import io.hamal.backend.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.backend.repository.api.NamespaceRepository
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.namespace.Entity
 import io.hamal.repository.record.namespace.NamespaceCreationRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
-import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sqlite.BaseSqliteRepository

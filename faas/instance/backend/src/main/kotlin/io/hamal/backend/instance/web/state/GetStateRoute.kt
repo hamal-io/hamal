@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.state
 
-import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.StateQueryRepository
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId

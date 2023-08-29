@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.namespace
 
-import io.hamal.backend.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.domain.ApiNamespace
 import org.springframework.http.ResponseEntity

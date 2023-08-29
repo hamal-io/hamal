@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.event
 
-import io.hamal.backend.repository.api.log.CreateTopic
-import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.LogTopic
-import io.hamal.backend.repository.api.log.ProtobufAppender
+import io.hamal.repository.api.log.CreateTopic
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.ProtobufAppender
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.TopicId

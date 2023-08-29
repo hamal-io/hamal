@@ -1,9 +1,9 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.backend.repository.api.Func
+import io.hamal.repository.api.Func
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.backend.repository.sqlite.record.Projection
-import io.hamal.backend.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.Projection
+import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 

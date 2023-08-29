@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.backend.repository.api.ExecLogQueryRepository
+import io.hamal.repository.api.ExecLogQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId

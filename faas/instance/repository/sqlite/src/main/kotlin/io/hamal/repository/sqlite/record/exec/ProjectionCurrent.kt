@@ -2,9 +2,9 @@ package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
-import io.hamal.backend.repository.sqlite.record.Projection
-import io.hamal.backend.repository.sqlite.record.RecordTransaction
-import io.hamal.backend.repository.sqlite.record.protobuf
+import io.hamal.repository.sqlite.record.Projection
+import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.protobuf
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sqlite.Connection

@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.config
 
-import io.hamal.backend.repository.api.*
+import io.hamal.repository.api.*
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryReqRepository
 import io.hamal.repository.memory.MemoryStateRepository
@@ -9,13 +9,13 @@ import io.hamal.repository.memory.record.MemoryExecRepository
 import io.hamal.repository.memory.record.MemoryFuncRepository
 import io.hamal.repository.memory.record.MemoryNamespaceRepository
 import io.hamal.repository.memory.record.MemoryTriggerRepository
-import io.hamal.backend.repository.sqlite.SqliteStateRepository
-import io.hamal.backend.repository.sqlite.log.SqliteLogBroker
-import io.hamal.backend.repository.sqlite.log.SqliteLogBrokerRepository
-import io.hamal.backend.repository.sqlite.record.exec.SqliteExecRepository
-import io.hamal.backend.repository.sqlite.record.func.SqliteFuncRepository
-import io.hamal.backend.repository.sqlite.record.namespace.SqliteNamespaceRepository
-import io.hamal.backend.repository.sqlite.record.trigger.SqliteTriggerRepository
+import io.hamal.repository.sqlite.SqliteStateRepository
+import io.hamal.repository.sqlite.log.SqliteLogBroker
+import io.hamal.repository.sqlite.log.SqliteLogBrokerRepository
+import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
+import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
+import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
+import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile

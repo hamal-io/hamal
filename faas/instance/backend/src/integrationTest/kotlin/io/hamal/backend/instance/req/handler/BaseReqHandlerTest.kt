@@ -1,10 +1,10 @@
 package io.hamal.backend.instance.req.handler
 
 import io.hamal.backend.instance.BaseTest
-import io.hamal.backend.repository.api.Func
-import io.hamal.backend.repository.api.FuncCmdRepository
-import io.hamal.backend.repository.api.log.CreateTopic
-import io.hamal.backend.repository.api.log.LogTopic
+import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCmdRepository
+import io.hamal.repository.api.log.CreateTopic
+import io.hamal.repository.api.log.LogTopic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType

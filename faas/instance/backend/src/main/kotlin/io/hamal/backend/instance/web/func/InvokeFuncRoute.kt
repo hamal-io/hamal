@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.func
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.repository.api.FuncQueryRepository
+import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.lib.domain.req.InvokeFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId

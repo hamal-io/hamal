@@ -1,9 +1,9 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.backend.repository.api.Func
-import io.hamal.backend.repository.api.FuncCmdRepository
-import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.backend.repository.api.FuncRepository
+import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCmdRepository
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.func.FuncCreationRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.func.FuncUpdatedRecord

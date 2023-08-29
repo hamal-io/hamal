@@ -4,10 +4,10 @@ import io.hamal.backend.instance.component.Async
 import io.hamal.backend.instance.event.SystemEvent
 import io.hamal.backend.instance.event.SystemEventHandlerContainer
 import io.hamal.backend.instance.event.handler.SystemEventHandler
-import io.hamal.backend.repository.api.log.CreateTopic
-import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.log.ProtobufLogConsumer
+import io.hamal.repository.api.log.CreateTopic
+import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.ProtobufLogConsumer
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.GenerateDomainId

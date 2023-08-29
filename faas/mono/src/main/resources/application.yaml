@@ -3,8 +3,8 @@ logging:
     root: INFO
     io.hamal: INFO
     io.hamal.runner: DEBUG
-    io.hamal.backend.repository: INFO
-    io.hamal.backend.repository.sqlite.log: INFO
+    io.hamal.repository: INFO
+    io.hamal.repository.sqlite.log: INFO
     io.hamal.extension.web3: TRACE
 spring:
   datasource:

@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.topic
 
-import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName

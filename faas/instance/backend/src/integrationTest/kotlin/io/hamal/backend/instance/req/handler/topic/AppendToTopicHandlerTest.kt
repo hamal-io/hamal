@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.backend.repository.api.log.LogChunkId
-import io.hamal.backend.repository.api.log.LogSegment
-import io.hamal.backend.repository.api.submitted_req.SubmittedAppendToTopicReq
+import io.hamal.repository.api.log.LogChunkId
+import io.hamal.repository.api.log.LogSegment
+import io.hamal.repository.api.submitted_req.SubmittedAppendToTopicReq
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted

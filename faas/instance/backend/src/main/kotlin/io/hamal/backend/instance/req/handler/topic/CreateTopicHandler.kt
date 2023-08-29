@@ -2,9 +2,9 @@ package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.backend.repository.api.log.CreateTopic
-import io.hamal.backend.repository.api.log.LogBrokerRepository
-import io.hamal.backend.repository.api.submitted_req.SubmittedCreateTopicReq
+import io.hamal.repository.api.log.CreateTopic
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.submitted_req.SubmittedCreateTopicReq
 import org.springframework.stereotype.Component
 
 @Component

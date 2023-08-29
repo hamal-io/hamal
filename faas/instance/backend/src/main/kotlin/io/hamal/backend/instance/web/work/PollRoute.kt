@@ -5,7 +5,7 @@ import io.hamal.backend.instance.event.SystemEventEmitter
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StartedExec
-import io.hamal.backend.repository.api.StateQueryRepository
+import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.domain.ApiUnitOfWorkList

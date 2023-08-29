@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.req
 
-import io.hamal.backend.repository.api.ReqCmdRepository
+import io.hamal.repository.api.ReqCmdRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit

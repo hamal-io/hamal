@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.backend.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*

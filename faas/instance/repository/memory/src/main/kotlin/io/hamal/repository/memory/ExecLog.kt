@@ -1,9 +1,9 @@
 package io.hamal.repository.memory
 
-import io.hamal.backend.repository.api.ExecLog
-import io.hamal.backend.repository.api.ExecLogCmdRepository
-import io.hamal.backend.repository.api.ExecLogQueryRepository
-import io.hamal.backend.repository.api.ExecLogRepository
+import io.hamal.repository.api.ExecLog
+import io.hamal.repository.api.ExecLogCmdRepository
+import io.hamal.repository.api.ExecLogQueryRepository
+import io.hamal.repository.api.ExecLogRepository
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.RemoteAt
 import java.util.concurrent.locks.ReentrantReadWriteLock

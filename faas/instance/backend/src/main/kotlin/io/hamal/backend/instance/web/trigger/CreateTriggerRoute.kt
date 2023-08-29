@@ -1,9 +1,9 @@
 package io.hamal.backend.instance.web.trigger
 
 import io.hamal.backend.instance.req.SubmitRequest
-import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.NamespaceQueryRepository
-import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId

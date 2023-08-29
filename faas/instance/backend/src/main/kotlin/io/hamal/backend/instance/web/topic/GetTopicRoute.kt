@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.topic
 
-import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.ApiTopic
 import org.springframework.http.ResponseEntity

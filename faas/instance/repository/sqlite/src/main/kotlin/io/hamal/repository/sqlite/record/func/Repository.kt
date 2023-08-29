@@ -1,16 +1,16 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.backend.repository.api.Func
-import io.hamal.backend.repository.api.FuncCmdRepository.CreateCmd
-import io.hamal.backend.repository.api.FuncCmdRepository.UpdateCmd
-import io.hamal.backend.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.backend.repository.api.FuncRepository
+import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.func.Entity
 import io.hamal.repository.record.func.FuncCreationRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.func.FuncUpdatedRecord
-import io.hamal.backend.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.SqliteRecordRepository
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path

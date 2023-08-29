@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.GroupId
-import io.hamal.backend.repository.api.log.LogChunkId
+import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.LogChunkId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.assertThat

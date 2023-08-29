@@ -1,6 +1,6 @@
 package io.hamal.repository.record.func
 
-import io.hamal.backend.repository.api.Func
+import io.hamal.repository.api.Func
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.lib.common.domain.CmdId

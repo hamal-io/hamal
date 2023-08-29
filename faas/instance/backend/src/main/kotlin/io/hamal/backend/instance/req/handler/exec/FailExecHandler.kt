@@ -8,7 +8,7 @@ import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.FailedExec
 import io.hamal.repository.api.StartedExec
-import io.hamal.backend.repository.api.submitted_req.SubmittedFailExecReq
+import io.hamal.repository.api.submitted_req.SubmittedFailExecReq
 import io.hamal.lib.common.domain.CmdId
 import org.springframework.stereotype.Component
 

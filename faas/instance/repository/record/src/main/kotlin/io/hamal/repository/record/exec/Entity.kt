@@ -1,9 +1,9 @@
-package io.hamal.backend.repository.api.record.exec
+package io.hamal.repository.api.record.exec
 
-import io.hamal.backend.repository.api.*
+import io.hamal.repository.api.*
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
-import io.hamal.backend.repository.record.exec.*
+import io.hamal.repository.record.exec.*
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Invocation

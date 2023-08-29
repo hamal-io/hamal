@@ -1,6 +1,6 @@
 package io.hamal.repository.record.namespace
 
-import io.hamal.backend.repository.api.Namespace
+import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.lib.common.domain.CmdId

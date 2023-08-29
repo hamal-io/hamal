@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.topic
 
-import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicId

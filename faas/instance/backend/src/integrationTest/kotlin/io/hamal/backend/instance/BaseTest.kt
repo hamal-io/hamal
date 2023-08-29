@@ -1,7 +1,7 @@
 package io.hamal.backend.instance
 
-import io.hamal.backend.repository.api.*
-import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.*
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation

@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.func
 
-import io.hamal.backend.repository.api.FuncQueryRepository
-import io.hamal.backend.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.domain.ApiFuncList

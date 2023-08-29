@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.trigger
 
-import io.hamal.backend.repository.api.*
-import io.hamal.backend.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.*
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.domain.ApiEventTrigger
 import io.hamal.lib.sdk.domain.ApiFixedRateTrigger

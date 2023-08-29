@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.req
 
-import io.hamal.backend.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.lib.common.KeyedOnce
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent

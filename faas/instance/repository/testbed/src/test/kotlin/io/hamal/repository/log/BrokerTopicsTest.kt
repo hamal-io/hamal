@@ -1,7 +1,7 @@
 package io.hamal.repository.log
 
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository.TopicToCreate
+import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.repository.AbstractUnitTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit

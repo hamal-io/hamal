@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.req
 
-import io.hamal.backend.repository.api.submitted_req.*
+import io.hamal.repository.api.submitted_req.*
 import io.hamal.lib.sdk.domain.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId

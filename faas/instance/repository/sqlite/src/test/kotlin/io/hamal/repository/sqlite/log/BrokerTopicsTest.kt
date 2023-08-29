@@ -1,6 +1,6 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.backend.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId

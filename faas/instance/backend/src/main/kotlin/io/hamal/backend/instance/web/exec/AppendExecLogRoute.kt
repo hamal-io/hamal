@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.backend.repository.api.ExecLogCmdRepository
-import io.hamal.backend.repository.api.ExecLogCmdRepository.LogCmd
+import io.hamal.repository.api.ExecLogCmdRepository
+import io.hamal.repository.api.ExecLogCmdRepository.LogCmd
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId

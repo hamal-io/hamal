@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.event
 
-import io.hamal.backend.repository.api.Namespace
+import io.hamal.repository.api.Namespace
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,8 +1,8 @@
 package io.hamal.repository.record.trigger
 
-import io.hamal.backend.repository.api.EventTrigger
-import io.hamal.backend.repository.api.FixedRateTrigger
-import io.hamal.backend.repository.api.Trigger
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.lib.common.domain.CmdId

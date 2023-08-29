@@ -1,9 +1,9 @@
 package io.hamal.repository.sqlite.record.trigger
 
-import io.hamal.backend.repository.api.Trigger
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
-import io.hamal.backend.repository.sqlite.record.Projection
-import io.hamal.backend.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.Projection
+import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 
