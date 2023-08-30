@@ -1,18 +1,18 @@
-package io.hamal.backend.instance.event
+package io.hamal.backend.instance.event.events
 
 import io.hamal.repository.api.Func
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemTopic("func::created")
+@InstanceEventTopic("func::created")
 data class FuncCreatedEvent(
     val func: Func,
-) : SystemEvent()
+) : InstanceEvent()
 
 
 @Serializable
-@SystemTopic("func::updated")
+@InstanceEventTopic("func::updated")
 data class FuncUpdatedEvent(
     val func: Func,
-) : SystemEvent()
+) : InstanceEvent()
 

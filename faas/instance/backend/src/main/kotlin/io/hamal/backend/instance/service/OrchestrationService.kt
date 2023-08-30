@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.service
 
-import io.hamal.backend.instance.event.ExecScheduledEvent
 import io.hamal.backend.instance.event.InstanceEventEmitter
+import io.hamal.backend.instance.event.events.ExecScheduledEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecId
@@ -91,8 +91,9 @@ class OrchestrationService(
     }
 
     fun scheduleExec(cmdId: CmdId, plannedExec: io.hamal.repository.api.PlannedExec) {
-        val scheduledExec = execCmdRepository.schedule(io.hamal.repository.api.ExecCmdRepository.ScheduleCmd(cmdId, plannedExec.id))
-            .also { emitEvent(cmdId, it) }
+        val scheduledExec =
+            execCmdRepository.schedule(io.hamal.repository.api.ExecCmdRepository.ScheduleCmd(cmdId, plannedExec.id))
+                .also { emitEvent(cmdId, it) }
 
         execs[scheduledExec.id] = scheduledExec
     }

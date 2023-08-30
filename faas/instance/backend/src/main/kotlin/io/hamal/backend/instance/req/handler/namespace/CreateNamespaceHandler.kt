@@ -1,18 +1,18 @@
 package io.hamal.backend.instance.req.handler.namespace
 
-import io.hamal.backend.instance.event.NamespaceCreatedEvent
 import io.hamal.backend.instance.event.InstanceEventEmitter
+import io.hamal.backend.instance.event.events.NamespaceCreatedEvent
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.submitted_req.SubmittedCreateNamespaceReq
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.NamespaceId
 import org.springframework.stereotype.Component
 
 @Component

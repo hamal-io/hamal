@@ -1,5 +1,6 @@
 package io.hamal.backend.instance.event
 
+import io.hamal.backend.instance.event.events.InstanceEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.TopicId
@@ -12,12 +13,12 @@ class InstanceEventEmitter(
     private val brokerRepository: LogBrokerRepository
 ) {
 
-    private val appender = ProtobufAppender(SystemEvent::class, brokerRepository)
+    private val appender = ProtobufAppender(InstanceEvent::class, brokerRepository)
 
-    fun <EVENT : SystemEvent> emit(cmdId: CmdId, evt: EVENT) {
-        val topic = brokerRepository.findTopic(evt.topic) ?: brokerRepository.create(
+    fun <EVENT : InstanceEvent> emit(cmdId: CmdId, evt: EVENT) {
+        val topic = brokerRepository.findTopic(evt.topicName) ?: brokerRepository.create(
             cmdId,
-            CreateTopic.TopicToCreate(generateDomainId(::TopicId), evt.topic)
+            CreateTopic.TopicToCreate(generateDomainId(::TopicId), evt.topicName)
         )
 
         appender.append(cmdId, topic, evt)

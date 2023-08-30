@@ -1,18 +1,17 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.event.SystemEvent
-import io.hamal.backend.instance.event.SystemEventHandlerContainer
-import io.hamal.backend.instance.event.handler.SystemEventHandler
-import io.hamal.repository.api.log.CreateTopic
-import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.ProtobufLogConsumer
+import io.hamal.backend.instance.event.InstanceEventContainer
+import io.hamal.backend.instance.event.InstanceEventHandler
+import io.hamal.backend.instance.event.events.InstanceEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.CreateTopic
+import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.ProtobufLogConsumer
 import org.springframework.beans.factory.DisposableBean
 import java.util.concurrent.ScheduledFuture
 import kotlin.reflect.KClass
@@ -24,9 +23,9 @@ interface EventService {
 
 interface SystemEventServiceFactory {
 
-    fun <EVENT : SystemEvent> register(
+    fun <EVENT : InstanceEvent> register(
         clazz: KClass<EVENT>,
-        handler: SystemEventHandler<EVENT>
+        handler: InstanceEventHandler<EVENT>
     ): SystemEventServiceFactory
 
     fun create(): EventService
@@ -38,11 +37,11 @@ class DefaultSystemEventService(
     val systemEventBrokerRepository: LogBrokerRepository
 ) : SystemEventServiceFactory {
 
-    private val handlerContainer = SystemEventHandlerContainer()
+    private val handlerContainer = InstanceEventContainer()
 
-    override fun <EVENT : SystemEvent> register(
+    override fun <EVENT : InstanceEvent> register(
         clazz: KClass<EVENT>,
-        handler: SystemEventHandler<EVENT>
+        handler: InstanceEventHandler<EVENT>
     ): SystemEventServiceFactory {
         handlerContainer.register(clazz, handler)
         return this
@@ -54,8 +53,7 @@ class DefaultSystemEventService(
             private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
             init {
-                val systemEventTopics = handlerContainer.topics()
-                    .map { TopicName(it) }
+                val systemEventTopics = handlerContainer.topicNames()
                     .map { topicName ->
                         val topicId = generateDomainId(::TopicId)
                         systemEventBrokerRepository.findTopic(topicName) ?: systemEventBrokerRepository.create(
@@ -66,10 +64,10 @@ class DefaultSystemEventService(
 
                 systemEventTopics.forEach { topic ->
                     val consumer = ProtobufLogConsumer(
-                        GroupId("event-service"),
+                        GroupId("instance-event-service"),
                         topic,
                         systemEventBrokerRepository,
-                        SystemEvent::class
+                        InstanceEvent::class
                     )
 
                     scheduledTasks.add(
@@ -77,7 +75,7 @@ class DefaultSystemEventService(
                             consumer.consume(10) { chunkId, evt ->
                                 handlerContainer[evt::class].forEach { handler ->
                                     try {
-                                        val cmdId = CmdId(md5("${evt.topic}-${chunkId.value.value}"))
+                                        val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value.value}"))
                                         handler.handle(cmdId, evt)
                                     } catch (t: Throwable) {
                                         t.printStackTrace()

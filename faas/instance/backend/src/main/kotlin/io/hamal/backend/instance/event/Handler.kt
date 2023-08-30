@@ -1,20 +1,29 @@
 package io.hamal.backend.instance.event
 
-import io.hamal.backend.instance.event.handler.SystemEventHandler
+import io.hamal.backend.instance.event.events.InstanceEvent
+import io.hamal.backend.instance.event.events.topicName
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.TopicName
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 
-class SystemEventHandlerContainer : SystemEventHandler.Container {
+interface InstanceEventHandler<out EVENT : InstanceEvent> {
+
+    fun handle(cmdId: CmdId, evt: @UnsafeVariance EVENT)
+
+}
+
+class InstanceEventContainer {
     private val receiverMapping = mutableMapOf<
-            KClass<out SystemEvent>,
-            List<SystemEventHandler<SystemEvent>>
+            KClass<out InstanceEvent>,
+            List<InstanceEventHandler<InstanceEvent>>
             >()
 
     private val lock = ReentrantReadWriteLock()
 
-    override fun <EVENT : SystemEvent> register(
+    fun <EVENT : InstanceEvent> register(
         clazz: KClass<EVENT>,
-        receiver: SystemEventHandler<EVENT>
+        receiver: InstanceEventHandler<EVENT>
     ): Boolean {
         try {
             lock.writeLock().lock()
@@ -28,22 +37,22 @@ class SystemEventHandlerContainer : SystemEventHandler.Container {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <EVENT : SystemEvent> get(clazz: KClass<EVENT>): List<SystemEventHandler<EVENT>> {
+    operator fun <EVENT : InstanceEvent> get(clazz: KClass<EVENT>): List<InstanceEventHandler<EVENT>> {
         try {
             lock.readLock().lock()
             return receiverMapping[clazz]
-                ?.map { it as SystemEventHandler<EVENT> }
+                ?.map { it as InstanceEventHandler<EVENT> }
                 ?: listOf()
         } finally {
             lock.readLock().unlock()
         }
     }
 
-    override fun topics(): Set<String> {
+    fun topicNames(): Set<TopicName> {
         try {
             lock.readLock().lock()
             return receiverMapping.keys
-                .map { it.topic() }
+                .map { it.topicName() }
                 .toSet()
         } finally {
             lock.readLock().unlock()

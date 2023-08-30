@@ -1,11 +1,11 @@
-package io.hamal.backend.instance.event
+package io.hamal.backend.instance.event.events
 
 import io.hamal.repository.api.Trigger
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemTopic("trigger::created")
+@InstanceEventTopic("trigger::created")
 data class TriggerCreatedEvent(
     val trigger: Trigger
-) : SystemEvent()
+) : InstanceEvent()
 

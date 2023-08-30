@@ -1,10 +1,10 @@
-package io.hamal.backend.instance.event
+package io.hamal.backend.instance.event.events
 
 import io.hamal.lib.domain.CorrelatedState
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemTopic("state::updated")
+@InstanceEventTopic("state::updated")
 data class StateUpdatedEvent(
     val state: CorrelatedState,
-) : SystemEvent()
+) : InstanceEvent()

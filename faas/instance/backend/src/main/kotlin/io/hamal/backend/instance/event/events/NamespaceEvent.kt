@@ -1,18 +1,18 @@
-package io.hamal.backend.instance.event
+package io.hamal.backend.instance.event.events
 
 import io.hamal.repository.api.Namespace
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SystemTopic("namespace::created")
+@InstanceEventTopic("namespace::created")
 data class NamespaceCreatedEvent(
     val namespace: Namespace,
-) : SystemEvent()
+) : InstanceEvent()
 
 
 @Serializable
-@SystemTopic("namespace::updated")
+@InstanceEventTopic("namespace::updated")
 data class NamespaceUpdatedEvent(
     val namespace: Namespace,
-) : SystemEvent()
+) : InstanceEvent()
 

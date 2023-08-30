@@ -1,13 +1,13 @@
 package io.hamal.backend.instance.req.handler.state
 
-import io.hamal.backend.instance.event.StateUpdatedEvent
 import io.hamal.backend.instance.event.InstanceEventEmitter
+import io.hamal.backend.instance.event.events.StateUpdatedEvent
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.repository.api.StateCmdRepository
-import io.hamal.repository.api.submitted_req.SubmittedSetStateReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
+import io.hamal.repository.api.StateCmdRepository
+import io.hamal.repository.api.submitted_req.SubmittedSetStateReq
 import org.springframework.stereotype.Component
 
 @Component
