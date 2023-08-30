@@ -1,9 +1,5 @@
 package io.hamal.repository.api.record.exec
 
-import io.hamal.repository.api.*
-import io.hamal.repository.record.RecordEntity
-import io.hamal.repository.record.RecordSequence
-import io.hamal.repository.record.exec.*
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Invocation
@@ -11,7 +7,9 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
-import io.hamal.repository.api.Exec
+import io.hamal.repository.api.*
+import io.hamal.repository.record.RecordEntity
+import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.exec.*
 import java.time.Instant
 
@@ -87,9 +85,9 @@ data class Entity(
         }
     }
 
-    override fun toDomainObject(): io.hamal.repository.api.Exec {
+    override fun toDomainObject(): Exec {
 
-        val plannedExec = io.hamal.repository.api.PlannedExec(
+        val plannedExec = PlannedExec(
             cmdId = cmdId,
             id = id,
             correlation = correlation,
@@ -100,18 +98,18 @@ data class Entity(
 
         if (status == ExecStatus.Planned) return plannedExec
 
-        val scheduledExec = io.hamal.repository.api.ScheduledExec(cmdId, id, plannedExec, ScheduledAt.now())
+        val scheduledExec = ScheduledExec(cmdId, id, plannedExec, ScheduledAt.now())
         if (status == ExecStatus.Scheduled) return scheduledExec
 
-        val queuedExec = io.hamal.repository.api.QueuedExec(cmdId, id, scheduledExec, QueuedAt.now())
+        val queuedExec = QueuedExec(cmdId, id, scheduledExec, QueuedAt.now())
         if (status == ExecStatus.Queued) return queuedExec
 
-        val startedExec = io.hamal.repository.api.StartedExec(cmdId, id, queuedExec)
+        val startedExec = StartedExec(cmdId, id, queuedExec)
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> io.hamal.repository.api.CompletedExec(cmdId, id, startedExec, CompletedAt.now())
-            ExecStatus.Failed -> io.hamal.repository.api.FailedExec(cmdId, id, startedExec, FailedAt.now(), cause!!)
+            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now())
+            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), cause!!)
             else -> TODO()
         }
     }
