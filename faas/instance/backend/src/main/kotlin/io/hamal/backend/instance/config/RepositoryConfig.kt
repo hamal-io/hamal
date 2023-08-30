@@ -54,10 +54,10 @@ open class SqliteRepositoryConfig {
     open fun execRepository() = SqliteExecRepository(SqliteExecRepository.Config(path))
 
     @Bean
-    open fun execCmdRepository(): io.hamal.repository.api.ExecCmdRepository = execRepository()
+    open fun execCmdRepository(): ExecCmdRepository = execRepository()
 
     @Bean
-    open fun execQueryRepository(): io.hamal.repository.api.ExecQueryRepository = execRepository()
+    open fun execQueryRepository(): ExecQueryRepository = execRepository()
 
     @Bean
     open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
@@ -115,10 +115,10 @@ open class MemoryRepositoryConfig {
     open fun namespaceQueryRepository(): NamespaceQueryRepository = MemoryNamespaceRepository
 
     @Bean
-    open fun execCmdRepository(): io.hamal.repository.api.ExecCmdRepository = MemoryExecRepository
+    open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository
 
     @Bean
-    open fun execQueryRepository(): io.hamal.repository.api.ExecQueryRepository = MemoryExecRepository
+    open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
 
     @Bean
     open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
