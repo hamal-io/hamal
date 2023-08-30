@@ -1,13 +1,6 @@
 package io.hamal.backend.instance
 
 import io.hamal.backend.instance.component.BootstrapBackend
-import io.hamal.backend.instance.event.InstanceEventEmitter
-import io.hamal.backend.instance.event.events.*
-import io.hamal.backend.instance.event.handler.exec.*
-import io.hamal.backend.instance.event.handler.trigger.TriggerCreatedHandler
-import io.hamal.backend.instance.service.FixedRateTriggerService
-import io.hamal.backend.instance.service.OrchestrationService
-import io.hamal.backend.instance.service.SystemEventServiceFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -37,24 +30,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 )
 open class BackendConfig {
 
-    @Bean
-    open fun backendEventConsumer(
-        eventServiceFactory: SystemEventServiceFactory,
-        execQueryRepository: io.hamal.repository.api.ExecQueryRepository,
-        execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
-        fixedRateTriggerService: FixedRateTriggerService,
-        orchestrationService: OrchestrationService,
-        eventEmitter: InstanceEventEmitter
-    ) = eventServiceFactory
-        .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
-
-        .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
-        .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdRepository, eventEmitter))
-        .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
-        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
-        .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))
-
-        .create()
 
 
     @Bean
