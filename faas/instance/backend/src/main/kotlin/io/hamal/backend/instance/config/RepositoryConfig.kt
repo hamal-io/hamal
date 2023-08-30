@@ -4,14 +4,14 @@ import io.hamal.repository.api.*
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryReqRepository
 import io.hamal.repository.memory.MemoryStateRepository
-import io.hamal.repository.memory.log.MemoryLogBrokerRepository
+import io.hamal.repository.memory.log.MemoryBrokerRepository
 import io.hamal.repository.memory.record.MemoryExecRepository
 import io.hamal.repository.memory.record.MemoryFuncRepository
 import io.hamal.repository.memory.record.MemoryNamespaceRepository
 import io.hamal.repository.memory.record.MemoryTriggerRepository
 import io.hamal.repository.sqlite.SqliteStateRepository
-import io.hamal.repository.sqlite.log.SqliteLogBroker
-import io.hamal.repository.sqlite.log.SqliteLogBrokerRepository
+import io.hamal.repository.sqlite.log.SqliteBroker
+import io.hamal.repository.sqlite.log.SqliteBrokerRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
@@ -27,10 +27,10 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
 
     @Bean
-    open fun instanceEventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("instance-event")))
+    open fun instanceEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("instance-event")))
 
     @Bean
-    open fun eventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("event")))
+    open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))
 
     @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
@@ -97,10 +97,10 @@ open class SqliteRepositoryConfig {
 open class MemoryRepositoryConfig {
 
     @Bean
-    open fun instanceEventBrokerRepository() = MemoryLogBrokerRepository()
+    open fun instanceEventBrokerRepository() = MemoryBrokerRepository()
 
     @Bean
-    open fun eventBrokerRepository() = MemoryLogBrokerRepository()
+    open fun eventBrokerRepository() = MemoryBrokerRepository()
 
     @Bean
     open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository

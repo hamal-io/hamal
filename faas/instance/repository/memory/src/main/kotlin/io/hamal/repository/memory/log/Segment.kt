@@ -1,33 +1,33 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.repository.api.log.LogChunk
-import io.hamal.repository.api.log.LogChunkId
-import io.hamal.repository.api.log.LogSegment
-import io.hamal.repository.api.log.LogSegmentRepository
-import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.repository.api.log.Chunk
+import io.hamal.repository.api.log.ChunkId
+import io.hamal.repository.api.log.Segment
+import io.hamal.repository.api.log.SegmentRepository
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-data class MemoryLogSegment(
-    override val id: LogSegment.Id,
+data class MemorySegment(
+    override val id: Segment.Id,
     override val topicId: TopicId,
-) : LogSegment
+) : Segment
 
 
 class MemoryLogSegmentRepository(
-    private val segment: MemoryLogSegment
-) : LogSegmentRepository {
+    private val segment: MemorySegment
+) : SegmentRepository {
 
-    private val store = mutableListOf<LogChunk>()
+    private val store = mutableListOf<Chunk>()
     private val lock = ReentrantLock()
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {
         lock.withLock {
             store.add(
-                LogChunk(
-                    id = LogChunkId(store.size + 1),
+                Chunk(
+                    id = ChunkId(store.size + 1),
                     segmentId = segment.id,
                     topicId = segment.topicId,
                     bytes = bytes,
@@ -37,7 +37,7 @@ class MemoryLogSegmentRepository(
         }
     }
 
-    override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
+    override fun read(firstId: ChunkId, limit: Int): List<Chunk> {
         if (limit < 1) {
             return listOf()
         }

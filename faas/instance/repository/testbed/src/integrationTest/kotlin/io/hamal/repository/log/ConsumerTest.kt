@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ConsumerTest : AbstractIntegrationTest() {
     @TestFactory
-    fun `Late consumer starts at the beginning`() = runWith(LogBrokerRepository::class) { testInstance ->
+    fun `Late consumer starts at the beginning`() = runWith(BrokerRepository::class) { testInstance ->
 
         val topic = testInstance.create(
             CmdId(1),
@@ -49,7 +49,7 @@ class ConsumerTest : AbstractIntegrationTest() {
 
 
     @TestFactory
-    fun `Can run concurrent to appender`() = runWith(LogBrokerRepository::class) { testInstance ->
+    fun `Can run concurrent to appender`() = runWith(BrokerRepository::class) { testInstance ->
 
         val topic = testInstance.create(
             CmdId(1),

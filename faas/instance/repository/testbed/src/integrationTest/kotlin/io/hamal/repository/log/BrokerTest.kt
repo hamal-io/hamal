@@ -2,7 +2,7 @@ package io.hamal.repository.log
 
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture.runAsync
 class BrokerTest : AbstractIntegrationTest() {
 
     @TestFactory
-    fun `Concurrent safe - 10 threads add to the same topic`() = runWith(LogBrokerRepository::class) { testInstance ->
+    fun `Concurrent safe - 10 threads add to the same topic`() = runWith(BrokerRepository::class) { testInstance ->
         val topic = testInstance.create(
             CmdId(1), TopicToCreate(
                 TopicId(123), TopicName("topic")
@@ -44,7 +44,7 @@ class BrokerTest : AbstractIntegrationTest() {
 
     @TestFactory
     fun `Concurrent safe - 100 threads add to the different topics`() =
-        runWith(LogBrokerRepository::class) { testInstance ->
+        runWith(BrokerRepository::class) { testInstance ->
 
             val futures = IntRange(1, 100).map { thread ->
                 runAsync {

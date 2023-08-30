@@ -3,7 +3,7 @@ package io.hamal.repository.memory.log
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
-import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.Topic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -14,14 +14,14 @@ import kotlin.concurrent.withLock
 class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
-    private val topicMapping = mutableMapOf<TopicName, LogTopic>()
-    private val topics = mutableMapOf<TopicId, LogTopic>()
+    private val topicMapping = mutableMapOf<TopicName, Topic>()
+    private val topics = mutableMapOf<TopicId, Topic>()
 
-    override fun create(cmdId: CmdId, toCreate: TopicToCreate): LogTopic {
+    override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
         return lock.withLock {
             require(topicMapping.values.none { it.id == toCreate.id }) { "Topic already exists" }
             require(!topicMapping.containsKey(toCreate.name)) { "Topic already exists" }
-            topicMapping[toCreate.name] = LogTopic(
+            topicMapping[toCreate.name] = Topic(
                 id = toCreate.id,
                 name = toCreate.name
             )
@@ -30,17 +30,17 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
         }
     }
 
-    override fun find(name: TopicName): LogTopic? {
+    override fun find(name: TopicName): Topic? {
         return lock.withLock {
             topicMapping[name]
         }
     }
 
-    override fun find(id: TopicId): LogTopic? = lock.withLock {
+    override fun find(id: TopicId): Topic? = lock.withLock {
         topics[id]
     }
 
-    override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
+    override fun list(block: TopicQuery.() -> Unit): List<Topic> {
         val query = TopicQuery().also(block)
         return lock.withLock {
             topics.entries.sortedBy { it.key }

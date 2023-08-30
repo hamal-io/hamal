@@ -14,7 +14,7 @@ import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ProtobufAppender
 import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
 import org.springframework.stereotype.Component
@@ -25,7 +25,7 @@ class CompleteExecHandler(
     private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: InstanceEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
-    private val eventBrokerRepository: LogBrokerRepository,
+    private val eventBrokerRepository: BrokerRepository,
     private val generateDomainId: GenerateDomainId
 ) : ReqHandler<SubmittedCompleteExecReq>(SubmittedCompleteExecReq::class) {
 

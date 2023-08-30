@@ -1,18 +1,18 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.LogBrokerConsumersRepository
-import io.hamal.repository.api.log.LogChunkId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.repository.api.log.BrokerConsumersRepository
+import io.hamal.repository.api.log.ChunkId
+import io.hamal.repository.api.log.GroupId
 import java.nio.file.Path
 
 data class SqliteBrokerConsumers(
     val path: Path
 )
 
-class SqliteLogBrokerConsumersRepository(
+class SqliteBrokerConsumersRepository(
     internal val brokerConsumers: SqliteBrokerConsumers,
 ) : BaseSqliteRepository(
     object : Config {
@@ -20,7 +20,7 @@ class SqliteLogBrokerConsumersRepository(
         override val filename: String get() = "consumers.db"
 
     }
-), LogBrokerConsumersRepository {
+), BrokerConsumersRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
@@ -44,7 +44,7 @@ class SqliteLogBrokerConsumersRepository(
         }
     }
 
-    override fun nextChunkId(groupId: GroupId, topicId: TopicId): LogChunkId {
+    override fun nextChunkId(groupId: GroupId, topicId: TopicId): ChunkId {
         return connection.executeQueryOne(
             """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
         ) {
@@ -53,12 +53,12 @@ class SqliteLogBrokerConsumersRepository(
                 set("topicId", topicId.value)
             }
             map {
-                LogChunkId(it.getSnowflakeId("next_chunk_id"))
+                ChunkId(it.getSnowflakeId("next_chunk_id"))
             }
-        } ?: LogChunkId(0)
+        } ?: ChunkId(0)
     }
 
-    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: LogChunkId) {
+    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: ChunkId) {
         connection.execute(
             """
             INSERT INTO consumers(group_id, topic_id, next_chunk_id)

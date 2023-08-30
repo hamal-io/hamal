@@ -9,8 +9,8 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.repository.api.log.LogChunkId
-import io.hamal.repository.api.log.LogSegment
+import io.hamal.repository.api.log.ChunkId
+import io.hamal.repository.api.log.Segment
 import io.hamal.repository.api.submitted_req.SubmittedAppendToTopicReq
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -35,12 +35,12 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        eventBrokerRepository.read(LogChunkId(0), topic, 1).also { payloads ->
+        eventBrokerRepository.read(ChunkId(0), topic, 1).also { payloads ->
             assertThat(payloads, hasSize(1))
 
             @OptIn(ExperimentalSerializationApi::class) with(payloads.first()) {
-                assertThat(segmentId, equalTo(LogSegment.Id(0)))
-                assertThat(id, equalTo(LogChunkId(1)))
+                assertThat(segmentId, equalTo(Segment.Id(0)))
+                assertThat(id, equalTo(ChunkId(1)))
                 assertThat(topicId, equalTo(TopicId(4444)))
 
                 val payload = ProtoBuf { }.decodeFromByteArray(TopicEntryPayload.serializer(), bytes)

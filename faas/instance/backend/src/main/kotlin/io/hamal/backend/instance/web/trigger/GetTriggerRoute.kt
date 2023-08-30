@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.trigger
 
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.domain.ApiEventTrigger
 import io.hamal.lib.sdk.domain.ApiFixedRateTrigger
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class GetTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: LogBrokerRepository,
+    private val eventBrokerRepository: BrokerRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {

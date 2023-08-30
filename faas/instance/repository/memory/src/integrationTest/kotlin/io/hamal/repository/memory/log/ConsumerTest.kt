@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 class ConsumerTest {
     @Test
     fun `Best effort to consume chunk once`() {
-        MemoryLogBrokerRepository().use { brokerRepository ->
+        MemoryBrokerRepository().use { brokerRepository ->
             val topic = brokerRepository.create(
                 CmdId(123),
                 TopicToCreate(TopicId(123), TopicName("topic"))
@@ -24,7 +24,7 @@ class ConsumerTest {
             IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
         }
 
-        MemoryLogBrokerRepository().use { brokerRepository ->
+        MemoryBrokerRepository().use { brokerRepository ->
             val topic = brokerRepository.create(
                 CmdId(123),
                 TopicToCreate(TopicId(123), TopicName("topic"))

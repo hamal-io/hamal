@@ -11,7 +11,7 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import org.springframework.stereotype.Component
 
@@ -20,7 +20,7 @@ class CreateTriggerHandler(
     private val triggerCmdRepository: TriggerCmdRepository,
     private val eventEmitter: InstanceEventEmitter,
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: LogBrokerRepository,
+    private val eventBrokerRepository: BrokerRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) : ReqHandler<SubmittedCreateTriggerReq>(SubmittedCreateTriggerReq::class) {
     override fun invoke(req: SubmittedCreateTriggerReq) {

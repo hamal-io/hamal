@@ -13,7 +13,7 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import java.io.Closeable
 
 interface CreateTopic {
-    fun create(cmdId: CmdId, topicToCreate: TopicToCreate): LogTopic
+    fun create(cmdId: CmdId, topicToCreate: TopicToCreate): Topic
 
     data class TopicToCreate(
         val id: TopicId,
@@ -22,28 +22,28 @@ interface CreateTopic {
 }
 
 interface AppendToTopic {
-    fun append(cmdId: CmdId, topic: LogTopic, bytes: ByteArray)
+    fun append(cmdId: CmdId, topic: Topic, bytes: ByteArray)
 }
 
 interface ConsumeFromTopic {
-    fun consume(groupId: GroupId, topic: LogTopic, limit: Int): List<LogChunk>
+    fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk>
 
-    fun commit(groupId: GroupId, topic: LogTopic, chunkId: LogChunkId)
+    fun commit(groupId: GroupId, topic: Topic, chunkId: ChunkId)
 }
 
 interface ReadFromTopic {
-    fun read(firstId: LogChunkId, topic: LogTopic, limit: Int): List<LogChunk>
+    fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk>
 }
 
 interface FindTopic {
-    fun getTopic(topicId: TopicId): LogTopic = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
+    fun getTopic(topicId: TopicId): Topic = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
 
-    fun findTopic(topicId: TopicId): LogTopic?
+    fun findTopic(topicId: TopicId): Topic?
 
-    fun findTopic(topicName: TopicName): LogTopic?
+    fun findTopic(topicName: TopicName): Topic?
 }
 
-interface LogBrokerRepository :
+interface BrokerRepository :
     CreateTopic,
     AppendToTopic,
     ConsumeFromTopic,
@@ -51,13 +51,13 @@ interface LogBrokerRepository :
     ReadFromTopic,
     Closeable {
 
-    fun listTopics(block: TopicQuery.() -> Unit): List<LogTopic>
+    fun listTopics(block: TopicQuery.() -> Unit): List<Topic>
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun listEntries(topic: LogTopic, block: LogQuery.() -> Unit): List<TopicEntry> {
-        val query = LogQuery().also(block)
-        val firstId = LogChunkId(SnowflakeId(query.afterId.value.value + 1))
+    fun listEntries(topic: Topic, block: TopicEntryQuery.() -> Unit): List<TopicEntry> {
+        val query = TopicEntryQuery().also(block)
+        val firstId = ChunkId(SnowflakeId(query.afterId.value.value + 1))
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
                 val payload = ProtoBuf.decodeFromByteArray(TopicEntryPayload.serializer(), chunk.bytes)
@@ -71,7 +71,7 @@ interface LogBrokerRepository :
     fun clear()
 
 
-    data class LogQuery(
+    data class TopicEntryQuery(
         var afterId: TopicEntryId = TopicEntryId(0),
         var limit: Limit = Limit(1)
     )

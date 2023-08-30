@@ -4,8 +4,8 @@ import io.hamal.lib.domain.vo.TopicId
 import java.io.Closeable
 
 
-interface LogBrokerConsumersRepository : Closeable {
-    fun nextChunkId(groupId: GroupId, topicId: TopicId): LogChunkId
-    fun commit(groupId: GroupId, topicId: TopicId, chunkId: LogChunkId)
+interface BrokerConsumersRepository : Closeable {
+    fun nextChunkId(groupId: GroupId, topicId: TopicId): ChunkId
+    fun commit(groupId: GroupId, topicId: TopicId, chunkId: ChunkId)
     fun count(): ULong
 }

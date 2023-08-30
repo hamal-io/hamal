@@ -9,7 +9,7 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.log.CreateTopic
 import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ProtobufLogConsumer
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
@@ -23,7 +23,7 @@ class InstanceEventService(
     private val async: Async,
     private val generateDomainId: GenerateDomainId,
     private val instanceEventContainer: InstanceEventContainer,
-    private val instanceEventBrokerRepository: LogBrokerRepository
+    private val instanceEventBrokerRepository: BrokerRepository
 ) : DisposableBean, ApplicationListener<ContextRefreshedEvent> {
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()

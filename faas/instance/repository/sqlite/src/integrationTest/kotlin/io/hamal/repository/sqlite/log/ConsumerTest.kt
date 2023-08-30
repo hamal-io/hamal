@@ -17,7 +17,7 @@ class ConsumerTest {
     fun `Best effort to consume chunk once`() {
         val path = Files.createTempDirectory("broker_it")
 
-        io.hamal.repository.sqlite.log.SqliteLogBrokerRepository(io.hamal.repository.sqlite.log.SqliteLogBroker(path))
+        io.hamal.repository.sqlite.log.SqliteBrokerRepository(io.hamal.repository.sqlite.log.SqliteBroker(path))
             .use { brokerRepository ->
             val topic = brokerRepository.create(
                 CmdId(1),
@@ -27,7 +27,7 @@ class ConsumerTest {
             IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
         }
 
-        io.hamal.repository.sqlite.log.SqliteLogBrokerRepository(io.hamal.repository.sqlite.log.SqliteLogBroker(path))
+        io.hamal.repository.sqlite.log.SqliteBrokerRepository(io.hamal.repository.sqlite.log.SqliteBroker(path))
             .use { brokerRepository ->
             val topic = brokerRepository.findTopic(TopicName("topic"))!!
             val testInstance = ProtobufLogConsumer(GroupId("consumer-01"), topic, brokerRepository, String::class)

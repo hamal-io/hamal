@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.web.topic
 
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ListTopicRoute(
-    private val eventBrokerRepository: LogBrokerRepository
+    private val eventBrokerRepository: BrokerRepository
 ) {
     @GetMapping("/v1/topics")
     fun listTopics(

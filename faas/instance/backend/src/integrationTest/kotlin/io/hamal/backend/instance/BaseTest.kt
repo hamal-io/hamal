@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
@@ -35,10 +35,10 @@ internal abstract class BaseTest {
     lateinit var localPort: Number
 
     @Autowired
-    lateinit var instanceEventBrokerRepository: LogBrokerRepository
+    lateinit var instanceEventBrokerRepository: BrokerRepository
 
     @Autowired
-    lateinit var eventBrokerRepository: LogBrokerRepository
+    lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var execCmdRepository: ExecCmdRepository

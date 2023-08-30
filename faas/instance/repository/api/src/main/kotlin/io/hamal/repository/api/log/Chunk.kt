@@ -6,27 +6,27 @@ import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.domain.vo.TopicId
 import java.time.Instant
 
-data class LogChunkId(override val value: SnowflakeId) : DomainId() {
+data class ChunkId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 }
 
-class LogChunk(
-    val id: LogChunkId,
-    val segmentId: LogSegment.Id,
+class Chunk(
+    val id: ChunkId,
+    val segmentId: Segment.Id,
     val topicId: TopicId,
     val bytes: ByteArray,
     val instant: Instant
 )
 
 
-interface LogChunkAppender {
+interface ChunkAppender {
     fun append(cmdId: CmdId, bytes: ByteArray)
 }
 
-interface LogChunkReader {
-    fun read(firstId: LogChunkId, limit: Int = 1): List<LogChunk>
+interface ChunkReader {
+    fun read(firstId: ChunkId, limit: Int = 1): List<Chunk>
 }
 
-interface LogChunkCounter {
+interface ChunkCounter {
     fun count(): ULong
 }

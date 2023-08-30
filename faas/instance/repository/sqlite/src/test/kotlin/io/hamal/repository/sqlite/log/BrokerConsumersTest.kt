@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.LogChunkId
+import io.hamal.repository.api.log.ChunkId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.TopicId
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,7 +29,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "some-path", "another-path")
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers(targetDir)).use { }
+            SqliteBrokerConsumersRepository(testBrokerConsumers(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "consumers.db")))
@@ -37,7 +37,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Creates consumers table`() {
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'consumers' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -46,18 +46,18 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Does not create consumers table if already exists`() {
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.execute(
                     """INSERT INTO consumers (group_id,topic_id,next_chunk_id) VALUES ('some-group-id',1234,4321);"""
                 )
             }
 
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use { }
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use { }
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use { }
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use { }
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
 
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM consumers") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -66,7 +66,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -75,7 +75,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -84,7 +84,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -93,7 +93,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            SqliteLogBrokerConsumersRepository(testBrokerConsumers()).use {
+            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
@@ -119,35 +119,35 @@ class SqliteLogBrokerConsumersRepositoryTest {
         @Test
         fun `Returns chunk id 0 if no entry exists for group id and topic id`() {
             val result = testInstance.nextChunkId(GroupId("some-group-id"), TopicId(42))
-            assertThat(result, equalTo(LogChunkId(0)))
+            assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(0UL))
         }
 
         @Test
         fun `Next chunk id - is last committed chunk id plus 1`() {
-            testInstance.commit(GroupId("some-group-id"), TopicId(1), LogChunkId(127))
+            testInstance.commit(GroupId("some-group-id"), TopicId(1), ChunkId(127))
             val result = testInstance.nextChunkId(GroupId("some-group-id"), TopicId(1))
-            assertThat(result, equalTo(LogChunkId(128)))
+            assertThat(result, equalTo(ChunkId(128)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different topic`() {
-            testInstance.commit(GroupId("some-group-id"), TopicId(1), LogChunkId(127))
+            testInstance.commit(GroupId("some-group-id"), TopicId(1), ChunkId(127))
             val result = testInstance.nextChunkId(GroupId("some-group-id"), TopicId(2))
-            assertThat(result, equalTo(LogChunkId(0)))
+            assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different group`() {
-            testInstance.commit(GroupId("some-group-id"), TopicId(1), LogChunkId(127))
+            testInstance.commit(GroupId("some-group-id"), TopicId(1), ChunkId(127))
             val result = testInstance.nextChunkId(GroupId("different-group-id"), TopicId(1))
-            assertThat(result, equalTo(LogChunkId(0)))
+            assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
-        private val testInstance = SqliteLogBrokerConsumersRepository(
+        private val testInstance = SqliteBrokerConsumersRepository(
             SqliteBrokerConsumers(Path(testDir))
         )
     }
@@ -167,7 +167,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Never committed before`() {
-            testInstance.commit(GroupId("some-group"), TopicId(123), LogChunkId(23))
+            testInstance.commit(GroupId("some-group"), TopicId(123), ChunkId(23))
             assertThat(testInstance.count(), equalTo(1UL))
 
             testInstance.connection.executeQuery("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
@@ -179,9 +179,9 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Committed before`() {
-            testInstance.commit(GroupId("some-group"), TopicId(123), LogChunkId(23))
+            testInstance.commit(GroupId("some-group"), TopicId(123), ChunkId(23))
 
-            testInstance.commit(GroupId("some-group"), TopicId(123), LogChunkId(1337))
+            testInstance.commit(GroupId("some-group"), TopicId(123), ChunkId(1337))
             assertThat(testInstance.count(), equalTo(1UL))
 
             testInstance.connection.executeQuery("SELECT group_id, topic_id, next_chunk_id FROM consumers") { resultSet ->
@@ -193,8 +193,8 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Does not overwrite different topic id `() {
-            testInstance.commit(GroupId("some-group"), TopicId(23), LogChunkId(1))
-            testInstance.commit(GroupId("some-group"), TopicId(34), LogChunkId(2))
+            testInstance.commit(GroupId("some-group"), TopicId(23), ChunkId(1))
+            testInstance.commit(GroupId("some-group"), TopicId(34), ChunkId(2))
 
             assertThat(testInstance.count(), equalTo(2UL))
             testInstance.connection.executeQuery("SELECT group_id FROM consumers") { resultSet ->
@@ -204,8 +204,8 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Does not overwrite different group id`() {
-            testInstance.commit(GroupId("some-group"), TopicId(23), LogChunkId(1))
-            testInstance.commit(GroupId("another-group"), TopicId(23), LogChunkId(2))
+            testInstance.commit(GroupId("some-group"), TopicId(23), ChunkId(1))
+            testInstance.commit(GroupId("another-group"), TopicId(23), ChunkId(2))
 
             assertThat(testInstance.count(), equalTo(2UL))
             testInstance.connection.executeQuery("SELECT topic_id FROM consumers") { resultSet ->
@@ -214,7 +214,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
         }
 
 
-        private val testInstance = SqliteLogBrokerConsumersRepository(
+        private val testInstance = SqliteBrokerConsumersRepository(
             SqliteBrokerConsumers(Path(testDir))
         )
     }
