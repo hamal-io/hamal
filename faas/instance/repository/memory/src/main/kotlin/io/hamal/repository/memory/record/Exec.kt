@@ -1,27 +1,26 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.record.exec.createEntity
 import io.hamal.repository.record.exec.*
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.repository.record.exec.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 internal object CurrentExecProjection {
-    private val projection = mutableMapOf<ExecId, io.hamal.repository.api.Exec>()
-    fun apply(exec: io.hamal.repository.api.Exec) {
+    private val projection = mutableMapOf<ExecId, Exec>()
+    fun apply(exec: Exec) {
         projection[exec.id] = exec
     }
 
-    fun find(execId: ExecId): io.hamal.repository.api.Exec? = projection[execId]
+    fun find(execId: ExecId): Exec? = projection[execId]
 
-    fun list(afterId: ExecId, limit: Limit): List<io.hamal.repository.api.Exec> {
+    fun list(afterId: ExecId, limit: Limit): List<Exec> {
         return projection.keys.sorted()
             .reversed()
             .dropWhile { it >= afterId }
@@ -36,13 +35,13 @@ internal object CurrentExecProjection {
 
 //FIXME this must be concurrent safe
 internal object QueueProjection {
-    private val queue = mutableListOf<io.hamal.repository.api.QueuedExec>()
-    fun add(exec: io.hamal.repository.api.QueuedExec) {
+    private val queue = mutableListOf<QueuedExec>()
+    fun add(exec: QueuedExec) {
         queue.add(exec)
     }
 
-    fun pop(limit: Int): List<io.hamal.repository.api.QueuedExec> {
-        val result = mutableListOf<io.hamal.repository.api.QueuedExec>()
+    fun pop(limit: Int): List<QueuedExec> {
+        val result = mutableListOf<QueuedExec>()
         for (idx in 0 until limit) {
             if (queue.isEmpty()) {
                 break
@@ -57,14 +56,14 @@ internal object QueueProjection {
     }
 }
 
-object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), io.hamal.repository.api.ExecRepository {
+object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRepository {
     private val lock = ReentrantLock()
 
-    override fun plan(cmd: PlanCmd): io.hamal.repository.api.PlannedExec {
+    override fun plan(cmd: PlanCmd): PlannedExec {
         return lock.withLock {
             val execId = cmd.execId
             if (contains(execId)) {
-                versionOf(execId, cmd.id) as io.hamal.repository.api.PlannedExec
+                versionOf(execId, cmd.id) as PlannedExec
             } else {
 
                 addRecord(
@@ -77,57 +76,57 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), io.ham
                         invocation = cmd.invocation
                     )
                 )
-                (currentVersion(execId) as io.hamal.repository.api.PlannedExec).also(CurrentExecProjection::apply)
+                (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)
             }
         }
     }
 
-    override fun schedule(cmd: ScheduleCmd): io.hamal.repository.api.ScheduledExec {
+    override fun schedule(cmd: ScheduleCmd): ScheduledExec {
         return lock.withLock {
             val execId = cmd.execId
             val cmdId = cmd.id
 
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.ScheduledExec
+                versionOf(execId, cmdId) as ScheduledExec
             } else {
-                check(currentVersion(execId) is io.hamal.repository.api.PlannedExec) { "current version of $execId is not planned" }
+                check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
 
                 addRecord(ExecScheduledRecord(execId, cmdId))
 
-                (currentVersion(execId) as io.hamal.repository.api.ScheduledExec).also(CurrentExecProjection::apply)
+                (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
             }
         }
     }
 
-    override fun queue(cmd: QueueCmd): io.hamal.repository.api.QueuedExec {
+    override fun queue(cmd: QueueCmd): QueuedExec {
         return lock.withLock {
             val execId = cmd.execId
             val cmdId = cmd.id
 
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.QueuedExec
+                versionOf(execId, cmdId) as QueuedExec
             } else {
-                check(currentVersion(execId) is io.hamal.repository.api.ScheduledExec) { "current version of $execId is not scheduled" }
+                check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
 
                 addRecord(ExecQueuedRecord(execId, cmdId))
 
-                (currentVersion(execId) as io.hamal.repository.api.QueuedExec)
+                (currentVersion(execId) as QueuedExec)
                     .also(CurrentExecProjection::apply)
                     .also(QueueProjection::add)
             }
         }
     }
 
-    override fun start(cmd: StartCmd): List<io.hamal.repository.api.StartedExec> {
+    override fun start(cmd: StartCmd): List<StartedExec> {
         return lock.withLock {
-            val result = mutableListOf<io.hamal.repository.api.StartedExec>()
+            val result = mutableListOf<StartedExec>()
             QueueProjection.pop(1).forEach { queuedExec ->
                 val execId = queuedExec.id
-                check(currentVersion(execId) is io.hamal.repository.api.QueuedExec) { "current version of $execId is not queued" }
+                check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
                 addRecord(ExecStartedRecord(execId, cmd.id))
 
-                result.add((currentVersion(execId) as io.hamal.repository.api.StartedExec).also(CurrentExecProjection::apply))
+                result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
             }
             result
         }
@@ -140,52 +139,52 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), io.ham
     }
 
 
-    override fun complete(cmd: CompleteCmd): io.hamal.repository.api.CompletedExec {
+    override fun complete(cmd: CompleteCmd): CompletedExec {
         return lock.withLock {
             val execId = cmd.execId
             val cmdId = cmd.id
 
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.CompletedExec
+                versionOf(execId, cmdId) as CompletedExec
             } else {
-                check(currentVersion(execId) is io.hamal.repository.api.StartedExec) { "current version of $execId is not started" }
+                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
 
                 addRecord(ExecCompletedRecord(execId, cmdId))
 
-                (versionOf(execId, cmdId) as io.hamal.repository.api.CompletedExec)
+                (versionOf(execId, cmdId) as CompletedExec)
                     .also(CurrentExecProjection::apply)
             }
         }
     }
 
-    override fun fail(cmd: FailCmd): io.hamal.repository.api.FailedExec {
+    override fun fail(cmd: FailCmd): FailedExec {
         return lock.withLock {
             val execId = cmd.execId
             val cmdId = cmd.id
 
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.FailedExec
+                versionOf(execId, cmdId) as FailedExec
             } else {
-                check(currentVersion(execId) is io.hamal.repository.api.StartedExec) { "current version of $execId is not started" }
+                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
 
                 addRecord(ExecFailedRecord(execId, cmdId, cmd.cause))
 
-                (versionOf(execId, cmdId) as io.hamal.repository.api.FailedExec).also(CurrentExecProjection::apply)
+                (versionOf(execId, cmdId) as FailedExec).also(CurrentExecProjection::apply)
             }
         }
     }
 
 
-    override fun find(execId: ExecId): io.hamal.repository.api.Exec? {
+    override fun find(execId: ExecId): Exec? {
         return CurrentExecProjection.find(execId)
     }
 
-    override fun list(block: ExecQuery.() -> Unit): List<io.hamal.repository.api.Exec> {
+    override fun list(block: ExecQuery.() -> Unit): List<Exec> {
         val query = ExecQuery().also(block)
         return CurrentExecProjection.list(query.afterId, query.limit)
     }
 
-    private fun MemoryExecRepository.currentVersion(id: ExecId): io.hamal.repository.api.Exec {
+    private fun MemoryExecRepository.currentVersion(id: ExecId): Exec {
         return listRecords(id)
             .createEntity()
             .toDomainObject()
@@ -194,7 +193,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), io.ham
     private fun MemoryExecRepository.commandAlreadyApplied(id: ExecId, cmdId: CmdId) =
         listRecords(id).any { it.cmdId == cmdId }
 
-    private fun MemoryExecRepository.versionOf(id: ExecId, cmdId: CmdId): io.hamal.repository.api.Exec {
+    private fun MemoryExecRepository.versionOf(id: ExecId, cmdId: CmdId): Exec {
         return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
             .createEntity()
             .toDomainObject()

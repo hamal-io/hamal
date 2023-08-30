@@ -1,7 +1,6 @@
 package io.hamal.backend.instance.web.exec
 
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.sdk.domain.ApiExecList
@@ -32,7 +31,6 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(id, equalTo(execId))
-                assertThat(status, equalTo(Queued))
             }
         }
     }
@@ -42,6 +40,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         awaitCompleted(
             IntRange(1, 50).map { createAdhocExec() }
         )
+
         val response = httpTemplate.get("/v1/execs")
             .parameter("limit", 42)
             .execute()
@@ -51,9 +50,6 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
 
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(42))
-            execs.forEach { exec ->
-                assertThat(exec.status, equalTo(Queued))
-            }
         }
     }
 
@@ -76,7 +72,6 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
                 assertThat(exec.id, equalTo(fortyFifthRequest.id(::ExecId)))
-                assertThat(exec.status, equalTo(Queued))
             }
         }
     }

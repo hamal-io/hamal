@@ -45,13 +45,8 @@ class InstanceEventService(
                 async.atFixedRate(1.milliseconds) {
                     consumer.consume(10) { chunkId, evt ->
                         instanceEventContainer[evt::class].forEach { handler ->
-                            try {
-                                val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value.value}"))
-                                handler.handle(cmdId, evt)
-                            } catch (t: Throwable) {
-                                t.printStackTrace()
-//                                        throw Error(t)
-                            }
+                            val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value.value}"))
+                            handler.handle(cmdId, evt)
                         }
                     }
                 },

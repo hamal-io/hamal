@@ -11,15 +11,15 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
-interface ExecRepository : io.hamal.repository.api.ExecCmdRepository, io.hamal.repository.api.ExecQueryRepository
+interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
 interface ExecCmdRepository {
-    fun plan(cmd: io.hamal.repository.api.ExecCmdRepository.PlanCmd): io.hamal.repository.api.PlannedExec
-    fun schedule(cmd: io.hamal.repository.api.ExecCmdRepository.ScheduleCmd): io.hamal.repository.api.ScheduledExec
-    fun queue(cmd: io.hamal.repository.api.ExecCmdRepository.QueueCmd): io.hamal.repository.api.QueuedExec
-    fun complete(cmd: io.hamal.repository.api.ExecCmdRepository.CompleteCmd): io.hamal.repository.api.CompletedExec
-    fun fail(cmd: io.hamal.repository.api.ExecCmdRepository.FailCmd): io.hamal.repository.api.FailedExec
-    fun start(cmd: io.hamal.repository.api.ExecCmdRepository.StartCmd): List<io.hamal.repository.api.StartedExec>
+    fun plan(cmd: PlanCmd): PlannedExec
+    fun schedule(cmd: ScheduleCmd): ScheduledExec
+    fun queue(cmd: QueueCmd): QueuedExec
+    fun complete(cmd: CompleteCmd): CompletedExec
+    fun fail(cmd: FailCmd): FailedExec
+    fun start(cmd: StartCmd): List<StartedExec>
     fun clear()
 
     data class PlanCmd(
@@ -59,8 +59,8 @@ interface ExecCmdRepository {
 
 interface ExecQueryRepository {
     fun get(execId: ExecId) = find(execId) ?: throw NoSuchElementException("Exec not found")
-    fun find(execId: ExecId): io.hamal.repository.api.Exec?
-    fun list(block: io.hamal.repository.api.ExecQueryRepository.ExecQuery.() -> Unit): List<io.hamal.repository.api.Exec>
+    fun find(execId: ExecId): Exec?
+    fun list(block: ExecQuery.() -> Unit): List<Exec>
     data class ExecQuery(
         var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1)
@@ -82,7 +82,7 @@ sealed class Exec : DomainObject<ExecId> {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as io.hamal.repository.api.Exec
+        other as Exec
 
         if (id != other.id) return false
         if (cmdId != other.cmdId) return false
@@ -106,7 +106,7 @@ class PlannedExec(
     override val code: CodeType,
     override val invocation: Invocation
 // FIXME    val plannedAt: PlannedAt
-) : io.hamal.repository.api.Exec() {
+) : Exec() {
     override val status = ExecStatus.Planned
 
     override fun toString(): String {
@@ -119,9 +119,9 @@ class PlannedExec(
 class ScheduledExec(
     override val cmdId: CmdId,
     override val id: ExecId,
-    val plannedExec: io.hamal.repository.api.PlannedExec,
+    val plannedExec: PlannedExec,
     val scheduledAt: ScheduledAt
-) : io.hamal.repository.api.Exec() {
+) : Exec() {
     override val status = ExecStatus.Scheduled
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
@@ -137,9 +137,9 @@ class ScheduledExec(
 class QueuedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
-    val scheduledExec: io.hamal.repository.api.ScheduledExec,
+    val scheduledExec: ScheduledExec,
     val queuedAt: QueuedAt
-) : io.hamal.repository.api.Exec() {
+) : Exec() {
     override val status = ExecStatus.Queued
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
@@ -155,8 +155,8 @@ class QueuedExec(
 class StartedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
-    val queuedExec: io.hamal.repository.api.QueuedExec
-) : io.hamal.repository.api.Exec() {
+    val queuedExec: QueuedExec
+) : Exec() {
     override val status = ExecStatus.Started
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
@@ -172,9 +172,9 @@ class CompletedExec(
     override val cmdId: CmdId,
 
     override val id: ExecId,
-    val startedExec: io.hamal.repository.api.StartedExec,
+    val startedExec: StartedExec,
     val completedAt: CompletedAt
-) : io.hamal.repository.api.Exec() {
+) : Exec() {
     override val status = ExecStatus.Completed
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
@@ -190,11 +190,11 @@ class CompletedExec(
 class FailedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
-    val startedExec: io.hamal.repository.api.StartedExec,
+    val startedExec: StartedExec,
     //FIXME failedAt
     val failedAt: FailedAt,
     val cause: ErrorType
-) : io.hamal.repository.api.Exec() {
+) : Exec() {
     override val status = ExecStatus.Failed
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
