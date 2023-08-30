@@ -2,10 +2,10 @@ package io.hamal.backend.instance.req.handler.topic
 
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
+import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.ProtobufAppender
 import io.hamal.repository.api.submitted_req.SubmittedAppendToTopicReq
-import io.hamal.lib.domain.vo.EventPayload
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,5 +18,5 @@ class AppendToTopicHandler(
         appender.append(req.cmdId(), topic, req.payload)
     }
 
-    private val appender = ProtobufAppender(EventPayload::class, eventBrokerRepository)
+    private val appender = ProtobufAppender(TopicEntryPayload::class, eventBrokerRepository)
 }

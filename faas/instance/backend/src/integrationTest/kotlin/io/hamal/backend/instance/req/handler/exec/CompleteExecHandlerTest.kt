@@ -1,8 +1,6 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.repository.api.CompletedExec
-import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
@@ -14,6 +12,7 @@ import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -52,7 +51,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
                 }
                 assertThat(exception.message, equalTo("Exec not in status Started"))
 
-                verifyNoCOmpletedExecExists()
+                verifyNoCompletedExecExists()
             }
         }
 
@@ -87,7 +86,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         }
     }
 
-    private fun verifyNoCOmpletedExecExists() {
+    private fun verifyNoCompletedExecExists() {
         execQueryRepository.list { }.also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {

@@ -85,7 +85,7 @@ function create_extension_factory()
         end
 
         function export.topic.append(topic_id, payload)
-            return internal.append_event(topic_id, payload)
+            return internal.append_entry(topic_id, payload)
         end
 
         function export.topic.create(cmd)
@@ -98,8 +98,8 @@ function create_extension_factory()
             return internal.list_topic()
         end
 
-        function export.topic.list_events(topic_id)
-            return internal.list_topic_event(topic_id)
+        function export.topic.list_entries(topic_id)
+            return internal.list_topic_entry(topic_id)
         end
 
         function export.topic.get(topic_id)

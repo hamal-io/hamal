@@ -1,6 +1,5 @@
 package io.hamal.repository.api.log
 
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
@@ -9,6 +8,7 @@ import io.hamal.lib.domain.EventWithId
 import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.io.Closeable
@@ -56,8 +56,8 @@ interface LogBrokerRepository :
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun listEvents(topic: LogTopic, block: EventQuery.() -> Unit): List<EventWithId> {
-        val query = EventQuery().also(block)
+    fun listEntries(topic: LogTopic, block: LogQuery.() -> Unit): List<EventWithId> {
+        val query = LogQuery().also(block)
         val firstId = LogChunkId(SnowflakeId(query.afterId.value.value + 1))
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
@@ -72,7 +72,7 @@ interface LogBrokerRepository :
     fun clear()
 
 
-    data class EventQuery(
+    data class LogQuery(
         var afterId: EventId = EventId(0),
         var limit: Limit = Limit(1)
     )

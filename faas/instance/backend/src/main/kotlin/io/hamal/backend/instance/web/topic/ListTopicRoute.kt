@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListTopicsRoute(
+class ListTopicRoute(
     private val eventBrokerRepository: LogBrokerRepository
 ) {
     @GetMapping("/v1/topics")

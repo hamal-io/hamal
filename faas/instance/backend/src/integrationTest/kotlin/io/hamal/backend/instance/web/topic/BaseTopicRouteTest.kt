@@ -2,7 +2,7 @@ package io.hamal.backend.instance.web.topic
 
 import io.hamal.backend.instance.web.BaseRouteTest
 import io.hamal.lib.domain.req.CreateTopicReq
-import io.hamal.lib.domain.vo.EventPayload
+import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -15,14 +15,14 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
-    fun listTopicEvents(topicId: TopicId): ApiTopicEventList {
-        val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/events")
+    fun listTopicEntries(topicId: TopicId): ApiTopicEntryList {
+        val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTopicsResponse.result(ApiTopicEventList::class)
+        return listTopicsResponse.result(ApiTopicEntryList::class)
     }
 
 
@@ -58,8 +58,8 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
         return createTopicResponse.result(ApiSubmittedReqWithId::class)
     }
 
-    fun appendToTopic(topicId: TopicId, toAppend: EventPayload): ApiSubmittedReq {
-        val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/events")
+    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiSubmittedReq {
+        val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(toAppend)
             .execute()
