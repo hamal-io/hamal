@@ -3,9 +3,8 @@ package io.hamal.repository.api.log
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventWithId
 import io.hamal.lib.domain.vo.TopicEntryId
+import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -56,15 +55,15 @@ interface LogBrokerRepository :
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun listEntries(topic: LogTopic, block: LogQuery.() -> Unit): List<EventWithId> {
+    fun listEntries(topic: LogTopic, block: LogQuery.() -> Unit): List<TopicEntry> {
         val query = LogQuery().also(block)
         val firstId = LogChunkId(SnowflakeId(query.afterId.value.value + 1))
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
-                val evt = ProtoBuf.decodeFromByteArray(Event.serializer(), chunk.bytes)
-                EventWithId(
+                val payload = ProtoBuf.decodeFromByteArray(TopicEntryPayload.serializer(), chunk.bytes)
+                TopicEntry(
                     id = TopicEntryId(chunk.id.value),
-                    value = evt.value
+                    payload = payload
                 )
             }
     }

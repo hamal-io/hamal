@@ -1,7 +1,5 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.repository.api.CompletedExec
-import io.hamal.repository.api.StartedExec
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.State

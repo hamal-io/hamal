@@ -2,7 +2,6 @@ package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicEntryId
-import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.ApiTopicEntryList
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -33,8 +32,8 @@ class ListEntryRoute(
                 topicName = topic.name,
                 entries = events.map {
                     ApiTopicEntryList.Entry(
-                        id = TopicEntryId(it.id.value),
-                        payload = TopicEntryPayload(it.value)
+                        id = it.id,
+                        payload = it.payload
                     )
                 }
             )
