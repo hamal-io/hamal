@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.req.handler.trigger
 
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.event.TriggerCreatedEvent
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
 @Component
 class CreateTriggerHandler(
     private val triggerCmdRepository: TriggerCmdRepository,
-    private val eventEmitter: SystemEventEmitter,
+    private val eventEmitter: InstanceEventEmitter,
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: LogBrokerRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository

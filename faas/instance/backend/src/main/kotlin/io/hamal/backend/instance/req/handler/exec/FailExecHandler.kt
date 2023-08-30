@@ -1,13 +1,9 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.event.ExecutionFailedEvent
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.repository.api.ExecCmdRepository
-import io.hamal.repository.api.ExecQueryRepository
-import io.hamal.repository.api.FailedExec
-import io.hamal.repository.api.StartedExec
 import io.hamal.repository.api.submitted_req.SubmittedFailExecReq
 import io.hamal.lib.common.domain.CmdId
 import org.springframework.stereotype.Component
@@ -16,7 +12,7 @@ import org.springframework.stereotype.Component
 class FailExecHandler(
     private val execQueryRepository: io.hamal.repository.api.ExecQueryRepository,
     private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter
+    private val eventEmitter: InstanceEventEmitter
 ) : ReqHandler<SubmittedFailExecReq>(SubmittedFailExecReq::class) {
 
     override fun invoke(req: SubmittedFailExecReq) {

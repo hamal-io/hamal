@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.func
 
 import io.hamal.backend.instance.event.FuncCreatedEvent
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.repository.api.Func
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class CreateFuncHandler(
     val funcCmdRepository: FuncCmdRepository,
-    val eventEmitter: SystemEventEmitter,
+    val eventEmitter: InstanceEventEmitter,
     val namespaceQueryRepository: NamespaceQueryRepository
 ) : ReqHandler<SubmittedCreateFuncReq>(SubmittedCreateFuncReq::class) {
     override fun invoke(req: SubmittedCreateFuncReq) {

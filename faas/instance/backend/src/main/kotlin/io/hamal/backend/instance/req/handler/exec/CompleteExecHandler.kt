@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.event.ExecutionCompletedEvent
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.repository.api.*
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component
 class CompleteExecHandler(
     private val execQueryRepository: io.hamal.repository.api.ExecQueryRepository,
     private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter,
+    private val eventEmitter: InstanceEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
     private val eventBrokerRepository: LogBrokerRepository,
     private val generateDomainId: GenerateDomainId

@@ -1,12 +1,10 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.event.ExecPlannedEvent
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
-import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.PlannedExec
 import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
@@ -18,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class InvokeExecHandler(
     private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
-    private val eventEmitter: SystemEventEmitter,
+    private val eventEmitter: InstanceEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
 ) : ReqHandler<SubmittedInvokeExecReq>(SubmittedInvokeExecReq::class) {
 

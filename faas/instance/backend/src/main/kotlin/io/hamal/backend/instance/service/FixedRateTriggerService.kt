@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.service
 
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.req.InvokeExec
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.repository.api.FixedRateTrigger
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
 @Service
 class FixedRateTriggerService(
     internal val triggerQueryRepository: TriggerQueryRepository,
-    internal val eventEmitter: SystemEventEmitter,
+    internal val eventEmitter: InstanceEventEmitter,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
     internal val funcQueryRepository: FuncQueryRepository

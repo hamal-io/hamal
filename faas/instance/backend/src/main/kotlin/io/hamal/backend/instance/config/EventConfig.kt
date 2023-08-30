@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.backend.instance.component.Async
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.service.DefaultSystemEventService
 import io.hamal.backend.instance.service.SystemEventServiceFactory
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -15,7 +15,7 @@ open class EventConfig {
     open fun systemEventEmitter(
         systemEventBrokerRepository: LogBrokerRepository,
         generateDomainId: GenerateDomainId
-    ): SystemEventEmitter = SystemEventEmitter(
+    ): InstanceEventEmitter = InstanceEventEmitter(
         generateDomainId,
         systemEventBrokerRepository
     )

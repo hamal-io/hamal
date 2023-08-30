@@ -1,10 +1,8 @@
 package io.hamal.backend.instance.web.work
 
 import io.hamal.backend.instance.event.ExecutionStartedEvent
-import io.hamal.backend.instance.event.SystemEventEmitter
-import io.hamal.repository.api.ExecCmdRepository
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.StartedExec
 import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
@@ -21,7 +19,7 @@ import java.security.SecureRandom
 class PollRoute(
     private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
-    private val eventEmitter: SystemEventEmitter
+    private val eventEmitter: InstanceEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<ApiUnitOfWorkList> {

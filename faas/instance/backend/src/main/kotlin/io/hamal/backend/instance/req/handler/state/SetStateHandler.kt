@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.state
 
 import io.hamal.backend.instance.event.StateUpdatedEvent
-import io.hamal.backend.instance.event.SystemEventEmitter
+import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.repository.api.StateCmdRepository
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class SetStateHandler(
     val stateCmdRepository: StateCmdRepository,
-    val eventEmitter: SystemEventEmitter
+    val eventEmitter: InstanceEventEmitter
 ) : ReqHandler<SubmittedSetStateReq>(SubmittedSetStateReq::class) {
     override fun invoke(req: SubmittedSetStateReq) {
         updateState(req).also { emitEvent(req.cmdId(), req.state) }
