@@ -27,7 +27,7 @@ import kotlin.io.path.Path
 open class SqliteRepositoryConfig {
 
     @Bean
-    open fun instanceEventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("system-event")))
+    open fun instanceEventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("instance-event")))
 
     @Bean
     open fun eventBrokerRepository() = SqliteLogBrokerRepository(SqliteLogBroker(path.resolve("event")))

@@ -1,7 +1,5 @@
 package io.hamal.backend.instance
 
-import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation
@@ -9,6 +7,8 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.repository.api.*
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
@@ -35,13 +35,16 @@ internal abstract class BaseTest {
     lateinit var localPort: Number
 
     @Autowired
+    lateinit var instanceEventBrokerRepository: LogBrokerRepository
+
+    @Autowired
     lateinit var eventBrokerRepository: LogBrokerRepository
 
     @Autowired
-    lateinit var execCmdRepository: io.hamal.repository.api.ExecCmdRepository
+    lateinit var execCmdRepository: ExecCmdRepository
 
     @Autowired
-    lateinit var execQueryRepository: io.hamal.repository.api.ExecQueryRepository
+    lateinit var execQueryRepository: ExecQueryRepository
 
     @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
@@ -78,6 +81,7 @@ internal abstract class BaseTest {
 
     @BeforeEach
     fun before() {
+        instanceEventBrokerRepository.clear()
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
@@ -102,10 +106,10 @@ internal abstract class BaseTest {
         status: ExecStatus,
         correlation: Correlation? = null,
         code: CodeType = CodeType("")
-    ): io.hamal.repository.api.Exec {
+    ): Exec {
 
         val planedExec = execCmdRepository.plan(
-            io.hamal.repository.api.ExecCmdRepository.PlanCmd(
+            ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
                 correlation = correlation,
@@ -120,7 +124,7 @@ internal abstract class BaseTest {
         }
 
         val scheduled = execCmdRepository.schedule(
-            io.hamal.repository.api.ExecCmdRepository.ScheduleCmd(
+            ExecCmdRepository.ScheduleCmd(
                 id = CmdId(2),
                 execId = planedExec.id,
             )
@@ -131,7 +135,7 @@ internal abstract class BaseTest {
         }
 
         val queued = execCmdRepository.queue(
-            io.hamal.repository.api.ExecCmdRepository.QueueCmd(
+            ExecCmdRepository.QueueCmd(
                 id = CmdId(3),
                 execId = scheduled.id
             )
@@ -140,21 +144,21 @@ internal abstract class BaseTest {
             return queued
         }
 
-        val startedExec = execCmdRepository.start(io.hamal.repository.api.ExecCmdRepository.StartCmd(CmdId(4))).first()
+        val startedExec = execCmdRepository.start(ExecCmdRepository.StartCmd(CmdId(4))).first()
         if (status == ExecStatus.Started) {
             return startedExec
         }
 
         return when (status) {
             ExecStatus.Completed -> execCmdRepository.complete(
-                io.hamal.repository.api.ExecCmdRepository.CompleteCmd(
+                ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id
                 )
             )
 
             ExecStatus.Failed -> execCmdRepository.fail(
-                io.hamal.repository.api.ExecCmdRepository.FailCmd(
+                ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
                     cause = ErrorType("BaseTest.kt")

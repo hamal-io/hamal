@@ -1,8 +1,6 @@
 package io.hamal.mono
 
 import io.hamal.backend.instance.component.BootstrapBackend
-import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecId
@@ -11,6 +9,8 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.HamalSdk
+import io.hamal.repository.api.*
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -28,10 +28,10 @@ abstract class BaseHamalTest {
     lateinit var eventBrokerRepository: LogBrokerRepository
 
     @Autowired
-    lateinit var execCmdRepository: io.hamal.repository.api.ExecCmdRepository
+    lateinit var execCmdRepository: ExecCmdRepository
 
     @Autowired
-    lateinit var execQueryRepository: io.hamal.repository.api.ExecQueryRepository
+    lateinit var execQueryRepository: ExecQueryRepository
 
     @Autowired
     lateinit var funcCmdRepository: FuncCmdRepository
@@ -62,7 +62,6 @@ abstract class BaseHamalTest {
 
                 sdk.awaitService.await(execReq)
 
-                // Waits until the test exec complete
                 var wait = true
                 val startedAt = TimeUtils.now()
                 while (wait) {
@@ -75,9 +74,9 @@ abstract class BaseHamalTest {
                             fail { "Execution failed" }
                         }
 
-//                        if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
-//                            fail("Timeout")
-//                        }
+                        if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
+                            fail("Timeout")
+                        }
                     }
                 }
             }
