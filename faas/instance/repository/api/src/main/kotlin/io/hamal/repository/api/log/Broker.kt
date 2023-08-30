@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventWithId
-import io.hamal.lib.domain.vo.EventId
+import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -63,7 +63,7 @@ interface LogBrokerRepository :
             .map { chunk ->
                 val evt = ProtoBuf.decodeFromByteArray(Event.serializer(), chunk.bytes)
                 EventWithId(
-                    id = EventId(chunk.id.value),
+                    id = TopicEntryId(chunk.id.value),
                     value = evt.value
                 )
             }
@@ -73,7 +73,7 @@ interface LogBrokerRepository :
 
 
     data class LogQuery(
-        var afterId: EventId = EventId(0),
+        var afterId: TopicEntryId = TopicEntryId(0),
         var limit: Limit = Limit(1)
     )
 }

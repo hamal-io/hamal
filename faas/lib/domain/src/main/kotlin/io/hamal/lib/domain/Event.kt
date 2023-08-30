@@ -1,6 +1,6 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.domain.vo.EventId
+import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
@@ -15,6 +15,6 @@ class Event(override val value: MapType = MapType()) : Inputs() {
 
 @Serializable
 data class EventWithId(
-    val id: EventId,
+    val id: TopicEntryId,
     val value: MapType
 )

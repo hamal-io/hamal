@@ -1,7 +1,6 @@
 package io.hamal.backend.instance.web.topic
 
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.EventId
 import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
@@ -20,7 +19,7 @@ class ListEntryRoute(
     @GetMapping("/v1/topics/{topicId}/entries")
     fun listEvents(
         @PathVariable("topicId") topicId: TopicId,
-        @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: EventId,
+        @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: TopicEntryId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiTopicEntryList> {
         val topic = eventBrokerRepository.getTopic(topicId)

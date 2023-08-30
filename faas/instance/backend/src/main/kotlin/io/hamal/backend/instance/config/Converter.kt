@@ -22,13 +22,13 @@ object TopicNameConverter : Converter<String, TopicName> {
 }
 
 
-object EventIdConverter : DomainIdConverter<EventId>(EventId::class, ::EventId)
 object ExecIdConverter : DomainIdConverter<ExecId>(ExecId::class, ::ExecId)
 object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)
 object NamespaceIdConverter : DomainIdConverter<NamespaceId>(NamespaceId::class, ::NamespaceId)
 object ReqIdConverter : DomainIdConverter<ReqId>(ReqId::class, ::ReqId)
 object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)
+object TopicEntryIdConverter : DomainIdConverter<TopicEntryId>(TopicEntryId::class, ::TopicEntryId)
 object TriggerIdConverter : DomainIdConverter<TriggerId>(TriggerId::class, ::TriggerId)
 
 sealed class DomainIdConverter<ID : DomainId>(
