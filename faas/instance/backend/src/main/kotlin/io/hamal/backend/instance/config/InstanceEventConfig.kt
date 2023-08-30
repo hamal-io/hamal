@@ -10,7 +10,7 @@ import io.hamal.backend.instance.service.OrchestrationService
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecQueryRepository
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration
 open class InstanceEventConfig {
     @Bean
     open fun instanceEventEmitter(
-        instanceEventBrokerRepository: LogBrokerRepository,
+        instanceEventBrokerRepository: BrokerRepository,
         generateDomainId: GenerateDomainId
     ): InstanceEventEmitter = InstanceEventEmitter(
         generateDomainId,

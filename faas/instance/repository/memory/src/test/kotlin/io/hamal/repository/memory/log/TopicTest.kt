@@ -1,9 +1,9 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.repository.api.log.LogChunk
-import io.hamal.repository.api.log.LogChunkId
-import io.hamal.repository.api.log.LogSegment
-import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.Chunk
+import io.hamal.repository.api.log.ChunkId
+import io.hamal.repository.api.log.Segment
+import io.hamal.repository.api.log.Topic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.TopicId
@@ -42,29 +42,29 @@ class MemoryLogTopicRepositoryTest {
                 assertThat(testInstance.count(), equalTo(3UL))
             }
 
-            testInstance.read(LogChunkId(1)).let {
+            testInstance.read(ChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunkId(1)))
+                assertThat(chunk.id, equalTo(ChunkId(1)))
                 assertThat(chunk.topicId, equalTo(TopicId(23)))
-                assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
             }
 
-            testInstance.read(LogChunkId(3)).let {
+            testInstance.read(ChunkId(3)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunkId(3)))
+                assertThat(chunk.id, equalTo(ChunkId(3)))
                 assertThat(chunk.topicId, equalTo(TopicId(23)))
-                assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
             }
         }
 
-        private val testInstance = MemoryLogTopicRepository(
-            LogTopic(
+        private val testInstance = MemoryTopicRepository(
+            Topic(
                 TopicId(23),
                 TopicName("test-topic")
             )
@@ -77,7 +77,7 @@ class MemoryLogTopicRepositoryTest {
         @Test
         fun `Reads multiple chunks`() {
             givenOneHundredChunks()
-            val result = testInstance.read(LogChunkId(25), 36)
+            val result = testInstance.read(ChunkId(25), 36)
             assertThat(result, hasSize(36))
 
             for (id in 0 until 36) {
@@ -85,9 +85,9 @@ class MemoryLogTopicRepositoryTest {
             }
         }
 
-        private fun assertChunk(chunk: LogChunk, id: Int) {
-            assertThat(chunk.id, equalTo(LogChunkId(id)))
-            assertThat(chunk.segmentId, equalTo(LogSegment.Id(0)))
+        private fun assertChunk(chunk: Chunk, id: Int) {
+            assertThat(chunk.id, equalTo(ChunkId(id)))
+            assertThat(chunk.segmentId, equalTo(Segment.Id(0)))
             assertThat(chunk.topicId, equalTo(TopicId(23)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
@@ -101,8 +101,8 @@ class MemoryLogTopicRepositoryTest {
             }
         }
 
-        private val testInstance = MemoryLogTopicRepository(
-            LogTopic(
+        private val testInstance = MemoryTopicRepository(
+            Topic(
                 TopicId(23),
                 TopicName("test-topic")
             )

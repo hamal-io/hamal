@@ -17,7 +17,7 @@ import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ProtobufBatchConsumer
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 class EventTriggerService(
-    internal val eventBrokerRepository: LogBrokerRepository,
+    internal val eventBrokerRepository: BrokerRepository,
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,

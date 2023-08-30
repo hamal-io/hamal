@@ -2,7 +2,7 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.Topic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
@@ -23,7 +23,7 @@ class SqliteBrokerTopicsRepository(
     override val filename: String get() = "topics.db"
 }), BrokerTopicsRepository {
 
-    private val topicMapping = ConcurrentHashMap<TopicName, LogTopic>()
+    private val topicMapping = ConcurrentHashMap<TopicName, Topic>()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -46,16 +46,16 @@ class SqliteBrokerTopicsRepository(
         }
     }
 
-    override fun create(cmdId: CmdId, toCreate: BrokerTopicsRepository.TopicToCreate): LogTopic {
+    override fun create(cmdId: CmdId, toCreate: BrokerTopicsRepository.TopicToCreate): Topic {
         try {
-            return connection.execute<LogTopic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
+            return connection.execute<Topic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
                 query {
                     set("id", toCreate.id)
                     set("name", toCreate.name)
                     set("now", TimeUtils.now())
                 }
                 map { rs ->
-                    LogTopic(
+                    Topic(
                         id = rs.getDomainId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
                     )
@@ -69,33 +69,33 @@ class SqliteBrokerTopicsRepository(
         }
     }
 
-    override fun find(name: TopicName): LogTopic? =
+    override fun find(name: TopicName): Topic? =
         topicMapping[name] ?: connection.executeQueryOne("SELECT id, name FROM topics WHERE name = :name") {
             query {
                 set("name", name.value)
             }
             map { rs ->
-                LogTopic(
+                Topic(
                     id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
                 )
             }
         }?.also { topicMapping[it.name] = it }
 
-    override fun find(id: TopicId): LogTopic? = topicMapping.values.find { it.id == id }
+    override fun find(id: TopicId): Topic? = topicMapping.values.find { it.id == id }
         ?: connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
             query {
                 set("id", id)
             }
             map { rs ->
-                LogTopic(
+                Topic(
                     id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
                 )
             }
         }?.also { topicMapping[it.name] = it }
 
-    override fun list(block: TopicQuery.() -> Unit): List<LogTopic> {
+    override fun list(block: TopicQuery.() -> Unit): List<Topic> {
         val query = TopicQuery().also(block)
-        return connection.executeQuery<LogTopic>(
+        return connection.executeQuery<Topic>(
             """
                 SELECT
                     id, name 
@@ -113,7 +113,7 @@ class SqliteBrokerTopicsRepository(
                 set("limit", query.limit)
             }
             map { rs ->
-                LogTopic(
+                Topic(
                     id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
                 )
             }

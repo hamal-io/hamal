@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.ApiTopicEntryList
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ListEntryRoute(
-    private val eventBrokerRepository: LogBrokerRepository
+    private val eventBrokerRepository: BrokerRepository
 ) {
     @GetMapping("/v1/topics/{topicId}/entries")
     fun listEvents(

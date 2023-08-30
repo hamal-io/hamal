@@ -23,14 +23,14 @@ class SqliteLogBrokerRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "some-path", "another-path")
-            SqliteLogBrokerRepository(testBroker(targetDir)).use { }
+            SqliteBrokerRepository(testBroker(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics.db")))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "consumers.db")))
         }
 
-        private fun testBroker(path: Path = Path(testDir)) = SqliteLogBroker(path)
+        private fun testBroker(path: Path = Path(testDir)) = SqliteBroker(path)
 
         private val testDir = "/tmp/hamal/test/broker"
     }
@@ -40,7 +40,7 @@ class SqliteLogBrokerRepositoryTest {
         @Test
         fun `Bug - Able to resolve real topic`() {
             val testPath = Files.createTempDirectory("testDir")
-            val testInstance = SqliteLogBrokerRepository(SqliteLogBroker(testPath))
+            val testInstance = SqliteBrokerRepository(SqliteBroker(testPath))
 
             val result = testInstance.create(
                 CmdId(123),

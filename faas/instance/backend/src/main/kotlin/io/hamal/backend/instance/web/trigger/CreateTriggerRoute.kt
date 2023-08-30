@@ -3,7 +3,7 @@ package io.hamal.backend.instance.web.trigger
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class CreateTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: LogBrokerRepository,
+    private val eventBrokerRepository: BrokerRepository,
     private val request: SubmitRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {

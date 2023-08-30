@@ -1,6 +1,6 @@
 package io.hamal.repository
 
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.fixture.BaseTestFixture
 import io.hamal.repository.fixture.MemoryFixture
@@ -28,7 +28,7 @@ abstract class AbstractUnitTest {
     }
 
     private val fixtures = mutableMapOf<KClass<*>, List<BaseTestFixture>>(
-        LogBrokerRepository::class to listOf(
+        BrokerRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

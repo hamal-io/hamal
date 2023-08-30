@@ -15,7 +15,7 @@ class MemoryLogBrokerRepositoryTest {
     inner class CreateTopicTest {
         @Test
         fun `Bug - Able to resolve real topic`() {
-            val testInstance = MemoryLogBrokerRepository()
+            val testInstance = MemoryBrokerRepository()
 
             val result = testInstance.create(
                 CmdId(123),

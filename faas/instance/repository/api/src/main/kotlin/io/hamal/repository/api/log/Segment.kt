@@ -3,7 +3,7 @@ package io.hamal.repository.api.log
 import io.hamal.lib.domain.vo.TopicId
 import java.io.Closeable
 
-interface LogSegment {
+interface Segment {
     val id: Id
     val topicId: TopicId
 
@@ -14,6 +14,7 @@ interface LogSegment {
 }
 
 
-interface LogSegmentRepository : LogChunkAppender, LogChunkReader, LogChunkCounter, Closeable {
+
+interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
     fun clear()
 }

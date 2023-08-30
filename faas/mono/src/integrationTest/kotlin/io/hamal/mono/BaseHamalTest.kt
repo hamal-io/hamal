@@ -10,7 +10,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.HamalSdk
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -25,7 +25,7 @@ import kotlin.io.path.name
 abstract class BaseHamalTest {
 
     @Autowired
-    lateinit var eventBrokerRepository: LogBrokerRepository
+    lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var execCmdRepository: ExecCmdRepository

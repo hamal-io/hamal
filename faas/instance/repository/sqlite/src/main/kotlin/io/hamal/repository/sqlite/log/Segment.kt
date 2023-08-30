@@ -1,29 +1,29 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.repository.api.log.LogChunk
-import io.hamal.repository.api.log.LogChunkId
-import io.hamal.repository.api.log.LogSegment
-import io.hamal.repository.api.log.LogSegmentRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.repository.api.log.Chunk
+import io.hamal.repository.api.log.ChunkId
+import io.hamal.repository.api.log.Segment
+import io.hamal.repository.api.log.SegmentRepository
 import java.nio.file.Path
 
-data class SqliteLogSegment(
-    override val id: LogSegment.Id,
+data class SqliteSegment(
+    override val id: Segment.Id,
     override val topicId: TopicId,
     val path: Path
-) : LogSegment
+) : Segment
 
 
-internal class SqliteLogSegmentRepository(
-    internal val segment: SqliteLogSegment,
+internal class SqliteSegmentRepository(
+    internal val segment: SqliteSegment,
 ) : BaseSqliteRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
-}), LogSegmentRepository {
+}), SegmentRepository {
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {
         connection.tx {
@@ -35,11 +35,11 @@ internal class SqliteLogSegmentRepository(
         }
     }
 
-    override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
+    override fun read(firstId: ChunkId, limit: Int): List<Chunk> {
         if (limit < 1) {
             return listOf()
         }
-        return connection.executeQuery<LogChunk>(
+        return connection.executeQuery<Chunk>(
             """SELECT id, bytes, instant FROM chunks WHERE id >= :firstId LIMIT :limit """.trimIndent()
         ) {
             query {
@@ -47,8 +47,8 @@ internal class SqliteLogSegmentRepository(
                 set("limit", limit)
             }
             map {
-                LogChunk(
-                    id = it.getDomainId("id", ::LogChunkId),
+                Chunk(
+                    id = it.getDomainId("id", ::ChunkId),
                     segmentId = segment.id,
                     topicId = segment.topicId,
                     bytes = it.getBytes("bytes"),

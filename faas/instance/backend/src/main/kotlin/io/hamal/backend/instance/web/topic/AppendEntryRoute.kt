@@ -5,7 +5,7 @@ import io.hamal.lib.domain.req.AppendEntryReq
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class AppendEntryRoute(
     private val submitRequest: SubmitRequest,
-    private val eventBrokerRepository: LogBrokerRepository
+    private val eventBrokerRepository: BrokerRepository
 ) {
     @PostMapping("/v1/topics/{topicId}/entries")
     fun appendEvent(

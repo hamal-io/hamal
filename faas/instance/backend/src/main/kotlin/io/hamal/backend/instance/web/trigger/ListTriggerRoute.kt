@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.trigger
 
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
@@ -20,7 +20,7 @@ class ListTriggerRoute(
     private val triggerQueryRepository: TriggerQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: LogBrokerRepository
+    private val eventBrokerRepository: BrokerRepository
 ) {
     @GetMapping("/v1/triggers")
     fun listTrigger(

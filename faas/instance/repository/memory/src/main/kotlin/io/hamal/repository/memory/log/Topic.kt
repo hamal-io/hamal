@@ -1,44 +1,44 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.repository.api.log.*
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.repository.api.log.*
 
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, partitioning by key
 // keeping track of consumer group ids
-class MemoryLogTopicRepository(
-    internal val topic: LogTopic
-) : LogTopicRepository {
+class MemoryTopicRepository(
+    internal val topic: Topic
+) : TopicRepository {
 
-    private var activeSegment: MemoryLogSegment
-    private var activeLogSegmentRepository: MemoryLogSegmentRepository
+    private var activeSegment: MemorySegment
+    private var activeSegmentRepository: MemoryLogSegmentRepository
 
     init {
-        activeSegment = MemoryLogSegment(
-            id = LogSegment.Id(0),
+        activeSegment = MemorySegment(
+            id = Segment.Id(0),
             topicId = topic.id
         )
-        activeLogSegmentRepository = MemoryLogSegmentRepository(activeSegment)
+        activeSegmentRepository = MemoryLogSegmentRepository(activeSegment)
     }
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {
-        activeLogSegmentRepository.append(cmdId, bytes)
+        activeSegmentRepository.append(cmdId, bytes)
     }
 
-    override fun read(firstId: LogChunkId, limit: Int): List<LogChunk> {
-        return activeLogSegmentRepository.read(firstId, limit)
+    override fun read(firstId: ChunkId, limit: Int): List<Chunk> {
+        return activeSegmentRepository.read(firstId, limit)
     }
 
     override fun count(): ULong {
-        return activeLogSegmentRepository.count()
+        return activeSegmentRepository.count()
     }
 
     override fun clear() {
-        activeLogSegmentRepository.clear()
+        activeSegmentRepository.clear()
     }
 
     override fun close() {
-        activeLogSegmentRepository.close()
+        activeSegmentRepository.close()
     }
 }

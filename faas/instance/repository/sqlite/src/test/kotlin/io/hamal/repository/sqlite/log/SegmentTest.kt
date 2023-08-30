@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.repository.api.log.LogChunk
-import io.hamal.repository.api.log.LogChunkId
-import io.hamal.repository.api.log.LogSegment
+import io.hamal.repository.api.log.Chunk
+import io.hamal.repository.api.log.ChunkId
+import io.hamal.repository.api.log.Segment
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
@@ -35,7 +35,7 @@ class SqliteLogSegmentRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "partition-001", "another-path")
-            SqliteLogSegmentRepository(testSegment(targetDir)).use { }
+            SqliteSegmentRepository(testSegment(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "00000000000000002810.db")))
@@ -43,7 +43,7 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Creates chunks table`() {
-            SqliteLogSegmentRepository(testSegment()).connection
+            SqliteSegmentRepository(testSegment()).connection
                 .executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'chunks' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -51,17 +51,17 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Does not create chunks table if already exists`() {
-            SqliteLogSegmentRepository(testSegment()).use {
+            SqliteSegmentRepository(testSegment()).use {
                 it.connection.execute("""INSERT INTO chunks (cmd_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
             }
 
 
-            SqliteLogSegmentRepository(testSegment()).use { }
-            SqliteLogSegmentRepository(testSegment()).use {}
-            SqliteLogSegmentRepository(testSegment()).use {}
-            SqliteLogSegmentRepository(testSegment()).use {}
+            SqliteSegmentRepository(testSegment()).use { }
+            SqliteSegmentRepository(testSegment()).use {}
+            SqliteSegmentRepository(testSegment()).use {}
+            SqliteSegmentRepository(testSegment()).use {}
 
-            SqliteLogSegmentRepository(testSegment()).use {
+            SqliteSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM chunks") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -70,7 +70,7 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            SqliteLogSegmentRepository(testSegment()).use {
+            SqliteSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT journal_mode FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -79,7 +79,7 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            SqliteLogSegmentRepository(testSegment()).use {
+            SqliteSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT locking_mode FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -88,7 +88,7 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            SqliteLogSegmentRepository(testSegment()).use {
+            SqliteSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT temp_store FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -97,15 +97,15 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            SqliteLogSegmentRepository(testSegment()).use {
+            SqliteSegmentRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT synchronous FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }
 
-        private fun testSegment(path: Path = Path(testDir)) = SqliteLogSegment(
-            id = LogSegment.Id(2810),
+        private fun testSegment(path: Path = Path(testDir)) = SqliteSegment(
+            id = Segment.Id(2810),
             topicId = TopicId(1506),
             path = path
         )
@@ -132,11 +132,11 @@ class SqliteLogSegmentRepositoryTest {
 
             assertThat(testInstance.count(), equalTo(2UL))
 
-            testInstance.read(LogChunkId(1), 2).let {
+            testInstance.read(ChunkId(1), 2).let {
                 assertThat(it, hasSize(2))
 
                 val chunk = it.first()
-                assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
@@ -151,11 +151,11 @@ class SqliteLogSegmentRepositoryTest {
 
             assertThat(testInstance.count(), equalTo(1UL))
 
-            testInstance.read(LogChunkId(1)).let {
+            testInstance.read(ChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunkId(1)))
-                assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
+                assertThat(chunk.id, equalTo(ChunkId(1)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
@@ -174,21 +174,21 @@ class SqliteLogSegmentRepositoryTest {
 
             assertThat(testInstance.count(), equalTo(3UL))
 
-            testInstance.read(LogChunkId(1)).let {
+            testInstance.read(ChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunkId(1)))
-                assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
+                assertThat(chunk.id, equalTo(ChunkId(1)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
 
-            testInstance.read(LogChunkId(3)).let {
+            testInstance.read(ChunkId(3)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
-                assertThat(chunk.id, equalTo(LogChunkId(3)))
-                assertThat(chunk.segmentId, equalTo(LogSegment.Id(2810)))
+                assertThat(chunk.id, equalTo(ChunkId(3)))
+                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
                 assertThat(chunk.topicId, equalTo(TopicId(1506)))
                 assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
@@ -224,9 +224,9 @@ class SqliteLogSegmentRepositoryTest {
             testInstance.append(CmdId(3), "VALUE_3".toByteArray())
         }
 
-        private val testInstance = SqliteLogSegmentRepository(
-            SqliteLogSegment(
-                id = LogSegment.Id(2810),
+        private val testInstance = SqliteSegmentRepository(
+            SqliteSegment(
+                id = Segment.Id(2810),
                 topicId = TopicId(1506),
                 path = Path(testDir)
             )
@@ -247,7 +247,7 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Tries to read from empty segment`() {
-            val result = testInstance.read(LogChunkId(20))
+            val result = testInstance.read(ChunkId(20))
             assertThat(result, hasSize(0))
         }
 
@@ -255,7 +255,7 @@ class SqliteLogSegmentRepositoryTest {
         fun `Tries to read outside of segment range`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunkId(200), 100)
+            val result = testInstance.read(ChunkId(200), 100)
             assertThat(result, hasSize(0))
         }
 
@@ -263,7 +263,7 @@ class SqliteLogSegmentRepositoryTest {
         fun `Tries to read with a limit of 0`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunkId(23), 0)
+            val result = testInstance.read(ChunkId(23), 0)
             assertThat(result, hasSize(0))
         }
 
@@ -271,7 +271,7 @@ class SqliteLogSegmentRepositoryTest {
         fun `Tries to read with a negative limit`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunkId(23), -20)
+            val result = testInstance.read(ChunkId(23), -20)
             assertThat(result, hasSize(0))
         }
 
@@ -279,7 +279,7 @@ class SqliteLogSegmentRepositoryTest {
         fun `Read exactly one chunk`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunkId(69))
+            val result = testInstance.read(ChunkId(69))
             assertThat(result, hasSize(1))
             assertChunk(result.first(), 69)
         }
@@ -287,7 +287,7 @@ class SqliteLogSegmentRepositoryTest {
         @Test
         fun `Reads multiple chunks`() {
             givenOneHundredChunks()
-            val result = testInstance.read(LogChunkId(25), 36)
+            val result = testInstance.read(ChunkId(25), 36)
             assertThat(result, hasSize(36))
 
             for (id in 0 until 36) {
@@ -299,7 +299,7 @@ class SqliteLogSegmentRepositoryTest {
         fun `Read is only partially covered by segment`() {
             givenOneHundredChunks()
 
-            val result = testInstance.read(LogChunkId(90), 40)
+            val result = testInstance.read(ChunkId(90), 40)
             assertThat(result, hasSize(11))
 
             for (id in 0 until 11) {
@@ -307,8 +307,8 @@ class SqliteLogSegmentRepositoryTest {
             }
         }
 
-        private fun assertChunk(chunk: LogChunk, id: Int) {
-            assertThat(chunk.id, equalTo(LogChunkId(id)))
+        private fun assertChunk(chunk: Chunk, id: Int) {
+            assertThat(chunk.id, equalTo(ChunkId(id)))
             assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
@@ -321,9 +321,9 @@ class SqliteLogSegmentRepositoryTest {
             }
         }
 
-        private val testInstance = SqliteLogSegmentRepository(
-            SqliteLogSegment(
-                id = LogSegment.Id(1028),
+        private val testInstance = SqliteSegmentRepository(
+            SqliteSegment(
+                id = Segment.Id(1028),
                 topicId = TopicId(1506),
                 path = Path(testDir),
             )
@@ -335,9 +335,9 @@ class SqliteLogSegmentRepositoryTest {
     inner class CloseTest {
         @Test
         fun `Close an open repository`() {
-            val testInstance = SqliteLogSegmentRepository(
-                SqliteLogSegment(
-                    id = LogSegment.Id(1028),
+            val testInstance = SqliteSegmentRepository(
+                SqliteSegment(
+                    id = Segment.Id(1028),
                     topicId = TopicId(1506),
                     path = Path(testDir)
                 )
@@ -348,9 +348,9 @@ class SqliteLogSegmentRepositoryTest {
 
         @Test
         fun `Closing an already closed connection is not a problem`() {
-            val testInstance = SqliteLogSegmentRepository(
-                SqliteLogSegment(
-                    id = LogSegment.Id(1028),
+            val testInstance = SqliteSegmentRepository(
+                SqliteSegment(
+                    id = Segment.Id(1028),
                     topicId = TopicId(1506),
                     path = Path(testDir),
                 )

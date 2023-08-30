@@ -8,11 +8,11 @@ import kotlin.reflect.KClass
 
 interface LogConsumer<VALUE : Any> {
     val groupId: GroupId
-    fun consume(limit: Int, fn: (LogChunkId, VALUE) -> Unit): Int {
+    fun consume(limit: Int, fn: (ChunkId, VALUE) -> Unit): Int {
         return consumeIndexed(limit) { _, chunkId, value -> fn(chunkId, value) }
     }
 
-    fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, VALUE) -> Unit): Int
+    fun consumeIndexed(limit: Int, fn: (Int, ChunkId, VALUE) -> Unit): Int
 }
 
 @JvmInline
@@ -31,12 +31,12 @@ interface BatchConsumer<VALUE : Any> {
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class ProtobufLogConsumer<Value : Any>(
     override val groupId: GroupId,
-    private val topic: LogTopic,
-    private val repository: LogBrokerRepository,
+    private val topic: Topic,
+    private val repository: BrokerRepository,
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
-    override fun consumeIndexed(limit: Int, fn: (Int, LogChunkId, Value) -> Unit): Int {
+    override fun consumeIndexed(limit: Int, fn: (Int, ChunkId, Value) -> Unit): Int {
         val chunksToConsume = repository.consume(groupId, topic, limit)
 
         chunksToConsume.mapIndexed { index, chunk ->
@@ -54,8 +54,8 @@ class ProtobufLogConsumer<Value : Any>(
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class ProtobufBatchConsumer<Value : Any>(
     override val groupId: GroupId,
-    private val topic: LogTopic,
-    private val repository: LogBrokerRepository,
+    private val topic: Topic,
+    private val repository: BrokerRepository,
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {
 
