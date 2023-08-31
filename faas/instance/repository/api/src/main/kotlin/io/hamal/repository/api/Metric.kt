@@ -10,18 +10,15 @@ enum class SystemEvent {
     NamespaceUpdatedEvent, StateUpdatedEvent, TriggerCreatedEvent;
 }
 
+interface AccessMetrics {
+    fun getTime(): Long
+    fun getMap(): LinkedHashMap<SystemEvent, Int>
+}
 
-interface IMetrics {
+interface MetricRepository {
     fun update(e: SystemEvent)
-    fun getAsMap(): LinkedHashMap<SystemEvent, Int>
-    fun getTimeStarted(): Long
+    fun getData(): AccessMetrics
     fun reset()
-
-    @TestOnly
-    fun getFailed():Int
-
-
-    fun getAsJson(): JsonObject
 }
 
 
