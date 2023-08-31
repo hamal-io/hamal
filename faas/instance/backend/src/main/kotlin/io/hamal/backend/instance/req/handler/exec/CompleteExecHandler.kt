@@ -6,15 +6,14 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.ProtobufAppender
 import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
 import org.springframework.stereotype.Component
@@ -61,20 +60,20 @@ class CompleteExecHandler(
         }
     }
 
-    private fun appendEvents(cmdId: CmdId, events: List<EventPayload>) {
+    private fun appendEvents(cmdId: CmdId, events: List<EventToSubmit>) {
         events.forEach { evt ->
             //FIXME create topic if not exists
-            val topicName = TopicName((evt.value["topic"] as StringType).value)
+            val topicName = evt.topicName
             val topic = eventBrokerRepository.findTopic(topicName) ?: eventBrokerRepository.create(
                 cmdId, TopicToCreate(
                     id = generateDomainId(::TopicId),
                     name = topicName
                 )
             )
-            appender.append(cmdId, topic, evt)
+            appender.append(cmdId, topic, TopicEntryPayload(evt.payload.value))
         }
     }
 
-    private val appender = ProtobufAppender(EventPayload::class, eventBrokerRepository)
+    private val appender = ProtobufAppender(TopicEntryPayload::class, eventBrokerRepository)
 
 }

@@ -1,6 +1,8 @@
 package io.hamal.runner.extension.ctx.function
 
 import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function2In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
@@ -33,9 +35,11 @@ class EmitFunction(
         }
 
 
-        // FIXME make sure topic is set and string
-        require(eventMap.containsKey("topic")) { "Topic not present" }
-
-        executionCtx.emit(EventPayload(MapType(eventMap)))
+        executionCtx.emit(
+            EventToSubmit(
+                topicName = TopicName(arg1.value),
+                payload = EventPayload(MapType(eventMap))
+            )
+        )
     }
 }

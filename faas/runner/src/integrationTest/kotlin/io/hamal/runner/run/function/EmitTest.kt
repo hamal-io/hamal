@@ -1,15 +1,16 @@
 package io.hamal.runner.run.function
 
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.TestFailConnector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -20,7 +21,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val executor = createTestExecutor()
         executor(unitOfWork(""))
 
-        val eventsToEmit = executor.context.runnerEmittedEvents
+        val eventsToEmit = executor.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(0))
     }
 
@@ -28,12 +29,12 @@ internal class EmitTest : AbstractExecuteTest() {
     fun `Emit event without topic`() {
         val execute = createTestExecutor(
             connector = TestFailConnector { err ->
-                assertThat(err, equalTo(ErrorType("Topic not present")))
+                assertThat(err.message, containsString("Topic not present"))
             }
         )
-        execute(unitOfWork("ctx.emit({value='test-value'})"))
+        execute(unitOfWork("ctx.emit()"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(0))
     }
 
@@ -41,93 +42,92 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event without payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit({topic='test-topic'})"))
+        execute(unitOfWork("ctx.emit('test-topic')"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
-            assertThat(value, equalTo(MapType(mutableMapOf("topic" to StringType("test-topic")))))
+            assertThat(topicName, equalTo(TopicName("test-topic")))
+            assertThat(payload, equalTo(EventPayload()))
         }
     }
 
     @Test
-    fun `Emit event with nil payload`() {
+    fun `Emit event with empty payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit({topic='test-topic', hamal=nil})"))
+        execute(unitOfWork("ctx.emit('test-topic', {})"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
-            assertThat(
-                value, equalTo(
-                    MapType(mutableMapOf("topic" to StringType("test-topic")))
-                )
-            )
+            assertThat(topicName, equalTo(TopicName("test-topic")))
+            assertThat(payload, equalTo(EventPayload()))
+        }
+    }
+
+
+    @Test
+    fun `Emit event with nil payload`() {
+        val execute = createTestExecutor()
+        execute(unitOfWork("ctx.emit('test-topic', {hamal=nil})"))
+
+        val eventsToEmit = execute.context.eventsToSubmit
+        assertThat(eventsToEmit, hasSize(1))
+
+        with(eventsToEmit.first()) {
+            assertThat(topicName, equalTo(TopicName("test-topic")))
+            assertThat(payload, equalTo(EventPayload()))
         }
     }
 
     @Test
     fun `Emit event with string payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit({topic='test-topic', hamal='rocks'})"))
+        execute(unitOfWork("ctx.emit('test-topic', {hamal='rocks'})"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
-            assertThat(
-                value, equalTo(
-                    MapType(
-                        mutableMapOf(
-                            "topic" to StringType("test-topic"),
-                            "hamal" to StringType("rocks")
-                        )
-                    )
-                )
-            )
+            assertThat(topicName, equalTo(TopicName("test-topic")))
+            assertThat(payload, equalTo(EventPayload(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
         }
     }
 
     @Test
     fun `Emit event with number payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit({topic='test-topic', answer=42})"))
+        execute(unitOfWork("ctx.emit('test-topic',{ answer=42 })"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
-            assertThat(
-                value, equalTo(
-                    MapType(
-                        mutableMapOf(
-                            "topic" to StringType("test-topic"),
-                            "answer" to NumberType(42)
-                        )
-                    )
-                )
-            )
+            assertThat(topicName, equalTo(TopicName("test-topic")))
+            assertThat(payload, equalTo(EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))))
         }
     }
 
     @Test
     fun `Emit event with boolean payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit({topic='test-topic', true_value=true, false_value=false})"))
+        execute(unitOfWork("ctx.emit('test-topic', {true_value=true, false_value=false})"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
+            assertThat(topicName, equalTo(TopicName("test-topic")))
             assertThat(
-                value, equalTo(
-                    MapType(
-                        mutableMapOf(
-                            "topic" to StringType("test-topic"),
-                            "true_value" to TrueValue,
-                            "false_value" to FalseValue
+                payload, equalTo(
+                    EventPayload(
+                        MapType(
+                            mutableMapOf(
+                                "true_value" to TrueValue,
+                                "false_value" to FalseValue
+                            )
                         )
                     )
                 )
@@ -139,21 +139,23 @@ internal class EmitTest : AbstractExecuteTest() {
     @Disabled
     fun `Emit event with table payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit({topic='test-topic', nested_table = { value = 23 }})"))
+        execute(unitOfWork("ctx.emit('test-topic', { nested_table = { value = 23 } })"))
 
-        val eventsToEmit = execute.context.runnerEmittedEvents
+        val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
+            assertThat(topicName, equalTo(TopicName("test-topic")))
             assertThat(
-                value, equalTo(
-                    MapType(
-                        mutableMapOf(
-                            "topic" to StringType("test-topic"),
-                            "nested_table" to MapType(
-                                mutableMapOf(
-                                    "value" to NumberType(23)
-                                ),
+                payload, equalTo(
+                    EventPayload(
+                        MapType(
+                            mutableMapOf(
+                                "nested_table" to MapType(
+                                    mutableMapOf(
+                                        "value" to NumberType(23)
+                                    ),
+                                )
                             )
                         )
                     )

@@ -2,18 +2,15 @@ package io.hamal.backend.instance.web.exec
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -121,13 +118,9 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 CompleteExecReq(
                     state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     events = listOf(
-                        EventPayload(
-                            MapType(
-                                mutableMapOf(
-                                    "topic" to StringType("test-completion"),
-                                    "value" to NumberType(42)
-                                )
-                            )
+                        EventToSubmit(
+                            topicName = TopicName("test-completion"),
+                            payload = EventPayload(MapType(mutableMapOf("value" to NumberType(42))))
                         )
                     )
                 )

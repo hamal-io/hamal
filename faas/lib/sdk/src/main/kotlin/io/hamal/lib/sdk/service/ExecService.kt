@@ -1,6 +1,6 @@
 package io.hamal.lib.sdk.service
 
-import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.req.FailExecReq
@@ -14,7 +14,7 @@ interface ExecService {
     fun poll(): ApiUnitOfWorkList
 
     //FIXME list of events to publish
-    fun complete(execId: ExecId, stateAfterCompletion: State, events: List<EventPayload>)
+    fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
 
     // able to emit events on failure
     fun fail(execId: ExecId, error: ErrorType)
@@ -26,10 +26,10 @@ class DefaultExecService(val template: HttpTemplate) : ExecService {
             .execute(ApiUnitOfWorkList::class)
     }
 
-    override fun complete(execId: ExecId, stateAfterCompletion: State, events: List<EventPayload>) {
+    override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {
         template.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
-            .body(CompleteExecReq(stateAfterCompletion, events))
+            .body(CompleteExecReq(stateAfterCompletion, eventToSubmit))
             .execute()
     }
 

@@ -64,7 +64,7 @@ class DefaultCodeRunner(
                     sandbox.load(unitOfWork.code)
                 }
 
-            connector.complete(execId, State(), executionContext.runnerEmittedEvents)
+            connector.complete(execId, State(), executionContext.eventsToSubmit)
             log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {

@@ -1,7 +1,7 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
@@ -13,7 +13,6 @@ class ExecContext(
     invocationEvents: ExecInvocationEvents
 ) : SandboxContext {
 
-    val runnerEmittedEvents get() : List<EventPayload> = eventsToEmit
 
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
         store[clazz] = obj
@@ -23,12 +22,13 @@ class ExecContext(
         return store[clazz] as OBJ
     }
 
-    fun emit(evt: EventPayload) {
-        eventsToEmit.add(evt)
+    fun emit(evt: EventToSubmit) {
+        eventsToSubmit.add(evt)
     }
 
     private val store = mutableMapOf<KClass<*>, Any>()
-    private val eventsToEmit = mutableListOf<EventPayload>()
+
+    val eventsToSubmit = mutableListOf<EventToSubmit>()
 
 
     init {

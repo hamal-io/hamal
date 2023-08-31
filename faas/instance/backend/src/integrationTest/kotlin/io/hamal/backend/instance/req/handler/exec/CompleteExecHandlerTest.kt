@@ -2,6 +2,7 @@ package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
@@ -9,6 +10,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -64,13 +66,9 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         id = ExecId(1234),
         state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
         events = listOf(
-            EventPayload(
-                MapType(
-                    mutableMapOf(
-                        "topic" to StringType("test-completion"),
-                        "ich" to StringType("habFertsch")
-                    )
-                )
+            EventToSubmit(
+                topicName = TopicName("test-completion"),
+                payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
             )
         ),
     )

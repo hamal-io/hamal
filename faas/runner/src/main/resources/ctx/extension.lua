@@ -6,9 +6,10 @@ function create_extension_factory()
             exec_id = _internal.exec_id
         }
 
-        function export.emit(event)
-            -- FIXME topic must be separate from payload
-            internal.emit(event.topic or "", event)
+        function export.emit(topic, event)
+            if topic == nil then return error("Topic not present") end
+
+            internal.emit(topic, event or {})
         end
 
         return export

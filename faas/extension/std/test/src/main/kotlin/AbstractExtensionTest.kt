@@ -1,4 +1,4 @@
-import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -19,7 +19,7 @@ class TestConnector : Connector {
         TODO()
     }
 
-    override fun complete(execId: ExecId, state: State, events: List<EventPayload>) {}
+    override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {}
     override fun fail(execId: ExecId, error: ErrorType) {
         org.junit.jupiter.api.fail { error.message }
     }
@@ -32,7 +32,7 @@ class TestFailConnector(
         TODO()
     }
 
-    override fun complete(execId: ExecId, state: State, events: List<EventPayload>) {
+    override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {
         org.junit.jupiter.api.fail { "Test expected to fail" }
     }
 
