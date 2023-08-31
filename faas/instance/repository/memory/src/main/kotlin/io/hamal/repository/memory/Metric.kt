@@ -54,7 +54,7 @@ class InMemoryMetrics : MetricRepository {
             val mMap = eventMap.clone() as LinkedHashMap<SystemEvent, Int>
 
             override fun getTime(): Long {
-                return timer
+                return mTimer
             }
 
             override fun getMap(): LinkedHashMap<SystemEvent, Int> {

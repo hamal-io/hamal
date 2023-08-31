@@ -1,11 +1,11 @@
 package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.event.events.*
-import io.hamal.repository.api.IMetrics
+import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.SystemEvent
 
 
-class MetricService(val repo: IMetrics) {
+class MetricService(val repo: MetricRepository) {
     fun handle(e: InstanceEvent) {
         when (e) {
             is ExecutionCompletedEvent -> repo.update(SystemEvent.ExecutionCompletedEvent)
