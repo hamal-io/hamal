@@ -1,14 +1,17 @@
 package io.hamal.backend.instance.req
 
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.*
-import io.hamal.lib.domain.*
+import io.hamal.lib.domain.CorrelatedState
+import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.ReqCmdRepository
+import io.hamal.repository.api.submitted_req.*
 import org.springframework.stereotype.Component
 
 
@@ -17,8 +20,8 @@ data class InvokeExec(
     val funcId: FuncId,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val invocation: Invocation,
-    val code: CodeType
+    val code: CodeType,
+    val events: List<Event>
 )
 
 @Component
@@ -37,7 +40,7 @@ class SubmitRequest(
             code = adhoc.code,
             funcId = null,
             correlationId = null,
-            invocation = AdhocInvocation()
+            events = listOf()
         ).also(reqCmdRepository::queue)
 
 
@@ -50,8 +53,8 @@ class SubmitRequest(
             funcId = funcId,
             correlationId = invokeFunc.correlationId,
             inputs = invokeFunc.inputs ?: InvocationInputs(),
-            invocation = FuncInvocation(),
-            code = func.code
+            code = func.code,
+            events = listOf()
         ).also(reqCmdRepository::queue)
     }
 
@@ -63,8 +66,8 @@ class SubmitRequest(
             funcId = invokeExec.funcId,
             correlationId = invokeExec.correlationId,
             inputs = invokeExec.inputs,
-            invocation = invokeExec.invocation,
-            code = invokeExec.code
+            code = invokeExec.code,
+            events = listOf()
         ).also(reqCmdRepository::queue)
 
 

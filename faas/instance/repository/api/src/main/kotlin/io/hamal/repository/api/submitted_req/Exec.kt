@@ -1,6 +1,6 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
@@ -22,6 +22,6 @@ data class SubmittedCompleteExecReq(
     override var status: ReqStatus,
     val id: ExecId,
     val state: State,
-    val events: List<Event>
+    val events: List<EventPayload>
 ) : SubmittedReq
 

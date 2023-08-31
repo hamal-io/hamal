@@ -1,6 +1,9 @@
 package io.hamal.runner.connector
 
-import io.hamal.lib.domain.*
+import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.kua.type.CodeType
@@ -11,15 +14,15 @@ data class UnitOfWork(
     val inputs: ExecInputs,
     val state: State,
     val code: CodeType,
-    val invocation: Invocation = AdhocInvocation(),
-    val correlation: Correlation? = null
+    val correlation: Correlation? = null,
+    val events: List<Event> = listOf()
 )
 
 // FIXME ConnectorState, ConnectorEvent, ConnectorError
 interface Connector {
     fun poll(): List<UnitOfWork>
 
-    fun complete(execId: ExecId, state: State, events: List<Event>)
+    fun complete(execId: ExecId, state: State, events: List<EventPayload>)
 
     fun fail(execId: ExecId, error: ErrorType)
 }

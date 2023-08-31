@@ -1,6 +1,6 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.Invocation
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -33,6 +33,6 @@ data class SubmittedInvokeExecReq(
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val invocation: Invocation,
-    val code: CodeType?
+    val code: CodeType?,
+    val events: List<Event>
 ) : SubmittedReq

@@ -1,6 +1,5 @@
 package io.hamal.backend.instance.web.exec
 
-import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.domain.ApiExec
 import org.springframework.http.ResponseEntity
@@ -23,7 +22,7 @@ class GetExecRoute(
                 correlation = it.correlation,
                 inputs = it.inputs,
                 code = it.code,
-                invocation = it.invocation
+                events = it.events
             )
         })
     }

@@ -1,8 +1,8 @@
 package io.hamal.backend.instance
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.AdhocInvocation
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
@@ -105,7 +105,8 @@ internal abstract class BaseTest {
         execId: ExecId,
         status: ExecStatus,
         correlation: Correlation? = null,
-        code: CodeType = CodeType("")
+        code: CodeType = CodeType(""),
+        events: List<Event> = listOf()
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
@@ -115,7 +116,7 @@ internal abstract class BaseTest {
                 correlation = correlation,
                 inputs = ExecInputs(),
                 code = code,
-                invocation = AdhocInvocation()
+                events = events
             )
         )
 

@@ -2,7 +2,7 @@ package io.hamal.repository.api.record.exec
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Invocation
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
@@ -25,7 +25,7 @@ data class Entity(
     var code: CodeType? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
-    var invocation: Invocation? = null,
+    var events: List<Event>? = null,
     var cause: ErrorType? = null
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
@@ -40,7 +40,7 @@ data class Entity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                invocation = rec.invocation,
+                events = rec.events,
                 plannedAt = Instant.now(), // FIXME
             )
 
@@ -93,7 +93,7 @@ data class Entity(
             correlation = correlation,
             inputs = inputs ?: ExecInputs(MapType()),
             code = code!!,
-            invocation = invocation!!
+            events = events ?: listOf()
         )
 
         if (status == ExecStatus.Planned) return plannedExec

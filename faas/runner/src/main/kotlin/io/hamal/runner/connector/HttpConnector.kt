@@ -1,7 +1,6 @@
 package io.hamal.runner.connector
 
-import io.hamal.lib.domain.AdhocInvocation
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.type.ErrorType
@@ -18,13 +17,13 @@ class HttpConnector(
                 inputs = it.inputs,
                 state = it.state,
                 code = it.code,
-                invocation = AdhocInvocation(),
-                correlation = it.correlation
+                correlation = it.correlation,
+                events = it.events
             )
         }
     }
 
-    override fun complete(execId: ExecId, state: State, events: List<Event>) {
+    override fun complete(execId: ExecId, state: State, events: List<EventPayload>) {
         sdk.execService().complete(execId, state, events)
     }
 

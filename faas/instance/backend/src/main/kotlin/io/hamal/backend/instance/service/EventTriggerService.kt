@@ -6,7 +6,7 @@ import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventInvocation
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
@@ -16,9 +16,10 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository
-import io.hamal.repository.api.log.GroupId
 import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.GroupId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
+import io.hamal.repository.api.log.TopicEntry
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
 import java.util.concurrent.ScheduledFuture
@@ -36,7 +37,7 @@ class EventTriggerService(
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
-    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<Event>>()
+    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TopicEntry>>()
 
     @PostConstruct
     fun setup() {
@@ -54,20 +55,24 @@ class EventTriggerService(
                         groupId = GroupId(trigger.id.value.value.toString(16)),
                         topic = topic,
                         repository = eventBrokerRepository,
-                        valueClass = Event::class
+                        valueClass = TopicEntry::class
                     )
 
                     triggerConsumers[trigger.id] = consumer
                     try {
-                        consumer.consumeBatch(1) { evts ->
+                        consumer.consumeBatch(1) { entries ->
                             submitRequest(
                                 InvokeExec(
                                     execId = generateDomainId(::ExecId),
                                     funcId = trigger.funcId,
                                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                                     inputs = InvocationInputs(),
-                                    invocation = EventInvocation(evts),
-                                    code = funcQueryRepository.get(trigger.funcId).code
+                                    code = funcQueryRepository.get(trigger.funcId).code,
+                                    events = entries.map {
+                                        Event(
+                                            payload = EventPayload(it.payload.value)
+                                        )
+                                    }
                                 )
                             )
                         }

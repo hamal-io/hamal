@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
@@ -64,7 +64,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
         id = ExecId(1234),
         state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
         events = listOf(
-            Event(
+            EventPayload(
                 MapType(
                     mutableMapOf(
                         "topic" to StringType("test-completion"),

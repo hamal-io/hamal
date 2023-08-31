@@ -9,13 +9,15 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.PlannedExec
 import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
 import org.springframework.stereotype.Component
 
 @Component
 class InvokeExecHandler(
-    private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
+    private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: InstanceEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
 ) : ReqHandler<SubmittedInvokeExecReq>(SubmittedInvokeExecReq::class) {
@@ -24,7 +26,7 @@ class InvokeExecHandler(
         planExec(req).also { emitEvent(req.cmdId(), it) }
     }
 
-    private fun planExec(req: SubmittedInvokeExecReq): io.hamal.repository.api.PlannedExec {
+    private fun planExec(req: SubmittedInvokeExecReq): PlannedExec {
         val correlationId = req.correlationId
         val func = req.funcId?.let { funcQueryRepository.get(it) }
 
@@ -35,18 +37,18 @@ class InvokeExecHandler(
         }
 
         return execCmdRepository.plan(
-            io.hamal.repository.api.ExecCmdRepository.PlanCmd(
+            ExecCmdRepository.PlanCmd(
                 id = req.cmdId(),
                 execId = req.id,
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),
                 code = func?.code ?: req.code ?: throw IllegalStateException("Code not found"),
-                invocation = req.invocation
+                events = req.events,
             )
         )
     }
 
-    private fun emitEvent(cmdId: CmdId, exec: io.hamal.repository.api.PlannedExec) {
+    private fun emitEvent(cmdId: CmdId, exec: PlannedExec) {
         eventEmitter.emit(cmdId, ExecPlannedEvent(exec))
     }
 }

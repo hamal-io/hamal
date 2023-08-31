@@ -1,5 +1,7 @@
 package io.hamal.repository.sqlite.record.exec
 
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -7,14 +9,10 @@ import io.hamal.repository.api.record.exec.Entity
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.exec.*
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sqlite.BaseSqliteRepository
-import io.hamal.repository.api.Exec
-import io.hamal.repository.record.exec.*
 import java.nio.file.Path
 
 internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
-    override fun invoke(recs: List<ExecRecord>): io.hamal.repository.api.Exec {
+    override fun invoke(recs: List<ExecRecord>): Exec {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
         check(firstRecord is ExecPlannedRecord)
@@ -35,7 +33,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
 
 class SqliteExecRepository(
     config: Config
-) : SqliteRecordRepository<ExecId, ExecRecord, io.hamal.repository.api.Exec>(
+) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(
     config = config,
     createDomainObject = CreateExec,
     recordClass = ExecRecord::class,
@@ -43,7 +41,7 @@ class SqliteExecRepository(
         ProjectionCurrent,
         ProjectionQueue
     )
-), io.hamal.repository.api.ExecRepository {
+), ExecRepository {
 
     data class Config(
         override val path: Path
@@ -51,12 +49,12 @@ class SqliteExecRepository(
         override val filename = "exec.db"
     }
 
-    override fun plan(cmd: PlanCmd): io.hamal.repository.api.PlannedExec {
+    override fun plan(cmd: PlanCmd): PlannedExec {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.PlannedExec
+                versionOf(execId, cmdId) as PlannedExec
             } else {
                 storeRecord(
                     ExecPlannedRecord(
@@ -65,22 +63,22 @@ class SqliteExecRepository(
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,
-                        invocation = cmd.invocation
+                        events = cmd.events
                     )
                 )
 
-                (currentVersion(execId) as io.hamal.repository.api.PlannedExec)
+                (currentVersion(execId) as PlannedExec)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun schedule(cmd: ScheduleCmd): io.hamal.repository.api.ScheduledExec {
+    override fun schedule(cmd: ScheduleCmd): ScheduledExec {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.ScheduledExec
+                versionOf(execId, cmdId) as ScheduledExec
             } else {
                 storeRecord(
                     ExecScheduledRecord(
@@ -88,18 +86,18 @@ class SqliteExecRepository(
                         cmdId = cmdId
                     )
                 )
-                (currentVersion(execId) as io.hamal.repository.api.ScheduledExec)
+                (currentVersion(execId) as ScheduledExec)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun queue(cmd: QueueCmd): io.hamal.repository.api.QueuedExec {
+    override fun queue(cmd: QueueCmd): QueuedExec {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.QueuedExec
+                versionOf(execId, cmdId) as QueuedExec
             } else {
                 storeRecord(
                     ExecQueuedRecord(
@@ -108,24 +106,24 @@ class SqliteExecRepository(
                     )
                 )
 
-                (currentVersion(execId) as io.hamal.repository.api.QueuedExec)
+                (currentVersion(execId) as QueuedExec)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionQueue.upsert(this, it) }
             }
         }
     }
 
-    override fun start(cmd: StartCmd): List<io.hamal.repository.api.StartedExec> {
+    override fun start(cmd: StartCmd): List<StartedExec> {
         val cmdId = cmd.id
-        val result = mutableListOf<io.hamal.repository.api.StartedExec>()
+        val result = mutableListOf<StartedExec>()
 
         tx {
             ProjectionQueue.pop(this, 1).forEach { queuedExec ->
                 val execId = queuedExec.id
-                check(currentVersion(execId) is io.hamal.repository.api.QueuedExec) { "current version of $execId is not queued" }
+                check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
                 if (commandAlreadyApplied(execId, cmdId)) {
-                    versionOf(execId, cmdId) as io.hamal.repository.api.QueuedExec
+                    versionOf(execId, cmdId) as QueuedExec
                 } else {
 
                     storeRecord(
@@ -135,7 +133,7 @@ class SqliteExecRepository(
                         )
                     )
                     result.add(
-                        (currentVersion(execId) as io.hamal.repository.api.StartedExec)
+                        (currentVersion(execId) as StartedExec)
                             .also { ProjectionCurrent.upsert(this, it) }
                     )
                 }
@@ -146,12 +144,12 @@ class SqliteExecRepository(
     }
 
 
-    override fun complete(cmd: CompleteCmd): io.hamal.repository.api.CompletedExec {
+    override fun complete(cmd: CompleteCmd): CompletedExec {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.CompletedExec
+                versionOf(execId, cmdId) as CompletedExec
             } else {
                 storeRecord(
                     ExecCompletedRecord(
@@ -159,18 +157,18 @@ class SqliteExecRepository(
                         cmdId = cmdId
                     )
                 )
-                (currentVersion(execId) as io.hamal.repository.api.CompletedExec)
+                (currentVersion(execId) as CompletedExec)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun fail(cmd: FailCmd): io.hamal.repository.api.FailedExec {
+    override fun fail(cmd: FailCmd): FailedExec {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(execId, cmdId)) {
-                versionOf(execId, cmdId) as io.hamal.repository.api.FailedExec
+                versionOf(execId, cmdId) as FailedExec
             } else {
                 storeRecord(
                     ExecFailedRecord(
@@ -179,17 +177,17 @@ class SqliteExecRepository(
                         cause = cmd.cause
                     )
                 )
-                (currentVersion(execId) as io.hamal.repository.api.FailedExec)
+                (currentVersion(execId) as FailedExec)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun find(execId: ExecId): io.hamal.repository.api.Exec? {
+    override fun find(execId: ExecId): Exec? {
         return ProjectionCurrent.find(connection, execId)
     }
 
-    override fun list(block: ExecQuery.() -> Unit): List<io.hamal.repository.api.Exec> {
+    override fun list(block: ExecQuery.() -> Unit): List<Exec> {
         val query = ExecQuery().also(block)
         return ProjectionCurrent.list(connection, query.afterId, query.limit)
     }

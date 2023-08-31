@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.req
 
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
@@ -13,6 +13,6 @@ data class FailExecReq(
 @Serializable
 data class CompleteExecReq(
     val state: State,
-    val events: List<Event>
+    val events: List<EventPayload>
 )
 

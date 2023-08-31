@@ -1,8 +1,7 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventInvocation
-import io.hamal.lib.domain.Invocation
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -37,7 +36,7 @@ internal class EventTest : AbstractExecuteTest() {
                     assert( ctx.events[2].block == 44 )
                 """.trimIndent()
                 ),
-                invocation = EventInvocation(events),
+                events = events,
             )
         )
     }
@@ -53,7 +52,7 @@ internal class EventTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeType("test.fn()"),
-                invocation = EventInvocation(events),
+                events = events,
             )
         )
         assertThat(testFn.result, equalTo(events))
@@ -61,13 +60,13 @@ internal class EventTest : AbstractExecuteTest() {
 
     class TestFunction(var result: List<Event>? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
-            val invocation = ctx[Invocation::class]
-            result = (invocation as EventInvocation).events
+            val invocationEvents = ctx[ExecInvocationEvents::class]
+            result = invocationEvents.events
         }
     }
 
     private val events = listOf(
-        Event(MapType(mutableMapOf("topic" to StringType("Topic-One"), "block" to NumberType(43)))),
-        Event(MapType(mutableMapOf("topic" to StringType("Topic-Two"), "block" to NumberType(44))))
+        Event(EventPayload(MapType(mutableMapOf("topic" to StringType("Topic-One"), "block" to NumberType(43))))),
+        Event(EventPayload(MapType(mutableMapOf("topic" to StringType("Topic-Two"), "block" to NumberType(44)))))
     )
 }

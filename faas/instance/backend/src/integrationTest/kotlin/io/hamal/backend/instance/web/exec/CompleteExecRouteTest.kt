@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.web.exec
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.vo.CorrelationId
@@ -121,7 +121,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 CompleteExecReq(
                     state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     events = listOf(
-                        Event(
+                        EventPayload(
                             MapType(
                                 mutableMapOf(
                                     "topic" to StringType("test-completion"),

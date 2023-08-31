@@ -1,13 +1,14 @@
 package io.hamal.backend.instance.req.handler.exec
 
 import io.hamal.backend.instance.req.handler.BaseReqHandlerTest
-import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
-import io.hamal.lib.domain.*
+import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -27,7 +28,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 code = CodeType("code"),
                 funcId = null,
                 correlationId = null,
-                invocation = AdhocInvocation()
+                events = listOf()
             )
         )
 
@@ -73,8 +74,8 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                     )
                 ),
                 funcId = FuncId(4444),
-                invocation = EventInvocation(listOf()),
-                code = CodeType("some-code")
+                code = CodeType("some-code"),
+                events = listOf()
             )
         )
 
@@ -139,7 +140,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 ),
                 funcId = FuncId(4444),
                 code = CodeType("Some func code"),
-                invocation = FuncInvocation()
+                events = listOf()
             )
         )
 
@@ -210,7 +211,6 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                     )
                 )
                 assertThat(code, equalTo(CodeType("SomeCode")))
-                assertThat(invocation, instanceOf(FixedRateInvocation::class.java))
             }
         }
     }
@@ -242,8 +242,8 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         ),
         funcId = FuncId(4444),
-        invocation = FixedRateInvocation(),
-        code = CodeType("")
+        code = CodeType(""),
+        events = listOf()
     )
     //@formatter:on
 }

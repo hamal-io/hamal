@@ -6,7 +6,7 @@ import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.TopicId
@@ -61,7 +61,7 @@ class CompleteExecHandler(
         }
     }
 
-    private fun appendEvents(cmdId: CmdId, events: List<Event>) {
+    private fun appendEvents(cmdId: CmdId, events: List<EventPayload>) {
         events.forEach { evt ->
             //FIXME create topic if not exists
             val topicName = TopicName((evt.value["topic"] as StringType).value)
@@ -75,6 +75,6 @@ class CompleteExecHandler(
         }
     }
 
-    private val appender = ProtobufAppender(Event::class, eventBrokerRepository)
+    private val appender = ProtobufAppender(EventPayload::class, eventBrokerRepository)
 
 }

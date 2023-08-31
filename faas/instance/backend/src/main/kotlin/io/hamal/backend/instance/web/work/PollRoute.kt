@@ -2,12 +2,12 @@ package io.hamal.backend.instance.web.work
 
 import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.event.events.ExecutionStartedEvent
-import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
 import io.hamal.lib.sdk.domain.ApiUnitOfWorkList.ApiUnitOfWork
+import io.hamal.repository.api.ExecCmdRepository.StartCmd
+import io.hamal.repository.api.StateQueryRepository
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -38,7 +38,7 @@ class PollRoute(
                         inputs = exec.inputs,
                         state = state,
                         code = exec.code,
-                        invocation = exec.invocation
+                        events = exec.events
                     )
                 }), OK
         )

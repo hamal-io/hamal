@@ -1,7 +1,6 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.EventInvocation
-import io.hamal.lib.domain.Invocation
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
@@ -12,13 +11,13 @@ import io.hamal.lib.kua.type.toProxyMap
 import io.hamal.runner.extension.ctx.function.EmitFunction
 
 class RunnerContextFactory(
-    private val executionCtx: RunnerSandboxContext
+    private val executionCtx: ExecContext
 ) : ScriptExtensionFactory {
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
             name = "ctx",
             internals = mapOf(
-                "events" to sandbox.invocationEvents(executionCtx[Invocation::class]),
+                "events" to sandbox.invocationEvents(executionCtx[ExecInvocationEvents::class].events),
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx)
             )
@@ -26,11 +25,8 @@ class RunnerContextFactory(
     }
 }
 
-private fun Sandbox.invocationEvents(invocation: Invocation): TableProxyArray = if (invocation is EventInvocation) {
-    tableCreateArray(invocation.events.size).let { result ->
-        invocation.events.map { toProxyMap(it.value) }.forEach(result::append)
+private fun Sandbox.invocationEvents(events: List<Event>): TableProxyArray =
+    tableCreateArray(events.size).let { result ->
+        events.map { toProxyMap(it.payload.value) }.forEach(result::append)
         result
     }
-} else {
-    tableCreateArray(0)
-}

@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.domain
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Invocation
+import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
@@ -45,5 +45,5 @@ data class ApiExec(
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val code: CodeType,
-    val invocation: Invocation
+    val events: List<Event>
 )
