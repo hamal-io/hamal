@@ -2,7 +2,7 @@ package io.hamal.backend.instance.service
 
 import io.hamal.backend.instance.component.Async
 import io.hamal.backend.instance.event.InstanceEventContainer
-import io.hamal.backend.instance.event.events.InstanceEvent
+import io.hamal.backend.instance.event.event.InstanceEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.GenerateDomainId

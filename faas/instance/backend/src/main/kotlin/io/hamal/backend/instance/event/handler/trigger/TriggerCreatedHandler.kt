@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.event.handler.trigger
 
 import io.hamal.backend.instance.event.InstanceEventHandler
-import io.hamal.backend.instance.event.events.TriggerCreatedEvent
+import io.hamal.backend.instance.event.event.TriggerCreatedEvent
 import io.hamal.backend.instance.service.FixedRateTriggerService
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.lib.common.domain.CmdId

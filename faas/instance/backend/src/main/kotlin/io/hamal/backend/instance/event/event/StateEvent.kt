@@ -1,4 +1,4 @@
-package io.hamal.backend.instance.event.events
+package io.hamal.backend.instance.event.event
 
 import io.hamal.lib.domain.CorrelatedState
 import kotlinx.serialization.Serializable

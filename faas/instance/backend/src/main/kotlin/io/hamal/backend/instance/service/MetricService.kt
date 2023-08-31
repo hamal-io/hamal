@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.service
 
-import io.hamal.backend.instance.event.events.*
+import io.hamal.backend.instance.event.event.*
 import io.hamal.repository.api.IMetrics
 import io.hamal.repository.api.SystemEvent
 
