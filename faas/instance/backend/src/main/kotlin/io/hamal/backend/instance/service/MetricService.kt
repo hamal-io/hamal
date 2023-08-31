@@ -5,9 +5,21 @@ import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.SystemEvent
 
 
-class MetricService(val repo: MetricRepository) {
-    fun handle(e: InstanceEvent) {
-        when (e) {
+interface MetricProvider{
+    fun addObserver(observer: MetricObserver)
+    fun removeObserver(observer: MetricObserver)
+    fun <T> notifyObservers(event: T)
+}
+
+interface MetricObserver{
+    fun handle(event: InstanceEvent)
+}
+
+class MetricService(val repo: MetricRepository) : MetricObserver {
+
+
+    override fun handle(event: InstanceEvent) {
+        when (event) {
             is ExecutionCompletedEvent -> repo.update(SystemEvent.ExecutionCompletedEvent)
             is ExecPlannedEvent -> repo.update(SystemEvent.ExecPlannedEvent)
             is ExecScheduledEvent -> repo.update(SystemEvent.ExecScheduledEvent)
