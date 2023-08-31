@@ -5,9 +5,7 @@ import io.hamal.backend.instance.req.InvokeExec
 import io.hamal.backend.instance.req.SubmitRequest
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventPayload
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
@@ -70,6 +68,11 @@ class EventTriggerService(
                                     code = funcQueryRepository.get(trigger.funcId).code,
                                     events = entries.map {
                                         Event(
+                                            topic = EventTopic(
+                                                id = topic.id,
+                                                name = topic.name
+                                            ),
+                                            id = EventId(it.id.value),
                                             payload = EventPayload(it.payload.value)
                                         )
                                     }

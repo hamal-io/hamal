@@ -1,16 +1,15 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventPayload
-import io.hamal.lib.domain.State
+import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.runner.connector.UnitOfWork
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -30,10 +29,16 @@ internal class EventTest : AbstractExecuteTest() {
                     """
                     assert( ctx.events ~= nil )
                     assert( #ctx.events == 2 )
-                    assert( ctx.events[1].topic == 'Topic-One' )
-                    assert( ctx.events[1].block == 43 )
-                    assert( ctx.events[2].topic == 'Topic-Two' )
-                    assert( ctx.events[2].block == 44 )
+                    
+                    assert( ctx.events[1].id == '4d2' )
+                    assert( ctx.events[1].topic.id == '1' )
+                    assert( ctx.events[1].topic.name == 'Topic-One' )
+                    assert( ctx.events[1].payload.block == 43 )
+
+                    assert( ctx.events[2].id == '10e1' )
+                    assert( ctx.events[2].topic.id == '17' )
+                    assert( ctx.events[2].topic.name == 'Topic-Two' )
+                    assert( ctx.events[2].payload.block == 44 )
                 """.trimIndent()
                 ),
                 events = events,
@@ -66,7 +71,21 @@ internal class EventTest : AbstractExecuteTest() {
     }
 
     private val events = listOf(
-        Event(EventPayload(MapType(mutableMapOf("topic" to StringType("Topic-One"), "block" to NumberType(43))))),
-        Event(EventPayload(MapType(mutableMapOf("topic" to StringType("Topic-Two"), "block" to NumberType(44)))))
+        Event(
+            topic = EventTopic(
+                id = TopicId(1),
+                name = TopicName("Topic-One")
+            ),
+            id = EventId(1234),
+            payload = EventPayload(MapType(mutableMapOf("block" to NumberType(43))))
+        ),
+        Event(
+            topic = EventTopic(
+                id = TopicId(23),
+                name = TopicName("Topic-Two")
+            ),
+            id = EventId(4321),
+            payload = EventPayload(MapType(mutableMapOf("block" to NumberType(44))))
+        )
     )
 }
