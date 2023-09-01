@@ -74,7 +74,7 @@ const Editor = (props: EditorProps) => {
     return <div>
         <MonacoEditor
             theme={"Github"}
-            height="85vh"
+            height="55vh"
             defaultValue={props.code}
             defaultLanguage={"lua"}
             options={EditorOptions}
