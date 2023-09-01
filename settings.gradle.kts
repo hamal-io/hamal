@@ -64,6 +64,7 @@ include(":platform:lib:sqlite")
 include(":platform:lib:web3")
 
 include(":project")
+include(":project:fn_guru")
 include(":web3proxy")
 
 rootProject.name = "hamal"

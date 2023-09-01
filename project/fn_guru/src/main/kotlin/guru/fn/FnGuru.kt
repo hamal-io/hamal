@@ -1,21 +1,22 @@
-package io.hamal.boostrap
+package guru.fn
 
-import io.hamal.backend.instance.BackendConfig
-import guru.fn.FrontendConfig
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 
+@EnableWebMvc
+@Configuration
 @SpringBootApplication
-class Instance
+open class FnGuru
 
 fun main(args: Array<String>) {
     SpringApplicationBuilder()
-        .main(Instance::class.java)
-        .sources(BackendConfig::class.java, FrontendConfig::class.java)
+        .parent(FnGuru::class.java)
         .web(WebApplicationType.SERVLET)
-        .properties("server.port=8008")
+        .properties("server.port=6006")
         .bannerMode(Banner.Mode.OFF)
         .run(*args)
 }

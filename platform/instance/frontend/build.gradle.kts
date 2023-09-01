@@ -29,7 +29,11 @@ node {
 }
 
 dependencies {
-    implementation(external.spring.web)
+    implementation(external.spring.web) {
+        exclude("com.fasterxml.jackson.core", "jackson-core")
+        exclude("org.springframework.boot", "spring-boot-starter-json")
+        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+    }
 }
 
 val npmBuild = tasks.register<NpmTask>("npmBuild") {

@@ -1,7 +1,7 @@
 package io.hamal.mono
 
 import io.hamal.backend.instance.BackendConfig
-import io.hamal.frontend.FrontendConfig
+import guru.fn.FrontendConfig
 import io.hamal.runner.RunnerConfig
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType

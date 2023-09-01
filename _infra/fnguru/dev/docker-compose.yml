@@ -1,0 +1,31 @@
+version: "3.5"
+networks:
+  fnguru_net:
+    ipam:
+      config:
+        - subnet: 10.43.0.0/16
+services:
+  hamal:
+    image: hamalio/mono
+    restart:
+      unless-stopped
+    ports:
+      - "0.0.0.0:8008:8008"
+    environment:
+      - ACTIVE_PROFILES=default,sqlite
+    volumes:
+      - "/mnt/instance:/tmp/hamal/instance"
+    networks:
+      - fnguru_net
+
+  fnguru:
+    image: hamalio/fnguru
+    restart:
+      unless-stopped
+    ports:
+      - "0.0.0.0:6006:6006"
+    environment:
+      - ACTIVE_PROFILES=default
+      - INSTANCE_HOST=http://instance:8008
+    networks:
+      - fnguru_net
