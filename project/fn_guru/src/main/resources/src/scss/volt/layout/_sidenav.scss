@@ -11,7 +11,7 @@
 	max-height: 100%;
 	overflow-y: auto;
 	width: 100%;
-	@include transition(max-width .1s);
+	@include transition(max-width .3s);
 	
 	@include media-breakpoint-up(md) {
 		width: 100%;
@@ -23,18 +23,23 @@
 	}
 
 	.nav-item {
+		border: $border-width solid transparent;
 		&.active {
 			& > .nav-link {
-				color: $gray-100;
-				background-color: $gray-700;
+				color: $light;
+				background-color: #2e3650;
+				border: $border-width solid lighten( $dark, 20% );
 			}
 		}
 		.nav-link {
-			color: $white;
-			cursor: pointer;
+			color: $light;
+			border: $border-width solid $dark;
 			&:hover {
-				color: $gray-100;
-				background-color: $gray-700;
+				color: $light;
+				background-color: #2e3650;
+			}
+			&.active {
+				color: $white;
 			}
 		}
 		margin-bottom: .2rem;
@@ -52,25 +57,35 @@
 
 		.sidebar-icon {
 			margin-right: .5rem;
-			color: $gray-400;
+			color: $white;
+			span{
+				min-width: 22px;
+			}
+			svg{
+				min-width: 22px;
+			}
+			&.svg-icon{
+				margin-right:14px;
+			}
 		}
 
 		.link-arrow{
 			font-size: $font-size-sm;
 		}
 
-		&[data-bs-toggle=collapse][aria-expanded=true] .link-arrow{
-			@include transform(rotate(90deg));
-			transition: $transition-base;
+		&:focus{
+			outline: none;
+			box-shadow: 0 0 0 0.1rem rgba(#4c5680, 0.2);
 		}
+
 	}
 	.nav-link.active {
-		color: $gray-100;
+		color: $primary;
 	}
 
 	.multi-level{
 		.nav-link{
-			padding-left: 53px;
+			padding-left: 45px;
 		}
 	}
 
@@ -79,77 +94,111 @@
 	.badge,
 	.notification-count {
 		opacity: 1;
+		@include transition(opacity .3s);
 	}
 
-	.sidebar-text-contracted {
-		display: none;
-	}
-
-	&.contracted {
-		.sidebar-text,
-		.link-arrow,
-		.badge {
-			opacity: 0;
-		}
-
-		.notification-count {
-			opacity: 1;
-			position: absolute;
-			top: 0;
-			left: 40px;
-			width: 18px;
-			height: 18px;
-			border-radius: 50%;
-			font-size: .7rem;
-			padding: .2rem;
-		}
-
-		.nav-item {
-			position: relative;
-			&.active {
-				& > .nav-link {
-					background-color: #363c54;
-					width: 44px;
-				}
-			}
-			.nav-link {
-				&:hover {
-					background-color: $primary;
-				}
-			}
-		}
-
+	@include media-breakpoint-up(md) {
 		.sidebar-text-contracted {
-			display: inline;
+			display: none;
+			@include transition(opacity .3s);
 		}
-
-		.multi-level .nav-link {
-			padding-left: 17px;
-		}
-
-		.nav-item {
-			white-space: nowrap;
-		}
-
-		.sidebar-icon {
-			text-align: center;
-		}
-
-
-		@include media-breakpoint-up(md) {
-			& + .content {
-				margin-left: 95px;
-				
+	
+		&.contracted {
+			.sidebar-text,
+			.link-arrow,
+			.badge {
+				opacity: 0;
 			}
+	
+			.notification-count {
+				opacity: 1;
+				position: absolute;
+				top: 0;
+				left: 35px;
+				width: 18px;
+				height: 18px;
+				border-radius: 50%;
+				font-size: .7rem;
+				padding: .2rem;
+			}
+	
+			.nav-item {
+				position: relative;
+				width: 47px;
+				&.active {
+					& > .nav-link {
+						background-color: $primary;
+					}
+				}
+				.nav-link {
+					&:hover {
+						background-color: $primary;
+					}
+				}
+			}
+	
+			.sidebar-text-contracted {
+				display: inline;
+			}
+	
+			.multi-level .nav-link {
+				padding-left: 17px;
+			}
+	
+			.nav-item {
+				white-space: nowrap;
+			}
+	
+			.sidebar-icon {
+				text-align: center;
+			}
+	
+	
+			@include media-breakpoint-up(md) {
+				& + .content {
+					margin-left: 95px;
+					
+				}
+			}
+	
+			max-width: 95px;
 		}
-
-		max-width: 95px;
 	}
 }
 
 .sidebar-inner {
 	position: relative;
 	overflow-y: hidden;
+	.accordion-button{
+		&::after {
+			background-image: none;
+			content: '\f054';
+			font-family: $font-awesome-5;
+			font-size: $font-size-sm;
+			font-weight: 900;
+			height:1.25rem;
+			width:.5rem;
+		}
+		&:not(.collapsed) {
+			background-color:#2e3650;
+			&::after{
+				transform: rotate(90deg);
+    			transition: all .2s ease;
+			}
+		}
+	}
+
+	.accordion {
+		padding-top: .25rem;
+	}
+
+	.accordion-body {
+		padding: .5rem 0 0 0;
+	}
+
+	.accordion-collapse{
+		border:0;
+	}
 }
 
 .sidebar-heading {
@@ -169,13 +218,12 @@
 
 .content {
 
-	overflow: hidden;
+	overflow: visible;
 	padding: 0 $spacer 0 $spacer;
 	@include transition(all .3s);
 
-	@include media-breakpoint-up(lg) {
+	@include media-breakpoint-up(md) {
 		margin-left: 260px;
-		margin-right: 260px;
 	}
 }
 
@@ -186,7 +234,25 @@
 	&:focus {
 		outline: none;
 		box-shadow: none;
-		background: $gray-300;
+		background: $gray-400;
 	}
 
 }
+
+.sidebar-transition-enter {
+	opacity: 0;
+}
+
+.sidebar-transition-enter-active {
+	opacity: 1;
+	transition: opacity 200ms;
+}
+
+.sidebar-transition-exit {
+	opacity: 1;
+}
+
+.sidebar-transition-exit-active {
+	opacity: 0;
+	transition: opacity 200ms;
+  }

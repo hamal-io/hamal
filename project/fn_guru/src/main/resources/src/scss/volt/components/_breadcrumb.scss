@@ -17,6 +17,15 @@
     font-weight: $breadcrumb-active-font-weight;
   }
 
+  + .breadcrumb-item {
+    &:before{
+      content: "\f101";
+      font-family: $font-awesome-5;
+      font-weight: 900;
+      color: $breadcrumb-divider-color;
+    }
+  }
+  
 }
 
 .breadcrumb-transparent {

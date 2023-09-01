@@ -2,7 +2,7 @@
  * = Sidebars
  */
 
- #doc-index:not(.collapse.show), .doc-sidebar {
+#doc-index:not(.collapse.show), .doc-sidebar {
     display: none;
 }
 
@@ -32,3 +32,11 @@
         }
     } 
 }  
+
+.upgrade-to-pro {
+    position: fixed;
+    left: 15px;
+    bottom: 15px;
+    width: 230px;
+    z-index: 999;
+}

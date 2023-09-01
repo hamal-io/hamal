@@ -28,9 +28,4 @@
     }
 }
 
-@each $color, $value in $theme-colors {
-    .modal-#{$color} {
-        @include modal-variant($value);
-    }
-}
 
