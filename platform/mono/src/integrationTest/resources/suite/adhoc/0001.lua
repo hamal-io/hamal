@@ -1,6 +1,6 @@
-local sys = require('sys')
+sys = require('sys')
 
-local err, res = sys.adhoc({
+err, res = sys.adhoc({
     inputs = {},
     code = [[
         print("inner code execution")
@@ -10,12 +10,12 @@ local err, res = sys.adhoc({
 sys.await_completed(res)
 
 assert(err == nil)
-local exec_id = res.id
+exec_id = res.id
 
 -- Remember: Each test is an adhoc invocation
-local err, execs = sys.exec.list()
+err, execs = sys.exec.list()
 assert(err == nil)
 assert(#execs == 2)
 
-local exec = execs[1]
+exec = execs[1]
 assert(exec.id == exec_id)

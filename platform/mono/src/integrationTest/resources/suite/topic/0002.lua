@@ -1,6 +1,6 @@
-local sys = require("sys")
+sys = require("sys")
 
-local err, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })
+err, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })
 assert(err == nil)
 assert(topic_one_req.req_id ~= nil)
 assert(topic_one_req.status == 'Submitted')

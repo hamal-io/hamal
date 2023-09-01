@@ -1,5 +1,5 @@
-local sys = require('sys')
+sys = require('sys')
 --
-local error = sys.func.get('123123123')
-assert(error.message == 'Func not found')
-assert(error['message'] == 'Func not found')
+err = sys.func.get('123123123')
+assert(err.message == 'Func not found')
+assert(err['message'] == 'Func not found')

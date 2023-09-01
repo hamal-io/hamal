@@ -1,10 +1,10 @@
-local sys = require("sys")
+sys = require("sys")
 
-local err, topics = sys.topic.list()
+err, topics = sys.topic.list()
 assert(err == nil)
 assert(#topics == 0)
 
-local err, topic_one_req = sys.topic.create({ name = "topic-one" })
+err, topic_one_req = sys.topic.create({ name = "topic-one" })
 assert(err == nil)
 assert(topic_one_req.req_id ~= nil)
 assert(topic_one_req.status == 'Submitted')

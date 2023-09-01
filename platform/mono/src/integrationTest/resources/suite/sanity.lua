@@ -1,1 +1,1 @@
-print("[X] Test")
+print("[X] Sanity Check")

@@ -1,11 +1,11 @@
-local sys = require('sys')
+sys = require('sys')
 
-local _, req = sys.topic.create({ name = "topic-one" })
+_, req = sys.topic.create({ name = "topic-one" })
 sys.await(req)
 
-local _, topic_id = sys.topic.resolve('topic-one')
+_, topic_id = sys.topic.resolve('topic-one')
 
-local err, entries = sys.topic.list_entries(topic_id)
+err, entries = sys.topic.list_entries(topic_id)
 assert(err == nil)
 assert(#entries == 0)
 

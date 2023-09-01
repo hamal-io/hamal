@@ -1,6 +1,6 @@
-local sys = require('sys')
+sys = require('sys')
 
-local err, create_func_req = sys.func.create({
+err, create_func_req = sys.func.create({
     name = 'empty-test-func',
     inputs = {},
     code = [[4 + 2]]
@@ -14,7 +14,7 @@ assert(create_func_req.req_id ~= nil)
 assert(create_func_req.status == 'Submitted')
 assert(create_func_req.id ~= nil)
 
-local err, func = sys.func.get(create_func_req.id)
+err, func = sys.func.get(create_func_req.id)
 assert(err == nil)
 
 assert(func.id == create_func_req.id)

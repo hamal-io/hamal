@@ -1,15 +1,15 @@
-local sys = require('sys')
+sys = require('sys')
 
 _, namespace_req = sys.namespace.create({ name = 'namespace-1' })
 
-local _, create_func_req = sys.func.create({ name = 'empty-test-func'; inputs = {}; code = [[4 + 2]] })
+_, create_func_req = sys.func.create({ name = 'empty-test-func'; inputs = {}; code = [[4 + 2]] })
 sys.await_completed(create_func_req)
 
-local _, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })
+_, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })
 sys.await(topic_one_req)
 
 -- trigger name is unique
-local err, trigger_req = sys.trigger.create_event({
+err, trigger_req = sys.trigger.create_event({
     func_id = create_func_req.id,
     namespace_id = nil,
     name = 'trigger-to-create',
@@ -29,7 +29,7 @@ err, trigger_req = sys.trigger.create_event({
 assert(err == nil)
 assert(sys.await_failed(trigger_req) == nil)
 
-local _, triggers = sys.trigger.list()
+_, triggers = sys.trigger.list()
 assert(#triggers == 1)
 
 -- same name different namespace
@@ -43,5 +43,5 @@ err, trigger_req = sys.trigger.create_event({
 assert(err == nil)
 sys.await_completed(trigger_req)
 
-local _, triggers = sys.trigger.list()
+_, triggers = sys.trigger.list()
 assert(#triggers == 2)

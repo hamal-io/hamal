@@ -1,16 +1,16 @@
-local sys = require('sys')
+sys = require('sys')
 
-local err, funcs = sys.func.list()
+err, funcs = sys.func.list()
 assert(err == nil)
 assert(#funcs == 0)
 
-local err, func_one_req = sys.func.create({ name = 'func-1' })
+err, func_one_req = sys.func.create({ name = 'func-1' })
 sys.await_completed(func_one_req)
 
 assert(err == nil)
 assert(func_one_req ~= nil)
 --
-local _, funcs = sys.func.list()
+_, funcs = sys.func.list()
 assert(#funcs == 1)
 
 assert(func_one_req.id == funcs[1].id)

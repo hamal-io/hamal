@@ -1,8 +1,8 @@
-local sys = require('sys')
+sys = require('sys')
 
-local _, req = sys.topic.create({ name = "topic-one" })
+_, req = sys.topic.create({ name = "topic-one" })
 sys.await(req)
 
-local error, topic_id = sys.topic.resolve('topic-one')
-assert(error == nil)
+err, topic_id = sys.topic.resolve('topic-one')
+assert(err == nil)
 assert(topic_id ~= nil)

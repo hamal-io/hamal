@@ -1,12 +1,12 @@
-local sys = require('sys')
+sys = require('sys')
 
-local err, namespaces = sys.namespace.list()
+err, namespaces = sys.namespace.list()
 assert(err == nil)
 
 -- hamal as default namespace
 assert(#namespaces == 1)
 
-local err, namespace_one_req = sys.namespace.create({
+err, namespace_one_req = sys.namespace.create({
     name = 'namespace-1'
 })
 
@@ -15,7 +15,7 @@ sys.await_completed(namespace_one_req)
 assert(err == nil)
 assert(namespace_one_req ~= nil)
 --
-local _, namespaces = sys.namespace.list()
+_, namespaces = sys.namespace.list()
 assert(#namespaces == 2)
 
 assert(namespace_one_req.id == namespaces[1].id)
