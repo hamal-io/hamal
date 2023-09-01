@@ -6,11 +6,10 @@ import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.SystemEvent
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
-import org.jetbrains.annotations.TestOnly
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 
-class InMemoryMetrics : MetricRepository {
+object MemoryMetricRepository : MetricRepository {
 
     private val lock = ReentrantReadWriteLock()
     private val timer: Long = System.currentTimeMillis()
@@ -41,7 +40,7 @@ class InMemoryMetrics : MetricRepository {
         val writeLock = lock.writeLock()
         writeLock.lock()
         try {
-            if (!eventMap.containsKey(key)) throw NoSuchElementException("${key} not found")
+            if (!eventMap.containsKey(key)) throw NoSuchElementException("$key not found")
             eventMap[key] = eventMap.getOrDefault(key, 0) + 1
         } finally {
             writeLock.unlock()
@@ -50,15 +49,12 @@ class InMemoryMetrics : MetricRepository {
 
     override fun getData(): AccessMetrics {
         return object : AccessMetrics {
-            val mTimer = timer
-            val mMap = eventMap.clone() as LinkedHashMap<SystemEvent, Int>
-
             override fun getTime(): Long {
-                return mTimer
+                return timer
             }
 
             override fun getMap(): LinkedHashMap<SystemEvent, Int> {
-                return mMap;
+                return LinkedHashMap(eventMap.toMap())
             }
         }
     }
@@ -81,7 +77,7 @@ class InMemoryMetrics : MetricRepository {
     }
 
 
-    override fun reset() {
+    override fun clear() {
         val writeLock = lock.writeLock()
         writeLock.lock()
         try {

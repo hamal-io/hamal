@@ -1,6 +1,7 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.repository.api.*
+import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryReqRepository
 import io.hamal.repository.memory.MemoryStateRepository
@@ -143,4 +144,7 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
+
+    @Bean
+    open fun metricRepository(): MetricRepository = MemoryMetricRepository
 }

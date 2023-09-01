@@ -3,22 +3,12 @@ package io.hamal.backend.instance.service
 import io.hamal.backend.instance.event.events.*
 import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.SystemEvent
+import org.springframework.stereotype.Service
 
+@Service
+class MetricService(private val repo: MetricRepository) {
 
-interface MetricProvider{
-    fun addObserver(observer: MetricObserver)
-    fun removeObserver(observer: MetricObserver)
-    fun <T> notifyObservers(event: T)
-}
-
-interface MetricObserver{
-    fun handle(event: InstanceEvent)
-}
-
-class MetricService(val repo: MetricRepository) : MetricObserver {
-
-
-    override fun handle(event: InstanceEvent) {
+    fun handleEvent(event: InstanceEvent) {
         when (event) {
             is ExecutionCompletedEvent -> repo.update(SystemEvent.ExecutionCompletedEvent)
             is ExecPlannedEvent -> repo.update(SystemEvent.ExecPlannedEvent)

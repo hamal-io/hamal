@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 
-class InMemoryMetricsTest {
+class MemoryMetricTest {
 
 
     @Test
     fun mapTest() {
-        val repo: MetricRepository = InMemoryMetrics()
+        val repo: MetricRepository = MemoryMetricRepository
         repo.update(SystemEvent.ExecutionCompletedEvent)
         val mp = repo.getData().getMap()
         Assertions.assertTrue(mp[SystemEvent.ExecutionCompletedEvent] == 1)
@@ -20,10 +20,10 @@ class InMemoryMetricsTest {
 
     @Test
     fun resetTest() {
-        val repo: MetricRepository = InMemoryMetrics()
+        val repo: MetricRepository = MemoryMetricRepository
         repo.update(SystemEvent.ExecutionCompletedEvent)
         repo.update(SystemEvent.ExecutionFailedEvent)
-        repo.reset()
+        repo.clear()
         val mp = repo.getData().getMap()
         Assertions.assertTrue(mp[SystemEvent.ExecutionCompletedEvent] == 0)
         Assertions.assertTrue(mp[SystemEvent.ExecutionFailedEvent] == 0)
@@ -33,7 +33,7 @@ class InMemoryMetricsTest {
 
     @Test
     fun except() {
-        val repo: MetricRepository = InMemoryMetrics()
+        val repo: MetricRepository = MemoryMetricRepository
         val thrown = Assertions.assertThrows(NoSuchElementException::class.java) {
             repo.update(SystemEvent.NamespaceCreatedEvent)
         }
@@ -42,7 +42,7 @@ class InMemoryMetricsTest {
 
     @Test
     fun lockTest() {
-        val repo: MetricRepository = InMemoryMetrics()
+        val repo: MetricRepository = MemoryMetricRepository
         val t1 = Thread {
             for (i in 1..50) {
                 repo.update(SystemEvent.ExecutionFailedEvent)
