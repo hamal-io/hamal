@@ -1,6 +1,6 @@
 package io.hamal.backend.instance.event
 
-import io.hamal.backend.instance.event.events.InstanceEvent
+import io.hamal.backend.instance.event.event.InstanceEvent
 import kotlin.reflect.KClass
 
 class InstanceEventContainerFactory {

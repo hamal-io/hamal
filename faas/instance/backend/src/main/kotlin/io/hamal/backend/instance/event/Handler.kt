@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.event
 
-import io.hamal.backend.instance.event.events.InstanceEvent
-import io.hamal.backend.instance.event.events.topicName
+import io.hamal.backend.instance.event.event.InstanceEvent
+import io.hamal.backend.instance.event.event.topicName
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
 import java.util.concurrent.locks.ReentrantReadWriteLock

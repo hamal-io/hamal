@@ -1,6 +1,5 @@
 # Hamal
 
-java -Dspring.profiles.active=memory -jar bootstrap/build/libs/bootstrap.jar
-java -Dspring.profiles.active=sqlite -jar bootstrap/build/libs/bootstrap.jar
-
-
+- Function
+- Trigger
+    - is a function which emits one or multiple invocation events

@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.service
 
-import io.hamal.backend.instance.event.events.*
 import io.hamal.repository.api.MetricRepository
+import io.hamal.backend.instance.event.event.*
 import io.hamal.repository.api.SystemEvent
 import org.springframework.stereotype.Service
 

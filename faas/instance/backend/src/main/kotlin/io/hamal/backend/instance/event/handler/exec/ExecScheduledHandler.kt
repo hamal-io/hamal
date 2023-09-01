@@ -2,8 +2,8 @@ package io.hamal.backend.instance.event.handler.exec
 
 import io.hamal.backend.instance.event.InstanceEventEmitter
 import io.hamal.backend.instance.event.InstanceEventHandler
-import io.hamal.backend.instance.event.events.ExecScheduledEvent
-import io.hamal.backend.instance.event.events.ExecutionQueuedEvent
+import io.hamal.backend.instance.event.event.ExecScheduledEvent
+import io.hamal.backend.instance.event.event.ExecutionQueuedEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.QueueCmd

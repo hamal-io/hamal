@@ -1,7 +1,7 @@
 package io.hamal.backend.instance.req.handler.state
 
 import io.hamal.backend.instance.event.InstanceEventEmitter
-import io.hamal.backend.instance.event.events.StateUpdatedEvent
+import io.hamal.backend.instance.event.event.StateUpdatedEvent
 import io.hamal.backend.instance.req.ReqHandler
 import io.hamal.backend.instance.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
