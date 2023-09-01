@@ -59,11 +59,6 @@ internal object BuildDirLoader : Loader {
     private val once = Once.default<Boolean>()
 }
 
-
-fun main() {
-    BuildDirLoader.load()
-}
-
 internal object ResourcesLoader : Loader {
     override fun load(): Boolean {
         return once {
@@ -97,8 +92,8 @@ internal object JarLoader : Loader {
         return once {
             try {
                 NativeUtils.loadLibraryFromJar("/$luaFile")
-                NativeUtils.loadLibraryFromJar("/$kuaFile")
                 NativeUtils.loadLibraryFromJar("/$mpdecimal")
+                NativeUtils.loadLibraryFromJar("/$kuaFile")
                 true
             } catch (t: Throwable) {
                 false
