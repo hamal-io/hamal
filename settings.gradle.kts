@@ -2,15 +2,6 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
-
-
-toolchainManagement {
-    jvm {
-    }
-}
-
-
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
@@ -72,6 +63,7 @@ include(":platform:lib:sdk")
 include(":platform:lib:sqlite")
 include(":platform:lib:web3")
 
+include(":project")
 include(":web3proxy")
 
 rootProject.name = "hamal"

@@ -1,8 +1,8 @@
 package io.hamal.backend.instance.config
 
 import io.hamal.repository.api.*
-import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
+import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryReqRepository
 import io.hamal.repository.memory.MemoryStateRepository
 import io.hamal.repository.memory.log.MemoryBrokerRepository
@@ -89,6 +89,9 @@ open class SqliteRepositoryConfig {
 
     @Bean
     open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+
+    @Bean
+    open fun metricRepository(): MetricRepository = MemoryMetricRepository
 
     private val path = Path("/tmp/hamal/instance")
 }
