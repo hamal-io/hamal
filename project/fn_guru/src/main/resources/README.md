@@ -180,7 +180,7 @@ Volt React Dashboard
 │   │   ├── Documentation.jsx
 │   │   ├── Footer.jsx
 │   │   ├── Forms.jsx
-│   │   ├── Navbar.jsx
+│   │   ├── index.tsx
 │   │   ├── Preloader.jsx
 │   │   ├── Progress.jsx
 │   │   ├── ScrollToTop.jsx
@@ -199,7 +199,7 @@ Volt React Dashboard
 │   ├── index.tsx
 │   ├── pages
 │   │   ├── HomePage.tsx
-│   │   ├── Presentation.tsx
+│   │   ├── HomePage.tsx
 │   │   ├── Settings.jsx
 │   │   ├── Transactions.jsx
 │   │   ├── components

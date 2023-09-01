@@ -1,147 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import { Routes } from "../routes";
+import React from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    faDownload,
+    faExternalLinkAlt,
+    faPager
+} from "@fortawesome/free-solid-svg-icons";
+import {faBootstrap, faReact, faSass} from "@fortawesome/free-brands-svg-icons";
+import {Badge, Button, Card, Col, Container, Image, Nav, Navbar, Row} from '@themesberg/react-bootstrap';
+import MockupPresentation from "../assets/img/mockup-presentation.png";
+import ReactHero from "../assets/img/technologies/react-hero-logo.svg";
+import Footer from "./components/footer";
+import GitHubButton from "react-github-btn";
 
-// pages
-// import Presentation from "./Presentation";
-// import Upgrade from "./Upgrade";
-// import DashboardOverview from "./dashboard/DashboardOverview";
-// import Transactions from "./Transactions";
-// import Settings from "./Settings";
-// import BootstrapTables from "./tables/BootstrapTables";
-// import Signin from "./examples/Signin";
-// import Signup from "./examples/Signup";
-// import ForgotPassword from "./examples/ForgotPassword";
-// import ResetPassword from "./examples/ResetPassword";
-// import Lock from "./examples/Lock";
-// import NotFoundPage from "./examples/NotFound";
-// import ServerError from "./examples/ServerError";
-//
-// // documentation pages
-// import DocsOverview from "./documentation/DocsOverview";
-// import DocsDownload from "./documentation/DocsDownload";
-// import DocsQuickStart from "./documentation/DocsQuickStart";
-// import DocsLicense from "./documentation/DocsLicense";
-// import DocsFolderStructure from "./documentation/DocsFolderStructure";
-// import DocsBuild from "./documentation/DocsBuild";
-// import DocsChangelog from "./documentation/DocsChangelog";
-//
-// // components
-// import Sidebar from "../components/Sidebar";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-// import Preloader from "../components/Preloader";
-//
-// import Accordion from "./components/Accordion";
-// import Alerts from "./components/Alerts";
-// import Badges from "./components/Badges";
-// import Breadcrumbs from "./components/Breadcrumbs";
-// import Buttons from "./components/Buttons";
-// import Forms from "./components/Forms";
-// import Modals from "./components/Modals";
-// import Navs from "./components/Navs";
-// import Navbars from "./components/Navbars";
-// import Pagination from "./components/Pagination";
-// import Popovers from "./components/Popovers";
-// import Progress from "./components/Progress";
-// import Tables from "./components/Tables";
-// import Tabs from "./components/Tabs";
-// import Tooltips from "./components/Tooltips";
-// import Toasts from "./components/Toasts";
+export default () => {
 
-const RouteWithLoader = ({ component: Component, ...rest }) => {
-  const [loaded, setLoaded] = useState(false);
+    return (
+        <>
+            <Navbar variant="dark" expand="lg" bg="dark" className="navbar-transparent navbar-theme-primary sticky-top">
+                <Container className="position-relative justify-content-between px-3">
+                    <Navbar.Brand className="me-lg-3 d-flex align-items-center">
+                        <Image src={ReactHero}/>
+                        <span className="ms-2 brand-text d-none d-md-inline">Volt React</span>
+                    </Navbar.Brand>
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <Route {...rest} render={props => ( <> <Preloader show={loaded ? false : true} /> <Component {...props} /> </> ) } />
-  );
+                    <div className="d-flex align-items-center">
+                        <Navbar.Collapse id="navbar-default-primary">
+                            <Nav className="navbar-nav-hover align-items-lg-center">
+                                <Nav.Link>Features</Nav.Link>
+                                <Nav.Link>Pages</Nav.Link>
+                                <Nav.Link className="d-sm-none d-xl-inline">Folder Structure</Nav.Link>
+                                <Nav.Link>Getting Started</Nav.Link>
+                                <Nav.Link>Upgrade to Pro</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Button variant="outline-white" className="ms-3"><FontAwesomeIcon icon={faDownload}
+                                                                                          className="me-1"/> Download</Button>
+                    </div>
+                </Container>
+            </Navbar>
+            <section className="section-header overflow-hidden pt-5 pt-lg-6 pb-9 pb-lg-12 bg-primary text-white"
+                     id="home">
+                <Container>
+                    <Row>
+                        <Col xs={12} className="text-center">
+                            <div className="react-big-icon d-none d-lg-block"><span className="fab fa-react"></span>
+                            </div>
+                            <h1 className="fw-bolder text-secondary">Volt React Dashboard</h1>
+                            <p className="text-muted fw-light mb-5 h5">Open source powered by React.js and Bootstrap
+                                5</p>
+                            <div className="d-flex align-items-center justify-content-center">
+                                <Button variant="secondary" className="text-dark me-3">
+                                    Explore dashboard <FontAwesomeIcon icon={faExternalLinkAlt}
+                                                                       className="d-none d-sm-inline ms-1"/>
+                                </Button>
+                                <GitHubButton className="mt-lg-2"
+                                              href="https://github.com/themesberg/volt-react-dashboard"
+                                              data-size="large"
+                                              data-show-count="true"
+                                              aria-label="Star themesberg/volt-react-dashboard on GitHub">Star</GitHubButton>
+                            </div>
+                        </Col>
+                    </Row>
+                    <figure className="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
+                        <svg className="fill-soft" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
+                            <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"/>
+                        </svg>
+                    </figure>
+                </Container>
+            </section>
+            <div className="section pt-0">
+                <Container className="mt-n10 mt-lg-n12 z-2">
+                    <Row className="justify-content-center">
+                        <Col xs={12}>
+                            <Image src={MockupPresentation} alt="Mockup presentation"/>
+                        </Col>
+                    </Row>
+                    <Row className="justify-content-center mt-5 mt-lg-6">
+                        <Col xs={6} md={3} className="text-center mb-4">
+                            <div
+                                className="icon icon-shape icon-lg bg-white shadow-lg border-light rounded-circle mb-4">
+                                <FontAwesomeIcon icon={faPager} className="text-secondary"/>
+                            </div>
+                            <h3 className="fw-bolder">10</h3>
+                            <p className="text-gray">Example Pages</p>
+                        </Col>
+                        <Col xs={6} md={3} className="text-center mb-4">
+                            <div
+                                className="icon icon-shape icon-lg bg-white shadow-lg border-light rounded-circle mb-4">
+                                <FontAwesomeIcon icon={faReact} className="text-secondary"/>
+                            </div>
+                            <h3 className="fw-bolder">100+</h3>
+                            <p className="text-gray">React Components</p>
+                        </Col>
+                        <Col xs={6} md={3} className="text-center">
+                            <div
+                                className="icon icon-shape icon-lg bg-white shadow-lg border-light rounded-circle mb-4">
+                                <FontAwesomeIcon icon={faSass} className="text-secondary"/>
+                            </div>
+                            <h3 className="fw-bolder">Workflow</h3>
+                            <p className="text-gray">Sass & react-app</p>
+                        </Col>
+                        <Col xs={6} md={3} className="text-center">
+                            <div
+                                className="icon icon-shape icon-lg bg-white shadow-lg border-light rounded-circle mb-4">
+                                <FontAwesomeIcon color="secondary" icon={faBootstrap} className="text-secondary"/>
+                            </div>
+                            <h3 className="fw-bolder">Bootstrap 5</h3>
+                            <p className="text-gray">CSS Framework</p>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+            <Footer/>
+        </>
+    );
 };
-
-const RouteWithSidebar = ({ component: Component, ...rest }) => {
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const localStorageIsSettingsVisible = () => {
-    return localStorage.getItem('settingsVisible') === 'false' ? false : true
-  }
-
-  const [showSettings, setShowSettings] = useState(localStorageIsSettingsVisible);
-
-  const toggleSettings = () => {
-    setShowSettings(!showSettings);
-    localStorage.setItem('settingsVisible', !showSettings);
-  }
-
-  return (
-    <Route {...rest} render={props => (
-      <>
-        <Preloader show={loaded ? false : true} />
-        <Sidebar />
-
-        <main className="content">
-          <Navbar />
-          <Component {...props} />
-          <Footer toggleSettings={toggleSettings} showSettings={showSettings} />
-        </main>
-      </>
-    )}
-    />
-  );
-};
-
-export default () => (
-  <Switch>
-    <RouteWithLoader exact path={Routes.Presentation.path} component={Presentation} />
-    <RouteWithLoader exact path={Routes.Signin.path} component={Signin} />
-    <RouteWithLoader exact path={Routes.Signup.path} component={Signup} />
-    <RouteWithLoader exact path={Routes.ForgotPassword.path} component={ForgotPassword} />
-    <RouteWithLoader exact path={Routes.ResetPassword.path} component={ResetPassword} />
-    <RouteWithLoader exact path={Routes.Lock.path} component={Lock} />
-    <RouteWithLoader exact path={Routes.NotFound.path} component={NotFoundPage} />
-    <RouteWithLoader exact path={Routes.ServerError.path} component={ServerError} />
-
-    {/* pages */}
-    <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
-    <RouteWithSidebar exact path={Routes.Upgrade.path} component={Upgrade} />
-    <RouteWithSidebar exact path={Routes.Transactions.path} component={Transactions} />
-    <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
-    <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
-
-    {/* components */}
-    <RouteWithSidebar exact path={Routes.Accordions.path} component={Accordion} />
-    <RouteWithSidebar exact path={Routes.Alerts.path} component={Alerts} />
-    <RouteWithSidebar exact path={Routes.Badges.path} component={Badges} />
-    <RouteWithSidebar exact path={Routes.Breadcrumbs.path} component={Breadcrumbs} />
-    <RouteWithSidebar exact path={Routes.Buttons.path} component={Buttons} />
-    <RouteWithSidebar exact path={Routes.Forms.path} component={Forms} />
-    <RouteWithSidebar exact path={Routes.Modals.path} component={Modals} />
-    <RouteWithSidebar exact path={Routes.Navs.path} component={Navs} />
-    <RouteWithSidebar exact path={Routes.Navbars.path} component={Navbars} />
-    <RouteWithSidebar exact path={Routes.Pagination.path} component={Pagination} />
-    <RouteWithSidebar exact path={Routes.Popovers.path} component={Popovers} />
-    <RouteWithSidebar exact path={Routes.Progress.path} component={Progress} />
-    <RouteWithSidebar exact path={Routes.Tables.path} component={Tables} />
-    <RouteWithSidebar exact path={Routes.Tabs.path} component={Tabs} />
-    <RouteWithSidebar exact path={Routes.Tooltips.path} component={Tooltips} />
-    <RouteWithSidebar exact path={Routes.Toasts.path} component={Toasts} />
-
-    {/* documentation */}
-    <RouteWithSidebar exact path={Routes.DocsOverview.path} component={DocsOverview} />
-    <RouteWithSidebar exact path={Routes.DocsDownload.path} component={DocsDownload} />
-    <RouteWithSidebar exact path={Routes.DocsQuickStart.path} component={DocsQuickStart} />
-    <RouteWithSidebar exact path={Routes.DocsLicense.path} component={DocsLicense} />
-    <RouteWithSidebar exact path={Routes.DocsFolderStructure.path} component={DocsFolderStructure} />
-    <RouteWithSidebar exact path={Routes.DocsBuild.path} component={DocsBuild} />
-    <RouteWithSidebar exact path={Routes.DocsChangelog.path} component={DocsChangelog} />
-
-    <Redirect to={Routes.NotFound.path} />
-  </Switch>
-);
