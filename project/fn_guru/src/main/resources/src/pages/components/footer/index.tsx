@@ -9,7 +9,7 @@ interface FooterProps {
 export default (props: FooterProps) => {
     const currentYear = moment().get("year");
     return (
-        <footer className="footer py-6 bg-dark text-white">
+        <footer className="footer bg-dark text-white">
             <Container>
                 <Row>
                     <Col md={4}>

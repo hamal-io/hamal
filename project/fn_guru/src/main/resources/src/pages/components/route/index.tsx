@@ -1,17 +1,13 @@
 import React, {useEffect, useState} from "react";
-import Preloader from "../preloader";
-import Sidebar from "../sidebar";
-import Footer from "../../pages/components/footer";
-import {Badge, Container, Image, Nav, Tab, TabPane} from "@themesberg/react-bootstrap";
-import {CSSTransition} from "react-transition-group";
-import SimpleBar from "simplebar-react";
+import Preloader from "../../../components/preloader";
+import Footer from "../footer";
+import {Badge, Image, Nav} from "@themesberg/react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import {Routes} from "../../routes";
 import {Link} from "react-router-dom";
 import Navbar from "../navbar";
+import Sidebar from "../sidebar";
 
-export const RouteWithNavbar = (props: any) => {
+export const RouteWithSidebar = (props: any) => {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
@@ -65,13 +61,12 @@ export const RouteWithNavbar = (props: any) => {
     return (
         <>
             <Preloader show={!loaded}/>
-            <Navbar/>
+            <Sidebar/>
             <main className="content">
+                <Navbar/>
                 {props.component}
-                <Footer toggleSettings={toggleSettings} showSettings={showSettings}/>
             </main>
         </>
     )
-
 }
 

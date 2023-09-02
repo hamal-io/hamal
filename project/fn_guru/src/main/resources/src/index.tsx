@@ -21,6 +21,7 @@ import Signin from "./pages/SigninPage";
 import Signup from "./pages/SignupPage";
 import Toc from "./pages/TocPage";
 import DashboardPage from "./pages/dashboard";
+import {RouteWithSidebar} from "./pages/components/route";
 
 
 const container = document.getElementById('root');
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
     {path: "/sign-in", element: <Signin/>},
     {path: "/sign-up", element: <Signup/>},
     {path: "/toc", element: <Toc/>},
-    {path: "/dashboard", element: <DashboardPage/>},
+    {path: "/dashboard", element: <RouteWithSidebar component={<DashboardPage/>}/>},
 ]);
 
 root.render(

@@ -27,9 +27,9 @@ export default (props: NavbarProps) => {
                         <Dropdown as={Nav.Item}>
                             <Dropdown.Toggle as={Nav.Link} className="pt-1 px-0">
                                 <div className="media d-flex align-items-center">
-                                    <Image className="user-avatar md-avatar rounded-circle"/>
+                                    {/*<Image className="user-avatar md-avatar rounded-circle"/>*/}
                                     <div className="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                                        <span className="mb-0 font-small fw-bold">Bonnie Green</span>
+                                        <span className="mb-0 font-small fw-bold">F. Guru</span>
                                     </div>
                                 </div>
                             </Dropdown.Toggle>
