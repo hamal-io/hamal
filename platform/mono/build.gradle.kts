@@ -33,8 +33,8 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":platform:instance:backend"))
-    implementation(project(":platform:instance:frontend"))
+    implementation(project(":platform:hub:backend"))
+    implementation(project(":platform:hub:frontend"))
     implementation(project(":platform:runner"))
 }
 
@@ -58,9 +58,9 @@ testing {
                     }
 
                     implementation(project(":platform:lib:kua"))
-                    implementation(project(":platform:instance:backend"))
-                    implementation(project(":platform:instance:repository:api"))
-                    implementation(project(":platform:instance:frontend"))
+                    implementation(project(":platform:hub:backend"))
+                    implementation(project(":platform:hub:repository:api"))
+                    implementation(project(":platform:hub:frontend"))
                     implementation(project(":platform:runner"))
                     implementation(project(":platform:runner-extension:std:sys"))
                     implementation(project(":platform:runner-extension:std:log"))

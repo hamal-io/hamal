@@ -32,15 +32,15 @@ dependencyResolutionManagement {
     }
 }
 
-include(":platform:instance")
-include(":platform:instance:backend")
-include(":platform:instance:bootstrap")
-include(":platform:instance:frontend")
-include(":platform:instance:repository:api")
-include(":platform:instance:repository:memory")
-include(":platform:instance:repository:record")
-include(":platform:instance:repository:sqlite")
-include(":platform:instance:repository:testbed")
+include(":platform:hub")
+include(":platform:hub:backend")
+include(":platform:hub:bootstrap")
+include(":platform:hub:frontend")
+include(":platform:hub:repository:api")
+include(":platform:hub:repository:memory")
+include(":platform:hub:repository:record")
+include(":platform:hub:repository:sqlite")
+include(":platform:hub:repository:testbed")
 include(":platform:mono")
 
 include(":platform:runner")

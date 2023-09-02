@@ -10,9 +10,9 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:instance:repository:api"))
-                    implementation(project(":platform:instance:repository:memory"))
-                    implementation(project(":platform:instance:repository:sqlite"))
+                    implementation(project(":platform:hub:repository:api"))
+                    implementation(project(":platform:hub:repository:memory"))
+                    implementation(project(":platform:hub:repository:sqlite"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)
