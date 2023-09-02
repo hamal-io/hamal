@@ -63,7 +63,9 @@ export default (props: SignUpProps) => {
                                         </FormCheck.Label>
                                     </FormCheck>
 
-                                    <Button variant="primary" type="submit" className="w-100">
+                                    <Button variant="primary" type="submit" className="w-100" onClick={
+                                        _ => navigate("/dashboard")
+                                    }>
                                         Sign up
                                     </Button>
                                 </Form>

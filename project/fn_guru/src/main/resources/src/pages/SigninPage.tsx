@@ -3,12 +3,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleLeft, faEnvelope, faUnlockAlt} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {Col, Row, Form, Card, Button, FormCheck, Container, InputGroup} from '@themesberg/react-bootstrap';
+import {useNavigate} from "react-router-dom";
 
 interface SignInProps {
 
 }
 
 export default (props: SignInProps) => {
+    const navigate = useNavigate()
     return (
         <main>
             <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -31,8 +33,11 @@ export default (props: SignInProps) => {
                                             <InputGroup.Text>
                                                 <FontAwesomeIcon icon={faEnvelope}/>
                                             </InputGroup.Text>
-                                            <Form.Control autoFocus required type="email"
-                                                          placeholder="example@company.com"/>
+                                            <Form.Control
+                                                // autoFocus
+                                                // required
+                                                type="email"
+                                                placeholder="example@company.com"/>
                                         </InputGroup>
                                     </Form.Group>
                                     <Form.Group>
@@ -42,7 +47,11 @@ export default (props: SignInProps) => {
                                                 <InputGroup.Text>
                                                     <FontAwesomeIcon icon={faUnlockAlt}/>
                                                 </InputGroup.Text>
-                                                <Form.Control required type="password" placeholder="Password"/>
+                                                <Form.Control
+                                                    // required
+                                                    type="password"
+                                                    placeholder="Password"
+                                                />
                                             </InputGroup>
                                         </Form.Group>
                                         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -54,7 +63,9 @@ export default (props: SignInProps) => {
                                             <Card.Link className="small text-end">Lost password?</Card.Link>
                                         </div>
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" className="w-100">
+                                    <Button variant="primary" type="submit" className="w-100" onClick={
+                                        _ => navigate("/dashboard")
+                                    }>
                                         Sign in
                                     </Button>
                                 </Form>
