@@ -1,10 +1,11 @@
 plugins {
     id("hamal.extension")
+
 }
 
 
 tasks.jar {
-    archiveFileName.set("extension-net-http.jar")
+    archiveFileName.set("extension-web3.jar")
 }
 
 distributions {
@@ -27,7 +28,7 @@ distributions {
 
 dependencies {
     implementation(project(":platform:lib:kua"))
-    implementation(project(":platform:lib:http"))
+    implementation(project(":platform:lib:web3"))
 }
 
 
@@ -37,19 +38,10 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:extension:std:test"))
-                    implementation(project(":platform:extension:net:http"))
-
+                    implementation(project(":platform:runner-extension:std:test"))
+                    implementation(project(":platform:runner-extension:web3"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
-                    implementation(external.spring.web) {
-                        exclude("com.fasterxml.jackson.core", "jackson-core")
-                        exclude("org.springframework.boot", "spring-boot-starter-json")
-                        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-                    }
-                    implementation(external.spring.test) {
-                        exclude("org.assertj", "*")
-                    }
                 }
             }
         }

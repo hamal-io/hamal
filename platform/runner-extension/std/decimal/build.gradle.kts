@@ -1,11 +1,10 @@
 plugins {
     id("hamal.extension")
-
 }
 
 
 tasks.jar {
-    archiveFileName.set("extension-web3.jar")
+    archiveFileName.set("extension-std-decimal.jar")
 }
 
 distributions {
@@ -28,7 +27,6 @@ distributions {
 
 dependencies {
     implementation(project(":platform:lib:kua"))
-    implementation(project(":platform:lib:web3"))
 }
 
 
@@ -38,10 +36,8 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:extension:std:test"))
-                    implementation(project(":platform:extension:web3"))
-                    implementation(external.junit)
-                    implementation(external.hamcrest)
+                    implementation(project(":platform:runner-extension:std:test"))
+                    implementation(project(":platform:runner-extension:std:decimal"))
                 }
             }
         }

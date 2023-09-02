@@ -28,11 +28,11 @@ dependencies {
     implementation(project(":platform:lib:web3"))
     implementation(project(":platform:lib:kua"))
 
-    implementation(project(":platform:extension:net:http"))
-    implementation(project(":platform:extension:std:decimal"))
-    implementation(project(":platform:extension:std:log"))
-    implementation(project(":platform:extension:std:sys"))
-    implementation(project(":platform:extension:web3"))
+    implementation(project(":platform:runner-extension:net:http"))
+    implementation(project(":platform:runner-extension:std:decimal"))
+    implementation(project(":platform:runner-extension:std:log"))
+    implementation(project(":platform:runner-extension:std:sys"))
+    implementation(project(":platform:runner-extension:web3"))
 
     implementation(external.spring.web) {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")

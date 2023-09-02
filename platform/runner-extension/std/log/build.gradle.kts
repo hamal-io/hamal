@@ -37,8 +37,8 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:extension:std:test"))
-                    implementation(project(":platform:extension:std:log"))
+                    implementation(project(":platform:runner-extension:std:test"))
+                    implementation(project(":platform:runner-extension:std:log"))
                 }
             }
         }

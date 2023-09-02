@@ -62,8 +62,8 @@ testing {
                     implementation(project(":platform:instance:repository:api"))
                     implementation(project(":platform:instance:frontend"))
                     implementation(project(":platform:runner"))
-                    implementation(project(":platform:extension:std:sys"))
-                    implementation(project(":platform:extension:std:log"))
+                    implementation(project(":platform:runner-extension:std:sys"))
+                    implementation(project(":platform:runner-extension:std:log"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

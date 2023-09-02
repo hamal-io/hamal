@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-std-decimal.jar")
+    archiveFileName.set("extension-net-http.jar")
 }
 
 distributions {
@@ -27,6 +27,7 @@ distributions {
 
 dependencies {
     implementation(project(":platform:lib:kua"))
+    implementation(project(":platform:lib:http"))
 }
 
 
@@ -36,8 +37,19 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:extension:std:test"))
-                    implementation(project(":platform:extension:std:decimal"))
+                    implementation(project(":platform:runner-extension:std:test"))
+                    implementation(project(":platform:runner-extension:net:http"))
+
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                    implementation(external.spring.web) {
+                        exclude("com.fasterxml.jackson.core", "jackson-core")
+                        exclude("org.springframework.boot", "spring-boot-starter-json")
+                        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+                    }
+                    implementation(external.spring.test) {
+                        exclude("org.assertj", "*")
+                    }
                 }
             }
         }
