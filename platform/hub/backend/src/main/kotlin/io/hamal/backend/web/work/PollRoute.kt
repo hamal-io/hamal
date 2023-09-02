@@ -1,7 +1,7 @@
 package io.hamal.backend.web.work
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.ExecutionStartedEvent
+import io.hamal.repository.api.event.ExecutionStartedEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.domain.ApiUnitOfWorkList

@@ -1,4 +1,4 @@
-package io.hamal.backend.event.event
+package io.hamal.repository.api.event
 
 import io.hamal.repository.api.Trigger
 import kotlinx.serialization.Serializable

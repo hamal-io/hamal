@@ -1,7 +1,7 @@
 package io.hamal.backend.event.handler.exec
 
 import io.hamal.backend.event.HubEventHandler
-import io.hamal.backend.event.event.ExecutionCompletedEvent
+import io.hamal.repository.api.event.ExecutionCompletedEvent
 import io.hamal.backend.service.MetricService
 import io.hamal.backend.service.OrchestrationService
 import io.hamal.lib.common.domain.CmdId

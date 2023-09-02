@@ -1,9 +1,9 @@
 package io.hamal.backend.event
 
-import io.hamal.backend.event.event.HubEvent
-import io.hamal.backend.event.event.topicName
+import io.hamal.repository.api.event.topicName
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.event.HubEvent
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 

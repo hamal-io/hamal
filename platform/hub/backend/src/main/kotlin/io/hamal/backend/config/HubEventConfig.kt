@@ -2,7 +2,7 @@ package io.hamal.backend.config
 
 import io.hamal.backend.event.HubEventContainerFactory
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.*
+import io.hamal.repository.api.event.*
 import io.hamal.backend.event.handler.exec.*
 import io.hamal.backend.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.backend.service.FixedRateTriggerService

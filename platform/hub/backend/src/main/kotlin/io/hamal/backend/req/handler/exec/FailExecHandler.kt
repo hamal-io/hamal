@@ -1,7 +1,7 @@
 package io.hamal.backend.req.handler.exec
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.ExecutionFailedEvent
+import io.hamal.repository.api.event.ExecutionFailedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.repository.api.submitted_req.SubmittedFailExecReq

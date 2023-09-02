@@ -1,6 +1,6 @@
 package io.hamal.backend.event
 
-import io.hamal.backend.event.event.HubEvent
+import io.hamal.repository.api.event.HubEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.TopicId

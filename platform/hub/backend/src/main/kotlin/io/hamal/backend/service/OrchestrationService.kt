@@ -1,7 +1,7 @@
 package io.hamal.backend.service
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.ExecScheduledEvent
+import io.hamal.repository.api.event.ExecScheduledEvent
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecId

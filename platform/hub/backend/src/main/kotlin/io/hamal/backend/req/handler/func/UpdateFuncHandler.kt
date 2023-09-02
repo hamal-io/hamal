@@ -1,7 +1,7 @@
 package io.hamal.backend.req.handler.func
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.FuncCreatedEvent
+import io.hamal.repository.api.event.FuncCreatedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.repository.api.Func

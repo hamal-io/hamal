@@ -1,7 +1,7 @@
 package io.hamal.backend.req.handler.trigger
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.TriggerCreatedEvent
+import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId

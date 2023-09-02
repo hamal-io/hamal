@@ -1,8 +1,8 @@
 package io.hamal.backend.service
 
-import io.hamal.backend.event.event.HubEvent
+import io.hamal.repository.api.event.HubEvent
 import io.hamal.repository.api.MetricRepository
-import io.hamal.backend.event.event.*
+import io.hamal.repository.api.event.*
 import io.hamal.repository.api.SystemEvent
 import org.springframework.stereotype.Service
 

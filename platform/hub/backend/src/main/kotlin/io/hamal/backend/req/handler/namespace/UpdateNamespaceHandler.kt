@@ -1,7 +1,7 @@
 package io.hamal.backend.req.handler.namespace
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.backend.event.event.NamespaceCreatedEvent
+import io.hamal.repository.api.event.NamespaceCreatedEvent
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.backend.req.ReqHandler
 import io.hamal.lib.common.domain.CmdId

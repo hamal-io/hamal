@@ -1,6 +1,6 @@
 package io.hamal.backend.event
 
-import io.hamal.backend.event.event.HubEvent
+import io.hamal.repository.api.event.HubEvent
 import kotlin.reflect.KClass
 
 class HubEventContainerFactory {
