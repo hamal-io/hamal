@@ -48,8 +48,9 @@ export default () => {
                     </Col>
                     <Col xs={4} md={6} lg={3} xl={4}>
                         <ButtonGroup className={"float-end"}>
-                            <Button onClick={() => setShowDefault(true)} variant="primary" className="m-1"> +
-                                Create</Button>
+                            <Button onClick={() => setShowDefault(true)} variant="primary" className="m-1">
+                                + Create
+                            </Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -57,7 +58,7 @@ export default () => {
 
             {
                 functions.map(func => (
-                    <Card onClick={_ => navigate(`/functions/${func.id}`)}>
+                    <Card key={func.id} onClick={_ => navigate(`/functions/${func.id}`)}>
                         <h1> {func.name}</h1>
                     </Card>
                 ))
