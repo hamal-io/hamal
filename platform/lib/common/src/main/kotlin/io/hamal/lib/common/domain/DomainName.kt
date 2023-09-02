@@ -1,6 +1,5 @@
 package io.hamal.lib.common.domain
 
-import io.hamal.lib.common.domain.ValueObject
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -28,7 +27,7 @@ abstract class DomainNameSerializer<NAME : DomainName>(
     val fn: (String) -> NAME
 ) : KSerializer<NAME> {
     override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)
+        get() = PrimitiveSerialDescriptor("Name", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): NAME {
         return fn(decoder.decodeString())

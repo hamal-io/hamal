@@ -1,9 +1,8 @@
 package io.hamal.backend.service
 
-import io.hamal.repository.api.event.HubEvent
 import io.hamal.repository.api.MetricRepository
-import io.hamal.repository.api.event.*
 import io.hamal.repository.api.SystemEvent
+import io.hamal.repository.api.event.*
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,6 +22,7 @@ class MetricService(private val repo: MetricRepository) {
             is NamespaceUpdatedEvent -> repo.update(SystemEvent.NamespaceUpdatedEvent)
             is StateUpdatedEvent -> repo.update(SystemEvent.StateUpdatedEvent)
             is TriggerCreatedEvent -> repo.update(SystemEvent.TriggerCreatedEvent)
+            else -> TODO()
         }
     }
 }

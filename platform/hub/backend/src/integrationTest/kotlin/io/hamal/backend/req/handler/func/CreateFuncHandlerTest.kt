@@ -1,7 +1,6 @@
 package io.hamal.backend.req.handler.func
 
 import io.hamal.backend.req.handler.BaseReqHandlerTest
-import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.FuncId
@@ -11,6 +10,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -22,7 +22,6 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Creates func`() {
         testInstance(submitCreateFuncReq)
-
         verifySingleFuncExists()
     }
 

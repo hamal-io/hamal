@@ -1,14 +1,21 @@
 package io.hamal.backend.web.req
 
-import io.hamal.repository.api.submitted_req.*
 import io.hamal.lib.sdk.domain.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReq
 import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.repository.api.submitted_req.*
 
 
 internal object Assembler {
     fun assemble(req: SubmittedReq): ApiSubmittedReq {
         return when (val r = req) {
+
+            is SubmittedCreateAccountWithPasswordReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                id = r.id
+            )
+
             is SubmittedAppendToTopicReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,

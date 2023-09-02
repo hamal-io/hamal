@@ -65,7 +65,7 @@ include(":platform:lib:web3")
 
 include(":project")
 include(":project:fn_guru")
-include(":web3proxy")
+include(":project:web3proxy")
 
 rootProject.name = "hamal"
 

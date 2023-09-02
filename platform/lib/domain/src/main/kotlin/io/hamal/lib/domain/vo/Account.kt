@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable(with = AccountId.Serializer::class)
 class AccountId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
+
     internal object Serializer : DomainIdSerializer<AccountId>(::AccountId)
 }
 
@@ -15,11 +16,17 @@ class AccountName(override val value: String) : DomainName() {
     internal object Serializer : DomainNameSerializer<AccountName>(::AccountName)
 }
 
-@Serializable
-class AccountEmail(override val value: String) : ValueObject.ComparableImpl<String>()
+@Serializable(with = AccountEmail.Serializer::class)
+class AccountEmail(override val value: String) : StringValueObject() {
+    //FIXME validate email
+    internal object Serializer : StringValueObjectSerializer<AccountEmail>(::AccountEmail)
+}
 
-@Serializable
-class AccountPassword(override val value: String) : ValueObject.ComparableImpl<String>()
+
+@Serializable(with = AccountPassword.Serializer::class)
+class AccountPassword(override val value: String) : StringValueObject() {
+    internal object Serializer : StringValueObjectSerializer<AccountPassword>(::AccountPassword)
+}
 
 
 

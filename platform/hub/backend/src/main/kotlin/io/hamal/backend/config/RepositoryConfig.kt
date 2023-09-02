@@ -6,10 +6,7 @@ import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryReqRepository
 import io.hamal.repository.memory.MemoryStateRepository
 import io.hamal.repository.memory.log.MemoryBrokerRepository
-import io.hamal.repository.memory.record.MemoryExecRepository
-import io.hamal.repository.memory.record.MemoryFuncRepository
-import io.hamal.repository.memory.record.MemoryNamespaceRepository
-import io.hamal.repository.memory.record.MemoryTriggerRepository
+import io.hamal.repository.memory.record.*
 import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.SqliteBroker
 import io.hamal.repository.sqlite.log.SqliteBrokerRepository
@@ -34,6 +31,15 @@ open class SqliteRepositoryConfig {
     open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))
 
     @Bean
+    open fun accountRepository() = MemoryAccountRepository
+
+    @Bean
+    open fun accountQueryRepository() = accountRepository()
+
+    @Bean
+    open fun accountCmdRepository() = accountRepository()
+
+    @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
 
     @Bean
@@ -41,6 +47,15 @@ open class SqliteRepositoryConfig {
 
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
+
+    @Bean
+    open fun groupRepository() = MemoryGroupRepository
+
+    @Bean
+    open fun groupQueryRepository() = groupRepository()
+
+    @Bean
+    open fun groupCmdRepository() = groupRepository()
 
     @Bean
     open fun namespaceRepository() = SqliteNamespaceRepository(SqliteNamespaceRepository.Config(path))
@@ -107,10 +122,28 @@ open class MemoryRepositoryConfig {
     open fun eventBrokerRepository() = MemoryBrokerRepository()
 
     @Bean
+    open fun accountRepository() = MemoryAccountRepository
+
+    @Bean
+    open fun accountQueryRepository() = accountRepository()
+
+    @Bean
+    open fun accountCmdRepository() = accountRepository()
+
+    @Bean
     open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository
 
     @Bean
     open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
+
+    @Bean
+    open fun groupRepository() = MemoryGroupRepository
+
+    @Bean
+    open fun groupQueryRepository() = groupRepository()
+
+    @Bean
+    open fun groupCmdRepository() = groupRepository()
 
     @Bean
     open fun namespaceCmdRepository(): NamespaceCmdRepository = MemoryNamespaceRepository

@@ -1,7 +1,9 @@
 package io.hamal.repository.api
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
@@ -32,6 +34,12 @@ interface AccountCmdRepository {
 }
 
 interface AccountQueryRepository {
-    fun find(accountId: AccountId)
+    fun get(accountId: AccountId) = find(accountId) ?: throw NoSuchElementException("Account not found")
+    fun find(accountId: AccountId): Account?
+    fun list(block: AccountQuery.() -> Unit): List<Account>
+    fun list(accountIds: List<AccountId>): List<Account> = accountIds.map(::get)
+    data class AccountQuery(
+        var afterId: AccountId = AccountId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(1)
+    )
 }
-

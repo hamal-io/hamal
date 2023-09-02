@@ -21,10 +21,11 @@ object TopicNameConverter : Converter<String, TopicName> {
     override fun convert(source: String) = TopicName(source)
 }
 
-
+object AccountIdConverter : DomainIdConverter<AccountId>(AccountId::class, ::AccountId)
 object ExecIdConverter : DomainIdConverter<ExecId>(ExecId::class, ::ExecId)
 object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)
+object GroupIdConverter : DomainIdConverter<GroupId>(GroupId::class, ::GroupId)
 object NamespaceIdConverter : DomainIdConverter<NamespaceId>(NamespaceId::class, ::NamespaceId)
 object ReqIdConverter : DomainIdConverter<ReqId>(ReqId::class, ::ReqId)
 object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)

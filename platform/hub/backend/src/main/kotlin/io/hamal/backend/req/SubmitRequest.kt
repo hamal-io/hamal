@@ -14,7 +14,6 @@ import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.*
 import org.springframework.stereotype.Component
 
-
 data class InvokeExec(
     val execId: ExecId,
     val funcId: FuncId,
@@ -31,6 +30,19 @@ class SubmitRequest(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
+
+    operator fun invoke(createAccount: CreateAccountReq) =
+        SubmittedCreateAccountWithPasswordReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            id = generateDomainId(::AccountId),
+            groupId = generateDomainId(::GroupId),
+            name = createAccount.name,
+            email = createAccount.email,
+            password = createAccount.password!!
+        ).also(reqCmdRepository::queue)
+
+
     operator fun invoke(adhoc: InvokeAdhocReq) =
         SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
