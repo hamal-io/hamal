@@ -1,12 +1,12 @@
 package io.hamal.repository.log
 
-import io.hamal.repository.api.log.BrokerTopicsRepository
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
-import io.hamal.repository.AbstractUnitTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
+import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.TestFactory

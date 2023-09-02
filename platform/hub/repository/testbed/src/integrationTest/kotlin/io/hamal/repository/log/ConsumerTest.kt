@@ -1,7 +1,7 @@
 package io.hamal.repository.log
 
 import io.hamal.repository.api.log.*
-import io.hamal.repository.AbstractIntegrationTest
+import io.hamal.repository.fixture.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.TopicId

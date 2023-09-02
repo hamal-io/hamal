@@ -1,15 +1,12 @@
-package io.hamal.repository
+package io.hamal.repository.fixture
 
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository
-import io.hamal.repository.fixture.BaseTestFixture
-import io.hamal.repository.fixture.MemoryFixture
-import io.hamal.repository.fixture.SqliteFixture
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import kotlin.reflect.KClass
 
-abstract class AbstractUnitTest {
+abstract class AbstractIntegrationTest {
 
     fun <REPO : AutoCloseable> runWith(
         interfaceClass: KClass<out REPO>,
