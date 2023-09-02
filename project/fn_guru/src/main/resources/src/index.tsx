@@ -11,12 +11,16 @@
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
 
 import React from 'react';
+
+import "./scss/volt.scss";
+
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {createRoot} from 'react-dom/client';
 import HomePage from "./pages/HomePage";
-import Signin from "./pages/Signin";
+import Signin from "./pages/SigninPage";
+import Signup from "./pages/SignupPage";
+import Toc from "./pages/TocPage";
 
-import "./scss/volt.scss";
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -24,6 +28,8 @@ const root = createRoot(container!);
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
     {path: "/sign-in", element: <Signin/>},
+    {path: "/sign-up", element: <Signup/>},
+    {path: "/toc", element: <Toc/>},
 ]);
 
 root.render(
