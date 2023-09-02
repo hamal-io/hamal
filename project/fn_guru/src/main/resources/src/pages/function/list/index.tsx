@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
-import {Breadcrumb, Button, ButtonGroup, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
+import {Breadcrumb, Button, ButtonGroup, Card, Col, Form, InputGroup, Row} from '@themesberg/react-bootstrap';
 import {Modal} from '@themesberg/react-bootstrap';
 import {faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -20,6 +20,8 @@ export default () => {
 
     const [showDefault, setShowDefault] = useState(false);
     const handleClose = () => setShowDefault(false);
+
+    const navigate = useNavigate()
 
     return (
         <State.Provider value={functions}>
@@ -51,8 +53,15 @@ export default () => {
                 </Row>
             </div>
 
-            {JSON.stringify(functions)}
-            
+            {
+                functions.map(func => (
+                    <Card onClick={_ => navigate(`/functions/${func.id}`)}>
+                        <h1> {func.name}</h1>
+                    </Card>
+                ))
+            }
+
+
             {
                 <CreateFunctionModal visible={showDefault} onClose={handleClose}/>
             }

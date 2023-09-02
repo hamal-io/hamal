@@ -21,6 +21,7 @@ import Signin from "./pages/sign-in";
 import Signup from "./pages/sign-up";
 import Toc from "./pages/toc";
 import DashboardPage from "./pages/dashboard";
+import DevelopPage from "./pages/develop";
 import FunctionListPage from "./pages/function/list";
 import FunctionDetailPage from "./pages/function/detail";
 import {RouteWithSidebar} from "./pages/components/route";
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
     {path: "/sign-up", element: <Signup/>},
     {path: "/toc", element: <Toc/>},
     {path: "/dashboard", element: <RouteWithSidebar component={<DashboardPage/>}/>},
+    {path: "/develop", element: <RouteWithSidebar component={<DevelopPage/>}/>},
     {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}/>},
     {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}/>},
 ]);
