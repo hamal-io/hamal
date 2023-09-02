@@ -16,13 +16,13 @@ import "./scss/volt.scss";
 
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {createRoot} from 'react-dom/client';
-import HomePage from "./pages/HomePage";
-import Signin from "./pages/SigninPage";
-import Signup from "./pages/SignupPage";
-import Toc from "./pages/TocPage";
+import HomePage from "./pages/home";
+import Signin from "./pages/sign-in";
+import Signup from "./pages/sign-up";
+import Toc from "./pages/toc";
 import DashboardPage from "./pages/dashboard";
+import FunctionListPage from "./pages/function/list";
 import {RouteWithSidebar} from "./pages/components/route";
-
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -33,6 +33,7 @@ const router = createBrowserRouter([
     {path: "/sign-up", element: <Signup/>},
     {path: "/toc", element: <Toc/>},
     {path: "/dashboard", element: <RouteWithSidebar component={<DashboardPage/>}/>},
+    {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}/>},
 ]);
 
 root.render(

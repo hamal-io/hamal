@@ -3,8 +3,8 @@ import {useNavigate} from 'react-router-dom';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignIn} from "@fortawesome/free-solid-svg-icons";
 import {Button, Col, Container, Nav, Navbar, Row} from '@themesberg/react-bootstrap';
-import Footer from "./components/footer";
-import Editor from "../components/editor";
+import Footer from "../components/footer";
+import Editor from "../../components/editor";
 
 export default () => {
     const navigate = useNavigate()

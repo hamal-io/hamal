@@ -3,22 +3,8 @@ import SimpleBar from 'simplebar-react';
 import {useLocation} from "react-router-dom";
 import {CSSTransition} from 'react-transition-group';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {
-    faBook,
-    faBoxOpen,
-    faChartPie,
-    faCog,
-    faFileAlt,
-    faHandHoldingUsd,
-    faSignOutAlt,
-    faTable,
-    faTimes,
-    faCalendarAlt,
-    faMapPin,
-    faInbox,
-    faRocket, faBookMedical, faHome, faCode
-} from "@fortawesome/free-solid-svg-icons";
-import {Nav, Badge, Image, Button, Dropdown, Accordion, Navbar} from '@themesberg/react-bootstrap';
+import {faTimes, faBookMedical, faHome, faCode} from "@fortawesome/free-solid-svg-icons";
+import {Nav, Badge, Image, Button, Navbar} from '@themesberg/react-bootstrap';
 import {Link} from 'react-router-dom';
 
 interface SidebarProps {
@@ -34,7 +20,17 @@ export default (props: SidebarProps) => {
     const onCollapse = () => setShow(!show);
 
     const NavItem = (props) => {
-        const {title, link, external, target, icon, image, badgeText, badgeBg = "secondary", badgeColor = "primary"} = props;
+        const {
+            title,
+            link,
+            external,
+            target,
+            icon,
+            image,
+            badgeText,
+            badgeBg = "secondary",
+            badgeColor = "primary"
+        } = props;
         const classNames = badgeText ? "d-flex justify-content-start align-items-center justify-content-between" : "";
         const navItemClassName = link === pathname ? "active" : "";
         const linkProps = external ? {href: link} : {as: Link, to: link};
@@ -89,9 +85,8 @@ export default (props: SidebarProps) => {
                         </div>
                         <Nav className="flex-column pt-3 pt-md-0">
                             <NavItem title="Dashboard" icon={faHome}/>
-                            <NavItem title="Functions" icon={faCode} href={"/functions"}/>
-                            <NavItem external title="Documentation" link="https://doc.fn.guru" target="_blank"
-                                     icon={faBookMedical}/>
+                            <NavItem title="Functions" icon={faCode} href="/functions"/>
+                            <NavItem external title="Documentation" link="https://doc.fn.guru" target="_blank" icon={faBookMedical}/>
                         </Nav>
                     </div>
                 </SimpleBar>
