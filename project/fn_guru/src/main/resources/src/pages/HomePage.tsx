@@ -1,4 +1,5 @@
 import React from "react";
+import {useNavigate} from 'react-router-dom';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignIn} from "@fortawesome/free-solid-svg-icons";
 import {Button, Col, Container, Nav, Navbar, Row} from '@themesberg/react-bootstrap';
@@ -6,6 +7,7 @@ import Footer from "./components/footer";
 import Editor from "../components/editor";
 
 export default () => {
+    const navigate = useNavigate()
     return (
         <>
             <Navbar variant="dark" expand="lg" bg="dark" className="navbar-transparent navbar-theme-primary sticky-top">
@@ -23,7 +25,7 @@ export default () => {
                             </Nav>
                         </Navbar.Collapse>
 
-                        <Button variant="outline-white" className="ms-3">
+                        <Button variant="outline-white" className="ms-3" onClick={evt => navigate(`/sign-in`)}>
                             <FontAwesomeIcon icon={faSignIn} className="me-1"/> Sign In
                         </Button>
                     </div>
@@ -37,7 +39,8 @@ export default () => {
                             <div className="react-big-icon d-none d-lg-block"><span className="fab fa-react"></span>
                             </div>
                             <h1 className="fw-bolder text-secondary">Simplest way to create Cloud Functions</h1>
-                            <p className="text-muted fw-light mb-5 h5">Open source, no installation, no command-line tools.
+                            <p className="text-muted fw-light mb-5 h5">Open source, no installation, no command-line
+                                tools.
                                 Write code and deploy functions from the browser.</p>
                         </Col>
                     </Row>

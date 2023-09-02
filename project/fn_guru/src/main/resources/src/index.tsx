@@ -14,6 +14,7 @@ import React from 'react';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {createRoot} from 'react-dom/client';
 import HomePage from "./pages/HomePage";
+import Signin from "./pages/Signin";
 
 import "./scss/volt.scss";
 
@@ -22,6 +23,7 @@ const root = createRoot(container!);
 
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
+    {path: "/sign-in", element: <Signin/>},
 ]);
 
 root.render(
