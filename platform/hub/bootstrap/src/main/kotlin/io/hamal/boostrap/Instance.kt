@@ -1,6 +1,6 @@
 package io.hamal.boostrap
 
-import io.hamal.backend.instance.BackendConfig
+import io.hamal.backend.BackendConfig
 import guru.fn.FrontendConfig
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType

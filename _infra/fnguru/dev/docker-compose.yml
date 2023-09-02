@@ -14,7 +14,7 @@ services:
     environment:
       - ACTIVE_PROFILES=default,sqlite
     volumes:
-      - "/mnt/instance:/tmp/hamal/instance"
+      - "/mnt/hub:/tmp/hamal/hub"
     networks:
       - fnguru_net
 
@@ -26,6 +26,6 @@ services:
       - "0.0.0.0:6006:6006"
     environment:
       - ACTIVE_PROFILES=default
-      - INSTANCE_HOST=http://instance:8008
+      - HUB_HOST=http://hamal:8008
     networks:
       - fnguru_net

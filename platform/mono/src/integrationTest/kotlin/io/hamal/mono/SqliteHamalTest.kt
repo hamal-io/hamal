@@ -1,6 +1,6 @@
 package io.hamal.mono
 
-import io.hamal.backend.instance.BackendConfig
+import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.DefaultHamalSdk
 import io.hamal.mono.config.TestRunnerConfig

@@ -5,7 +5,7 @@ logging:
     io.hamal.runner: DEBUG
     io.hamal.backend.repository: INFO
     io.hamal.backend.repository.sqlite.log: INFO
-    io.hamal.extension.web3: TRACE
+
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC

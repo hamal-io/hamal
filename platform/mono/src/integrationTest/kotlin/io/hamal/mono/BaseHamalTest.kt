@@ -1,6 +1,6 @@
 package io.hamal.mono
 
-import io.hamal.backend.instance.component.BootstrapBackend
+import io.hamal.backend.component.BootstrapBackend
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecId

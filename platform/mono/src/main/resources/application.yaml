@@ -23,4 +23,4 @@ server:
 io:
   hamal:
     runner:
-      host: ${INSTANCE_HOST:http://127.0.0.1:8008}
+      host: ${HUB_HOST:http://127.0.0.1:8008}

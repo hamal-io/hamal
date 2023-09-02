@@ -1,0 +1,153 @@
+package io.hamal.backend.config
+
+import io.hamal.repository.api.*
+import io.hamal.repository.memory.MemoryExecLogRepository
+import io.hamal.repository.memory.MemoryMetricRepository
+import io.hamal.repository.memory.MemoryReqRepository
+import io.hamal.repository.memory.MemoryStateRepository
+import io.hamal.repository.memory.log.MemoryBrokerRepository
+import io.hamal.repository.memory.record.MemoryExecRepository
+import io.hamal.repository.memory.record.MemoryFuncRepository
+import io.hamal.repository.memory.record.MemoryNamespaceRepository
+import io.hamal.repository.memory.record.MemoryTriggerRepository
+import io.hamal.repository.sqlite.SqliteStateRepository
+import io.hamal.repository.sqlite.log.SqliteBroker
+import io.hamal.repository.sqlite.log.SqliteBrokerRepository
+import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
+import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
+import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
+import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
+import kotlin.io.path.Path
+
+
+@Profile("sqlite")
+@Configuration
+open class SqliteRepositoryConfig {
+
+    @Bean
+    open fun hubEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("hub-event")))
+
+    @Bean
+    open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))
+
+    @Bean
+    open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
+
+    @Bean
+    open fun funcCmdRepository(): FuncCmdRepository = funcRepository()
+
+    @Bean
+    open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
+
+    @Bean
+    open fun namespaceRepository() = SqliteNamespaceRepository(SqliteNamespaceRepository.Config(path))
+
+    @Bean
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = namespaceRepository()
+
+    @Bean
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
+
+    @Bean
+    open fun execRepository() = SqliteExecRepository(SqliteExecRepository.Config(path))
+
+    @Bean
+    open fun execCmdRepository(): ExecCmdRepository = execRepository()
+
+    @Bean
+    open fun execQueryRepository(): ExecQueryRepository = execRepository()
+
+    @Bean
+    open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
+
+    @Bean
+    open fun execLogQueryRepository(): ExecLogQueryRepository = MemoryExecLogRepository
+
+    @Bean
+    open fun triggerRepository() = SqliteTriggerRepository(SqliteTriggerRepository.Config(path))
+
+    @Bean
+    open fun triggerCmdRepository(): TriggerCmdRepository = triggerRepository()
+
+    @Bean
+    open fun triggerQueryRepository(): TriggerQueryRepository = triggerRepository()
+
+    @Bean
+    open fun stateRepository() = SqliteStateRepository(path)
+
+    @Bean
+    open fun stateCmdRepository(): StateCmdRepository = stateRepository()
+
+    @Bean
+    open fun stateQueryRepository(): StateQueryRepository = stateRepository()
+
+    @Bean
+    open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
+
+    @Bean
+    open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+
+    @Bean
+    open fun metricRepository(): MetricRepository = MemoryMetricRepository
+
+    private val path = Path("/tmp/hamal/hub")
+}
+
+@Profile("memory")
+@Configuration
+open class MemoryRepositoryConfig {
+
+    @Bean
+    open fun hubEventBrokerRepository() = MemoryBrokerRepository()
+
+    @Bean
+    open fun eventBrokerRepository() = MemoryBrokerRepository()
+
+    @Bean
+    open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository
+
+    @Bean
+    open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
+
+    @Bean
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = MemoryNamespaceRepository
+
+    @Bean
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = MemoryNamespaceRepository
+
+    @Bean
+    open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository
+
+    @Bean
+    open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
+
+    @Bean
+    open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
+
+    @Bean
+    open fun execLogQueryRepository(): ExecLogQueryRepository = MemoryExecLogRepository
+
+    @Bean
+    open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
+
+    @Bean
+    open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+
+    @Bean
+    open fun stateCmdRepository(): StateCmdRepository = MemoryStateRepository
+
+    @Bean
+    open fun stateQueryRepository(): StateQueryRepository = MemoryStateRepository
+
+    @Bean
+    open fun triggerCmdRepository(): TriggerCmdRepository = MemoryTriggerRepository
+
+    @Bean
+    open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
+
+    @Bean
+    open fun metricRepository(): MetricRepository = MemoryMetricRepository
+}

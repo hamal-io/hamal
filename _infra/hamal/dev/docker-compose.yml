@@ -27,8 +27,8 @@ services:
     networks:
       - hamalnet
 
-  instance:
-    image: hamalio/instance
+  hub:
+    image: hamalio/hub
     restart:
       unless-stopped
     ports:
@@ -36,7 +36,7 @@ services:
     environment:
       - ACTIVE_PROFILES=default,sqlite
     volumes:
-      - "/mnt/instance:/tmp/hamal/instance"
+      - "/mnt/hub:/tmp/hamal/hub"
     networks:
       - hamalnet
 
@@ -46,7 +46,7 @@ services:
       unless-stopped
     environment:
       - ACTIVE_PROFILES=default
-      - INSTANCE_HOST=http://instance:8008
+      - HUB_HOST=http://hub:8008
     volumes:
       - "/mnt/runner:/tmp/hamal/runner"
     networks:

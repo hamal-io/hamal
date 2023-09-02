@@ -1,6 +1,6 @@
 package io.hamal.mono
 
-import io.hamal.backend.instance.BackendConfig
+import io.hamal.backend.BackendConfig
 import guru.fn.FrontendConfig
 import io.hamal.runner.RunnerConfig
 import org.springframework.boot.Banner
