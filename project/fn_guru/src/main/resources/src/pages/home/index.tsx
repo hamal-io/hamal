@@ -31,13 +31,10 @@ export default () => {
                     </div>
                 </Container>
             </Navbar>
-            <section className="section-header overflow-hidden pt-5 pt-lg-6 pb-9 pb-lg-12 bg-primary text-white"
-                     id="home">
+            <section className="section-header overflow-hidden pt-4  pb-1 pb-lg-12 bg-primary text-white">
                 <Container>
                     <Row>
                         <Col xs={12} className="text-center">
-                            <div className="react-big-icon d-none d-lg-block"><span className="fab fa-react"></span>
-                            </div>
                             <h1 className="fw-bolder text-secondary">Simplest way to create Cloud Functions</h1>
                             <p className="text-muted fw-light mb-5 h5">Open source, no installation, no command-line
                                 tools.

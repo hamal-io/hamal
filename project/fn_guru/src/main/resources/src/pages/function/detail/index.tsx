@@ -8,6 +8,7 @@ import Spinner from "../../../components/spinner";
 import {ApiFunction} from "../../../api/types";
 import Editor from "../../../components/editor";
 
+import OverviewTab from "./tabs/overview"
 import CodeTab from "./tabs/code";
 import LogTab from './tabs/log'
 import SettingsTab from './tabs/settings'
@@ -75,10 +76,15 @@ export default () => {
                 </div>
             </div>
 
-            <Tab.Container defaultActiveKey="code_tab">
+            <Tab.Container defaultActiveKey="overview_tab">
                 <Row>
                     <Col lg={12}>
                         <Nav variant="pills" className="flex-column flex-sm-row">
+                            <Nav.Item>
+                                <Nav.Link eventKey="overview_tab" className="mb-sm-3 mb-md-0">
+                                    <FontAwesomeIcon icon={faHome} className="me-2"/> Overview
+                                </Nav.Link>
+                            </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="code_tab" className="mb-sm-3 mb-md-0">
                                     <FontAwesomeIcon icon={faCode} className="me-2"/> Code
@@ -101,6 +107,9 @@ export default () => {
                             </Nav.Item>
                         </Nav>
                         <Tab.Content>
+                            <Tab.Pane eventKey="overview_tab" className="py-4">
+                                <OverviewTab/>
+                            </Tab.Pane>
                             <Tab.Pane eventKey="code_tab" className="py-4">
                                 <CodeTab func={func}/>
                             </Tab.Pane>

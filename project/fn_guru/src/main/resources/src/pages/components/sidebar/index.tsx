@@ -3,7 +3,7 @@ import SimpleBar from 'simplebar-react';
 import {useLocation} from "react-router-dom";
 import {CSSTransition} from 'react-transition-group';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTimes, faBookMedical, faHome, faCode, faServer} from "@fortawesome/free-solid-svg-icons";
+import {faTimes, faBookMedical, faHome, faCode, faServer, faCubes} from "@fortawesome/free-solid-svg-icons";
 import {Nav, Badge, Image, Button, Navbar} from '@themesberg/react-bootstrap';
 import {Link} from 'react-router-dom';
 
@@ -86,7 +86,7 @@ export default (props: SidebarProps) => {
                         <Nav className="flex-column pt-3 pt-md-0">
                             <NavItem title="Dashboard" icon={faHome} link="/dashboard"/>
                             <NavItem title="Develop" icon={faCode} link="/develop"/>
-                            <NavItem title="Functions" icon={faServer} link="/functions"/>
+                            <NavItem title="Functions" icon={faCubes} link="/functions"/>
                             <NavItem external title="Documentation" link="https://doc.fn.guru" target="_blank" icon={faBookMedical}/>
                         </Nav>
                     </div>

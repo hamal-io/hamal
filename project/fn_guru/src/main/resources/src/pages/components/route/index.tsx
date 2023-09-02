@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import Preloader from "../../../components/preloader";
-import Footer from "../footer";
 import {Badge, Image, Nav} from "@themesberg/react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Link} from "react-router-dom";
@@ -60,7 +59,7 @@ export const RouteWithSidebar = (props: any) => {
 
     return (
         <>
-            <Preloader show={!loaded}/>
+            {/*<Preloader show={!loaded}/>*/}
             <Sidebar/>
             <main className="content">
                 <Navbar/>
