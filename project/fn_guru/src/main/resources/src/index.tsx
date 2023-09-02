@@ -22,6 +22,7 @@ import Signup from "./pages/sign-up";
 import Toc from "./pages/toc";
 import DashboardPage from "./pages/dashboard";
 import FunctionListPage from "./pages/function/list";
+import FunctionDetailPage from "./pages/function/detail";
 import {RouteWithSidebar} from "./pages/components/route";
 
 const container = document.getElementById('root');
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
     {path: "/toc", element: <Toc/>},
     {path: "/dashboard", element: <RouteWithSidebar component={<DashboardPage/>}/>},
     {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}/>},
+    {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}/>},
 ]);
 
 root.render(

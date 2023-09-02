@@ -84,9 +84,10 @@ export default (props: SidebarProps) => {
                             </Nav.Link>
                         </div>
                         <Nav className="flex-column pt-3 pt-md-0">
-                            <NavItem title="Dashboard" icon={faHome}/>
-                            <NavItem title="Functions" icon={faCode} href="/functions"/>
-                            <NavItem external title="Documentation" link="https://doc.fn.guru" target="_blank" icon={faBookMedical}/>
+                            <NavItem title="Dashboard" icon={faHome} link="/dashboard"/>
+                            <NavItem title="Functions" icon={faCode} link="/functions"/>
+                            <NavItem external title="Documentation" link="https://doc.fn.guru" target="_blank"
+                                     icon={faBookMedical}/>
                         </Nav>
                     </div>
                 </SimpleBar>
