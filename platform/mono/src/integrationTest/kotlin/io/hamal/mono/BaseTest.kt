@@ -11,18 +11,15 @@ import io.hamal.lib.sdk.HubSdk
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
-import java.lang.Thread.sleep
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
-import java.time.temporal.ChronoUnit.DAYS
+import java.time.temporal.ChronoUnit
 import kotlin.io.path.name
 
-abstract class BaseHamalTest {
+abstract class BaseTest {
 
     @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
@@ -63,7 +60,7 @@ abstract class BaseHamalTest {
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
-            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
+            DynamicTest.dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
                 val execReq = rootHubSdk.adhocService.submit(
@@ -77,7 +74,7 @@ abstract class BaseHamalTest {
                 var wait = true
                 val startedAt = TimeUtils.now()
                 while (wait) {
-                    sleep(1)
+                    Thread.sleep(1)
                     with(execQueryRepository.get(execReq.id(::ExecId))) {
                         if (status == ExecStatus.Completed) {
                             wait = false
@@ -133,7 +130,7 @@ abstract class BaseHamalTest {
                 authId = generateDomainId(::AuthId),
                 accountId = rootAccount.id,
                 token = AuthToken("test-root-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         ) as TokenAuth).token
 
@@ -141,8 +138,7 @@ abstract class BaseHamalTest {
 
     abstract val rootHttpTemplate: HttpTemplate
     abstract val rootHubSdk: HubSdk
+    abstract val testPath : Path
+
+    private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 }
-
-
-private val testPath = Paths.get("src", "integrationTest", "resources", "as_root")
-private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }

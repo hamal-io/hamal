@@ -1,10 +1,10 @@
-package io.hamal.mono
+package io.hamal.mono.as_root
 
 import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.DefaultHubSdk
-import io.hamal.mono.config.TestRunnerConfig
 import io.hamal.runner.RunnerConfig
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT
@@ -17,9 +17,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(
     classes = [
-        TestRunnerConfig::class,
         BackendConfig::class,
-        RunnerConfig::class
+        RunnerConfig::class,
+        TestRunnerConfig::class
     ]
 )
 @SpringBootTest(
@@ -30,7 +30,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 )
 @ActiveProfiles(value = ["test", "sqlite"])
 @DirtiesContext
-class SqliteHamalTest : BaseHamalTest() {
+@DisplayName("as_root - sqlite")
+class SqliteHamalTest : BaseAsRootTest() {
     final override val rootHttpTemplate = HttpTemplate(
         baseUrl = "http://localhost:8043",
         headerFactory = {

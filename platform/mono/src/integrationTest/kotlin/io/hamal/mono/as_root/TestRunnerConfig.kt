@@ -1,4 +1,4 @@
-package io.hamal.mono.config
+package io.hamal.mono.as_root
 
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
