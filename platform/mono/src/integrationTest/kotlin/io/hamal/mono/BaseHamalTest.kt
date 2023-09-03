@@ -19,7 +19,7 @@ import java.lang.Thread.sleep
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.temporal.ChronoUnit
+import java.time.temporal.ChronoUnit.DAYS
 import kotlin.io.path.name
 
 abstract class BaseHamalTest {
@@ -63,7 +63,7 @@ abstract class BaseHamalTest {
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
-            dynamicTest("${testFile.parent.name}/${testFile.name}") {
+            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
                 val execReq = rootHubSdk.adhocService.submit(
@@ -133,7 +133,7 @@ abstract class BaseHamalTest {
                 authId = generateDomainId(::AuthId),
                 accountId = rootAccount.id,
                 token = AuthToken("test-root-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
         ) as TokenAuth).token
 
@@ -144,5 +144,5 @@ abstract class BaseHamalTest {
 }
 
 
-private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
+private val testPath = Paths.get("src", "integrationTest", "resources", "as_root")
 private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
