@@ -2,7 +2,7 @@ package io.hamal.backend.web.namespace
 
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.domain.ApiNamespace
+import io.hamal.lib.sdk.hub.domain.ApiNamespace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

@@ -13,11 +13,11 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import kotlin.time.Duration
 
 class CreateTriggerFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -55,8 +55,7 @@ class CreateTriggerFunction(
                 topicId = topicId
             )
 
-            val res = templateSupplier()
-                .post("/v1/triggers")
+            val res = httpTemplate.post("/v1/triggers")
                 .body(r)
                 .execute(ApiSubmittedReqWithId::class)
 

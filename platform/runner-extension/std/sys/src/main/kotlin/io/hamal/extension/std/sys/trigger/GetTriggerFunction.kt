@@ -10,20 +10,19 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiEventTrigger
-import io.hamal.lib.sdk.domain.ApiFixedRateTrigger
-import io.hamal.lib.sdk.domain.ApiTrigger
+import io.hamal.lib.sdk.hub.domain.ApiError
+import io.hamal.lib.sdk.hub.domain.ApiEventTrigger
+import io.hamal.lib.sdk.hub.domain.ApiFixedRateTrigger
+import io.hamal.lib.sdk.hub.domain.ApiTrigger
 
 class GetTriggerFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        val response = templateSupplier()
-            .get("/v1/triggers/${arg1.value}")
+        val response = httpTemplate.get("/v1/triggers/${arg1.value}")
             .execute()
 
         if (response is SuccessHttpResponse) {

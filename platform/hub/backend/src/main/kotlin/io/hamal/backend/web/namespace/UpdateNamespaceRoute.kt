@@ -4,7 +4,7 @@ import io.hamal.backend.req.SubmitRequest
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.UpdateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable

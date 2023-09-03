@@ -8,17 +8,17 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
 
 class AwaitFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In1Out<StringType, ErrorType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(ErrorType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
         while (true) {
-            templateSupplier().get("/v1/reqs/{reqId}")
+            httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
                 .execute(ApiSubmittedReq::class)
                 .let {
@@ -39,14 +39,14 @@ class AwaitFunction(
 
 
 class AwaitCompletedFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In1Out<StringType, ErrorType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(ErrorType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
         while (true) {
-            templateSupplier().get("/v1/reqs/{reqId}")
+            httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
                 .execute(ApiSubmittedReq::class)
                 .let {
@@ -69,14 +69,14 @@ class AwaitCompletedFunction(
 }
 
 class AwaitFailedFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In1Out<StringType, ErrorType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(ErrorType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
         while (true) {
-            templateSupplier().get("/v1/reqs/{reqId}")
+            httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
                 .execute(ApiSubmittedReq::class)
                 .let {

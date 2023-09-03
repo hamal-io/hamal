@@ -5,8 +5,8 @@ import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
-import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiUnitOfWorkList
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 

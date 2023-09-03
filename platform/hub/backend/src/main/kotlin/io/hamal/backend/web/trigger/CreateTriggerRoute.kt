@@ -6,7 +6,7 @@ import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

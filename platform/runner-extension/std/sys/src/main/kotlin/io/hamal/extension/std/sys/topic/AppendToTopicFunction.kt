@@ -10,10 +10,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 
 class AppendToTopicFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
     FunctionInput2Schema(StringType::class, MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -21,8 +21,7 @@ class AppendToTopicFunction(
 
     override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: MapType): Pair<ErrorType?, MapType?> {
         try {
-            val res = templateSupplier()
-                .post("/v1/topics/{topicId}/entries")
+            val res = httpTemplate.post("/v1/topics/{topicId}/entries")
                 .path("topicId", arg1.value)
                 .body(TopicEntryPayload(arg2))
                 .execute(ApiSubmittedReqWithId::class)

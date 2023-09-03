@@ -7,9 +7,9 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.domain.ApiNamespace
-import io.hamal.lib.sdk.domain.ApiNamespaceList
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiNamespace
+import io.hamal.lib.sdk.hub.domain.ApiNamespaceList
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 

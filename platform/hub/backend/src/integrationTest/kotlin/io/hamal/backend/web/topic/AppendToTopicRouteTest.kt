@@ -8,7 +8,7 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiError
+import io.hamal.lib.sdk.hub.domain.ApiError
 import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

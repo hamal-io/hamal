@@ -2,7 +2,7 @@ package io.hamal.mono
 
 import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.DefaultHamalSdk
+import io.hamal.lib.sdk.DefaultHubSdk
 import io.hamal.mono.config.TestRunnerConfig
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.extension.ExtendWith
@@ -31,6 +31,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ActiveProfiles(value = ["test", "sqlite"])
 @DirtiesContext
 class SqliteHamalTest : BaseHamalTest() {
-    final override val httpTemplate = HttpTemplate("http://localhost:8043")
-    final override val sdk = DefaultHamalSdk(httpTemplate)
+    final override val rootHttpTemplate = HttpTemplate(
+        baseUrl = "http://localhost:8043",
+        headerFactory = {
+            set("x-hamal-token", "test-root-token")
+        }
+    )
+    final override val rootHubSdk = DefaultHubSdk(rootHttpTemplate)
 }

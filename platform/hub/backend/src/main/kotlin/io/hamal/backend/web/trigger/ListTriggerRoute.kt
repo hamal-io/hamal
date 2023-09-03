@@ -5,10 +5,10 @@ import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.domain.ApiSimpleEventTrigger
-import io.hamal.lib.sdk.domain.ApiSimpleFixedRateTrigger
-import io.hamal.lib.sdk.domain.ApiSimpleTrigger
-import io.hamal.lib.sdk.domain.ApiTriggerList
+import io.hamal.lib.sdk.hub.domain.ApiSimpleEventTrigger
+import io.hamal.lib.sdk.hub.domain.ApiSimpleFixedRateTrigger
+import io.hamal.lib.sdk.hub.domain.ApiSimpleTrigger
+import io.hamal.lib.sdk.hub.domain.ApiTriggerList
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

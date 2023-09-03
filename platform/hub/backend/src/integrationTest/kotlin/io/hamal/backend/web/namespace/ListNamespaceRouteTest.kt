@@ -4,7 +4,7 @@ import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sdk.domain.ApiNamespaceList
+import io.hamal.lib.sdk.hub.domain.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

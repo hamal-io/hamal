@@ -1,7 +1,5 @@
 package io.hamal.backend.web.exec
 
-import io.hamal.repository.api.FailedExec
-import io.hamal.repository.api.StartedExec
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.CorrelationId
@@ -12,7 +10,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest

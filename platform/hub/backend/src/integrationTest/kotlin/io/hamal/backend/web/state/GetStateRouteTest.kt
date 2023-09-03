@@ -8,9 +8,9 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiCorrelatedState
-import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiState
+import io.hamal.lib.sdk.hub.domain.ApiCorrelatedState
+import io.hamal.lib.sdk.hub.domain.ApiError
+import io.hamal.lib.sdk.hub.domain.ApiState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

@@ -1,6 +1,7 @@
 package io.hamal.backend
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
@@ -8,6 +9,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.api.*
+import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
+import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
@@ -18,10 +21,11 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDO
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import java.time.temporal.ChronoUnit.DAYS
 
 @ContextConfiguration(
     classes = [
-        io.hamal.backend.BackendConfig::class,
+        BackendConfig::class,
     ]
 )
 @SpringBootTest(
@@ -33,6 +37,12 @@ internal abstract class BaseTest {
 
     @LocalServerPort
     lateinit var localPort: Number
+
+    @Autowired
+    lateinit var accountCmdRepository: AccountCmdRepository
+
+    @Autowired
+    lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
     lateinit var hubEventBrokerRepository: BrokerRepository
@@ -51,6 +61,9 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var funcCmdRepository: FuncCmdRepository
+
+    @Autowired
+    lateinit var groupCmdRepository: GroupCmdRepository
 
     @Autowired
     lateinit var namespaceQueryRepository: NamespaceQueryRepository
@@ -79,12 +92,19 @@ internal abstract class BaseTest {
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
+    lateinit var rootAccount: Account
+    lateinit var rootAccountAuthToken: AuthToken
+
     @BeforeEach
     fun before() {
+
+        accountCmdRepository.clear()
+        authCmdRepository.clear()
         hubEventBrokerRepository.clear()
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
+        groupCmdRepository.clear()
         namespaceCmdRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
@@ -98,6 +118,26 @@ internal abstract class BaseTest {
                 inputs = NamespaceInputs()
             )
         )
+
+        rootAccount = accountCmdRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = CmdId(2),
+                accountId = generateDomainId(::AccountId),
+                name = AccountName("test-root"),
+                email = AccountEmail("test@hamal.io"),
+                salt = PasswordSalt("test-salt")
+            )
+        )
+
+        rootAccountAuthToken = (authCmdRepository.create(
+            CreateTokenAuthCmd(
+                id = CmdId(3),
+                authId = generateDomainId(::AuthId),
+                accountId = rootAccount.id,
+                token = AuthToken("test-token"),
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
+            )
+        ) as TokenAuth).token
     }
 
 
@@ -145,7 +185,7 @@ internal abstract class BaseTest {
             return queued
         }
 
-        val startedExec = execCmdRepository.start(ExecCmdRepository.StartCmd(CmdId(4))).first()
+        val startedExec = execCmdRepository.start(StartCmd(CmdId(4))).first()
         if (status == ExecStatus.Started) {
             return startedExec
         }

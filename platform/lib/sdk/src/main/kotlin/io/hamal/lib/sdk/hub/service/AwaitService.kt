@@ -1,14 +1,16 @@
-package io.hamal.lib.sdk.service
+package io.hamal.lib.sdk.hub.service
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
 
 interface AwaitService {
     fun await(req: ApiSubmittedReq)
 }
 
-class DefaultAwaitService(private val template: HttpTemplate) : AwaitService {
+internal class DefaultAwaitService(
+    private val template: HttpTemplate
+) : AwaitService {
     override fun await(req: ApiSubmittedReq) {
         while (true) {
             template.get("/v1/reqs/{reqId}")

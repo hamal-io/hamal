@@ -2,14 +2,12 @@ package io.hamal.mono
 
 import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.HttpTemplateSupplier
+import io.hamal.lib.sdk.DefaultHubSdk
 import io.hamal.mono.config.TestRunnerConfig
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT
-import org.springframework.context.annotation.Bean
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -32,9 +30,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ActiveProfiles(value = ["test", "memory"])
 @DirtiesContext
 class MemoryHamalTest : BaseHamalTest() {
-    final override val httpTemplate = HttpTemplate("http://localhost:8042")
-    final override val sdk = DefaultHamalSdk(httpTemplate)
-
-    @Bean
-    fun httpTemplateSupplier(): HttpTemplateSupplier = { HttpTemplate("http://localhost:8042") }
+    final override val rootHttpTemplate = HttpTemplate(
+        baseUrl = "http://localhost:8042",
+        headerFactory = {
+            set("x-hamal-token", "test-root-token")
+        }
+    )
+    final override val rootHubSdk = DefaultHubSdk(rootHttpTemplate)
 }

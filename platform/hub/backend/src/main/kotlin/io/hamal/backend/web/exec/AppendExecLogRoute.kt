@@ -5,7 +5,7 @@ import io.hamal.repository.api.ExecLogCmdRepository.LogCmd
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
-import io.hamal.lib.sdk.domain.AppendExecLogCmd
+import io.hamal.lib.sdk.hub.domain.AppendExecLogCmd
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

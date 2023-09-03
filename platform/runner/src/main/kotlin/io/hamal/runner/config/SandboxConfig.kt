@@ -11,7 +11,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.sdk.DefaultHamalSdk
+import io.hamal.lib.sdk.DefaultHubSdk
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -37,13 +37,13 @@ class RunnerSandboxFactory(
         NativeLoader.load(Jar)
 
         val template = HttpTemplate(instanceHost) // FIXME sdk instead
-        val sdk = DefaultHamalSdk(template)
+        val sdk = DefaultHubSdk(template)
 
         return Sandbox(ctx).register(
             DecimalExtensionFactory,
             HttpExtensionFactory(),
             LogExtensionFactory(sdk.execLogService),
-            SysExtensionFactory { template },
+            SysExtensionFactory(template),
             EthExtensionFactory(),
             HmlExtensionFactory()
         )

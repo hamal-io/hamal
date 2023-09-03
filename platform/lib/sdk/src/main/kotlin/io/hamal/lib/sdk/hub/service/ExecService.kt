@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.service
+package io.hamal.lib.sdk.hub.service
 
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.domain.ApiUnitOfWorkList
+import io.hamal.lib.sdk.hub.domain.ApiUnitOfWorkList
 
 interface ExecService {
     fun poll(): ApiUnitOfWorkList
@@ -20,7 +20,10 @@ interface ExecService {
     fun fail(execId: ExecId, error: ErrorType)
 }
 
-class DefaultExecService(val template: HttpTemplate) : ExecService {
+internal class DefaultExecService(
+    private val template: HttpTemplate
+) : ExecService {
+
     override fun poll(): ApiUnitOfWorkList {
         return template.post("/v1/dequeue")
             .execute(ApiUnitOfWorkList::class)

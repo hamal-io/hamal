@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.domain
+package io.hamal.lib.sdk.hub.domain
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName

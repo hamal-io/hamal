@@ -7,10 +7,10 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HamalSdk
+import io.hamal.lib.sdk.HubSdk
 
 class ResolveTopicFunction(
-    private val sdk: HamalSdk
+    private val sdk: HubSdk
 ) : Function1In2Out<StringType, ErrorType, StringType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, StringType::class)

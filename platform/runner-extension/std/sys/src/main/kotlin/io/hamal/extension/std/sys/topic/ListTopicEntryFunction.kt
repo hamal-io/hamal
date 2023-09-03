@@ -8,17 +8,17 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiTopicEntryList
+import io.hamal.lib.sdk.hub.domain.ApiTopicEntryList
 
 class ListTopicEntryFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<StringType, ErrorType, ArrayType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, ArrayType?> {
         val entries = try {
-            templateSupplier()
+            httpTemplate
                 .get("/v1/topics/{topicId}/entries")
                 .path("topicId", arg1.value)
                 .execute(ApiTopicEntryList::class)

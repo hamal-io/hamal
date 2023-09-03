@@ -3,7 +3,7 @@ package io.hamal.backend.web.exec
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable

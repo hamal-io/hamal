@@ -8,8 +8,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiTopicEntryList
+import io.hamal.lib.sdk.hub.domain.ApiError
+import io.hamal.lib.sdk.hub.domain.ApiTopicEntryList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

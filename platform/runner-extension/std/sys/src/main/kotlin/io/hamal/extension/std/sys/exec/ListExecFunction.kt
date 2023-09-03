@@ -8,17 +8,16 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiExecList
+import io.hamal.lib.sdk.hub.domain.ApiExecList
 
 class ListExecFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val execs = try {
-            templateSupplier()
-                .get("/v1/execs")
+            httpTemplate.get("/v1/execs")
                 .execute(ApiExecList::class)
                 .execs
         } catch (t: Throwable) {

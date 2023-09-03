@@ -4,14 +4,14 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.HamalSdk
+import io.hamal.lib.sdk.HubSdk
 
 class HttpConnector(
-    private val sdk: HamalSdk
+    private val sdk: HubSdk
 ) : Connector {
 
     override fun poll(): List<UnitOfWork> {
-        return sdk.execService().poll().work.map {
+        return sdk.execService.poll().work.map {
             UnitOfWork(
                 id = it.id,
                 inputs = it.inputs,
@@ -24,10 +24,10 @@ class HttpConnector(
     }
 
     override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {
-        sdk.execService().complete(execId, state, events)
+        sdk.execService.complete(execId, state, events)
     }
 
     override fun fail(execId: ExecId, error: ErrorType) {
-        sdk.execService().fail(execId, error)
+        sdk.execService.fail(execId, error)
     }
 }

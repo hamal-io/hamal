@@ -1,9 +1,8 @@
 package io.hamal.backend.web.exec
 
-import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.domain.ApiExecList
+import io.hamal.lib.sdk.hub.domain.ApiExecList
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

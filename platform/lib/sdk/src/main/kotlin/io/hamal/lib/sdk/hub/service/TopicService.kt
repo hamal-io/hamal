@@ -1,19 +1,19 @@
-package io.hamal.lib.sdk.service
+package io.hamal.lib.sdk.hub.service
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.domain.ApiTopicList
+import io.hamal.lib.sdk.hub.domain.ApiTopicList
 
 interface TopicService {
     fun resolve(topicName: TopicName): TopicId
 }
 
-class DefaultTopicService(
-    val httpTemplate: HttpTemplate,
-    private val topicNameCache: KeyedOnce<TopicName, TopicId> = KeyedOnce.default()
+internal class DefaultTopicService(
+    private val httpTemplate: HttpTemplate
 ) : TopicService {
+
     override fun resolve(topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
             httpTemplate.get("/v1/topics")
@@ -24,4 +24,6 @@ class DefaultTopicService(
                 ?: throw NoSuchElementException("Topic not found")
         }
     }
+
+    private val topicNameCache: KeyedOnce<TopicName, TopicId> = KeyedOnce.default()
 }

@@ -1,6 +1,6 @@
 package io.hamal.backend.filter
 
-import io.hamal.lib.sdk.domain.ApiError
+import io.hamal.lib.sdk.hub.domain.ApiError
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest

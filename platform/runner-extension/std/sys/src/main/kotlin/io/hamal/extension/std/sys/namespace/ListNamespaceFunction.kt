@@ -8,16 +8,16 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiNamespaceList
+import io.hamal.lib.sdk.hub.domain.ApiNamespaceList
 
 class ListNamespaceFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val namespaces = try {
-            templateSupplier()
+            httpTemplate
                 .get("/v1/namespaces")
                 .execute(ApiNamespaceList::class)
                 .namespaces

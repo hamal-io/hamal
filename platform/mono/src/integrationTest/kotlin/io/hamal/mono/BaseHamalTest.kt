@@ -1,14 +1,13 @@
 package io.hamal.mono
 
-import io.hamal.backend.component.BootstrapBackend
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.req.InvokeAdhocReq
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.HamalSdk
+import io.hamal.lib.sdk.HubSdk
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
@@ -20,12 +19,19 @@ import java.lang.Thread.sleep
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.temporal.ChronoUnit
 import kotlin.io.path.name
 
 abstract class BaseHamalTest {
 
     @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
+
+    @Autowired
+    lateinit var accountCmdRepository: AccountCmdRepository
+
+    @Autowired
+    lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
     lateinit var execCmdRepository: ExecCmdRepository
@@ -37,6 +43,9 @@ abstract class BaseHamalTest {
     lateinit var funcCmdRepository: FuncCmdRepository
 
     @Autowired
+    lateinit var groupCmdRepository: GroupCmdRepository
+
+    @Autowired
     lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
@@ -46,7 +55,10 @@ abstract class BaseHamalTest {
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @Autowired
-    lateinit var backendBootstrap: BootstrapBackend
+    lateinit var generateDomainId: GenerateDomainId
+
+    lateinit var rootAccount: Account
+    lateinit var rootAccountAuthToken: AuthToken
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -54,13 +66,13 @@ abstract class BaseHamalTest {
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
-                val execReq = sdk.adhocService().submit(
+                val execReq = rootHubSdk.adhocService.submit(
                     InvokeAdhocReq(
-                        inputs = InvocationInputs(), code = CodeType(String(Files.readAllBytes(testFile)))
+                        InvocationInputs(),
+                        CodeType(String(Files.readAllBytes(testFile)))
                     )
                 )
-
-                sdk.awaitService.await(execReq)
+                rootHubSdk.awaitService.await(execReq)
 
                 var wait = true
                 val startedAt = TimeUtils.now()
@@ -85,16 +97,50 @@ abstract class BaseHamalTest {
 
     private fun setupTestEnv() {
         eventBrokerRepository.clear()
+
+        accountCmdRepository.clear()
+        authCmdRepository.clear()
         reqCmdRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
+        groupCmdRepository.clear()
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
-        backendBootstrap.bootstrap()
+
+
+        namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(1),
+                namespaceId = generateDomainId(::NamespaceId),
+                name = NamespaceName("hamal"),
+                inputs = NamespaceInputs()
+            )
+        )
+
+        rootAccount = accountCmdRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = CmdId(2),
+                accountId = generateDomainId(::AccountId),
+                name = AccountName("test-root"),
+                email = AccountEmail("test@hamal.io"),
+                salt = PasswordSalt("test-salt")
+            )
+        )
+
+        rootAccountAuthToken = (authCmdRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = CmdId(3),
+                authId = generateDomainId(::AuthId),
+                accountId = rootAccount.id,
+                token = AuthToken("test-root-token"),
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+            )
+        ) as TokenAuth).token
+
     }
 
-    abstract val httpTemplate: HttpTemplate
-    abstract val sdk: HamalSdk
+    abstract val rootHttpTemplate: HttpTemplate
+    abstract val rootHubSdk: HubSdk
 }
 
 

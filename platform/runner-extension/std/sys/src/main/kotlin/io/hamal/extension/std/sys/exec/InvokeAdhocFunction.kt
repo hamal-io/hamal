@@ -2,6 +2,7 @@ package io.hamal.extension.std.sys.exec
 
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -10,11 +11,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.sdk.HttpTemplateSupplier
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 
 class InvokeAdhocFunction(
-    private val templateSupplier: HttpTemplateSupplier
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -25,8 +25,7 @@ class InvokeAdhocFunction(
             code = CodeType(arg1.getString("code"))
         )
 
-        val res = templateSupplier()
-            .post("/v1/adhoc")
+        val res = httpTemplate.post("/v1/adhoc")
             .body(r)
             .execute(ApiSubmittedReqWithId::class)
 

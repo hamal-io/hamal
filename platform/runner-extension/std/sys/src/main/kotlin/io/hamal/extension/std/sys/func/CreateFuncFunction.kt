@@ -14,10 +14,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 
 class CreateFuncFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -37,8 +37,7 @@ class CreateFuncFunction(
                 code = arg1.getCodeType("code")
             )
 
-            val res = templateSupplier()
-                .post("/v1/funcs")
+            val res = httpTemplate.post("/v1/funcs")
                 .body(r)
                 .execute(ApiSubmittedReqWithId::class)
 

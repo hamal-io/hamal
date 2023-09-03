@@ -8,19 +8,19 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSimpleEventTrigger
-import io.hamal.lib.sdk.domain.ApiSimpleFixedRateTrigger
-import io.hamal.lib.sdk.domain.ApiSimpleTrigger
-import io.hamal.lib.sdk.domain.ApiTriggerList
+import io.hamal.lib.sdk.hub.domain.ApiSimpleEventTrigger
+import io.hamal.lib.sdk.hub.domain.ApiSimpleFixedRateTrigger
+import io.hamal.lib.sdk.hub.domain.ApiSimpleTrigger
+import io.hamal.lib.sdk.hub.domain.ApiTriggerList
 
 class ListTriggerFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val triggers = try {
-            templateSupplier()
+            httpTemplate
                 .get("/v1/triggers")
                 .execute(ApiTriggerList::class)
                 .triggers

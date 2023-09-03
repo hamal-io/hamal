@@ -1,9 +1,9 @@
 package io.hamal.backend.web.req
 
-import io.hamal.lib.sdk.domain.ApiDefaultSubmittedReq
-import io.hamal.lib.sdk.domain.ApiSubmittedReq
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
-import io.hamal.lib.sdk.domain.ApiSubmittedWithTokenReq
+import io.hamal.lib.sdk.hub.domain.ApiDefaultSubmittedReq
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedWithTokenReq
 import io.hamal.repository.api.submitted_req.*
 
 

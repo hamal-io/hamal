@@ -2,7 +2,7 @@ package io.hamal.backend.web.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
-import io.hamal.lib.sdk.domain.ApiTriggerList
+import io.hamal.lib.sdk.hub.domain.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.domain.ApiFuncList
+import io.hamal.lib.sdk.hub.domain.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

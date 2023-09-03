@@ -3,7 +3,7 @@ package io.hamal.backend.web.exec
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.domain.ApiExecList
+import io.hamal.lib.sdk.hub.domain.ApiExecList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

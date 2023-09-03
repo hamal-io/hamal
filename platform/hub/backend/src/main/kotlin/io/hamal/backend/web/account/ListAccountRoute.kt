@@ -2,7 +2,7 @@ package io.hamal.backend.web.account
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.sdk.domain.ApiAccountList
+import io.hamal.lib.sdk.hub.domain.ApiAccountList
 import io.hamal.repository.api.AccountQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

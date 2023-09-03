@@ -11,10 +11,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 
 class CreateTopicFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -24,8 +24,7 @@ class CreateTopicFunction(
             val r = CreateTopicReq(
                 name = TopicName(arg1.getString("name")),
             )
-            val res = templateSupplier()
-                .post("/v1/topics")
+            val res = httpTemplate.post("/v1/topics")
                 .body(r)
                 .execute(ApiSubmittedReqWithId::class)
 

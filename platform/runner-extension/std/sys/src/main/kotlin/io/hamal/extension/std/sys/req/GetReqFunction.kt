@@ -10,17 +10,16 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
 
 class GetReqFunction(
-    private val templateSupplier: () -> HttpTemplate
+    private val httpTemplate: HttpTemplate
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        val response = templateSupplier()
-            .get("/v1/reqs/{reqId}")
+        val response = httpTemplate.get("/v1/reqs/{reqId}")
             .path("reqId", arg1.value)
             .execute()
 

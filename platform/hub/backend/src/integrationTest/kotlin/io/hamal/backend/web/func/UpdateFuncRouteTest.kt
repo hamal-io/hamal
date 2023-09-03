@@ -1,6 +1,5 @@
 package io.hamal.backend.web.func
 
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.req.UpdateFuncReq
@@ -13,8 +12,9 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.domain.ApiError
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiError
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -83,10 +83,14 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
                 )
             )
             .execute()
+
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val funcId = updateFuncResponse.result(ApiSubmittedReqWithId::class).id(::FuncId)
+        val submittedReq = updateFuncResponse.result(ApiSubmittedReqWithId::class)
+        awaitCompleted(submittedReq)
+
+        val funcId = submittedReq.id(::FuncId)
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))

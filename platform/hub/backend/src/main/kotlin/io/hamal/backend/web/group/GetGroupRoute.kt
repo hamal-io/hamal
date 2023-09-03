@@ -1,7 +1,7 @@
 package io.hamal.backend.web.group
 
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.domain.ApiGroup
+import io.hamal.lib.sdk.hub.domain.ApiGroup
 import io.hamal.repository.api.GroupQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

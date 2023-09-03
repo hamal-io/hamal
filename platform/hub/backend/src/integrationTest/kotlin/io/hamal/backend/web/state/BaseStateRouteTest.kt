@@ -12,9 +12,9 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.domain.ApiCorrelatedState
-import io.hamal.lib.sdk.domain.ApiSubmittedReq
-import io.hamal.lib.sdk.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.domain.ApiCorrelatedState
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 

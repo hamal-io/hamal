@@ -1,7 +1,7 @@
 package io.hamal.runner.service
 
-import io.hamal.lib.sdk.DefaultHamalSdk
-import io.hamal.lib.sdk.HttpTemplateSupplier
+import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.sdk.DefaultHubSdk
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.connector.UnitOfWork
@@ -16,14 +16,13 @@ import kotlin.time.toJavaDuration
 
 @Service
 class HttpExecutorService(
-    private val httpTemplateSupplier: HttpTemplateSupplier,
+    private val httpTemplate: HttpTemplate,
     private val runnerExecutor: ThreadPoolTaskScheduler,
     private val sandboxFactory: SandboxFactory
 ) {
     @Scheduled(initialDelay = 1, timeUnit = TimeUnit.SECONDS, fixedRate = Int.MAX_VALUE.toLong())
     fun run() {
-        val template = httpTemplateSupplier()
-        val sdk = DefaultHamalSdk(template)
+        val sdk = DefaultHubSdk(httpTemplate)
         val connector = HttpConnector(sdk)
         val execute = DefaultCodeRunner(connector, sandboxFactory)
         runnerExecutor.scheduleAtFixedRate({
