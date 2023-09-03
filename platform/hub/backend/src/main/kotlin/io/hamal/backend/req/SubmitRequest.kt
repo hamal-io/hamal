@@ -66,6 +66,7 @@ class SubmitRequest(
                 salt
             ),
             salt = salt,
+            token = generateToken()
         ).also(reqCmdRepository::queue)
     }
 

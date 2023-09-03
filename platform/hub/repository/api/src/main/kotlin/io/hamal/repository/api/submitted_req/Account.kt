@@ -15,5 +15,6 @@ data class SubmittedCreateAccountWithPasswordReq(
     val name: AccountName,
     val email: AccountEmail?,
     val salt: PasswordSalt,
-    val hash: PasswordHash
+    val hash: PasswordHash,
+    val token: AuthToken
 ) : SubmittedReq

@@ -58,5 +58,7 @@ interface AuthCmdRepository {
 
 
 interface AuthQueryRepository {
+    fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Account not found")
+    fun find(authToken: AuthToken): Auth?
     fun list(accountId: AccountId): List<Auth>
 }

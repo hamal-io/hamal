@@ -1,6 +1,7 @@
 package io.hamal.repository.memory
 
 import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthRepository
@@ -12,6 +13,7 @@ import kotlin.concurrent.write
 
 object MemoryAuthRepository : AuthRepository {
     private val lock = ReentrantReadWriteLock()
+
     private val store = mutableMapOf<AccountId, MutableList<Auth>>()
 
     override fun create(cmd: CreateCmd): Auth {
@@ -47,5 +49,14 @@ object MemoryAuthRepository : AuthRepository {
 
     override fun clear() {
         lock.write { store.clear() }
+    }
+
+    override fun find(authToken: AuthToken): Auth? {
+        return lock.read {
+            store.flatMap { it.value }
+                .asSequence()
+                .filterIsInstance<TokenAuth>()
+                .find { it.token == authToken }
+        }
     }
 }
