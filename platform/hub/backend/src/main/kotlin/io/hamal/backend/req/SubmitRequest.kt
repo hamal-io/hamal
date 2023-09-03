@@ -2,6 +2,7 @@ package io.hamal.backend.req
 
 import io.hamal.backend.component.EncodePassword
 import io.hamal.backend.component.GenerateSalt
+import io.hamal.backend.component.GenerateToken
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
@@ -10,6 +11,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.repository.api.Account
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
@@ -32,8 +34,21 @@ class SubmitRequest(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val generateSalt: GenerateSalt,
-    private val encodePassword: EncodePassword
+    private val encodePassword: EncodePassword,
+    private val generateToken: GenerateToken
 ) {
+
+    operator fun invoke(account: Account, password: Password): SubmittedSignInWithPasswordReq {
+        val encodedPassword = encodePassword(password, account.salt)
+        return SubmittedSignInWithPasswordReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            authId = generateDomainId(::AuthId),
+            accountId = account.id,
+            hash = encodedPassword,
+            token = generateToken()
+        ).also(reqCmdRepository::queue)
+    }
 
     operator fun invoke(createAccount: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
         val salt = generateSalt()
@@ -47,13 +62,12 @@ class SubmitRequest(
             email = createAccount.email,
             authenticationId = generateDomainId(::AuthId),
             hash = encodePassword(
-                createAccount.password ?: throw IllegalArgumentException("Password is missing"),
+                createAccount.password ?: throw NoSuchElementException("Account not found"),
                 salt
             ),
             salt = salt,
         ).also(reqCmdRepository::queue)
     }
-
 
     operator fun invoke(adhoc: InvokeAdhocReq) =
         SubmittedInvokeExecReq(

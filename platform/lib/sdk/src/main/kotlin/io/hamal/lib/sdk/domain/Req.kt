@@ -4,6 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.vo.AuthToken
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,20 +15,26 @@ data class ApiReqList(
 @Serializable
 sealed interface ApiSubmittedReq {
     val reqId: ReqId
-    var status: ReqStatus
+    val status: ReqStatus
 }
 
 @Serializable
 data class ApiDefaultSubmittedReq(
     override val reqId: ReqId,
-    override var status: ReqStatus,
+    override val status: ReqStatus,
 ) : ApiSubmittedReq
 
+@Serializable
+data class ApiSubmittedWithTokenReq(
+    override val reqId: ReqId,
+    override val status: ReqStatus,
+    val token: AuthToken
+) : ApiSubmittedReq
 
 @Serializable
 data class ApiSubmittedReqWithId(
     override val reqId: ReqId,
-    override var status: ReqStatus,
+    override val status: ReqStatus,
     val id: SnowflakeId,
 ) : ApiSubmittedReq {
 

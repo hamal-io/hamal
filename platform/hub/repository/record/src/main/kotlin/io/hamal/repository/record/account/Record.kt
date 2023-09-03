@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.PasswordSalt
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -22,5 +23,6 @@ data class AccountCreationRecord(
     override val entityId: AccountId,
     override val cmdId: CmdId,
     val name: AccountName,
-    val email: AccountEmail?
+    val email: AccountEmail?,
+    val salt: PasswordSalt
 ) : AccountRecord()

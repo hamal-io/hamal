@@ -14,6 +14,6 @@ data class SubmittedCreateAccountWithPasswordReq(
     val groupId: GroupId,
     val name: AccountName,
     val email: AccountEmail?,
-    val hash: PasswordHash,
-    val salt: PasswordSalt
+    val salt: PasswordSalt,
+    val hash: PasswordHash
 ) : SubmittedReq

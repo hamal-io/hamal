@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountName
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
@@ -28,6 +29,8 @@ internal object CurrentAccountProjection {
 
     fun find(accountId: AccountId): Account? = projection[accountId]
 
+    fun find(accountName: AccountName): Account? = projection.values.find { it.name == accountName }
+
     fun list(afterId: AccountId, limit: Limit): List<Account> {
         return projection.keys.sorted()
             .reversed()
@@ -43,6 +46,7 @@ internal object CurrentAccountProjection {
 
 object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(), AccountRepository {
     private val lock = ReentrantLock()
+
     override fun create(cmd: AccountCmdRepository.CreateCmd): Account {
         return lock.withLock {
             val accountId = cmd.accountId
@@ -55,6 +59,7 @@ object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(
                         cmdId = cmd.id,
                         name = cmd.name,
                         email = cmd.email,
+                        salt = cmd.salt
                     )
                 )
                 (currentVersion(accountId)).also(CurrentAccountProjection::apply)
@@ -63,6 +68,8 @@ object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(
     }
 
     override fun find(accountId: AccountId): Account? = CurrentAccountProjection.find(accountId)
+
+    override fun find(accountName: AccountName): Account? = CurrentAccountProjection.find(accountName)
 
     override fun list(block: AccountQuery.() -> Unit): List<Account> {
         val query = AccountQuery().also(block)

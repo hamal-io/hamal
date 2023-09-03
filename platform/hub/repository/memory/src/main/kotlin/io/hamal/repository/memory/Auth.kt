@@ -1,11 +1,11 @@
 package io.hamal.repository.memory
 
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.Auth
-import io.hamal.repository.api.AuthCmdRepository.CreateCmd
-import io.hamal.repository.api.AuthCmdRepository.CreatePasswordAuthCmd
+import io.hamal.repository.api.AuthCmdRepository.*
+import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.PasswordAuth
+import io.hamal.repository.api.TokenAuth
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -22,7 +22,17 @@ object MemoryAuthRepository : AuthRepository {
                     id = cmd.authId,
                     accountId = cmd.accountId,
                     hash = cmd.hash,
-                    salt = cmd.salt
+                ).also {
+                    store.putIfAbsent(it.accountId, mutableListOf())
+                    store[it.accountId]!!.add(it)
+                }
+
+                is CreateTokenAuthCmd -> TokenAuth(
+                    cmdId = cmd.id,
+                    id = cmd.authId,
+                    accountId = cmd.accountId,
+                    token = cmd.token,
+                    expiresAt = cmd.expiresAt
                 ).also {
                     store.putIfAbsent(it.accountId, mutableListOf())
                     store[it.accountId]!!.add(it)

@@ -1,10 +1,7 @@
 package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.PasswordHash
-import io.hamal.lib.domain.vo.PasswordSalt
+import io.hamal.lib.domain.vo.*
 
 sealed interface Auth {
     val id: AuthId
@@ -15,9 +12,17 @@ data class PasswordAuth(
     override val id: AuthId,
     val cmdId: CmdId,
     override val accountId: AccountId,
-    val hash: PasswordHash,
-    val salt: PasswordSalt
+    val hash: PasswordHash
 ) : Auth
+
+data class TokenAuth(
+    override val id: AuthId,
+    val cmdId: CmdId,
+    override val accountId: AccountId,
+    val token: AuthToken,
+    val expiresAt: AuthTokenExpiresAt
+) : Auth
+
 
 interface AuthRepository : AuthCmdRepository, AuthQueryRepository
 
@@ -39,10 +44,19 @@ interface AuthCmdRepository {
         override val id: CmdId,
         override val authId: AuthId,
         override val accountId: AccountId,
-        val hash: PasswordHash,
-        val salt: PasswordSalt
+        val hash: PasswordHash
+    ) : CreateCmd
+
+    data class CreateTokenAuthCmd(
+        override val id: CmdId,
+        override val authId: AuthId,
+        override val accountId: AccountId,
+        val token: AuthToken,
+        val expiresAt: AuthTokenExpiresAt
     ) : CreateCmd
 }
 
 
-interface AuthQueryRepository
+interface AuthQueryRepository {
+    fun list(accountId: AccountId): List<Auth>
+}

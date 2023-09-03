@@ -1,9 +1,9 @@
 package io.hamal.backend.component
 
+import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.domain.vo.PasswordHash
 import io.hamal.lib.domain.vo.PasswordSalt
-import org.springframework.stereotype.Component
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
@@ -13,7 +13,6 @@ interface EncodePassword {
     operator fun invoke(password: Password, salt: PasswordSalt): PasswordHash
 }
 
-@Component
 object PBKDF2 : EncodePassword {
     override fun invoke(password: Password, salt: PasswordSalt): PasswordHash {
         val input = "${salt.value}${password.value}".toByteArray()
@@ -29,12 +28,24 @@ interface GenerateSalt {
     operator fun invoke(): PasswordSalt
 }
 
-@Component
 object SecureRandomSalt : GenerateSalt {
     override fun invoke(): PasswordSalt {
         val random = SecureRandom()
         val salt = ByteArray(64)
         random.nextBytes(salt)
         return PasswordSalt(HexFormat.of().formatHex(salt))
+    }
+}
+
+interface GenerateToken {
+    operator fun invoke(): AuthToken
+}
+
+object DomainGenerateToken : GenerateToken {
+    override fun invoke(): AuthToken {
+        val random = SecureRandom()
+        val salt = ByteArray(64)
+        random.nextBytes(salt)
+        return AuthToken(HexFormat.of().formatHex(salt))
     }
 }

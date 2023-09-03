@@ -11,7 +11,7 @@ import io.hamal.repository.api.submitted_req.SubmittedCreateAccountWithPasswordR
 import org.springframework.stereotype.Component
 
 @Component
-class CreateAccountHandler(
+class CreateAccountWithPasswordHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
@@ -26,18 +26,19 @@ class CreateAccountHandler(
     }
 }
 
-private fun CreateAccountHandler.createAccount(req: SubmittedCreateAccountWithPasswordReq): Account {
+private fun CreateAccountWithPasswordHandler.createAccount(req: SubmittedCreateAccountWithPasswordReq): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
             accountId = req.id,
             name = req.name,
-            email = req.email
+            email = req.email,
+            salt = req.salt
         )
     )
 }
 
-private fun CreateAccountHandler.createGroup(req: SubmittedCreateAccountWithPasswordReq): Group {
+private fun CreateAccountWithPasswordHandler.createGroup(req: SubmittedCreateAccountWithPasswordReq): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -48,18 +49,17 @@ private fun CreateAccountHandler.createGroup(req: SubmittedCreateAccountWithPass
     )
 }
 
-private fun CreateAccountHandler.createPasswordAuthentication(req: SubmittedCreateAccountWithPasswordReq): Auth {
+private fun CreateAccountWithPasswordHandler.createPasswordAuthentication(req: SubmittedCreateAccountWithPasswordReq): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreatePasswordAuthCmd(
             id = req.cmdId(),
             authId = req.authenticationId,
             accountId = req.id,
-            hash = req.hash,
-            salt = req.salt
+            hash = req.hash
         )
     )
 }
 
-private fun CreateAccountHandler.emitEvent(cmdId: CmdId, account: Account) {
+private fun CreateAccountWithPasswordHandler.emitEvent(cmdId: CmdId, account: Account) {
     eventEmitter.emit(cmdId, AccountCreatedEvent(account))
 }
