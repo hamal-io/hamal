@@ -11,7 +11,7 @@ class HttpConnector(
 ) : Connector {
 
     override fun poll(): List<UnitOfWork> {
-        return sdk.execService.poll().work.map {
+        return sdk.exec.poll().work.map {
             UnitOfWork(
                 id = it.id,
                 inputs = it.inputs,
@@ -24,10 +24,10 @@ class HttpConnector(
     }
 
     override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {
-        sdk.execService.complete(execId, state, events)
+        sdk.exec.complete(execId, state, events)
     }
 
     override fun fail(execId: ExecId, error: ErrorType) {
-        sdk.execService.fail(execId, error)
+        sdk.exec.fail(execId, error)
     }
 }

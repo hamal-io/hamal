@@ -5,4 +5,6 @@ import java.nio.file.Paths
 
 abstract class BaseAsRootTest : BaseTest() {
     override val testPath = Paths.get("src", "integrationTest", "resources", "as_root")
+
+    override fun setup() {}
 }

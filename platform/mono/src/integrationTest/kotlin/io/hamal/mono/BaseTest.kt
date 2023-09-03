@@ -11,6 +11,7 @@ import io.hamal.lib.sdk.HubSdk
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,16 +61,16 @@ abstract class BaseTest {
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
-            DynamicTest.dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
+            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
-                val execReq = rootHubSdk.adhocService.submit(
+                val execReq = rootHubSdk.adhoc.submit(
                     InvokeAdhocReq(
                         InvocationInputs(),
                         CodeType(String(Files.readAllBytes(testFile)))
                     )
                 )
-                rootHubSdk.awaitService.await(execReq)
+                rootHubSdk.await(execReq)
 
                 var wait = true
                 val startedAt = TimeUtils.now()
@@ -134,11 +135,13 @@ abstract class BaseTest {
             )
         ) as TokenAuth).token
 
+        setup()
     }
 
     abstract val rootHttpTemplate: HttpTemplate
     abstract val rootHubSdk: HubSdk
-    abstract val testPath : Path
+    abstract val testPath: Path
+    abstract fun setup()
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 }

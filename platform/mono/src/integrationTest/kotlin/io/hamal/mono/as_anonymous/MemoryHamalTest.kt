@@ -1,4 +1,4 @@
-package io.hamal.mono.as_root
+package io.hamal.mono.as_anonymous
 
 import io.hamal.backend.BackendConfig
 import io.hamal.lib.http.HttpTemplate
@@ -16,9 +16,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(
     classes = [
+        TestAsAnonymousRunnerConfig::class,
         BackendConfig::class,
         RunnerConfig::class,
-        TestAsRootRunnerConfig::class
     ]
 )
 @SpringBootTest(
@@ -29,8 +29,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 )
 @ActiveProfiles(value = ["test", "memory"])
 @DirtiesContext
-@DisplayName("as_root - memory")
-class MemoryHamalTest : BaseAsRootTest() {
+@DisplayName("as_anonymous - memory")
+class MemoryHamalTest : BaseAsAnonymousTest() {
     final override val rootHttpTemplate = HttpTemplate(
         baseUrl = "http://localhost:8042",
         headerFactory = {

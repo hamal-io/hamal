@@ -15,9 +15,11 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.sdk.DefaultHubSdk
+import io.hamal.lib.sdk.HubSdk
 
 class SysExtensionFactory(
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplate,
+    private val sdk: HubSdk = DefaultHubSdk(httpTemplate)
 ) : ScriptExtensionFactory {
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
@@ -34,7 +36,7 @@ class SysExtensionFactory(
                 "list_execs" to ListExecFunction(httpTemplate),
                 "get_exec" to GetExecFunction(httpTemplate),
 
-                "create_func" to CreateFuncFunction(httpTemplate),
+                "create_func" to CreateFuncFunction(sdk),
                 "get_func" to GetFuncFunction(httpTemplate),
                 "list_func" to ListFuncFunction(httpTemplate),
 

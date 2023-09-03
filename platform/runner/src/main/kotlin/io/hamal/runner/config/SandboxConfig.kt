@@ -42,7 +42,7 @@ class RunnerSandboxFactory(
         return Sandbox(ctx).register(
             DecimalExtensionFactory,
             HttpExtensionFactory(),
-            LogExtensionFactory(sdk.execLogService),
+            LogExtensionFactory(sdk.execLog),
             SysExtensionFactory(template),
             EthExtensionFactory(),
             HmlExtensionFactory()

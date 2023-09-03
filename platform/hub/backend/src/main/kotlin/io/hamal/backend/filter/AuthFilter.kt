@@ -24,7 +24,7 @@ class AuthFilter(
         val path = request.servletPath
 
         // FIXME skip worker auth for now
-        if (path == "/v1/dequeue") {
+        if (path == "/v1/dequeue" || path.endsWith("complete") || path.endsWith("fail")) {
             return filterChain.doFilter(request, response)
         }
 
@@ -36,7 +36,7 @@ class AuthFilter(
             ?.let(::AuthToken) ?: throw NoSuchElementException("Account not found")
 
         val auth = authRepository.get(token)
-        // FIXME not expired
+//        // FIXME not expired
         return filterChain.doFilter(request, response)
     }
 

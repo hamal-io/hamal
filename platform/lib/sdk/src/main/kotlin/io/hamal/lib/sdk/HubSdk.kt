@@ -4,48 +4,54 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.hub.service.*
 
 interface HubSdk {
-    val accountService: AccountService
-    val authService: AuthService
-    val adhocService: AdhocService
-    val awaitService: AwaitService
-    val execService: ExecService
-    val execLogService: ExecLogService
-    val groupService: GroupService
-    val topicService: TopicService
+    val account: AccountService
+    val auth: AuthService
+    val adhoc: AdhocService
+    val await: AwaitService
+    val exec: ExecService
+    val execLog: ExecLogService
+    val func: FuncService
+    val group: GroupService
+    val topic: TopicService
 }
 
 data class DefaultHubSdk(
     val httpTemplate: HttpTemplate
 ) : HubSdk {
 
-    override val accountService: AccountService by lazy {
+    override val account: AccountService by lazy {
         DefaultAccountService(httpTemplate)
     }
 
-    override val adhocService: AdhocService by lazy {
+    override val adhoc: AdhocService by lazy {
         DefaultAdhocService(httpTemplate)
     }
 
-    override val authService: AuthService by lazy {
+    override val auth: AuthService by lazy {
         DefaultAuthService(httpTemplate)
     }
 
-    override val awaitService: AwaitService by lazy {
+    override val await: AwaitService by lazy {
         DefaultAwaitService(httpTemplate)
     }
 
-    override val execService: ExecService by lazy {
+    override val exec: ExecService by lazy {
         DefaultExecService(httpTemplate)
     }
 
-    override val execLogService: ExecLogService by lazy {
+    override val execLog: ExecLogService by lazy {
         DefaultExecLogService(httpTemplate)
     }
-    override val groupService: GroupService by lazy {
+
+    override val func: FuncService by lazy {
+        DefaultFuncService(httpTemplate)
+    }
+
+    override val group: GroupService by lazy {
         DefaultGroupService(httpTemplate)
     }
 
-    override val topicService: TopicService by lazy {
+    override val topic: TopicService by lazy {
         DefaultTopicService(httpTemplate)
     }
 }

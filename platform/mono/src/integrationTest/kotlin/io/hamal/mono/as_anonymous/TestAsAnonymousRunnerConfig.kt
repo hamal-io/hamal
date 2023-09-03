@@ -1,4 +1,4 @@
-package io.hamal.mono.as_root
+package io.hamal.mono.as_anonymous
 
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
@@ -15,18 +15,15 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
 @TestConfiguration
-class TestRunnerConfig {
+internal class TestAsAnonymousRunnerConfig {
 
     @Bean
     fun httpTemplate(
         @Value("\${server.port}") serverPort: Number
     ) = HttpTemplate(
         baseUrl = "http://localhost:$serverPort",
-        headerFactory = {
-            set("x-hamal-token", "test-root-token")
-        }
+        headerFactory = { }
     )
-
 
     @Bean
     fun sandboxFactory(
@@ -36,7 +33,7 @@ class TestRunnerConfig {
             NativeLoader.load(Resources)
             val sdk = DefaultHubSdk(httpTemplate)
             return Sandbox(NopSandboxContext()).register(
-                LogExtensionFactory(sdk.execLogService),
+                LogExtensionFactory(sdk.execLog),
                 SysExtensionFactory(httpTemplate)
             )
         }

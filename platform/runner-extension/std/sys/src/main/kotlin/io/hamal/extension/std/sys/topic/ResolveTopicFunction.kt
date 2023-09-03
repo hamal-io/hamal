@@ -19,7 +19,7 @@ class ResolveTopicFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, StringType?> {
         return try {
             null to StringType(
-                sdk.topicService.resolve(TopicName(arg1.value))
+                sdk.topic.resolve(TopicName(arg1.value))
                     .value
                     .value
                     .toString(16)
