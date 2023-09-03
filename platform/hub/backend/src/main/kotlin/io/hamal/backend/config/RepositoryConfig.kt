@@ -1,10 +1,7 @@
 package io.hamal.backend.config
 
 import io.hamal.repository.api.*
-import io.hamal.repository.memory.MemoryExecLogRepository
-import io.hamal.repository.memory.MemoryMetricRepository
-import io.hamal.repository.memory.MemoryReqRepository
-import io.hamal.repository.memory.MemoryStateRepository
+import io.hamal.repository.memory.*
 import io.hamal.repository.memory.log.MemoryBrokerRepository
 import io.hamal.repository.memory.record.*
 import io.hamal.repository.sqlite.SqliteStateRepository
@@ -38,6 +35,15 @@ open class SqliteRepositoryConfig {
 
     @Bean
     open fun accountCmdRepository() = accountRepository()
+
+    @Bean
+    open fun authRepository() = MemoryAuthRepository
+
+    @Bean
+    open fun authQueryRepository() = authRepository()
+
+    @Bean
+    open fun authCmdRepository() = authRepository()
 
     @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
@@ -129,6 +135,15 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun accountCmdRepository() = accountRepository()
+
+    @Bean
+    open fun authRepository() = MemoryAuthRepository
+
+    @Bean
+    open fun authQueryRepository() = authRepository()
+
+    @Bean
+    open fun authCmdRepository() = authRepository()
 
     @Bean
     open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository

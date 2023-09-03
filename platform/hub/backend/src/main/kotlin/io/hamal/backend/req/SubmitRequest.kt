@@ -1,5 +1,7 @@
 package io.hamal.backend.req
 
+import io.hamal.backend.component.EncodePassword
+import io.hamal.backend.component.GenerateSalt
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
@@ -28,19 +30,29 @@ class SubmitRequest(
     private val generateDomainId: GenerateDomainId,
     private val reqCmdRepository: ReqCmdRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val generateSalt: GenerateSalt,
+    private val encodePassword: EncodePassword
 ) {
 
-    operator fun invoke(createAccount: CreateAccountReq) =
-        SubmittedCreateAccountWithPasswordReq(
+    operator fun invoke(createAccount: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
+        val salt = generateSalt()
+
+        return SubmittedCreateAccountWithPasswordReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::AccountId),
             groupId = generateDomainId(::GroupId),
             name = createAccount.name,
             email = createAccount.email,
-            password = createAccount.password!!
+            authenticationId = generateDomainId(::AuthId),
+            hash = encodePassword(
+                createAccount.password ?: throw IllegalArgumentException("Password is missing"),
+                salt
+            ),
+            salt = salt,
         ).also(reqCmdRepository::queue)
+    }
 
 
     operator fun invoke(adhoc: InvokeAdhocReq) =

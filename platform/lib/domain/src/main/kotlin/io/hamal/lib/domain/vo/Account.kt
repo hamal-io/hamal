@@ -23,10 +23,3 @@ class AccountEmail(override val value: String) : StringValueObject() {
 }
 
 
-@Serializable(with = AccountPassword.Serializer::class)
-class AccountPassword(override val value: String) : StringValueObject() {
-    internal object Serializer : StringValueObjectSerializer<AccountPassword>(::AccountPassword)
-}
-
-
-

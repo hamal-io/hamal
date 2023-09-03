@@ -10,8 +10,10 @@ data class SubmittedCreateAccountWithPasswordReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: AccountId,
+    val authenticationId: AuthId,
     val groupId: GroupId,
     val name: AccountName,
     val email: AccountEmail?,
-    val password: AccountPassword
+    val hash: PasswordHash,
+    val salt: PasswordSalt
 ) : SubmittedReq
