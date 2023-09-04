@@ -8,27 +8,27 @@ import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
-@Serializable(with = ApiState.Serializer::class)
-class ApiState(override val value: MapType = MapType()) : Inputs() {
-    internal object Serializer : InputsSerializer<ApiState>(::ApiState)
+@Serializable(with = HubState.Serializer::class)
+class HubState(override val value: MapType = MapType()) : Inputs() {
+    internal object Serializer : InputsSerializer<HubState>(::HubState)
 }
 
 @Serializable
-data class ApiCorrelation(
+data class HubCorrelation(
     val correlationId: CorrelationId,
-    val func: ApiFunc
+    val func: Func
 ) {
     @Serializable
-    data class ApiFunc(
+    data class Func(
         val id: FuncId,
         val name: FuncName
     )
 }
 
 @Serializable
-data class ApiCorrelatedState(
-    val correlation: ApiCorrelation,
-    val value: ApiState
+data class HubCorrelatedState(
+    val correlation: HubCorrelation,
+    val state: HubState
 ) {
-    operator fun get(key: String) = value.value[key]
+    operator fun get(key: String) = state.value[key]
 }

@@ -13,8 +13,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.*
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -41,7 +41,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithId::class)
+        val result = creationResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(getTrigger(result.id(::TriggerId))) {
@@ -79,7 +79,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithId::class)
+        val result = creationResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(getTrigger(result.id(::TriggerId))) {
@@ -108,7 +108,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = creationResponse.error(ApiError::class)
+        val error = creationResponse.error(HubError::class)
         assertThat(error.message, equalTo("Namespace not found"))
 
         assertThat(listTriggers().triggers, empty())
@@ -131,7 +131,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithId::class)
+        val result = creationResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(triggerQueryRepository.get(result.id(::TriggerId))) {
@@ -159,7 +159,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(ApiError::class)
+        val result = creationResponse.error(HubError::class)
         assertThat(result.message, equalTo("Func not found"))
         verifyNoRequests()
     }
@@ -182,7 +182,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithId::class)
+        val result = creationResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(triggerQueryRepository.get(result.id(::TriggerId))) {
@@ -211,7 +211,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(BadRequest))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(ApiError::class)
+        val result = creationResponse.error(HubError::class)
         assertThat(result.message, equalTo("topicId is missing"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
@@ -233,7 +233,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(ApiError::class)
+        val result = creationResponse.error(HubError::class)
         assertThat(result.message, equalTo("Topic not found"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
@@ -255,7 +255,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(ApiError::class)
+        val result = creationResponse.error(HubError::class)
         assertThat(result.message, equalTo("Func not found"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }

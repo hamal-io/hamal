@@ -1,7 +1,7 @@
 package io.hamal.backend.web.exec
 
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.ApiExec
+import io.hamal.lib.sdk.hub.HubExec
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,9 +14,9 @@ class GetExecRoute(
     @GetMapping("/v1/execs/{execId}")
     fun get(
         @PathVariable("execId") execId: ExecId
-    ): ResponseEntity<ApiExec> {
+    ): ResponseEntity<HubExec> {
         return ResponseEntity.ok(execQueryRepository.get(execId).let {
-            ApiExec(
+            HubExec(
                 id = it.id,
                 status = it.status,
                 correlation = it.correlation,

@@ -7,9 +7,9 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SetStateReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.ApiDefaultSubmittedReq
-import io.hamal.lib.sdk.hub.ApiState
-import io.hamal.lib.sdk.hub.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
+import io.hamal.lib.sdk.hub.HubState
+import io.hamal.lib.sdk.hub.HubSubmittedReq
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,8 +26,8 @@ class SetStateRoute(
     fun setState(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("correlationId") correlationId: CorrelationId,
-        @RequestBody state: ApiState
-    ): ResponseEntity<ApiSubmittedReq> {
+        @RequestBody state: HubState
+    ): ResponseEntity<HubSubmittedReq> {
         ensureFuncExists(funcId)
 
         val result = request(
@@ -40,7 +40,7 @@ class SetStateRoute(
             )
         )
         return ResponseEntity(result.let {
-            ApiDefaultSubmittedReq(
+            HubDefaultSubmittedReq(
                 reqId = it.reqId,
                 status = it.status
             )

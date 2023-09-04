@@ -8,7 +8,7 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiNamespaceList
+import io.hamal.lib.sdk.hub.HubNamespaceList
 
 class ListNamespaceFunction(
     private val httpTemplate: HttpTemplate
@@ -19,7 +19,7 @@ class ListNamespaceFunction(
         val namespaces = try {
             httpTemplate
                 .get("/v1/namespaces")
-                .execute(ApiNamespaceList::class)
+                .execute(HubNamespaceList::class)
                 .namespaces
 
         } catch (t: Throwable) {

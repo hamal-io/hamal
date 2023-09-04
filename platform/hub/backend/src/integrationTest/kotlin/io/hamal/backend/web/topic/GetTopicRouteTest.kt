@@ -1,7 +1,7 @@
 package io.hamal.backend.web.topic
 
 
-import io.hamal.lib.sdk.hub.ApiError
+import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
@@ -29,7 +29,7 @@ internal class GetTopicRouteTest : BaseTopicRouteTest() {
         assertThat(getTopicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getTopicResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getTopicResponse.error(ApiError::class)
+        val error = getTopicResponse.error(HubError::class)
         assertThat(error.message, equalTo("Topic not found"))
     }
 }

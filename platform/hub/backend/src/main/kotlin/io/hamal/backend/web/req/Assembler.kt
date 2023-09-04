@@ -1,89 +1,89 @@
 package io.hamal.backend.web.req
 
-import io.hamal.lib.sdk.hub.ApiDefaultSubmittedReq
-import io.hamal.lib.sdk.hub.ApiSubmittedReq
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
-import io.hamal.lib.sdk.hub.ApiSubmittedWithTokenReq
+import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
+import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import io.hamal.repository.api.submitted_req.*
 
 
 internal object Assembler {
-    fun assemble(req: SubmittedReq): ApiSubmittedReq {
+    fun assemble(req: SubmittedReq): HubSubmittedReq {
         return when (val r = req) {
 
-            is SubmittedCreateAccountWithPasswordReq -> ApiSubmittedReqWithId(
+            is SubmittedCreateAccountWithPasswordReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedAppendToTopicReq -> ApiSubmittedReqWithId(
+            is SubmittedAppendToTopicReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedCompleteExecReq -> ApiSubmittedReqWithId(
+            is SubmittedCompleteExecReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedCreateFuncReq -> ApiSubmittedReqWithId(
+            is SubmittedCreateFuncReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedCreateNamespaceReq -> ApiSubmittedReqWithId(
+            is SubmittedCreateNamespaceReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedCreateTopicReq -> ApiSubmittedReqWithId(
+            is SubmittedCreateTopicReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedCreateTriggerReq -> ApiSubmittedReqWithId(
+            is SubmittedCreateTriggerReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedFailExecReq -> ApiSubmittedReqWithId(
+            is SubmittedFailExecReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedInvokeExecReq -> ApiSubmittedReqWithId(
+            is SubmittedInvokeExecReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedUpdateFuncReq -> ApiSubmittedReqWithId(
+            is SubmittedUpdateFuncReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
-            is SubmittedUpdateNamespaceReq -> ApiSubmittedReqWithId(
+            is SubmittedUpdateNamespaceReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 id = r.id
             )
 
 
-            is SubmittedSetStateReq -> ApiDefaultSubmittedReq(
+            is SubmittedSetStateReq -> HubDefaultSubmittedReq(
                 reqId = r.reqId,
                 status = r.status
             )
 
-            is SubmittedSignInWithPasswordReq -> ApiSubmittedWithTokenReq(
+            is SubmittedSignInWithPasswordReq -> HubSubmittedWithTokenReq(
                 reqId = r.reqId,
                 status = r.status,
                 token = r.token

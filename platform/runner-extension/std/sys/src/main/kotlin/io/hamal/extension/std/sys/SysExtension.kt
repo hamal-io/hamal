@@ -37,8 +37,8 @@ class SysExtensionFactory(
                 "get_exec" to GetExecFunction(httpTemplate),
 
                 "create_func" to CreateFuncFunction(sdk),
-                "get_func" to GetFuncFunction(httpTemplate),
-                "list_func" to ListFuncFunction(httpTemplate),
+                "get_func" to GetFuncFunction(sdk),
+                "list_func" to ListFuncFunction(sdk),
 
                 "create_namespace" to CreateNamespaceFunction(httpTemplate),
                 "get_namespace" to GetNamespaceFunction(httpTemplate),

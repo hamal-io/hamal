@@ -2,7 +2,7 @@ package io.hamal.backend.web.auth
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.SignInReq
-import io.hamal.lib.sdk.hub.ApiSubmittedWithTokenReq
+import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import io.hamal.repository.api.AccountQueryRepository
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -18,13 +18,13 @@ class SignInRoute(
     @PostMapping("/v1/sign-in")
     fun createFunc(
         @RequestBody signIn: SignInReq
-    ): ResponseEntity<ApiSubmittedWithTokenReq> {
+    ): ResponseEntity<HubSubmittedWithTokenReq> {
         val account = accountQueryRepository.find(signIn.name) ?: throw NoSuchElementException("Account not found")
         val password = signIn.password ?: throw NoSuchElementException("Account not found")
         val result = submitRequest(account, password)
 
         return ResponseEntity(
-            ApiSubmittedWithTokenReq(
+            HubSubmittedWithTokenReq(
                 reqId = result.reqId,
                 status = result.status,
                 token = result.token

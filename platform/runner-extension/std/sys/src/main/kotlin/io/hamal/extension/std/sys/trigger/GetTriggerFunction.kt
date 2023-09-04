@@ -10,10 +10,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiEventTrigger
-import io.hamal.lib.sdk.hub.ApiFixedRateTrigger
-import io.hamal.lib.sdk.hub.ApiTrigger
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubEventTrigger
+import io.hamal.lib.sdk.hub.HubFixedRateTrigger
+import io.hamal.lib.sdk.hub.HubTrigger
 
 class GetTriggerFunction(
     private val httpTemplate: HttpTemplate
@@ -26,11 +26,11 @@ class GetTriggerFunction(
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(ApiTrigger::class)
+            return null to response.result(HubTrigger::class)
                 .let { trigger ->
 
                     when (val t = trigger) {
-                        is ApiFixedRateTrigger ->
+                        is HubFixedRateTrigger ->
                             MapType(
                                 mutableMapOf(
                                     "id" to StringType(t.id.value.value.toString(16)),
@@ -52,7 +52,7 @@ class GetTriggerFunction(
                                 )
                             )
 
-                        is ApiEventTrigger -> {
+                        is HubEventTrigger -> {
                             MapType(
                                 mutableMapOf(
                                     "id" to StringType(t.id.value.value.toString(16)),
@@ -85,7 +85,7 @@ class GetTriggerFunction(
                 }
         } else {
             require(response is ErrorHttpResponse)
-            return response.error(ApiError::class)
+            return response.error(HubError::class)
                 .let { error ->
                     ErrorType(error.message ?: "An unknown error occurred")
                 } to null

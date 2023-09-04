@@ -1,7 +1,7 @@
 package io.hamal.backend.web.account
 
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.sdk.hub.ApiAccount
+import io.hamal.lib.sdk.hub.HubAccount
 import io.hamal.repository.api.AccountQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,10 +15,10 @@ class GetAccountRoute(
     @GetMapping("/v1/accounts/{accountId}")
     fun getAccount(
         @PathVariable("accountId") accountId: AccountId,
-    ): ResponseEntity<ApiAccount> {
+    ): ResponseEntity<HubAccount> {
         val result = accountQueryRepository.get(accountId)
         return ResponseEntity.ok(result.let {
-            ApiAccount(
+            HubAccount(
                 id = it.id,
                 name = it.name,
             )

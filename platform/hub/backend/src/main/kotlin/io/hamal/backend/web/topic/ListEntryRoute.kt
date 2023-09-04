@@ -3,7 +3,7 @@ package io.hamal.backend.web.topic
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.ApiTopicEntryList
+import io.hamal.lib.sdk.hub.HubTopicEntryList
 import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,18 +20,18 @@ class ListEntryRoute(
         @PathVariable("topicId") topicId: TopicId,
         @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: TopicEntryId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ApiTopicEntryList> {
+    ): ResponseEntity<HubTopicEntryList> {
         val topic = eventBrokerRepository.getTopic(topicId)
         val events = eventBrokerRepository.listEntries(topic) {
             this.afterId = afterId
             this.limit = limit
         }
         return ResponseEntity.ok(
-            ApiTopicEntryList(
+            HubTopicEntryList(
                 topicId = topic.id,
                 topicName = topic.name,
                 entries = events.map {
-                    ApiTopicEntryList.Entry(
+                    HubTopicEntryList.Entry(
                         id = it.id,
                         payload = it.payload
                     )

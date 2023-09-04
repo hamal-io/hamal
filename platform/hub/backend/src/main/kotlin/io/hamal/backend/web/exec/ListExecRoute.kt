@@ -2,7 +2,7 @@ package io.hamal.backend.web.exec
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.ApiExecList
+import io.hamal.lib.sdk.hub.HubExecList
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -16,15 +16,15 @@ class ListExecRoute(
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ApiExecList> {
+    ): ResponseEntity<HubExecList> {
         val execs = execQueryRepository.list {
             this.afterId = afterId
             this.limit = limit
         }
         return ResponseEntity.ok(
-            ApiExecList(
+            HubExecList(
                 execs = execs.map {
-                    ApiExecList.SimpleExec(
+                    HubExecList.Exec(
                         id = it.id,
                         status = it.status,
                         correlation = it.correlation,

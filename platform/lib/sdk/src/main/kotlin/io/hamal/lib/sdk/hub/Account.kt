@@ -6,11 +6,11 @@ import io.hamal.lib.http.HttpTemplate
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiAccountList(
-    val accounts: List<ApiSimpleAccount>
+data class HubAccountList(
+    val accounts: List<Account>
 ) {
     @Serializable
-    data class ApiSimpleAccount(
+    data class Account(
         val id: AccountId,
         val name: AccountName
     )
@@ -18,13 +18,13 @@ data class ApiAccountList(
 
 
 @Serializable
-data class ApiAccount(
+data class HubAccount(
     val id: AccountId,
     val name: AccountName,
 )
 
-interface AccountService
+interface HubAccountService
 
-internal class DefaultAccountService(
+internal class DefaultHubAccountService(
     private val template: HttpTemplate
-) : AccountService
+) : HubAccountService

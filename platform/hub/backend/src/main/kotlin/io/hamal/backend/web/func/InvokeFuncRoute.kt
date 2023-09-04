@@ -4,7 +4,7 @@ import io.hamal.backend.req.SubmitRequest
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.lib.domain.req.InvokeFuncReq
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,11 +21,11 @@ class InvokeFuncRoute(
     fun execFunc(
         @PathVariable("funcId") funcId: FuncId,
         @RequestBody invocation: InvokeFuncReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         val func = funcQueryRepository.get(funcId)
         val result = request(func.id, invocation)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 id = it.id

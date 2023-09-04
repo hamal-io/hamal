@@ -4,17 +4,17 @@ import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 
-interface AdhocService {
-    fun submit(req: InvokeAdhocReq): ApiSubmittedReqWithId
+interface HubAdhocService {
+    fun submit(req: InvokeAdhocReq): HubSubmittedReqWithId
 }
 
-internal class DefaultAdhocService(
+internal class DefaultHubAdhocService(
     private val template: HttpTemplate
-) : AdhocService {
-    override fun submit(req: InvokeAdhocReq): ApiSubmittedReqWithId {
+) : HubAdhocService {
+    override fun submit(req: InvokeAdhocReq): HubSubmittedReqWithId {
         return template
             .post("/v1/adhoc")
             .body(req)
-            .execute(ApiSubmittedReqWithId::class)
+            .execute(HubSubmittedReqWithId::class)
     }
 }

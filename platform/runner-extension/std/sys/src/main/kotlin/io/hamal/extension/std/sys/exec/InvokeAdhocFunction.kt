@@ -11,7 +11,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 
 class InvokeAdhocFunction(
     private val httpTemplate: HttpTemplate
@@ -27,7 +27,7 @@ class InvokeAdhocFunction(
 
         val res = httpTemplate.post("/v1/adhoc")
             .body(r)
-            .execute(ApiSubmittedReqWithId::class)
+            .execute(HubSubmittedReqWithId::class)
 
         return null to MapType().apply {
             this["req_id"] = res.reqId

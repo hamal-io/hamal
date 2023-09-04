@@ -9,7 +9,7 @@ import io.hamal.lib.http.HttpTemplate
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiTopicEntryList(
+data class HubTopicEntryList(
     val topicId: TopicId,
     val topicName: TopicName,
     val entries: List<Entry>
@@ -23,13 +23,13 @@ data class ApiTopicEntryList(
 
 
 @Serializable
-data class ApiTopic(
+data class HubTopic(
     val id: TopicId,
     val name: TopicName
 )
 
 @Serializable
-data class ApiTopicList(
+data class HubTopicList(
     val topics: List<Topic>
 ) {
     @Serializable
@@ -40,19 +40,19 @@ data class ApiTopicList(
 }
 
 
-interface TopicService {
+interface HubTopicService {
     fun resolve(topicName: TopicName): TopicId
 }
 
-internal class DefaultTopicService(
+internal class DefaultHubTopicService(
     private val httpTemplate: HttpTemplate
-) : TopicService {
+) : HubTopicService {
 
     override fun resolve(topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
             httpTemplate.get("/v1/topics")
                 .parameter("names", topicName.value)
-                .execute(ApiTopicList::class)
+                .execute(HubTopicList::class)
                 .topics
                 .firstOrNull()?.id
                 ?: throw NoSuchElementException("Topic not found")

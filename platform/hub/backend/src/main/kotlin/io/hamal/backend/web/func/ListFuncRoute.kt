@@ -4,8 +4,8 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.ApiFuncList
-import io.hamal.lib.sdk.hub.ApiFuncList.ApiSimpleFunc.Namespace
+import io.hamal.lib.sdk.hub.HubFuncList
+import io.hamal.lib.sdk.hub.HubFuncList.Func.Namespace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -20,7 +20,7 @@ class ListFuncRoute(
     fun listFunc(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ApiFuncList> {
+    ): ResponseEntity<HubFuncList> {
         val result = funcQueryRepository.list {
             this.afterId = afterId
             this.limit = limit
@@ -28,10 +28,10 @@ class ListFuncRoute(
 
         val namespaces = namespaceQueryRepository.list(result.map { it.namespaceId }).associateBy { it.id }
 
-        return ResponseEntity.ok(ApiFuncList(
+        return ResponseEntity.ok(HubFuncList(
             result.map { func ->
                 val namespace = namespaces[func.namespaceId]!!
-                ApiFuncList.ApiSimpleFunc(
+                HubFuncList.Func(
                     id = func.id,
                     namespace = Namespace(
                         id = namespace.id,

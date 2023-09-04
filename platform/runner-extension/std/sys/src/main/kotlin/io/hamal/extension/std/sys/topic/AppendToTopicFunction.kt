@@ -10,7 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 
 class AppendToTopicFunction(
     private val httpTemplate: HttpTemplate
@@ -24,7 +24,7 @@ class AppendToTopicFunction(
             val res = httpTemplate.post("/v1/topics/{topicId}/entries")
                 .path("topicId", arg1.value)
                 .body(TopicEntryPayload(arg2))
-                .execute(ApiSubmittedReqWithId::class)
+                .execute(HubSubmittedReqWithId::class)
 
             return null to MapType(
                 mutableMapOf(

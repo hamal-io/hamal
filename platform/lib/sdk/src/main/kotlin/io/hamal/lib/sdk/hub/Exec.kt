@@ -14,24 +14,11 @@ import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Deprecated("do not have separate dto")
-data class ApiSimpleExecutionModel(
-    val id: ExecId,
-    val state: ExecStatus
-)
-
-@Serializable
-@Deprecated("do not have separate dto")
-data class ApiSimpleExecutionModels(
-    val execs: List<ApiSimpleExecutionModel>
-)
-
-@Serializable
-data class ApiExecList(
-    val execs: List<SimpleExec>
+data class HubExecList(
+    val execs: List<Exec>
 ) {
     @Serializable
-    data class SimpleExec(
+    data class Exec(
         val id: ExecId,
         val status: ExecStatus,
         val correlation: Correlation?,
@@ -46,7 +33,7 @@ data class ApiExecList(
 }
 
 @Serializable
-data class ApiExec(
+data class HubExec(
     val id: ExecId,
     val status: ExecStatus,
     val correlation: Correlation?,
@@ -55,8 +42,8 @@ data class ApiExec(
     val events: List<Event>
 )
 
-interface ExecService {
-    fun poll(): ApiUnitOfWorkList
+interface HubExecService {
+    fun poll(): HubUnitOfWorkList
 
     //FIXME list of events to publish
     fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
@@ -65,13 +52,13 @@ interface ExecService {
     fun fail(execId: ExecId, error: ErrorType)
 }
 
-internal class DefaultExecService(
+internal class DefaultHubExecService(
     private val template: HttpTemplate
-) : ExecService {
+) : HubExecService {
 
-    override fun poll(): ApiUnitOfWorkList {
+    override fun poll(): HubUnitOfWorkList {
         return template.post("/v1/dequeue")
-            .execute(ApiUnitOfWorkList::class)
+            .execute(HubUnitOfWorkList::class)
     }
 
     override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {

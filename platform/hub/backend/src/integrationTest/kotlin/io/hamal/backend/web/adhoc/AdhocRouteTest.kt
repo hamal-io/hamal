@@ -10,7 +10,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -29,7 +29,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        val result = awaitCompleted(response.result(ApiSubmittedReqWithId::class))
+        val result = awaitCompleted(response.result(HubSubmittedReqWithId::class))
         assertThat(result.status, equalTo(Submitted))
 
         verifyReqCompleted(result.reqId)

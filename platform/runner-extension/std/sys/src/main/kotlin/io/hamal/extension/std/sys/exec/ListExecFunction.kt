@@ -8,7 +8,7 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiExecList
+import io.hamal.lib.sdk.hub.HubExecList
 
 class ListExecFunction(
     private val httpTemplate: HttpTemplate
@@ -18,7 +18,7 @@ class ListExecFunction(
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         val execs = try {
             httpTemplate.get("/v1/execs")
-                .execute(ApiExecList::class)
+                .execute(HubExecList::class)
                 .execs
         } catch (t: Throwable) {
             t.printStackTrace()

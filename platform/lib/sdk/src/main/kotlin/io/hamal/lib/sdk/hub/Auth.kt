@@ -3,8 +3,8 @@ package io.hamal.lib.sdk.hub
 import io.hamal.lib.http.HttpTemplate
 
 
-interface AuthService
+interface HubAuthService
 
-internal class DefaultAuthService(
-    private val httpTemplate: HttpTemplate
-) : AuthService
+internal class DefaultHubAuthService(
+    private val template: HttpTemplate
+) : HubAuthService

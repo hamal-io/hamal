@@ -12,8 +12,8 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -34,7 +34,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
         assertThat(getNamespaceResponse.statusCode, equalTo(NotFound))
         require(getNamespaceResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getNamespaceResponse.error(ApiError::class)
+        val error = getNamespaceResponse.error(HubError::class)
         assertThat(error.message, equalTo("Namespace not found"))
     }
 
@@ -61,7 +61,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val namespaceId = updateNamespaceResponse.result(ApiSubmittedReqWithId::class).id(::NamespaceId)
+        val namespaceId = updateNamespaceResponse.result(HubSubmittedReqWithId::class).id(::NamespaceId)
 
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))

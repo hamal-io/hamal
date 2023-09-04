@@ -12,7 +12,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 
 class CreateNamespaceFunction(
     private val httpTemplate: HttpTemplate
@@ -30,7 +30,7 @@ class CreateNamespaceFunction(
 
             val res = httpTemplate.post("/v1/namespaces")
                 .body(r)
-                .execute(ApiSubmittedReqWithId::class)
+                .execute(HubSubmittedReqWithId::class)
 
             return null to MapType(
                 mutableMapOf(

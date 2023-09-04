@@ -10,7 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiExec
+import io.hamal.lib.sdk.hub.HubExec
 
 class GetExecFunction(
     private val httpTemplate: HttpTemplate
@@ -24,7 +24,7 @@ class GetExecFunction(
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(ApiExec::class)
+            return null to response.result(HubExec::class)
                 .let { exec ->
 
                     MapType().also {

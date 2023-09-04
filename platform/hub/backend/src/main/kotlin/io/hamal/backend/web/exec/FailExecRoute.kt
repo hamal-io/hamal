@@ -3,7 +3,7 @@ package io.hamal.backend.web.exec
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,10 +19,10 @@ class FailExecRoute(
     fun failExec(
         @PathVariable("execId") execId: ExecId,
         @RequestBody fail: FailExecReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         val result = request(execId, fail)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 id = it.id

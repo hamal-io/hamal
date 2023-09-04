@@ -8,35 +8,35 @@ import io.hamal.lib.domain.vo.AuthToken
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiReqList(
-    val reqs: List<ApiSubmittedReq>
+data class HubReqList(
+    val reqs: List<HubSubmittedReq>
 )
 
 @Serializable
-sealed interface ApiSubmittedReq {
+sealed interface HubSubmittedReq {
     val reqId: ReqId
     val status: ReqStatus
 }
 
 @Serializable
-data class ApiDefaultSubmittedReq(
+data class HubDefaultSubmittedReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
-) : ApiSubmittedReq
+) : HubSubmittedReq
 
 @Serializable
-data class ApiSubmittedWithTokenReq(
+data class HubSubmittedWithTokenReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
     val token: AuthToken
-) : ApiSubmittedReq
+) : HubSubmittedReq
 
 @Serializable
-data class ApiSubmittedReqWithId(
+data class HubSubmittedReqWithId(
     override val reqId: ReqId,
     override val status: ReqStatus,
     val id: SnowflakeId,
-) : ApiSubmittedReq {
+) : HubSubmittedReq {
 
     constructor(reqId: ReqId, status: ReqStatus, id: DomainId) : this(reqId, status, id.value)
 

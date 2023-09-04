@@ -3,20 +3,20 @@ package io.hamal.lib.sdk.hub
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.http.HttpTemplate
 
-interface AwaitService {
-    operator fun invoke(req: ApiSubmittedReq) = await(req)
+interface HubAwaitService {
+    operator fun invoke(req: HubSubmittedReq) = await(req)
 
-    fun await(req: ApiSubmittedReq)
+    fun await(req: HubSubmittedReq)
 }
 
-internal class DefaultAwaitService(
+internal class DefaultHubAwaitService(
     private val template: HttpTemplate
-) : AwaitService {
-    override fun await(req: ApiSubmittedReq) {
+) : HubAwaitService {
+    override fun await(req: HubSubmittedReq) {
         while (true) {
             template.get("/v1/reqs/{reqId}")
                 .path("reqId", req.reqId)
-                .execute(ApiSubmittedReq::class)
+                .execute(HubSubmittedReq::class)
                 .let {
                     when (it.status) {
                         ReqStatus.Completed -> {

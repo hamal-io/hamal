@@ -2,7 +2,7 @@ package io.hamal.backend.web.namespace
 
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.hub.ApiNamespace
+import io.hamal.lib.sdk.hub.HubNamespace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,10 +15,10 @@ class GetNamespaceRoute(
     @GetMapping("/v1/namespaces/{namespaceId}")
     fun getNamespace(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
-    ): ResponseEntity<ApiNamespace> {
+    ): ResponseEntity<HubNamespace> {
         val result = namespaceQueryRepository.get(namespaceId)
         return ResponseEntity.ok(result.let {
-            ApiNamespace(
+            HubNamespace(
                 id = it.id,
                 name = it.name,
                 inputs = it.inputs

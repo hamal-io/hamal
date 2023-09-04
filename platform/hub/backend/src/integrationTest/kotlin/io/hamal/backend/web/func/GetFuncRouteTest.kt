@@ -10,8 +10,8 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiFunc
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubFunc
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getFuncResponse.error(ApiError::class)
+        val error = getFuncResponse.error(HubError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 
@@ -44,7 +44,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getFuncResponse.result(ApiFunc::class)) {
+        with(getFuncResponse.result(HubFunc::class)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))

@@ -3,9 +3,9 @@ package io.hamal.backend.web.req
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.ApiReqList
-import io.hamal.lib.sdk.hub.ApiSubmittedReq
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubReqList
+import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -28,7 +28,7 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
             with(reqs.first()) {
                 assertThat(reqId, equalTo(adhocResponse.reqId))
                 assertThat(status, equalTo(Completed))
-                assertThat(this, instanceOf(ApiSubmittedReq::class.java))
+                assertThat(this, instanceOf(HubSubmittedReq::class.java))
             }
         }
     }
@@ -39,12 +39,12 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
 
         val listResponse = httpTemplate.get("/v1/reqs")
             .parameter("limit", 23)
-            .execute(ApiReqList::class)
+            .execute(HubReqList::class)
 
         assertThat(listResponse.reqs, hasSize(23))
 
         listResponse.reqs
-            .map { it as ApiSubmittedReqWithId }
+            .map { it as HubSubmittedReqWithId }
             .forEachIndexed { idx, req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
                 assertThat(code, equalTo(CodeType("${22 - idx}")))
@@ -61,12 +61,12 @@ internal class ListReqRouteTest : BaseReqRouteTest() {
         val listResponse = httpTemplate.get("/v1/reqs")
             .parameter("after_id", request70.reqId)
             .parameter("limit", 1)
-            .execute(ApiReqList::class)
+            .execute(HubReqList::class)
 
         assertThat(listResponse.reqs, hasSize(1))
 
         listResponse.reqs
-            .map { it as ApiSubmittedReqWithId }
+            .map { it as HubSubmittedReqWithId }
             .forEach { req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
                 assertThat(code, equalTo(CodeType("71")))

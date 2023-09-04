@@ -5,8 +5,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(ApiSubmittedReqWithId::class)
+        val result = response.result(HubSubmittedReqWithId::class)
         assertThat(result.status, equalTo(Completed))
     }
 
@@ -33,7 +33,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(ApiError::class)
+        val error = response.error(HubError::class)
         assertThat(error.message, equalTo("Req not found"))
     }
 

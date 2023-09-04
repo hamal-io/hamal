@@ -11,7 +11,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -38,7 +38,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = completionResponse.result(ApiSubmittedReqWithId::class)
+                val result = completionResponse.result(HubSubmittedReqWithId::class)
 
                 awaitFailed(result.reqId)
                 verifyNoStateSet(result.id(::ExecId))
@@ -61,7 +61,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = completionResponse.result(ApiSubmittedReqWithId::class)
+        val result = completionResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         verifyExecCompleted(result.id(::ExecId))
@@ -84,7 +84,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(ApiSubmittedReqWithId::class)
+        val result = response.result(HubSubmittedReqWithId::class)
         awaitFailed(result.reqId)
     }
 

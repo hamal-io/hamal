@@ -6,18 +6,19 @@ import io.hamal.lib.domain.vo.NamespaceName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiNamespaceList(
-    val namespaces: List<ApiSimpleNamespace>
+data class HubNamespaceList(
+    val namespaces: List<Namespace>
 ) {
     @Serializable
-    data class ApiSimpleNamespace(
-        val id: NamespaceId, val name: NamespaceName
+    data class Namespace(
+        val id: NamespaceId,
+        val name: NamespaceName
     )
 }
 
 
 @Serializable
-data class ApiNamespace(
+data class HubNamespace(
     val id: NamespaceId,
     val name: NamespaceName,
     val inputs: NamespaceInputs

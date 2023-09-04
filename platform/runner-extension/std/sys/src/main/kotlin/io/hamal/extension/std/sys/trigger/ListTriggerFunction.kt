@@ -8,10 +8,7 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiSimpleEventTrigger
-import io.hamal.lib.sdk.hub.ApiSimpleFixedRateTrigger
-import io.hamal.lib.sdk.hub.ApiSimpleTrigger
-import io.hamal.lib.sdk.hub.ApiTriggerList
+import io.hamal.lib.sdk.hub.HubTriggerList
 
 class ListTriggerFunction(
     private val httpTemplate: HttpTemplate
@@ -22,17 +19,17 @@ class ListTriggerFunction(
         val triggers = try {
             httpTemplate
                 .get("/v1/triggers")
-                .execute(ApiTriggerList::class)
+                .execute(HubTriggerList::class)
                 .triggers
         } catch (t: Throwable) {
             t.printStackTrace()
-            listOf<ApiSimpleTrigger>()
+            listOf<HubTriggerList.Trigger>()
         }
 
         return null to ArrayType(
             triggers.mapIndexed { index, trigger ->
                 index to when (val t = trigger) {
-                    is ApiSimpleFixedRateTrigger -> {
+                    is HubTriggerList.FixedRateTrigger -> {
                         MapType(
                             mutableMapOf(
                                 "id" to StringType(t.id.value.value.toString(16)),
@@ -55,7 +52,7 @@ class ListTriggerFunction(
                         )
                     }
 
-                    is ApiSimpleEventTrigger -> {
+                    is HubTriggerList.EventTrigger -> {
                         MapType(
                             mutableMapOf(
                                 "id" to StringType(t.id.value.value.toString(16)),

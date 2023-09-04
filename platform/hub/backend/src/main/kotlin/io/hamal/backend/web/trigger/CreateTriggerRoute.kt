@@ -6,7 +6,7 @@ import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,14 +23,14 @@ class CreateTriggerRoute(
     @PostMapping("/v1/triggers")
     fun createTrigger(
         @RequestBody createTrigger: CreateTriggerReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         ensureFuncExists(createTrigger)
         ensureTopicExists(createTrigger)
         ensureNamespaceExist(createTrigger)
 
         val result = request(createTrigger)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 id = it.id

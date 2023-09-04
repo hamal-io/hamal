@@ -8,7 +8,7 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiTopicList
+import io.hamal.lib.sdk.hub.HubTopicList
 
 class ListTopicFunction(
     private val httpTemplate: HttpTemplate
@@ -19,11 +19,11 @@ class ListTopicFunction(
         val topicList = try {
             httpTemplate
                 .get("/v1/topics")
-                .execute(ApiTopicList::class)
+                .execute(HubTopicList::class)
                 .topics
         } catch (t: Throwable) {
             t.printStackTrace()
-            listOf<ApiTopicList.Topic>()
+            listOf<HubTopicList.Topic>()
         }
 
         return null to ArrayType(

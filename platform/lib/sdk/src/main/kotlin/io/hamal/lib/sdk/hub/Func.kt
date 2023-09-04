@@ -6,14 +6,15 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
+import io.hamal.lib.sdk.hub.HubFuncList.Func
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiFuncList(
-    val funcs: List<ApiSimpleFunc>
+data class HubFuncList(
+    val funcs: List<Func>
 ) {
     @Serializable
-    data class ApiSimpleFunc(
+    data class Func(
         val id: FuncId,
         val namespace: Namespace,
         val name: FuncName
@@ -28,7 +29,7 @@ data class ApiFuncList(
 
 
 @Serializable
-data class ApiFunc(
+data class HubFunc(
     val id: FuncId,
     val namespace: Namespace,
     val name: FuncName,
@@ -42,17 +43,32 @@ data class ApiFunc(
     )
 }
 
-interface FuncService {
-    fun create(createFuncReq: CreateFuncReq): ApiSubmittedReqWithId
+interface HubFuncService {
+    fun create(createFuncReq: CreateFuncReq): HubSubmittedReqWithId
+    fun list(): List<Func>
+    fun get(funcId: FuncId): HubFunc
 }
 
-internal class DefaultFuncService(
+internal class DefaultHubFuncService(
     private val template: HttpTemplate
-) : FuncService {
+) : HubFuncService {
+
     override fun create(createFuncReq: CreateFuncReq) =
         template.post("/v1/funcs")
             .body(createFuncReq)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .fold(HubSubmittedReqWithId::class)
+
+    override fun list(): List<Func> =
+        template.get("/v1/funcs")
+            .execute()
+            .fold(HubFuncList::class)
+            .funcs
+
+    override fun get(funcId: FuncId) =
+        template.get("/v1/funcs/{funcId}")
+            .path("funcId", funcId)
+            .execute()
+            .fold(HubFunc::class)
 
 }

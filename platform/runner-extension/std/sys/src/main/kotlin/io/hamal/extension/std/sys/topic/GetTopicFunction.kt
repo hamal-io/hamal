@@ -10,8 +10,8 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiTopic
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubTopic
 
 class GetTopicFunction(
     private val httpTemplate: HttpTemplate
@@ -25,7 +25,7 @@ class GetTopicFunction(
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(ApiTopic::class)
+            return null to response.result(HubTopic::class)
                 .let { topic ->
                     MapType(
                         mutableMapOf(
@@ -36,7 +36,7 @@ class GetTopicFunction(
                 }
         } else {
             require(response is ErrorHttpResponse)
-            return response.error(ApiError::class)
+            return response.error(HubError::class)
                 .let { error -> ErrorType(error.message ?: "An unknown error occurred") } to null
         }
     }

@@ -2,7 +2,7 @@ package io.hamal.backend.web.namespace
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateNamespaceReq
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,11 +16,11 @@ class CreateNamespaceRoute(
     @PostMapping("/v1/namespaces")
     fun createNamespace(
         @RequestBody createNamespace: CreateNamespaceReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         val result = request(createNamespace)
         return ResponseEntity(
             result.let {
-                ApiSubmittedReqWithId(
+                HubSubmittedReqWithId(
                     reqId = it.reqId,
                     status = it.status,
                     id = it.id

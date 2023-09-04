@@ -14,14 +14,14 @@ import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.hub.AppendExecLogCmd
-import io.hamal.lib.sdk.hub.ExecLogService
+import io.hamal.lib.sdk.hub.HubExecLogService
 import logger
 
 
 val log = logger(LogFunction::class)
 
 class LogExtensionFactory(
-    private val execLogService: ExecLogService
+    private val execLogService: HubExecLogService
 ) : ScriptExtensionFactory {
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
@@ -34,7 +34,7 @@ class LogExtensionFactory(
 }
 
 class LogFunction(
-    private val execLogService: ExecLogService
+    private val execLogService: HubExecLogService
 ) : Function2In1Out<StringType, StringType, ErrorType>(
     FunctionInput2Schema(StringType::class, StringType::class),
     FunctionOutput1Schema(ErrorType::class)

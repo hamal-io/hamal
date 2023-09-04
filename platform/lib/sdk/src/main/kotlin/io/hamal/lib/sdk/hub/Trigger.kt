@@ -5,57 +5,56 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-data class ApiTriggerList(
-    val triggers: List<ApiSimpleTrigger>
-)
+data class HubTriggerList(
+    val triggers: List<Trigger>
+) {
+    @Serializable
+    sealed interface Trigger {
+        val id: TriggerId
+        val name: TriggerName
+        val func: Func
+        val namespace: Namespace
 
-@Serializable
-sealed interface ApiSimpleTrigger {
-    val id: TriggerId
-    val name: TriggerName
-    val func: Func
-    val namespace: Namespace
+        @Serializable
+        data class Func(
+            val id: FuncId,
+            val name: FuncName
+        )
+
+        @Serializable
+        data class Namespace(
+            val id: NamespaceId,
+            val name: NamespaceName
+        )
+    }
 
     @Serializable
-    data class Func(
-        val id: FuncId,
-        val name: FuncName
-    )
+    class FixedRateTrigger(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Trigger.Func,
+        override val namespace: Trigger.Namespace,
+        val duration: Duration
+    ) : Trigger
 
     @Serializable
-    data class Namespace(
-        val id: NamespaceId,
-        val name: NamespaceName
-    )
+    class EventTrigger(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Trigger.Func,
+        override val namespace: Trigger.Namespace,
+        val topic: Topic
+    ) : Trigger {
+        @Serializable
+        data class Topic(
+            val id: TopicId,
+            val name: TopicName
+        )
+    }
 }
 
 @Serializable
-class ApiSimpleFixedRateTrigger(
-    override val id: TriggerId,
-    override val name: TriggerName,
-    override val func: ApiSimpleTrigger.Func,
-    override val namespace: ApiSimpleTrigger.Namespace,
-    val duration: Duration
-) : ApiSimpleTrigger
-
-@Serializable
-class ApiSimpleEventTrigger(
-    override val id: TriggerId,
-    override val name: TriggerName,
-    override val func: ApiSimpleTrigger.Func,
-    override val namespace: ApiSimpleTrigger.Namespace,
-    val topic: Topic
-) : ApiSimpleTrigger {
-    @Serializable
-    data class Topic(
-        val id: TopicId,
-        val name: TopicName
-    )
-}
-
-
-@Serializable
-sealed interface ApiTrigger {
+sealed interface HubTrigger {
     val id: TriggerId
     val name: TriggerName
     val func: Func
@@ -77,29 +76,31 @@ sealed interface ApiTrigger {
 }
 
 @Serializable
-class ApiFixedRateTrigger(
+class HubFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: ApiTrigger.Func,
-    override val namespace: ApiTrigger.Namespace,
+    override val func: HubTrigger.Func,
+    override val namespace: HubTrigger.Namespace,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val duration: Duration
-) : ApiTrigger
+) : HubTrigger
 
 @Serializable
-class ApiEventTrigger(
+class HubEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: ApiTrigger.Func,
-    override val namespace: ApiTrigger.Namespace,
+    override val func: HubTrigger.Func,
+    override val namespace: HubTrigger.Namespace,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val topic: Topic
-) : ApiTrigger {
+) : HubTrigger {
     @Serializable
     data class Topic(
         val id: TopicId,
         val name: TopicName
     )
 }
+
+

@@ -1,8 +1,6 @@
 package io.hamal.extension.std.sys.func
 
-import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,21 +8,17 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiFunc
+import io.hamal.lib.sdk.HubSdk
 
 class GetFuncFunction(
-    private val httpTemplate: HttpTemplate
+    private val sdk: HubSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        val response = httpTemplate.get("/v1/funcs/${arg1.value}")
-            .execute()
-
-        if (response is SuccessHttpResponse) {
-            return null to response.result(ApiFunc::class)
+        try {
+            return null to sdk.func.get(FuncId(arg1.value))
                 .let { func ->
                     MapType(
                         mutableMapOf(
@@ -40,12 +34,8 @@ class GetFuncFunction(
                         )
                     )
                 }
-        } else {
-            require(response is ErrorHttpResponse)
-            return response.error(ApiError::class)
-                .let { error ->
-                    ErrorType(error.message ?: "An unknown error occurred")
-                } to null
+        } catch (t: Throwable) {
+            return ErrorType(t.message!!) to null
         }
     }
 }

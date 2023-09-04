@@ -12,8 +12,8 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -37,7 +37,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         assertThat(getFuncResponse.statusCode, equalTo(NotFound))
         require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getFuncResponse.error(ApiError::class)
+        val error = getFuncResponse.error(HubError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 
@@ -87,7 +87,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(ApiSubmittedReqWithId::class)
+        val submittedReq = updateFuncResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(submittedReq)
 
         val funcId = submittedReq.id(::FuncId)
@@ -131,7 +131,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(NotFound))
         require(updateFuncResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = updateFuncResponse.error(ApiError::class)
+        val error = updateFuncResponse.error(HubError::class)
         assertThat(error.message, equalTo("Namespace not found"))
 
         with(getFunc(func.id(::FuncId))) {
@@ -176,7 +176,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val funcId = updateFuncResponse.result(ApiSubmittedReqWithId::class).id(::FuncId)
+        val funcId = updateFuncResponse.result(HubSubmittedReqWithId::class).id(::FuncId)
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))

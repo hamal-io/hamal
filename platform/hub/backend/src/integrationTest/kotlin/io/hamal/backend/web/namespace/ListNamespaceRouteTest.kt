@@ -4,7 +4,7 @@ import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sdk.hub.ApiNamespaceList
+import io.hamal.lib.sdk.hub.HubNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -56,7 +56,7 @@ internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
 
         val listResponse = httpTemplate.get("/v1/namespaces")
             .parameter("limit", 12)
-            .execute(ApiNamespaceList::class)
+            .execute(HubNamespaceList::class)
 
         assertThat(listResponse.namespaces, hasSize(12))
 
@@ -82,7 +82,7 @@ internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
         val listResponse = httpTemplate.get("/v1/namespaces")
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
-            .execute(ApiNamespaceList::class)
+            .execute(HubNamespaceList::class)
 
         assertThat(listResponse.namespaces, hasSize(1))
 

@@ -10,8 +10,8 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiNamespace
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubNamespace
 
 class GetNamespaceFunction(
     private val httpTemplate: HttpTemplate
@@ -24,7 +24,7 @@ class GetNamespaceFunction(
             .execute()
 
         if (response is SuccessHttpResponse) {
-            return null to response.result(ApiNamespace::class)
+            return null to response.result(HubNamespace::class)
                 .let { namespace ->
                     MapType(
                         mutableMapOf(
@@ -35,7 +35,7 @@ class GetNamespaceFunction(
                 }
         } else {
             require(response is ErrorHttpResponse)
-            return response.error(ApiError::class)
+            return response.error(HubError::class)
                 .let { error ->
                     ErrorType(error.message ?: "An unknown error occurred")
                 } to null

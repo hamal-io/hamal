@@ -2,7 +2,7 @@ package io.hamal.backend.web.topic
 
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.ApiTopic
+import io.hamal.lib.sdk.hub.HubTopic
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,10 +15,10 @@ class GetTopicRoute(
     @GetMapping("/v1/topics/{topicId}")
     fun getTopic(
         @PathVariable("topicId") topicId: TopicId
-    ): ResponseEntity<ApiTopic> {
+    ): ResponseEntity<HubTopic> {
         val topic = eventBrokerRepository.getTopic(topicId)
         return ResponseEntity.ok(
-            ApiTopic(
+            HubTopic(
                 id = topic.id,
                 name = topic.name
             )

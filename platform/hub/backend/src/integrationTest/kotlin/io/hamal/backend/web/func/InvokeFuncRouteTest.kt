@@ -12,8 +12,8 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -45,7 +45,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(ApiSubmittedReqWithId::class)
+        val result = invocationResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
     }
 
@@ -74,7 +74,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(ApiSubmittedReqWithId::class)
+        val result = invocationResponse.result(HubSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
     }
 
@@ -91,7 +91,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         assertThat(invocationResponse.statusCode, equalTo(NotFound))
         require(invocationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = invocationResponse.error(ApiError::class)
+        val error = invocationResponse.error(HubError::class)
         assertThat(error.message, equalTo("Func not found"))
 
         verifyNoRequests()

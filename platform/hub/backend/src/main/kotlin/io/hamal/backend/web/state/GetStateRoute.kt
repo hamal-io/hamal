@@ -5,9 +5,9 @@ import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.ApiCorrelatedState
-import io.hamal.lib.sdk.hub.ApiCorrelation
-import io.hamal.lib.sdk.hub.ApiState
+import io.hamal.lib.sdk.hub.HubCorrelatedState
+import io.hamal.lib.sdk.hub.HubCorrelation
+import io.hamal.lib.sdk.hub.HubState
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,19 +22,19 @@ class GetStateRoute(
     fun getState(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("correlationId") correlationId: CorrelationId,
-    ): ResponseEntity<ApiCorrelatedState> {
+    ): ResponseEntity<HubCorrelatedState> {
         val func = funcQueryRepository.get(funcId)
         val result = stateQueryRepository.get(Correlation(correlationId, funcId))
         return ResponseEntity.ok(
-            ApiCorrelatedState(
-                correlation = ApiCorrelation(
+            HubCorrelatedState(
+                correlation = HubCorrelation(
                     correlationId = correlationId,
-                    func = ApiCorrelation.ApiFunc(
+                    func = HubCorrelation.Func(
                         id = func.id,
                         name = func.name
                     )
                 ),
-                value = ApiState(result.value.value)
+                state = HubState(result.value.value)
             )
         )
     }

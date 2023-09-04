@@ -1,14 +1,14 @@
 package io.hamal.backend.web.trigger
 
-import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.hub.ApiSimpleEventTrigger
-import io.hamal.lib.sdk.hub.ApiSimpleFixedRateTrigger
-import io.hamal.lib.sdk.hub.ApiSimpleTrigger
-import io.hamal.lib.sdk.hub.ApiTriggerList
+import io.hamal.lib.sdk.hub.HubTriggerList
+import io.hamal.lib.sdk.hub.HubTriggerList.EventTrigger.Topic
+import io.hamal.lib.sdk.hub.HubTriggerList.Trigger.Func
+import io.hamal.lib.sdk.hub.HubTriggerList.Trigger.Namespace
+import io.hamal.repository.api.*
+import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -26,7 +26,7 @@ class ListTriggerRoute(
     fun listTrigger(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ApiTriggerList> {
+    ): ResponseEntity<HubTriggerList> {
         val result = triggerQueryRepository.list {
             this.afterId = triggerId
             this.types = TriggerType.values().toSet()
@@ -43,18 +43,18 @@ class ListTriggerRoute(
             .associateBy { it.id }
 
         return ResponseEntity.ok(
-            ApiTriggerList(
+            HubTriggerList(
                 result.map { trigger ->
                     when (val t = trigger) {
                         is FixedRateTrigger -> {
-                            ApiSimpleFixedRateTrigger(
+                            HubTriggerList.FixedRateTrigger(
                                 id = t.id,
                                 name = t.name,
-                                func = ApiSimpleTrigger.Func(
+                                func = Func(
                                     id = t.funcId,
                                     name = funcs[t.funcId]!!.name
                                 ),
-                                namespace = ApiSimpleTrigger.Namespace(
+                                namespace = Namespace(
                                     id = t.namespaceId,
                                     name = namespaces[t.namespaceId]!!.name
                                 ),
@@ -63,18 +63,18 @@ class ListTriggerRoute(
                         }
 
                         is EventTrigger -> {
-                            ApiSimpleEventTrigger(
+                            HubTriggerList.EventTrigger(
                                 id = t.id,
                                 name = t.name,
-                                func = ApiSimpleTrigger.Func(
+                                func = Func(
                                     id = t.funcId,
                                     name = funcs[t.funcId]!!.name
                                 ),
-                                namespace = ApiSimpleTrigger.Namespace(
+                                namespace = Namespace(
                                     id = t.namespaceId,
                                     name = namespaces[t.namespaceId]!!.name
                                 ),
-                                topic = ApiSimpleEventTrigger.Topic(
+                                topic = Topic(
                                     id = t.topicId,
                                     name = topics[t.topicId]!!.name
                                 )

@@ -15,50 +15,50 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
-    fun listTopicEntries(topicId: TopicId): ApiTopicEntryList {
+    fun listTopicEntries(topicId: TopicId): HubTopicEntryList {
         val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTopicsResponse.result(ApiTopicEntryList::class)
+        return listTopicsResponse.result(HubTopicEntryList::class)
     }
 
 
     fun listTopics(
         names: List<TopicName> = listOf()
-    ): ApiTopicList {
+    ): HubTopicList {
         val listTopicsResponse = httpTemplate.get("/v1/topics")
             .parameter("names", names.joinToString(",") { it.value })
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTopicsResponse.result(ApiTopicList::class)
+        return listTopicsResponse.result(HubTopicList::class)
     }
 
-    fun getTopic(topicId: TopicId): ApiTopic {
+    fun getTopic(topicId: TopicId): HubTopic {
         val getTopicResponse = httpTemplate.get("/v1/topics/{topicId}")
             .path("topicId", topicId)
             .execute()
 
         assertThat(getTopicResponse.statusCode, equalTo(Ok))
         require(getTopicResponse is SuccessHttpResponse) { "request was not successful" }
-        return getTopicResponse.result(ApiTopic::class)
+        return getTopicResponse.result(HubTopic::class)
     }
 
 
-    fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
+    fun createTopic(topicName: TopicName): HubSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithId::class)
+        return createTopicResponse.result(HubSubmittedReqWithId::class)
     }
 
-    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiSubmittedReq {
+    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): HubSubmittedReq {
         val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(toAppend)
@@ -67,6 +67,6 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiDefaultSubmittedReq::class)
+        return createTopicResponse.result(HubDefaultSubmittedReq::class)
     }
 }

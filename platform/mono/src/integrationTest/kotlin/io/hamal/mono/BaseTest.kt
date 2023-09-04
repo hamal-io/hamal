@@ -134,14 +134,11 @@ abstract class BaseTest {
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         ) as TokenAuth).token
-
-        setup()
     }
 
     abstract val rootHttpTemplate: HttpTemplate
     abstract val rootHubSdk: HubSdk
     abstract val testPath: Path
-    abstract fun setup()
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 }

@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class ApiUnitOfWorkList(
-    val work: List<ApiUnitOfWork>
+data class HubUnitOfWorkList(
+    val work: List<UnitOfWork>
 ) {
     @Serializable
-    data class ApiUnitOfWork(
+    data class UnitOfWork(
         val id: ExecId,
         val inputs: ExecInputs,
         val state: State,

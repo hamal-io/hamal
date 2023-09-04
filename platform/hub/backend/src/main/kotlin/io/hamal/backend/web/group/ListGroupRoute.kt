@@ -2,7 +2,7 @@ package io.hamal.backend.web.group
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.hub.ApiGroupList
+import io.hamal.lib.sdk.hub.HubGroupList
 import io.hamal.repository.api.GroupQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,15 +17,15 @@ class ListGroupRoute(
     fun listGroup(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: GroupId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<ApiGroupList> {
+    ): ResponseEntity<HubGroupList> {
         val result = groupQueryRepository.list {
             this.afterId = afterId
             this.limit = limit
         }
 
-        return ResponseEntity.ok(ApiGroupList(
+        return ResponseEntity.ok(HubGroupList(
             result.map { group ->
-                ApiGroupList.ApiSimpleGroup(
+                HubGroupList.Group(
                     id = group.id,
                     name = group.name
                 )

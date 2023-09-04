@@ -2,7 +2,7 @@ package io.hamal.backend.web.account
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateAccountReq
-import io.hamal.lib.sdk.hub.ApiSubmittedWithTokenReq
+import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,11 +16,11 @@ class CreateAccountRoute(
     @PostMapping("/v1/accounts")
     fun createFunc(
         @RequestBody createAccount: CreateAccountReq
-    ): ResponseEntity<ApiSubmittedWithTokenReq> {
+    ): ResponseEntity<HubSubmittedWithTokenReq> {
         val result = request(createAccount)
         return ResponseEntity(
             result.let {
-                ApiSubmittedWithTokenReq(
+                HubSubmittedWithTokenReq(
                     reqId = it.reqId,
                     status = it.status,
                     token = it.token

@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiTopicEntryList
+import io.hamal.lib.sdk.hub.HubTopicEntryList
 
 class ListTopicEntryFunction(
     private val httpTemplate: HttpTemplate
@@ -21,7 +21,7 @@ class ListTopicEntryFunction(
             httpTemplate
                 .get("/v1/topics/{topicId}/entries")
                 .path("topicId", arg1.value)
-                .execute(ApiTopicEntryList::class)
+                .execute(HubTopicEntryList::class)
                 .entries
         } catch (t: Throwable) {
             t.printStackTrace()

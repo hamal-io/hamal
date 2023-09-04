@@ -4,7 +4,7 @@ import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.AppendEntryReq
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -22,7 +22,7 @@ class AppendEntryRoute(
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,
         @RequestBody topAppend: TopicEntryPayload
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         val topic = eventBrokerRepository.getTopic(topicId)
         val result = submitRequest(
             AppendEntryReq(
@@ -31,7 +31,7 @@ class AppendEntryRoute(
             )
         )
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 id = it.id

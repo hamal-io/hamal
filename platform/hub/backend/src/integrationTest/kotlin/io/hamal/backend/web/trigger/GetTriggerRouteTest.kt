@@ -10,9 +10,9 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.ApiError
-import io.hamal.lib.sdk.hub.ApiEventTrigger
-import io.hamal.lib.sdk.hub.ApiFixedRateTrigger
+import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubEventTrigger
+import io.hamal.lib.sdk.hub.HubFixedRateTrigger
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(NotFound))
         require(getTriggerResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getTriggerResponse.error(ApiError::class)
+        val error = getTriggerResponse.error(HubError::class)
         assertThat(error.message, equalTo("Trigger not found"))
     }
 
@@ -50,7 +50,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(ApiFixedRateTrigger::class)) {
+        with(getTriggerResponse.result(HubFixedRateTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
@@ -83,7 +83,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(ApiEventTrigger::class)) {
+        with(getTriggerResponse.result(HubEventTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))

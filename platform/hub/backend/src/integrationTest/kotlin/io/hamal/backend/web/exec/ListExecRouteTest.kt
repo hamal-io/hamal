@@ -3,7 +3,7 @@ package io.hamal.backend.web.exec
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.hub.ApiExecList
+import io.hamal.lib.sdk.hub.HubExecList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -15,7 +15,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        val result = response.result(ApiExecList::class)
+        val result = response.result(HubExecList::class)
         assertThat(result.execs, empty())
     }
 
@@ -27,7 +27,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(ApiExecList::class)) {
+        with(response.result(HubExecList::class)) {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(id, equalTo(execId))
@@ -48,7 +48,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(ApiExecList::class)) {
+        with(response.result(HubExecList::class)) {
             assertThat(execs, hasSize(42))
         }
     }
@@ -68,7 +68,7 @@ internal class ListExecRouteTest : BaseExecRouteTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(ApiExecList::class)) {
+        with(response.result(HubExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
                 assertThat(exec.id, equalTo(fortyFifthRequest.id(::ExecId)))

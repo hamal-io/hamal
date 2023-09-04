@@ -4,7 +4,7 @@ import io.hamal.backend.req.SubmitRequest
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.UpdateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,11 +21,11 @@ class UpdateNamespaceRoute(
     fun createNamespace(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody updateNamespace: UpdateNamespaceReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         ensureNamespaceExists(namespaceId)
         val result = request(namespaceId, updateNamespace)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 id = it.id

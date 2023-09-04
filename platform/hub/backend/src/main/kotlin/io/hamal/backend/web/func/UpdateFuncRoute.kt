@@ -5,7 +5,7 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.UpdateFuncReq
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,12 +23,12 @@ class UpdateFuncRoute(
     fun createFunc(
         @PathVariable("funcId") funcId: FuncId,
         @RequestBody updateFunc: UpdateFuncReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+    ): ResponseEntity<HubSubmittedReqWithId> {
         ensureFuncExists(funcId)
         ensureNamespaceIdExists(updateFunc)
         val result = request(funcId, updateFunc)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 id = it.id

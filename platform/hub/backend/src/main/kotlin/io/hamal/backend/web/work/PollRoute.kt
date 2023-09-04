@@ -3,8 +3,8 @@ package io.hamal.backend.web.work
 import io.hamal.backend.event.HubEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
-import io.hamal.lib.sdk.hub.ApiUnitOfWorkList
-import io.hamal.lib.sdk.hub.ApiUnitOfWorkList.ApiUnitOfWork
+import io.hamal.lib.sdk.hub.HubUnitOfWorkList
+import io.hamal.lib.sdk.hub.HubUnitOfWorkList.UnitOfWork
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StateQueryRepository
@@ -21,17 +21,17 @@ class PollRoute(
     private val eventEmitter: HubEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
-    fun dequeue(): ResponseEntity<ApiUnitOfWorkList> {
+    fun dequeue(): ResponseEntity<HubUnitOfWorkList> {
         val cmdId = CmdId.random()
         val result = execCmdRepository.start(StartCmd(cmdId)).also {
             emitEvents(cmdId, it)
         }
 
         return ResponseEntity(
-            ApiUnitOfWorkList(
+            HubUnitOfWorkList(
                 work = result.map { exec ->
                     val state = exec.correlation?.let { stateQueryRepository.find(it)?.value } ?: State()
-                    ApiUnitOfWork(
+                    UnitOfWork(
                         id = exec.id,
                         correlation = exec.correlation,
                         inputs = exec.inputs,

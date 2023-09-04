@@ -15,13 +15,13 @@ data class AppendExecLogCmd(
 
 
 @Serializable
-data class ApiExcLogList(
-    val logs: List<ApiExecLog>
+data class HubExcLogList(
+    val logs: List<HubExecLog>
 )
 
 
 @Serializable
-data class ApiExecLog(
+data class HubExecLog(
     val id: ExecLogId,
     val execId: ExecId,
     val level: ExecLogLevel,
@@ -31,13 +31,13 @@ data class ApiExecLog(
 )
 
 
-interface ExecLogService {
+interface HubExecLogService {
     fun append(execId: ExecId, cmd: AppendExecLogCmd)
 }
 
-internal class DefaultExecLogService(
+internal class DefaultHubExecLogService(
     private val template: HttpTemplate
-) : ExecLogService {
+) : HubExecLogService {
     override fun append(execId: ExecId, cmd: AppendExecLogCmd) {
         template
             .post("/v1/execs/{execId}/logs")
