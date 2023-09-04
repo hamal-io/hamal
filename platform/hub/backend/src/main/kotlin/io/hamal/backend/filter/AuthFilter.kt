@@ -1,6 +1,5 @@
 package io.hamal.backend.filter
 
-import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -21,27 +20,27 @@ class AuthFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val path = request.servletPath
-
-        val runnerToken = request.getHeader("x-runner-token")
-        if (runnerToken == "i_am_runner_let_me_in") {
-            return filterChain.doFilter(request, response)
-        }
-
-        val runnerExecToken = request.getHeader("x-runner-exec-token")
-        if (runnerExecToken == "let_me_in") {
-            return filterChain.doFilter(request, response)
-        }
-
-        if (path == "/v1/sign-in" || path == "/v1/accounts" && request.method == "POST") {
-            return filterChain.doFilter(request, response)
-        }
-
-        val token = request.getHeader("x-hamal-token")
-            ?.let(::AuthToken) ?: throw NoSuchElementException("Account not found")
-
-        val auth = authRepository.get(token)
-//        // FIXME not expired
+//        val path = request.servletPath
+//
+//        val runnerToken = request.getHeader("x-runner-token")
+//        if (runnerToken == "i_am_runner_let_me_in") {
+//            return filterChain.doFilter(request, response)
+//        }
+//
+//        val runnerExecToken = request.getHeader("x-runner-exec-token")
+//        if (runnerExecToken == "let_me_in") {
+//            return filterChain.doFilter(request, response)
+//        }
+//
+//        if (path == "/v1/sign-in" || path == "/v1/accounts" && request.method == "POST") {
+//            return filterChain.doFilter(request, response)
+//        }
+//
+//        val token = request.getHeader("x-hamal-token")
+//            ?.let(::AuthToken) ?: throw NoSuchElementException("Account not found")
+//
+//        val auth = authRepository.get(token)
+////        // FIXME not expired
         return filterChain.doFilter(request, response)
     }
 
