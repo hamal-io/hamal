@@ -9,6 +9,7 @@ import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.DefaultHubSdk
+import io.hamal.mono.rootHubSdk
 import io.hamal.runner.config.SandboxFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
@@ -20,10 +21,23 @@ internal class TestAsGroupAdminRunnerConfig {
     @Bean
     fun httpTemplate(
         @Value("\${server.port}") serverPort: Number
-    ) = HttpTemplate(
-        baseUrl = "http://localhost:$serverPort",
-        headerFactory = { }
-    )
+    ) = rootHubSdk(serverPort).let { rootSdk ->
+
+//        val token = rootSdk.account.create(
+//            CreateAccountReq(
+//                name = AccountName("group-admin"),
+//                password = Password("group-admin-password"),
+//                email = AccountEmail("group@admin.com")
+//            )
+//        ).also { rootSdk.await(it) }.token
+
+        HttpTemplate(
+            baseUrl = "http://localhost:$serverPort",
+            headerFactory = {
+//                set("x-hamal-token", token.value)
+            }
+        )
+    }
 
     @Bean
     fun sandboxFactory(

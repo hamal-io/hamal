@@ -7,6 +7,7 @@ import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.DefaultHubSdk
 import io.hamal.lib.sdk.HubSdk
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
@@ -136,9 +137,17 @@ abstract class BaseTest {
         ) as TokenAuth).token
     }
 
-    abstract val rootHttpTemplate: HttpTemplate
     abstract val rootHubSdk: HubSdk
     abstract val testPath: Path
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 }
+
+fun rootHubSdk(serverPort: Number) = DefaultHubSdk(
+    HttpTemplate(
+        baseUrl = "http://localhost:$serverPort",
+        headerFactory = {
+            set("x-hamal-token", "test-root-token")
+        }
+    )
+)
