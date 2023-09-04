@@ -16,7 +16,6 @@ data class HubAccountList(
     )
 }
 
-
 @Serializable
 data class HubAccount(
     val id: AccountId,
