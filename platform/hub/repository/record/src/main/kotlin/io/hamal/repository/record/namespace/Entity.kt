@@ -1,16 +1,18 @@
 package io.hamal.repository.record.namespace
 
-import io.hamal.repository.api.Namespace
-import io.hamal.repository.record.RecordEntity
-import io.hamal.repository.record.RecordSequence
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.record.RecordEntity
+import io.hamal.repository.record.RecordSequence
 
 data class Entity(
-    override val id: NamespaceId,
     override val cmdId: CmdId,
+    override val id: NamespaceId,
+    val groupId: GroupId,
     override val sequence: RecordSequence,
 
     var name: NamespaceName? = null,
@@ -42,6 +44,7 @@ data class Entity(
         return Namespace(
             cmdId = cmdId,
             id = id,
+            groupId = groupId,
             name = name!!,
             inputs = inputs!!,
         )
@@ -55,6 +58,7 @@ fun List<NamespaceRecord>.createEntity(): Entity {
 
     var result = Entity(
         id = firstRecord.entityId,
+        groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence()
     )

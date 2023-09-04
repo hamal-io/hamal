@@ -1,5 +1,7 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -9,8 +11,6 @@ import io.hamal.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path
 
 internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Trigger> {
@@ -58,8 +58,9 @@ class SqliteTriggerRepository(
             } else {
                 storeRecord(
                     FixedRateTriggerCreationRecord(
-                        entityId = triggerId,
                         cmdId = cmdId,
+                        entityId = triggerId,
+                        groupId = cmd.groupId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
@@ -85,8 +86,9 @@ class SqliteTriggerRepository(
             } else {
                 storeRecord(
                     EventTriggerCreationRecord(
-                        entityId = triggerId,
                         cmdId = cmdId,
+                        entityId = triggerId,
+                        groupId = cmd.groupId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,

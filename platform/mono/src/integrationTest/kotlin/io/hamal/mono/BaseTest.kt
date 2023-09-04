@@ -58,6 +58,7 @@ abstract class BaseTest {
 
     lateinit var rootAccount: Account
     lateinit var rootAccountAuthToken: AuthToken
+    lateinit var rootGroup: Group
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -106,16 +107,6 @@ abstract class BaseTest {
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
 
-
-        namespaceCmdRepository.create(
-            NamespaceCmdRepository.CreateCmd(
-                id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
-                name = NamespaceName("hamal"),
-                inputs = NamespaceInputs()
-            )
-        )
-
         rootAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
@@ -135,6 +126,26 @@ abstract class BaseTest {
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         ) as TokenAuth).token
+
+        rootGroup = groupCmdRepository.create(
+            GroupCmdRepository.CreateCmd(
+                id = CmdId(4),
+                groupId = generateDomainId(::GroupId),
+                name = GroupName("test-group"),
+                creatorId = rootAccount.id
+            )
+        )
+
+
+        namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(1),
+                namespaceId = generateDomainId(::NamespaceId),
+                groupId = rootGroup.id,
+                name = NamespaceName("hamal"),
+                inputs = NamespaceInputs()
+            )
+        )
     }
 
     abstract val rootHubSdk: HubSdk

@@ -1,5 +1,9 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
@@ -8,10 +12,6 @@ import io.hamal.repository.record.func.FuncCreationRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.func.FuncUpdatedRecord
 import io.hamal.repository.record.func.createEntity
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.vo.FuncId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -53,8 +53,9 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRe
             } else {
                 addRecord(
                     FuncCreationRecord(
-                        entityId = funcId,
                         cmdId = cmd.id,
+                        entityId = funcId,
+                        groupId = cmd.groupId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,

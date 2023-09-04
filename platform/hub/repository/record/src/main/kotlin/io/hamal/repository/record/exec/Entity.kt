@@ -14,8 +14,9 @@ import io.hamal.repository.record.exec.*
 import java.time.Instant
 
 data class Entity(
-    override val id: ExecId,
     override val cmdId: CmdId,
+    override val id: ExecId,
+    val groupId: GroupId,
     override val sequence: RecordSequence,
 
 
@@ -33,8 +34,9 @@ data class Entity(
     override fun apply(rec: ExecRecord): Entity {
         return when (rec) {
             is ExecPlannedRecord -> copy(
-                id = rec.entityId,
                 cmdId = rec.cmdId,
+                id = rec.entityId,
+                groupId = rec.groupId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Planned,
                 correlation = rec.correlation,
@@ -90,6 +92,7 @@ data class Entity(
         val plannedExec = PlannedExec(
             cmdId = cmdId,
             id = id,
+            groupId = groupId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(MapType()),
             code = code!!,
@@ -122,6 +125,7 @@ fun List<ExecRecord>.createEntity(): Entity {
 
     var result = Entity(
         id = firstRecord.entityId,
+        groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence()
     )

@@ -1,15 +1,16 @@
 package io.hamal.backend.req.handler.func
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.repository.api.event.FuncCreatedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
-import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCmdRepository
+import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.event.FuncCreatedEvent
+import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,9 +26,10 @@ class CreateFuncHandler(
 
 private fun CreateFuncHandler.createFunc(req: SubmittedCreateFuncReq): Func {
     return funcCmdRepository.create(
-        FuncCmdRepository.CreateCmd(
+        CreateCmd(
             id = req.cmdId(),
             funcId = req.id,
+            groupId = req.groupId,
             namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
             name = req.name,
             inputs = req.inputs,

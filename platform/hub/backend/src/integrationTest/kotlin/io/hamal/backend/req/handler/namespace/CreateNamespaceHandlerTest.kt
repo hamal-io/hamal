@@ -1,7 +1,6 @@
 package io.hamal.backend.req.handler.namespace
 
 import io.hamal.backend.req.handler.BaseReqHandlerTest
-import io.hamal.repository.api.submitted_req.SubmittedCreateNamespaceReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.NamespaceId
@@ -9,6 +8,7 @@ import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.submitted_req.SubmittedCreateNamespaceReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -39,6 +39,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(2),
                 status = Submitted,
                 id = NamespaceId(12345),
+                groupId = testGroup.id,
                 name = NamespaceName("another-namespace"),
                 inputs = NamespaceInputs()
             )
@@ -66,6 +67,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(1),
         status = Submitted,
         id = NamespaceId(12345),
+        groupId = testGroup.id,
         name = NamespaceName("awesome-namespace"),
         inputs = NamespaceInputs(
             MapType(mutableMapOf("hamal" to StringType("rocks")))

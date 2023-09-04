@@ -18,6 +18,7 @@ interface TriggerCmdRepository {
     data class CreateFixedRateCmd(
         val id: CmdId,
         val triggerId: TriggerId,
+        val groupId: GroupId,
         val name: TriggerName,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
@@ -29,6 +30,7 @@ interface TriggerCmdRepository {
     data class CreateEventCmd(
         val id: CmdId,
         val triggerId: TriggerId,
+        val groupId: GroupId,
         val name: TriggerName,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
@@ -56,6 +58,7 @@ interface TriggerQueryRepository {
 @Serializable
 sealed interface Trigger : DomainObject<TriggerId> {
     val cmdId: CmdId
+    val groupId: GroupId
     val name: TriggerName
     val funcId: FuncId
     val namespaceId: NamespaceId
@@ -67,6 +70,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
 class FixedRateTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
+    override val groupId: GroupId,
     override val name: TriggerName,
     override val funcId: FuncId,
     override val namespaceId: NamespaceId,
@@ -79,6 +83,7 @@ class FixedRateTrigger(
 class EventTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
+    override val groupId: GroupId,
     override val name: TriggerName,
     override val funcId: FuncId,
     override val namespaceId: NamespaceId,

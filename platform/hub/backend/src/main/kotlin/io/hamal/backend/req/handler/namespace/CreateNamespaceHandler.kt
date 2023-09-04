@@ -1,7 +1,6 @@
 package io.hamal.backend.req.handler.namespace
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.repository.api.event.NamespaceCreatedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
@@ -12,6 +11,7 @@ import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.event.NamespaceCreatedEvent
 import io.hamal.repository.api.submitted_req.SubmittedCreateNamespaceReq
 import org.springframework.stereotype.Component
 
@@ -39,11 +39,25 @@ private fun CreateNamespaceHandler.createNamespace(req: SubmittedCreateNamespace
 
     val allNames = req.name.allNamespaceNames()
     allNames.take(allNames.size - 1).filter { name -> !existingNamespaceNames.contains(name) }.forEach { name ->
-        namespaceCmdRepository.create(CreateCmd(req.cmdId(), generateDomainId(::NamespaceId), name, req.inputs))
+        namespaceCmdRepository.create(
+            CreateCmd(
+                id = req.cmdId(),
+                namespaceId = generateDomainId(::NamespaceId),
+                groupId = req.groupId,
+                name = name,
+                inputs = req.inputs
+            )
+        )
     }
 
     return namespaceCmdRepository.create(
-        CreateCmd(req.cmdId(), req.id, req.name, req.inputs)
+        CreateCmd(
+            id = req.cmdId(),
+            namespaceId = req.id,
+            groupId = req.groupId,
+            name = req.name,
+            inputs = req.inputs
+        )
     )
 }
 

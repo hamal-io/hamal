@@ -1,15 +1,15 @@
 package io.hamal.repository.record.trigger
 
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.Trigger
-import io.hamal.repository.record.RecordEntity
-import io.hamal.repository.record.RecordSequence
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.Trigger
+import io.hamal.repository.record.RecordEntity
+import io.hamal.repository.record.RecordSequence
 import kotlin.time.Duration
 
 data class Entity(
@@ -17,6 +17,7 @@ data class Entity(
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
 
+    var groupId: GroupId? = null,
     var funcId: FuncId? = null,
     var namespaceId: NamespaceId? = null,
     var name: TriggerName? = null,
@@ -32,8 +33,9 @@ data class Entity(
     override fun apply(rec: TriggerRecord): Entity {
         return when (rec) {
             is FixedRateTriggerCreationRecord -> copy(
-                id = rec.entityId,
                 cmdId = rec.cmdId,
+                id = rec.entityId,
+                groupId = rec.groupId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
@@ -64,6 +66,7 @@ data class Entity(
             FixedRate -> FixedRateTrigger(
                 cmdId = cmdId,
                 id = id,
+                groupId = groupId!!,
                 funcId = funcId!!,
                 namespaceId = namespaceId!!,
                 correlationId = correlationId,
@@ -75,6 +78,7 @@ data class Entity(
             Event -> EventTrigger(
                 cmdId = cmdId,
                 id = id,
+                groupId = groupId!!,
                 funcId = funcId!!,
                 namespaceId = namespaceId!!,
                 correlationId = correlationId,

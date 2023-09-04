@@ -31,6 +31,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
             FuncCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 funcId = id,
+                groupId = testGroup.id,
                 namespaceId = namespaceId,
                 name = name,
                 inputs = inputs,

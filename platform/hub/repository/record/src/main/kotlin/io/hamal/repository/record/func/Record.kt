@@ -1,13 +1,10 @@
 package io.hamal.repository.record.func
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -24,6 +21,7 @@ sealed class FuncRecord(
 data class FuncCreationRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
+    val groupId: GroupId,
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,

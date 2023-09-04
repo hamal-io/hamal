@@ -1,5 +1,7 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
@@ -11,8 +13,6 @@ import io.hamal.repository.record.func.FuncCreationRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.func.FuncUpdatedRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
@@ -22,8 +22,9 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
         check(firstRecord is FuncCreationRecord)
 
         var result = Entity(
-            id = firstRecord.entityId,
             cmdId = firstRecord.cmdId,
+            id = firstRecord.entityId,
+            groupId = firstRecord.groupId,
             sequence = firstRecord.sequence()
         )
 
@@ -62,8 +63,9 @@ class SqliteFuncRepository(
             } else {
                 storeRecord(
                     FuncCreationRecord(
-                        entityId = funcId,
                         cmdId = cmdId,
+                        entityId = funcId,
+                        groupId = cmd.groupId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,

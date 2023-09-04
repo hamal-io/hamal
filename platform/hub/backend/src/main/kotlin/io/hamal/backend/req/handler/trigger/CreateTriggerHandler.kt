@@ -1,7 +1,6 @@
 package io.hamal.backend.req.handler.trigger
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
@@ -11,6 +10,7 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository
+import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import org.springframework.stereotype.Component
@@ -31,6 +31,7 @@ class CreateTriggerHandler(
                 TriggerCmdRepository.CreateFixedRateCmd(
                     id = req.cmdId(),
                     triggerId = req.id,
+                    groupId = req.groupId,
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
@@ -47,6 +48,7 @@ class CreateTriggerHandler(
                     TriggerCmdRepository.CreateEventCmd(
                         id = req.cmdId(),
                         triggerId = req.id,
+                        groupId = req.groupId,
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,

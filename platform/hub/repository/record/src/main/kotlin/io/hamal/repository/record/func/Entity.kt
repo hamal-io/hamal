@@ -1,18 +1,16 @@
 package io.hamal.repository.record.func
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.api.Func
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.kua.type.CodeType
 
 data class Entity(
-    override val id: FuncId,
     override val cmdId: CmdId,
+    override val id: FuncId,
+    val groupId: GroupId,
     override val sequence: RecordSequence,
 
     var namespaceId: NamespaceId? = null,
@@ -50,6 +48,7 @@ data class Entity(
         return Func(
             cmdId = cmdId,
             id = id,
+            groupId = groupId,
             namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
@@ -65,6 +64,7 @@ fun List<FuncRecord>.createEntity(): Entity {
 
     var result = Entity(
         id = firstRecord.entityId,
+        groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence()
     )

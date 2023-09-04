@@ -92,8 +92,9 @@ internal abstract class BaseTest {
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
-    lateinit var rootAccount: Account
-    lateinit var rootAccountAuthToken: AuthToken
+    lateinit var testAccount: Account
+    lateinit var testAuthToken: AuthToken
+    lateinit var testGroup: Group
 
     @BeforeEach
     fun before() {
@@ -110,16 +111,8 @@ internal abstract class BaseTest {
         stateCmdRepository.clear()
         triggerCmdRepository.clear()
 
-        namespaceCmdRepository.create(
-            NamespaceCmdRepository.CreateCmd(
-                id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
-                name = NamespaceName("hamal"),
-                inputs = NamespaceInputs()
-            )
-        )
 
-        rootAccount = accountCmdRepository.create(
+        testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
@@ -129,15 +122,35 @@ internal abstract class BaseTest {
             )
         )
 
-        rootAccountAuthToken = (authCmdRepository.create(
+        testAuthToken = (authCmdRepository.create(
             CreateTokenAuthCmd(
                 id = CmdId(3),
                 authId = generateDomainId(::AuthId),
-                accountId = rootAccount.id,
+                accountId = testAccount.id,
                 token = AuthToken("test-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
         ) as TokenAuth).token
+
+        testGroup = groupCmdRepository.create(
+            GroupCmdRepository.CreateCmd(
+                id = CmdId(4),
+                groupId = generateDomainId(::GroupId),
+                name = GroupName("test-group"),
+                creatorId = testAccount.id
+            )
+        )
+
+        namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(1),
+                namespaceId = generateDomainId(::NamespaceId),
+                groupId = testGroup.id,
+                name = NamespaceName("hamal"),
+                inputs = NamespaceInputs()
+            )
+        )
+
     }
 
 
@@ -153,6 +166,7 @@ internal abstract class BaseTest {
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
+                groupId = testGroup.id,
                 correlation = correlation,
                 inputs = ExecInputs(),
                 code = code,

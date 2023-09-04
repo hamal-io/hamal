@@ -1,7 +1,6 @@
 package io.hamal.backend.req.handler.exec
 
 import io.hamal.backend.event.HubEventEmitter
-import io.hamal.repository.api.event.ExecPlannedEvent
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
@@ -10,8 +9,10 @@ import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.ExecCmdRepository
+import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.PlannedExec
+import io.hamal.repository.api.event.ExecPlannedEvent
 import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
 import org.springframework.stereotype.Component
 
@@ -37,9 +38,10 @@ class InvokeExecHandler(
         }
 
         return execCmdRepository.plan(
-            ExecCmdRepository.PlanCmd(
+            PlanCmd(
                 id = req.cmdId(),
                 execId = req.id,
+                groupId = req.groupId,
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),
                 code = func?.code ?: req.code ?: throw IllegalStateException("Code not found"),

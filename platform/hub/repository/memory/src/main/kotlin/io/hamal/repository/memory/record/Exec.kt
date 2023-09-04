@@ -68,8 +68,9 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRe
 
                 addRecord(
                     ExecPlannedRecord(
-                        entityId = execId,
                         cmdId = cmd.id,
+                        entityId = execId,
+                        groupId = cmd.groupId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,

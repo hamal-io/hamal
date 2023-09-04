@@ -1,18 +1,19 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.namespace.NamespaceCreationRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import io.hamal.repository.record.namespace.createEntity
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -45,7 +46,7 @@ internal object CurrentNamespaceProjection {
 
 object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceRepository {
 
-    override fun create(cmd: NamespaceCmdRepository.CreateCmd): Namespace {
+    override fun create(cmd: CreateCmd): Namespace {
         return lock.withLock {
             val namespaceId = cmd.namespaceId
             if (contains(namespaceId)) {
@@ -53,8 +54,9 @@ object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRe
             } else {
                 addRecord(
                     NamespaceCreationRecord(
-                        entityId = namespaceId,
                         cmdId = cmd.id,
+                        entityId = namespaceId,
+                        groupId = cmd.groupId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                     )

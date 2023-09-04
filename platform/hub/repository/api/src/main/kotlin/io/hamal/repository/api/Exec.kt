@@ -25,6 +25,7 @@ interface ExecCmdRepository {
     data class PlanCmd(
         val id: CmdId,
         val execId: ExecId,
+        val groupId: GroupId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val code: CodeType,
@@ -69,8 +70,9 @@ interface ExecQueryRepository {
 
 @Serializable
 sealed class Exec : DomainObject<ExecId> {
-    abstract override val id: ExecId
     abstract val cmdId: CmdId
+    abstract override val id: ExecId
+    abstract val groupId: GroupId
     abstract val status: ExecStatus
 
     abstract val correlation: Correlation?
@@ -101,6 +103,7 @@ sealed class Exec : DomainObject<ExecId> {
 class PlannedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val groupId: GroupId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val code: CodeType,
@@ -123,6 +126,7 @@ class ScheduledExec(
     val scheduledAt: ScheduledAt
 ) : Exec() {
     override val status = ExecStatus.Scheduled
+    override val groupId get() = plannedExec.groupId
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
     override val code get() = plannedExec.code
@@ -141,6 +145,7 @@ class QueuedExec(
     val queuedAt: QueuedAt
 ) : Exec() {
     override val status = ExecStatus.Queued
+    override val groupId get() = scheduledExec.groupId
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
     override val code get() = scheduledExec.code
@@ -158,6 +163,7 @@ class StartedExec(
     val queuedExec: QueuedExec
 ) : Exec() {
     override val status = ExecStatus.Started
+    override val groupId get() = queuedExec.groupId
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
     override val code get() = queuedExec.code
@@ -170,12 +176,12 @@ class StartedExec(
 @Serializable
 class CompletedExec(
     override val cmdId: CmdId,
-
     override val id: ExecId,
     val startedExec: StartedExec,
     val completedAt: CompletedAt
 ) : Exec() {
     override val status = ExecStatus.Completed
+    override val groupId get() = startedExec.groupId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val code get() = startedExec.code
@@ -196,6 +202,7 @@ class FailedExec(
     val cause: ErrorType
 ) : Exec() {
     override val status = ExecStatus.Failed
+    override val groupId get() = startedExec.groupId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val code get() = startedExec.code

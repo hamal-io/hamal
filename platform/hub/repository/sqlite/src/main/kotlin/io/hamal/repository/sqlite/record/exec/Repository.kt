@@ -18,8 +18,9 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
         check(firstRecord is ExecPlannedRecord)
 
         var result = Entity(
-            id = firstRecord.entityId,
             cmdId = firstRecord.cmdId,
+            id = firstRecord.entityId,
+            groupId = firstRecord.groupId,
             sequence = firstRecord.sequence()
         )
 
@@ -58,8 +59,9 @@ class SqliteExecRepository(
             } else {
                 storeRecord(
                     ExecPlannedRecord(
-                        entityId = execId,
                         cmdId = cmdId,
+                        entityId = execId,
+                        groupId = cmd.groupId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,

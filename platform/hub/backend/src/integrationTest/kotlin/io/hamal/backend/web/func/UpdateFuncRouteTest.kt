@@ -47,6 +47,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(1),
+                groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
             )
@@ -67,6 +68,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             CreateCmd(
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
+                groupId = testGroup.id,
                 name = NamespaceName("updatedNamespace"),
                 inputs = NamespaceInputs()
             )
@@ -107,6 +109,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(1),
+                groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
             )
@@ -146,6 +149,7 @@ internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
             CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(1),
+                groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
             )

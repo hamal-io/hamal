@@ -1,6 +1,5 @@
 package io.hamal.backend.web.func
 
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*
@@ -11,6 +10,7 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.hub.HubError
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -46,6 +46,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
             CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
+                groupId = testGroup.id,
                 name = NamespaceName("hamal::name::space"),
                 inputs = NamespaceInputs()
             )

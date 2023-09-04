@@ -1,15 +1,15 @@
 package io.hamal.backend.req.handler.trigger
 
 import io.hamal.backend.req.handler.BaseReqHandlerTest
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -113,8 +113,9 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(1),
         status = Submitted,
         type = TriggerType.FixedRate,
-        funcId = FuncId(2222),
         id = TriggerId(1234),
+        groupId = testGroup.id,
+        funcId = FuncId(2222),
         name = TriggerName("FixedRateTrigger"),
         duration = 42.seconds,
         inputs = TriggerInputs(
@@ -127,9 +128,10 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         reqId = ReqId(1),
         status = Submitted,
         type = TriggerType.Event,
+        id = TriggerId(1234),
+        groupId = testGroup.id,
         funcId = FuncId(2222),
         topicId = TopicId(1111),
-        id = TriggerId(1234),
         name = TriggerName("EventTrigger"),
         inputs = TriggerInputs(
             MapType(mutableMapOf("hamal" to StringType("rocks"))),

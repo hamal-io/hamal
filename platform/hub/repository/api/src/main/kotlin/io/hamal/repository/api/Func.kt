@@ -4,10 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
@@ -23,6 +20,7 @@ interface FuncCmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val funcId: FuncId,
+        val groupId: GroupId,
         val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
@@ -53,6 +51,7 @@ interface FuncQueryRepository {
 @Serializable
 data class Func(
     override val id: FuncId,
+    val groupId: GroupId,
     val cmdId: CmdId,
     val namespaceId: NamespaceId,
     val name: FuncName,

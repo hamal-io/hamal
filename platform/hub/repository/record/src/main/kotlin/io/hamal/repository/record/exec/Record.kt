@@ -5,6 +5,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.record.Record
@@ -22,8 +23,9 @@ sealed class ExecRecord(
 @Serializable
 @SerialName("EPR")
 data class ExecPlannedRecord(
-    override val entityId: ExecId,
     override val cmdId: CmdId,
+    override val entityId: ExecId,
+    val groupId: GroupId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val code: CodeType,

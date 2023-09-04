@@ -1,5 +1,10 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerType.FixedRate
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
@@ -11,11 +16,6 @@ import io.hamal.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.record.trigger.createEntity
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
-import io.hamal.lib.domain.vo.TriggerId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -65,8 +65,9 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
             }
             MemoryTriggerRepository.addRecord(
                 FixedRateTriggerCreationRecord(
-                    entityId = triggerId,
                     cmdId = cmd.id,
+                    entityId = triggerId,
+                    groupId = cmd.groupId,
                     funcId = cmd.funcId,
                     namespaceId = cmd.namespaceId,
                     name = cmd.name,
@@ -87,8 +88,9 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
             } else {
                 MemoryTriggerRepository.addRecord(
                     EventTriggerCreationRecord(
-                        entityId = triggerId,
                         cmdId = cmd.id,
+                        entityId = triggerId,
+                        groupId = cmd.groupId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,

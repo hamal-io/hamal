@@ -1,9 +1,5 @@
 package io.hamal.backend.web.trigger
 
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.NamespaceCmdRepository
-import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
@@ -15,6 +11,10 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -58,6 +58,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
+                groupId = testGroup.id,
                 name = NamespaceName("hamal::name::space"),
                 inputs = NamespaceInputs()
             )

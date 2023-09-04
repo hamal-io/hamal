@@ -1,5 +1,8 @@
 package io.hamal.repository.sqlite.record.namespace
 
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -11,9 +14,6 @@ import io.hamal.repository.record.namespace.NamespaceCreationRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sqlite.BaseSqliteRepository
 import java.nio.file.Path
 
 internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecord, Namespace> {
@@ -23,8 +23,9 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
         check(firstRecord is NamespaceCreationRecord)
 
         var result = Entity(
-            id = firstRecord.entityId,
             cmdId = firstRecord.cmdId,
+            id = firstRecord.entityId,
+            groupId = firstRecord.groupId,
             sequence = firstRecord.sequence()
         )
 
@@ -60,8 +61,9 @@ class SqliteNamespaceRepository(
             } else {
                 storeRecord(
                     NamespaceCreationRecord(
-                        entityId = namespaceId,
                         cmdId = cmdId,
+                        entityId = namespaceId,
+                        groupId = cmd.groupId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                     )
