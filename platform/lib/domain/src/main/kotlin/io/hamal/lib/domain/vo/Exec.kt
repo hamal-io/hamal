@@ -3,6 +3,8 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainIdSerializer
+import io.hamal.lib.common.domain.StringValueObject
+import io.hamal.lib.common.domain.StringValueObjectSerializer
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
@@ -36,3 +38,8 @@ enum class ExecStatus(val value: Int) {
     }
 }
 
+
+@Serializable(with = ExecToken.Serializer::class)
+class ExecToken(override val value: String) : StringValueObject() {
+    internal object Serializer : StringValueObjectSerializer<ExecToken>(::ExecToken)
+}

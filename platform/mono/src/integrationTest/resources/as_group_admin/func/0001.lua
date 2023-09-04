@@ -1,8 +1,8 @@
 sys = require('sys')
 
---err, funcs = sys.func.list()
---assert(err == nil)
---assert(#funcs == 0)
+err, funcs = sys.func.list()
+assert(err == nil)
+assert(#funcs == 0)
 
 --err, func_one_req = sys.func.create({ name = 'func-1' })
 --sys.await_completed(func_one_req)

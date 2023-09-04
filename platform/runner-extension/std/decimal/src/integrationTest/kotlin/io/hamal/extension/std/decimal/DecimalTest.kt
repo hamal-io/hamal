@@ -8,7 +8,7 @@ internal class DecimalTest : AbstractExtensionTest() {
     @Test
     fun `Can import decimal`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
             local decimal = require('decimal')
@@ -21,7 +21,7 @@ internal class DecimalTest : AbstractExtensionTest() {
     @Test
     fun `Creating decimal and iterating over _G does not crash`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
             local decimal = require('decimal')
@@ -35,7 +35,7 @@ internal class DecimalTest : AbstractExtensionTest() {
     @Test
     fun `Can create new decimal instance by number`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
             local decimal = require('decimal')
@@ -49,7 +49,7 @@ internal class DecimalTest : AbstractExtensionTest() {
     @Test
     fun `Can create new decimal instance by string`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
             local decimal = require('decimal')

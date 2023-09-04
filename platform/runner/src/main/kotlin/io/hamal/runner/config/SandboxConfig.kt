@@ -6,6 +6,7 @@ import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
 import io.hamal.extension.web3.eth.EthExtensionFactory
 import io.hamal.extension.web3.hml.HmlExtensionFactory
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
@@ -15,10 +16,9 @@ import io.hamal.lib.sdk.DefaultHubSdk
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 
 @Configuration
-@Profile("!test")
+//@Profile("!test")
 class SandboxConfig {
     @Bean
     fun sandboxFactory(
@@ -36,7 +36,15 @@ class RunnerSandboxFactory(
     override fun create(ctx: SandboxContext): Sandbox {
         NativeLoader.load(Jar)
 
-        val template = HttpTemplate(instanceHost) // FIXME sdk instead
+        val execToken = ctx[ExecToken::class]
+        println(execToken)
+
+        val template = HttpTemplate(
+            baseUrl = instanceHost,
+            headerFactory = {
+                set("x-runner-exec-token", execToken.value)
+            }
+        )
         val sdk = DefaultHubSdk(template)
 
         return Sandbox(ctx).register(

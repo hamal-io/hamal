@@ -17,7 +17,7 @@ object IntegrationTest : AbstractExtensionTest() {
         return collectFiles().map { testFile ->
             DynamicTest.dynamicTest("${testFile.parent.name}/${testFile.name}") {
                 val execute = createTestExecutor(EthExtensionFactory())
-                execute(unitOfWork(String(Files.readAllBytes(testFile))))
+                execute.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()
     }

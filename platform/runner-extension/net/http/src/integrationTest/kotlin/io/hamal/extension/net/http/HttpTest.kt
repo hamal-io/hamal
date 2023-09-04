@@ -39,7 +39,7 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
                 )
 
                 val execute = createTestExecutor(HttpExtensionFactory(config))
-                execute(unitOfWork(String(Files.readAllBytes(testFile))))
+                execute.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()
     }

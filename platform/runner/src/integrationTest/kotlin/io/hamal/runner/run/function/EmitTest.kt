@@ -19,7 +19,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `No events emitted`() {
         val executor = createTestExecutor()
-        executor(unitOfWork(""))
+        executor.run(unitOfWork(""))
 
         val eventsToEmit = executor.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(0))
@@ -32,7 +32,7 @@ internal class EmitTest : AbstractExecuteTest() {
                 assertThat(err.message, containsString("Topic not present"))
             }
         )
-        execute(unitOfWork("ctx.emit()"))
+        execute.run(unitOfWork("ctx.emit()"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(0))
@@ -42,7 +42,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event without payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic')"))
+        execute.run(unitOfWork("ctx.emit('test-topic')"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -56,7 +56,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event with empty payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic', {})"))
+        execute.run(unitOfWork("ctx.emit('test-topic', {})"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -71,7 +71,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event with nil payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic', {hamal=nil})"))
+        execute.run(unitOfWork("ctx.emit('test-topic', {hamal=nil})"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -85,7 +85,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event with string payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic', {hamal='rocks'})"))
+        execute.run(unitOfWork("ctx.emit('test-topic', {hamal='rocks'})"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -99,7 +99,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event with number payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic',{ answer=42 })"))
+        execute.run(unitOfWork("ctx.emit('test-topic',{ answer=42 })"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -113,7 +113,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event with boolean payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic', {true_value=true, false_value=false})"))
+        execute.run(unitOfWork("ctx.emit('test-topic', {true_value=true, false_value=false})"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -139,7 +139,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Disabled
     fun `Emit event with table payload`() {
         val execute = createTestExecutor()
-        execute(unitOfWork("ctx.emit('test-topic', { nested_table = { value = 23 } })"))
+        execute.run(unitOfWork("ctx.emit('test-topic', { nested_table = { value = 23 } })"))
 
         val eventsToEmit = execute.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))

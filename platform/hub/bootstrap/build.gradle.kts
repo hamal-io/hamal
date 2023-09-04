@@ -11,7 +11,7 @@ plugins {
 
 apply(plugin = "io.spring.dependency-management")
 
-archivesName.set("instance-bootstrap")
+archivesName.set("hub-bootstrap")
 
 docker {
     springBootApplication {

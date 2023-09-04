@@ -14,4 +14,5 @@ open class SecurityConfig {
 
     @Bean
     open fun generateToken(): GenerateToken = DomainGenerateToken
+
 }

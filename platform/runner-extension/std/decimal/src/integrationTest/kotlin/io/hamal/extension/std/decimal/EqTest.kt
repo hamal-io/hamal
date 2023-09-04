@@ -8,7 +8,7 @@ internal class EqTest : AbstractExtensionTest() {
     @Test
     fun `decimal, number`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
                 local decimal = require('decimal')
@@ -27,7 +27,7 @@ internal class EqTest : AbstractExtensionTest() {
     @Test
     fun `decimal, decimal`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
                 local decimal = require('decimal')
@@ -45,7 +45,7 @@ internal class EqTest : AbstractExtensionTest() {
     @Test
     fun `number, decimal`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
                 local decimal = require('decimal')

@@ -15,7 +15,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
     @Test
     fun `exec_id available in code`() {
         val testExecutor = createTestExecutor()
-        testExecutor(
+        testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
                 inputs = ExecInputs(),
@@ -31,7 +31,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         val testFn = TestFunction()
 
         val testExecutor = createTestExecutor("fn" to testFn)
-        testExecutor(
+        testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
                 inputs = ExecInputs(),

@@ -23,8 +23,13 @@ class AuthFilter(
     ) {
         val path = request.servletPath
 
-        // FIXME skip worker auth for now
-        if (path == "/v1/dequeue" || path.endsWith("complete") || path.endsWith("fail")) {
+        val runnerToken = request.getHeader("x-runner-token")
+        if (runnerToken == "i_am_runner_let_me_in") {
+            return filterChain.doFilter(request, response)
+        }
+
+        val runnerExecToken = request.getHeader("x-runner-exec-token")
+        if (runnerExecToken == "let_me_in") {
             return filterChain.doFilter(request, response)
         }
 

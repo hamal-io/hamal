@@ -8,7 +8,7 @@ internal class AbsTest : AbstractExtensionTest() {
     @Test
     fun `decimal, decimal`() {
         val execute = createTestExecutor(DecimalExtensionFactory)
-        execute(
+        execute.run(
             unitOfWork(
                 """
                 local decimal = require('decimal')

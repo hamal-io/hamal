@@ -2,6 +2,7 @@ package io.hamal.runner.run
 
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
@@ -17,7 +18,7 @@ import io.hamal.runner.connector.UnitOfWork
 import logger
 
 interface CodeRunner {
-    operator fun invoke(unitOfWork: UnitOfWork)
+    fun run(unitOfWork: UnitOfWork)
 }
 
 class DefaultCodeRunner(
@@ -29,13 +30,14 @@ class DefaultCodeRunner(
 
     val context get() = executionContext
 
-    override fun invoke(unitOfWork: UnitOfWork) {
+    override fun run(unitOfWork: UnitOfWork) {
         val execId = unitOfWork.id
         try {
             log.debug("Start execution: $execId")
 
             executionContext = ExecContext(ExecInvocationEvents(unitOfWork.events))
             executionContext[ExecId::class] = unitOfWork.id
+            executionContext[ExecToken::class] = unitOfWork.token
 
             sandboxFactory.create(executionContext)
                 .use { sandbox ->
