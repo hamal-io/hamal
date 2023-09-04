@@ -1,7 +1,11 @@
-package io.hamal.lib.sdk.hub.domain
+package io.hamal.lib.sdk.hub
 
+import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -36,4 +40,19 @@ data class ApiFunc(
         val id: NamespaceId,
         val name: NamespaceName
     )
+}
+
+interface FuncService {
+    fun create(createFuncReq: CreateFuncReq): ApiSubmittedReqWithId
+}
+
+internal class DefaultFuncService(
+    private val template: HttpTemplate
+) : FuncService {
+    override fun create(createFuncReq: CreateFuncReq) =
+        template.post("/v1/funcs")
+            .body(createFuncReq)
+            .execute()
+            .fold(ApiSubmittedReqWithId::class)
+
 }

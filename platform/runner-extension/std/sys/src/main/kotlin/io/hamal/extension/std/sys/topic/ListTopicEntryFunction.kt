@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.domain.ApiTopicEntryList
+import io.hamal.lib.sdk.hub.ApiTopicEntryList
 
 class ListTopicEntryFunction(
     private val httpTemplate: HttpTemplate

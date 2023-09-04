@@ -4,8 +4,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpResponse
 import io.hamal.lib.http.NoContentHttpResponse
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.hub.domain.ApiError
-import io.hamal.lib.sdk.hub.domain.ApiException
+import io.hamal.lib.sdk.hub.ApiError
+import io.hamal.lib.sdk.hub.ApiException
 import kotlin.reflect.KClass
 
 internal fun <TYPE : Any> HttpResponse.fold(clazz: KClass<TYPE>): TYPE {

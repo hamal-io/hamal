@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub.domain
+package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId

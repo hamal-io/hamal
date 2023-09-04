@@ -2,7 +2,7 @@ package io.hamal.backend.web.topic
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateTopicReq
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

@@ -3,8 +3,8 @@ package io.hamal.backend.web.work
 import io.hamal.backend.event.HubEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
-import io.hamal.lib.sdk.hub.domain.ApiUnitOfWorkList
-import io.hamal.lib.sdk.hub.domain.ApiUnitOfWorkList.ApiUnitOfWork
+import io.hamal.lib.sdk.hub.ApiUnitOfWorkList
+import io.hamal.lib.sdk.hub.ApiUnitOfWorkList.ApiUnitOfWork
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StateQueryRepository

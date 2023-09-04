@@ -2,7 +2,7 @@ package io.hamal.backend.web.account
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateAccountReq
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedWithTokenReq
+import io.hamal.lib.sdk.hub.ApiSubmittedWithTokenReq
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

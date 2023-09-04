@@ -1,10 +1,44 @@
-package io.hamal.lib.sdk.hub.service
+package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.common.KeyedOnce
+import io.hamal.lib.domain.vo.TopicEntryId
+import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.hub.domain.ApiTopicList
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ApiTopicEntryList(
+    val topicId: TopicId,
+    val topicName: TopicName,
+    val entries: List<Entry>
+) {
+    @Serializable
+    data class Entry(
+        val id: TopicEntryId,
+        val payload: TopicEntryPayload
+    )
+}
+
+
+@Serializable
+data class ApiTopic(
+    val id: TopicId,
+    val name: TopicName
+)
+
+@Serializable
+data class ApiTopicList(
+    val topics: List<Topic>
+) {
+    @Serializable
+    data class Topic(
+        val id: TopicId,
+        val name: TopicName
+    )
+}
+
 
 interface TopicService {
     fun resolve(topicName: TopicName): TopicId

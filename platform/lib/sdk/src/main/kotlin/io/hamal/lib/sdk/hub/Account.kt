@@ -1,7 +1,8 @@
-package io.hamal.lib.sdk.hub.domain
+package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.http.HttpTemplate
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,3 +22,9 @@ data class ApiAccount(
     val id: AccountId,
     val name: AccountName,
 )
+
+interface AccountService
+
+internal class DefaultAccountService(
+    private val template: HttpTemplate
+) : AccountService

@@ -6,8 +6,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.domain.ApiError
-import io.hamal.lib.sdk.hub.domain.ApiExec
+import io.hamal.lib.sdk.hub.ApiError
+import io.hamal.lib.sdk.hub.ApiExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue

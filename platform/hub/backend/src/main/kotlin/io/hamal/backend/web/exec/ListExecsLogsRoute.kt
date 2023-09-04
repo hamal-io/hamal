@@ -3,8 +3,8 @@ package io.hamal.backend.web.exec
 import io.hamal.repository.api.ExecLogQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecLogId
-import io.hamal.lib.sdk.hub.domain.ApiExcLogList
-import io.hamal.lib.sdk.hub.domain.ApiExecLog
+import io.hamal.lib.sdk.hub.ApiExcLogList
+import io.hamal.lib.sdk.hub.ApiExecLog
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

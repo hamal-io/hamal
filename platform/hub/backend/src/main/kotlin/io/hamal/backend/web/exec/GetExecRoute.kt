@@ -1,7 +1,7 @@
 package io.hamal.backend.web.exec
 
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.domain.ApiExec
+import io.hamal.lib.sdk.hub.ApiExec
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

@@ -15,9 +15,9 @@ import io.hamal.lib.kua.type.FalseValue
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.TrueValue
-import io.hamal.lib.sdk.hub.domain.ApiError
-import io.hamal.lib.sdk.hub.domain.ApiState
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.ApiError
+import io.hamal.lib.sdk.hub.ApiState
+import io.hamal.lib.sdk.hub.ApiSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

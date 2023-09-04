@@ -5,9 +5,9 @@ import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.domain.ApiCorrelatedState
-import io.hamal.lib.sdk.hub.domain.ApiCorrelation
-import io.hamal.lib.sdk.hub.domain.ApiState
+import io.hamal.lib.sdk.hub.ApiCorrelatedState
+import io.hamal.lib.sdk.hub.ApiCorrelation
+import io.hamal.lib.sdk.hub.ApiState
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

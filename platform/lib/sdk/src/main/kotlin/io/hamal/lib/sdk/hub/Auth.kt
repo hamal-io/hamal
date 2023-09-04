@@ -1,6 +1,7 @@
-package io.hamal.lib.sdk.hub.service
+package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.http.HttpTemplate
+
 
 interface AuthService
 

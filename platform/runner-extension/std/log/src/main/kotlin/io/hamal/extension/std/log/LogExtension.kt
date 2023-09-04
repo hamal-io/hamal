@@ -13,8 +13,8 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.domain.AppendExecLogCmd
-import io.hamal.lib.sdk.hub.service.ExecLogService
+import io.hamal.lib.sdk.hub.AppendExecLogCmd
+import io.hamal.lib.sdk.hub.ExecLogService
 import logger
 
 

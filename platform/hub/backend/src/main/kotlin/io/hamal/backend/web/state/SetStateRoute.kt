@@ -7,9 +7,9 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SetStateReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.domain.ApiDefaultSubmittedReq
-import io.hamal.lib.sdk.hub.domain.ApiState
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.ApiDefaultSubmittedReq
+import io.hamal.lib.sdk.hub.ApiState
+import io.hamal.lib.sdk.hub.ApiSubmittedReq
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable

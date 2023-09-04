@@ -5,7 +5,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain._enum.ReqStatus.Failed
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.ApiSubmittedReq
 import io.hamal.repository.api.submitted_req.SubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty

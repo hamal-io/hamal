@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub.domain
+package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId

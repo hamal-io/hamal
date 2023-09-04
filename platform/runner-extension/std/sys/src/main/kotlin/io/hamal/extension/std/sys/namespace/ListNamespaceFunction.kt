@@ -8,7 +8,7 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.domain.ApiNamespaceList
+import io.hamal.lib.sdk.hub.ApiNamespaceList
 
 class ListNamespaceFunction(
     private val httpTemplate: HttpTemplate

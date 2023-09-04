@@ -3,9 +3,9 @@ package io.hamal.backend.web.req
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.domain.ApiReqList
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.ApiReqList
+import io.hamal.lib.sdk.hub.ApiSubmittedReq
+import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

@@ -10,7 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.domain.ApiExec
+import io.hamal.lib.sdk.hub.ApiExec
 
 class GetExecFunction(
     private val httpTemplate: HttpTemplate

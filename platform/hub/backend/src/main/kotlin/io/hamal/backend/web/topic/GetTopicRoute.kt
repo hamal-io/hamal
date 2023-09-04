@@ -2,7 +2,7 @@ package io.hamal.backend.web.topic
 
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.domain.ApiTopic
+import io.hamal.lib.sdk.hub.ApiTopic
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.hub.service.*
+import io.hamal.lib.sdk.hub.*
 
 interface HubSdk {
     val account: AccountService

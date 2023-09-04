@@ -3,7 +3,7 @@ package io.hamal.backend.web.func
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.hub.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

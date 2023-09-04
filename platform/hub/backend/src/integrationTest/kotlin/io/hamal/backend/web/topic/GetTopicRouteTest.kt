@@ -1,7 +1,7 @@
 package io.hamal.backend.web.topic
 
 
-import io.hamal.lib.sdk.hub.domain.ApiError
+import io.hamal.lib.sdk.hub.ApiError
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse

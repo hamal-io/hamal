@@ -8,10 +8,10 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.domain.ApiSimpleEventTrigger
-import io.hamal.lib.sdk.hub.domain.ApiSimpleFixedRateTrigger
-import io.hamal.lib.sdk.hub.domain.ApiSimpleTrigger
-import io.hamal.lib.sdk.hub.domain.ApiTriggerList
+import io.hamal.lib.sdk.hub.ApiSimpleEventTrigger
+import io.hamal.lib.sdk.hub.ApiSimpleFixedRateTrigger
+import io.hamal.lib.sdk.hub.ApiSimpleTrigger
+import io.hamal.lib.sdk.hub.ApiTriggerList
 
 class ListTriggerFunction(
     private val httpTemplate: HttpTemplate

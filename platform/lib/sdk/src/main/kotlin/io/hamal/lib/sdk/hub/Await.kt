@@ -1,8 +1,7 @@
-package io.hamal.lib.sdk.hub.service
+package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.hub.domain.ApiSubmittedReq
 
 interface AwaitService {
     operator fun invoke(req: ApiSubmittedReq) = await(req)
