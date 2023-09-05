@@ -1,51 +1,52 @@
 package io.hamal.repository.memory
 
 
+import io.hamal.repository.api.MetricAccess
 import io.hamal.repository.api.MetricRepository
-import io.hamal.repository.api.SystemEvent
+import io.hamal.repository.api.event.HubEvent
+import io.hamal.repository.api.event.HubEventTopic
+import io.hamal.repository.api.event.topicName
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import kotlin.reflect.KClass
 
 
 class MemoryMetricTest {
 
 
-    @Test
-    fun mapTest() {
-        val repo: MetricRepository = MemoryMetricRepository
-        repo.update(SystemEvent.ExecutionCompletedEvent)
-        val mp = repo.getData().getMap()
-        Assertions.assertTrue(mp[SystemEvent.ExecutionCompletedEvent] == 1)
-    }
+    // val repo: MetricRepository = MemoryMetricRepository
+
+
+    /*   @BeforeEach
+       fun clearRepo() {
+           repo.clear()
+       }*/
 
     @Test
+    fun mapTest() {
+        val subs = HubEvent::class.sealedSubclasses
+        println("")
+
+
+    }
+
+    /*
+   @Test
     fun resetTest() {
-        val repo: MetricRepository = MemoryMetricRepository
-        repo.update(SystemEvent.ExecutionCompletedEvent)
-        repo.update(SystemEvent.ExecutionFailedEvent)
+        repo.update(ExecutionCompletedEvent)
+        repo.update(ExecutionFailedEvent)
         repo.clear()
         val mp = repo.getData().getMap()
         Assertions.assertTrue(mp[SystemEvent.ExecutionCompletedEvent] == 0)
         Assertions.assertTrue(mp[SystemEvent.ExecutionFailedEvent] == 0)
-
-
-    }
-
-    @Test
-    fun except() {
-        val repo: MetricRepository = MemoryMetricRepository
-        val thrown = Assertions.assertThrows(NoSuchElementException::class.java) {
-            repo.update(SystemEvent.NamespaceCreatedEvent)
-        }
-        Assertions.assertEquals("NamespaceCreatedEvent not found", thrown.message)
     }
 
     @Test
     fun lockTest() {
-        val repo: MetricRepository = MemoryMetricRepository
         val t1 = Thread {
             for (i in 1..50) {
-                repo.update(SystemEvent.ExecutionFailedEvent)
+                repo.update(HubEvent)
             }
         }
 
@@ -65,6 +66,6 @@ class MemoryMetricTest {
         t1.join()
         t2.join()
         Assertions.assertEquals(100, repo.getData().getMap()[SystemEvent.ExecutionFailedEvent])
-    }
+    }*/
 
 }

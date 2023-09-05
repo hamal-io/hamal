@@ -1,71 +1,70 @@
 package io.hamal.repository.memory
 
 
-import io.hamal.repository.api.AccessMetrics
+import io.hamal.repository.api.MetricAccess
 import io.hamal.repository.api.MetricRepository
-import io.hamal.repository.api.SystemEvent
-import kotlinx.serialization.Serializable
+import io.hamal.repository.api.event.HubEvent
+import io.hamal.repository.api.event.HubEventTopic
 import kotlinx.serialization.json.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
+import kotlin.concurrent.write
 
 
 object MemoryMetricRepository : MetricRepository {
 
     private val lock = ReentrantReadWriteLock()
-    private val timer: Long = System.currentTimeMillis()
+    private val eventMap = LinkedHashMap<String, Int>()
+    private var timer: Long = System.currentTimeMillis()
 
 
-    @Serializable
-    private val eventMap: LinkedHashMap<SystemEvent, Int> = linkedMapOf(
-        SystemEvent.ExecutionCompletedEvent to 0,
-        SystemEvent.ExecutionFailedEvent to 0,
-        SystemEvent.ExecPlannedEvent to 0,
-        SystemEvent.ExecutionQueuedEvent to 0,
-        SystemEvent.ExecutionStartedEvent to 0,
-        SystemEvent.ExecScheduledEvent to 0,
-        SystemEvent.ExecInvokedEvent to 0
-    )
-
-    private fun read(): LinkedHashMap<SystemEvent, Int> {
-        val readLock = lock.readLock()
-        readLock.lock()
-        try {
-            return LinkedHashMap(eventMap)
-        } finally {
-            readLock.unlock()
-        }
+    override fun create() {
+        TODO()
     }
 
-    override fun update(key: SystemEvent) {
-        val writeLock = lock.writeLock()
-        writeLock.lock()
-        try {
-            if (!eventMap.containsKey(key)) throw NoSuchElementException("$key not found")
-            eventMap[key] = eventMap.getOrDefault(key, 0) + 1
-        } finally {
-            writeLock.unlock()
-        }
+
+    private fun read(): LinkedHashMap<String, Int> {
+        lock.read { return LinkedHashMap(eventMap) }
     }
 
-    override fun getData(): AccessMetrics {
-        return object : AccessMetrics {
+    override fun update(e: HubEvent) {
+        lock.write {
+            val topic = e.topicName.toString()
+            if (!eventMap.containsKey(topic)) {
+                eventMap.put(topic, 0)
+            }
+            eventMap[topic] = eventMap.getOrDefault(topic, 0) + 1
+        }
+
+    }
+
+    override fun update(e: HubEventTopic) {
+        val topic = e.value
+        if (!eventMap.containsKey(topic)) {
+            eventMap.put(topic, 0)
+        }
+        eventMap[topic] = eventMap.getOrDefault(topic, 0) + 1
+    }
+
+    override fun getData(): MetricAccess {
+        return object : MetricAccess {
             override fun getTime(): Long {
                 return timer
             }
 
-            override fun getMap(): LinkedHashMap<SystemEvent, Int> {
-                return LinkedHashMap(eventMap.toMap())
+            override fun getMap(): LinkedHashMap<String, Int> {
+                return read()
             }
         }
     }
 
     fun getAsJson(): JsonObject {
         //TODO for use in other class
-        val data = read()
+        val data = getData().getMap()
         val arr = buildJsonArray {
             for (i in data) {
                 addJsonObject {
-                    put(i.key.name, i.value)
+                    put(i.key, i.value)
                 }
             }
         }
@@ -76,16 +75,16 @@ object MemoryMetricRepository : MetricRepository {
         }
     }
 
+    override fun setTimer(timer: Long) {
+        this.timer = timer
+    }
+
 
     override fun clear() {
-        val writeLock = lock.writeLock()
-        writeLock.lock()
-        try {
-            for (i in eventMap) {
-                i.setValue(0)
-            }
-        } finally {
-            writeLock.unlock()
+        lock.write {
+            timer = System.currentTimeMillis()
+            eventMap.clear()
         }
     }
 }
+
