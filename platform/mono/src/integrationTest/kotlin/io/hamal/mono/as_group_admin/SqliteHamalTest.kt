@@ -1,6 +1,6 @@
 package io.hamal.mono.as_group_admin
 
-import io.hamal.backend.BackendConfig
+import io.hamal.api.ApiConfig
 import io.hamal.mono.BaseTest
 import io.hamal.mono.rootHubSdk
 import io.hamal.runner.RunnerConfig
@@ -18,7 +18,7 @@ import java.nio.file.Paths
     webEnvironment = DEFINED_PORT,
     properties = ["server.port=8043", "io.hamal.runner.host=http://localhost:8043"],
     classes = [
-        BackendConfig::class,
+        ApiConfig::class,
         RunnerConfig::class
     ]
 )
