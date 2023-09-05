@@ -1,7 +1,7 @@
 package io.hamal.boostrap
 
+import io.hamal.admin.AdminConfig
 import io.hamal.backend.BackendConfig
-import guru.fn.FrontendConfig
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -13,7 +13,7 @@ class Instance
 fun main(args: Array<String>) {
     SpringApplicationBuilder()
         .main(Instance::class.java)
-        .sources(BackendConfig::class.java, FrontendConfig::class.java)
+        .sources(AdminConfig::class.java, BackendConfig::class.java)
         .web(WebApplicationType.SERVLET)
         .properties("server.port=8008")
         .bannerMode(Banner.Mode.OFF)

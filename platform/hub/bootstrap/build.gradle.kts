@@ -33,7 +33,7 @@ dependencies {
     }
 
     implementation(project(":platform:hub:backend"))
-    implementation(project(":platform:hub:frontend"))
+    implementation(project(":platform:hub:admin"))
 }
 
 @Suppress("UnstableApiUsage")
@@ -53,7 +53,7 @@ testing {
                     implementation(project(":platform:lib:kua"))
                     implementation(project(":platform:hub:backend"))
                     implementation(project(":platform:hub:repository:api"))
-                    implementation(project(":platform:hub:frontend"))
+                    implementation(project(":platform:hub:admin"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

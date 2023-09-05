@@ -1,4 +1,4 @@
-package guru.fn
+package io.hamal.admin
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
@@ -9,4 +9,4 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 @ComponentScan
 @EnableWebMvc
 @EnableAutoConfiguration
-open class FrontendConfig
+open class AdminConfig

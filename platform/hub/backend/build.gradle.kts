@@ -42,7 +42,7 @@ testing {
                     }
 
                     implementation(project(":platform:hub:backend"))
-                    implementation(project(":platform:hub:frontend"))
+                    implementation(project(":platform:hub:admin"))
                     implementation(project(":platform:runner"))
                     implementation(project(":platform:hub:repository:api"))
                     implementation(project(":platform:hub:repository:memory"))

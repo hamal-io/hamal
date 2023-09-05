@@ -1,4 +1,4 @@
-package guru.fn.filter
+package io.hamal.admin.filter
 
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain

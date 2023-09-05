@@ -21,7 +21,7 @@ kotlin {
 }
 
 
-archivesName.set("hub-frontend")
+archivesName.set("hub-admin")
 
 node {
     nodeProjectDir.set(file("${project.projectDir}/src/main/resources"))

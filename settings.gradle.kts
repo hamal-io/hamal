@@ -33,9 +33,9 @@ dependencyResolutionManagement {
 }
 
 include(":platform:hub")
+include(":platform:hub:admin")
 include(":platform:hub:backend")
 include(":platform:hub:bootstrap")
-include(":platform:hub:frontend")
 include(":platform:hub:repository:api")
 include(":platform:hub:repository:memory")
 include(":platform:hub:repository:record")
