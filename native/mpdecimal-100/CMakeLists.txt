@@ -23,7 +23,14 @@ set(SRCS
 )
 
 add_compile_definitions(CONFIG_64)
-add_compile_definitions(ASM)
+
+if(APPLE)
+    add_compile_definitions(ANSI)
+elseif(UNIX)
+    add_compile_definitions(ASM)
+endif()
+
+
 
 add_library(mpdecimal_100 SHARED ${SRCS})
 target_include_directories(mpdecimal_100 PUBLIC include)
