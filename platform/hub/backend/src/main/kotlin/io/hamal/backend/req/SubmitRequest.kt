@@ -18,7 +18,7 @@ import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.*
 import org.springframework.stereotype.Component
 
-data class InvokeExec(
+data class InvokeExecReq(
     val execId: ExecId,
     val funcId: FuncId,
     val correlationId: CorrelationId?,
@@ -50,7 +50,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(createAccount: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
+    operator fun invoke(req: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
         val salt = generateSalt()
 
         return SubmittedCreateAccountWithPasswordReq(
@@ -58,159 +58,163 @@ class SubmitRequest(
             status = Submitted,
             id = generateDomainId(::AccountId),
             groupId = generateDomainId(::GroupId),
-            name = createAccount.name,
-            email = createAccount.email,
+            name = req.name,
+            email = req.email,
             authenticationId = generateDomainId(::AuthId),
             hash = encodePassword(
-                createAccount.password ?: throw NoSuchElementException("Account not found"),
-                salt
+                password = req.password ?: throw NoSuchElementException("Account not found"),
+                salt = salt
             ),
             salt = salt,
             token = generateToken()
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(adhoc: InvokeAdhocReq) =
+    operator fun invoke(groupId: GroupId, req: InvokeAdhocReq) =
         SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::ExecId),
-            groupId = TODO(),
-            inputs = adhoc.inputs,
-            code = adhoc.code,
+            groupId = groupId,
+            inputs = req.inputs,
+            code = req.code,
             funcId = null,
             correlationId = null,
             events = listOf()
         ).also(reqCmdRepository::queue)
 
 
-    operator fun invoke(funcId: FuncId, invokeFunc: InvokeFuncReq): SubmittedInvokeExecReq {
+    operator fun invoke(funcId: FuncId, req: InvokeFuncReq): SubmittedInvokeExecReq {
         val func = funcQueryRepository.get(funcId)
         return SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::ExecId),
-            groupId = TODO(),
+            groupId = func.groupId,
             funcId = funcId,
-            correlationId = invokeFunc.correlationId,
-            inputs = invokeFunc.inputs ?: InvocationInputs(),
+            correlationId = req.correlationId,
+            inputs = req.inputs ?: InvocationInputs(),
             code = func.code,
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(invokeExec: InvokeExec) =
-        SubmittedInvokeExecReq(
+    operator fun invoke(req: InvokeExecReq): SubmittedInvokeExecReq {
+        val func = funcQueryRepository.get(req.funcId)
+        return SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::ExecId),
-            groupId = TODO(),
-            funcId = invokeExec.funcId,
-            correlationId = invokeExec.correlationId,
-            inputs = invokeExec.inputs,
-            code = invokeExec.code,
+            groupId = func.groupId,
+            funcId = req.funcId,
+            correlationId = req.correlationId,
+            inputs = req.inputs,
+            code = req.code,
             events = listOf()
         ).also(reqCmdRepository::queue)
+    }
 
 
-    operator fun invoke(execId: ExecId, complete: CompleteExecReq) =
+    operator fun invoke(execId: ExecId, req: CompleteExecReq) =
         SubmittedCompleteExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = execId,
-            state = complete.state,
-            events = complete.events
+            state = req.state,
+            events = req.events
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(execId: ExecId, fail: FailExecReq) =
+    operator fun invoke(execId: ExecId, req: FailExecReq) =
         SubmittedFailExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = execId,
-            cause = fail.cause
+            cause = req.cause
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(createFuncReq: CreateFuncReq) =
+    operator fun invoke(groupId: GroupId, req: CreateFuncReq) =
         SubmittedCreateFuncReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::FuncId),
-            groupId = TODO(),
-            namespaceId = createFuncReq.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
-            name = createFuncReq.name,
-            inputs = createFuncReq.inputs,
-            code = createFuncReq.code
+            groupId = groupId,
+            namespaceId = req.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
+            name = req.name,
+            inputs = req.inputs,
+            code = req.code
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(funcId: FuncId, updateFuncReq: UpdateFuncReq) =
+    operator fun invoke(funcId: FuncId, req: UpdateFuncReq) =
         SubmittedUpdateFuncReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = funcId,
-            namespaceId = updateFuncReq.namespaceId,
-            name = updateFuncReq.name,
-            inputs = updateFuncReq.inputs,
-            code = updateFuncReq.code
+            namespaceId = req.namespaceId,
+            name = req.name,
+            inputs = req.inputs,
+            code = req.code
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(createNamespaceReq: CreateNamespaceReq) =
+    operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) =
         SubmittedCreateNamespaceReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::NamespaceId),
-            groupId = TODO(),
-            name = createNamespaceReq.name,
-            inputs = createNamespaceReq.inputs
+            groupId = groupId,
+            name = req.name,
+            inputs = req.inputs
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, updateNamespaceReq: UpdateNamespaceReq) =
+    operator fun invoke(namespaceId: NamespaceId, req: UpdateNamespaceReq) =
         SubmittedUpdateNamespaceReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = namespaceId,
-            name = updateNamespaceReq.name,
-            inputs = updateNamespaceReq.inputs
+            name = req.name,
+            inputs = req.inputs
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(createTriggerReq: CreateTriggerReq) =
-        SubmittedCreateTriggerReq(
-            type = createTriggerReq.type,
+    operator fun invoke(req: CreateTriggerReq): SubmittedCreateTriggerReq {
+        val func = funcQueryRepository.get(req.funcId)
+        return SubmittedCreateTriggerReq(
+            type = req.type,
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::TriggerId),
-            groupId = TODO(),
-            name = createTriggerReq.name,
-            funcId = createTriggerReq.funcId,
-            namespaceId = createTriggerReq.namespaceId,
-            inputs = createTriggerReq.inputs,
-            correlationId = createTriggerReq.correlationId,
-            duration = createTriggerReq.duration,
-            topicId = createTriggerReq.topicId
+            groupId = func.groupId,
+            name = req.name,
+            funcId = func.id,
+            namespaceId = req.namespaceId,
+            inputs = req.inputs,
+            correlationId = req.correlationId,
+            duration = req.duration,
+            topicId = req.topicId
         ).also(reqCmdRepository::queue)
+    }
 
-    operator fun invoke(createTopic: CreateTopicReq) =
+    operator fun invoke(req: CreateTopicReq) =
         SubmittedCreateTopicReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::TopicId),
-            name = createTopic.name
+            name = req.name
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(appendEvent: AppendEntryReq) =
+    operator fun invoke(req: AppendEntryReq) =
         SubmittedAppendToTopicReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
-            id = appendEvent.topicId,
-            payload = appendEvent.payload
+            id = req.topicId,
+            payload = req.payload
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(setStateReq: SetStateReq) =
+    operator fun invoke(req: SetStateReq) =
         SubmittedSetStateReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             state = CorrelatedState(
-                correlation = setStateReq.correlation,
-                value = setStateReq.value
+                correlation = req.correlation,
+                value = req.value
             )
         ).also(reqCmdRepository::queue)
 }

@@ -47,8 +47,9 @@ data class Entity(
             )
 
             is EventTriggerCreationRecord -> copy(
-                id = rec.entityId,
                 cmdId = rec.cmdId,
+                id = rec.entityId,
+                groupId = rec.groupId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,

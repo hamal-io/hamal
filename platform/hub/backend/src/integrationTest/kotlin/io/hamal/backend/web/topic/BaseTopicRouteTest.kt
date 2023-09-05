@@ -29,7 +29,8 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
     fun listTopics(
         names: List<TopicName> = listOf()
     ): HubTopicList {
-        val listTopicsResponse = httpTemplate.get("/v1/topics")
+        val listTopicsResponse = httpTemplate.get("/v1/groups/{groupId}/topics")
+            .path("groupId", testGroup.id)
             .parameter("names", names.joinToString(",") { it.value })
             .execute()
 
@@ -50,7 +51,10 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
 
 
     fun createTopic(topicName: TopicName): HubSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
+        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
+            .path("groupId", testGroup.id)
+            .body(CreateTopicReq(topicName))
+            .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }

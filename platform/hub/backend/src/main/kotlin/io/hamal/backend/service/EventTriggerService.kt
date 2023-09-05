@@ -1,7 +1,7 @@
 package io.hamal.backend.service
 
 import io.hamal.backend.component.Async
-import io.hamal.backend.req.InvokeExec
+import io.hamal.backend.req.InvokeExecReq
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
@@ -60,7 +60,7 @@ class EventTriggerService(
                     try {
                         consumer.consumeBatch(1) { entries ->
                             submitRequest(
-                                InvokeExec(
+                                InvokeExecReq(
                                     execId = generateDomainId(::ExecId),
                                     funcId = trigger.funcId,
                                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),

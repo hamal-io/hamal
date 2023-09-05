@@ -1,10 +1,7 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.domain.*
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
@@ -23,6 +20,7 @@ internal class EventTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeType(
@@ -54,6 +52,7 @@ internal class EventTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeType("test.fn()"),
@@ -65,7 +64,7 @@ internal class EventTest : AbstractExecuteTest() {
 
     class TestFunction(var result: List<Event>? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
-            val invocationEvents = ctx[ExecInvocationEvents::class]
+            val invocationEvents = ctx[RunnerInvocationEvents::class]
             result = invocationEvents.events
         }
     }

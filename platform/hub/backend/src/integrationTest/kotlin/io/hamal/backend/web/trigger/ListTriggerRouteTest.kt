@@ -34,7 +34,8 @@ internal class ListTriggerRouteTest : BaseTriggerRouteTest() {
             IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
         )
 
-        val listResponse = httpTemplate.get("/v1/triggers")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
             .parameter("limit", 12)
             .execute(HubTriggerList::class)
 
@@ -52,7 +53,8 @@ internal class ListTriggerRouteTest : BaseTriggerRouteTest() {
 
         val request15 = requests[15]
 
-        val listResponse = (httpTemplate.get("/v1/triggers")
+        val listResponse = (httpTemplate.get("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
             .parameter("after_id", request15.id)
             .parameter("limit", 1))
             .execute(HubTriggerList::class)

@@ -44,8 +44,8 @@ data class HubFunc(
 }
 
 interface HubFuncService {
-    fun create(createFuncReq: CreateFuncReq): HubSubmittedReqWithId
-    fun list(): List<Func>
+    fun create(groupId: GroupId, createFuncReq: CreateFuncReq): HubSubmittedReqWithId
+    fun list(groupId: GroupId): List<Func>
     fun get(funcId: FuncId): HubFunc
 }
 
@@ -53,14 +53,16 @@ internal class DefaultHubFuncService(
     private val template: HttpTemplate
 ) : HubFuncService {
 
-    override fun create(createFuncReq: CreateFuncReq) =
-        template.post("/v1/funcs")
+    override fun create(groupId: GroupId, createFuncReq: CreateFuncReq) =
+        template.post("/v1/groups/{groupId}/funcs")
+            .path("groupId", groupId)
             .body(createFuncReq)
             .execute()
             .fold(HubSubmittedReqWithId::class)
 
-    override fun list(): List<Func> =
-        template.get("/v1/funcs")
+    override fun list(groupId: GroupId): List<Func> =
+        template.get("/v1/groups/{groupId}/funcs")
+            .path("groupId", groupId)
             .execute()
             .fold(HubFuncList::class)
             .funcs

@@ -4,7 +4,8 @@ import io.hamal.backend.event.HubEventEmitter
 import io.hamal.backend.req.ReqHandler
 import io.hamal.backend.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
@@ -23,15 +24,16 @@ class CreateTriggerHandler(
     private val eventBrokerRepository: BrokerRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) : ReqHandler<SubmittedCreateTriggerReq>(SubmittedCreateTriggerReq::class) {
+
     override fun invoke(req: SubmittedCreateTriggerReq) {
-        funcQueryRepository.get(req.funcId)
+        val func = funcQueryRepository.get(req.funcId)
 
         val trigger = when (req.type) {
-            TriggerType.FixedRate -> triggerCmdRepository.create(
+            FixedRate -> triggerCmdRepository.create(
                 TriggerCmdRepository.CreateFixedRateCmd(
                     id = req.cmdId(),
                     triggerId = req.id,
-                    groupId = req.groupId,
+                    groupId = func.groupId,
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
@@ -41,14 +43,14 @@ class CreateTriggerHandler(
                 )
             )
 
-            TriggerType.Event -> {
+            Event -> {
                 eventBrokerRepository.getTopic(req.topicId!!)
 
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateEventCmd(
                         id = req.cmdId(),
                         triggerId = req.id,
-                        groupId = req.groupId,
+                        groupId = func.groupId,
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,

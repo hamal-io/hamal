@@ -3,7 +3,8 @@ package io.hamal.backend.req.handler.trigger
 import io.hamal.backend.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -71,7 +72,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleFixedRateTriggerExists() {
-        triggerQueryRepository.list { types = setOf(TriggerType.FixedRate) }.also { triggers ->
+        triggerQueryRepository.list { types = setOf(FixedRate) }.also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -86,7 +87,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list { types = setOf(TriggerType.Event) }.also { triggers ->
+        triggerQueryRepository.list { types = setOf(Event) }.also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -109,32 +110,35 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: CreateTriggerHandler
 
-    private val submitCreateFixedRateTriggerReq = SubmittedCreateTriggerReq(
-        reqId = ReqId(1),
-        status = Submitted,
-        type = TriggerType.FixedRate,
-        id = TriggerId(1234),
-        groupId = testGroup.id,
-        funcId = FuncId(2222),
-        name = TriggerName("FixedRateTrigger"),
-        duration = 42.seconds,
-        inputs = TriggerInputs(
-            MapType(mutableMapOf("hamal" to StringType("rocks")))
-        ),
-    )
-
-    private
-    val submitCreateEventTriggerReq = SubmittedCreateTriggerReq(
-        reqId = ReqId(1),
-        status = Submitted,
-        type = TriggerType.Event,
-        id = TriggerId(1234),
-        groupId = testGroup.id,
-        funcId = FuncId(2222),
-        topicId = TopicId(1111),
-        name = TriggerName("EventTrigger"),
-        inputs = TriggerInputs(
-            MapType(mutableMapOf("hamal" to StringType("rocks"))),
+    private val submitCreateFixedRateTriggerReq by lazy {
+        SubmittedCreateTriggerReq(
+            reqId = ReqId(1),
+            status = Submitted,
+            type = FixedRate,
+            id = TriggerId(1234),
+            groupId = testGroup.id,
+            funcId = FuncId(2222),
+            name = TriggerName("FixedRateTrigger"),
+            duration = 42.seconds,
+            inputs = TriggerInputs(
+                MapType(mutableMapOf("hamal" to StringType("rocks")))
+            ),
         )
-    )
+    }
+
+    private val submitCreateEventTriggerReq by lazy {
+        SubmittedCreateTriggerReq(
+            reqId = ReqId(1),
+            status = Submitted,
+            type = Event,
+            id = TriggerId(1234),
+            groupId = testGroup.id,
+            funcId = FuncId(2222),
+            topicId = TopicId(1111),
+            name = TriggerName("EventTrigger"),
+            inputs = TriggerInputs(
+                MapType(mutableMapOf("hamal" to StringType("rocks"))),
+            )
+        )
+    }
 }

@@ -20,7 +20,8 @@ import kotlin.time.Duration.Companion.seconds
 internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
 
     fun createFunc(name: FuncName): HubSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/funcs")
+        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/funcs")
+            .path("groupId", testGroup.id)
             .body(
                 CreateFuncReq(
                     namespaceId = null,
@@ -38,7 +39,10 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     }
 
     fun createTopic(topicName: TopicName): HubSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/topics").body(CreateTopicReq(topicName)).execute()
+        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
+            .path("groupId", testGroup.id)
+            .body(CreateTopicReq(topicName))
+            .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
@@ -49,7 +53,8 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     fun createFixedRateTrigger(name: TriggerName): HubSubmittedReqWithId {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers")
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
             .body(
                 CreateTriggerReq(
                     type = TriggerType.FixedRate,
@@ -68,7 +73,8 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     }
 
     fun createTrigger(req: CreateTriggerReq): HubSubmittedReqWithId {
-        val creationResponse = httpTemplate.post("/v1/triggers")
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
             .body(req)
             .execute()
 
@@ -79,7 +85,10 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     }
 
     fun listTriggers(): HubTriggerList {
-        val listTriggersResponse = httpTemplate.get("/v1/triggers").execute()
+        val listTriggersResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .execute()
+
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
         return listTriggersResponse.result(HubTriggerList::class)

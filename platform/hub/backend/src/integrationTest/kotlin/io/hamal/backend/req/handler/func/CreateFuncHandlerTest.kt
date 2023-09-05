@@ -61,14 +61,16 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: CreateFuncHandler
 
-    private val submitCreateFuncReq = SubmittedCreateFuncReq(
-        reqId = ReqId(1),
-        status = Submitted,
-        id = FuncId(12345),
-        groupId = testGroup.id,
-        namespaceId = NamespaceId(23456),
-        name = FuncName("awesome-func"),
-        inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-        code = CodeType("some code")
-    )
+    private val submitCreateFuncReq by lazy {
+        SubmittedCreateFuncReq(
+            reqId = ReqId(1),
+            status = Submitted,
+            id = FuncId(12345),
+            groupId = testGroup.id,
+            namespaceId = NamespaceId(23456),
+            name = FuncName("awesome-func"),
+            inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
+            code = CodeType("some code")
+        )
+    }
 }

@@ -14,7 +14,8 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class BaseExecRouteTest : BaseRouteTest() {
     fun createAdhocExec(): HubSubmittedReqWithId {
         val createAdhocExecResponse = httpTemplate
-            .post("/v1/adhoc")
+            .post("/v1/groups/{groupId}/adhoc")
+            .path("groupId", testGroup.id)
             .body(
                 InvokeAdhocReq(
                     inputs = InvocationInputs(),

@@ -27,7 +27,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
     fun `Creates trigger without namespace id`() {
         val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
@@ -66,7 +68,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
 
         val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
@@ -95,7 +99,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
     fun `Tries to create trigger with namespace id but namespace does not exist`() {
         val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
@@ -119,7 +125,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
     fun `Creates fixed rate trigger`() {
         val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
@@ -147,7 +155,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
 
     @Test
     fun `Tries to create fixed rate trigger but func does not exist`() {
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
@@ -170,7 +180,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val topicId = awaitCompleted(createTopic(TopicName("event-trigger-topic"))).id(::TopicId)
         val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
@@ -200,7 +212,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
     fun `Tries to create event trigger but does not specify topic id`() {
         val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
@@ -221,7 +235,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
     fun `Tries to create event trigger but func does not exists`() {
         val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
@@ -243,7 +259,9 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
     fun `Tries to create event trigger but topic does not exists`() {
         val topicId = awaitCompleted(createTopic(TopicName("event-trigger-topic"))).id(::TopicId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers").body(
+        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", testGroup.id)
+            .body(
                 CreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),

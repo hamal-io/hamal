@@ -1,10 +1,7 @@
 package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.domain.vo.TopicEntryId
-import io.hamal.lib.domain.vo.TopicEntryPayload
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import kotlinx.serialization.Serializable
 
@@ -41,16 +38,17 @@ data class HubTopicList(
 
 
 interface HubTopicService {
-    fun resolve(topicName: TopicName): TopicId
+    fun resolve(groupId: GroupId, topicName: TopicName): TopicId
 }
 
 internal class DefaultHubTopicService(
     private val httpTemplate: HttpTemplate
 ) : HubTopicService {
 
-    override fun resolve(topicName: TopicName): TopicId {
+    override fun resolve(groupId: GroupId, topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
-            httpTemplate.get("/v1/topics")
+            httpTemplate.get("/v1/groups/{groupId}/topics")
+                .path("groupId", groupId)
                 .parameter("names", topicName.value)
                 .execute(HubTopicList::class)
                 .topics

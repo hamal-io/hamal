@@ -4,6 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -29,6 +30,7 @@ class CreateFuncFunction(
             }
 
             val res = sdk.func.create(
+                ctx[GroupId::class],
                 CreateFuncReq(
                     namespaceId = namespaceId,
                     name = FuncName(arg1.getString("name")),

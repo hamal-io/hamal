@@ -3,6 +3,7 @@ package io.hamal.runner.run
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecToken
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
@@ -26,23 +27,24 @@ class DefaultCodeRunner(
     private val sandboxFactory: SandboxFactory
 ) : CodeRunner {
 
-    private lateinit var executionContext: ExecContext
+    private lateinit var runnerContext: RunnerContext
 
-    val context get() = executionContext
+    val context get() = runnerContext
 
     override fun run(unitOfWork: UnitOfWork) {
         val execId = unitOfWork.id
         try {
             log.debug("Start execution: $execId")
 
-            executionContext = ExecContext(ExecInvocationEvents(unitOfWork.events))
-            executionContext[ExecId::class] = unitOfWork.id
-            executionContext[ExecToken::class] = unitOfWork.token
+            runnerContext = RunnerContext(RunnerInvocationEvents(unitOfWork.events))
+            runnerContext[ExecId::class] = unitOfWork.id
+            runnerContext[GroupId::class] = unitOfWork.groupId
+            runnerContext[ExecToken::class] = unitOfWork.token
 
-            sandboxFactory.create(executionContext)
+            sandboxFactory.create(runnerContext)
                 .use { sandbox ->
 
-                    val ctxExtension = RunnerContextFactory(executionContext).create(sandbox)
+                    val ctxExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
                     val internalTable = sandbox.state.tableCreateMap(ctxExtension.internals.size)
                     ctxExtension.internals.forEach { entry ->
@@ -66,7 +68,7 @@ class DefaultCodeRunner(
                     sandbox.load(unitOfWork.code)
                 }
 
-            connector.complete(execId, State(), executionContext.eventsToSubmit)
+            connector.complete(execId, State(), runnerContext.eventsToSubmit)
             log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {

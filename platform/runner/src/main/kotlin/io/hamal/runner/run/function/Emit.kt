@@ -8,10 +8,10 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
-import io.hamal.runner.run.ExecContext
+import io.hamal.runner.run.RunnerContext
 
 class EmitFunction(
-    private val executionCtx: ExecContext
+    private val executionCtx: RunnerContext
 ) : Function2In0Out<StringType, TableProxyMap>(
     FunctionInput2Schema(StringType::class, TableProxyMap::class)
 ) {

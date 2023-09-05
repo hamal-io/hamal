@@ -15,14 +15,21 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseNamespaceRouteTest : BaseRouteTest() {
     fun createNamespace(req: CreateNamespaceReq): HubSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/namespaces").body(req).execute()
+        val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
+            .path("groupId", testGroup.id)
+            .body(req)
+            .execute()
+
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
         return response.result(HubSubmittedReqWithId::class)
     }
 
     fun listNamespaces(): HubNamespaceList {
-        val listNamespacesResponse = httpTemplate.get("/v1/namespaces").execute()
+        val listNamespacesResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
+            .path("groupId", testGroup.id)
+            .execute()
+
         assertThat(listNamespacesResponse.statusCode, equalTo(Ok))
         require(listNamespacesResponse is SuccessHttpResponse) { "request was not successful" }
         return listNamespacesResponse.result(HubNamespaceList::class)
@@ -32,6 +39,7 @@ internal sealed class BaseNamespaceRouteTest : BaseRouteTest() {
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespaceId)
             .execute()
+
         assertThat(getNamespaceResponse.statusCode, equalTo(Ok))
         require(getNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
         return getNamespaceResponse.result(HubNamespace::class)

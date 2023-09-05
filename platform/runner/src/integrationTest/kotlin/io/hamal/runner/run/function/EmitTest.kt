@@ -4,6 +4,7 @@ import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.TestFailConnector
@@ -167,6 +168,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
     private fun unitOfWork(code: String) = UnitOfWork(
         id = ExecId(1234),
+        groupId = GroupId(5432),
         inputs = ExecInputs(),
         state = State(),
         code = CodeType(code),

@@ -40,8 +40,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
                 assertThat(
-                    inputs,
-                    equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))))
+                    inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))))
                 )
                 assertThat(code, equalTo(CodeType("code")))
             }
@@ -54,8 +53,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
                 MapType(
                     mutableMapOf(
-                        "override" to StringType("false"),
-                        "func" to StringType("func")
+                        "override" to StringType("false"), "func" to StringType("func")
                     )
                 )
             )
@@ -70,8 +68,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 inputs = InvocationInputs(
                     MapType(
                         mutableMapOf(
-                            "override" to StringType("true"),
-                            "invocation" to StringType("invocation")
+                            "override" to StringType("true"), "invocation" to StringType("invocation")
                         )
                     )
                 ),
@@ -89,8 +86,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     correlation, equalTo(
                         Correlation(
-                            funcId = FuncId(4444),
-                            correlationId = CorrelationId("some-correlation")
+                            funcId = FuncId(4444), correlationId = CorrelationId("some-correlation")
                         )
                     )
                 )
@@ -115,13 +111,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes func execution`() {
         createFunc(
-            id = FuncId(4444),
-            code = CodeType("SomeCode"),
-            inputs = FuncInputs(
+            id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
                 MapType(
                     mutableMapOf(
-                        "override" to StringType("false"),
-                        "func" to StringType("func")
+                        "override" to StringType("false"), "func" to StringType("func")
                     )
                 )
             )
@@ -136,8 +129,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 inputs = InvocationInputs(
                     MapType(
                         mutableMapOf(
-                            "override" to StringType("true"),
-                            "invocation" to StringType("invocation")
+                            "override" to StringType("true"), "invocation" to StringType("invocation")
                         )
                     )
                 ),
@@ -155,8 +147,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     correlation, equalTo(
                         Correlation(
-                            funcId = FuncId(4444),
-                            correlationId = CorrelationId("some-correlation")
+                            funcId = FuncId(4444), correlationId = CorrelationId("some-correlation")
                         )
                     )
                 )
@@ -181,13 +172,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes fixed rate execution`() {
         createFunc(
-            id = FuncId(4444),
-            code = CodeType("SomeCode"),
-            inputs = FuncInputs(
+            id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
                 MapType(
                     mutableMapOf(
-                        "override" to StringType("false"),
-                        "func" to StringType("func")
+                        "override" to StringType("false"), "func" to StringType("func")
                     )
                 )
             )
@@ -231,23 +219,25 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: InvokeExecHandler
 
     //@formatter:off
-    private val submittedFixedRateInvocationReq = SubmittedInvokeExecReq(
-        reqId = ReqId(1),
-        correlationId = CorrelationId("some-correlation"),
-        status = Submitted,
-        id = ExecId(3333),
-        groupId = testGroup.id,
-        inputs = InvocationInputs(
-            MapType(
-                mutableMapOf(
-                "override" to StringType("true"),
-                "invocation" to StringType("invocation")
+    private val submittedFixedRateInvocationReq by lazy {
+        SubmittedInvokeExecReq(
+            reqId = ReqId(1),
+            correlationId = CorrelationId("some-correlation"),
+            status = Submitted,
+            id = ExecId(3333),
+            groupId = testGroup.id,
+            inputs = InvocationInputs(
+                MapType(
+                    mutableMapOf(
+                    "override" to StringType("true"),
+                    "invocation" to StringType("invocation")
+                    )
                 )
-            )
-        ),
-        funcId = FuncId(4444),
-        code = CodeType(""),
-        events = listOf()
-    )
+            ),
+            funcId = FuncId(4444),
+            code = CodeType(""),
+            events = listOf()
+        )
+    }
     //@formatter:on
 }

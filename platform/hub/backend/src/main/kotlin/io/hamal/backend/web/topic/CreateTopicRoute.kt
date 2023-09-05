@@ -2,9 +2,11 @@ package io.hamal.backend.web.topic
 
 import io.hamal.backend.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateTopicReq
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -13,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 class CreateTopicRoute(
     private val submitRequest: SubmitRequest
 ) {
-    @PostMapping("/v1/topics")
+    @PostMapping("/v1/groups/{groupId}/topics")
     fun createTopic(
+        @PathVariable("groupId") groupId: GroupId,
         @RequestBody createTopic: CreateTopicReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         val result = submitRequest(createTopic)

@@ -14,6 +14,7 @@ class HttpConnector(
         return sdk.exec.poll().work.map {
             UnitOfWork(
                 id = it.id,
+                groupId = it.groupId,
                 inputs = it.inputs,
                 state = it.state,
                 code = it.code,

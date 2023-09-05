@@ -63,14 +63,16 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: CreateNamespaceHandler
 
-    private val submitCreateNamespaceReq = SubmittedCreateNamespaceReq(
-        reqId = ReqId(1),
-        status = Submitted,
-        id = NamespaceId(12345),
-        groupId = testGroup.id,
-        name = NamespaceName("awesome-namespace"),
-        inputs = NamespaceInputs(
-            MapType(mutableMapOf("hamal" to StringType("rocks")))
+    private val submitCreateNamespaceReq by lazy {
+        SubmittedCreateNamespaceReq(
+            reqId = ReqId(1),
+            status = Submitted,
+            id = NamespaceId(12345),
+            groupId = testGroup.id,
+            name = NamespaceName("awesome-namespace"),
+            inputs = NamespaceInputs(
+                MapType(mutableMapOf("hamal" to StringType("rocks")))
+            )
         )
-    )
+    }
 }

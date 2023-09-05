@@ -55,7 +55,8 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/funcs")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/funcs")
+            .path("groupId", testGroup.id)
             .parameter("limit", 12)
             .execute(HubFuncList::class)
 
@@ -82,7 +83,8 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/funcs")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/funcs")
+            .path("groupId", testGroup.id)
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(HubFuncList::class)

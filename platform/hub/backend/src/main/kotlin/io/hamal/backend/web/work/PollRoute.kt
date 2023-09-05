@@ -33,6 +33,7 @@ class PollRoute(
                     val state = exec.correlation?.let { stateQueryRepository.find(it)?.value } ?: State()
                     UnitOfWork(
                         id = exec.id,
+                        groupId = exec.groupId,
                         correlation = exec.correlation,
                         inputs = exec.inputs,
                         state = state,

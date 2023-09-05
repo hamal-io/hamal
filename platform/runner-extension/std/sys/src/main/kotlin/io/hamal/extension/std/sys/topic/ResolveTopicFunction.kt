@@ -1,5 +1,6 @@
 package io.hamal.extension.std.sys.topic
 
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -19,7 +20,7 @@ class ResolveTopicFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, StringType?> {
         return try {
             null to StringType(
-                sdk.topic.resolve(TopicName(arg1.value))
+                sdk.topic.resolve(ctx[GroupId::class], TopicName(arg1.value))
                     .value
                     .value
                     .toString(16)

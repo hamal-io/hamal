@@ -12,13 +12,13 @@ import io.hamal.lib.kua.type.toProxyMap
 import io.hamal.runner.extension.ctx.function.EmitFunction
 
 class RunnerContextFactory(
-    private val executionCtx: ExecContext
+    private val executionCtx: RunnerContext
 ) : ScriptExtensionFactory {
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(
             name = "ctx",
             internals = mapOf(
-                "events" to sandbox.invocationEvents(executionCtx[ExecInvocationEvents::class].events),
+                "events" to sandbox.invocationEvents(executionCtx[RunnerInvocationEvents::class].events),
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx)
             )

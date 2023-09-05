@@ -54,7 +54,8 @@ internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/namespaces")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
+            .path("groupId", testGroup.id)
             .parameter("limit", 12)
             .execute(HubNamespaceList::class)
 
@@ -79,7 +80,8 @@ internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/namespaces")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
+            .path("groupId", testGroup.id)
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(HubNamespaceList::class)

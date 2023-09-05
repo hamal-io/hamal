@@ -2,6 +2,7 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -62,7 +63,8 @@ abstract class AbstractExtensionTest {
         inputs: ExecInputs = ExecInputs()
     ) = UnitOfWork(
         id = ExecId(1234),
-        inputs = ExecInputs(),
+        groupId = GroupId(5432),
+        inputs = inputs,
         state = State(),
         code = CodeType(code),
         correlation = null

@@ -14,7 +14,13 @@ class BootstrapBackend(
     private val submitRequest: SubmitRequest
 ) {
     fun bootstrap() {
-        submitRequest(CreateNamespaceReq(NamespaceName("hamal"), NamespaceInputs()))
-        submitRequest(CreateAccountReq(AccountName("root"), null, Password("toor")))
+        val acctReq = submitRequest(
+            CreateAccountReq(
+                AccountName("root"),
+                null,
+                Password("toor")
+            )
+        )
+        submitRequest(acctReq.groupId, CreateNamespaceReq(NamespaceName("hamal"), NamespaceInputs()))
     }
 }

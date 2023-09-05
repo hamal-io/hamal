@@ -3,6 +3,7 @@ package io.hamal.runner.run
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
@@ -18,6 +19,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeType("assert(ctx.exec_id == '4d2')"),
@@ -34,6 +36,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeType("test.fn()"),

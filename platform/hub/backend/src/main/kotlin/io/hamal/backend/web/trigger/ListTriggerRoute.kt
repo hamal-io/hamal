@@ -2,6 +2,7 @@ package io.hamal.backend.web.trigger
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.hub.HubTriggerList
 import io.hamal.lib.sdk.hub.HubTriggerList.EventTrigger.Topic
@@ -11,6 +12,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
@@ -22,8 +24,9 @@ class ListTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository
 ) {
-    @GetMapping("/v1/triggers")
+    @GetMapping("/v1/groups/{groupId}/triggers")
     fun listTrigger(
+        @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<HubTriggerList> {

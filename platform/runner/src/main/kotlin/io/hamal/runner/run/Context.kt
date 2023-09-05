@@ -5,12 +5,12 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
-data class ExecInvocationEvents(
+data class RunnerInvocationEvents(
     val events: List<Event>
 )
 
-class ExecContext(
-    invocationEvents: ExecInvocationEvents
+class RunnerContext(
+    invocationEvents: RunnerInvocationEvents
 ) : SandboxContext {
 
 
@@ -32,7 +32,7 @@ class ExecContext(
 
 
     init {
-        this[ExecInvocationEvents::class] = invocationEvents
+        this[RunnerInvocationEvents::class] = invocationEvents
     }
 
 }

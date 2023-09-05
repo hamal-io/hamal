@@ -77,7 +77,8 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
     @Test
     fun `Tries to create func with namespace which does not exist`() {
 
-        val response = httpTemplate.post("/v1/funcs")
+        val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
+            .path("groupId", testGroup.id)
             .body(
                 CreateFuncReq(
                     name = FuncName("test-func"),

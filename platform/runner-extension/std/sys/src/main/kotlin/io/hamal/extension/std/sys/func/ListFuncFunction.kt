@@ -1,5 +1,6 @@
 package io.hamal.extension.std.sys.func
 
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
@@ -17,7 +18,7 @@ class ListFuncFunction(
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         try {
             return null to ArrayType(
-                sdk.func.list()
+                sdk.func.list(ctx[GroupId::class])
                     .mapIndexed { index, func ->
                         index to MapType(
                             mutableMapOf(

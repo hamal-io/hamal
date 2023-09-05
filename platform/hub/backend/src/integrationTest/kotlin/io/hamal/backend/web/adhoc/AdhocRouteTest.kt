@@ -39,7 +39,8 @@ internal class AdhocRouteTest : BaseRouteTest() {
 
     private fun request(req: InvokeAdhocReq) =
         httpTemplate
-            .post("/v1/adhoc")
+            .post("/v1/groups/{groupId}/adhoc")
+            .path("groupId", testGroup.id)
             .body(req)
             .execute()
 

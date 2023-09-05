@@ -19,8 +19,10 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseStateRouteTest : BaseRouteTest() {
+
     fun createFunc(name: FuncName): HubSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/funcs")
+        val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
+            .path("groupId", testGroup.id)
             .body(
                 CreateFuncReq(
                     namespaceId = null,

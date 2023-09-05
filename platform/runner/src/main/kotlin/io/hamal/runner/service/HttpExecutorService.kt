@@ -6,7 +6,6 @@ import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.DefaultCodeRunner
-import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Service
@@ -30,6 +29,7 @@ class HttpExecutorService(
                 DefaultCodeRunner(connector, sandboxFactory).run(
                     UnitOfWork(
                         id = uow.id,
+                        groupId = uow.groupId,
                         inputs = uow.inputs,
                         state = uow.state,
                         code = uow.code,
@@ -39,10 +39,6 @@ class HttpExecutorService(
                 )
             }
         }, 10.milliseconds.toJavaDuration())
-    }
-
-    companion object {
-        private val log = LoggerFactory.getLogger(HttpExecutorService::class.java)
     }
 }
 

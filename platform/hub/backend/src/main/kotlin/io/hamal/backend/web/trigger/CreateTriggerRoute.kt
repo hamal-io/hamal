@@ -1,14 +1,16 @@
 package io.hamal.backend.web.trigger
 
 import io.hamal.backend.req.SubmitRequest
+import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.req.CreateTriggerReq
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.CreateTriggerReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -20,8 +22,9 @@ class CreateTriggerRoute(
     private val request: SubmitRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
-    @PostMapping("/v1/triggers")
+    @PostMapping("/v1/groups/{groupId}/triggers")
     fun createTrigger(
+        @PathVariable("groupId") groupId: GroupId,
         @RequestBody createTrigger: CreateTriggerReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         ensureFuncExists(createTrigger)

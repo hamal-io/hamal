@@ -23,12 +23,14 @@ internal sealed class BaseReqRouteTest : BaseRouteTest() {
     }
 
     fun adhoc(code: CodeType = CodeType("")): HubSubmittedReqWithId {
-        return httpTemplate.post("/v1/adhoc").body(
-            InvokeAdhocReq(
-                inputs = InvocationInputs(),
-                code = code
-            )
-        ).execute(HubSubmittedReqWithId::class)
+        return httpTemplate.post("/v1/groups/{groupId}/adhoc")
+            .path("groupId", testGroup.id)
+            .body(
+                InvokeAdhocReq(
+                    inputs = InvocationInputs(),
+                    code = code
+                )
+            ).execute(HubSubmittedReqWithId::class)
     }
 
 }

@@ -67,6 +67,7 @@ abstract class BaseTest {
                 setupTestEnv()
 
                 val execReq = rootHubSdk.adhoc.submit(
+                    rootGroup.id,
                     InvokeAdhocReq(
                         InvocationInputs(),
                         CodeType(String(Files.readAllBytes(testFile)))
