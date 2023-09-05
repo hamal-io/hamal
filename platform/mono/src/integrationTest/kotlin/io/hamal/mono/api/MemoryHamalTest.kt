@@ -23,7 +23,7 @@ import java.nio.file.Paths
 @DirtiesContext
 @DisplayName("api - memory")
 @ActiveProfiles(value = ["test", "memory"])
-class MemoryHamalTest : BaseTest() {
+internal class MemoryApiHamalTest : BaseTest() {
     final override val rootHubSdk = rootHubSdk(8042)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

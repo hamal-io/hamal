@@ -1,4 +1,4 @@
-package io.hamal.mono.api
+package io.hamal.mono.admin
 
 import io.hamal.api.ApiConfig
 import io.hamal.mono.BaseTest
@@ -12,19 +12,18 @@ import org.springframework.test.context.ActiveProfiles
 import java.nio.file.Path
 import java.nio.file.Paths
 
-
 @SpringBootTest(
     webEnvironment = DEFINED_PORT,
-    properties = ["server.port=8043", "io.hamal.runner.host=http://localhost:8043"],
+    properties = ["server.port=8042", "io.hamal.runner.host=http://localhost:8042"],
     classes = [
         ApiConfig::class,
         RunnerConfig::class
     ]
 )
 @DirtiesContext
-@DisplayName("api - sqlite")
-@ActiveProfiles(value = ["test", "sqlite"])
-internal class SqliteApiHamalTest : BaseTest() {
-    final override val rootHubSdk = rootHubSdk(8043)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
+@DisplayName("admin - memory")
+@ActiveProfiles(value = ["test", "memory"])
+internal class MemoryAdminHamalTest : BaseTest() {
+    final override val rootHubSdk = rootHubSdk(8042)
+    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 }

@@ -1,1 +1,1 @@
-print("Sanity Check - as_root [X]")
+print("Sanity Check - api [X]")

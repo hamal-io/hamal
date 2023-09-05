@@ -1,4 +1,4 @@
-package io.hamal.mono.api
+package io.hamal.mono.admin
 
 import io.hamal.api.ApiConfig
 import io.hamal.mono.BaseTest
@@ -22,9 +22,9 @@ import java.nio.file.Paths
     ]
 )
 @DirtiesContext
-@DisplayName("api - sqlite")
+@DisplayName("admin - sqlite")
 @ActiveProfiles(value = ["test", "sqlite"])
-internal class SqliteApiHamalTest : BaseTest() {
+internal class SqliteAdminHamalTest : BaseTest() {
     final override val rootHubSdk = rootHubSdk(8043)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
+    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 }
