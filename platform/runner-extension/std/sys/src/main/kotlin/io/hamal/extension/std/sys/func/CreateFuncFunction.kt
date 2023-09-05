@@ -22,7 +22,7 @@ class CreateFuncFunction(
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
-        try {
+        return try {
             val namespaceId = if (arg1.type("namespace_id") == StringType::class) {
                 NamespaceId(SnowflakeId(arg1.getString("namespace_id")))
             } else {
@@ -39,7 +39,7 @@ class CreateFuncFunction(
                 )
             )
 
-            return null to MapType(
+            null to MapType(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
@@ -48,7 +48,7 @@ class CreateFuncFunction(
             )
 
         } catch (t: Throwable) {
-            return ErrorType(t.message!!) to null
+            ErrorType(t.message!!) to null
         }
     }
 }

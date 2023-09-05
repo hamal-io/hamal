@@ -14,6 +14,7 @@ interface HubSdk {
     val group: HubGroupService
     val namespace: HubNamespaceService
     val topic: HubTopicService
+    val trigger: HubTriggerService
 }
 
 data class DefaultHubSdk(
@@ -58,5 +59,9 @@ data class DefaultHubSdk(
 
     override val topic: HubTopicService by lazy {
         DefaultHubTopicService(template)
+    }
+
+    override val trigger: HubTriggerService by lazy {
+        DefaultHubTriggerService(template)
     }
 }

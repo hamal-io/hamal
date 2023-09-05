@@ -46,7 +46,7 @@ internal class DefaultHubNamespaceService(
             .fold(HubSubmittedReqWithId::class)
 
     override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/funcs")
+        template.get("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
             .execute()
             .fold(HubNamespaceList::class)

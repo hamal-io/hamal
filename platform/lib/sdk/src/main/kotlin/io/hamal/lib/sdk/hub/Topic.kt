@@ -1,8 +1,11 @@
 package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.common.KeyedOnce
+import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.body
+import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,7 +20,6 @@ data class HubTopicEntryList(
         val payload: TopicEntryPayload
     )
 }
-
 
 @Serializable
 data class HubTopic(
@@ -38,16 +40,56 @@ data class HubTopicList(
 
 
 interface HubTopicService {
+    fun append(topicId: TopicId, payload: TopicEntryPayload): HubSubmittedReqWithId
+    fun create(groupId: GroupId, req: CreateTopicReq): HubSubmittedReqWithId
+    fun list(groupId: GroupId): List<HubTopicList.Topic>
+    fun entries(topicId: TopicId): List<HubTopicEntryList.Entry>
+    fun get(topicId: TopicId): HubTopic
     fun resolve(groupId: GroupId, topicName: TopicName): TopicId
 }
 
 internal class DefaultHubTopicService(
-    private val httpTemplate: HttpTemplate
+    private val template: HttpTemplate
 ) : HubTopicService {
+
+    override fun append(topicId: TopicId, payload: TopicEntryPayload) =
+        template.post("/v1/topics/{topicId}/entries")
+            .path("topicId", topicId)
+            .body(payload)
+            .execute()
+            .fold(HubSubmittedReqWithId::class)
+
+    override fun create(groupId: GroupId, req: CreateTopicReq) =
+        template.post("/v1/groups/{groupId}/topics")
+            .path("groupId", groupId)
+            .body(req)
+            .execute()
+            .fold(HubSubmittedReqWithId::class)
+
+    override fun list(groupId: GroupId) =
+        template.get("/v1/groups/{groupId}/topics")
+            .path("groupId", groupId)
+            .execute()
+            .fold(HubTopicList::class)
+            .topics
+
+    override fun entries(topicId: TopicId) =
+        template
+            .get("/v1/topics/{topicId}/entries")
+            .path("topicId", topicId)
+            .execute()
+            .fold(HubTopicEntryList::class)
+            .entries
+
+    override fun get(topicId: TopicId) =
+        template.get("/v1/topics/{topicId}")
+            .path("topicId", topicId)
+            .execute()
+            .fold(HubTopic::class)
 
     override fun resolve(groupId: GroupId, topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
-            httpTemplate.get("/v1/groups/{groupId}/topics")
+            template.get("/v1/groups/{groupId}/topics")
                 .path("groupId", groupId)
                 .parameter("names", topicName.value)
                 .execute(HubTopicList::class)

@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
@@ -29,11 +30,9 @@ import org.springframework.scheduling.annotation.EnableScheduling
     ]
 )
 open class BackendConfig {
-
-
     @Bean
+    @Profile("!test")
     open fun commandLineRunner() = object : CommandLineRunner {
-
         @Autowired
         lateinit var backendBootstrap: BootstrapBackend
 

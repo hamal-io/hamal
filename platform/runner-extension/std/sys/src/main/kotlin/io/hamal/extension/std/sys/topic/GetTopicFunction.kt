@@ -1,8 +1,7 @@
 package io.hamal.extension.std.sys.topic
 
-import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,22 +9,17 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubTopic
+import io.hamal.lib.sdk.HubSdk
 
 class GetTopicFunction(
-    private val httpTemplate: HttpTemplate
+    private val sdk: HubSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        val response = httpTemplate
-            .get("/v1/topics/${arg1.value}")
-            .execute()
-
-        if (response is SuccessHttpResponse) {
-            return null to response.result(HubTopic::class)
+        return try {
+            null to sdk.topic.get(TopicId(arg1.value))
                 .let { topic ->
                     MapType(
                         mutableMapOf(
@@ -34,10 +28,8 @@ class GetTopicFunction(
                         )
                     )
                 }
-        } else {
-            require(response is ErrorHttpResponse)
-            return response.error(HubError::class)
-                .let { error -> ErrorType(error.message ?: "An unknown error occurred") } to null
+        } catch (t: Throwable) {
+            ErrorType(t.message!!) to null
         }
     }
 }

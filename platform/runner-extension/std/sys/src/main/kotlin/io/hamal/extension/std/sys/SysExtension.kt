@@ -44,16 +44,16 @@ class SysExtensionFactory(
                 "get_namespace" to GetNamespaceFunction(sdk),
                 "list_namespace" to ListNamespaceFunction(sdk),
 
-                "create_topic" to CreateTopicFunction(httpTemplate),
-                "resolve_topic" to ResolveTopicFunction(DefaultHubSdk(httpTemplate)),
-                "list_topic" to ListTopicFunction(httpTemplate),
-                "get_topic" to GetTopicFunction(httpTemplate),
-                "append_entry" to AppendToTopicFunction(httpTemplate),
-                "list_topic_entry" to ListTopicEntryFunction(httpTemplate),
+                "create_topic" to CreateTopicFunction(sdk),
+                "resolve_topic" to ResolveTopicFunction(sdk),
+                "list_topic" to ListTopicFunction(sdk),
+                "get_topic" to GetTopicFunction(sdk),
+                "append_entry" to AppendToTopicFunction(sdk),
+                "list_topic_entry" to ListTopicEntryFunction(sdk),
 
-                "create_trigger" to CreateTriggerFunction(httpTemplate),
-                "get_trigger" to GetTriggerFunction(httpTemplate),
-                "list_trigger" to ListTriggerFunction(httpTemplate)
+                "create_trigger" to CreateTriggerFunction(sdk),
+                "get_trigger" to GetTriggerFunction(sdk),
+                "list_trigger" to ListTriggerFunction(sdk)
             )
         )
     }

@@ -1,7 +1,5 @@
 sys = require('sys')
-
 --
-
 _, namespace_req = sys.namespace.create({ name = "hamal::name:space::rocks" })
 sys.await_completed(namespace_req)
 

@@ -1,8 +1,6 @@
 package io.hamal.extension.std.sys.trigger
 
-import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,85 +8,74 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.HubSdk
 import io.hamal.lib.sdk.hub.HubEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
-import io.hamal.lib.sdk.hub.HubTrigger
 
 class GetTriggerFunction(
-    private val httpTemplate: HttpTemplate
+    private val sdk: HubSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        val response = httpTemplate.get("/v1/triggers/${arg1.value}")
-            .execute()
-
-        if (response is SuccessHttpResponse) {
-            return null to response.result(HubTrigger::class)
+        return try {
+            null to sdk.trigger.get(TriggerId(arg1.value))
                 .let { trigger ->
-
-                    when (val t = trigger) {
+                    when (trigger) {
                         is HubFixedRateTrigger ->
                             MapType(
                                 mutableMapOf(
-                                    "id" to StringType(t.id.value.value.toString(16)),
+                                    "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("FixedRate"),
-                                    "name" to StringType(t.name.value),
+                                    "name" to StringType(trigger.name.value),
                                     "namespace" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(t.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(t.namespace.name.value)
+                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(t.func.id.value.value.toString(16)),
-                                            "name" to StringType(t.func.name.value)
+                                            "id" to StringType(trigger.func.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to StringType(t.duration.toIsoString())
+                                    "duration" to StringType(trigger.duration.toIsoString())
                                 )
                             )
 
                         is HubEventTrigger -> {
                             MapType(
                                 mutableMapOf(
-                                    "id" to StringType(t.id.value.value.toString(16)),
+                                    "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("Event"),
-                                    "name" to StringType(t.name.value),
+                                    "name" to StringType(trigger.name.value),
                                     "namespace" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(t.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(t.namespace.name.value)
+                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(t.func.id.value.value.toString(16)),
-                                            "name" to StringType(t.func.name.value)
+                                            "id" to StringType(trigger.func.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.func.name.value)
                                         )
                                     ),
                                     "topic" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(t.topic.id.value.value.toString(16)),
-                                            "name" to StringType(t.topic.name.value)
+                                            "id" to StringType(trigger.topic.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.topic.name.value)
                                         )
                                     ),
                                 )
                             )
                         }
-
-                        else -> TODO()
                     }
                 }
-        } else {
-            require(response is ErrorHttpResponse)
-            return response.error(HubError::class)
-                .let { error ->
-                    ErrorType(error.message ?: "An unknown error occurred")
-                } to null
+        } catch (t: Throwable) {
+            ErrorType(t.message!!) to null
         }
     }
 }

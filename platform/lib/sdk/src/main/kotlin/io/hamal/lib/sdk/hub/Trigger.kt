@@ -1,6 +1,10 @@
 package io.hamal.lib.sdk.hub
 
+import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.body
+import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -104,3 +108,33 @@ class HubEventTrigger(
 }
 
 
+interface HubTriggerService {
+    fun create(groupId: GroupId, req: CreateTriggerReq): HubSubmittedReqWithId
+    fun list(groupId: GroupId): List<HubTriggerList.Trigger>
+    fun get(triggerId: TriggerId): HubTrigger
+}
+
+
+internal class DefaultHubTriggerService(
+    private val template: HttpTemplate
+) : HubTriggerService {
+    override fun create(groupId: GroupId, req: CreateTriggerReq) =
+        template.post("/v1/groups/{groupId}/triggers")
+            .path("groupId", groupId)
+            .body(req)
+            .execute()
+            .fold(HubSubmittedReqWithId::class)
+
+    override fun list(groupId: GroupId) =
+        template.get("/v1/groups/{groupId}/triggers")
+            .path("groupId", groupId)
+            .execute()
+            .fold(HubTriggerList::class)
+            .triggers
+
+    override fun get(triggerId: TriggerId) =
+        template.get("/v1/triggers/{triggerId}")
+            .path("triggerId", triggerId)
+            .execute()
+            .fold(HubTrigger::class)
+}
