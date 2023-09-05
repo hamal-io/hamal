@@ -66,7 +66,7 @@ abstract class BaseTest {
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 
-                val execReq = rootHubSdk.adhoc.submit(
+                val execReq = rootHubSdk.adhoc.invoke(
                     rootGroup.id,
                     InvokeAdhocReq(
                         InvocationInputs(),
@@ -136,7 +136,6 @@ abstract class BaseTest {
                 creatorId = rootAccount.id
             )
         )
-
 
         namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(

@@ -11,6 +11,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -44,12 +45,11 @@ data class HubExec(
 
 interface HubExecService {
     fun poll(): HubUnitOfWorkList
-
-    //FIXME list of events to publish
     fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
-
-    // able to emit events on failure
     fun fail(execId: ExecId, error: ErrorType)
+
+    fun list(groupId: GroupId): List<HubExecList.Exec>
+    fun get(execId: ExecId): HubExec
 }
 
 internal class DefaultHubExecService(
@@ -58,7 +58,8 @@ internal class DefaultHubExecService(
 
     override fun poll(): HubUnitOfWorkList {
         return template.post("/v1/dequeue")
-            .execute(HubUnitOfWorkList::class)
+            .execute()
+            .fold(HubUnitOfWorkList::class)
     }
 
     override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {
@@ -74,4 +75,17 @@ internal class DefaultHubExecService(
             .body(FailExecReq(error))
             .execute()
     }
+
+    override fun list(groupId: GroupId) =
+        template.get("/v1/groups/{groupId}/execs")
+            .path("groupId", groupId)
+            .execute()
+            .fold(HubExecList::class)
+            .execs
+
+    override fun get(execId: ExecId) =
+        template.get("/v1/execs/{execId}")
+            .path("execId", execId)
+            .execute()
+            .fold(HubExec::class)
 }

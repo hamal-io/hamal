@@ -1,6 +1,6 @@
 package io.hamal.extension.std.sys.exec
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
@@ -8,33 +8,28 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubExecList
+import io.hamal.lib.sdk.HubSdk
 
 class ListExecFunction(
-    private val httpTemplate: HttpTemplate
+    private val sdk: HubSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
-        val execs = try {
-            httpTemplate.get("/v1/execs")
-                .execute(HubExecList::class)
-                .execs
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            listOf()
-        }
-
-        return null to ArrayType(
-            execs.mapIndexed { index, exec ->
-                index to MapType(
-                    mutableMapOf(
-                        "id" to StringType(exec.id.value.value.toString(16)),
-                        "status" to StringType(exec.status.toString())
+        return try {
+            val execs = sdk.exec.list(ctx[GroupId::class])
+            null to ArrayType(
+                execs.mapIndexed { index, exec ->
+                    index to MapType(
+                        mutableMapOf(
+                            "id" to StringType(exec.id.value.value.toString(16)),
+                            "status" to StringType(exec.status.toString())
+                        )
                     )
-                )
-            }.toMap().toMutableMap()
-        )
-
+                }.toMap().toMutableMap()
+            )
+        } catch (t: Throwable) {
+            ErrorType(t.message!!) to null
+        }
     }
 }

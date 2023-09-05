@@ -12,46 +12,51 @@ interface HubSdk {
     val execLog: HubExecLogService
     val func: HubFuncService
     val group: HubGroupService
+    val namespace: HubNamespaceService
     val topic: HubTopicService
 }
 
 data class DefaultHubSdk(
-    val httpTemplate: HttpTemplate
+    val template: HttpTemplate
 ) : HubSdk {
 
     override val account: HubAccountService by lazy {
-        DefaultHubAccountService(httpTemplate)
+        DefaultHubAccountService(template)
     }
 
     override val adhoc: HubAdhocService by lazy {
-        DefaultHubAdhocService(httpTemplate)
+        DefaultHubAdhocService(template)
     }
 
     override val auth: HubAuthService by lazy {
-        DefaultHubAuthService(httpTemplate)
+        DefaultHubAuthService(template)
     }
 
     override val await: HubAwaitService by lazy {
-        DefaultHubAwaitService(httpTemplate)
+        DefaultHubAwaitService(template)
     }
 
     override val exec: HubExecService by lazy {
-        DefaultHubExecService(httpTemplate)
+        DefaultHubExecService(template)
     }
 
     override val execLog: HubExecLogService by lazy {
-        DefaultHubExecLogService(httpTemplate)
+        DefaultHubExecLogService(template)
     }
 
     override val func: HubFuncService by lazy {
-        DefaultHubFuncService(httpTemplate)
+        DefaultHubFuncService(template)
     }
 
     override val group: HubGroupService by lazy {
-        DefaultHubGroupService(httpTemplate)
+        DefaultHubGroupService(template)
+    }
+
+    override val namespace: HubNamespaceService by lazy {
+        DefaultHubNamespaceService(template)
     }
 
     override val topic: HubTopicService by lazy {
-        DefaultHubTopicService(httpTemplate)
+        DefaultHubTopicService(template)
     }
 }

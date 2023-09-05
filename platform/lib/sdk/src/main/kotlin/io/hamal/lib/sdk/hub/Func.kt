@@ -6,7 +6,6 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.sdk.hub.HubFuncList.Func
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -45,7 +44,7 @@ data class HubFunc(
 
 interface HubFuncService {
     fun create(groupId: GroupId, createFuncReq: CreateFuncReq): HubSubmittedReqWithId
-    fun list(groupId: GroupId): List<Func>
+    fun list(groupId: GroupId): List<HubFuncList.Func>
     fun get(funcId: FuncId): HubFunc
 }
 
@@ -60,7 +59,7 @@ internal class DefaultHubFuncService(
             .execute()
             .fold(HubSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId): List<Func> =
+    override fun list(groupId: GroupId): List<HubFuncList.Func> =
         template.get("/v1/groups/{groupId}/funcs")
             .path("groupId", groupId)
             .execute()

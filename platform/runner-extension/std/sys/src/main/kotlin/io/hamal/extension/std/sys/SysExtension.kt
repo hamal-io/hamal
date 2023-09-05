@@ -1,7 +1,7 @@
 package io.hamal.extension.std.sys
 
+import io.hamal.extension.std.sys.adhoc.InvokeAdhocFunction
 import io.hamal.extension.std.sys.exec.GetExecFunction
-import io.hamal.extension.std.sys.exec.InvokeAdhocFunction
 import io.hamal.extension.std.sys.exec.ListExecFunction
 import io.hamal.extension.std.sys.func.*
 import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
@@ -29,20 +29,20 @@ class SysExtensionFactory(
                 "await_completed" to AwaitCompletedFunction(httpTemplate),
                 "await_failed" to AwaitFailedFunction(httpTemplate),
 
-                "adhoc" to InvokeAdhocFunction(httpTemplate),
+                "adhoc" to InvokeAdhocFunction(sdk),
 
                 "get_req" to GetReqFunction(httpTemplate),
 
-                "list_execs" to ListExecFunction(httpTemplate),
-                "get_exec" to GetExecFunction(httpTemplate),
+                "list_execs" to ListExecFunction(sdk),
+                "get_exec" to GetExecFunction(sdk),
 
                 "create_func" to CreateFuncFunction(sdk),
                 "get_func" to GetFuncFunction(sdk),
                 "list_func" to ListFuncFunction(sdk),
 
-                "create_namespace" to CreateNamespaceFunction(httpTemplate),
-                "get_namespace" to GetNamespaceFunction(httpTemplate),
-                "list_namespace" to ListNamespaceFunction(httpTemplate),
+                "create_namespace" to CreateNamespaceFunction(sdk),
+                "get_namespace" to GetNamespaceFunction(sdk),
+                "list_namespace" to ListNamespaceFunction(sdk),
 
                 "create_topic" to CreateTopicFunction(httpTemplate),
                 "resolve_topic" to ResolveTopicFunction(DefaultHubSdk(httpTemplate)),

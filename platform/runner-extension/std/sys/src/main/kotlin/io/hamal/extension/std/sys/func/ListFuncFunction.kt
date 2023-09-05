@@ -16,8 +16,8 @@ class ListFuncFunction(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
-        try {
-            return null to ArrayType(
+        return try {
+            null to ArrayType(
                 sdk.func.list(ctx[GroupId::class])
                     .mapIndexed { index, func ->
                         index to MapType(
@@ -35,7 +35,7 @@ class ListFuncFunction(
                     }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            return ErrorType(t.message!!) to null
+            ErrorType(t.message!!) to null
         }
     }
 }

@@ -17,8 +17,8 @@ class GetFuncFunction(
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        try {
-            return null to sdk.func.get(FuncId(arg1.value))
+        return try {
+            null to sdk.func.get(FuncId(arg1.value))
                 .let { func ->
                     MapType(
                         mutableMapOf(
@@ -35,7 +35,7 @@ class GetFuncFunction(
                     )
                 }
         } catch (t: Throwable) {
-            return ErrorType(t.message!!) to null
+            ErrorType(t.message!!) to null
         }
     }
 }

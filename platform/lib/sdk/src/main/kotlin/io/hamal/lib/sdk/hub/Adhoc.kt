@@ -6,13 +6,13 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 
 interface HubAdhocService {
-    fun submit(groupId: GroupId, req: InvokeAdhocReq): HubSubmittedReqWithId
+    operator fun invoke(groupId: GroupId, req: InvokeAdhocReq): HubSubmittedReqWithId
 }
 
 internal class DefaultHubAdhocService(
     private val template: HttpTemplate
 ) : HubAdhocService {
-    override fun submit(groupId: GroupId, req: InvokeAdhocReq): HubSubmittedReqWithId {
+    override fun invoke(groupId: GroupId, req: InvokeAdhocReq): HubSubmittedReqWithId {
         return template
             .post("/v1/groups/{groupId}/adhoc")
             .path("groupId", groupId)

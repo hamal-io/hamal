@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable(with = ExecId.Serializer::class)
 class ExecId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     internal object Serializer : DomainIdSerializer<ExecId>(::ExecId)
 }
