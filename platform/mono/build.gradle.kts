@@ -35,6 +35,7 @@ dependencies {
 
     implementation(project(":platform:hub:api"))
     implementation(project(":platform:hub:admin"))
+    implementation(project(":platform:hub:core"))
     implementation(project(":platform:runner"))
 }
 

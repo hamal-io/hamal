@@ -1,6 +1,6 @@
 package io.hamal.api.web.topic
 
-import io.hamal.api.req.SubmitRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.req.AppendEntryReq
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId

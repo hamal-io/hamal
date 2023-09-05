@@ -13,7 +13,7 @@ import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.MethodOrderer.Random
 import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -32,7 +32,7 @@ import java.time.temporal.ChronoUnit.DAYS
     webEnvironment = RANDOM_PORT
 )
 @ActiveProfiles("memory")
-@TestMethodOrder(MethodOrderer.Random::class)
+@TestMethodOrder(Random::class)
 internal abstract class BaseTest {
 
     @LocalServerPort

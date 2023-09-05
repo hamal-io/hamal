@@ -1,6 +1,6 @@
 package io.hamal.api.web.work
 
-import io.hamal.api.event.HubEventEmitter
+import io.hamal.core.event.HubEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.hub.HubUnitOfWorkList

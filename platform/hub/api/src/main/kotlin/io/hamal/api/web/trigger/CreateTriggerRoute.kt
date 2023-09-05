@@ -1,6 +1,6 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.api.req.SubmitRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.GroupId

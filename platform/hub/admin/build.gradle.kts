@@ -29,6 +29,7 @@ node {
 }
 
 dependencies {
+    implementation(project(":platform:hub:core"))
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")

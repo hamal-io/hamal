@@ -1,11 +1,11 @@
 package io.hamal.api.web.func
 
-import io.hamal.api.req.SubmitRequest
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.req.UpdateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable

@@ -32,8 +32,9 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":platform:hub:api"))
     implementation(project(":platform:hub:admin"))
+    implementation(project(":platform:hub:api"))
+    implementation(project(":platform:hub:core"))
 }
 
 @Suppress("UnstableApiUsage")

@@ -1,7 +1,6 @@
 package io.hamal.api.web
 
-import io.hamal.api.req.SubmitRequest
-import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.req.SetStateReq
@@ -10,6 +9,7 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
 import io.hamal.lib.sdk.hub.HubState
 import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.repository.api.FuncQueryRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable

@@ -1,6 +1,6 @@
 package io.hamal.api.web.auth
 
-import io.hamal.api.req.SubmitRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.req.SignInReq
 import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import io.hamal.repository.api.AccountQueryRepository

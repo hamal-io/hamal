@@ -1,6 +1,6 @@
 package io.hamal.api.web.exec
 
-import io.hamal.api.req.SubmitRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId

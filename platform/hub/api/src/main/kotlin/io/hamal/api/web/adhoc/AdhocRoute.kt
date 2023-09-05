@@ -1,6 +1,6 @@
 package io.hamal.api.web.adhoc
 
-import io.hamal.api.req.SubmitRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId

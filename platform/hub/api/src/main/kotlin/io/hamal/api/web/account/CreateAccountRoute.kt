@@ -1,6 +1,6 @@
 package io.hamal.api.web.account
 
-import io.hamal.api.req.SubmitRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.req.CreateAccountReq
 import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import org.springframework.http.HttpStatus.ACCEPTED

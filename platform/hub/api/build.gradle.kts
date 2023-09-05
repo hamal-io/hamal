@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":platform:lib:sdk"))
     implementation(project(":platform:lib:kua"))
 
+    implementation(project(":platform:hub:core"))
     implementation(project(":platform:hub:repository:api"))
     implementation(project(":platform:hub:repository:memory"))
     implementation(project(":platform:hub:repository:sqlite"))

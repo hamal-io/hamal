@@ -1,8 +1,6 @@
 package io.hamal.api
 
-import io.hamal.api.component.BootstrapBackend
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.CommandLineRunner
+import io.hamal.core.CoreConfig
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -10,15 +8,15 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
+import org.springframework.context.annotation.Import
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
 @ComponentScan
 @EnableScheduling
+@Import(CoreConfig::class)
 @EnableAutoConfiguration(
     exclude = [
         DataSourceAutoConfiguration::class,
@@ -29,17 +27,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
         JmxAutoConfiguration::class
     ]
 )
-open class ApiConfig {
-    @Bean
-    @Profile("!test")
-    open fun commandLineRunner() = object : CommandLineRunner {
-        @Autowired
-        lateinit var backendBootstrap: BootstrapBackend
-
-        override fun run(vararg args: String?) {
-            backendBootstrap.bootstrap()
-        }
-    }
-}
+open class ApiConfig
 
 
