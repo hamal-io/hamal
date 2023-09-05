@@ -29,12 +29,8 @@ node {
 }
 
 dependencies {
+    implementation(project(":platform:lib:sdk"))
     implementation(project(":platform:hub:core"))
-    implementation(external.spring.web) {
-        exclude("com.fasterxml.jackson.core", "jackson-core")
-        exclude("org.springframework.boot", "spring-boot-starter-json")
-        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-    }
 }
 
 val npmBuild = tasks.register<NpmTask>("npmBuild") {
@@ -56,4 +52,27 @@ tasks.register<NpmTask>("npmDev") {
     description = "Runs the application in dev mode"
     group = "Npm"
     npmCommand.set(listOf("run", "dev"))
+}
+
+@Suppress("UnstableApiUsage")
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+
+                dependencies {
+                    implementation(project())
+                    implementation(project(":platform:lib:sdk"))
+                    implementation(project(":platform:hub:core"))
+                    implementation(project(":platform:runner"))
+
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                    implementation(external.spring.test) {
+                        exclude("org.assertj", "*")
+                    }
+                }
+            }
+        }
+    }
 }

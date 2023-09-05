@@ -5,24 +5,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-backend")
+archivesName.set("hub-api")
 
 dependencies {
     implementation(project(":platform:lib:sdk"))
-    implementation(project(":platform:lib:kua"))
-
     implementation(project(":platform:hub:core"))
-    implementation(project(":platform:hub:repository:api"))
-    implementation(project(":platform:hub:repository:memory"))
-    implementation(project(":platform:hub:repository:sqlite"))
-
-    implementation(external.spring.web) {
-        exclude("com.fasterxml.jackson.core", "jackson-core")
-        exclude("org.springframework.boot", "spring-boot-starter-json")
-        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-    }
-
-    implementation(project(":platform:runner-extension:std:log"))
 }
 
 
@@ -35,18 +22,8 @@ testing {
                 dependencies {
                     implementation(project())
                     implementation(project(":platform:lib:sdk"))
-
-                    implementation(external.spring.web) {
-                        exclude("com.fasterxml.jackson.core", "jackson-core")
-                        exclude("org.springframework.boot", "spring-boot-starter-json")
-                        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-                    }
-
-                    implementation(project(":platform:hub:api"))
-                    implementation(project(":platform:hub:admin"))
+                    implementation(project(":platform:hub:core"))
                     implementation(project(":platform:runner"))
-                    implementation(project(":platform:hub:repository:api"))
-                    implementation(project(":platform:hub:repository:memory"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

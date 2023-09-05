@@ -1,4 +1,4 @@
-package io.hamal.mono.as_root
+package io.hamal.mono.api
 
 import io.hamal.api.ApiConfig
 import io.hamal.mono.BaseTest
@@ -21,9 +21,9 @@ import java.nio.file.Paths
     ]
 )
 @DirtiesContext
-@DisplayName("as_root - memory")
+@DisplayName("api - memory")
 @ActiveProfiles(value = ["test", "memory"])
 class MemoryHamalTest : BaseTest() {
     final override val rootHubSdk = rootHubSdk(8042)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "as_root")
+    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

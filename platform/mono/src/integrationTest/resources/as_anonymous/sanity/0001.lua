@@ -1,1 +1,0 @@
-print("Sanity Check - as_anonymous [X]")

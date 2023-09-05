@@ -116,7 +116,7 @@ internal abstract class BaseTest {
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
-                name = AccountName("test-root"),
+                name = AccountName("test-account"),
                 email = AccountEmail("test@hamal.io"),
                 salt = PasswordSalt("test-salt")
             )
@@ -150,7 +150,6 @@ internal abstract class BaseTest {
                 inputs = NamespaceInputs()
             )
         )
-
     }
 
 

@@ -8,20 +8,20 @@ plugins {
 archivesName.set("hub-backend")
 
 dependencies {
-    implementation(project(":platform:lib:sdk"))
-    implementation(project(":platform:lib:kua"))
+    api(project(":platform:lib:sdk"))
+    api(project(":platform:lib:kua"))
 
-    implementation(project(":platform:hub:repository:api"))
-    implementation(project(":platform:hub:repository:memory"))
-    implementation(project(":platform:hub:repository:sqlite"))
+    api(project(":platform:hub:repository:api"))
+    api(project(":platform:hub:repository:memory"))
+    api(project(":platform:hub:repository:sqlite"))
 
-    implementation(external.spring.web) {
+    api(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":platform:runner-extension:std:log"))
+    api(project(":platform:runner-extension:std:log"))
 }
 
 

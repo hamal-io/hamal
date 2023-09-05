@@ -58,11 +58,12 @@ testing {
                         exclude("com.fasterxml.jackson.core", "jackson-annotations")
                     }
 
-                    implementation(project(":platform:lib:kua"))
-                    implementation(project(":platform:hub:api"))
-                    implementation(project(":platform:hub:repository:api"))
+
                     implementation(project(":platform:hub:admin"))
+                    implementation(project(":platform:hub:api"))
                     implementation(project(":platform:runner"))
+                    
+                    implementation(project(":platform:hub:repository:api"))
                     implementation(project(":platform:runner-extension:std:sys"))
                     implementation(project(":platform:runner-extension:std:log"))
 
