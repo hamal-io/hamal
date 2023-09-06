@@ -2,7 +2,7 @@ package io.hamal.core.service
 
 import io.hamal.core.component.Async
 import io.hamal.core.req.InvokeExecReq
-import io.hamal.core.req.SubmitRequest
+import io.hamal.core.req.SubmitCoreRequest
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.*
@@ -24,10 +24,10 @@ import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-class EventTriggerService(
+internal class EventTriggerService(
     internal val eventBrokerRepository: BrokerRepository,
     internal val triggerQueryRepository: TriggerQueryRepository,
-    internal val submitRequest: SubmitRequest,
+    internal val submitRequest: SubmitCoreRequest,
     internal val generateDomainId: GenerateDomainId,
     internal val async: Async,
     private val funcQueryRepository: FuncQueryRepository

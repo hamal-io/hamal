@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Service
-class OrchestrationService(
+internal class OrchestrationService(
     private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
     private val eventEmitter: HubEventEmitter
 ) {

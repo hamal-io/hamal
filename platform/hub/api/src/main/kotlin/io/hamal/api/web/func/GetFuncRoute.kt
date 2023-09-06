@@ -1,16 +1,16 @@
 package io.hamal.api.web.func
 
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubFunc
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GetFuncRoute(
+internal class GetFuncRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {

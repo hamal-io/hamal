@@ -9,7 +9,7 @@ import logger
 
 private val log = logger(ExecCompletedHandler::class)
 
-class ExecCompletedHandler(
+internal class ExecCompletedHandler(
     private val orchestrationService: OrchestrationService,
     private val metricService: MetricService
 ) : HubEventHandler<ExecutionCompletedEvent> {

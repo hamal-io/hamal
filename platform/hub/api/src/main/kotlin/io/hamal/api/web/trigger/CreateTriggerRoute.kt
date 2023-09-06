@@ -1,6 +1,6 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubCreateTriggerReq
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CreateTriggerRoute(
+internal class CreateTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
-    private val request: SubmitRequest,
+    private val request: SubmitApiRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @PostMapping("/v1/groups/{groupId}/triggers")

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListAccountRoute(
+internal class ListAccountRoute(
     private val accountQueryRepository: AccountQueryRepository
 ) {
     @GetMapping("/v1/accounts")

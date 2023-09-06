@@ -1,6 +1,6 @@
 package io.hamal.api.web
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SetStateRoute(
+internal class SetStateRoute(
     private val funcQueryRepository: FuncQueryRepository,
-    private val request: SubmitRequest
+    private val request: SubmitApiRequest
 ) {
     @PostMapping("/v1/funcs/{funcId}/states/{correlationId}")
     fun setState(

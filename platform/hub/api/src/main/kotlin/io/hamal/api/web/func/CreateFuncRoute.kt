@@ -1,6 +1,6 @@
 package io.hamal.api.web.func
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubCreateFuncReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CreateFuncRoute(
-    private val request: SubmitRequest,
+internal class CreateFuncRoute(
+    private val request: SubmitApiRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @PostMapping("/v1/groups/{groupId}/funcs")

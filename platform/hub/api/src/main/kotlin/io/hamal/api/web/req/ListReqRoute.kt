@@ -1,16 +1,16 @@
 package io.hamal.api.web.req
 
-import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.sdk.hub.HubReqList
+import io.hamal.repository.api.ReqQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListReqRoute(
+internal class ListReqRoute(
     private val reqQueryRepository: ReqQueryRepository
 ) {
     @GetMapping("/v1/reqs")

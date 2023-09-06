@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GetGroupRoute(
+internal class GetGroupRoute(
     private val groupQueryRepository: GroupQueryRepository,
 ) {
     @GetMapping("/v1/groups/{groupId}")

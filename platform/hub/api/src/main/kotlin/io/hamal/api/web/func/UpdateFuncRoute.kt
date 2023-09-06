@@ -1,6 +1,6 @@
 package io.hamal.api.web.func
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.lib.sdk.hub.HubUpdateFuncReq
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UpdateFuncRoute(
+internal class UpdateFuncRoute(
     private val funcQueryRepository: FuncQueryRepository,
-    private val request: SubmitRequest,
+    private val request: SubmitApiRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
     @PutMapping("/v1/funcs/{funcId}")

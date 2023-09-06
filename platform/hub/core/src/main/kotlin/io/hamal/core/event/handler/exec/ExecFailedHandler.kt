@@ -8,7 +8,7 @@ import logger
 
 private val log = logger(ExecFailedHandler::class)
 
-class ExecFailedHandler(
+internal class ExecFailedHandler(
     private val orchestrationService: OrchestrationService
 ) : HubEventHandler<ExecutionFailedEvent> {
 

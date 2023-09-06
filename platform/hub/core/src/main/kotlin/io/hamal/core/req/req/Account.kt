@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.req
+package io.hamal.core.req.req
 
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountName

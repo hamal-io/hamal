@@ -1,6 +1,6 @@
 package io.hamal.api.web.topic
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.hub.HubAppendEntryReq
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class AppendEntryRoute(
-    private val submitRequest: SubmitRequest,
+internal class AppendEntryRoute(
+    private val submitRequest: SubmitApiRequest,
     private val eventBrokerRepository: BrokerRepository
 ) {
     @PostMapping("/v1/topics/{topicId}/entries")

@@ -1,6 +1,6 @@
 package io.hamal.api.web.namespace
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CreateNamespaceRoute(
-    private val request: SubmitRequest,
+internal class CreateNamespaceRoute(
+    private val request: SubmitApiRequest,
 ) {
     @PostMapping("/v1/groups/{groupId}/namespaces")
     fun createNamespace(

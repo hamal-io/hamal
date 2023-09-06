@@ -1,11 +1,11 @@
 package io.hamal.api.web.exec
 
-import io.hamal.repository.api.ExecLogCmdRepository
-import io.hamal.repository.api.ExecLogCmdRepository.LogCmd
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
 import io.hamal.lib.sdk.hub.AppendExecLogCmd
+import io.hamal.repository.api.ExecLogCmdRepository
+import io.hamal.repository.api.ExecLogCmdRepository.LogCmd
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 
 @RestController
-class AppendExecLogRoute(
+internal class AppendExecLogRoute(
     private val generateDomainId: GenerateDomainId,
     private val execLogCmdRepository: ExecLogCmdRepository
 ) {
