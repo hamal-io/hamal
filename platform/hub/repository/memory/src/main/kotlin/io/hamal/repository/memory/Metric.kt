@@ -6,6 +6,7 @@ import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.event.HubEvent
 import io.hamal.repository.api.event.HubEventTopic
 import kotlinx.serialization.json.*
+import org.jetbrains.annotations.TestOnly
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -35,15 +36,14 @@ object MemoryMetricRepository : MetricRepository {
             }
             eventMap[topic] = eventMap.getOrDefault(topic, 0) + 1
         }
-
     }
 
-    override fun update(e: HubEventTopic) {
-        val topic = e.value
-        if (!eventMap.containsKey(topic)) {
-            eventMap.put(topic, 0)
+    @TestOnly
+    override fun update(e: String) {
+        if (!eventMap.containsKey(e)) {
+            eventMap.put(e, 0)
         }
-        eventMap[topic] = eventMap.getOrDefault(topic, 0) + 1
+        eventMap[e] = eventMap.getOrDefault(e, 0) + 1
     }
 
     override fun getData(): MetricAccess {
