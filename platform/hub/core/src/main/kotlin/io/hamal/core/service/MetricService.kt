@@ -6,13 +6,14 @@ import io.hamal.repository.api.event.*
 import org.springframework.stereotype.Service
 
 @Service
-class MetricService(private val repo: MetricRepository) {
-
+class MetricService(
+    private val repo: MetricRepository
+) {
     fun handleEvent(event: HubEvent) {
         repo.update(event)
     }
 
-    fun getCounter(): MetricAccess {
+    fun get(): MetricAccess {
         return repo.getData()
     }
 }

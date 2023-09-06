@@ -4,8 +4,6 @@ package io.hamal.repository.memory
 import io.hamal.repository.api.MetricAccess
 import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.event.HubEvent
-import io.hamal.repository.api.event.HubEventTopic
-import kotlinx.serialization.json.*
 import org.jetbrains.annotations.TestOnly
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
@@ -57,23 +55,6 @@ object MemoryMetricRepository : MetricRepository {
             override fun getMap(): LinkedHashMap<String, Int> {
                 return read()
             }
-        }
-    }
-
-    fun getAsJson(): JsonObject {
-        //TODO for use in other class
-        val data = getData().getMap()
-        val arr = buildJsonArray {
-            for (i in data) {
-                addJsonObject {
-                    put(i.key, i.value)
-                }
-            }
-        }
-
-        return buildJsonObject {
-            put("timer", timer)
-            put("events", arr)
         }
     }
 
