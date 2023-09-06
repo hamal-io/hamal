@@ -35,6 +35,7 @@ private fun CreateAccountWithPasswordHandler.createAccount(req: SubmittedCreateA
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
             accountId = req.id,
+            accountType = req.type,
             name = req.name,
             email = req.email,
             salt = req.salt

@@ -6,6 +6,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.api.*
@@ -116,6 +117,7 @@ internal abstract class BaseTest {
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
+                accountType = Root,
                 name = AccountName("test-root"),
                 email = AccountEmail("test@hamal.io"),
                 salt = PasswordSalt("test-salt")
