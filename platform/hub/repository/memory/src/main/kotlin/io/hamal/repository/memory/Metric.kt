@@ -40,10 +40,12 @@ object MemoryMetricRepository : MetricRepository {
 
     @TestOnly
     override fun update(e: String) {
-        if (!eventMap.containsKey(e)) {
-            eventMap.put(e, 0)
+        lock.write {
+            if (!eventMap.containsKey(e)) {
+                eventMap.put(e, 0)
+            }
+            eventMap[e] = eventMap.getOrDefault(e, 0) + 1
         }
-        eventMap[e] = eventMap.getOrDefault(e, 0) + 1
     }
 
     override fun getData(): MetricAccess {

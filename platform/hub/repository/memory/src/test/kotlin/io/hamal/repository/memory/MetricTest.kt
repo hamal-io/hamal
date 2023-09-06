@@ -15,7 +15,7 @@ class MemoryMetricTest {
 
 
     @Nested
-    inner class APITest {
+    inner class RepoTest {
         val repo: MetricRepository = MemoryMetricRepository
         val hubEvents = HubEvent::class.sealedSubclasses.map { it.topicName().value }
 
@@ -41,7 +41,7 @@ class MemoryMetricTest {
 
         @Test
         fun multithreadTest() {
-            val executor = Executors.newFixedThreadPool(4)
+            val pool = Executors.newFixedThreadPool(4)
 
             val tasks = List(100) {
                 Runnable {
@@ -51,13 +51,12 @@ class MemoryMetricTest {
                 }
             }
 
-            tasks.forEach { executor.submit(it) }
-            executor.shutdown()
-            executor.awaitTermination(1, TimeUnit.MINUTES)
+            tasks.forEach { pool.submit(it) }
+            pool.shutdown()
+            pool.awaitTermination(1, TimeUnit.MINUTES)
 
             for (i in repo.getData().getMap()) {
-                //println(i.value)
-                Assertions.assertEquals(99, i.value)
+                Assertions.assertEquals(100, i.value)
             }
         }
 
