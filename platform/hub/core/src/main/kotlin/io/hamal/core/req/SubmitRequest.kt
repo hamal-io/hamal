@@ -10,6 +10,8 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.req.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountType.Enjoyer
+import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.FuncQueryRepository
@@ -50,13 +52,33 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
+    operator fun invoke(req: CreateRootAccountReq): SubmittedCreateAccountWithPasswordReq {
         val salt = generateSalt()
-
         return SubmittedCreateAccountWithPasswordReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::AccountId),
+            type = Root,
+            groupId = generateDomainId(::GroupId),
+            name = req.name,
+            email = req.email,
+            authenticationId = generateDomainId(::AuthId),
+            hash = encodePassword(
+                password = req.password,
+                salt = salt
+            ),
+            salt = salt,
+            token = generateToken()
+        ).also(reqCmdRepository::queue)
+    }
+
+    operator fun invoke(req: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
+        val salt = generateSalt()
+        return SubmittedCreateAccountWithPasswordReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            id = generateDomainId(::AccountId),
+            type = Enjoyer,
             groupId = generateDomainId(::GroupId),
             name = req.name,
             email = req.email,

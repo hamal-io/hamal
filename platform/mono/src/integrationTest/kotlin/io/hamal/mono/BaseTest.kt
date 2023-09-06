@@ -5,6 +5,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.DefaultHubSdk
@@ -112,6 +113,7 @@ abstract class BaseTest {
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
+                accountType = Root,
                 name = AccountName("test-root"),
                 email = AccountEmail("test@hamal.io"),
                 salt = PasswordSalt("test-salt")

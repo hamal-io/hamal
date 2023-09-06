@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable(with = AccountId.Serializer::class)
 class AccountId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     internal object Serializer : DomainIdSerializer<AccountId>(::AccountId)
 }
@@ -22,4 +23,8 @@ class AccountEmail(override val value: String) : StringValueObject() {
     internal object Serializer : StringValueObjectSerializer<AccountEmail>(::AccountEmail)
 }
 
-
+enum class AccountType {
+    Enjoyer,
+    Root,
+    Runner
+}

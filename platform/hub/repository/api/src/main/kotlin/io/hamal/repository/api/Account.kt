@@ -4,16 +4,14 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.AccountEmail
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AccountName
-import io.hamal.lib.domain.vo.PasswordSalt
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Account(
     override val id: AccountId,
     val cmdId: CmdId,
+    val type: AccountType,
     val name: AccountName,
     val email: AccountEmail?,
     val salt: PasswordSalt
@@ -30,6 +28,7 @@ interface AccountCmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val accountId: AccountId,
+        val accountType: AccountType,
         val name: AccountName,
         val email: AccountEmail?,
         val salt: PasswordSalt

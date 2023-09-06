@@ -6,7 +6,7 @@ import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
 import io.hamal.repository.api.Account
-import io.hamal.repository.api.AccountCmdRepository
+import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.account.AccountCreationRecord
@@ -47,7 +47,7 @@ internal object CurrentAccountProjection {
 object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(), AccountRepository {
     private val lock = ReentrantLock()
 
-    override fun create(cmd: AccountCmdRepository.CreateCmd): Account {
+    override fun create(cmd: CreateCmd): Account {
         return lock.withLock {
             val accountId = cmd.accountId
             if (contains(accountId)) {
@@ -55,8 +55,9 @@ object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(
             } else {
                 addRecord(
                     AccountCreationRecord(
-                        entityId = accountId,
                         cmdId = cmd.id,
+                        entityId = accountId,
+                        type = cmd.accountType,
                         name = cmd.name,
                         email = cmd.email,
                         salt = cmd.salt

@@ -11,3 +11,11 @@ data class CreateAccountReq(
     val email: AccountEmail?,
     val password: Password?
 )
+
+
+@Serializable
+data class CreateRootAccountReq(
+    val name: AccountName,
+    val email: AccountEmail,
+    val password: Password
+)
