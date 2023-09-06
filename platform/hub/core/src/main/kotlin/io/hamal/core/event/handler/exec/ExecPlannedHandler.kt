@@ -8,7 +8,7 @@ import logger
 
 private val log = logger(ExecPlannedHandler::class)
 
-class ExecPlannedHandler(
+internal class ExecPlannedHandler(
     private val orchestrationService: OrchestrationService
 ) : HubEventHandler<ExecPlannedEvent> {
     override fun handle(cmdId: CmdId, evt: ExecPlannedEvent) {

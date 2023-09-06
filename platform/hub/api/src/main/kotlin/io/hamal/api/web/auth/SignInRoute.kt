@@ -1,6 +1,6 @@
 package io.hamal.api.web.auth
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.sdk.hub.HubSignInReq
 import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import io.hamal.repository.api.AccountQueryRepository
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SignInRoute(
+internal class SignInRoute(
     private val accountQueryRepository: AccountQueryRepository,
-    private val submitRequest: SubmitRequest
+    private val submitRequest: SubmitApiRequest
 ) {
     @PostMapping("/v1/sign-in")
     fun createFunc(

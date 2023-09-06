@@ -7,6 +7,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import io.hamal.repository.api.submitted_req.SubmittedCreateAccountWithPasswordReq
@@ -18,6 +20,7 @@ class CreateAccountWithPasswordHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
+    val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: HubEventEmitter,
 ) : ReqHandler<SubmittedCreateAccountWithPasswordReq>(SubmittedCreateAccountWithPasswordReq::class) {
 
@@ -25,6 +28,7 @@ class CreateAccountWithPasswordHandler(
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
+            .also { createNamespace(req) }
             .also { createPasswordAuth(req) }
             .also { createTokenAuth(req) }
     }
@@ -53,6 +57,19 @@ private fun CreateAccountWithPasswordHandler.createGroup(req: SubmittedCreateAcc
         )
     )
 }
+
+private fun CreateAccountWithPasswordHandler.createNamespace(req: SubmittedCreateAccountWithPasswordReq): Namespace {
+    return namespaceCmdRepository.create(
+        NamespaceCmdRepository.CreateCmd(
+            id = req.cmdId(),
+            namespaceId = req.namespaceId,
+            groupId = req.groupId,
+            name = NamespaceName("hamal"),
+            inputs = NamespaceInputs()
+        )
+    )
+}
+
 
 private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: SubmittedCreateAccountWithPasswordReq): Auth {
     return authCmdRepository.create(

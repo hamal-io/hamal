@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListExecsLogsRoute(
+internal class ListExecsLogsRoute(
     private val execLogQueryRepository: ExecLogQueryRepository
 ) {
     @GetMapping("/v1/groups/{groupId}/exec-logs")

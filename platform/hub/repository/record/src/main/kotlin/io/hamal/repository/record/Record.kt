@@ -10,10 +10,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-interface RecordType {
-    val value: Int
-}
-
 @Serializable(with = RecordSequence.Serializer::class)
 data class RecordSequence(val value: Int) : Comparable<RecordSequence>//FIXME becomes VO
 {
@@ -40,9 +36,9 @@ data class RecordSequence(val value: Int) : Comparable<RecordSequence>//FIXME be
 }
 
 abstract class Record<ID : DomainId> {
-    abstract var sequence: RecordSequence?
-    abstract val entityId: ID
     abstract val cmdId: CmdId
+    abstract val entityId: ID
+    abstract var sequence: RecordSequence?
 
     fun sequence() =
         sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")

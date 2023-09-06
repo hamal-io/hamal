@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListNamespaceRoute(
+internal class ListNamespaceRoute(
     private val namespaceQueryRepository: NamespaceQueryRepository,
 ) {
     @GetMapping("/v1/groups/{groupId}/namespaces")

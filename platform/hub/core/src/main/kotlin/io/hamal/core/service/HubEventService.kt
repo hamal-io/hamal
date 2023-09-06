@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-class HubEventService(
+internal class HubEventService(
     private val async: Async,
     private val generateDomainId: GenerateDomainId,
     private val hubEventContainer: HubEventContainer,
@@ -38,7 +38,7 @@ class HubEventService(
 
         instanceTopics.forEach { topic ->
             val consumer = ProtobufLogConsumer(
-                GroupId("instance-event-service"), topic, hubEventBrokerRepository, HubEvent::class
+                GroupId("core-event-service"), topic, hubEventBrokerRepository, HubEvent::class
             )
 
             scheduledTasks.add(

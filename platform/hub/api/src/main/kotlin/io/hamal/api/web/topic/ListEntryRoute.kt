@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListEntryRoute(
+internal class ListEntryRoute(
     private val eventBrokerRepository: BrokerRepository
 ) {
     @GetMapping("/v1/topics/{topicId}/entries")

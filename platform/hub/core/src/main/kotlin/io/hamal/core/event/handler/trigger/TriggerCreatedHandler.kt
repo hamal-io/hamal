@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.event.TriggerCreatedEvent
 
-class TriggerCreatedHandler(
+internal class TriggerCreatedHandler(
     private val fixedRateTriggerService: FixedRateTriggerService
 ) : HubEventHandler<TriggerCreatedEvent> {
     override fun handle(cmdId: CmdId, evt: TriggerCreatedEvent) {

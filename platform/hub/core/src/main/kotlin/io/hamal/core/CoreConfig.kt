@@ -1,9 +1,10 @@
 package io.hamal.core
 
-import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.CreateRootAccountReq
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
+import io.hamal.core.req.SubmitCoreRequest
+import io.hamal.core.req.req.CreateRootAccountReq
+import io.hamal.lib.domain.vo.AccountEmail
+import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.Password
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
@@ -32,20 +34,19 @@ import org.springframework.scheduling.annotation.EnableScheduling
     ]
 )
 open class CoreConfig {
-
     @Autowired
-    private lateinit var submitRequest: SubmitRequest
+    private lateinit var submitRequest: SubmitCoreRequest
 
     @Bean
+    @Profile("!test")
     open fun commandLineRunner() = CommandLineRunner {
-        val acctReq = submitRequest(
+        submitRequest(
             CreateRootAccountReq(
                 AccountName("root"),
                 AccountEmail("root@hamal.io"),
                 Password("toor")
             )
         )
-        submitRequest(acctReq.groupId, HubCreateNamespaceReq(NamespaceName("hamal"), NamespaceInputs()))
     }
 }
 

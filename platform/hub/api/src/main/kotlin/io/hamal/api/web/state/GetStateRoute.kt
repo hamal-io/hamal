@@ -1,20 +1,20 @@
 package io.hamal.api.web.state
 
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.StateQueryRepository
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubCorrelatedState
 import io.hamal.lib.sdk.hub.HubCorrelation
 import io.hamal.lib.sdk.hub.HubState
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.StateQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GetStateRoute(
+internal class GetStateRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val stateQueryRepository: StateQueryRepository
 ) {

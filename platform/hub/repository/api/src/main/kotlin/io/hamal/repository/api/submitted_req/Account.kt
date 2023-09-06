@@ -13,6 +13,7 @@ data class SubmittedCreateAccountWithPasswordReq(
     val type: AccountType,
     val authenticationId: AuthId,
     val groupId: GroupId,
+    val namespaceId: NamespaceId,
     val name: AccountName,
     val email: AccountEmail?,
     val salt: PasswordSalt,

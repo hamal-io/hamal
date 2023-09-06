@@ -1,6 +1,6 @@
 package io.hamal.api.web.namespace
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.lib.sdk.hub.HubUpdateNamespaceReq
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UpdateNamespaceRoute(
+internal class UpdateNamespaceRoute(
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val request: SubmitRequest,
+    private val request: SubmitApiRequest,
 ) {
     @PutMapping("/v1/namespaces/{namespaceId}")
     fun createNamespace(

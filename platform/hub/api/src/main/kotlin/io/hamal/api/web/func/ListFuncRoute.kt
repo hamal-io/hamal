@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ListFuncRoute(
+internal class ListFuncRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {

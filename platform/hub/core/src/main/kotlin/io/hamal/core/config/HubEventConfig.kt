@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class HubEventConfig {
+internal open class HubEventConfig {
     @Bean
     open fun hubEventEmitter(
         hubEventBrokerRepository: BrokerRepository,

@@ -1,6 +1,6 @@
 package io.hamal.api.web.func
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.api.req.SubmitApiRequest
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubInvokeFuncReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class InvokeFuncRoute(
-    private val request: SubmitRequest,
+internal class InvokeFuncRoute(
+    private val request: SubmitApiRequest,
     private val funcQueryRepository: FuncQueryRepository
 ) {
     @PostMapping("/v1/funcs/{funcId}/exec")

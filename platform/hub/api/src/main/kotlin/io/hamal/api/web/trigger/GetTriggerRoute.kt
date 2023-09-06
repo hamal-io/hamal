@@ -1,18 +1,18 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.hub.HubEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
 import io.hamal.lib.sdk.hub.HubTrigger
+import io.hamal.repository.api.*
+import io.hamal.repository.api.log.BrokerRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GetTriggerRoute(
+internal class GetTriggerRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
