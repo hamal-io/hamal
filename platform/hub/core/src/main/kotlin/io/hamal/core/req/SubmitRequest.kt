@@ -13,6 +13,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Enjoyer
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.hub.*
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
@@ -72,7 +73,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: CreateAccountReq): SubmittedCreateAccountWithPasswordReq {
+    operator fun invoke(req: HubCreateAccountReq): SubmittedCreateAccountWithPasswordReq {
         val salt = generateSalt()
         return SubmittedCreateAccountWithPasswordReq(
             reqId = generateDomainId(::ReqId),
@@ -92,7 +93,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(groupId: GroupId, req: InvokeAdhocReq) =
+    operator fun invoke(groupId: GroupId, req: HubInvokeAdhocReq) =
         SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -106,7 +107,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
 
 
-    operator fun invoke(funcId: FuncId, req: InvokeFuncReq): SubmittedInvokeExecReq {
+    operator fun invoke(funcId: FuncId, req: HubInvokeFuncReq): SubmittedInvokeExecReq {
         val func = funcQueryRepository.get(funcId)
         return SubmittedInvokeExecReq(
             reqId = generateDomainId(::ReqId),
@@ -136,8 +137,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-
-    operator fun invoke(execId: ExecId, req: CompleteExecReq) =
+    operator fun invoke(execId: ExecId, req: HubCompleteExecReq) =
         SubmittedCompleteExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -146,7 +146,7 @@ class SubmitRequest(
             events = req.events
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(execId: ExecId, req: FailExecReq) =
+    operator fun invoke(execId: ExecId, req: HubFailExecReq) =
         SubmittedFailExecReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -154,7 +154,7 @@ class SubmitRequest(
             cause = req.cause
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, req: CreateFuncReq) =
+    operator fun invoke(groupId: GroupId, req: HubCreateFuncReq) =
         SubmittedCreateFuncReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -166,7 +166,7 @@ class SubmitRequest(
             code = req.code
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(funcId: FuncId, req: UpdateFuncReq) =
+    operator fun invoke(funcId: FuncId, req: HubUpdateFuncReq) =
         SubmittedUpdateFuncReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -177,7 +177,7 @@ class SubmitRequest(
             code = req.code
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) =
+    operator fun invoke(groupId: GroupId, req: HubCreateNamespaceReq) =
         SubmittedCreateNamespaceReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -187,7 +187,7 @@ class SubmitRequest(
             inputs = req.inputs
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, req: UpdateNamespaceReq) =
+    operator fun invoke(namespaceId: NamespaceId, req: HubUpdateNamespaceReq) =
         SubmittedUpdateNamespaceReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -196,7 +196,7 @@ class SubmitRequest(
             inputs = req.inputs
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(req: CreateTriggerReq): SubmittedCreateTriggerReq {
+    operator fun invoke(req: HubCreateTriggerReq): SubmittedCreateTriggerReq {
         val func = funcQueryRepository.get(req.funcId)
         return SubmittedCreateTriggerReq(
             type = req.type,
@@ -214,7 +214,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: CreateTopicReq) =
+    operator fun invoke(req: HubCreateTopicReq) =
         SubmittedCreateTopicReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -222,7 +222,7 @@ class SubmitRequest(
             name = req.name
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(req: AppendEntryReq) =
+    operator fun invoke(req: HubAppendEntryReq) =
         SubmittedAppendToTopicReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -230,7 +230,7 @@ class SubmitRequest(
             payload = req.payload
         ).also(reqCmdRepository::queue)
 
-    operator fun invoke(req: SetStateReq) =
+    operator fun invoke(req: HubSetStateReq) =
         SubmittedSetStateReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,

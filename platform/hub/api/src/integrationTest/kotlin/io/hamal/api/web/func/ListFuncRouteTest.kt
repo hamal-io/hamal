@@ -1,11 +1,11 @@
 package io.hamal.api.web.func
 
-import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.hub.HubCreateFuncReq
 import io.hamal.lib.sdk.hub.HubFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -22,7 +22,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
     fun `Single func`() {
         val funcId = awaitCompleted(
             createFunc(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     namespaceId = null,
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
@@ -45,7 +45,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createFunc(
-                    CreateFuncReq(
+                    HubCreateFuncReq(
                         namespaceId = null,
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
@@ -71,7 +71,7 @@ internal class ListFuncRouteTest : BaseFuncRouteTest() {
     fun `Skip and limit funcs`() {
         val requests = IntRange(0, 99).map {
             createFunc(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     namespaceId = null,
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),

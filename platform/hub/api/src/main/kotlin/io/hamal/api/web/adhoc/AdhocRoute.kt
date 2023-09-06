@@ -1,8 +1,8 @@
 package io.hamal.api.web.adhoc
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ class AdhocRoute(
     @PostMapping("/v1/groups/{groupId}/adhoc")
     fun adhoc(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody adhocInvocation: InvokeAdhocReq
+        @RequestBody adhocInvocation: HubInvokeAdhocReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         val result = submitRequest(groupId, adhocInvocation)
         return ResponseEntity(result.let {

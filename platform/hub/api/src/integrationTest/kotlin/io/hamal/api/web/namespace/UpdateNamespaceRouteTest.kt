@@ -1,7 +1,5 @@
 package io.hamal.api.web.namespace
 
-import io.hamal.lib.domain.req.CreateNamespaceReq
-import io.hamal.lib.domain.req.UpdateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
@@ -12,8 +10,10 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubUpdateNamespaceReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,7 +24,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
     fun `Tries to update namespace which does not exists`() {
         val getNamespaceResponse = httpTemplate.put("/v1/namespaces/33333333")
             .body(
-                UpdateNamespaceReq(
+                HubUpdateNamespaceReq(
                     name = NamespaceName("update"),
                     inputs = NamespaceInputs(),
                 )
@@ -42,7 +42,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
     fun `Updates namespace`() {
         val namespace = awaitCompleted(
             createNamespace(
-                CreateNamespaceReq(
+                HubCreateNamespaceReq(
                     name = NamespaceName("createdName"),
                     inputs = NamespaceInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs")))))
                 )
@@ -52,7 +52,7 @@ internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
         val updateNamespaceResponse = httpTemplate.put("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespace.id)
             .body(
-                UpdateNamespaceReq(
+                HubUpdateNamespaceReq(
                     name = NamespaceName("updatedName"),
                     inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))
                 )

@@ -2,7 +2,6 @@ package io.hamal.api.web.trigger
 
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
-import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -10,6 +9,7 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.hub.HubCreateTriggerReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
@@ -34,7 +34,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
         val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id(::FuncId)
         val triggerId = awaitCompleted(
             createTrigger(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = FixedRate,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
@@ -67,7 +67,7 @@ internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
 
         val triggerId = awaitCompleted(
             createTrigger(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = Event,
                     correlationId = null,
                     name = TriggerName("trigger-one"),

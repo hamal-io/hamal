@@ -4,13 +4,13 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.sdk.hub.HubCompleteExecReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -74,7 +74,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
     fun `Tries to complete exec which does not exist`() {
         val response = httpTemplate.post("/v1/execs/123456765432/complete")
             .body(
-                CompleteExecReq(
+                HubCompleteExecReq(
                     state = State(),
                     events = listOf()
                 )
@@ -115,7 +115,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
         httpTemplate.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                CompleteExecReq(
+                HubCompleteExecReq(
                     state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     events = listOf(
                         EventToSubmit(

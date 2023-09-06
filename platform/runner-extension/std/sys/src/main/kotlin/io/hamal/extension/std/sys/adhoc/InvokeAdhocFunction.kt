@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sys.adhoc
 
-import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.kua.function.Function1In2Out
@@ -11,6 +10,7 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
 
 class InvokeAdhocFunction(
     private val sdk: HubSdk
@@ -22,7 +22,7 @@ class InvokeAdhocFunction(
         return try {
             val res = sdk.adhoc(
                 ctx[GroupId::class],
-                InvokeAdhocReq(
+                HubInvokeAdhocReq(
                     inputs = InvocationInputs(),
                     code = CodeType(arg1.getString("code"))
                 )

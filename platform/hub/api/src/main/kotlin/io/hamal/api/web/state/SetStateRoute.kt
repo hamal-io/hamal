@@ -3,10 +3,10 @@ package io.hamal.api.web
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.SetStateReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
+import io.hamal.lib.sdk.hub.HubSetStateReq
 import io.hamal.lib.sdk.hub.HubState
 import io.hamal.lib.sdk.hub.HubSubmittedReq
 import io.hamal.repository.api.FuncQueryRepository
@@ -31,7 +31,7 @@ class SetStateRoute(
         ensureFuncExists(funcId)
 
         val result = request(
-            SetStateReq(
+            HubSetStateReq(
                 correlation = Correlation(
                     funcId = funcId,
                     correlationId = correlationId,

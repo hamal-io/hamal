@@ -2,17 +2,12 @@ package io.hamal.api.web.trigger
 
 import io.hamal.api.web.BaseRouteTest
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.req.CreateTopicReq
-import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
-import io.hamal.lib.sdk.hub.HubTrigger
-import io.hamal.lib.sdk.hub.HubTriggerList
+import io.hamal.lib.sdk.hub.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import kotlin.time.Duration.Companion.seconds
@@ -23,7 +18,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .body(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
@@ -41,7 +36,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     fun createTopic(topicName: TopicName): HubSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
             .path("groupId", testGroup.id)
-            .body(CreateTopicReq(topicName))
+            .body(HubCreateTopicReq(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
@@ -56,7 +51,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = TriggerType.FixedRate,
                     name = name,
                     funcId = funcId,
@@ -72,7 +67,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
         return creationResponse.result(HubSubmittedReqWithId::class)
     }
 
-    fun createTrigger(req: CreateTriggerReq): HubSubmittedReqWithId {
+    fun createTrigger(req: HubCreateTriggerReq): HubSubmittedReqWithId {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(req)

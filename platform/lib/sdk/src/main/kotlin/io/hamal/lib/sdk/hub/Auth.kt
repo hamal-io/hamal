@@ -1,7 +1,15 @@
 package io.hamal.lib.sdk.hub
 
+import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.http.HttpTemplate
+import kotlinx.serialization.Serializable
 
+@Serializable
+data class HubSignInReq(
+    val name: AccountName,
+    val password: Password?
+)
 
 interface HubAuthService
 

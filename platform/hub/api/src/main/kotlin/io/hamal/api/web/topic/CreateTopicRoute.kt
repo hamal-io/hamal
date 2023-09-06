@@ -1,8 +1,8 @@
 package io.hamal.api.web.topic
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.sdk.hub.HubCreateTopicReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ class CreateTopicRoute(
     @PostMapping("/v1/groups/{groupId}/topics")
     fun createTopic(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody createTopic: CreateTopicReq
+        @RequestBody createTopic: HubCreateTopicReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         val result = submitRequest(createTopic)
         return ResponseEntity(result.let {

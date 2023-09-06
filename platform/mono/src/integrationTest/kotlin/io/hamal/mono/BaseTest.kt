@@ -3,13 +3,13 @@ package io.hamal.mono
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.DefaultHubSdk
 import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
@@ -69,7 +69,7 @@ abstract class BaseTest {
 
                 val execReq = rootHubSdk.adhoc.invoke(
                     rootGroup.id,
-                    InvokeAdhocReq(
+                    HubInvokeAdhocReq(
                         InvocationInputs(),
                         CodeType(String(Files.readAllBytes(testFile)))
                     )

@@ -1,5 +1,7 @@
 package io.hamal.lib.sdk.hub
 
+import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
@@ -7,6 +9,12 @@ import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class HubSetStateReq(
+    val correlation: Correlation,
+    val value: State
+)
 
 @Serializable(with = HubState.Serializer::class)
 class HubState(override val value: MapType = MapType()) : Inputs() {

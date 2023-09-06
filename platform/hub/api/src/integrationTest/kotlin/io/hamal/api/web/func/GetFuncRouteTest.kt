@@ -1,6 +1,5 @@
 package io.hamal.api.web.func
 
-import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -10,6 +9,7 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.hub.HubCreateFuncReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubFunc
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,7 +31,7 @@ internal class GetFuncRouteTest : BaseFuncRouteTest() {
     fun `Get func`() {
         val funcId = awaitCompleted(
             createFunc(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     name = FuncName("func-one"),
                     namespaceId = null,
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),

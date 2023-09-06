@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sys.namespace
 
-import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
@@ -12,6 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 
 class CreateNamespaceFunction(
     private val sdk: HubSdk
@@ -23,7 +23,7 @@ class CreateNamespaceFunction(
         return try {
             val res = sdk.namespace.create(
                 ctx[GroupId::class],
-                CreateNamespaceReq(
+                HubCreateNamespaceReq(
                     name = NamespaceName(arg1.getString("name")),
                     inputs = NamespaceInputs(),
                 )

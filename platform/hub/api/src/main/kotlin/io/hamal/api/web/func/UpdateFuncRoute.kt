@@ -1,9 +1,9 @@
 package io.hamal.api.web.func
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.UpdateFuncReq
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.hub.HubUpdateFuncReq
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -22,7 +22,7 @@ class UpdateFuncRoute(
     @PutMapping("/v1/funcs/{funcId}")
     fun createFunc(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody updateFunc: UpdateFuncReq
+        @RequestBody updateFunc: HubUpdateFuncReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         ensureFuncExists(funcId)
         ensureNamespaceIdExists(updateFunc)
@@ -40,7 +40,7 @@ class UpdateFuncRoute(
         funcQueryRepository.get(funcId)
     }
 
-    private fun ensureNamespaceIdExists(updateFunc: UpdateFuncReq) {
+    private fun ensureNamespaceIdExists(updateFunc: HubUpdateFuncReq) {
         updateFunc.namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

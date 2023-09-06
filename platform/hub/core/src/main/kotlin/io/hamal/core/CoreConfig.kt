@@ -1,9 +1,9 @@
 package io.hamal.core
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.req.CreateRootAccountReq
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -45,7 +45,7 @@ open class CoreConfig {
                 Password("toor")
             )
         )
-        submitRequest(acctReq.groupId, CreateNamespaceReq(NamespaceName("hamal"), NamespaceInputs()))
+        submitRequest(acctReq.groupId, HubCreateNamespaceReq(NamespaceName("hamal"), NamespaceInputs()))
     }
 }
 
