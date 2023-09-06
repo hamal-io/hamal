@@ -1,6 +1,5 @@
 package io.hamal.api.web.namespace
 
-import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
@@ -10,6 +9,7 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubNamespace
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,7 +31,7 @@ internal class GetNamespaceRouteTest : BaseNamespaceRouteTest() {
     fun `Get namespace`() {
         val namespaceId = awaitCompleted(
             createNamespace(
-                CreateNamespaceReq(
+                HubCreateNamespaceReq(
                     name = NamespaceName("namespace-one"),
                     inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )

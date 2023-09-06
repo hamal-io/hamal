@@ -1,7 +1,6 @@
 package io.hamal.api.web.func
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -9,6 +8,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.hub.HubCreateFuncReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
@@ -20,7 +20,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
     @Test
     fun `Create func without namespace id`() {
         val result = createFunc(
-            CreateFuncReq(
+            HubCreateFuncReq(
                 name = FuncName("test-func"),
                 namespaceId = null,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
@@ -53,7 +53,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
         )
 
         val result = createFunc(
-            CreateFuncReq(
+            HubCreateFuncReq(
                 name = FuncName("test-func"),
                 namespaceId = namespace.id,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
@@ -80,7 +80,7 @@ internal class CreateFuncRouteTest : BaseFuncRouteTest() {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .body(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     name = FuncName("test-func"),
                     namespaceId = NamespaceId(12345),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),

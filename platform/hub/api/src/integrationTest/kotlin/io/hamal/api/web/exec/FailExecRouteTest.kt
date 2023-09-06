@@ -1,7 +1,6 @@
 package io.hamal.api.web.exec
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
@@ -10,6 +9,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.sdk.hub.HubFailExecReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -69,7 +69,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/v1/execs/123456765432/fail")
-            .body(FailExecReq(ErrorType("SomeErrorValue")))
+            .body(HubFailExecReq(ErrorType("SomeErrorValue")))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
@@ -90,7 +90,7 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/v1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(FailExecReq(ErrorType("SomeErrorCause")))
+            .body(HubFailExecReq(ErrorType("SomeErrorCause")))
             .execute()
 
 }

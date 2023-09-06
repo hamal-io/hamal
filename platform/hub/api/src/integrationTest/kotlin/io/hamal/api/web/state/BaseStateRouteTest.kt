@@ -4,17 +4,13 @@ import io.hamal.api.web.BaseRouteTest
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.CompleteExecReq
-import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubCorrelatedState
-import io.hamal.lib.sdk.hub.HubSubmittedReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.hub.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
@@ -24,7 +20,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .body(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
@@ -42,7 +38,7 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
         val response = httpTemplate.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                CompleteExecReq(
+                HubCompleteExecReq(
                     state = state,
                     events = listOf()
                 )

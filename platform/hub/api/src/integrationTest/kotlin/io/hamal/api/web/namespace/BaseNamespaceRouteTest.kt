@@ -1,12 +1,12 @@
 package io.hamal.api.web.namespace
 
 import io.hamal.api.web.BaseRouteTest
-import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 import io.hamal.lib.sdk.hub.HubNamespace
 import io.hamal.lib.sdk.hub.HubNamespaceList
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
@@ -14,7 +14,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseNamespaceRouteTest : BaseRouteTest() {
-    fun createNamespace(req: CreateNamespaceReq): HubSubmittedReqWithId {
+    fun createNamespace(req: HubCreateNamespaceReq): HubSubmittedReqWithId {
         val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
             .body(req)

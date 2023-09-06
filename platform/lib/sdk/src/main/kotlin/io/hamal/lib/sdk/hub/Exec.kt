@@ -4,8 +4,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.req.CompleteExecReq
-import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
@@ -13,6 +11,17 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class HubFailExecReq(
+    val cause: ErrorType
+)
+
+@Serializable
+data class HubCompleteExecReq(
+    val state: State,
+    val events: List<EventToSubmit>
+)
 
 @Serializable
 data class HubExecList(
@@ -65,14 +74,14 @@ internal class DefaultHubExecService(
     override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {
         template.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
-            .body(CompleteExecReq(stateAfterCompletion, eventToSubmit))
+            .body(HubCompleteExecReq(stateAfterCompletion, eventToSubmit))
             .execute()
     }
 
     override fun fail(execId: ExecId, error: ErrorType) {
         template.post("/v1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(FailExecReq(error))
+            .body(HubFailExecReq(error))
             .execute()
     }
 

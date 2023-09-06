@@ -1,12 +1,22 @@
 package io.hamal.lib.sdk.hub
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class HubCreateTopicReq(
+    val name: TopicName
+)
+
+@Serializable
+data class HubAppendEntryReq(
+    val topicId: TopicId,
+    val payload: TopicEntryPayload
+)
 
 @Serializable
 data class HubTopicEntryList(
@@ -41,7 +51,7 @@ data class HubTopicList(
 
 interface HubTopicService {
     fun append(topicId: TopicId, payload: TopicEntryPayload): HubSubmittedReqWithId
-    fun create(groupId: GroupId, req: CreateTopicReq): HubSubmittedReqWithId
+    fun create(groupId: GroupId, req: HubCreateTopicReq): HubSubmittedReqWithId
     fun list(groupId: GroupId): List<HubTopicList.Topic>
     fun entries(topicId: TopicId): List<HubTopicEntryList.Entry>
     fun get(topicId: TopicId): HubTopic
@@ -59,7 +69,7 @@ internal class DefaultHubTopicService(
             .execute()
             .fold(HubSubmittedReqWithId::class)
 
-    override fun create(groupId: GroupId, req: CreateTopicReq) =
+    override fun create(groupId: GroupId, req: HubCreateTopicReq) =
         template.post("/v1/groups/{groupId}/topics")
             .path("groupId", groupId)
             .body(req)

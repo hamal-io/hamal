@@ -1,7 +1,6 @@
 package io.hamal.api.web.topic
 
 import io.hamal.api.web.BaseRouteTest
-import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -53,7 +52,7 @@ internal sealed class BaseTopicRouteTest : BaseRouteTest() {
     fun createTopic(topicName: TopicName): HubSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
             .path("groupId", testGroup.id)
-            .body(CreateTopicReq(topicName))
+            .body(HubCreateTopicReq(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))

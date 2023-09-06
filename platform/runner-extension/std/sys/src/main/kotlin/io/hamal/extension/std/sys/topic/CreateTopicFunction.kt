@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sys.topic
 
-import io.hamal.lib.domain.req.CreateTopicReq
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -11,6 +10,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.hub.HubCreateTopicReq
 
 class CreateTopicFunction(
     private val sdk: HubSdk
@@ -22,7 +22,7 @@ class CreateTopicFunction(
         return try {
             val res = sdk.topic.create(
                 ctx[GroupId::class],
-                CreateTopicReq(
+                HubCreateTopicReq(
                     name = TopicName(arg1.getString("name")),
                 )
             )

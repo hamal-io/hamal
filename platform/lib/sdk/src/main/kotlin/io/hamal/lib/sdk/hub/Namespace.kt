@@ -1,6 +1,5 @@
 package io.hamal.lib.sdk.hub
 
-import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
@@ -9,6 +8,18 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class HubCreateNamespaceReq(
+    val name: NamespaceName,
+    val inputs: NamespaceInputs
+)
+
+@Serializable
+data class HubUpdateNamespaceReq(
+    val name: NamespaceName,
+    val inputs: NamespaceInputs,
+)
 
 @Serializable
 data class HubNamespaceList(
@@ -29,7 +40,7 @@ data class HubNamespace(
 )
 
 interface HubNamespaceService {
-    fun create(groupId: GroupId, createNamespaceReq: CreateNamespaceReq): HubSubmittedReqWithId
+    fun create(groupId: GroupId, createNamespaceReq: HubCreateNamespaceReq): HubSubmittedReqWithId
     fun list(groupId: GroupId): List<HubNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): HubNamespace
 }
@@ -38,7 +49,7 @@ internal class DefaultHubNamespaceService(
     private val template: HttpTemplate
 ) : HubNamespaceService {
 
-    override fun create(groupId: GroupId, createNamespaceReq: CreateNamespaceReq) =
+    override fun create(groupId: GroupId, createNamespaceReq: HubCreateNamespaceReq) =
         template.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
             .body(createNamespaceReq)

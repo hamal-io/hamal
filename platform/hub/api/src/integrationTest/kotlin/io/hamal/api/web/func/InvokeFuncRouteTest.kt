@@ -1,7 +1,5 @@
 package io.hamal.api.web.func
 
-import io.hamal.lib.domain.req.CreateFuncReq
-import io.hamal.lib.domain.req.InvokeFuncReq
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -12,7 +10,9 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.hub.HubCreateFuncReq
 import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.hub.HubInvokeFuncReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,7 +24,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
     fun `Invokes func`() {
         val createResponse = awaitCompleted(
             createFunc(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     name = FuncName("test"),
                     namespaceId = null,
                     inputs = FuncInputs(),
@@ -36,7 +36,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
             .path("funcId", createResponse.id)
             .body(
-                InvokeFuncReq(
+                HubInvokeFuncReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs()
                 )
@@ -53,7 +53,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
     fun `Invokes func without providing correlation id`() {
         val createResponse = awaitCompleted(
             createFunc(
-                CreateFuncReq(
+                HubCreateFuncReq(
                     name = FuncName("test"),
                     namespaceId = null,
                     inputs = FuncInputs(),
@@ -65,7 +65,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
             .path("funcId", createResponse.id)
             .body(
-                InvokeFuncReq(
+                HubInvokeFuncReq(
                     inputs = InvocationInputs(),
                     correlationId = null
                 )
@@ -82,7 +82,7 @@ internal class InvokeFuncRouteTest : BaseFuncRouteTest() {
     fun `Tries to invoke func which does not exist`() {
         val invocationResponse = httpTemplate.post("/v1/funcs/1234/exec")
             .body(
-                InvokeFuncReq(
+                HubInvokeFuncReq(
                     correlationId = CorrelationId("__default__"),
                     inputs = InvocationInputs()
                 )

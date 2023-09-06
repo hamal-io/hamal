@@ -3,12 +3,12 @@ package io.hamal.api.web.trigger
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
-import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.*
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+import io.hamal.lib.sdk.hub.HubCreateTriggerReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.repository.api.EventTrigger
@@ -30,7 +30,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
                     funcId = funcId,
@@ -71,7 +71,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
                     funcId = funcId,
@@ -102,7 +102,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
                     funcId = funcId,
@@ -128,7 +128,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = funcId,
@@ -158,7 +158,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = FuncId(123),
@@ -183,7 +183,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
@@ -215,7 +215,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
@@ -238,7 +238,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
@@ -262,7 +262,7 @@ internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
         val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .body(
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = FuncId(1234),

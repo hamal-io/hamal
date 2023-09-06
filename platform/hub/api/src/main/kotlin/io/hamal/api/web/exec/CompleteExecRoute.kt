@@ -1,8 +1,8 @@
 package io.hamal.api.web.exec
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.CompleteExecReq
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.sdk.hub.HubCompleteExecReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ class CompleteExecRoute(
     @PostMapping("/v1/execs/{execId}/complete")
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody complete: CompleteExecReq
+        @RequestBody complete: HubCompleteExecReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         val result = request(execId, complete)
         return ResponseEntity(result.let {

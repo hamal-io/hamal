@@ -1,7 +1,6 @@
 package io.hamal.extension.std.sys.func
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.req.CreateFuncReq
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.GroupId
@@ -14,6 +13,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.hub.HubCreateFuncReq
 
 class CreateFuncFunction(
     private val sdk: HubSdk
@@ -31,7 +31,7 @@ class CreateFuncFunction(
 
             val res = sdk.func.create(
                 ctx[GroupId::class],
-                CreateFuncReq(
+                HubCreateFuncReq(
                     namespaceId = namespaceId,
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),

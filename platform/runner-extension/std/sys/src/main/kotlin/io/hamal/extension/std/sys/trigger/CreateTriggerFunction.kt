@@ -2,7 +2,6 @@ package io.hamal.extension.std.sys.trigger
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -12,6 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.hub.HubCreateTriggerReq
 import kotlin.time.Duration
 
 class CreateTriggerFunction(
@@ -24,7 +24,7 @@ class CreateTriggerFunction(
         return try {
             val res = sdk.trigger.create(
                 ctx[GroupId::class],
-                CreateTriggerReq(
+                HubCreateTriggerReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                     name = TriggerName(arg1.getString("name")),

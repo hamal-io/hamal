@@ -1,8 +1,8 @@
 package io.hamal.api.web.exec
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.FailExecReq
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.sdk.hub.HubFailExecReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ class FailExecRoute(
     @PostMapping("/v1/execs/{execId}/fail")
     fun failExec(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody fail: FailExecReq
+        @RequestBody fail: HubFailExecReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         val result = request(execId, fail)
         return ResponseEntity(result.let {

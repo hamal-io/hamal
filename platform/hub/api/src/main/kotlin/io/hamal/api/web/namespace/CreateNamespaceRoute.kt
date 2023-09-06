@@ -1,8 +1,8 @@
 package io.hamal.api.web.namespace
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.req.CreateNamespaceReq
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ class CreateNamespaceRoute(
     @PostMapping("/v1/groups/{groupId}/namespaces")
     fun createNamespace(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody createNamespace: CreateNamespaceReq
+        @RequestBody createNamespace: HubCreateNamespaceReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         val result = request(groupId, createNamespace)
         return ResponseEntity(

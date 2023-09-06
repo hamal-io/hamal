@@ -2,7 +2,6 @@ package io.hamal.api.web.adhoc
 
 import io.hamal.api.web.BaseRouteTest
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.req.InvokeAdhocReq
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -10,6 +9,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -21,7 +21,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
         val response = request(
-            InvokeAdhocReq(
+            HubInvokeAdhocReq(
                 inputs = InvocationInputs(),
                 code = CodeType("40 + 2")
             )
@@ -37,7 +37,7 @@ internal class AdhocRouteTest : BaseRouteTest() {
     }
 
 
-    private fun request(req: InvokeAdhocReq) =
+    private fun request(req: HubInvokeAdhocReq) =
         httpTemplate
             .post("/v1/groups/{groupId}/adhoc")
             .path("groupId", testGroup.id)

@@ -2,8 +2,8 @@ package io.hamal.api.web.trigger
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.req.CreateTriggerReq
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.sdk.hub.HubCreateTriggerReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository
@@ -25,7 +25,7 @@ class CreateTriggerRoute(
     @PostMapping("/v1/groups/{groupId}/triggers")
     fun createTrigger(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody createTrigger: CreateTriggerReq
+        @RequestBody createTrigger: HubCreateTriggerReq
     ): ResponseEntity<HubSubmittedReqWithId> {
         ensureFuncExists(createTrigger)
         ensureTopicExists(createTrigger)
@@ -41,18 +41,18 @@ class CreateTriggerRoute(
         }, ACCEPTED)
     }
 
-    private fun ensureFuncExists(createTrigger: CreateTriggerReq) {
+    private fun ensureFuncExists(createTrigger: HubCreateTriggerReq) {
         funcQueryRepository.get(createTrigger.funcId)
     }
 
-    private fun ensureTopicExists(createTrigger: CreateTriggerReq) {
+    private fun ensureTopicExists(createTrigger: HubCreateTriggerReq) {
         if (createTrigger.type == TriggerType.Event) {
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
             eventBrokerRepository.getTopic(createTrigger.topicId!!)
         }
     }
 
-    private fun ensureNamespaceExist(createTriggerReq: CreateTriggerReq) {
+    private fun ensureNamespaceExist(createTriggerReq: HubCreateTriggerReq) {
         createTriggerReq.namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }
