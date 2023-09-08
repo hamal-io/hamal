@@ -26,13 +26,13 @@ object MemoryMetricRepository : MetricRepository {
         lock.read { return LinkedHashMap(eventMap) }
     }
 
-    override fun update(e: HubEvent) {
+    override fun update(e: HubEvent, transform: (HubEvent) -> String) {
         lock.write {
-            val topic = e.topicName.toString()
-            if (!eventMap.containsKey(topic)) {
-                eventMap.put(topic, 0)
+            val friendlyName = transform(e)
+            if (!eventMap.containsKey(friendlyName)) {
+                eventMap.put(friendlyName, 0)
             }
-            eventMap[topic] = eventMap.getOrDefault(topic, 0) + 1
+            eventMap[friendlyName] = eventMap.getOrDefault(friendlyName, 0) + 1
         }
     }
 

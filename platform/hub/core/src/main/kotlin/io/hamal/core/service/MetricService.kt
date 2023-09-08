@@ -18,8 +18,10 @@ class MetricService(
     )
 
     fun handleEvent(event: HubEvent) {
-        if (interestingEvents.contains(event::class)) {
-            repo.update(event)
+        if (interestingEvents.any { it.isInstance(event) }) {
+            repo.update(event) {
+                it::class.toString()
+            }
         }
     }
 

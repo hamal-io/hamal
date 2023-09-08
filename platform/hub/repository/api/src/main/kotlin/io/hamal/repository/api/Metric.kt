@@ -1,14 +1,7 @@
 package io.hamal.repository.api
 
 import io.hamal.repository.api.event.HubEvent
-import io.hamal.repository.api.event.HubEventTopic
 import org.jetbrains.annotations.TestOnly
-
-/*enum class SystemEvent {
-    ExecutionCompletedEvent, ExecInvokedEvent, ExecPlannedEvent, ExecScheduledEvent, ExecutionFailedEvent,
-    ExecutionQueuedEvent, ExecutionStartedEvent, FuncCreatedEvent, FuncUpdatedEvent, NamespaceCreatedEvent,
-    NamespaceUpdatedEvent, StateUpdatedEvent, TriggerCreatedEvent;
-}*/
 
 interface MetricAccess {
     fun getTime(): Long
@@ -17,7 +10,8 @@ interface MetricAccess {
 
 interface MetricRepository {
     fun create()
-    fun update(e: HubEvent)
+    fun update(e: HubEvent, transform: (HubEvent) -> String)
+
     @TestOnly
     fun update(e: String)
     fun getData(): MetricAccess
