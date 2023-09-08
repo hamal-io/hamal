@@ -16,7 +16,10 @@ export interface SubmitAdhocInvocationRequest {
 }
 
 export async function invokeAdhoc(req: SubmitAdhocInvocationRequest): Promise<ApiSubmittedAdhocInvocation> {
-    const response = await fetch("http://localhost:8008/v1/adhoc", {
+    //const response = await fetch("http://localhost:8008/v1/adhoc",
+    //new
+    const response = await fetch("http://localhost:8008/v1/groups/1/adhoc", {
+        //end new
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({

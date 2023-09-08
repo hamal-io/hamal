@@ -20,10 +20,12 @@ open class HubEventConfig {
     @Bean
     open fun hubEventEmitter(
         hubEventBrokerRepository: BrokerRepository,
-        generateDomainId: GenerateDomainId
+        generateDomainId: GenerateDomainId,
+        metricService: MetricService
     ): HubEventEmitter = HubEventEmitter(
         generateDomainId,
-        hubEventBrokerRepository
+        hubEventBrokerRepository,
+        metricService
     )
 
     @Bean
@@ -39,7 +41,7 @@ open class HubEventConfig {
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdRepository, eventEmitter))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
-        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService, metricService))
+        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
         .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))
         .create()
 
