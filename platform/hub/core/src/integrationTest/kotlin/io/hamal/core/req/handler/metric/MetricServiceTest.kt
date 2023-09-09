@@ -23,63 +23,98 @@ import io.hamal.repository.api.submitted_req.SubmittedFailExecReq
 import io.hamal.repository.memory.MemoryMetricRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 
-internal class MetricServiceTest : BaseReqHandlerTest() {
-    val metricRepository: MetricRepository = MemoryMetricRepository
+class MetricServiceTest {
+
+    private val metricRepository: MetricRepository = MemoryMetricRepository
 
     @BeforeEach
     fun clear() {
         metricRepository.clear()
     }
 
-    @Autowired
-    private lateinit var completeExecHandler: CompleteExecHandler
+    @Nested
+    internal inner class TestEmitter(
+        @Autowired val completeExecHandler: CompleteExecHandler,
+        @Autowired val failExecHandler: FailExecHandler
+    ) : BaseReqHandlerTest() {
 
+        private fun emitCompleted() {
+            createExec(ExecId(1234), ExecStatus.Started)
+            completeExecHandler(submittedCompleteExecReq)
+        }
 
-    @Autowired
-    private lateinit var failExecHandler: FailExecHandler
+        private fun emitFailed() {
+            createExec(ExecId(1234), ExecStatus.Started)
+            failExecHandler(submittedFailExecReq)
+        }
 
-
-    @Test
-    fun `count completed`() {
-        createExec(ExecId(1234), ExecStatus.Started)
-        completeExecHandler(submittedCompleteExecReq)
-        Assertions.assertEquals(1, metricRepository.getData().getMap().size)
-        Assertions.assertEquals(
-            1, metricRepository.getData().getMap().getValue(ExecutionCompletedEvent::class.toString())
+        private val submittedCompleteExecReq = SubmittedCompleteExecReq(
+            reqId = ReqId(10),
+            status = ReqStatus.Submitted,
+            id = ExecId(1234),
+            state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
+            events = listOf(
+                EventToSubmit(
+                    topicName = TopicName("test-completion"),
+                    payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
+                )
+            ),
         )
-    }
 
-    @Test
-    fun `count failed`() {
-        createExec(ExecId(1234), ExecStatus.Started)
-        failExecHandler(submittedFailExecReq)
-        Assertions.assertEquals(1, metricRepository.getData().getMap().size)
-        Assertions.assertEquals(1, metricRepository.getData().getMap().getValue(ExecutionFailedEvent::class.toString()))
-    }
+        private val submittedFailExecReq = SubmittedFailExecReq(
+            reqId = ReqId(10),
+            status = ReqStatus.Submitted,
+            id = ExecId(1234),
+            cause = ErrorType("You have not tried hard enough")
+        )
 
-    private val submittedCompleteExecReq = SubmittedCompleteExecReq(
-        reqId = ReqId(10),
-        status = ReqStatus.Submitted,
-        id = ExecId(1234),
-        state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
-        events = listOf(
-            EventToSubmit(
-                topicName = TopicName("test-completion"),
-                payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
+        @Test
+        fun `count completed`() {
+            emitCompleted()
+            Assertions.assertFalse(metricRepository.getData().getMap().isEmpty())
+            Assertions.assertEquals(1, metricRepository.getData().getMap().size)
+            Assertions.assertEquals(
+                1, metricRepository.getData().getMap().getValue(ExecutionCompletedEvent::class.toString())
             )
-        ),
-    )
+        }
 
-    private val submittedFailExecReq = SubmittedFailExecReq(
-        reqId = ReqId(10),
-        status = ReqStatus.Submitted,
-        id = ExecId(1234),
-        cause = ErrorType("You have not tried hard enough")
-    )
+        @Test
+        fun `count failed`() {
+            emitFailed()
+            Assertions.assertEquals(1, metricRepository.getData().getMap().size)
+            Assertions.assertEquals(
+                1,
+                metricRepository.getData().getMap().getValue(ExecutionFailedEvent::class.toString())
+            )
+        }
 
+        /*
+        @Test
+        fun multithreadTest() {
+            val pool = Executors.newFixedThreadPool(4)
 
+              val tasks = List(100) {
+                  Runnable {
+                      TODO()
+                  }
+              }
+
+              tasks.forEach { pool.submit(it) }
+              pool.shutdown()
+              pool.awaitTermination(1, TimeUnit.MINUTES)
+
+              for (i in metricRepository.getData().getMap()) {
+                  // Assertions.assertEquals(100, i.value)
+              }
+          }
+        }*/
+    }
 }
+

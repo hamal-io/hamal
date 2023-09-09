@@ -4,7 +4,6 @@ package io.hamal.repository.memory
 import io.hamal.repository.api.MetricAccess
 import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.event.HubEvent
-import org.jetbrains.annotations.TestOnly
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -36,15 +35,6 @@ object MemoryMetricRepository : MetricRepository {
         }
     }
 
-    @TestOnly
-    override fun update(e: String) {
-        lock.write {
-            if (!eventMap.containsKey(e)) {
-                eventMap.put(e, 0)
-            }
-            eventMap[e] = eventMap.getOrDefault(e, 0) + 1
-        }
-    }
 
     override fun getData(): MetricAccess {
         return object : MetricAccess {

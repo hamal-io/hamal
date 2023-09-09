@@ -11,9 +11,6 @@ interface MetricAccess {
 interface MetricRepository {
     fun create()
     fun update(e: HubEvent, transform: (HubEvent) -> String)
-
-    @TestOnly
-    fun update(e: String)
     fun getData(): MetricAccess
     fun clear()
     fun setTimer(timer: Long)
