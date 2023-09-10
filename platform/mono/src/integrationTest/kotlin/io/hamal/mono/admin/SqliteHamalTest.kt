@@ -1,8 +1,8 @@
 package io.hamal.mono.admin
 
-import io.hamal.api.ApiConfig
-import io.hamal.mono.BaseTest
-import io.hamal.mono.rootHubSdk
+import io.hamal.admin.AdminConfig
+import io.hamal.bridge.BridgeConfig
+import io.hamal.core.CoreConfig
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,7 +19,9 @@ import java.nio.file.Paths
     webEnvironment = DEFINED_PORT,
     properties = ["server.port=8043", "io.hamal.runner.host=http://localhost:8043"],
     classes = [
-        ApiConfig::class,
+        AdminConfig::class,
+        CoreConfig::class,
+        BridgeConfig::class,
         RunnerConfig::class
     ]
 )
@@ -27,7 +29,7 @@ import java.nio.file.Paths
 @DisplayName("admin - sqlite")
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "sqlite"])
-internal class SqliteAdminHamalTest : BaseTest() {
-    final override val rootHubSdk = rootHubSdk(8043)
+internal class SqliteAdminHamalTest : BaseAdminTest() {
+    final override val adminSdk = rootAdminSdk(8043)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 }

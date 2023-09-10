@@ -1,5 +1,6 @@
 package io.hamal.core.config
 
+import io.hamal.core.component.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Bean

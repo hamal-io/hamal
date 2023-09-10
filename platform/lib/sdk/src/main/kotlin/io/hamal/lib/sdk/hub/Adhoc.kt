@@ -5,6 +5,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,6 +26,7 @@ internal class DefaultHubAdhocService(
             .post("/v1/groups/{groupId}/adhoc")
             .path("groupId", groupId)
             .body(req)
-            .execute(HubSubmittedReqWithId::class)
+            .execute()
+            .fold(HubSubmittedReqWithId::class)
     }
 }

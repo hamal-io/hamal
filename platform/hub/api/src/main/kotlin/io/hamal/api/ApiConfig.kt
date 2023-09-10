@@ -1,6 +1,5 @@
 package io.hamal.api
 
-import io.hamal.core.CoreConfig
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -10,13 +9,11 @@ import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
 @ComponentScan
 @EnableScheduling
-@Import(CoreConfig::class)
 @EnableAutoConfiguration(
     exclude = [
         DataSourceAutoConfiguration::class,
