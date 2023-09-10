@@ -4,10 +4,10 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.DefaultBridgeSdk
 
 class HttpConnector(
-    private val sdk: HubSdk
+    private val sdk: DefaultBridgeSdk
 ) : Connector {
 
     override fun poll(): List<UnitOfWork> {

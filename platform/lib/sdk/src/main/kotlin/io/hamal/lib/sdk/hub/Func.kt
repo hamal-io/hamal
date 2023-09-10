@@ -15,7 +15,6 @@ data class HubCreateFuncReq(
     val code: CodeType
 )
 
-
 @Serializable
 data class HubUpdateFuncReq(
     val namespaceId: NamespaceId? = null,
@@ -29,7 +28,6 @@ data class HubInvokeFuncReq(
     val correlationId: CorrelationId? = null,
     val inputs: InvocationInputs? = null,
 )
-
 
 @Serializable
 data class HubFuncList(

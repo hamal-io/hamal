@@ -1,8 +1,8 @@
 package io.hamal.mono.api
 
 import io.hamal.api.ApiConfig
-import io.hamal.mono.BaseTest
-import io.hamal.mono.rootHubSdk
+import io.hamal.bridge.BridgeConfig
+import io.hamal.core.CoreConfig
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,6 +19,8 @@ import java.nio.file.Paths
     properties = ["server.port=8042", "io.hamal.runner.host=http://localhost:8042"],
     classes = [
         ApiConfig::class,
+        CoreConfig::class,
+        BridgeConfig::class,
         RunnerConfig::class
     ]
 )
@@ -26,7 +28,7 @@ import java.nio.file.Paths
 @DisplayName("api - memory")
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "memory"])
-internal class MemoryApiHamalTest : BaseTest() {
+internal class MemoryApiHamalTest : BaseApiTest() {
     final override val rootHubSdk = rootHubSdk(8042)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

@@ -35,6 +35,7 @@ dependencies {
 
     implementation(project(":platform:hub:api"))
     implementation(project(":platform:hub:admin"))
+    implementation(project(":platform:hub:bridge"))
     implementation(project(":platform:hub:core"))
     implementation(project(":platform:runner"))
 }
@@ -61,8 +62,10 @@ testing {
 
                     implementation(project(":platform:hub:admin"))
                     implementation(project(":platform:hub:api"))
+                    implementation(project(":platform:hub:bridge"))
+                    implementation(project(":platform:hub:core"))
                     implementation(project(":platform:runner"))
-                    
+
                     implementation(project(":platform:hub:repository:api"))
                     implementation(project(":platform:runner-extension:std:sys"))
                     implementation(project(":platform:runner-extension:std:log"))

@@ -34,6 +34,7 @@ dependencies {
 
     implementation(project(":platform:hub:admin"))
     implementation(project(":platform:hub:api"))
+    implementation(project(":platform:hub:bridge"))
     implementation(project(":platform:hub:core"))
 }
 
@@ -52,9 +53,10 @@ testing {
                     }
 
                     implementation(project(":platform:lib:kua"))
-                    implementation(project(":platform:hub:api"))
-                    implementation(project(":platform:hub:repository:api"))
                     implementation(project(":platform:hub:admin"))
+                    implementation(project(":platform:hub:api"))
+                    implementation(project(":platform:hub:bridge"))
+                    implementation(project(":platform:hub:repository:api"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

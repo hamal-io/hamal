@@ -1,5 +1,6 @@
 package io.hamal.api
 
+import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
@@ -27,6 +28,7 @@ import java.time.temporal.ChronoUnit.DAYS
 @ContextConfiguration(
     classes = [
         ApiConfig::class,
+        CoreConfig::class
     ]
 )
 @SpringBootTest(

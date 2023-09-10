@@ -1,6 +1,5 @@
 package io.hamal.api.filter
 
-import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -11,8 +10,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 @Order(BASIC_AUTH_ORDER)
-class AuthFilter(
-    private val authRepository: AuthRepository
+class AuthApiFilter(
+//    private val authRepository: AuthRepository
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(

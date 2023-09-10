@@ -13,10 +13,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
-
 @Component
 @Order(HIGHEST_PRECEDENCE)
-class ErrorFilter(
+class ErrorApiFilter(
     private val json: Json
 ) : OncePerRequestFilter() {
 

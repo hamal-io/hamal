@@ -1,7 +1,7 @@
 package io.hamal.runner.service
 
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.DefaultHubSdk
+import io.hamal.lib.sdk.DefaultBridgeSdk
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.connector.UnitOfWork
@@ -21,7 +21,7 @@ class HttpExecutorService(
 ) : ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        val sdk = DefaultHubSdk(httpTemplate)
+        val sdk = DefaultBridgeSdk(httpTemplate)
         val connector = HttpConnector(sdk)
 
         runnerExecutor.scheduleAtFixedRate({
