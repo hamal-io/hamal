@@ -17,8 +17,32 @@ import org.springframework.web.bind.annotation.RestController
 internal class ListTopicRoute(
     private val eventBrokerRepository: BrokerRepository
 ) {
-    @GetMapping("/v1/groups/{groupId}/topics")
+
+    @GetMapping("/v1/topics")
     fun listTopics(
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
+        @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+    ): ResponseEntity<AdminTopicList> {
+        val topics = eventBrokerRepository.listTopics {
+            this.afterId = afterId
+            this.names = topicNames
+            this.limit = limit
+        }
+        return ResponseEntity.ok(
+            AdminTopicList(
+                topics = topics.map { topic ->
+                    Topic(
+                        id = topic.id,
+                        name = topic.name
+                    )
+                }
+            )
+        )
+    }
+
+    @GetMapping("/v1/groups/{groupId}/topics")
+    fun listGroupTopics(
         @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
         @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,

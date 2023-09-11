@@ -1,5 +1,6 @@
 package io.hamal.api
 
+import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -28,6 +29,7 @@ import java.time.temporal.ChronoUnit.DAYS
 @ContextConfiguration(
     classes = [
         ApiConfig::class,
+        BridgeConfig::class,
         CoreConfig::class
     ]
 )

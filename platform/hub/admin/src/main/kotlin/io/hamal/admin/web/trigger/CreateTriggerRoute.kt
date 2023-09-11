@@ -22,8 +22,29 @@ internal class CreateTriggerRoute(
     private val request: SubmitAdminRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
-    @PostMapping("/v1/groups/{groupId}/triggers")
+
+    @PostMapping("/v1/triggers")
     fun createTrigger(
+        @RequestBody createTrigger: AdminCreateTriggerReq
+    ): ResponseEntity<AdminSubmittedReqWithId> {
+        
+        ensureFuncExists(createTrigger)
+        ensureTopicExists(createTrigger)
+        ensureNamespaceExist(createTrigger)
+
+        val result = request(createTrigger)
+        return ResponseEntity(result.let {
+            AdminSubmittedReqWithId(
+                reqId = it.reqId,
+                status = it.status,
+                id = it.id
+            )
+        }, ACCEPTED)
+    }
+
+
+    @PostMapping("/v1/groups/{groupId}/triggers")
+    fun createGroupTrigger(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody createTrigger: AdminCreateTriggerReq
     ): ResponseEntity<AdminSubmittedReqWithId> {

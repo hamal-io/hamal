@@ -20,7 +20,7 @@ export interface ApiListTopics {
 }
 
 export async function listTopics(query: ListTopicsQuery): Promise<ApiListTopics> {
-    const response = await fetch("http://localhost:8008/v1/topics", {
+    const response = await fetch("http://localhost:9009/v1/topics", {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -32,7 +32,7 @@ export async function listTopics(query: ListTopicsQuery): Promise<ApiListTopics>
 }
 
 export async function getTopic(topicId: string): Promise<ApiTopic> {
-    const response = await fetch(`http://localhost:8008/v1/topics/${topicId}`, {
+    const response = await fetch(`http://localhost:9009/v1/topics/${topicId}`, {
         headers: defaultHeaders,
         method: "GET",
     })

@@ -18,8 +18,35 @@ internal class ListFuncRoute(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
-    @GetMapping("/v1/groups/{groupId}/funcs")
+
+    @GetMapping("/v1/funcs")
     fun listFunc(
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+    ): ResponseEntity<AdminFuncList> {
+        val result = funcQueryRepository.list {
+            this.afterId = afterId
+            this.limit = limit
+        }
+
+        val namespaces = namespaceQueryRepository.list(result.map { it.namespaceId }).associateBy { it.id }
+        return ResponseEntity.ok(AdminFuncList(
+            result.map { func ->
+                val namespace = namespaces[func.namespaceId]!!
+                AdminFuncList.Func(
+                    id = func.id,
+                    namespace = Namespace(
+                        id = namespace.id,
+                        name = namespace.name
+                    ),
+                    name = func.name
+                )
+            }
+        ))
+    }
+
+    @GetMapping("/v1/groups/{groupId}/funcs")
+    fun listGroupFunc(
         @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit

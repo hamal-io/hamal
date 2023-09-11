@@ -15,8 +15,23 @@ import org.springframework.web.bind.annotation.RestController
 internal class AdhocRoute(
     private val submitRequest: SubmitAdminRequest
 ) {
-    @PostMapping("/v1/groups/{groupId}/adhoc")
+
+    @PostMapping("/v1/adhoc")
     fun adhoc(
+        @RequestBody adhocInvocation: AdminInvokeAdhocReq
+    ): ResponseEntity<AdminSubmittedReqWithId> {
+        val result = submitRequest(GroupId.root, adhocInvocation)
+        return ResponseEntity(result.let {
+            AdminSubmittedReqWithId(
+                reqId = it.reqId,
+                status = it.status,
+                id = it.id
+            )
+        }, ACCEPTED)
+    }
+
+    @PostMapping("/v1/groups/{groupId}/adhoc")
+    fun adhocGroup(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody adhocInvocation: AdminInvokeAdhocReq
     ): ResponseEntity<AdminSubmittedReqWithId> {
