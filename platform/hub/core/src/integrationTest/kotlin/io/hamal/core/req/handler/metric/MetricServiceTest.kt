@@ -120,15 +120,6 @@ class MetricServiceTest {
             )
         }
 
-
-        @Test
-        fun loopt() {
-            TODO()
-            myEmitter.execute(ExecutionCompletedEvent::class)
-            myEmitter.execute(ExecutionFailedEvent::class)
-            val s = metricRepository.getData().getMap()
-        }
-
         @Disabled
         fun multithreadTest() {
             val pool = Executors.newFixedThreadPool(4)
