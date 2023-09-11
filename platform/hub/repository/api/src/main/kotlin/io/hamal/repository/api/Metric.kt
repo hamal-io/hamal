@@ -1,7 +1,7 @@
 package io.hamal.repository.api
 
 import io.hamal.repository.api.event.HubEvent
-import org.jetbrains.annotations.TestOnly
+
 
 interface MetricAccess {
     fun getTime(): Long

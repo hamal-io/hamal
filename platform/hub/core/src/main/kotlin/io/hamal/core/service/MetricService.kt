@@ -20,7 +20,7 @@ class MetricService(
     fun handleEvent(event: HubEvent) {
         if (interestingEvents.any { it.isInstance(event) }) {
             repo.update(event) {
-                it::class.toString()
+                it.topicName.value
             }
         }
     }
