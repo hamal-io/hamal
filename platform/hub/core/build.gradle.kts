@@ -10,6 +10,7 @@ archivesName.set("hub-backend")
 dependencies {
     api(project(":platform:lib:sdk"))
     api(project(":platform:lib:kua"))
+    api(project(":platform:hub:request"))
 
     api(project(":platform:hub:repository:api"))
     api(project(":platform:hub:repository:memory"))

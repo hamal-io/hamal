@@ -1,6 +1,6 @@
 package io.hamal.core
 
-import io.hamal.core.req.SubmitCoreRequest
+import io.hamal.core.req.SubmitRequest
 import io.hamal.core.req.req.CreateRootAccountReq
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountName
@@ -35,7 +35,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 )
 open class CoreConfig {
     @Autowired
-    private lateinit var submitRequest: SubmitCoreRequest
+    private lateinit var submitRequest: SubmitRequest
 
     @Bean
     @Profile("!test")

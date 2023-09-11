@@ -15,6 +15,7 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.SubmittedCreateAccountWithPasswordReq
 import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
+import io.hamal.request.adhoc.InvokeAdhocReq
 import org.springframework.stereotype.Component
 
 data class InvokeExecReq(
@@ -27,7 +28,7 @@ data class InvokeExecReq(
 )
 
 @Component
-internal class SubmitCoreRequest(
+class SubmitRequest(
     private val generateDomainId: GenerateDomainId,
     private val reqCmdRepository: ReqCmdRepository,
     private val funcQueryRepository: FuncQueryRepository,
@@ -71,5 +72,18 @@ internal class SubmitCoreRequest(
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
+
+    operator fun invoke(groupId: GroupId, req: InvokeAdhocReq) =
+        SubmittedInvokeExecReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            id = generateDomainId(::ExecId),
+            groupId = groupId,
+            inputs = req.inputs,
+            code = req.code,
+            funcId = null,
+            correlationId = null,
+            events = listOf()
+        ).also(reqCmdRepository::queue)
 }
 

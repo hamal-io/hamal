@@ -6,13 +6,14 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
+import io.hamal.request.adhoc.InvokeAdhocReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AdminInvokeAdhocReq(
-    val inputs: InvocationInputs,
-    val code: CodeType
-)
+    override val inputs: InvocationInputs,
+    override val code: CodeType
+) : InvokeAdhocReq
 
 interface AdminAdhocService {
     operator fun invoke(groupId: GroupId, req: AdminInvokeAdhocReq): AdminSubmittedReqWithId
