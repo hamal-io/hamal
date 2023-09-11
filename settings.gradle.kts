@@ -43,6 +43,7 @@ include(":platform:hub:repository:memory")
 include(":platform:hub:repository:record")
 include(":platform:hub:repository:sqlite")
 include(":platform:hub:repository:testbed")
+include(":platform:hub:request")
 include(":platform:mono")
 
 include(":platform:runner")
