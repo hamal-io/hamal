@@ -15,8 +15,25 @@ import org.springframework.web.bind.annotation.RestController
 internal class CreateNamespaceRoute(
     private val request: SubmitAdminRequest,
 ) {
-    @PostMapping("/v1/groups/{groupId}/namespaces")
+
+    @PostMapping("/v1/namespaces")
     fun createNamespace(
+        @RequestBody createNamespace: AdminCreateNamespaceReq
+    ): ResponseEntity<AdminSubmittedReqWithId> {
+        val result = request(GroupId.root, createNamespace)
+        return ResponseEntity(
+            result.let {
+                AdminSubmittedReqWithId(
+                    reqId = it.reqId,
+                    status = it.status,
+                    id = it.id
+                )
+            }, ACCEPTED
+        )
+    }
+
+    @PostMapping("/v1/groups/{groupId}/namespaces")
+    fun createGroupNamespace(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody createNamespace: AdminCreateNamespaceReq
     ): ResponseEntity<AdminSubmittedReqWithId> {

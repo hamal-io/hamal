@@ -17,8 +17,27 @@ internal class CreateFuncRoute(
     private val request: SubmitAdminRequest,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {
-    @PostMapping("/v1/groups/{groupId}/funcs")
+
+    @PostMapping("/v1/funcs")
     fun createFunc(
+        @RequestBody createFunc: AdminCreateFuncReq
+    ): ResponseEntity<AdminSubmittedReqWithId> {
+        ensureNamespaceIdExists(createFunc)
+
+        val result = request(GroupId.root, createFunc)
+        return ResponseEntity(
+            result.let {
+                AdminSubmittedReqWithId(
+                    reqId = it.reqId,
+                    status = it.status,
+                    id = it.id
+                )
+            }, ACCEPTED
+        )
+    }
+
+    @PostMapping("/v1/groups/{groupId}/funcs")
+    fun createGroupFunc(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody createFunc: AdminCreateFuncReq
     ): ResponseEntity<AdminSubmittedReqWithId> {

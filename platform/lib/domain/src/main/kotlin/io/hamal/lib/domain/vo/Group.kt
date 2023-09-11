@@ -12,6 +12,10 @@ class GroupId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
     internal object Serializer : DomainIdSerializer<GroupId>(::GroupId)
+
+    companion object {
+        val root = GroupId(1)
+    }
 }
 
 @Serializable(with = GroupName.Serializer::class)

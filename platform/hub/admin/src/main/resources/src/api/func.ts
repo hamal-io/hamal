@@ -13,7 +13,7 @@ export interface ListFunctionsQuery {
 }
 
 export async function listFunctions(query: ListFunctionsQuery): Promise<ApiListFunctions> {
-    const response = await fetch("http://localhost:8008/v1/funcs", {
+    const response = await fetch("http://localhost:9009/v1/funcs", {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -29,7 +29,7 @@ export interface SubmitCreateFunctionRequest {
 }
 
 export async function createFunction(req: SubmitCreateFunctionRequest): Promise<ApiSubmittedFunctionCreation> {
-    const response = await fetch("http://localhost:8008/v1/funcs", {
+    const response = await fetch("http://localhost:9009/v1/funcs", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({
@@ -53,7 +53,7 @@ export interface SubmitUpdateFunctionRequest {
 }
 
 export async function updateFunction(funcId: string, req: SubmitUpdateFunctionRequest): Promise<ApiSubmittedFunctionUpdating> {
-    const response = await fetch(`http://localhost:8008/v1/funcs/${funcId}`, {
+    const response = await fetch(`http://localhost:9009/v1/funcs/${funcId}`, {
         headers: defaultHeaders,
         method: "PUT",
         body: JSON.stringify({
@@ -72,7 +72,7 @@ export async function updateFunction(funcId: string, req: SubmitUpdateFunctionRe
 
 
 export async function getFunction(id: string): Promise<ApiFunction> {
-    const response = await fetch(`http://localhost:8008/v1/funcs/${id}`, {
+    const response = await fetch(`http://localhost:9009/v1/funcs/${id}`, {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -89,7 +89,7 @@ export interface ListExecutionLogsQuery {
 }
 
 export async function listExecutionLogs(query: ListExecutionLogsQuery): Promise<ApiListExecutionLogs> {
-    const response = await fetch("http://localhost:8008/v1/exec-logs", {
+    const response = await fetch("http://localhost:9009/v1/exec-logs", {
         headers: defaultHeaders,
         method: "GET",
     })

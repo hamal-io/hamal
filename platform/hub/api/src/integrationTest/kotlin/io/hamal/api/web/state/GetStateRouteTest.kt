@@ -2,7 +2,11 @@ package io.hamal.api.web.state
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -23,7 +27,7 @@ internal class GetStateRouteTest : BaseStateRouteTest() {
 
         val execId = createExec(
             execId = ExecId(123),
-            status = ExecStatus.Started,
+            status = Started,
             correlation = Correlation(
                 funcId = funcId,
                 correlationId = CorrelationId("__1__")

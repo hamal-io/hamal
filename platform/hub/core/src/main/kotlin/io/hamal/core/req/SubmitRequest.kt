@@ -41,9 +41,9 @@ internal class SubmitCoreRequest(
         return SubmittedCreateAccountWithPasswordReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
-            id = generateDomainId(::AccountId),
+            id = AccountId.root,
             type = Root,
-            groupId = generateDomainId(::GroupId),
+            groupId = GroupId.root,
             namespaceId = generateDomainId(::NamespaceId),
             name = req.name,
             email = req.email,

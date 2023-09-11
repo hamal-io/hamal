@@ -15,8 +15,24 @@ import org.springframework.web.bind.annotation.RestController
 internal class CreateTopicRoute(
     private val submitRequest: SubmitAdminRequest
 ) {
-    @PostMapping("/v1/groups/{groupId}/topics")
+
+    @PostMapping("/v1/topics")
     fun createTopic(
+        @RequestBody createTopic: AdminCreateTopicReq
+    ): ResponseEntity<AdminSubmittedReqWithId> {
+        val result = submitRequest(createTopic)
+        return ResponseEntity(result.let {
+            AdminSubmittedReqWithId(
+                reqId = it.reqId,
+                status = it.status,
+                id = it.id
+            )
+        }, HttpStatus.ACCEPTED)
+    }
+
+
+    @PostMapping("/v1/groups/{groupId}/topics")
+    fun createGroupTopic(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody createTopic: AdminCreateTopicReq
     ): ResponseEntity<AdminSubmittedReqWithId> {

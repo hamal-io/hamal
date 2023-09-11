@@ -15,8 +15,28 @@ import org.springframework.web.bind.annotation.RestController
 internal class ListNamespaceRoute(
     private val namespaceQueryRepository: NamespaceQueryRepository,
 ) {
-    @GetMapping("/v1/groups/{groupId}/namespaces")
+
+    @GetMapping("/v1/namespaces")
     fun listNamespace(
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: NamespaceId,
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+    ): ResponseEntity<AdminNamespaceList> {
+        val result = namespaceQueryRepository.list {
+            this.afterId = afterId
+            this.limit = limit
+        }
+        return ResponseEntity.ok(AdminNamespaceList(
+            result.map {
+                AdminNamespaceList.Namespace(
+                    id = it.id,
+                    name = it.name
+                )
+            }
+        ))
+    }
+
+    @GetMapping("/v1/groups/{groupId}/namespaces")
+    fun listGroupNamespace(
         @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: NamespaceId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
