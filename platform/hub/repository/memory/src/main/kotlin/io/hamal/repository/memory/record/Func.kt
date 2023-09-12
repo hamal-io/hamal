@@ -89,8 +89,7 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRe
 
     override fun find(funcId: FuncId): Func? = CurrentFuncProjection.find(funcId)
 
-    override fun list(block: FuncQuery.() -> Unit): List<Func> {
-        val query = FuncQuery().also(block)
+    override fun list(query: FuncQuery): List<Func> {
         return CurrentFuncProjection.list(query.afterId, query.limit)
     }
 

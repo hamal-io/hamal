@@ -10,6 +10,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -47,7 +48,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
 
 
     private fun verifySingleFuncExists() {
-        funcQueryRepository.list { }.also { funcs ->
+        funcQueryRepository.list(FuncQuery()).also { funcs ->
             assertThat(funcs, hasSize(1))
             with(funcs.first()) {
                 assertThat(id, equalTo(FuncId(12345)))
