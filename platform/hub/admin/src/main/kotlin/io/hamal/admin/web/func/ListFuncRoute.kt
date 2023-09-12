@@ -1,12 +1,16 @@
 package io.hamal.admin.web.func
 
+import io.hamal.core.component.func.ListFunc
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.admin.AdminFuncList
-import io.hamal.lib.sdk.admin.AdminFuncList.Func.Namespace
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.lib.sdk.admin.AdminFuncList.*
+import io.hamal.lib.sdk.admin.AdminFuncList.Func.*
+import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.repository.api.Namespace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,8 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class ListFuncRoute(
-    private val funcQueryRepository: FuncQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository
+    private val listFunc: ListFunc
 ) {
 
     @GetMapping("/v1/funcs")
@@ -24,25 +27,13 @@ internal class ListFuncRoute(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<AdminFuncList> {
-        val result = funcQueryRepository.list {
-            this.afterId = afterId
-            this.limit = limit
-        }
-
-        val namespaces = namespaceQueryRepository.list(result.map { it.namespaceId }).associateBy { it.id }
-        return ResponseEntity.ok(AdminFuncList(
-            result.map { func ->
-                val namespace = namespaces[func.namespaceId]!!
-                AdminFuncList.Func(
-                    id = func.id,
-                    namespace = Namespace(
-                        id = namespace.id,
-                        name = namespace.name
-                    ),
-                    name = func.name
-                )
-            }
-        ))
+        return listFunc(
+            FuncQuery(
+                afterId = afterId,
+                limit = limit
+            ),
+            ::assemble
+        )
     }
 
     @GetMapping("/v1/groups/{groupId}/funcs")
@@ -51,17 +42,21 @@ internal class ListFuncRoute(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<AdminFuncList> {
-        val result = funcQueryRepository.list {
-            this.afterId = afterId
-            this.limit = limit
-        }
+        return listFunc(
+            FuncQuery(
+                afterId = afterId,
+                limit = limit
+                // groupId = ...
+            ),
+            ::assemble
+        )
+    }
 
-        val namespaces = namespaceQueryRepository.list(result.map { it.namespaceId }).associateBy { it.id }
-
-        return ResponseEntity.ok(AdminFuncList(
-            result.map { func ->
+    private fun assemble(funcs: List<Func>, namespaces: Map<NamespaceId, Namespace>) =
+        ResponseEntity.ok(AdminFuncList(
+            funcs.map { func ->
                 val namespace = namespaces[func.namespaceId]!!
-                AdminFuncList.Func(
+                Func(
                     id = func.id,
                     namespace = Namespace(
                         id = namespace.id,
@@ -71,5 +66,4 @@ internal class ListFuncRoute(
                 )
             }
         ))
-    }
 }

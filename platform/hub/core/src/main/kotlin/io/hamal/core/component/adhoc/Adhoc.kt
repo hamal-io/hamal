@@ -1,4 +1,4 @@
-package io.hamal.core.route.adhoc
+package io.hamal.core.component.adhoc
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.GroupId
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class AdhocRoute(
+class Adhoc(
     private val submitRequest: SubmitRequest
 ) {
-    fun <T : Any> adhoc(
+    operator fun <T : Any> invoke(
         groupId: GroupId,
         adhocInvocation: InvokeAdhocReq,
         responseHandler: (SubmittedReq) -> T

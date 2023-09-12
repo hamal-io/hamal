@@ -108,8 +108,7 @@ class SqliteFuncRepository(
         return ProjectionCurrent.find(connection, funcId)
     }
 
-    override fun list(block: FuncQuery.() -> Unit): List<Func> {
-        val query = FuncQuery().also(block)
+    override fun list(query: FuncQuery): List<Func> {
         return ProjectionCurrent.list(connection, query.afterId, query.limit)
     }
 }
