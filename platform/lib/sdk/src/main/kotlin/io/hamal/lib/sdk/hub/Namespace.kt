@@ -7,19 +7,21 @@ import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
+import io.hamal.request.CreateNamespaceReq
+import io.hamal.request.UpdateNamespaceReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class HubCreateNamespaceReq(
-    val name: NamespaceName,
-    val inputs: NamespaceInputs
-)
+    override val name: NamespaceName,
+    override val inputs: NamespaceInputs
+) : CreateNamespaceReq
 
 @Serializable
 data class HubUpdateNamespaceReq(
-    val name: NamespaceName,
-    val inputs: NamespaceInputs,
-)
+    override val name: NamespaceName,
+    override val inputs: NamespaceInputs,
+) : UpdateNamespaceReq
 
 @Serializable
 data class HubNamespaceList(

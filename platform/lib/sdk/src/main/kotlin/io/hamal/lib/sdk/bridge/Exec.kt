@@ -12,18 +12,20 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.fold
+import io.hamal.request.CompleteExecReq
+import io.hamal.request.FailExecReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class BridgeFailExecReq(
-    val cause: ErrorType
-)
+    override val cause: ErrorType
+) : FailExecReq
 
 @Serializable
 data class BridgeCompleteExecReq(
-    val state: State,
-    val events: List<EventToSubmit>
-)
+    override val state: State,
+    override val events: List<EventToSubmit>
+) : CompleteExecReq
 
 @Serializable
 data class BridgeUnitOfWorkList(

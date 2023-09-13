@@ -5,18 +5,20 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
+import io.hamal.request.AppendEntryReq
+import io.hamal.request.CreateTopicReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AdminCreateTopicReq(
-    val name: TopicName
-)
+    override val name: TopicName
+) : CreateTopicReq
 
 @Serializable
 data class AdminAppendEntryReq(
-    val topicId: TopicId,
-    val payload: TopicEntryPayload
-)
+    override val topicId: TopicId,
+    override val payload: TopicEntryPayload
+) : AppendEntryReq
 
 @Serializable
 data class AdminTopicEntryList(

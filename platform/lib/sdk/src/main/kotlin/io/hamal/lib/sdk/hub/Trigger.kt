@@ -5,20 +5,21 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
+import io.hamal.request.CreateTriggerReq
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
 data class HubCreateTriggerReq(
-    val type: TriggerType,
-    val name: TriggerName,
-    val funcId: FuncId,
-    val namespaceId: NamespaceId? = null,
-    val inputs: TriggerInputs,
-    val correlationId: CorrelationId? = null,
-    val duration: Duration? = null,
-    val topicId: TopicId? = null,
-)
+    override val type: TriggerType,
+    override val name: TriggerName,
+    override val funcId: FuncId,
+    override val namespaceId: NamespaceId? = null,
+    override val inputs: TriggerInputs,
+    override val correlationId: CorrelationId? = null,
+    override val duration: Duration? = null,
+    override val topicId: TopicId? = null,
+) : CreateTriggerReq
 
 @Serializable
 data class HubTriggerList(

@@ -6,7 +6,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
-import io.hamal.request.adhoc.InvokeAdhocReq
+import io.hamal.request.InvokeAdhocReq
 import kotlinx.serialization.Serializable
 
 @Serializable

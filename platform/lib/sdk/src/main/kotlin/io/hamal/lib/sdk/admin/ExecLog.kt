@@ -4,14 +4,15 @@ import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
+import io.hamal.request.AppendExecLogReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AppendExecLogCmd(
-    val level: ExecLogLevel,
-    val message: ExecLogMessage,
-    val localAt: LocalAt
-)
+data class AdminAppendExecLogCmd(
+    override val level: ExecLogLevel,
+    override val message: ExecLogMessage,
+    override val localAt: LocalAt
+) : AppendExecLogReq
 
 
 @Serializable
@@ -32,13 +33,13 @@ data class AdminExecLog(
 
 
 interface AdminExecLogService {
-    fun append(execId: ExecId, cmd: AppendExecLogCmd)
+    fun append(execId: ExecId, cmd: AdminAppendExecLogCmd)
 }
 
 internal class DefaultAdminExecLogService(
     private val template: HttpTemplate
 ) : AdminExecLogService {
-    override fun append(execId: ExecId, cmd: AppendExecLogCmd) {
+    override fun append(execId: ExecId, cmd: AdminAppendExecLogCmd) {
         template
             .post("/v1/execs/{execId}/logs")
             .path("execId", execId)

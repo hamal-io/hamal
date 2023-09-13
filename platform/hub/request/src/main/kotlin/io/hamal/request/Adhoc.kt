@@ -1,4 +1,4 @@
-package io.hamal.request.adhoc
+package io.hamal.request
 
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.kua.type.CodeType
