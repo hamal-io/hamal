@@ -6,6 +6,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain._enum.ReqStatus.Failed
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.submitted_req.SubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -91,12 +92,12 @@ internal abstract class BaseRouteTest : BaseTest() {
 
 
     fun verifyNoRequests() {
-        val requests = reqQueryRepository.list { }
+        val requests = reqQueryRepository.list(ReqQuery())
         assertThat(requests, empty())
     }
 
     fun <SUBMITTED_REQ : SubmittedReq> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
-        val requests = reqQueryRepository.list { }.filterIsInstance(clazz.java)
+        val requests = reqQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
         assertThat(requests, empty())
     }
 

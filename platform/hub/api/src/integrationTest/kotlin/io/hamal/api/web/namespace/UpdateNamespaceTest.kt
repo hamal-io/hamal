@@ -60,8 +60,9 @@ internal class UpdateNamespaceTest : BaseNamespaceRouteTest() {
             .execute()
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
-
-        val namespaceId = updateNamespaceResponse.result(HubSubmittedReqWithId::class).id(::NamespaceId)
+        
+        val req = updateNamespaceResponse.result(HubSubmittedReqWithId::class)
+        val namespaceId = awaitCompleted(req).id(::NamespaceId)
 
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))

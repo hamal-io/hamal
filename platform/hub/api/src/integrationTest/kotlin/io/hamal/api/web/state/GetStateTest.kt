@@ -19,7 +19,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class GetStateRouteTest : BaseStateRouteTest() {
+internal class GetStateTest : BaseStateRouteTest() {
 
     @Test
     fun `Get state`() {

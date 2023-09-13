@@ -10,7 +10,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListReqRouteTest : BaseReqRouteTest() {
+internal class ListReqTest : BaseReqRouteTest() {
     @Test
     fun `No reqs`() {
         with(list()) {

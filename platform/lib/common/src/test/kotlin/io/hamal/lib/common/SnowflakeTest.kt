@@ -348,11 +348,11 @@ class SnowflakeTest {
         @Test
         fun `Multiple generators with different Partitions create ids`() {
             val instanceOne =
-                SnowflakeGenerator(DefaultPartitionSource(1))
+                SnowflakeGenerator(DefaultPartitionSource(125))
             val instanceTwo =
-                SnowflakeGenerator(DefaultPartitionSource(2))
+                SnowflakeGenerator(DefaultPartitionSource(126))
             val instanceThree =
-                SnowflakeGenerator(DefaultPartitionSource(3))
+                SnowflakeGenerator(DefaultPartitionSource(127))
 
             val resultOne = supplyAsync { IntRange(1, 500_000).map { instanceOne.next() }.toSet() }
             val resultTwo = supplyAsync { IntRange(1, 500_000).map { instanceTwo.next() }.toSet() }
