@@ -38,7 +38,7 @@ interface GroupCmdRepository {
 interface GroupQueryRepository {
     fun get(groupId: GroupId) = find(groupId) ?: throw NoSuchElementException("Group not found")
     fun find(groupId: GroupId): Group?
-    fun list(block: GroupQuery.() -> Unit): List<Group>
+    fun list(query: GroupQuery): List<Group>
     fun list(groupIds: List<GroupId>): List<Group> = groupIds.map(::get)
     data class GroupQuery(
         var afterId: GroupId = GroupId(SnowflakeId(Long.MAX_VALUE)),

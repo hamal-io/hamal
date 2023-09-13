@@ -18,7 +18,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class UpdateNamespaceRouteTest : BaseNamespaceRouteTest() {
+internal class UpdateNamespaceTest : BaseNamespaceRouteTest() {
 
     @Test
     fun `Tries to update namespace which does not exists`() {

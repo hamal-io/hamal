@@ -10,7 +10,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class CreateNamespaceRouteTest : BaseNamespaceRouteTest() {
+internal class CreateNamespaceTest : BaseNamespaceRouteTest() {
     @Test
     fun `Create namespace`() {
         val result = createNamespace(
@@ -24,7 +24,7 @@ internal class CreateNamespaceRouteTest : BaseNamespaceRouteTest() {
     }
 }
 
-private fun CreateNamespaceRouteTest.verifyNamespaceCreated(namespaceId: NamespaceId) {
+private fun CreateNamespaceTest.verifyNamespaceCreated(namespaceId: NamespaceId) {
     with(namespaceQueryRepository.get(namespaceId)) {
         assertThat(id, equalTo(namespaceId))
         assertThat(name, equalTo(NamespaceName("test-namespace")))

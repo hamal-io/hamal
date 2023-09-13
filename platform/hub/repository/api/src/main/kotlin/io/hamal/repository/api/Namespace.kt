@@ -41,7 +41,7 @@ interface NamespaceQueryRepository {
     fun find(namespaceId: NamespaceId): Namespace?
     fun find(namespaceName: NamespaceName): Namespace?
 
-    fun list(block: NamespaceQuery.() -> Unit): List<Namespace>
+    fun list(query: NamespaceQuery): List<Namespace>
     fun list(namespaceIds: List<NamespaceId>): List<Namespace> {
         //FIXME single query
         return namespaceIds.mapNotNull(::find)

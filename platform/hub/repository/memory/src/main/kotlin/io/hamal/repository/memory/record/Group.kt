@@ -59,8 +59,7 @@ object MemoryGroupRepository : BaseRecordRepository<GroupId, GroupRecord>(), Gro
 
     override fun find(groupId: GroupId): Group? = CurrentGroupProjection.find(groupId)
 
-    override fun list(block: GroupQuery.() -> Unit): List<Group> {
-        val query = GroupQuery().also(block)
+    override fun list(query: GroupQuery): List<Group> {
         return CurrentGroupProjection.list(query.afterId, query.limit)
     }
 

@@ -88,8 +88,7 @@ object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRe
 
     override fun find(namespaceName: NamespaceName): Namespace? = CurrentNamespaceProjection.find(namespaceName)
 
-    override fun list(block: NamespaceQuery.() -> Unit): List<Namespace> {
-        val query = NamespaceQuery().also(block)
+    override fun list(query: NamespaceQuery): List<Namespace> {
         return CurrentNamespaceProjection.list(query.afterId, query.limit)
     }
 
