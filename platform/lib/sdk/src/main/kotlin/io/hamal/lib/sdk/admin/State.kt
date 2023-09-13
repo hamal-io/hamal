@@ -8,13 +8,14 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
+import io.hamal.request.SetStateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AdminSetStateReq(
-    val correlation: Correlation,
-    val value: State
-)
+    override val correlation: Correlation,
+    override val value: State
+) : SetStateReq
 
 @Serializable(with = AdminState.Serializer::class)
 class AdminState(override val value: MapType = MapType()) : Inputs() {

@@ -3,7 +3,7 @@ package io.hamal.api.web.exec
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
-import io.hamal.lib.sdk.hub.AppendExecLogCmd
+import io.hamal.lib.sdk.hub.HubAppendExecLogReq
 import io.hamal.repository.api.ExecLogCmdRepository
 import io.hamal.repository.api.ExecLogCmdRepository.LogCmd
 import org.springframework.http.ResponseEntity
@@ -22,7 +22,7 @@ internal class AppendExecLogRoute(
     @PostMapping("/v1/execs/{execId}/logs")
     fun appendExecLog(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody appendExecLog: AppendExecLogCmd
+        @RequestBody appendExecLog: HubAppendExecLogReq
     ): ResponseEntity<Unit> {
         execLogCmdRepository.append(
             LogCmd(

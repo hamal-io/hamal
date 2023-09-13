@@ -7,14 +7,15 @@ import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
+import io.hamal.request.CreateAccountReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AdminCreateAccountReq(
-    val name: AccountName,
-    val email: AccountEmail?,
-    val password: Password?
-)
+    override val name: AccountName,
+    override val email: AccountEmail?,
+    override val password: Password?
+) : CreateAccountReq
 
 @Serializable
 data class AdminAccountList(

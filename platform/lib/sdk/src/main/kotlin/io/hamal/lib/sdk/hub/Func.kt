@@ -5,29 +5,32 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
+import io.hamal.request.CreateFuncReq
+import io.hamal.request.InvokeFuncReq
+import io.hamal.request.UpdateFuncReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class HubCreateFuncReq(
-    val namespaceId: NamespaceId? = null,
-    val name: FuncName,
-    val inputs: FuncInputs,
-    val code: CodeType
-)
+    override val namespaceId: NamespaceId? = null,
+    override val name: FuncName,
+    override val inputs: FuncInputs,
+    override val code: CodeType
+) : CreateFuncReq
 
 @Serializable
 data class HubUpdateFuncReq(
-    val namespaceId: NamespaceId? = null,
-    val name: FuncName? = null,
-    val inputs: FuncInputs? = null,
-    val code: CodeType? = null
-)
+    override val namespaceId: NamespaceId? = null,
+    override val name: FuncName? = null,
+    override val inputs: FuncInputs? = null,
+    override val code: CodeType? = null
+) : UpdateFuncReq
 
 @Serializable
 data class HubInvokeFuncReq(
-    val correlationId: CorrelationId? = null,
-    val inputs: InvocationInputs? = null,
-)
+    override val correlationId: CorrelationId? = null,
+    override val inputs: InvocationInputs? = null,
+) : InvokeFuncReq
 
 @Serializable
 data class HubFuncList(

@@ -1,9 +1,9 @@
-package io.hamal.api.web.adhoc
+package io.hamal.api.web.func
 
-import io.hamal.api.web.req.Assembler.assemble
-import io.hamal.core.component.adhoc.Adhoc
+import io.hamal.api.web.req.Assembler
+import io.hamal.core.component.func.CreateFunc
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
+import io.hamal.lib.sdk.hub.HubCreateFuncReq
 import io.hamal.lib.sdk.hub.HubSubmittedReq
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class AdhocController(private val adhoc: Adhoc) {
-    @PostMapping("/v1/groups/{groupId}/adhoc")
-    fun groupAdhoc(
+internal class CreateFuncController(private val createFunc: CreateFunc) {
+    @PostMapping("/v1/groups/{groupId}/funcs")
+    fun createFunc(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody req: HubInvokeAdhocReq
+        @RequestBody req: HubCreateFuncReq
     ): ResponseEntity<HubSubmittedReq> =
-        adhoc(groupId, req) {
-            ResponseEntity(assemble(it), ACCEPTED)
-
+        createFunc(groupId, req) {
+            ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }
 }
