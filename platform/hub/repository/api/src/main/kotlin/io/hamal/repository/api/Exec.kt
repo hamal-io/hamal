@@ -61,7 +61,7 @@ interface ExecCmdRepository {
 interface ExecQueryRepository {
     fun get(execId: ExecId) = find(execId) ?: throw NoSuchElementException("Exec not found")
     fun find(execId: ExecId): Exec?
-    fun list(block: ExecQuery.() -> Unit): List<Exec>
+    fun list(query: ExecQuery): List<Exec>
     data class ExecQuery(
         var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1)

@@ -4,7 +4,7 @@ import AbstractExtensionTest
 import io.hamal.lib.domain._enum.ExecLogLevel.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
-import io.hamal.lib.sdk.hub.HubAppendExecLogReq
+import io.hamal.lib.sdk.hub.HubAppendExecLogCmd
 import io.hamal.lib.sdk.hub.HubExecLogService
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -91,13 +91,13 @@ internal class LogTest : AbstractExtensionTest() {
     }
 
     private class TestExecLogService : HubExecLogService {
-        override fun append(execId: ExecId, req: HubAppendExecLogReq) {
+        override fun append(execId: ExecId, req: HubAppendExecLogCmd) {
             this.execId = execId
             this.req = req
         }
 
         lateinit var execId: ExecId
-        lateinit var req: HubAppendExecLogReq
+        lateinit var req: HubAppendExecLogCmd
     }
 
 }

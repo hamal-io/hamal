@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -33,7 +34,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list { }.also {
+        execQueryRepository.list(ExecQuery()).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -78,7 +79,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list { }.also {
+        execQueryRepository.list(ExecQuery()).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -139,7 +140,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list { }.also {
+        execQueryRepository.list(ExecQuery()).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -182,7 +183,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
         )
         testInstance(submittedFixedRateInvocationReq)
 
-        execQueryRepository.list { }.also {
+        execQueryRepository.list(ExecQuery()).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -210,7 +211,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     fun `Tries to invoke exec but func does not exists`() {
         val exception = assertThrows<NoSuchElementException> { testInstance(submittedFixedRateInvocationReq) }
         assertThat(exception.message, equalTo("Func not found"))
-        execQueryRepository.list { }.also {
+        execQueryRepository.list(ExecQuery()).also {
             assertThat(it, empty())
         }
     }
