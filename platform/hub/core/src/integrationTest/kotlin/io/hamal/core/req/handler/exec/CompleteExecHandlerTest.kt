@@ -14,6 +14,7 @@ import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -74,7 +75,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     )
 
     private fun verifyCompleted() {
-        execQueryRepository.list { }.also { execs ->
+        execQueryRepository.list(ExecQuery()).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 require(this is io.hamal.repository.api.CompletedExec)
@@ -85,7 +86,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoCompletedExecExists() {
-        execQueryRepository.list { }.also { execs ->
+        execQueryRepository.list(ExecQuery()).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(status, not(equalTo(Completed)))

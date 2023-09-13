@@ -1,11 +1,11 @@
 package io.hamal.repository.memory
 
-import io.hamal.repository.api.ExecLog
-import io.hamal.repository.api.ExecLogCmdRepository
-import io.hamal.repository.api.ExecLogQueryRepository
-import io.hamal.repository.api.ExecLogRepository
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.RemoteAt
+import io.hamal.repository.api.ExecLog
+import io.hamal.repository.api.ExecLogCmdRepository
+import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
+import io.hamal.repository.api.ExecLogRepository
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -31,8 +31,7 @@ object MemoryExecLogRepository : ExecLogRepository {
         lock.write { store.clear() }
     }
 
-    override fun list(execId: ExecId, block: ExecLogQueryRepository.ExecLogQuery.() -> Unit): List<ExecLog> {
-        val query = ExecLogQueryRepository.ExecLogQuery().also(block)
+    override fun list(execId: ExecId, query: ExecLogQuery): List<ExecLog> {
         return lock.read {
             store.reversed()
                 .asSequence()
@@ -45,8 +44,7 @@ object MemoryExecLogRepository : ExecLogRepository {
         }
     }
 
-    override fun list(block: ExecLogQueryRepository.ExecLogQuery.() -> Unit): List<ExecLog> {
-        val query = ExecLogQueryRepository.ExecLogQuery().also(block)
+    override fun list(query: ExecLogQuery): List<ExecLog> {
         return lock.read {
             store.reversed()
                 .asSequence()

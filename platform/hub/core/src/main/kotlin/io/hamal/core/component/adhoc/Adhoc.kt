@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component
 class Adhoc(private val submitRequest: SubmitRequest) {
     operator fun <T : Any> invoke(
         groupId: GroupId,
-        adhocInvocation: InvokeAdhocReq,
+        req: InvokeAdhocReq,
         responseHandler: (SubmittedReq) -> T
     ): T {
         return responseHandler(
-            submitRequest(groupId, adhocInvocation)
+            submitRequest(groupId, req)
         )
     }
 }

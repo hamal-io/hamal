@@ -13,7 +13,7 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubAppendExecLogReq
+import io.hamal.lib.sdk.hub.HubAppendExecLogCmd
 import io.hamal.lib.sdk.hub.HubExecLogService
 import logger
 
@@ -50,7 +50,7 @@ class LogFunction(
 
         execLogService.append(
             ctx[ExecId::class],
-            HubAppendExecLogReq(
+            HubAppendExecLogCmd(
                 level = level,
                 message = message,
                 localAt = LocalAt.now()

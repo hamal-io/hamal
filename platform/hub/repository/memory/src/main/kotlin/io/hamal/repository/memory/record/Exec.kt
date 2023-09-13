@@ -180,8 +180,7 @@ object MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRe
         return CurrentExecProjection.find(execId)
     }
 
-    override fun list(block: ExecQuery.() -> Unit): List<Exec> {
-        val query = ExecQuery().also(block)
+    override fun list(query: ExecQuery): List<Exec> {
         return CurrentExecProjection.list(query.afterId, query.limit)
     }
 

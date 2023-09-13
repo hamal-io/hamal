@@ -21,9 +21,9 @@ interface ExecLogCmdRepository {
 }
 
 interface ExecLogQueryRepository {
-    fun list(execId: ExecId, block: ExecLogQuery.() -> Unit): List<ExecLog>
+    fun list(execId: ExecId, query: ExecLogQuery): List<ExecLog>
 
-    fun list(block: ExecLogQuery.() -> Unit): List<ExecLog>
+    fun list(query: ExecLogQuery): List<ExecLog>
 
     data class ExecLogQuery(
         var afterId: ExecLogId = ExecLogId(SnowflakeId(Long.MAX_VALUE)),

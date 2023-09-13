@@ -189,8 +189,7 @@ class SqliteExecRepository(
         return ProjectionCurrent.find(connection, execId)
     }
 
-    override fun list(block: ExecQuery.() -> Unit): List<Exec> {
-        val query = ExecQuery().also(block)
+    override fun list(query: ExecQuery): List<Exec> {
         return ProjectionCurrent.list(connection, query.afterId, query.limit)
     }
 
