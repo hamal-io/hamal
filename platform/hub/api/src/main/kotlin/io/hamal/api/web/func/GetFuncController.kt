@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GetFuncRoute(
+internal class GetFuncController(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) {

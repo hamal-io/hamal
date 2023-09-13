@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListFuncRoute(
-    private val listFunc: ListFunc
-) {
-
+internal class ListFuncController(private val listFunc: ListFunc) {
     @GetMapping("/v1/funcs")
     fun listFunc(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
