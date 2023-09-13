@@ -72,8 +72,7 @@ object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(
 
     override fun find(accountName: AccountName): Account? = CurrentAccountProjection.find(accountName)
 
-    override fun list(block: AccountQuery.() -> Unit): List<Account> {
-        val query = AccountQuery().also(block)
+    override fun list(query: AccountQuery): List<Account> {
         return CurrentAccountProjection.list(query.afterId, query.limit)
     }
 

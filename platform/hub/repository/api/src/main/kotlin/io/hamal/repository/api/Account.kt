@@ -40,7 +40,7 @@ interface AccountQueryRepository {
     fun find(accountId: AccountId): Account?
     fun get(accountName: AccountName) = find(accountName) ?: throw NoSuchElementException("Account not found")
     fun find(accountName: AccountName): Account?
-    fun list(block: AccountQuery.() -> Unit): List<Account>
+    fun list(query: AccountQuery): List<Account>
     fun list(accountIds: List<AccountId>): List<Account> = accountIds.map(::get)
     data class AccountQuery(
         var afterId: AccountId = AccountId(SnowflakeId(Long.MAX_VALUE)),
