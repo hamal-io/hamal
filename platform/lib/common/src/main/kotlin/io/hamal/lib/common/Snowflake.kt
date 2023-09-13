@@ -16,6 +16,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
+import kotlin.time.Duration.Companion.milliseconds
 
 
 @JvmInline
@@ -101,13 +102,13 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     }
 }
 
-
+@OptIn(kotlin.time.ExperimentalTime::class)
 class DefaultElapsedSource(
     val epoch: Long = 1682116276624 // 2023-04-22 some when in the morning AEST
 ) : SnowflakeId.ElapsedSource {
-    override fun elapsed() = Elapsed(millis())
+    override fun elapsed() = Elapsed(source.elapsedNow().plus(epoch.milliseconds).inWholeMilliseconds)
 
-    private fun millis() = System.currentTimeMillis() - epoch
+    private val source = kotlin.time.TimeSource.Monotonic.markNow()
 }
 
 class DefaultPartitionSource(

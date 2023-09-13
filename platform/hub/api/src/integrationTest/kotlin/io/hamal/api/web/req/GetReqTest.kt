@@ -2,8 +2,8 @@ package io.hamal.api.web.req
 
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class GetReqRouteTest : BaseReqRouteTest() {
+internal class GetReqTest : BaseReqRouteTest() {
     @Test
     fun `Gets req`() {
         val request = awaitCompleted(
@@ -20,7 +20,7 @@ internal class GetReqRouteTest : BaseReqRouteTest() {
         )
 
         val response = httpTemplate.get("/v1/reqs/{reqId}").path("reqId", request.reqId).execute()
-        assertThat(response.statusCode, equalTo(Ok))
+        assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
         val result = response.result(HubSubmittedReqWithId::class)

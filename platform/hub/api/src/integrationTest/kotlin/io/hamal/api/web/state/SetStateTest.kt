@@ -15,14 +15,14 @@ import io.hamal.lib.kua.type.FalseValue
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.TrueValue
+import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
 import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubState
-import io.hamal.lib.sdk.hub.HubSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class SetStateRouteTest : BaseStateRouteTest() {
+internal class SetStateTest : BaseStateRouteTest() {
     @Test
     fun `Sets state for a function first time`() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
@@ -35,7 +35,7 @@ internal class SetStateRouteTest : BaseStateRouteTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        response.result(HubSubmittedReq::class)
+        response.result(HubDefaultSubmittedReq::class)
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
         assertThat(correlatedState["answer"], equalTo(NumberType(42)))

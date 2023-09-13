@@ -1,12 +1,12 @@
 package io.hamal.repository.memory
 
+import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.repository.api.ReqRepository
 import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.repository.memory.record.CurrentExecProjection
 import io.hamal.repository.memory.record.QueueProjection
-import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain._enum.ReqStatus
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -68,8 +68,7 @@ object MemoryReqRepository : ReqRepository {
         return ProtoBuf { }.decodeFromByteArray(SubmittedReq.serializer(), result)
     }
 
-    override fun list(block: ReqQueryRepository.Query.() -> Unit): List<SubmittedReq> {
-        val query = ReqQueryRepository.Query().also(block)
+    override fun list(query: ReqQueryRepository.ReqQuery): List<SubmittedReq> {
         return lock.withLock {
             store.keys.sorted()
                 .dropWhile { it <= query.afterId }

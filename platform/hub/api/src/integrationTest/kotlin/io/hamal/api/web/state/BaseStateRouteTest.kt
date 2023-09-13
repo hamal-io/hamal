@@ -72,6 +72,6 @@ internal sealed class BaseStateRouteTest : BaseRouteTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        return response.result(HubSubmittedReq::class)
+        return response.result(HubDefaultSubmittedReq::class)
     }
 }

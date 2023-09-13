@@ -17,8 +17,8 @@ interface ReqCmdRepository {
 interface ReqQueryRepository {
     fun get(reqId: ReqId) = find(reqId) ?: throw NoSuchElementException("Req not found")
     fun find(reqId: ReqId): SubmittedReq?
-    fun list(block: Query.() -> Unit): List<SubmittedReq>
-    data class Query(
+    fun list(query: ReqQuery): List<SubmittedReq>
+    data class ReqQuery(
         var afterId: ReqId = ReqId(0),
         var limit: Limit = Limit(1)
     )
