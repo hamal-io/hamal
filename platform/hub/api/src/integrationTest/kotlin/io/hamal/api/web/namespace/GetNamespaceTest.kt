@@ -16,7 +16,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class GetNamespaceRouteTest : BaseNamespaceRouteTest() {
+internal class GetNamespaceTest : BaseNamespaceRouteTest() {
     @Test
     fun `Namespace does not exists`() {
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/33333333").execute()

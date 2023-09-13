@@ -10,7 +10,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
-internal class ListNamespaceRouteTest : BaseNamespaceRouteTest() {
+internal class ListNamespaceTest : BaseNamespaceRouteTest() {
     @Test
     fun `Only default namespaces`() {
         val result = listNamespaces()

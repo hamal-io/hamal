@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.submitted_req.SubmittedCreateNamespaceReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -50,7 +51,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
 
 
     private fun verifySingleNamespaceExists() {
-        namespaceQueryRepository.list { }.also { namespaces ->
+        namespaceQueryRepository.list(NamespaceQuery()).also { namespaces ->
             assertThat(namespaces, hasSize(1))
             with(namespaces.first()) {
                 assertThat(id, equalTo(NamespaceId(12345)))

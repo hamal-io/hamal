@@ -105,8 +105,7 @@ class SqliteNamespaceRepository(
         return ProjectionUniqueName.find(connection, namespaceName)?.let { find((it)) }
     }
 
-    override fun list(block: NamespaceQuery.() -> Unit): List<Namespace> {
-        val query = NamespaceQuery().also(block)
+    override fun list(query: NamespaceQuery): List<Namespace> {
         return ProjectionCurrent.list(connection, query.afterId, query.limit)
     }
 }
