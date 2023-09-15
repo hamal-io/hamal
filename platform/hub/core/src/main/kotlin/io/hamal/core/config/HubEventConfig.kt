@@ -34,7 +34,6 @@ internal open class HubEventConfig {
         execCmdRepository: ExecCmdRepository,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
-        metricService: MetricService,
         eventEmitter: HubEventEmitter
     ) = HubEventContainerFactory()
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
