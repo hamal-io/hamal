@@ -41,11 +41,13 @@ internal class EventTriggerService(
     fun setup() {
         scheduledTasks.add(
             async.atFixedRate(1.milliseconds) {
-                triggerQueryRepository.list {
-                    afterId = TriggerId(SnowflakeId(Long.MAX_VALUE))
-                    types = setOf(TriggerType.Event)
-                    limit = Limit(10)
-                }.forEach { trigger ->
+                triggerQueryRepository.list(
+                    TriggerQueryRepository.TriggerQuery(
+                        afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
+                        types = setOf(TriggerType.Event),
+                        limit = Limit(10)
+                    )
+                ).forEach { trigger ->
                     require(trigger is EventTrigger)
 
                     val topic = eventBrokerRepository.getTopic(trigger.topicId)

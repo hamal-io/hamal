@@ -44,7 +44,7 @@ interface TriggerQueryRepository {
     fun get(triggerId: TriggerId) = find(triggerId) ?: throw NoSuchElementException("Trigger not found")
     fun find(triggerId: TriggerId): Trigger?
 
-    fun list(block: TriggerQuery.() -> Unit): List<Trigger>
+    fun list(query: TriggerQuery): List<Trigger>
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),

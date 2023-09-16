@@ -48,7 +48,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     fun createFixedRateTrigger(name: TriggerName): HubSubmittedReqWithId {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+        val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
                 HubCreateTriggerReq(
@@ -68,7 +68,7 @@ internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
     }
 
     fun createTrigger(req: HubCreateTriggerReq): HubSubmittedReqWithId {
-        val creationResponse = httpTemplate.post("/v1/groups/{groupId}/triggers")
+        val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(req)
             .execute()

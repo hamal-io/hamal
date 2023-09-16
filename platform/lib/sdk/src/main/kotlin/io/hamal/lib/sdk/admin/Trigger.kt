@@ -132,7 +132,7 @@ internal class DefaultAdminTriggerService(
     private val template: HttpTemplate
 ) : AdminTriggerService {
     override fun create(groupId: GroupId, req: AdminCreateTriggerReq) =
-        template.post("/v1/groups/{groupId}/triggers")
+        template.post("/v1/triggers")
             .path("groupId", groupId)
             .body(req)
             .execute()

@@ -34,10 +34,12 @@ internal class FixedRateTriggerService(
 
     @PostConstruct
     fun setup() {
-        triggerQueryRepository.list {
-            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE))
-            limit = Limit(10)
-        }.filterIsInstance<FixedRateTrigger>().forEach {
+        triggerQueryRepository.list(
+            TriggerQueryRepository.TriggerQuery(
+                afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
+                limit = Limit(10)
+            )
+        ).filterIsInstance<FixedRateTrigger>().forEach {
             plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
         }
     }

@@ -132,7 +132,7 @@ internal class DefaultHubTriggerService(
     private val template: HttpTemplate
 ) : HubTriggerService {
     override fun create(groupId: GroupId, req: HubCreateTriggerReq) =
-        template.post("/v1/groups/{groupId}/triggers")
+        template.post("/v1/triggers")
             .path("groupId", groupId)
             .body(req)
             .execute()
