@@ -5,6 +5,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.submitted_req.SubmittedCreateTopicReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -60,7 +61,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleTopicExists() {
-        eventBrokerRepository.listTopics { }.also { topics ->
+        eventBrokerRepository.listTopics(TopicQuery()).also { topics ->
             assertThat(topics, hasSize(1))
             with(topics.first()) {
                 assertThat(id, equalTo(TopicId(2345)))

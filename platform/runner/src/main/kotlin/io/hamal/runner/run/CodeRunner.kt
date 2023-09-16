@@ -1,5 +1,6 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.common.logger
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecToken
@@ -16,7 +17,6 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
-import logger
 
 interface CodeRunner {
     fun run(unitOfWork: UnitOfWork)

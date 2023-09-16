@@ -1,5 +1,6 @@
 package io.hamal.mono.api
 
+import io.hamal.lib.common.Logger
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
@@ -64,7 +65,9 @@ abstract class BaseApiTest {
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
-            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
+            val testFileWithPath = "${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}"
+            dynamicTest(testFileWithPath) {
+                log.info("Start test $testFileWithPath")
                 setupTestEnv()
 
                 val execReq = rootHubSdk.adhoc.invoke(
@@ -152,6 +155,7 @@ abstract class BaseApiTest {
 
     abstract val rootHubSdk: HubSdk
     abstract val testPath: Path
+    abstract val log: Logger
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 

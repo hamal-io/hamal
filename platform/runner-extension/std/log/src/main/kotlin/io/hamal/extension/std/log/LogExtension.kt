@@ -1,5 +1,6 @@
 package io.hamal.extension.std.log
 
+import io.hamal.lib.common.logger
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
@@ -15,7 +16,6 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.hub.HubAppendExecLogCmd
 import io.hamal.lib.sdk.hub.HubExecLogService
-import logger
 
 
 val log = logger(LogFunction::class)

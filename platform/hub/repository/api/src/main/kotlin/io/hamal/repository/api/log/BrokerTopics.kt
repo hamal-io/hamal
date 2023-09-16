@@ -11,8 +11,8 @@ interface BrokerTopicsRepository : Closeable {
     fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic
     fun find(name: TopicName): Topic?
     fun find(id: TopicId): Topic?
-    fun list(block: TopicQuery.() -> Unit): List<Topic>
-    fun count(block: TopicQuery.() -> Unit): ULong
+    fun list(query: TopicQuery): List<Topic>
+    fun count(query: TopicQuery): ULong
 
     data class TopicToCreate(
         val id: TopicId,
@@ -23,5 +23,6 @@ interface BrokerTopicsRepository : Closeable {
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
         var names: List<TopicName> = listOf(),
         var limit: Limit = Limit(1)
+        // FIXME group id
     )
 }

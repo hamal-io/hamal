@@ -1,5 +1,6 @@
 package io.hamal.extension.web3.eth
 
+import io.hamal.lib.common.logger
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
@@ -19,7 +20,6 @@ import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResponse
 import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.eth.domain.EthGetLiteBlockResponse
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
-import logger
 import kotlin.to
 
 private val log = logger(EthExecuteFunction::class)

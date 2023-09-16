@@ -1,12 +1,12 @@
 package io.hamal.repository.memory.log
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.repository.api.log.Topic
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -40,8 +40,7 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
         topics[id]
     }
 
-    override fun list(block: TopicQuery.() -> Unit): List<Topic> {
-        val query = TopicQuery().also(block)
+    override fun list(query: TopicQuery): List<Topic> {
         return lock.withLock {
             topics.entries.sortedBy { it.key }
                 .reversed()
@@ -52,8 +51,7 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
         }
     }
 
-    override fun count(block: TopicQuery.() -> Unit): ULong {
-        val query = TopicQuery().also(block)
+    override fun count(query: TopicQuery): ULong {
         return lock.withLock {
             topics.entries.sortedBy { it.key }
                 .reversed()

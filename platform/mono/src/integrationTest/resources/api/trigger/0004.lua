@@ -28,7 +28,7 @@ assert(sys.await_failed(trigger_req) == nil)
 
 _, triggers = sys.trigger.list()
 assert(#triggers == 1)
-
+--
 -- same name different namespace
 err, trigger_req = sys.trigger.create_fixed_rate({
     func_id = create_func_req.id,
@@ -39,6 +39,6 @@ err, trigger_req = sys.trigger.create_fixed_rate({
 })
 assert(err == nil)
 sys.await_completed(trigger_req)
-
+--
 _, triggers = sys.trigger.list()
 assert(#triggers == 2)

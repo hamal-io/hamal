@@ -1,13 +1,13 @@
 package io.hamal.repository.sqlite.record.exec
 
-import io.hamal.repository.api.Exec
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sqlite.Connection
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -56,7 +56,10 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, io.hamal.repo
         }
     }
 
-    override fun upsert(tx: RecordTransaction<ExecId, ExecRecord, io.hamal.repository.api.Exec>, obj: io.hamal.repository.api.Exec) {
+    override fun upsert(
+        tx: RecordTransaction<ExecId, ExecRecord, io.hamal.repository.api.Exec>,
+        obj: io.hamal.repository.api.Exec
+    ) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
@@ -84,8 +87,8 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, io.hamal.repo
         )
     }
 
-    override fun clear(connection: Connection) {
-        connection.execute("""DELETE FROM current""")
+    override fun clear(tx: Transaction) {
+        tx.execute("""DELETE FROM current""")
     }
 
     override fun invalidate() {

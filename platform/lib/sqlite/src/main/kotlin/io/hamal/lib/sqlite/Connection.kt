@@ -5,9 +5,9 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.logger
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.sqlite.Transaction.AbortException
-import logger
 import java.math.BigInteger
 import java.sql.DriverManager
 import java.time.Instant
