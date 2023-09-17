@@ -1,6 +1,6 @@
 package io.hamal.admin.web.trigger
 
-import io.hamal.core.adapter.trigger.ListTriggers
+import io.hamal.core.adapter.ListTriggersPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.GroupId
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class ListTriggersController(private val listTriggers: ListTriggers) {
+class ListTriggersController(private val listTriggers: ListTriggersPort) {
     @GetMapping("/v1/triggers")
     fun listGroupTriggers(
         @PathVariable("groupId") groupId: GroupId,

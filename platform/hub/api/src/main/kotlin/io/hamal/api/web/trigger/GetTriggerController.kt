@@ -1,6 +1,6 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.core.adapter.trigger.GetTrigger
+import io.hamal.core.adapter.GetTriggerPort
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.hub.HubEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GetTriggerController(private val getTrigger: GetTrigger) {
+internal class GetTriggerController(private val getTrigger: GetTriggerPort) {
     @GetMapping("/v1/triggers/{triggerId}")
     fun getFunc(
         @PathVariable("triggerId") triggerId: TriggerId,

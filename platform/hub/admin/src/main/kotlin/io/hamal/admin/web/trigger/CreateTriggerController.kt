@@ -1,8 +1,7 @@
 package io.hamal.admin.web.trigger
 
 import io.hamal.admin.web.req.Assembler
-
-import io.hamal.core.adapter.trigger.CreateTrigger
+import io.hamal.core.adapter.CreateTriggerPort
 import io.hamal.lib.sdk.admin.AdminCreateTriggerReq
 import io.hamal.lib.sdk.admin.AdminSubmittedReq
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CreateTriggerController(private val createTrigger: CreateTrigger) {
+internal class CreateTriggerController(private val createTrigger: CreateTriggerPort) {
     @PostMapping("/v1/triggers")
     fun createTrigger(
         @RequestBody req: AdminCreateTriggerReq
