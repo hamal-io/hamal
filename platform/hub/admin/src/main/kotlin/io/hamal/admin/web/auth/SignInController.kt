@@ -1,6 +1,6 @@
 package io.hamal.admin.web.auth
 
-import io.hamal.core.component.auth.SignIn
+import io.hamal.core.adapter.SignInPort
 import io.hamal.lib.sdk.hub.HubSignInReq
 import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class SignInController(private val signIn: SignIn) {
+internal class SignInController(private val signIn: SignInPort) {
     @PostMapping("/v1/sign-in")
     fun createFunc(@RequestBody req: HubSignInReq): ResponseEntity<HubSubmittedWithTokenReq> {
         return signIn(req) { submitted ->

@@ -1,14 +1,14 @@
 package io.hamal.repository.sqlite.log
 
-import io.hamal.repository.api.log.BrokerTopicsRepository
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.log.Topic
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
+import io.hamal.repository.api.log.Topic
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 
@@ -93,8 +93,7 @@ class SqliteBrokerTopicsRepository(
             }
         }?.also { topicMapping[it.name] = it }
 
-    override fun list(block: TopicQuery.() -> Unit): List<Topic> {
-        val query = TopicQuery().also(block)
+    override fun list(query: TopicQuery): List<Topic> {
         return connection.executeQuery<Topic>(
             """
                 SELECT
@@ -120,8 +119,7 @@ class SqliteBrokerTopicsRepository(
         }
     }
 
-    override fun count(block: TopicQuery.() -> Unit): ULong {
-        val query = TopicQuery().also(block)
+    override fun count(query: TopicQuery): ULong {
         return connection.executeQueryOne(
             """
             SELECT 

@@ -3,6 +3,8 @@ package io.hamal.mono.api
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
+import io.hamal.lib.common.Logger
+import io.hamal.lib.common.logger
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
@@ -30,6 +32,7 @@ import java.nio.file.Paths
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "sqlite"])
 internal class SqliteApiHamalTest : BaseApiTest() {
+    final override val log: Logger = logger(this::class)
     final override val rootHubSdk = rootHubSdk(8043)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

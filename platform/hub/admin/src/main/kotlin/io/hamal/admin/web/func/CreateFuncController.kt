@@ -1,7 +1,7 @@
 package io.hamal.admin.web.func
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.component.func.CreateFunc
+import io.hamal.core.adapter.CreateFuncPort
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.admin.AdminCreateFuncReq
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CreateFuncController(private val createFunc: CreateFunc) {
+internal class CreateFuncController(private val createFunc: CreateFuncPort) {
 
     @PostMapping("/v1/funcs")
     fun createFunc(@RequestBody req: AdminCreateFuncReq) =

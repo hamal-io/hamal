@@ -70,11 +70,3 @@ data class DefaultAdminSdk(
         DefaultAdminTriggerService(template)
     }
 }
-
-fun main() {
-    val adminSdk = DefaultAdminSdk(
-        HttpTemplate("http://localhost:9009")
-    )
-
-    println(adminSdk.metric.get())
-}

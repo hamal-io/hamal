@@ -1,7 +1,7 @@
 package io.hamal.api.web.namespace
 
 import io.hamal.api.web.req.Assembler
-import io.hamal.core.component.namespace.UpdateNamespace
+import io.hamal.core.adapter.UpdateNamespacePort
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.hub.HubUpdateNamespaceReq
 import org.springframework.http.HttpStatus
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class UpdateNamespaceController(private val updateNamespace: UpdateNamespace) {
+internal class UpdateNamespaceController(private val updateNamespace: UpdateNamespacePort) {
     @PutMapping("/v1/namespaces/{namespaceId}")
     fun createNamespace(
         @PathVariable("namespaceId") namespaceId: NamespaceId,

@@ -51,12 +51,11 @@ interface BrokerRepository :
     ReadFromTopic,
     Closeable {
 
-    fun listTopics(block: TopicQuery.() -> Unit): List<Topic>
+    fun listTopics(block: TopicQuery): List<Topic>
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun listEntries(topic: Topic, block: TopicEntryQuery.() -> Unit): List<TopicEntry> {
-        val query = TopicEntryQuery().also(block)
+    fun listEntries(topic: Topic, query: TopicEntryQuery): List<TopicEntry> {
         val firstId = ChunkId(SnowflakeId(query.afterId.value.value + 1))
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
@@ -69,7 +68,6 @@ interface BrokerRepository :
     }
 
     fun clear()
-
 
     data class TopicEntryQuery(
         var afterId: TopicEntryId = TopicEntryId(0),

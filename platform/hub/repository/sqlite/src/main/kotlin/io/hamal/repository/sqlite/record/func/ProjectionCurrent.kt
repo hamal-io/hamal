@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.Connection
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -83,8 +84,8 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
         )
     }
 
-    override fun clear(connection: Connection) {
-        connection.execute("""DELETE FROM current""")
+    override fun clear(tx: Transaction) {
+        tx.execute("""DELETE FROM current""")
     }
 
     override fun invalidate() {

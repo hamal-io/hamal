@@ -1,5 +1,10 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.Transaction
+import io.hamal.lib.sqlite.unsafeInCriteria
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
@@ -8,10 +13,6 @@ import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.unsafeInCriteria
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -97,8 +98,8 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
         )
     }
 
-    override fun clear(connection: Connection) {
-        connection.execute("""DELETE FROM current""")
+    override fun clear(tx: Transaction) {
+        tx.execute("""DELETE FROM current""")
     }
 
     override fun invalidate() {

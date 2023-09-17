@@ -1,3 +1,5 @@
+package io.hamal.lib.common
+
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 

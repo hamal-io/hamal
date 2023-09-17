@@ -106,8 +106,7 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
 
     override fun find(triggerId: TriggerId) = CurrentTriggerProjection.find(triggerId)
 
-    override fun list(block: TriggerQuery.() -> Unit): List<Trigger> {
-        val query = TriggerQuery().also(block)
+    override fun list(query: TriggerQuery): List<Trigger> {
         return CurrentTriggerProjection.list(query)
     }
 

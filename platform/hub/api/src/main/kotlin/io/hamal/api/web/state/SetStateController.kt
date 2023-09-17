@@ -1,6 +1,6 @@
-package io.hamal.api.web
+package io.hamal.api.web.state
 
-import io.hamal.core.component.state.SetState
+import io.hamal.core.adapter.SetStatePort
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class SetStateController(private val setState: SetState) {
+internal class SetStateController(private val setState: SetStatePort) {
     @PostMapping("/v1/funcs/{funcId}/states/{correlationId}")
     fun setState(
         @PathVariable("funcId") funcId: FuncId,

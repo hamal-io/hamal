@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.namespace
 
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sqlite.Connection
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -83,8 +84,8 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
         )
     }
 
-    override fun clear(connection: Connection) {
-        connection.execute("""DELETE FROM current""")
+    override fun clear(tx: Transaction) {
+        tx.execute("""DELETE FROM current""")
     }
 
     override fun invalidate() {

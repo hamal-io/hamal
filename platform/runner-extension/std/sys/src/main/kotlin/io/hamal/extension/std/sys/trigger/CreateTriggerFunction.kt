@@ -23,7 +23,6 @@ class CreateTriggerFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.trigger.create(
-                ctx[GroupId::class],
                 HubCreateTriggerReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),

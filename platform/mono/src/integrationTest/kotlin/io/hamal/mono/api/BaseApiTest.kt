@@ -1,5 +1,6 @@
 package io.hamal.mono.api
 
+import io.hamal.lib.common.Logger
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.temporal.ChronoUnit
+import java.time.temporal.ChronoUnit.DAYS
 import kotlin.io.path.name
 
 abstract class BaseApiTest {
@@ -57,18 +58,21 @@ abstract class BaseApiTest {
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
-    private lateinit var testAccount: Account
-    private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
+    private lateinit var testAdminAccount: Account
+    private lateinit var testAdminAuthToken: AuthToken
+    private lateinit var testAdminGroup: Group
 
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
-            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
+
+            val testFileWithPath = "${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}"
+            dynamicTest(testFileWithPath) {
+                log.info("Start test $testFileWithPath")
                 setupTestEnv()
 
                 val execReq = rootHubSdk.adhoc.invoke(
-                    testGroup.id,
+                    testAdminGroup.id,
                     HubInvokeAdhocReq(
                         InvocationInputs(),
                         CodeType(String(Files.readAllBytes(testFile)))
@@ -109,7 +113,7 @@ abstract class BaseApiTest {
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
 
-        testAccount = accountCmdRepository.create(
+        testAdminAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
@@ -120,22 +124,22 @@ abstract class BaseApiTest {
             )
         )
 
-        testAccountAuthToken = (authCmdRepository.create(
+        testAdminAuthToken = (authCmdRepository.create(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = CmdId(3),
                 authId = generateDomainId(::AuthId),
-                accountId = testAccount.id,
-                token = AuthToken("test-account-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                accountId = testAdminAccount.id,
+                token = AuthToken("test-root-token"),
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
         ) as TokenAuth).token
 
-        testGroup = groupCmdRepository.create(
+        testAdminGroup = groupCmdRepository.create(
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
                 groupId = generateDomainId(::GroupId),
                 name = GroupName("test-group"),
-                creatorId = testAccount.id
+                creatorId = testAdminAccount.id
             )
         )
 
@@ -143,7 +147,7 @@ abstract class BaseApiTest {
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = generateDomainId(::NamespaceId),
-                groupId = testGroup.id,
+                groupId = testAdminGroup.id,
                 name = NamespaceName("hamal"),
                 inputs = NamespaceInputs()
             )
@@ -152,6 +156,7 @@ abstract class BaseApiTest {
 
     abstract val rootHubSdk: HubSdk
     abstract val testPath: Path
+    abstract val log: Logger
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 
@@ -159,7 +164,7 @@ abstract class BaseApiTest {
         HttpTemplate(
             baseUrl = "http://localhost:$serverPort",
             headerFactory = {
-                set("x-hamal-token", "test-account-token")
+                set("x-hamal-token", "test-root-token")
             }
         )
     )

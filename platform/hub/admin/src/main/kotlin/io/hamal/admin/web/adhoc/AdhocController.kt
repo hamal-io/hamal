@@ -1,7 +1,7 @@
 package io.hamal.admin.web.adhoc
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.component.adhoc.Adhoc
+import io.hamal.core.adapter.InvokeAdhocPort
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.admin.AdminInvokeAdhocReq
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class AdhocController(private val adhoc: Adhoc) {
+internal class AdhocController(private val adhoc: InvokeAdhocPort) {
     @PostMapping("/v1/adhoc")
     fun adhoc(@RequestBody req: AdminInvokeAdhocReq) =
         submit(GroupId.root, req)

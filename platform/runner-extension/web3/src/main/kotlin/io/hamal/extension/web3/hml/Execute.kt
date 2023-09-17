@@ -1,5 +1,6 @@
 package io.hamal.extension.web3.hml
 
+import io.hamal.lib.common.logger
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
@@ -14,7 +15,6 @@ import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.hml.domain.HmlCallResponse
 import io.hamal.lib.web3.hml.domain.HmlGetBlockResponse
 import io.hamal.lib.web3.hml.http.HmlHttpBatchService
-import logger
 
 private val log = logger(HmlExecuteFunction::class)
 

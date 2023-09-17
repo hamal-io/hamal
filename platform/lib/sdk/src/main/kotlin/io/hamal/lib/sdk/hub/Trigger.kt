@@ -122,7 +122,7 @@ class HubEventTrigger(
 
 
 interface HubTriggerService {
-    fun create(groupId: GroupId, req: HubCreateTriggerReq): HubSubmittedReqWithId
+    fun create(req: HubCreateTriggerReq): HubSubmittedReqWithId
     fun list(groupId: GroupId): List<HubTriggerList.Trigger>
     fun get(triggerId: TriggerId): HubTrigger
 }
@@ -131,9 +131,8 @@ interface HubTriggerService {
 internal class DefaultHubTriggerService(
     private val template: HttpTemplate
 ) : HubTriggerService {
-    override fun create(groupId: GroupId, req: HubCreateTriggerReq) =
-        template.post("/v1/groups/{groupId}/triggers")
-            .path("groupId", groupId)
+    override fun create(req: HubCreateTriggerReq) =
+        template.post("/v1/triggers")
             .body(req)
             .execute()
             .fold(HubSubmittedReqWithId::class)

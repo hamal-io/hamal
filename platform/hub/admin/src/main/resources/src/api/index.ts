@@ -16,10 +16,7 @@ export interface SubmitAdhocInvocationRequest {
 }
 
 export async function invokeAdhoc(req: SubmitAdhocInvocationRequest): Promise<ApiSubmittedAdhocInvocation> {
-    //const response = await fetch("http://localhost:8008/v1/adhoc",
-    //new
-    const response = await fetch("http://localhost:8008/v1/groups/1/adhoc", {
-        //end new
+    const response = await fetch("http://localhost:9009/v1/adhoc", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({
@@ -40,7 +37,7 @@ export interface ListExecutionsQuery {
 }
 
 export async function listExecutions(query: ListExecutionsQuery): Promise<ApiListExecutions> {
-    const response = await fetch("http://localhost:8008/v1/execs", {
+    const response = await fetch("http://localhost:9009/v1/execs", {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -53,7 +50,7 @@ export async function listExecutions(query: ListExecutionsQuery): Promise<ApiLis
 
 
 export async function getExecution(id: string): Promise<ApiExecution> {
-    const response = await fetch(`http://localhost:8008/v1/execs/${id}`, {
+    const response = await fetch(`http://localhost:9009/v1/execs/${id}`, {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -70,7 +67,7 @@ export interface ListTriggersQuery {
 }
 
 export async function listTriggers(query: ListTriggersQuery): Promise<ApiListTriggers> {
-    const response = await fetch("http://localhost:8008/v1/triggers", {
+    const response = await fetch("http://localhost:9009/v1/triggers", {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -90,7 +87,7 @@ export interface SubmitCreateTriggerRequest {
 }
 
 export async function createTrigger(req: SubmitCreateTriggerRequest): Promise<ApiSubmittedTriggerCreation> {
-    const response = await fetch("http://localhost:8008/v1/triggers", {
+    const response = await fetch("http://localhost:9009/v1/triggers", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({
@@ -112,7 +109,7 @@ export async function createTrigger(req: SubmitCreateTriggerRequest): Promise<Ap
 
 
 export async function getTrigger(id: string): Promise<ApiTrigger> {
-    const response = await fetch(`http://localhost:8008/v1/triggers/${id}`, {
+    const response = await fetch(`http://localhost:9009/v1/triggers/${id}`, {
         headers: defaultHeaders,
         method: "GET",
     })

@@ -1,11 +1,12 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sqlite.Connection
 
 internal object ProjectionUniqueName : Projection<TriggerId, TriggerRecord, Trigger> {
 
@@ -38,8 +39,8 @@ internal object ProjectionUniqueName : Projection<TriggerId, TriggerRecord, Trig
         )
     }
 
-    override fun clear(connection: Connection) {
-        connection.execute("""DELETE FROM unique_names""")
+    override fun clear(tx: Transaction) {
+        tx.execute("""DELETE FROM unique_names""")
     }
 
     override fun invalidate() {}
