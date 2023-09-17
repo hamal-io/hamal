@@ -1,7 +1,7 @@
 package io.hamal.admin.web.namespace
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.adapter.namespace.CreateNamespace
+import io.hamal.core.adapter.CreateNamespacePort
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.admin.AdminCreateNamespaceReq
 import io.hamal.lib.sdk.admin.AdminSubmittedReq
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CreateNamespaceController(private val createNamespace: CreateNamespace) {
+internal class CreateNamespaceController(private val createNamespace: CreateNamespacePort) {
     @PostMapping("/v1/groups/{groupId}/namespaces")
     fun createNamespace(
         @PathVariable("groupId") groupId: GroupId,
