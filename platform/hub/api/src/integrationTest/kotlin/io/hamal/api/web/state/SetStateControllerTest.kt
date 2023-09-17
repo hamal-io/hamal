@@ -22,7 +22,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class SetStateTest : BaseStateRouteTest() {
+internal class SetStateControllerTest : BaseStateControllerTest() {
     @Test
     fun `Sets state for a function first time`() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)

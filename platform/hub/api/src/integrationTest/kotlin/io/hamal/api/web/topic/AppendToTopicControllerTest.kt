@@ -15,7 +15,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
-internal class AppendToTopicRouteTest : BaseTopicRouteTest() {
+internal class AppendToTopicControllerTest : BaseTopicControllerTest() {
 
     @Test
     fun `Append entry`() {

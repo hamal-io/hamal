@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListFuncRouteTest : BaseFuncRouteTest() {
+internal class ListFuncControllerTest : BaseFuncControllerTest() {
     @Test
     fun `No funcs`() {
         val result = listFuncs()

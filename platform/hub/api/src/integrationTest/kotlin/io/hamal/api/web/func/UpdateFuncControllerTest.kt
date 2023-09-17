@@ -19,7 +19,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class UpdateFuncRouteTest : BaseFuncRouteTest() {
+internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
 
     @Test
     fun `Tries to update func which does not exists`() {

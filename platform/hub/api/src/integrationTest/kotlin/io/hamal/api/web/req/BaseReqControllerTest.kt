@@ -1,6 +1,6 @@
 package io.hamal.api.web.req
 
-import io.hamal.api.web.BaseRouteTest
+import io.hamal.api.web.BaseControllerTest
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
@@ -12,7 +12,7 @@ import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseReqRouteTest : BaseRouteTest() {
+internal sealed class BaseReqControllerTest : BaseControllerTest() {
 
     fun list(): HubReqList {
         val listResponse = httpTemplate.get("/v1/reqs").execute()

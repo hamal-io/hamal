@@ -1,6 +1,6 @@
 package io.hamal.api.web.state
 
-import io.hamal.api.web.BaseRouteTest
+import io.hamal.api.web.BaseControllerTest
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -14,7 +14,7 @@ import io.hamal.lib.sdk.hub.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseStateRouteTest : BaseRouteTest() {
+internal sealed class BaseStateControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): HubSubmittedReqWithId {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")

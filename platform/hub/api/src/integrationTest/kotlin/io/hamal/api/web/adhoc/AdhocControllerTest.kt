@@ -1,6 +1,6 @@
 package io.hamal.api.web.adhoc
 
-import io.hamal.api.web.BaseRouteTest
+import io.hamal.api.web.BaseControllerTest
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -17,7 +17,7 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
 
-internal class AdhocRouteTest : BaseRouteTest() {
+internal class AdhocControllerTest : BaseControllerTest() {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
         val response = request(

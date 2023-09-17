@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class GetReqTest : BaseReqRouteTest() {
+internal class GetReqControllerTest : BaseReqControllerTest() {
     @Test
     fun `Gets req`() {
         val request = awaitCompleted(

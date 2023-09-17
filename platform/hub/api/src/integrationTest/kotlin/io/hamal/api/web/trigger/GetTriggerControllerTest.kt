@@ -18,7 +18,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
-internal class GetTriggerRouteTest : BaseTriggerRouteTest() {
+internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
     @Test
     fun `Trigger does not exists`() {
         val getTriggerResponse = httpTemplate.get("/v1/triggers/33333333").execute()

@@ -8,7 +8,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
-internal class CreateTopicRouteTest : BaseTopicRouteTest() {
+internal class CreateTopicControllerTest : BaseTopicControllerTest() {
     @Test
     fun `Create topic`() {
         val topicId = awaitCompleted(
@@ -39,7 +39,7 @@ internal class CreateTopicRouteTest : BaseTopicRouteTest() {
     }
 }
 
-private fun CreateTopicRouteTest.verifyTopicCreated(topicId: TopicId) {
+private fun CreateTopicControllerTest.verifyTopicCreated(topicId: TopicId) {
     with(eventBrokerRepository.findTopic(topicId)!!) {
         assertThat(id, equalTo(topicId))
         assertThat(name, equalTo(TopicName("namespace::topics_one")))

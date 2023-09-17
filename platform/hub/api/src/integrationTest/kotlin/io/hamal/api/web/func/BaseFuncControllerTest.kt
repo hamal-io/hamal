@@ -1,6 +1,6 @@
 package io.hamal.api.web.func
 
-import io.hamal.api.web.BaseRouteTest
+import io.hamal.api.web.BaseControllerTest
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
@@ -13,7 +13,7 @@ import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseFuncRouteTest : BaseRouteTest() {
+internal sealed class BaseFuncControllerTest : BaseControllerTest() {
     fun createFunc(req: HubCreateFuncReq): HubSubmittedReqWithId {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)

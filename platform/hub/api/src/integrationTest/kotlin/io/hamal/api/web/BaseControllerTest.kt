@@ -13,7 +13,7 @@ import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import kotlin.reflect.KClass
 
-internal abstract class BaseRouteTest : BaseTest() {
+internal abstract class BaseControllerTest : BaseTest() {
 
     val httpTemplate: HttpTemplate by lazy {
         HttpTemplate(

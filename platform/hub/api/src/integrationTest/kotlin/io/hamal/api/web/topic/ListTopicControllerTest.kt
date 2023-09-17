@@ -7,7 +7,7 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
 
-internal class ListTopicRouteTest : BaseTopicRouteTest() {
+internal class ListTopicControllerTest : BaseTopicControllerTest() {
     @Test
     fun `No topics`() {
         val result = listTopics()

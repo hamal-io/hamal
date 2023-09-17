@@ -14,7 +14,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListEntryRouteTest : BaseTopicRouteTest() {
+internal class ListEntryControllerTest : BaseTopicControllerTest() {
     @Test
     fun `No entries`() {
         val topicId = awaitCompleted(

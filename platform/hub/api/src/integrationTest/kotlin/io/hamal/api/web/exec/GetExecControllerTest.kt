@@ -13,7 +13,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
-internal class GetExecControllerTest : BaseExecRouteTest() {
+internal class GetExecControllerTest : BaseExecControllerTest() {
     @Test
     fun `Get exec`() {
         val createAdhocResponse = awaitCompleted(

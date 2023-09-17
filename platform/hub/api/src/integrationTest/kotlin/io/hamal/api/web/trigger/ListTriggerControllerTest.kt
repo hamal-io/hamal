@@ -7,7 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListTriggerRouteTest : BaseTriggerRouteTest() {
+internal class ListTriggerControllerTest : BaseTriggerControllerTest() {
     @Test
     fun `No trigger to list`() {
         with(listTriggers()) {

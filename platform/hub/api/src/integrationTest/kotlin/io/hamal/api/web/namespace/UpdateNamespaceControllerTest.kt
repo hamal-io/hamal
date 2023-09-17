@@ -18,7 +18,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class UpdateNamespaceTest : BaseNamespaceRouteTest() {
+internal class UpdateNamespaceControllerTest : BaseNamespaceControllerTest() {
 
     @Test
     fun `Tries to update namespace which does not exists`() {
@@ -60,7 +60,7 @@ internal class UpdateNamespaceTest : BaseNamespaceRouteTest() {
             .execute()
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
-        
+
         val req = updateNamespaceResponse.result(HubSubmittedReqWithId::class)
         val namespaceId = awaitCompleted(req).id(::NamespaceId)
 

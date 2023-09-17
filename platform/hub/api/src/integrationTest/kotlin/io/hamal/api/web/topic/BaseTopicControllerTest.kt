@@ -1,6 +1,6 @@
 package io.hamal.api.web.topic
 
-import io.hamal.api.web.BaseRouteTest
+import io.hamal.api.web.BaseControllerTest
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -12,7 +12,7 @@ import io.hamal.lib.sdk.hub.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseTopicRouteTest : BaseRouteTest() {
+internal sealed class BaseTopicControllerTest : BaseControllerTest() {
 
     fun listTopicEntries(topicId: TopicId): HubTopicEntryList {
         val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/entries")

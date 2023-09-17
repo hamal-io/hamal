@@ -1,17 +1,17 @@
 package io.hamal.api.web.topic
 
 
-import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.sdk.hub.HubError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class GetTopicRouteTest : BaseTopicRouteTest() {
+internal class GetTopicControllerTest : BaseTopicControllerTest() {
 
     @Test
     fun `Single topic`() {

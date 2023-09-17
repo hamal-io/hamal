@@ -21,7 +21,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
-internal class CreateTriggerRouteTest : BaseTriggerRouteTest() {
+internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
 
     @Test
     fun `Creates trigger without namespace id`() {

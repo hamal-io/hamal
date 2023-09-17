@@ -1,6 +1,6 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.api.web.BaseRouteTest
+import io.hamal.api.web.BaseControllerTest
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
@@ -12,7 +12,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import kotlin.time.Duration.Companion.seconds
 
-internal sealed class BaseTriggerRouteTest : BaseRouteTest() {
+internal sealed class BaseTriggerControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): HubSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/funcs")

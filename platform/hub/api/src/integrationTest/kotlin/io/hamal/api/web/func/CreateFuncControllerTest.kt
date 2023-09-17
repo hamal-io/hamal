@@ -16,7 +16,8 @@ import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class CreateFuncRouteTest : BaseFuncRouteTest() {
+internal class CreateFuncControllerTest : BaseFuncControllerTest() {
+
     @Test
     fun `Create func without namespace id`() {
         val result = createFunc(
