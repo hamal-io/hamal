@@ -1,6 +1,6 @@
 package io.hamal.admin.web.account
 
-import io.hamal.core.component.account.ListAccount
+import io.hamal.core.adapter.ListAccountPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.admin.AdminAccountList
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListAccountController(private val listAccount: ListAccount) {
+internal class ListAccountController(private val listAccount: ListAccountPort) {
     @GetMapping("/v1/accounts")
     fun listAccount(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: AccountId,

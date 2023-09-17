@@ -1,6 +1,6 @@
 package io.hamal.api.web.topic
 
-import io.hamal.core.component.topic.GetTopic
+import io.hamal.core.adapter.topic.GetTopic
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.hub.HubTopic
 import org.springframework.http.ResponseEntity

@@ -1,6 +1,6 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.core.component.trigger.GetTrigger
+import io.hamal.core.adapter.trigger.GetTrigger
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.hub.HubEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger

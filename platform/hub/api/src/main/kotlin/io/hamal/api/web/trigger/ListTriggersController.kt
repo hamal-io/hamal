@@ -1,6 +1,6 @@
 package io.hamal.api.web.trigger
 
-import io.hamal.core.component.trigger.ListTriggers
+import io.hamal.core.adapter.trigger.ListTriggers
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.GroupId

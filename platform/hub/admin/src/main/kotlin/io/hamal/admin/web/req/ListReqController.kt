@@ -1,6 +1,6 @@
 package io.hamal.admin.web.req
 
-import io.hamal.core.component.req.ListReq
+import io.hamal.core.adapter.req.ListReq
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.sdk.admin.AdminReqList

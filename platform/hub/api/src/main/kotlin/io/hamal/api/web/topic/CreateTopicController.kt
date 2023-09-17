@@ -1,7 +1,7 @@
 package io.hamal.api.web.topic
 
 import io.hamal.api.web.req.Assembler
-import io.hamal.core.component.topic.CreateTopic
+import io.hamal.core.adapter.topic.CreateTopic
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubCreateTopicReq
 import io.hamal.lib.sdk.hub.HubSubmittedReq

@@ -1,7 +1,7 @@
 package io.hamal.admin.web.topic
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.component.topic.AppendEntryToTopic
+import io.hamal.core.adapter.topic.AppendEntryToTopic
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.admin.AdminSubmittedReq

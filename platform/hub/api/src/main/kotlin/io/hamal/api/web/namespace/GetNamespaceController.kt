@@ -1,6 +1,6 @@
 package io.hamal.api.web.namespace
 
-import io.hamal.core.component.namespace.GetNamespace
+import io.hamal.core.adapter.namespace.GetNamespace
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.hub.HubNamespace
 import org.springframework.http.ResponseEntity

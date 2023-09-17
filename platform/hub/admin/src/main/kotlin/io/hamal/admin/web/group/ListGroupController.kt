@@ -1,6 +1,6 @@
 package io.hamal.admin.web.group
 
-import io.hamal.core.component.group.ListGroup
+import io.hamal.core.adapter.group.ListGroup
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.admin.AdminGroupList

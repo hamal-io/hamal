@@ -1,6 +1,6 @@
 package io.hamal.admin.web.exec
 
-import io.hamal.core.component.exec.ListExec
+import io.hamal.core.adapter.exec.ListExec
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.GroupId
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListExecController(private val listExec: ListExec) {
+internal class ListExecController(private val listExec: io.hamal.core.adapter.exec.ListExec) {
     @GetMapping("/v1/groups/{groupId}/execs")
     fun list(
         @PathVariable("groupId") groupId: GroupId,

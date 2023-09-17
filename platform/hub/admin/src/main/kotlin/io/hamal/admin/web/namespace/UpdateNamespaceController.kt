@@ -1,7 +1,7 @@
 package io.hamal.admin.web.namespace
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.component.namespace.UpdateNamespace
+import io.hamal.core.adapter.namespace.UpdateNamespace
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.admin.AdminUpdateNamespaceReq
 import org.springframework.http.HttpStatus

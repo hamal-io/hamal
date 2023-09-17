@@ -1,7 +1,7 @@
 package io.hamal.api.web.trigger
 
 import io.hamal.api.web.req.Assembler
-import io.hamal.core.component.trigger.CreateTrigger
+import io.hamal.core.adapter.trigger.CreateTrigger
 import io.hamal.lib.sdk.hub.HubCreateTriggerReq
 import io.hamal.lib.sdk.hub.HubSubmittedReq
 import org.springframework.http.HttpStatus.ACCEPTED

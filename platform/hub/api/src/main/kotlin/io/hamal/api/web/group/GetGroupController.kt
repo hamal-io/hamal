@@ -1,6 +1,6 @@
 package io.hamal.api.web.group
 
-import io.hamal.core.component.group.GetGroup
+import io.hamal.core.adapter.group.GetGroup
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubGroup
 import org.springframework.http.ResponseEntity

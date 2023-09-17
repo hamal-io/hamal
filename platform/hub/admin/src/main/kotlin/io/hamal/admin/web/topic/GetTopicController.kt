@@ -1,6 +1,6 @@
 package io.hamal.admin.web.topic
 
-import io.hamal.core.component.topic.GetTopic
+import io.hamal.core.adapter.topic.GetTopic
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.admin.AdminTopic
 import org.springframework.http.ResponseEntity

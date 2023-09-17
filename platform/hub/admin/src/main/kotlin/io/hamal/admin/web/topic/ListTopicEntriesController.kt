@@ -1,6 +1,6 @@
 package io.hamal.admin.web.topic
 
-import io.hamal.core.component.topic.ListTopicEntries
+import io.hamal.core.adapter.topic.ListTopicEntries
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicId

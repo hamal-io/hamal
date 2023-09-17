@@ -1,6 +1,6 @@
 package io.hamal.api.web.state
 
-import io.hamal.core.component.state.GetState
+import io.hamal.core.adapter.state.GetState
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.hub.HubCorrelatedState

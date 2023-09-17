@@ -1,6 +1,6 @@
 package io.hamal.api.web
 
-import io.hamal.core.component.state.SetState
+import io.hamal.core.adapter.state.SetState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId

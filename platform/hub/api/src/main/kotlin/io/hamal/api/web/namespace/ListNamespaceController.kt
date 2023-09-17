@@ -1,6 +1,6 @@
 package io.hamal.api.web.namespace
 
-import io.hamal.core.component.namespace.ListNamespace
+import io.hamal.core.adapter.namespace.ListNamespace
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId

@@ -2,7 +2,7 @@ package io.hamal.admin.web.trigger
 
 import io.hamal.admin.web.req.Assembler
 
-import io.hamal.core.component.trigger.CreateTrigger
+import io.hamal.core.adapter.trigger.CreateTrigger
 import io.hamal.lib.sdk.admin.AdminCreateTriggerReq
 import io.hamal.lib.sdk.admin.AdminSubmittedReq
 import org.springframework.http.HttpStatus.ACCEPTED

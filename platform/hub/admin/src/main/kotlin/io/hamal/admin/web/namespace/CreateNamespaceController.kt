@@ -1,7 +1,7 @@
 package io.hamal.admin.web.namespace
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.component.namespace.CreateNamespace
+import io.hamal.core.adapter.namespace.CreateNamespace
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.admin.AdminCreateNamespaceReq
 import io.hamal.lib.sdk.admin.AdminSubmittedReq

@@ -1,6 +1,6 @@
 package io.hamal.api.web.req
 
-import io.hamal.core.component.req.GetReq
+import io.hamal.core.adapter.req.GetReq
 import io.hamal.lib.domain.ReqId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
