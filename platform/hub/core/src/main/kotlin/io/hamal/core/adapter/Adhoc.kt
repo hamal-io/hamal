@@ -1,4 +1,4 @@
-package io.hamal.core.adapter.adhoc
+package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.GroupId
@@ -7,9 +7,15 @@ import io.hamal.request.InvokeAdhocReq
 import org.springframework.stereotype.Component
 
 
+interface InvokeAdhocPort {
+    operator fun <T : Any> invoke(groupId: GroupId, req: InvokeAdhocReq, responseHandler: (SubmittedReq) -> T): T
+}
+
+interface AdhocPort : InvokeAdhocPort
+
 @Component
-class Adhoc(private val submitRequest: SubmitRequest) {
-    operator fun <T : Any> invoke(
+class AdhocAdapter(private val submitRequest: SubmitRequest) : AdhocPort {
+    override operator fun <T : Any> invoke(
         groupId: GroupId,
         req: InvokeAdhocReq,
         responseHandler: (SubmittedReq) -> T
