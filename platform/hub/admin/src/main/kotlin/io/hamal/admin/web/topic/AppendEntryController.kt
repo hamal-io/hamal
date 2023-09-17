@@ -1,7 +1,7 @@
 package io.hamal.admin.web.topic
 
 import io.hamal.admin.web.req.Assembler
-import io.hamal.core.adapter.topic.AppendEntryToTopic
+import io.hamal.core.adapter.AppendEntryToTopicPort
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.admin.AdminSubmittedReq
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class AppendEntryController(private val appendEntryToTopic: AppendEntryToTopic) {
+internal class AppendEntryController(private val appendEntryToTopic: AppendEntryToTopicPort) {
     @PostMapping("/v1/topics/{topicId}/entries")
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,

@@ -1,7 +1,7 @@
 package io.hamal.api.web.topic
 
 import io.hamal.api.web.req.Assembler
-import io.hamal.core.adapter.topic.CreateTopic
+import io.hamal.core.adapter.CreateTopicPort
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.hub.HubCreateTopicReq
 import io.hamal.lib.sdk.hub.HubSubmittedReq
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CreateTopicController(private val createTopic: CreateTopic) {
+class CreateTopicController(private val createTopic: CreateTopicPort) {
 
     @PostMapping("/v1/groups/{groupId}/topics")
     fun createTopic(
