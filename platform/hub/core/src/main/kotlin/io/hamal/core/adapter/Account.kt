@@ -17,11 +17,11 @@ interface GetAccountPort {
     operator fun <T : Any> invoke(accountId: AccountId, responseHandler: (Account) -> T): T
 }
 
-interface ListAccountPort {
+interface ListAccountsPort {
     operator fun <T : Any> invoke(query: AccountQuery, responseHandler: (List<Account>) -> T): T
 }
 
-interface AccountPort : CreateAccountPort, GetAccountPort, ListAccountPort
+interface AccountPort : CreateAccountPort, GetAccountPort, ListAccountsPort
 
 @Component
 class AccountAdapter(

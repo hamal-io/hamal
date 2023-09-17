@@ -18,6 +18,7 @@ import java.time.Instant
 @Serializable(with = ExecLogId.Serializer::class)
 class ExecLogId(override val value: SnowflakeId) : DomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     internal object Serializer : DomainIdSerializer<ExecLogId>(::ExecLogId)
 }

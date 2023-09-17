@@ -1,6 +1,6 @@
 package io.hamal.admin.web.func
 
-import io.hamal.core.adapter.ListFuncPort
+import io.hamal.core.adapter.ListFuncsPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListFuncController(private val listFunc: ListFuncPort) {
+internal class ListFuncsController(private val listFunc: ListFuncsPort) {
     @GetMapping("/v1/funcs")
     fun listFunc(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,

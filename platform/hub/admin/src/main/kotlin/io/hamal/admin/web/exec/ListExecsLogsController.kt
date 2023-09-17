@@ -1,6 +1,6 @@
 package io.hamal.admin.web.exec
 
-import io.hamal.core.adapter.exec.ListExecsLogs
+import io.hamal.core.adapter.ListExecsLogsPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecLogId
 import io.hamal.lib.domain.vo.GroupId
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListExecsLogsController(private val execsLogs: io.hamal.core.adapter.exec.ListExecsLogs) {
+internal class ListExecsLogsController(private val execsLogs: ListExecsLogsPort) {
     @GetMapping("/v1/groups/{groupId}/exec-logs")
     fun getExecLogs(
         @PathVariable("groupId") groupId: GroupId,

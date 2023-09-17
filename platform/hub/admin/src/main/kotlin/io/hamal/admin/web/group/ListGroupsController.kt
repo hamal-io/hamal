@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListGroupController(private val listGroup: ListGroup) {
+internal class ListGroupsController(private val listGroup: ListGroup) {
     @GetMapping("/v1/groups")
     fun listGroup(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: GroupId,

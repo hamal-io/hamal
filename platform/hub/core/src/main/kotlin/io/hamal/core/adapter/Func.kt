@@ -27,7 +27,7 @@ interface InvokeFuncPort {
     operator fun <T : Any> invoke(funcId: FuncId, req: InvokeFuncReq, responseHandler: (SubmittedReq) -> T): T
 }
 
-interface ListFuncPort {
+interface ListFuncsPort {
     operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T): T
 }
 
@@ -35,7 +35,7 @@ interface UpdateFuncPort {
     operator fun <T : Any> invoke(funcId: FuncId, req: UpdateFuncReq, responseHandler: (SubmittedReq) -> T): T
 }
 
-interface FuncPort : CreateFuncPort, GetFuncPort, InvokeFuncPort, ListFuncPort, UpdateFuncPort
+interface FuncPort : CreateFuncPort, GetFuncPort, InvokeFuncPort, ListFuncsPort, UpdateFuncPort
 
 @Component
 class FuncAdapter(
