@@ -1,4 +1,4 @@
-package io.hamal.core.adapter.auth
+package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.repository.api.AccountQueryRepository
@@ -6,13 +6,24 @@ import io.hamal.repository.api.submitted_req.SubmittedSignInWithPasswordReq
 import io.hamal.request.SignInReq
 import org.springframework.stereotype.Component
 
+
+interface SignInPort {
+    operator fun <T : Any> invoke(
+        req: SignInReq,
+        responseHandler: (SubmittedSignInWithPasswordReq) -> T
+    ): T
+}
+
+interface AuthPort : SignInPort
+
+
 @Component
-class SignIn(
+class AuthAdapter(
     private val accountQueryRepository: AccountQueryRepository,
     private val submitRequest: SubmitRequest
-) {
+) : AuthPort {
 
-    operator fun <T : Any> invoke(
+    override operator fun <T : Any> invoke(
         req: SignInReq,
         responseHandler: (SubmittedSignInWithPasswordReq) -> T
     ): T {
