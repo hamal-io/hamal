@@ -12,7 +12,5 @@ class CreateNamespace(private val submitRequest: SubmitRequest) {
         groupId: GroupId,
         req: CreateNamespaceReq,
         responseHandler: (SubmittedReq) -> T
-    ): T {
-        return responseHandler(submitRequest(groupId, req))
-    }
+    ): T = responseHandler(submitRequest(groupId, req))
 }

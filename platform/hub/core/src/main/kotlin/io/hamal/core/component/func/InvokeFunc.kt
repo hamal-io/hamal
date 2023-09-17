@@ -14,7 +14,5 @@ class InvokeFunc(
         funcId: FuncId,
         req: InvokeFuncReq,
         responseHandler: (SubmittedReq) -> T
-    ): T {
-        return responseHandler(submitRequest(funcId, req))
-    }
+    ): T = responseHandler(submitRequest(funcId, req))
 }

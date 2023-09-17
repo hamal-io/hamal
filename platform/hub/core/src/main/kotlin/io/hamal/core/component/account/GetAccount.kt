@@ -10,8 +10,5 @@ class GetAccount(private val accountQueryRepository: AccountQueryRepository) {
     operator fun <T : Any> invoke(
         accountId: AccountId,
         responseHandler: (Account) -> T
-    ): T {
-        val result = accountQueryRepository.get(accountId)
-        return responseHandler(result)
-    }
+    ): T = responseHandler(accountQueryRepository.get(accountId))
 }

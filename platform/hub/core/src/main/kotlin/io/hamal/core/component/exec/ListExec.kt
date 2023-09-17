@@ -9,7 +9,5 @@ class ListExec(private val execQueryRepository: ExecQueryRepository) {
     operator fun <T : Any> invoke(
         query: ExecQueryRepository.ExecQuery,
         responseHandler: (List<Exec>) -> T
-    ): T {
-        return responseHandler(execQueryRepository.list(query))
-    }
+    ): T = responseHandler(execQueryRepository.list(query))
 }

@@ -18,18 +18,16 @@ class AppendExecLog(
         execId: ExecId,
         req: AppendExecLogCmd,
         responseHandler: (ExecLog) -> T
-    ): T {
-        return responseHandler(
-            execLogCmdRepository.append(
-                LogCmd(
-                    id = generateDomainId(::ExecLogId),
-                    execId = execId,
-                    level = req.level,
-                    message = req.message,
-                    localAt = req.localAt
-                )
+    ): T = responseHandler(
+        execLogCmdRepository.append(
+            LogCmd(
+                id = generateDomainId(::ExecLogId),
+                execId = execId,
+                level = req.level,
+                message = req.message,
+                localAt = req.localAt
             )
         )
-    }
+    )
 }
 

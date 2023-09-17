@@ -11,7 +11,5 @@ class ListExecLogs(private val execLogQueryRepository: ExecLogQueryRepository) {
         execId: ExecId,
         query: ExecLogQueryRepository.ExecLogQuery,
         responseHandler: (List<ExecLog>) -> T
-    ): T {
-        return responseHandler(execLogQueryRepository.list(execId, query))
-    }
+    ): T = responseHandler(execLogQueryRepository.list(execId, query))
 }

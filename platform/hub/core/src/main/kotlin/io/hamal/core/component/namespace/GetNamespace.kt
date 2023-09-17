@@ -10,7 +10,5 @@ class GetNamespace(private val namespaceQueryRepository: NamespaceQueryRepositor
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         responseHandler: (Namespace) -> T
-    ): T {
-        return responseHandler(namespaceQueryRepository.get(namespaceId))
-    }
+    ): T = responseHandler(namespaceQueryRepository.get(namespaceId))
 }

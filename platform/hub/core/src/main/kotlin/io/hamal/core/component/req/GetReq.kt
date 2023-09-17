@@ -10,7 +10,5 @@ class GetReq(private val reqQueryRepository: ReqQueryRepository) {
     operator fun <T : Any> invoke(
         reqId: ReqId,
         responseHandler: (SubmittedReq) -> T
-    ): T {
-        return responseHandler(reqQueryRepository.get(reqId))
-    }
+    ): T = responseHandler(reqQueryRepository.get(reqId))
 }

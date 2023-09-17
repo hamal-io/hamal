@@ -9,7 +9,5 @@ class ListGroup(private val groupQueryRepository: GroupQueryRepository) {
     operator fun <T : Any> invoke(
         query: GroupQueryRepository.GroupQuery,
         responseHandler: (List<Group>) -> T
-    ): T {
-        return responseHandler(groupQueryRepository.list(query))
-    }
+    ): T = responseHandler(groupQueryRepository.list(query))
 }

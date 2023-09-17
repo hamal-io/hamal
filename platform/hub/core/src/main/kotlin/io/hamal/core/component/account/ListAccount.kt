@@ -9,8 +9,5 @@ class ListAccount(private val accountQueryRepository: AccountQueryRepository) {
     operator fun <T : Any> invoke(
         query: AccountQueryRepository.AccountQuery,
         responseHandler: (List<Account>) -> T
-    ): T {
-        val accounts = accountQueryRepository.list(query)
-        return responseHandler(accounts)
-    }
+    ): T = responseHandler(accountQueryRepository.list(query))
 }

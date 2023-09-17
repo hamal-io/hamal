@@ -18,7 +18,9 @@ class AppendEntryToTopic(
         topAppend: TopicEntryPayload,
         responseHandler: (SubmittedReq) -> T
     ): T {
-        val topic = eventBrokerRepository.getTopic(topicId)
-        return responseHandler(submitRequest(HubAppendEntryReq(topic.id, topAppend)))
+        ensureTopicExists(topicId)
+        return responseHandler(submitRequest(HubAppendEntryReq(topicId, topAppend)))
     }
+
+    private fun ensureTopicExists(topicId: TopicId) = eventBrokerRepository.getTopic(topicId)
 }

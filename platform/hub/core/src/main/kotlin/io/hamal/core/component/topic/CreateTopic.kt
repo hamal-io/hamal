@@ -12,7 +12,5 @@ class CreateTopic(private val submitRequest: SubmitRequest) {
         groupId: GroupId,
         req: CreateTopicReq,
         responseHandler: (SubmittedReq) -> T
-    ): T {
-        return responseHandler(submitRequest(req))
-    }
+    ): T = responseHandler(submitRequest(req))
 }

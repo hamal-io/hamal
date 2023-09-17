@@ -13,9 +13,5 @@ class Adhoc(private val submitRequest: SubmitRequest) {
         groupId: GroupId,
         req: InvokeAdhocReq,
         responseHandler: (SubmittedReq) -> T
-    ): T {
-        return responseHandler(
-            submitRequest(groupId, req)
-        )
-    }
+    ): T = responseHandler(submitRequest(groupId, req))
 }

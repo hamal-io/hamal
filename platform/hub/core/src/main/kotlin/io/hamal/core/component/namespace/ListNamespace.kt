@@ -9,7 +9,5 @@ class ListNamespace(private val namespaceQueryRepository: NamespaceQueryReposito
     operator fun <T : Any> invoke(
         query: NamespaceQueryRepository.NamespaceQuery,
         responseHandler: (List<Namespace>) -> T
-    ): T {
-        return responseHandler(namespaceQueryRepository.list(query))
-    }
+    ): T = responseHandler(namespaceQueryRepository.list(query))
 }

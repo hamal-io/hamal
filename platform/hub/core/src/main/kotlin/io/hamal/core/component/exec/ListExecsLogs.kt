@@ -9,7 +9,5 @@ class ListExecsLogs(private val execLogQueryRepository: ExecLogQueryRepository) 
     operator fun <T : Any> invoke(
         query: ExecLogQueryRepository.ExecLogQuery,
         responseHandler: (List<ExecLog>) -> T
-    ): T {
-        return responseHandler(execLogQueryRepository.list(query))
-    }
+    ): T = responseHandler(execLogQueryRepository.list(query))
 }

@@ -10,7 +10,5 @@ class GetGroup(private val groupQueryRepository: GroupQueryRepository) {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         responseHandler: (Group) -> T
-    ): T {
-        return responseHandler(groupQueryRepository.get(groupId))
-    }
+    ): T = responseHandler(groupQueryRepository.get(groupId))
 }

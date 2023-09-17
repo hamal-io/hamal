@@ -10,7 +10,5 @@ class GetExec(private val execQueryRepository: ExecQueryRepository) {
     operator fun <T : Any> invoke(
         execId: ExecId,
         responseHandler: (Exec) -> T
-    ): T {
-        return responseHandler(execQueryRepository.get(execId))
-    }
+    ): T = responseHandler(execQueryRepository.get(execId))
 }

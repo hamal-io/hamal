@@ -10,7 +10,5 @@ class GetTopic(private val eventBrokerRepository: BrokerRepository) {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         responseHandler: (Topic) -> T
-    ): T {
-        return responseHandler(eventBrokerRepository.getTopic(topicId))
-    }
+    ): T = responseHandler(eventBrokerRepository.getTopic(topicId))
 }
