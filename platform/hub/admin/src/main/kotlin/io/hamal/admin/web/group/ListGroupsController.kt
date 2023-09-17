@@ -1,6 +1,6 @@
 package io.hamal.admin.web.group
 
-import io.hamal.core.adapter.group.ListGroup
+import io.hamal.core.adapter.ListGroupsPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.admin.AdminGroupList
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListGroupsController(private val listGroup: ListGroup) {
+internal class ListGroupsController(private val listGroup: ListGroupsPort) {
     @GetMapping("/v1/groups")
     fun listGroup(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: GroupId,
