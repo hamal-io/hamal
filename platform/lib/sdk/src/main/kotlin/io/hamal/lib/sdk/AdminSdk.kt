@@ -12,6 +12,7 @@ interface AdminSdk {
     val execLog: AdminExecLogService
     val func: AdminFuncService
     val group: AdminGroupService
+    val metric: AdminMetricService
     val namespace: AdminNamespaceService
     val topic: AdminTopicService
     val trigger: AdminTriggerService
@@ -49,6 +50,10 @@ data class DefaultAdminSdk(
         DefaultAdminFuncService(template)
     }
 
+    override val metric: AdminMetricService by lazy {
+        DefaultAdminMetricService(template)
+    }
+
     override val group: AdminGroupService by lazy {
         DefaultAdminGroupService(template)
     }
@@ -64,4 +69,12 @@ data class DefaultAdminSdk(
     override val trigger: AdminTriggerService by lazy {
         DefaultAdminTriggerService(template)
     }
+}
+
+fun main() {
+    val adminSdk = DefaultAdminSdk(
+        HttpTemplate("http://localhost:9009")
+    )
+
+    println(adminSdk.metric.get())
 }

@@ -1,6 +1,8 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.sdk.admin.AdminMetricService
+import io.hamal.lib.sdk.admin.DefaultAdminMetricService
 import io.hamal.lib.sdk.hub.*
 
 interface HubSdk {
@@ -15,7 +17,7 @@ interface HubSdk {
     val namespace: HubNamespaceService
     val topic: HubTopicService
     val trigger: HubTriggerService
-    val metric: HubMetricService
+    val metric: AdminMetricService
 }
 
 data class DefaultHubSdk(
@@ -66,7 +68,7 @@ data class DefaultHubSdk(
         DefaultHubTriggerService(template)
     }
 
-    override val metric: HubMetricService by lazy {
-        DefaultMetricService(template)
+    override val metric: AdminMetricService by lazy {
+        DefaultAdminMetricService(template)
     }
 }

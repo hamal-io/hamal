@@ -1,21 +1,21 @@
-package io.hamal.api.web.metric
+package io.hamal.admin.web.metric
 
 import io.hamal.core.service.MetricService
-import io.hamal.lib.sdk.hub.MetricType
+import io.hamal.lib.sdk.admin.AdminMetrics
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class MetricRoute(
-    val metricService: MetricService
+class MetricController(
+    private val metricService: MetricService
 ) {
-    @GetMapping("/v1/metrics/json", produces = ["application/json"])
-    fun json(): ResponseEntity<MetricType> {
+    @GetMapping("/v1/metrics", produces = ["application/json"])
+    fun json(): ResponseEntity<AdminMetrics> {
         val result = metricService.get()
         return ResponseEntity.ok(
-            MetricType(result.getTime(), result.getMap())
+            AdminMetrics(result.getTime(), result.getMap())
         )
     }
 }
