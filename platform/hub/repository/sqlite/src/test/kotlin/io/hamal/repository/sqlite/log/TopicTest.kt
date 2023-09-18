@@ -1,14 +1,15 @@
 package io.hamal.repository.sqlite.log
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.FileUtils
+import io.hamal.lib.common.util.TimeUtils.withEpochMilli
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.Chunk
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
 import io.hamal.repository.api.log.Topic
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.FileUtils
-import io.hamal.lib.common.util.TimeUtils.withEpochMilli
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -38,7 +39,8 @@ class SqliteLogTopicRepositoryTest {
             SqliteTopicRepository(
                 Topic(
                     id = TopicId(23),
-                    name = TopicName("test-topic")
+                    name = TopicName("test-topic"),
+                    groupId = GroupId(34)
                 ),
                 targetDir
             ).use { }
@@ -95,6 +97,7 @@ class SqliteLogTopicRepositoryTest {
         private val testInstance = SqliteTopicRepository(
             Topic(
                 TopicId(23),
+                GroupId(34),
                 TopicName("test-topic"),
             ),
             Path(testDir)
@@ -134,6 +137,7 @@ class SqliteLogTopicRepositoryTest {
         private val testInstance = SqliteTopicRepository(
             Topic(
                 TopicId(23),
+                GroupId(34),
                 TopicName("test-topic")
             ),
             Path(testDir)

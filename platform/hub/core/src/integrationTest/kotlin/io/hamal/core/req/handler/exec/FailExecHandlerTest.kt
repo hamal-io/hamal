@@ -2,7 +2,7 @@ package io.hamal.core.req.handler.exec
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed
@@ -55,12 +55,15 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: FailExecHandler
 
-    private val submittedFailExecReq = SubmittedFailExecReq(
-        reqId = ReqId(10),
-        status = ReqStatus.Submitted,
-        id = ExecId(1234),
-        cause = ErrorType("You have not tried hard enough")
-    )
+    private val submittedFailExecReq by lazy {
+        SubmittedFailExecReq(
+            reqId = ReqId(10),
+            status = Submitted,
+            id = ExecId(1234),
+            groupId = testGroup.id,
+            cause = ErrorType("You have not tried hard enough")
+        )
+    }
 
     private fun verifyFailed() {
         execQueryRepository.list(ExecQuery()).also { execs ->

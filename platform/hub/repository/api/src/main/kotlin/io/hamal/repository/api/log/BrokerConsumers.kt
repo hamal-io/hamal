@@ -5,7 +5,7 @@ import java.io.Closeable
 
 
 interface BrokerConsumersRepository : Closeable {
-    fun nextChunkId(groupId: GroupId, topicId: TopicId): ChunkId
-    fun commit(groupId: GroupId, topicId: TopicId, chunkId: ChunkId)
+    fun nextChunkId(consumerId: ConsumerId, topicId: TopicId): ChunkId
+    fun commit(consumerId: ConsumerId, topicId: TopicId, chunkId: ChunkId)
     fun count(): ULong
 }

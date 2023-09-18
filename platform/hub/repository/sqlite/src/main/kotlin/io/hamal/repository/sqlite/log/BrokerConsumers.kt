@@ -5,7 +5,7 @@ import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.repository.api.log.BrokerConsumersRepository
 import io.hamal.repository.api.log.ChunkId
-import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.ConsumerId
 import java.nio.file.Path
 
 data class SqliteBrokerConsumers(
@@ -44,12 +44,12 @@ class SqliteBrokerConsumersRepository(
         }
     }
 
-    override fun nextChunkId(groupId: GroupId, topicId: TopicId): ChunkId {
+    override fun nextChunkId(consumerId: ConsumerId, topicId: TopicId): ChunkId {
         return connection.executeQueryOne(
             """SELECT next_chunk_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
         ) {
             query {
-                set("groupId", groupId.value)
+                set("groupId", consumerId.value)
                 set("topicId", topicId.value)
             }
             map {
@@ -58,7 +58,7 @@ class SqliteBrokerConsumersRepository(
         } ?: ChunkId(0)
     }
 
-    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: ChunkId) {
+    override fun commit(consumerId: ConsumerId, topicId: TopicId, chunkId: ChunkId) {
         connection.execute(
             """
             INSERT INTO consumers(group_id, topic_id, next_chunk_id)
@@ -70,7 +70,7 @@ class SqliteBrokerConsumersRepository(
                             excluded.topic_id  == consumers.topic_id;
                     """.trimIndent(),
         ) {
-            set("groupId", groupId.value)
+            set("groupId", consumerId.value)
             set("topicId", topicId.value)
             set("nextChunkId", chunkId.value.value + 1)
         }

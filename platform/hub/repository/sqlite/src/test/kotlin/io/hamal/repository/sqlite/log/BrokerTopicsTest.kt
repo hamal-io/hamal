@@ -2,10 +2,11 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
@@ -46,7 +47,7 @@ class SqliteLogBrokerTopicsRepositoryTest {
         @Test
         fun `Does not create topics table if already exists`() {
             SqliteBrokerTopicsRepository(testBrokerTopics()).use {
-                it.connection.execute("""INSERT INTO topics (name,instant) VALUES ('some-topic',unixepoch());""")
+                it.connection.execute("""INSERT INTO topics (group_id, name,instant) VALUES (1,'some-topic',unixepoch());""")
             }
 
             SqliteBrokerTopicsRepository(testBrokerTopics()).use { }
@@ -116,9 +117,10 @@ class SqliteLogBrokerTopicsRepositoryTest {
         fun `Creates a new entry if topic does not exists`() {
             val result = testInstance.create(
                 CmdId(1),
-                BrokerTopicsRepository.TopicToCreate(
+                TopicToCreate(
                     TopicId(1),
-                    TopicName("very-first-topic")
+                    TopicName("very-first-topic"),
+                    GroupId(1)
                 )
             )
 
@@ -132,17 +134,19 @@ class SqliteLogBrokerTopicsRepositoryTest {
         fun `Bug - able to create realistic topic name`() {
             testInstance.create(
                 CmdId(1),
-                BrokerTopicsRepository.TopicToCreate(
+                TopicToCreate(
                     TopicId(1),
-                    TopicName("very-first-topic")
+                    TopicName("very-first-topic"),
+                    GroupId(1),
                 )
             )
 
             val result = testInstance.create(
                 CmdId(2),
-                BrokerTopicsRepository.TopicToCreate(
+                TopicToCreate(
                     TopicId(2),
-                    TopicName("func::created")
+                    TopicName("func::created"),
+                    GroupId(1)
                 )
             )
             assertThat(result.id, equalTo(TopicId(2)))
@@ -155,18 +159,20 @@ class SqliteLogBrokerTopicsRepositoryTest {
         fun `Throws if topic already exists`() {
             testInstance.create(
                 CmdId(1),
-                BrokerTopicsRepository.TopicToCreate(
+                TopicToCreate(
                     TopicId(1),
-                    TopicName("very-first-topic")
+                    TopicName("very-first-topic"),
+                    GroupId(1)
                 )
             )
 
             val throwable = assertThrows<IllegalArgumentException> {
                 testInstance.create(
                     CmdId(2),
-                    BrokerTopicsRepository.TopicToCreate(
+                    TopicToCreate(
                         TopicId(2),
-                        TopicName("very-first-topic")
+                        TopicName("very-first-topic"),
+                        GroupId(1)
                     )
                 )
             }

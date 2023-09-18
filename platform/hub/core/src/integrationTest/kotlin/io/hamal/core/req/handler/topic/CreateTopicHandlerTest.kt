@@ -32,6 +32,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
                     reqId = ReqId(2),
                     status = Submitted,
                     id = TopicId(2345),
+                    groupId = testGroup.id,
                     name = TopicName("another-topic-name")
                 )
             )
@@ -51,6 +52,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
                     reqId = ReqId(2),
                     status = Submitted,
                     id = TopicId(3456),
+                    groupId = testGroup.id,
                     name = TopicName("some-topic-name")
                 )
             )
@@ -73,10 +75,13 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: CreateTopicHandler
 
-    private val submittedCreateTopicReq = SubmittedCreateTopicReq(
-        reqId = ReqId(1),
-        status = Submitted,
-        id = TopicId(2345),
-        name = TopicName("some-topic-name")
-    )
+    private val submittedCreateTopicReq by lazy {
+        SubmittedCreateTopicReq(
+            reqId = ReqId(1),
+            status = Submitted,
+            id = TopicId(2345),
+            groupId = testGroup.id,
+            name = TopicName("some-topic-name")
+        )
+    }
 }

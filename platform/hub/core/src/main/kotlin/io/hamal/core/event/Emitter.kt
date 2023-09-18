@@ -2,10 +2,11 @@ package io.hamal.core.event
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.event.HubEvent
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.CreateTopic
+import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.ProtobufAppender
 
 class HubEventEmitter(
@@ -18,7 +19,7 @@ class HubEventEmitter(
     fun <EVENT : HubEvent> emit(cmdId: CmdId, evt: EVENT) {
         val topic = brokerRepository.findTopic(evt.topicName) ?: brokerRepository.create(
             cmdId,
-            CreateTopic.TopicToCreate(generateDomainId(::TopicId), evt.topicName)
+            TopicToCreate(generateDomainId(::TopicId), evt.topicName, GroupId.root)
         )
 
         appender.append(cmdId, topic, evt)

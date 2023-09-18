@@ -61,18 +61,21 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: CompleteExecHandler
 
-    private val submittedCompleteExecReq = SubmittedCompleteExecReq(
-        reqId = ReqId(10),
-        status = ReqStatus.Submitted,
-        id = ExecId(1234),
-        state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
-        events = listOf(
-            EventToSubmit(
-                topicName = TopicName("test-completion"),
-                payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
-            )
-        ),
-    )
+    private val submittedCompleteExecReq by lazy {
+        SubmittedCompleteExecReq(
+            reqId = ReqId(10),
+            status = ReqStatus.Submitted,
+            id = ExecId(1234),
+            state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
+            groupId = testGroup.id,
+            events = listOf(
+                EventToSubmit(
+                    topicName = TopicName("test-completion"),
+                    payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
+                )
+            ),
+        )
+    }
 
     private fun verifyCompleted() {
         execQueryRepository.list(ExecQuery()).also { execs ->

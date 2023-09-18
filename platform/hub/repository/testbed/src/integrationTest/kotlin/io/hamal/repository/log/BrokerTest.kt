@@ -1,13 +1,14 @@
 package io.hamal.repository.log
 
-import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.GroupId
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.fixture.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.ConsumerId
+import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -20,7 +21,7 @@ class BrokerTest : AbstractIntegrationTest() {
     fun `Concurrent safe - 10 threads add to the same topic`() = runWith(BrokerRepository::class) { testInstance ->
         val topic = testInstance.create(
             CmdId(1), TopicToCreate(
-                TopicId(123), TopicName("topic")
+                TopicId(123), TopicName("topic"), GroupId(1)
             )
         )
 
@@ -38,7 +39,7 @@ class BrokerTest : AbstractIntegrationTest() {
 
         futures.forEach { it.join() }
 
-        val result = testInstance.consume(GroupId("group-id"), topic, 100_000)
+        val result = testInstance.consume(ConsumerId("group-id"), topic, 100_000)
         assertThat(result, hasSize(10_000))
     }
 
@@ -50,7 +51,7 @@ class BrokerTest : AbstractIntegrationTest() {
                 runAsync {
                     val topic = testInstance.create(
                         CmdId(1),
-                        TopicToCreate(TopicId(thread), TopicName("topic-$thread"))
+                        TopicToCreate(TopicId(thread), TopicName("topic-$thread"), GroupId(1))
                     )
 
                     IntRange(1, 100).forEach {
@@ -66,7 +67,7 @@ class BrokerTest : AbstractIntegrationTest() {
 
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.consume(
-                    GroupId("group-id"),
+                    ConsumerId("group-id"),
                     testInstance.findTopic(TopicName("topic-$thread"))!!,
                     1_000_000
                 )

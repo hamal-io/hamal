@@ -14,73 +14,85 @@ internal object Assembler {
             is SubmittedCreateAccountWithPasswordReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedAppendToTopicReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedCompleteExecReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedCreateFuncReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedCreateNamespaceReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedCreateTopicReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedCreateTriggerReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedFailExecReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedInvokeExecReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedUpdateFuncReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
             is SubmittedUpdateNamespaceReq -> HubSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                groupId = r.groupId,
                 id = r.id
             )
 
 
             is SubmittedSetStateReq -> HubDefaultSubmittedReq(
                 reqId = r.reqId,
-                status = r.status
+                status = r.status,
+                groupId = r.groupId
             )
 
             is SubmittedSignInWithPasswordReq -> HubSubmittedWithTokenReq(

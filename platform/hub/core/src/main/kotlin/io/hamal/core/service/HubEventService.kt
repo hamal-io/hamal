@@ -5,11 +5,12 @@ import io.hamal.core.event.HubEventContainer
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.event.HubEvent
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.CreateTopic
-import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.ConsumerId
+import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.ProtobufLogConsumer
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
@@ -32,13 +33,13 @@ internal class HubEventService(
         val instanceTopics = hubEventContainer.topicNames().map { topicName ->
             val topicId = generateDomainId(::TopicId)
             hubEventBrokerRepository.findTopic(topicName) ?: hubEventBrokerRepository.create(
-                CmdId(topicId), CreateTopic.TopicToCreate(topicId, topicName)
+                CmdId(topicId), TopicToCreate(topicId, topicName, GroupId.root)
             )
         }
 
         instanceTopics.forEach { topic ->
             val consumer = ProtobufLogConsumer(
-                GroupId("core-event-service"), topic, hubEventBrokerRepository, HubEvent::class
+                ConsumerId("core-event-service"), topic, hubEventBrokerRepository, HubEvent::class
             )
 
             scheduledTasks.add(

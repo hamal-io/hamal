@@ -4,25 +4,25 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.log.BrokerConsumersRepository
 import io.hamal.repository.api.log.ChunkId
-import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.ConsumerId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class MemoryBrokerConsumersRepository : BrokerConsumersRepository {
 
     internal val lock = ReentrantLock()
-    internal val store = mutableMapOf<Pair<GroupId, TopicId>, ChunkId>()
-    override fun nextChunkId(groupId: GroupId, topicId: TopicId): ChunkId {
+    internal val store = mutableMapOf<Pair<ConsumerId, TopicId>, ChunkId>()
+    override fun nextChunkId(consumerId: ConsumerId, topicId: TopicId): ChunkId {
         return lock.withLock {
-            store[Pair(groupId, topicId)] ?: ChunkId(0)
+            store[Pair(consumerId, topicId)] ?: ChunkId(0)
         }
     }
 
-    override fun commit(groupId: GroupId, topicId: TopicId, chunkId: ChunkId) {
+    override fun commit(consumerId: ConsumerId, topicId: TopicId, chunkId: ChunkId) {
         return lock.withLock {
-            store.putIfAbsent(Pair(groupId, topicId), ChunkId(0))
-            store[Pair(groupId, topicId)] = ChunkId(SnowflakeId(chunkId.value.value + 1))
-            store[Pair(groupId, topicId)]
+            store.putIfAbsent(Pair(consumerId, topicId), ChunkId(0))
+            store[Pair(consumerId, topicId)] = ChunkId(SnowflakeId(chunkId.value.value + 1))
+            store[Pair(consumerId, topicId)]
         }
     }
 

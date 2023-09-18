@@ -34,7 +34,8 @@ internal class SetStateController(private val setState: SetStatePort) {
         ResponseEntity(
             HubDefaultSubmittedReq(
                 reqId = it.reqId,
-                status = it.status
+                status = it.status,
+                groupId = it.groupId,
             ), HttpStatus.ACCEPTED
         )
     }

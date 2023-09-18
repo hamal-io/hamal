@@ -9,84 +9,96 @@ import io.hamal.repository.api.submitted_req.*
 
 internal object Assembler {
     fun assemble(req: SubmittedReq): AdminSubmittedReq {
-        return when (val r = req) {
+        return when (req) {
 
             is SubmittedCreateAccountWithPasswordReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedAppendToTopicReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedCompleteExecReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedCreateFuncReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedCreateNamespaceReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedCreateTopicReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedCreateTriggerReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedFailExecReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedInvokeExecReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedUpdateFuncReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
             is SubmittedUpdateNamespaceReq -> AdminSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                id = r.id
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId,
+                id = req.id
             )
 
 
             is SubmittedSetStateReq -> AdminDefaultSubmittedReq(
-                reqId = r.reqId,
-                status = r.status
+                reqId = req.reqId,
+                status = req.status,
+                groupId = req.groupId
             )
 
             is SubmittedSignInWithPasswordReq -> AdminSubmittedWithTokenReq(
-                reqId = r.reqId,
-                status = r.status,
-                token = r.token
+                reqId = req.reqId,
+                status = req.status,
+                token = req.token
             )
         }
     }

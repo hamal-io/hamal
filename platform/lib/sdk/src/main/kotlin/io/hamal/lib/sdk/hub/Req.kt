@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.GroupId
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,10 +20,18 @@ sealed interface HubSubmittedReq {
 }
 
 @Serializable
+sealed interface HubSubmittedReqWithGroupId : HubSubmittedReq {
+    override val reqId: ReqId
+    override val status: ReqStatus
+    val groupId: GroupId
+}
+
+@Serializable
 data class HubDefaultSubmittedReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
-) : HubSubmittedReq
+    override val groupId: GroupId
+) : HubSubmittedReqWithGroupId
 
 @Serializable
 data class HubSubmittedWithTokenReq(
@@ -35,10 +44,16 @@ data class HubSubmittedWithTokenReq(
 data class HubSubmittedReqWithId(
     override val reqId: ReqId,
     override val status: ReqStatus,
+    override val groupId: GroupId,
     val id: SnowflakeId,
-) : HubSubmittedReq {
+) : HubSubmittedReqWithGroupId {
 
-    constructor(reqId: ReqId, status: ReqStatus, id: DomainId) : this(reqId, status, id.value)
+    constructor(reqId: ReqId, status: ReqStatus, groupId: GroupId, id: DomainId) : this(
+        reqId,
+        status,
+        groupId,
+        id.value,
+    )
 
     fun <DOMAIN_ID : DomainId> id(block: SnowflakeId.() -> DOMAIN_ID): DOMAIN_ID {
         return block(id)

@@ -2,6 +2,7 @@ package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository
@@ -23,7 +24,8 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
             testInstance.create(
                 CmdId(123), TopicToCreate(
                     id = TopicId(2345),
-                    name = TopicName("created-topic")
+                    name = TopicName("created-topic"),
+                    groupId = GroupId(1)
                 )
             )
         }
@@ -154,20 +156,21 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
         create(
             CmdId(1), TopicToCreate(
                 id = TopicId(5432),
-                name = TopicName("created-topic")
+                name = TopicName("created-topic"),
+                groupId = GroupId(1)
             )
         )
     }
 
     private fun BrokerTopicsRepository.setupTopics() {
-        create(CmdId(1), TopicToCreate(TopicId(1), TopicName("topic-one")))
-        create(CmdId(2), TopicToCreate(TopicId(2), TopicName("topic-two")))
-        create(CmdId(3), TopicToCreate(TopicId(3), TopicName("topic-three")))
-        create(CmdId(4), TopicToCreate(TopicId(4), TopicName("topic-four")))
-        create(CmdId(5), TopicToCreate(TopicId(5), TopicName("topic-five")))
-        create(CmdId(6), TopicToCreate(TopicId(6), TopicName("topic-six")))
-        create(CmdId(7), TopicToCreate(TopicId(7), TopicName("topic-seven")))
-        create(CmdId(8), TopicToCreate(TopicId(8), TopicName("topic-eight")))
-        create(CmdId(9), TopicToCreate(TopicId(9), TopicName("topic-nine")))
+        create(CmdId(1), TopicToCreate(TopicId(1), TopicName("topic-one"), GroupId(1)))
+        create(CmdId(2), TopicToCreate(TopicId(2), TopicName("topic-two"), GroupId(1)))
+        create(CmdId(3), TopicToCreate(TopicId(3), TopicName("topic-three"), GroupId(1)))
+        create(CmdId(4), TopicToCreate(TopicId(4), TopicName("topic-four"), GroupId(1)))
+        create(CmdId(5), TopicToCreate(TopicId(5), TopicName("topic-five"), GroupId(1)))
+        create(CmdId(6), TopicToCreate(TopicId(6), TopicName("topic-six"), GroupId(1)))
+        create(CmdId(7), TopicToCreate(TopicId(7), TopicName("topic-seven"), GroupId(1)))
+        create(CmdId(8), TopicToCreate(TopicId(8), TopicName("topic-eight"), GroupId(1)))
+        create(CmdId(9), TopicToCreate(TopicId(9), TopicName("topic-nine"), GroupId(1)))
     }
 }

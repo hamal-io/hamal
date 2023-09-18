@@ -8,6 +8,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.*
@@ -37,7 +38,7 @@ class CompleteExecHandler(
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
             .also { setState(cmdId, it, req.state) }
-            .also { appendEvents(cmdId, req.events) }
+            .also { appendEvents(cmdId, req.groupId, req.events) }
 
     }
 
@@ -60,14 +61,15 @@ class CompleteExecHandler(
         }
     }
 
-    private fun appendEvents(cmdId: CmdId, events: List<EventToSubmit>) {
+    private fun appendEvents(cmdId: CmdId, groupId: GroupId, events: List<EventToSubmit>) {
         events.forEach { evt ->
             //FIXME create topic if not exists
             val topicName = evt.topicName
             val topic = eventBrokerRepository.findTopic(topicName) ?: eventBrokerRepository.create(
                 cmdId, TopicToCreate(
                     id = generateDomainId(::TopicId),
-                    name = topicName
+                    name = topicName,
+                    groupId = groupId
                 )
             )
             appender.append(cmdId, topic, TopicEntryPayload(evt.payload.value))

@@ -1,13 +1,14 @@
 package io.hamal.repository.memory.log
 
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.util.TimeUtils.withEpochMilli
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.Chunk
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
 import io.hamal.repository.api.log.Topic
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.TimeUtils.withEpochMilli
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -66,6 +67,7 @@ class MemoryLogTopicRepositoryTest {
         private val testInstance = MemoryTopicRepository(
             Topic(
                 TopicId(23),
+                GroupId(1),
                 TopicName("test-topic")
             )
         )
@@ -104,6 +106,7 @@ class MemoryLogTopicRepositoryTest {
         private val testInstance = MemoryTopicRepository(
             Topic(
                 TopicId(23),
+                GroupId(1),
                 TopicName("test-topic")
             )
         )

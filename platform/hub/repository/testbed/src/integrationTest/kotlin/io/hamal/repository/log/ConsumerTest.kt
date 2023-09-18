@@ -1,11 +1,16 @@
 package io.hamal.repository.log
 
-import io.hamal.repository.api.log.*
-import io.hamal.repository.fixture.AbstractIntegrationTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.ConsumerId
+import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.repository.api.log.ProtobufAppender
+import io.hamal.repository.api.log.ProtobufLogConsumer
+import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
@@ -19,13 +24,13 @@ class ConsumerTest : AbstractIntegrationTest() {
 
         val topic = testInstance.create(
             CmdId(1),
-            CreateTopic.TopicToCreate(TopicId(123), TopicName("topic"))
+            TopicToCreate(TopicId(123), TopicName("topic"), GroupId(1))
         )
 
         val appender = ProtobufAppender(String::class, testInstance)
         IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
 
-        val testConsumer = ProtobufLogConsumer(GroupId("consumer-01"), topic, testInstance, String::class)
+        val testConsumer = ProtobufLogConsumer(ConsumerId("consumer-01"), topic, testInstance, String::class)
         testConsumer.consumeIndexed(10) { index, _, value ->
             assertThat("${index + 1}", equalTo(value))
         }
@@ -53,12 +58,12 @@ class ConsumerTest : AbstractIntegrationTest() {
 
         val topic = testInstance.create(
             CmdId(1),
-            CreateTopic.TopicToCreate(TopicId(123), TopicName("topic"))
+            TopicToCreate(TopicId(123), TopicName("topic"), GroupId.root)
         )
 
         val testAppender = ProtobufAppender(String::class, testInstance)
 
-        val testConsumer = ProtobufLogConsumer(GroupId("consumer-01"), topic, testInstance, String::class)
+        val testConsumer = ProtobufLogConsumer(ConsumerId("consumer-01"), topic, testInstance, String::class)
         val collected = mutableListOf<String>()
         val consumerFuture = CompletableFuture.runAsync {
             while (collected.size < 1_000) {
