@@ -31,6 +31,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
                 reqId = ReqId(SnowflakeId(123)),
                 status = Submitted,
                 id = TopicId(4444),
+                groupId = testGroup.id,
                 payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
             )
         )
@@ -57,6 +58,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
                     reqId = ReqId(SnowflakeId(123)),
                     status = Submitted,
                     id = TopicId(123),
+                    groupId = testGroup.id,
                     payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )
             )

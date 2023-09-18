@@ -41,7 +41,8 @@ class SqliteBrokerRepository(
             cmdId,
             TopicToCreate(
                 topicToCreate.id,
-                topicToCreate.name
+                topicToCreate.name,
+                topicToCreate.groupId
             )
         )
 
@@ -57,13 +58,13 @@ class SqliteBrokerRepository(
         }
     }
 
-    override fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {
-        val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
+    override fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk> {
+        val nextChunkId = consumersRepository.nextChunkId(consumerId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(groupId: GroupId, topic: Topic, chunkId: ChunkId) {
-        consumersRepository.commit(groupId, topic.id, chunkId)
+    override fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId) {
+        consumersRepository.commit(consumerId, topic.id, chunkId)
     }
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)

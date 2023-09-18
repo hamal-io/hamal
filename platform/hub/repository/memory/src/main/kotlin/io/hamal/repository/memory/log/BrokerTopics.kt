@@ -23,7 +23,8 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
             require(!topicMapping.containsKey(toCreate.name)) { "Topic already exists" }
             topicMapping[toCreate.name] = Topic(
                 id = toCreate.id,
-                name = toCreate.name
+                name = toCreate.name,
+                groupId = toCreate.groupId
             )
             topics[toCreate.id] = topicMapping[toCreate.name]!!
             topicMapping[toCreate.name]!!

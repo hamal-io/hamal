@@ -1,17 +1,18 @@
-package io.hamal.bridge.web
+package io.hamal.admin.web
 
-import io.hamal.bridge.BaseTest
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Completed
+import io.hamal.lib.domain._enum.ReqStatus.Failed
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.lib.sdk.admin.AdminSubmittedReq
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.submitted_req.SubmittedReq
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.empty
+import org.hamcrest.Matchers.equalTo
 import kotlin.reflect.KClass
 
-internal abstract class BaseRouteTest : BaseTest() {
+internal abstract class BaseControllerTest : io.hamal.admin.BaseTest() {
 
     val httpTemplate: HttpTemplate by lazy {
         HttpTemplate(
@@ -24,21 +25,15 @@ internal abstract class BaseRouteTest : BaseTest() {
 
     fun verifyReqCompleted(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
-            org.hamcrest.MatcherAssert.assertThat(id, org.hamcrest.Matchers.equalTo(id))
-            org.hamcrest.MatcherAssert.assertThat(
-                status,
-                org.hamcrest.Matchers.equalTo(io.hamal.lib.domain._enum.ReqStatus.Completed)
-            )
+            assertThat(id, equalTo(id))
+            assertThat(status, equalTo(Completed))
         }
     }
 
     fun verifyReqFailed(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
-            org.hamcrest.MatcherAssert.assertThat(id, org.hamcrest.Matchers.equalTo(id))
-            org.hamcrest.MatcherAssert.assertThat(
-                status,
-                org.hamcrest.Matchers.equalTo(io.hamal.lib.domain._enum.ReqStatus.Failed)
-            )
+            assertThat(id, equalTo(id))
+            assertThat(status, equalTo(Failed))
         }
     }
 
@@ -46,10 +41,10 @@ internal abstract class BaseRouteTest : BaseTest() {
     fun awaitCompleted(id: ReqId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Completed) {
+                if (it.status == Completed) {
                     return
                 }
-                if (it.status == ReqStatus.Failed) {
+                if (it.status == Failed) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -57,27 +52,27 @@ internal abstract class BaseRouteTest : BaseTest() {
         }
     }
 
-    fun <REQ : HubSubmittedReq> awaitCompleted(req: REQ): REQ {
+    fun <REQ : AdminSubmittedReq> awaitCompleted(req: REQ): REQ {
         awaitCompleted(req.reqId)
         return req
     }
 
-    fun <REQ : HubSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
+    fun <REQ : AdminSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
         return reqs.toList().onEach { awaitCompleted(it.reqId) }
     }
 
-    fun <REQ : HubSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
+    fun <REQ : AdminSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
         return reqs.onEach { awaitCompleted(it.reqId) }
     }
 
     fun awaitFailed(id: ReqId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Failed) {
+                if (it.status == Failed) {
                     return
                 }
 
-                if (it.status == ReqStatus.Completed) {
+                if (it.status == Completed) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }
@@ -85,24 +80,24 @@ internal abstract class BaseRouteTest : BaseTest() {
         }
     }
 
-    fun <REQ : HubSubmittedReq> awaitFailed(req: REQ): REQ {
+    fun <REQ : AdminSubmittedReq> awaitFailed(req: REQ): REQ {
         awaitFailed(req.reqId)
         return req
     }
 
-    fun <REQ : HubSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
+    fun <REQ : AdminSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
         return reqs.onEach { awaitFailed(it.reqId) }
     }
 
 
     fun verifyNoRequests() {
         val requests = reqQueryRepository.list(ReqQuery())
-        MatcherAssert.assertThat(requests, Matchers.empty())
+        assertThat(requests, empty())
     }
 
     fun <SUBMITTED_REQ : SubmittedReq> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
         val requests = reqQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
-        MatcherAssert.assertThat(requests, Matchers.empty())
+        assertThat(requests, empty())
     }
 
 }

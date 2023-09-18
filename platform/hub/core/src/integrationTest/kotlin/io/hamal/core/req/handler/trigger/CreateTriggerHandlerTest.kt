@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -73,7 +73,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleFixedRateTriggerExists() {
-        triggerQueryRepository.list(TriggerQueryRepository.TriggerQuery(types = setOf(FixedRate))).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = setOf(FixedRate), groupIds = setOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -88,7 +88,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list(TriggerQueryRepository.TriggerQuery(types = setOf(Event))).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = setOf(Event), groupIds = setOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -103,7 +103,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoTriggerExists() {
-        triggerQueryRepository.list(TriggerQueryRepository.TriggerQuery()).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(groupIds = setOf())).also { triggers ->
             assertThat(triggers, empty())
         }
     }

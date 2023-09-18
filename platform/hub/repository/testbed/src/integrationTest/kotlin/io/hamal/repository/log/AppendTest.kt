@@ -1,12 +1,13 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.fixture.AbstractIntegrationTest
 import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.TestFactory
@@ -18,7 +19,7 @@ class AppendTest : AbstractIntegrationTest() {
     fun `Append value to topic with long cmd id`() = runWith(BrokerRepository::class) { testInstance ->
         val topic = testInstance.create(
             CmdId(1),
-            TopicToCreate(TopicId(1), TopicName("test-topic"))
+            TopicToCreate(TopicId(1), TopicName("test-topic"), GroupId(1))
         )
         testInstance.append(
             CmdId(BigInteger("380896718712995851145215087")),
@@ -32,7 +33,7 @@ class AppendTest : AbstractIntegrationTest() {
         )
 
         val result = testInstance.consume(
-            GroupId("group-id"),
+            ConsumerId("group-id"),
             testInstance.findTopic(TopicName("test-topic"))!!,
             1_000
         )

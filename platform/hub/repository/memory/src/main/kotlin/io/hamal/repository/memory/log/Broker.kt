@@ -29,13 +29,13 @@ class MemoryBrokerRepository : BrokerRepository {
             }
     }
 
-    override fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk> {
-        val nextChunkId = consumersRepository.nextChunkId(groupId, topic.id)
+    override fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk> {
+        val nextChunkId = consumersRepository.nextChunkId(consumerId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(groupId: GroupId, topic: Topic, chunkId: ChunkId) {
-        consumersRepository.commit(groupId, topic.id, chunkId)
+    override fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId) {
+        consumersRepository.commit(consumerId, topic.id, chunkId)
     }
 
     override fun clear() {
@@ -47,12 +47,13 @@ class MemoryBrokerRepository : BrokerRepository {
             }
     }
 
-    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): Topic =
+    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate) =
         topicsRepository.create(
             cmdId,
             TopicToCreate(
                 topicToCreate.id,
-                topicToCreate.name
+                topicToCreate.name,
+                topicToCreate.groupId
             )
         )
 

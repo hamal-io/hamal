@@ -15,7 +15,7 @@ import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.GroupId
+import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
 import io.hamal.repository.api.log.TopicEntry
 import jakarta.annotation.PostConstruct
@@ -45,14 +45,15 @@ internal class EventTriggerService(
                     TriggerQueryRepository.TriggerQuery(
                         afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
                         types = setOf(TriggerType.Event),
-                        limit = Limit(10)
+                        limit = Limit(10),
+                        groupIds = setOf()
                     )
                 ).forEach { trigger ->
                     require(trigger is EventTrigger)
 
                     val topic = eventBrokerRepository.getTopic(trigger.topicId)
                     val consumer = ProtobufBatchConsumer(
-                        groupId = GroupId(trigger.id.value.value.toString(16)),
+                        consumerId = ConsumerId(trigger.id.value.value.toString(16)),
                         topic = topic,
                         repository = eventBrokerRepository,
                         valueClass = TopicEntry::class

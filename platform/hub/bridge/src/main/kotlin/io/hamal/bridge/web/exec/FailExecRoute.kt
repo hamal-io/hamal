@@ -25,6 +25,7 @@ internal class FailExecRoute(
             HubSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
+                groupId = it.groupId,
                 id = it.id
             )
         }, HttpStatus.ACCEPTED)

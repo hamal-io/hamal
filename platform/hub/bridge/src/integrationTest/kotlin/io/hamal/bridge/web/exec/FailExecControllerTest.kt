@@ -5,10 +5,13 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
+import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubFailExecReq
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +20,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class FailExecRouteTest : BaseExecRouteTest() {
+internal class FailExecControllerTest : BaseExecControllerTest() {
 
     @TestFactory
     fun `Can not fail exec which is not started`() = ExecStatus.values()
@@ -72,11 +75,11 @@ internal class FailExecRouteTest : BaseExecRouteTest() {
             .body(HubFailExecReq(ErrorType("SomeErrorValue")))
             .execute()
 
-        assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
+        assertThat(response.statusCode, equalTo(NotFound))
+        require(response is ErrorHttpResponse) { "request was successful" }
 
-        val result = response.result(HubSubmittedReqWithId::class)
-        awaitFailed(result.reqId)
+        val result = response.error(HubError::class)
+        assertThat(result.message, equalTo("Exec not found"))
     }
 
     private fun verifyExecFailed(execId: ExecId) {

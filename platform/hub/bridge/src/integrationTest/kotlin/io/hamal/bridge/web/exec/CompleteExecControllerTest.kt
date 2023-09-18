@@ -5,12 +5,16 @@ import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
+import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.sdk.hub.HubCompleteExecReq
+import io.hamal.lib.sdk.hub.HubError
 import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import io.hamal.repository.api.CompletedExec
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,11 +23,11 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class CompleteExecRouteTest : BaseExecRouteTest() {
+internal class CompleteExecControllerTest : BaseExecControllerTest() {
 
     @TestFactory
     fun `Can not complete exec which is not started`() = ExecStatus.values()
-        .filterNot { it == ExecStatus.Started }
+        .filterNot { it == Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {
                 val exec = createExec(
@@ -51,7 +55,7 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
     fun `Completes started exec`() {
         val startedExec = createExec(
             execId = ExecId(123),
-            status = ExecStatus.Started,
+            status = Started,
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
@@ -82,11 +86,11 @@ internal class CompleteExecRouteTest : BaseExecRouteTest() {
             )
             .execute()
 
-        assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
+        assertThat(response.statusCode, equalTo(NotFound))
+        require(response is ErrorHttpResponse) { "request was successful" }
 
-        val result = response.result(HubSubmittedReqWithId::class)
-        awaitFailed(result.reqId)
+        val result = response.error(HubError::class)
+        assertThat(result.message, equalTo("Exec not found"))
     }
 
     private fun verifyExecCompleted(execId: ExecId) {

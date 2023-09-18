@@ -15,12 +15,14 @@ internal class ListGroupsController(private val listGroup: ListGroupsPort) {
     @GetMapping("/v1/groups")
     fun listGroup(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: GroupId,
-        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") groupIds: List<GroupId>
     ): ResponseEntity<AdminGroupList> {
         return listGroup(
             GroupQuery(
                 afterId = afterId,
                 limit = limit
+                // ids ..
             )
         ) { groups ->
             ResponseEntity.ok(AdminGroupList(

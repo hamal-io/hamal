@@ -6,13 +6,17 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateNamespaceReq
 import io.hamal.request.UpdateNamespaceReq
 import org.springframework.stereotype.Component
 
 interface CreateNamespacePort {
-    operator fun <T : Any> invoke(groupId: GroupId, req: CreateNamespaceReq, responseHandler: (SubmittedReq) -> T): T
+    operator fun <T : Any> invoke(
+        groupId: GroupId,
+        req: CreateNamespaceReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T
 }
 
 interface GetNamespacePort {
@@ -28,7 +32,7 @@ interface UpdateNamespacePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: UpdateNamespaceReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
 }
 
@@ -41,7 +45,11 @@ class NamespaceAdapter(
     private val submitRequest: SubmitRequest,
 ) : NamespacePort {
 
-    override fun <T : Any> invoke(groupId: GroupId, req: CreateNamespaceReq, responseHandler: (SubmittedReq) -> T): T =
+    override fun <T : Any> invoke(
+        groupId: GroupId,
+        req: CreateNamespaceReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T =
         responseHandler(submitRequest(groupId, req))
 
     override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T =
@@ -53,7 +61,7 @@ class NamespaceAdapter(
     override operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: UpdateNamespaceReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
         ensureNamespaceExists(namespaceId)
         return responseHandler(submitRequest(namespaceId, req))

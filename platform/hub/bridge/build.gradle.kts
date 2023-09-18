@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-api")
+archivesName.set("hub-bridge")
 
 dependencies {
     implementation(project(":platform:lib:sdk"))

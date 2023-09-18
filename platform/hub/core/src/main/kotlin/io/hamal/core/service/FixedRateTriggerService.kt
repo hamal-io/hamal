@@ -37,7 +37,8 @@ internal class FixedRateTriggerService(
         triggerQueryRepository.list(
             TriggerQueryRepository.TriggerQuery(
                 afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-                limit = Limit(10)
+                limit = Limit(10),
+                groupIds = setOf()
             )
         ).filterIsInstance<FixedRateTrigger>().forEach {
             plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)

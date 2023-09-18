@@ -1,6 +1,6 @@
 package io.hamal.bridge.web.exec
 
-import io.hamal.bridge.web.BaseRouteTest
+import io.hamal.bridge.web.BaseControllerTest
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
@@ -11,7 +11,7 @@ import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseExecRouteTest : BaseRouteTest() {
+internal sealed class BaseExecControllerTest : BaseControllerTest() {
     fun createAdhocExec(): HubSubmittedReqWithId {
         val createAdhocExecResponse = httpTemplate
             .post("/v1/groups/{groupId}/adhoc")

@@ -9,10 +9,10 @@ import kotlinx.serialization.Serializable
 data class SubmittedCreateAccountWithPasswordReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
+    val groupId: GroupId,
     val id: AccountId,
     val type: AccountType,
     val authenticationId: AuthId,
-    val groupId: GroupId,
     val namespaceId: NamespaceId,
     val name: AccountName,
     val email: AccountEmail?,

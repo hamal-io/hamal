@@ -3,6 +3,7 @@ package io.hamal.repository.api.log
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import java.io.Closeable
@@ -16,7 +17,8 @@ interface BrokerTopicsRepository : Closeable {
 
     data class TopicToCreate(
         val id: TopicId,
-        val name: TopicName
+        val name: TopicName,
+        val groupId: GroupId
     )
 
     data class TopicQuery(

@@ -3,10 +3,7 @@ package io.hamal.repository.api.log
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.TopicEntryId
-import io.hamal.lib.domain.vo.TopicEntryPayload
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -17,7 +14,8 @@ interface CreateTopic {
 
     data class TopicToCreate(
         val id: TopicId,
-        val name: TopicName
+        val name: TopicName,
+        val groupId: GroupId
     )
 }
 
@@ -26,9 +24,9 @@ interface AppendToTopic {
 }
 
 interface ConsumeFromTopic {
-    fun consume(groupId: GroupId, topic: Topic, limit: Int): List<Chunk>
+    fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk>
 
-    fun commit(groupId: GroupId, topic: Topic, chunkId: ChunkId)
+    fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId)
 }
 
 interface ReadFromTopic {

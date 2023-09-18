@@ -11,7 +11,7 @@ import io.hamal.lib.sdk.hub.HubTriggerList.Trigger.Func
 import io.hamal.lib.sdk.hub.HubTriggerList.Trigger.Namespace
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,10 +28,11 @@ class ListTriggersController(private val listTriggers: ListTriggersPort) {
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<HubTriggerList> {
         return listTriggers(
-            groupId, TriggerQueryRepository.TriggerQuery(
+            TriggerQuery(
                 afterId = triggerId,
                 types = TriggerType.values().toSet(),
-                limit = limit
+                limit = limit,
+                groupIds = setOf(groupId)
             )
         ) { triggers, funcs, namespaces, topics ->
             ResponseEntity.ok(

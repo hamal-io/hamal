@@ -9,14 +9,18 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
 import org.springframework.stereotype.Component
 
 interface CreateFuncPort {
-    operator fun <T : Any> invoke(groupId: GroupId, req: CreateFuncReq, responseHandler: (SubmittedReq) -> T): T
+    operator fun <T : Any> invoke(
+        groupId: GroupId,
+        req: CreateFuncReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T
 }
 
 interface GetFuncPort {
@@ -24,7 +28,11 @@ interface GetFuncPort {
 }
 
 interface InvokeFuncPort {
-    operator fun <T : Any> invoke(funcId: FuncId, req: InvokeFuncReq, responseHandler: (SubmittedReq) -> T): T
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        req: InvokeFuncReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T
 }
 
 interface ListFuncsPort {
@@ -32,7 +40,11 @@ interface ListFuncsPort {
 }
 
 interface UpdateFuncPort {
-    operator fun <T : Any> invoke(funcId: FuncId, req: UpdateFuncReq, responseHandler: (SubmittedReq) -> T): T
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        req: UpdateFuncReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T
 }
 
 interface FuncPort : CreateFuncPort, GetFuncPort, InvokeFuncPort, ListFuncsPort, UpdateFuncPort
@@ -43,7 +55,11 @@ class FuncAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) : FuncPort {
-    override fun <T : Any> invoke(groupId: GroupId, req: CreateFuncReq, responseHandler: (SubmittedReq) -> T): T {
+    override fun <T : Any> invoke(
+        groupId: GroupId,
+        req: CreateFuncReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T {
         ensureNamespaceIdExists(req.namespaceId)
         return responseHandler(submitRequest(groupId, req))
     }
@@ -54,7 +70,11 @@ class FuncAdapter(
         return responseHandler(func, namespaces)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, req: InvokeFuncReq, responseHandler: (SubmittedReq) -> T): T {
+    override fun <T : Any> invoke(
+        funcId: FuncId,
+        req: InvokeFuncReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T {
         return responseHandler(submitRequest(funcId, req))
     }
 
@@ -68,7 +88,11 @@ class FuncAdapter(
         return responseHandler(funcs, namespaces)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, req: UpdateFuncReq, responseHandler: (SubmittedReq) -> T): T {
+    override fun <T : Any> invoke(
+        funcId: FuncId,
+        req: UpdateFuncReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T {
         ensureFuncExists(funcId)
         ensureNamespaceIdExists(req.namespaceId)
         return responseHandler(submitRequest(funcId, req))

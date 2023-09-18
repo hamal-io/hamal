@@ -11,16 +11,16 @@ import kotlin.time.Duration
 data class SubmittedCreateTriggerReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
+    override val groupId: GroupId,
     val type: TriggerType,
     val id: TriggerId,
     val name: TriggerName,
-    val groupId: GroupId,
     val funcId: FuncId,
     val inputs: TriggerInputs,
     var namespaceId: NamespaceId? = null,
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null
-) : SubmittedReq
+) : SubmittedReqWithGroupId
 
 

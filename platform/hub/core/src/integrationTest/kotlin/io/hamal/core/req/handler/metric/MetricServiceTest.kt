@@ -1,6 +1,5 @@
 package io.hamal.core.req.handler.metric
 
-import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.core.req.handler.exec.CompleteExecHandler
 import io.hamal.core.req.handler.exec.FailExecHandler
@@ -11,6 +10,7 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
@@ -22,13 +22,8 @@ import io.hamal.repository.api.event.ExecutionFailedEvent
 import io.hamal.repository.api.event.HubEvent
 import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
 import io.hamal.repository.api.submitted_req.SubmittedFailExecReq
-import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.repository.memory.MemoryMetricRepository
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -59,6 +54,7 @@ class MetricServiceTest {
                     SubmittedCompleteExecReq(
                         ReqId(id),
                         ReqStatus.Submitted,
+                        groupId = GroupId(23),
                         ExecId(id),
                         state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
                         events = listOf(
@@ -77,6 +73,7 @@ class MetricServiceTest {
                         reqId = ReqId(id),
                         status = ReqStatus.Submitted,
                         id = ExecId(id),
+                        groupId = GroupId(23),
                         cause = ErrorType("You have not tried hard enough")
                     )
                 )

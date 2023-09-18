@@ -2,12 +2,14 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
+import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import io.hamal.repository.api.log.Topic
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
@@ -38,6 +40,7 @@ class SqliteBrokerTopicsRepository(
          CREATE TABLE IF NOT EXISTS topics (
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL ,
+            group_id INTEGER NOT NULL,
             instant DATETIME NOT NULL,
             UNIQUE(name)
         );
@@ -46,18 +49,20 @@ class SqliteBrokerTopicsRepository(
         }
     }
 
-    override fun create(cmdId: CmdId, toCreate: BrokerTopicsRepository.TopicToCreate): Topic {
+    override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
         try {
-            return connection.execute<Topic>("INSERT INTO topics(id, name, instant) VALUES (:id, :name, :now) RETURNING id,name") {
+            return connection.execute<Topic>("INSERT INTO topics(id, name,group_id, instant) VALUES (:id, :name,:groupId, :now) RETURNING id,name, group_id") {
                 query {
                     set("id", toCreate.id)
                     set("name", toCreate.name)
+                    set("groupId", toCreate.groupId)
                     set("now", TimeUtils.now())
                 }
                 map { rs ->
                     Topic(
                         id = rs.getDomainId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
+                        groupId = rs.getDomainId("group_id", ::GroupId)
                     )
                 }
             }!!
@@ -70,25 +75,29 @@ class SqliteBrokerTopicsRepository(
     }
 
     override fun find(name: TopicName): Topic? =
-        topicMapping[name] ?: connection.executeQueryOne("SELECT id, name FROM topics WHERE name = :name") {
+        topicMapping[name] ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE name = :name") {
             query {
                 set("name", name.value)
             }
             map { rs ->
                 Topic(
-                    id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
+                    id = rs.getDomainId("id", ::TopicId),
+                    name = TopicName(rs.getString("name")),
+                    groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
         }?.also { topicMapping[it.name] = it }
 
     override fun find(id: TopicId): Topic? = topicMapping.values.find { it.id == id }
-        ?: connection.executeQueryOne("SELECT id,name FROM topics WHERE id = :id") {
+        ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE id = :id") {
             query {
                 set("id", id)
             }
             map { rs ->
                 Topic(
-                    id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
+                    id = rs.getDomainId("id", ::TopicId),
+                    name = TopicName(rs.getString("name")),
+                    groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
         }?.also { topicMapping[it.name] = it }
@@ -97,7 +106,7 @@ class SqliteBrokerTopicsRepository(
         return connection.executeQuery<Topic>(
             """
                 SELECT
-                    id, name 
+                    id, name, group_id
                 FROM 
                     topics
                 WHERE
@@ -113,7 +122,9 @@ class SqliteBrokerTopicsRepository(
             }
             map { rs ->
                 Topic(
-                    id = rs.getDomainId("id", ::TopicId), name = TopicName(rs.getString("name"))
+                    id = rs.getDomainId("id", ::TopicId),
+                    name = TopicName(rs.getString("name")),
+                    groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
         }

@@ -10,7 +10,7 @@ import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.log.TopicEntry
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateTopicReq
 import org.springframework.stereotype.Component
 
@@ -18,12 +18,16 @@ interface AppendEntryToTopicPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         topAppend: TopicEntryPayload,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
 }
 
 interface CreateTopicPort {
-    operator fun <T : Any> invoke(groupId: GroupId, req: CreateTopicReq, responseHandler: (SubmittedReq) -> T): T
+    operator fun <T : Any> invoke(
+        groupId: GroupId,
+        req: CreateTopicReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T
 }
 
 interface GetTopicPort {
@@ -60,21 +64,25 @@ class TopicAdapter(
     override fun <T : Any> invoke(
         topicId: TopicId,
         topAppend: TopicEntryPayload,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
         ensureTopicExists(topicId)
         return responseHandler(submitRequest(HubAppendEntryReq(topicId, topAppend)))
     }
 
-    override fun <T : Any> invoke(groupId: GroupId, req: CreateTopicReq, responseHandler: (SubmittedReq) -> T): T =
-        responseHandler(submitRequest(req))
+    override fun <T : Any> invoke(
+        groupId: GroupId,
+        req: CreateTopicReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T =
+        responseHandler(submitRequest(groupId, req))
 
     override fun <T : Any> invoke(topicId: TopicId, responseHandler: (Topic) -> T): T =
         responseHandler(eventBrokerRepository.getTopic(topicId))
 
     override fun <T : Any> invoke(query: TopicQuery, responseHandler: (List<Topic>) -> T): T =
         responseHandler(eventBrokerRepository.listTopics(query))
-    
+
     override fun <T : Any> invoke(
         topicId: TopicId,
         query: TopicEntryQuery,

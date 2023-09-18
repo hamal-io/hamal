@@ -43,7 +43,7 @@ data class AdminNamespace(
 
 interface AdminNamespaceService {
     fun create(groupId: GroupId, createNamespaceReq: AdminCreateNamespaceReq): AdminSubmittedReqWithId
-    fun list(groupId: GroupId): List<AdminNamespaceList.Namespace>
+    fun list(groupIds: List<GroupId>): List<AdminNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): AdminNamespace
 }
 
@@ -58,9 +58,9 @@ internal class DefaultAdminNamespaceService(
             .execute()
             .fold(AdminSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", groupId)
+    override fun list(groupIds: List<GroupId>) =
+        template.get("/v1/namespaces")
+            .parameter("group_ids", groupIds)
             .execute()
             .fold(AdminNamespaceList::class)
             .namespaces
