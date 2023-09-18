@@ -25,8 +25,14 @@ object MemoryMetricRepository : MetricRepository {
         lock.read { return LinkedHashMap(eventMap) }
     }
 
-    override fun update(e: HubEvent, transform: (HubEvent) -> String) {
+    private fun write(f: () -> Unit) {
         lock.write {
+            f()
+        }
+    }
+
+    override fun update(e: HubEvent, transform: (HubEvent) -> String) {
+        write {
             val friendlyName = transform(e)
             if (!eventMap.containsKey(friendlyName)) {
                 eventMap.put(friendlyName, 0)

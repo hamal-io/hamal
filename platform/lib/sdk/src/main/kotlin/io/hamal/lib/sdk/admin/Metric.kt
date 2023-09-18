@@ -21,7 +21,7 @@ internal class DefaultAdminMetricService(
 ) : AdminMetricService {
 
     override fun get() =
-        template.get("/v1/metrics")
+        template.get("/v1/metrics/json")
             .execute()
             .fold(AdminMetrics::class)
 
