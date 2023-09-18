@@ -16,12 +16,21 @@ data class AdminInvokeAdhocReq(
 ) : InvokeAdhocReq
 
 interface AdminAdhocService {
+    operator fun invoke(req: AdminInvokeAdhocReq): AdminSubmittedReqWithId
     operator fun invoke(groupId: GroupId, req: AdminInvokeAdhocReq): AdminSubmittedReqWithId
 }
 
 internal class DefaultAdminAdhocService(
     private val template: HttpTemplate
 ) : AdminAdhocService {
+    override fun invoke(req: AdminInvokeAdhocReq): AdminSubmittedReqWithId {
+        return template
+            .post("/v1/adhoc")
+            .body(req)
+            .execute()
+            .fold(AdminSubmittedReqWithId::class)
+    }
+
     override fun invoke(groupId: GroupId, req: AdminInvokeAdhocReq): AdminSubmittedReqWithId {
         return template
             .post("/v1/groups/{groupId}/adhoc")

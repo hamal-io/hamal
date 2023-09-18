@@ -67,7 +67,7 @@ data class AdminFunc(
 
 interface AdminFuncService {
     fun create(groupId: GroupId, createFuncReq: AdminCreateFuncReq): AdminSubmittedReqWithId
-    fun list(groupId: GroupId): List<AdminFuncList.Func>
+    fun list(groupIds: List<GroupId>): List<AdminFuncList.Func>
     fun get(funcId: FuncId): AdminFunc
 }
 
@@ -82,9 +82,9 @@ internal class DefaultAdminFuncService(
             .execute()
             .fold(AdminSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId): List<AdminFuncList.Func> =
-        template.get("/v1/groups/{groupId}/funcs")
-            .path("groupId", groupId)
+    override fun list(groupIds: List<GroupId>): List<AdminFuncList.Func> =
+        template.get("/v1/funcs")
+            .parameter("group_id", groupIds)
             .execute()
             .fold(AdminFuncList::class)
             .funcs

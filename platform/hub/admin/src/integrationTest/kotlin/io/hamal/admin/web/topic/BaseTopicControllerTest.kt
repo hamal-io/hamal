@@ -28,8 +28,8 @@ internal sealed class BaseTopicControllerTest : BaseControllerTest() {
     fun listTopics(
         names: List<TopicName> = listOf()
     ): AdminTopicList {
-        val listTopicsResponse = httpTemplate.get("/v1/groups/{groupId}/topics")
-            .path("groupId", testGroup.id)
+        val listTopicsResponse = httpTemplate.get("/v1/topics")
+            .parameter("group_ids", testGroup.id)
             .parameter("names", names.joinToString(",") { it.value })
             .execute()
 

@@ -1,6 +1,5 @@
 package io.hamal.core.config
 
-import io.hamal.core.adapter.*
 import io.hamal.core.component.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json

@@ -26,8 +26,8 @@ internal sealed class BaseFuncControllerTest : BaseControllerTest() {
     }
 
     fun listFuncs(): AdminFuncList {
-        val listFuncsResponse = httpTemplate.get("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val listFuncsResponse = httpTemplate.get("/v1/funcs")
+            .parameter("group_ids", testGroup.id)
             .execute()
 
         assertThat(listFuncsResponse.statusCode, equalTo(Ok))

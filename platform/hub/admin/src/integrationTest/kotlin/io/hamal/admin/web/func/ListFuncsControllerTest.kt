@@ -55,8 +55,8 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/funcs")
+            .parameter("group_ids", testGroup.id)
             .parameter("limit", 12)
             .execute(AdminFuncList::class)
 
@@ -83,8 +83,8 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/funcs")
+            .parameter("group_ids", testGroup.id)
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(AdminFuncList::class)

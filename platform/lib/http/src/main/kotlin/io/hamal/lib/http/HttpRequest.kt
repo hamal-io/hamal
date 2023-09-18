@@ -21,6 +21,7 @@ interface HttpRequest {
     fun parameter(key: String, value: Number): HttpRequest
     fun parameter(key: String, value: SnowflakeId): HttpRequest
     fun parameter(key: String, value: DomainId): HttpRequest
+    fun parameter(key: String, value: List<DomainId>): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
@@ -119,6 +120,11 @@ class DefaultHttpRequest(
 
     override fun parameter(key: String, value: DomainId): HttpRequest {
         parameters.add(HttpParameter(key, value.value.value.toString(16)))
+        return this
+    }
+
+    override fun parameter(key: String, value: List<DomainId>): HttpRequest {
+        parameters.add(HttpParameter(key, value.joinToString(",") { it.value.value.toString(16) }))
         return this
     }
 

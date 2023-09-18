@@ -54,8 +54,8 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/namespaces")
+            .parameter("group_ids", testGroup.id)
             .parameter("limit", 12)
             .execute(AdminNamespaceList::class)
 
@@ -80,8 +80,8 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/namespaces")
+            .parameter("group_ids", testGroup.id)
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(AdminNamespaceList::class)

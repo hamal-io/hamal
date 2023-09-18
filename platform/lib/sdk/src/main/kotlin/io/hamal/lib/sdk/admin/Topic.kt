@@ -54,7 +54,7 @@ data class AdminTopicList(
 interface AdminTopicService {
     fun append(topicId: TopicId, payload: TopicEntryPayload): AdminSubmittedReqWithId
     fun create(groupId: GroupId, req: AdminCreateTopicReq): AdminSubmittedReqWithId
-    fun list(groupId: GroupId): List<AdminTopicList.Topic>
+    fun list(groupIds: List<GroupId>): List<AdminTopicList.Topic>
     fun entries(topicId: TopicId): List<AdminTopicEntryList.Entry>
     fun get(topicId: TopicId): AdminTopic
     fun resolve(groupId: GroupId, topicName: TopicName): TopicId
@@ -78,9 +78,9 @@ internal class DefaultAdminTopicService(
             .execute()
             .fold(AdminSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId) =
+    override fun list(groupIds: List<GroupId>) =
         template.get("/v1/groups/{groupId}/topics")
-            .path("groupId", groupId)
+            .parameter("group_ids", groupIds)
             .execute()
             .fold(AdminTopicList::class)
             .topics

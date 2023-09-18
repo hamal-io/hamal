@@ -3,6 +3,7 @@ package io.hamal.admin.web.trigger
 import io.hamal.core.adapter.ListTriggersPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.admin.AdminTriggerList
 import io.hamal.lib.sdk.admin.AdminTriggerList.EventTrigger.Topic
@@ -22,7 +23,8 @@ class ListTriggersController(private val listTriggers: ListTriggersPort) {
     @GetMapping("/v1/triggers")
     fun listGroupTriggers(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
-        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>
     ): ResponseEntity<AdminTriggerList> {
         return listTriggers(
             TriggerQuery(

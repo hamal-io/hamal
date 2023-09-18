@@ -59,7 +59,7 @@ interface AdminExecService {
     fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
     fun fail(execId: ExecId, error: ErrorType)
 
-    fun list(groupId: GroupId): List<AdminExecList.Exec>
+    fun list(groupIds: List<GroupId>): List<AdminExecList.Exec>
     fun get(execId: ExecId): AdminExec
 }
 
@@ -87,9 +87,9 @@ internal class DefaultAdminExecService(
             .execute()
     }
 
-    override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/execs")
-            .path("groupId", groupId)
+    override fun list(groupIds: List<GroupId>) =
+        template.get("/v1/execs")
+            .parameter("group_ids", groupIds)
             .execute()
             .fold(AdminExecList::class)
             .execs

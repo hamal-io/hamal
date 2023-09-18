@@ -26,8 +26,8 @@ internal sealed class BaseNamespaceControllerTest : BaseControllerTest() {
     }
 
     fun listNamespaces(): AdminNamespaceList {
-        val listNamespacesResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val listNamespacesResponse = httpTemplate.get("/v1/namespaces")
+            .path("group_ids", testGroup.id)
             .execute()
 
         assertThat(listNamespacesResponse.statusCode, equalTo(Ok))

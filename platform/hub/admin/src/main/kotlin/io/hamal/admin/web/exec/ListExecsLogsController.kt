@@ -9,17 +9,16 @@ import io.hamal.lib.sdk.admin.AdminExecLog
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class ListExecsLogsController(private val execsLogs: ListExecsLogsPort) {
-    @GetMapping("/v1/groups/{groupId}/exec-logs")
+    @GetMapping("/v1/exec-logs")
     fun getExecLogs(
-        @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecLogId,
-        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>
     ): ResponseEntity<AdminExcLogList> {
         return execsLogs(
             ExecLogQuery(
