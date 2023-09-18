@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import kotlin.reflect.KClass
 
-internal abstract class BaseRouteTest : BaseTest() {
+internal abstract class BaseControllerTest : BaseTest() {
 
     val httpTemplate: HttpTemplate by lazy {
         HttpTemplate(

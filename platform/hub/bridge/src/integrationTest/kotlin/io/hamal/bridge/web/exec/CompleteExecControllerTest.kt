@@ -23,7 +23,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class CompleteExecRouteTest : BaseExecRouteTest() {
+internal class CompleteExecControllerTest : BaseExecControllerTest() {
 
     @TestFactory
     fun `Can not complete exec which is not started`() = ExecStatus.values()

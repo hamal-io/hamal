@@ -12,7 +12,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class DequeueRouteTest : BaseWorkRouteTest() {
+internal class DequeueControllerTest : BaseWorkControllerTest() {
     @Test
     fun `Nothing to dequeue`() {
         with(dequeue()) {
@@ -72,6 +72,6 @@ internal class DequeueRouteTest : BaseWorkRouteTest() {
     }
 }
 
-private fun DequeueRouteTest.verifyExecStarted(execId: ExecId) {
+private fun DequeueControllerTest.verifyExecStarted(execId: ExecId) {
     assertThat(execQueryRepository.get(execId).status, equalTo(Started))
 }

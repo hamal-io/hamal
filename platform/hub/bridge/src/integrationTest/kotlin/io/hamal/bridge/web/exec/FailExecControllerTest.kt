@@ -20,7 +20,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class FailExecRouteTest : BaseExecRouteTest() {
+internal class FailExecControllerTest : BaseExecControllerTest() {
 
     @TestFactory
     fun `Can not fail exec which is not started`() = ExecStatus.values()
