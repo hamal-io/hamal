@@ -5,8 +5,8 @@ import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubCreateFuncReq
-import io.hamal.lib.sdk.hub.HubFuncList
+import io.hamal.lib.sdk.admin.AdminCreateFuncReq
+import io.hamal.lib.sdk.admin.AdminFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
     fun `Single func`() {
         val funcId = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = null,
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
@@ -45,7 +45,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createFunc(
-                    HubCreateFuncReq(
+                    AdminCreateFuncReq(
                         namespaceId = null,
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
@@ -58,7 +58,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
         val listResponse = httpTemplate.get("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .parameter("limit", 12)
-            .execute(HubFuncList::class)
+            .execute(AdminFuncList::class)
 
         assertThat(listResponse.funcs, hasSize(12))
 
@@ -71,7 +71,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
     fun `Skip and limit funcs`() {
         val requests = IntRange(0, 99).map {
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = null,
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
@@ -87,7 +87,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
             .path("groupId", testGroup.id)
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
-            .execute(HubFuncList::class)
+            .execute(AdminFuncList::class)
 
         assertThat(listResponse.funcs, hasSize(1))
 

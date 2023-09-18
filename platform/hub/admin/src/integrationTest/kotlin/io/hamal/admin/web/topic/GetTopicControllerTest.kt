@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.admin.AdminError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ internal class GetTopicControllerTest : BaseTopicControllerTest() {
         assertThat(getTopicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getTopicResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getTopicResponse.error(HubError::class)
+        val error = getTopicResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Topic not found"))
     }
 }

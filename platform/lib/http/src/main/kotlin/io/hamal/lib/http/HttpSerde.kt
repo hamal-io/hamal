@@ -28,10 +28,8 @@ interface HttpErrorDeserializer {
 object DefaultErrorDeserializer : HttpErrorDeserializer {
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
-        return delegate.decodeFromStream(clazz.serializer(), inputStream)
+        return jsonDelegate.decodeFromStream(clazz.serializer(), inputStream)
     }
-
-    private val delegate = Json { ignoreUnknownKeys = true }
 }
 
 interface HttpContentDeserializer {
@@ -42,15 +40,13 @@ interface HttpContentDeserializer {
 object KotlinJsonHttpContentDeserializer : HttpContentDeserializer {
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-        return delegate.decodeFromStream(clazz.serializer(), inputStream)
+        return jsonDelegate.decodeFromStream(clazz.serializer(), inputStream)
     }
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return delegate.decodeFromStream(ArraySerializer(clazz, clazz.serializer()), inputStream).toList()
+        return jsonDelegate.decodeFromStream(ArraySerializer(clazz, clazz.serializer()), inputStream).toList()
     }
-
-    private val delegate = Json { ignoreUnknownKeys = true }
 }
 
 interface HttpContentSerializer {
@@ -60,8 +56,14 @@ interface HttpContentSerializer {
 object KotlinJsonHttpContentSerializer : HttpContentSerializer {
     @OptIn(InternalSerializationApi::class)
     override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
-        return delegate.encodeToString(clazz.serializer(), value)
+        return jsonDelegate.encodeToString(clazz.serializer(), value)
     }
+}
 
-    private val delegate = Json { ignoreUnknownKeys = true }
+
+@OptIn(ExperimentalSerializationApi::class)
+private val jsonDelegate = Json {
+    explicitNulls = false
+    ignoreUnknownKeys = true
+    encodeDefaults = true
 }

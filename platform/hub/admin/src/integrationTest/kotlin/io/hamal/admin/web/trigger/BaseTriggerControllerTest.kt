@@ -7,18 +7,18 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.*
+import io.hamal.lib.sdk.admin.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import kotlin.time.Duration.Companion.seconds
 
 internal sealed class BaseTriggerControllerTest : BaseControllerTest() {
 
-    fun createFunc(name: FuncName): HubSubmittedReqWithId {
+    fun createFunc(name: FuncName): AdminSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
@@ -30,28 +30,28 @@ internal sealed class BaseTriggerControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(HubSubmittedReqWithId::class)
+        return createTopicResponse.result(AdminSubmittedReqWithId::class)
     }
 
-    fun createTopic(topicName: TopicName): HubSubmittedReqWithId {
+    fun createTopic(topicName: TopicName): AdminSubmittedReqWithId {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
             .path("groupId", testGroup.id)
-            .body(HubCreateTopicReq(topicName))
+            .body(AdminCreateTopicReq(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(HubSubmittedReqWithId::class)
+        return createTopicResponse.result(AdminSubmittedReqWithId::class)
     }
 
-    fun createFixedRateTrigger(name: TriggerName): HubSubmittedReqWithId {
+    fun createFixedRateTrigger(name: TriggerName): AdminSubmittedReqWithId {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
 
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = TriggerType.FixedRate,
                     name = name,
                     funcId = funcId,
@@ -64,10 +64,10 @@ internal sealed class BaseTriggerControllerTest : BaseControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return creationResponse.result(HubSubmittedReqWithId::class)
+        return creationResponse.result(AdminSubmittedReqWithId::class)
     }
 
-    fun createTrigger(req: HubCreateTriggerReq): HubSubmittedReqWithId {
+    fun createTrigger(req: AdminCreateTriggerReq): AdminSubmittedReqWithId {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(req)
@@ -76,26 +76,25 @@ internal sealed class BaseTriggerControllerTest : BaseControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return creationResponse.result(HubSubmittedReqWithId::class)
+        return creationResponse.result(AdminSubmittedReqWithId::class)
     }
 
-    fun listTriggers(): HubTriggerList {
-        val listTriggersResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+    fun listTriggers(): AdminTriggerList {
+        val listTriggersResponse = httpTemplate.get("/v1/triggers")
             .execute()
 
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTriggersResponse.result(HubTriggerList::class)
+        return listTriggersResponse.result(AdminTriggerList::class)
     }
 
-    fun getTrigger(triggerId: TriggerId): HubTrigger {
+    fun getTrigger(triggerId: TriggerId): AdminTrigger {
         val listTriggersResponse = httpTemplate.get("/v1/triggers/{triggerId}")
             .path("triggerId", triggerId)
             .execute()
 
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
-        return listTriggersResponse.result(HubTrigger::class)
+        return listTriggersResponse.result(AdminTrigger::class)
     }
 }

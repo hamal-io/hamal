@@ -45,7 +45,8 @@ internal class EventTriggerService(
                     TriggerQueryRepository.TriggerQuery(
                         afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
                         types = setOf(TriggerType.Event),
-                        limit = Limit(10)
+                        limit = Limit(10),
+                        groupIds = setOf()
                     )
                 ).forEach { trigger ->
                     require(trigger is EventTrigger)

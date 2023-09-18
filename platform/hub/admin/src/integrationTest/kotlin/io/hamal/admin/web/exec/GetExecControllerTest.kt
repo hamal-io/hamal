@@ -6,8 +6,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubExec
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -24,7 +24,7 @@ internal class GetExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExec::class)) {
+        with(response.result(AdminExec::class)) {
             assertThat(id, equalTo(createAdhocResponse.id(::ExecId)))
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(code, equalTo(CodeType("40 + 2")))
@@ -38,7 +38,7 @@ internal class GetExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HubError::class)
+        val error = response.error(AdminError::class)
         assertThat(error.message, equalTo("Exec not found"))
     }
 }

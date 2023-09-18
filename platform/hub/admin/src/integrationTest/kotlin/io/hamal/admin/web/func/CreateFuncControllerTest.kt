@@ -8,8 +8,8 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubCreateFuncReq
-import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.admin.AdminCreateFuncReq
+import io.hamal.lib.sdk.admin.AdminError
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -21,7 +21,7 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
     @Test
     fun `Create func without namespace id`() {
         val result = createFunc(
-            HubCreateFuncReq(
+            AdminCreateFuncReq(
                 name = FuncName("test-func"),
                 namespaceId = null,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
@@ -54,7 +54,7 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
         )
 
         val result = createFunc(
-            HubCreateFuncReq(
+            AdminCreateFuncReq(
                 name = FuncName("test-func"),
                 namespaceId = namespace.id,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
@@ -81,7 +81,7 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     name = FuncName("test-func"),
                     namespaceId = NamespaceId(12345),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
@@ -93,7 +93,7 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HubError::class)
+        val error = response.error(AdminError::class)
         assertThat(error.message, equalTo("Namespace not found"))
 
         assertThat(listFuncs().funcs, empty())

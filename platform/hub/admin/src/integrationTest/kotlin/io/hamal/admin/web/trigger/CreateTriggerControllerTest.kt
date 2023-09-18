@@ -8,9 +8,9 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.*
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.hub.HubCreateTriggerReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.admin.AdminCreateTriggerReq
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminSubmittedReqWithId
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.NamespaceCmdRepository
@@ -30,7 +30,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
                     funcId = funcId,
@@ -43,7 +43,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(HubSubmittedReqWithId::class)
+        val result = creationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(getTrigger(result.id(::TriggerId))) {
@@ -71,7 +71,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
                     funcId = funcId,
@@ -84,7 +84,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(HubSubmittedReqWithId::class)
+        val result = creationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(getTrigger(result.id(::TriggerId))) {
@@ -102,7 +102,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("trigger"),
                     funcId = funcId,
@@ -115,7 +115,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = creationResponse.error(HubError::class)
+        val error = creationResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Namespace not found"))
 
         assertThat(listTriggers().triggers, empty())
@@ -128,7 +128,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = funcId,
@@ -140,7 +140,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(HubSubmittedReqWithId::class)
+        val result = creationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(triggerQueryRepository.get(result.id(::TriggerId))) {
@@ -158,7 +158,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = FixedRate,
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = FuncId(123),
@@ -170,7 +170,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HubError::class)
+        val result = creationResponse.error(AdminError::class)
         assertThat(result.message, equalTo("Func not found"))
         verifyNoRequests()
     }
@@ -183,7 +183,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
@@ -195,7 +195,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(HubSubmittedReqWithId::class)
+        val result = creationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         with(triggerQueryRepository.get(result.id(::TriggerId))) {
@@ -215,7 +215,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
@@ -226,7 +226,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(BadRequest))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HubError::class)
+        val result = creationResponse.error(AdminError::class)
         assertThat(result.message, equalTo("topicId is missing"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
@@ -238,7 +238,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
@@ -250,7 +250,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HubError::class)
+        val result = creationResponse.error(AdminError::class)
         assertThat(result.message, equalTo("Topic not found"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }
@@ -262,7 +262,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         val creationResponse = httpTemplate.post("/v1/triggers")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = TriggerType.Event,
                     name = TriggerName("event-trigger"),
                     funcId = FuncId(1234),
@@ -274,7 +274,7 @@ internal class CreateTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val result = creationResponse.error(HubError::class)
+        val result = creationResponse.error(AdminError::class)
         assertThat(result.message, equalTo("Func not found"))
         verifyNoRequests(SubmittedCreateTriggerReq::class)
     }

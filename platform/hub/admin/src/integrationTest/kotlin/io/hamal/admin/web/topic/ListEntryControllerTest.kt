@@ -8,8 +8,8 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubTopicEntryList
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminTopicEntryList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -61,7 +61,7 @@ internal class ListEntryControllerTest : BaseTopicControllerTest() {
         val listResponse = httpTemplate.get("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .parameter("limit", 23)
-            .execute(HubTopicEntryList::class)
+            .execute(AdminTopicEntryList::class)
 
         assertThat(listResponse.entries, hasSize(23))
 
@@ -90,7 +90,7 @@ internal class ListEntryControllerTest : BaseTopicControllerTest() {
             .path("topicId", topicId)
             .parameter("after_id", TopicId(95))
             .parameter("limit", 1)
-            .execute(HubTopicEntryList::class)
+            .execute(AdminTopicEntryList::class)
 
         assertThat(listResponse.entries, hasSize(1))
 
@@ -126,7 +126,7 @@ internal class ListEntryControllerTest : BaseTopicControllerTest() {
         assertThat(topicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(topicResponse is ErrorHttpResponse)
 
-        val error = topicResponse.error(HubError::class)
+        val error = topicResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Topic not found"))
     }
 

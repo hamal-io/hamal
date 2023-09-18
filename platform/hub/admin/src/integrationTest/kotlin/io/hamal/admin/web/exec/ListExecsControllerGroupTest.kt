@@ -1,14 +1,14 @@
-package io.hamal.api.web.exec
+package io.hamal.admin.web.exec
 
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.hub.HubExecList
+import io.hamal.lib.sdk.admin.AdminExecList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListExecControllerTest : BaseExecControllerTest() {
+internal class ListExecsControllerGroupTest : BaseExecControllerTest() {
     @Test
     fun `No execs`() {
         val response = httpTemplate.get("/v1/groups/{groupId}/execs")
@@ -18,7 +18,7 @@ internal class ListExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        val result = response.result(HubExecList::class)
+        val result = response.result(AdminExecList::class)
         assertThat(result.execs, empty())
     }
 
@@ -33,7 +33,7 @@ internal class ListExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExecList::class)) {
+        with(response.result(AdminExecList::class)) {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(id, equalTo(execId))
@@ -55,7 +55,7 @@ internal class ListExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExecList::class)) {
+        with(response.result(AdminExecList::class)) {
             assertThat(execs, hasSize(42))
         }
     }
@@ -76,7 +76,7 @@ internal class ListExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExecList::class)) {
+        with(response.result(AdminExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
                 assertThat(exec.id, equalTo(fortyFifthRequest.id(::ExecId)))

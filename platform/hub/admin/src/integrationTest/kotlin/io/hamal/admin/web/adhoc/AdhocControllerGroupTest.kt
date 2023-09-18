@@ -17,7 +17,7 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
 
-internal class AdhocControllerTest : BaseControllerTest() {
+internal class AdhocControllerGroupTest : BaseControllerTest() {
 
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
@@ -40,7 +40,8 @@ internal class AdhocControllerTest : BaseControllerTest() {
 
     private fun request(req: AdminInvokeAdhocReq) =
         httpTemplate
-            .post("/v1/adhoc")
+            .post("/v1/groups/{groupId}/adhoc")
+            .path("groupId", testGroup.id)
             .body(req)
             .execute()
 

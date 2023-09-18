@@ -15,9 +15,9 @@ import io.hamal.lib.kua.type.FalseValue
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.TrueValue
-import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubState
+import io.hamal.lib.sdk.admin.AdminDefaultSubmittedReq
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -35,7 +35,7 @@ internal class SetStateControllerTest : BaseStateControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        response.result(HubDefaultSubmittedReq::class)
+        response.result(AdminDefaultSubmittedReq::class)
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
         assertThat(correlatedState["answer"], equalTo(NumberType(42)))
@@ -53,12 +53,12 @@ internal class SetStateControllerTest : BaseStateControllerTest() {
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(state, equalTo(HubState(MapType(mutableMapOf("result" to TrueValue)))))
+            assertThat(state, equalTo(AdminState(MapType(mutableMapOf("result" to TrueValue)))))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(state, equalTo(HubState(MapType((mutableMapOf("result" to FalseValue))))))
+            assertThat(state, equalTo(AdminState(MapType((mutableMapOf("result" to FalseValue))))))
         }
     }
 
@@ -96,7 +96,7 @@ internal class SetStateControllerTest : BaseStateControllerTest() {
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HubError::class)
+        val error = response.error(AdminError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 }

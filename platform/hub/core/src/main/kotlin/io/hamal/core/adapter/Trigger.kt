@@ -2,8 +2,12 @@ package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.submitted_req.SubmittedReq
@@ -28,8 +32,7 @@ interface GetTriggerPort {
 
 interface ListTriggersPort {
     operator fun <T : Any> invoke(
-        groupId: GroupId,
-        query: TriggerQueryRepository.TriggerQuery,
+        query: TriggerQuery,
         responseHandler: (
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
@@ -77,8 +80,7 @@ class TriggerAdapter(
     }
 
     override operator fun <T : Any> invoke(
-        groupId: GroupId,
-        query: TriggerQueryRepository.TriggerQuery,
+        query: TriggerQuery,
         responseHandler: (
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,

@@ -2,7 +2,7 @@ package io.hamal.admin.web.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
-import io.hamal.lib.sdk.hub.HubTriggerList
+import io.hamal.lib.sdk.admin.AdminTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -34,10 +34,9 @@ internal class ListTriggerControllerTest : BaseTriggerControllerTest() {
             IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
         )
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/triggers")
             .parameter("limit", 12)
-            .execute(HubTriggerList::class)
+            .execute(AdminTriggerList::class)
 
         assertThat(listResponse.triggers, hasSize(12))
 
@@ -53,11 +52,10 @@ internal class ListTriggerControllerTest : BaseTriggerControllerTest() {
 
         val request15 = requests[15]
 
-        val listResponse = (httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+        val listResponse = (httpTemplate.get("/v1/triggers")
             .parameter("after_id", request15.id)
             .parameter("limit", 1))
-            .execute(HubTriggerList::class)
+            .execute(AdminTriggerList::class)
 
         with(listResponse) {
             assertThat(triggers, hasSize(1))

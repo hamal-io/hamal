@@ -9,9 +9,9 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubCreateFuncReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubFunc
+import io.hamal.lib.sdk.admin.AdminCreateFuncReq
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminFunc
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class GetFuncControllerTest : BaseFuncControllerTest() {
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getFuncResponse.error(HubError::class)
+        val error = getFuncResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 
@@ -31,7 +31,7 @@ internal class GetFuncControllerTest : BaseFuncControllerTest() {
     fun `Get func`() {
         val funcId = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     name = FuncName("func-one"),
                     namespaceId = null,
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
@@ -44,7 +44,7 @@ internal class GetFuncControllerTest : BaseFuncControllerTest() {
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getFuncResponse.result(HubFunc::class)) {
+        with(getFuncResponse.result(AdminFunc::class)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))

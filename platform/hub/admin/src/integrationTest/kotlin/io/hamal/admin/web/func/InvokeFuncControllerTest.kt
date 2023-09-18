@@ -10,10 +10,10 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubCreateFuncReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubInvokeFuncReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.admin.AdminCreateFuncReq
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminInvokeFuncReq
+import io.hamal.lib.sdk.admin.AdminSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,7 +24,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
     fun `Invokes func`() {
         val createResponse = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     name = FuncName("test"),
                     namespaceId = null,
                     inputs = FuncInputs(),
@@ -36,7 +36,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
             .path("funcId", createResponse.id)
             .body(
-                HubInvokeFuncReq(
+                AdminInvokeFuncReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs()
                 )
@@ -45,7 +45,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(HubSubmittedReqWithId::class)
+        val result = invocationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
     }
 
@@ -53,7 +53,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
     fun `Invokes func without providing correlation id`() {
         val createResponse = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     name = FuncName("test"),
                     namespaceId = null,
                     inputs = FuncInputs(),
@@ -65,7 +65,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
             .path("funcId", createResponse.id)
             .body(
-                HubInvokeFuncReq(
+                AdminInvokeFuncReq(
                     inputs = InvocationInputs(),
                     correlationId = null
                 )
@@ -74,7 +74,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(HubSubmittedReqWithId::class)
+        val result = invocationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
     }
 
@@ -82,7 +82,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
     fun `Tries to invoke func which does not exist`() {
         val invocationResponse = httpTemplate.post("/v1/funcs/1234/exec")
             .body(
-                HubInvokeFuncReq(
+                AdminInvokeFuncReq(
                     correlationId = CorrelationId("__default__"),
                     inputs = InvocationInputs()
                 )
@@ -91,7 +91,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
         assertThat(invocationResponse.statusCode, equalTo(NotFound))
         require(invocationResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = invocationResponse.error(HubError::class)
+        val error = invocationResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Func not found"))
 
         verifyNoRequests()

@@ -10,10 +10,10 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubCreateFuncReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
-import io.hamal.lib.sdk.hub.HubUpdateFuncReq
+import io.hamal.lib.sdk.admin.AdminCreateFuncReq
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminSubmittedReqWithId
+import io.hamal.lib.sdk.admin.AdminUpdateFuncReq
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -25,7 +25,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
     fun `Tries to update func which does not exists`() {
         val getFuncResponse = httpTemplate.put("/v1/funcs/33333333")
             .body(
-                HubUpdateFuncReq(
+                AdminUpdateFuncReq(
                     namespaceId = null,
                     name = FuncName("update"),
                     inputs = FuncInputs(),
@@ -37,7 +37,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
         assertThat(getFuncResponse.statusCode, equalTo(NotFound))
         require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getFuncResponse.error(HubError::class)
+        val error = getFuncResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 
@@ -55,7 +55,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
@@ -77,7 +77,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
         val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
-                HubUpdateFuncReq(
+                AdminUpdateFuncReq(
                     namespaceId = updateNamespace.id,
                     name = FuncName("updatedName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
@@ -89,7 +89,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(HubSubmittedReqWithId::class)
+        val submittedReq = updateFuncResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(submittedReq)
 
         val funcId = submittedReq.id(::FuncId)
@@ -117,7 +117,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
@@ -128,13 +128,13 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
 
         val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
             .path("funcId", func.id)
-            .body(HubUpdateFuncReq(NamespaceId(12345)))
+            .body(AdminUpdateFuncReq(NamespaceId(12345)))
             .execute()
 
         assertThat(updateFuncResponse.statusCode, equalTo(NotFound))
         require(updateFuncResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = updateFuncResponse.error(HubError::class)
+        val error = updateFuncResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Namespace not found"))
 
         with(getFunc(func.id(::FuncId))) {
@@ -157,7 +157,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
@@ -169,7 +169,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
         val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
-                HubUpdateFuncReq(
+                AdminUpdateFuncReq(
                     namespaceId = null,
                     name = null,
                     inputs = null,
@@ -180,7 +180,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val funcId = updateFuncResponse.result(HubSubmittedReqWithId::class).id(::FuncId)
+        val funcId = updateFuncResponse.result(AdminSubmittedReqWithId::class).id(::FuncId)
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))

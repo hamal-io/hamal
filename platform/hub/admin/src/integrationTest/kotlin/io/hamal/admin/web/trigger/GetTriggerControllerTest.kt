@@ -9,10 +9,10 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubCreateTriggerReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubEventTrigger
-import io.hamal.lib.sdk.hub.HubFixedRateTrigger
+import io.hamal.lib.sdk.admin.AdminCreateTriggerReq
+import io.hamal.lib.sdk.admin.AdminError
+import io.hamal.lib.sdk.admin.AdminEventTrigger
+import io.hamal.lib.sdk.admin.AdminFixedRateTrigger
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(NotFound))
         require(getTriggerResponse is ErrorHttpResponse) { "request was successful" }
 
-        val error = getTriggerResponse.error(HubError::class)
+        val error = getTriggerResponse.error(AdminError::class)
         assertThat(error.message, equalTo("Trigger not found"))
     }
 
@@ -34,7 +34,7 @@ internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
         val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id(::FuncId)
         val triggerId = awaitCompleted(
             createTrigger(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = FixedRate,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
@@ -50,7 +50,7 @@ internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(HubFixedRateTrigger::class)) {
+        with(getTriggerResponse.result(AdminFixedRateTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
@@ -67,7 +67,7 @@ internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
 
         val triggerId = awaitCompleted(
             createTrigger(
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = Event,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
@@ -83,7 +83,7 @@ internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(HubEventTrigger::class)) {
+        with(getTriggerResponse.result(AdminEventTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))

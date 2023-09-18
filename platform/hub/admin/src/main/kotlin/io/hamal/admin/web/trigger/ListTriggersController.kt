@@ -3,7 +3,6 @@ package io.hamal.admin.web.trigger
 import io.hamal.core.adapter.ListTriggersPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.admin.AdminTriggerList
 import io.hamal.lib.sdk.admin.AdminTriggerList.EventTrigger.Topic
@@ -11,10 +10,9 @@ import io.hamal.lib.sdk.admin.AdminTriggerList.Trigger.Func
 import io.hamal.lib.sdk.admin.AdminTriggerList.Trigger.Namespace
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
@@ -23,15 +21,15 @@ import org.springframework.web.bind.annotation.RestController
 class ListTriggersController(private val listTriggers: ListTriggersPort) {
     @GetMapping("/v1/triggers")
     fun listGroupTriggers(
-        @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<AdminTriggerList> {
         return listTriggers(
-            groupId, TriggerQueryRepository.TriggerQuery(
+            TriggerQuery(
                 afterId = triggerId,
                 types = TriggerType.values().toSet(),
-                limit = limit
+                limit = limit,
+                groupIds = setOf()
             )
         ) { triggers, funcs, namespaces, topics ->
             ResponseEntity.ok(

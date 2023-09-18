@@ -3,8 +3,8 @@ package io.hamal.admin.web.namespace
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
-import io.hamal.lib.sdk.hub.HubNamespaceList
+import io.hamal.lib.sdk.admin.AdminCreateNamespaceReq
+import io.hamal.lib.sdk.admin.AdminNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -25,7 +25,7 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
     fun `Single namespace`() {
         val namespaceId = awaitCompleted(
             createNamespace(
-                HubCreateNamespaceReq(
+                AdminCreateNamespaceReq(
                     name = NamespaceName("namespace-one"),
                     inputs = NamespaceInputs()
                 )
@@ -46,7 +46,7 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createNamespace(
-                    HubCreateNamespaceReq(
+                    AdminCreateNamespaceReq(
                         name = NamespaceName("namespace-$it"),
                         inputs = NamespaceInputs()
                     )
@@ -57,7 +57,7 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
         val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
             .parameter("limit", 12)
-            .execute(HubNamespaceList::class)
+            .execute(AdminNamespaceList::class)
 
         assertThat(listResponse.namespaces, hasSize(12))
 
@@ -70,7 +70,7 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
     fun `Skip and limit namespaces`() {
         val requests = IntRange(0, 99).map {
             createNamespace(
-                HubCreateNamespaceReq(
+                AdminCreateNamespaceReq(
                     name = NamespaceName("namespace-$it"),
                     inputs = NamespaceInputs()
                 )
@@ -84,7 +84,7 @@ internal class ListNamespacesControllerTest : BaseNamespaceControllerTest() {
             .path("groupId", testGroup.id)
             .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
-            .execute(HubNamespaceList::class)
+            .execute(AdminNamespaceList::class)
 
         assertThat(listResponse.namespaces, hasSize(1))
 

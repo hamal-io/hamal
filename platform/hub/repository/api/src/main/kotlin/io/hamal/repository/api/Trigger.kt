@@ -49,7 +49,8 @@ interface TriggerQueryRepository {
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
         var types: Set<TriggerType> = TriggerType.values().toSet(),
-        var limit: Limit = Limit(1)
+        var limit: Limit = Limit(1),
+        val groupIds: Set<GroupId>
     )
 
 }
