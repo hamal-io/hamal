@@ -63,6 +63,7 @@ testing {
                 dependencies {
                     implementation(project())
                     implementation(project(":platform:lib:sdk"))
+                    implementation(project(":platform:hub:bridge"))
                     implementation(project(":platform:hub:core"))
                     implementation(project(":platform:runner"))
 
