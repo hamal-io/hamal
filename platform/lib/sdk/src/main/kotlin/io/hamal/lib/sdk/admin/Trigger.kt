@@ -122,7 +122,7 @@ class AdminEventTrigger(
 
 
 interface AdminTriggerService {
-    fun create(groupId: GroupId, req: AdminCreateTriggerReq): AdminSubmittedReqWithId
+    fun create(req: AdminCreateTriggerReq): AdminSubmittedReqWithId
     fun list(groupIds: List<GroupId>): List<AdminTriggerList.Trigger>
     fun get(triggerId: TriggerId): AdminTrigger
 }
@@ -131,9 +131,8 @@ interface AdminTriggerService {
 internal class DefaultAdminTriggerService(
     private val template: HttpTemplate
 ) : AdminTriggerService {
-    override fun create(groupId: GroupId, req: AdminCreateTriggerReq) =
+    override fun create(req: AdminCreateTriggerReq) =
         template.post("/v1/triggers")
-            .path("groupId", groupId)
             .body(req)
             .execute()
             .fold(AdminSubmittedReqWithId::class)
