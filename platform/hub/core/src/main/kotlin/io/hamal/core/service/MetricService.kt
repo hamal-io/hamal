@@ -1,5 +1,6 @@
 package io.hamal.core.service
 
+import io.hamal.lib.sdk.admin.AdminMetrics
 import io.hamal.repository.api.MetricAccess
 import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.event.ExecutionCompletedEvent
@@ -25,11 +26,11 @@ class MetricService(
         }
     }
 
-    fun get(): MetricAccess {
+    fun query(): MetricAccess {
         return repo.getData()
     }
 
-    fun clear(){
+    fun clear() {
         repo.clear()
     }
 }

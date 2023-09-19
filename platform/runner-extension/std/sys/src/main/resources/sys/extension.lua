@@ -7,8 +7,12 @@ function create_extension_factory()
             namespace = { },
             req = { },
             topic = { },
-            trigger = { }
+            trigger = { },
         }
+
+        function export.get_metric()
+            return internal.get_metric()
+        end
 
         function export.adhoc(cmd)
             local err, res = internal.adhoc({

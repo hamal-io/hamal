@@ -1,3 +1,3 @@
 sys = require('sys')
-metrics = sys.get_metric()
-assert(metrics ~= nil)
+local msg = sys.get_metric()
+assert(msg ~= nil)
