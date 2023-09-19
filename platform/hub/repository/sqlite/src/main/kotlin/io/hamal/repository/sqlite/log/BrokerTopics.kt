@@ -42,7 +42,7 @@ class SqliteBrokerTopicsRepository(
             name TEXT NOT NULL ,
             group_id INTEGER NOT NULL,
             instant DATETIME NOT NULL,
-            UNIQUE(name)
+            UNIQUE(group_id, name)
         );
         """
             )
@@ -67,26 +67,28 @@ class SqliteBrokerTopicsRepository(
                 }
             }!!
         } catch (t: Throwable) {
-            if (t.message!!.contains("(UNIQUE constraint failed: topics.name)")) {
+            if (t.message!!.contains("(UNIQUE constraint failed: topics.group_id, topics.name)")) {
                 throw IllegalArgumentException("Topic already exists")
             }
             throw t
         }
     }
 
-    override fun find(name: TopicName): Topic? =
-        topicMapping[name] ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE name = :name") {
-            query {
-                set("name", name.value)
-            }
-            map { rs ->
-                Topic(
-                    id = rs.getDomainId("id", ::TopicId),
-                    name = TopicName(rs.getString("name")),
-                    groupId = rs.getDomainId("group_id", ::GroupId)
-                )
-            }
-        }?.also { topicMapping[it.name] = it }
+    override fun find(groupId: GroupId, name: TopicName): Topic? =
+        topicMapping[name]
+            ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE name = :name AND group_id = :groupId") {
+                query {
+                    set("name", name.value)
+                    set("groupId", groupId.value)
+                }
+                map { rs ->
+                    Topic(
+                        id = rs.getDomainId("id", ::TopicId),
+                        name = TopicName(rs.getString("name")),
+                        groupId = rs.getDomainId("group_id", ::GroupId)
+                    )
+                }
+            }?.also { topicMapping[it.name] = it }
 
     override fun find(id: TopicId): Topic? = topicMapping.values.find { it.id == id }
         ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE id = :id") {
@@ -112,6 +114,7 @@ class SqliteBrokerTopicsRepository(
                 WHERE
                     id < :afterId
                     ${query.names()}
+                    ${query.groupIds()}
                 ORDER BY id DESC
                 LIMIT :limit
             """.trimIndent()
@@ -140,6 +143,7 @@ class SqliteBrokerTopicsRepository(
             WHERE
                 id < :afterId
                 ${query.names()}
+                ${query.groupIds()}
             ORDER BY id DESC
         """.trimIndent()
         ) {
@@ -171,4 +175,11 @@ class SqliteBrokerTopicsRepository(
         }
     }
 
+    private fun TopicQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
 }

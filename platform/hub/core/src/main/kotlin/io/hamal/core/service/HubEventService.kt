@@ -32,7 +32,7 @@ internal class HubEventService(
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         val instanceTopics = hubEventContainer.topicNames().map { topicName ->
             val topicId = generateDomainId(::TopicId)
-            hubEventBrokerRepository.findTopic(topicName) ?: hubEventBrokerRepository.create(
+            hubEventBrokerRepository.findTopic(GroupId.root, topicName) ?: hubEventBrokerRepository.create(
                 CmdId(topicId), TopicToCreate(topicId, topicName, GroupId.root)
             )
         }

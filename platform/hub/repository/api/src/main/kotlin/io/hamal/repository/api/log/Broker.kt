@@ -38,7 +38,7 @@ interface FindTopic {
 
     fun findTopic(topicId: TopicId): Topic?
 
-    fun findTopic(topicName: TopicName): Topic?
+    fun findTopic(groupId: GroupId, topicName: TopicName): Topic?
 }
 
 interface BrokerRepository :
@@ -49,7 +49,7 @@ interface BrokerRepository :
     ReadFromTopic,
     Closeable {
 
-    fun listTopics(block: TopicQuery): List<Topic>
+    fun listTopics(query: TopicQuery): List<Topic>
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
 
     @OptIn(ExperimentalSerializationApi::class)

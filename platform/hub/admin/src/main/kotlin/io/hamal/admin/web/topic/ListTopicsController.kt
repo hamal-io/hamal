@@ -26,8 +26,8 @@ internal class ListTopicsController(private val listTopics: ListTopicsPort) {
             TopicQuery(
                 afterId = afterId,
                 names = topicNames,
-                limit = limit
-                // groupid
+                limit = limit,
+                groupIds = groupIds
             )
         ) { topics ->
             ResponseEntity.ok(

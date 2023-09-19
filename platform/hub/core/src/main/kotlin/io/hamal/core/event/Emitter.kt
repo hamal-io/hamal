@@ -17,7 +17,7 @@ class HubEventEmitter(
     private val appender = ProtobufAppender(HubEvent::class, brokerRepository)
 
     fun <EVENT : HubEvent> emit(cmdId: CmdId, evt: EVENT) {
-        val topic = brokerRepository.findTopic(evt.topicName) ?: brokerRepository.create(
+        val topic = brokerRepository.findTopic(GroupId.root, evt.topicName) ?: brokerRepository.create(
             cmdId,
             TopicToCreate(generateDomainId(::TopicId), evt.topicName, GroupId.root)
         )

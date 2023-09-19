@@ -65,7 +65,7 @@ class CompleteExecHandler(
         events.forEach { evt ->
             //FIXME create topic if not exists
             val topicName = evt.topicName
-            val topic = eventBrokerRepository.findTopic(topicName) ?: eventBrokerRepository.create(
+            val topic = eventBrokerRepository.findTopic(groupId, topicName) ?: eventBrokerRepository.create(
                 cmdId, TopicToCreate(
                     id = generateDomainId(::TopicId),
                     name = topicName,
