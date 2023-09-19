@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 
 
-class SqliteBrokerRepositoryTest : AbstractUnitTest() {
+class BrokerRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class CreateTopicTest {
 
