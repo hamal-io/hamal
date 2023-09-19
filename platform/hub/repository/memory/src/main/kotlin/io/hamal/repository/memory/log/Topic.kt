@@ -12,14 +12,14 @@ class MemoryTopicRepository(
 ) : TopicRepository {
 
     private var activeSegment: MemorySegment
-    private var activeSegmentRepository: MemoryLogSegmentRepository
+    private var activeSegmentRepository: MemorySegmentRepository
 
     init {
         activeSegment = MemorySegment(
             id = Segment.Id(0),
             topicId = topic.id
         )
-        activeSegmentRepository = MemoryLogSegmentRepository(activeSegment)
+        activeSegmentRepository = MemorySegmentRepository(activeSegment)
     }
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {

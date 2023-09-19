@@ -18,7 +18,7 @@ data class SqliteSegment(
 ) : Segment
 
 
-internal class SqliteSegmentRepository(
+class SqliteSegmentRepository(
     internal val segment: SqliteSegment,
 ) : BaseSqliteRepository(object : Config {
     override val path: Path get() = segment.path

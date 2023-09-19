@@ -27,7 +27,8 @@ internal class ListTopicsController(private val listTopics: ListTopicsPort) {
             BrokerTopicsRepository.TopicQuery(
                 afterId = afterId,
                 names = topicNames,
-                limit = limit
+                limit = limit,
+                groupIds = listOf(groupId)
             )
         ) { topics ->
             ResponseEntity.ok(

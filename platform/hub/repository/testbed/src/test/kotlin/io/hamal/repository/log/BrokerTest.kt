@@ -1,23 +1,24 @@
-package io.hamal.repository.memory.log
+package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 
-class MemoryLogBrokerRepositoryTest {
+class BrokerRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class CreateTopicTest {
-        @Test
-        fun `Bug - Able to resolve real topic`() {
-            val testInstance = MemoryBrokerRepository()
 
+        @TestFactory
+        fun `Bug - Able to resolve real topic`() = runWith(BrokerRepository::class) { testInstance ->
             val result = testInstance.create(
                 CmdId(123),
                 TopicToCreate(TopicId(234), TopicName("scheduler::flow_enqueued"), GroupId(1))

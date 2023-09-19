@@ -1,39 +1,27 @@
-package io.hamal.repository.memory.log
+package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.Chunk
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.log.Topic
+import io.hamal.repository.api.log.TopicRepository
+import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 import java.time.Instant
 
 
-class MemoryLogTopicRepositoryTest {
+internal class TopicRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class AppendTest {
-        @BeforeEach
-        fun setup() {
-            testInstance.clear()
-        }
 
-        @AfterEach
-        fun after() {
-            testInstance.close()
-        }
-
-        @Test
-        fun `Append multiple records to empty partition`() {
+        @TestFactory
+        fun `Append multiple records to empty partition`() = runWith(TopicRepository::class) { testInstance ->
             withEpochMilli(98765) {
                 listOf(
                     "VALUE_1".toByteArray(),
@@ -63,22 +51,14 @@ class MemoryLogTopicRepositoryTest {
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
             }
         }
-
-        private val testInstance = MemoryTopicRepository(
-            Topic(
-                TopicId(23),
-                GroupId(1),
-                TopicName("test-topic")
-            )
-        )
     }
 
     @Nested
     inner class ReadTest {
 
-        @Test
-        fun `Reads multiple chunks`() {
-            givenOneHundredChunks()
+        @TestFactory
+        fun `Reads multiple chunks`() = runWith(TopicRepository::class) { testInstance ->
+            testInstance.appendOneHundredChunks()
             val result = testInstance.read(ChunkId(25), 36)
             assertThat(result, hasSize(36))
 
@@ -95,20 +75,14 @@ class MemoryLogTopicRepositoryTest {
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
 
-        private fun givenOneHundredChunks() {
+        private fun TopicRepository.appendOneHundredChunks() {
             LongRange(1, 100).forEach {
                 withEpochMilli(it) {
-                    testInstance.append(CmdId(it.toInt()), "VALUE_$it".toByteArray())
+                    append(CmdId(it.toInt()), "VALUE_$it".toByteArray())
                 }
             }
         }
-
-        private val testInstance = MemoryTopicRepository(
-            Topic(
-                TopicId(23),
-                GroupId(1),
-                TopicName("test-topic")
-            )
-        )
     }
+
+
 }

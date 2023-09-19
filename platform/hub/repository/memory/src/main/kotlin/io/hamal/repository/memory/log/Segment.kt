@@ -16,7 +16,7 @@ data class MemorySegment(
 ) : Segment
 
 
-class MemoryLogSegmentRepository(
+class MemorySegmentRepository(
     private val segment: MemorySegment
 ) : SegmentRepository {
 

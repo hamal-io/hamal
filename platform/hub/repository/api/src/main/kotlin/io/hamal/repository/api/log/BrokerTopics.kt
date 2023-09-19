@@ -10,7 +10,7 @@ import java.io.Closeable
 
 interface BrokerTopicsRepository : Closeable {
     fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic
-    fun find(name: TopicName): Topic?
+    fun find(groupId: GroupId, name: TopicName): Topic?
     fun find(id: TopicId): Topic?
     fun list(query: TopicQuery): List<Topic>
     fun count(query: TopicQuery): ULong
@@ -24,7 +24,7 @@ interface BrokerTopicsRepository : Closeable {
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
         var names: List<TopicName> = listOf(),
-        var limit: Limit = Limit(1)
-        // FIXME group id
+        var limit: Limit = Limit(1),
+        var groupIds: List<GroupId>
     )
 }

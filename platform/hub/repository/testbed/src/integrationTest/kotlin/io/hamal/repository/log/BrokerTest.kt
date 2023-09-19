@@ -68,7 +68,7 @@ class BrokerTest : AbstractIntegrationTest() {
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.consume(
                     ConsumerId("group-id"),
-                    testInstance.findTopic(TopicName("topic-$thread"))!!,
+                    testInstance.findTopic(GroupId.root, TopicName("topic-$thread"))!!,
                     1_000_000
                 )
                 assertThat(result, hasSize(100))

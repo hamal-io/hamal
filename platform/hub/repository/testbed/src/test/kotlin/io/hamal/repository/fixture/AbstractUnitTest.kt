@@ -1,7 +1,6 @@
 package io.hamal.repository.fixture
 
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.*
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import kotlin.reflect.KClass
@@ -25,11 +24,23 @@ abstract class AbstractUnitTest {
     }
 
     private val fixtures = mutableMapOf<KClass<*>, List<BaseTestFixture>>(
+        BrokerConsumersRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
         BrokerRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
         BrokerTopicsRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        SegmentRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        TopicRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         )

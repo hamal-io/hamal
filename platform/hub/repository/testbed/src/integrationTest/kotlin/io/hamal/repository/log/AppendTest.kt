@@ -34,7 +34,7 @@ class AppendTest : AbstractIntegrationTest() {
 
         val result = testInstance.consume(
             ConsumerId("group-id"),
-            testInstance.findTopic(TopicName("test-topic"))!!,
+            testInstance.findTopic(GroupId(1), TopicName("test-topic"))!!,
             1_000
         )
         assertThat(result, Matchers.hasSize(2))

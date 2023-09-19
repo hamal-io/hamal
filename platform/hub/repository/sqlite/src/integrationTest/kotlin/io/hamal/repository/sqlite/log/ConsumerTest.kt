@@ -30,7 +30,7 @@ class ConsumerTest {
 
         SqliteBrokerRepository(SqliteBroker(path))
             .use { brokerRepository ->
-                val topic = brokerRepository.findTopic(TopicName("topic"))!!
+                val topic = brokerRepository.findTopic(GroupId.root, TopicName("topic"))!!
                 val testInstance =
                     ProtobufLogConsumer(ConsumerId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->

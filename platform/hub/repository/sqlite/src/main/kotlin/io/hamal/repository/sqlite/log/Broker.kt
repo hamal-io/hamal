@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.*
@@ -68,7 +69,7 @@ class SqliteBrokerRepository(
     }
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
-    override fun findTopic(topicName: TopicName) = topicsRepository.find(topicName)
+    override fun findTopic(groupId: GroupId, topicName: TopicName) = topicsRepository.find(groupId, topicName)
     override fun listTopics(query: TopicQuery): List<Topic> {
         return topicsRepository.list(query)
     }
