@@ -17,7 +17,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class SqliteLogBrokerRepositoryTest {
+class SqliteBrokerRepositoryTest {
     @Nested
     inner class ConstructorTest {
 

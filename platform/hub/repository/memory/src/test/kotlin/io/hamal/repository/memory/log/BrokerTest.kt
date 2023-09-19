@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 
-class MemoryLogBrokerRepositoryTest {
+class MemoryBrokerRepositoryTest {
     @Nested
     inner class CreateTopicTest {
         @Test

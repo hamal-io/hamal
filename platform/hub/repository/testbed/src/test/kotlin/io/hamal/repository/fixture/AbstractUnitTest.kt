@@ -2,6 +2,7 @@ package io.hamal.repository.fixture
 
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.log.SegmentRepository
 import io.hamal.repository.api.log.TopicRepository
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -31,6 +32,10 @@ abstract class AbstractUnitTest {
             SqliteFixture
         ),
         BrokerTopicsRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        SegmentRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

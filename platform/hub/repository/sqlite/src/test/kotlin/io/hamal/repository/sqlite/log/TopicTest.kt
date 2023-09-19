@@ -13,7 +13,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class SqliteLogTopicRepositoryTest {
+class SqliteTopicRepositoryTest {
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -39,6 +39,6 @@ class SqliteLogTopicRepositoryTest {
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "topics/00000023")))
         }
     }
-    
+
     private val testDir = "/tmp/hamal/test/partitions"
 }

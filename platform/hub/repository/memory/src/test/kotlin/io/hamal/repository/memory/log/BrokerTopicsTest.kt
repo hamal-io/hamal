@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.*
 
 
-class MemoryLogBrokerTopicsRepositoryTest {
+class MemoryBrokerTopicsRepositoryTest {
 
     @Nested
     inner class CreateTopicTest {
