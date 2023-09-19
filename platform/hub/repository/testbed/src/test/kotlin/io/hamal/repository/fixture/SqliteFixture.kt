@@ -12,6 +12,9 @@ object SqliteFixture : BaseTestFixture {
 
     @Suppress("UNCHECKED_CAST")
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
+        BrokerRepository::class -> SqliteBrokerRepository(
+            SqliteBroker(createTempDirectory("sqlite_broker_test"))
+        ) as REPO
 
         BrokerTopicsRepository::class -> SqliteBrokerTopicsRepository(
             SqliteBrokerTopics(createTempDirectory("sqlite_broker_topics_test"))

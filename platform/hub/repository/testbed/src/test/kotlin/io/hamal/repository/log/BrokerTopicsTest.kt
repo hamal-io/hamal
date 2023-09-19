@@ -17,6 +17,74 @@ import org.junit.jupiter.api.assertThrows
 internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
 
     @TestFactory
+    fun `Creates a new topic`() = runWith(BrokerTopicsRepository::class) { testInstance ->
+        val result = testInstance.create(
+            CmdId(1),
+            TopicToCreate(TopicId(1), TopicName("very-first-topic"), GroupId(234))
+        )
+
+        assertThat(result.id, equalTo(TopicId(1)))
+        assertThat(result.name, equalTo(TopicName("very-first-topic")))
+        assertThat(result.groupId, equalTo(GroupId(234)))
+        assertThat(testInstance.count(TopicQuery(groupIds = listOf())), equalTo(1UL))
+    }
+
+    @TestFactory
+    fun `Bug - able to create realistic topic name`() = runWith(BrokerTopicsRepository::class) { testInstance ->
+        testInstance.create(
+            CmdId(1),
+            TopicToCreate(TopicId(1), TopicName("very-first-topic"), GroupId(345))
+        )
+
+        val result = testInstance.create(
+            CmdId(2),
+            TopicToCreate(TopicId(2), TopicName("func::created"), GroupId(345))
+        )
+        assertThat(result.id, equalTo(TopicId(2)))
+        assertThat(result.name, equalTo(TopicName("func::created")))
+
+        assertThat(testInstance.count(TopicQuery(groupIds = listOf())), equalTo(2UL))
+    }
+
+    @TestFactory
+    fun `Does not create a new entry if topic already exists`() =
+        runWith(BrokerTopicsRepository::class) { testInstance ->
+            testInstance.create(
+                CmdId(1),
+                TopicToCreate(TopicId(1), TopicName("very-first-topic"), GroupId(1))
+            )
+
+            val throwable = assertThrows<IllegalArgumentException> {
+                testInstance.create(
+                    CmdId(2),
+                    TopicToCreate(TopicId(2), TopicName("very-first-topic"), GroupId(1))
+                )
+            }
+            assertThat(throwable.message, equalTo("Topic already exists"))
+            assertThat(testInstance.count(TopicQuery(groupIds = listOf())), equalTo(1UL))
+        }
+
+    @TestFactory
+    fun `Create a new topic even topic name exists for different group`() =
+        runWith(BrokerTopicsRepository::class) { testInstance ->
+            testInstance.create(
+                CmdId(1),
+                TopicToCreate(TopicId(1), TopicName("very-first-topic"), GroupId(1))
+            )
+
+            testInstance.create(
+                CmdId(2),
+                TopicToCreate(TopicId(2), TopicName("very-first-topic"), GroupId(2))
+            )
+
+            testInstance.create(
+                CmdId(3),
+                TopicToCreate(TopicId(3), TopicName("very-first-topic"), GroupId(3))
+            )
+        }
+
+
+    @TestFactory
     fun `Topic name only exists in different group`() = runWith(BrokerTopicsRepository::class) { testInstance ->
         testInstance.setupTopic()
 
