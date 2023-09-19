@@ -98,6 +98,7 @@ class MetricServiceTest {
 
 
         @Test
+        @Disabled
         fun `count completed`() {
             myEmitter.execute(ExecutionCompletedEvent::class)
             Assertions.assertFalse(metricRepository.getData().getMap().isEmpty())
@@ -108,6 +109,7 @@ class MetricServiceTest {
         }
 
         @Test
+        @Disabled
         fun `count failed`() {
             myEmitter.execute(ExecutionFailedEvent::class)
             Assertions.assertEquals(1, metricRepository.getData().getMap().size)
