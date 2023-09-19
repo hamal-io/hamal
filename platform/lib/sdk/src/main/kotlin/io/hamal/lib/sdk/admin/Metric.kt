@@ -12,6 +12,7 @@ data class AdminMetrics(
 )
 
 interface AdminMetricService {
+    fun clear()
     fun get(): AdminMetrics
 }
 
@@ -21,9 +22,12 @@ internal class DefaultAdminMetricService(
 ) : AdminMetricService {
 
     override fun get() =
-        template.get("/v1/metrics")
+        template.get("/v1/metrics/json")
             .execute()
             .fold(AdminMetrics::class)
 
-
+    override fun clear() {
+        template.post("/v1/metrics/clear")
+            .execute()
+    }
 }

@@ -53,7 +53,9 @@ class SysExtensionFactory(
 
                 "create_trigger" to CreateTriggerFunction(sdk),
                 "get_trigger" to GetTriggerFunction(sdk),
-                "list_trigger" to ListTriggerFunction(sdk)
+                "list_trigger" to ListTriggerFunction(sdk),
+
+                "get_metric" to GetMetricFunction(sdk)
             )
         )
     }

@@ -28,5 +28,9 @@ class MetricService(
     fun get(): MetricAccess {
         return repo.getData()
     }
+
+    fun clear(){
+        repo.clear()
+    }
 }
 
