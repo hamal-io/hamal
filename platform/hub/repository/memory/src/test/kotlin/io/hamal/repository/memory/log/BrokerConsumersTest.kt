@@ -27,31 +27,31 @@ class MemoryLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Returns chunk id 0 if no entry exists for group id and topic id`() {
-            val result = testInstance.nextChunkId(ConsumerId("some-group-id"), TopicId(42))
+            val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(42))
             assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(0UL))
         }
 
         @Test
         fun `Next chunk id - is last committed chunk id plus 1`() {
-            testInstance.commit(ConsumerId("some-group-id"), TopicId(1), ChunkId(127))
-            val result = testInstance.nextChunkId(ConsumerId("some-group-id"), TopicId(1))
+            testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
+            val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(1))
             assertThat(result, equalTo(ChunkId(128)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different topic`() {
-            testInstance.commit(ConsumerId("some-group-id"), TopicId(1), ChunkId(127))
+            testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
 
-            val result = testInstance.nextChunkId(ConsumerId("some-group-id"), TopicId(2))
+            val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(2))
             assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different group`() {
-            testInstance.commit(ConsumerId("some-group-id"), TopicId(1), ChunkId(127))
+            testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
             val result = testInstance.nextChunkId(ConsumerId("different-group-id"), TopicId(1))
             assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(1UL))

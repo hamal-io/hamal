@@ -48,7 +48,7 @@ class SqliteLogBrokerConsumersRepositoryTest {
         fun `Does not create consumers table if already exists`() {
             SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
                 it.connection.execute(
-                    """INSERT INTO consumers (group_id,topic_id,next_chunk_id) VALUES ('some-group-id',1234,4321);"""
+                    """INSERT INTO consumers (group_id,topic_id,next_chunk_id) VALUES ('some-consumer-id',1234,4321);"""
                 )
             }
 
@@ -118,30 +118,30 @@ class SqliteLogBrokerConsumersRepositoryTest {
 
         @Test
         fun `Returns chunk id 0 if no entry exists for group id and topic id`() {
-            val result = testInstance.nextChunkId(ConsumerId("some-group-id"), TopicId(42))
+            val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(42))
             assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(0UL))
         }
 
         @Test
         fun `Next chunk id - is last committed chunk id plus 1`() {
-            testInstance.commit(ConsumerId("some-group-id"), TopicId(1), ChunkId(127))
-            val result = testInstance.nextChunkId(ConsumerId("some-group-id"), TopicId(1))
+            testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
+            val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(1))
             assertThat(result, equalTo(ChunkId(128)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different topic`() {
-            testInstance.commit(ConsumerId("some-group-id"), TopicId(1), ChunkId(127))
-            val result = testInstance.nextChunkId(ConsumerId("some-group-id"), TopicId(2))
+            testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
+            val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(2))
             assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(1UL))
         }
 
         @Test
         fun `Does not return next chunk id of different group`() {
-            testInstance.commit(ConsumerId("some-group-id"), TopicId(1), ChunkId(127))
+            testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
             val result = testInstance.nextChunkId(ConsumerId("different-group-id"), TopicId(1))
             assertThat(result, equalTo(ChunkId(0)))
             assertThat(testInstance.count(), equalTo(1UL))
