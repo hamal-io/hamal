@@ -10,10 +10,6 @@ function create_extension_factory()
             trigger = { },
         }
 
-        function export.get_metric()
-            return internal.get_metric()
-        end
-
         function export.adhoc(cmd)
             local err, res = internal.adhoc({
                 inputs = cmd.inputs or {},
@@ -138,6 +134,10 @@ function create_extension_factory()
 
         function export.trigger.list()
             return internal.list_trigger()
+        end
+
+        function export.get_metric()
+            return internal.get_metric()
         end
 
         return export

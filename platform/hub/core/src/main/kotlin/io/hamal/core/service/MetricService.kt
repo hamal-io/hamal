@@ -1,13 +1,13 @@
 package io.hamal.core.service
 
-import io.hamal.lib.sdk.admin.AdminMetrics
-import io.hamal.repository.api.MetricAccess
+import io.hamal.repository.api.MetricData
 import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.event.ExecutionCompletedEvent
 import io.hamal.repository.api.event.ExecutionFailedEvent
 import io.hamal.repository.api.event.HubEvent
 import org.springframework.stereotype.Service
 import kotlin.reflect.KClass
+
 
 @Service
 class MetricService(
@@ -26,8 +26,8 @@ class MetricService(
         }
     }
 
-    fun query(): MetricAccess {
-        return repo.getData()
+    fun query(): MetricData {
+        return repo.get()
     }
 
     fun clear() {

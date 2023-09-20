@@ -1,19 +1,25 @@
 package io.hamal.repository.api
 
 import io.hamal.repository.api.event.HubEvent
+import kotlinx.serialization.Serializable
 
 
-interface MetricAccess {
-    fun getTime(): Long
-    fun getMap(): LinkedHashMap<String, Int>
+@Serializable
+data class MetricData(
+    val time: Long = System.currentTimeMillis(),
+    val events: MutableList<Count> = mutableListOf()
+) {
+    @Serializable
+    data class Count(
+        val name: String,
+        var value: Int
+    )
 }
 
 interface MetricRepository {
-    fun create()
     fun update(e: HubEvent, transform: (HubEvent) -> String)
-    fun getData(): MetricAccess
+    fun get(): MetricData
     fun clear()
-    fun setTimer(timer: Long)
 }
 
 

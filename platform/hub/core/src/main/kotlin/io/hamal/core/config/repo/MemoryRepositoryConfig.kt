@@ -88,5 +88,5 @@ open class MemoryRepositoryConfig {
     open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
 
     @Bean
-    open fun metricRepository(): MetricRepository = MemoryMetricRepository
+    open fun metricRepository(): MetricRepository = memoryMetricRepository
 }

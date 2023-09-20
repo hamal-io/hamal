@@ -1,7 +1,7 @@
 package io.hamal.repository.memory
 
 
-import io.hamal.repository.api.MetricAccess
+import io.hamal.repository.api.MetricData
 import io.hamal.repository.api.MetricRepository
 import io.hamal.repository.api.event.HubEvent
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -9,20 +9,16 @@ import kotlin.concurrent.read
 import kotlin.concurrent.write
 
 
-object MemoryMetricRepository : MetricRepository {
+class MemoryMetricRepository(
+    val time: Long = System.currentTimeMillis()
+) : MetricRepository {
 
     private val lock = ReentrantReadWriteLock()
-    private val eventMap = LinkedHashMap<String, Int>()
-    private var timer: Long = System.currentTimeMillis()
+    private var data: MetricData = MetricData(time, mutableListOf())
 
 
-    override fun create() {
-        TODO()
-    }
-
-
-    private fun read(): LinkedHashMap<String, Int> {
-        lock.read { return LinkedHashMap(eventMap) }
+    private fun read(): MetricData {
+        lock.read { return MetricData(data.time, data.events) }
     }
 
     private fun write(f: () -> Unit) {
@@ -34,36 +30,23 @@ object MemoryMetricRepository : MetricRepository {
     override fun update(e: HubEvent, transform: (HubEvent) -> String) {
         write {
             val friendlyName = transform(e)
-            if (!eventMap.containsKey(friendlyName)) {
-                eventMap.put(friendlyName, 0)
-            }
-            eventMap[friendlyName] = eventMap.getOrDefault(friendlyName, 0) + 1
-        }
-    }
-
-
-    override fun getData(): MetricAccess {
-        return object : MetricAccess {
-            override fun getTime(): Long {
-                return timer
-            }
-
-            override fun getMap(): LinkedHashMap<String, Int> {
-                return read()
+            val match: MetricData.Count? = data.events.find { it.name == friendlyName }
+            if (match == null) {
+                data.events.add(MetricData.Count(friendlyName, 1))
+            } else {
+                match.value++
             }
         }
     }
 
-    override fun setTimer(timer: Long) {
-        this.timer = timer
+    override fun get(): MetricData {
+        return read()
     }
-
 
     override fun clear() {
-        lock.write {
-            timer = System.currentTimeMillis()
-            eventMap.clear()
-        }
+        data = MetricData()
     }
 }
 
+
+val memoryMetricRepository = MemoryMetricRepository()

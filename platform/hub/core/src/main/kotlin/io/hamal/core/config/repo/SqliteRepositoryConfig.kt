@@ -111,7 +111,7 @@ open class SqliteRepositoryConfig {
     open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
 
     @Bean
-    open fun metricRepository(): MetricRepository = MemoryMetricRepository
+    open fun metricRepository(): MetricRepository = memoryMetricRepository
 
     private val path = Path("/tmp/hamal/hub")
 }
