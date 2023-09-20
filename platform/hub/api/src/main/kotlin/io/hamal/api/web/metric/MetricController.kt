@@ -14,6 +14,7 @@ import kotlin.reflect.KClass
 class MetricController(
     private val metricService: MetricService
 ) {
+    //Port 9009
     @GetMapping("/v1/metrics/json", produces = ["application/json"])
     fun json(): ResponseEntity<MetricData> {
         return ResponseEntity.ok(
@@ -21,8 +22,5 @@ class MetricController(
         )
     }
 
-    @PostMapping("/v1/metrics/clear")
-    fun clear() {
-        metricService.clear()
-    }
+
 }

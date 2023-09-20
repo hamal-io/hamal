@@ -16,8 +16,7 @@ class GetMetricFunction(
 
     override fun invoke(ctx: FunctionContext): StringType {
         val z: MetricData = hubSdk.metric.get()
-
-        return StringType("coming soon")
+        return StringType(z.time.toString())
     }
 }
 
