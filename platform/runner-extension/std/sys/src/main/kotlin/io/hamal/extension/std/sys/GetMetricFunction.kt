@@ -6,8 +6,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.admin.AdminMetricService
-import io.hamal.lib.sdk.admin.AdminMetrics
+import io.hamal.lib.sdk.admin.MetricData
 
 class GetMetricFunction(
     private val hubSdk: HubSdk
@@ -16,9 +15,9 @@ class GetMetricFunction(
 ) {
 
     override fun invoke(ctx: FunctionContext): StringType {
-        val z: AdminMetrics = hubSdk.metric.get()
+        val z: MetricData = hubSdk.metric.get()
 
-        return StringType(z.time.toString())
+        return StringType("coming soon")
     }
 }
 
