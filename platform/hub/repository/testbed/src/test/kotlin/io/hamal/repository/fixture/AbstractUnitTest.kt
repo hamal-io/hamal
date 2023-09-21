@@ -11,7 +11,7 @@ abstract class AbstractUnitTest {
 
     fun <REPO : Repository> runWith(
         interfaceClass: KClass<out REPO>,
-        block: (testInstance: REPO) -> Unit
+        block: REPO.() -> Unit
     ): List<DynamicTest> {
         return provideTestInstances(interfaceClass).map { testInstance ->
             testInstance.clear()

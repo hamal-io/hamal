@@ -18,8 +18,8 @@ class BrokerRepositoryTest : AbstractUnitTest() {
     inner class CreateTopicTest {
 
         @TestFactory
-        fun `Bug - Able to resolve real topic`() = runWith(BrokerRepository::class) { testInstance ->
-            val result = testInstance.create(
+        fun `Bug - Able to resolve real topic`() = runWith(BrokerRepository::class) {
+            val result = create(
                 CmdId(123),
                 TopicToCreate(TopicId(234), TopicName("scheduler::flow_enqueued"), GroupId(1))
             )

@@ -21,17 +21,17 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     inner class AppendTest {
 
         @TestFactory
-        fun `Append multiple records to empty partition`() = runWith(TopicRepository::class) { testInstance ->
+        fun `Append multiple records to empty partition`() = runWith(TopicRepository::class) {
             withEpochMilli(98765) {
                 listOf(
                     "VALUE_1".toByteArray(),
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
-                ).forEachIndexed { index, value -> testInstance.append(CmdId(index), value) }
-                assertThat(testInstance.count(), equalTo(3UL))
+                ).forEachIndexed { index, value -> append(CmdId(index), value) }
+                assertThat(count(), equalTo(3UL))
             }
 
-            testInstance.read(ChunkId(1)).let {
+            read(ChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(ChunkId(1)))
@@ -41,7 +41,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(98765)))
             }
 
-            testInstance.read(ChunkId(3)).let {
+            read(ChunkId(3)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(ChunkId(3)))
@@ -57,9 +57,9 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     inner class ReadTest {
 
         @TestFactory
-        fun `Reads multiple chunks`() = runWith(TopicRepository::class) { testInstance ->
-            testInstance.appendOneHundredChunks()
-            val result = testInstance.read(ChunkId(25), 36)
+        fun `Reads multiple chunks`() = runWith(TopicRepository::class) {
+            appendOneHundredChunks()
+            val result = read(ChunkId(25), 36)
             assertThat(result, hasSize(36))
 
             for (id in 0 until 36) {

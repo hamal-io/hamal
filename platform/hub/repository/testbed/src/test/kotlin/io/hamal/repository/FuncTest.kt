@@ -13,6 +13,7 @@ import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -24,8 +25,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class CreateFuncTest {
         @TestFactory
-        fun `Creates Func`() = runWith(FuncRepository::class) { testInstance ->
-            val result = testInstance.create(
+        fun `Creates Func`() = runWith(FuncRepository::class) {
+            val result = create(
                 CreateCmd(
                     id = CmdId(1),
                     funcId = FuncId(123),
@@ -52,14 +53,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(code, equalTo(CodeType("40 + 2")))
             }
 
-            testInstance.verifyCount(1)
+            verifyCount(1)
         }
 
         @TestFactory
         fun `Tries to create but same name already exist in namespace`() =
-            runWith(FuncRepository::class) { testInstance ->
+            runWith(FuncRepository::class) {
 
-                testInstance.createFunc(
+                createFunc(
                     funcId = FuncId(1),
                     namespaceId = NamespaceId(2),
                     groupId = GroupId(3),
@@ -67,7 +68,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
-                    testInstance.create(
+                    create(
                         CreateCmd(
                             id = CmdId(2),
                             funcId = FuncId(4),
@@ -85,21 +86,21 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     equalTo("FuncName(first-func-name) not unique in namespace NamespaceId(2)")
                 )
 
-                testInstance.verifyCount(1)
+                verifyCount(1)
             }
 
         @TestFactory
         fun `Creates with same name but different namespace`() =
-            runWith(FuncRepository::class) { testInstance ->
+            runWith(FuncRepository::class) {
 
-                testInstance.createFunc(
+                createFunc(
                     funcId = FuncId(1),
                     namespaceId = NamespaceId(2),
                     groupId = GroupId(3),
                     name = FuncName("func-name")
                 )
 
-                val result = testInstance.create(
+                val result = create(
                     CreateCmd(
                         id = CmdId(2),
                         funcId = FuncId(4),
@@ -120,14 +121,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(code, equalTo(CodeType("'13'..'37'")))
                 }
 
-                testInstance.verifyCount(2)
+                verifyCount(2)
             }
 
         @TestFactory
         fun `Tries to create but cmd with func id was already applied`() =
-            runWith(FuncRepository::class) { testInstance ->
+            runWith(FuncRepository::class) {
 
-                testInstance.createFunc(
+                createFunc(
                     cmdId = CmdId(23456),
                     funcId = FuncId(5),
                     namespaceId = NamespaceId(2),
@@ -136,7 +137,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 )
 
 
-                val result = testInstance.create(
+                val result = create(
                     CreateCmd(
                         id = CmdId(23456),
                         funcId = FuncId(5),
@@ -157,7 +158,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(code, equalTo(CodeType("40 + 2")))
                 }
 
-                testInstance.verifyCount(1)
+                verifyCount(1)
             }
     }
 
@@ -165,15 +166,15 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
     inner class UpdatesFuncTest {
 
         @TestFactory
-        fun `Updates func`() = runWith(FuncRepository::class) { testInstance ->
-            testInstance.createFunc(
+        fun `Updates func`() = runWith(FuncRepository::class) {
+            createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
                 name = FuncName("func-name")
             )
 
-            val result = testInstance.update(
+            val result = update(
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
                     namespaceId = NamespaceId(22),
@@ -192,19 +193,19 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(code, equalTo(CodeType("'13'..'37'")))
             }
 
-            testInstance.verifyCount(1)
+            verifyCount(1)
         }
 
         @TestFactory
-        fun `Updates func without updating it`() = runWith(FuncRepository::class) { testInstance ->
-            testInstance.createFunc(
+        fun `Updates func without updating it`() = runWith(FuncRepository::class) {
+            createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
                 name = FuncName("func-name")
             )
 
-            val result = testInstance.update(
+            val result = update(
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
                     namespaceId = null,
@@ -223,21 +224,21 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(code, equalTo(CodeType("40 + 2")))
             }
 
-            testInstance.verifyCount(1)
+            verifyCount(1)
         }
 
         @TestFactory
         fun `Tries to update but same name already exist in namespace`() =
-            runWith(FuncRepository::class) { testInstance ->
+            runWith(FuncRepository::class) {
 
-                testInstance.createFunc(
+                createFunc(
                     funcId = FuncId(1),
                     namespaceId = NamespaceId(2),
                     groupId = GroupId(3),
                     name = FuncName("already-exists")
                 )
 
-                testInstance.createFunc(
+                createFunc(
                     funcId = FuncId(2),
                     namespaceId = NamespaceId(2),
                     groupId = GroupId(3),
@@ -245,7 +246,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
-                    testInstance.update(
+                    update(
                         FuncId(2), UpdateCmd(
                             id = CmdId(2),
                             name = FuncName("already-exists"),
@@ -258,14 +259,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     equalTo("FuncName(already-exists) not unique in namespace NamespaceId(2)")
                 )
 
-                with(testInstance.get(FuncId(2))) {
+                with(get(FuncId(2))) {
                     assertThat(id, equalTo(FuncId(2)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(name, equalTo(FuncName("to-update")))
                 }
 
-                testInstance.verifyCount(2)
+                verifyCount(2)
             }
 
     }
@@ -274,60 +275,167 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
     inner class ClearTest {
 
         @TestFactory
-        fun `Nothing to clear`() = runWith(FuncRepository::class) { testInstance ->
-            testInstance.clear()
-            testInstance.verifyCount(0)
+        fun `Nothing to clear`() = runWith(FuncRepository::class) {
+            clear()
+            verifyCount(0)
         }
 
 
         @TestFactory
-        fun `Clear table`() = runWith(FuncRepository::class) { testInstance ->
+        fun `Clear table`() = runWith(FuncRepository::class) {
 
-            testInstance.createFunc(
+            createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
                 name = FuncName("already-exists")
             )
 
-            testInstance.createFunc(
+            createFunc(
                 funcId = FuncId(2),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
                 name = FuncName("to-update")
             )
-            testInstance.clear()
-            testInstance.verifyCount(0)
+
+            clear()
+            verifyCount(0)
         }
 
     }
-}
+
+    @Nested
+    inner class GetTest {
+        @TestFactory
+        fun `Get func by id`() = runWith(FuncRepository::class) {
+            createFunc(
+                funcId = FuncId(1),
+                namespaceId = NamespaceId(2),
+                groupId = GroupId(3),
+                name = FuncName("SomeFunc")
+            )
+
+            with(get(FuncId(1))) {
+                assertThat(id, equalTo(FuncId(1)))
+                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
+                assertThat(name, equalTo(FuncName("SomeFunc")))
+                assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(code, equalTo(CodeType("40 + 2")))
+            }
+        }
+
+        @TestFactory
+        fun `Tries to get func by id but does not exist`() = runWith(FuncRepository::class) {
+            createFunc(
+                funcId = FuncId(1),
+                namespaceId = NamespaceId(2),
+                groupId = GroupId(3),
+                name = FuncName("SomeFunc")
+            )
+
+            val exception = assertThrows<NoSuchElementException> {
+                get(FuncId(111111))
+            }
+            assertThat(exception.message, equalTo("Func not found"))
+        }
+    }
+
+    @Nested
+    inner class FindTest {
+        @TestFactory
+        fun `Find func by id`() = runWith(FuncRepository::class) {
+            createFunc(
+                funcId = FuncId(1),
+                namespaceId = NamespaceId(2),
+                groupId = GroupId(3),
+                name = FuncName("SomeFunc")
+            )
+
+            with(find(FuncId(1))!!) {
+                assertThat(id, equalTo(FuncId(1)))
+                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
+                assertThat(name, equalTo(FuncName("SomeFunc")))
+                assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(code, equalTo(CodeType("40 + 2")))
+            }
+        }
+
+        @TestFactory
+        fun `Tries to find func by id but does not exist`() = runWith(FuncRepository::class) {
+            createFunc(
+                funcId = FuncId(1),
+                namespaceId = NamespaceId(2),
+                groupId = GroupId(3),
+                name = FuncName("SomeFunc")
+            )
+
+            val result = find(FuncId(111111))
+            assertThat(result, nullValue())
+        }
+    }
+
+    @Nested
+    inner class ListTest {
+
+        fun `List by ids`() = runWith(FuncRepository::class) {
+            setup()
+
+            val result = find(FuncId(111111))
+            assertThat(result, nullValue())
+        }
+
+        private fun FuncRepository.setup() {
+            createFunc(
+                funcId = FuncId(1),
+                namespaceId = NamespaceId(2),
+                groupId = GroupId(3),
+                name = FuncName("Func")
+            )
+
+            createFunc(
+                funcId = FuncId(2),
+                namespaceId = NamespaceId(3),
+                groupId = GroupId(3),
+                name = FuncName("Func")
+            )
+
+            createFunc(
+                funcId = FuncId(2),
+                namespaceId = NamespaceId(3),
+                groupId = GroupId(3),
+                name = FuncName("Func")
+            )
+        }
+    }
 
 
-private fun FuncRepository.createFunc(
-    funcId: FuncId,
-    namespaceId: NamespaceId,
-    name: FuncName,
-    groupId: GroupId,
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-) {
-    create(
-        CreateCmd(
-            id = cmdId,
-            funcId = funcId,
-            groupId = groupId,
-            namespaceId = namespaceId,
-            name = name,
-            inputs = FuncInputs(
-                MapType(
-                    mutableMapOf(
-                        "hamal" to StringType("rockz")
+    private fun FuncRepository.createFunc(
+        funcId: FuncId,
+        namespaceId: NamespaceId,
+        name: FuncName,
+        groupId: GroupId,
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) {
+        create(
+            CreateCmd(
+                id = cmdId,
+                funcId = funcId,
+                groupId = groupId,
+                namespaceId = namespaceId,
+                name = name,
+                inputs = FuncInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
                     )
-                )
-            ),
-            code = CodeType("40 + 2")
+                ),
+                code = CodeType("40 + 2")
+            )
         )
-    )
+    }
 }
 
 private fun FuncRepository.verifyCount(expected: Int) {
