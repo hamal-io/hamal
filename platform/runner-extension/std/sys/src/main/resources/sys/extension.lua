@@ -136,10 +136,10 @@ function create_extension_factory()
             return internal.list_trigger()
         end
 
-        function export.get_metric()
-            return internal.get_metric()
+        function export.metrics()
+            return internal.metrics()
         end
 
-        return export
+       return export
     end
 end

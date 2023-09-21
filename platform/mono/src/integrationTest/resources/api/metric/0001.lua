@@ -1,3 +1,5 @@
 sys = require('sys')
-local msg = sys.get_metric()
-assert(msg ~= nil)
+print('f')
+m = sys.metrics()
+assert(m.time ~= 0)
+assert(m.exec_completed ~= 0)

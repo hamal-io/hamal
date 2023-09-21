@@ -27,6 +27,7 @@ internal class DefaultAdminMetricService(
     private val template: HttpTemplate
 ) : AdminMetricService {
 
+    //set port to 9009 browser ok, test not
     private fun swapPortandGet(base: HttpTemplate, injectUrl: String, getReq: String): MetricData {
         val baseUrlProperty = base::class.declaredMemberProperties.find { it.name == "baseUrl" } as? KMutableProperty<*>
         baseUrlProperty?.isAccessible = true
@@ -42,10 +43,12 @@ internal class DefaultAdminMetricService(
         return swapPortandGet(template, "http://localhost:9009", "/v1/metrics/json")
     }
 
-    /*  that should work but wrong port
-        override fun get() = template.get("/v1/metrics/json")
-             .header("Content-Type", "application/json")
-             .execute()
-             .fold(MetricData::class)
+
+    /* query port 7007, no metric service available
+    override fun get() = template.get("/v1/metrics/json")
+           .header("Content-Type", "application/json")
+           .execute()
+           .fold(MetricData::class)
     */
+
 }

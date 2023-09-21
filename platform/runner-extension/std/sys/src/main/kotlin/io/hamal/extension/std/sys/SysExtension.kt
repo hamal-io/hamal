@@ -4,6 +4,7 @@ import io.hamal.extension.std.sys.adhoc.InvokeAdhocFunction
 import io.hamal.extension.std.sys.exec.GetExecFunction
 import io.hamal.extension.std.sys.exec.ListExecFunction
 import io.hamal.extension.std.sys.func.*
+import io.hamal.extension.std.sys.metric.GetMetricFunction
 import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
 import io.hamal.extension.std.sys.req.GetReqFunction
 import io.hamal.extension.std.sys.topic.*
@@ -55,7 +56,7 @@ class SysExtensionFactory(
                 "get_trigger" to GetTriggerFunction(sdk),
                 "list_trigger" to ListTriggerFunction(sdk),
 
-                "get_metric" to GetMetricFunction(sdk)
+                "metrics" to GetMetricFunction(sdk)
             )
         )
     }
