@@ -37,10 +37,13 @@ open class MemoryRepositoryConfig {
     open fun authCmdRepository() = authRepository()
 
     @Bean
-    open fun funcCmdRepository(): FuncCmdRepository = MemoryFuncRepository
+    open fun funcRepository(): FuncRepository = MemoryFuncRepository()
 
     @Bean
-    open fun funcQueryRepository(): FuncQueryRepository = MemoryFuncRepository
+    open fun funcCmdRepository(): FuncCmdRepository = funcRepository()
+
+    @Bean
+    open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
     open fun groupRepository() = MemoryGroupRepository

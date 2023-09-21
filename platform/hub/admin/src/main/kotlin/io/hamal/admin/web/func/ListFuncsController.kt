@@ -27,8 +27,8 @@ internal class ListFuncsController(private val listFunc: ListFuncsPort) {
         return listFunc(
             FuncQuery(
                 afterId = afterId,
-                limit = limit
-                //groupid
+                limit = limit,
+                groupIds = groupIds
             ),
             ::assemble
         )

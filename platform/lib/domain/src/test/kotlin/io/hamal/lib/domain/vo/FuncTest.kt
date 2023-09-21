@@ -61,7 +61,7 @@ class FuncIdTest {
 }
 
 
-class FuncRefTest {
+class FuncNameTest {
     @Nested
     inner class EqualsTest {
         @Test

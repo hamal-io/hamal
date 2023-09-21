@@ -1,7 +1,5 @@
 package io.hamal.repository.sqlite.record
 
-import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.Record
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
@@ -9,6 +7,8 @@ import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
+import io.hamal.repository.record.CreateDomainObject
+import io.hamal.repository.record.Record
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
@@ -18,7 +18,7 @@ interface RecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObje
     fun storeRecord(record: RECORD): RECORD
     fun recordsOf(id: ID): List<RECORD>
     fun lastRecordOf(id: ID): RECORD
-    fun commandAlreadyApplied(id: ID, cmdId: CmdId): Boolean
+    fun commandAlreadyApplied(cmdId: CmdId, id: ID): Boolean
     fun versionOf(id: ID, cmdId: CmdId): OBJ
     fun currentVersion(id: ID): OBJ
 }
@@ -59,7 +59,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
             ?: throw IllegalArgumentException("No records found for $id")
     }
 
-    override fun commandAlreadyApplied(id: ID, cmdId: CmdId): Boolean {
+    override fun commandAlreadyApplied(cmdId: CmdId, id: ID): Boolean {
         return recordsOf(id).any { it.cmdId == cmdId }
     }
 

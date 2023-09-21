@@ -144,7 +144,6 @@ class SqliteBrokerTopicsRepository(
                 id < :afterId
                 ${query.names()}
                 ${query.groupIds()}
-            ORDER BY id DESC
         """.trimIndent()
         ) {
             query {

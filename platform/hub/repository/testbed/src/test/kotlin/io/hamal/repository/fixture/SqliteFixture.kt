@@ -3,8 +3,10 @@ package io.hamal.repository.fixture
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.log.*
+import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
 
@@ -22,6 +24,10 @@ object SqliteFixture : BaseTestFixture {
 
         BrokerTopicsRepository::class -> SqliteBrokerTopicsRepository(
             SqliteBrokerTopics(createTempDirectory("sqlite_broker_topics_test"))
+        ) as REPO
+
+        FuncRepository::class -> SqliteFuncRepository(
+            SqliteFuncRepository.Config(createTempDirectory("sqlite_func_test"))
         ) as REPO
 
         SegmentRepository::class ->

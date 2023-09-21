@@ -6,9 +6,9 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import java.io.Closeable
+import io.hamal.repository.api.Repository
 
-interface BrokerTopicsRepository : Closeable {
+interface BrokerTopicsRepository : Repository {
     fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic
     fun find(groupId: GroupId, name: TopicName): Topic?
     fun find(id: TopicId): Topic?

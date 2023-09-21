@@ -1,7 +1,7 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.domain.vo.TopicId
-import java.io.Closeable
+import io.hamal.repository.api.Repository
 
 interface Segment {
     val id: Id
@@ -14,7 +14,4 @@ interface Segment {
 }
 
 
-
-interface SegmentRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
-    fun clear()
-}
+interface SegmentRepository : Repository, ChunkAppender, ChunkReader, ChunkCounter

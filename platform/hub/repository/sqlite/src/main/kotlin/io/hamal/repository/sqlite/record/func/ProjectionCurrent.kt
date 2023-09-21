@@ -1,10 +1,10 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
@@ -35,7 +35,7 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
         }
     }
 
-    fun list(connection: Connection, afterId: FuncId, limit: Limit): List<Func> {
+    fun list(connection: Connection, query: FuncQuery): List<Func> {
         return connection.executeQuery<Func>(
             """
             SELECT 
@@ -44,18 +44,40 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
                 current
             WHERE
                 id < :afterId
+                ${query.groupIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
         ) {
             query {
-                set("afterId", afterId)
-                set("limit", limit)
+                set("afterId", query.afterId)
+                set("limit", query.limit)
             }
             map { rs ->
                 protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
             }
         }
+    }
+
+    fun count(connection: Connection, query: FuncQuery): ULong {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                current
+            WHERE
+                id < :afterId
+                ${query.groupIds()}
+        """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+            }
+            map {
+                it.getLong("count").toULong()
+            }
+        } ?: 0UL
     }
 
     override fun upsert(tx: RecordTransaction<FuncId, FuncRecord, Func>, obj: Func) {
@@ -89,5 +111,13 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
     }
 
     override fun invalidate() {
+    }
+
+    private fun FuncQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
     }
 }

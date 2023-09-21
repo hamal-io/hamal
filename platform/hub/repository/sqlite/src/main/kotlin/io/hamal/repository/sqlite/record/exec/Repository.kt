@@ -54,7 +54,7 @@ class SqliteExecRepository(
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as PlannedExec
             } else {
                 storeRecord(
@@ -79,7 +79,7 @@ class SqliteExecRepository(
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as ScheduledExec
             } else {
                 storeRecord(
@@ -98,7 +98,7 @@ class SqliteExecRepository(
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as QueuedExec
             } else {
                 storeRecord(
@@ -124,7 +124,7 @@ class SqliteExecRepository(
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
 
-                if (commandAlreadyApplied(execId, cmdId)) {
+                if (commandAlreadyApplied(cmdId, execId)) {
                     versionOf(execId, cmdId) as QueuedExec
                 } else {
 
@@ -150,7 +150,7 @@ class SqliteExecRepository(
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as CompletedExec
             } else {
                 storeRecord(
@@ -169,7 +169,7 @@ class SqliteExecRepository(
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as FailedExec
             } else {
                 storeRecord(

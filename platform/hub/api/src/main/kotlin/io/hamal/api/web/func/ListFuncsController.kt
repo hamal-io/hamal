@@ -25,8 +25,8 @@ internal class ListFuncsController(private val listFunc: ListFuncsPort) {
         return listFunc(
             FuncQuery(
                 afterId = afterId,
-                limit = limit
-                // groupId = ...
+                limit = limit,
+                groupIds = listOf(groupId)
             ),
             // assembler
         ) { funcs, namespaces ->

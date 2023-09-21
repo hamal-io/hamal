@@ -58,7 +58,7 @@ class SqliteFuncRepository(
         val funcId = cmd.funcId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(funcId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, funcId)) {
                 versionOf(funcId, cmdId)
             } else {
                 storeRecord(
@@ -83,7 +83,7 @@ class SqliteFuncRepository(
     override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(funcId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, funcId)) {
                 versionOf(funcId, cmdId)
             } else {
                 val currentVersion = versionOf(funcId, cmdId)
@@ -109,6 +109,10 @@ class SqliteFuncRepository(
     }
 
     override fun list(query: FuncQuery): List<Func> {
-        return ProjectionCurrent.list(connection, query.afterId, query.limit)
+        return ProjectionCurrent.list(connection, query)
+    }
+
+    override fun count(query: FuncQuery): ULong {
+        return ProjectionCurrent.count(connection, query)
     }
 }
