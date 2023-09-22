@@ -84,12 +84,13 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, data) 
+                    (id,group_id, data) 
                 VALUES
-                    (:id, :data)
+                    (:id, :groupId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
+            set("groupId", obj.groupId)
             set("data", protobuf.encodeToByteArray(Func.serializer(), obj))
         }
     }
@@ -99,6 +100,7 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
+                 group_id       INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );

@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
@@ -12,8 +13,7 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -377,13 +377,83 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
     }
 
     @Nested
-    inner class ListTest {
+    inner class ListAndCountTest {
 
-        fun `List by ids`() = runWith(FuncRepository::class) {
+        @TestFactory
+        fun `By ids`() = runWith(FuncRepository::class) {
             setup()
 
-            val result = find(FuncId(111111))
-            assertThat(result, nullValue())
+            val result = list(listOf(FuncId(111111), FuncId(3)))
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(FuncId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(name, equalTo(FuncName("Func")))
+            }
+        }
+
+        @TestFactory
+        fun `With group ids`() = runWith(FuncRepository::class) {
+            setup()
+
+            val query = FuncQuery(
+                groupIds = listOf(GroupId(5), GroupId(4)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(2UL))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(FuncId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(name, equalTo(FuncName("Func")))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(FuncId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(name, equalTo(FuncName("Func")))
+            }
+        }
+
+
+        @TestFactory
+        fun `Limit`() = runWith(FuncRepository::class) {
+            setup()
+
+            val query = FuncQuery(
+                groupIds = listOf(),
+                limit = Limit(3)
+            )
+
+            assertThat(count(query), equalTo(4UL))
+            val result = list(query)
+            assertThat(result, hasSize(3))
+        }
+
+        @TestFactory
+        fun `Skip and limit`() = runWith(FuncRepository::class) {
+            setup()
+
+            val query = FuncQuery(
+                afterId = FuncId(2),
+                groupIds = listOf(),
+                limit = Limit(1)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(FuncId(1)))
+            }
         }
 
         private fun FuncRepository.setup() {
@@ -402,9 +472,16 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
 
             createFunc(
-                funcId = FuncId(2),
-                namespaceId = NamespaceId(3),
-                groupId = GroupId(3),
+                funcId = FuncId(3),
+                namespaceId = NamespaceId(4),
+                groupId = GroupId(4),
+                name = FuncName("Func")
+            )
+
+            createFunc(
+                funcId = FuncId(4),
+                namespaceId = NamespaceId(10),
+                groupId = GroupId(5),
                 name = FuncName("Func")
             )
         }
