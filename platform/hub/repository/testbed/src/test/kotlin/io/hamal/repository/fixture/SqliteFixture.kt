@@ -3,10 +3,12 @@ package io.hamal.repository.fixture
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.log.*
+import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import java.nio.file.Files.createTempDirectory
@@ -16,6 +18,10 @@ object SqliteFixture : BaseTestFixture {
 
     @Suppress("UNCHECKED_CAST")
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
+        AccountRepository::class -> SqliteAccountRepository(
+            SqliteAccountRepository.Config(createTempDirectory("sqlite_account_test"))
+        ) as REPO
+
         BrokerConsumersRepository::class -> SqliteBrokerConsumersRepository(
             SqliteBrokerConsumers(createTempDirectory("sqlite_broker_consumers_test"))
         ) as REPO

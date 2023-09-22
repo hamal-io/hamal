@@ -7,7 +7,7 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
-data class Entity(
+data class FuncEntity(
     override val cmdId: CmdId,
     override val id: FuncId,
     val groupId: GroupId,
@@ -20,7 +20,7 @@ data class Entity(
 
 ) : RecordEntity<FuncId, FuncRecord, Func> {
 
-    override fun apply(rec: FuncRecord): Entity {
+    override fun apply(rec: FuncRecord): FuncEntity {
         return when (rec) {
             is FuncCreationRecord -> copy(
                 id = rec.entityId,
@@ -57,12 +57,12 @@ data class Entity(
     }
 }
 
-fun List<FuncRecord>.createEntity(): Entity {
+fun List<FuncRecord>.createEntity(): FuncEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
     check(firstRecord is FuncCreationRecord)
 
-    var result = Entity(
+    var result = FuncEntity(
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,

@@ -6,9 +6,9 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.trigger.Entity
 import io.hamal.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.repository.record.trigger.FixedRateTriggerCreationRecord
+import io.hamal.repository.record.trigger.TriggerEntity
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
 import java.nio.file.Path
@@ -20,7 +20,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
 
         check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord)
 
-        var result = Entity(
+        var result = TriggerEntity(
             id = firstRecord.entityId,
             cmdId = firstRecord.cmdId,
             sequence = firstRecord.sequence()

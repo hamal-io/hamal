@@ -5,7 +5,7 @@ import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.record.exec.Entity
+import io.hamal.repository.api.record.exec.ExecEntity
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.exec.*
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
@@ -17,7 +17,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
         val firstRecord = recs.first()
         check(firstRecord is ExecPlannedRecord)
 
-        var result = Entity(
+        var result = ExecEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,

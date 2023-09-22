@@ -8,8 +8,8 @@ import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.func.Entity
 import io.hamal.repository.record.func.FuncCreationRecord
+import io.hamal.repository.record.func.FuncEntity
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.func.FuncUpdatedRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
@@ -21,7 +21,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
         val firstRecord = recs.first()
         check(firstRecord is FuncCreationRecord)
 
-        var result = Entity(
+        var result = FuncEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,

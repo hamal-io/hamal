@@ -3,10 +3,12 @@ package io.hamal.repository.fixture
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.log.*
+import io.hamal.repository.memory.record.MemoryAccountRepository
 import io.hamal.repository.memory.record.MemoryFuncRepository
 import io.hamal.repository.memory.record.MemoryNamespaceRepository
 import kotlin.reflect.KClass
@@ -14,6 +16,7 @@ import kotlin.reflect.KClass
 object MemoryFixture : BaseTestFixture {
     @Suppress("UNCHECKED_CAST")
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
+        AccountRepository::class -> MemoryAccountRepository() as REPO
         BrokerRepository::class -> MemoryBrokerRepository() as REPO
         BrokerConsumersRepository::class -> MemoryBrokerConsumersRepository() as REPO
         BrokerTopicsRepository::class -> MemoryBrokerTopicsRepository() as REPO

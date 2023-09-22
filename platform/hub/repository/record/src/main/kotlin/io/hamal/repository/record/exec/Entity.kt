@@ -13,7 +13,7 @@ import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.exec.*
 import java.time.Instant
 
-data class Entity(
+data class ExecEntity(
     override val cmdId: CmdId,
     override val id: ExecId,
     val groupId: GroupId,
@@ -31,7 +31,7 @@ data class Entity(
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
 
-    override fun apply(rec: ExecRecord): Entity {
+    override fun apply(rec: ExecRecord): ExecEntity {
         return when (rec) {
             is ExecPlannedRecord -> copy(
                 cmdId = rec.cmdId,
@@ -118,12 +118,12 @@ data class Entity(
     }
 }
 
-fun List<ExecRecord>.createEntity(): Entity {
+fun List<ExecRecord>.createEntity(): ExecEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
     check(firstRecord is ExecPlannedRecord)
 
-    var result = Entity(
+    var result = ExecEntity(
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,

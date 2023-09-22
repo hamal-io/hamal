@@ -26,7 +26,7 @@ internal object ProjectionUniqueName : Projection<FuncId, FuncRecord, Func> {
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: unique_name.name, unique_name.namespace_id)")) {
-                throw IllegalArgumentException("${obj.name} not unique in namespace ${obj.namespaceId}")
+                throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.namespaceId}")
             }
             throw e
         }

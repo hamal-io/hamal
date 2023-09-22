@@ -1,7 +1,6 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
@@ -19,10 +18,18 @@ internal object CurrentAccountProjection {
     private val projection = mutableMapOf<AccountId, Account>()
     fun apply(account: Account) {
 
-        check(projection.values.asSequence()
+        require(projection.values.asSequence()
             .map { it.name }
             .none { it == account.name }
-        ) { "Account name ${account.name} not unique" }
+        ) { "${account.name} already exists" }
+
+        if (account.email != null) {
+            require(projection.values.asSequence()
+                .map { it.email }
+                .none { it == account.email }
+            ) { "${account.email} already exists" }
+        }
+
 
         projection[account.id] = account
     }
@@ -31,12 +38,24 @@ internal object CurrentAccountProjection {
 
     fun find(accountName: AccountName): Account? = projection.values.find { it.name == accountName }
 
-    fun list(afterId: AccountId, limit: Limit): List<Account> {
-        return projection.keys.sorted()
+    fun list(query: AccountQuery): List<Account> {
+        return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
+            .map { it.value }
             .reversed()
-            .dropWhile { it >= afterId }
-            .take(limit.value)
-            .mapNotNull { find(it) }
+            .asSequence()
+            .dropWhile { it.id >= query.afterId }
+            .take(query.limit.value)
+            .toList()
+    }
+
+    fun count(query: AccountQuery): ULong {
+        return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .dropWhile { it.id >= query.afterId }
+            .count()
+            .toULong()
     }
 
     fun clear() {
@@ -50,7 +69,7 @@ class MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>()
     override fun create(cmd: CreateCmd): Account {
         return lock.withLock {
             val accountId = cmd.accountId
-            if (contains(accountId)) {
+            if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)
             } else {
                 addRecord(
@@ -73,7 +92,11 @@ class MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>()
     override fun find(accountName: AccountName): Account? = CurrentAccountProjection.find(accountName)
 
     override fun list(query: AccountQuery): List<Account> {
-        return CurrentAccountProjection.list(query.afterId, query.limit)
+        return CurrentAccountProjection.list(query)
+    }
+
+    override fun count(query: AccountQuery): ULong {
+        return CurrentAccountProjection.count(query)
     }
 
     override fun clear() {
@@ -91,7 +114,7 @@ private fun MemoryAccountRepository.currentVersion(id: AccountId): Account {
         .toDomainObject()
 }
 
-private fun MemoryAccountRepository.commandAlreadyApplied(id: AccountId, cmdId: CmdId) =
+private fun MemoryAccountRepository.commandAlreadyApplied(cmdId: CmdId, id: AccountId) =
     listRecords(id).any { it.cmdId == cmdId }
 
 private fun MemoryAccountRepository.versionOf(id: AccountId, cmdId: CmdId): Account {

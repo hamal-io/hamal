@@ -1,5 +1,6 @@
 package io.hamal.repository.fixture
 
+import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.api.CmdRepository
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.NamespaceRepository
@@ -28,6 +29,10 @@ abstract class AbstractUnitTest {
     }
 
     private val fixtures = mutableMapOf<KClass<*>, List<BaseTestFixture>>(
+        AccountRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
         BrokerConsumersRepository::class to listOf(
             MemoryFixture,
             SqliteFixture

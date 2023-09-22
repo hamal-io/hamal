@@ -9,8 +9,8 @@ import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.namespace.Entity
 import io.hamal.repository.record.namespace.NamespaceCreationRecord
+import io.hamal.repository.record.namespace.NamespaceEntity
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
@@ -22,7 +22,7 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
         val firstRecord = recs.first()
         check(firstRecord is NamespaceCreationRecord)
 
-        var result = Entity(
+        var result = NamespaceEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,

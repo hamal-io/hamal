@@ -9,7 +9,7 @@ import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
-data class Entity(
+data class NamespaceEntity(
     override val cmdId: CmdId,
     override val id: NamespaceId,
     val groupId: GroupId,
@@ -20,7 +20,7 @@ data class Entity(
 
     ) : RecordEntity<NamespaceId, NamespaceRecord, Namespace> {
 
-    override fun apply(rec: NamespaceRecord): Entity {
+    override fun apply(rec: NamespaceRecord): NamespaceEntity {
         return when (rec) {
             is NamespaceCreationRecord -> copy(
                 id = rec.entityId,
@@ -51,12 +51,12 @@ data class Entity(
     }
 }
 
-fun List<NamespaceRecord>.createEntity(): Entity {
+fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
     check(firstRecord is NamespaceCreationRecord)
 
-    var result = Entity(
+    var result = NamespaceEntity(
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,

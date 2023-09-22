@@ -57,7 +57,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exist in namespace`() =
+        fun `Tries to create but same name already exists in namespace`() =
             runWith(FuncRepository::class) {
 
                 createFunc(
@@ -83,7 +83,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FuncName(first-func-name) not unique in namespace NamespaceId(2)")
+                    equalTo("FuncName(first-func-name) already exists in namespace NamespaceId(2)")
                 )
 
                 verifyCount(1)
@@ -228,7 +228,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to update but same name already exist in namespace`() =
+        fun `Tries to update but same name already exists in namespace`() =
             runWith(FuncRepository::class) {
 
                 createFunc(
@@ -256,7 +256,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FuncName(already-exists) not unique in namespace NamespaceId(2)")
+                    equalTo("FuncName(already-exists) already exists in namespace NamespaceId(2)")
                 )
 
                 with(get(FuncId(2))) {
@@ -279,7 +279,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             clear()
             verifyCount(0)
         }
-        
+
         @TestFactory
         fun `Clear table`() = runWith(FuncRepository::class) {
 

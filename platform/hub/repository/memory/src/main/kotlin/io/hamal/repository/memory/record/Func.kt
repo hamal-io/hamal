@@ -25,7 +25,7 @@ internal object CurrentFuncProjection {
             if (currentFunc != null) {
                 projection[currentFunc.id] = currentFunc
             }
-            throw IllegalArgumentException("${func.name} not unique in namespace ${func.namespaceId}")
+            throw IllegalArgumentException("${func.name} already exists in namespace ${func.namespaceId}")
         }
 
         projection[func.id] = func

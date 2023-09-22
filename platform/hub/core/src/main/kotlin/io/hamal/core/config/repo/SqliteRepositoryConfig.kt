@@ -5,11 +5,11 @@ import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryReqRepository
-import io.hamal.repository.memory.record.MemoryAccountRepository
 import io.hamal.repository.memory.record.MemoryGroupRepository
 import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.SqliteBroker
 import io.hamal.repository.sqlite.log.SqliteBrokerRepository
+import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
@@ -31,7 +31,7 @@ open class SqliteRepositoryConfig {
     open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))
 
     @Bean
-    open fun accountRepository() = MemoryAccountRepository()
+    open fun accountRepository() = SqliteAccountRepository(SqliteAccountRepository.Config(path))
 
     @Bean
     open fun accountQueryRepository() = accountRepository()

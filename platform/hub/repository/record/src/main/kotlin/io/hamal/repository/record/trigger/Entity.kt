@@ -12,7 +12,8 @@ import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import kotlin.time.Duration
 
-data class Entity(
+
+data class TriggerEntity(
     override val id: TriggerId,
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
@@ -30,7 +31,7 @@ data class Entity(
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
 
-    override fun apply(rec: TriggerRecord): Entity {
+    override fun apply(rec: TriggerRecord): TriggerEntity {
         return when (rec) {
             is FixedRateTriggerCreationRecord -> copy(
                 cmdId = rec.cmdId,
@@ -91,13 +92,13 @@ data class Entity(
     }
 }
 
-fun List<TriggerRecord>.createEntity(): Entity {
+fun List<TriggerRecord>.createEntity(): TriggerEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
 
     check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord)
 
-    var result = Entity(
+    var result = TriggerEntity(
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence()
