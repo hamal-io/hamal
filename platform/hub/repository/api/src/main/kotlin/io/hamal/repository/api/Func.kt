@@ -10,12 +10,10 @@ import kotlinx.serialization.Serializable
 
 interface FuncRepository : FuncCmdRepository, FuncQueryRepository
 
-interface FuncCmdRepository {
+interface FuncCmdRepository : Repository {
     fun create(cmd: CreateCmd): Func
 
     fun update(funcId: FuncId, cmd: UpdateCmd): Func
-
-    fun clear()
 
     data class CreateCmd(
         val id: CmdId,
@@ -29,10 +27,10 @@ interface FuncCmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val namespaceId: NamespaceId?,
-        val name: FuncName?,
-        val inputs: FuncInputs?,
-        val code: CodeType?,
+        val namespaceId: NamespaceId? = null,
+        val name: FuncName? = null,
+        val inputs: FuncInputs? = null,
+        val code: CodeType? = null,
     )
 }
 
@@ -41,9 +39,13 @@ interface FuncQueryRepository {
     fun find(funcId: FuncId): Func?
     fun list(query: FuncQuery): List<Func>
     fun list(funcIds: List<FuncId>): List<Func> = funcIds.map(::get)
+    fun count(query: FuncQuery): ULong
+
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
-        var limit: Limit = Limit(1)
+        var limit: Limit = Limit(1),
+        var funcIds: List<FuncId> = listOf(),
+        var groupIds: List<GroupId>
     )
 }
 

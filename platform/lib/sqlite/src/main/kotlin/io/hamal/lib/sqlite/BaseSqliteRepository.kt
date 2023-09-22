@@ -3,13 +3,12 @@ package io.hamal.lib.sqlite
 import io.hamal.lib.common.logger
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.Once
-import java.io.Closeable
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 abstract class BaseSqliteRepository(
     val config: Config
-) : Closeable {
+) : AutoCloseable {
 
     protected val log = logger(this::class)
 

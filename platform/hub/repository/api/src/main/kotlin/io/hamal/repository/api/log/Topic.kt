@@ -1,8 +1,7 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.GroupId
-import java.io.Closeable
+import io.hamal.repository.api.Repository
 
 data class Topic(
     val id: TopicId,
@@ -10,9 +9,7 @@ data class Topic(
     val name: TopicName
 )
 
-interface TopicRepository : ChunkAppender, ChunkReader, ChunkCounter, Closeable {
-    fun clear()
-}
+interface TopicRepository : Repository, ChunkAppender, ChunkReader, ChunkCounter
 
 data class TopicEntry(
     val id: TopicEntryId,

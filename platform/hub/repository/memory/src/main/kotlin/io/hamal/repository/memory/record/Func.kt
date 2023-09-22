@@ -1,7 +1,6 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
@@ -18,23 +17,44 @@ import kotlin.concurrent.withLock
 internal object CurrentFuncProjection {
     private val projection = mutableMapOf<FuncId, Func>()
     fun apply(func: Func) {
+        val currentFunc = projection[func.id]
+        projection.remove(func.id)
 
-        val values = projection.values.groupBy({ it.namespaceId }, { it.name }).toMutableMap()
-        values[func.namespaceId] = values[func.namespaceId]?.plus(func.name) ?: listOf(func.name)
-        val unique = values.all { it.value.size == it.value.toSet().size }
-        check(unique) { "Func name ${func.name} not unique in namespace ${func.namespaceId}" }
+        val funcsInNamespace = projection.values.filter { it.namespaceId == func.namespaceId }
+        if (funcsInNamespace.any { it.name == func.name }) {
+            if (currentFunc != null) {
+                projection[currentFunc.id] = currentFunc
+            }
+            throw IllegalArgumentException("${func.name} not unique in namespace ${func.namespaceId}")
+        }
 
         projection[func.id] = func
     }
 
     fun find(funcId: FuncId): Func? = projection[funcId]
 
-    fun list(afterId: FuncId, limit: Limit): List<Func> {
-        return projection.keys.sorted()
+    fun list(query: FuncQuery): List<Func> {
+        return projection.filter { query.funcIds.isEmpty() || it.key in query.funcIds }
+            .map { it.value }
             .reversed()
-            .dropWhile { it >= afterId }
-            .take(limit.value)
-            .mapNotNull { find(it) }
+            .asSequence()
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .take(query.limit.value)
+            .toList()
+    }
+
+    fun count(query: FuncQuery): ULong {
+        return projection.filter { query.funcIds.isEmpty() || it.key in query.funcIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .count()
+            .toULong()
     }
 
     fun clear() {
@@ -42,12 +62,13 @@ internal object CurrentFuncProjection {
     }
 }
 
-object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRepository {
+class MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRepository {
     private val lock = ReentrantLock()
     override fun create(cmd: FuncCmdRepository.CreateCmd): Func {
         return lock.withLock {
             val funcId = cmd.funcId
-            if (contains(funcId)) {
+            val cmdId = cmd.id
+            if (commandAlreadyApplied(cmdId, funcId)) {
                 versionOf(funcId, cmd.id)
             } else {
                 addRecord(
@@ -68,7 +89,7 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRe
 
     override fun update(funcId: FuncId, cmd: FuncCmdRepository.UpdateCmd): Func {
         return lock.withLock {
-            if (commandAlreadyApplied(funcId, cmd.id)) {
+            if (commandAlreadyApplied(cmd.id, funcId)) {
                 versionOf(funcId, cmd.id)
             } else {
                 val currentVersion = versionOf(funcId, cmd.id)
@@ -90,7 +111,15 @@ object MemoryFuncRepository : BaseRecordRepository<FuncId, FuncRecord>(), FuncRe
     override fun find(funcId: FuncId): Func? = CurrentFuncProjection.find(funcId)
 
     override fun list(query: FuncQuery): List<Func> {
-        return CurrentFuncProjection.list(query.afterId, query.limit)
+        return CurrentFuncProjection.list(query)
+    }
+
+    override fun count(query: FuncQuery): ULong {
+        return CurrentFuncProjection.count(query)
+    }
+
+    override fun close() {
+
     }
 
     override fun clear() {
@@ -105,7 +134,7 @@ private fun MemoryFuncRepository.currentVersion(id: FuncId): Func {
         .toDomainObject()
 }
 
-private fun MemoryFuncRepository.commandAlreadyApplied(id: FuncId, cmdId: CmdId) =
+private fun MemoryFuncRepository.commandAlreadyApplied(cmdId: CmdId, id: FuncId) =
     listRecords(id).any { it.cmdId == cmdId }
 
 private fun MemoryFuncRepository.versionOf(id: FuncId, cmdId: CmdId): Func {

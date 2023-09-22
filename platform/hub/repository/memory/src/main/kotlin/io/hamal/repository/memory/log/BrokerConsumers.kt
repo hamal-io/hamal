@@ -28,6 +28,11 @@ class MemoryBrokerConsumersRepository : BrokerConsumersRepository {
 
     override fun close() {}
     override fun count(): ULong = lock.withLock { store.size.toULong() }
+    override fun clear() {
+        lock.withLock {
+            store.clear()
+        }
+    }
 }
 
 fun MemoryBrokerConsumersRepository.clear() {

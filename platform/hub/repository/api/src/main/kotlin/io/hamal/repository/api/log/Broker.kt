@@ -4,10 +4,10 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Repository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
-import java.io.Closeable
 
 interface CreateTopic {
     fun create(cmdId: CmdId, topicToCreate: TopicToCreate): Topic
@@ -42,12 +42,12 @@ interface FindTopic {
 }
 
 interface BrokerRepository :
+    Repository,
     CreateTopic,
     AppendToTopic,
     ConsumeFromTopic,
     FindTopic,
-    ReadFromTopic,
-    Closeable {
+    ReadFromTopic {
 
     fun listTopics(query: TopicQuery): List<Topic>
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
@@ -64,9 +64,7 @@ interface BrokerRepository :
                 )
             }
     }
-
-    fun clear()
-
+    
     data class TopicEntryQuery(
         var afterId: TopicEntryId = TopicEntryId(0),
         var limit: Limit = Limit(1)

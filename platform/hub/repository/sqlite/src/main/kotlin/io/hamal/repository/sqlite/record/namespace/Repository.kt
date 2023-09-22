@@ -56,7 +56,7 @@ class SqliteNamespaceRepository(
         val namespaceId = cmd.namespaceId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(namespaceId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, namespaceId)) {
                 versionOf(namespaceId, cmdId)
             } else {
                 storeRecord(
@@ -79,7 +79,7 @@ class SqliteNamespaceRepository(
     override fun update(namespaceId: NamespaceId, cmd: NamespaceCmdRepository.UpdateCmd): Namespace {
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(namespaceId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, namespaceId)) {
                 versionOf(namespaceId, cmdId)
             } else {
                 storeRecord(

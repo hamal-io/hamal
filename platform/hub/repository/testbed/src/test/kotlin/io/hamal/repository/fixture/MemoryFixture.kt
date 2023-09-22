@@ -3,8 +3,10 @@ package io.hamal.repository.fixture
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.log.*
+import io.hamal.repository.memory.record.MemoryFuncRepository
 import kotlin.reflect.KClass
 
 object MemoryFixture : BaseTestFixture {
@@ -13,6 +15,7 @@ object MemoryFixture : BaseTestFixture {
         BrokerRepository::class -> MemoryBrokerRepository() as REPO
         BrokerConsumersRepository::class -> MemoryBrokerConsumersRepository() as REPO
         BrokerTopicsRepository::class -> MemoryBrokerTopicsRepository() as REPO
+        FuncRepository::class -> MemoryFuncRepository() as REPO
         SegmentRepository::class -> MemorySegmentRepository(MemorySegment(Segment.Id(2810), TopicId(1506))) as REPO
         TopicRepository::class -> MemoryTopicRepository(Topic(TopicId(23), GroupId(1), TopicName("test-topic"))) as REPO
         else -> TODO()

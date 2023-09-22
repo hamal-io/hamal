@@ -53,7 +53,7 @@ class SqliteTriggerRepository(
         val triggerId = cmd.triggerId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(triggerId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, triggerId)) {
                 versionOf(triggerId, cmdId) as FixedRateTrigger
             } else {
                 storeRecord(
@@ -81,7 +81,7 @@ class SqliteTriggerRepository(
         val triggerId = cmd.triggerId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(triggerId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, triggerId)) {
                 versionOf(triggerId, cmdId) as EventTrigger
             } else {
                 storeRecord(

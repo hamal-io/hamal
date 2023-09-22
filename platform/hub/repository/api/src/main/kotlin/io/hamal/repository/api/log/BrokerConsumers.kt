@@ -1,10 +1,10 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.domain.vo.TopicId
-import java.io.Closeable
+import io.hamal.repository.api.Repository
 
 
-interface BrokerConsumersRepository : Closeable {
+interface BrokerConsumersRepository : Repository {
     fun nextChunkId(consumerId: ConsumerId, topicId: TopicId): ChunkId
     fun commit(consumerId: ConsumerId, topicId: TopicId, chunkId: ChunkId)
     fun count(): ULong

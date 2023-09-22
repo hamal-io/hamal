@@ -48,7 +48,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
 
 
     private fun verifySingleFuncExists() {
-        funcQueryRepository.list(FuncQuery()).also { funcs ->
+        funcQueryRepository.list(FuncQuery(groupIds = listOf())).also { funcs ->
             assertThat(funcs, hasSize(1))
             with(funcs.first()) {
                 assertThat(id, equalTo(FuncId(12345)))

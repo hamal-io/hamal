@@ -23,15 +23,15 @@ class SegmentRepositoryTest : AbstractUnitTest() {
     inner class AppendTest {
 
         @TestFactory
-        fun `Bytes, Instant does not have to be unique`() = runWith(SegmentRepository::class) { testInstance ->
+        fun `Bytes, Instant does not have to be unique`() = runWith(SegmentRepository::class) {
             withInstant(Instant.ofEpochMilli(1)) {
-                testInstance.append(CmdId(1), "SomeBytes".toByteArray())
-                testInstance.append(CmdId(2), "SomeBytes".toByteArray())
+                append(CmdId(1), "SomeBytes".toByteArray())
+                append(CmdId(2), "SomeBytes".toByteArray())
             }
 
-            assertThat(testInstance.count(), equalTo(2UL))
+            assertThat(count(), equalTo(2UL))
 
-            testInstance.read(ChunkId(1), 2).let {
+            read(ChunkId(1), 2).let {
                 assertThat(it, hasSize(2))
 
                 val chunk = it.first()
@@ -44,14 +44,14 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
 
         @TestFactory
-        fun `Append single chunk`() = runWith(SegmentRepository::class) { testInstance ->
+        fun `Append single chunk`() = runWith(SegmentRepository::class) {
             withInstant(Instant.ofEpochMilli(2810)) {
-                testInstance.append(CmdId(1), "VALUE".toByteArray())
+                append(CmdId(1), "VALUE".toByteArray())
             }
 
-            assertThat(testInstance.count(), equalTo(1UL))
+            assertThat(count(), equalTo(1UL))
 
-            testInstance.read(ChunkId(1)).let {
+            read(ChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(ChunkId(1)))
@@ -63,16 +63,16 @@ class SegmentRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Append multiple chunks to empty segment`() = runWith(SegmentRepository::class) { testInstance ->
+        fun `Append multiple chunks to empty segment`() = runWith(SegmentRepository::class) {
             withEpochMilli(123456) {
                 listOf(
                     "VALUE_1".toByteArray(), "VALUE_2".toByteArray(), "VALUE_3".toByteArray()
-                ).forEachIndexed { index, value -> testInstance.append(CmdId(index), value) }
+                ).forEachIndexed { index, value -> append(CmdId(index), value) }
             }
 
-            assertThat(testInstance.count(), equalTo(3UL))
+            assertThat(count(), equalTo(3UL))
 
-            testInstance.read(ChunkId(1)).let {
+            read(ChunkId(1)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(ChunkId(1)))
@@ -82,7 +82,7 @@ class SegmentRepositoryTest : AbstractUnitTest() {
                 assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
 
-            testInstance.read(ChunkId(3)).let {
+            read(ChunkId(3)).let {
                 assertThat(it, hasSize(1))
                 val chunk = it.first()
                 assertThat(chunk.id, equalTo(ChunkId(3)))
@@ -97,26 +97,26 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Append multiple chunks to segment which already contains chunks`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createThreeChunks()
+            runWith(SegmentRepository::class) {
+                createThreeChunks()
 
                 listOf(
                     "Hamal".toByteArray(),
                     "Rockz".toByteArray(),
-                ).forEachIndexed { index, value -> testInstance.append(CmdId(index + 4), value) }
+                ).forEachIndexed { index, value -> append(CmdId(index + 4), value) }
 
-                assertThat(testInstance.count(), equalTo(5UL))
+                assertThat(count(), equalTo(5UL))
             }
 
         @TestFactory
         fun `A chunk was already created with this cmd id`() =
-            runWith(SegmentRepository::class) { testInstance ->
+            runWith(SegmentRepository::class) {
                 withEpochMilli(123456) {
-                    testInstance.createThreeChunks()
-                    testInstance.append(CmdId(2), "OTHER_VALUE".toByteArray())
+                    createThreeChunks()
+                    append(CmdId(2), "OTHER_VALUE".toByteArray())
                 }
 
-                testInstance.read(ChunkId(2)).let {
+                read(ChunkId(2)).let {
                     assertThat(it, hasSize(1))
                     val chunk = it.first()
                     assertThat(chunk.id, equalTo(ChunkId(2)))
@@ -139,49 +139,49 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to read from empty segment`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                val result = testInstance.read(ChunkId(20))
+            runWith(SegmentRepository::class) {
+                val result = read(ChunkId(20))
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Tries to read outside from range`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createOneHundredChunks()
-                val result = testInstance.read(ChunkId(200), 100)
+            runWith(SegmentRepository::class) {
+                createOneHundredChunks()
+                val result = read(ChunkId(200), 100)
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Tries to read with a limit of 0`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createOneHundredChunks()
-                val result = testInstance.read(ChunkId(23), 0)
+            runWith(SegmentRepository::class) {
+                createOneHundredChunks()
+                val result = read(ChunkId(23), 0)
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Tries to read with a negative limit`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createOneHundredChunks()
-                val result = testInstance.read(ChunkId(23), -20)
+            runWith(SegmentRepository::class) {
+                createOneHundredChunks()
+                val result = read(ChunkId(23), -20)
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Read exactly one chunk`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createOneHundredChunks()
-                val result = testInstance.read(ChunkId(69))
+            runWith(SegmentRepository::class) {
+                createOneHundredChunks()
+                val result = read(ChunkId(69))
                 assertThat(result, hasSize(1))
                 assertChunk(result.first(), 69)
             }
 
         @TestFactory
         fun `Reads multiple chunks`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createOneHundredChunks()
-                val result = testInstance.read(ChunkId(25), 36)
+            runWith(SegmentRepository::class) {
+                createOneHundredChunks()
+                val result = read(ChunkId(25), 36)
                 assertThat(result, hasSize(36))
 
                 for (id in 0 until 36) {
@@ -191,9 +191,9 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Read is only partially covered by segment`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.createOneHundredChunks()
-                val result = testInstance.read(ChunkId(90), 40)
+            runWith(SegmentRepository::class) {
+                createOneHundredChunks()
+                val result = read(ChunkId(90), 40)
                 assertThat(result, hasSize(11))
 
                 for (id in 0 until 11) {
@@ -221,18 +221,18 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Close an open repository`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.close()
+            runWith(SegmentRepository::class) {
+                close()
             }
 
         @TestFactory
         fun `Closing an already closed connection is not a problem`() =
-            runWith(SegmentRepository::class) { testInstance ->
-                testInstance.close()
-                testInstance.close()
-                testInstance.close()
-                testInstance.close()
-                testInstance.close()
+            runWith(SegmentRepository::class) {
+                close()
+                close()
+                close()
+                close()
+                close()
             }
     }
 }

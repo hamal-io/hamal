@@ -18,37 +18,37 @@ class BrokerConsumersRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Returns chunk id 0 if no entry exists for consumer id and topic id`() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(42))
+            runWith(BrokerConsumersRepository::class) {
+                val result = nextChunkId(ConsumerId("some-consumer-id"), TopicId(42))
                 assertThat(result, equalTo(ChunkId(0)))
-                assertThat(testInstance.count(), equalTo(0UL))
+                assertThat(count(), equalTo(0UL))
             }
 
         @TestFactory
         fun `Next chunk id - is last committed chunk id plus 1`() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
-                val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(1))
+            runWith(BrokerConsumersRepository::class) {
+                commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
+                val result = nextChunkId(ConsumerId("some-consumer-id"), TopicId(1))
                 assertThat(result, equalTo(ChunkId(128)))
-                assertThat(testInstance.count(), equalTo(1UL))
+                assertThat(count(), equalTo(1UL))
             }
 
         @TestFactory
         fun `Does not return next chunk id of different topic`() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
-                val result = testInstance.nextChunkId(ConsumerId("some-consumer-id"), TopicId(2))
+            runWith(BrokerConsumersRepository::class) {
+                commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
+                val result = nextChunkId(ConsumerId("some-consumer-id"), TopicId(2))
                 assertThat(result, equalTo(ChunkId(0)))
-                assertThat(testInstance.count(), equalTo(1UL))
+                assertThat(count(), equalTo(1UL))
             }
 
         @TestFactory
         fun `Does not return next chunk id of different consumer`() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                testInstance.commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
-                val result = testInstance.nextChunkId(ConsumerId("different-consumer-id"), TopicId(1))
+            runWith(BrokerConsumersRepository::class) {
+                commit(ConsumerId("some-consumer-id"), TopicId(1), ChunkId(127))
+                val result = nextChunkId(ConsumerId("different-consumer-id"), TopicId(1))
                 assertThat(result, equalTo(ChunkId(0)))
-                assertThat(testInstance.count(), equalTo(1UL))
+                assertThat(count(), equalTo(1UL))
             }
 
     }
@@ -58,28 +58,28 @@ class BrokerConsumersRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Committed before`() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                testInstance.commit(ConsumerId("some-consumer"), TopicId(123), ChunkId(23))
-                testInstance.commit(ConsumerId("some-consumer"), TopicId(123), ChunkId(1337))
-                assertThat(testInstance.count(), equalTo(1UL))
+            runWith(BrokerConsumersRepository::class) {
+                commit(ConsumerId("some-consumer"), TopicId(123), ChunkId(23))
+                commit(ConsumerId("some-consumer"), TopicId(123), ChunkId(1337))
+                assertThat(count(), equalTo(1UL))
             }
 
         @TestFactory
         fun `Does not overwrite different topic id `() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                testInstance.commit(ConsumerId("some-consumer"), TopicId(23), ChunkId(1))
-                testInstance.commit(ConsumerId("some-consumer"), TopicId(34), ChunkId(2))
-                assertThat(testInstance.count(), equalTo(2UL))
+            runWith(BrokerConsumersRepository::class) {
+                commit(ConsumerId("some-consumer"), TopicId(23), ChunkId(1))
+                commit(ConsumerId("some-consumer"), TopicId(34), ChunkId(2))
+                assertThat(count(), equalTo(2UL))
             }
 
 
         @TestFactory
         fun `Does not overwrite different consumer id `() =
-            runWith(BrokerConsumersRepository::class) { testInstance ->
-                testInstance.commit(ConsumerId("some-consumer"), TopicId(23), ChunkId(1))
-                testInstance.commit(ConsumerId("another-consumer"), TopicId(23), ChunkId(2))
+            runWith(BrokerConsumersRepository::class) {
+                commit(ConsumerId("some-consumer"), TopicId(23), ChunkId(1))
+                commit(ConsumerId("another-consumer"), TopicId(23), ChunkId(2))
 
-                assertThat(testInstance.count(), equalTo(2UL))
+                assertThat(count(), equalTo(2UL))
             }
 
     }

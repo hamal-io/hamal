@@ -76,7 +76,7 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
         }
     }
 
-    fun clear() {
+    override fun clear() {
         topics.clear()
     }
 
