@@ -47,6 +47,9 @@ abstract class BaseApiTest {
     lateinit var groupCmdRepository: GroupCmdRepository
 
     @Autowired
+    lateinit var metricRepository: MetricRepository
+
+    @Autowired
     lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
@@ -110,6 +113,7 @@ abstract class BaseApiTest {
         execCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
+        metricRepository.clear()
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
 

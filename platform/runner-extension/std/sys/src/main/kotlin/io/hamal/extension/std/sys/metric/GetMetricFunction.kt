@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.admin.MetricData
+import io.hamal.lib.sdk.hub.MetricData
 
 
 class GetMetricFunction(
@@ -18,12 +18,9 @@ class GetMetricFunction(
     override fun invoke(ctx: FunctionContext): MapType {
         val data: MetricData = hubSdk.metric.get()
         val map = MapType()
-        map.set("time", data.time)
-        if (!data.events.isEmpty()) {
-            for (i in data.events) {
-                map.set(i.name.replace("::", "_"), i.value)
-            }
-        }
+        map["time"] = data.time
+        map["exec_completed"] = data.events.find { it.name == "exec::completed" }?.value ?: 0
+        map["exec_failed"] = data.events.find { it.name == "exec::failed" }?.value ?: 0
         return map
     }
 }

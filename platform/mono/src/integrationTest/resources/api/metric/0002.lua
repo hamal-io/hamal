@@ -1,0 +1,18 @@
+--sys = require('sys')
+--
+--_, req = sys.adhoc({
+--    code = [[ print("some message") ]]
+--})
+--
+--sys.await_completed(req)
+--
+--while false do
+--    _, exec = sys.exec.get(req.id)
+--    print(exec.status)
+--end
+--
+--m = sys.metrics()
+--assert(m.time ~= 0)
+--print(m.exec_completed)
+--print(m.exec_failed)
+--assert(m.exec_completed == 1)
