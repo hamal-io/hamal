@@ -51,7 +51,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
 
 
     private fun verifySingleNamespaceExists() {
-        namespaceQueryRepository.list(NamespaceQuery()).also { namespaces ->
+        namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())).also { namespaces ->
             assertThat(namespaces, hasSize(1))
             with(namespaces.first()) {
                 assertThat(id, equalTo(NamespaceId(12345)))

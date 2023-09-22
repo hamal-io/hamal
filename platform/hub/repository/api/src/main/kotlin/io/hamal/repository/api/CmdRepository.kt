@@ -1,5 +1,5 @@
 package io.hamal.repository.api
 
-interface Repository : AutoCloseable {
+interface CmdRepository : AutoCloseable {
     fun clear()
 }

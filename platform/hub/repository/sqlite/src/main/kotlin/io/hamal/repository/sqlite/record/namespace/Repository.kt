@@ -82,12 +82,13 @@ class SqliteNamespaceRepository(
             if (commandAlreadyApplied(cmdId, namespaceId)) {
                 versionOf(namespaceId, cmdId)
             } else {
+                val current = currentVersion(namespaceId)
                 storeRecord(
                     NamespaceUpdatedRecord(
                         entityId = namespaceId,
                         cmdId = cmdId,
-                        name = cmd.name,
-                        inputs = cmd.inputs,
+                        name = cmd.name ?: current.name,
+                        inputs = cmd.inputs ?: current.inputs,
                     )
                 )
                 currentVersion(namespaceId)
@@ -106,6 +107,10 @@ class SqliteNamespaceRepository(
     }
 
     override fun list(query: NamespaceQuery): List<Namespace> {
-        return ProjectionCurrent.list(connection, query.afterId, query.limit)
+        return ProjectionCurrent.list(connection, query)
+    }
+
+    override fun count(query: NamespaceQuery): ULong {
+        return ProjectionCurrent.count(connection, query)
     }
 }

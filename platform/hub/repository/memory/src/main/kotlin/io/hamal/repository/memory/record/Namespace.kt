@@ -1,7 +1,6 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
@@ -21,9 +20,16 @@ internal object CurrentNamespaceProjection {
     private val projection = mutableMapOf<NamespaceId, Namespace>()
 
     fun apply(namespace: Namespace) {
-        val unique = projection.values.none { namespace.name == it.name }
+        val currentNamespace = projection[namespace.id]
+        projection.remove(namespace.id)
 
-        check(unique) { "Namespace name ${namespace.name.value} not unique" }
+        val namespacesInGroup = projection.values.filter { it.groupId == namespace.groupId }
+        if (namespacesInGroup.any { it.name == namespace.name }) {
+            if (currentNamespace != null) {
+                projection[currentNamespace.id] = currentNamespace
+            }
+            throw IllegalArgumentException("${namespace.name} already exists")
+        }
 
         projection[namespace.id] = namespace
     }
@@ -31,12 +37,28 @@ internal object CurrentNamespaceProjection {
     fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
     fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }
 
-    fun list(afterId: NamespaceId, limit: Limit): List<Namespace> {
-        return projection.keys.sorted()
+    fun list(query: NamespaceQuery): List<Namespace> {
+        return projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
+            .map { it.value }
             .reversed()
-            .dropWhile { it >= afterId }
-            .take(limit.value)
-            .mapNotNull { find(it) }
+            .asSequence()
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .take(query.limit.value)
+            .toList()
+    }
+
+    fun count(query: NamespaceQuery): ULong {
+        return projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .count()
+            .toULong()
     }
 
     fun clear() {
@@ -44,7 +66,7 @@ internal object CurrentNamespaceProjection {
     }
 }
 
-object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceRepository {
+class MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceRepository {
 
     override fun create(cmd: CreateCmd): Namespace {
         return lock.withLock {
@@ -71,12 +93,13 @@ object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRe
             if (commandAlreadyApplied(namespaceId, cmd.id)) {
                 versionOf(namespaceId, cmd.id)
             } else {
+                val current = currentVersion(namespaceId)
                 addRecord(
                     NamespaceUpdatedRecord(
                         entityId = namespaceId,
                         cmdId = cmd.id,
-                        name = cmd.name,
-                        inputs = cmd.inputs,
+                        name = cmd.name ?: current.name,
+                        inputs = cmd.inputs ?: current.inputs,
                     )
                 )
                 (currentVersion(namespaceId)).also(CurrentNamespaceProjection::apply)
@@ -89,13 +112,19 @@ object MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRe
     override fun find(namespaceName: NamespaceName): Namespace? = CurrentNamespaceProjection.find(namespaceName)
 
     override fun list(query: NamespaceQuery): List<Namespace> {
-        return CurrentNamespaceProjection.list(query.afterId, query.limit)
+        return CurrentNamespaceProjection.list(query)
+    }
+
+    override fun count(query: NamespaceQuery): ULong {
+        return CurrentNamespaceProjection.count(query)
     }
 
     override fun clear() {
         super.clear()
         CurrentNamespaceProjection.clear()
     }
+
+    override fun close() {}
 
     private val lock = ReentrantLock()
 }

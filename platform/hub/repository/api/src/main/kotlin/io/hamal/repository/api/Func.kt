@@ -8,9 +8,20 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
+@Serializable
+data class Func(
+    override val id: FuncId,
+    val groupId: GroupId,
+    val cmdId: CmdId,
+    val namespaceId: NamespaceId,
+    val name: FuncName,
+    val inputs: FuncInputs,
+    val code: CodeType
+) : DomainObject<FuncId>
+
 interface FuncRepository : FuncCmdRepository, FuncQueryRepository
 
-interface FuncCmdRepository : Repository {
+interface FuncCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Func
 
     fun update(funcId: FuncId, cmd: UpdateCmd): Func
@@ -55,15 +66,3 @@ interface FuncQueryRepository {
         var groupIds: List<GroupId>
     )
 }
-
-
-@Serializable
-data class Func(
-    override val id: FuncId,
-    val groupId: GroupId,
-    val cmdId: CmdId,
-    val namespaceId: NamespaceId,
-    val name: FuncName,
-    val inputs: FuncInputs,
-    val code: CodeType
-) : DomainObject<FuncId>

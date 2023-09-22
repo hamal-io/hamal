@@ -23,8 +23,8 @@ internal class ListNamespacesController(private val listNamespace: ListNamespace
         return listNamespace(
             NamespaceQuery(
                 afterId = afterId,
-                limit = limit
-                // group id
+                limit = limit,
+                groupIds = listOf(groupId)
             )
         ) { namespaces ->
             ResponseEntity.ok(HubNamespaceList(

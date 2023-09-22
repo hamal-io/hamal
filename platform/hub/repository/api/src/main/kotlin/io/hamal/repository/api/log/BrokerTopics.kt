@@ -6,9 +6,9 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.Repository
+import io.hamal.repository.api.CmdRepository
 
-interface BrokerTopicsRepository : Repository {
+interface BrokerTopicsRepository : CmdRepository {
     fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic
     fun find(groupId: GroupId, name: TopicName): Topic?
     fun find(id: TopicId): Topic?

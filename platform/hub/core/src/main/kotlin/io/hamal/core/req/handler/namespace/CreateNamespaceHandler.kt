@@ -32,8 +32,12 @@ class CreateNamespaceHandler(
 }
 
 private fun CreateNamespaceHandler.createNamespace(req: SubmittedCreateNamespaceReq): Namespace {
-    val existingNamespaces =
-        namespaceQueryRepository.list(NamespaceQueryRepository.NamespaceQuery(limit = Limit(Int.MAX_VALUE)))
+    val existingNamespaces = namespaceQueryRepository.list(
+        NamespaceQueryRepository.NamespaceQuery(
+            groupIds = listOf(req.groupId),
+            limit = Limit.all
+        )
+    )
     existingNamespaces.find { it.name == req.name }?.let { return it }
 
     val existingNamespaceNames = existingNamespaces.map(Namespace::name)

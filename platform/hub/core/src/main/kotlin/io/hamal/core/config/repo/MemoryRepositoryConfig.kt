@@ -55,10 +55,13 @@ open class MemoryRepositoryConfig {
     open fun groupCmdRepository() = groupRepository()
 
     @Bean
-    open fun namespaceCmdRepository(): NamespaceCmdRepository = MemoryNamespaceRepository
+    open fun namespaceRepository() = MemoryNamespaceRepository()
 
     @Bean
-    open fun namespaceQueryRepository(): NamespaceQueryRepository = MemoryNamespaceRepository
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = namespaceRepository()
+
+    @Bean
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
 
     @Bean
     open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository

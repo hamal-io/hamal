@@ -4,7 +4,7 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.Repository
+import io.hamal.repository.api.CmdRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -42,7 +42,7 @@ interface FindTopic {
 }
 
 interface BrokerRepository :
-    Repository,
+    CmdRepository,
     CreateTopic,
     AppendToTopic,
     ConsumeFromTopic,
@@ -64,7 +64,7 @@ interface BrokerRepository :
                 )
             }
     }
-    
+
     data class TopicEntryQuery(
         var afterId: TopicEntryId = TopicEntryId(0),
         var limit: Limit = Limit(1)

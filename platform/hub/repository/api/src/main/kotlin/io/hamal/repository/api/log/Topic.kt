@@ -1,7 +1,7 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.Repository
+import io.hamal.repository.api.CmdRepository
 
 data class Topic(
     val id: TopicId,
@@ -9,7 +9,7 @@ data class Topic(
     val name: TopicName
 )
 
-interface TopicRepository : Repository, ChunkAppender, ChunkReader, ChunkCounter
+interface TopicRepository : CmdRepository, ChunkAppender, ChunkReader, ChunkCounter
 
 data class TopicEntry(
     val id: TopicEntryId,

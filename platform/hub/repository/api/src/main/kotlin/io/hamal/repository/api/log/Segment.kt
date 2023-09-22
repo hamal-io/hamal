@@ -1,7 +1,7 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.Repository
+import io.hamal.repository.api.CmdRepository
 
 interface Segment {
     val id: Id
@@ -14,4 +14,4 @@ interface Segment {
 }
 
 
-interface SegmentRepository : Repository, ChunkAppender, ChunkReader, ChunkCounter
+interface SegmentRepository : CmdRepository, ChunkAppender, ChunkReader, ChunkCounter

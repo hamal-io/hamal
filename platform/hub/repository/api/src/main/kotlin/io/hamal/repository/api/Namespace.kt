@@ -12,12 +12,10 @@ import kotlinx.serialization.Serializable
 
 interface NamespaceRepository : NamespaceCmdRepository, NamespaceQueryRepository
 
-interface NamespaceCmdRepository {
+interface NamespaceCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Namespace
 
     fun update(namespaceId: NamespaceId, cmd: UpdateCmd): Namespace
-
-    fun clear()
 
     data class CreateCmd(
         val id: CmdId,
@@ -29,8 +27,8 @@ interface NamespaceCmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val name: NamespaceName,
-        val inputs: NamespaceInputs
+        val name: NamespaceName? = null,
+        val inputs: NamespaceInputs? = null
     )
 }
 
@@ -43,10 +41,13 @@ interface NamespaceQueryRepository {
 
     fun list(query: NamespaceQuery): List<Namespace>
     fun list(namespaceIds: List<NamespaceId>) = namespaceIds.mapNotNull(::find)
+    fun count(query: NamespaceQuery): ULong
 
     data class NamespaceQuery(
         var afterId: NamespaceId = NamespaceId(SnowflakeId(Long.MAX_VALUE)),
-        var limit: Limit = Limit(1)
+        var limit: Limit = Limit(1),
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var groupIds: List<GroupId>
     )
 }
 

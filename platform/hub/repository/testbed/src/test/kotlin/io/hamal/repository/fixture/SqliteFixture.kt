@@ -4,9 +4,11 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.FuncRepository
+import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
+import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
 
@@ -28,6 +30,10 @@ object SqliteFixture : BaseTestFixture {
 
         FuncRepository::class -> SqliteFuncRepository(
             SqliteFuncRepository.Config(createTempDirectory("sqlite_func_test"))
+        ) as REPO
+
+        NamespaceRepository::class -> SqliteNamespaceRepository(
+            SqliteNamespaceRepository.Config(createTempDirectory("sqlite_namespace_test"))
         ) as REPO
 
         SegmentRepository::class ->

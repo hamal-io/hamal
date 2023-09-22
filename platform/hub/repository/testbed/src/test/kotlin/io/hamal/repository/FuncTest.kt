@@ -279,8 +279,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             clear()
             verifyCount(0)
         }
-
-
+        
         @TestFactory
         fun `Clear table`() = runWith(FuncRepository::class) {
 
@@ -486,32 +485,32 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
         }
     }
-    
-    private fun FuncRepository.createFunc(
-        funcId: FuncId,
-        namespaceId: NamespaceId,
-        name: FuncName,
-        groupId: GroupId,
-        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-    ) {
-        create(
-            CreateCmd(
-                id = cmdId,
-                funcId = funcId,
-                groupId = groupId,
-                namespaceId = namespaceId,
-                name = name,
-                inputs = FuncInputs(
-                    MapType(
-                        mutableMapOf(
-                            "hamal" to StringType("rockz")
-                        )
+}
+
+private fun FuncRepository.createFunc(
+    funcId: FuncId,
+    namespaceId: NamespaceId,
+    name: FuncName,
+    groupId: GroupId,
+    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+) {
+    create(
+        CreateCmd(
+            id = cmdId,
+            funcId = funcId,
+            groupId = groupId,
+            namespaceId = namespaceId,
+            name = name,
+            inputs = FuncInputs(
+                MapType(
+                    mutableMapOf(
+                        "hamal" to StringType("rockz")
                     )
-                ),
-                code = CodeType("40 + 2")
-            )
+                )
+            ),
+            code = CodeType("40 + 2")
         )
-    }
+    )
 }
 
 private fun FuncRepository.verifyCount(expected: Int) {

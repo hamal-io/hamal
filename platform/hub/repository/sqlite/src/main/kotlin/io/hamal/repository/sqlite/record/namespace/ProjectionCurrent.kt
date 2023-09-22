@@ -1,10 +1,10 @@
 package io.hamal.repository.sqlite.record.namespace
 
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
@@ -35,7 +35,7 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
         }
     }
 
-    fun list(connection: Connection, afterId: NamespaceId, limit: Limit): List<Namespace> {
+    fun list(connection: Connection, query: NamespaceQuery): List<Namespace> {
         return connection.executeQuery<Namespace>(
             """
             SELECT 
@@ -44,13 +44,15 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
                 current
             WHERE
                 id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
         ) {
             query {
-                set("afterId", afterId)
-                set("limit", limit)
+                set("afterId", query.afterId)
+                set("limit", query.limit)
             }
             map { rs ->
                 protobuf.decodeFromByteArray(Namespace.serializer(), rs.getBytes("data"))
@@ -58,16 +60,39 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
         }
     }
 
+    fun count(connection: Connection, query: NamespaceQuery): ULong {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                current
+            WHERE
+                id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
+        """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+            }
+            map {
+                it.getLong("count").toULong()
+            }
+        } ?: 0UL
+    }
+
     override fun upsert(tx: RecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, data) 
+                    (id, group_id, data) 
                 VALUES
-                    (:id, :data)
+                    (:id, :groupId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
+            set("groupId", obj.groupId)
             set("data", protobuf.encodeToByteArray(Namespace.serializer(), obj))
         }
     }
@@ -77,6 +102,7 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
+                 group_id       INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -89,5 +115,21 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
     }
 
     override fun invalidate() {
+    }
+
+    private fun NamespaceQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun NamespaceQuery.ids(): String {
+        return if (namespaceIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+        }
     }
 }
