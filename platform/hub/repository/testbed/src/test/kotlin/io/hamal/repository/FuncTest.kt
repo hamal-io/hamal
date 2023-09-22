@@ -486,8 +486,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
         }
     }
-
-
+    
     private fun FuncRepository.createFunc(
         funcId: FuncId,
         namespaceId: NamespaceId,

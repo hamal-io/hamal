@@ -42,10 +42,7 @@ interface NamespaceQueryRepository {
     fun find(namespaceName: NamespaceName): Namespace?
 
     fun list(query: NamespaceQuery): List<Namespace>
-    fun list(namespaceIds: List<NamespaceId>): List<Namespace> {
-        //FIXME single query
-        return namespaceIds.mapNotNull(::find)
-    }
+    fun list(namespaceIds: List<NamespaceId>) = namespaceIds.mapNotNull(::find)
 
     data class NamespaceQuery(
         var afterId: NamespaceId = NamespaceId(SnowflakeId(Long.MAX_VALUE)),

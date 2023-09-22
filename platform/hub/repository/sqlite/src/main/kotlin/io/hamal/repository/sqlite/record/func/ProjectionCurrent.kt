@@ -44,6 +44,7 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
                 current
             WHERE
                 id < :afterId
+                ${query.ids()}
                 ${query.groupIds()}
             ORDER BY id DESC
             LIMIT :limit
@@ -68,6 +69,7 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
                 current
             WHERE
                 id < :afterId
+                ${query.ids()}
                 ${query.groupIds()}
         """.trimIndent()
         ) {
@@ -84,7 +86,7 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id,group_id, data) 
+                    (id, group_id, data) 
                 VALUES
                     (:id, :groupId, :data)
             """.trimIndent()
@@ -120,6 +122,14 @@ internal object ProjectionCurrent : Projection<FuncId, FuncRecord, Func> {
             ""
         } else {
             "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun FuncQuery.ids(): String {
+        return if (funcIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

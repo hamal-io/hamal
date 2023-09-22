@@ -27,4 +27,8 @@ data class Limit(
             encoder.encodeInt(value.value)
         }
     }
+
+    companion object {
+        val all = Limit(Int.MAX_VALUE)
+    }
 }

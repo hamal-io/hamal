@@ -38,7 +38,14 @@ interface FuncQueryRepository {
     fun get(funcId: FuncId) = find(funcId) ?: throw NoSuchElementException("Func not found")
     fun find(funcId: FuncId): Func?
     fun list(query: FuncQuery): List<Func>
-    fun list(funcIds: List<FuncId>): List<Func> = funcIds.mapNotNull(::find)
+    fun list(funcIds: List<FuncId>): List<Func> = list(
+        FuncQuery(
+            limit = Limit.all,
+            groupIds = listOf(),
+            funcIds = funcIds,
+        )
+    )
+
     fun count(query: FuncQuery): ULong
 
     data class FuncQuery(
