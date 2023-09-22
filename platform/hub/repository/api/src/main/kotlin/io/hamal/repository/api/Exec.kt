@@ -13,14 +13,15 @@ import kotlinx.serialization.Serializable
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
-interface ExecCmdRepository {
+interface ExecCmdRepository : CmdRepository {
     fun plan(cmd: PlanCmd): PlannedExec
     fun schedule(cmd: ScheduleCmd): ScheduledExec
     fun queue(cmd: QueueCmd): QueuedExec
+
     fun complete(cmd: CompleteCmd): CompletedExec
     fun fail(cmd: FailCmd): FailedExec
+
     fun start(cmd: StartCmd): List<StartedExec>
-    fun clear()
 
     data class PlanCmd(
         val id: CmdId,

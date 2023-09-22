@@ -40,7 +40,14 @@ interface NamespaceQueryRepository {
     fun find(namespaceName: NamespaceName): Namespace?
 
     fun list(query: NamespaceQuery): List<Namespace>
-    fun list(namespaceIds: List<NamespaceId>) = namespaceIds.mapNotNull(::find)
+    fun list(namespaceIds: List<NamespaceId>) = list(
+        NamespaceQuery(
+            limit = Limit.all,
+            groupIds = listOf(),
+            namespaceIds = namespaceIds,
+        )
+    )
+
     fun count(query: NamespaceQuery): ULong
 
     data class NamespaceQuery(

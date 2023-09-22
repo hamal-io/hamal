@@ -19,11 +19,9 @@ data class Account(
 
 interface AccountRepository : AccountCmdRepository, AccountQueryRepository
 
-interface AccountCmdRepository {
+interface AccountCmdRepository : CmdRepository {
 
     fun create(cmd: CreateCmd): Account
-
-    fun clear()
 
     data class CreateCmd(
         val id: CmdId,
@@ -42,8 +40,10 @@ interface AccountQueryRepository {
     fun find(accountName: AccountName): Account?
     fun list(query: AccountQuery): List<Account>
     fun list(accountIds: List<AccountId>): List<Account> = accountIds.map(::get)
+    
     data class AccountQuery(
         var afterId: AccountId = AccountId(SnowflakeId(Long.MAX_VALUE)),
-        var limit: Limit = Limit(1)
+        var limit: Limit = Limit(1),
+        var accountIds: List<AccountId> = listOf()
     )
 }

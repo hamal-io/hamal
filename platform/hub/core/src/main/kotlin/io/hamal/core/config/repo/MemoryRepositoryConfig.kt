@@ -19,7 +19,7 @@ open class MemoryRepositoryConfig {
     open fun eventBrokerRepository() = MemoryBrokerRepository()
 
     @Bean
-    open fun accountRepository() = MemoryAccountRepository
+    open fun accountRepository() = MemoryAccountRepository()
 
     @Bean
     open fun accountQueryRepository() = accountRepository()
@@ -64,10 +64,13 @@ open class MemoryRepositoryConfig {
     open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
 
     @Bean
-    open fun execCmdRepository(): ExecCmdRepository = MemoryExecRepository
+    open fun execRepository(): ExecRepository = MemoryExecRepository()
 
     @Bean
-    open fun execQueryRepository(): ExecQueryRepository = MemoryExecRepository
+    open fun execCmdRepository(): ExecCmdRepository = execRepository()
+
+    @Bean
+    open fun execQueryRepository(): ExecQueryRepository = execRepository()
 
     @Bean
     open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository

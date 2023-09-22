@@ -1,8 +1,12 @@
 package io.hamal.core.config.repo
 
 import io.hamal.repository.api.*
-import io.hamal.repository.memory.*
-import io.hamal.repository.memory.record.*
+import io.hamal.repository.memory.MemoryAuthRepository
+import io.hamal.repository.memory.MemoryExecLogRepository
+import io.hamal.repository.memory.MemoryMetricRepository
+import io.hamal.repository.memory.MemoryReqRepository
+import io.hamal.repository.memory.record.MemoryAccountRepository
+import io.hamal.repository.memory.record.MemoryGroupRepository
 import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.SqliteBroker
 import io.hamal.repository.sqlite.log.SqliteBrokerRepository
@@ -27,7 +31,7 @@ open class SqliteRepositoryConfig {
     open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))
 
     @Bean
-    open fun accountRepository() = MemoryAccountRepository
+    open fun accountRepository() = MemoryAccountRepository()
 
     @Bean
     open fun accountQueryRepository() = accountRepository()

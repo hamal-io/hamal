@@ -44,7 +44,7 @@ internal object CurrentAccountProjection {
     }
 }
 
-object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(), AccountRepository {
+class MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(), AccountRepository {
     private val lock = ReentrantLock()
 
     override fun create(cmd: CreateCmd): Account {
@@ -79,6 +79,9 @@ object MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(
     override fun clear() {
         super.clear()
         CurrentAccountProjection.clear()
+    }
+
+    override fun close() {
     }
 }
 
