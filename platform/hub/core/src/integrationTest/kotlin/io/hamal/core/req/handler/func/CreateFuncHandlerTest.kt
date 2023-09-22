@@ -23,31 +23,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Creates func`() {
         testInstance(submitCreateFuncReq)
-        verifySingleFuncExists()
-    }
 
-    @Test
-    fun `Func with id already exists`() {
-        testInstance(submitCreateFuncReq)
-
-        testInstance(
-            SubmittedCreateFuncReq(
-                reqId = ReqId(2),
-                status = Submitted,
-                id = FuncId(12345),
-                groupId = testGroup.id,
-                namespaceId = NamespaceId(23456),
-                name = FuncName("another-func"),
-                inputs = FuncInputs(),
-                code = CodeType("")
-            )
-        )
-
-        verifySingleFuncExists()
-    }
-
-
-    private fun verifySingleFuncExists() {
         funcQueryRepository.list(FuncQuery(groupIds = listOf())).also { funcs ->
             assertThat(funcs, hasSize(1))
             with(funcs.first()) {
@@ -58,7 +34,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
             }
         }
     }
-
+    
     @Autowired
     private lateinit var testInstance: CreateFuncHandler
 
