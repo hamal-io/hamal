@@ -1,6 +1,8 @@
 package io.hamal.repository.api
 
+import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 
 sealed interface Auth {
@@ -26,13 +28,9 @@ data class TokenAuth(
 
 interface AuthRepository : AuthCmdRepository, AuthQueryRepository
 
-interface AuthCmdRepository {
+interface AuthCmdRepository : CmdRepository {
 
     fun create(cmd: CreateCmd): Auth
-
-    fun list(accountId: AccountId): List<Auth>
-
-    fun clear()
 
     sealed interface CreateCmd {
         val id: CmdId
@@ -60,5 +58,20 @@ interface AuthCmdRepository {
 interface AuthQueryRepository {
     fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Account not found")
     fun find(authToken: AuthToken): Auth?
-    fun list(accountId: AccountId): List<Auth>
+    fun list(accountId: AccountId) = list(
+        AuthQuery(
+            limit = Limit.all,
+            accountIds = listOf(accountId)
+        )
+    )
+
+    fun list(query: AuthQuery): List<Auth>
+    fun count(query: AuthQuery): ULong
+
+    data class AuthQuery(
+        var afterId: AuthId = AuthId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(1),
+        var authIds: List<AuthId> = listOf(),
+        var accountIds: List<AccountId> = listOf()
+    )
 }

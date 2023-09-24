@@ -20,7 +20,7 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.math.abs
 import kotlin.random.Random
 
-internal class AccountTest : AbstractUnitTest() {
+internal class AccountRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class CreateTest {
         @TestFactory

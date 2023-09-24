@@ -4,9 +4,11 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.AccountRepository
+import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.api.log.*
+import io.hamal.repository.sqlite.SqliteAuthRepository
 import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
@@ -20,6 +22,10 @@ object SqliteFixture : BaseTestFixture {
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
         AccountRepository::class -> SqliteAccountRepository(
             SqliteAccountRepository.Config(createTempDirectory("sqlite_account_test"))
+        ) as REPO
+
+        AuthRepository::class -> SqliteAuthRepository(
+            SqliteAuthRepository.Config(createTempDirectory("sqlite_auth_test"))
         ) as REPO
 
         BrokerConsumersRepository::class -> SqliteBrokerConsumersRepository(

@@ -28,7 +28,7 @@ open class MemoryRepositoryConfig {
     open fun accountCmdRepository() = accountRepository()
 
     @Bean
-    open fun authRepository() = MemoryAuthRepository
+    open fun authRepository() = MemoryAuthRepository()
 
     @Bean
     open fun authQueryRepository() = authRepository()

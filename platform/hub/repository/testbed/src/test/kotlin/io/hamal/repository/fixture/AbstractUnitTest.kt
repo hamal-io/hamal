@@ -1,9 +1,6 @@
 package io.hamal.repository.fixture
 
-import io.hamal.repository.api.AccountRepository
-import io.hamal.repository.api.CmdRepository
-import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.api.NamespaceRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -30,6 +27,10 @@ abstract class AbstractUnitTest {
 
     private val fixtures = mutableMapOf<KClass<*>, List<BaseTestFixture>>(
         AccountRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        AuthRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

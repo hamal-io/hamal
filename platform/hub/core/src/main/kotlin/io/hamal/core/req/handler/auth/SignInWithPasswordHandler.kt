@@ -10,7 +10,7 @@ import io.hamal.repository.api.PasswordAuth
 import io.hamal.repository.api.TokenAuth
 import io.hamal.repository.api.submitted_req.SubmittedSignInWithPasswordReq
 import org.springframework.stereotype.Component
-import java.time.temporal.ChronoUnit
+import java.time.temporal.ChronoUnit.DAYS
 
 @Component
 class SignInWithPasswordHandler(
@@ -25,7 +25,7 @@ class SignInWithPasswordHandler(
                     authId = req.authId,
                     accountId = auth.accountId,
                     token = req.token,
-                    expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+                    expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, DAYS))
                 )
             ) as TokenAuth
         } ?: throw NoSuchElementException("Account not found")
