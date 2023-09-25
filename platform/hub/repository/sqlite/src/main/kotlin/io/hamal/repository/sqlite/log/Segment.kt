@@ -3,7 +3,7 @@ package io.hamal.repository.sqlite.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.repository.api.log.Chunk
 import io.hamal.repository.api.log.ChunkId
@@ -20,7 +20,7 @@ data class SqliteSegment(
 
 class SqliteSegmentRepository(
     internal val segment: SqliteSegment,
-) : BaseSqliteRepository(object : Config {
+) : SqliteBaseRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
 }), SegmentRepository {

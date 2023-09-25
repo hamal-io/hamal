@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.repository.api.log.BrokerConsumersRepository
 import io.hamal.repository.api.log.ChunkId
@@ -14,7 +14,7 @@ data class SqliteBrokerConsumers(
 
 class SqliteBrokerConsumersRepository(
     internal val brokerConsumers: SqliteBrokerConsumers,
-) : BaseSqliteRepository(
+) : SqliteBaseRepository(
     object : Config {
         override val path: Path get() = brokerConsumers.path
         override val filename: String get() = "consumers.db"

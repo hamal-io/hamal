@@ -6,7 +6,7 @@ import io.hamal.lib.domain.Once
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-abstract class BaseSqliteRepository(
+abstract class SqliteBaseRepository(
     val config: Config
 ) : AutoCloseable {
 
@@ -46,7 +46,7 @@ abstract class BaseSqliteRepository(
 
 }
 
-private fun ensureFilePath(config: BaseSqliteRepository.Config): Path {
+private fun ensureFilePath(config: SqliteBaseRepository.Config): Path {
     return FileUtils.createDirectories(config.path)
         .resolve(config.path.resolve(Path(config.filename)))
 }

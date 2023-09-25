@@ -2,8 +2,8 @@ package io.hamal.repository.sqlite.record
 
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.Record
 import kotlin.reflect.KClass
@@ -16,7 +16,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     private val recordCache: RecordCache<ID, RECORD, OBJ> = RecordCache(RecordLoader(recordClass)),
     private val projections: List<Projection<ID, RECORD, OBJ>>
 
-) : BaseSqliteRepository(object : Config {
+) : SqliteBaseRepository(object : Config {
     override val path = config.path
     override val filename = config.filename
 }) {

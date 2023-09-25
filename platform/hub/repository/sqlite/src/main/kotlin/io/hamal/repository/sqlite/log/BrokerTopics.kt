@@ -5,7 +5,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -20,7 +20,7 @@ data class SqliteBrokerTopics(
 
 class SqliteBrokerTopicsRepository(
     internal val brokerTopics: SqliteBrokerTopics,
-) : BaseSqliteRepository(object : Config {
+) : SqliteBaseRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"
 }), BrokerTopicsRepository {

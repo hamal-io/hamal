@@ -1,7 +1,7 @@
 package io.hamal.app.proxy.repository
 
-import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import java.nio.file.Path
 
 interface BlockRepository {
@@ -11,7 +11,7 @@ interface BlockRepository {
 
 class SqliteBlockRepository(
     val path: Path,
-) : BaseSqliteRepository(object : Config {
+) : SqliteBaseRepository(object : Config {
     override val path = path
     override val filename: String = "blocks.db"
 }), BlockRepository {

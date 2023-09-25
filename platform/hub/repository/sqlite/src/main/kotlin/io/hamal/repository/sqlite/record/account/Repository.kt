@@ -2,7 +2,7 @@ package io.hamal.repository.sqlite.record.account
 
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
@@ -49,7 +49,7 @@ class SqliteAccountRepository(
 
     data class Config(
         override val path: Path
-    ) : BaseSqliteRepository.Config {
+    ) : SqliteBaseRepository.Config {
         override val filename = "account.db"
     }
 

@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record.func
 
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
@@ -50,7 +50,7 @@ class SqliteFuncRepository(
 
     data class Config(
         override val path: Path
-    ) : BaseSqliteRepository.Config {
+    ) : SqliteBaseRepository.Config {
         override val filename = "func.db"
     }
 

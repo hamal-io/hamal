@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.repository.api.log.*
 import java.nio.file.Path
@@ -17,7 +17,7 @@ import java.nio.file.Path
 class SqliteTopicRepository(
     internal val topic: Topic,
     internal val path: Path
-) : BaseSqliteRepository(
+) : SqliteBaseRepository(
     object : Config {
         override val path: Path get() = path
         override val filename: String get() = String.format("topics/%08d", topic.id.value.value)

@@ -1,7 +1,7 @@
 package io.hamal.app.proxy.repository
 
-import io.hamal.lib.sqlite.BaseSqliteRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.util.Web3Encoding
 import java.nio.file.Path
 
@@ -34,7 +34,7 @@ class SqliteCallRepository(
 class SqliteCallPartitionRepository(
     val path: Path,
     val partition: Int
-) : BaseSqliteRepository(object : Config {
+) : SqliteBaseRepository(object : Config {
     override val path = path
     override val filename: String = "calls-${partition}.db"
 }), CallRepository {

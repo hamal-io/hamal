@@ -1,6 +1,6 @@
 package io.hamal.app.proxy.repository
 
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
@@ -10,7 +10,7 @@ import java.nio.file.Path
 // FIXME renmae to sqlite address repo
 class AddressRepository(
     path: Path
-) : BaseSqliteRepository(object : Config {
+) : SqliteBaseRepository(object : Config {
     override val path = path
     override val filename: String = "addresses.db"
 }) {

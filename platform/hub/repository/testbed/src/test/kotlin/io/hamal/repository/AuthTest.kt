@@ -159,7 +159,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 token = AuthToken("some-token")
             )
 
-            val result = get(AuthToken("does-not-exists"))
+            val result = find(AuthToken("does-not-exists"))
             assertThat(result, nullValue())
         }
     }

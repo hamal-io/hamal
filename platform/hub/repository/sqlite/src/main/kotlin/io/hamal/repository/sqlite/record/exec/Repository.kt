@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -46,7 +46,7 @@ class SqliteExecRepository(
 
     data class Config(
         override val path: Path
-    ) : BaseSqliteRepository.Config {
+    ) : SqliteBaseRepository.Config {
         override val filename = "exec.db"
     }
 

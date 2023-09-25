@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -45,7 +45,7 @@ class SqliteTriggerRepository(
 
     data class Config(
         override val path: Path,
-    ) : BaseSqliteRepository.Config {
+    ) : SqliteBaseRepository.Config {
         override val filename = "trigger.db"
     }
 

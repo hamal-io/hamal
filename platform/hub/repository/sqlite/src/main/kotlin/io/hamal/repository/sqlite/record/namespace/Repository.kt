@@ -2,7 +2,7 @@ package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -48,7 +48,7 @@ class SqliteNamespaceRepository(
 
     data class Config(
         override val path: Path
-    ) : BaseSqliteRepository.Config {
+    ) : SqliteBaseRepository.Config {
         override val filename = "namespace.db"
     }
 

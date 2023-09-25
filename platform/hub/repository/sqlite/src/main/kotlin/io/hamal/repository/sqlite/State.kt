@@ -7,14 +7,14 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.BaseSqliteRepository
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.nio.file.Path
 
 class SqliteStateRepository(
     path: Path
-) : BaseSqliteRepository(
+) : SqliteBaseRepository(
     config = object : Config {
         override val path = path
         override val filename = "correlated-state.db"
