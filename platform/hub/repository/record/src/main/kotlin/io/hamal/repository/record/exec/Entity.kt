@@ -8,6 +8,7 @@ import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.repository.api.*
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.exec.*
@@ -136,4 +137,10 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
 
 
     return result
+}
+
+object CreateExecFromRecords : CreateDomainObject<ExecId, ExecRecord, Exec> {
+    override fun invoke(recs: List<ExecRecord>): Exec {
+        return recs.createEntity().toDomainObject()
+    }
 }

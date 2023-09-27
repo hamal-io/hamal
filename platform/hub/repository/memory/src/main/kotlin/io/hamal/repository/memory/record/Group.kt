@@ -1,16 +1,14 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupCmdRepository
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.api.GroupRepository
+import io.hamal.repository.record.group.CreateGroupFromRecords
 import io.hamal.repository.record.group.GroupCreationRecord
 import io.hamal.repository.record.group.GroupRecord
-import io.hamal.repository.record.group.createEntity
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -36,15 +34,18 @@ internal object CurrentGroupProjection {
     }
 }
 
-object MemoryGroupRepository : BaseRecordRepository<GroupId, GroupRecord>(), GroupRepository {
+class MemoryGroupRepository : MemoryRecordRepository<GroupId, GroupRecord, Group>(
+    createDomainObject = CreateGroupFromRecords,
+    recordClass = GroupRecord::class
+), GroupRepository {
     private val lock = ReentrantLock()
     override fun create(cmd: GroupCmdRepository.CreateCmd): Group {
         return lock.withLock {
             val groupId = cmd.groupId
-            if (contains(groupId)) {
+            if (commandAlreadyApplied(cmd.id, groupId)) {
                 versionOf(groupId, cmd.id)
             } else {
-                addRecord(
+                store(
                     GroupCreationRecord(
                         entityId = groupId,
                         cmdId = cmd.id,
@@ -67,19 +68,4 @@ object MemoryGroupRepository : BaseRecordRepository<GroupId, GroupRecord>(), Gro
         super.clear()
         CurrentGroupProjection.clear()
     }
-}
-
-private fun MemoryGroupRepository.currentVersion(id: GroupId): Group {
-    return listRecords(id)
-        .createEntity()
-        .toDomainObject()
-}
-
-private fun MemoryGroupRepository.commandAlreadyApplied(id: GroupId, cmdId: CmdId) =
-    listRecords(id).any { it.cmdId == cmdId }
-
-private fun MemoryGroupRepository.versionOf(id: GroupId, cmdId: CmdId): Group {
-    return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
-        .createEntity()
-        .toDomainObject()
 }

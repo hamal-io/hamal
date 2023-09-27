@@ -46,7 +46,7 @@ open class MemoryRepositoryConfig {
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
-    open fun groupRepository() = MemoryGroupRepository
+    open fun groupRepository() = MemoryGroupRepository()
 
     @Bean
     open fun groupQueryRepository() = groupRepository()
@@ -73,29 +73,41 @@ open class MemoryRepositoryConfig {
     open fun execQueryRepository(): ExecQueryRepository = execRepository()
 
     @Bean
-    open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
+    open fun execLogRepository(): ExecLogRepository = MemoryExecLogRepository()
 
     @Bean
-    open fun execLogQueryRepository(): ExecLogQueryRepository = MemoryExecLogRepository
+    open fun execLogCmdRepository(): ExecLogCmdRepository = execLogRepository()
 
     @Bean
-    open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
+    open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
 
     @Bean
-    open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+    open fun reqRepository(): ReqRepository = MemoryReqRepository()
 
     @Bean
-    open fun stateCmdRepository(): StateCmdRepository = MemoryStateRepository
+    open fun reqCmdRepository(): ReqCmdRepository = reqRepository()
 
     @Bean
-    open fun stateQueryRepository(): StateQueryRepository = MemoryStateRepository
+    open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
 
     @Bean
-    open fun triggerCmdRepository(): TriggerCmdRepository = MemoryTriggerRepository
+    open fun stateRepository(): StateRepository = MemoryStateRepository()
 
     @Bean
-    open fun triggerQueryRepository(): TriggerQueryRepository = MemoryTriggerRepository
+    open fun stateCmdRepository(): StateCmdRepository = stateRepository()
 
     @Bean
-    open fun metricRepository(): MetricRepository = MemoryMetricRepository
+    open fun stateQueryRepository(): StateQueryRepository = stateRepository()
+
+    @Bean
+    open fun triggerRepository(): TriggerRepository = MemoryTriggerRepository()
+
+    @Bean
+    open fun triggerCmdRepository(): TriggerCmdRepository = triggerRepository()
+
+    @Bean
+    open fun triggerQueryRepository(): TriggerQueryRepository = triggerRepository()
+
+    @Bean
+    open fun metricRepository(): MetricRepository = MemoryMetricRepository()
 }

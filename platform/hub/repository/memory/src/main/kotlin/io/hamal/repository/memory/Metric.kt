@@ -9,7 +9,7 @@ import kotlinx.serialization.json.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 
-object MemoryMetricRepository : MetricRepository {
+class MemoryMetricRepository : MetricRepository {
 
     private val lock = ReentrantReadWriteLock()
     private val timer: Long = System.currentTimeMillis()

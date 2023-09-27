@@ -8,6 +8,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
+
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import kotlin.time.Duration
@@ -109,4 +111,10 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     }
 
     return result
+}
+
+object CreateTriggerFromRecords : CreateDomainObject<TriggerId, TriggerRecord, Trigger> {
+    override fun invoke(recs: List<TriggerRecord>): Trigger {
+        return recs.createEntity().toDomainObject()
+    }
 }

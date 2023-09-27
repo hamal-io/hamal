@@ -1,8 +1,11 @@
 package io.hamal.repository.record.group
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.GroupName
 import io.hamal.repository.api.Group
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
@@ -56,4 +59,10 @@ fun List<GroupRecord>.createEntity(): GroupEntity {
     }
 
     return result
+}
+
+object CreateGroupFromRecords : CreateDomainObject<GroupId, GroupRecord, Group> {
+    override fun invoke(recs: List<GroupRecord>): Group {
+        return recs.createEntity().toDomainObject()
+    }
 }

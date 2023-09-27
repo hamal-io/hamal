@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
 
-object MemoryExecLogRepository : ExecLogRepository {
+class MemoryExecLogRepository : ExecLogRepository {
     private val lock = ReentrantReadWriteLock()
     private val store = mutableListOf<ExecLog>()
 

@@ -1,7 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.Namespace
@@ -9,10 +7,10 @@ import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
+import io.hamal.repository.record.namespace.CreateNamespaceFromRecords
 import io.hamal.repository.record.namespace.NamespaceCreationRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
-import io.hamal.repository.record.namespace.createEntity
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -66,15 +64,19 @@ internal object CurrentNamespaceProjection {
     }
 }
 
-class MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRecord>(), NamespaceRepository {
+class MemoryNamespaceRepository :
+    MemoryRecordRepository<NamespaceId, NamespaceRecord, Namespace>(
+        createDomainObject = CreateNamespaceFromRecords,
+        recordClass = NamespaceRecord::class
+    ), NamespaceRepository {
 
     override fun create(cmd: CreateCmd): Namespace {
         return lock.withLock {
             val namespaceId = cmd.namespaceId
-            if (contains(namespaceId)) {
+            if (commandAlreadyApplied(cmd.id, namespaceId)) {
                 versionOf(namespaceId, cmd.id)
             } else {
-                addRecord(
+                store(
                     NamespaceCreationRecord(
                         cmdId = cmd.id,
                         entityId = namespaceId,
@@ -90,11 +92,11 @@ class MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRec
 
     override fun update(namespaceId: NamespaceId, cmd: NamespaceCmdRepository.UpdateCmd): Namespace {
         return lock.withLock {
-            if (commandAlreadyApplied(namespaceId, cmd.id)) {
+            if (commandAlreadyApplied(cmd.id, namespaceId)) {
                 versionOf(namespaceId, cmd.id)
             } else {
                 val current = currentVersion(namespaceId)
-                addRecord(
+                store(
                     NamespaceUpdatedRecord(
                         entityId = namespaceId,
                         cmdId = cmd.id,
@@ -127,19 +129,4 @@ class MemoryNamespaceRepository : BaseRecordRepository<NamespaceId, NamespaceRec
     override fun close() {}
 
     private val lock = ReentrantLock()
-}
-
-private fun MemoryNamespaceRepository.currentVersion(id: NamespaceId): Namespace {
-    return listRecords(id)
-        .createEntity()
-        .toDomainObject()
-}
-
-private fun MemoryNamespaceRepository.commandAlreadyApplied(id: NamespaceId, cmdId: CmdId) =
-    listRecords(id).any { it.cmdId == cmdId }
-
-private fun MemoryNamespaceRepository.versionOf(id: NamespaceId, cmdId: CmdId): Namespace {
-    return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
-        .createEntity()
-        .toDomainObject()
 }

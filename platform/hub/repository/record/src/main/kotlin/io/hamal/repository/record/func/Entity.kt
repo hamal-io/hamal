@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.api.Func
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
@@ -74,4 +75,10 @@ fun List<FuncRecord>.createEntity(): FuncEntity {
     }
 
     return result
+}
+
+object CreateFuncFromRecords : CreateDomainObject<FuncId, FuncRecord, Func> {
+    override fun invoke(recs: List<FuncRecord>): Func {
+        return recs.createEntity().toDomainObject()
+    }
 }

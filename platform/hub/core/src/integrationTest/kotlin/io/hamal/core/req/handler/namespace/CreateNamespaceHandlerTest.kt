@@ -37,7 +37,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             SubmittedCreateNamespaceReq(
-                reqId = ReqId(2),
+                reqId = ReqId(1),
                 status = Submitted,
                 id = NamespaceId(12345),
                 groupId = testGroup.id,

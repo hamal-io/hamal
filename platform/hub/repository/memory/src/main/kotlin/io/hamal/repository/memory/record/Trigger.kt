@@ -1,7 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.TriggerId
@@ -12,10 +10,10 @@ import io.hamal.repository.api.TriggerCmdRepository.CreateEventCmd
 import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.TriggerRepository
+import io.hamal.repository.record.trigger.CreateTriggerFromRecords
 import io.hamal.repository.record.trigger.EventTriggerCreationRecord
 import io.hamal.repository.record.trigger.FixedRateTriggerCreationRecord
 import io.hamal.repository.record.trigger.TriggerRecord
-import io.hamal.repository.record.trigger.createEntity
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -54,16 +52,19 @@ internal object CurrentTriggerProjection {
 }
 
 
-object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(), TriggerRepository {
+class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord, Trigger>(
+    createDomainObject = CreateTriggerFromRecords,
+    recordClass = TriggerRecord::class
+), TriggerRepository {
     private val lock = ReentrantLock()
 
     override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {
         return lock.withLock {
             val triggerId = cmd.triggerId
-            if (contains(triggerId)) {
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as FixedRateTrigger
             }
-            MemoryTriggerRepository.addRecord(
+            store(
                 FixedRateTriggerCreationRecord(
                     cmdId = cmd.id,
                     entityId = triggerId,
@@ -83,10 +84,10 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
     override fun create(cmd: CreateEventCmd): EventTrigger {
         return lock.withLock {
             val triggerId = cmd.triggerId
-            if (contains(triggerId)) {
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as EventTrigger
             } else {
-                MemoryTriggerRepository.addRecord(
+                store(
                     EventTriggerCreationRecord(
                         cmdId = cmd.id,
                         entityId = triggerId,
@@ -114,16 +115,4 @@ object MemoryTriggerRepository : BaseRecordRepository<TriggerId, TriggerRecord>(
         super.clear()
         CurrentTriggerProjection.clear()
     }
-}
-
-private fun MemoryTriggerRepository.currentVersion(id: TriggerId): Trigger {
-    return listRecords(id)
-        .createEntity()
-        .toDomainObject()
-}
-
-private fun MemoryTriggerRepository.versionOf(id: TriggerId, cmdId: CmdId): Trigger {
-    return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
-        .createEntity()
-        .toDomainObject()
 }

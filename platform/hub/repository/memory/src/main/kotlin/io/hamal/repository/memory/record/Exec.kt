@@ -1,12 +1,10 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.record.exec.createEntity
+import io.hamal.repository.api.record.exec.CreateExecFromRecords
 import io.hamal.repository.record.exec.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -71,17 +69,19 @@ internal object QueueProjection {
     }
 }
 
-class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRepository {
+class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
+    createDomainObject = CreateExecFromRecords,
+    recordClass = ExecRecord::class
+), ExecRepository {
     private val lock = ReentrantLock()
 
     override fun plan(cmd: PlanCmd): PlannedExec {
         return lock.withLock {
             val execId = cmd.execId
-            if (contains(execId)) {
+            if (commandAlreadyApplied(cmd.id, execId)) {
                 versionOf(execId, cmd.id) as PlannedExec
             } else {
-
-                addRecord(
+                store(
                     ExecPlannedRecord(
                         cmdId = cmd.id,
                         entityId = execId,
@@ -102,12 +102,12 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             val execId = cmd.execId
             val cmdId = cmd.id
 
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmd.id, execId)) {
                 versionOf(execId, cmdId) as ScheduledExec
             } else {
                 check(currentVersion(execId) is PlannedExec) { "$execId not planned" }
 
-                addRecord(ExecScheduledRecord(cmdId, execId))
+                store(ExecScheduledRecord(cmdId, execId))
 
                 (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
             }
@@ -119,12 +119,12 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             val execId = cmd.execId
             val cmdId = cmd.id
 
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmd.id, execId)) {
                 versionOf(execId, cmdId) as QueuedExec
             } else {
                 check(currentVersion(execId) is ScheduledExec) { "$execId not scheduled" }
 
-                addRecord(ExecQueuedRecord(cmdId, execId))
+                store(ExecQueuedRecord(cmdId, execId))
 
                 (currentVersion(execId) as QueuedExec)
                     .also(CurrentExecProjection::apply)
@@ -140,7 +140,7 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "$execId not queued" }
 
-                addRecord(ExecStartedRecord(cmd.id, execId))
+                store(ExecStartedRecord(cmd.id, execId))
 
                 result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
             }
@@ -163,12 +163,12 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             val execId = cmd.execId
             val cmdId = cmd.id
 
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as CompletedExec
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                addRecord(ExecCompletedRecord(cmdId, execId))
+                store(ExecCompletedRecord(cmdId, execId))
 
                 (versionOf(execId, cmdId) as CompletedExec).also(CurrentExecProjection::apply)
             }
@@ -180,12 +180,12 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             val execId = cmd.execId
             val cmdId = cmd.id
 
-            if (commandAlreadyApplied(execId, cmdId)) {
+            if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as FailedExec
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                addRecord(ExecFailedRecord(cmdId, execId, cmd.cause))
+                store(ExecFailedRecord(cmdId, execId, cmd.cause))
 
                 (versionOf(execId, cmdId) as FailedExec).also(CurrentExecProjection::apply)
             }
@@ -203,21 +203,6 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
 
     override fun count(query: ExecQuery): ULong {
         return CurrentExecProjection.count(query)
-    }
-
-    private fun MemoryExecRepository.currentVersion(id: ExecId): Exec {
-        return listRecords(id)
-            .createEntity()
-            .toDomainObject()
-    }
-
-    private fun MemoryExecRepository.commandAlreadyApplied(id: ExecId, cmdId: CmdId) =
-        listRecords(id).any { it.cmdId == cmdId }
-
-    private fun MemoryExecRepository.versionOf(id: ExecId, cmdId: CmdId): Exec {
-        return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
-            .createEntity()
-            .toDomainObject()
     }
 }
 

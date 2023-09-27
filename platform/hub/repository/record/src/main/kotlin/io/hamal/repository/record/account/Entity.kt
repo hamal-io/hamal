@@ -3,6 +3,7 @@ package io.hamal.repository.record.account
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Account
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
@@ -64,4 +65,10 @@ fun List<AccountRecord>.createEntity(): AccountEntity {
     }
 
     return result
+}
+
+object CreateAccountFromRecords : CreateDomainObject<AccountId, AccountRecord, Account> {
+    override fun invoke(recs: List<AccountRecord>): Account {
+        return recs.createEntity().toDomainObject()
+    }
 }

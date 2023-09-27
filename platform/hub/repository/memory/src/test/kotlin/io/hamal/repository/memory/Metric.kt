@@ -12,7 +12,7 @@ class MemoryMetricTest {
 
     @Test
     fun mapTest() {
-        val repo: MetricRepository = MemoryMetricRepository
+        val repo: MetricRepository = MemoryMetricRepository()
         repo.update(SystemEvent.ExecutionCompletedEvent)
         val mp = repo.getData().getMap()
         Assertions.assertTrue(mp[SystemEvent.ExecutionCompletedEvent] == 1)
@@ -20,7 +20,7 @@ class MemoryMetricTest {
 
     @Test
     fun resetTest() {
-        val repo: MetricRepository = MemoryMetricRepository
+        val repo: MetricRepository = MemoryMetricRepository()
         repo.update(SystemEvent.ExecutionCompletedEvent)
         repo.update(SystemEvent.ExecutionFailedEvent)
         repo.clear()
@@ -33,7 +33,7 @@ class MemoryMetricTest {
 
     @Test
     fun except() {
-        val repo: MetricRepository = MemoryMetricRepository
+        val repo: MetricRepository = MemoryMetricRepository()
         val thrown = Assertions.assertThrows(NoSuchElementException::class.java) {
             repo.update(SystemEvent.NamespaceCreatedEvent)
         }
@@ -42,7 +42,7 @@ class MemoryMetricTest {
 
     @Test
     fun lockTest() {
-        val repo: MetricRepository = MemoryMetricRepository
+        val repo: MetricRepository = MemoryMetricRepository()
         val t1 = Thread {
             for (i in 1..50) {
                 repo.update(SystemEvent.ExecutionFailedEvent)

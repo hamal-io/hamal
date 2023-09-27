@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.Namespace
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
@@ -68,4 +69,10 @@ fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
     }
 
     return result
+}
+
+object CreateNamespaceFromRecords : CreateDomainObject<NamespaceId, NamespaceRecord, Namespace> {
+    override fun invoke(recs: List<NamespaceRecord>): Namespace {
+        return recs.createEntity().toDomainObject()
+    }
 }

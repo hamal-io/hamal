@@ -1,7 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
 import io.hamal.repository.api.Account
@@ -10,7 +8,7 @@ import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.account.AccountCreationRecord
 import io.hamal.repository.record.account.AccountRecord
-import io.hamal.repository.record.account.createEntity
+import io.hamal.repository.record.account.CreateAccountFromRecords
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -63,7 +61,10 @@ internal object CurrentAccountProjection {
     }
 }
 
-class MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>(), AccountRepository {
+class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord, Account>(
+    createDomainObject = CreateAccountFromRecords,
+    recordClass = AccountRecord::class
+), AccountRepository {
     private val lock = ReentrantLock()
 
     override fun create(cmd: CreateCmd): Account {
@@ -72,7 +73,7 @@ class MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>()
             if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)
             } else {
-                addRecord(
+                store(
                     AccountCreationRecord(
                         cmdId = cmd.id,
                         entityId = accountId,
@@ -106,19 +107,4 @@ class MemoryAccountRepository : BaseRecordRepository<AccountId, AccountRecord>()
 
     override fun close() {
     }
-}
-
-private fun MemoryAccountRepository.currentVersion(id: AccountId): Account {
-    return listRecords(id)
-        .createEntity()
-        .toDomainObject()
-}
-
-private fun MemoryAccountRepository.commandAlreadyApplied(cmdId: CmdId, id: AccountId) =
-    listRecords(id).any { it.cmdId == cmdId }
-
-private fun MemoryAccountRepository.versionOf(id: AccountId, cmdId: CmdId): Account {
-    return listRecords(id).takeWhileInclusive { it.cmdId != cmdId }
-        .createEntity()
-        .toDomainObject()
 }

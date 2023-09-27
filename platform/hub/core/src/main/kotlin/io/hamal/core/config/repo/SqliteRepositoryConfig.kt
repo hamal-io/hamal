@@ -58,7 +58,7 @@ open class SqliteRepositoryConfig {
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
-    open fun groupRepository() = MemoryGroupRepository
+    open fun groupRepository() = MemoryGroupRepository()
 
     @Bean
     open fun groupQueryRepository() = groupRepository()
@@ -85,10 +85,13 @@ open class SqliteRepositoryConfig {
     open fun execQueryRepository(): ExecQueryRepository = execRepository()
 
     @Bean
-    open fun execLogCmdRepository(): ExecLogCmdRepository = MemoryExecLogRepository
+    open fun execLogRepository(): ExecLogRepository = MemoryExecLogRepository()
 
     @Bean
-    open fun execLogQueryRepository(): ExecLogQueryRepository = MemoryExecLogRepository
+    open fun execLogCmdRepository(): ExecLogCmdRepository = execLogRepository()
+
+    @Bean
+    open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
 
     @Bean
     open fun triggerRepository() = SqliteTriggerRepository(SqliteTriggerRepository.Config(path))
@@ -109,13 +112,16 @@ open class SqliteRepositoryConfig {
     open fun stateQueryRepository(): StateQueryRepository = stateRepository()
 
     @Bean
-    open fun reqCmdRepository(): ReqCmdRepository = MemoryReqRepository
+    open fun reqRepository(): ReqRepository = MemoryReqRepository()
 
     @Bean
-    open fun reqQueryRepository(): ReqQueryRepository = MemoryReqRepository
+    open fun reqCmdRepository(): ReqCmdRepository = reqRepository()
 
     @Bean
-    open fun metricRepository(): MetricRepository = MemoryMetricRepository
+    open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
+
+    @Bean
+    open fun metricRepository(): MetricRepository = MemoryMetricRepository()
 
     private val path = Path("/tmp/hamal/hub")
 }

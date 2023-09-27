@@ -9,8 +9,8 @@ import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordRepository
 import io.hamal.repository.record.RecordSequence
-import io.hamal.repository.record.Store
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
@@ -22,7 +22,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,
-) : Store<ID, RECORD, OBJ>, Transaction {
+) : RecordRepository<ID, RECORD, OBJ>, Transaction {
 
     override fun store(record: RECORD): RECORD {
         execute(
@@ -111,4 +111,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     ) = delegate.executeQuery(sql, block)
 
     override fun abort() = delegate.abort()
+    override fun clear() {
+        delegate.execute("""DELETE FROM records""")
+    }
 }
