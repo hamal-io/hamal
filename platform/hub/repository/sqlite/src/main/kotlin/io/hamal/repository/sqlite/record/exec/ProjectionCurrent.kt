@@ -43,6 +43,8 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 current
             WHERE
                 id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -66,6 +68,8 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 current
             WHERE
                 id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
         """.trimIndent()
         ) {
             query {
@@ -85,13 +89,14 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id,status, data) 
+                    (id,status,group_id,data) 
                 VALUES
-                    (:id,:status, :data)
+                    (:id,:status,:groupId,:data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
+            set("groupId", obj.groupId)
             set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
         }
     }
@@ -102,6 +107,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  status         INTEGER NOT NULL,
+                 group_id       INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -114,5 +120,21 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
     }
 
     override fun invalidate() {
+    }
+
+    private fun ExecQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun ExecQuery.ids(): String {
+        return if (execIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+        }
     }
 }
