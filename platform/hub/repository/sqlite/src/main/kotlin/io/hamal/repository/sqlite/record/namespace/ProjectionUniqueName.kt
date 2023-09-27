@@ -6,11 +6,11 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.namespace.NamespaceRecord
-import io.hamal.repository.sqlite.record.Projection
-import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.SqliteProjection
+import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : Projection<NamespaceId, NamespaceRecord, Namespace> {
+internal object ProjectionUniqueName : SqliteProjection<NamespaceId, NamespaceRecord, Namespace> {
 
     fun find(connection: Connection, namespaceName: NamespaceName): NamespaceId? {
         return connection.executeQueryOne(
@@ -30,7 +30,7 @@ internal object ProjectionUniqueName : Projection<NamespaceId, NamespaceRecord, 
         }
     }
 
-    override fun upsert(tx: RecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
+    override fun upsert(tx: SqliteRecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         try {
             tx.execute(
                 """

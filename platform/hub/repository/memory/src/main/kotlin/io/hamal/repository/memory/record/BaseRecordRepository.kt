@@ -1,8 +1,8 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.DomainId
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
-import io.hamal.lib.common.domain.DomainId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -20,6 +20,7 @@ abstract class BaseRecordRepository<ID : DomainId, RECORD : Record<ID>> {
     }
 
     fun listRecords(id: ID): List<RECORD> = lock.withLock { store.getOrDefault(id, listOf()) }
+
     fun contains(id: ID) = lock.withLock { store.containsKey(id) }
 
     open fun clear() {

@@ -5,12 +5,12 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
-import io.hamal.repository.sqlite.record.Projection
-import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.SqliteProjection
+import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 
-internal object ProjectionUniqueName : Projection<TriggerId, TriggerRecord, Trigger> {
+internal object ProjectionUniqueName : SqliteProjection<TriggerId, TriggerRecord, Trigger> {
 
-    override fun upsert(tx: RecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
+    override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         tx.execute(
             """
                 INSERT INTO unique_names

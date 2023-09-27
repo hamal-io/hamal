@@ -59,7 +59,7 @@ class SqliteNamespaceRepository(
             if (commandAlreadyApplied(cmdId, namespaceId)) {
                 versionOf(namespaceId, cmdId)
             } else {
-                storeRecord(
+                store(
                     NamespaceCreationRecord(
                         cmdId = cmdId,
                         entityId = namespaceId,
@@ -83,7 +83,7 @@ class SqliteNamespaceRepository(
                 versionOf(namespaceId, cmdId)
             } else {
                 val current = currentVersion(namespaceId)
-                storeRecord(
+                store(
                     NamespaceUpdatedRecord(
                         entityId = namespaceId,
                         cmdId = cmdId,

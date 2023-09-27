@@ -6,14 +6,14 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.record.namespace.NamespaceRecord
-import io.hamal.repository.sqlite.record.Projection
-import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.SqliteProjection
+import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Namespace> {
+internal object ProjectionCurrent : SqliteProjection<NamespaceId, NamespaceRecord, Namespace> {
 
     fun find(connection: Connection, namespaceId: NamespaceId): Namespace? {
         return connection.executeQueryOne(
@@ -82,7 +82,7 @@ internal object ProjectionCurrent : Projection<NamespaceId, NamespaceRecord, Nam
         } ?: 0UL
     }
 
-    override fun upsert(tx: RecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
+    override fun upsert(tx: SqliteRecordTransaction<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

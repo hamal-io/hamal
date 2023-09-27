@@ -60,7 +60,7 @@ class SqliteAccountRepository(
             if (commandAlreadyApplied(cmdId, accountId)) {
                 versionOf(accountId, cmdId)
             } else {
-                storeRecord(
+                store(
                     AccountCreationRecord(
                         cmdId = cmdId,
                         entityId = accountId,

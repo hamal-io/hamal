@@ -9,31 +9,22 @@ import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.Store
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
-interface RecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>> : Transaction {
-    fun storeRecord(record: RECORD): RECORD
-    fun recordsOf(id: ID): List<RECORD>
-    fun lastRecordOf(id: ID): RECORD
-    fun commandAlreadyApplied(cmdId: CmdId, id: ID): Boolean
-    fun versionOf(id: ID, cmdId: CmdId): OBJ
-    fun currentVersion(id: ID): OBJ
-}
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,
-    private val recordCache: RecordCache<ID, RECORD, OBJ>
-) : RecordTransaction<ID, RECORD, OBJ> {
+) : Store<ID, RECORD, OBJ>, Transaction {
 
-    override fun storeRecord(record: RECORD): RECORD {
-        recordCache.add(this, record)
-
+    override fun store(record: RECORD): RECORD {
         execute(
             """
                 INSERT INTO records
@@ -51,11 +42,37 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     }
 
     override fun recordsOf(id: ID): List<RECORD> {
-        return recordCache.list(this, id)
+        return executeQuery(
+            """
+            SELECT data, sequence FROM records WHERE entity_id = :entityId ORDER BY sequence ASC
+        """.trimIndent()
+        ) {
+            query {
+                set("entityId", id)
+            }
+            map {
+                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
+                    record.sequence = RecordSequence(it.getInt("sequence"))
+                }
+            }
+        }
     }
 
     override fun lastRecordOf(id: ID): RECORD {
-        return recordCache.list(this, id).lastOrNull()
+        return executeQuery(
+            """
+            SELECT data, sequence FROM records WHERE entity_id = :entityId ORDER BY sequence DESC LIMIT 1
+        """.trimIndent()
+        ) {
+            query {
+                set("entityId", id)
+            }
+            map {
+                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
+                    record.sequence = RecordSequence(it.getInt("sequence"))
+                }
+            }
+        }.lastOrNull()
             ?: throw NoSuchElementException("${recordClass.simpleName!!.replace("Record", "")} not found")
     }
 

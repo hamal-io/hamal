@@ -57,7 +57,7 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as PlannedExec
             } else {
-                storeRecord(
+                store(
                     ExecPlannedRecord(
                         cmdId = cmdId,
                         entityId = execId,
@@ -84,7 +84,7 @@ class SqliteExecRepository(
             } else {
                 check(currentVersion(execId) is PlannedExec) { "$execId not planned" }
 
-                storeRecord(ExecScheduledRecord(cmdId, execId))
+                store(ExecScheduledRecord(cmdId, execId))
 
                 (currentVersion(execId) as ScheduledExec).also { ProjectionCurrent.upsert(this, it) }
             }
@@ -100,7 +100,7 @@ class SqliteExecRepository(
             } else {
                 check(currentVersion(execId) is ScheduledExec) { "$execId not scheduled" }
 
-                storeRecord(ExecQueuedRecord(cmdId, execId))
+                store(ExecQueuedRecord(cmdId, execId))
 
                 (currentVersion(execId) as QueuedExec)
                     .also { ProjectionCurrent.upsert(this, it) }
@@ -121,7 +121,7 @@ class SqliteExecRepository(
                 } else {
                     check(currentVersion(execId) is QueuedExec) { "$execId not queued" }
 
-                    storeRecord(ExecStartedRecord(cmd.id, execId))
+                    store(ExecStartedRecord(cmd.id, execId))
 
                     result.add((currentVersion(execId) as StartedExec).also { ProjectionCurrent.upsert(this, it) })
                 }
@@ -141,7 +141,7 @@ class SqliteExecRepository(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                storeRecord(ExecCompletedRecord(cmdId, execId))
+                store(ExecCompletedRecord(cmdId, execId))
 
                 (currentVersion(execId) as CompletedExec).also { ProjectionCurrent.upsert(this, it) }
             }
@@ -157,7 +157,7 @@ class SqliteExecRepository(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                storeRecord(ExecFailedRecord(cmdId, execId, cmd.cause))
+                store(ExecFailedRecord(cmdId, execId, cmd.cause))
 
                 (currentVersion(execId) as FailedExec).also { ProjectionCurrent.upsert(this, it) }
             }

@@ -56,7 +56,7 @@ class SqliteTriggerRepository(
             if (commandAlreadyApplied(cmdId, triggerId)) {
                 versionOf(triggerId, cmdId) as FixedRateTrigger
             } else {
-                storeRecord(
+                store(
                     FixedRateTriggerCreationRecord(
                         cmdId = cmdId,
                         entityId = triggerId,
@@ -84,7 +84,7 @@ class SqliteTriggerRepository(
             if (commandAlreadyApplied(cmdId, triggerId)) {
                 versionOf(triggerId, cmdId) as EventTrigger
             } else {
-                storeRecord(
+                store(
                     EventTriggerCreationRecord(
                         cmdId = cmdId,
                         entityId = triggerId,

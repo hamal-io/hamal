@@ -48,9 +48,7 @@ interface RecordEntity<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID
     val id: ID
     val cmdId: CmdId
     val sequence: RecordSequence
-
     fun apply(rec: RECORD): RecordEntity<ID, RECORD, OBJ>
-
     fun toDomainObject(): OBJ
 }
 

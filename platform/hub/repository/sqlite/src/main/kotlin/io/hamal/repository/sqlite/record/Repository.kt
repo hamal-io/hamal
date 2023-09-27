@@ -13,8 +13,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     config: Config,
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
-    private val recordCache: RecordCache<ID, RECORD, OBJ> = RecordCache(RecordLoader(recordClass)),
-    private val projections: List<Projection<ID, RECORD, OBJ>>
+    private val projections: List<SqliteProjection<ID, RECORD, OBJ>>
 
 ) : SqliteBaseRepository(object : Config {
     override val path = config.path
@@ -65,7 +64,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
         }
     }
 
-    fun <T> tx(block: RecordTransaction<ID, RECORD, OBJ>.() -> T): T {
+    fun <T> tx(block: SqliteRecordTransaction<ID, RECORD, OBJ>.() -> T): T {
         return try {
             connection.tx {
                 block(
@@ -73,7 +72,6 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
                         createDomainObject,
                         recordClass,
                         this,
-                        recordCache
                     )
                 )
             }
@@ -83,10 +81,8 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
              * 2 Options -  Make the Cache transactional or wipe all cache data
              * As this should rarely happen --> simpler and cheaper execution for happy path
              */
-            recordCache.invalidate()
-            projections.forEach(Projection<ID, RECORD, OBJ>::invalidate)
+            projections.forEach(SqliteProjection<ID, RECORD, OBJ>::invalidate)
             throw t
         }
     }
-
 }

@@ -10,14 +10,14 @@ import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.record.trigger.TriggerRecord
-import io.hamal.repository.sqlite.record.Projection
-import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.SqliteProjection
+import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger> {
+internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, Trigger> {
     fun find(connection: Connection, triggerId: TriggerId): Trigger? {
         return connection.executeQueryOne(
             """
@@ -65,7 +65,7 @@ internal object ProjectionCurrent : Projection<TriggerId, TriggerRecord, Trigger
         }
     }
 
-    override fun upsert(tx: RecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
+    override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

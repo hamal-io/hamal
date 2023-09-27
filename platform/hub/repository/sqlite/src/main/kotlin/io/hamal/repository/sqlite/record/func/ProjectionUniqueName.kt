@@ -5,13 +5,13 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.sqlite.record.Projection
-import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.SqliteProjection
+import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : Projection<FuncId, FuncRecord, Func> {
+internal object ProjectionUniqueName : SqliteProjection<FuncId, FuncRecord, Func> {
 
-    override fun upsert(tx: RecordTransaction<FuncId, FuncRecord, Func>, obj: Func) {
+    override fun upsert(tx: SqliteRecordTransaction<FuncId, FuncRecord, Func>, obj: Func) {
         try {
             tx.execute(
                 """

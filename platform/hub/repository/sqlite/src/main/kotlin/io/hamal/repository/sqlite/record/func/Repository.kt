@@ -61,7 +61,7 @@ class SqliteFuncRepository(
             if (commandAlreadyApplied(cmdId, funcId)) {
                 versionOf(funcId, cmdId)
             } else {
-                storeRecord(
+                store(
                     FuncCreationRecord(
                         cmdId = cmdId,
                         entityId = funcId,
@@ -87,7 +87,7 @@ class SqliteFuncRepository(
                 versionOf(funcId, cmdId)
             } else {
                 val currentVersion = versionOf(funcId, cmdId)
-                storeRecord(
+                store(
                     FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmdId,

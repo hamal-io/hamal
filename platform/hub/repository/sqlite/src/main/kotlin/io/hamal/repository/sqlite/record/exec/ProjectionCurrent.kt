@@ -6,14 +6,14 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.record.exec.ExecRecord
-import io.hamal.repository.sqlite.record.Projection
-import io.hamal.repository.sqlite.record.RecordTransaction
+import io.hamal.repository.sqlite.record.SqliteProjection
+import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
+internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
     fun find(connection: Connection, execId: ExecId): Exec? {
         return connection.executeQueryOne(
             """
@@ -79,7 +79,7 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
 
 
     override fun upsert(
-        tx: RecordTransaction<ExecId, ExecRecord, Exec>,
+        tx: SqliteRecordTransaction<ExecId, ExecRecord, Exec>,
         obj: Exec
     ) {
         tx.execute(
