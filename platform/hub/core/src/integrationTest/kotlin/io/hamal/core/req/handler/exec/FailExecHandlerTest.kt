@@ -66,7 +66,7 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyFailed() {
-        execQueryRepository.list(ExecQuery()).also { execs ->
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 require(this is io.hamal.repository.api.FailedExec)
@@ -77,7 +77,7 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoFailedExecExists() {
-        execQueryRepository.list(ExecQuery()).also { execs ->
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(status, not(equalTo(Failed)))

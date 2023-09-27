@@ -3,14 +3,12 @@ package io.hamal.repository.fixture
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.AccountRepository
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.api.NamespaceRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.log.*
 import io.hamal.repository.memory.record.MemoryAccountRepository
+import io.hamal.repository.memory.record.MemoryExecRepository
 import io.hamal.repository.memory.record.MemoryFuncRepository
 import io.hamal.repository.memory.record.MemoryNamespaceRepository
 import kotlin.reflect.KClass
@@ -23,6 +21,7 @@ object MemoryFixture : BaseTestFixture {
         BrokerRepository::class -> MemoryBrokerRepository() as REPO
         BrokerConsumersRepository::class -> MemoryBrokerConsumersRepository() as REPO
         BrokerTopicsRepository::class -> MemoryBrokerTopicsRepository() as REPO
+        ExecRepository::class -> MemoryExecRepository() as REPO
         FuncRepository::class -> MemoryFuncRepository() as REPO
         NamespaceRepository::class -> MemoryNamespaceRepository() as REPO
         SegmentRepository::class -> MemorySegmentRepository(MemorySegment(Segment.Id(2810), TopicId(1506))) as REPO

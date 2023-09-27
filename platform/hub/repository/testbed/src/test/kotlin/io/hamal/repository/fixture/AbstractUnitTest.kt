@@ -10,11 +10,12 @@ abstract class AbstractUnitTest {
 
     fun <REPO : CmdRepository> runWith(
         interfaceClass: KClass<out REPO>,
+        description: String? = null,
         block: REPO.() -> Unit
     ): List<DynamicTest> {
         return provideTestInstances(interfaceClass).map { testInstance ->
             testInstance.clear()
-            dynamicTest(testInstance::class.simpleName) {
+            dynamicTest("${testInstance::class.simpleName} ${description ?: ""}") {
                 testInstance.use(block)
             }
         }
@@ -43,6 +44,10 @@ abstract class AbstractUnitTest {
             SqliteFixture
         ),
         BrokerTopicsRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        ExecRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

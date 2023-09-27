@@ -1,7 +1,6 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.repository.api.*
@@ -20,12 +19,28 @@ internal object CurrentExecProjection {
 
     fun find(execId: ExecId): Exec? = projection[execId]
 
-    fun list(afterId: ExecId, limit: Limit): List<Exec> {
-        return projection.keys.sorted()
+    fun list(query: ExecQuery): List<Exec> {
+        return projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
+            .map { it.value }
             .reversed()
-            .dropWhile { it >= afterId }
-            .take(limit.value)
-            .mapNotNull { find(it) }
+            .asSequence()
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .take(query.limit.value)
+            .toList()
+    }
+
+    fun count(query: ExecQuery): ULong {
+        return projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .count()
+            .toULong()
     }
 
     fun clear() {
@@ -90,9 +105,9 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as ScheduledExec
             } else {
-                check(currentVersion(execId) is PlannedExec) { "current version of $execId is not planned" }
+                check(currentVersion(execId) is PlannedExec) { "$execId not planned" }
 
-                addRecord(ExecScheduledRecord(execId, cmdId))
+                addRecord(ExecScheduledRecord(cmdId, execId))
 
                 (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
             }
@@ -107,9 +122,9 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as QueuedExec
             } else {
-                check(currentVersion(execId) is ScheduledExec) { "current version of $execId is not scheduled" }
+                check(currentVersion(execId) is ScheduledExec) { "$execId not scheduled" }
 
-                addRecord(ExecQueuedRecord(execId, cmdId))
+                addRecord(ExecQueuedRecord(cmdId, execId))
 
                 (currentVersion(execId) as QueuedExec)
                     .also(CurrentExecProjection::apply)
@@ -123,9 +138,9 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             val result = mutableListOf<StartedExec>()
             QueueProjection.pop(1).forEach { queuedExec ->
                 val execId = queuedExec.id
-                check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
+                check(currentVersion(execId) is QueuedExec) { "$execId not queued" }
 
-                addRecord(ExecStartedRecord(execId, cmd.id))
+                addRecord(ExecStartedRecord(cmd.id, execId))
 
                 result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
             }
@@ -151,12 +166,11 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as CompletedExec
             } else {
-                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
+                check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                addRecord(ExecCompletedRecord(execId, cmdId))
+                addRecord(ExecCompletedRecord(cmdId, execId))
 
-                (versionOf(execId, cmdId) as CompletedExec)
-                    .also(CurrentExecProjection::apply)
+                (versionOf(execId, cmdId) as CompletedExec).also(CurrentExecProjection::apply)
             }
         }
     }
@@ -169,9 +183,9 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
             if (commandAlreadyApplied(execId, cmdId)) {
                 versionOf(execId, cmdId) as FailedExec
             } else {
-                check(currentVersion(execId) is StartedExec) { "current version of $execId is not started" }
+                check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                addRecord(ExecFailedRecord(execId, cmdId, cmd.cause))
+                addRecord(ExecFailedRecord(cmdId, execId, cmd.cause))
 
                 (versionOf(execId, cmdId) as FailedExec).also(CurrentExecProjection::apply)
             }
@@ -184,7 +198,11 @@ class MemoryExecRepository : BaseRecordRepository<ExecId, ExecRecord>(), ExecRep
     }
 
     override fun list(query: ExecQuery): List<Exec> {
-        return CurrentExecProjection.list(query.afterId, query.limit)
+        return CurrentExecProjection.list(query)
+    }
+
+    override fun count(query: ExecQuery): ULong {
+        return CurrentExecProjection.count(query)
     }
 
     private fun MemoryExecRepository.currentVersion(id: ExecId): Exec {

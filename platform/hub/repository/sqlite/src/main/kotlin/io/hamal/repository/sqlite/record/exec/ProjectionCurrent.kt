@@ -1,9 +1,10 @@
 package io.hamal.repository.sqlite.record.exec
 
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
+import io.hamal.repository.api.Exec
+import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.record.Projection
 import io.hamal.repository.sqlite.record.RecordTransaction
@@ -12,8 +13,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : Projection<ExecId, ExecRecord, io.hamal.repository.api.Exec> {
-    fun find(connection: Connection, execId: ExecId): io.hamal.repository.api.Exec? {
+internal object ProjectionCurrent : Projection<ExecId, ExecRecord, Exec> {
+    fun find(connection: Connection, execId: ExecId): Exec? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -28,13 +29,13 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, io.hamal.repo
                 set("id", execId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(io.hamal.repository.api.Exec.serializer(), rs.getBytes("data"))
+                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
             }
         }
     }
 
-    fun list(connection: Connection, afterId: ExecId, limit: Limit): List<io.hamal.repository.api.Exec> {
-        return connection.executeQuery<io.hamal.repository.api.Exec>(
+    fun list(connection: Connection, query: ExecQuery): List<Exec> {
+        return connection.executeQuery<Exec>(
             """
             SELECT 
                 data
@@ -47,18 +48,39 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, io.hamal.repo
         """.trimIndent()
         ) {
             query {
-                set("afterId", afterId)
-                set("limit", limit)
+                set("afterId", query.afterId)
+                set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(io.hamal.repository.api.Exec.serializer(), rs.getBytes("data"))
+                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
             }
         }
     }
 
+    fun count(connection: Connection, query: ExecQuery): ULong {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                current
+            WHERE
+                id < :afterId
+        """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+            }
+            map {
+                it.getLong("count").toULong()
+            }
+        } ?: 0UL
+    }
+
+
     override fun upsert(
-        tx: RecordTransaction<ExecId, ExecRecord, io.hamal.repository.api.Exec>,
-        obj: io.hamal.repository.api.Exec
+        tx: RecordTransaction<ExecId, ExecRecord, Exec>,
+        obj: Exec
     ) {
         tx.execute(
             """
@@ -70,7 +92,7 @@ internal object ProjectionCurrent : Projection<ExecId, ExecRecord, io.hamal.repo
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
-            set("data", protobuf.encodeToByteArray(io.hamal.repository.api.Exec.serializer(), obj))
+            set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
         }
     }
 

@@ -82,14 +82,11 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as ScheduledExec
             } else {
-                storeRecord(
-                    ExecScheduledRecord(
-                        entityId = execId,
-                        cmdId = cmdId
-                    )
-                )
-                (currentVersion(execId) as ScheduledExec)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                check(currentVersion(execId) is PlannedExec) { "$execId not planned" }
+
+                storeRecord(ExecScheduledRecord(cmdId, execId))
+
+                (currentVersion(execId) as ScheduledExec).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -101,12 +98,9 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as QueuedExec
             } else {
-                storeRecord(
-                    ExecQueuedRecord(
-                        entityId = execId,
-                        cmdId = cmdId
-                    )
-                )
+                check(currentVersion(execId) is ScheduledExec) { "$execId not scheduled" }
+
+                storeRecord(ExecQueuedRecord(cmdId, execId))
 
                 (currentVersion(execId) as QueuedExec)
                     .also { ProjectionCurrent.upsert(this, it) }
@@ -122,22 +116,14 @@ class SqliteExecRepository(
         tx {
             ProjectionQueue.pop(this, 1).forEach { queuedExec ->
                 val execId = queuedExec.id
-                check(currentVersion(execId) is QueuedExec) { "current version of $execId is not queued" }
-
                 if (commandAlreadyApplied(cmdId, execId)) {
                     versionOf(execId, cmdId) as QueuedExec
                 } else {
+                    check(currentVersion(execId) is QueuedExec) { "$execId not queued" }
 
-                    storeRecord(
-                        ExecStartedRecord(
-                            entityId = execId,
-                            cmdId = cmd.id
-                        )
-                    )
-                    result.add(
-                        (currentVersion(execId) as StartedExec)
-                            .also { ProjectionCurrent.upsert(this, it) }
-                    )
+                    storeRecord(ExecStartedRecord(cmd.id, execId))
+
+                    result.add((currentVersion(execId) as StartedExec).also { ProjectionCurrent.upsert(this, it) })
                 }
             }
         }
@@ -153,14 +139,11 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as CompletedExec
             } else {
-                storeRecord(
-                    ExecCompletedRecord(
-                        entityId = execId,
-                        cmdId = cmdId
-                    )
-                )
-                (currentVersion(execId) as CompletedExec)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                check(currentVersion(execId) is StartedExec) { "$execId not started" }
+
+                storeRecord(ExecCompletedRecord(cmdId, execId))
+
+                (currentVersion(execId) as CompletedExec).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -172,15 +155,11 @@ class SqliteExecRepository(
             if (commandAlreadyApplied(cmdId, execId)) {
                 versionOf(execId, cmdId) as FailedExec
             } else {
-                storeRecord(
-                    ExecFailedRecord(
-                        entityId = execId,
-                        cmdId = cmdId,
-                        cause = cmd.cause
-                    )
-                )
-                (currentVersion(execId) as FailedExec)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                check(currentVersion(execId) is StartedExec) { "$execId not started" }
+
+                storeRecord(ExecFailedRecord(cmdId, execId, cmd.cause))
+
+                (currentVersion(execId) as FailedExec).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -190,7 +169,11 @@ class SqliteExecRepository(
     }
 
     override fun list(query: ExecQuery): List<Exec> {
-        return ProjectionCurrent.list(connection, query.afterId, query.limit)
+        return ProjectionCurrent.list(connection, query)
+    }
+
+    override fun count(query: ExecQuery): ULong {
+        return ProjectionCurrent.count(connection, query)
     }
 
 }

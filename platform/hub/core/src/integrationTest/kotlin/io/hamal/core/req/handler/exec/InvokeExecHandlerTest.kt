@@ -34,7 +34,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list(ExecQuery()).also {
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -79,7 +79,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list(ExecQuery()).also {
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -140,7 +140,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list(ExecQuery()).also {
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -183,7 +183,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
         )
         testInstance(submittedFixedRateInvocationReq)
 
-        execQueryRepository.list(ExecQuery()).also {
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -211,7 +211,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     fun `Tries to invoke exec but func does not exists`() {
         val exception = assertThrows<NoSuchElementException> { testInstance(submittedFixedRateInvocationReq) }
         assertThat(exception.message, equalTo("Func not found"))
-        execQueryRepository.list(ExecQuery()).also {
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
             assertThat(it, empty())
         }
     }

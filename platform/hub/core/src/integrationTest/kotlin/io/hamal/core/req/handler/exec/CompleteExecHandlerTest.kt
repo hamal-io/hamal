@@ -78,7 +78,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyCompleted() {
-        execQueryRepository.list(ExecQuery()).also { execs ->
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 require(this is io.hamal.repository.api.CompletedExec)
@@ -89,7 +89,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoCompletedExecExists() {
-        execQueryRepository.list(ExecQuery()).also { execs ->
+        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(status, not(equalTo(Completed)))

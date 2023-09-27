@@ -56,7 +56,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
 
     override fun lastRecordOf(id: ID): RECORD {
         return recordCache.list(this, id).lastOrNull()
-            ?: throw IllegalArgumentException("No records found for $id")
+            ?: throw NoSuchElementException("${recordClass.simpleName!!.replace("Record", "")} not found")
     }
 
     override fun commandAlreadyApplied(cmdId: CmdId, id: ID): Boolean {

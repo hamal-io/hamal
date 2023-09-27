@@ -3,14 +3,12 @@ package io.hamal.repository.fixture
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.AccountRepository
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.api.NamespaceRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.SqliteAuthRepository
 import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
+import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import java.nio.file.Files.createTempDirectory
@@ -38,6 +36,10 @@ object SqliteFixture : BaseTestFixture {
 
         BrokerTopicsRepository::class -> SqliteBrokerTopicsRepository(
             SqliteBrokerTopics(createTempDirectory("sqlite_broker_topics_test"))
+        ) as REPO
+
+        ExecRepository::class -> SqliteExecRepository(
+            SqliteExecRepository.Config(createTempDirectory("sqlite_exec_test"))
         ) as REPO
 
         FuncRepository::class -> SqliteFuncRepository(

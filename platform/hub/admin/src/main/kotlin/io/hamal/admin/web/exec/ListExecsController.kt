@@ -22,8 +22,8 @@ internal class ListExecsController(private val listExec: ListExecsPort) {
         return listExec(
             ExecQueryRepository.ExecQuery(
                 afterId = afterId,
-                limit = limit
-                // group id
+                limit = limit,
+                groupIds = groupIds
             )
         ) { execs ->
             ResponseEntity.ok(
