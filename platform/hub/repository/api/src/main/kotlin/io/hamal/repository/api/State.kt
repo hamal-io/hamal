@@ -7,9 +7,8 @@ import io.hamal.lib.domain.State
 
 interface StateRepository : StateCmdRepository, StateQueryRepository
 
-interface StateCmdRepository {
+interface StateCmdRepository : CmdRepository {
     fun set(cmdId: CmdId, correlatedState: CorrelatedState)
-    fun clear()
 }
 
 interface StateQueryRepository {

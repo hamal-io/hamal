@@ -8,6 +8,7 @@ import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryReqRepository
+import io.hamal.repository.memory.MemoryStateRepository
 import io.hamal.repository.memory.log.*
 import io.hamal.repository.memory.record.*
 import kotlin.reflect.KClass
@@ -26,6 +27,7 @@ object MemoryFixture : BaseTestFixture {
         GroupRepository::class -> MemoryGroupRepository() as REPO
         NamespaceRepository::class -> MemoryNamespaceRepository() as REPO
         ReqRepository::class -> MemoryReqRepository() as REPO
+        StateRepository::class -> MemoryStateRepository() as REPO
         SegmentRepository::class -> MemorySegmentRepository(MemorySegment(Segment.Id(2810), TopicId(1506))) as REPO
         TopicRepository::class -> MemoryTopicRepository(Topic(TopicId(23), GroupId(1), TopicName("test-topic"))) as REPO
         else -> TODO()

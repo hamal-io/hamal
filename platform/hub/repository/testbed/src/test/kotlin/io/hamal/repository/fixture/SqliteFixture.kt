@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.SqliteAuthRepository
+import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
@@ -57,6 +58,11 @@ object SqliteFixture : BaseTestFixture {
                     TopicId(1506),
                     createTempDirectory("sqlite_topic_test")
                 )
+            ) as REPO
+
+        StateRepository::class ->
+            SqliteStateRepository(
+                SqliteStateRepository.Config(createTempDirectory("sqlite_state_test"))
             ) as REPO
 
         TopicRepository::class -> SqliteTopicRepository(
