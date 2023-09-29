@@ -21,11 +21,9 @@ data class Group(
 
 interface GroupRepository : GroupCmdRepository, GroupQueryRepository
 
-interface GroupCmdRepository {
+interface GroupCmdRepository : CmdRepository {
 
     fun create(cmd: CreateCmd): Group
-
-    fun clear()
 
     data class CreateCmd(
         val id: CmdId,
@@ -38,11 +36,19 @@ interface GroupCmdRepository {
 interface GroupQueryRepository {
     fun get(groupId: GroupId) = find(groupId) ?: throw NoSuchElementException("Group not found")
     fun find(groupId: GroupId): Group?
+    fun list(groupIds: List<GroupId>): List<Group> = list(
+        GroupQuery(
+            limit = Limit.all,
+            groupIds = groupIds,
+        )
+    )
+
     fun list(query: GroupQuery): List<Group>
-    fun list(groupIds: List<GroupId>): List<Group> = groupIds.map(::get)
+    fun count(query: GroupQuery): ULong
     data class GroupQuery(
         var afterId: GroupId = GroupId(SnowflakeId(Long.MAX_VALUE)),
-        var limit: Limit = Limit(1)
+        var limit: Limit = Limit(1),
+        var groupIds: List<GroupId>
     )
 }
 
