@@ -8,26 +8,28 @@ import kotlinx.serialization.Serializable
 
 interface ExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository
 
-interface ExecLogCmdRepository {
-    fun append(cmd: LogCmd): ExecLog
-    fun clear()
-    data class LogCmd(
-        val id: ExecLogId,
+interface ExecLogCmdRepository : CmdRepository {
+    fun append(cmd: AppendCmd): ExecLog
+    data class AppendCmd(
+        val execLogId: ExecLogId,
         val level: ExecLogLevel,
         val execId: ExecId,
+        val groupId: GroupId,
         val message: ExecLogMessage,
         val localAt: LocalAt
     )
 }
 
 interface ExecLogQueryRepository {
-    fun list(execId: ExecId, query: ExecLogQuery): List<ExecLog>
-
     fun list(query: ExecLogQuery): List<ExecLog>
+    fun count(query: ExecLogQuery): ULong
 
     data class ExecLogQuery(
         var afterId: ExecLogId = ExecLogId(SnowflakeId(Long.MAX_VALUE)),
-        var limit: Limit = Limit(1)
+        var limit: Limit = Limit(1),
+        var execLogIds: List<ExecLogId> = listOf(),
+        var execIds: List<ExecId> = listOf(),
+        var groupIds: List<GroupId>
     )
 }
 
@@ -35,6 +37,7 @@ interface ExecLogQueryRepository {
 data class ExecLog(
     val id: ExecLogId,
     val execId: ExecId,
+    val groupId: GroupId,
     val level: ExecLogLevel,
     val message: ExecLogMessage,
     val localAt: LocalAt,

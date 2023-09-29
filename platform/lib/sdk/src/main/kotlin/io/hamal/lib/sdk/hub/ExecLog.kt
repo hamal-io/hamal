@@ -4,7 +4,7 @@ import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.request.AppendExecLogCmd
+import io.hamal.request.AppendExecLogReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,7 +12,7 @@ data class HubAppendExecLogCmd(
     override val level: ExecLogLevel,
     override val message: ExecLogMessage,
     override val localAt: LocalAt
-) : AppendExecLogCmd
+) : AppendExecLogReq
 
 
 @Serializable

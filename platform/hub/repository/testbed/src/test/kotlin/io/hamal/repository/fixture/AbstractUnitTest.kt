@@ -47,6 +47,10 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
+        ExecLogRepository::class to listOf(
+            MemoryFixture
+//FIXME     SqliteFixture
+        ),
         ExecRepository::class to listOf(
             MemoryFixture,
             SqliteFixture

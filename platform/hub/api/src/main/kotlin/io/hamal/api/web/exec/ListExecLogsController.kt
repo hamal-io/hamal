@@ -24,9 +24,11 @@ internal class ListExecLogsController(
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<HubExcLogList> {
         return execLogs(
-            execId, ExecLogQuery(
+            ExecLogQuery(
                 afterId = afterId,
-                limit = limit
+                limit = limit,
+                execIds = listOf(execId),
+                groupIds = listOf()
             )
         ) { logs ->
             ResponseEntity.ok(

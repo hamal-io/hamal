@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.MemoryAuthRepository
+import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.log.*
 import io.hamal.repository.memory.record.MemoryAccountRepository
 import io.hamal.repository.memory.record.MemoryExecRepository
@@ -21,6 +22,7 @@ object MemoryFixture : BaseTestFixture {
         BrokerRepository::class -> MemoryBrokerRepository() as REPO
         BrokerConsumersRepository::class -> MemoryBrokerConsumersRepository() as REPO
         BrokerTopicsRepository::class -> MemoryBrokerTopicsRepository() as REPO
+        ExecLogRepository::class -> MemoryExecLogRepository() as REPO
         ExecRepository::class -> MemoryExecRepository() as REPO
         FuncRepository::class -> MemoryFuncRepository() as REPO
         NamespaceRepository::class -> MemoryNamespaceRepository() as REPO
