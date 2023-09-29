@@ -2,13 +2,15 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.*
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.kua.type.StringType
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CodeValue {
-    val code: String = ""
+@SerialName("CodeValue")
+data class CodeValue(override val value: String) : ValueObject<String> {
+    constructor(str: StringType) : this(str.value)
 }
 
 @Serializable(with = CodeId.Serializer::class)
@@ -63,9 +65,9 @@ interface CodeQueryRepository {
     fun count(query: CodeQuery): ULong
 
     data class CodeQuery(
-        var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
+        var afterId: CodeId = CodeId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var funcIds: List<CodeId> = listOf(),
+        var codeIds: List<CodeId> = listOf(),
         var groupIds: List<GroupId>
     )
 
