@@ -30,9 +30,9 @@ class ListTriggersController(private val listTriggers: ListTriggersPort) {
         return listTriggers(
             TriggerQuery(
                 afterId = triggerId,
-                types = TriggerType.values().toSet(),
+                types = TriggerType.values().toList(),
                 limit = limit,
-                groupIds = setOf(groupId)
+                groupIds = listOf(groupId)
             )
         ) { triggers, funcs, namespaces, topics ->
             ResponseEntity.ok(

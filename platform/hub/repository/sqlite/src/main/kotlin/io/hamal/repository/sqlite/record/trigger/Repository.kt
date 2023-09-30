@@ -112,4 +112,8 @@ class SqliteTriggerRepository(
     override fun list(query: TriggerQuery): List<Trigger> {
         return ProjectionCurrent.list(connection, query)
     }
+
+    override fun count(query: TriggerQuery): ULong {
+        return ProjectionCurrent.count(connection, query)
+    }
 }

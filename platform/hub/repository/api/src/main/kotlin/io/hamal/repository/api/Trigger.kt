@@ -11,10 +11,10 @@ import kotlin.time.Duration
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
 
-interface TriggerCmdRepository {
+interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateFixedRateCmd): FixedRateTrigger
     fun create(cmd: CreateEventCmd): EventTrigger
-    fun clear()
+
     data class CreateFixedRateCmd(
         val id: CmdId,
         val triggerId: TriggerId,
@@ -45,14 +45,15 @@ interface TriggerQueryRepository {
     fun find(triggerId: TriggerId): Trigger?
 
     fun list(query: TriggerQuery): List<Trigger>
+    fun count(query: TriggerQuery): ULong
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-        var types: Set<TriggerType> = TriggerType.values().toSet(),
+        var types: List<TriggerType> = TriggerType.values().toList(),
         var limit: Limit = Limit(1),
-        val groupIds: Set<GroupId>
+        var triggerIds: List<TriggerId> = listOf(),
+        var groupIds: List<GroupId>
     )
-
 }
 
 

@@ -100,6 +100,8 @@ internal object Assembler {
                 status = r.status,
                 token = r.token
             )
+
+            is TestSubmittedReq -> TODO()
         }
     }
 }

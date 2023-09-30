@@ -30,6 +30,7 @@ object MemoryFixture : BaseTestFixture {
         StateRepository::class -> MemoryStateRepository() as REPO
         SegmentRepository::class -> MemorySegmentRepository(MemorySegment(Segment.Id(2810), TopicId(1506))) as REPO
         TopicRepository::class -> MemoryTopicRepository(Topic(TopicId(23), GroupId(1), TopicName("test-topic"))) as REPO
+        TriggerRepository::class -> MemoryTriggerRepository() as REPO
         else -> TODO()
     }
 }

@@ -73,7 +73,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleFixedRateTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = setOf(FixedRate), groupIds = setOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(FixedRate), groupIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -88,7 +88,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = setOf(Event), groupIds = setOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), groupIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -103,7 +103,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(groupIds = setOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(groupIds = listOf())).also { triggers ->
             assertThat(triggers, empty())
         }
     }

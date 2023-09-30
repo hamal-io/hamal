@@ -103,7 +103,7 @@ open class SqliteRepositoryConfig {
     open fun triggerQueryRepository(): TriggerQueryRepository = triggerRepository()
 
     @Bean
-    open fun stateRepository() = SqliteStateRepository(path)
+    open fun stateRepository() = SqliteStateRepository(SqliteStateRepository.Config(path))
 
     @Bean
     open fun stateCmdRepository(): StateCmdRepository = stateRepository()

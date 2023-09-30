@@ -51,6 +51,8 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             WHERE
                 id < :afterId AND
                 ${unsafeInCriteria("type", query.types.map { it.value })}
+                ${query.ids()}
+                ${query.groupIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -65,16 +67,42 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         }
     }
 
+    fun count(
+        connection: Connection,
+        query: TriggerQueryRepository.TriggerQuery
+    ): ULong {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                current
+            WHERE
+                id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
+        """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+            }
+            map {
+                it.getLong("count").toULong()
+            }
+        } ?: 0UL
+    }
+
     override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id,type, data) 
+                    (id, group_id, type, data) 
                 VALUES
-                    (:id,:type, :data)
+                    (:id, :groupId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
+            set("groupId", obj.groupId)
             set(
                 "type", when (obj) {
                     is FixedRateTrigger -> TriggerType.FixedRate
@@ -90,6 +118,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
+                 group_id       INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
@@ -105,4 +134,19 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
     override fun invalidate() {
     }
 
+    private fun TriggerQueryRepository.TriggerQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun TriggerQueryRepository.TriggerQuery.ids(): String {
+        return if (triggerIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${triggerIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
 }

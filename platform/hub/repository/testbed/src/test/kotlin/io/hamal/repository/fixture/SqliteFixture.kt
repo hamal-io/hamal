@@ -12,6 +12,7 @@ import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
+import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
 
@@ -68,6 +69,10 @@ object SqliteFixture : BaseTestFixture {
         TopicRepository::class -> SqliteTopicRepository(
             Topic(TopicId(23), GroupId(1), TopicName("test-topic")),
             createTempDirectory("sqlite_topic_test")
+        ) as REPO
+
+        TriggerRepository::class -> SqliteTriggerRepository(
+            SqliteTriggerRepository.Config(createTempDirectory("sqlite_trigger_test"))
         ) as REPO
 
         else -> TODO()
