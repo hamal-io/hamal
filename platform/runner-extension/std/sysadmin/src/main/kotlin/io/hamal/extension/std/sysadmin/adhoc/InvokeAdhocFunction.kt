@@ -1,6 +1,5 @@
 package io.hamal.extension.std.sysadmin.adhoc
 
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -21,7 +20,6 @@ class InvokeAdhocFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.adhoc(
-                ctx[GroupId::class],
                 AdminInvokeAdhocReq(
                     inputs = InvocationInputs(),
                     code = CodeType(arg1.getString("code"))

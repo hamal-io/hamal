@@ -16,9 +16,9 @@ class SysAdminExtensionFactory(
         return ScriptExtension(
             name = "sysadmin",
             internals = mapOf(
-                "await" to io.hamal.extension.std.sysadmin.AwaitFunction(httpTemplate),
-                "await_completed" to io.hamal.extension.std.sysadmin.AwaitCompletedFunction(httpTemplate),
-                "await_failed" to io.hamal.extension.std.sysadmin.AwaitFailedFunction(httpTemplate),
+                "await" to AwaitFunction(httpTemplate),
+                "await_completed" to AwaitCompletedFunction(httpTemplate),
+                "await_failed" to AwaitFailedFunction(httpTemplate),
 
                 "adhoc" to InvokeAdhocFunction(sdk),
 

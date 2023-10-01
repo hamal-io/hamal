@@ -7,9 +7,9 @@ err, res = admin.adhoc({
     ]]
 })
 
---assert(err == nil)
+assert(err == nil)
 
---admin.await_completed(res)
+admin.await_completed(res)
 --exec_id = res.id
 --
 ---- Remember: Each test is an adhoc invocation
