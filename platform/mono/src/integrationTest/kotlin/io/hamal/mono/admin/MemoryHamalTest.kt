@@ -5,12 +5,9 @@ import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -28,9 +25,7 @@ import java.nio.file.Paths
         RunnerConfig::class
     ]
 )
-@DirtiesContext
 @DisplayName("admin - memory")
-@ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "memory"])
 internal class MemoryAdminHamalTest : BaseAdminTest() {
     final override val adminSdk = rootAdminSdk(8052)

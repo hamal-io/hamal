@@ -54,7 +54,7 @@ abstract class BaseAdminTest {
 
     @TestFactory
     fun run(): List<DynamicTest> {
-        return collectFiles().map { testFile ->
+        return collectFiles().sorted().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 setupTestEnv()
 

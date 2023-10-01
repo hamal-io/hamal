@@ -64,11 +64,12 @@ abstract class BaseApiTest {
 
     @TestFactory
     fun run(): List<DynamicTest> {
-        return collectFiles().map { testFile ->
+        return collectFiles().sorted().map { testFile ->
             val testFileWithPath = "${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}"
             dynamicTest(testFileWithPath) {
-                log.info("Start test $testFileWithPath")
                 setupTestEnv()
+                
+                log.info("Start test $testFileWithPath")
 
                 val execReq = rootHubSdk.adhoc.invoke(
                     testGroup.id,
