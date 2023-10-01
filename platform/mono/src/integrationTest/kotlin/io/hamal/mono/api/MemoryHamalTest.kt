@@ -24,8 +24,8 @@ import java.nio.file.Paths
         "io.hamal.runner.api.host=http://localhost:8042",
         "io.hamal.runner.bridge.host=http://localhost:8042"
     ], classes = [
-        ApiConfig::class,
         CoreConfig::class,
+        ApiConfig::class,
         BridgeConfig::class,
         RunnerConfig::class
     ]

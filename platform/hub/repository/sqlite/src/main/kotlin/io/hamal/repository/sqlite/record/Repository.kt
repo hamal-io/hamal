@@ -65,24 +65,14 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     }
 
     fun <T> tx(block: SqliteRecordTransaction<ID, RECORD, OBJ>.() -> T): T {
-        return try {
-            connection.tx {
-                block(
-                    SqliteRecordTransaction(
-                        createDomainObject,
-                        recordClass,
-                        this,
-                    )
+        return connection.tx {
+            block(
+                SqliteRecordTransaction(
+                    createDomainObject,
+                    recordClass,
+                    this,
                 )
-            }
-        } catch (t: Throwable) {
-            /**
-             * Exception / errors during block execution lead to inconsistent data.
-             * 2 Options -  Make the Cache transactional or wipe all cache data
-             * As this should rarely happen --> simpler and cheaper execution for happy path
-             */
-            projections.forEach(SqliteProjection<ID, RECORD, OBJ>::invalidate)
-            throw t
+            )
         }
     }
 }

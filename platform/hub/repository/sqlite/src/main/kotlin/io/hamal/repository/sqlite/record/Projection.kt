@@ -10,5 +10,4 @@ interface SqliteProjection<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObjec
     fun upsert(tx: SqliteRecordTransaction<ID, RECORD, OBJ>, obj: OBJ)
     fun setupSchema(connection: Connection)
     fun clear(tx: Transaction)
-    fun invalidate()
 }

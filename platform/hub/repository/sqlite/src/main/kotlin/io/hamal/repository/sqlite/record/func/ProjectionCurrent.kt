@@ -114,9 +114,6 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
         tx.execute("""DELETE FROM current""")
     }
 
-    override fun invalidate() {
-    }
-
     private fun FuncQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""

@@ -16,7 +16,7 @@ import java.sql.DriverManager
 import java.time.Instant
 
 
-class NamedPreparedStatementIT {
+class NamedPreparedStatementTest {
     companion object {
         val connection: Connection = DriverManager.getConnection(
             "jdbc:sqlite:${Files.createTempDirectory("named-parameter-test")}/test.db"

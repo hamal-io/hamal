@@ -25,16 +25,15 @@ import java.nio.file.Paths
         "io.hamal.runner.admin.host=http://localhost:8043",
         "io.hamal.runner.bridge.host=http://localhost:8043"
     ], classes = [
-        ApiConfig::class,
         CoreConfig::class,
+        ApiConfig::class,
         BridgeConfig::class,
         RunnerConfig::class
     ]
 )
 @DirtiesContext
-@ExtendWith(SpringExtension::class)
-
 @DisplayName("api - sqlite")
+@ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "sqlite"])
 internal class SqliteApiHamalTest : BaseApiTest() {
     final override val log: Logger = logger(this::class)

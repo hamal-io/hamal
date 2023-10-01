@@ -68,6 +68,5 @@ internal object ProjectionUniqueName : SqliteProjection<NamespaceId, NamespaceRe
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM unique_name""")
     }
-
-    override fun invalidate() {}
+    
 }

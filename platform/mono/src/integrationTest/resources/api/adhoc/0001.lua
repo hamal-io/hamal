@@ -1,19 +1,19 @@
-admin = require('sys')
+sys = require('sys')
 
-err, res = admin.adhoc({
+err, res = sys.adhoc({
     inputs = {},
     code = [[
         print("inner code execution")
     ]]
 })
 
-admin.await_completed(res)
+sys.await_completed(res)
 
 assert(err == nil)
 exec_id = res.id
 
 -- Remember: Each test is an adhoc invocation
-err, execs = admin.exec.list()
+err, execs = sys.exec.list()
 assert(err == nil)
 assert(#execs == 2)
 

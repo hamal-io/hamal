@@ -1,13 +1,13 @@
-admin = require('sys')
+sys = require('sys')
 --
 ---- Remember: Each test is an adhoc invoked exec
-err, execs = admin.exec.list()
+err, execs = sys.exec.list()
 assert(err == nil)
 assert(#execs == 1)
 
 test_exec = execs[1]
 
-err, exec = admin.exec.get(test_exec.id)
+err, exec = sys.exec.get(test_exec.id)
 assert(err == nil)
 
 assert(exec.id == test_exec.id)

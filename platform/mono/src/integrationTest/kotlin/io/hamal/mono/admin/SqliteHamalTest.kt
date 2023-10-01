@@ -18,13 +18,13 @@ import java.nio.file.Paths
 @SpringBootTest(
     webEnvironment = DEFINED_PORT,
     properties = [
-        "server.port=8043",
-        "io.hamal.runner.admin.host=http://localhost:8043",
-        "io.hamal.runner.api.host=http://localhost:8043",
-        "io.hamal.runner.bridge.host=http://localhost:8043"
+        "server.port=8053",
+        "io.hamal.runner.admin.host=http://localhost:8053",
+        "io.hamal.runner.api.host=http://localhost:8053",
+        "io.hamal.runner.bridge.host=http://localhost:8053"
     ], classes = [
-        AdminConfig::class,
         CoreConfig::class,
+        AdminConfig::class,
         BridgeConfig::class,
         RunnerConfig::class
     ]
@@ -34,6 +34,6 @@ import java.nio.file.Paths
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "sqlite"])
 internal class SqliteAdminHamalTest : BaseAdminTest() {
-    final override val adminSdk = rootAdminSdk(8043)
+    final override val adminSdk = rootAdminSdk(8053)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 }

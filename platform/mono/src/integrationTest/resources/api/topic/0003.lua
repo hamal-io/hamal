@@ -1,5 +1,5 @@
-admin = require('sys')
+sys = require('sys')
 --
-err, _ = admin.topic.get('123123123')
+err, _ = sys.topic.get('123123123')
 assert(err.message == 'Topic not found')
 assert(err['message'] == 'Topic not found')

@@ -17,13 +17,13 @@ import java.nio.file.Paths
 @SpringBootTest(
     webEnvironment = DEFINED_PORT,
     properties = [
-        "server.port=8042",
-        "io.hamal.runner.admin.host=http://localhost:8042",
-        "io.hamal.runner.api.host=http://localhost:8042",
-        "io.hamal.runner.bridge.host=http://localhost:8042"
+        "server.port=8052",
+        "io.hamal.runner.admin.host=http://localhost:8052",
+        "io.hamal.runner.api.host=http://localhost:8052",
+        "io.hamal.runner.bridge.host=http://localhost:8052"
     ], classes = [
-        AdminConfig::class,
         CoreConfig::class,
+        AdminConfig::class,
         BridgeConfig::class,
         RunnerConfig::class
     ]
@@ -33,6 +33,6 @@ import java.nio.file.Paths
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles(value = ["test", "memory"])
 internal class MemoryAdminHamalTest : BaseAdminTest() {
-    final override val adminSdk = rootAdminSdk(8042)
+    final override val adminSdk = rootAdminSdk(8052)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 }

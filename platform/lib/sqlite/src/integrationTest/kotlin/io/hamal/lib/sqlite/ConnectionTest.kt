@@ -13,7 +13,7 @@ import java.nio.file.Files
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
-class DefaultConnectionIT {
+class ConnectionImplTest {
     @Nested
     inner class PrepareTest {
         @Test
@@ -34,7 +34,7 @@ class DefaultConnectionIT {
                 }
         }
 
-        private val testInstance = DefaultConnection(
+        private val testInstance = ConnectionImpl(
             PrepareTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
         )
@@ -167,7 +167,7 @@ class DefaultConnectionIT {
         }
 
 
-        private val testInstance = DefaultConnection(
+        private val testInstance = ConnectionImpl(
             ExecuteTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("execute")}/db.sqlite"
         )
@@ -287,7 +287,7 @@ class DefaultConnectionIT {
         }
 
         private val testInstance =
-            DefaultConnection(
+            ConnectionImpl(
                 ExecuteUpdateTest::class,
                 "jdbc:sqlite:${Files.createTempDirectory("execute-update")}/db.sqlite"
             )
@@ -378,7 +378,7 @@ class DefaultConnectionIT {
             assertThat(result, equalTo(listOf(BooleanResult(true))))
         }
 
-        private val testInstance = DefaultConnection(
+        private val testInstance = ConnectionImpl(
             ExecuteQueryTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("execute-query")}/db.sqlite"
         )
@@ -470,7 +470,7 @@ class DefaultConnectionIT {
             assertThat(count, equalTo(listOf(1)))
         }
 
-        private val testInstance = DefaultConnection(
+        private val testInstance = ConnectionImpl(
             TxTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("tx")}/db.sqlite"
         )
@@ -515,7 +515,7 @@ class DefaultConnectionIT {
             assertTrue(testInstance.isClosed)
         }
 
-        private val testInstance = DefaultConnection(
+        private val testInstance = ConnectionImpl(
             CloseTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("connection")}/db.sqlite"
         )

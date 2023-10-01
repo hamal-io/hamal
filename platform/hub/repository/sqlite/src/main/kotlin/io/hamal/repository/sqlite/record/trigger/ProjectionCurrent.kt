@@ -131,9 +131,6 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         tx.execute("""DELETE FROM current""")
     }
 
-    override fun invalidate() {
-    }
-
     private fun TriggerQueryRepository.TriggerQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""

@@ -110,9 +110,6 @@ internal object ProjectionCurrent : SqliteProjection<AccountId, AccountRecord, A
         tx.execute("""DELETE FROM current""")
     }
 
-    override fun invalidate() {
-    }
-
     private fun AccountQuery.ids(): String {
         return if (accountIds.isEmpty()) {
             ""

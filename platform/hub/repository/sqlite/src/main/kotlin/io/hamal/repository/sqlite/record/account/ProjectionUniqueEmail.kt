@@ -50,5 +50,4 @@ internal object ProjectionUniqueEmail : SqliteProjection<AccountId, AccountRecor
         tx.execute("""DELETE FROM unique_email""")
     }
 
-    override fun invalidate() {}
 }
