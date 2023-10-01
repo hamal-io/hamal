@@ -1,10 +1,9 @@
 package io.hamal.mono.admin
 
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.AdminSdk
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.temporal.ChronoUnit.DAYS
 import kotlin.io.path.name
 
 abstract class BaseAdminTest {
@@ -54,13 +52,6 @@ abstract class BaseAdminTest {
     @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
-    @Autowired
-    lateinit var generateDomainId: GenerateDomainId
-
-    private lateinit var testAdminAccount: Account
-    private lateinit var testAdminAuthToken: AuthToken
-    private lateinit var testAdminGroup: Group
-
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
@@ -68,7 +59,6 @@ abstract class BaseAdminTest {
                 setupTestEnv()
 
                 val execReq = adminSdk.adhoc.invoke(
-                    testAdminGroup.id,
                     AdminInvokeAdhocReq(
                         InvocationInputs(),
                         CodeType(String(Files.readAllBytes(testFile)))
@@ -108,46 +98,6 @@ abstract class BaseAdminTest {
         groupCmdRepository.clear()
         namespaceCmdRepository.clear()
         triggerCmdRepository.clear()
-
-        testAdminAccount = accountCmdRepository.create(
-            AccountCmdRepository.CreateCmd(
-                id = CmdId(2),
-                accountId = generateDomainId(::AccountId),
-                accountType = Root,
-                name = AccountName("test-root"),
-                email = AccountEmail("test-root@hamal.io"),
-                salt = PasswordSalt("test-salt")
-            )
-        )
-
-        testAdminAuthToken = (authCmdRepository.create(
-            AuthCmdRepository.CreateTokenAuthCmd(
-                id = CmdId(3),
-                authId = generateDomainId(::AuthId),
-                accountId = testAdminAccount.id,
-                token = AuthToken("test-root-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
-            )
-        ) as TokenAuth).token
-
-        testAdminGroup = groupCmdRepository.create(
-            GroupCmdRepository.CreateCmd(
-                id = CmdId(4),
-                groupId = generateDomainId(::GroupId),
-                name = GroupName("test-group"),
-                creatorId = testAdminAccount.id
-            )
-        )
-
-        namespaceCmdRepository.create(
-            NamespaceCmdRepository.CreateCmd(
-                id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
-                groupId = testAdminGroup.id,
-                name = NamespaceName("hamal"),
-                inputs = NamespaceInputs()
-            )
-        )
     }
 
     abstract val adminSdk: AdminSdk
@@ -157,10 +107,7 @@ abstract class BaseAdminTest {
 
     fun rootAdminSdk(serverPort: Number) = DefaultAdminSdk(
         HttpTemplate(
-            baseUrl = "http://localhost:$serverPort",
-            headerFactory = {
-                set("x-hamal-token", "test-root-token")
-            }
+            baseUrl = "http://localhost:$serverPort"
         )
     )
 }

@@ -1,6 +1,6 @@
-sys = require('sys')
+admin = require('sys')
 
-err, namespace_req = sys.namespace.create({
+err, namespace_req = admin.namespace.create({
     name = 'empty-test-namespace',
     inputs = {},
     code = [[4 + 2]]
@@ -12,9 +12,9 @@ assert(namespace_req.req_id ~= nil)
 assert(namespace_req.status == 'Submitted')
 assert(namespace_req.id ~= nil)
 
-sys.await_completed(namespace_req)
+admin.await_completed(namespace_req)
 
-err, namespace = sys.namespace.get(namespace_req.id)
+err, namespace = admin.namespace.get(namespace_req.id)
 assert(err == nil)
 
 assert(namespace.id == namespace_req.id)

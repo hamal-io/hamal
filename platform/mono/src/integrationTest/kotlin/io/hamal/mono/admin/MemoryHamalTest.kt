@@ -16,8 +16,12 @@ import java.nio.file.Paths
 
 @SpringBootTest(
     webEnvironment = DEFINED_PORT,
-    properties = ["server.port=8042", "io.hamal.runner.host=http://localhost:8042"],
-    classes = [
+    properties = [
+        "server.port=8042",
+        "io.hamal.runner.admin.host=http://localhost:8042",
+        "io.hamal.runner.api.host=http://localhost:8042",
+        "io.hamal.runner.bridge.host=http://localhost:8042"
+    ], classes = [
         AdminConfig::class,
         CoreConfig::class,
         BridgeConfig::class,

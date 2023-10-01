@@ -4,6 +4,7 @@ import io.hamal.extension.net.http.HttpExtensionFactory
 import io.hamal.extension.std.log.DecimalExtensionFactory
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
+import io.hamal.extension.std.sysadmin.SysAdminExtensionFactory
 import io.hamal.extension.web3.eth.EthExtensionFactory
 import io.hamal.extension.web3.hml.HmlExtensionFactory
 import io.hamal.lib.domain.vo.ExecToken
@@ -22,8 +23,12 @@ import org.springframework.context.annotation.Configuration
 class SandboxConfig {
     @Bean
     fun sandboxFactory(
-        @Value("\${io.hamal.runner.host}") host: String
-    ): SandboxFactory = RunnerSandboxFactory(host)
+        @Value("\${io.hamal.runner.admin.host}") adminHost: String,
+        @Value("\${io.hamal.runner.api.host}") apiHost: String,
+        @Value("\${io.hamal.runner.bridge.host}") bridgeHost: String
+    ): SandboxFactory = RunnerSandboxFactory(
+        adminHost, apiHost, bridgeHost
+    )
 }
 
 interface SandboxFactory {
@@ -31,16 +36,17 @@ interface SandboxFactory {
 }
 
 class RunnerSandboxFactory(
-    val instanceHost: String
+    private val adminHost: String,
+    private val apiHost: String,
+    private val bridgeHost: String
+
 ) : SandboxFactory {
     override fun create(ctx: SandboxContext): Sandbox {
         NativeLoader.load(Jar)
 
         val execToken = ctx[ExecToken::class]
-        println(execToken)
-
         val template = HttpTemplate(
-            baseUrl = instanceHost,
+            baseUrl = apiHost,
             headerFactory = {
                 set("x-runner-exec-token", execToken.value)
             }
@@ -51,7 +57,8 @@ class RunnerSandboxFactory(
             DecimalExtensionFactory,
             HttpExtensionFactory(),
             LogExtensionFactory(sdk.execLog),
-            SysExtensionFactory(template),
+            SysExtensionFactory(HttpTemplate(apiHost)),
+            SysAdminExtensionFactory(HttpTemplate(adminHost)),
             EthExtensionFactory(),
             HmlExtensionFactory()
         )

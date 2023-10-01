@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class HubConfig {
+class RunnerBridgeConfig {
     @Bean
     fun httpTemplate(
-        @Value("\${io.hamal.runner.host}") host: String
+        @Value("\${io.hamal.runner.bridge.host}") host: String
     ) = HttpTemplate(
         baseUrl = host,
         headerFactory = {
