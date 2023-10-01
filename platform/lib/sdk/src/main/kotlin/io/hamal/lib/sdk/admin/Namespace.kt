@@ -43,7 +43,7 @@ data class AdminNamespace(
 
 interface AdminNamespaceService {
     fun create(groupId: GroupId, createNamespaceReq: AdminCreateNamespaceReq): AdminSubmittedReqWithId
-    fun list(groupIds: List<GroupId>): List<AdminNamespaceList.Namespace>
+    fun list(groupIds: List<GroupId> = listOf()): List<AdminNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): AdminNamespace
 }
 

@@ -1,4 +1,4 @@
-package io.hamal.extension.std.sys.func
+package io.hamal.extension.std.sysadmin.namespace
 
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -8,10 +8,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.AdminSdk
 
 class GetNamespaceFunction(
-    private val sdk: HubSdk
+    private val sdk: AdminSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)

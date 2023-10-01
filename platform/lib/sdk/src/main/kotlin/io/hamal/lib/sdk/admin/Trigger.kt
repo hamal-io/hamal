@@ -123,7 +123,7 @@ class AdminEventTrigger(
 
 interface AdminTriggerService {
     fun create(req: AdminCreateTriggerReq): AdminSubmittedReqWithId
-    fun list(groupIds: List<GroupId>): List<AdminTriggerList.Trigger>
+    fun list(groupIds: List<GroupId> = listOf()): List<AdminTriggerList.Trigger>
     fun get(triggerId: TriggerId): AdminTrigger
 }
 

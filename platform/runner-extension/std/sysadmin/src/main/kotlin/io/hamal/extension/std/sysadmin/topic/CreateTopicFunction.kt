@@ -9,11 +9,11 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubCreateTopicReq
+import io.hamal.lib.sdk.AdminSdk
+import io.hamal.lib.sdk.admin.AdminCreateTopicReq
 
 class CreateTopicFunction(
-    private val sdk: HubSdk
+    private val sdk: AdminSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -22,7 +22,7 @@ class CreateTopicFunction(
         return try {
             val res = sdk.topic.create(
                 ctx[GroupId::class],
-                HubCreateTopicReq(
+                AdminCreateTopicReq(
                     name = TopicName(arg1.getString("name")),
                 )
             )

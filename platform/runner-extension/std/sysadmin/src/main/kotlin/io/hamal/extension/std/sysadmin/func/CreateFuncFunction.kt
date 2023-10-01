@@ -12,11 +12,11 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubCreateFuncReq
+import io.hamal.lib.sdk.AdminSdk
+import io.hamal.lib.sdk.admin.AdminCreateFuncReq
 
 class CreateFuncFunction(
-    private val sdk: HubSdk
+    private val sdk: AdminSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -31,7 +31,7 @@ class CreateFuncFunction(
 
             val res = sdk.func.create(
                 ctx[GroupId::class],
-                HubCreateFuncReq(
+                AdminCreateFuncReq(
                     namespaceId = namespaceId,
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),

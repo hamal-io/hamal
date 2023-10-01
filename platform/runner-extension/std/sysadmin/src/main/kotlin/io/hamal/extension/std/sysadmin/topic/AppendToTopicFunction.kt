@@ -9,10 +9,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.AdminSdk
 
 class AppendToTopicFunction(
-    private val sdk: HubSdk
+    private val sdk: AdminSdk
 ) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
     FunctionInput2Schema(StringType::class, MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)

@@ -10,12 +10,12 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubCreateTriggerReq
+import io.hamal.lib.sdk.AdminSdk
+import io.hamal.lib.sdk.admin.AdminCreateTriggerReq
 import kotlin.time.Duration
 
 class CreateTriggerFunction(
-    private val sdk: HubSdk
+    private val sdk: AdminSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -23,8 +23,7 @@ class CreateTriggerFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.trigger.create(
-                ctx[GroupId::class],
-                HubCreateTriggerReq(
+                AdminCreateTriggerReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                     name = TriggerName(arg1.getString("name")),

@@ -1,7 +1,6 @@
 package io.hamal.extension.std.sysadmin.topic
 
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -9,10 +8,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.AdminSdk
 
 class GetTopicFunction(
-    private val sdk: HubSdk
+    private val sdk: AdminSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)

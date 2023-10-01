@@ -54,7 +54,7 @@ data class AdminTopicList(
 interface AdminTopicService {
     fun append(topicId: TopicId, payload: TopicEntryPayload): AdminSubmittedReqWithId
     fun create(groupId: GroupId, req: AdminCreateTopicReq): AdminSubmittedReqWithId
-    fun list(groupIds: List<GroupId>): List<AdminTopicList.Topic>
+    fun list(groupIds: List<GroupId> = listOf()): List<AdminTopicList.Topic>
     fun entries(topicId: TopicId): List<AdminTopicEntryList.Entry>
     fun get(topicId: TopicId): AdminTopic
     fun resolve(groupId: GroupId, topicName: TopicName): TopicId

@@ -59,7 +59,7 @@ interface AdminExecService {
     fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
     fun fail(execId: ExecId, error: ErrorType)
 
-    fun list(groupIds: List<GroupId>): List<AdminExecList.Exec>
+    fun list(groupIds: List<GroupId> = listOf()): List<AdminExecList.Exec>
     fun get(execId: ExecId): AdminExec
 }
 

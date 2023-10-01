@@ -1,4 +1,4 @@
-package io.hamal.extension.std.sys.func
+package io.hamal.extension.std.sys.namespace
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In2Out
