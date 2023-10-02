@@ -34,7 +34,7 @@ interface CodeRepository : CodeCmdRepository, CodeQueryRepository
 
 interface CodeCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Code
-    fun update(): Code
+    fun update(codeId: CodeId, cmd: UpdateCmd): Code
 
     data class CreateCmd(
         val id: CmdId,
@@ -52,16 +52,15 @@ interface CodeCmdRepository : CmdRepository {
 interface CodeQueryRepository {
     fun get(codeId: CodeId) = find(codeId) ?: throw NoSuchElementException("Code not found")
     fun find(codeId: CodeId): Code?
-    fun list(): List<Code>
-
-    /*fun list(codeIds: List<CodeId>): List<Code> = list(
+    fun list(query: CodeQuery): List<Code>
+    fun list(codeIds: List<CodeId>): List<Code> = list(
         CodeQuery(
             limit = Limit.all,
             groupIds = listOf(),
             codeIds = codeIds,
         )
     )
-    */
+
     fun count(query: CodeQuery): ULong
 
     data class CodeQuery(

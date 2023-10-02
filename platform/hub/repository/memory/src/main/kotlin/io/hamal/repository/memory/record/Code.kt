@@ -16,11 +16,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
         TODO("Not yet implemented")
     }
 
-    override fun update(): Code {
-        TODO("Not yet implemented")
-    }
-
-    override fun clear() {
+    override fun update(codeId: CodeId, cmd: CodeCmdRepository.UpdateCmd): Code {
         TODO("Not yet implemented")
     }
 
@@ -32,7 +28,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
         TODO("Not yet implemented")
     }
 
-    override fun list(): List<Code> {
+    override fun list(query: CodeQueryRepository.CodeQuery): List<Code> {
         TODO("Not yet implemented")
     }
 

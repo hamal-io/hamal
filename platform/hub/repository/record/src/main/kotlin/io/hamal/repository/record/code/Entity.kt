@@ -11,7 +11,7 @@ import io.hamal.repository.record.RecordSequence
 
 
 
-class CodeEntity(
+data class CodeEntity(
     override val cmdId: CmdId,
     override val id: CodeId,
     val groupId: GroupId,
