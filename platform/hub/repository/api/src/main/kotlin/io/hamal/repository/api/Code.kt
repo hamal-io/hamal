@@ -47,6 +47,8 @@ interface CodeCmdRepository : CmdRepository {
         val id: CmdId,
         val code: CodeValue? = null,
     )
+
+
 }
 
 interface CodeQueryRepository {

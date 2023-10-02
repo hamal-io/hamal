@@ -40,7 +40,12 @@ data class CodeEntity(
     }
 
     override fun toDomainObject(): Code {
-        TODO("Not yet implemented")
+        return Code(
+            cmdId = cmdId,
+            id = id,
+            groupId = groupId,
+            code = code!!
+        )
     }
 }
 

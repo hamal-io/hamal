@@ -98,7 +98,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
     }
 
     override fun close() {
-        TODO("Not yet implemented")
+
     }
 
     override fun find(codeId: CodeId): Code? = CurrentCodeProjection.find(codeId)
