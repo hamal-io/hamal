@@ -1,5 +1,6 @@
 package io.hamal.core.config.repo
 
+import io.hamal.core.config.HubBasePath
 import io.hamal.repository.api.*
 import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
@@ -22,7 +23,9 @@ import kotlin.io.path.Path
 
 @Configuration
 @Profile("sqlite")
-open class SqliteRepositoryConfig {
+open class SqliteRepositoryConfig(
+    val hubBasePath: HubBasePath
+) {
 
     @Bean
     open fun hubEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("hub-event")))
@@ -123,5 +126,5 @@ open class SqliteRepositoryConfig {
     @Bean
     open fun metricRepository(): MetricRepository = MemoryMetricRepository()
 
-    private val path = Path("/tmp/hamal/hub")
+    private val path = Path(hubBasePath.value)
 }

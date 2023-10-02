@@ -9,6 +9,7 @@ import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DisplayName
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -21,14 +22,16 @@ import java.nio.file.Paths
         "io.hamal.runner.api.host=http://localhost:8042",
         "io.hamal.runner.bridge.host=http://localhost:8042"
     ], classes = [
+        ApiTestConfig::class,
         CoreConfig::class,
         ApiConfig::class,
         BridgeConfig::class,
         RunnerConfig::class
     ]
 )
+@DirtiesContext
 @DisplayName("api - memory")
-@ActiveProfiles(value = ["test", "memory"])
+@ActiveProfiles(value = ["test", "api", "memory"])
 internal class MemoryApiHamalTest : BaseApiTest() {
     final override val log: Logger = logger(this::class)
     final override val rootHubSdk = rootHubSdk(8042)

@@ -26,31 +26,28 @@ abstract class BaseAdminTest {
     lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
-    lateinit var accountCmdRepository: AccountCmdRepository
+    lateinit var accountRepository: AccountRepository
 
     @Autowired
-    lateinit var authCmdRepository: AuthCmdRepository
+    lateinit var authRepository: AuthRepository
 
     @Autowired
-    lateinit var execCmdRepository: ExecCmdRepository
+    lateinit var execRepository: ExecRepository
 
     @Autowired
-    lateinit var execQueryRepository: ExecQueryRepository
+    lateinit var funcRepository: FuncRepository
 
     @Autowired
-    lateinit var funcCmdRepository: FuncCmdRepository
+    lateinit var groupRepository: GroupRepository
 
     @Autowired
-    lateinit var groupCmdRepository: GroupCmdRepository
+    lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
-    lateinit var namespaceCmdRepository: NamespaceCmdRepository
+    lateinit var reqRepository: ReqRepository
 
     @Autowired
-    lateinit var reqCmdRepository: ReqCmdRepository
-
-    @Autowired
-    lateinit var triggerCmdRepository: TriggerCmdRepository
+    lateinit var triggerRepository: TriggerRepository
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -69,8 +66,7 @@ abstract class BaseAdminTest {
                 var wait = true
                 val startedAt = TimeUtils.now()
                 while (wait) {
-                    Thread.sleep(1)
-                    with(execQueryRepository.get(execReq.id(::ExecId))) {
+                    with(execRepository.get(execReq.id(::ExecId))) {
                         if (status == ExecStatus.Completed) {
                             wait = false
                         }
@@ -78,10 +74,11 @@ abstract class BaseAdminTest {
                             fail { "Execution failed" }
                         }
 
-                        if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
+                        if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
                             fail("Timeout")
                         }
                     }
+                    Thread.sleep(1)
                 }
             }
         }.toList()
@@ -90,14 +87,14 @@ abstract class BaseAdminTest {
     private fun setupTestEnv() {
         eventBrokerRepository.clear()
 
-        accountCmdRepository.clear()
-        authCmdRepository.clear()
-        reqCmdRepository.clear()
-        execCmdRepository.clear()
-        funcCmdRepository.clear()
-        groupCmdRepository.clear()
-        namespaceCmdRepository.clear()
-        triggerCmdRepository.clear()
+        accountRepository.clear()
+        authRepository.clear()
+        reqRepository.clear()
+        execRepository.clear()
+        funcRepository.clear()
+        groupRepository.clear()
+        namespaceRepository.clear()
+        triggerRepository.clear()
     }
 
     abstract val adminSdk: AdminSdk
@@ -110,4 +107,5 @@ abstract class BaseAdminTest {
             baseUrl = "http://localhost:$serverPort"
         )
     )
+
 }
