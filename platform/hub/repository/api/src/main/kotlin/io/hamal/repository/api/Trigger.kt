@@ -66,6 +66,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
     val namespaceId: NamespaceId
     val correlationId: CorrelationId?
     val inputs: TriggerInputs
+    val type: TriggerType
 }
 
 @Serializable
@@ -79,7 +80,9 @@ class FixedRateTrigger(
     override val inputs: TriggerInputs,
     val duration: Duration,
     override val correlationId: CorrelationId? = null
-) : Trigger
+) : Trigger {
+    override val type = TriggerType.FixedRate
+}
 
 @Serializable
 class EventTrigger(
@@ -92,4 +95,6 @@ class EventTrigger(
     override val inputs: TriggerInputs,
     val topicId: TopicId,
     override val correlationId: CorrelationId? = null
-) : Trigger
+) : Trigger {
+    override val type = TriggerType.Event
+}

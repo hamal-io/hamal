@@ -42,6 +42,9 @@ internal object CurrentTriggerProjection {
             .reversed()
             .asSequence()
             .filter {
+                if (query.types.isEmpty()) true else query.types.contains(it.type)
+            }
+            .filter {
                 if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
             }.dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
@@ -53,6 +56,9 @@ internal object CurrentTriggerProjection {
             .map { it.value }
             .reversed()
             .asSequence()
+            .filter {
+                if (query.types.isEmpty()) true else query.types.contains(it.type)
+            }
             .filter {
                 if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
             }.dropWhile { it.id >= query.afterId }

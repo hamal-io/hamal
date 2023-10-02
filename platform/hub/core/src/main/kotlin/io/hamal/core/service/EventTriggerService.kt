@@ -14,6 +14,7 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
@@ -42,7 +43,7 @@ internal class EventTriggerService(
         scheduledTasks.add(
             async.atFixedRate(1.milliseconds) {
                 triggerQueryRepository.list(
-                    TriggerQueryRepository.TriggerQuery(
+                    TriggerQuery(
                         afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
                         types = listOf(TriggerType.Event),
                         limit = Limit(10),

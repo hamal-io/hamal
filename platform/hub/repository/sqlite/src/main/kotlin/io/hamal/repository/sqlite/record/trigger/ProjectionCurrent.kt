@@ -4,11 +4,10 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.lib.sqlite.unsafeInCriteria
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.SqliteProjection
 import io.hamal.repository.sqlite.record.SqliteRecordTransaction
@@ -40,7 +39,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
 
     fun list(
         connection: Connection,
-        query: TriggerQueryRepository.TriggerQuery
+        query: TriggerQuery
     ): List<Trigger> {
         return connection.executeQuery<Trigger>(
             """
@@ -49,10 +48,10 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
              FROM
                 current
             WHERE
-                id < :afterId AND
-                ${unsafeInCriteria("type", query.types.map { it.value })}
+                id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.types()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -69,7 +68,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
 
     fun count(
         connection: Connection,
-        query: TriggerQueryRepository.TriggerQuery
+        query: TriggerQuery
     ): ULong {
         return connection.executeQueryOne(
             """
@@ -81,6 +80,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.types()}
         """.trimIndent()
         ) {
             query {
@@ -131,7 +131,15 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         tx.execute("""DELETE FROM current""")
     }
 
-    private fun TriggerQueryRepository.TriggerQuery.groupIds(): String {
+    private fun TriggerQuery.types(): String {
+        return if (types.isEmpty()) {
+            ""
+        } else {
+            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+        }
+    }
+
+    private fun TriggerQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""
         } else {
@@ -139,7 +147,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         }
     }
 
-    private fun TriggerQueryRepository.TriggerQuery.ids(): String {
+    private fun TriggerQuery.ids(): String {
         return if (triggerIds.isEmpty()) {
             ""
         } else {

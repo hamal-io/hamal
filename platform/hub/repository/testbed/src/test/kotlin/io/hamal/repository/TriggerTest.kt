@@ -1,6 +1,8 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -433,7 +435,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             val query = TriggerQuery(
                 groupIds = listOf(GroupId(5), GroupId(4)),
-                limit = io.hamal.lib.common.domain.Limit(10)
+                limit = Limit(10)
             )
 
             assertThat(count(query), equalTo(2UL))
@@ -455,6 +457,28 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
         }
 
+        @TestFactory
+        fun `With trigger types`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                types = listOf(TriggerType.Event),
+                groupIds = listOf(),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(2UL))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(4)))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(TriggerId(2)))
+            }
+        }
 
         @TestFactory
         fun `Limit`() = runWith(TriggerRepository::class) {
@@ -462,7 +486,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             val query = TriggerQuery(
                 groupIds = listOf(),
-                limit = io.hamal.lib.common.domain.Limit(3)
+                limit = Limit(3)
             )
 
             assertThat(count(query), equalTo(4UL))
@@ -477,7 +501,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             val query = TriggerQuery(
                 afterId = TriggerId(2),
                 groupIds = listOf(),
-                limit = io.hamal.lib.common.domain.Limit(1)
+                limit = Limit(1)
             )
 
             assertThat(count(query), equalTo(1UL))
