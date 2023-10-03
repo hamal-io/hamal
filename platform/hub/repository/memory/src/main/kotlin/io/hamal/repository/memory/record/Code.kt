@@ -1,7 +1,7 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.repository.api.*
-import io.hamal.repository.api.CodeQueryRepository.*
+import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeCreationRecord
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CodeUpdatedRecord
@@ -13,10 +13,11 @@ import kotlin.concurrent.withLock
 internal object CurrentCodeProjection {
     private val projection = mutableMapOf<CodeId, Code>()
     fun apply(code: Code) {
-        if (find(code.id) != null) {
-            throw RuntimeException("CodeId ${code.id} already exists")
+        if (projection.values.any { it.code == code.code }) {
+            throw RuntimeException("CodeValue already exists at: ${code.id}")
+        } else {
+            projection[code.id] = code
         }
-        projection[code.id] = code
     }
 
     fun find(codeId: CodeId): Code? = projection[codeId]
