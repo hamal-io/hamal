@@ -14,7 +14,7 @@ internal object CurrentCodeProjection {
     private val projection = mutableMapOf<CodeId, Code>()
     fun apply(code: Code) {
         if (find(code.id) != null) {
-            throw RuntimeException("${code.id} already exists")
+            throw RuntimeException("CodeId ${code.id} already exists")
         }
         projection[code.id] = code
     }

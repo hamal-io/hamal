@@ -2,7 +2,6 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
@@ -11,7 +10,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
-import kotlin.io.path.createTempDirectory
+import org.junit.jupiter.api.assertThrows
+import kotlin.RuntimeException
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -20,7 +20,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
     inner class CreateCodeTest {
 
         @TestFactory
-        fun `Creates Func`() = runWith(CodeRepository::class) {
+        fun `Creates Code`() = runWith(CodeRepository::class) {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
@@ -38,24 +38,36 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `code already exists`() = runWith(CodeRepository::class) {
-            createCode(
-                cmdId = CmdId(1234),
-                codeId = CodeId(5),
-                groupId = GroupId(6)
-            )
+        fun `Create codeId that already exists`() = runWith(CodeRepository::class) {
+            runWith(CodeRepository::class) {
+
+                createCode(
+                    cmdId = CmdId(1),
+                    codeId = CodeId(2),
+                    groupId = GroupId(3),
+                    //code = CodeValue("print(\"test\")")
+                )
+
+
+                val exception = assertThrows<RuntimeException> {
+                    create(
+                        CreateCmd(
+                            id = CmdId(2),
+                            codeId = CodeId(2),
+                            groupId = GroupId(3),
+                            code = CodeValue("print(\"test\")")
+                        )
+                    )
+                }
+
+                assertThat(
+                    exception.message,
+                    equalTo("CodeId 5 already exists")
+                )
+
+                verifyCount(2)
+            }
         }
-
-        val result = CodeCmdRepository.create(
-
-            CreateCmd(
-                id = CmdId(1234),
-                codeId = CodeId(6),
-                groupId = GroupId(6),
-                code = codeValue("print(\"test\")")
-            )
-            )
-        )
     }
 
     private fun CodeRepository.createCode(
