@@ -1,5 +1,6 @@
 import React from 'react'
 import {Button, Footer, Navbar} from 'flowbite-react'
+import Editor from "../../../component/editor";
 
 const l = {
     base: "block py-2 pr-4 pl-3 md:p-0 text-xl",
@@ -63,18 +64,21 @@ const HomePage: React.FC = () => (
                 <p>Simplest way to create Cloud Functions</p>
                 <p>No installation, no command-line tools.</p>
                 <p>Write code and deploy functions from the browser.</p>
+            </div>
 
-                <textarea
-                value={"log = require(\"log\")\n" +
-                    "log.info(\"hello world\")"}
-                >
-                </textarea>
+            <div className="flex flex-col items-center justify-center">
+            <Editor
+                code={`log = require('log')\nlog.info("That wasn't hard, was it?")`}
+                onChange={code => console.log("run me", code)}
+            />
 
                 <div className="flex flex-row ">
-                <Button>Test</Button>
-                <Button>Deploy</Button>
+                    <Button>Test</Button>
+                    <Button>Deploy</Button>
                 </div>
             </div>
+
+
         </main>
 
         <Footer container>
