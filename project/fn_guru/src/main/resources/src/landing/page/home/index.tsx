@@ -43,10 +43,10 @@ const HomePage: React.FC = () => (
 
             <Navbar.Toggle/>
             <Navbar.Collapse>
-                <Navbar.Link href="#" theme={l}>
+                <Navbar.Link href="/sign-in" theme={l}>
                     Login
                 </Navbar.Link>
-                <Navbar.Link href="#" active theme={{
+                <Navbar.Link href="/sign-up" active theme={{
                     base: "px-2 py-2 text-2xl",
                     active: {
                         on: "bg-green-700 text-white rounded",
