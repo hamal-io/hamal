@@ -71,7 +71,7 @@ const EditorOptions = {
 }
 
 const Editor = (props: EditorProps) => {
-    return <div>
+    return (
         <MonacoEditor
             theme={"Github"}
             height="55vh"
@@ -80,7 +80,7 @@ const Editor = (props: EditorProps) => {
             options={EditorOptions}
             onChange={props.onChange}
         />
-    </div>;
+    );
 }
 
 export default Editor;
