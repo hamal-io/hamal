@@ -3,15 +3,15 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.kua.type.CodeType
-import io.hamal.repository.api.*
+import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
+import io.hamal.repository.api.CodeId
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
+import io.hamal.repository.api.CodeRepository
+import io.hamal.repository.api.CodeValue
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Disabled
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -40,9 +40,8 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             }
         }
 
-        @Disabled
         @TestFactory
-        fun `Create codeValue that already exists`() = runWith(CodeRepository::class) {
+        fun `Creates code duplicate`() = runWith(CodeRepository::class) {
             runWith(CodeRepository::class) {
 
                 createCode(
@@ -51,25 +50,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     codeValue = CodeValue("40 + 2")
                 )
 
-
-                val exception = assertThrows<RuntimeException> {
-                    create(
-                        CreateCmd(
-                            id = CmdId(3),
-                            codeId = CodeId(4),
-                            groupId = GroupId(1),
-                            code = CodeValue("40 + 2")
-                        )
-                    )
-                }
-
-                //always passes
-                assertThat(
-                    exception.message,
-                    equalTo("CodeValue already exist at: CodeId(1)")
+                createCode(
+                    codeId = CodeId(2),
+                    groupId = GroupId(1),
+                    codeValue = CodeValue("40 + 2")
                 )
 
-                verifyCount(1)
+                assertThat(get(CodeId(1)).code, equalTo(CodeValue("40 + 2")))
+                assertThat(get(CodeId(2)).code, equalTo(CodeValue("40 + 2")))
             }
         }
     }
@@ -99,37 +87,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             }
 
             verifyCount(1)
-        }
-
-        @TestFactory
-        fun `Tries to update with same code`() = runWith(CodeRepository::class) {
-            createCode(
-                codeId = CodeId(1),
-                groupId = GroupId(1),
-                codeValue = CodeValue("8 + 8")
-            )
-
-            createCode(
-                codeId = CodeId(2),
-                groupId = GroupId(1),
-                codeValue = CodeValue("10 + 10")
-            )
-
-            val exception = assertThrows<RuntimeException> {
-                update(
-                    CodeId(2),
-                    CodeCmdRepository.UpdateCmd(
-                        CmdId(3),
-                        CodeValue("8 + 8")
-                    )
-                )
-            }
-
-
-            //assertThat(exception.message, equalTo("CodeValue already exists at id: CodeId(1)"))
-            assertThat(get(CodeId(2)).code, equalTo(CodeValue("10 + 10")))
-            verifyCount(2)
-
         }
     }
 
@@ -221,7 +178,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             )
 
             val result = find(CodeId(111111))
-            assertThat(result, Matchers.nullValue())
+            assertThat(result, nullValue())
         }
     }
 
@@ -232,7 +189,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             setup()
 
             val result = list(listOf(CodeId(111111), CodeId(3)))
-            assertThat(result, Matchers.hasSize(1))
+            assertThat(result, hasSize(1))
 
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(3)))
@@ -252,7 +209,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             assertThat(count(query), equalTo(2UL))
             val result = list(query)
-            assertThat(result, Matchers.hasSize(2))
+            assertThat(result, hasSize(2))
 
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(4)))
@@ -302,7 +259,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             assertThat(count(query), equalTo(4UL))
             val result = list(query)
-            assertThat(result, Matchers.hasSize(3))
+            assertThat(result, hasSize(3))
         }
 
         @TestFactory
@@ -317,7 +274,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             assertThat(count(query), equalTo(1UL))
             val result = list(query)
-            assertThat(result, Matchers.hasSize(1))
+            assertThat(result, hasSize(1))
 
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(1)))
