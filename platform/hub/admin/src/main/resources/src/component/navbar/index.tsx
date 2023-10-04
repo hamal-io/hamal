@@ -44,14 +44,23 @@ export default function () {
                 <Navbar.Link onClick={_ => navigate("/adhoc", {replace: true})} theme={l}>
                     Adhoc
                 </Navbar.Link>
+                <Navbar.Link onClick={_ => navigate("/executions", {replace: true})} theme={l}>
+                    Execution
+                </Navbar.Link>
                 <Navbar.Link onClick={_ => navigate("/logs", {replace: true})} theme={l}>
                     Logs
                 </Navbar.Link>
                 <Navbar.Link onClick={_ => navigate("/functions", {replace: true})} theme={l}>
                     Function
                 </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/trigger", {replace: true})} theme={l}>
+                <Navbar.Link onClick={_ => navigate("/triggers", {replace: true})} theme={l}>
                     Trigger
+                </Navbar.Link>
+                <Navbar.Link onClick={_ => navigate("/groups", {replace: true})} theme={l}>
+                    Group
+                </Navbar.Link>
+                <Navbar.Link onClick={_ => navigate("/accounts", {replace: true})} theme={l}>
+                    Account
                 </Navbar.Link>
             </Navbar.Collapse>
         </Navbar>

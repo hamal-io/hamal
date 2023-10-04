@@ -1,17 +1,21 @@
-import React, {useState} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import Theme from "./theme.tsx";
-import {Button, Flowbite} from 'flowbite-react'
+import {Flowbite} from 'flowbite-react'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import DashboardPage from "./page/dashboard";
-import SignInPage from "./page/sign-in";
 import AdhocPage from "./page/adhoc";
 import Navbar from "./component/navbar";
 
 import Footer from "./component/footer";
 import FuncListPage from "./page/func-list";
+import LogListPage from "./page/log-list";
+import TriggerListPage from "./page/trigger-list";
+import ExecListPage from "./page/exec-list";
+import AccountListPage from "./page/account-list";
+import GroupListPage from "./page/group-list";
 
 const DefaultPage: React.FC<DefaultPageProps> = (props) => {
     return (
@@ -27,6 +31,10 @@ const DefaultPage: React.FC<DefaultPageProps> = (props) => {
 
 const router = createBrowserRouter([
     {
+        path: "/accounts",
+        element: <DefaultPage><AccountListPage/></DefaultPage>
+    },
+    {
         path: "/",
         element: <DefaultPage><DashboardPage/></DefaultPage>
     },
@@ -35,12 +43,24 @@ const router = createBrowserRouter([
         element: <DefaultPage><AdhocPage/></DefaultPage>
     },
     {
+        path: "/executions",
+        element: <DefaultPage><ExecListPage/></DefaultPage>
+    },
+    {
         path: "/functions",
         element: <DefaultPage><FuncListPage/></DefaultPage>
     },
     {
-        path: "/sign-in",
-        element: <SignInPage/>
+        path: "/groups",
+        element: <DefaultPage><GroupListPage/></DefaultPage>
+    },
+    {
+        path: "/logs",
+        element: <DefaultPage><LogListPage/></DefaultPage>
+    },
+    {
+        path: "/triggers",
+        element: <DefaultPage><TriggerListPage/></DefaultPage>
     },
 ]);
 
