@@ -1,12 +1,12 @@
 import React from 'react'
 
-const HomePage: React.FC = () => {
+const FuncListPage: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center">
-            <p>Dashboard</p>
+            Func List
         </div>
     );
 }
 
-export default HomePage;
+export default FuncListPage;
 
