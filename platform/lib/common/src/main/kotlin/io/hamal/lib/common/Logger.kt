@@ -17,10 +17,10 @@ fun <T : Any> logger(forClass: KClass<T>): Logger {
 }
 
 fun logger(name: String): Logger {
-    return DefaultLogger(LoggerFactory.getLogger(name))
+    return LoggerImpl(LoggerFactory.getLogger(name))
 }
 
-class DefaultLogger(
+class LoggerImpl(
     private val delegate: org.slf4j.Logger
 ) : Logger {
     override fun trace(msg: String) {
@@ -41,7 +41,7 @@ class DefaultLogger(
     }
 
     override fun error(msg: String) {
-        delegate.warn(msg)
+        delegate.error(msg)
     }
 
     override fun error(msg: String, throwable: Throwable) {

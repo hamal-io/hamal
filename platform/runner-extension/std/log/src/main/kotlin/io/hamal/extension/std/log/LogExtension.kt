@@ -46,6 +46,10 @@ class LogFunction(
 
         if (level == ExecLogLevel.Info) {
             log.info(message.value)
+        } else if (level == ExecLogLevel.Warn) {
+            log.warn(message.value)
+        } else if (level == ExecLogLevel.Error) {
+            log.error(message.value)
         }
 
         execLogService.append(

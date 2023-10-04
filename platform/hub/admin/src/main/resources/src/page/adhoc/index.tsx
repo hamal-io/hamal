@@ -1,5 +1,7 @@
-import React from 'react'
-import {Footer, Navbar} from 'flowbite-react'
+import React, {useState} from 'react'
+import {Button, Footer, Navbar} from 'flowbite-react'
+import Editor from '../../component/editor'
+import {invokeAdhoc} from "../../api/adhoc.ts";
 
 const l = {
     base: "block py-2 pr-4 pl-3 md:p-0 text-xl",
@@ -14,6 +16,8 @@ const l = {
 };
 
 const AdhocPage: React.FC = () => {
+    const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
+
     return (
         <div className="flex flex-col h-screen justify-between">
             <Navbar
@@ -36,12 +40,6 @@ const AdhocPage: React.FC = () => {
                     }
                 }}
             >
-                <Navbar.Brand href="https://hamal.io">
-                    <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                        Hamal
-                    </span>
-                </Navbar.Brand>
-
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
                     <Navbar.Link href="/" theme={l}>
@@ -64,7 +62,29 @@ const AdhocPage: React.FC = () => {
 
             <main className="flex-1 w-full mx-auto p-4 text-lg h-full shadow-lg bg-gray-100">
                 <div className="flex flex-col items-center justify-center">
-                    <p>Adhoc</p>
+                    <div className="w-1/2">
+                        <Editor
+                            code={code}
+                            onChange={code => {
+                                setCode(code || "")
+
+                            }}
+                        />
+                    </div>
+
+                    <div className="flex flex-row ">
+                        <Button onClick={() => {
+                            console.log("run code", code)
+                            invokeAdhoc({
+                                code
+                            }).then(submitted => {
+                                console.log("id", submitted.id)
+                                console.log("reqId", submitted.reqId)
+                                console.log(submitted.status)
+                            }).catch(error => console.error(error))
+
+                        }}>Execute</Button>
+                    </div>
                 </div>
             </main>
 
