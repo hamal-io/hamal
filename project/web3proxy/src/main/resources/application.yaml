@@ -10,10 +10,10 @@ server:
     threads:
       max: 2
       min-spare: 1
-  port: 8000
+  port: 10000
 
 io:
   hamal:
     proxy:
       upstream:
-        host: ${UPSTREAM_HOST:http://localhost:9000}
+        host: ${UPSTREAM_HOST:http://localhost:10000}
