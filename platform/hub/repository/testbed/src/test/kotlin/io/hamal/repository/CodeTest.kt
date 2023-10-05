@@ -58,6 +58,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
                 assertThat(get(CodeId(1)).code, equalTo(CodeValue("40 + 2")))
                 assertThat(get(CodeId(2)).code, equalTo(CodeValue("40 + 2")))
+                verifyCount(2)
             }
         }
     }
