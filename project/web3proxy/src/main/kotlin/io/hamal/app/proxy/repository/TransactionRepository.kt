@@ -1,7 +1,7 @@
 package io.hamal.app.proxy.repository
 
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.util.Web3Encoding
 import java.nio.file.Path
 
@@ -16,7 +16,7 @@ class SqliteTransactionRepository(
     path: Path
 ) : TransactionRepository {
 
-    private val partitions = (0..9)
+    private val partitions = (0..24)
         .map { partition -> SqliteTransactionPartitionRepository(path, partition) }
         .associateBy { it.partition }
 
@@ -32,7 +32,7 @@ class SqliteTransactionRepository(
         return partitions[resolvePartition(blockId)]!!.find(blockId, blockIndex)
     }
 
-    private fun resolvePartition(blockId: ULong) = (blockId % 10UL).toInt()
+    private fun resolvePartition(blockId: ULong) = (blockId % 25UL).toInt()
 }
 
 class SqliteTransactionPartitionRepository(
