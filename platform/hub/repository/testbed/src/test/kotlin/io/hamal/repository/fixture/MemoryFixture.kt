@@ -21,6 +21,7 @@ object MemoryFixture : BaseTestFixture {
         BrokerRepository::class -> MemoryBrokerRepository() as REPO
         BrokerConsumersRepository::class -> MemoryBrokerConsumersRepository() as REPO
         BrokerTopicsRepository::class -> MemoryBrokerTopicsRepository() as REPO
+        CodeRepository::class -> MemoryCodeRepository() as REPO
         ExecLogRepository::class -> MemoryExecLogRepository() as REPO
         ExecRepository::class -> MemoryExecRepository() as REPO
         FuncRepository::class -> MemoryFuncRepository() as REPO
