@@ -1,22 +1,13 @@
 {
-  "name": "@hamal/fnguru",
-  "description": "",
-  "author": "hamal",
-  "keywords": [],
-  "license": "MIT",
-  "homepage": "https://fn.guru",
-  "bugs": {
-    "url": "https://github.com/hamal-io/hamal/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hamal-io/hamal"
-  },
-  "version": "0.0.1",
+  "name": "fn_guru",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -30,33 +21,28 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@types/react-dom": "^18.2.7",
-    "@types/react-router-dom": "^5.3.3",
-    "@vitejs/plugin-react": "^4.0.4",
-    "vite": "^4.4.8"
-  },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.4.2",
-    "@fortawesome/free-brands-svg-icons": "^6.4.2",
-    "@fortawesome/free-regular-svg-icons": "^6.4.2",
-    "@fortawesome/free-solid-svg-icons": "^6.4.2",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@monaco-editor/react": "^4.5.1",
-    "@themesberg/react-bootstrap": "^1.4.1",
-    "bootstrap": "^5.3.1",
-    "mobile-detect": "^1.4.5",
-    "moment-timezone": "^0.5.43",
-    "monaco-themes": "^0.4.4",
+    "autoprefixer": "^10.4.16",
+    "flowbite-react": "^0.6.3",
+    "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-error-boundary": "^4.0.10",
-    "react-github-btn": "^1.4.0",
     "react-router-dom": "^6.14.2",
     "react-router-hash-link": "^2.4.3",
-    "sass": "^1.64.2",
-    "simplebar-react": "^3.2.4",
-    "vite-plugin-svgr": "^3.2.0",
-    "vite-tsconfig-paths": "^4.2.0"
+    "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-router-dom": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }

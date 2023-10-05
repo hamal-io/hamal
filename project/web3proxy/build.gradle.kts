@@ -15,7 +15,7 @@ docker {
     springBootApplication {
         maintainer.set("hamal.io docker@hamal.io")
         baseImage.set("openjdk:22-slim-bullseye")
-        ports.set(listOf(8008, 8009))
+        ports.set(listOf(10000, 10000))
         images.set(listOf("hamalio/web3proxy"))
         jvmArgs.set(listOf("-Dspring.profiles.active=default", "-Xmx8192m","-XX:+ExitOnOutOfMemoryError"))
     }

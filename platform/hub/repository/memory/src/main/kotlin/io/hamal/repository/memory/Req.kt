@@ -2,6 +2,7 @@ package io.hamal.repository.memory
 
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.repository.api.ReqRepository
 import io.hamal.repository.api.submitted_req.SubmittedReq
@@ -38,7 +39,8 @@ class MemoryReqRepository : ReqRepository {
     }
 
     override fun complete(reqId: ReqId) {
-        val req = find(reqId) ?: return
+        val req = get(reqId)
+        check(req.status == Submitted) { "Req not submitted" }
         lock.withLock {
             store[req.reqId] =
                 ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Completed })
@@ -46,7 +48,8 @@ class MemoryReqRepository : ReqRepository {
     }
 
     override fun fail(reqId: ReqId) {
-        val req = find(reqId) ?: return
+        val req = get(reqId)
+        check(req.status == Submitted) { "Req not submitted" }
         lock.withLock {
             store[req.reqId] =
                 ProtoBuf { }.encodeToByteArray(SubmittedReq.serializer(), req.apply { status = ReqStatus.Failed })
@@ -77,4 +80,17 @@ class MemoryReqRepository : ReqRepository {
                 .reversed()
         }
     }
+
+    override fun count(query: ReqQueryRepository.ReqQuery): ULong {
+        return lock.withLock {
+            store.keys.sorted()
+                .dropWhile { it <= query.afterId }
+                .count()
+                .toULong()
+        }
+    }
+
+    override fun close() {
+    }
+
 }

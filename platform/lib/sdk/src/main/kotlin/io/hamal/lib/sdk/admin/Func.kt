@@ -67,7 +67,7 @@ data class AdminFunc(
 
 interface AdminFuncService {
     fun create(groupId: GroupId, createFuncReq: AdminCreateFuncReq): AdminSubmittedReqWithId
-    fun list(groupIds: List<GroupId>): List<AdminFuncList.Func>
+    fun list(groupIds: List<GroupId> = listOf()): List<AdminFuncList.Func>
     fun get(funcId: FuncId): AdminFunc
 }
 

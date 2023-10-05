@@ -17,6 +17,9 @@ class MemoryStateRepository : StateRepository {
         states.clear()
     }
 
+    override fun close() {
+    }
+
     override fun find(correlation: Correlation) = states[correlation]
 
 }

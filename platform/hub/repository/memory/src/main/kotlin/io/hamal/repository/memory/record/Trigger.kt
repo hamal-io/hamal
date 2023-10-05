@@ -1,7 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
@@ -22,10 +20,16 @@ internal object CurrentTriggerProjection {
     private val projection = mutableMapOf<TriggerId, Trigger>()
 
     fun apply(trigger: Trigger) {
-        val values = projection.values.groupBy({ it.namespaceId }, { it.name }).toMutableMap()
-        values[trigger.namespaceId] = values[trigger.namespaceId]?.plus(trigger.name) ?: listOf(trigger.name)
-        val unique = values.all { it.value.size == it.value.toSet().size }
-        check(unique) { "Trigger name ${trigger.name} already exists in namespace ${trigger.namespaceId}" }
+        val currentTrigger = projection[trigger.id]
+        projection.remove(trigger.id)
+
+        val triggersInNamespace = projection.values.filter { it.namespaceId == trigger.namespaceId }
+        if (triggersInNamespace.any { it.name == trigger.name }) {
+            if (currentTrigger != null) {
+                projection[currentTrigger.id] = currentTrigger
+            }
+            throw IllegalArgumentException("${trigger.name} already exists in namespace ${trigger.namespaceId}")
+        }
 
         projection[trigger.id] = trigger
     }
@@ -33,17 +37,33 @@ internal object CurrentTriggerProjection {
     fun find(triggerId: TriggerId): Trigger? = projection[triggerId]
 
     fun list(query: TriggerQuery): List<Trigger> {
-        return projection.keys.sorted()
+        return projection.filter { query.triggerIds.isEmpty() || it.key in query.triggerIds }
+            .map { it.value }
             .reversed()
-            .dropWhile { it >= query.afterId }
-            .mapNotNull { find(it) }
+            .asSequence()
             .filter {
-                when (it) {
-                    is FixedRateTrigger -> query.types.contains(FixedRate)
-                    is EventTrigger -> query.types.contains(Event)
-                }
+                if (query.types.isEmpty()) true else query.types.contains(it.type)
             }
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
+            .toList()
+    }
+
+    fun count(query: TriggerQuery): ULong {
+        return projection.filter { query.triggerIds.isEmpty() || it.key in query.triggerIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .filter {
+                if (query.types.isEmpty()) true else query.types.contains(it.type)
+            }
+            .filter {
+                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+            }.dropWhile { it.id >= query.afterId }
+            .count()
+            .toULong()
     }
 
     fun clear() {
@@ -111,8 +131,14 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         return CurrentTriggerProjection.list(query)
     }
 
+    override fun count(query: TriggerQuery): ULong {
+        return CurrentTriggerProjection.count(query)
+    }
+
     override fun clear() {
         super.clear()
         CurrentTriggerProjection.clear()
     }
+
+    override fun close() {}
 }

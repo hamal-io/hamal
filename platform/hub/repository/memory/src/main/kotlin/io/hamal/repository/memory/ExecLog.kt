@@ -1,9 +1,8 @@
 package io.hamal.repository.memory
 
-import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.RemoteAt
 import io.hamal.repository.api.ExecLog
-import io.hamal.repository.api.ExecLogCmdRepository
+import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecLogRepository
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -14,11 +13,12 @@ class MemoryExecLogRepository : ExecLogRepository {
     private val lock = ReentrantReadWriteLock()
     private val store = mutableListOf<ExecLog>()
 
-    override fun append(cmd: ExecLogCmdRepository.LogCmd): ExecLog {
+    override fun append(cmd: AppendCmd): ExecLog {
         return lock.write {
             ExecLog(
-                id = cmd.id,
+                id = cmd.execLogId,
                 execId = cmd.execId,
+                groupId = cmd.groupId,
                 level = cmd.level,
                 message = cmd.message,
                 localAt = cmd.localAt,
@@ -31,26 +31,31 @@ class MemoryExecLogRepository : ExecLogRepository {
         lock.write { store.clear() }
     }
 
-    override fun list(execId: ExecId, query: ExecLogQuery): List<ExecLog> {
-        return lock.read {
-            store.reversed()
-                .asSequence()
-                .filter {
-                    it.execId == execId
-                }
-                .dropWhile { it.id >= query.afterId }
-                .take(query.limit.value)
-                .toList()
-        }
-    }
+    override fun close() {}
 
     override fun list(query: ExecLogQuery): List<ExecLog> {
         return lock.read {
             store.reversed()
                 .asSequence()
                 .dropWhile { it.id >= query.afterId }
+                .filter { query.groupIds.isEmpty() || query.groupIds.contains(it.groupId) }
+                .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
+                .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
                 .take(query.limit.value)
                 .toList()
+        }
+    }
+
+    override fun count(query: ExecLogQuery): ULong {
+        return lock.read {
+            store.reversed()
+                .asSequence()
+                .dropWhile { it.id >= query.afterId }
+                .filter { query.groupIds.isEmpty() || query.groupIds.contains(it.groupId) }
+                .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
+                .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
+                .count()
+                .toULong()
         }
     }
 }

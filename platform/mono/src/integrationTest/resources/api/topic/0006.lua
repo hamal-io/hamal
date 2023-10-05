@@ -11,7 +11,9 @@ assert(#entries == 0)
 
 sys.topic.append(topic_id, { value = 'value-one' })
 sys.topic.append(topic_id, { value = 'value-two' })
-sys.topic.append(topic_id, { value = 'value-three' })
+_, req = sys.topic.append(topic_id, { value = 'value-three' })
+
+sys.await(req)
 
 err, entries = sys.topic.list_entries(topic_id)
 assert(err == nil)

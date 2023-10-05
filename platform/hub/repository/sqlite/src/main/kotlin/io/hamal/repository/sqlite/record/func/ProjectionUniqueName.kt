@@ -49,6 +49,5 @@ internal object ProjectionUniqueName : SqliteProjection<FuncId, FuncRecord, Func
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM unique_name""")
     }
-
-    override fun invalidate() {}
+    
 }

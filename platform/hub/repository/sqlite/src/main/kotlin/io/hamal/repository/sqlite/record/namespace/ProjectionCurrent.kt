@@ -113,10 +113,7 @@ internal object ProjectionCurrent : SqliteProjection<NamespaceId, NamespaceRecor
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
     }
-
-    override fun invalidate() {
-    }
-
+    
     private fun NamespaceQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""

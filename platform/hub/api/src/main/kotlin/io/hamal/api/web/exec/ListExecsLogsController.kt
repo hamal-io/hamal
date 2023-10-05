@@ -1,6 +1,6 @@
 package io.hamal.api.web.exec
 
-import io.hamal.core.adapter.ListExecsLogsPort
+import io.hamal.core.adapter.ListExecLogsPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecLogId
 import io.hamal.lib.domain.vo.GroupId
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListExecsLogsController(private val execsLogs: ListExecsLogsPort) {
+internal class ListExecsLogsController(private val execsLogs: ListExecLogsPort) {
     @GetMapping("/v1/groups/{groupId}/exec-logs")
     fun getExecLogs(
         @PathVariable("groupId") groupId: GroupId,
@@ -25,7 +25,7 @@ internal class ListExecsLogsController(private val execsLogs: ListExecsLogsPort)
             ExecLogQuery(
                 afterId = afterId,
                 limit = limit,
-                // group id
+                groupIds = listOf(groupId)
             )
         ) { logs ->
             ResponseEntity.ok(

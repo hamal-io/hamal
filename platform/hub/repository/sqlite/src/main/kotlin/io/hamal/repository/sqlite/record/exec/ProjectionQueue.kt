@@ -67,6 +67,4 @@ internal object ProjectionQueue : SqliteProjection<ExecId, ExecRecord, Exec> {
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM queue""")
     }
-
-    override fun invalidate() {}
 }

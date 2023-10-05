@@ -1,29 +1,15 @@
 version: "3.5"
-networks:
-  hamalnet:
-    ipam:
-      config:
-        - subnet: 10.42.0.0/16
 services:
-  bsc-proxy:
-    image: hamalio/proxy
-    restart:
-      unless-stopped
-    ports:
-      - "0.0.0.0:8001:8000"
-    volumes:
-      - "/mnt/proxy/bsc:/tmp/hamal/db"
-    networks:
-      - hamalnet
-
   eth-proxy:
-    image: hamalio/proxy
+    image: hamalio/web3proxy
     restart:
       unless-stopped
+    environment:
+      - UPSTREAM_HOST=http://localhost:10001
     ports:
-      - "0.0.0.0:8000:8000"
+      - "0.0.0.0:10001:9000"
     volumes:
-      - "/mnt/proxy/eth:/tmp/hamal/db"
+      - "/data/web3proxy/eth:/tmp/web3proxy"
     networks:
       - hamalnet
 
@@ -51,3 +37,6 @@ services:
       - "/mnt/runner:/tmp/hamal/runner"
     networks:
       - hamalnet
+
+networks:
+  hamalnet:

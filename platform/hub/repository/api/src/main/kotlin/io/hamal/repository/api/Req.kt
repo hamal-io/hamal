@@ -6,18 +6,18 @@ import io.hamal.repository.api.submitted_req.SubmittedReq
 
 interface ReqRepository : ReqCmdRepository, ReqQueryRepository
 
-interface ReqCmdRepository {
+interface ReqCmdRepository : CmdRepository {
     fun queue(req: SubmittedReq)
     fun next(limit: Int): List<SubmittedReq>
     fun complete(reqId: ReqId)
     fun fail(reqId: ReqId)
-    fun clear()
 }
 
 interface ReqQueryRepository {
     fun get(reqId: ReqId) = find(reqId) ?: throw NoSuchElementException("Req not found")
     fun find(reqId: ReqId): SubmittedReq?
     fun list(query: ReqQuery): List<SubmittedReq>
+    fun count(query: ReqQuery): ULong
     data class ReqQuery(
         var afterId: ReqId = ReqId(0),
         var limit: Limit = Limit(1)

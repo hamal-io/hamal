@@ -1,47 +1,27 @@
-// =========================================================
-// * Volt React Dashboard
-// =========================================================
-// * Product Page: https://themesberg.com/product/dashboard/volt-react
-// * Copyright 2021 Themesberg (https://www.themesberg.com)
-// * Official Repository: https://github.com/themesberg/volt-react-dashboard
-// * License: MIT License (https://themesberg.com/licensing)
-// * Designed and coded by https://themesberg.com
-// * Modified by Hamal Devs 2023 (https://hamal.io)
-// =========================================================
-// * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
-
-import React from 'react';
-
-import "./scss/volt.scss";
-
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import Theme from "./theme.tsx";
+import {Flowbite} from 'flowbite-react'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {createRoot} from 'react-dom/client';
-import HomePage from "./pages/home";
-import Signin from "./pages/sign-in";
-import Signup from "./pages/sign-up";
-import Toc from "./pages/toc";
-import DashboardPage from "./pages/dashboard";
-import DevelopPage from "./pages/develop";
-import FunctionListPage from "./pages/function/list";
-import FunctionDetailPage from "./pages/function/detail";
-import {RouteWithSidebar} from "./pages/components/route";
 
-const container = document.getElementById('root');
-const root = createRoot(container!);
+import DashboardPage from "./app/page/dashboard";
+import HomePage from "./landing/page/home";
+import SignInPage from "./landing/page/sign-in";
+import SignUpPage from "./landing/page/sign-up";
 
 const router = createBrowserRouter([
-    {path: "/", element: <HomePage/>},
-    {path: "/sign-in", element: <Signin/>},
-    {path: "/sign-up", element: <Signup/>},
-    {path: "/toc", element: <Toc/>},
-    {path: "/dashboard", element: <RouteWithSidebar component={<DashboardPage/>}/>},
-    {path: "/develop", element: <RouteWithSidebar component={<DevelopPage/>}/>},
-    {path: "/functions", element: <RouteWithSidebar component={<FunctionListPage/>}/>},
-    {path: "/functions/:funcId", element: <RouteWithSidebar component={<FunctionDetailPage/>}/>},
+    { path: "/", element: <HomePage/> },
+    { path: "/sign-in", element: <SignInPage/> },
+    { path: "/sign-up", element: <SignUpPage/> },
+    { path: "/dashboard", element: <DashboardPage/> }
 ]);
 
-root.render(
-    <>
-        <RouterProvider router={router}/>
-    </>
-);
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <Flowbite theme={{theme: Theme}}>
+            <RouterProvider router={router}/>
+        </Flowbite>
+    </React.StrictMode>,
+)
+

@@ -32,6 +32,7 @@ dependencies {
     implementation(project(":platform:runner-extension:std:decimal"))
     implementation(project(":platform:runner-extension:std:log"))
     implementation(project(":platform:runner-extension:std:sys"))
+    implementation(project(":platform:runner-extension:std:sysadmin"))
     implementation(project(":platform:runner-extension:web3"))
 
     implementation(external.spring.web) {

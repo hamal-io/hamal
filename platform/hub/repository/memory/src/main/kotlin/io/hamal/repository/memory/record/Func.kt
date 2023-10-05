@@ -119,12 +119,10 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
         return CurrentFuncProjection.count(query)
     }
 
-    override fun close() {
-
-    }
-
     override fun clear() {
         super.clear()
         CurrentFuncProjection.clear()
     }
+
+    override fun close() {}
 }

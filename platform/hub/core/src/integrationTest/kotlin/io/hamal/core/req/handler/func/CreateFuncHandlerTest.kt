@@ -34,7 +34,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
             }
         }
     }
-    
+
     @Autowired
     private lateinit var testInstance: CreateFuncHandler
 

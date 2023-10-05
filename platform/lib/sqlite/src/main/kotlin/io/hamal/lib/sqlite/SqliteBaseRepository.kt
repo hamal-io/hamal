@@ -16,7 +16,7 @@ abstract class SqliteBaseRepository(
 
     val connection by lazy {
         connectionOnce {
-            val result = DefaultConnection(
+            val result = ConnectionImpl(
                 this::class,
                 "jdbc:sqlite:${ensureFilePath(config)}"
             )
@@ -42,8 +42,6 @@ abstract class SqliteBaseRepository(
             connection.close()
         }
     }
-
-
 }
 
 private fun ensureFilePath(config: SqliteBaseRepository.Config): Path {

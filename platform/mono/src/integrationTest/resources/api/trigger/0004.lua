@@ -2,7 +2,7 @@ sys = require('sys')
 
 _, namespace_req = sys.namespace.create({ name = 'namespace-1' })
 
-_, create_func_req = sys.func.create({ name = 'empty-test-func'; inputs = {}; code = [[4 + 2]] })
+_, create_func_req = sys.func.create({ name = 'empty-test-func'; inputs = {}; code = [[ x = 4 + 2]] })
 sys.await_completed(create_func_req)
 
 -- trigger name is unique
@@ -13,8 +13,9 @@ err, trigger_req = sys.trigger.create_fixed_rate({
     inputs = { },
     duration = 'PT5S'
 })
-sys.await_completed(trigger_req)
+
 assert(err == nil)
+sys.await_completed(trigger_req)
 
 err, trigger_req = sys.trigger.create_fixed_rate({
     func_id = create_func_req.id,

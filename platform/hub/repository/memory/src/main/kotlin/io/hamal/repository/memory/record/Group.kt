@@ -1,6 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupCmdRepository
@@ -16,17 +15,39 @@ internal object CurrentGroupProjection {
     private val projection = mutableMapOf<GroupId, Group>()
 
     fun apply(group: Group) {
+        val currentGroup = projection[group.id]
+        projection.remove(group.id)
+
+        if (projection.values.any { it.name == group.name }) {
+            if (currentGroup != null) {
+                projection[currentGroup.id] = currentGroup
+            }
+            throw IllegalArgumentException("${group.name} already exists")
+        }
+
         projection[group.id] = group
     }
 
     fun find(groupId: GroupId): Group? = projection[groupId]
 
-    fun list(afterId: GroupId, limit: Limit): List<Group> {
-        return projection.keys.sorted()
+    fun list(query: GroupQuery): List<Group> {
+        return projection.filter { query.groupIds.isEmpty() || it.key in query.groupIds }
+            .map { it.value }
             .reversed()
-            .dropWhile { it >= afterId }
-            .take(limit.value)
-            .mapNotNull { find(it) }
+            .asSequence()
+            .dropWhile { it.id >= query.afterId }
+            .take(query.limit.value)
+            .toList()
+    }
+
+    fun count(query: GroupQuery): ULong {
+        return projection.filter { query.groupIds.isEmpty() || it.key in query.groupIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .dropWhile { it.id >= query.afterId }
+            .count()
+            .toULong()
     }
 
     fun clear() {
@@ -61,11 +82,18 @@ class MemoryGroupRepository : MemoryRecordRepository<GroupId, GroupRecord, Group
     override fun find(groupId: GroupId): Group? = CurrentGroupProjection.find(groupId)
 
     override fun list(query: GroupQuery): List<Group> {
-        return CurrentGroupProjection.list(query.afterId, query.limit)
+        return CurrentGroupProjection.list(query)
+    }
+
+    override fun count(query: GroupQuery): ULong {
+        return CurrentGroupProjection.count(query)
     }
 
     override fun clear() {
         super.clear()
         CurrentGroupProjection.clear()
+    }
+
+    override fun close() {
     }
 }

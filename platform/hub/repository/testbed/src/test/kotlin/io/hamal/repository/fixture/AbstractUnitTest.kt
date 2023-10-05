@@ -47,6 +47,14 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
+        CodeRepository::class to listOf(
+            MemoryFixture,
+            //SqliteFixture
+        ),
+        ExecLogRepository::class to listOf(
+            MemoryFixture
+//FIXME     SqliteFixture
+        ),
         ExecRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
@@ -55,7 +63,19 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
+        GroupRepository::class to listOf(
+            MemoryFixture,
+// FIXME    SqliteFixture
+        ),
         NamespaceRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        ReqRepository::class to listOf(
+            MemoryFixture,
+// FIXME    SqliteFixture
+        ),
+        StateRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
@@ -67,9 +87,9 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-        CodeRepository::class to listOf(
+        TriggerRepository::class to listOf(
             MemoryFixture,
-            //SqliteFixture
+            SqliteFixture
         )
 
     )

@@ -1,4 +1,0 @@
-
-for idx = 17781431, 17771431, -1 do
-    web3.get_block(idx)
-end

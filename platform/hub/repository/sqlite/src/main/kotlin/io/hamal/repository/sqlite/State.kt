@@ -1,25 +1,26 @@
 package io.hamal.repository.sqlite
 
-import io.hamal.repository.api.StateRepository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
+import io.hamal.repository.api.StateRepository
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.nio.file.Path
 
 class SqliteStateRepository(
-    path: Path
-) : SqliteBaseRepository(
-    config = object : Config {
-        override val path = path
-        override val filename = "correlated-state.db"
-    },
-), StateRepository {
+    config: Config
+) : SqliteBaseRepository(config), StateRepository {
+
+    data class Config(
+        override val path: Path
+    ) : SqliteBaseRepository.Config {
+        override val filename = "state.db"
+    }
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
@@ -32,7 +33,7 @@ class SqliteStateRepository(
         connection.tx {
             execute(
                 """
-                CREATE TABLE IF NOT EXISTS correlated_states (
+                CREATE TABLE IF NOT EXISTS states (
                     func_id INTEGER NOT NULL ,
                     correlation_id TEXT NOT NULL ,
                     value BLOB,
@@ -46,7 +47,7 @@ class SqliteStateRepository(
     override fun set(cmdId: CmdId, correlatedState: CorrelatedState) {
         connection.execute<Unit>(
             """
-            INSERT INTO correlated_states (func_id, correlation_id, value)
+            INSERT INTO states (func_id, correlation_id, value)
                 VALUES(:funcId, :correlationId, :value) 
                 ON CONFLICT (func_id, correlation_id) 
                 DO 
@@ -62,11 +63,11 @@ class SqliteStateRepository(
     }
 
     override fun clear() {
-        TODO()
+        connection.execute("""DELETE FROM states""")
     }
 
     override fun find(correlation: Correlation): CorrelatedState? {
-        return connection.executeQueryOne("SELECT func_id, correlation_id, value FROM correlated_states WHERE func_id = :funcId AND correlation_id = :correlationId") {
+        return connection.executeQueryOne("SELECT func_id, correlation_id, value FROM states WHERE func_id = :funcId AND correlation_id = :correlationId") {
             query {
                 set("funcId", correlation.funcId)
                 set("correlationId", correlation.correlationId.value)

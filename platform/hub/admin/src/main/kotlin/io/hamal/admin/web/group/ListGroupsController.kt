@@ -21,8 +21,8 @@ internal class ListGroupsController(private val listGroup: ListGroupsPort) {
         return listGroup(
             GroupQuery(
                 afterId = afterId,
-                limit = limit
-                // ids ..
+                limit = limit,
+                groupIds = groupIds
             )
         ) { groups ->
             ResponseEntity.ok(AdminGroupList(

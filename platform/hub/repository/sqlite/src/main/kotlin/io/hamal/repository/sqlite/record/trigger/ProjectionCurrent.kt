@@ -4,11 +4,10 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.lib.sqlite.unsafeInCriteria
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.SqliteProjection
 import io.hamal.repository.sqlite.record.SqliteRecordTransaction
@@ -40,7 +39,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
 
     fun list(
         connection: Connection,
-        query: TriggerQueryRepository.TriggerQuery
+        query: TriggerQuery
     ): List<Trigger> {
         return connection.executeQuery<Trigger>(
             """
@@ -49,8 +48,10 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
              FROM
                 current
             WHERE
-                id < :afterId AND
-                ${unsafeInCriteria("type", query.types.map { it.value })}
+                id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
+                ${query.types()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -65,16 +66,43 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         }
     }
 
+    fun count(
+        connection: Connection,
+        query: TriggerQuery
+    ): ULong {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                current
+            WHERE
+                id < :afterId
+                ${query.ids()}
+                ${query.groupIds()}
+                ${query.types()}
+        """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+            }
+            map {
+                it.getLong("count").toULong()
+            }
+        } ?: 0UL
+    }
+
     override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id,type, data) 
+                    (id, group_id, type, data) 
                 VALUES
-                    (:id,:type, :data)
+                    (:id, :groupId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
+            set("groupId", obj.groupId)
             set(
                 "type", when (obj) {
                     is FixedRateTrigger -> TriggerType.FixedRate
@@ -90,6 +118,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
+                 group_id       INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
@@ -102,7 +131,27 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         tx.execute("""DELETE FROM current""")
     }
 
-    override fun invalidate() {
+    private fun TriggerQuery.types(): String {
+        return if (types.isEmpty()) {
+            ""
+        } else {
+            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+        }
     }
 
+    private fun TriggerQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun TriggerQuery.ids(): String {
+        return if (triggerIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${triggerIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
 }

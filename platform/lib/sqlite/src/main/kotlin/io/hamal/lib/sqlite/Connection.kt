@@ -19,32 +19,28 @@ class NamedPreparedStatementDelegate(
     val delegate: NamedPreparedStatement<*>
 ) {
     operator fun set(
-        param: String,
-        value: Boolean
+        param: String, value: Boolean
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: Int
+        param: String, value: Int
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: UInt
+        param: String, value: UInt
     ): NamedPreparedStatementDelegate {
         delegate[param] = value.toInt()
         return this
     }
 
     operator fun set(
-        param: String,
-        value: UShort
+        param: String, value: UShort
     ): NamedPreparedStatementDelegate {
         delegate[param] = value.toInt()
         return this
@@ -52,88 +48,77 @@ class NamedPreparedStatementDelegate(
 
 
     operator fun set(
-        param: String,
-        value: BigInteger
+        param: String, value: BigInteger
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: Limit
+        param: String, value: Limit
     ): NamedPreparedStatementDelegate {
         delegate[param] = value.value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: Long
+        param: String, value: Long
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: ULong
+        param: String, value: ULong
     ): NamedPreparedStatementDelegate {
         delegate[param] = value.toLong()
         return this
     }
 
     operator fun set(
-        param: String,
-        value: Instant
+        param: String, value: Instant
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: SnowflakeId
+        param: String, value: SnowflakeId
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: DomainId
+        param: String, value: DomainId
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: DomainName
+        param: String, value: DomainName
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: CmdId
+        param: String, value: CmdId
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: ByteArray
+        param: String, value: ByteArray
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
     }
 
     operator fun set(
-        param: String,
-        value: String
+        param: String, value: String
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this
@@ -171,45 +156,38 @@ interface Connection : AutoCloseable {
     fun prepare(sql: String): NamedPreparedStatement<*>
     fun execute(sql: String)
     fun execute(
-        sql: String,
-        block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
+        sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
     )
 
     fun <T : Any> execute(
-        sql: String,
-        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+        sql: String, block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): T?
 
     fun executeUpdate(sql: String): Int
     fun executeUpdate(
-        sql: String,
-        block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
+        sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
     ): Int
 
     fun <T : Any> executeQuery(
-        sql: String,
-        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+        sql: String, block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): List<T>
 
     fun executeQuery(
-        sql: String,
-        block: (NamedResultSet) -> Unit
+        sql: String, block: (NamedResultSet) -> Unit
     )
 
     fun <T : Any> executeQueryOne(
-        sql: String,
-        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+        sql: String, block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): T? = executeQuery(sql, block).firstOrNull()
 
     fun <T> tx(block: Transaction.() -> T): T
 }
 
-class DefaultConnection(
-    owningClass: KClass<*>,
-    url: String
+class ConnectionImpl(
+    owningClass: KClass<*>, url: String
 ) : Connection {
 
-    val delegate: java.sql.Connection
+    var delegate: java.sql.Connection
     private val log = logger(owningClass)
     private val lock = ReentrantLock()
 
@@ -236,8 +214,7 @@ class DefaultConnection(
     }
 
     override fun execute(
-        sql: String,
-        block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
+        sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
     ) {
         prepare(sql).use {
             block(NamedPreparedStatementDelegate(it))
@@ -247,16 +224,17 @@ class DefaultConnection(
     }
 
     override fun <T : Any> execute(
-        sql: String,
-        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+        sql: String, block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): T? {
-        val it = prepare(sql)
+        val stmt = prepare(sql)
         val delegate = NamedPreparedStatementResultSetDelegate<T>(
-            NamedPreparedStatementDelegate(it)
+            NamedPreparedStatementDelegate(stmt)
         )
         block(delegate)
-        log.debug("Execute : ${it.sql}")
-        return it.execute()?.let(delegate::apply)?.firstOrNull()
+        log.debug("Execute : ${stmt.sql}")
+        return stmt.execute()
+            ?.let(delegate::apply)
+            ?.firstOrNull()
     }
 
     override fun executeUpdate(sql: String): Int {
@@ -267,8 +245,7 @@ class DefaultConnection(
     }
 
     override fun executeUpdate(
-        sql: String,
-        block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
+        sql: String, block: NamedPreparedStatementDelegate.() -> NamedPreparedStatementDelegate
     ): Int {
         return prepare(sql).use {
             block(NamedPreparedStatementDelegate(it))
@@ -278,14 +255,12 @@ class DefaultConnection(
     }
 
     override fun <T : Any> executeQuery(
-        sql: String,
-        block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
+        sql: String, block: NamedPreparedStatementResultSetDelegate<T>.() -> NamedPreparedStatementResultSetDelegate<T>
     ): List<T> {
         return prepare(sql).use {
-            val delegate =
-                NamedPreparedStatementResultSetDelegate<T>(
-                    NamedPreparedStatementDelegate(it)
-                )
+            val delegate = NamedPreparedStatementResultSetDelegate<T>(
+                NamedPreparedStatementDelegate(it)
+            )
             block(delegate)
             log.debug("Execute query: ${it.sql}")
             delegate.apply(it.executeQuery())

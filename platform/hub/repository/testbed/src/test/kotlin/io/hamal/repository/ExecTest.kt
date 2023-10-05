@@ -10,6 +10,7 @@ import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.ExecRepository
+import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -322,6 +323,26 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
                 verifyCount(1)
             }
+    }
+
+    @Nested
+    inner class ClearTest {
+
+        @TestFactory
+        fun `Nothing to clear`() = runWith(ExecRepository::class) {
+            clear()
+            verifyCount(0)
+        }
+
+        @TestFactory
+        fun `Clear table`() = runWith(ExecRepository::class) {
+            createExec(ExecId(1), Started, groupId = GroupId(3))
+            createExec(ExecId(2), Completed, groupId = GroupId(345))
+
+            clear()
+            verifyCount(0)
+        }
+
     }
 
     @Nested

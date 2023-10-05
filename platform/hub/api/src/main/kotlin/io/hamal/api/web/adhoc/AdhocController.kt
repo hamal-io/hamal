@@ -21,6 +21,5 @@ internal class AdhocController(private val invokeAdhoc: InvokeAdhocPort) {
     ): ResponseEntity<HubSubmittedReq> =
         invokeAdhoc(groupId, req) {
             ResponseEntity(assemble(it), ACCEPTED)
-
         }
 }
