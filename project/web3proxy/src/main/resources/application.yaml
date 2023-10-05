@@ -16,4 +16,4 @@ io:
   hamal:
     proxy:
       upstream:
-        host: ${UPSTREAM_HOST:http://localhost:10000}
+        host: ${UPSTREAM_HOST:http://localhost:10001}
