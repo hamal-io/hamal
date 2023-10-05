@@ -92,6 +92,6 @@ class RepositoryConfig {
 //        }
 //    }
 
-    private val path = Path("/tmp/hamal/db")
+    private val path = Path("/tmp/web3proxy")
 
 }
