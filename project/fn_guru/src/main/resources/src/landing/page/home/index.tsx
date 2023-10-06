@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
                         Login
                     </Navbar.Link>
                     <Navbar.Link href="/sign-up" active theme={{
-                        base: "px-2 py-2 text-2xl",
+                        base: "px-1 py-1 text-lg",
                         active: {
                             on: "bg-green-700 text-white rounded",
                             off: "border-b border-gray-100 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:hover:bg-transparent md:hover:text-cyan-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
