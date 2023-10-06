@@ -4,8 +4,8 @@ import io.hamal.repository.api.Trigger
 import kotlinx.serialization.Serializable
 
 @Serializable
-@HubEventTopic("trigger::created")
+@PlatformEventTopic("trigger::created")
 data class TriggerCreatedEvent(
     val trigger: Trigger
-) : HubEvent()
+) : PlatformEvent()
 

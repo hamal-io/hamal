@@ -2,28 +2,28 @@ package io.hamal.core.event
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.event.HubEvent
+import io.hamal.repository.api.event.PlatformEvent
 import io.hamal.repository.api.event.topicName
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.reflect.KClass
 
-interface HubEventHandler<out EVENT : HubEvent> {
+interface PlatformEventHandler<out EVENT : PlatformEvent> {
 
     fun handle(cmdId: CmdId, evt: @UnsafeVariance EVENT)
 
 }
 
-class HubEventContainer {
+class PlatformEventContainer {
     private val receiverMapping = mutableMapOf<
-            KClass<out HubEvent>,
-            List<HubEventHandler<HubEvent>>
+            KClass<out PlatformEvent>,
+            List<PlatformEventHandler<PlatformEvent>>
             >()
 
     private val lock = ReentrantReadWriteLock()
 
-    fun <EVENT : HubEvent> register(
+    fun <EVENT : PlatformEvent> register(
         clazz: KClass<EVENT>,
-        receiver: HubEventHandler<EVENT>
+        receiver: PlatformEventHandler<EVENT>
     ): Boolean {
         try {
             lock.writeLock().lock()
@@ -37,11 +37,11 @@ class HubEventContainer {
     }
 
     @Suppress("UNCHECKED_CAST")
-    operator fun <EVENT : HubEvent> get(clazz: KClass<EVENT>): List<HubEventHandler<EVENT>> {
+    operator fun <EVENT : PlatformEvent> get(clazz: KClass<EVENT>): List<PlatformEventHandler<EVENT>> {
         try {
             lock.readLock().lock()
             return receiverMapping[clazz]
-                ?.map { it as HubEventHandler<EVENT> }
+                ?.map { it as PlatformEventHandler<EVENT> }
                 ?: listOf()
         } finally {
             lock.readLock().unlock()

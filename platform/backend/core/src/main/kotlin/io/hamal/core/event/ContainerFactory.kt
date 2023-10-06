@@ -1,20 +1,20 @@
 package io.hamal.core.event
 
-import io.hamal.repository.api.event.HubEvent
+import io.hamal.repository.api.event.PlatformEvent
 import kotlin.reflect.KClass
 
-class HubEventContainerFactory {
-    private val container = HubEventContainer()
+class PlatformEventContainerFactory {
+    private val container = PlatformEventContainer()
 
-    fun <EVENT : HubEvent> register(
+    fun <EVENT : PlatformEvent> register(
         clazz: KClass<EVENT>,
-        handler: HubEventHandler<EVENT>
-    ): HubEventContainerFactory {
+        handler: PlatformEventHandler<EVENT>
+    ): PlatformEventContainerFactory {
         container.register(clazz, handler)
         return this
     }
 
-    fun create(): HubEventContainer {
+    fun create(): PlatformEventContainer {
         return container
     }
 }

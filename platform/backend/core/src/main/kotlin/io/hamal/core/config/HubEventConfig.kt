@@ -1,7 +1,7 @@
 package io.hamal.core.config
 
-import io.hamal.core.event.HubEventContainerFactory
-import io.hamal.core.event.HubEventEmitter
+import io.hamal.core.event.PlatformEventContainerFactory
+import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.event.handler.exec.*
 import io.hamal.core.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.core.service.FixedRateTriggerService
@@ -16,25 +16,25 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-internal open class HubEventConfig {
+internal open class PlatformEventConfig {
     @Bean
-    open fun hubEventEmitter(
-        hubEventBrokerRepository: BrokerRepository,
+    open fun platformEventEmitter(
+        platformEventBrokerRepository: BrokerRepository,
         generateDomainId: GenerateDomainId
-    ): HubEventEmitter = HubEventEmitter(
+    ): PlatformEventEmitter = PlatformEventEmitter(
         generateDomainId,
-        hubEventBrokerRepository
+        platformEventBrokerRepository
     )
 
     @Bean
-    open fun hubEventContainer(
+    open fun platformEventContainer(
         execQueryRepository: ExecQueryRepository,
         execCmdRepository: ExecCmdRepository,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
         metricService: MetricService,
-        eventEmitter: HubEventEmitter
-    ) = HubEventContainerFactory()
+        eventEmitter: PlatformEventEmitter
+    ) = PlatformEventContainerFactory()
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdRepository, eventEmitter))

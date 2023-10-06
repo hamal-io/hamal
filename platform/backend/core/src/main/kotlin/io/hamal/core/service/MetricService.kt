@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class MetricService(private val repo: MetricRepository) {
 
-    fun handleEvent(event: HubEvent) {
+    fun handleEvent(event: PlatformEvent) {
         when (event) {
             is ExecutionCompletedEvent -> repo.update(SystemEvent.ExecutionCompletedEvent)
             is ExecPlannedEvent -> repo.update(SystemEvent.ExecPlannedEvent)

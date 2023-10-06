@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile
 open class MemoryRepositoryConfig {
 
     @Bean
-    open fun hubEventBrokerRepository() = MemoryBrokerRepository()
+    open fun platformEventBrokerRepository() = MemoryBrokerRepository()
 
     @Bean
     open fun eventBrokerRepository() = MemoryBrokerRepository()

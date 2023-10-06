@@ -46,7 +46,7 @@ internal abstract class BaseTest {
     lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
-    lateinit var hubEventBrokerRepository: BrokerRepository
+    lateinit var platformEventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
@@ -102,7 +102,7 @@ internal abstract class BaseTest {
 
         accountCmdRepository.clear()
         authCmdRepository.clear()
-        hubEventBrokerRepository.clear()
+        platformEventBrokerRepository.clear()
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()

@@ -4,15 +4,15 @@ import io.hamal.repository.api.Namespace
 import kotlinx.serialization.Serializable
 
 @Serializable
-@HubEventTopic("namespace::created")
+@PlatformEventTopic("namespace::created")
 data class NamespaceCreatedEvent(
     val namespace: Namespace,
-) : HubEvent()
+) : PlatformEvent()
 
 
 @Serializable
-@HubEventTopic("namespace::updated")
+@PlatformEventTopic("namespace::updated")
 data class NamespaceUpdatedEvent(
     val namespace: Namespace,
-) : HubEvent()
+) : PlatformEvent()
 

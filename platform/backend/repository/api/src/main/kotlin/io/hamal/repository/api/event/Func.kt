@@ -4,15 +4,15 @@ import io.hamal.repository.api.Func
 import kotlinx.serialization.Serializable
 
 @Serializable
-@HubEventTopic("func::created")
+@PlatformEventTopic("func::created")
 data class FuncCreatedEvent(
     val func: Func,
-) : HubEvent()
+) : PlatformEvent()
 
 
 @Serializable
-@HubEventTopic("func::updated")
+@PlatformEventTopic("func::updated")
 data class FuncUpdatedEvent(
     val func: Func,
-) : HubEvent()
+) : PlatformEvent()
 

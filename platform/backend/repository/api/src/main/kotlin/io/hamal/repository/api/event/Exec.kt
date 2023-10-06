@@ -4,37 +4,37 @@ import io.hamal.repository.api.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-@HubEventTopic("exec::planned")
+@PlatformEventTopic("exec::planned")
 data class ExecPlannedEvent(
     val plannedExec: PlannedExec
-) : HubEvent()
+) : PlatformEvent()
 
 @Serializable
-@HubEventTopic("exec::scheduled")
+@PlatformEventTopic("exec::scheduled")
 data class ExecScheduledEvent(
     val scheduledExec: ScheduledExec
-) : HubEvent()
+) : PlatformEvent()
 
 @Serializable
-@HubEventTopic("exec::queued")
+@PlatformEventTopic("exec::queued")
 data class ExecutionQueuedEvent(
     val queuedExec: QueuedExec
-) : HubEvent()
+) : PlatformEvent()
 
 @Serializable
-@HubEventTopic("exec::started")
+@PlatformEventTopic("exec::started")
 data class ExecutionStartedEvent(
     val startedExec: StartedExec
-) : HubEvent()
+) : PlatformEvent()
 
 @Serializable
-@HubEventTopic("exec::completed")
+@PlatformEventTopic("exec::completed")
 data class ExecutionCompletedEvent(
     val completedExec: CompletedExec
-) : HubEvent()
+) : PlatformEvent()
 
 @Serializable
-@HubEventTopic("exec::failed")
+@PlatformEventTopic("exec::failed")
 data class ExecutionFailedEvent(
     val failedExec: FailedExec
-) : HubEvent()
+) : PlatformEvent()

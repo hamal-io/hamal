@@ -23,12 +23,10 @@ import kotlin.io.path.Path
 
 @Configuration
 @Profile("sqlite")
-open class SqliteRepositoryConfig(
-    val hubBasePath: BackendBasePath
-) {
+open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
-    open fun hubEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("hub-event")))
+    open fun platformEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("platform-event")))
 
     @Bean
     open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))
@@ -126,5 +124,5 @@ open class SqliteRepositoryConfig(
     @Bean
     open fun metricRepository(): MetricRepository = MemoryMetricRepository()
 
-    private val path = Path(hubBasePath.value)
+    private val path = Path(backendBasePath.value)
 }

@@ -9,7 +9,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubEventTrigger
+import io.hamal.lib.sdk.hub.PlatformEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
 
 class GetTriggerFunction(
@@ -45,7 +45,7 @@ class GetTriggerFunction(
                                 )
                             )
 
-                        is HubEventTrigger -> {
+                        is PlatformEventTrigger -> {
                             MapType(
                                 mutableMapOf(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
