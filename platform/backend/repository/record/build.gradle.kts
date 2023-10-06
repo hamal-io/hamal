@@ -8,7 +8,7 @@ plugins {
 archivesName.set("hub-repository-record")
 
 dependencies {
-    api(project(":platform:hub:repository:api"))
+    api(project(":platform:backend:repository:api"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

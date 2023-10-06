@@ -30,7 +30,7 @@ node {
 
 dependencies {
     implementation(project(":platform:lib:sdk"))
-    implementation(project(":platform:hub:core"))
+    implementation(project(":platform:backend:core"))
 }
 
 val npmBuild = tasks.register<NpmTask>("npmBuild") {
@@ -63,8 +63,8 @@ testing {
                 dependencies {
                     implementation(project())
                     implementation(project(":platform:lib:sdk"))
-                    implementation(project(":platform:hub:bridge"))
-                    implementation(project(":platform:hub:core"))
+                    implementation(project(":platform:backend:bridge"))
+                    implementation(project(":platform:backend:core"))
                     implementation(project(":platform:runner"))
 
                     implementation(external.junit)

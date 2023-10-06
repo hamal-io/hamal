@@ -5,10 +5,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-request")
+archivesName.set("hub-bridge")
 
 dependencies {
-    implementation(project(":platform:lib:domain"))
+    implementation(project(":platform:lib:sdk"))
+    implementation(project(":platform:backend:core"))
 }
 
 
@@ -19,11 +20,10 @@ testing {
             if (this is JvmTestSuite) {
 
                 dependencies {
-//                    implementation(project())
-//                    implementation(project(":platform:lib:sdk"))
-//                    implementation(project(":platform:hub:bridge"))
-//                    implementation(project(":platform:hub:core"))
-//                    implementation(project(":platform:runner"))
+                    implementation(project())
+                    implementation(project(":platform:lib:sdk"))
+                    implementation(project(":platform:backend:core"))
+                    implementation(project(":platform:runner"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

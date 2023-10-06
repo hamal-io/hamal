@@ -5,12 +5,13 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-repository-memory")
+archivesName.set("hub-repository-sqlite")
 
 dependencies {
-    api(project(":platform:hub:repository:record"))
+    api(project(":platform:lib:sqlite"))
+    api(project(":platform:backend:repository:record"))
 
-    testImplementation(project(":platform:hub:repository:memory"))
+    testImplementation(project(":platform:backend:repository:sqlite"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
@@ -20,9 +21,9 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(external.sqlite)
+                    implementation(project(":platform:lib:sqlite"))
 
-                    implementation(project(":platform:hub:repository:memory"))
+                    implementation(project(":platform:backend:repository:sqlite"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
                 }

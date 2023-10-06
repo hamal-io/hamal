@@ -5,11 +5,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-bridge")
+archivesName.set("hub-api")
 
 dependencies {
     implementation(project(":platform:lib:sdk"))
-    implementation(project(":platform:hub:core"))
+    implementation(project(":platform:backend:core"))
+    implementation(project(":platform:backend:request"))
 }
 
 
@@ -22,7 +23,8 @@ testing {
                 dependencies {
                     implementation(project())
                     implementation(project(":platform:lib:sdk"))
-                    implementation(project(":platform:hub:core"))
+                    implementation(project(":platform:backend:bridge"))
+                    implementation(project(":platform:backend:core"))
                     implementation(project(":platform:runner"))
 
                     implementation(external.junit)
