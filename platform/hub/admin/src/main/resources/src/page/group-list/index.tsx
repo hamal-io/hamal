@@ -1,12 +1,12 @@
 import React from 'react'
 
-const LogListPage: React.FC = () => {
+const GroupListPage: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center">
-            Log List
+            Group List
         </div>
     );
 }
 
-export default LogListPage;
+export default GroupListPage;
 

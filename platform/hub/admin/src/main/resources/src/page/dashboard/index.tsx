@@ -1,7 +1,12 @@
-import React from "react";
+import React from 'react'
 
-export default () => {
-    return (<>
-        <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4"></div>
-    </>);
-};
+const HomePage: React.FC = () => {
+    return (
+        <div className="flex flex-col items-center justify-center">
+            <p>Dashboard</p>
+        </div>
+    );
+}
+
+export default HomePage;
+

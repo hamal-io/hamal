@@ -1,57 +1,39 @@
-import React, {useState} from "react";
-import {
-    Breadcrumb,
-    Button,
-    ButtonGroup,
-    Card,
-    Col,
-    Container,
-    Nav,
-    Pagination,
-    Row,
-    Table
-} from '@themesberg/react-bootstrap';
-import {faHome} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Editor from "../../component/editor";
-import {invokeAdhoc} from "../../api";
+import React, {useState} from 'react'
+import {Button} from 'flowbite-react'
+import Editor from '../../component/editor'
+import {invokeAdhoc} from "../../api/adhoc.ts";
 
-export default function () {
-    const [code, setCode] = useState(`print("hello hamal")`)
+const AdhocPage: React.FC = () => {
+    const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
+
     return (
-        <>
-            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
-                <div className="d-block mb-2 mb-md-0">
-                    <Breadcrumb className="d-none d-md-inline-block"
-                                listProps={{className: "breadcrumb-dark breadcrumb-transparent"}}>
-                        <Breadcrumb.Item><FontAwesomeIcon icon={faHome}/></Breadcrumb.Item>
-                        <Breadcrumb.Item>Adhoc</Breadcrumb.Item></Breadcrumb>
-                </div>
+        <div className="flex flex-col items-center justify-center">
+            <div className="w-1/2">
+                <Editor
+                    code={code}
+                    onChange={code => {
+                        setCode(code || "")
+
+                    }}
+                />
             </div>
-            <Row>
-                <Col xs={12} xl={8}>
-                    <Button onClick={_ => invokeAdhoc({code})} variant="primary" size="sm">Run Code</Button>
 
-                    <Editor
-                        code={code}
-                        onChange={code => setCode(code || '')}
-                    />
+            <div className="flex flex-row ">
+                <Button onClick={() => {
+                    console.log("run code", code)
+                    invokeAdhoc({
+                        code
+                    }).then(submitted => {
+                        console.log("id", submitted.id)
+                        console.log("reqId", submitted.reqId)
+                        console.log(submitted.status)
+                    }).catch(error => console.error(error))
 
-                </Col>
-                <Col xs={12} xl={4}>
-                    <Row>
-                        <Col xs={12}>
-                            <h1>Inputs Placeholder</h1>
-                            <h1>Events Placeholder</h1>
-                            <h1>State Placeholder</h1>
-                            <h1>Execution Logs Placeholder</h1>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </>
+                }}>Execute</Button>
+            </div>
+        </div>
     );
-};
+}
 
-
+export default AdhocPage;
 

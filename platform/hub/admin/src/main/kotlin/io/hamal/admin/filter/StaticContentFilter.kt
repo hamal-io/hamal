@@ -22,9 +22,9 @@ class StaticContentFilter : Filter {
         if (path.startsWith("/v1")) {
             chain.doFilter(request, response)
         } else if (fileExtensions.stream().anyMatch { path.contains(it) }) {
-            resourceToResponse("static$path", response)
+            resourceToResponse("dist$path", response)
         } else {
-            resourceToResponse("static/index.html", response)
+            resourceToResponse("dist/index.html", response)
         }
     }
 

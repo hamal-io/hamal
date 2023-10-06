@@ -1,14 +1,28 @@
-import React from "react";
+import {Footer} from "flowbite-react";
 
-interface FooterProps {
-    toggleSettings: () => void;
-    showSettings: boolean;
-}
 
-export default (props: FooterProps) => {
+export default function () {
     return (
-        <div>
-
-        </div>
-    );
-};
+        <Footer container>
+            <Footer.Copyright
+                by="hamal.io"
+                href="#"
+                year={2023}
+            />
+            <Footer.LinkGroup>
+                <Footer.Link href="#">
+                    About
+                </Footer.Link>
+                <Footer.Link href="#">
+                    Privacy Policy
+                </Footer.Link>
+                <Footer.Link href="#">
+                    Licensing
+                </Footer.Link>
+                <Footer.Link href="#">
+                    Contact
+                </Footer.Link>
+            </Footer.LinkGroup>
+        </Footer>
+    )
+}
