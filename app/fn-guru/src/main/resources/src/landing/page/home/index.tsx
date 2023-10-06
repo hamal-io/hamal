@@ -64,7 +64,7 @@ const HomePage: React.FC = () => {
 
             <main className="flex-1 w-full mx-auto p-4 text-lg h-full shadow-lg bg-gray-100">
                 <div className="flex flex-col items-center justify-center">
-                    <p>Simplest way to create Cloud Functions</p>
+                    <p>Simplest way to automate your workflows through cloud functions</p>
                     <p>No installation, no command-line tools.</p>
                     <p>Write code and deploy functions from the browser.</p>
                 </div>

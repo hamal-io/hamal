@@ -1,4 +1,4 @@
-package io.hamal.backend
+package io.hamal.mono
 
 import io.hamal.admin.AdminConfig
 import io.hamal.api.ApiConfig

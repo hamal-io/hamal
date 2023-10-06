@@ -1,4 +1,4 @@
-package io.hamal.backend.api
+package io.hamal.testbed.api
 
 import io.hamal.lib.common.Logger
 import io.hamal.lib.common.domain.CmdId

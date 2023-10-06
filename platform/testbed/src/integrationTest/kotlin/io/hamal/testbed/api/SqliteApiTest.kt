@@ -1,4 +1,4 @@
-package io.hamal.backend.api
+package io.hamal.testbed.api
 
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig

@@ -1,4 +1,4 @@
-package io.hamal.backend.admin
+package io.hamal.testbed.admin
 
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.ExecId
