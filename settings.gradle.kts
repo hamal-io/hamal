@@ -65,10 +65,12 @@ include(":platform:lib:sdk")
 include(":platform:lib:sqlite")
 include(":platform:lib:web3")
 
-include(":project")
-include(":project:fn-guru")
-include(":project:hamal-mono")
-include(":project:web3proxy")
+include(":app")
+include(":app:fn-guru")
+include(":app:hamal-backend")
+include(":app:hamal-mono")
+include(":app:hamal-runner")
+include(":app:web3proxy")
 
 rootProject.name = "hamal"
 
