@@ -1,6 +1,6 @@
 package io.hamal.core.config.repo
 
-import io.hamal.core.config.HubBasePath
+import io.hamal.core.config.BackendBasePath
 import io.hamal.repository.api.*
 import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
@@ -24,7 +24,7 @@ import kotlin.io.path.Path
 @Configuration
 @Profile("sqlite")
 open class SqliteRepositoryConfig(
-    val hubBasePath: HubBasePath
+    val hubBasePath: BackendBasePath
 ) {
 
     @Bean

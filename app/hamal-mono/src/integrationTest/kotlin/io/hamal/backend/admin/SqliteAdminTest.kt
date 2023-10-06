@@ -3,7 +3,7 @@ package io.hamal.backend.admin
 import io.hamal.admin.AdminConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
-import io.hamal.core.config.HubBasePath
+import io.hamal.core.config.BackendBasePath
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.DisplayName
 import org.springframework.boot.test.context.SpringBootTest
@@ -39,5 +39,5 @@ internal class SqliteAdminHamalTest : BaseAdminTest() {
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 
     @Bean
-    fun hubBasePath() = HubBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
+    fun hubBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
 }

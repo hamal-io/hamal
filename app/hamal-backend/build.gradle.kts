@@ -25,7 +25,7 @@ docker {
                 9009, 9009
             )
         )
-        images.set(listOf("hamalio/hamal-mono"))
+        images.set(listOf("hamalio/hamal-backend"))
         jvmArgs.set(listOf("-Xmx1024m", "-XX:+ExitOnOutOfMemoryError"))
     }
 }

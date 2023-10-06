@@ -1,0 +1,15 @@
+version: "3.5"
+services:
+  mono:
+    image: hamalio/hamal-mono
+    restart:
+      unless-stopped
+    ports:
+      - "0.0.0.0:9009:9009"
+    environment:
+      - ACTIVE_PROFILES=default,memory
+    networks:
+      - hamalnet
+
+networks:
+  hamalnet:
