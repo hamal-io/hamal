@@ -104,7 +104,7 @@ class HubFixedRateTrigger(
 ) : HubTrigger
 
 @Serializable
-class HubEventTrigger(
+class PlatformEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: HubTrigger.Func,

@@ -28,7 +28,7 @@ open class SqliteRepositoryConfig(
 ) {
 
     @Bean
-    open fun hubEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("hub-event")))
+    open fun platformEventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("hub-event")))
 
     @Bean
     open fun eventBrokerRepository() = SqliteBrokerRepository(SqliteBroker(path.resolve("event")))

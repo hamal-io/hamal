@@ -1,6 +1,6 @@
 package io.hamal.core.req.handler.exec
 
-import io.hamal.core.event.HubEventEmitter
+import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
 @Component
 class InvokeExecHandler(
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: HubEventEmitter,
+    private val eventEmitter: PlatformEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
 ) : ReqHandler<SubmittedInvokeExecReq>(SubmittedInvokeExecReq::class) {
 

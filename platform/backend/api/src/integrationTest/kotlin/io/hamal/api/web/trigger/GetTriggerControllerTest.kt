@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.hub.HubCreateTriggerReq
 import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubEventTrigger
+import io.hamal.lib.sdk.hub.PlatformEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -83,7 +83,7 @@ internal class GetTriggerControllerTest : BaseTriggerControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(HubEventTrigger::class)) {
+        with(getTriggerResponse.result(PlatformEventTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))

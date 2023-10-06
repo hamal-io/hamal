@@ -2,7 +2,7 @@ package io.hamal.api.web.trigger
 
 import io.hamal.core.adapter.GetTriggerPort
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.hub.HubEventTrigger
+import io.hamal.lib.sdk.hub.PlatformEventTrigger
 import io.hamal.lib.sdk.hub.HubFixedRateTrigger
 import io.hamal.lib.sdk.hub.HubTrigger
 import io.hamal.repository.api.EventTrigger
@@ -37,7 +37,7 @@ internal class GetTriggerController(private val getTrigger: GetTriggerPort) {
                         duration = trigger.duration
                     )
 
-                    is EventTrigger -> HubEventTrigger(
+                    is EventTrigger -> PlatformEventTrigger(
                         id = trigger.id,
                         name = trigger.name,
                         func = HubTrigger.Func(
@@ -49,7 +49,7 @@ internal class GetTriggerController(private val getTrigger: GetTriggerPort) {
                             name = namespace.name
                         ),
                         inputs = trigger.inputs,
-                        topic = HubEventTrigger.Topic(
+                        topic = PlatformEventTrigger.Topic(
                             id = topic!!.id,
                             name = topic.name
                         )

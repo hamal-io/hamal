@@ -1,13 +1,13 @@
 package io.hamal.core.service
 
 import io.hamal.core.component.Async
-import io.hamal.core.event.HubEventContainer
+import io.hamal.core.event.PlatformEventContainer
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.event.HubEvent
+import io.hamal.repository.api.event.PlatformEvent
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
@@ -20,32 +20,32 @@ import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-internal class HubEventService(
+internal class PlatformEventService(
     private val async: Async,
     private val generateDomainId: GenerateDomainId,
-    private val hubEventContainer: HubEventContainer,
-    private val hubEventBrokerRepository: BrokerRepository
+    private val platformEventContainer: PlatformEventContainer,
+    private val platformEventBrokerRepository: BrokerRepository
 ) : DisposableBean, ApplicationListener<ContextRefreshedEvent> {
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        val instanceTopics = hubEventContainer.topicNames().map { topicName ->
+        val instanceTopics = platformEventContainer.topicNames().map { topicName ->
             val topicId = generateDomainId(::TopicId)
-            hubEventBrokerRepository.findTopic(GroupId.root, topicName) ?: hubEventBrokerRepository.create(
+            platformEventBrokerRepository.findTopic(GroupId.root, topicName) ?: platformEventBrokerRepository.create(
                 CmdId(topicId), TopicToCreate(topicId, topicName, GroupId.root)
             )
         }
 
         instanceTopics.forEach { topic ->
             val consumer = ProtobufLogConsumer(
-                ConsumerId("core-event-service"), topic, hubEventBrokerRepository, HubEvent::class
+                ConsumerId("core-event-service"), topic, platformEventBrokerRepository, PlatformEvent::class
             )
 
             scheduledTasks.add(
                 async.atFixedRate(1.milliseconds) {
                     consumer.consume(10) { chunkId, evt ->
-                        hubEventContainer[evt::class].forEach { handler ->
+                        platformEventContainer[evt::class].forEach { handler ->
                             val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value.value}"))
                             handler.handle(cmdId, evt)
                         }

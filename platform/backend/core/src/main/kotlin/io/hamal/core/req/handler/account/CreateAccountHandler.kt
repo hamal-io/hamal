@@ -1,6 +1,6 @@
 package io.hamal.core.req.handler.account
 
-import io.hamal.core.event.HubEventEmitter
+import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
@@ -21,7 +21,7 @@ class CreateAccountWithPasswordHandler(
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
-    val eventEmitter: HubEventEmitter,
+    val eventEmitter: PlatformEventEmitter,
 ) : ReqHandler<SubmittedCreateAccountWithPasswordReq>(SubmittedCreateAccountWithPasswordReq::class) {
 
     override fun invoke(req: SubmittedCreateAccountWithPasswordReq) {

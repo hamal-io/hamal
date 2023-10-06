@@ -1,6 +1,6 @@
 package io.hamal.core.service
 
-import io.hamal.core.event.HubEventEmitter
+import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.common.SnowflakeId
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 @Service
 internal class FixedRateTriggerService(
     internal val triggerQueryRepository: TriggerQueryRepository,
-    internal val eventEmitter: HubEventEmitter,
+    internal val eventEmitter: PlatformEventEmitter,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
     internal val funcQueryRepository: FuncQueryRepository

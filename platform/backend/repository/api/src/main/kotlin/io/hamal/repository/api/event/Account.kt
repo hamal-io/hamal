@@ -4,7 +4,7 @@ import io.hamal.repository.api.Account
 import kotlinx.serialization.Serializable
 
 @Serializable
-@HubEventTopic("account::created")
+@PlatformEventTopic("account::created")
 data class AccountCreatedEvent(
     val account: Account,
-) : HubEvent()
+) : PlatformEvent()

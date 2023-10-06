@@ -1,6 +1,6 @@
 package io.hamal.bridge.web.work
 
-import io.hamal.core.event.HubEventEmitter
+import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.hub.HubUnitOfWorkList
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 internal class PollRoute(
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
-    private val eventEmitter: HubEventEmitter
+    private val eventEmitter: PlatformEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<HubUnitOfWorkList> {
