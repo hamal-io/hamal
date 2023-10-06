@@ -62,7 +62,7 @@ interface EditorProps {
 //     wordWrapMinified: true,
 // }
 
-const Editor = (props: EditorProps) => {
+export const Editor = (props: EditorProps) => {
     return (
         <MonacoEditor
             theme={"Github"}
@@ -73,5 +73,3 @@ const Editor = (props: EditorProps) => {
         />
     );
 }
-
-export default Editor;

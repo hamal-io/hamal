@@ -1,11 +1,10 @@
 import {Footer as Delegate} from "flowbite-react";
 import {FC} from "react";
 
-
 export const Footer: FC = () => (
     <Delegate container>
         <Delegate.Copyright
-            by="hamal.io"
+            by="fn.guru"
             href="#"
             year={2023}
         />
@@ -24,4 +23,4 @@ export const Footer: FC = () => (
             </Delegate.Link>
         </Delegate.LinkGroup>
     </Delegate>
-)
+);

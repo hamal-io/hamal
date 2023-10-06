@@ -7,9 +7,8 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import DashboardPage from "./page/dashboard";
 import AdhocPage from "./page/adhoc";
-import Navbar from "./component/navbar";
+import {Footer, Navbar} from "./component";
 
-import Footer from "./component/footer";
 import FuncListPage from "./page/func-list";
 import LogListPage from "./page/log-list";
 import TriggerListPage from "./page/trigger-list";
