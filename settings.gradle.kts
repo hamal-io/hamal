@@ -35,7 +35,6 @@ dependencyResolutionManagement {
 include(":platform:backend")
 include(":platform:backend:admin")
 include(":platform:backend:api")
-include(":platform:backend:bootstrap")
 include(":platform:backend:bridge")
 include(":platform:backend:core")
 include(":platform:backend:repository:api")
@@ -44,7 +43,6 @@ include(":platform:backend:repository:record")
 include(":platform:backend:repository:sqlite")
 include(":platform:backend:repository:testbed")
 include(":platform:backend:request")
-include(":platform:mono")
 
 include(":platform:runner")
 include(":platform:runner-extension")
@@ -68,7 +66,8 @@ include(":platform:lib:sqlite")
 include(":platform:lib:web3")
 
 include(":project")
-include(":project:fn_guru")
+include(":project:fn-guru")
+include(":project:hamal-mono")
 include(":project:web3proxy")
 
 rootProject.name = "hamal"
