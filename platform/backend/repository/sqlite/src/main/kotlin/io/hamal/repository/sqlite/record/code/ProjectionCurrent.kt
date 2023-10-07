@@ -14,15 +14,15 @@ import kotlinx.serialization.ExperimentalSerializationApi
 @OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : SqliteProjection<CodeId, CodeRecord, Code> {
 
-    fun find(connection: Connection, codeID: CodeId): Code?{
+    fun find(connection: Connection, codeID: CodeId): Code? {
         TODO("Not yet implemented")
     }
 
-    fun find(codeId: CodeId, codeVersion: CodeVersion): Code?{
+    fun find(connection: Connection, codeId: CodeId, codeVersion: CodeVersion): Code? {
         TODO("Not yet implemented")
     }
 
-    fun list(connection: Connection, query: CodeQueryRepository.CodeQuery): List<Code>{
+    fun list(connection: Connection, query: CodeQueryRepository.CodeQuery): List<Code> {
         TODO("Not yet implemented")
     }
 
