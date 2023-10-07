@@ -8,6 +8,7 @@ import io.hamal.repository.api.CodeCmdRepository.*
 import io.hamal.repository.api.CodeQueryRepository.*
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.CreateDomainObject
+import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.code.CodeCreationRecord
 import io.hamal.repository.record.code.CodeEntity
 import io.hamal.repository.record.code.CodeRecord
@@ -15,6 +16,7 @@ import io.hamal.repository.record.code.CodeUpdatedRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
 
 import java.nio.file.Path
+
 
 internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
     override fun invoke(recs: List<CodeRecord>): Code {
@@ -100,7 +102,9 @@ class SqliteCodeRepository(
     }
 
     override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? {
-        return ProjectionCurrent.find(connection, codeId, codeVersion)
+        return tx {
+            versionOf(codeId, RecordSequence(codeVersion.value))
+        }
     }
 
     override fun list(query: CodeQuery): List<Code> {

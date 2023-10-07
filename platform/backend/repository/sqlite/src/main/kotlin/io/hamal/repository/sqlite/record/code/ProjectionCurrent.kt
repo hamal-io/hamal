@@ -1,7 +1,6 @@
 package io.hamal.repository.sqlite.record.code
 
 import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Code
@@ -33,10 +32,6 @@ internal object ProjectionCurrent : SqliteProjection<CodeId, CodeRecord, Code> {
                 protobuf.decodeFromByteArray(Code.serializer(), rs.getBytes("data"))
             }
         }
-    }
-
-    fun find(connection: Connection, codeId: CodeId, codeVersion: CodeVersion): Code? {
-        TODO("Not yet implemented")
     }
 
     fun list(connection: Connection, query: CodeQuery): List<Code> {
