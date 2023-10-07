@@ -42,6 +42,9 @@ export const Navbar: FC = () => {
                 <Delegate.Link onClick={() => navigate("/dashboard", {replace: true})}>
                     Dashboard
                 </Delegate.Link>
+                <Delegate.Link onClick={() => navigate("/play", {replace: true})}>
+                    Play
+                </Delegate.Link>
                 <Delegate.Link onClick={() => navigate("/functions", {replace: true})}>
                     Functions
                 </Delegate.Link>

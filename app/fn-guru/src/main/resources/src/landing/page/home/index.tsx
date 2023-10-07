@@ -24,9 +24,7 @@ const HomePage: React.FC = () => {
                             code={code}
                             onChange={code => {
                                 setCode(code || "")
-
-                            }
-                            }
+                            }}
                         />
                     </div>
 

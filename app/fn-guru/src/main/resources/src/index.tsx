@@ -15,6 +15,7 @@ import AuthenticatedPage from "./app/page/authenticated";
 import DashboardPage from "./app/page/dashboard";
 import FuncListPage from "./app/page/func-list";
 import ExecListPage from "./app/page/exec-list";
+import AdhocPage from "./app/page/adhoc";
 
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -23,7 +24,8 @@ const router = createBrowserRouter([
 
     {path: "/dashboard", element: <AuthenticatedPage><DashboardPage/></AuthenticatedPage>},
     {path: "/functions", element: <AuthenticatedPage><FuncListPage/></AuthenticatedPage>},
-    {path: "/executions", element: <AuthenticatedPage><ExecListPage/></AuthenticatedPage>}
+    {path: "/executions", element: <AuthenticatedPage><ExecListPage/></AuthenticatedPage>},
+    {path: "/play", element: <AuthenticatedPage><AdhocPage/></AuthenticatedPage>}
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
