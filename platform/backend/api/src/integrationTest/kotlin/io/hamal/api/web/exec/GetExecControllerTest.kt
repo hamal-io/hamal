@@ -1,11 +1,11 @@
 package io.hamal.api.web.exec
 
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiExec
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,7 +27,7 @@ internal class GetExecControllerTest : BaseExecControllerTest() {
         with(response.result(ApiExec::class)) {
             assertThat(id, equalTo(createAdhocResponse.id(::ExecId)))
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(code, equalTo(CodeType("40 + 2")))
+            assertThat(code, equalTo(CodeValue("40 + 2")))
             assertThat(correlation, nullValue())
         }
     }

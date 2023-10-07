@@ -3,6 +3,7 @@ package io.hamal.bridge.web.work
 import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.sdk.api.ApiUnitOfWorkList
 import io.hamal.lib.sdk.api.ApiUnitOfWorkList.UnitOfWork
 import io.hamal.repository.api.ExecCmdRepository
@@ -37,7 +38,7 @@ internal class PollRoute(
                         correlation = exec.correlation,
                         inputs = exec.inputs,
                         state = state,
-                        code = exec.code,
+                        code = exec.code ?: CodeValue(""), // FIXME
                         events = exec.events
                     )
                 }), OK

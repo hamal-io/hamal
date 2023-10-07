@@ -20,6 +20,8 @@ internal class GetExecController(private val getExec: GetExecPort) {
                     correlation = exec.correlation,
                     inputs = exec.inputs,
                     code = exec.code,
+                    codeId = exec.codeId,
+                    codeVersion = exec.codeVersion,
                     events = exec.events
                 )
             )

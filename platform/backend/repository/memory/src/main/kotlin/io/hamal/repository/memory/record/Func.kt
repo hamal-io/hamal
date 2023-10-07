@@ -80,7 +80,8 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        code = cmd.code
+                        codeId = cmd.codeId,
+                        codeVersion = cmd.codeVersion
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
@@ -101,7 +102,8 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        code = cmd.code ?: currentVersion.code
+                        codeId = cmd.codeId ?: currentVersion.codeId,
+                        codeVersion = cmd.codeVersion ?: currentVersion.codeVersion
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)

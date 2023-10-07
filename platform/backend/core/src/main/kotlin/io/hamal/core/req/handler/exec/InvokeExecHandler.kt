@@ -44,7 +44,9 @@ class InvokeExecHandler(
                 groupId = req.groupId,
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),
-                code = func?.code ?: req.code ?: throw IllegalStateException("Code not found"),
+                code = req.code,
+                codeId = req.codeId,
+                codeVersion = req.codeVersion,
                 events = req.events,
             )
         )

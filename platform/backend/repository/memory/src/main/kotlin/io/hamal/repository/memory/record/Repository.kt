@@ -47,6 +47,22 @@ abstract class MemoryRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
         return createDomainObject(recordsOf(id).takeWhileInclusive { it.cmdId != cmdId })
     }
 
+    override fun versionOf(id: ID, sequence: RecordSequence): OBJ? {
+        return recordsOf(id)
+            .filter {
+                val seq = it.sequence
+                seq != null && seq >= sequence
+            }
+            .ifEmpty { null }
+            ?.let { records ->
+                if (records.none { it.sequence == sequence }) {
+                    null
+                } else {
+                    createDomainObject(records)
+                }
+            }
+    }
+
     override fun currentVersion(id: ID): OBJ {
         val lastRecord = lastRecordOf(id)
         return versionOf(id, lastRecord.cmdId)

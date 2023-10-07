@@ -3,6 +3,7 @@ package io.hamal.admin.web.func
 import io.hamal.core.adapter.GetFuncPort
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.admin.AdminFunc
+import io.hamal.repository.api.Code
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.Namespace
 import org.springframework.http.ResponseEntity
@@ -16,7 +17,7 @@ internal class GetFuncController(private val getFunc: GetFuncPort) {
     @GetMapping("/v1/funcs/{funcId}")
     fun getFunc(@PathVariable("funcId") funcId: FuncId) = getFunc(funcId, ::assemble)
 
-    private fun assemble(func: Func, namespace: Namespace) =
+    private fun assemble(func: Func, code: Code, namespace: Namespace) =
         ResponseEntity.ok(
             AdminFunc(
                 id = func.id,
@@ -26,7 +27,11 @@ internal class GetFuncController(private val getFunc: GetFuncPort) {
                 ),
                 name = func.name,
                 inputs = func.inputs,
-                code = func.code
+                code = AdminFunc.Code(
+                    id = code.id,
+                    version = code.version,
+                    value = code.value
+                )
             )
         )
 }

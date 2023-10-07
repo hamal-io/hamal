@@ -3,7 +3,6 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -40,7 +39,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                             )
                         )
                     ),
-                    code = CodeType("40 + 2")
+                    codeId = CodeId(5),
+                    codeVersion = CodeVersion(6)
                 )
             )
 
@@ -50,7 +50,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(234)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
-                assertThat(code, equalTo(CodeType("40 + 2")))
+                assertThat(codeId, equalTo(CodeId(5)))
+                assertThat(codeVersion, equalTo(CodeVersion(6)))
             }
 
             verifyCount(1)
@@ -76,7 +77,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                             namespaceId = NamespaceId(2),
                             name = FuncName("first-func-name"),
                             inputs = FuncInputs(),
-                            code = CodeType("40 + 2")
+                            codeId = CodeId(5),
+                            codeVersion = CodeVersion(6)
                         )
                     )
                 }
@@ -108,7 +110,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(22),
                         name = FuncName("func-name"),
                         inputs = FuncInputs(),
-                        code = CodeType("'13'..'37'")
+                        codeId = CodeId(5),
+                        codeVersion = CodeVersion(6)
                     )
                 )
 
@@ -118,7 +121,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(FuncName("func-name")))
                     assertThat(inputs, equalTo(FuncInputs()))
-                    assertThat(code, equalTo(CodeType("'13'..'37'")))
+                    assertThat(codeId, equalTo(CodeId(5)))
+                    assertThat(codeVersion, equalTo(CodeVersion(6)))
                 }
 
                 verifyCount(2)
@@ -145,7 +149,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(2222),
                         name = FuncName("second-func-name"),
                         inputs = FuncInputs(),
-                        code = CodeType("40 + 2")
+                        codeId = CodeId(5),
+                        codeVersion = CodeVersion(6)
                     )
                 )
 
@@ -155,7 +160,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(FuncName("first-func-name")))
                     assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
-                    assertThat(code, equalTo(CodeType("40 + 2")))
+                    assertThat(codeId, equalTo(CodeId(5)))
+                    assertThat(codeVersion, equalTo(CodeVersion(6)))
                 }
 
                 verifyCount(1)
@@ -180,7 +186,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(22),
                     name = FuncName("Updated"),
                     inputs = FuncInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    code = CodeType("'13'..'37'")
+                    codeId = CodeId(5),
+                    codeVersion = CodeVersion(6)
                 )
             )
 
@@ -190,7 +197,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(22)))
                 assertThat(name, equalTo(FuncName("Updated")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("answer" to NumberType(42))))))
-                assertThat(code, equalTo(CodeType("'13'..'37'")))
+                assertThat(codeId, equalTo(CodeId(5)))
+                assertThat(codeVersion, equalTo(CodeVersion(6)))
             }
 
             verifyCount(1)
@@ -211,7 +219,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     namespaceId = null,
                     name = null,
                     inputs = null,
-                    code = null
+                    codeId = null,
+                    codeVersion = null
                 )
             )
 
@@ -221,7 +230,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("func-name")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
-                assertThat(code, equalTo(CodeType("40 + 2")))
+                assertThat(codeId, equalTo(CodeId(5)))
+                assertThat(codeVersion, equalTo(CodeVersion(6)))
             }
 
             verifyCount(1)
@@ -311,7 +321,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = FuncName("SomeFunc")
+                name = FuncName("SomeFunc"),
+                codeId = CodeId(4),
+                codeVersion = CodeVersion(5)
             )
 
             with(get(FuncId(1))) {
@@ -320,7 +332,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
-                assertThat(code, equalTo(CodeType("40 + 2")))
+                assertThat(codeId, equalTo(CodeId(4)))
+                assertThat(codeVersion, equalTo(CodeVersion(5)))
             }
         }
 
@@ -348,7 +361,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = FuncName("SomeFunc")
+                name = FuncName("SomeFunc"),
+                codeId = CodeId(4),
+                codeVersion = CodeVersion(5)
             )
 
             with(find(FuncId(1))!!) {
@@ -357,7 +372,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
-                assertThat(code, equalTo(CodeType("40 + 2")))
+                assertThat(codeId, equalTo(CodeId(4)))
+                assertThat(codeVersion, equalTo(CodeVersion(5)))
             }
         }
 
@@ -492,6 +508,8 @@ private fun FuncRepository.createFunc(
     namespaceId: NamespaceId,
     name: FuncName,
     groupId: GroupId,
+    codeId: CodeId = CodeId(5),
+    codeVersion: CodeVersion = CodeVersion(6),
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
@@ -508,7 +526,8 @@ private fun FuncRepository.createFunc(
                     )
                 )
             ),
-            code = CodeType("40 + 2")
+            codeId = codeId,
+            codeVersion = codeVersion
         )
     )
 }

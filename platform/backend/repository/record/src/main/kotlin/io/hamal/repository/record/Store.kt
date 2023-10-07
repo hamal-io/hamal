@@ -10,6 +10,7 @@ interface RecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObjec
     fun lastRecordOf(id: ID): RECORD
     fun commandAlreadyApplied(cmdId: CmdId, id: ID): Boolean
     fun versionOf(id: ID, cmdId: CmdId): OBJ
+    fun versionOf(id: ID, sequence: RecordSequence): OBJ?
     fun currentVersion(id: ID): OBJ
     fun clear()
 }

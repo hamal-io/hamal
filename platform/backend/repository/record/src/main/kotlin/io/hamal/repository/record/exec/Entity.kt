@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.repository.api.*
@@ -24,7 +23,9 @@ data class ExecEntity(
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
-    var code: CodeType? = null,
+    var code: CodeValue? = null,
+    var codeId: CodeId? = null,
+    var codeVersion: CodeVersion? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
     var events: List<Event>? = null,
@@ -43,6 +44,8 @@ data class ExecEntity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
+                codeId = rec.codeId,
+                codeVersion = rec.codeVersion,
                 events = rec.events,
                 plannedAt = Instant.now(), // FIXME
             )
@@ -96,7 +99,9 @@ data class ExecEntity(
             groupId = groupId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(MapType()),
-            code = code!!,
+            code = code,
+            codeId = codeId,
+            codeVersion = codeVersion,
             events = events ?: listOf()
         )
 

@@ -4,11 +4,8 @@ import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.Namespace
-import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
@@ -24,7 +21,7 @@ interface CreateFuncPort {
 }
 
 interface GetFuncPort {
-    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Namespace) -> T): T
+    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T
 }
 
 interface InvokeFuncPort {
@@ -53,6 +50,7 @@ interface FuncPort : CreateFuncPort, GetFuncPort, InvokeFuncPort, ListFuncsPort,
 class FuncAdapter(
     private val submitRequest: SubmitRequest,
     private val funcQueryRepository: FuncQueryRepository,
+    private val codeQueryRepository: CodeQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) : FuncPort {
     override fun <T : Any> invoke(
@@ -64,10 +62,11 @@ class FuncAdapter(
         return responseHandler(submitRequest(groupId, req))
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Namespace) -> T): T {
+    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T {
         val func = funcQueryRepository.get(funcId)
+        val code = codeQueryRepository.get(func.codeId)
         val namespaces = namespaceQueryRepository.get(func.namespaceId)
-        return responseHandler(func, namespaces)
+        return responseHandler(func, code, namespaces)
     }
 
     override fun <T : Any> invoke(

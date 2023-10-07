@@ -7,7 +7,6 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
@@ -72,7 +71,7 @@ abstract class BaseApiTest {
                     testGroup.id,
                     ApiInvokeAdhocReq(
                         InvocationInputs(),
-                        CodeType(String(Files.readAllBytes(testFile)))
+                        CodeValue(String(Files.readAllBytes(testFile)))
                     )
                 )
                 rootApiSdk.await(execReq)

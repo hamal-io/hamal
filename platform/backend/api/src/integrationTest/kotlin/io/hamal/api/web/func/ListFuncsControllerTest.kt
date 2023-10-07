@@ -1,10 +1,6 @@
 package io.hamal.api.web.func
 
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiCreateFuncReq
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,7 +22,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
                     namespaceId = null,
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
-                    code = CodeType("")
+                    code = CodeValue("")
                 )
             )
         ).id(::FuncId)
@@ -49,7 +45,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
                         namespaceId = null,
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
-                        code = CodeType("")
+                        code = CodeValue("")
                     )
                 )
             }
@@ -75,7 +71,7 @@ internal class ListFuncsControllerTest : BaseFuncControllerTest() {
                     namespaceId = null,
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
-                    code = CodeType("")
+                    code = CodeValue("")
                 )
             )
         }

@@ -7,7 +7,6 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.admin.AdminCreateFuncReq
@@ -29,7 +28,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
                     namespaceId = null,
                     name = FuncName("update"),
                     inputs = FuncInputs(),
-                    code = CodeType("")
+                    code = CodeValue("")
                 )
             )
             .execute()
@@ -59,7 +58,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
-                    code = CodeType("createdCode")
+                    code = CodeValue("createdCode")
                 )
             )
         )
@@ -81,7 +80,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
                     namespaceId = updateNamespace.id,
                     name = FuncName("updatedName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
-                    code = CodeType("updatedCode")
+                    code = CodeValue("updatedCode")
                 )
             )
             .execute()
@@ -99,7 +98,9 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
             assertThat(namespace.name, equalTo(NamespaceName("updatedNamespace")))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
-            assertThat(code, equalTo(CodeType("updatedCode")))
+
+            assertThat(code.version, equalTo(CodeVersion(2)))
+            assertThat(code.value, equalTo(CodeValue("updatedCode")))
         }
     }
 
@@ -121,7 +122,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
-                    code = CodeType("createdCode")
+                    code = CodeValue("createdCode")
                 )
             )
         )
@@ -161,7 +162,7 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
                     namespaceId = createdNamespace.id,
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
-                    code = CodeType("createdCode")
+                    code = CodeValue("createdCode")
                 )
             )
         )
@@ -187,7 +188,9 @@ internal class UpdateFuncControllerTest : BaseFuncControllerTest() {
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("createdName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
-            assertThat(code, equalTo(CodeType("createdCode")))
+
+            assertThat(code.version, equalTo(CodeVersion(2)))
+            assertThat(code.value, equalTo(CodeValue("createdCode")))
         }
     }
 }

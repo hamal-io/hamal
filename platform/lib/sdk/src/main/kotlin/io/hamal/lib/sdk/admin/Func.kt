@@ -3,7 +3,6 @@ package io.hamal.lib.sdk.admin
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.UpdateFuncReq
@@ -14,7 +13,7 @@ data class AdminCreateFuncReq(
     override val namespaceId: NamespaceId? = null,
     override val name: FuncName,
     override val inputs: FuncInputs,
-    override val code: CodeType
+    override val code: CodeValue
 ) : CreateFuncReq
 
 @Serializable
@@ -22,7 +21,7 @@ data class AdminUpdateFuncReq(
     override val namespaceId: NamespaceId? = null,
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
-    override val code: CodeType? = null
+    override val code: CodeValue? = null
 ) : UpdateFuncReq
 
 @Serializable
@@ -56,12 +55,19 @@ data class AdminFunc(
     val namespace: Namespace,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeType
+    val code: Code
 ) {
     @Serializable
     data class Namespace(
         val id: NamespaceId,
         val name: NamespaceName
+    )
+
+    @Serializable
+    data class Code(
+        val id: CodeId,
+        val version: CodeVersion,
+        val value: CodeValue
     )
 }
 

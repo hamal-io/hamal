@@ -1,13 +1,9 @@
 package io.hamal.bridge.web.work
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.kua.type.CodeType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -25,7 +21,7 @@ internal class DequeueControllerTest : BaseWorkControllerTest() {
         createExec(
             execId = generateDomainId(::ExecId),
             status = Queued,
-            code = CodeType("40 + 2")
+            code = CodeValue("40 + 2")
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
@@ -33,7 +29,7 @@ internal class DequeueControllerTest : BaseWorkControllerTest() {
             with(work.first()) {
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
-                assertThat(code, equalTo(CodeType("40 + 2")))
+                assertThat(code, equalTo(CodeValue("40 + 2")))
 
                 verifyExecStarted(id)
             }
@@ -49,7 +45,7 @@ internal class DequeueControllerTest : BaseWorkControllerTest() {
                 funcId = FuncId(123),
                 correlationId = CorrelationId("_some_chosen_correlation_@")
             ),
-            code = CodeType("40 + 2")
+            code = CodeValue("40 + 2")
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
@@ -64,7 +60,7 @@ internal class DequeueControllerTest : BaseWorkControllerTest() {
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeType("40 + 2")))
+                assertThat(code, equalTo(CodeValue("40 + 2")))
 
                 verifyExecStarted(id)
             }

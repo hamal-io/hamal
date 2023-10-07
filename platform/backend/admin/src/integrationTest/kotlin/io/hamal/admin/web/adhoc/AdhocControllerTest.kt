@@ -2,13 +2,13 @@ package io.hamal.admin.web.adhoc
 
 import io.hamal.admin.web.BaseControllerTest
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.admin.AdminInvokeAdhocReq
 import io.hamal.lib.sdk.admin.AdminSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
@@ -24,7 +24,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
         val response = request(
             AdminInvokeAdhocReq(
                 inputs = InvocationInputs(),
-                code = CodeType("40 + 2")
+                code = CodeValue("40 + 2")
             )
         )
 
@@ -50,7 +50,9 @@ internal class AdhocControllerTest : BaseControllerTest() {
             assertThat(id, equalTo(execId))
             assertThat(correlation, nullValue())
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(code, equalTo(CodeType("40 + 2")))
+            assertThat(code, equalTo(CodeValue("40 + 2")))
+            assertThat(codeId, nullValue())
+            assertThat(codeVersion, nullValue())
         }
     }
 }

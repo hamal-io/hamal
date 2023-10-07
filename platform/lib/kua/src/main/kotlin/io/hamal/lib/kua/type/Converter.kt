@@ -81,6 +81,8 @@ fun State.toProxyMap(map: MapType): TableProxyMap {
         map.entries.forEach { (key, value) ->
             when (value) {
                 is BooleanType -> it[key] = value
+                is CodeType -> it[key] = value
+                is NilType -> it[key] = NilType
                 is NumberType -> it[key] = value
                 is StringType -> it[key] = value
                 is MapType -> {

@@ -2,13 +2,14 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
-import io.hamal.repository.api.CodeId
+import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
-import io.hamal.repository.api.CodeValue
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -29,14 +30,15 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     codeId = CodeId(123),
                     groupId = GroupId(1),
-                    code = CodeValue("40 + 2")
+                    value = CodeValue("40 + 2")
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(CodeId(123)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(code, equalTo(CodeValue("40 + 2")))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("40 + 2")))
             }
         }
 
@@ -56,9 +58,19 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     codeValue = CodeValue("40 + 2")
                 )
 
-                assertThat(get(CodeId(1)).code, equalTo(CodeValue("40 + 2")))
-                assertThat(get(CodeId(2)).code, equalTo(CodeValue("40 + 2")))
                 verifyCount(2)
+
+                with(get(CodeId(1))) {
+                    assertThat(id, equalTo(CodeId(1)))
+                    assertThat(version, equalTo(CodeVersion(1)))
+                    assertThat(value, equalTo(CodeValue("40 + 2")))
+                }
+
+                with(get(CodeId(2))) {
+                    assertThat(id, equalTo(CodeId(2)))
+                    assertThat(version, equalTo(CodeVersion(1)))
+                    assertThat(value, equalTo(CodeValue("40 + 2")))
+                }
             }
         }
     }
@@ -74,20 +86,38 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 codeValue = CodeValue("8 + 8")
             )
 
-            val result = update(
-                CodeId(1), CodeCmdRepository.UpdateCmd(
-                    id = CmdId(2),
-                    code = CodeValue("40 + 2")
-                )
-            )
+            val result = update(CodeId(1), UpdateCmd(CmdId(2), CodeValue("40 + 2")))
 
             with(result) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(code, equalTo(CodeValue("40 + 2")))
+                assertThat(version, equalTo(CodeVersion(2)))
+                assertThat(value, equalTo(CodeValue("40 + 2")))
             }
 
             verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Updates code multiple times`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(1),
+                codeValue = CodeValue("8 + 8")
+            )
+
+            verifyCount(1)
+
+            repeat(13) { iteration ->
+                val result = update(CodeId(1), UpdateCmd(CmdId(iteration + 2), CodeValue("40 + $iteration")))
+
+                with(result) {
+                    assertThat(id, equalTo(CodeId(1)))
+                    assertThat(groupId, equalTo(GroupId(1)))
+                    assertThat(version, equalTo(CodeVersion(iteration + 2)))
+                    assertThat(value, equalTo(CodeValue("40 + $iteration")))
+                }
+            }
         }
     }
 
@@ -134,7 +164,36 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(get(CodeId(1))) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(code, equalTo(CodeValue("1 + 1")))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("1 + 1")))
+            }
+        }
+
+        @TestFactory
+        fun `Get code by id and version`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("created")
+            )
+
+            repeat(10) { iteration ->
+                update(CodeId(1), UpdateCmd(CmdId(iteration + 2), CodeValue("1 + $iteration")))
+            }
+
+            with(get(CodeId(1), CodeVersion(1))) {
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("created")))
+            }
+
+            with(get(CodeId(1), CodeVersion(2))) {
+                assertThat(version, equalTo(CodeVersion(2)))
+                assertThat(value, equalTo(CodeValue("1 + 0")))
+            }
+
+            with(get(CodeId(1), CodeVersion(5))) {
+                assertThat(version, equalTo(CodeVersion(5)))
+                assertThat(value, equalTo(CodeValue("1 + 3")))
             }
         }
 
@@ -151,6 +210,24 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             }
             assertThat(exception.message, equalTo("Code not found"))
         }
+
+        @TestFactory
+        fun `Tries to get code by id and version but version does not exists`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("1 + 1")
+            )
+
+            assertThat(
+                assertThrows<NoSuchElementException> { get(CodeId(1), CodeVersion(0)) }.message,
+                equalTo("Code not found")
+            )
+            assertThat(
+                assertThrows<NoSuchElementException> { get(CodeId(1), CodeVersion(2)) }.message,
+                equalTo("Code not found")
+            )
+        }
     }
 
     @Nested
@@ -166,7 +243,36 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(find(CodeId(1))!!) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(code, equalTo(CodeValue("1 + 1")))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("1 + 1")))
+            }
+        }
+
+        @TestFactory
+        fun `Find code by id and version`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("created")
+            )
+
+            repeat(10) { iteration ->
+                update(CodeId(1), UpdateCmd(CmdId(iteration + 2), CodeValue("1 + $iteration")))
+            }
+
+            with(find(CodeId(1), CodeVersion(1))!!) {
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("created")))
+            }
+
+            with(find(CodeId(1), CodeVersion(2))!!) {
+                assertThat(version, equalTo(CodeVersion(2)))
+                assertThat(value, equalTo(CodeValue("1 + 0")))
+            }
+
+            with(find(CodeId(1), CodeVersion(5))!!) {
+                assertThat(version, equalTo(CodeVersion(5)))
+                assertThat(value, equalTo(CodeValue("1 + 3")))
             }
         }
 
@@ -180,6 +286,19 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             val result = find(CodeId(111111))
             assertThat(result, nullValue())
+        }
+
+
+        @TestFactory
+        fun `Tries to find code by id and version but version does not exists`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("1 + 1")
+            )
+
+            assertThat(find(CodeId(1), CodeVersion(0)), nullValue())
+            assertThat(find(CodeId(1), CodeVersion(2)), nullValue())
         }
     }
 
@@ -195,7 +314,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
-                assertThat(code, equalTo(CodeValue("1 + 3")))
+                assertThat(value, equalTo(CodeValue("1 + 3")))
             }
         }
 
@@ -215,13 +334,13 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(4)))
                 assertThat(groupId, equalTo(GroupId(5)))
-                assertThat(code, equalTo(CodeValue("1 + 4")))
+                assertThat(value, equalTo(CodeValue("1 + 4")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
-                assertThat(code, equalTo(CodeValue("1 + 3")))
+                assertThat(value, equalTo(CodeValue("1 + 3")))
             }
         }
 
@@ -295,7 +414,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 id = cmdId,
                 codeId = codeId,
                 groupId = groupId,
-                code = codeValue
+                value = codeValue
             )
         )
 

@@ -7,10 +7,10 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
+import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.BeforeEach
@@ -160,18 +160,22 @@ internal abstract class BaseTest {
         execId: ExecId,
         status: ExecStatus,
         correlation: Correlation? = null,
-        code: CodeType = CodeType(""),
+        code: CodeValue = CodeValue(""),
+        codeId: CodeId? = null,
+        codeVersion: CodeVersion? = null,
         events: List<Event> = listOf()
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
-            ExecCmdRepository.PlanCmd(
+            PlanCmd(
                 id = CmdId(1),
                 execId = execId,
                 groupId = testGroup.id,
                 correlation = correlation,
                 inputs = ExecInputs(),
                 code = code,
+                codeId = codeId,
+                codeVersion = codeVersion,
                 events = events
             )
         )

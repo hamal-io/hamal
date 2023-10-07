@@ -5,7 +5,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +15,8 @@ data class Func(
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeType
+    val codeId: CodeId,
+    val codeVersion: CodeVersion
 ) : DomainObject<FuncId>
 
 interface FuncRepository : FuncCmdRepository, FuncQueryRepository
@@ -33,7 +33,8 @@ interface FuncCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
-        val code: CodeType,
+        val codeId: CodeId,
+        val codeVersion: CodeVersion
     )
 
     data class UpdateCmd(
@@ -41,7 +42,8 @@ interface FuncCmdRepository : CmdRepository {
         val namespaceId: NamespaceId? = null,
         val name: FuncName? = null,
         val inputs: FuncInputs? = null,
-        val code: CodeType? = null,
+        val codeId: CodeId? = null,
+        val codeVersion: CodeVersion? = null
     )
 }
 

@@ -5,7 +5,6 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.admin.AdminCreateFuncReq
@@ -25,18 +24,23 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
                 name = FuncName("test-func"),
                 namespaceId = null,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                code = CodeType("13 + 37")
+                code = CodeValue("13 + 37")
             )
         )
         awaitCompleted(result.reqId)
 
-        with(funcQueryRepository.get(result.id(::FuncId))) {
+        val func = funcQueryRepository.get(result.id(::FuncId))
+        with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-            assertThat(code, equalTo(CodeType("13 + 37")))
 
             val namespace = namespaceQueryRepository.get(namespaceId)
             assertThat(namespace.name, equalTo(NamespaceName("hamal")))
+        }
+
+        with(codeQueryRepository.get(func.codeId)) {
+            assertThat(version, equalTo(CodeVersion(1)))
+            assertThat(value, equalTo(CodeValue("13 + 37")))
         }
     }
 
@@ -58,20 +62,25 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
                 name = FuncName("test-func"),
                 namespaceId = namespace.id,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                code = CodeType("13 + 37")
+                code = CodeValue("13 + 37")
             )
         )
         awaitCompleted(result.reqId)
 
-        with(funcQueryRepository.get(result.id(::FuncId))) {
+        val func = funcQueryRepository.get(result.id(::FuncId))
+        with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-            assertThat(code, equalTo(CodeType("13 + 37")))
 
             namespaceQueryRepository.get(namespaceId).let {
                 assertThat(it.id, equalTo(namespace.id))
                 assertThat(it.name, equalTo(NamespaceName("hamal::name::space")))
             }
+        }
+
+        with(codeQueryRepository.get(func.codeId)) {
+            assertThat(version, equalTo(CodeVersion(1)))
+            assertThat(value, equalTo(CodeValue("13 + 37")))
         }
     }
 
@@ -85,7 +94,7 @@ internal class CreateFuncControllerTest : BaseFuncControllerTest() {
                     name = FuncName("test-func"),
                     namespaceId = NamespaceId(12345),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                    code = CodeType("13 + 37")
+                    code = CodeValue("13 + 37")
                 )
             )
             .execute()

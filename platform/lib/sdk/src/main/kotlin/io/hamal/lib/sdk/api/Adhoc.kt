@@ -1,10 +1,10 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.fold
 import io.hamal.request.InvokeAdhocReq
 import kotlinx.serialization.Serializable
@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiInvokeAdhocReq(
     override val inputs: InvocationInputs,
-    override val code: CodeType
+    override val code: CodeValue
 ) : InvokeAdhocReq
 
 interface ApiAdhocService {

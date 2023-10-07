@@ -3,10 +3,7 @@ package io.hamal.repository.record.exec
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
@@ -28,7 +25,9 @@ data class ExecPlannedRecord(
     val groupId: GroupId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val code: CodeType,
+    val code: CodeValue?,
+    val codeId: CodeId?,
+    val codeVersion: CodeVersion?,
     val events: List<Event>
 ) : ExecRecord()
 

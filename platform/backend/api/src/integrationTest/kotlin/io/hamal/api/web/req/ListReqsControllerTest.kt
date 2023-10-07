@@ -1,8 +1,8 @@
 package io.hamal.api.web.req
 
 import io.hamal.lib.domain._enum.ReqStatus.Completed
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
@@ -35,7 +35,7 @@ internal class ListReqsControllerTest : BaseReqControllerTest() {
 
     @Test
     fun `Limit reqs`() {
-        awaitCompleted(IntRange(0, 25).map { adhoc(CodeType("$it")) })
+        awaitCompleted(IntRange(0, 25).map { adhoc(CodeValue("$it")) })
 
         val listResponse = httpTemplate.get("/v1/reqs")
             .parameter("limit", 23)
@@ -47,13 +47,13 @@ internal class ListReqsControllerTest : BaseReqControllerTest() {
             .map { it as ApiSubmittedReqWithId }
             .forEachIndexed { idx, req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
-                assertThat(code, equalTo(CodeType("${22 - idx}")))
+                assertThat(code, equalTo(CodeValue("${22 - idx}")))
             }
     }
 
     @Test
     fun `Skip and limit reqs`() {
-        val requests = IntRange(0, 100).map { adhoc(CodeType("$it")) }
+        val requests = IntRange(0, 100).map { adhoc(CodeValue("$it")) }
         awaitCompleted(requests)
 
         val request70 = requests[70]
@@ -69,7 +69,7 @@ internal class ListReqsControllerTest : BaseReqControllerTest() {
             .map { it as ApiSubmittedReqWithId }
             .forEach { req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
-                assertThat(code, equalTo(CodeType("71")))
+                assertThat(code, equalTo(CodeValue("71")))
             }
     }
 }

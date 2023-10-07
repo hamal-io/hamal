@@ -23,7 +23,9 @@ data class InvokeExecReq(
     val funcId: FuncId,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val code: CodeType,
+    val code: CodeValue?,
+    val codeId: CodeId?,
+    val codeVersion: CodeVersion?,
     val events: List<Event>
 )
 
@@ -71,6 +73,8 @@ class SubmitRequest(
             correlationId = req.correlationId,
             inputs = req.inputs,
             code = req.code,
+            codeId = req.codeId,
+            codeVersion = req.codeVersion,
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
@@ -114,6 +118,8 @@ class SubmitRequest(
         groupId = groupId,
         inputs = req.inputs,
         code = req.code,
+        codeId = null,
+        codeVersion = null,
         funcId = null,
         correlationId = null,
         events = listOf()
@@ -130,7 +136,9 @@ class SubmitRequest(
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs ?: InvocationInputs(),
-            code = func.code,
+            code = null,
+            codeId = func.codeId,
+            codeVersion = func.codeVersion,
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
@@ -160,7 +168,8 @@ class SubmitRequest(
         namespaceId = req.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
         name = req.name,
         inputs = req.inputs,
-        code = req.code
+        code = req.code,
+        codeId = generateDomainId(::CodeId)
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(funcId: FuncId, req: UpdateFuncReq) = SubmittedUpdateFuncReq(
@@ -171,8 +180,9 @@ class SubmitRequest(
         namespaceId = req.namespaceId,
         name = req.name,
         inputs = req.inputs,
-        code = req.code
-    ).also(reqCmdRepository::queue)
+        code = req.code,
+
+        ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) = SubmittedCreateNamespaceReq(
         reqId = generateDomainId(::ReqId),

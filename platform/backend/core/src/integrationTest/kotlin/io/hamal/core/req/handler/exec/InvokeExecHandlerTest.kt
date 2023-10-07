@@ -5,7 +5,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -19,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
 
     @Test
-    fun `Invokes adhoc execution`() {
+    fun `Invokes execution with code`() {
         testInstance(
             SubmittedInvokeExecReq(
                 reqId = ReqId(1),
@@ -27,7 +26,9 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 id = ExecId(3333),
                 groupId = testGroup.id,
                 inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
-                code = CodeType("code"),
+                code = CodeValue("code"),
+                codeId = null,
+                codeVersion = null,
                 funcId = null,
                 correlationId = null,
                 events = listOf()
@@ -40,18 +41,21 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             with(it.first()) {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
-                assertThat(
-                    inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))))
-                )
-                assertThat(code, equalTo(CodeType("code")))
+                assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks"))))))
+                assertThat(code, equalTo(CodeValue("code")))
+                assertThat(codeId, nullValue())
+                assertThat(codeVersion, nullValue())
             }
         }
     }
 
     @Test
-    fun `Invokes event execution`() {
+    fun `Invokes execution with codeId and codeVersion`() {
         createFunc(
-            id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
+            id = FuncId(4444),
+            codeId = CodeId(4455),
+            codeVersion = CodeVersion(5544),
+            inputs = FuncInputs(
                 MapType(
                     mutableMapOf(
                         "override" to StringType("false"), "func" to StringType("func")
@@ -74,7 +78,9 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                     )
                 ),
                 funcId = FuncId(4444),
-                code = CodeType("some-code"),
+                code = null,
+                codeId = CodeId(4455),
+                codeVersion = CodeVersion(5544),
                 events = listOf()
             )
         )
@@ -85,11 +91,8 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             with(it.first()) {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(
-                    correlation, equalTo(
-                        Correlation(
-                            funcId = FuncId(4444), correlationId = CorrelationId("some-correlation")
-                        )
-                    )
+                    correlation,
+                    equalTo(Correlation(funcId = FuncId(4444), correlationId = CorrelationId("some-correlation")))
                 )
                 assertThat(
                     inputs, equalTo(
@@ -100,109 +103,13 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                                     "invocation" to StringType("invocation"),
                                     "override" to StringType("true"),
                                 )
-                            ),
+                            )
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeType("SomeCode")))
-            }
-        }
-    }
-
-    @Test
-    fun `Invokes func execution`() {
-        createFunc(
-            id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
-                MapType(
-                    mutableMapOf(
-                        "override" to StringType("false"), "func" to StringType("func")
-                    )
-                )
-            )
-        )
-        testInstance(
-            SubmittedInvokeExecReq(
-                reqId = ReqId(1),
-                id = ExecId(3333),
-                groupId = testGroup.id,
-                correlationId = CorrelationId("some-correlation"),
-                status = Submitted,
-                inputs = InvocationInputs(
-                    MapType(
-                        mutableMapOf(
-                            "override" to StringType("true"), "invocation" to StringType("invocation")
-                        )
-                    )
-                ),
-                funcId = FuncId(4444),
-                code = CodeType("Some func code"),
-                events = listOf()
-            )
-        )
-
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
-            assertThat(it, hasSize(1))
-
-            with(it.first()) {
-                assertThat(id, equalTo(ExecId(3333)))
-                assertThat(
-                    correlation, equalTo(
-                        Correlation(
-                            funcId = FuncId(4444), correlationId = CorrelationId("some-correlation")
-                        )
-                    )
-                )
-                assertThat(
-                    inputs, equalTo(
-                        ExecInputs(
-                            MapType(
-                                mutableMapOf(
-                                    "func" to StringType("func"),
-                                    "invocation" to StringType("invocation"),
-                                    "override" to StringType("true"),
-                                )
-                            ),
-                        )
-                    )
-                )
-                assertThat(code, equalTo(CodeType("SomeCode")))
-            }
-        }
-    }
-
-    @Test
-    fun `Invokes fixed rate execution`() {
-        createFunc(
-            id = FuncId(4444), code = CodeType("SomeCode"), inputs = FuncInputs(
-                MapType(
-                    mutableMapOf(
-                        "override" to StringType("false"), "func" to StringType("func")
-                    )
-                )
-            )
-        )
-        testInstance(submittedFixedRateInvocationReq)
-
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
-            assertThat(it, hasSize(1))
-
-            with(it.first()) {
-                assertThat(id, equalTo(ExecId(3333)))
-                assertThat(correlation, equalTo(Correlation(CorrelationId("some-correlation"), FuncId(4444))))
-                assertThat(
-                    inputs, equalTo(
-                        ExecInputs(
-                            MapType(
-                                mutableMapOf(
-                                    "func" to StringType("func"),
-                                    "invocation" to StringType("invocation"),
-                                    "override" to StringType("true"),
-                                )
-                            ),
-                        )
-                    )
-                )
-                assertThat(code, equalTo(CodeType("SomeCode")))
+                assertThat(code, nullValue())
+                assertThat(codeId, equalTo(CodeId(4455)))
+                assertThat(codeVersion, equalTo(CodeVersion(5544)))
             }
         }
     }
@@ -219,7 +126,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     @Autowired
     private lateinit var testInstance: InvokeExecHandler
 
-    //@formatter:off
+    //    @formatter:off
     private val submittedFixedRateInvocationReq by lazy {
         SubmittedInvokeExecReq(
             reqId = ReqId(1),
@@ -227,16 +134,14 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             id = ExecId(3333),
             groupId = testGroup.id,
-            inputs = InvocationInputs(
-                MapType(
-                    mutableMapOf(
+            inputs = InvocationInputs(MapType(mutableMapOf(
                     "override" to StringType("true"),
                     "invocation" to StringType("invocation")
-                    )
-                )
-            ),
+                    ))),
             funcId = FuncId(4444),
-            code = CodeType(""),
+            code = null,
+            codeId = CodeId(5555),
+            codeVersion = CodeVersion(6666),
             events = listOf()
         )
     }

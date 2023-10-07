@@ -3,7 +3,6 @@ package io.hamal.repository.api.submitted_req
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import kotlinx.serialization.Serializable
 
 
@@ -16,7 +15,8 @@ data class SubmittedCreateFuncReq(
     val namespaceId: NamespaceId?,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeType
+    val code: CodeValue,
+    val codeId: CodeId
 ) : SubmittedReqWithGroupId
 
 
@@ -29,5 +29,5 @@ data class SubmittedUpdateFuncReq(
     val namespaceId: NamespaceId?,
     val name: FuncName?,
     val inputs: FuncInputs?,
-    val code: CodeType?
+    val code: CodeValue?
 ) : SubmittedReqWithGroupId

@@ -1,10 +1,12 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository
-import io.hamal.repository.api.CodeId
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
+import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.code.CodeCreationRecord
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CodeUpdatedRecord
@@ -70,13 +72,11 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                         cmdId = cmd.id,
                         entityId = codeId,
                         groupId = cmd.groupId,
-                        code = cmd.code
+                        value = cmd.value
                     )
                 )
                 (currentVersion(codeId)).also(CurrentCodeProjection::apply)
             }
-
-
         }
     }
 
@@ -90,7 +90,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                     CodeUpdatedRecord(
                         entityId = codeId,
                         cmdId = cmd.id,
-                        code = cmd.code ?: currentVersion.code
+                        value = cmd.value ?: currentVersion.value
                     )
                 )
                 (currentVersion(codeId)).also(CurrentCodeProjection::apply)
@@ -103,6 +103,9 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
     }
 
     override fun find(codeId: CodeId): Code? = CurrentCodeProjection.find(codeId)
+
+    override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? =
+        versionOf(codeId, RecordSequence(codeVersion.value))
 
     override fun list(query: CodeQuery): List<Code> = CurrentCodeProjection.list(query)
 

@@ -62,6 +62,7 @@ internal class EventTriggerService(
 
                     triggerConsumers[trigger.id] = consumer
                     try {
+                        val func = funcQueryRepository.get(trigger.funcId)
                         consumer.consumeBatch(1) { entries ->
                             submitRequest(
                                 InvokeExecReq(
@@ -69,7 +70,9 @@ internal class EventTriggerService(
                                     funcId = trigger.funcId,
                                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                                     inputs = InvocationInputs(),
-                                    code = funcQueryRepository.get(trigger.funcId).code,
+                                    code = null,
+                                    codeId = func.codeId,
+                                    codeVersion = func.codeVersion,
                                     events = entries.map {
                                         Event(
                                             topic = EventTopic(

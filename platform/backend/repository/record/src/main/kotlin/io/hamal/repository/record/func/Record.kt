@@ -2,7 +2,6 @@ package io.hamal.repository.record.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -25,7 +24,8 @@ data class FuncCreationRecord(
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeType
+    val codeId: CodeId,
+    val codeVersion: CodeVersion
 ) : FuncRecord()
 
 @Serializable
@@ -36,5 +36,6 @@ data class FuncUpdatedRecord(
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeType
+    val codeId: CodeId,
+    val codeVersion: CodeVersion
 ) : FuncRecord()

@@ -1,11 +1,11 @@
 package io.hamal.admin.web.exec
 
 import io.hamal.admin.web.BaseControllerTest
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.admin.AdminInvokeAdhocReq
 import io.hamal.lib.sdk.admin.AdminSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,7 +19,7 @@ internal sealed class BaseExecControllerTest : BaseControllerTest() {
             .body(
                 AdminInvokeAdhocReq(
                     inputs = InvocationInputs(),
-                    code = CodeType("40 + 2")
+                    code = CodeValue("40 + 2")
                 )
             )
             .execute()

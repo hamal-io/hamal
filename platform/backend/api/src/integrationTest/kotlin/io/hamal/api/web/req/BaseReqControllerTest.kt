@@ -1,11 +1,11 @@
 package io.hamal.api.web.req
 
 import io.hamal.api.web.BaseControllerTest
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
 import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
@@ -22,7 +22,7 @@ internal sealed class BaseReqControllerTest : BaseControllerTest() {
         return listResponse.result(ApiReqList::class)
     }
 
-    fun adhoc(code: CodeType = CodeType("")): ApiSubmittedReqWithId {
+    fun adhoc(code: CodeValue = CodeValue("")): ApiSubmittedReqWithId {
         return httpTemplate.post("/v1/groups/{groupId}/adhoc")
             .path("groupId", testGroup.id)
             .body(

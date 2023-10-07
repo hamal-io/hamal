@@ -84,6 +84,24 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
         return createDomainObject(recordsOf(id).takeWhileInclusive { it.cmdId != cmdId })
     }
 
+    override fun versionOf(id: ID, sequence: RecordSequence): OBJ? {
+        return executeQuery(
+            """
+            SELECT data, sequence FROM records WHERE entity_id = :entityId AND sequence < :sequence ORDER BY sequence DESC LIMIT 1
+        """.trimIndent()
+        ) {
+            query {
+                set("entityId", id)
+                set("sequence", sequence.value)
+            }
+            map {
+                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
+                    record.sequence = RecordSequence(it.getInt("sequence"))
+                }
+            }
+        }.ifEmpty { null }?.let(createDomainObject::invoke)
+    }
+
     override fun currentVersion(id: ID): OBJ {
         val lastRecord = lastRecordOf(id)
         return versionOf(id, lastRecord.cmdId)
@@ -111,6 +129,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     ) = delegate.executeQuery(sql, block)
 
     override fun abort() = delegate.abort()
+
     override fun clear() {
         delegate.execute("""DELETE FROM records""")
     }

@@ -4,13 +4,14 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.*
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.Exec
-import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.ExecRepository
-import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -36,7 +37,9 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                         funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                    code = CodeType("40 + 2"),
+                    code = CodeValue("40 + 2"),
+                    codeId = null,
+                    codeVersion = null,
                     events = listOf(
                         Event(
                             topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -357,7 +360,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation!!.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation!!.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(code, equalTo(CodeType("'13'..'37'")))
+                assertThat(code, equalTo(CodeValue("'13'..'37'")))
                 assertThat(
                     events, equalTo(
                         listOf(
@@ -395,7 +398,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation!!.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation!!.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(code, equalTo(CodeType("'13'..'37'")))
+                assertThat(code, equalTo(CodeValue("'13'..'37'")))
                 assertThat(
                     events, equalTo(
                         listOf(
@@ -531,7 +534,7 @@ private fun assertBaseExec(exec: Exec) {
             )
         )
     )
-    assertThat(exec.code, equalTo(CodeType("40 + 2")))
+    assertThat(exec.code, equalTo(CodeValue("40 + 2")))
     assertThat(
         exec.events, equalTo(
             listOf(
@@ -559,7 +562,9 @@ private fun ExecRepository.planExec(
             funcId = FuncId(23)
         ),
         inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-        code = CodeType("40 + 2"),
+        code = CodeValue("40 + 2"),
+        codeId = null,
+        codeVersion = null,
         events = listOf(
             Event(
                 topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -595,7 +600,9 @@ fun ExecRepository.createExec(
                 funcId = FuncId(444)
             ),
             inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-            code = CodeType("'13'..'37'"),
+            code = CodeValue("'13'..'37'"),
+            codeId = null,
+            codeVersion = null,
             events = listOf(
                 Event(
                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -638,14 +645,14 @@ fun ExecRepository.createExec(
 
     return when (status) {
         Completed -> complete(
-            ExecCmdRepository.CompleteCmd(
+            CompleteCmd(
                 id = CmdId(104),
                 execId = startedExec.id
             )
         )
 
         Failed -> fail(
-            ExecCmdRepository.FailCmd(
+            FailCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
                 cause = ErrorType("ExecTest")

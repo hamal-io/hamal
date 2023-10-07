@@ -7,7 +7,6 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CompleteExecReq
@@ -50,7 +49,9 @@ data class AdminExec(
     val status: ExecStatus,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val code: CodeType,
+    val code: CodeValue?,
+    val codeId: CodeId?,
+    val codeVersion: CodeVersion?,
     val events: List<Event>
 )
 

@@ -1,11 +1,11 @@
 package io.hamal.testbed.admin
 
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.AdminSdk
 import io.hamal.lib.sdk.AdminSdkImpl
 import io.hamal.lib.sdk.admin.AdminInvokeAdhocReq
@@ -58,7 +58,7 @@ abstract class BaseAdminTest {
                 val execReq = adminSdk.adhoc.invoke(
                     AdminInvokeAdhocReq(
                         InvocationInputs(),
-                        CodeType(String(Files.readAllBytes(testFile)))
+                        CodeValue(String(Files.readAllBytes(testFile)))
                     )
                 )
                 adminSdk.await(execReq)

@@ -9,7 +9,6 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
@@ -48,6 +47,12 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var authCmdRepository: AuthCmdRepository
+
+    @Autowired
+    lateinit var codeCmdRepository: CodeCmdRepository
+
+    @Autowired
+    lateinit var codeQueryRepository: CodeQueryRepository
 
     @Autowired
     lateinit var platformEventBrokerRepository: BrokerRepository
@@ -163,7 +168,9 @@ internal abstract class BaseTest {
         execId: ExecId,
         status: ExecStatus,
         correlation: Correlation? = null,
-        code: CodeType = CodeType(""),
+        code: CodeValue? = CodeValue(""),
+        codeId: CodeId? = null,
+        codeVersion: CodeVersion? = null,
         events: List<Event> = listOf()
     ): Exec {
 
@@ -175,6 +182,8 @@ internal abstract class BaseTest {
                 correlation = correlation,
                 inputs = ExecInputs(),
                 code = code,
+                codeId = codeId,
+                codeVersion = codeVersion,
                 events = events
             )
         )

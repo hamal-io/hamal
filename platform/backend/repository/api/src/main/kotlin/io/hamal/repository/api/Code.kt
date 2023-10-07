@@ -1,32 +1,23 @@
 package io.hamal.repository.api
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.kua.type.StringType
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-@SerialName("CodeValue")
-data class CodeValue(override val value: String) : ValueObject<String> {
-    constructor(str: StringType) : this(str.value)
-}
-
-@Serializable(with = CodeId.Serializer::class)
-class CodeId(override val value: SnowflakeId) : DomainId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
-
-    internal object Serializer : DomainIdSerializer<CodeId>(::CodeId)
-}
 
 @Serializable
 data class Code(
     override val id: CodeId,
     val groupId: GroupId,
     val cmdId: CmdId,
-    val code: CodeValue
+    val version: CodeVersion,
+    val value: CodeValue
 ) : DomainObject<CodeId>
 
 
@@ -40,20 +31,24 @@ interface CodeCmdRepository : CmdRepository {
         val id: CmdId,
         val codeId: CodeId,
         val groupId: GroupId,
-        val code: CodeValue,
+        val value: CodeValue,
     )
 
     data class UpdateCmd(
         val id: CmdId,
-        val code: CodeValue? = null,
+        val value: CodeValue? = null,
     )
-
-
 }
 
 interface CodeQueryRepository {
-    fun get(codeId: CodeId) = find(codeId) ?: throw NoSuchElementException("Code not found")
+    fun get(codeId: CodeId) = find(codeId)
+        ?: throw NoSuchElementException("Code not found")
+
+    fun get(codeId: CodeId, codeVersion: CodeVersion) = find(codeId, codeVersion)
+        ?: throw NoSuchElementException("Code not found")
+
     fun find(codeId: CodeId): Code?
+    fun find(codeId: CodeId, codeVersion: CodeVersion): Code?
     fun list(query: CodeQuery): List<Code>
     fun list(codeIds: List<CodeId>): List<Code> = list(
         CodeQuery(

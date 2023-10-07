@@ -1,15 +1,11 @@
 package io.hamal.admin.web.func
 
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.admin.AdminCreateFuncReq
 import io.hamal.lib.sdk.admin.AdminError
 import io.hamal.lib.sdk.admin.AdminInvokeFuncReq
@@ -28,7 +24,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
                     name = FuncName("test"),
                     namespaceId = null,
                     inputs = FuncInputs(),
-                    code = CodeType("")
+                    code = CodeValue("")
                 )
             )
         )
@@ -57,7 +53,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
                     name = FuncName("test"),
                     namespaceId = null,
                     inputs = FuncInputs(),
-                    code = CodeType("")
+                    code = CodeValue("")
                 )
             )
         )

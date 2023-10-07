@@ -1,14 +1,14 @@
 package io.hamal.repository.record.code
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.CodeId
-import io.hamal.repository.api.CodeValue
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import io.hamal.repository.record.Record
-import kotlinx.serialization.SerialName
 
 @Serializable
 sealed class CodeRecord(
@@ -22,7 +22,7 @@ data class CodeCreationRecord(
     override val entityId: CodeId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val code: CodeValue
+    val value: CodeValue
 ) : CodeRecord()
 
 @Serializable
@@ -30,5 +30,5 @@ data class CodeCreationRecord(
 data class CodeUpdatedRecord(
     override val entityId: CodeId,
     override val cmdId: CmdId,
-    val code: CodeValue
+    val value: CodeValue
 ) : CodeRecord()

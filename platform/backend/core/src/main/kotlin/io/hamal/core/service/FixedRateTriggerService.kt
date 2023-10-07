@@ -64,13 +64,16 @@ internal class FixedRateTriggerService(
 }
 
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
+    val func = funcQueryRepository.get(trigger.funcId)
     submitRequest(
         InvokeExecReq(
             execId = generateDomainId(::ExecId),
             funcId = trigger.funcId,
             correlationId = trigger.correlationId ?: CorrelationId("__default__"),
             inputs = InvocationInputs(),
-            code = funcQueryRepository.get(trigger.funcId).code,
+            code = null,
+            codeId = func.codeId,
+            codeVersion = func.codeVersion,
             events = listOf() // FIXME
         )
     )

@@ -2,7 +2,6 @@ package io.hamal.repository.record.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.api.Func
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -17,7 +16,8 @@ data class FuncEntity(
     var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
-    var code: CodeType? = null
+    var codeId: CodeId? = null,
+    var codeVersion: CodeVersion? = null
 
 ) : RecordEntity<FuncId, FuncRecord, Func> {
 
@@ -30,7 +30,8 @@ data class FuncEntity(
                 namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
-                code = rec.code
+                codeId = rec.codeId,
+                codeVersion = rec.codeVersion
             )
 
             is FuncUpdatedRecord -> copy(
@@ -40,7 +41,8 @@ data class FuncEntity(
                 namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
-                code = rec.code
+                codeId = rec.codeId,
+                codeVersion = rec.codeVersion
             )
         }
     }
@@ -53,7 +55,8 @@ data class FuncEntity(
             namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
-            code = code!!,
+            codeId = codeId!!,
+            codeVersion = codeVersion!!
         )
     }
 }

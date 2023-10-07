@@ -6,7 +6,6 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
@@ -19,7 +18,9 @@ data class SubmittedInvokeExecReq(
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val code: CodeType?,
+    val code: CodeValue?,
+    val codeId: CodeId?,
+    val codeVersion: CodeVersion?,
     val events: List<Event>
 ) : SubmittedReqWithGroupId
 
