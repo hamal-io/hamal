@@ -3,9 +3,9 @@ package io.hamal.bridge.web.work
 import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.sdk.api.ApiUnitOfWorkList
 import io.hamal.lib.sdk.api.ApiUnitOfWorkList.UnitOfWork
+import io.hamal.repository.api.CodeQueryRepository
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StateQueryRepository
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class PollRoute(
+    private val codeQueryRepository: CodeQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
     private val eventEmitter: PlatformEventEmitter
@@ -28,17 +29,24 @@ internal class PollRoute(
             emitEvents(cmdId, it)
         }
 
+
+
         return ResponseEntity(
             ApiUnitOfWorkList(
                 work = result.map { exec ->
                     val state = exec.correlation?.let { stateQueryRepository.find(it)?.value } ?: State()
+
+                    val code = exec.code ?: run {
+                        codeQueryRepository.find(exec.codeId!!, exec.codeVersion!!)?.value
+                    }!!
+
                     UnitOfWork(
                         id = exec.id,
                         groupId = exec.groupId,
                         correlation = exec.correlation,
                         inputs = exec.inputs,
                         state = state,
-                        code = exec.code ?: CodeValue(""), // FIXME
+                        code = code,
                         events = exec.events
                     )
                 }), OK

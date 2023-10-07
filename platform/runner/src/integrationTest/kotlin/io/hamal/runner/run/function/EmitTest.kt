@@ -2,10 +2,7 @@ package io.hamal.runner.run.function
 
 import io.hamal.lib.domain.EventPayload
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.TestFailConnector
 import io.hamal.runner.connector.UnitOfWork
@@ -171,7 +168,7 @@ internal class EmitTest : AbstractExecuteTest() {
         groupId = GroupId(5432),
         inputs = ExecInputs(),
         state = State(),
-        code = CodeType(code),
+        code = CodeValue(code),
         correlation = null
     )
 }

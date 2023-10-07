@@ -1,12 +1,12 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.runner.connector.UnitOfWork
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -22,7 +22,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeType("assert(ctx.exec_id == '4d2')"),
+                code = CodeValue("assert(ctx.exec_id == '4d2')"),
                 correlation = null
             )
         )
@@ -39,7 +39,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeType("test.fn()"),
+                code = CodeValue("test.fn()"),
                 correlation = null
             )
         )

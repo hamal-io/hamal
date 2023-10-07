@@ -4,11 +4,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.ErrorType
 
 data class UnitOfWork(
@@ -16,7 +12,7 @@ data class UnitOfWork(
     val groupId: GroupId,
     val inputs: ExecInputs,
     val state: State,
-    val code: CodeType,
+    val code: CodeValue,
     val token: ExecToken = ExecToken("let_me_in"), // FIXME
     val correlation: Correlation? = null,
     val events: List<Event> = listOf()

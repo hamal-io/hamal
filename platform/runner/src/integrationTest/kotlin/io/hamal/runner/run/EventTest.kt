@@ -4,7 +4,6 @@ import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.runner.connector.UnitOfWork
@@ -23,7 +22,7 @@ internal class EventTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeType(
+                code = CodeValue(
                     """
                     assert( ctx.events ~= nil )
                     assert( #ctx.events == 2 )
@@ -55,7 +54,7 @@ internal class EventTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeType("test.fn()"),
+                code = CodeValue("test.fn()"),
                 events = events,
             )
         )

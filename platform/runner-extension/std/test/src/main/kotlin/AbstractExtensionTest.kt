@@ -1,5 +1,7 @@
+
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.GroupId
@@ -8,7 +10,6 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extension.ExtensionFactory
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -66,7 +67,7 @@ abstract class AbstractExtensionTest {
         groupId = GroupId(5432),
         inputs = inputs,
         state = State(),
-        code = CodeType(code),
+        code = CodeValue(code),
         correlation = null
     )
 }

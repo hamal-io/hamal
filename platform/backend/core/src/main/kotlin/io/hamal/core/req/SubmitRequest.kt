@@ -11,7 +11,6 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.submitted_req.*

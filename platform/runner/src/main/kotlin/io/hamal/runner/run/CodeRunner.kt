@@ -11,6 +11,7 @@ import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -65,7 +66,7 @@ class CodeRunnerImpl(
                     sandbox.state.load("${ctxExtension.name} = create_extension_factory()()")
                     sandbox.unsetGlobal("_internal")
 
-                    sandbox.load(unitOfWork.code)
+                    sandbox.load(CodeType(unitOfWork.code.value))
                 }
 
             connector.complete(execId, State(), runnerContext.eventsToSubmit)
