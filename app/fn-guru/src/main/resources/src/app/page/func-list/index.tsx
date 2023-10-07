@@ -35,10 +35,12 @@ const FuncListPage: React.FC = () => {
     ))
 
     return (
-        <main className="flex-1 w-full mx-auto p-4 text-lg h-full shadow-lg bg-gray-100">
-            <div className="flex flex-col items-center justify-center">
-                <p> Functions </p>
+        <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
+            <div className="flex p-3 items-center justify-end bg-gray-300">
                 <CreateFuncModalButton/>
+            </div>
+
+            <div className="flex flex-col items-center justify-center">
                 {list}
             </div>
         </main>

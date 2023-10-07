@@ -35,7 +35,7 @@ export async function createFunction(req: SubmitCreateFunctionRequest): Promise<
         body: JSON.stringify({
                 name: req.name,
                 inputs: {},
-                code: {"value": ""}
+                code: ""
             }
         )
     })
@@ -48,8 +48,8 @@ export async function createFunction(req: SubmitCreateFunctionRequest): Promise<
 
 
 export interface SubmitUpdateFunctionRequest {
-    name: string;
-    code: string;
+    name?: string;
+    code?: string;
 }
 
 export async function updateFunction(funcId: string, req: SubmitUpdateFunctionRequest): Promise<ApiSubmittedFunctionUpdating> {
@@ -59,7 +59,7 @@ export async function updateFunction(funcId: string, req: SubmitUpdateFunctionRe
         body: JSON.stringify({
                 name: req.name,
                 inputs: {},
-                code: {"value": req.code}
+                code: req.code
             }
         )
     })
