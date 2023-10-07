@@ -2,7 +2,7 @@ package io.hamal.api.web.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
-import io.hamal.lib.sdk.hub.HubTriggerList
+import io.hamal.lib.sdk.api.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -37,7 +37,7 @@ internal class ListTriggerControllerTest : BaseTriggerControllerTest() {
         val listResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
             .path("groupId", testGroup.id)
             .parameter("limit", 12)
-            .execute(HubTriggerList::class)
+            .execute(ApiTriggerList::class)
 
         assertThat(listResponse.triggers, hasSize(12))
 
@@ -57,7 +57,7 @@ internal class ListTriggerControllerTest : BaseTriggerControllerTest() {
             .path("groupId", testGroup.id)
             .parameter("after_id", request15.id)
             .parameter("limit", 1))
-            .execute(HubTriggerList::class)
+            .execute(ApiTriggerList::class)
 
         with(listResponse) {
             assertThat(triggers, hasSize(1))

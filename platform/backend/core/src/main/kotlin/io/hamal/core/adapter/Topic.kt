@@ -4,7 +4,7 @@ import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.HubAppendEntryReq
+import io.hamal.lib.sdk.api.ApiAppendEntryReq
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -67,7 +67,7 @@ class TopicAdapter(
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
         ensureTopicExists(topicId)
-        return responseHandler(submitRequest(HubAppendEntryReq(topicId, topAppend)))
+        return responseHandler(submitRequest(ApiAppendEntryReq(topicId, topAppend)))
     }
 
     override fun <T : Any> invoke(

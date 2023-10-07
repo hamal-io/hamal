@@ -18,12 +18,12 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
-import io.hamal.lib.sdk.DefaultHubSdk
-import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.ApiSdkImpl
+import io.hamal.lib.sdk.ApiSdk
 
 class SysExtensionFactory(
     private val httpTemplate: HttpTemplate,
-    private val sdk: HubSdk = DefaultHubSdk(httpTemplate)
+    private val sdk: ApiSdk = ApiSdkImpl(httpTemplate)
 ) : ScriptExtensionFactory {
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(

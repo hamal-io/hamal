@@ -63,7 +63,7 @@ interface AdminExecService {
     fun get(execId: ExecId): AdminExec
 }
 
-internal class DefaultAdminExecService(
+internal class AdminExecServiceImpl(
     private val template: HttpTemplate
 ) : AdminExecService {
 

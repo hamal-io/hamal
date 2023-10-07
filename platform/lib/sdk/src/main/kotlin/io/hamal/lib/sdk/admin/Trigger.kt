@@ -128,7 +128,7 @@ interface AdminTriggerService {
 }
 
 
-internal class DefaultAdminTriggerService(
+internal class AdminTriggerServiceImpl(
     private val template: HttpTemplate
 ) : AdminTriggerService {
     override fun create(req: AdminCreateTriggerReq) =

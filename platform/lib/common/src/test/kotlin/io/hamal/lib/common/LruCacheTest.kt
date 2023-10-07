@@ -155,7 +155,7 @@ class DefaultLruCacheTest {
     }
 
 
-    private val testInstance: DefaultLruCache<Int, Int> = DefaultLruCache(20)
+    private val testInstance: LruCacheImpl<Int, Int> = LruCacheImpl(20)
 
     private val someKey = 1
     private val someValue = 2

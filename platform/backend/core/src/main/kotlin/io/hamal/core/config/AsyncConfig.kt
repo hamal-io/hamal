@@ -17,7 +17,7 @@ open class AsyncConfig : SchedulingConfigurer {
     @Bean
     open fun executor(): ThreadPoolTaskScheduler {
         val result = ThreadPoolTaskScheduler()
-        result.threadNamePrefix = "hub-"
+        result.threadNamePrefix = "backend-"
         result.poolSize = 1
         result.initialize()
         return result

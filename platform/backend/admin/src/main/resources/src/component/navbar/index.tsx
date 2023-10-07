@@ -1,5 +1,6 @@
-import {Navbar} from "flowbite-react";
+import {Navbar as Delegate} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
+import {FC} from "react";
 
 const l = {
     base: "block py-2 pr-4 pl-3 md:p-0 text-xl",
@@ -13,10 +14,10 @@ const l = {
     }
 };
 
-export default function () {
+export const Navbar: FC = () => {
     const navigate = useNavigate()
     return (
-        <Navbar
+        <Delegate
             theme={{
                 base: "bg-white px-2 py-5",
                 rounded: {
@@ -36,33 +37,33 @@ export default function () {
                 }
             }}
         >
-            <Navbar.Toggle/>
-            <Navbar.Collapse>
-                <Navbar.Link onClick={_ => navigate("/", {replace: true})} theme={l}>
+            <Delegate.Toggle/>
+            <Delegate.Collapse>
+                <Delegate.Link onClick={_ => navigate("/", {replace: true})} theme={l}>
                     Dashboard
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/adhoc", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/adhoc", {replace: true})} theme={l}>
                     Adhoc
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/executions", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/executions", {replace: true})} theme={l}>
                     Execution
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/logs", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/logs", {replace: true})} theme={l}>
                     Logs
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/functions", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/functions", {replace: true})} theme={l}>
                     Function
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/triggers", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/triggers", {replace: true})} theme={l}>
                     Trigger
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/groups", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/groups", {replace: true})} theme={l}>
                     Group
-                </Navbar.Link>
-                <Navbar.Link onClick={_ => navigate("/accounts", {replace: true})} theme={l}>
+                </Delegate.Link>
+                <Delegate.Link onClick={_ => navigate("/accounts", {replace: true})} theme={l}>
                     Account
-                </Navbar.Link>
-            </Navbar.Collapse>
-        </Navbar>
+                </Delegate.Link>
+            </Delegate.Collapse>
+        </Delegate>
     )
 }

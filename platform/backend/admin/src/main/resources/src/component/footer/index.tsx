@@ -1,28 +1,27 @@
-import {Footer} from "flowbite-react";
+import {Footer as Delegate} from "flowbite-react";
+import {FC} from "react";
 
 
-export default function () {
-    return (
-        <Footer container>
-            <Footer.Copyright
-                by="hamal.io"
-                href="#"
-                year={2023}
-            />
-            <Footer.LinkGroup>
-                <Footer.Link href="#">
-                    About
-                </Footer.Link>
-                <Footer.Link href="#">
-                    Privacy Policy
-                </Footer.Link>
-                <Footer.Link href="#">
-                    Licensing
-                </Footer.Link>
-                <Footer.Link href="#">
-                    Contact
-                </Footer.Link>
-            </Footer.LinkGroup>
-        </Footer>
-    )
-}
+export const Footer: FC = () => (
+    <Delegate container>
+        <Delegate.Copyright
+            by="hamal.io"
+            href="#"
+            year={2023}
+        />
+        <Delegate.LinkGroup>
+            <Delegate.Link href="#">
+                About
+            </Delegate.Link>
+            <Delegate.Link href="#">
+                Privacy Policy
+            </Delegate.Link>
+            <Delegate.Link href="#">
+                Licensing
+            </Delegate.Link>
+            <Delegate.Link href="#">
+                Contact
+            </Delegate.Link>
+        </Delegate.LinkGroup>
+    </Delegate>
+)

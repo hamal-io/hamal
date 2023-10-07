@@ -3,9 +3,9 @@ package io.hamal.api.web.state
 import io.hamal.core.adapter.GetStatePort
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.HubCorrelatedState
-import io.hamal.lib.sdk.hub.HubCorrelation
-import io.hamal.lib.sdk.hub.HubState
+import io.hamal.lib.sdk.api.ApiCorrelatedState
+import io.hamal.lib.sdk.api.ApiCorrelation
+import io.hamal.lib.sdk.api.ApiState
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,15 +19,15 @@ internal class GetStateController(private val getState: GetStatePort) {
         @PathVariable("correlationId") correlationId: CorrelationId,
     ) = getState(funcId, correlationId) { correlatedState, func ->
         ResponseEntity.ok(
-            HubCorrelatedState(
-                correlation = HubCorrelation(
+            ApiCorrelatedState(
+                correlation = ApiCorrelation(
                     correlationId = correlationId,
-                    func = HubCorrelation.Func(
+                    func = ApiCorrelation.Func(
                         id = func.id,
                         name = func.name
                     )
                 ),
-                state = HubState(correlatedState.value.value)
+                state = ApiState(correlatedState.value.value)
             )
         )
     }

@@ -5,10 +5,10 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.hub.HubTriggerList
-import io.hamal.lib.sdk.hub.HubTriggerList.EventTrigger.Topic
-import io.hamal.lib.sdk.hub.HubTriggerList.Trigger.Func
-import io.hamal.lib.sdk.hub.HubTriggerList.Trigger.Namespace
+import io.hamal.lib.sdk.api.ApiTriggerList
+import io.hamal.lib.sdk.api.ApiTriggerList.EventTrigger.Topic
+import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
+import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -26,7 +26,7 @@ class ListTriggersController(private val listTriggers: ListTriggersPort) {
         @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<HubTriggerList> {
+    ): ResponseEntity<ApiTriggerList> {
         return listTriggers(
             TriggerQuery(
                 afterId = triggerId,
@@ -36,11 +36,11 @@ class ListTriggersController(private val listTriggers: ListTriggersPort) {
             )
         ) { triggers, funcs, namespaces, topics ->
             ResponseEntity.ok(
-                HubTriggerList(
+                ApiTriggerList(
                     triggers.map { trigger ->
                         when (trigger) {
                             is FixedRateTrigger -> {
-                                HubTriggerList.FixedRateTrigger(
+                                ApiTriggerList.FixedRateTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -56,7 +56,7 @@ class ListTriggersController(private val listTriggers: ListTriggersPort) {
                             }
 
                             is EventTrigger -> {
-                                HubTriggerList.EventTrigger(
+                                ApiTriggerList.EventTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(

@@ -11,9 +11,9 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubFailExecReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiFailExecReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -40,7 +40,7 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
                 assertThat(failureResponse.statusCode, equalTo(Accepted))
                 require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = failureResponse.result(HubSubmittedReqWithId::class)
+                val result = failureResponse.result(ApiSubmittedReqWithId::class)
 
                 awaitFailed(result.reqId)
             }
@@ -61,7 +61,7 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
         assertThat(failureResponse.statusCode, equalTo(Accepted))
         require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = failureResponse.result(HubSubmittedReqWithId::class)
+        val result = failureResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         verifyExecFailed(result.id(::ExecId))
@@ -72,13 +72,13 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/v1/execs/123456765432/fail")
-            .body(HubFailExecReq(ErrorType("SomeErrorValue")))
+            .body(ApiFailExecReq(ErrorType("SomeErrorValue")))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val result = response.error(HubError::class)
+        val result = response.error(ApiError::class)
         assertThat(result.message, equalTo("Exec not found"))
     }
 
@@ -93,7 +93,7 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/v1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(HubFailExecReq(ErrorType("SomeErrorCause")))
+            .body(ApiFailExecReq(ErrorType("SomeErrorCause")))
             .execute()
 
 }

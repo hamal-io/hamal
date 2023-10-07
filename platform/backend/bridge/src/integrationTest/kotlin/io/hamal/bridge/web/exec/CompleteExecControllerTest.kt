@@ -13,9 +13,9 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.sdk.hub.HubCompleteExecReq
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiCompleteExecReq
+import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import io.hamal.repository.api.CompletedExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -43,7 +43,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = completionResponse.result(HubSubmittedReqWithId::class)
+                val result = completionResponse.result(ApiSubmittedReqWithId::class)
 
                 awaitFailed(result.reqId)
                 verifyNoStateSet(result.id(::ExecId))
@@ -66,7 +66,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
         assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = completionResponse.result(HubSubmittedReqWithId::class)
+        val result = completionResponse.result(ApiSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
 
         verifyExecCompleted(result.id(::ExecId))
@@ -79,7 +79,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
     fun `Tries to complete exec which does not exist`() {
         val response = httpTemplate.post("/v1/execs/123456765432/complete")
             .body(
-                HubCompleteExecReq(
+                ApiCompleteExecReq(
                     state = State(),
                     events = listOf()
                 )
@@ -89,7 +89,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val result = response.error(HubError::class)
+        val result = response.error(ApiError::class)
         assertThat(result.message, equalTo("Exec not found"))
     }
 
@@ -120,7 +120,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
         httpTemplate.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                HubCompleteExecReq(
+                ApiCompleteExecReq(
                     state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     events = listOf(
                         EventToSubmit(

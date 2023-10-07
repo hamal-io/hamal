@@ -2,9 +2,9 @@ package io.hamal.api.web.trigger
 
 import io.hamal.core.adapter.GetTriggerPort
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.hub.PlatformEventTrigger
-import io.hamal.lib.sdk.hub.HubFixedRateTrigger
-import io.hamal.lib.sdk.hub.HubTrigger
+import io.hamal.lib.sdk.api.ApiEventTrigger
+import io.hamal.lib.sdk.api.ApiFixedRateTrigger
+import io.hamal.lib.sdk.api.ApiTrigger
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import org.springframework.http.ResponseEntity
@@ -17,19 +17,19 @@ internal class GetTriggerController(private val getTrigger: GetTriggerPort) {
     @GetMapping("/v1/triggers/{triggerId}")
     fun getFunc(
         @PathVariable("triggerId") triggerId: TriggerId,
-    ): ResponseEntity<HubTrigger> {
+    ): ResponseEntity<ApiTrigger> {
 
         return getTrigger(triggerId) { trigger, func, namespace, topic ->
             ResponseEntity.ok(
                 when (trigger) {
-                    is FixedRateTrigger -> HubFixedRateTrigger(
+                    is FixedRateTrigger -> ApiFixedRateTrigger(
                         id = trigger.id,
                         name = trigger.name,
-                        func = HubTrigger.Func(
+                        func = ApiTrigger.Func(
                             id = func.id,
                             name = func.name
                         ),
-                        namespace = HubTrigger.Namespace(
+                        namespace = ApiTrigger.Namespace(
                             id = namespace.id,
                             name = namespace.name
                         ),
@@ -37,19 +37,19 @@ internal class GetTriggerController(private val getTrigger: GetTriggerPort) {
                         duration = trigger.duration
                     )
 
-                    is EventTrigger -> PlatformEventTrigger(
+                    is EventTrigger -> ApiEventTrigger(
                         id = trigger.id,
                         name = trigger.name,
-                        func = HubTrigger.Func(
+                        func = ApiTrigger.Func(
                             id = func.id,
                             name = func.name
                         ),
-                        namespace = HubTrigger.Namespace(
+                        namespace = ApiTrigger.Namespace(
                             id = namespace.id,
                             name = namespace.name
                         ),
                         inputs = trigger.inputs,
-                        topic = PlatformEventTrigger.Topic(
+                        topic = ApiEventTrigger.Topic(
                             id = topic!!.id,
                             name = topic.name
                         )

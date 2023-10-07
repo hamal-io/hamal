@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
@@ -8,7 +8,7 @@ import io.hamal.request.AppendExecLogReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubAppendExecLogCmd(
+data class ApiAppendExecLogCmd(
     override val level: ExecLogLevel,
     override val message: ExecLogMessage,
     override val localAt: LocalAt
@@ -16,13 +16,13 @@ data class HubAppendExecLogCmd(
 
 
 @Serializable
-data class HubExcLogList(
-    val logs: List<HubExecLog>
+data class ApiExcLogList(
+    val logs: List<ApiExecLog>
 )
 
 
 @Serializable
-data class HubExecLog(
+data class ApiExecLog(
     val id: ExecLogId,
     val execId: ExecId,
     val level: ExecLogLevel,
@@ -32,14 +32,14 @@ data class HubExecLog(
 )
 
 
-interface HubExecLogService {
-    fun append(execId: ExecId, req: HubAppendExecLogCmd)
+interface ApiExecLogService {
+    fun append(execId: ExecId, req: ApiAppendExecLogCmd)
 }
 
-internal class DefaultHubExecLogService(
+internal class ApiExecLogServiceImpl(
     private val template: HttpTemplate
-) : HubExecLogService {
-    override fun append(execId: ExecId, req: HubAppendExecLogCmd) {
+) : ApiExecLogService {
+    override fun append(execId: ExecId, req: ApiAppendExecLogCmd) {
         template
             .post("/v1/execs/{execId}/logs")
             .path("execId", execId)

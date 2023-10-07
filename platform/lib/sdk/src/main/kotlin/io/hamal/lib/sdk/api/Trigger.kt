@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-data class HubCreateTriggerReq(
+data class ApiCreateTriggerReq(
     override val type: TriggerType,
     override val name: TriggerName,
     override val funcId: FuncId,
@@ -22,7 +22,7 @@ data class HubCreateTriggerReq(
 ) : CreateTriggerReq
 
 @Serializable
-data class HubTriggerList(
+data class ApiTriggerList(
     val triggers: List<Trigger>
 ) {
     @Serializable
@@ -71,7 +71,7 @@ data class HubTriggerList(
 }
 
 @Serializable
-sealed interface HubTrigger {
+sealed interface ApiTrigger {
     val id: TriggerId
     val name: TriggerName
     val func: Func
@@ -93,26 +93,26 @@ sealed interface HubTrigger {
 }
 
 @Serializable
-class HubFixedRateTrigger(
+class ApiFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: HubTrigger.Func,
-    override val namespace: HubTrigger.Namespace,
+    override val func: ApiTrigger.Func,
+    override val namespace: ApiTrigger.Namespace,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val duration: Duration
-) : HubTrigger
+) : ApiTrigger
 
 @Serializable
-class PlatformEventTrigger(
+class ApiEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: HubTrigger.Func,
-    override val namespace: HubTrigger.Namespace,
+    override val func: ApiTrigger.Func,
+    override val namespace: ApiTrigger.Namespace,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val topic: Topic
-) : HubTrigger {
+) : ApiTrigger {
     @Serializable
     data class Topic(
         val id: TopicId,
@@ -121,33 +121,33 @@ class PlatformEventTrigger(
 }
 
 
-interface HubTriggerService {
-    fun create(groupId: GroupId, req: HubCreateTriggerReq): HubSubmittedReqWithId
-    fun list(groupId: GroupId): List<HubTriggerList.Trigger>
-    fun get(triggerId: TriggerId): HubTrigger
+interface ApiTriggerService {
+    fun create(groupId: GroupId, req: ApiCreateTriggerReq): ApiSubmittedReqWithId
+    fun list(groupId: GroupId): List<ApiTriggerList.Trigger>
+    fun get(triggerId: TriggerId): ApiTrigger
 }
 
 
-internal class DefaultHubTriggerService(
+internal class ApiTriggerServiceImpl(
     private val template: HttpTemplate
-) : HubTriggerService {
-    override fun create(groupId: GroupId, req: HubCreateTriggerReq) =
+) : ApiTriggerService {
+    override fun create(groupId: GroupId, req: ApiCreateTriggerReq) =
         template.post("/v1/triggers")
             .path("groupId", groupId)
             .body(req)
             .execute()
-            .fold(HubSubmittedReqWithId::class)
+            .fold(ApiSubmittedReqWithId::class)
 
     override fun list(groupId: GroupId) =
         template.get("/v1/groups/{groupId}/triggers")
             .path("groupId", groupId)
             .execute()
-            .fold(HubTriggerList::class)
+            .fold(ApiTriggerList::class)
             .triggers
 
     override fun get(triggerId: TriggerId) =
         template.get("/v1/triggers/{triggerId}")
             .path("triggerId", triggerId)
             .execute()
-            .fold(HubTrigger::class)
+            .fold(ApiTrigger::class)
 }

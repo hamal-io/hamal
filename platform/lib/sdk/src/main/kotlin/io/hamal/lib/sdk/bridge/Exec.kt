@@ -50,7 +50,7 @@ interface BridgeExecService {
     fun fail(execId: ExecId, error: ErrorType)
 }
 
-internal class DefaultBridgeExecService(
+internal class BridgeExecServiceImpl(
     private val template: HttpTemplate
 ) : BridgeExecService {
 

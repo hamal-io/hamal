@@ -14,7 +14,7 @@ internal abstract class AbstractExecuteTest {
     fun createTestExecutor(
         vararg testExtensions: Pair<String, Type>,
         connector: Connector = TestConnector()
-    ) = DefaultCodeRunner(
+    ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)

@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
@@ -6,7 +6,7 @@ import io.hamal.lib.http.HttpTemplate
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubGroupList(
+data class ApiGroupList(
     val groups: List<Group>
 ) {
     @Serializable
@@ -18,13 +18,13 @@ data class HubGroupList(
 
 
 @Serializable
-data class HubGroup(
+data class ApiGroup(
     val id: GroupId,
     val name: GroupName,
 )
 
-interface HubGroupService
+interface ApiGroupService
 
-internal class DefaultHubGroupService(
+internal class ApiGroupServiceImpl(
     private val template: HttpTemplate
-) : HubGroupService
+) : ApiGroupService

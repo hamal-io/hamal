@@ -8,10 +8,10 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
+import io.hamal.lib.sdk.ApiSdk
 
 class ListFuncFunction(
-    private val sdk: HubSdk
+    private val sdk: ApiSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {

@@ -39,5 +39,5 @@ internal class SqliteAdminHamalTest : BaseAdminTest() {
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 
     @Bean
-    fun hubBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
+    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
 }

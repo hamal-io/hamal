@@ -6,6 +6,7 @@ import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryReqRepository
+import io.hamal.repository.memory.record.MemoryCodeRepository
 import io.hamal.repository.memory.record.MemoryGroupRepository
 import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.SqliteBroker
@@ -48,6 +49,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun authCmdRepository() = authRepository()
+
+    @Bean
+    open fun codeRepository() = MemoryCodeRepository()
+
+    @Bean
+    open fun codeCmdRepository() = codeRepository()
+
+    @Bean
+    open fun codeQueryRepository() = codeRepository()
 
     @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))

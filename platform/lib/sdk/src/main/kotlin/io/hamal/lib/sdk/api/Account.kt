@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
@@ -11,14 +11,14 @@ import io.hamal.request.CreateAccountReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubCreateAccountReq(
+data class ApiCreateAccountReq(
     override val name: AccountName,
     override val email: AccountEmail?,
     override val password: Password?
 ) : CreateAccountReq
 
 @Serializable
-data class HubAccountList(
+data class ApiAccountList(
     val accounts: List<Account>
 ) {
     @Serializable
@@ -29,23 +29,23 @@ data class HubAccountList(
 }
 
 @Serializable
-data class HubAccount(
+data class ApiAccount(
     val id: AccountId,
     val name: AccountName,
 )
 
-interface HubAccountService {
-    fun create(createAccountReq: HubCreateAccountReq): HubSubmittedWithTokenReq
+interface ApiAccountService {
+    fun create(createAccountReq: ApiCreateAccountReq): ApiSubmittedWithTokenReq
 }
 
-internal class DefaultHubAccountService(
+internal class ApiAccountServiceImpl(
     private val template: HttpTemplate
-) : HubAccountService {
+) : ApiAccountService {
 
-    override fun create(createAccountReq: HubCreateAccountReq) =
+    override fun create(createAccountReq: ApiCreateAccountReq) =
         template.post("/v1/accounts")
             .body(createAccountReq)
             .execute()
-            .fold(HubSubmittedWithTokenReq::class)
+            .fold(ApiSubmittedWithTokenReq::class)
 
 }

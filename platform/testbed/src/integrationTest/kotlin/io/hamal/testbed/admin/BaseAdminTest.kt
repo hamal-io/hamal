@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.sdk.AdminSdk
-import io.hamal.lib.sdk.DefaultAdminSdk
+import io.hamal.lib.sdk.AdminSdkImpl
 import io.hamal.lib.sdk.admin.AdminInvokeAdhocReq
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
@@ -102,7 +102,7 @@ abstract class BaseAdminTest {
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 
-    fun rootAdminSdk(serverPort: Number) = DefaultAdminSdk(
+    fun rootAdminSdk(serverPort: Number) = AdminSdkImpl(
         HttpTemplate(
             baseUrl = "http://localhost:$serverPort"
         )

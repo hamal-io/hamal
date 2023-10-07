@@ -17,51 +17,51 @@ interface AdminSdk {
     val trigger: AdminTriggerService
 }
 
-data class DefaultAdminSdk(
+data class AdminSdkImpl(
     val template: HttpTemplate
 ) : AdminSdk {
 
     override val account: AdminAccountService by lazy {
-        DefaultAdminAccountService(template)
+        AdminAccountServiceImpl(template)
     }
 
     override val adhoc: AdminAdhocService by lazy {
-        DefaultAdminAdhocService(template)
+        AdminAdhocServiceImpl(template)
     }
 
     override val auth: AdminAuthService by lazy {
-        DefaultAdminAuthService(template)
+        AdminAuthServiceImpl(template)
     }
 
     override val await: AdminAwaitService by lazy {
-        DefaultAdminAwaitService(template)
+        AdminAwaitServiceImpl(template)
     }
 
     override val exec: AdminExecService by lazy {
-        DefaultAdminExecService(template)
+        AdminExecServiceImpl(template)
     }
 
     override val execLog: AdminExecLogService by lazy {
-        DefaultAdminExecLogService(template)
+        AdminExecLogServiceImpl(template)
     }
 
     override val func: AdminFuncService by lazy {
-        DefaultAdminFuncService(template)
+        AdminFuncServiceImpl(template)
     }
 
     override val group: AdminGroupService by lazy {
-        DefaultAdminGroupService(template)
+        AdminGroupServiceImpl(template)
     }
 
     override val namespace: AdminNamespaceService by lazy {
-        DefaultAdminNamespaceService(template)
+        AdminNamespaceServiceImpl(template)
     }
 
     override val topic: AdminTopicService by lazy {
-        DefaultAdminTopicService(template)
+        AdminTopicServiceImpl(template)
     }
 
     override val trigger: AdminTriggerService by lazy {
-        DefaultAdminTriggerService(template)
+        AdminTriggerServiceImpl(template)
     }
 }

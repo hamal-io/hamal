@@ -5,9 +5,9 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
-import io.hamal.lib.sdk.hub.HubSetStateReq
-import io.hamal.lib.sdk.hub.HubState
+import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
+import io.hamal.lib.sdk.api.ApiSetStateReq
+import io.hamal.lib.sdk.api.ApiState
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,9 +21,9 @@ internal class SetStateController(private val setState: SetStatePort) {
     fun setState(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("correlationId") correlationId: CorrelationId,
-        @RequestBody state: HubState
+        @RequestBody state: ApiState
     ) = setState(
-        HubSetStateReq(
+        ApiSetStateReq(
             correlation = Correlation(
                 funcId = funcId,
                 correlationId = correlationId,
@@ -32,7 +32,7 @@ internal class SetStateController(private val setState: SetStatePort) {
         )
     ) {
         ResponseEntity(
-            HubDefaultSubmittedReq(
+            ApiDefaultSubmittedReq(
                 reqId = it.reqId,
                 status = it.status,
                 groupId = it.groupId,

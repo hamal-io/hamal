@@ -13,7 +13,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.sdk.DefaultHubSdk
+import io.hamal.lib.sdk.ApiSdkImpl
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -51,7 +51,7 @@ class RunnerSandboxFactory(
                 set("x-runner-exec-token", execToken.value)
             }
         )
-        val sdk = DefaultHubSdk(template)
+        val sdk = ApiSdkImpl(template)
 
         return Sandbox(ctx).register(
             DecimalExtensionFactory,

@@ -4,7 +4,7 @@ import io.hamal.bridge.BaseTest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.submitted_req.SubmittedReq
 import org.hamcrest.MatcherAssert
@@ -57,16 +57,16 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <REQ : HubSubmittedReq> awaitCompleted(req: REQ): REQ {
+    fun <REQ : ApiSubmittedReq> awaitCompleted(req: REQ): REQ {
         awaitCompleted(req.reqId)
         return req
     }
 
-    fun <REQ : HubSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
+    fun <REQ : ApiSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
         return reqs.toList().onEach { awaitCompleted(it.reqId) }
     }
 
-    fun <REQ : HubSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
+    fun <REQ : ApiSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
         return reqs.onEach { awaitCompleted(it.reqId) }
     }
 
@@ -85,12 +85,12 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <REQ : HubSubmittedReq> awaitFailed(req: REQ): REQ {
+    fun <REQ : ApiSubmittedReq> awaitFailed(req: REQ): REQ {
         awaitFailed(req.reqId)
         return req
     }
 
-    fun <REQ : HubSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
+    fun <REQ : ApiSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
         return reqs.onEach { awaitFailed(it.reqId) }
     }
 

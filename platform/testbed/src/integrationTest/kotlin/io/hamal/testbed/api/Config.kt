@@ -8,5 +8,5 @@ import java.util.*
 @TestConfiguration
 open class ApiTestConfig {
     @Bean
-    fun hubBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
+    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
 }

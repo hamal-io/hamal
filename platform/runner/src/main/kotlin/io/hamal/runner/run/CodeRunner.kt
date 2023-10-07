@@ -22,7 +22,7 @@ interface CodeRunner {
     fun run(unitOfWork: UnitOfWork)
 }
 
-class DefaultCodeRunner(
+class CodeRunnerImpl(
     private val connector: Connector,
     private val sandboxFactory: SandboxFactory
 ) : CodeRunner {
@@ -98,6 +98,6 @@ class DefaultCodeRunner(
     }
 
     companion object {
-        private val log = logger(DefaultCodeRunner::class)
+        private val log = logger(CodeRunnerImpl::class)
     }
 }

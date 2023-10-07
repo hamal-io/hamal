@@ -9,7 +9,7 @@ interface AdminAwaitService {
     fun await(req: AdminSubmittedReq)
 }
 
-internal class DefaultAdminAwaitService(
+internal class AdminAwaitServiceImpl(
     private val template: HttpTemplate
 ) : AdminAwaitService {
     override fun await(req: AdminSubmittedReq) {

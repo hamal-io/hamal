@@ -2,7 +2,7 @@ package io.hamal.api.web.exec
 
 import io.hamal.core.adapter.AppendExecLogPort
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.HubAppendExecLogCmd
+import io.hamal.lib.sdk.api.ApiAppendExecLogCmd
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +14,7 @@ internal class AppendExecLogController(private val appendExecLog: AppendExecLogP
     @PostMapping("/v1/execs/{execId}/logs")
     fun appendExecLog(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody cmd: HubAppendExecLogCmd
+        @RequestBody cmd: ApiAppendExecLogCmd
     ): ResponseEntity<Unit> {
         return appendExecLog(execId, cmd) {
             ResponseEntity.accepted().build()

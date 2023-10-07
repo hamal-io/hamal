@@ -8,5 +8,5 @@ import java.util.*
 @TestConfiguration
 open class AdminTestConfig {
     @Bean
-    fun hubBasePath() = BackendBasePath("/tmp/hamal/test-admin/${UUID.randomUUID()}")
+    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-admin/${UUID.randomUUID()}")
 }

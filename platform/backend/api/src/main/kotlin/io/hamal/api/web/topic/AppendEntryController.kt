@@ -4,7 +4,7 @@ import io.hamal.api.web.req.Assembler
 import io.hamal.core.adapter.AppendEntryToTopicPort
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.HubSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReq
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,7 +18,7 @@ internal class AppendEntryController(private val appendEntryToTopic: AppendEntry
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,
         @RequestBody topAppend: TopicEntryPayload
-    ): ResponseEntity<HubSubmittedReq> {
+    ): ResponseEntity<ApiSubmittedReq> {
         return appendEntryToTopic(topicId, topAppend) {
             ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }

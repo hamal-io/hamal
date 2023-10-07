@@ -3,7 +3,7 @@ package io.hamal.api.web.req
 import io.hamal.core.adapter.ListReqPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.ReqId
-import io.hamal.lib.sdk.hub.HubReqList
+import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.repository.api.ReqQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +16,7 @@ internal class ListReqsController(private val listReqs: ListReqPort) {
     fun listReqs(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: ReqId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<HubReqList> {
+    ): ResponseEntity<ApiReqList> {
         return listReqs(
             ReqQueryRepository.ReqQuery(
                 afterId = afterId,
@@ -25,7 +25,7 @@ internal class ListReqsController(private val listReqs: ListReqPort) {
             ),
             // assembler
         ) { reqs ->
-            ResponseEntity.ok(HubReqList(
+            ResponseEntity.ok(ApiReqList(
                 reqs.map { Assembler.assemble(it) }
             ))
         }

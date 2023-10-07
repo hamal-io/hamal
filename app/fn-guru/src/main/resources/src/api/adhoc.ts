@@ -9,7 +9,6 @@ export const defaultHeaders = {
     'Content-Type': 'application/json'
 }
 
-
 export interface SubmitAdhocInvocationRequest {
     code: string;
 }

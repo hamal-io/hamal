@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Button} from 'flowbite-react'
-import Editor from '../../component/editor'
+import {Editor} from '../../component'
 import {invokeAdhoc} from "../../api/adhoc.ts";
 
 const AdhocPage: React.FC = () => {

@@ -10,11 +10,11 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubCreateNamespaceReq
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
 
 class CreateNamespaceFunction(
-    private val sdk: HubSdk
+    private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -23,7 +23,7 @@ class CreateNamespaceFunction(
         return try {
             val res = sdk.namespace.create(
                 ctx[GroupId::class],
-                HubCreateNamespaceReq(
+                ApiCreateNamespaceReq(
                     name = NamespaceName(arg1.getString("name")),
                     inputs = NamespaceInputs(),
                 )

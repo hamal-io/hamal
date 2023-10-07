@@ -24,7 +24,7 @@ interface EthRequestHandler {
     )
 }
 
-class DefaultEthRequestHandler(
+class EthRequestHandlerImpl(
     private val json: Json,
     private val ethCache: EthCache,
     private val httpTemplate: HttpTemplate

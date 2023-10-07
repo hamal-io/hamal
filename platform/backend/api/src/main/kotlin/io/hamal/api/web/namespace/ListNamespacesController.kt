@@ -4,7 +4,7 @@ import io.hamal.core.adapter.ListNamespacesPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.hub.HubNamespaceList
+import io.hamal.lib.sdk.api.ApiNamespaceList
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +19,7 @@ internal class ListNamespacesController(private val listNamespace: ListNamespace
         @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: NamespaceId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<HubNamespaceList> {
+    ): ResponseEntity<ApiNamespaceList> {
         return listNamespace(
             NamespaceQuery(
                 afterId = afterId,
@@ -27,9 +27,9 @@ internal class ListNamespacesController(private val listNamespace: ListNamespace
                 groupIds = listOf(groupId)
             )
         ) { namespaces ->
-            ResponseEntity.ok(HubNamespaceList(
+            ResponseEntity.ok(ApiNamespaceList(
                 namespaces.map {
-                    HubNamespaceList.Namespace(
+                    ApiNamespaceList.Namespace(
                         id = it.id,
                         name = it.name
                     )

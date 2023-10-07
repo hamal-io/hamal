@@ -2,7 +2,7 @@ package io.hamal.app.proxy.cache
 
 import io.hamal.app.proxy.domain.EthCall
 import io.hamal.app.proxy.repository.*
-import io.hamal.lib.common.DefaultLruCache
+import io.hamal.lib.common.LruCacheImpl
 import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.eth.domain.EthBlock
 import io.hamal.lib.web3.util.Web3Formatter
@@ -113,7 +113,7 @@ class EthLruCache(
             }
     }
 
-    private val blockStore = DefaultLruCache<EthUint64, EthBlock>(1000)
+    private val blockStore = LruCacheImpl<EthUint64, EthBlock>(1000)
     private val blockNumberMapping = mutableMapOf<EthHash, EthUint64>()
     private val lock = ReentrantLock()
 }

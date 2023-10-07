@@ -9,8 +9,8 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -21,7 +21,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
         val response = request(
-            HubInvokeAdhocReq(
+            ApiInvokeAdhocReq(
                 inputs = InvocationInputs(),
                 code = CodeType("40 + 2")
             )
@@ -29,7 +29,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        val result = awaitCompleted(response.result(HubSubmittedReqWithId::class))
+        val result = awaitCompleted(response.result(ApiSubmittedReqWithId::class))
         assertThat(result.status, equalTo(Submitted))
 
         verifyReqCompleted(result.reqId)
@@ -37,7 +37,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
     }
 
 
-    private fun request(req: HubInvokeAdhocReq) =
+    private fun request(req: ApiInvokeAdhocReq) =
         httpTemplate
             .post("/v1/groups/{groupId}/adhoc")
             .path("groupId", testGroup.id)

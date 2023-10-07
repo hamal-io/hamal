@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -12,18 +12,18 @@ import io.hamal.request.SetStateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubSetStateReq(
+data class ApiSetStateReq(
     override val correlation: Correlation,
     override val value: State
 ) : SetStateReq
 
-@Serializable(with = HubState.Serializer::class)
-class HubState(override val value: MapType = MapType()) : Inputs() {
-    internal object Serializer : InputsSerializer<HubState>(::HubState)
+@Serializable(with = ApiState.Serializer::class)
+class ApiState(override val value: MapType = MapType()) : Inputs() {
+    internal object Serializer : InputsSerializer<ApiState>(::ApiState)
 }
 
 @Serializable
-data class HubCorrelation(
+data class ApiCorrelation(
     val correlationId: CorrelationId,
     val func: Func
 ) {
@@ -35,9 +35,9 @@ data class HubCorrelation(
 }
 
 @Serializable
-data class HubCorrelatedState(
-    val correlation: HubCorrelation,
-    val state: HubState
+data class ApiCorrelatedState(
+    val correlation: ApiCorrelation,
+    val state: ApiState
 ) {
     operator fun get(key: String) = state.value[key]
 }

@@ -71,7 +71,7 @@ interface AdminFuncService {
     fun get(funcId: FuncId): AdminFunc
 }
 
-internal class DefaultAdminFuncService(
+internal class AdminFuncServiceImpl(
     private val template: HttpTemplate
 ) : AdminFuncService {
 
