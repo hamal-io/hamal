@@ -47,7 +47,7 @@ interface AdminNamespaceService {
     fun get(namespaceId: NamespaceId): AdminNamespace
 }
 
-internal class DefaultAdminNamespaceService(
+internal class AdminNamespaceServiceImpl(
     private val template: HttpTemplate
 ) : AdminNamespaceService {
 

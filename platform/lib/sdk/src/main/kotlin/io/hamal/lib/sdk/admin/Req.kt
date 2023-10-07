@@ -26,7 +26,6 @@ sealed interface AdminSubmittedReqWithGroupId : AdminSubmittedReq {
     val groupId: GroupId
 }
 
-
 @Serializable
 data class AdminDefaultSubmittedReq(
     override val reqId: ReqId,

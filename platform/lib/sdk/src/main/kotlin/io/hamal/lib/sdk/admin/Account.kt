@@ -38,7 +38,7 @@ interface AdminAccountService {
     fun create(createAccountReq: AdminCreateAccountReq): AdminSubmittedWithTokenReq
 }
 
-internal class DefaultAdminAccountService(
+internal class AdminAccountServiceImpl(
     private val template: HttpTemplate
 ) : AdminAccountService {
 

@@ -36,7 +36,7 @@ interface AdminExecLogService {
     fun append(execId: ExecId, cmd: AdminAppendExecLogCmd)
 }
 
-internal class DefaultAdminExecLogService(
+internal class AdminExecLogServiceImpl(
     private val template: HttpTemplate
 ) : AdminExecLogService {
     override fun append(execId: ExecId, cmd: AdminAppendExecLogCmd) {

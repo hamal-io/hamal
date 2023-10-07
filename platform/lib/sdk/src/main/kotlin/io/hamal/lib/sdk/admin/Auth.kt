@@ -14,6 +14,6 @@ data class AdminSignInReq(
 
 interface AdminAuthService
 
-internal class DefaultAdminAuthService(
+internal class AdminAuthServiceImpl(
     private val template: HttpTemplate
 ) : AdminAuthService

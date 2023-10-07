@@ -20,11 +20,11 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
 import io.hamal.lib.sdk.AdminSdk
-import io.hamal.lib.sdk.DefaultAdminSdk
+import io.hamal.lib.sdk.AdminSdkImpl
 
 class SysAdminExtensionFactory(
     private val httpTemplate: HttpTemplate,
-    private val sdk: AdminSdk = DefaultAdminSdk(httpTemplate)
+    private val sdk: AdminSdk = AdminSdkImpl(httpTemplate)
 ) : ScriptExtensionFactory {
     override fun create(sandbox: Sandbox): ScriptExtension {
         return ScriptExtension(

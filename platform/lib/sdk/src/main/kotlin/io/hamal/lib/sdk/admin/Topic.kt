@@ -60,7 +60,7 @@ interface AdminTopicService {
     fun resolve(groupId: GroupId, topicName: TopicName): TopicId
 }
 
-internal class DefaultAdminTopicService(
+internal class AdminTopicServiceImpl(
     private val template: HttpTemplate
 ) : AdminTopicService {
 

@@ -20,7 +20,7 @@ interface AdminAdhocService {
     operator fun invoke(groupId: GroupId, req: AdminInvokeAdhocReq): AdminSubmittedReqWithId
 }
 
-internal class DefaultAdminAdhocService(
+internal class AdminAdhocServiceImpl(
     private val template: HttpTemplate
 ) : AdminAdhocService {
     override fun invoke(req: AdminInvokeAdhocReq): AdminSubmittedReqWithId {

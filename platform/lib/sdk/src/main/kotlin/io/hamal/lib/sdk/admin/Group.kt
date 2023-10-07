@@ -25,6 +25,6 @@ data class AdminGroup(
 
 interface AdminGroupService
 
-internal class DefaultAdminGroupService(
+internal class AdminGroupServiceImpl(
     private val template: HttpTemplate
 ) : AdminGroupService
