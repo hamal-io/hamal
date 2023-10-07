@@ -13,6 +13,11 @@ import kotlinx.serialization.encoding.Encoder
 class CorrelationId(
     override val value: String
 ) : ValueObject.ComparableImpl<String>() {
+
+    companion object {
+        val default = CorrelationId("__default__")
+    }
+
     init {
         CorrelationIdValidator.validate(value)
     }

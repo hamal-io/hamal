@@ -5,6 +5,7 @@ import io.hamal.extension.std.sys.exec.GetExecFunction
 import io.hamal.extension.std.sys.exec.ListExecFunction
 import io.hamal.extension.std.sys.func.CreateFuncFunction
 import io.hamal.extension.std.sys.func.GetFuncFunction
+import io.hamal.extension.std.sys.func.InvokeFuncFunction
 import io.hamal.extension.std.sys.func.ListFuncFunction
 import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
 import io.hamal.extension.std.sys.namespace.GetNamespaceFunction
@@ -18,8 +19,9 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.ScriptExtension
 import io.hamal.lib.kua.extension.ScriptExtensionFactory
-import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.ApiSdkImpl
+
 
 class SysExtensionFactory(
     private val httpTemplate: HttpTemplate,
@@ -43,6 +45,7 @@ class SysExtensionFactory(
                 "create_func" to CreateFuncFunction(sdk),
                 "get_func" to GetFuncFunction(sdk),
                 "list_func" to ListFuncFunction(sdk),
+                "func_invoke" to InvokeFuncFunction(sdk),
 
                 "create_namespace" to CreateNamespaceFunction(sdk),
                 "get_namespace" to GetNamespaceFunction(sdk),

@@ -6,6 +6,7 @@ import io.hamal.extension.std.sysadmin.exec.GetExecFunction
 import io.hamal.extension.std.sysadmin.exec.ListExecFunction
 import io.hamal.extension.std.sysadmin.func.CreateFuncFunction
 import io.hamal.extension.std.sysadmin.func.GetFuncFunction
+import io.hamal.extension.std.sysadmin.func.InvokeFuncFunction
 import io.hamal.extension.std.sysadmin.func.ListFuncFunction
 import io.hamal.extension.std.sysadmin.namespace.CreateNamespaceFunction
 import io.hamal.extension.std.sysadmin.namespace.GetNamespaceFunction
@@ -44,6 +45,7 @@ class SysAdminExtensionFactory(
                 "create_func" to CreateFuncFunction(sdk),
                 "get_func" to GetFuncFunction(sdk),
                 "list_func" to ListFuncFunction(sdk),
+                "func_invoke" to InvokeFuncFunction(sdk),
 
                 "create_namespace" to CreateNamespaceFunction(sdk),
                 "get_namespace" to GetNamespaceFunction(sdk),

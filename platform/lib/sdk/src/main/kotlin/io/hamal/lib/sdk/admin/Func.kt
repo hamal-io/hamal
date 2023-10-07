@@ -75,6 +75,7 @@ interface AdminFuncService {
     fun create(groupId: GroupId, createFuncReq: AdminCreateFuncReq): AdminSubmittedReqWithId
     fun list(groupIds: List<GroupId> = listOf()): List<AdminFuncList.Func>
     fun get(funcId: FuncId): AdminFunc
+    fun invoke(funcId: FuncId, req: AdminInvokeFuncReq): AdminSubmittedReqWithId
 }
 
 internal class AdminFuncServiceImpl(
@@ -100,5 +101,11 @@ internal class AdminFuncServiceImpl(
             .path("funcId", funcId)
             .execute()
             .fold(AdminFunc::class)
-
+    
+    override fun invoke(funcId: FuncId, req: AdminInvokeFuncReq) =
+        template.post("/v1/funcs/{funcId}/exec")
+            .path("funcId", funcId)
+            .body(req)
+            .execute()
+            .fold(AdminSubmittedReqWithId::class)
 }

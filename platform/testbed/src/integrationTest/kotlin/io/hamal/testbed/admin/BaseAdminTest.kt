@@ -1,10 +1,9 @@
 package io.hamal.testbed.admin
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.AdminSdk
 import io.hamal.lib.sdk.AdminSdkImpl
@@ -48,6 +47,9 @@ abstract class BaseAdminTest {
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
+
+    @Autowired
+    lateinit var generateDomainId: GenerateDomainId
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -95,6 +97,16 @@ abstract class BaseAdminTest {
         groupRepository.clear()
         namespaceRepository.clear()
         triggerRepository.clear()
+
+        namespaceRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(1),
+                namespaceId = generateDomainId(::NamespaceId),
+                groupId = GroupId.root,
+                name = NamespaceName("hamal"),
+                inputs = NamespaceInputs()
+            )
+        )
     }
 
     abstract val adminSdk: AdminSdk

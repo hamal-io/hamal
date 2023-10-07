@@ -61,6 +61,10 @@ function create_extension_factory()
             return internal.list_func()
         end
 
+        function export.func.invoke(func_id, body)
+            return internal.func_invoke(func_id, body)
+        end
+
         function export.namespace.create(cmd)
             return internal.create_namespace({
                 name = cmd.name or "",

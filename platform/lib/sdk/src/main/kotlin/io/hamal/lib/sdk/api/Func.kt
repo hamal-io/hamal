@@ -76,6 +76,7 @@ interface ApiFuncService {
     fun create(groupId: GroupId, createFuncReq: ApiCreateFuncReq): ApiSubmittedReqWithId
     fun list(groupId: GroupId): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
+    fun invoke(funcId: FuncId, req: ApiInvokeFuncReq): ApiSubmittedReqWithId
 }
 
 internal class ApiFuncServiceImpl(
@@ -101,5 +102,12 @@ internal class ApiFuncServiceImpl(
             .path("funcId", funcId)
             .execute()
             .fold(ApiFunc::class)
+
+    override fun invoke(funcId: FuncId, req: ApiInvokeFuncReq) =
+        template.post("/v1/funcs/{funcId}/exec")
+            .path("funcId", funcId)
+            .body(req)
+            .execute()
+            .fold(ApiSubmittedReqWithId::class)
 
 }

@@ -22,11 +22,11 @@ class GetExecFunction(
                 it["status"] = StringType(exec.status.name)
                 it["inputs"] = MapType() // FIXME
                 exec.correlation?.correlationId?.value?.let { corId ->
-                    it["correlationId"] = corId
+                    it["correlation_id"] = corId
                 } // FIXME set nil value to table --> makes the api nicer
                 it["code"] = exec.code?.value?.let(::CodeType) ?: NilType
-                it["codeId"] = exec.codeId?.value?.value?.toString(16)?.let(::StringType) ?: NilType
-                it["codeVersion"] = exec.codeVersion?.value?.let(::NumberType) ?: NilType
+                it["code_id"] = exec.codeId?.value?.value?.toString(16)?.let(::StringType) ?: NilType
+                it["code_version"] = exec.codeVersion?.value?.let(::NumberType) ?: NilType
             }
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null

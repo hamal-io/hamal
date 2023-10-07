@@ -26,13 +26,14 @@ class CreateFuncFunction(
                 null
             }
 
+
             val res = sdk.func.create(
                 ctx[GroupId::class],
                 AdminCreateFuncReq(
                     namespaceId = namespaceId,
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
-                    code = CodeValue(arg1.getStringType("code"))
+                    code = CodeValue(arg1.getString("code"))
                 )
             )
 

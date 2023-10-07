@@ -20,7 +20,7 @@ export async function invokeAdhoc(req: SubmitAdhocInvocationRequest): Promise<Ap
         method: "POST",
         body: JSON.stringify({
                 inputs: {},
-                code: {"value": req.code}
+                code: req.code
             }
         )
     })

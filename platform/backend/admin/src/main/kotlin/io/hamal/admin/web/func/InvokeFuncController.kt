@@ -17,9 +17,9 @@ internal class InvokeFuncController(private val invokeFunc: InvokeFuncPort) {
     @PostMapping("/v1/funcs/{funcId}/exec")
     fun execFunc(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody req: ApiInvokeFuncReq
+        @RequestBody req: ApiInvokeFuncReq? = null
     ): ResponseEntity<AdminSubmittedReq> =
-        invokeFunc(funcId, req) {
+        invokeFunc(funcId, req ?: ApiInvokeFuncReq()) {
             ResponseEntity(Assembler.assemble(it), HttpStatus.ACCEPTED)
         }
 }

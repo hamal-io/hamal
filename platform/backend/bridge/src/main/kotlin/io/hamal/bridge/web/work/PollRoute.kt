@@ -28,9 +28,6 @@ internal class PollRoute(
         val result = execCmdRepository.start(StartCmd(cmdId)).also {
             emitEvents(cmdId, it)
         }
-
-
-
         return ResponseEntity(
             ApiUnitOfWorkList(
                 work = result.map { exec ->
