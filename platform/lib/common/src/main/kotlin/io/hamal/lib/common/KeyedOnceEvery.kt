@@ -42,7 +42,7 @@ interface KeyedOnceEvery<KEY : Any, VALUE : Any> {
         private val instantSupplier: InstantSupplier,
         private val maxCapacity: Int
     ) : KeyedOnceEvery<KEY, VALUE> {
-        private val onceStore: LruCache<KEY, OnceEvery<VALUE>> = DefaultLruCache(maxCapacity)
+        private val onceStore: LruCache<KEY, OnceEvery<VALUE>> = LruCacheImpl(maxCapacity)
 
         override fun invoke(key: KEY, fn: () -> VALUE): VALUE {
             onceStore.setIfAbsent(key, OnceEvery.default(every, instantSupplier))

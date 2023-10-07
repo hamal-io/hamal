@@ -38,7 +38,7 @@ interface KeyedOnce<KEY : Any, VALUE : Any> {
     }
 
     class LruImpl<KEY : Any, VALUE : Any>(maxCapacity: Int) : KeyedOnce<KEY, VALUE> {
-        private val onceStore: LruCache<KEY, Once<VALUE>> = DefaultLruCache(maxCapacity)
+        private val onceStore: LruCache<KEY, Once<VALUE>> = LruCacheImpl(maxCapacity)
 
         override fun invoke(key: KEY, fn: (key: KEY) -> VALUE): VALUE {
             onceStore.setIfAbsent(key, Once.default())

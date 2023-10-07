@@ -2,8 +2,8 @@ package io.hamal.app.proxy.config
 
 import io.hamal.app.proxy.cache.EthCache
 import io.hamal.app.proxy.cache.HmlCache
-import io.hamal.app.proxy.handler.DefaultEthRequestHandler
-import io.hamal.app.proxy.handler.DefaultHmlRequestHandler
+import io.hamal.app.proxy.handler.EthRequestHandlerImpl
+import io.hamal.app.proxy.handler.HmlRequestHandlerImpl
 import io.hamal.lib.http.HttpTemplate
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Bean
@@ -17,7 +17,7 @@ class HandlerConfig {
         json: Json,
         cache: EthCache,
         upstreamHttpTemplate: HttpTemplate
-    ) = DefaultEthRequestHandler(
+    ) = EthRequestHandlerImpl(
         json,
         cache,
         upstreamHttpTemplate
@@ -27,7 +27,7 @@ class HandlerConfig {
     fun hmlRequestHandler(
         json: Json,
         cache: HmlCache,
-    ) = DefaultHmlRequestHandler(
+    ) = HmlRequestHandlerImpl(
         json,
         cache
     )

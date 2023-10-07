@@ -21,7 +21,7 @@ interface HmlRequestHandler {
     )
 }
 
-class DefaultHmlRequestHandler(
+class HmlRequestHandlerImpl(
     private val json: Json,
     private val hmlCache: HmlCache
 ) : HmlRequestHandler {

@@ -1,7 +1,7 @@
 package io.hamal.app.proxy.cache
 
 import io.hamal.app.proxy.repository.*
-import io.hamal.lib.common.DefaultLruCache
+import io.hamal.lib.common.LruCacheImpl
 import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.hml.domain.HmlBlock
 import io.hamal.lib.web3.util.Web3Formatter
@@ -62,5 +62,5 @@ class HmlLruCache(
             }
     }
 
-    private val blockStore = DefaultLruCache<EthUint64, HmlBlock>(1000)
+    private val blockStore = LruCacheImpl<EthUint64, HmlBlock>(1000)
 }

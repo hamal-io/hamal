@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
-import io.hamal.runner.run.DefaultCodeRunner
+import io.hamal.runner.run.CodeRunnerImpl
 
 class TestConnector : Connector {
     override fun poll(): List<UnitOfWork> {
@@ -47,7 +47,7 @@ abstract class AbstractExtensionTest {
     fun createTestExecutor(
         testInstanceFactory: ExtensionFactory<*>,
         connector: Connector = TestConnector()
-    ) = DefaultCodeRunner(
+    ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)

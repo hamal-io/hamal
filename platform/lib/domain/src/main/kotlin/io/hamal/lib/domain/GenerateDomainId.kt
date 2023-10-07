@@ -7,7 +7,7 @@ interface GenerateDomainId {
     operator fun <ID : DomainId> invoke(ctor: (SnowflakeId) -> ID): ID
 }
 
-class DefaultDomainIdGenerator(
+class DomainIdGeneratorImpl(
     private val partition: Partition
 ) : GenerateDomainId {
     private val provideGenerator = KeyedOnce.default<(SnowflakeId) -> DomainId, SnowflakeId.Generator>()
