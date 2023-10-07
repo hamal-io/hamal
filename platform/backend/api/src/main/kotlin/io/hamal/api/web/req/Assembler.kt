@@ -1,87 +1,87 @@
 package io.hamal.api.web.req
 
-import io.hamal.lib.sdk.hub.HubDefaultSubmittedReq
-import io.hamal.lib.sdk.hub.HubSubmittedReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
-import io.hamal.lib.sdk.hub.HubSubmittedWithTokenReq
+import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedWithTokenReq
 import io.hamal.repository.api.submitted_req.*
 
 
 internal object Assembler {
-    fun assemble(req: SubmittedReq): HubSubmittedReq {
+    fun assemble(req: SubmittedReq): ApiSubmittedReq {
         return when (val r = req) {
 
-            is SubmittedCreateAccountWithPasswordReq -> HubSubmittedReqWithId(
+            is SubmittedCreateAccountWithPasswordReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedAppendToTopicReq -> HubSubmittedReqWithId(
+            is SubmittedAppendToTopicReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedCompleteExecReq -> HubSubmittedReqWithId(
+            is SubmittedCompleteExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedCreateFuncReq -> HubSubmittedReqWithId(
+            is SubmittedCreateFuncReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedCreateNamespaceReq -> HubSubmittedReqWithId(
+            is SubmittedCreateNamespaceReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedCreateTopicReq -> HubSubmittedReqWithId(
+            is SubmittedCreateTopicReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedCreateTriggerReq -> HubSubmittedReqWithId(
+            is SubmittedCreateTriggerReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedFailExecReq -> HubSubmittedReqWithId(
+            is SubmittedFailExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedInvokeExecReq -> HubSubmittedReqWithId(
+            is SubmittedInvokeExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedUpdateFuncReq -> HubSubmittedReqWithId(
+            is SubmittedUpdateFuncReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is SubmittedUpdateNamespaceReq -> HubSubmittedReqWithId(
+            is SubmittedUpdateNamespaceReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId,
@@ -89,13 +89,13 @@ internal object Assembler {
             )
 
 
-            is SubmittedSetStateReq -> HubDefaultSubmittedReq(
+            is SubmittedSetStateReq -> ApiDefaultSubmittedReq(
                 reqId = r.reqId,
                 status = r.status,
                 groupId = r.groupId
             )
 
-            is SubmittedSignInWithPasswordReq -> HubSubmittedWithTokenReq(
+            is SubmittedSignInWithPasswordReq -> ApiSubmittedWithTokenReq(
                 reqId = r.reqId,
                 status = r.status,
                 token = r.token

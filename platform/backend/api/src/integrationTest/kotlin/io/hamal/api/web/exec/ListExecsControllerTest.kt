@@ -3,7 +3,7 @@ package io.hamal.api.web.exec
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.hub.HubExecList
+import io.hamal.lib.sdk.api.ApiExecList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        val result = response.result(HubExecList::class)
+        val result = response.result(ApiExecList::class)
         assertThat(result.execs, empty())
     }
 
@@ -33,7 +33,7 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExecList::class)) {
+        with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(id, equalTo(execId))
@@ -55,7 +55,7 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExecList::class)) {
+        with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(42))
         }
     }
@@ -76,7 +76,7 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse)
 
-        with(response.result(HubExecList::class)) {
+        with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
                 assertThat(exec.id, equalTo(fortyFifthRequest.id(::ExecId)))

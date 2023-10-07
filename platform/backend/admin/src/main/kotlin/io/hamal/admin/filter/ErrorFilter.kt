@@ -1,6 +1,6 @@
 package io.hamal.admin.filter
 
-import io.hamal.lib.sdk.hub.HubError
+import io.hamal.lib.sdk.api.ApiError
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -39,7 +39,7 @@ class ErrorApiFilter(
                 else -> SC_INTERNAL_SERVER_ERROR
             }
 
-            val encoded = json.encodeToString(HubError.serializer(), HubError(toHandle?.message ?: "Unknown error"))
+            val encoded = json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error"))
             response.status = statusCode
             response.addHeader("Content-Type", "application/json")
             response.writer.write(encoded)

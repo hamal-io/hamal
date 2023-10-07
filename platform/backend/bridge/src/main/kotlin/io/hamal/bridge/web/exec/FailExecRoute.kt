@@ -2,8 +2,8 @@ package io.hamal.bridge.web.exec
 
 import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.HubFailExecReq
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiFailExecReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,11 +18,11 @@ internal class FailExecRoute(
     @PostMapping("/v1/execs/{execId}/fail")
     fun failExec(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody fail: HubFailExecReq
-    ): ResponseEntity<HubSubmittedReqWithId> {
+        @RequestBody fail: ApiFailExecReq
+    ): ResponseEntity<ApiSubmittedReqWithId> {
         val result = request(execId, fail)
         return ResponseEntity(result.let {
-            HubSubmittedReqWithId(
+            ApiSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
                 groupId = it.groupId,

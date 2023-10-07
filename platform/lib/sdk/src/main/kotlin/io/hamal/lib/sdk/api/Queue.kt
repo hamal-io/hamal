@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class HubUnitOfWorkList(
+data class ApiUnitOfWorkList(
     val work: List<UnitOfWork>
 ) {
     @Serializable

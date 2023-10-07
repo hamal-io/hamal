@@ -8,12 +8,12 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.PlatformEventTrigger
-import io.hamal.lib.sdk.hub.HubFixedRateTrigger
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiEventTrigger
+import io.hamal.lib.sdk.api.ApiFixedRateTrigger
 
 class GetTriggerFunction(
-    private val sdk: HubSdk
+    private val sdk: ApiSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -23,7 +23,7 @@ class GetTriggerFunction(
             null to sdk.trigger.get(TriggerId(arg1.value))
                 .let { trigger ->
                     when (trigger) {
-                        is HubFixedRateTrigger ->
+                        is ApiFixedRateTrigger ->
                             MapType(
                                 mutableMapOf(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
@@ -45,7 +45,7 @@ class GetTriggerFunction(
                                 )
                             )
 
-                        is PlatformEventTrigger -> {
+                        is ApiEventTrigger -> {
                             MapType(
                                 mutableMapOf(
                                     "id" to StringType(trigger.id.value.value.toString(16)),

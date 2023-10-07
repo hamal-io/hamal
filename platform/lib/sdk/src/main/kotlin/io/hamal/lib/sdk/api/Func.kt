@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
@@ -11,7 +11,7 @@ import io.hamal.request.UpdateFuncReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubCreateFuncReq(
+data class ApiCreateFuncReq(
     override val namespaceId: NamespaceId? = null,
     override val name: FuncName,
     override val inputs: FuncInputs,
@@ -19,7 +19,7 @@ data class HubCreateFuncReq(
 ) : CreateFuncReq
 
 @Serializable
-data class HubUpdateFuncReq(
+data class ApiUpdateFuncReq(
     override val namespaceId: NamespaceId? = null,
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
@@ -27,13 +27,13 @@ data class HubUpdateFuncReq(
 ) : UpdateFuncReq
 
 @Serializable
-data class HubInvokeFuncReq(
+data class ApiInvokeFuncReq(
     override val correlationId: CorrelationId? = null,
     override val inputs: InvocationInputs? = null,
 ) : InvokeFuncReq
 
 @Serializable
-data class HubFuncList(
+data class ApiFuncList(
     val funcs: List<Func>
 ) {
     @Serializable
@@ -52,7 +52,7 @@ data class HubFuncList(
 
 
 @Serializable
-data class HubFunc(
+data class ApiFunc(
     val id: FuncId,
     val namespace: Namespace,
     val name: FuncName,
@@ -66,34 +66,34 @@ data class HubFunc(
     )
 }
 
-interface HubFuncService {
-    fun create(groupId: GroupId, createFuncReq: HubCreateFuncReq): HubSubmittedReqWithId
-    fun list(groupId: GroupId): List<HubFuncList.Func>
-    fun get(funcId: FuncId): HubFunc
+interface ApiFuncService {
+    fun create(groupId: GroupId, createFuncReq: ApiCreateFuncReq): ApiSubmittedReqWithId
+    fun list(groupId: GroupId): List<ApiFuncList.Func>
+    fun get(funcId: FuncId): ApiFunc
 }
 
-internal class DefaultHubFuncService(
+internal class ApiFuncServiceImpl(
     private val template: HttpTemplate
-) : HubFuncService {
+) : ApiFuncService {
 
-    override fun create(groupId: GroupId, createFuncReq: HubCreateFuncReq) =
+    override fun create(groupId: GroupId, createFuncReq: ApiCreateFuncReq) =
         template.post("/v1/groups/{groupId}/funcs")
             .path("groupId", groupId)
             .body(createFuncReq)
             .execute()
-            .fold(HubSubmittedReqWithId::class)
+            .fold(ApiSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId): List<HubFuncList.Func> =
+    override fun list(groupId: GroupId): List<ApiFuncList.Func> =
         template.get("/v1/groups/{groupId}/funcs")
             .path("groupId", groupId)
             .execute()
-            .fold(HubFuncList::class)
+            .fold(ApiFuncList::class)
             .funcs
 
     override fun get(funcId: FuncId) =
         template.get("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .execute()
-            .fold(HubFunc::class)
+            .fold(ApiFunc::class)
 
 }

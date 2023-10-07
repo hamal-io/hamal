@@ -34,6 +34,6 @@ import java.nio.file.Paths
 @ActiveProfiles(value = ["test", "api", "memory"])
 internal class MemoryApiHamalTest : BaseApiTest() {
     final override val log: Logger = logger(this::class)
-    final override val rootHubSdk = rootHubSdk(8042)
+    final override val rootApiSdk = rootApiSdk(8042)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

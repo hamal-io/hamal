@@ -10,12 +10,12 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubCreateTriggerReq
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiCreateTriggerReq
 import kotlin.time.Duration
 
 class CreateTriggerFunction(
-    private val sdk: HubSdk
+    private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -24,7 +24,7 @@ class CreateTriggerFunction(
         return try {
             val res = sdk.trigger.create(
                 ctx[GroupId::class],
-                HubCreateTriggerReq(
+                ApiCreateTriggerReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                     name = TriggerName(arg1.getString("name")),

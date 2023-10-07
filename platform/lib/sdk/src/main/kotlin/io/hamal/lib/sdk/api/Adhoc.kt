@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -10,24 +10,24 @@ import io.hamal.request.InvokeAdhocReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubInvokeAdhocReq(
+data class ApiInvokeAdhocReq(
     override val inputs: InvocationInputs,
     override val code: CodeType
 ) : InvokeAdhocReq
 
-interface HubAdhocService {
-    operator fun invoke(groupId: GroupId, req: HubInvokeAdhocReq): HubSubmittedReqWithId
+interface ApiAdhocService {
+    operator fun invoke(groupId: GroupId, req: ApiInvokeAdhocReq): ApiSubmittedReqWithId
 }
 
-internal class DefaultHubAdhocService(
+internal class ApiAdhocServiceImpl(
     private val template: HttpTemplate
-) : HubAdhocService {
-    override fun invoke(groupId: GroupId, req: HubInvokeAdhocReq): HubSubmittedReqWithId {
+) : ApiAdhocService {
+    override fun invoke(groupId: GroupId, req: ApiInvokeAdhocReq): ApiSubmittedReqWithId {
         return template
             .post("/v1/groups/{groupId}/adhoc")
             .path("groupId", groupId)
             .body(req)
             .execute()
-            .fold(HubSubmittedReqWithId::class)
+            .fold(ApiSubmittedReqWithId::class)
     }
 }

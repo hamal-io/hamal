@@ -6,31 +6,31 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
-import io.hamal.lib.sdk.hub.HubReqList
-import io.hamal.lib.sdk.hub.HubSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
+import io.hamal.lib.sdk.api.ApiReqList
+import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseReqControllerTest : BaseControllerTest() {
 
-    fun list(): HubReqList {
+    fun list(): ApiReqList {
         val listResponse = httpTemplate.get("/v1/reqs").execute()
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))
 
         require(listResponse is SuccessHttpResponse) { "request was not successful" }
-        return listResponse.result(HubReqList::class)
+        return listResponse.result(ApiReqList::class)
     }
 
-    fun adhoc(code: CodeType = CodeType("")): HubSubmittedReqWithId {
+    fun adhoc(code: CodeType = CodeType("")): ApiSubmittedReqWithId {
         return httpTemplate.post("/v1/groups/{groupId}/adhoc")
             .path("groupId", testGroup.id)
             .body(
-                HubInvokeAdhocReq(
+                ApiInvokeAdhocReq(
                     inputs = InvocationInputs(),
                     code = code
                 )
-            ).execute(HubSubmittedReqWithId::class)
+            ).execute(ApiSubmittedReqWithId::class)
     }
 
 }

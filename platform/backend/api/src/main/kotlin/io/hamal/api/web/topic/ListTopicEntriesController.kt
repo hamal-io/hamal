@@ -4,7 +4,7 @@ import io.hamal.core.adapter.ListTopicEntriesPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.hub.HubTopicEntryList
+import io.hamal.lib.sdk.api.ApiTopicEntryList
 import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +19,7 @@ internal class ListTopicEntriesController(private val listTopicEntries: ListTopi
         @PathVariable("topicId") topicId: TopicId,
         @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: TopicEntryId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<HubTopicEntryList> {
+    ): ResponseEntity<ApiTopicEntryList> {
         return listTopicEntries(
             topicId, TopicEntryQuery(
                 afterId = afterId,
@@ -27,11 +27,11 @@ internal class ListTopicEntriesController(private val listTopicEntries: ListTopi
             )
         ) { entries, topic ->
             ResponseEntity.ok(
-                HubTopicEntryList(
+                ApiTopicEntryList(
                     topicId = topic.id,
                     topicName = topic.name,
                     entries = entries.map {
-                        HubTopicEntryList.Entry(
+                        ApiTopicEntryList.Entry(
                             id = it.id,
                             payload = it.payload
                         )

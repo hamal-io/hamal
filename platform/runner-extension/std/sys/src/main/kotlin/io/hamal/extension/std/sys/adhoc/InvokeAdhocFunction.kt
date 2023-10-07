@@ -9,11 +9,11 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.CodeType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
 
 class InvokeAdhocFunction(
-    private val sdk: HubSdk
+    private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
@@ -22,7 +22,7 @@ class InvokeAdhocFunction(
         return try {
             val res = sdk.adhoc(
                 ctx[GroupId::class],
-                HubInvokeAdhocReq(
+                ApiInvokeAdhocReq(
                     inputs = InvocationInputs(),
                     code = CodeType(arg1.getString("code"))
                 )

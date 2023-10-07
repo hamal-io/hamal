@@ -8,9 +8,9 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.DefaultHubSdk
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubInvokeAdhocReq
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.ApiSdkImpl
+import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
@@ -68,14 +68,14 @@ abstract class BaseApiTest {
 
                 log.info("Start test $testFileWithPath")
 
-                val execReq = rootHubSdk.adhoc.invoke(
+                val execReq = rootApiSdk.adhoc.invoke(
                     testGroup.id,
-                    HubInvokeAdhocReq(
+                    ApiInvokeAdhocReq(
                         InvocationInputs(),
                         CodeType(String(Files.readAllBytes(testFile)))
                     )
                 )
-                rootHubSdk.await(execReq)
+                rootApiSdk.await(execReq)
 
                 var wait = true
                 val startedAt = TimeUtils.now()
@@ -151,13 +151,13 @@ abstract class BaseApiTest {
         )
     }
 
-    abstract val rootHubSdk: HubSdk
+    abstract val rootApiSdk: ApiSdk
     abstract val testPath: Path
     abstract val log: Logger
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 
-    fun rootHubSdk(serverPort: Number) = DefaultHubSdk(
+    fun rootApiSdk(serverPort: Number) = ApiSdkImpl(
         HttpTemplate(
             baseUrl = "http://localhost:$serverPort",
             headerFactory = {

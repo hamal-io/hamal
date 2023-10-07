@@ -2,7 +2,7 @@ package io.hamal.api.web.namespace
 
 import io.hamal.core.adapter.GetNamespacePort
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.hub.HubNamespace
+import io.hamal.lib.sdk.api.ApiNamespace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,7 +14,7 @@ internal class GetNamespaceController(private val getNamespace: GetNamespacePort
     fun getNamespace(@PathVariable("namespaceId") namespaceId: NamespaceId) =
         getNamespace(namespaceId) { namespace ->
             ResponseEntity.ok(
-                HubNamespace(
+                ApiNamespace(
                     id = namespace.id,
                     name = namespace.name,
                     inputs = namespace.inputs

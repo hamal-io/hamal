@@ -35,6 +35,6 @@ import java.nio.file.Paths
 @ActiveProfiles(value = ["test", "api", "sqlite"])
 internal class SqliteApiHamalTest : BaseApiTest() {
     final override val log: Logger = logger(this::class)
-    final override val rootHubSdk = rootHubSdk(8043)
+    final override val rootApiSdk = rootApiSdk(8043)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

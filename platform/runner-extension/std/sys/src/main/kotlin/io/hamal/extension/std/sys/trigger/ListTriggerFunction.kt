@@ -8,11 +8,11 @@ import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.HubSdk
-import io.hamal.lib.sdk.hub.HubTriggerList
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiTriggerList
 
 class ListTriggerFunction(
-    private val sdk: HubSdk
+    private val sdk: ApiSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
 ) {
@@ -22,7 +22,7 @@ class ListTriggerFunction(
                 sdk.trigger.list(ctx[GroupId::class])
                     .mapIndexed { index, trigger ->
                         index to when (trigger) {
-                            is HubTriggerList.FixedRateTrigger -> {
+                            is ApiTriggerList.FixedRateTrigger -> {
                                 MapType(
                                     mutableMapOf(
                                         "id" to StringType(trigger.id.value.value.toString(16)),
@@ -45,7 +45,7 @@ class ListTriggerFunction(
                                 )
                             }
 
-                            is HubTriggerList.EventTrigger -> {
+                            is ApiTriggerList.EventTrigger -> {
                                 MapType(
                                     mutableMapOf(
                                         "id" to StringType(trigger.id.value.value.toString(16)),

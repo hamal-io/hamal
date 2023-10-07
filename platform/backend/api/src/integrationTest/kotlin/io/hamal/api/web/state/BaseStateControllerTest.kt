@@ -10,17 +10,17 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.sdk.hub.*
+import io.hamal.lib.sdk.api.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BaseStateControllerTest : BaseControllerTest() {
 
-    fun createFunc(name: FuncName): HubSubmittedReqWithId {
+    fun createFunc(name: FuncName): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)
             .body(
-                HubCreateFuncReq(
+                ApiCreateFuncReq(
                     namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
@@ -31,14 +31,14 @@ internal sealed class BaseStateControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(HubSubmittedReqWithId::class)
+        return response.result(ApiSubmittedReqWithId::class)
     }
 
-    fun completeExec(execId: ExecId, state: State): HubSubmittedReqWithId {
+    fun completeExec(execId: ExecId, state: State): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                HubCompleteExecReq(
+                ApiCompleteExecReq(
                     state = state,
                     events = listOf()
                 )
@@ -46,12 +46,12 @@ internal sealed class BaseStateControllerTest : BaseControllerTest() {
             .execute()
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(HubSubmittedReqWithId::class)
+        return response.result(ApiSubmittedReqWithId::class)
     }
 
     fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.correlationId)
 
-    fun getState(funcId: FuncId, correlationId: CorrelationId): HubCorrelatedState {
+    fun getState(funcId: FuncId, correlationId: CorrelationId): ApiCorrelatedState {
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", funcId)
             .path("correlationId", correlationId.value)
@@ -59,10 +59,10 @@ internal sealed class BaseStateControllerTest : BaseControllerTest() {
         assertThat(response.statusCode, equalTo(Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        return response.result(HubCorrelatedState::class)
+        return response.result(ApiCorrelatedState::class)
     }
 
-    fun setState(correlatedState: CorrelatedState): HubSubmittedReq {
+    fun setState(correlatedState: CorrelatedState): ApiSubmittedReq {
         val response = httpTemplate.post("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", correlatedState.correlation.funcId)
             .path("correlationId", correlatedState.correlation.correlationId.value)
@@ -72,6 +72,6 @@ internal sealed class BaseStateControllerTest : BaseControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        return response.result(HubDefaultSubmittedReq::class)
+        return response.result(ApiDefaultSubmittedReq::class)
     }
 }

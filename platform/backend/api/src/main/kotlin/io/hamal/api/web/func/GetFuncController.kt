@@ -2,7 +2,7 @@ package io.hamal.api.web.func
 
 import io.hamal.core.adapter.GetFuncPort
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.hub.HubFunc
+import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.Namespace
 import org.springframework.http.ResponseEntity
@@ -18,9 +18,9 @@ internal class GetFuncController(private val getFunc: GetFuncPort) {
 
     private fun assemble(func: Func, namespace: Namespace) =
         ResponseEntity.ok(
-            HubFunc(
+            ApiFunc(
                 id = func.id,
-                namespace = HubFunc.Namespace(
+                namespace = ApiFunc.Namespace(
                     id = namespace.id,
                     name = namespace.name
                 ),

@@ -4,7 +4,7 @@ import io.hamal.core.adapter.ListExecsPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.hub.HubExecList
+import io.hamal.lib.sdk.api.ApiExecList
 import io.hamal.repository.api.ExecQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +19,7 @@ internal class ListExecsController(private val listExec: ListExecsPort) {
         @PathVariable("groupId") groupId: GroupId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
-    ): ResponseEntity<HubExecList> {
+    ): ResponseEntity<ApiExecList> {
         return listExec(
             ExecQueryRepository.ExecQuery(
                 afterId = afterId,
@@ -28,9 +28,9 @@ internal class ListExecsController(private val listExec: ListExecsPort) {
             )
         ) { execs ->
             ResponseEntity.ok(
-                HubExecList(
+                ApiExecList(
                     execs = execs.map {
-                        HubExecList.Exec(
+                        ApiExecList.Exec(
                             id = it.id,
                             status = it.status,
                             correlation = it.correlation,

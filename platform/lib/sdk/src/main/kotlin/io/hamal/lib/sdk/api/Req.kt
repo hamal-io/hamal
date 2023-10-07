@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
@@ -9,44 +9,44 @@ import io.hamal.lib.domain.vo.GroupId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubReqList(
-    val reqs: List<HubSubmittedReq>
+data class ApiReqList(
+    val reqs: List<ApiSubmittedReq>
 )
 
 @Serializable
-sealed interface HubSubmittedReq {
+sealed interface ApiSubmittedReq {
     val reqId: ReqId
     val status: ReqStatus
 }
 
 @Serializable
-sealed interface HubSubmittedReqWithGroupId : HubSubmittedReq {
+sealed interface ApiSubmittedReqWithGroupId : ApiSubmittedReq {
     override val reqId: ReqId
     override val status: ReqStatus
     val groupId: GroupId
 }
 
 @Serializable
-data class HubDefaultSubmittedReq(
+data class ApiDefaultSubmittedReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
     override val groupId: GroupId
-) : HubSubmittedReqWithGroupId
+) : ApiSubmittedReqWithGroupId
 
 @Serializable
-data class HubSubmittedWithTokenReq(
+data class ApiSubmittedWithTokenReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
     val token: AuthToken
-) : HubSubmittedReq
+) : ApiSubmittedReq
 
 @Serializable
-data class HubSubmittedReqWithId(
+data class ApiSubmittedReqWithId(
     override val reqId: ReqId,
     override val status: ReqStatus,
     override val groupId: GroupId,
     val id: SnowflakeId,
-) : HubSubmittedReqWithGroupId {
+) : ApiSubmittedReqWithGroupId {
 
     constructor(reqId: ReqId, status: ReqStatus, groupId: GroupId, id: DomainId) : this(
         reqId,

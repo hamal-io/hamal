@@ -1,4 +1,4 @@
-package io.hamal.lib.sdk.hub
+package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
@@ -15,18 +15,18 @@ import io.hamal.request.FailExecReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HubFailExecReq(
+data class ApiFailExecReq(
     override val cause: ErrorType
 ) : FailExecReq
 
 @Serializable
-data class HubCompleteExecReq(
+data class ApiCompleteExecReq(
     override val state: State,
     override val events: List<EventToSubmit>
 ) : CompleteExecReq
 
 @Serializable
-data class HubExecList(
+data class ApiExecList(
     val execs: List<Exec>
 ) {
     @Serializable
@@ -45,7 +45,7 @@ data class HubExecList(
 }
 
 @Serializable
-data class HubExec(
+data class ApiExec(
     val id: ExecId,
     val status: ExecStatus,
     val correlation: Correlation?,
@@ -54,36 +54,36 @@ data class HubExec(
     val events: List<Event>
 )
 
-interface HubExecService {
-    fun poll(): HubUnitOfWorkList
+interface ApiExecService {
+    fun poll(): ApiUnitOfWorkList
     fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
     fun fail(execId: ExecId, error: ErrorType)
 
-    fun list(groupId: GroupId): List<HubExecList.Exec>
-    fun get(execId: ExecId): HubExec
+    fun list(groupId: GroupId): List<ApiExecList.Exec>
+    fun get(execId: ExecId): ApiExec
 }
 
-internal class DefaultHubExecService(
+internal class ApiExecServiceImpl(
     private val template: HttpTemplate
-) : HubExecService {
+) : ApiExecService {
 
-    override fun poll(): HubUnitOfWorkList {
+    override fun poll(): ApiUnitOfWorkList {
         return template.post("/v1/dequeue")
             .execute()
-            .fold(HubUnitOfWorkList::class)
+            .fold(ApiUnitOfWorkList::class)
     }
 
     override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {
         template.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
-            .body(HubCompleteExecReq(stateAfterCompletion, eventToSubmit))
+            .body(ApiCompleteExecReq(stateAfterCompletion, eventToSubmit))
             .execute()
     }
 
     override fun fail(execId: ExecId, error: ErrorType) {
         template.post("/v1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(HubFailExecReq(error))
+            .body(ApiFailExecReq(error))
             .execute()
     }
 
@@ -91,12 +91,12 @@ internal class DefaultHubExecService(
         template.get("/v1/groups/{groupId}/execs")
             .path("groupId", groupId)
             .execute()
-            .fold(HubExecList::class)
+            .fold(ApiExecList::class)
             .execs
 
     override fun get(execId: ExecId) =
         template.get("/v1/execs/{execId}")
             .path("execId", execId)
             .execute()
-            .fold(HubExec::class)
+            .fold(ApiExec::class)
 }

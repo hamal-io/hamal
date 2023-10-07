@@ -12,9 +12,9 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.hub.HubCorrelatedState
-import io.hamal.lib.sdk.hub.HubError
-import io.hamal.lib.sdk.hub.HubState
+import io.hamal.lib.sdk.api.ApiCorrelatedState
+import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -40,11 +40,11 @@ internal class GetStateControllerTest : BaseStateControllerTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val correlatedState = response.result(HubCorrelatedState::class)
+        val correlatedState = response.result(ApiCorrelatedState::class)
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.state, equalTo(HubState(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+        assertThat(correlatedState.state, equalTo(ApiState(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
     }
 
     @Test
@@ -55,11 +55,11 @@ internal class GetStateControllerTest : BaseStateControllerTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val correlatedState = response.result(HubCorrelatedState::class)
+        val correlatedState = response.result(ApiCorrelatedState::class)
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.state, equalTo(HubState()))
+        assertThat(correlatedState.state, equalTo(ApiState()))
     }
 
     @Test
@@ -68,7 +68,7 @@ internal class GetStateControllerTest : BaseStateControllerTest() {
         assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
         require(response is ErrorHttpResponse) { "request was successful" }
 
-        val error = response.error(HubError::class)
+        val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))
     }
 }

@@ -4,8 +4,8 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.hub.HubCompleteExecReq
-import io.hamal.lib.sdk.hub.HubFailExecReq
+import io.hamal.lib.sdk.api.ApiCompleteExecReq
+import io.hamal.lib.sdk.api.ApiFailExecReq
 import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
@@ -19,7 +19,7 @@ internal class SubmitBridgeRequest(
     private val execQueryRepository: ExecQueryRepository
 ) {
 
-    operator fun invoke(execId: ExecId, req: HubCompleteExecReq): SubmittedCompleteExecReq {
+    operator fun invoke(execId: ExecId, req: ApiCompleteExecReq): SubmittedCompleteExecReq {
         val exec = execQueryRepository.get(execId)
         return SubmittedCompleteExecReq(
             reqId = generateDomainId(::ReqId),
@@ -31,7 +31,7 @@ internal class SubmitBridgeRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(execId: ExecId, req: HubFailExecReq): SubmittedFailExecReq {
+    operator fun invoke(execId: ExecId, req: ApiFailExecReq): SubmittedFailExecReq {
         val exec = execQueryRepository.get(execId)
         return SubmittedFailExecReq(
             reqId = generateDomainId(::ReqId),
