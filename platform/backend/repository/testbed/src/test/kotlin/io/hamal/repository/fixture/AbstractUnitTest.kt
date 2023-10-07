@@ -49,7 +49,7 @@ abstract class AbstractUnitTest {
         ),
         CodeRepository::class to listOf(
             MemoryFixture,
-            //SqliteFixture
+            SqliteFixture
         ),
         ExecLogRepository::class to listOf(
             MemoryFixture
