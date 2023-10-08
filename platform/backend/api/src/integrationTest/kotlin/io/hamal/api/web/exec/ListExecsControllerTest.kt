@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test
 internal class ListExecsControllerTest : BaseExecControllerTest() {
     @Test
     fun `No execs`() {
-        val response = httpTemplate.get("/v1/groups/{groupId}/execs")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.get("/v1/execs")
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
@@ -26,8 +25,8 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
     fun `Single exec`() {
         val execId = awaitCompleted(createAdhocExec()).id(::ExecId)
 
-        val response = httpTemplate.get("/v1/groups/{groupId}/execs")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.get("/v1/execs")
+            .parameter("group_ids", testGroup.id)
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
@@ -47,8 +46,8 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
             IntRange(1, 50).map { createAdhocExec() }
         )
 
-        val response = httpTemplate.get("/v1/groups/{groupId}/execs")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.get("/v1/execs")
+            .parameter("group_ids", testGroup.id)
             .parameter("limit", 42)
             .execute()
 
@@ -67,8 +66,8 @@ internal class ListExecsControllerTest : BaseExecControllerTest() {
         val fortyFifthRequest = requests.drop(44).take(1).first()
         val fortySixthRequest = requests.drop(45).take(1).first()
 
-        val response = httpTemplate.get("/v1/groups/{groupId}/execs")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.get("/v1/execs")
+            .parameter("group_ids", testGroup.id)
             .parameter("limit", 1)
             .parameter("after_id", fortySixthRequest.id)
             .execute()

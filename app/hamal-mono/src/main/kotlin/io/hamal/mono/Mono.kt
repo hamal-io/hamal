@@ -1,6 +1,5 @@
 package io.hamal.mono
 
-import io.hamal.admin.AdminConfig
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
@@ -46,14 +45,6 @@ fun main(args: Array<String>) {
         .child(ApiConfig::class.java)
         .web(SERVLET)
         .properties("server.port=8008")
-        .bannerMode(OFF)
-        .run(*args)
-
-    applicationBuilder
-        .parent(parent)
-        .child(AdminConfig::class.java)
-        .web(SERVLET)
-        .properties("server.port=9009")
         .bannerMode(OFF)
         .run(*args)
 

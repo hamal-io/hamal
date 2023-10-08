@@ -11,7 +11,7 @@ export interface ListFuncsQuery {
 }
 
 export async function listFuncs(query: ListFuncsQuery): Promise<ApiFuncList> {
-    const response = await fetch("http://localhost:8008/v1/groups/1/funcs", {
+    const response = await fetch("http://localhost:8008/v1/funcs", {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -27,7 +27,7 @@ export interface SubmitCreateFuncReq {
 }
 
 export async function createFunc(req: SubmitCreateFuncReq): Promise<ApiSubmittedReqWithId> {
-    const response = await fetch("http://localhost:8008/v1/groups/1/funcs", {
+    const response = await fetch("http://localhost:8008/v1/funcs", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({

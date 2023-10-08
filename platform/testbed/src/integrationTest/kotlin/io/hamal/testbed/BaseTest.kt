@@ -1,13 +1,15 @@
-package io.hamal.testbed.admin
+package io.hamal.testbed
 
+import io.hamal.lib.common.Logger
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.AdminSdk
-import io.hamal.lib.sdk.AdminSdkImpl
-import io.hamal.lib.sdk.admin.AdminInvokeAdhocReq
+import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.ApiSdkImpl
+import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
@@ -17,9 +19,10 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.temporal.ChronoUnit
 import kotlin.io.path.name
 
-abstract class BaseAdminTest {
+abstract class BaseTest {
 
     @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
@@ -51,23 +54,32 @@ abstract class BaseAdminTest {
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
+    private lateinit var testAccount: Account
+    private lateinit var testAccountAuthToken: AuthToken
+    private lateinit var testGroup: Group
+
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().sorted().map { testFile ->
-            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
+            val testFileWithPath = "${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}"
+            dynamicTest(testFileWithPath) {
                 setupTestEnv()
 
-                val execReq = adminSdk.adhoc.invoke(
-                    AdminInvokeAdhocReq(
+                log.info("Start test $testFileWithPath")
+
+                val execReq = rootApiSdk.adhoc.invoke(
+                    testGroup.id,
+                    ApiInvokeAdhocReq(
                         InvocationInputs(),
                         CodeValue(String(Files.readAllBytes(testFile)))
                     )
                 )
-                adminSdk.await(execReq)
+                rootApiSdk.await(execReq)
 
                 var wait = true
                 val startedAt = TimeUtils.now()
                 while (wait) {
+                    Thread.sleep(1)
                     with(execRepository.get(execReq.id(::ExecId))) {
                         if (status == ExecStatus.Completed) {
                             wait = false
@@ -80,7 +92,6 @@ abstract class BaseAdminTest {
                             fail("Timeout")
                         }
                     }
-                    Thread.sleep(1)
                 }
             }
         }.toList()
@@ -98,26 +109,59 @@ abstract class BaseAdminTest {
         namespaceRepository.clear()
         triggerRepository.clear()
 
+        testAccount = accountRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = CmdId(2),
+                accountId = generateDomainId(::AccountId),
+                accountType = Root,
+                name = AccountName("test-account"),
+                email = AccountEmail("test-account@hamal.io"),
+                salt = PasswordSalt("test-salt")
+            )
+        )
+
+        testAccountAuthToken = (authRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = CmdId(3),
+                authId = generateDomainId(::AuthId),
+                accountId = testAccount.id,
+                token = AuthToken("test-account-token"),
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+            )
+        ) as TokenAuth).token
+
+        testGroup = groupRepository.create(
+            GroupCmdRepository.CreateCmd(
+                id = CmdId(4),
+                groupId = generateDomainId(::GroupId),
+                name = GroupName("test-group"),
+                creatorId = testAccount.id
+            )
+        )
+
         namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = generateDomainId(::NamespaceId),
-                groupId = GroupId.root,
+                groupId = testGroup.id,
                 name = NamespaceName("hamal"),
                 inputs = NamespaceInputs()
             )
         )
     }
 
-    abstract val adminSdk: AdminSdk
+    abstract val rootApiSdk: ApiSdk
     abstract val testPath: Path
+    abstract val log: Logger
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 
-    fun rootAdminSdk(serverPort: Number) = AdminSdkImpl(
+    fun rootApiSdk(serverPort: Number) = ApiSdkImpl(
         HttpTemplate(
-            baseUrl = "http://localhost:$serverPort"
+            baseUrl = "http://localhost:$serverPort",
+            headerFactory = {
+                set("x-hamal-token", "test-account-token")
+            }
         )
     )
-
 }

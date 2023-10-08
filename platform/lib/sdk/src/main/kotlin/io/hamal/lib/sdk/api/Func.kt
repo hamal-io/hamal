@@ -91,8 +91,8 @@ internal class ApiFuncServiceImpl(
             .fold(ApiSubmittedReqWithId::class)
 
     override fun list(groupId: GroupId): List<ApiFuncList.Func> =
-        template.get("/v1/groups/{groupId}/funcs")
-            .path("groupId", groupId)
+        template.get("/v1/funcs")
+            .parameter("group_ids", groupId)
             .execute()
             .fold(ApiFuncList::class)
             .funcs

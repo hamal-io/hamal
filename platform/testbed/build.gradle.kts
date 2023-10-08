@@ -20,8 +20,6 @@ testing {
                         exclude("com.fasterxml.jackson.core", "jackson-annotations")
                     }
 
-
-                    implementation(project(":platform:backend:admin"))
                     implementation(project(":platform:backend:api"))
                     implementation(project(":platform:backend:bridge"))
                     implementation(project(":platform:backend:core"))

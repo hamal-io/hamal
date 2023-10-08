@@ -4,7 +4,6 @@ import io.hamal.extension.net.http.HttpExtensionFactory
 import io.hamal.extension.std.log.DecimalExtensionFactory
 import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.std.sys.SysExtensionFactory
-import io.hamal.extension.std.sysadmin.SysAdminExtensionFactory
 import io.hamal.extension.web3.eth.EthExtensionFactory
 import io.hamal.extension.web3.hml.HmlExtensionFactory
 import io.hamal.lib.domain.vo.ExecToken
@@ -58,7 +57,6 @@ class RunnerSandboxFactory(
             HttpExtensionFactory(),
             LogExtensionFactory(sdk.execLog),
             SysExtensionFactory(HttpTemplate(apiHost)),
-            SysAdminExtensionFactory(HttpTemplate(adminHost)),
             EthExtensionFactory(),
             HmlExtensionFactory()
         )

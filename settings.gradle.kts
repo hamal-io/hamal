@@ -33,7 +33,6 @@ dependencyResolutionManagement {
 }
 
 include(":platform:backend")
-include(":platform:backend:admin")
 include(":platform:backend:api")
 include(":platform:backend:bridge")
 include(":platform:backend:core")
@@ -61,7 +60,6 @@ include(":platform:runner-extension:std:decimal")
 include(":platform:runner-extension:std:log")
 include(":platform:runner-extension:std:test")
 include(":platform:runner-extension:std:sys")
-include(":platform:runner-extension:std:sysadmin")
 include(":platform:runner-extension:starter")
 include(":platform:runner-extension:web3")
 

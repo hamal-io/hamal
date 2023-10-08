@@ -39,7 +39,6 @@ dependencies {
     }
 
     implementation(project(":platform:backend:api"))
-    implementation(project(":platform:backend:admin"))
     implementation(project(":platform:backend:bridge"))
     implementation(project(":platform:backend:core"))
     implementation(project(":platform:runner"))

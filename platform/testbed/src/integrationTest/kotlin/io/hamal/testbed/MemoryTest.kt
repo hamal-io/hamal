@@ -1,4 +1,4 @@
-package io.hamal.testbed.api
+package io.hamal.testbed
 
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
@@ -32,7 +32,7 @@ import java.nio.file.Paths
 @DirtiesContext
 @DisplayName("api - memory")
 @ActiveProfiles(value = ["test", "api", "memory"])
-internal class MemoryApiHamalTest : BaseApiTest() {
+internal class MemoryApiHamalTest : BaseTest() {
     final override val log: Logger = logger(this::class)
     final override val rootApiSdk = rootApiSdk(8042)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")

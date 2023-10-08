@@ -89,8 +89,8 @@ internal class ApiExecServiceImpl(
     }
 
     override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/execs")
-            .path("groupId", groupId)
+        template.get("/v1/execs")
+            .parameter("group_ids", groupId)
             .execute()
             .fold(ApiExecList::class)
             .execs

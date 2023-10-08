@@ -21,8 +21,7 @@ docker {
         ports.set(
             listOf(
                 7007, 7007,
-                8008, 8008,
-                9009, 9009
+                8008, 8008
             )
         )
         images.set(listOf("hamalio/hamal-backend"))
@@ -40,7 +39,6 @@ dependencies {
     }
 
     implementation(project(":platform:backend:api"))
-    implementation(project(":platform:backend:admin"))
     implementation(project(":platform:backend:bridge"))
     implementation(project(":platform:backend:core"))
     implementation(project(":platform:runner"))
@@ -66,7 +64,6 @@ testing {
                     }
 
 
-                    implementation(project(":platform:backend:admin"))
                     implementation(project(":platform:backend:api"))
                     implementation(project(":platform:backend:bridge"))
                     implementation(project(":platform:backend:core"))

@@ -1,4 +1,4 @@
-package io.hamal.testbed.admin
+package io.hamal.testbed
 
 import io.hamal.core.config.BackendBasePath
 import org.springframework.boot.test.context.TestConfiguration
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean
 import java.util.*
 
 @TestConfiguration
-open class AdminTestConfig {
+open class ApiTestConfig {
     @Bean
-    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-admin/${UUID.randomUUID()}")
+    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
 }

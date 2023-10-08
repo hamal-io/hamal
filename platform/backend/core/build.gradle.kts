@@ -43,7 +43,6 @@ testing {
                     }
 
                     implementation(project(":platform:backend:api"))
-                    implementation(project(":platform:backend:admin"))
                     implementation(project(":platform:runner"))
                     implementation(project(":platform:backend:repository:api"))
                     implementation(project(":platform:backend:repository:memory"))

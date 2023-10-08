@@ -1,4 +1,4 @@
-package io.hamal.testbed.api
+package io.hamal.testbed
 
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
@@ -33,7 +33,7 @@ import java.nio.file.Paths
 @DirtiesContext
 @DisplayName("api - sqlite")
 @ActiveProfiles(value = ["test", "api", "sqlite"])
-internal class SqliteApiHamalTest : BaseApiTest() {
+internal class SqliteApiHamalTest : BaseTest() {
     final override val log: Logger = logger(this::class)
     final override val rootApiSdk = rootApiSdk(8043)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")

@@ -11,7 +11,7 @@ export interface ApiSubmitAdhocReq {
 
 export async function invokeAdhoc(req: ApiSubmitAdhocReq): Promise<ApiSubmittedReqWithId> {
     //FIXME do not use admin endpoint - only for prototyping
-    const response = await fetch("http://localhost:8008/v1/groups/1/adhoc", {
+    const response = await fetch("http://localhost:8008/v1/adhoc", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({
