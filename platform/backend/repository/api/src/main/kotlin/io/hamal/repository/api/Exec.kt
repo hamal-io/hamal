@@ -77,6 +77,7 @@ interface ExecQueryRepository {
         var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var groupIds: List<GroupId>,
+        var funcIds: List<FuncId> = listOf(),
         var execIds: List<ExecId> = listOf()
     )
 }

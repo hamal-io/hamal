@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
@@ -45,6 +46,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.funcIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -70,6 +72,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.funcIds()}
         """.trimIndent()
         ) {
             query {
@@ -83,20 +86,20 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
 
 
     override fun upsert(
-        tx: SqliteRecordTransaction<ExecId, ExecRecord, Exec>,
-        obj: Exec
+        tx: SqliteRecordTransaction<ExecId, ExecRecord, Exec>, obj: Exec
     ) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id,status,group_id,data) 
+                    (id,status,group_id,func_id,data) 
                 VALUES
-                    (:id,:status,:groupId,:data)
+                    (:id,:status,:groupId,:funcId,:data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
             set("groupId", obj.groupId)
+            set("funcId", obj.correlation?.funcId ?: FuncId(0))
             set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
         }
     }
@@ -108,6 +111,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                  id             INTEGER NOT NULL,
                  status         INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
+                 func_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -119,6 +123,14 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
         tx.execute("""DELETE FROM current""")
     }
 
+    private fun ExecQuery.ids(): String {
+        return if (execIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
     private fun ExecQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""
@@ -127,11 +139,11 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
         }
     }
 
-    private fun ExecQuery.ids(): String {
-        return if (execIds.isEmpty()) {
+    private fun ExecQuery.funcIds(): String {
+        return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+            "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

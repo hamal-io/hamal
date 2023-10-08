@@ -114,19 +114,19 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
         tx.execute("""DELETE FROM current""")
     }
 
-    private fun FuncQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
-            ""
-        } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
-        }
-    }
-
     private fun FuncQuery.ids(): String {
         return if (funcIds.isEmpty()) {
             ""
         } else {
             "AND id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun FuncQuery.groupIds(): String {
+        return if (groupIds.isEmpty()) {
+            ""
+        } else {
+            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

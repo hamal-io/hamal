@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.*
@@ -352,13 +353,17 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
     inner class GetTest {
         @TestFactory
         fun `Get exec by id`() = runWith(ExecRepository::class) {
-            createExec(ExecId(1), Completed)
+            createExec(
+                execId = ExecId(1),
+                status = Completed,
+                correlation = Correlation(CorrelationId("SomeCorrelationId"), FuncId(444))
+            )
 
             with(get(ExecId(1))) {
                 assertThat(id, equalTo(ExecId(1)))
                 assertThat(groupId, equalTo(GroupId(333)))
-                assertThat(correlation!!.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
-                assertThat(correlation!!.funcId, equalTo(FuncId(444)))
+                assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(code, equalTo(CodeValue("'13'..'37'")))
                 assertThat(
@@ -390,13 +395,17 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
     inner class FindTest {
         @TestFactory
         fun `Find exec by id`() = runWith(ExecRepository::class) {
-            createExec(ExecId(1), Completed)
+            createExec(
+                execId = ExecId(1),
+                status = Completed,
+                correlation = Correlation(CorrelationId("SomeCorrelationId"), FuncId(444))
+            )
 
             with(find(ExecId(1))!!) {
                 assertThat(id, equalTo(ExecId(1)))
                 assertThat(groupId, equalTo(GroupId(333)))
-                assertThat(correlation!!.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
-                assertThat(correlation!!.funcId, equalTo(FuncId(444)))
+                assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(code, equalTo(CodeValue("'13'..'37'")))
                 assertThat(
@@ -443,7 +452,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             val query = ExecQuery(
                 groupIds = listOf(GroupId(5), GroupId(4)),
-                limit = io.hamal.lib.common.domain.Limit(10)
+                limit = Limit(10)
             )
 
             assertThat(count(query), equalTo(2UL))
@@ -461,6 +470,28 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             }
         }
 
+        @TestFactory
+        fun `With func ids`() = runWith(ExecRepository::class) {
+            setup()
+
+            val query = ExecQuery(
+                funcIds = listOf(FuncId(234), FuncId(123)),
+                groupIds = listOf(),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(2UL))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(ExecId(2)))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(ExecId(1)))
+            }
+        }
 
         @TestFactory
         fun `Limit`() = runWith(ExecRepository::class) {
@@ -468,7 +499,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             val query = ExecQuery(
                 groupIds = listOf(),
-                limit = io.hamal.lib.common.domain.Limit(3)
+                limit = Limit(3)
             )
 
             assertThat(count(query), equalTo(4UL))
@@ -483,7 +514,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             val query = ExecQuery(
                 afterId = ExecId(2),
                 groupIds = listOf(),
-                limit = io.hamal.lib.common.domain.Limit(1)
+                limit = Limit(1)
             )
 
             assertThat(count(query), equalTo(1UL))
@@ -499,25 +530,38 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             createExec(
                 execId = ExecId(1),
                 groupId = GroupId(3),
-                status = Completed
+                status = Completed,
+                correlation = Correlation(
+                    correlationId = CorrelationId("CID-1"),
+                    funcId = FuncId(234)
+                )
             )
 
             createExec(
                 execId = ExecId(2),
                 groupId = GroupId(3),
-                status = Failed
+                status = Failed,
+                correlation = Correlation(
+                    correlationId = CorrelationId("CID-2"),
+                    funcId = FuncId(234)
+                )
             )
 
             createExec(
                 execId = ExecId(3),
                 groupId = GroupId(4),
-                status = Started
+                status = Started,
+                correlation = Correlation(
+                    correlationId = CorrelationId("CID-1"),
+                    funcId = FuncId(444)
+                )
             )
 
             createExec(
                 execId = ExecId(4),
                 groupId = GroupId(5),
-                status = Queued
+                status = Queued,
+                correlation = null
             )
         }
     }
@@ -587,7 +631,8 @@ private fun ExecRepository.verifyCount(expected: Int, block: ExecQuery.() -> Uni
 fun ExecRepository.createExec(
     execId: ExecId,
     status: ExecStatus,
-    groupId: GroupId = GroupId(333)
+    groupId: GroupId = GroupId(333),
+    correlation: Correlation? = null
 ): Exec {
 
     val planedExec = plan(
@@ -595,10 +640,7 @@ fun ExecRepository.createExec(
             id = CmdId(100),
             execId = execId,
             groupId = groupId,
-            correlation = Correlation(
-                correlationId = CorrelationId("SomeCorrelationId"),
-                funcId = FuncId(444)
-            ),
+            correlation = correlation,
             inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             code = CodeValue("'13'..'37'"),
             codeId = null,
