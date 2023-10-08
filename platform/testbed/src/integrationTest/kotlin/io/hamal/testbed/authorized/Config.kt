@@ -1,4 +1,4 @@
-package io.hamal.testbed
+package io.hamal.testbed.authorized
 
 import io.hamal.core.config.BackendBasePath
 import org.springframework.boot.test.context.TestConfiguration

@@ -1,11 +1,11 @@
-package io.hamal.testbed
+package io.hamal.testbed.authorized
 
 import io.hamal.lib.common.Logger
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.AccountType.Enjoyer
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
@@ -67,14 +67,14 @@ abstract class BaseTest {
 
                 log.info("Start test $testFileWithPath")
 
-                val execReq = rootApiSdk.adhoc.invoke(
+                val execReq = sdk.adhoc.invoke(
                     testGroup.id,
                     ApiInvokeAdhocReq(
                         InvocationInputs(),
                         CodeValue(String(Files.readAllBytes(testFile)))
                     )
                 )
-                rootApiSdk.await(execReq)
+                sdk.await(execReq)
 
                 var wait = true
                 val startedAt = TimeUtils.now()
@@ -113,10 +113,10 @@ abstract class BaseTest {
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
-                accountType = Root,
-                name = AccountName("test-account"),
-                email = AccountEmail("test-account@hamal.io"),
-                salt = PasswordSalt("test-salt")
+                accountType = Enjoyer,
+                name = AccountName("group-admin"),
+                email = AccountEmail("group-admin@hamal.io"),
+                salt = PasswordSalt("group-admin-salt")
             )
         )
 
@@ -125,7 +125,7 @@ abstract class BaseTest {
                 id = CmdId(3),
                 authId = generateDomainId(::AuthId),
                 accountId = testAccount.id,
-                token = AuthToken("test-account-token"),
+                token = AuthToken("group-admin-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         ) as TokenAuth).token
@@ -134,7 +134,7 @@ abstract class BaseTest {
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
                 groupId = generateDomainId(::GroupId),
-                name = GroupName("test-group"),
+                name = GroupName("group-admin-group"),
                 creatorId = testAccount.id
             )
         )
@@ -150,17 +150,17 @@ abstract class BaseTest {
         )
     }
 
-    abstract val rootApiSdk: ApiSdk
+    abstract val sdk: ApiSdk
     abstract val testPath: Path
     abstract val log: Logger
 
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 
-    fun rootApiSdk(serverPort: Number) = ApiSdkImpl(
+    fun withApiSdk(serverPort: Number) = ApiSdkImpl(
         HttpTemplate(
             baseUrl = "http://localhost:$serverPort",
             headerFactory = {
-                set("x-hamal-token", "test-account-token")
+                set("authorization", "group-admin-token")
             }
         )
     )

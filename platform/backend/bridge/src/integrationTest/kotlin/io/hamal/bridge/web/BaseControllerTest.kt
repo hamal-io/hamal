@@ -17,7 +17,7 @@ internal abstract class BaseControllerTest : BaseTest() {
         HttpTemplate(
             baseUrl = "http://localhost:${localPort}",
             headerFactory = {
-                set("x-hamal-token", "test-token")
+                set("authorization", "test-token")
             }
         )
     }

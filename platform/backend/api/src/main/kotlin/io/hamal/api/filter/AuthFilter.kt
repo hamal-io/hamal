@@ -35,7 +35,7 @@ class AuthApiFilter(
 //            return filterChain.doFilter(request, response)
 //        }
 //
-//        val token = request.getHeader("x-hamal-token")
+//        val token = request.getHeader("authorization")
 //            ?.let(::AuthToken) ?: throw NoSuchElementException("Account not found")
 //
 //        val auth = authRepository.get(token)

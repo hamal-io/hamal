@@ -1,4 +1,4 @@
-package io.hamal.testbed
+package io.hamal.testbed.authorized
 
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
@@ -14,13 +14,14 @@ import org.springframework.test.context.ActiveProfiles
 import java.nio.file.Path
 import java.nio.file.Paths
 
+
 @SpringBootTest(
     webEnvironment = DEFINED_PORT,
     properties = [
-        "server.port=8042",
-        "io.hamal.runner.admin.host=http://localhost:8042",
-        "io.hamal.runner.api.host=http://localhost:8042",
-        "io.hamal.runner.bridge.host=http://localhost:8042"
+        "server.port=8053",
+        "io.hamal.runner.api.host=http://localhost:8053",
+        "io.hamal.runner.admin.host=http://localhost:8053",
+        "io.hamal.runner.bridge.host=http://localhost:8053"
     ], classes = [
         ApiTestConfig::class,
         CoreConfig::class,
@@ -30,10 +31,10 @@ import java.nio.file.Paths
     ]
 )
 @DirtiesContext
-@DisplayName("api - memory")
-@ActiveProfiles(value = ["test", "api", "memory"])
-internal class MemoryApiHamalTest : BaseTest() {
+@DisplayName("authorized - sqlite")
+@ActiveProfiles(value = ["test", "authorized", "sqlite"])
+internal class SqliteAuthorizedTest : BaseTest() {
     final override val log: Logger = logger(this::class)
-    final override val rootApiSdk = rootApiSdk(8042)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
+    final override val sdk = withApiSdk(8053)
+    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "authorized")
 }
