@@ -1,21 +1,20 @@
-import React, {useEffect, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 import {useNavigate, useParams} from "react-router-dom";
 import Editor from "../../../component/editor";
 import {Button} from "flowbite-react";
 import {ApiFunc} from "../../../api/types";
 import {getFunction, invokeAdhoc, invokeFunc, updateFunc} from "../../../api";
-import adhoc from "../adhoc";
 
-type TabType = 'Dashboard' | 'Editor' | 'Trigger' | 'Run' | 'Settings'
+type TabType = 'Dashboard' | 'Editor' | 'Runs' | 'Settings'
 
 
 interface EditorTabProps {
     code: string;
-    setCode: (code: string) => void;
     funcId: string;
+    setCode: (code: string) => void;
 }
 
-const EditorTab: React.FC<EditorTabProps> = (props) => {
+const EditorTab: FC<EditorTabProps> = (props) => {
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="w-full">
@@ -48,6 +47,24 @@ const EditorTab: React.FC<EditorTabProps> = (props) => {
     )
 }
 
+interface RunTabProps {
+    funcId: string;
+}
+
+const RunTab: FC<RunTabProps> = (props) => {
+    // trigger list and execs
+    return (
+        <div className="flex flex-col items-center justify-center">
+            <h2> Run </h2>
+
+            <Button onClick={() => {
+                invokeFunc(props.funcId, {}).then(response => {
+                    console.log(response)
+                })
+            }}> Invoke manually </Button>
+        </div>
+    )
+}
 
 const FuncDetailPage: React.FC = () => {
     const {funcId} = useParams()
@@ -114,20 +131,7 @@ const FuncDetailPage: React.FC = () => {
                         </li>
                         <li>
                             <a
-                                onClick={() => setActiveTab('Trigger')}
-                                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg
-                                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
-                                </svg>
-                                <span className="flex-1 ml-3 whitespace-nowrap">Trigger</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                onClick={() => setActiveTab('Run')}
+                                onClick={() => setActiveTab('Runs')}
                                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <svg
                                     className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -158,8 +162,7 @@ const FuncDetailPage: React.FC = () => {
             <div className="p-4 sm:ml-64">
                 {activeTab === 'Dashboard' && <h1> Dashboard</h1>}
                 {activeTab === 'Editor' && <EditorTab funcId={funcId} code={code} setCode={setCode}/>}
-                {activeTab === 'Trigger' && <h1> Trigger</h1>}
-                {activeTab === 'Run' && <h1> Run</h1>}
+                {activeTab === 'Runs' && <RunTab funcId={funcId}/>}
                 {activeTab === 'Settings' && <h1> Settings</h1>}
             </div>
         </main>
