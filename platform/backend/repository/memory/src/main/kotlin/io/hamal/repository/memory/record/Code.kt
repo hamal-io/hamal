@@ -3,7 +3,7 @@ package io.hamal.repository.memory.record
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.repository.api.Code
-import io.hamal.repository.api.CodeCmdRepository
+import io.hamal.repository.api.CodeCmdRepository.*
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.RecordSequence
@@ -60,7 +60,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
 ), CodeRepository {
     private val lock = ReentrantLock()
 
-    override fun create(cmd: CodeCmdRepository.CreateCmd): Code {
+    override fun create(cmd: CreateCmd): Code {
         return lock.withLock {
             val codeId = cmd.codeId
             val cmdId = cmd.id
@@ -80,7 +80,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
         }
     }
 
-    override fun update(codeId: CodeId, cmd: CodeCmdRepository.UpdateCmd): Code {
+    override fun update(codeId: CodeId, cmd: UpdateCmd): Code {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, codeId)) {
                 versionOf(codeId, cmd.id)

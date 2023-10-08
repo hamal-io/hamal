@@ -277,7 +277,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to find func by id but does not exist`() = runWith(CodeRepository::class) {
+        fun `Tries to find code by id but does not exist`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
                 groupId = GroupId(3),
