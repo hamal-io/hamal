@@ -2,7 +2,9 @@ package io.hamal.api.web.func
 
 import io.hamal.api.web.req.Assembler
 import io.hamal.core.adapter.InvokeFuncPort
+import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.sdk.api.ApiInvokeFuncReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -19,7 +21,12 @@ internal class InvokeFuncController(private val invokeFunc: InvokeFuncPort) {
         @PathVariable("funcId") funcId: FuncId,
         @RequestBody req: ApiInvokeFuncReq? = null
     ): ResponseEntity<ApiSubmittedReq> =
-        invokeFunc(funcId, req ?: ApiInvokeFuncReq()) {
+        invokeFunc(
+            funcId, ApiInvokeFuncReq(
+                correlationId = req?.correlationId ?: CorrelationId.default,
+                inputs = req?.inputs ?: InvocationInputs()
+            )
+        ) {
             ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }
 }

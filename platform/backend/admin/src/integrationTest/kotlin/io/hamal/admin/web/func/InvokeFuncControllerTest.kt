@@ -1,5 +1,6 @@
 package io.hamal.admin.web.func
 
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.Test
 internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
 
     @Test
-    fun `Invokes func`() {
+    fun `Invokes func with correlation id`() {
         val createResponse = awaitCompleted(
             createFunc(
                 AdminCreateFuncReq(
@@ -29,7 +30,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", createResponse.id)
             .body(
                 AdminInvokeFuncReq(
@@ -43,10 +44,21 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
 
         val result = invocationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
+
+        with(execQueryRepository.get(result.id(::ExecId))) {
+            assertThat(
+                correlation, equalTo(
+                    Correlation(
+                        correlationId = CorrelationId("some-correlation-id"),
+                        funcId = createResponse.id(::FuncId)
+                    )
+                )
+            )
+        }
     }
 
     @Test
-    fun `Invokes func without providing correlation id`() {
+    fun `Invokes func without correlation id`() {
         val createResponse = awaitCompleted(
             createFunc(
                 AdminCreateFuncReq(
@@ -58,7 +70,7 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", createResponse.id)
             .body(
                 AdminInvokeFuncReq(
@@ -72,11 +84,22 @@ internal class InvokeFuncControllerTest : BaseFuncControllerTest() {
 
         val result = invocationResponse.result(AdminSubmittedReqWithId::class)
         awaitCompleted(result.reqId)
+
+        with(execQueryRepository.get(result.id(::ExecId))) {
+            assertThat(
+                correlation, equalTo(
+                    Correlation(
+                        correlationId = CorrelationId("__default__"),
+                        funcId = createResponse.id(::FuncId)
+                    )
+                )
+            )
+        }
     }
 
     @Test
     fun `Tries to invoke func which does not exist`() {
-        val invocationResponse = httpTemplate.post("/v1/funcs/1234/exec")
+        val invocationResponse = httpTemplate.post("/v1/funcs/1234/invoke")
             .body(
                 AdminInvokeFuncReq(
                     correlationId = CorrelationId("__default__"),

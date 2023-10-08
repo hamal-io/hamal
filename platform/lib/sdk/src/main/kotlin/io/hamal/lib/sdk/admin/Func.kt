@@ -5,6 +5,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateFuncReq
+import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
 import kotlinx.serialization.Serializable
 
@@ -26,9 +27,9 @@ data class AdminUpdateFuncReq(
 
 @Serializable
 data class AdminInvokeFuncReq(
-    val correlationId: CorrelationId? = null,
-    val inputs: InvocationInputs? = null,
-)
+    override val correlationId: CorrelationId? = null,
+    override val inputs: InvocationInputs? = null,
+) : InvokeFuncReq
 
 @Serializable
 data class AdminFuncList(
@@ -101,7 +102,7 @@ internal class AdminFuncServiceImpl(
             .path("funcId", funcId)
             .execute()
             .fold(AdminFunc::class)
-    
+
     override fun invoke(funcId: FuncId, req: AdminInvokeFuncReq) =
         template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
