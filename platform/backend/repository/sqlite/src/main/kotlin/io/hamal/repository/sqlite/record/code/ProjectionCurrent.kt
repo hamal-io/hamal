@@ -4,7 +4,7 @@ import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Code
-import io.hamal.repository.api.CodeQueryRepository.*
+import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.sqlite.record.SqliteProjection
 import io.hamal.repository.sqlite.record.SqliteRecordTransaction
@@ -33,6 +33,7 @@ internal object ProjectionCurrent : SqliteProjection<CodeId, CodeRecord, Code> {
             }
         }
     }
+
 
     fun list(connection: Connection, query: CodeQuery): List<Code> {
         return connection.executeQuery<Code>(

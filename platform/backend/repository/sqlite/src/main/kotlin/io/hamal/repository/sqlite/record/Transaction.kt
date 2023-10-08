@@ -87,7 +87,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     override fun versionOf(id: ID, sequence: RecordSequence): OBJ? {
         return executeQuery(
             """
-            SELECT data, sequence FROM records WHERE entity_id = :entityId AND sequence < :sequence ORDER BY sequence DESC LIMIT 1
+            SELECT data, sequence FROM records WHERE entity_id = :entityId AND sequence = :sequence ORDER BY sequence DESC LIMIT 1
         """.trimIndent()
         ) {
             query {

@@ -4,8 +4,9 @@ import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Code
-import io.hamal.repository.api.CodeCmdRepository.*
-import io.hamal.repository.api.CodeQueryRepository.*
+import io.hamal.repository.api.CodeCmdRepository.CreateCmd
+import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
+import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordSequence
@@ -14,7 +15,6 @@ import io.hamal.repository.record.code.CodeEntity
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CodeUpdatedRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
-
 import java.nio.file.Path
 
 
@@ -102,9 +102,7 @@ class SqliteCodeRepository(
     }
 
     override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? {
-        return tx {
-            versionOf(codeId, RecordSequence(codeVersion.value))
-        }
+        return tx { versionOf(codeId, RecordSequence(codeVersion.value)) }
     }
 
     override fun list(query: CodeQuery): List<Code> {
