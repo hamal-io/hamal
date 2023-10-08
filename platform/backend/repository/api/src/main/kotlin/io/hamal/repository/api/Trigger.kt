@@ -52,6 +52,7 @@ interface TriggerQueryRepository {
         var types: List<TriggerType> = TriggerType.values().toList(),
         var limit: Limit = Limit(1),
         var triggerIds: List<TriggerId> = listOf(),
+        var funcIds: List<FuncId> = listOf(),
         var groupIds: List<GroupId>
     )
 }

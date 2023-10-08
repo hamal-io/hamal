@@ -74,24 +74,28 @@ const RunTab: FC<RunTabProps> = (props) => {
         </Card>
     ))
 
+
     return (
         <div className="flex flex-col items-center justify-center">
             <h2> Run </h2>
 
-
-            <Button onClick={() => {
-                invokeFunc(props.funcId, {}).then(response => {
-                    console.log(response)
-
-                    setLoading(true)
-                    listExecs({funcId: props.funcId, limit: 10}).then(response => {
-                        setExecs(response.execs)
-                        setLoading(false)
-                    })
-                })
-            }}> Invoke manually </Button>
-
             <h2> Triggers: </h2>
+            <Card>
+                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <p> Manual Trigger </p>
+                    <Button onClick={() => {
+                        invokeFunc(props.funcId, {}).then(response => {
+                            console.log(response)
+
+                            setLoading(true)
+                            listExecs({funcId: props.funcId, limit: 10}).then(response => {
+                                setExecs(response.execs)
+                                setLoading(false)
+                            })
+                        })
+                    }}> Invoke </Button>
+                </h5>
+            </Card>
 
             <h2>Execs:</h2>
             <div>

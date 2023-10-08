@@ -30,7 +30,7 @@ docker {
         maintainer.set("hamal.io docker@hamal.io")
         baseImage.set("openjdk:22-slim-bullseye")
         ports.set(listOf(6006, 6006))
-        images.set(listOf("hamalio/fnguru"))
+        images.set(listOf("hamalio/fn-guru"))
         jvmArgs.set(listOf("-Xmx512m", "-XX:+ExitOnOutOfMemoryError"))
     }
 }

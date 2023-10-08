@@ -6,6 +6,7 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.TriggerCmdRepository.CreateEventCmd
 import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
@@ -458,6 +459,31 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
+        fun `With func ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                funcIds = listOf(FuncId(9), FuncId(10), FuncId(11)),
+                groupIds = listOf(),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(2UL))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                require(this is EventTrigger)
+                assertThat(id, equalTo(TriggerId(2)))
+            }
+
+            with(result[1]) {
+                require(this is FixedRateTrigger)
+                assertThat(id, equalTo(TriggerId(1)))
+            }
+        }
+
+        @TestFactory
         fun `With trigger types`() = runWith(TriggerRepository::class) {
             setup()
 
@@ -518,28 +544,32 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 triggerId = TriggerId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = TriggerName("Trigger")
+                name = TriggerName("Trigger"),
+                funcId = FuncId(10)
             )
 
             createEventTrigger(
                 triggerId = TriggerId(2),
                 namespaceId = NamespaceId(3),
                 groupId = GroupId(3),
-                name = TriggerName("Trigger")
+                name = TriggerName("Trigger"),
+                funcId = FuncId(11)
             )
 
             createFixedRateTrigger(
                 triggerId = TriggerId(3),
                 namespaceId = NamespaceId(4),
                 groupId = GroupId(4),
-                name = TriggerName("Trigger")
+                name = TriggerName("Trigger"),
+                funcId = FuncId(12)
             )
 
             createEventTrigger(
                 triggerId = TriggerId(4),
                 namespaceId = NamespaceId(10),
                 groupId = GroupId(5),
-                name = TriggerName("Trigger")
+                name = TriggerName("Trigger"),
+                funcId = FuncId(13)
             )
         }
     }
@@ -550,6 +580,7 @@ private fun TriggerRepository.createFixedRateTrigger(
     namespaceId: NamespaceId,
     name: TriggerName,
     groupId: GroupId,
+    funcId: FuncId = FuncId(4),
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
@@ -566,7 +597,7 @@ private fun TriggerRepository.createFixedRateTrigger(
                     )
                 )
             ),
-            funcId = FuncId(4),
+            funcId = funcId,
             duration = 10.seconds
         )
     )
@@ -577,6 +608,7 @@ private fun TriggerRepository.createEventTrigger(
     namespaceId: NamespaceId,
     name: TriggerName,
     groupId: GroupId,
+    funcId: FuncId = FuncId(4),
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
@@ -593,7 +625,7 @@ private fun TriggerRepository.createEventTrigger(
                     )
                 )
             ),
-            funcId = FuncId(4),
+            funcId = funcId,
             topicId = TopicId(9)
         )
     )

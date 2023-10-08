@@ -51,6 +51,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.funcIds()}
                 ${query.types()}
             ORDER BY id DESC
             LIMIT :limit
@@ -80,6 +81,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.funcIds()}
                 ${query.types()}
         """.trimIndent()
         ) {
@@ -96,13 +98,14 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, type, data) 
+                    (id, group_id, func_id, type, data) 
                 VALUES
-                    (:id, :groupId, :type, :data)
+                    (:id, :groupId, :funcId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
+            set("funcId", obj.funcId)
             set(
                 "type", when (obj) {
                     is FixedRateTrigger -> TriggerType.FixedRate
@@ -119,6 +122,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
+                 func_id        INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
@@ -139,6 +143,14 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         }
     }
 
+    private fun TriggerQuery.ids(): String {
+        return if (triggerIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${triggerIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
     private fun TriggerQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""
@@ -147,11 +159,12 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         }
     }
 
-    private fun TriggerQuery.ids(): String {
-        return if (triggerIds.isEmpty()) {
+    private fun TriggerQuery.funcIds(): String {
+        return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${triggerIds.joinToString(",") { "${it.value.value}" }})"
+            "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
+
 }
