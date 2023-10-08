@@ -11,7 +11,7 @@ export interface ListFuncsQuery {
 }
 
 export async function listFuncs(query: ListFuncsQuery): Promise<ApiFuncList> {
-    const response = await fetch("http://localhost:9009/v1/funcs", {
+    const response = await fetch("http://localhost:8008/v1/groups/1/funcs", {
         headers: defaultHeaders,
         method: "GET",
     })
@@ -27,7 +27,7 @@ export interface SubmitCreateFuncReq {
 }
 
 export async function createFunc(req: SubmitCreateFuncReq): Promise<ApiSubmittedReqWithId> {
-    const response = await fetch("http://localhost:9009/v1/funcs", {
+    const response = await fetch("http://localhost:8008/v1/groups/1/funcs", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({
@@ -51,7 +51,7 @@ export interface SubmitUpdateFuncReq {
 }
 
 export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Promise<ApiSubmittedReqWithId> {
-    const response = await fetch(`http://localhost:9009/v1/funcs/${funcId}`, {
+    const response = await fetch(`http://localhost:8008/v1/funcs/${funcId}`, {
         headers: defaultHeaders,
         method: "PUT",
         body: JSON.stringify({
@@ -74,7 +74,7 @@ export interface SubmitInvokeFuncReq {
 }
 
 export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Promise<ApiSubmittedReqWithId> {
-    const response = await fetch(`http://localhost:9009/v1/funcs/${funcId}/invoke`, {
+    const response = await fetch(`http://localhost:8008/v1/funcs/${funcId}/invoke`, {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify(req)
@@ -88,7 +88,7 @@ export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Prom
 
 
 export async function getFunction(id: string): Promise<ApiFunc> {
-    const response = await fetch(`http://localhost:9009/v1/funcs/${id}`, {
+    const response = await fetch(`http://localhost:8008/v1/funcs/${id}`, {
         headers: defaultHeaders,
         method: "GET",
     })
