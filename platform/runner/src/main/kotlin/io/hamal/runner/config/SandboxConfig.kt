@@ -22,11 +22,10 @@ import org.springframework.context.annotation.Configuration
 class SandboxConfig {
     @Bean
     fun sandboxFactory(
-        @Value("\${io.hamal.runner.admin.host}") adminHost: String,
         @Value("\${io.hamal.runner.api.host}") apiHost: String,
         @Value("\${io.hamal.runner.bridge.host}") bridgeHost: String
     ): SandboxFactory = RunnerSandboxFactory(
-        adminHost, apiHost, bridgeHost
+        apiHost, bridgeHost
     )
 }
 
@@ -35,7 +34,6 @@ interface SandboxFactory {
 }
 
 class RunnerSandboxFactory(
-    private val adminHost: String,
     private val apiHost: String,
     private val bridgeHost: String
 

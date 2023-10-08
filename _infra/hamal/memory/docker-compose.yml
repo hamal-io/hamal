@@ -3,7 +3,7 @@ services:
   backend:
     image: hamalio/hamal-backend
     ports:
-      - "0.0.0.0:9009:9009"
+      - "0.0.0.0:8008:8008"
     environment:
       - ACTIVE_PROFILES=default,memory
     networks:
@@ -13,7 +13,6 @@ services:
     image: hamalio/hamal-runner
     environment:
       - ACTIVE_PROFILES=default
-      - ADMIN_HOST=http://backend:9009
       - API_HOST=http://backend:8008
       - BRIDGE_HOST=http://backend:7007
     networks:

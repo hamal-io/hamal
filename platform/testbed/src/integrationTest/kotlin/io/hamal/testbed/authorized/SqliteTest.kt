@@ -20,7 +20,6 @@ import java.nio.file.Paths
     properties = [
         "server.port=8053",
         "io.hamal.runner.api.host=http://localhost:8053",
-        "io.hamal.runner.admin.host=http://localhost:8053",
         "io.hamal.runner.bridge.host=http://localhost:8053"
     ], classes = [
         ApiTestConfig::class,
@@ -34,7 +33,7 @@ import java.nio.file.Paths
 @DisplayName("authorized - sqlite")
 @ActiveProfiles(value = ["test", "authorized", "sqlite"])
 internal class SqliteAuthorizedTest : BaseTest() {
-    final override val log: Logger = logger(this::class)
-    final override val sdk = withApiSdk(8053)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "authorized")
+    override val log: Logger = logger(this::class)
+    override val sdk = withApiSdk(8053)
+    override val testPath: Path = Paths.get("src", "integrationTest", "resources", "authorized")
 }

@@ -18,7 +18,6 @@ import java.nio.file.Paths
     webEnvironment = DEFINED_PORT,
     properties = [
         "server.port=8052",
-        "io.hamal.runner.admin.host=http://localhost:8052",
         "io.hamal.runner.api.host=http://localhost:8052",
         "io.hamal.runner.bridge.host=http://localhost:8052"
     ], classes = [

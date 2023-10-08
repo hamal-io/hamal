@@ -22,8 +22,6 @@ server:
 io:
   hamal:
     runner:
-      admin:
-        host: ${ADMIN_HOST:http://127.0.0.1:9009}
       api:
         host: ${API_HOST:http://127.0.0.1:8008}
       bridge:

@@ -1,8 +1,6 @@
 io:
   hamal:
     runner:
-      admin:
-        host: ${ADMIN_HOST:http://0.0.0.0:9009}
       api:
         host: ${API_HOST:http://0.0.0.0:8008}
       bridge:
