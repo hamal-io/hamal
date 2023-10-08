@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ExecAppendLogController(private val appendExecLog: AppendExecLogPort) {
+internal class ExecLogAppendController(private val appendExecLog: AppendExecLogPort) {
     @PostMapping("/v1/execs/{execId}/logs")
     fun appendExecLog(
         @PathVariable("execId") execId: ExecId,

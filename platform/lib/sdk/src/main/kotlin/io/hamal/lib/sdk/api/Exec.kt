@@ -6,7 +6,6 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CompleteExecReq
@@ -49,10 +48,6 @@ data class ApiExec(
 )
 
 interface ApiExecService {
-    fun poll(): ApiUnitOfWorkList
-    fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
-    fun fail(execId: ExecId, error: ErrorType)
-
     fun list(groupId: GroupId): List<ApiExecList.Exec>
     fun get(execId: ExecId): ApiExec
 }
@@ -60,26 +55,6 @@ interface ApiExecService {
 internal class ApiExecServiceImpl(
     private val template: HttpTemplate
 ) : ApiExecService {
-
-    override fun poll(): ApiUnitOfWorkList {
-        return template.post("/v1/dequeue")
-            .execute()
-            .fold(ApiUnitOfWorkList::class)
-    }
-
-    override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {
-        template.post("/v1/execs/{execId}/complete")
-            .path("execId", execId)
-            .body(ApiCompleteExecReq(stateAfterCompletion, eventToSubmit))
-            .execute()
-    }
-
-    override fun fail(execId: ExecId, error: ErrorType) {
-        template.post("/v1/execs/{execId}/fail")
-            .path("execId", execId)
-            .body(ApiFailExecReq(error))
-            .execute()
-    }
 
     override fun list(groupId: GroupId) =
         template.get("/v1/execs")
