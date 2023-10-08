@@ -1,22 +1,27 @@
-import {ApiSubmittedReqWithId} from "./types";
+interface ApiSubmittedAdhocInvocation {
+    reqId: string;
+    status: string;
+    id: string;
+}
 
 export const defaultHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
 }
 
-export interface ApiSubmitAdhocReq {
+
+export interface SubmitAdhocInvocationRequest {
     code: string;
 }
 
-export async function invokeAdhoc(req: ApiSubmitAdhocReq): Promise<ApiSubmittedReqWithId> {
+export async function invokeAdhoc(req: SubmitAdhocInvocationRequest): Promise<ApiSubmittedAdhocInvocation> {
     //FIXME do not use admin endpoint - only for prototyping
-    const response = await fetch("http://localhost:8008/v1/groups/1/adhoc", {
+    const response = await fetch("http://localhost:9009/v1/adhoc", {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({
                 inputs: {},
-                code: req.code
+                code: {"value": req.code}
             }
         )
     })
@@ -24,5 +29,5 @@ export async function invokeAdhoc(req: ApiSubmitAdhocReq): Promise<ApiSubmittedR
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedReqWithId;
+    return await response.json() as ApiSubmittedAdhocInvocation;
 }

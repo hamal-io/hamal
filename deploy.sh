@@ -7,7 +7,7 @@ BASEDIR=$(dirname "$SCRIPT")
 
 ./gradlew clean build
 
-cd $BASEDIR/platform/backend/admin/src/main/resources
+cd $BASEDIR/platform/admin/src/main/resources
 npm install
 npm run build
 
