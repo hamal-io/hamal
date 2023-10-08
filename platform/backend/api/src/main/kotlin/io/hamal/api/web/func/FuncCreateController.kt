@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CreateFuncController(private val createFunc: CreateFuncPort) {
+internal class FuncCreateController(private val createFunc: CreateFuncPort) {
     @PostMapping("/v1/groups/{groupId}/funcs")
     fun createFunc(
         @PathVariable("groupId") groupId: GroupId,

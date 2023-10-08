@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GetFuncController(private val getFunc: GetFuncPort) {
+internal class FuncGetController(private val getFunc: GetFuncPort) {
 
     @GetMapping("/v1/funcs/{funcId}")
     fun getFunc(@PathVariable("funcId") funcId: FuncId) = getFunc(funcId, ::assemble)

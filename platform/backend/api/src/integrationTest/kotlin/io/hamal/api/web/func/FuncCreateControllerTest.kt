@@ -15,7 +15,7 @@ import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class CreateFuncControllerTest : BaseFuncControllerTest() {
+internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Create func without namespace id`() {

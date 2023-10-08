@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ListExecsControllerTest : BaseExecControllerTest() {
+internal class ExecListControllerTest : ExecBaseControllerTest() {
     @Test
     fun `No execs`() {
         val response = httpTemplate.get("/v1/execs")

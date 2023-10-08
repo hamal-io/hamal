@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GetExecController(private val getExec: GetExecPort) {
+internal class ExecGetController(private val getExec: GetExecPort) {
     @GetMapping("/v1/execs/{execId}")
     fun get(@PathVariable("execId") execId: ExecId): ResponseEntity<ApiExec> {
         return getExec(execId) { exec ->

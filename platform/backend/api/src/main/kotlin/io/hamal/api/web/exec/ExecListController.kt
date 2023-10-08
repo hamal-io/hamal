@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListExecsController(private val listExec: ListExecsPort) {
+internal class ExecListController(private val listExec: ListExecsPort) {
 
     @GetMapping("/v1/execs")
     fun list(

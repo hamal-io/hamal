@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class InvokeFuncController(private val invokeFunc: InvokeFuncPort) {
+internal class FuncInvokeController(private val invokeFunc: InvokeFuncPort) {
     @PostMapping("/v1/funcs/{funcId}/invoke")
     fun execFunc(
         @PathVariable("funcId") funcId: FuncId,

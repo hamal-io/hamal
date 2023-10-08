@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class UpdateFuncController(private val updateFunc: UpdateFuncPort) {
+internal class FuncUpdateController(private val updateFunc: UpdateFuncPort) {
     @PutMapping("/v1/funcs/{funcId}")
     fun createFunc(@PathVariable("funcId") funcId: FuncId, @RequestBody req: ApiUpdateFuncReq) =
         updateFunc(funcId, req) { submittedReq ->

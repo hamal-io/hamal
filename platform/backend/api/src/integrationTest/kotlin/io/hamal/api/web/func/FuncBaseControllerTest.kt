@@ -13,7 +13,7 @@ import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseFuncControllerTest : BaseControllerTest() {
+internal sealed class FuncBaseControllerTest : BaseControllerTest() {
     fun createFunc(req: ApiCreateFuncReq): ApiSubmittedReqWithId {
         val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
             .path("groupId", testGroup.id)

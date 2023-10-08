@@ -11,7 +11,7 @@ import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseExecControllerTest : BaseControllerTest() {
+internal sealed class ExecBaseControllerTest : BaseControllerTest() {
     fun createAdhocExec(): ApiSubmittedReqWithId {
         val createAdhocExecResponse = httpTemplate
             .post("/v1/groups/{groupId}/adhoc")

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ListFuncsController(private val listFunc: ListFuncsPort) {
+internal class FuncListController(private val listFunc: ListFuncsPort) {
 
     @GetMapping("/v1/funcs")
     fun listFunc(
