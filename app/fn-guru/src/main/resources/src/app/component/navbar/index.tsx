@@ -49,7 +49,7 @@ export const Navbar: FC = () => {
                     Functions
                 </Delegate.Link>
                 <Delegate.Link onClick={() => navigate("/runs", {replace: true})}>
-                    Events
+                    Runs
                 </Delegate.Link>
             </Delegate.Collapse>
         </Delegate>

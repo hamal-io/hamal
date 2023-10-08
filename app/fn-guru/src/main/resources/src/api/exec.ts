@@ -7,7 +7,7 @@ export interface ListExecsQuery {
 }
 
 export async function listExecs({funcId, limit}: ListExecsQuery): Promise<ApiExecList> {
-    const response = await fetch(`http://localhost:8008/v1/execs?func_ids=${funcId}&limit=${limit}`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs?func_ids=${funcId}&limit=${limit}`, {
         headers: defaultHeaders,
         method: "GET",
     })
