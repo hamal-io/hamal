@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {ApiSimpleFunc} from "../../../api/types";
-import {createFunction, listFuncs} from "../../../api";
+import {ApiFuncSimple} from "../../../api/types";
+import {createFunc, listFuncs} from "../../../api";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
 
@@ -8,7 +8,7 @@ const FuncListPage: React.FC = () => {
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(true)
-    const [funcs, setFuncs] = useState([] as Array<ApiSimpleFunc>)
+    const [funcs, setFuncs] = useState([] as Array<ApiFuncSimple>)
     useEffect(() => {
         listFuncs({limit: 10}).then(response => {
             setFuncs(response.funcs)
@@ -65,7 +65,7 @@ const CreateFuncModalButton = () => {
     }, [])
 
     const submit = () => {
-        createFunction({name})
+        createFunc({name})
             .then(response => {
                 navigate(`/functions/${response.id}`)
                 props.setOpenModal(undefined)

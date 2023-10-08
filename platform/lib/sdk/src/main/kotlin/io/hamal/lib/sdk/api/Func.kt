@@ -104,7 +104,7 @@ internal class ApiFuncServiceImpl(
             .fold(ApiFunc::class)
 
     override fun invoke(funcId: FuncId, req: ApiInvokeFuncReq) =
-        template.post("/v1/funcs/{funcId}/exec")
+        template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)
             .execute()

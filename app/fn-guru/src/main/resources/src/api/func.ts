@@ -1,18 +1,16 @@
 import {
-    ApiFunction,
-    ApiListExecutionLogs,
-    ApiListFunctions,
-    ApiSubmittedFunctionCreation,
-    ApiSubmittedFunctionUpdating
+    ApiFunc,
+    ApiFuncList,
+    ApiSubmittedReqWithId
 } from "./types";
 
 import {defaultHeaders} from "./shared";
 
-export interface ListFunctionsQuery {
+export interface ListFuncsQuery {
     limit: number;
 }
 
-export async function listFuncs(query: ListFunctionsQuery): Promise<ApiListFunctions> {
+export async function listFuncs(query: ListFuncsQuery): Promise<ApiFuncList> {
     const response = await fetch("http://localhost:9009/v1/funcs", {
         headers: defaultHeaders,
         method: "GET",
@@ -21,14 +19,14 @@ export async function listFuncs(query: ListFunctionsQuery): Promise<ApiListFunct
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiListFunctions;
+    return await response.json() as ApiFuncList;
 }
 
-export interface SubmitCreateFunctionRequest {
+export interface SubmitCreateFuncReq {
     name: string;
 }
 
-export async function createFunction(req: SubmitCreateFunctionRequest): Promise<ApiSubmittedFunctionCreation> {
+export async function createFunc(req: SubmitCreateFuncReq): Promise<ApiSubmittedReqWithId> {
     const response = await fetch("http://localhost:9009/v1/funcs", {
         headers: defaultHeaders,
         method: "POST",
@@ -43,16 +41,16 @@ export async function createFunction(req: SubmitCreateFunctionRequest): Promise<
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedFunctionCreation;
+    return await response.json() as ApiSubmittedReqWithId;
 }
 
 
-export interface SubmitUpdateFunctionRequest {
+export interface SubmitUpdateFuncReq {
     name?: string;
     code?: string;
 }
 
-export async function updateFunction(funcId: string, req: SubmitUpdateFunctionRequest): Promise<ApiSubmittedFunctionUpdating> {
+export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Promise<ApiSubmittedReqWithId> {
     const response = await fetch(`http://localhost:9009/v1/funcs/${funcId}`, {
         headers: defaultHeaders,
         method: "PUT",
@@ -67,11 +65,29 @@ export async function updateFunction(funcId: string, req: SubmitUpdateFunctionRe
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedFunctionUpdating;
+    return await response.json() as ApiSubmittedReqWithId;
+}
+
+export interface SubmitInvokeFuncReq {
+    correlationId?: string;
+    inputs?: object;
+}
+
+export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Promise<ApiSubmittedReqWithId> {
+    const response = await fetch(`http://localhost:9009/v1/funcs/${funcId}/invoke`, {
+        headers: defaultHeaders,
+        method: "POST",
+        body: JSON.stringify(req)
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiSubmittedReqWithId;
 }
 
 
-export async function getFunction(id: string): Promise<ApiFunction> {
+export async function getFunction(id: string): Promise<ApiFunc> {
     const response = await fetch(`http://localhost:9009/v1/funcs/${id}`, {
         headers: defaultHeaders,
         method: "GET",
@@ -80,22 +96,5 @@ export async function getFunction(id: string): Promise<ApiFunction> {
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiFunction;
-}
-
-
-export interface ListExecutionLogsQuery {
-    limit: number;
-}
-
-export async function listExecutionLogs(query: ListExecutionLogsQuery): Promise<ApiListExecutionLogs> {
-    const response = await fetch("http://localhost:9009/v1/exec-logs", {
-        headers: defaultHeaders,
-        method: "GET",
-    })
-    if (!response.ok) {
-        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-        throw new Error(message);
-    }
-    return await response.json() as ApiListExecutionLogs;
+    return await response.json() as ApiFunc;
 }

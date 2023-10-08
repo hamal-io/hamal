@@ -103,7 +103,7 @@ internal class AdminFuncServiceImpl(
             .fold(AdminFunc::class)
     
     override fun invoke(funcId: FuncId, req: AdminInvokeFuncReq) =
-        template.post("/v1/funcs/{funcId}/exec")
+        template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)
             .execute()

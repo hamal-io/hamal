@@ -14,7 +14,7 @@ import SignUpPage from "./landing/page/sign-up";
 import AuthenticatedPage from "./app/page/authenticated";
 import DashboardPage from "./app/page/dashboard";
 import FuncListPage from "./app/page/func-list";
-import ExecListPage from "./app/page/exec-list";
+import RunListPage from "./app/page/run-list";
 import AdhocPage from "./app/page/adhoc";
 import FuncDetail from "./app/page/func-detail";
 
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     {path: "/dashboard", element: <AuthenticatedPage><DashboardPage/></AuthenticatedPage>},
     {path: "/functions", element: <AuthenticatedPage><FuncListPage/></AuthenticatedPage>},
     {path: "/functions/:funcId", element: <AuthenticatedPage><FuncDetail/></AuthenticatedPage>},
-    {path: "/executions", element: <AuthenticatedPage><ExecListPage/></AuthenticatedPage>},
+    {path: "/runs", element: <AuthenticatedPage><RunListPage/></AuthenticatedPage>},
     {path: "/play", element: <AuthenticatedPage><AdhocPage/></AuthenticatedPage>}
 ]);
 
