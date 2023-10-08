@@ -22,3 +22,13 @@ export interface ApiFunc {
         value: string
     }
 }
+
+
+export interface ApiExecList {
+    execs: Array<ApiExecSimple>;
+}
+
+export interface ApiExecSimple {
+    id: string;
+    status: string;
+}

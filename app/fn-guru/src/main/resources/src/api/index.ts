@@ -1,2 +1,3 @@
-export * from './adhoc.ts';
+export * from './adhoc';
+export * from './exec';
 export * from './func';

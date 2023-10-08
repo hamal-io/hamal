@@ -33,13 +33,6 @@ data class ApiExecList(
         val id: ExecId,
         val status: ExecStatus,
         val correlation: Correlation?,
-        val func: Func?
-    )
-
-    @Serializable
-    data class Func(
-        val id: FuncId,
-        val name: FuncName
     )
 }
 

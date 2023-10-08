@@ -37,7 +37,6 @@ internal class ListExecsController(private val listExec: ListExecsPort) {
                             id = it.id,
                             status = it.status,
                             correlation = it.correlation,
-                            func = null
                         )
                     }
                 )

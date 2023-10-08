@@ -1,9 +1,9 @@
-import {FC, useEffect, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {useNavigate, useParams} from "react-router-dom";
 import Editor from "../../../component/editor";
-import {Button} from "flowbite-react";
-import {ApiFunc} from "../../../api/types";
-import {getFunction, invokeAdhoc, invokeFunc, updateFunc} from "../../../api";
+import {Button, Card} from "flowbite-react";
+import {ApiExecSimple, ApiFunc} from "../../../api/types";
+import {getFunction, invokeAdhoc, invokeFunc, listExecs, updateFunc} from "../../../api";
 
 type TabType = 'Dashboard' | 'Editor' | 'Runs' | 'Settings'
 
@@ -52,7 +52,28 @@ interface RunTabProps {
 }
 
 const RunTab: FC<RunTabProps> = (props) => {
-    // trigger list and execs
+    const [loading, setLoading] = useState(false);
+    const [execs, setExecs] = useState<ApiExecSimple[]>([])
+
+    useEffect(() => {
+        setLoading(true)
+        listExecs({funcId: props.funcId, limit: 10}).then(response => {
+            setExecs(response.execs)
+            setLoading(false)
+        })
+    }, [props.funcId]);
+
+    const exec = execs.map(exec => (
+        <Card
+            key={exec.id}
+            className="max-w-sm"
+        >
+            <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <p>{exec.id} : {exec.status}</p>
+            </h5>
+        </Card>
+    ))
+
     return (
         <div className="flex flex-col items-center justify-center">
             <h2> Run </h2>
@@ -61,8 +82,21 @@ const RunTab: FC<RunTabProps> = (props) => {
             <Button onClick={() => {
                 invokeFunc(props.funcId, {}).then(response => {
                     console.log(response)
+
+                    setLoading(true)
+                    listExecs({funcId: props.funcId, limit: 10}).then(response => {
+                        setExecs(response.execs)
+                        setLoading(false)
+                    })
                 })
             }}> Invoke manually </Button>
+
+            <h2> Triggers: </h2>
+
+            <h2>Execs:</h2>
+            <div>
+                {exec}
+            </div>
         </div>
     )
 }
@@ -91,6 +125,7 @@ const FuncDetailPage: React.FC = () => {
             })
         }
     }, [funcId]);
+
 
     return (
         <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
