@@ -61,9 +61,10 @@ abstract class BaseTest {
     @TestFactory
     fun run(): List<DynamicTest> {
         return testPaths().sorted().map { testPath ->
-            dynamicTest(generateTestName(testPath)) {
+            val testName = generateTestName(testPath)
+            dynamicTest(testName) {
                 setupTestEnv()
-                println("[${testPath}]")
+                println("[$testName]")
 
                 Files.walk(testPath)
                     .filter { f: Path -> f.name.endsWith(".lua") }
@@ -83,7 +84,6 @@ abstract class BaseTest {
                         var wait = true
                         val startedAt = TimeUtils.now()
                         while (wait) {
-                            Thread.sleep(1)
                             with(execRepository.get(execReq.id(::ExecId))) {
                                 if (status == ExecStatus.Completed) {
                                     wait = false

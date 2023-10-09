@@ -4,10 +4,7 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
 class ListExecFunction(
@@ -23,7 +20,8 @@ class ListExecFunction(
                     index to MapType(
                         mutableMapOf(
                             "id" to StringType(exec.id.value.value.toString(16)),
-                            "status" to StringType(exec.status.toString())
+                            "status" to StringType(exec.status.toString()),
+                            "correlation_id" to (exec.correlation?.correlationId?.value?.let(::StringType) ?: NilType)
                         )
                     )
                 }.toMap().toMutableMap()
