@@ -54,6 +54,7 @@ class SqliteGroupRepository(
     override fun create(cmd: CreateCmd): Group {
         val groupId = cmd.groupId
         val cmdId = cmd.id
+
         return tx {
             if (commandAlreadyApplied(cmdId, groupId)) {
                 versionOf(groupId, cmdId)
