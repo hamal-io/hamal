@@ -73,7 +73,6 @@ class CodeRunnerImpl(
             log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {
-            e.printStackTrace()
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {
@@ -92,7 +91,6 @@ class CodeRunnerImpl(
             connector.fail(execId, ErrorType(a.message ?: "Unknown reason"))
             log.debug("Assertion error: $execId - ${a.message}")
         } catch (t: Throwable) {
-            t.printStackTrace()
             connector.fail(execId, ErrorType(t.message ?: "Unknown reason"))
             log.debug("Failed exec: $execId")
         }

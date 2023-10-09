@@ -33,6 +33,6 @@ import java.nio.file.Paths
 @ActiveProfiles(value = ["test", "admin", "memory"])
 internal class MemoryAdminTest : BaseTest() {
     final override val log: Logger = logger(this::class)
-    final override val apiSdk = withApiSdk(8042)
+    final override val sdk = withApiSdk(8042)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
 }

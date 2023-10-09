@@ -60,42 +60,52 @@ abstract class BaseTest {
 
     @TestFactory
     fun run(): List<DynamicTest> {
-        return collectFiles().sorted().map { testFile ->
-            val testFileWithPath = "${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}"
-            dynamicTest(testFileWithPath) {
+        return testPaths().sorted().map { testPath ->
+            dynamicTest(generateTestName(testPath)) {
                 setupTestEnv()
+                println("[${testPath}]")
 
-                log.info("Start test $testFileWithPath")
+                Files.walk(testPath)
+                    .filter { f: Path -> f.name.endsWith(".lua") }
+                    .sorted()
+                    .forEach { file ->
+                        println(">>>>>>>>>>>>>> ${file.fileName}")
+                        val execReq = sdk.adhoc.invoke(
+                            testGroup.id,
+                            ApiInvokeAdhocReq(
+                                InvocationInputs(),
+                                CodeValue(String(Files.readAllBytes(file)))
+                            )
+                        )
 
-                val execReq = apiSdk.adhoc.invoke(
-                    testGroup.id,
-                    ApiInvokeAdhocReq(
-                        InvocationInputs(),
-                        CodeValue(String(Files.readAllBytes(testFile)))
-                    )
-                )
-                apiSdk.await(execReq)
+                        sdk.await(execReq)
 
-                var wait = true
-                val startedAt = TimeUtils.now()
-                while (wait) {
-                    Thread.sleep(1)
-                    with(execRepository.get(execReq.id(::ExecId))) {
-                        if (status == ExecStatus.Completed) {
-                            wait = false
-                        }
-                        if (status == ExecStatus.Failed) {
-                            fail { "Execution failed" }
-                        }
+                        var wait = true
+                        val startedAt = TimeUtils.now()
+                        while (wait) {
+                            Thread.sleep(1)
+                            with(execRepository.get(execReq.id(::ExecId))) {
+                                if (status == ExecStatus.Completed) {
+                                    wait = false
+                                }
+                                if (status == ExecStatus.Failed) {
+                                    fail { "Execution failed" }
+                                }
 
-                        if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
-                            fail("Timeout")
+                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                                    fail("Timeout")
+                                }
+                            }
                         }
                     }
-                }
             }
         }.toList()
     }
+
+    private fun generateTestName(testPath: Path) = testPath.toAbsolutePath().toString().split("/")
+        .dropWhile { it != "resources" }
+        .drop(1)
+        .joinToString("/")
 
     private fun setupTestEnv() {
         eventBrokerRepository.clear()
@@ -150,11 +160,15 @@ abstract class BaseTest {
         )
     }
 
-    abstract val apiSdk: ApiSdk
+    abstract val sdk: ApiSdk
     abstract val testPath: Path
     abstract val log: Logger
 
-    private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
+    private fun testPaths() = Files.walk(testPath)
+        .filter { f: Path -> f.name.endsWith(".lua") }
+        .map { it.parent }
+        .distinct()
+        .sorted()
 
     fun withApiSdk(serverPort: Number) = ApiSdkImpl(
         HttpTemplate(

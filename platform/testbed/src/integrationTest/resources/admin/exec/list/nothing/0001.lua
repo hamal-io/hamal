@@ -4,3 +4,5 @@ sys = require('sys')
 err, execs = sys.exec.list()
 assert(err == nil)
 assert(#execs == 1)
+
+assert(execs[1].status == 'Started')
