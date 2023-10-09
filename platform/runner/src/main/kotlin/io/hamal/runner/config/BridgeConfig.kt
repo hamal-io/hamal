@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class RunnerBridgeConfig {
+open class RunnerBridgeConfig {
     @Bean
-    fun httpTemplate(
+    open fun httpTemplate(
         @Value("\${io.hamal.runner.bridge.host}") host: String
     ) = HttpTemplate(
         baseUrl = host,

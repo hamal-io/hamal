@@ -19,10 +19,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-//@Profile("!test")
-class SandboxConfig {
+open class SandboxConfig {
     @Bean
-    fun sandboxFactory(
+    open fun sandboxFactory(
         @Value("\${io.hamal.runner.api.host}") apiHost: String,
         @Value("\${io.hamal.runner.bridge.host}") bridgeHost: String
     ): SandboxFactory = RunnerSandboxFactory(

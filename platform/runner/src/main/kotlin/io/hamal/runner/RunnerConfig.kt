@@ -18,10 +18,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
         JmxAutoConfiguration::class
     ]
 )
-class RunnerConfig {
-
+open class RunnerConfig {
     @Bean
-    fun runnerExecutor(): ThreadPoolTaskScheduler {
+    open fun runnerExecutor(): ThreadPoolTaskScheduler {
         val result = ThreadPoolTaskScheduler()
         result.threadNamePrefix = "runner-"
         result.poolSize = 1
