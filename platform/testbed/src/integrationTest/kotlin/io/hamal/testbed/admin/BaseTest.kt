@@ -108,16 +108,18 @@ abstract class BaseTest {
         .joinToString("/")
 
     private fun setupTestEnv() {
-        eventBrokerRepository.clear()
+        repeat(10) {
+            eventBrokerRepository.clear()
 
-        accountRepository.clear()
-        authRepository.clear()
-        reqRepository.clear()
-        execRepository.clear()
-        funcRepository.clear()
-        groupRepository.clear()
-        namespaceRepository.clear()
-        triggerRepository.clear()
+            accountRepository.clear()
+            authRepository.clear()
+            reqRepository.clear()
+            execRepository.clear()
+            funcRepository.clear()
+            groupRepository.clear()
+            namespaceRepository.clear()
+            triggerRepository.clear()
+        }
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
