@@ -12,6 +12,7 @@ import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
+import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import java.nio.file.Files.createTempDirectory
@@ -51,6 +52,10 @@ object SqliteFixture : BaseTestFixture {
 
         FuncRepository::class -> SqliteFuncRepository(
             SqliteFuncRepository.Config(createTempDirectory("sqlite_func_test"))
+        ) as REPO
+
+        GroupRepository::class -> SqliteGroupRepository(
+            SqliteGroupRepository.Config(createTempDirectory("sqlite_group_test"))
         ) as REPO
 
         NamespaceRepository::class -> SqliteNamespaceRepository(
