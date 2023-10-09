@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -6,22 +5,8 @@ plugins {
     application
     id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
-    kotlin("plugin.spring").version("1.8.10")
-    id("com.bmuschko.docker-spring-boot-application") version "9.3.1"
 }
 apply(plugin = "io.spring.dependency-management")
-
-archivesName.set("runner")
-
-docker {
-    springBootApplication {
-        maintainer.set("hamal.io docker@hamal.io")
-        baseImage.set("openjdk:22-slim-bullseye")
-        ports.set(listOf(8008, 8008))
-        images.set(listOf("hamalio/runner"))
-        jvmArgs.set(listOf("-Xmx4096m", "-XX:+ExitOnOutOfMemoryError"))
-    }
-}
 
 dependencies {
     implementation(project(":platform:lib:sdk"))
@@ -47,9 +32,7 @@ dependencies {
 }
 
 
-tasks.named<BootJar>("bootJar") {
-    launchScript()
-}
+tasks.named<BootJar>("bootJar") { enabled = false }
 
 @Suppress("UnstableApiUsage")
 testing {

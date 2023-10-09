@@ -69,5 +69,15 @@ tasks.jacocoTestReport {
         xml.required.set(true)
         csv.required.set(false)
     }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.map {
+            fileTree(it).apply {
+                exclude(
+                    "**/**/*serializer*.*",
+                    "**/**/*Companion*.*"
+                )
+            }
+        }))
+    }
     dependsOn(tasks.check)
 }

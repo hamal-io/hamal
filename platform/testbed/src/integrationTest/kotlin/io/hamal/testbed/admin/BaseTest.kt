@@ -119,6 +119,7 @@ abstract class BaseTest {
             groupRepository.clear()
             namespaceRepository.clear()
             triggerRepository.clear()
+            Thread.sleep(10)
         }
 
         testAccount = accountRepository.create(

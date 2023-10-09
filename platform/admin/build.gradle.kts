@@ -1,13 +1,12 @@
+
 import com.github.gradle.node.npm.proxy.ProxySettings
 import com.github.gradle.node.npm.task.NpmTask
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     id("hamal.common")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.github.node-gradle.node").version("5.0.0")
 }
-
 
 java {
     toolchain {
@@ -19,9 +18,6 @@ java {
 kotlin {
     jvmToolchain(17)
 }
-
-
-archivesName.set("hub-admin")
 
 node {
     nodeProjectDir.set(file("${project.projectDir}/src/main/resources"))
