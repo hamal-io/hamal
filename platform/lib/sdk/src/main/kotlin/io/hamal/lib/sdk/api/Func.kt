@@ -14,7 +14,9 @@ data class ApiCreateFuncReq(
     override val namespaceId: NamespaceId? = null,
     override val name: FuncName,
     override val inputs: FuncInputs,
-    override val code: CodeValue
+    override val code: CodeValue,
+    override val codeType: CodeType
+
 ) : CreateFuncReq
 
 @Serializable

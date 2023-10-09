@@ -168,6 +168,7 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         code = req.code,
+        codeType = req.codeType,
         codeId = generateDomainId(::CodeId)
     ).also(reqCmdRepository::queue)
 

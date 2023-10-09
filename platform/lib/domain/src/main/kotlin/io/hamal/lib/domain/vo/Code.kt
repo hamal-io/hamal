@@ -11,6 +11,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import java.lang.IllegalArgumentException
 
 @Serializable(with = CodeId.Serializer::class)
 class CodeId(override val value: SnowflakeId) : DomainId() {
@@ -45,3 +46,18 @@ data class CodeValue(override val value: String) : ValueObject<String> {
 data class CodeVersion(override val value: Int) : IntValueObject() {
     internal object Serializer : IntValueObjectSerializer<CodeVersion>(::CodeVersion)
 }
+
+
+enum class CodeType(val value: Int) {
+    None(0),
+    Lua54(1);
+
+    companion object {
+        fun getByValue(value: Int): CodeType {
+            val ct = values().find { it.value == value }
+                ?: throw IllegalArgumentException("CodeType value: ${value} not existing")
+            return ct
+        }
+    }
+}
+

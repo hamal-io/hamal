@@ -1,10 +1,7 @@
 package io.hamal.repository.record.code
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Code
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -14,10 +11,10 @@ import io.hamal.repository.record.RecordSequence
 data class CodeEntity(
     override val cmdId: CmdId,
     override val id: CodeId,
-    val groupId: GroupId,
     override val sequence: RecordSequence,
-
-    var value: CodeValue? = null
+    val groupId: GroupId,
+    var value: CodeValue? = null,
+    val type: CodeType? = null
 
 ) : RecordEntity<CodeId, CodeRecord, Code> {
 
@@ -45,7 +42,9 @@ data class CodeEntity(
             id = id,
             groupId = groupId,
             version = CodeVersion(sequence.value),
-            value = value!!
+            value = value!!,
+            type = type!!
+
         )
     }
 }

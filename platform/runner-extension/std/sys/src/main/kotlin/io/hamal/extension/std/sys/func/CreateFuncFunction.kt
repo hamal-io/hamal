@@ -32,7 +32,8 @@ class CreateFuncFunction(
                     namespaceId = namespaceId,
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
-                    code = CodeValue(arg1.getString("code"))
+                    code = CodeValue(arg1.getString("code")),
+                    codeType = CodeType.getByValue(arg1.getString("type").toInt())
                 )
             )
 
