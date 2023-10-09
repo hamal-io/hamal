@@ -46,8 +46,8 @@ internal object BuildDirLoader : Loader {
             val baseDir = System.getProperty("user.dir")
             try {
                 System.load("$baseDir/lib/kua/native/cmake-build-debug/lua/$luaFile")
-                System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/$kuaFile")
                 System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/$mpdecimal")
+                System.load("$baseDir/lib/kua/native/cmake-build-debug/kua/$kuaFile")
                 true
             } catch (t: Throwable) {
                 false
@@ -67,13 +67,13 @@ internal object ResourcesLoader : Loader {
                 ?.let { System.load(it.file); true }
                 ?: false
             if (result) {
-                classloader.getResource("./${kuaFile}")
-                    ?.let { System.load(it.file); true }
-                    ?: false
-
                 classloader.getResource("./${mpdecimal}")
                     ?.let { System.load(it.file) }
                     ?: throw IllegalStateException("unable to load mpdecimal")
+
+                classloader.getResource("./${kuaFile}")
+                    ?.let { System.load(it.file); true }
+                    ?: false
 
                 true
             } else {
