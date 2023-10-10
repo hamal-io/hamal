@@ -2,18 +2,33 @@ import {defaultHeaders} from "./shared";
 import {ApiExecList} from "./types";
 
 export interface ListExecsQuery {
-    funcId: string;
+    groupId?: string;
+    funcId?: string;
     limit: number;
 }
 
-export async function listExecs({funcId, limit}: ListExecsQuery): Promise<ApiExecList> {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs?func_ids=${funcId}&limit=${limit}`, {
-        headers: defaultHeaders,
-        method: "GET",
-    })
-    if (!response.ok) {
-        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-        throw new Error(message);
+export async function listExecs({funcId, groupId, limit}: ListExecsQuery): Promise<ApiExecList> {
+    if (groupId !== undefined) {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs?group_ids=${groupId}&limit=${limit}`, {
+            headers: defaultHeaders,
+            method: "GET",
+        })
+        if (!response.ok) {
+            const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+            throw new Error(message);
+        }
+        return await response.json() as ApiExecList;
+    } else {
+
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs?func_ids=${funcId}&limit=${limit}`, {
+            headers: defaultHeaders,
+            method: "GET",
+        })
+        if (!response.ok) {
+            const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+            throw new Error(message);
+        }
+        return await response.json() as ApiExecList;
     }
-    return await response.json() as ApiExecList;
+
 }

@@ -16,7 +16,7 @@ interface EditorTabProps {
 
 const EditorTab: FC<EditorTabProps> = (props) => {
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col p-10 items-center justify-center">
             <div className="w-full">
                 <Editor
                     code={props.code}
@@ -66,7 +66,7 @@ const RunTab: FC<RunTabProps> = (props) => {
     const exec = execs.map(exec => (
         <Card
             key={exec.id}
-            className="max-w-sm"
+            className="m-8 max-w-sm"
         >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <p>{exec.id} : {exec.status}</p>
@@ -76,32 +76,45 @@ const RunTab: FC<RunTabProps> = (props) => {
 
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <h2> Run </h2>
+        <div className="flex flex-col">
+            <Button onClick={() => {
+                invokeFunc(props.funcId, {}).then(response => {
+                    console.log(response)
 
-            <h2> Triggers: </h2>
-            <Card>
-                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <p> Manual Trigger </p>
-                    <Button onClick={() => {
-                        invokeFunc(props.funcId, {}).then(response => {
-                            console.log(response)
+                    setLoading(true)
+                    listExecs({funcId: props.funcId, limit: 10}).then(response => {
+                        setExecs(response.execs)
+                        setLoading(false)
+                    })
+                })
+            }}> Run Function </Button>
+            <div className="flex flex-row">
+                <div className="flex flex-col items-start w-1/4">
 
-                            setLoading(true)
-                            listExecs({funcId: props.funcId, limit: 10}).then(response => {
-                                setExecs(response.execs)
-                                setLoading(false)
-                            })
-                        })
-                    }}> Invoke </Button>
-                </h5>
-            </Card>
+                    <Card>
+                        <p> Trigger Placeholder  </p>
+                    </Card>
 
-            <h2>Execs:</h2>
-            <div>
-                {exec}
+                    <Card>
+                        <p> Trigger Placeholder  </p>
+                    </Card>
+
+                    <Card>
+                        <p> New Trigger </p>
+                        <Button onClick={() => {
+                        }}> Add </Button>
+                    </Card>
+
+                </div>
+                <div className="flex flex-col items-center w-3/4">
+                    <h2>Execs:</h2>
+                    <div>
+                        {exec}
+                    </div>
+                </div>
             </div>
         </div>
+
     )
 }
 
@@ -142,12 +155,10 @@ const FuncDetailPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className="p-4 sm:ml-64">
-                {activeTab === 'Dashboard' && <h1> Dashboard</h1>}
-                {activeTab === 'Code' && <EditorTab funcId={funcId} code={code} setCode={setCode}/>}
-                {activeTab === 'Runs' && <RunTab funcId={funcId}/>}
-                {activeTab === 'Settings' && <h1> Settings</h1>}
-            </div>
+            {activeTab === 'Dashboard' && <h1> Dashboard</h1>}
+            {activeTab === 'Code' && <EditorTab funcId={funcId} code={code} setCode={setCode}/>}
+            {activeTab === 'Runs' && <RunTab funcId={funcId}/>}
+            {activeTab === 'Settings' && <h1> Settings</h1>}
         </main>
 
     );
