@@ -1,7 +1,6 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeType
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.*
@@ -74,7 +73,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                         entityId = codeId,
                         groupId = cmd.groupId,
                         value = cmd.value,
-                        type = CodeType.Lua54
+                        type = cmd.type
                     )
                 )
                 (currentVersion(codeId))

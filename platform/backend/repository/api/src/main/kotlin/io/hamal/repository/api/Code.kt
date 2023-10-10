@@ -29,7 +29,7 @@ interface CodeCmdRepository : CmdRepository {
         val codeId: CodeId,
         val groupId: GroupId,
         val value: CodeValue,
-        val type: CodeType? = null
+        val type: CodeType = CodeType.Lua54
     )
 
     data class UpdateCmd(

@@ -1,7 +1,6 @@
 package io.hamal.repository.sqlite.record.code
 
 import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeType
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Code
@@ -68,13 +67,12 @@ class SqliteCodeRepository(
                         entityId = codeId,
                         groupId = cmd.groupId,
                         value = cmd.value,
-                        type = CodeType.Lua54
+                        type = cmd.type
                     )
                 )
 
                 currentVersion(codeId)
                     .also { ProjectionCurrent.upsert(this, it) }
-                    .also { code -> code.type = CodeType.Lua54 }
             }
         }
     }

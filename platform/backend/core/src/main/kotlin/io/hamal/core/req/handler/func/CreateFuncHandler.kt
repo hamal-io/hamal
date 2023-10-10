@@ -33,7 +33,6 @@ private fun CreateFuncHandler.createFunc(req: SubmittedCreateFuncReq): Func {
             codeId = req.codeId,
             groupId = req.groupId,
             value = req.code
-
         )
     )
     return funcCmdRepository.create(
