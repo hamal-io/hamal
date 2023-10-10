@@ -8,7 +8,6 @@ interface CreateFuncReq {
     val name: FuncName
     val inputs: FuncInputs
     val code: CodeValue
-    val codeType: CodeType
 }
 
 

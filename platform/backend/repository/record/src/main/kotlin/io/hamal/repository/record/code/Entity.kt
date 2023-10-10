@@ -25,6 +25,7 @@ data class CodeEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 value = rec.value
+
             )
 
             is CodeUpdatedRecord -> copy(
