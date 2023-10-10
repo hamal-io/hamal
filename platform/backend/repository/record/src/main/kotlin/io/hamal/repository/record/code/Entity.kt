@@ -24,7 +24,8 @@ data class CodeEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                value = rec.value
+                value = rec.value,
+                type = rec.type
 
             )
 

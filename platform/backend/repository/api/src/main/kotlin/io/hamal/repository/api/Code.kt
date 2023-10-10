@@ -14,7 +14,7 @@ data class Code(
     val cmdId: CmdId,
     val version: CodeVersion,
     val value: CodeValue,
-    val type: CodeType
+    var type: CodeType
 ) : DomainObject<CodeId>
 
 
@@ -28,7 +28,8 @@ interface CodeCmdRepository : CmdRepository {
         val id: CmdId,
         val codeId: CodeId,
         val groupId: GroupId,
-        val value: CodeValue
+        val value: CodeValue,
+        val type: CodeType? = null
     )
 
     data class UpdateCmd(
