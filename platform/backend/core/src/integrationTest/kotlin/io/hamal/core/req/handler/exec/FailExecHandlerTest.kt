@@ -4,10 +4,12 @@ import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.submitted_req.SubmittedFailExecReq
 import org.hamcrest.MatcherAssert.assertThat
@@ -61,7 +63,7 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             id = ExecId(1234),
             groupId = testGroup.id,
-            cause = ErrorType("You have not tried hard enough")
+            result = ExecResult(MapType("message" to StringType("You have not tried hard enough")))
         )
     }
 
@@ -72,6 +74,10 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
                 require(this is io.hamal.repository.api.FailedExec)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Failed))
+                assertThat(
+                    result,
+                    equalTo(ExecResult(MapType("message" to StringType("You have not tried hard enough"))))
+                )
             }
         }
     }

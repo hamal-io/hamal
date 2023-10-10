@@ -1,16 +1,14 @@
 package io.hamal.bridge.web.exec
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFailExecReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
@@ -72,7 +70,7 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/v1/execs/123456765432/fail")
-            .body(ApiFailExecReq(ErrorType("SomeErrorValue")))
+            .body(ApiFailExecReq(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
@@ -86,14 +84,14 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as io.hamal.repository.api.FailedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Failed))
-            assertThat(cause, equalTo(ErrorType("SomeErrorCause")))
+            assertThat(result, equalTo(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
         }
     }
 
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/v1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(ApiFailExecReq(ErrorType("SomeErrorCause")))
+            .body(ApiFailExecReq(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
             .execute()
 
 }

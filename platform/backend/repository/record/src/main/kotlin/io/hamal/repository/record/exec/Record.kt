@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.ErrorType
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -58,6 +57,7 @@ data class ExecStartedRecord(
 data class ExecCompletedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
+    val result: ExecResult
 ) : ExecRecord()
 
 @Serializable
@@ -65,5 +65,5 @@ data class ExecCompletedRecord(
 data class ExecFailedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
-    val cause: ErrorType
+    val result: ExecResult
 ) : ExecRecord()

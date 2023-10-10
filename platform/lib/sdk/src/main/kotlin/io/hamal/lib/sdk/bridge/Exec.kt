@@ -4,13 +4,9 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CompleteExecReq
 import io.hamal.request.FailExecReq
@@ -18,11 +14,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BridgeFailExecReq(
-    override val cause: ErrorType
+    override val result: ExecResult
 ) : FailExecReq
 
 @Serializable
 data class BridgeCompleteExecReq(
+    override val result: ExecResult,
     override val state: State,
     override val events: List<EventToSubmit>
 ) : CompleteExecReq
@@ -46,8 +43,8 @@ data class BridgeUnitOfWorkList(
 
 interface BridgeExecService {
     fun poll(): BridgeUnitOfWorkList
-    fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
-    fun fail(execId: ExecId, error: ErrorType)
+    fun complete(execId: ExecId, result: ExecResult, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>)
+    fun fail(execId: ExecId, result: ExecResult)
 }
 
 internal class BridgeExecServiceImpl(
@@ -60,17 +57,25 @@ internal class BridgeExecServiceImpl(
             .fold(BridgeUnitOfWorkList::class)
     }
 
-    override fun complete(execId: ExecId, stateAfterCompletion: State, eventToSubmit: List<EventToSubmit>) {
+    override fun complete(
+        execId: ExecId,
+        result: ExecResult,
+        stateAfterCompletion: State,
+        eventToSubmit: List<EventToSubmit>
+    ) {
         template.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
-            .body(BridgeCompleteExecReq(stateAfterCompletion, eventToSubmit))
+            .body(BridgeCompleteExecReq(result, stateAfterCompletion, eventToSubmit))
             .execute()
     }
 
-    override fun fail(execId: ExecId, error: ErrorType) {
+    override fun fail(
+        execId: ExecId,
+        result: ExecResult
+    ) {
         template.post("/v1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(BridgeFailExecReq(error))
+            .body(BridgeFailExecReq(result))
             .execute()
     }
 }

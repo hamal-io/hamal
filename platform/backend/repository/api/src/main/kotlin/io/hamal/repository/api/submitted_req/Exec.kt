@@ -6,7 +6,6 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,7 +29,7 @@ data class SubmittedFailExecReq(
     override var status: ReqStatus,
     override val groupId: GroupId,
     val id: ExecId,
-    val cause: ErrorType
+    val result: ExecResult
 ) : SubmittedReqWithGroupId
 
 @Serializable
@@ -40,6 +39,7 @@ data class SubmittedCompleteExecReq(
     override val groupId: GroupId,
     val id: ExecId,
     val state: State,
+    val result: ExecResult,
     val events: List<EventToSubmit>
 ) : SubmittedReqWithGroupId
 

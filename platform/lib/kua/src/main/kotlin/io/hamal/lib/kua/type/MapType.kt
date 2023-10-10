@@ -20,6 +20,8 @@ data class MapType(
     val entries: MutableMap<String, SerializableType> = mutableMapOf(),
 ) : TableType {
 
+    constructor(vararg pairs: Pair<String, SerializableType>) : this(mutableMapOf(*pairs))
+
     val size get() = entries.size
 
     operator fun get(key: String): SerializableType = entries[key] ?: NilType

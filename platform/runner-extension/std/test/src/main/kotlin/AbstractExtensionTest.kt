@@ -1,45 +1,41 @@
-
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extension.ExtensionFactory
-import io.hamal.lib.kua.type.ErrorType
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.CodeRunnerImpl
+import org.junit.jupiter.api.fail
 
 class TestConnector : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
     }
 
-    override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {}
-    override fun fail(execId: ExecId, error: ErrorType) {
-        org.junit.jupiter.api.fail { error.message }
+    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {}
+    override fun fail(execId: ExecId, result: ExecResult) {
+        fail { result.value["message"].toString() }
     }
 }
 
 class TestFailConnector(
-    val block: (ErrorType) -> Unit = {}
+    val block: (ExecResult) -> Unit = {}
 ) : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
     }
 
-    override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {
-        org.junit.jupiter.api.fail { "Test expected to fail" }
+    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {
+        fail { "Test expected to fail" }
     }
 
-    override fun fail(execId: ExecId, error: ErrorType) {
-        block(error)
+    override fun fail(execId: ExecId, result: ExecResult) {
+        block(result)
     }
 }
 

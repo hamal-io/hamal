@@ -41,13 +41,18 @@ interface FindTopic {
     fun findTopic(groupId: GroupId, topicName: TopicName): Topic?
 }
 
+interface ResolveTopic {
+    fun resolveTopic(groupId: GroupId, name: TopicName): Topic?
+}
+
 interface BrokerRepository :
     CmdRepository,
     CreateTopic,
     AppendToTopic,
     ConsumeFromTopic,
     FindTopic,
-    ReadFromTopic {
+    ReadFromTopic,
+    ResolveTopic {
 
     fun listTopics(query: TopicQuery): List<Topic>
     fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!

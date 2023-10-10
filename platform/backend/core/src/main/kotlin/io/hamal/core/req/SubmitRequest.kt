@@ -147,6 +147,7 @@ class SubmitRequest(
         status = Submitted,
         groupId = execQueryRepository.get(execId).groupId,
         id = execId,
+        result = req.result,
         state = req.state,
         events = req.events
     ).also(reqCmdRepository::queue)
@@ -156,7 +157,7 @@ class SubmitRequest(
         status = Submitted,
         groupId = execQueryRepository.get(execId).groupId,
         id = execId,
-        cause = req.cause
+        result = req.result
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, req: CreateFuncReq) = SubmittedCreateFuncReq(

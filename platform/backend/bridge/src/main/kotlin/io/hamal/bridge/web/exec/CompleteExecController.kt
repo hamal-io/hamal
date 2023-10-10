@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CompleteExecRoute(
+internal class CompleteExecController(
     val request: SubmitBridgeRequest
 ) {
     @PostMapping("/v1/execs/{execId}/complete")

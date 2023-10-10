@@ -5,7 +5,6 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.ErrorType
 
 data class UnitOfWork(
     val id: ExecId,
@@ -22,7 +21,7 @@ data class UnitOfWork(
 interface Connector {
     fun poll(): List<UnitOfWork>
 
-    fun complete(execId: ExecId, state: State, events: List<EventToSubmit>)
+    fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>)
 
-    fun fail(execId: ExecId, error: ErrorType)
+    fun fail(execId: ExecId, result: ExecResult)
 }

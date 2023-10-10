@@ -13,12 +13,16 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCompleteExecReq
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import io.hamal.repository.api.CompletedExec
+import io.hamal.repository.api.log.ConsumerId
+import io.hamal.repository.api.log.ProtobufBatchConsumer
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -71,7 +75,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
 
         verifyExecCompleted(result.id(::ExecId))
         verifyStateSet(result.id(::ExecId))
-        //FIXME events
+        verifyEventAppended()
     }
 
 
@@ -81,6 +85,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
             .body(
                 ApiCompleteExecReq(
                     state = State(),
+                    result = ExecResult(),
                     events = listOf()
                 )
             )
@@ -97,6 +102,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as CompletedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
+            assertThat(result, equalTo(ExecResult(MapType("hamal" to StringType("rocks")))))
         }
     }
 
@@ -116,12 +122,29 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
         }
     }
 
+    private fun verifyEventAppended() {
+        val topic = eventBrokerRepository.resolveTopic(testGroup.id, TopicName("test-completion"))!!
+
+        ProtobufBatchConsumer(
+            consumerId = ConsumerId("a"),
+            repository = eventBrokerRepository,
+            topic = topic,
+            valueClass = EventPayload::class
+        ).consumeBatch(10) { eventPayloads ->
+            assertThat(eventPayloads, hasSize(1))
+
+            val payload = eventPayloads.first()
+            assertThat(payload, equalTo(EventPayload(MapType(mutableMapOf("value" to NumberType(42))))))
+        }
+    }
+
     private fun requestCompletion(execId: ExecId) =
         httpTemplate.post("/v1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
                 ApiCompleteExecReq(
                     state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
+                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
                     events = listOf(
                         EventToSubmit(
                             topicName = TopicName("test-completion"),
