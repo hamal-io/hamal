@@ -18,10 +18,10 @@ class CodeAdapter(
 ) : CodePort {
 
     override fun <T : Any> invoke(codeId: CodeId, codeVersion: CodeVersion, responseHandler: (Code) -> T): T {
-        if (codeVersion != CodeVersion(0)) {
-            return responseHandler(codeQueryRepository.get(codeId, codeVersion))
-        }
-        return responseHandler(codeQueryRepository.get(codeId))
+        return if (codeVersion != CodeVersion(0))
+            responseHandler(codeQueryRepository.get(codeId, codeVersion))
+        else
+            responseHandler(codeQueryRepository.get(codeId))
 
     }
 }

@@ -23,11 +23,12 @@ internal class CodeGetController(private val getCode: GetCodePort) {
     }
 
 
-    private fun assemble(code: Code) = ResponseEntity.ok(
-        ApiCode(
-            id = code.id,
-            value = code.value,
-            version = code.version
+    private fun assemble(code: Code) =
+        ResponseEntity.ok(
+            ApiCode(
+                id = code.id,
+                value = code.value,
+                version = code.version
+            )
         )
-    )
 }
