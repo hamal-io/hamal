@@ -70,14 +70,16 @@ interface EditorProps {
 
 const Editor = (props: EditorProps) => {
     return (
-        <MonacoEditor
-            theme={"Github"}
-            height="55vh"
-            defaultValue={props.code}
-            defaultLanguage={"lua"}
-            // options={EditorOptions}
-            onChange={props.onChange}
-        />
+        <div>
+            <MonacoEditor
+                theme={"Github"}
+                height="55vh"
+                value={props.code}
+                defaultLanguage={"lua"}
+                // options={EditorOptions}
+                onChange={props.onChange}
+            />
+        </div>
     );
 }
 

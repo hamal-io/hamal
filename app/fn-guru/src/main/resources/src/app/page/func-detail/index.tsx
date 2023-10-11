@@ -92,11 +92,11 @@ const RunTab: FC<RunTabProps> = (props) => {
                 <div className="flex flex-col items-start w-1/4">
 
                     <Card>
-                        <p> Trigger Placeholder  </p>
+                        <p> Trigger Placeholder </p>
                     </Card>
 
                     <Card>
-                        <p> Trigger Placeholder  </p>
+                        <p> Trigger Placeholder </p>
                     </Card>
 
                     <Card>
