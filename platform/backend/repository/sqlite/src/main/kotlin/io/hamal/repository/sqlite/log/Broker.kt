@@ -73,6 +73,8 @@ class SqliteBrokerRepository(
     override fun listTopics(query: TopicQuery): List<Topic> {
         return topicsRepository.list(query)
     }
+    
+    override fun resolveTopic(groupId: GroupId, name: TopicName) = topicsRepository.find(groupId, name)
 
     override fun clear() {
         topicsRepository.clear()

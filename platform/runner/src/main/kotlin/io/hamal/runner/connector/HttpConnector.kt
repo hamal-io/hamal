@@ -3,7 +3,7 @@ package io.hamal.runner.connector
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.sdk.BridgeSdkImpl
 
 class HttpConnector(
@@ -24,11 +24,11 @@ class HttpConnector(
         }
     }
 
-    override fun complete(execId: ExecId, state: State, events: List<EventToSubmit>) {
-        sdk.exec.complete(execId, state, events)
+    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {
+        sdk.exec.complete(execId, result, state, events)
     }
 
-    override fun fail(execId: ExecId, error: ErrorType) {
-        sdk.exec.fail(execId, error)
+    override fun fail(execId: ExecId, result: ExecResult) {
+        sdk.exec.fail(execId, result)
     }
 }

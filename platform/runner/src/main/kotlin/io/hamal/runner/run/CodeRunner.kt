@@ -3,6 +3,7 @@ package io.hamal.runner.run
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.AssertionError
@@ -12,7 +13,7 @@ import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.runner.config.SandboxFactory
@@ -69,29 +70,44 @@ class CodeRunnerImpl(
                     sandbox.load(CodeType(unitOfWork.code.value))
                 }
 
-            connector.complete(execId, State(), runnerContext.eventsToSubmit)
+            connector.complete(execId, ExecResult(), State(), runnerContext.eventsToSubmit)
             log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {
-                    connector.complete(execId, State(), listOf())
+                    connector.complete(execId, ExecResult(cause.result), State(), listOf())
                     log.debug("Completed exec: $execId")
                 } else {
-                    connector.fail(execId, ErrorType(e.message ?: "Unknown reason"))
+                    connector.fail(execId, ExecResult(cause.result))
                     log.debug("Failed exec: $execId")
                 }
             } else {
-                connector.fail(execId, ErrorType(e.message ?: "Unknown reason"))
+                connector.fail(
+                    execId,
+                    ExecResult(
+                        MapType(mutableMapOf("message" to StringType(e.message ?: "Unknown reason")))
+                    )
+                )
                 log.debug("Failed exec: $execId")
             }
         } catch (a: AssertionError) {
             a.printStackTrace()
-            connector.fail(execId, ErrorType(a.message ?: "Unknown reason"))
+            connector.fail(
+                execId,
+                ExecResult(
+                    MapType(mutableMapOf("message" to StringType(a.message ?: "Unknown reason")))
+                )
+            )
             log.debug("Assertion error: $execId - ${a.message}")
         } catch (t: Throwable) {
-            connector.fail(execId, ErrorType(t.message ?: "Unknown reason"))
+            connector.fail(
+                execId,
+                ExecResult(
+                    MapType(mutableMapOf("message" to StringType(t.message ?: "Unknown reason")))
+                )
+            )
             log.debug("Failed exec: $execId")
         }
     }

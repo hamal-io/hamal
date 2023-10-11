@@ -40,7 +40,7 @@ internal class ExtensionTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
-                ScriptExtension(
+                BundleExtension(
                     name = "test",
                     internals = mapOf(
                         "test_extension_call" to TestCall0In0OutFunction

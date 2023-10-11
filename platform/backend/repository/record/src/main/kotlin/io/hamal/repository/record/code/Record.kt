@@ -2,6 +2,7 @@ package io.hamal.repository.record.code
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeType
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.record.Record
@@ -22,7 +23,8 @@ data class CodeCreationRecord(
     override val entityId: CodeId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val value: CodeValue
+    val value: CodeValue,
+    val type: CodeType
 ) : CodeRecord()
 
 @Serializable

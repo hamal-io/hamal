@@ -6,7 +6,6 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CompleteExecReq
 import io.hamal.request.FailExecReq
@@ -14,11 +13,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiFailExecReq(
-    override val cause: ErrorType
+    override val result: ExecResult
 ) : FailExecReq
 
 @Serializable
 data class ApiCompleteExecReq(
+    override val result: ExecResult,
     override val state: State,
     override val events: List<EventToSubmit>
 ) : CompleteExecReq

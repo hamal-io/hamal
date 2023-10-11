@@ -143,7 +143,7 @@ class SqliteExecRepository(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                store(ExecCompletedRecord(cmdId, execId))
+                store(ExecCompletedRecord(cmdId, execId, cmd.result))
 
                 (currentVersion(execId) as CompletedExec).also { ProjectionCurrent.upsert(this, it) }
             }
@@ -159,7 +159,7 @@ class SqliteExecRepository(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                store(ExecFailedRecord(cmdId, execId, cmd.cause))
+                store(ExecFailedRecord(cmdId, execId, cmd.result))
 
                 (currentVersion(execId) as FailedExec).also { ProjectionCurrent.upsert(this, it) }
             }

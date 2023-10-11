@@ -26,7 +26,7 @@ internal class AnyTypeTest {
         )
 
         sandbox.load("test.captor(test.pass_through(true))")
-        assertThat(captor.result, equalTo(AnyType(TrueValue)))
+        assertThat(captor.result, equalTo(AnyType(True)))
     }
 
     @Test

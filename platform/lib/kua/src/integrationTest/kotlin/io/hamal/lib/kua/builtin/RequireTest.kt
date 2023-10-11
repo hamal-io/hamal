@@ -3,7 +3,7 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.ScriptExtension
+import io.hamal.lib.kua.extension.BundleExtension
 import org.junit.jupiter.api.Test
 
 
@@ -29,7 +29,7 @@ internal class ExtensionTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
-                ScriptExtension(
+                BundleExtension(
                     name = "test",
                     internals = mapOf()
                 )

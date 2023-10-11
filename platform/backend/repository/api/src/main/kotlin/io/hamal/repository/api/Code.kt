@@ -4,12 +4,8 @@ import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 data class Code(
@@ -17,7 +13,8 @@ data class Code(
     val groupId: GroupId,
     val cmdId: CmdId,
     val version: CodeVersion,
-    val value: CodeValue
+    val value: CodeValue,
+    var type: CodeType
 ) : DomainObject<CodeId>
 
 
@@ -32,6 +29,7 @@ interface CodeCmdRepository : CmdRepository {
         val codeId: CodeId,
         val groupId: GroupId,
         val value: CodeValue,
+        val type: CodeType = CodeType.Lua54
     )
 
     data class UpdateCmd(

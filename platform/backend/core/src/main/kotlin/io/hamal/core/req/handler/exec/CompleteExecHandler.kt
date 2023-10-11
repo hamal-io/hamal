@@ -43,7 +43,7 @@ class CompleteExecHandler(
     }
 
     private fun completeExec(req: SubmittedCompleteExecReq) =
-        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.id))
+        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.id, req.result))
 
     private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
         eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))

@@ -26,6 +26,7 @@ internal class SubmitBridgeRequest(
             status = ReqStatus.Submitted,
             id = execId,
             groupId = exec.groupId,
+            result = req.result,
             state = req.state,
             events = req.events
         ).also(reqCmdRepository::queue)
@@ -38,7 +39,7 @@ internal class SubmitBridgeRequest(
             status = ReqStatus.Submitted,
             id = execId,
             groupId = exec.groupId,
-            cause = req.cause
+            result = req.result
         ).also(reqCmdRepository::queue)
     }
 

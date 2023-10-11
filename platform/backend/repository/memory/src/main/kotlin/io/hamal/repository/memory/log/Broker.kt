@@ -64,6 +64,8 @@ class MemoryBrokerRepository : BrokerRepository {
         return topicsRepository.list(query)
     }
 
+    override fun resolveTopic(groupId: GroupId, name: TopicName) = topicsRepository.find(groupId, name)
+
     override fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk> {
         return resolveRepository(topic).read(firstId, limit)
     }

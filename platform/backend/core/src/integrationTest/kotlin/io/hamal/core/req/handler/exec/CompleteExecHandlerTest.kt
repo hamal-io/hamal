@@ -7,6 +7,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
@@ -66,7 +67,8 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
             reqId = ReqId(10),
             status = ReqStatus.Submitted,
             id = ExecId(1234),
-            state = State(MapType(mutableMapOf("counter" to NumberType(1)))),
+            result = ExecResult(MapType("hamal" to StringType("rocks"))),
+            state = State(MapType("counter" to NumberType(1))),
             groupId = testGroup.id,
             events = listOf(
                 EventToSubmit(
@@ -84,6 +86,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
                 require(this is io.hamal.repository.api.CompletedExec)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
+                assertThat(result, equalTo(ExecResult(MapType("hamal" to StringType("rocks")))))
             }
         }
     }

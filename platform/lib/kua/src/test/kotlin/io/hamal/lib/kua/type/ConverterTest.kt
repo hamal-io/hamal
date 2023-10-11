@@ -92,11 +92,11 @@ internal class ToProxyArrayTest {
 
     @Test
     fun `Array with boolean type`() {
-        val testArray = ArrayType(mutableMapOf(1 to TrueValue, 2 to FalseValue))
+        val testArray = ArrayType(mutableMapOf(1 to True, 2 to False))
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(2))
-        assertThat(result.getBooleanType(1), equalTo(TrueValue))
-        assertThat(result.getBooleanType(2), equalTo(FalseValue))
+        assertThat(result.getBooleanType(1), equalTo(True))
+        assertThat(result.getBooleanType(2), equalTo(False))
     }
 
     @Test
@@ -160,8 +160,8 @@ internal class ToArrayTypeTest {
         val table = testState.tableCreateArray(1).also { it.append(true); it.append(false) }
         val result = testState.toArrayType(table)
         assertThat(result.size, equalTo(2))
-        assertThat(result[1], equalTo(TrueValue))
-        assertThat(result[2], equalTo(FalseValue))
+        assertThat(result[1], equalTo(True))
+        assertThat(result[2], equalTo(False))
     }
 
     @Test
@@ -224,11 +224,11 @@ internal class ToProxyMapTest {
 
     @Test
     fun `Map with boolean type`() {
-        val testMap = MapType(mutableMapOf("true_value" to TrueValue, "false_value" to FalseValue))
+        val testMap = MapType(mutableMapOf("true_value" to True, "false_value" to False))
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(2))
-        assertThat(result.getBooleanType("true_value"), equalTo(TrueValue))
-        assertThat(result.getBooleanType("false_value"), equalTo(FalseValue))
+        assertThat(result.getBooleanType("true_value"), equalTo(True))
+        assertThat(result.getBooleanType("false_value"), equalTo(False))
     }
 
     @Test

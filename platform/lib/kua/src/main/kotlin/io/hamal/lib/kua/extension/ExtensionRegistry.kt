@@ -10,10 +10,10 @@ class ExtensionRegistry(
 ) {
 
     val state = sb.state
-    val extensions = mutableMapOf<String, ScriptExtension>()
+    val extensions = mutableMapOf<String, BundleExtension>()
     val extensionFactories = mutableMapOf<String, TableProxyMap>()
 
-    fun register(extension: ScriptExtension) {
+    fun register(extension: BundleExtension) {
         extensions[extension.name] = extension
 
         // FIXME load the factory

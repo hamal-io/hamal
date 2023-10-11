@@ -7,7 +7,6 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.ErrorType
 import kotlinx.serialization.Serializable
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
@@ -50,13 +49,14 @@ interface ExecCmdRepository : CmdRepository {
 
     data class CompleteCmd(
         val id: CmdId,
-        val execId: ExecId
+        val execId: ExecId,
+        val result: ExecResult
     )
 
     data class FailCmd(
         val id: CmdId,
         val execId: ExecId,
-        val cause: ErrorType
+        val result: ExecResult
     )
 }
 
@@ -202,7 +202,8 @@ class CompletedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     val startedExec: StartedExec,
-    val completedAt: CompletedAt
+    val completedAt: CompletedAt,
+    val result: ExecResult
 ) : Exec() {
     override val status = ExecStatus.Completed
     override val groupId get() = startedExec.groupId
@@ -225,7 +226,7 @@ class FailedExec(
     val startedExec: StartedExec,
     //FIXME failedAt
     val failedAt: FailedAt,
-    val cause: ErrorType
+    val result: ExecResult
 ) : Exec() {
     override val status = ExecStatus.Failed
     override val groupId get() = startedExec.groupId

@@ -11,10 +11,10 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.FalseValue
+import io.hamal.lib.kua.type.False
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.TrueValue
+import io.hamal.lib.kua.type.True
 import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
@@ -48,17 +48,17 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
 
-        setState(CorrelatedState(correlationOne, State(MapType(mutableMapOf("result" to TrueValue)))))
-        setState(CorrelatedState(correlationTwo, State(MapType(mutableMapOf("result" to FalseValue)))))
+        setState(CorrelatedState(correlationOne, State(MapType(mutableMapOf("result" to True)))))
+        setState(CorrelatedState(correlationTwo, State(MapType(mutableMapOf("result" to False)))))
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(state, equalTo(ApiState(MapType(mutableMapOf("result" to TrueValue)))))
+            assertThat(state, equalTo(ApiState(MapType(mutableMapOf("result" to True)))))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(state, equalTo(ApiState(MapType((mutableMapOf("result" to FalseValue))))))
+            assertThat(state, equalTo(ApiState(MapType((mutableMapOf("result" to False))))))
         }
     }
 

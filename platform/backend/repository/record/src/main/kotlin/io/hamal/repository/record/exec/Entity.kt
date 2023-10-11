@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.repository.api.*
 import io.hamal.repository.record.CreateDomainObject
@@ -29,7 +28,7 @@ data class ExecEntity(
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
     var events: List<Event>? = null,
-    var cause: ErrorType? = null
+    var result: ExecResult? = null
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
 
@@ -78,13 +77,14 @@ data class ExecEntity(
                 sequence = rec.sequence(),
                 status = ExecStatus.Completed,
 //                enqueuedAt = Instant.now() // FIXME
+                result = rec.result
             )
 
             is ExecFailedRecord -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Failed,
-                cause = rec.cause
+                result = rec.result
             )
 
             else -> TODO()
@@ -117,8 +117,8 @@ data class ExecEntity(
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now())
-            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), cause!!)
+            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now(), result!!)
+            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), result!!)
             else -> TODO()
         }
     }

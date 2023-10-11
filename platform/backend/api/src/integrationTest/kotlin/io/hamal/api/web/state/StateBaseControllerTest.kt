@@ -39,6 +39,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
             .body(
                 ApiCompleteExecReq(
                     state = state,
+                    result = ExecResult(),
                     events = listOf()
                 )
             )

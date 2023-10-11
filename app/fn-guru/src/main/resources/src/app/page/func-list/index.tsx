@@ -36,7 +36,7 @@ const FuncListPage: React.FC = () => {
 
     return (
         <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
-            <div className="flex p-3 items-center justify-end bg-gray-300">
+            <div className="flex p-3 items-center justify-center bg-white">
                 <CreateFuncModalButton/>
             </div>
 

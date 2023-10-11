@@ -5,7 +5,6 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.*
-import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -234,9 +233,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result = complete(CompleteCmd(CmdId(5), ExecId(2)))
+            val result = complete(CompleteCmd(CmdId(5), ExecId(2), ExecResult(MapType("answer" to NumberType(42)))))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Completed))
+            assertThat(result.result, equalTo(ExecResult(MapType("answer" to NumberType(42)))))
 
             verifyCount(1)
         }
@@ -248,7 +248,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
-                        complete(CompleteCmd(CmdId(4), ExecId(23)))
+                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult()))
                     }
                     assertThat(exception.message, equalTo("ExecId(23) not started"))
 
@@ -266,7 +266,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 start(StartCmd(CmdId(4)))
 
                 val exception = assertThrows<NoSuchElementException> {
-                    complete(CompleteCmd(CmdId(4), ExecId(23)))
+                    complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult()))
                 }
                 assertThat(exception.message, equalTo("Exec not found"))
 
@@ -289,9 +289,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result = fail(FailCmd(CmdId(5), ExecId(2), ErrorType("SomeError")))
+            val result = fail(FailCmd(CmdId(5), ExecId(2), ExecResult(MapType("message" to StringType("SomeError")))))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Failed))
+            assertThat(result.result, equalTo(ExecResult(MapType("message" to StringType("SomeError")))))
 
             verifyCount(1)
         }
@@ -303,7 +304,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
-                        fail(FailCmd(CmdId(4), ExecId(23), ErrorType("SomeError")))
+                        fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
                     }
                     assertThat(exception.message, equalTo("ExecId(23) not started"))
 
@@ -321,7 +322,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 start(StartCmd(CmdId(4)))
 
                 val exception = assertThrows<NoSuchElementException> {
-                    fail(FailCmd(CmdId(4), ExecId(23), ErrorType("SomeError")))
+                    fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
                 }
                 assertThat(exception.message, equalTo("Exec not found"))
 
@@ -689,7 +690,8 @@ fun ExecRepository.createExec(
         Completed -> complete(
             CompleteCmd(
                 id = CmdId(104),
-                execId = startedExec.id
+                execId = startedExec.id,
+                result = ExecResult(MapType("answer" to NumberType(42)))
             )
         )
 
@@ -697,7 +699,7 @@ fun ExecRepository.createExec(
             FailCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                cause = ErrorType("ExecTest")
+                result = ExecResult(MapType("message" to StringType("ExecTest")))
             )
         )
 

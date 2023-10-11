@@ -44,3 +44,8 @@ enum class ExecStatus(val value: Int) {
 class ExecToken(override val value: String) : StringValueObject() {
     internal object Serializer : StringValueObjectSerializer<ExecToken>(::ExecToken)
 }
+
+@Serializable(with = ExecResult.Serializer::class)
+class ExecResult(override val value: MapType = MapType()) : Inputs() {
+    internal object Serializer : InputsSerializer<ExecResult>(::ExecResult)
+}
