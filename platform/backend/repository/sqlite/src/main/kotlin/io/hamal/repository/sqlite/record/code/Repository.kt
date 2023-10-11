@@ -66,7 +66,8 @@ class SqliteCodeRepository(
                         cmdId = cmdId,
                         entityId = codeId,
                         groupId = cmd.groupId,
-                        value = cmd.value
+                        value = cmd.value,
+                        type = cmd.type
                     )
                 )
 

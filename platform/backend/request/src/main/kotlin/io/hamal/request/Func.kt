@@ -2,6 +2,7 @@ package io.hamal.request
 
 import io.hamal.lib.domain.vo.*
 
+
 interface CreateFuncReq {
     val namespaceId: NamespaceId?
     val name: FuncName
