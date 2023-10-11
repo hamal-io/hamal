@@ -2,18 +2,18 @@ package io.hamal.core.config.repo
 
 import io.hamal.core.config.BackendBasePath
 import io.hamal.repository.api.*
-import io.hamal.repository.memory.MemoryAuthRepository
 import io.hamal.repository.memory.MemoryExecLogRepository
 import io.hamal.repository.memory.MemoryMetricRepository
 import io.hamal.repository.memory.MemoryReqRepository
-import io.hamal.repository.memory.record.MemoryCodeRepository
-import io.hamal.repository.memory.record.MemoryGroupRepository
+import io.hamal.repository.sqlite.SqliteAuthRepository
 import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.SqliteBroker
 import io.hamal.repository.sqlite.log.SqliteBrokerRepository
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
+import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
+import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
@@ -42,7 +42,7 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun accountCmdRepository() = accountRepository()
 
     @Bean
-    open fun authRepository() = MemoryAuthRepository()
+    open fun authRepository() = SqliteAuthRepository(SqliteAuthRepository.Config(path))
 
     @Bean
     open fun authQueryRepository() = authRepository()
@@ -51,7 +51,7 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun authCmdRepository() = authRepository()
 
     @Bean
-    open fun codeRepository() = MemoryCodeRepository()
+    open fun codeRepository() = SqliteCodeRepository(SqliteCodeRepository.Config(path))
 
     @Bean
     open fun codeCmdRepository() = codeRepository()
@@ -69,7 +69,7 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
-    open fun groupRepository() = MemoryGroupRepository()
+    open fun groupRepository() = SqliteGroupRepository(SqliteGroupRepository.Config(path))
 
     @Bean
     open fun groupQueryRepository() = groupRepository()
