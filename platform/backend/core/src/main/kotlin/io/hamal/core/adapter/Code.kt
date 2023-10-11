@@ -19,13 +19,21 @@ class CodeAdapter(
 
     override fun <T : Any> invoke(codeId: CodeId, codeVersion: CodeVersion, responseHandler: (Code) -> T): T {
         ensureCodeExists(codeId)
-        return if (codeVersion != CodeVersion(0))
+        return if (codeVersion != CodeVersion(0)) {
+            ensureVersionExists(codeId, codeVersion)
             responseHandler(codeQueryRepository.get(codeId, codeVersion))
-        else
+        } else {
             responseHandler(codeQueryRepository.get(codeId))
+        }
 
     }
 
     private fun ensureCodeExists(codeId: CodeId) = codeQueryRepository.get(codeId)
 
+    private fun ensureVersionExists(codeId: CodeId, codeVersion: CodeVersion) {
+        codeQueryRepository.get(codeId, codeVersion)
+    }
+
+
 }
+

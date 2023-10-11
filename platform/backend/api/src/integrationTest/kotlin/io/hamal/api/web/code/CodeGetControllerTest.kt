@@ -9,13 +9,12 @@ import io.hamal.repository.api.CodeCmdRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestFactory
 
 
 internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
 
-    @TestFactory
+    @Test
     fun `Get code by id`() {
         val createCode = codeCmdRepository.create(
             CodeCmdRepository.CreateCmd(
@@ -84,6 +83,30 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             assertThat(value, equalTo(CodeValue("40 + 2")))
             assertThat(version, equalTo(CodeVersion(2)))
         }
+    }
+
+    @Test
+    fun `Code version non exist`() {
+        codeCmdRepository.create(
+            CodeCmdRepository.CreateCmd(
+                id = CmdId(6),
+                codeId = CodeId(4),
+                groupId = testGroup.id,
+                value = CodeValue("1 + 1")
+            )
+        )
+
+        val getCodeResponse = httpTemplate.get("/v1/code/{codeId}")
+            .path("codeId", CodeId(4))
+            .parameter("codeVersion", 2)
+            .execute()
+
+        assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))
+        require(getCodeResponse is ErrorHttpResponse) { "request was successful" }
+
+        val error = getCodeResponse.error(ApiError::class)
+        assertThat(error.message, equalTo("Code not found"))
+
     }
 
     @Test
