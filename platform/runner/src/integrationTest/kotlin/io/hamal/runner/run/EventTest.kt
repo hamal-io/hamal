@@ -15,7 +15,7 @@ internal class EventTest : AbstractExecuteTest() {
 
     @Test
     fun `events available in code`() {
-        val testExecutor = createTestExecutor()
+        val testExecutor = createTestRunner()
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
@@ -47,7 +47,7 @@ internal class EventTest : AbstractExecuteTest() {
     fun `events available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestExecutor("fn" to testFn)
+        val testExecutor = createTestRunner("fn" to testFn)
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),

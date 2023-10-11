@@ -21,9 +21,9 @@ class NativeExtension(
 ) : Extension
 
 
-interface ScriptExtensionFactory : ExtensionFactory<ScriptExtension>
+interface BundleExtensionFactory : ExtensionFactory<BundleExtension>
 
-class ScriptExtension(
+class BundleExtension(
     override val name: String,
     val init: String = loadInitFromResources(name),
     val internals: Map<String, Type>,

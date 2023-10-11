@@ -36,7 +36,7 @@ data class ArrayType(
         return entries[idx]!!
     }
 
-    fun getBoolean(idx: Int) = getBooleanValue(idx) == TrueValue
+    fun getBoolean(idx: Int) = getBooleanValue(idx) == True
     fun getBooleanValue(idx: Int): BooleanType {
         checkExpectedType(idx, BooleanType::class)
         return entries[idx]!! as BooleanType

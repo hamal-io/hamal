@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.type.FalseValue
+import io.hamal.lib.kua.type.False
 import io.hamal.lib.kua.type.StringType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -20,7 +20,7 @@ internal class TableProxyArrayTest {
         lateinit var testInstance: TableProxyArray
         return listOf(
             { testInstance.append(true) },
-            { testInstance.append(FalseValue) },
+            { testInstance.append(False) },
             { testInstance.append(23.23) },
             { testInstance.append(23) },
             { testInstance.append(23L) },

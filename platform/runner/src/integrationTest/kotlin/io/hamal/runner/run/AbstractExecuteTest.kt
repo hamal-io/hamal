@@ -11,7 +11,7 @@ import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 
 internal abstract class AbstractExecuteTest {
-    fun createTestExecutor(
+    fun createTestRunner(
         vararg testExtensions: Pair<String, Type>,
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(

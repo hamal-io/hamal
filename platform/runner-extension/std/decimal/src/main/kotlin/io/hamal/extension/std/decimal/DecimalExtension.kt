@@ -1,13 +1,13 @@
 package io.hamal.extension.std.log
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.ScriptExtension
-import io.hamal.lib.kua.extension.ScriptExtensionFactory
+import io.hamal.lib.kua.extension.BundleExtension
+import io.hamal.lib.kua.extension.BundleExtensionFactory
 
 
-object DecimalExtensionFactory : ScriptExtensionFactory {
-    override fun create(sandbox: Sandbox): ScriptExtension {
-        return ScriptExtension(
+object DecimalExtensionFactory : BundleExtensionFactory {
+    override fun create(sandbox: Sandbox): BundleExtension {
+        return BundleExtension(
             name = "decimal",
             internals = mapOf()
         )

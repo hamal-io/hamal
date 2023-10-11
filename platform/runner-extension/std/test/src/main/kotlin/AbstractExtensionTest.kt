@@ -12,19 +12,24 @@ import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.CodeRunnerImpl
 import org.junit.jupiter.api.fail
 
-class TestConnector : Connector {
+class TestConnector(
+    val block: (ExecId, ExecResult, State, List<EventToSubmit>) -> Unit = { _, _, _, _ -> }
+) : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {}
+    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {
+        block(execId, result, state, events)
+    }
+
     override fun fail(execId: ExecId, result: ExecResult) {
         fail { result.value["message"].toString() }
     }
 }
 
 class TestFailConnector(
-    val block: (ExecResult) -> Unit = {}
+    val block: (execId: ExecId, ExecResult) -> Unit = { _, _ -> }
 ) : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
@@ -35,7 +40,7 @@ class TestFailConnector(
     }
 
     override fun fail(execId: ExecId, result: ExecResult) {
-        block(result)
+        block(execId, result)
     }
 }
 

@@ -16,8 +16,8 @@ internal class TableProxyMapTest {
         lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.set("key", true) },
-            { testInstance.set("key", TrueValue) },
-            { testInstance.set(StringType("key"), TrueValue) },
+            { testInstance.set("key", True) },
+            { testInstance.set(StringType("key"), True) },
 
             { testInstance.set("key", CodeType("print('hacked')")) },
             { testInstance.set(StringType("key"), CodeType("print('hacked')")) },
@@ -95,7 +95,7 @@ internal class TableProxyMapTest {
                 testInstance["key"] = true
 
                 when (val result = testFn()) {
-                    is BooleanType -> assertThat(result, equalTo(TrueValue))
+                    is BooleanType -> assertThat(result, equalTo(True))
                     is Boolean -> assertThat(result, equalTo(true))
                     else -> TODO()
                 }

@@ -31,7 +31,7 @@ class Sandbox(
 
     fun register(vararg factories: ExtensionFactory<*>): Sandbox {
         factories.map { it.create(this) }.forEach { extension ->
-            check(extension is ScriptExtension)
+            check(extension is BundleExtension)
             this.register(extension)
         }
         return this
@@ -45,7 +45,7 @@ class Sandbox(
         fn(state)
     }
 
-    fun register(extension: ScriptExtension) {
+    fun register(extension: BundleExtension) {
         registry.register(extension)
     }
 
