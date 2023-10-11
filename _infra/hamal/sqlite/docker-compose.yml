@@ -5,7 +5,9 @@ services:
     ports:
       - "0.0.0.0:8008:8008"
     environment:
-      - ACTIVE_PROFILES=default,memory,dev
+      - ACTIVE_PROFILES=default,sqlite,dev
+    volumes:
+      - "/tmp/hamal/backend:/tmp/hamal/backend"
     networks:
       - hamalnet
 
@@ -15,6 +17,7 @@ services:
       - ACTIVE_PROFILES=default,dev
       - API_HOST=http://backend:8008
       - BRIDGE_HOST=http://backend:7007
+      - HTTP_POLL_EVERY_MS=100
     networks:
       - hamalnet
     depends_on:

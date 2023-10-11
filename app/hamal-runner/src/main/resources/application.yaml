@@ -5,22 +5,15 @@ logging:
     io.hamal.runner: DEBUG
     io.hamal.repository: INFO
     io.hamal.extension: INFO
-spring:
-  datasource:
-    driver-class-name: org.sqlite.JDBC
 
   profiles:
     active: ${ACTIVE_PROFILES:default}
 
-server:
-  tomcat:
-    threads:
-      max: 10
-      min-spare: 2
-
 io:
   hamal:
     runner:
+      http:
+        poll-every-ms: ${HTTP_POLL_EVERY_MS:1000}
       api:
         host: ${API_HOST:http://127.0.0.1:8008}
       bridge:

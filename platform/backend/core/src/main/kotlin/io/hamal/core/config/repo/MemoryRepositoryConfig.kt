@@ -1,7 +1,10 @@
 package io.hamal.core.config.repo
 
 import io.hamal.repository.api.*
-import io.hamal.repository.memory.*
+import io.hamal.repository.memory.MemoryAuthRepository
+import io.hamal.repository.memory.MemoryExecLogRepository
+import io.hamal.repository.memory.MemoryReqRepository
+import io.hamal.repository.memory.MemoryStateRepository
 import io.hamal.repository.memory.log.MemoryBrokerRepository
 import io.hamal.repository.memory.record.*
 import org.springframework.context.annotation.Bean
@@ -117,6 +120,4 @@ open class MemoryRepositoryConfig {
     @Bean
     open fun triggerQueryRepository(): TriggerQueryRepository = triggerRepository()
 
-    @Bean
-    open fun metricRepository(): MetricRepository = MemoryMetricRepository()
 }

@@ -5,7 +5,6 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.event.handler.exec.*
 import io.hamal.core.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.core.service.FixedRateTriggerService
-import io.hamal.core.service.MetricService
 import io.hamal.core.service.OrchestrationService
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.repository.api.ExecCmdRepository
@@ -32,14 +31,13 @@ internal open class PlatformEventConfig {
         execCmdRepository: ExecCmdRepository,
         fixedRateTriggerService: FixedRateTriggerService,
         orchestrationService: OrchestrationService,
-        metricService: MetricService,
         eventEmitter: PlatformEventEmitter
     ) = PlatformEventContainerFactory()
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdRepository, eventEmitter))
         .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
-        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService, metricService))
+        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
         .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))
         .create()
 

@@ -1,6 +1,8 @@
 io:
   hamal:
     runner:
+      http:
+        poll-every-ms: ${HTTP_POLL_EVERY_MS:1000}
       api:
         host: ${API_HOST:http://0.0.0.0:8008}
       bridge:
