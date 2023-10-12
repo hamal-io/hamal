@@ -1,6 +1,6 @@
 package io.hamal.extension.std.sys.func
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext

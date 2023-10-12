@@ -1,6 +1,6 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus

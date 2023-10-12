@@ -1,7 +1,7 @@
 package io.hamal.core.req.handler.topic
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.TopicEntryPayload

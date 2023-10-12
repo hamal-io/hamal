@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType

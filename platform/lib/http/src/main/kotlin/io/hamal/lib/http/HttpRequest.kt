@@ -1,7 +1,7 @@
 package io.hamal.lib.http
 
-import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import kotlin.reflect.KClass
 

@@ -1,6 +1,6 @@
 package io.hamal.extension.std.sys.hook
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.NamespaceId

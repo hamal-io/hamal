@@ -3,7 +3,7 @@ package io.hamal.core.service
 import io.hamal.core.component.Async
 import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.TriggerType

@@ -1,10 +1,10 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
+import io.hamal.lib.common.snowflake.SnowflakeId
 import kotlinx.serialization.Serializable
 
 @Serializable(with = HookId.Serializer::class)
