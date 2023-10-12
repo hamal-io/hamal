@@ -45,3 +45,19 @@ data class CodeValue(override val value: String) : ValueObject<String> {
 data class CodeVersion(override val value: Int) : IntValueObject() {
     internal object Serializer : IntValueObjectSerializer<CodeVersion>(::CodeVersion)
 }
+
+
+enum class CodeType(val value: Int) {
+    None(0),
+    Lua54(1);
+
+    companion object {
+        @JvmStatic
+        fun of(value: Int): CodeType {
+            val result = CodeType.values().find { it.value == value }
+            require(result != null) { "$value not mapped as a code type" }
+            return result
+        }
+    }
+}
+

@@ -71,10 +71,12 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                         cmdId = cmd.id,
                         entityId = codeId,
                         groupId = cmd.groupId,
-                        value = cmd.value
+                        value = cmd.value,
+                        type = cmd.type
                     )
                 )
-                (currentVersion(codeId)).also(CurrentCodeProjection::apply)
+                (currentVersion(codeId))
+                    .also(CurrentCodeProjection::apply)
             }
         }
     }

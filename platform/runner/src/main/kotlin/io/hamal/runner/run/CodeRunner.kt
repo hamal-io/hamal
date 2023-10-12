@@ -77,15 +77,10 @@ class CodeRunnerImpl(
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {
-                    connector.complete(execId, ExecResult(), State(), listOf())
+                    connector.complete(execId, ExecResult(cause.result), State(), listOf())
                     log.debug("Completed exec: $execId")
                 } else {
-                    connector.fail(
-                        execId,
-                        ExecResult(
-                            MapType(mutableMapOf("message" to StringType(e.message ?: "Unknown reason")))
-                        )
-                    )
+                    connector.fail(execId, ExecResult(cause.result))
                     log.debug("Failed exec: $execId")
                 }
             } else {

@@ -1,0 +1,28 @@
+version: "3.5"
+services:
+  backend:
+    image: hamalio/hamal-backend
+    ports:
+      - "0.0.0.0:8008:8008"
+    environment:
+      - ACTIVE_PROFILES=default,sqlite,dev
+    volumes:
+      - "/tmp/hamal/backend:/tmp/hamal/backend"
+    networks:
+      - hamalnet
+
+  runner:
+    image: hamalio/hamal-runner
+    environment:
+      - ACTIVE_PROFILES=default,dev
+      - API_HOST=http://backend:8008
+      - BRIDGE_HOST=http://backend:7007
+      - HTTP_POLL_EVERY_MS=100
+    networks:
+      - hamalnet
+    depends_on:
+      backend:
+        condition: service_started
+
+networks:
+  hamalnet:

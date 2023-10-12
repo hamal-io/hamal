@@ -13,7 +13,7 @@ class TableProxyArray(
 
     val length get() = state.native.tableGetLength(index)
 
-    fun getBoolean(idx: Int) = getBooleanType(idx) == TrueValue
+    fun getBoolean(idx: Int) = getBooleanType(idx) == True
     fun getBooleanType(idx: Int): BooleanType {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(BooleanType::class)

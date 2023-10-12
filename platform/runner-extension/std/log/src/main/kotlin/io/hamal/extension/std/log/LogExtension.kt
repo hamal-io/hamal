@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
 import io.hamal.lib.domain.vo.LocalAt
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.ScriptExtension
-import io.hamal.lib.kua.extension.ScriptExtensionFactory
+import io.hamal.lib.kua.extension.BundleExtension
+import io.hamal.lib.kua.extension.BundleExtensionFactory
 import io.hamal.lib.kua.function.Function2In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
@@ -22,9 +22,9 @@ val log = logger(LogFunction::class)
 
 class LogExtensionFactory(
     private val execLogService: ApiExecLogService
-) : ScriptExtensionFactory {
-    override fun create(sandbox: Sandbox): ScriptExtension {
-        return ScriptExtension(
+) : BundleExtensionFactory {
+    override fun create(sandbox: Sandbox): BundleExtension {
+        return BundleExtension(
             name = "log",
             internals = mapOf(
                 "log" to LogFunction(execLogService),

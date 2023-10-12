@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 internal class ExecIdTest : AbstractExecuteTest() {
     @Test
     fun `exec_id available in code`() {
-        val testExecutor = createTestExecutor()
+        val testExecutor = createTestRunner()
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
@@ -32,7 +32,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
     fun `exec_id available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestExecutor("fn" to testFn)
+        val testExecutor = createTestRunner("fn" to testFn)
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),

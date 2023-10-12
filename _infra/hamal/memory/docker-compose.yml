@@ -5,14 +5,14 @@ services:
     ports:
       - "0.0.0.0:8008:8008"
     environment:
-      - ACTIVE_PROFILES=default,memory
+      - ACTIVE_PROFILES=default,memory,dev
     networks:
       - hamalnet
 
   runner:
     image: hamalio/hamal-runner
     environment:
-      - ACTIVE_PROFILES=default
+      - ACTIVE_PROFILES=default,dev
       - API_HOST=http://backend:8008
       - BRIDGE_HOST=http://backend:7007
     networks:

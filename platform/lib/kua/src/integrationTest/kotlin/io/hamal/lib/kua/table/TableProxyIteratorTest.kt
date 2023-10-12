@@ -35,7 +35,7 @@ internal class TableEntryIteratorTest {
                 assertThat(resultCollector.keys, hasSize(3))
                 assertThat(resultCollector[StringType("key")], equalTo(AnyType(StringType("value"))))
                 assertThat(resultCollector[StringType("answer")], equalTo(AnyType(NumberType(42))))
-                assertThat(resultCollector[StringType("result")], equalTo(AnyType(TrueValue)))
+                assertThat(resultCollector[StringType("result")], equalTo(AnyType(True)))
             }
         }
 
@@ -100,7 +100,7 @@ internal class TableEntryIteratorTest {
                 assertThat(resultCollector.keys, hasSize(3))
                 assertThat(resultCollector[NumberType(1)], equalTo(AnyType(StringType("value"))))
                 assertThat(resultCollector[NumberType(2)], equalTo(AnyType(NumberType(42))))
-                assertThat(resultCollector[NumberType(3)], equalTo(AnyType(TrueValue)))
+                assertThat(resultCollector[NumberType(3)], equalTo(AnyType(True)))
             }
         }
 

@@ -6,6 +6,7 @@ import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.CodeRunnerImpl
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -17,7 +18,8 @@ import kotlin.time.toJavaDuration
 class HttpExecutorService(
     private val httpTemplate: HttpTemplate,
     private val runnerExecutor: ThreadPoolTaskScheduler,
-    private val sandboxFactory: SandboxFactory
+    private val sandboxFactory: SandboxFactory,
+    @Value("\${io.hamal.runner.http.poll-every-ms}") private val pollEveryMs: Long
 ) : ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
@@ -38,7 +40,7 @@ class HttpExecutorService(
                     )
                 )
             }
-        }, 10.milliseconds.toJavaDuration())
+        }, pollEveryMs.milliseconds.toJavaDuration())
     }
 }
 

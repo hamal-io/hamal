@@ -2,10 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
@@ -39,6 +36,8 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type, equalTo(CodeType.of(1)))
             }
         }
 
@@ -64,12 +63,15 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(CodeId(1)))
                     assertThat(version, equalTo(CodeVersion(1)))
                     assertThat(value, equalTo(CodeValue("40 + 2")))
+                    assertThat(type, equalTo(CodeType.Lua54))
+
                 }
 
                 with(get(CodeId(2))) {
                     assertThat(id, equalTo(CodeId(2)))
                     assertThat(version, equalTo(CodeVersion(1)))
                     assertThat(value, equalTo(CodeValue("40 + 2")))
+                    assertThat(type, equalTo(CodeType.Lua54))
                 }
             }
         }
@@ -93,6 +95,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(version, equalTo(CodeVersion(2)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
 
             verifyCount(1)
@@ -116,6 +119,8 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(1)))
                     assertThat(version, equalTo(CodeVersion(iteration + 2)))
                     assertThat(value, equalTo(CodeValue("40 + $iteration")))
+                    assertThat(type, equalTo(CodeType.Lua54))
+
                 }
             }
         }
@@ -166,6 +171,8 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(type, equalTo(CodeType.Lua54))
+
             }
         }
 
@@ -194,6 +201,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(get(CodeId(1), CodeVersion(5))) {
                 assertThat(version, equalTo(CodeVersion(5)))
                 assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
         }
 
@@ -245,6 +253,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
         }
 
@@ -263,16 +272,19 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(find(CodeId(1), CodeVersion(1))!!) {
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("created")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(find(CodeId(1), CodeVersion(2))!!) {
                 assertThat(version, equalTo(CodeVersion(2)))
                 assertThat(value, equalTo(CodeValue("1 + 0")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(find(CodeId(1), CodeVersion(5))!!) {
                 assertThat(version, equalTo(CodeVersion(5)))
                 assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
         }
 
@@ -315,6 +327,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
         }
 
@@ -335,12 +348,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(4)))
                 assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(value, equalTo(CodeValue("1 + 4")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(type, equalTo(CodeType.Lua54))
             }
         }
 
