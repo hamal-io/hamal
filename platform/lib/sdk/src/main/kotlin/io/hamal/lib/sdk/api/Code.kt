@@ -4,6 +4,7 @@ import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,17 +17,22 @@ data class ApiCode(
 interface ApiCodeService {
     fun get(codeId: CodeId): ApiCode
     fun get(codeId: CodeId, codeVersion: CodeVersion): ApiCode
-
 }
 
 internal class ApiCodeServiceImpl(
     private val template: HttpTemplate
 ) : ApiCodeService {
-    override fun get(codeId: CodeId): ApiCode {
-        TODO("Not yet implemented")
-    }
+    override fun get(codeId: CodeId) =
+        template.get("/v1/code/{codeId}")
+            .path("codeId", codeId)
+            .execute()
+            .fold(ApiCode::class)
 
-    override fun get(codeId: CodeId, codeVersion: CodeVersion): ApiCode {
-        TODO("Not yet implemented")
-    }
+
+    override fun get(codeId: CodeId, codeVersion: CodeVersion) =
+        template.get("/v1/code/{codeId}")
+            .path("codeId", codeId)
+            .parameter("codeVersion", codeVersion.value)
+            .execute()
+            .fold(ApiCode::class)
 }

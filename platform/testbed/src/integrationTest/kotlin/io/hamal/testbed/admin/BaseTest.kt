@@ -34,6 +34,9 @@ abstract class BaseTest {
     lateinit var authRepository: AuthRepository
 
     @Autowired
+    lateinit var codeRepository: CodeRepository
+
+    @Autowired
     lateinit var execRepository: ExecRepository
 
     @Autowired
@@ -113,6 +116,7 @@ abstract class BaseTest {
 
             accountRepository.clear()
             authRepository.clear()
+            codeRepository.clear()
             reqRepository.clear()
             execRepository.clear()
             funcRepository.clear()
