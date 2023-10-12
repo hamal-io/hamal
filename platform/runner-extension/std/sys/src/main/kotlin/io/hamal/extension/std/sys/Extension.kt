@@ -35,34 +35,34 @@ class SysExtensionFactory(
 
                 "adhoc" to AdhocInvokeFunction(sdk),
 
-                "get_req" to ReqGetFunction(httpTemplate),
+                "req_get" to ReqGetFunction(httpTemplate),
 
-                "list_execs" to ExecListFunction(sdk),
-                "get_exec" to ExecGetFunction(sdk),
+                "exec_list" to ExecListFunction(sdk),
+                "exec_get" to ExecGetFunction(sdk),
 
-                "create_func" to FuncCreateFunction(sdk),
-                "get_func" to FuncGetFunction(sdk),
-                "list_func" to FuncListFunction(sdk),
+                "func_create" to FuncCreateFunction(sdk),
+                "func_get" to FuncGetFunction(sdk),
+                "func_list" to FuncListFunction(sdk),
                 "func_invoke" to FuncInvokeFunction(sdk),
 
-                "create_hook" to HookCreateFunction(sdk),
-                "get_hook" to HookGetFunction(sdk),
-                "list_hook" to HookListFunction(sdk),
+                "hook_create" to HookCreateFunction(sdk),
+                "hook_get" to HookGetFunction(sdk),
+                "hook_list" to HookListFunction(sdk),
 
-                "create_namespace" to NamespaceCreateFunction(sdk),
-                "get_namespace" to NamespaceGetFunction(sdk),
-                "list_namespace" to NamespaceListFunction(sdk),
+                "namespace_create" to NamespaceCreateFunction(sdk),
+                "namespace_get" to NamespaceGetFunction(sdk),
+                "namespace_list" to NamespaceListFunction(sdk),
 
-                "create_topic" to TopicCreateFunction(sdk),
-                "resolve_topic" to TopicResolveFunction(sdk),
-                "list_topic" to TopicListFunction(sdk),
-                "get_topic" to TopicGetFunction(sdk),
-                "append_entry" to TopicEntryAppendFunction(sdk),
-                "list_topic_entry" to TopicEntryListFunction(sdk),
+                "topic_create" to TopicCreateFunction(sdk),
+                "topic_resolve" to TopicResolveFunction(sdk),
+                "topic_list" to TopicListFunction(sdk),
+                "topic_get" to TopicGetFunction(sdk),
+                "topic_entry_append" to TopicEntryAppendFunction(sdk),
+                "topic_entry_list" to TopicEntryListFunction(sdk),
 
-                "create_trigger" to TriggerCreateFunction(sdk),
-                "get_trigger" to TriggerGetFunction(sdk),
-                "list_trigger" to TriggerListFunction(sdk)
+                "trigger_create" to TriggerCreateFunction(sdk),
+                "trigger_get" to TriggerGetFunction(sdk),
+                "trigger_list" to TriggerListFunction(sdk)
             )
         )
     }

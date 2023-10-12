@@ -6,7 +6,7 @@ sys.await_completed(create_func_req)
 _, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })
 sys.await(topic_one_req)
 
-err, create_trigger_req = sys.trigger.create_event({
+err, trigger_create_req = sys.trigger.create_event({
     func_id = create_func_req.id,
     namespace_id = nil,
     name = 'trigger-to-create',
@@ -14,13 +14,13 @@ err, create_trigger_req = sys.trigger.create_event({
     topic_id = topic_one_req.id
 })
 assert(err == nil)
-sys.await_completed(create_trigger_req)
+sys.await_completed(trigger_create_req)
 
-assert(create_trigger_req.req_id ~= nil)
-assert(create_trigger_req.status == 'Submitted')
-assert(create_trigger_req.id ~= nil)
+assert(trigger_create_req.req_id ~= nil)
+assert(trigger_create_req.status == 'Submitted')
+assert(trigger_create_req.id ~= nil)
 
-err, trigger = sys.trigger.get(create_trigger_req.id)
+err, trigger = sys.trigger.get(trigger_create_req.id)
 assert(err == nil)
 
 assert(trigger.type == 'Event')

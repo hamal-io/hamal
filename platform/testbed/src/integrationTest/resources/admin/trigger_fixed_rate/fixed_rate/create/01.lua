@@ -4,7 +4,7 @@ err, create_func_req = sys.func.create({ name = 'empty-test-func'; inputs = {}; 
 assert(err == nil)
 sys.await_completed(create_func_req)
 
-err, create_trigger_req = sys.trigger.create_fixed_rate({
+err, trigger_create_req = sys.trigger.create_fixed_rate({
     func_id = create_func_req.id,
     namespace_id = nil,
     name = 'trigger-to-create',
@@ -12,13 +12,13 @@ err, create_trigger_req = sys.trigger.create_fixed_rate({
     duration = 'PT5S'
 })
 assert(err == nil)
-sys.await_completed(create_trigger_req)
+sys.await_completed(trigger_create_req)
 
-assert(create_trigger_req.req_id ~= nil)
-assert(create_trigger_req.status == 'Submitted')
-assert(create_trigger_req.id ~= nil)
+assert(trigger_create_req.req_id ~= nil)
+assert(trigger_create_req.status == 'Submitted')
+assert(trigger_create_req.id ~= nil)
 
-err, trigger = sys.trigger.get(create_trigger_req.id)
+err, trigger = sys.trigger.get(trigger_create_req.id)
 assert(err == nil)
 
 assert(trigger.type == 'FixedRate')

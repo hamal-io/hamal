@@ -38,15 +38,15 @@ function create_extension_factory()
         end
 
         function export.exec.get(exec_id)
-            return internal.get_exec(exec_id)
+            return internal.exec_get(exec_id)
         end
 
         function export.exec.list()
-            return internal.list_execs()
+            return internal.exec_list()
         end
 
         function export.func.create(cmd)
-            return internal.create_func({
+            return internal.func_create({
                 namespace_id = cmd.namespace_id or nil,
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
@@ -55,11 +55,11 @@ function create_extension_factory()
         end
 
         function export.func.get(func_id)
-            return internal.get_func(func_id)
+            return internal.func_get(func_id)
         end
 
         function export.func.list()
-            return internal.list_func()
+            return internal.func_list()
         end
 
         function export.func.invoke(func_id, body)
@@ -67,67 +67,67 @@ function create_extension_factory()
         end
 
         function export.hook.create(cmd)
-            return internal.create_hook({
+            return internal.hook_create({
                 namespace_id = cmd.namespace_id or nil,
                 name = cmd.name or nil
             })
         end
 
         function export.hook.get(hook_id)
-            return internal.get_hook(hook_id)
+            return internal.hook_get(hook_id)
         end
 
         function export.hook.list()
-            return internal.list_hook()
+            return internal.hook_list()
         end
 
         function export.namespace.create(cmd)
-            return internal.create_namespace({
+            return internal.namespace_create({
                 name = cmd.name or "",
                 inputs = cmd.inputs or {}
             })
         end
 
         function export.namespace.get(namespace_id)
-            return internal.get_namespace(namespace_id)
+            return internal.namespace_get(namespace_id)
         end
 
         function export.namespace.list()
-            return internal.list_namespace()
+            return internal.namespace_list()
         end
 
         function export.req.get(req_id)
-            return internal.get_req(req_id)
+            return internal.req_get(req_id)
         end
 
         function export.topic.resolve(topic_name)
-            return internal.resolve_topic(topic_name)
+            return internal.topic_resolve(topic_name)
         end
 
         function export.topic.append(topic_id, payload)
-            return internal.append_entry(topic_id, payload)
+            return internal.topic_entry_append(topic_id, payload)
         end
 
         function export.topic.create(cmd)
-            return internal.create_topic({
+            return internal.topic_create({
                 name = cmd.name
             })
         end
 
         function export.topic.list()
-            return internal.list_topic()
+            return internal.topic_list()
         end
 
         function export.topic.list_entries(topic_id)
-            return internal.list_topic_entry(topic_id)
+            return internal.topic_entry_list(topic_id)
         end
 
         function export.topic.get(topic_id)
-            return internal.get_topic(topic_id)
+            return internal.topic_get(topic_id)
         end
 
         function export.trigger.create_fixed_rate(cmd)
-            return internal.create_trigger({
+            return internal.trigger_create({
                 type = "FixedRate",
                 namespace_id = cmd.namespace_id,
                 name = cmd.name,
@@ -138,7 +138,7 @@ function create_extension_factory()
         end
 
         function export.trigger.create_event(cmd)
-            return internal.create_trigger({
+            return internal.trigger_create({
                 type = "Event",
                 namespace_id = cmd.namespace_id,
                 name = cmd.name,
@@ -149,11 +149,11 @@ function create_extension_factory()
         end
 
         function export.trigger.get(trigger_id)
-            return internal.get_trigger(trigger_id)
+            return internal.trigger_get(trigger_id)
         end
 
         function export.trigger.list()
-            return internal.list_trigger()
+            return internal.trigger_list()
         end
 
         return export

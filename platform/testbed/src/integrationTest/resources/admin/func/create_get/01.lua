@@ -5,10 +5,8 @@ err, create_func_req = sys.func.create({
     inputs = {},
     code = [[4 + 2]]
 })
-
-sys.await_completed(create_func_req)
-
 assert(err == nil)
+sys.await_completed(create_func_req)
 
 assert(create_func_req.req_id ~= nil)
 assert(create_func_req.status == 'Submitted')
