@@ -1,4 +1,4 @@
-package io.hamal.api.web.code
+package io.hamal.api.http.endpoint.code
 
 import io.hamal.core.adapter.GetCodePort
 import io.hamal.lib.domain.vo.CodeId

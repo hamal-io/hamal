@@ -1,7 +1,9 @@
-package io.hamal.api.web.code
+package io.hamal.api.http.code
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.Test
 
 
 internal class CodeGetControllerTest : CodeBaseControllerTest() {
-
 
     @Test
     fun `Get code by id`() {
@@ -34,7 +35,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
 
     @Test
-    fun `Get code of version`() {
+    fun `Get code with version`() {
         codeCmdRepository.create(
             CodeCmdRepository.CreateCmd(
                 id = CmdId(2),
@@ -44,19 +45,21 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             )
         )
 
-        codeCmdRepository.update(
-            CodeId(2), CodeCmdRepository.UpdateCmd(
-                CmdId(3),
-                CodeValue("40 + 2")
+        repeat(10) { iteration ->
+            codeCmdRepository.update(
+                CodeId(2), CodeCmdRepository.UpdateCmd(
+                    CmdId(3 + iteration),
+                    CodeValue("40 + ${2 + iteration}")
+                )
             )
-        )
+        }
 
-        val r = getCode(CodeId(2), CodeVersion(2))
+        val r = getCode(CodeId(2), CodeVersion(4))
 
         with(r) {
             assertThat(id, equalTo(CodeId(2)))
-            assertThat(value, equalTo(CodeValue("40 + 2")))
-            assertThat(version, equalTo(CodeVersion(2)))
+            assertThat(value, equalTo(CodeValue("40 + 4")))
+            assertThat(version, equalTo(CodeVersion(4)))
         }
     }
 
@@ -86,7 +89,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
     }
 
     @Test
-    fun `Code version non exist`() {
+    fun `Code with version does not exist`() {
         codeCmdRepository.create(
             CodeCmdRepository.CreateCmd(
                 id = CmdId(6),
@@ -118,6 +121,4 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
         val error = getCodeResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Code not found"))
     }
-
-
 }

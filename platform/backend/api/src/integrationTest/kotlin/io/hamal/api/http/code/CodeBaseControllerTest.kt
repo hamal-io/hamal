@@ -1,6 +1,7 @@
-package io.hamal.api.web.code
+package io.hamal.api.http.code
 
-import io.hamal.api.web.BaseControllerTest
+
+import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpStatusCode.*
