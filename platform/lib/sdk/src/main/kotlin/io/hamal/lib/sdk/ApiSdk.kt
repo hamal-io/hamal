@@ -8,6 +8,7 @@ interface ApiSdk {
     val auth: AuthService
     val adhoc: ApiAdhocService
     val await: ApiAwaitService
+    val code: ApiCodeService
     val exec: ApiExecService
     val execLog: ApiExecLogService
     val func: ApiFuncService
@@ -36,6 +37,10 @@ data class ApiSdkImpl(
 
     override val await: ApiAwaitService by lazy {
         ApiAwaitServiceImpl(template)
+    }
+
+    override val code: ApiCodeService by lazy {
+        ApiCodeServiceImpl(template)
     }
 
     override val exec: ApiExecService by lazy {
