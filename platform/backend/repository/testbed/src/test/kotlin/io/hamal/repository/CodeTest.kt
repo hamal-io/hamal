@@ -37,7 +37,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
-                assertThat(type, equalTo(CodeType.of(1)))
             }
         }
 
@@ -418,6 +417,41 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
     }
 
+
+    @Nested
+    inner class CodeTypeTest {
+        @TestFactory
+        fun `Set code type`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("1 + 1")
+            )
+            val c = find(CodeId(1))!!
+            c.type = CodeType.None
+            assertThat(c.type, equalTo(CodeType.None))
+        }
+
+        @TestFactory
+        fun `Get code type by id`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("1 + 1")
+            )
+            val c = find(CodeId(1))!!
+            assertThat(c.type, equalTo(CodeType.of(c.type.value)))
+        }
+
+        @TestFactory
+        fun `Code type id does not exist`() = runWith(CodeRepository::class) {
+            assertThat(
+                assertThrows<IllegalArgumentException> { CodeType.of(777) }.message,
+                equalTo("777 not mapped as a code type")
+            )
+        }
+    }
+
     private fun CodeRepository.createCode(
         codeId: CodeId,
         groupId: GroupId,
@@ -432,7 +466,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 value = codeValue
             )
         )
-
     }
 
     private fun CodeRepository.verifyCount(expected: Int) {
