@@ -19,7 +19,6 @@ internal object CurrentCodeProjection {
     private val projection = mutableMapOf<CodeId, Code>()
     fun apply(code: Code) {
         projection[code.id] = code
-
     }
 
     fun find(codeId: CodeId): Code? = projection[codeId]

@@ -14,10 +14,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
-    @Test
+    @TestFactory
     fun `Create func without namespace id`() {
         val result = createFunc(
             ApiCreateFuncReq(
