@@ -1,8 +1,8 @@
 package io.hamal.repository.api.log
 
-import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.TopicId
 import java.time.Instant
 

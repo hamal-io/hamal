@@ -1,6 +1,6 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.log.BrokerConsumersRepository
 import io.hamal.repository.api.log.ChunkId

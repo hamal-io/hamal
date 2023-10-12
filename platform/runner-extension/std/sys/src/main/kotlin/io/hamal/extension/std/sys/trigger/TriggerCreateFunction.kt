@@ -1,6 +1,6 @@
 package io.hamal.extension.std.sys.trigger
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function1In2Out

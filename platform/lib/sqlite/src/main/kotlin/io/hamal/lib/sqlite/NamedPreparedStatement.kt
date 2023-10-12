@@ -3,7 +3,7 @@ package io.hamal.lib.sqlite
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainName

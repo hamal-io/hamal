@@ -1,9 +1,9 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainName
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -261,7 +261,8 @@ class NamedPreparedStatementTest {
 
         @Test
         fun `Sets named parameter of type domain id`() {
-            class TestDomainId(override val value: SnowflakeId) : DomainId() {
+            class TestDomainId(override val value: SnowflakeId) :
+                DomainId() {
                 constructor(value: Int) : this(SnowflakeId(value.toLong()))
             }
 

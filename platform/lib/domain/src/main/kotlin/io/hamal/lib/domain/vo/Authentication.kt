@@ -1,10 +1,10 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainAt
 import io.hamal.lib.domain.vo.base.DomainAtSerializer
 import kotlinx.serialization.Serializable

@@ -1,6 +1,6 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.SnowflakeId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import org.hamcrest.CoreMatchers.equalTo
@@ -84,7 +84,13 @@ class DefaultNamedResultSetIT {
         connection.createStatement().use { it.execute("INSERT INTO some_table (snowflake_id_value) VALUES (987654)") }
         val testInstance =
             testInstance("SELECT snowflake_id_value FROM some_table WHERE snowflake_id_value is not null")
-        assertThat(testInstance.getSnowflakeId("snowflake_id_value"), equalTo(SnowflakeId(987654)))
+        assertThat(
+            testInstance.getSnowflakeId("snowflake_id_value"), equalTo(
+                SnowflakeId(
+                    987654
+                )
+            )
+        )
     }
 
     @Test

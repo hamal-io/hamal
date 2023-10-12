@@ -16,3 +16,24 @@ dependencies {
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
+
+@Suppress("UnstableApiUsage")
+testing {
+    suites {
+        configureEach {
+            if (this is JvmTestSuite) {
+                dependencies {
+                    implementation(external.kotlin.reflect)
+                    implementation(external.kotlin.protobuf)
+                    implementation(external.kotlin.json)
+                    implementation(external.spring.logging)
+
+                    implementation(project(":platform:lib:common"))
+
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                }
+            }
+        }
+    }
+}
