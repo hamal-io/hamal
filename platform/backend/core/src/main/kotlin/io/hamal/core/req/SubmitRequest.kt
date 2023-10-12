@@ -33,6 +33,7 @@ class SubmitRequest(
     private val generateDomainId: GenerateDomainId,
     private val reqCmdRepository: ReqCmdRepository,
     private val funcQueryRepository: FuncQueryRepository,
+    private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val generateSalt: GenerateSalt,
     private val encodePassword: EncodePassword,
@@ -183,6 +184,25 @@ class SubmitRequest(
         code = req.code,
 
         ).also(reqCmdRepository::queue)
+
+
+    operator fun invoke(groupId: GroupId, req: CreateHookReq) = SubmittedCreateHookReq(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        id = generateDomainId(::HookId),
+        groupId = groupId,
+        namespaceId = req.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
+        name = req.name
+    ).also(reqCmdRepository::queue)
+
+    operator fun invoke(hookId: HookId, req: UpdateHookReq) = SubmittedUpdateHookReq(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        groupId = hookQueryRepository.get(hookId).groupId,
+        id = hookId,
+        namespaceId = req.namespaceId,
+        name = req.name,
+    ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) = SubmittedCreateNamespaceReq(
         reqId = generateDomainId(::ReqId),

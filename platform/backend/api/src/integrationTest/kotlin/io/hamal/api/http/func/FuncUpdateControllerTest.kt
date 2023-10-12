@@ -22,7 +22,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Tries to update func which does not exists`() {
-        val getFuncResponse = httpTemplate.put("/v1/funcs/33333333")
+        val getFuncResponse = httpTemplate.patch("/v1/funcs/33333333")
             .body(
                 ApiUpdateFuncReq(
                     namespaceId = null,
@@ -73,7 +73,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             )
         )
 
-        val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
+        val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
                 ApiUpdateFuncReq(
@@ -127,7 +127,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             )
         )
 
-        val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
+        val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(ApiUpdateFuncReq(NamespaceId(12345)))
             .execute()
@@ -167,7 +167,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             )
         )
 
-        val updateFuncResponse = httpTemplate.put("/v1/funcs/{funcId}")
+        val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
                 ApiUpdateFuncReq(

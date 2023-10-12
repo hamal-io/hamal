@@ -13,6 +13,7 @@ import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
+import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
@@ -75,6 +76,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun groupCmdRepository() = groupRepository()
+
+    @Bean
+    open fun hookRepository() = SqliteHookRepository(SqliteHookRepository.Config(path))
+
+    @Bean
+    open fun hookQueryRepository() = hookRepository()
+
+    @Bean
+    open fun hookCmdRepository() = hookRepository()
 
     @Bean
     open fun namespaceRepository() = SqliteNamespaceRepository(SqliteNamespaceRepository.Config(path))

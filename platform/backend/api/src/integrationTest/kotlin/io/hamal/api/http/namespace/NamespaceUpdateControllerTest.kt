@@ -22,7 +22,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
 
     @Test
     fun `Tries to update namespace which does not exists`() {
-        val getNamespaceResponse = httpTemplate.put("/v1/namespaces/33333333")
+        val getNamespaceResponse = httpTemplate.patch("/v1/namespaces/33333333")
             .body(
                 ApiUpdateNamespaceReq(
                     name = NamespaceName("update"),
@@ -49,7 +49,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
             )
         )
 
-        val updateNamespaceResponse = httpTemplate.put("/v1/namespaces/{namespaceId}")
+        val updateNamespaceResponse = httpTemplate.patch("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespace.id)
             .body(
                 ApiUpdateNamespaceReq(

@@ -67,6 +67,15 @@ open class MemoryRepositoryConfig {
     open fun groupCmdRepository() = groupRepository()
 
     @Bean
+    open fun hookRepository() = MemoryHookRepository()
+
+    @Bean
+    open fun hookQueryRepository() = hookRepository()
+
+    @Bean
+    open fun hookCmdRepository() = hookRepository()
+
+    @Bean
     open fun namespaceRepository() = MemoryNamespaceRepository()
 
     @Bean

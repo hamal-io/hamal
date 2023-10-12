@@ -68,6 +68,9 @@ internal abstract class BaseTest {
     lateinit var groupCmdRepository: GroupCmdRepository
 
     @Autowired
+    lateinit var hookRepository: HookRepository
+
+    @Autowired
     lateinit var namespaceQueryRepository: NamespaceQueryRepository
 
     @Autowired

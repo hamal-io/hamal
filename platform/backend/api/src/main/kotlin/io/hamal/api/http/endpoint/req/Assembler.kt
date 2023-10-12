@@ -39,6 +39,20 @@ internal object Assembler {
                 id = r.id
             )
 
+            is SubmittedCreateHookReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is SubmittedUpdateHookReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
+
             is SubmittedCreateNamespaceReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
@@ -101,7 +115,9 @@ internal object Assembler {
                 token = r.token
             )
 
+
             is TestSubmittedReq -> TODO()
+
         }
     }
 }

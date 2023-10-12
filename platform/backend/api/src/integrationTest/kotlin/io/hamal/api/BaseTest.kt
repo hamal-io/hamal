@@ -77,6 +77,12 @@ internal abstract class BaseTest {
     lateinit var groupCmdRepository: GroupCmdRepository
 
     @Autowired
+    lateinit var hookQueryRepository: HookQueryRepository
+
+    @Autowired
+    lateinit var hookCmdRepository: HookCmdRepository
+
+    @Autowired
     lateinit var namespaceQueryRepository: NamespaceQueryRepository
 
     @Autowired
@@ -117,6 +123,7 @@ internal abstract class BaseTest {
         execCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
+        hookCmdRepository.clear()
         namespaceCmdRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
