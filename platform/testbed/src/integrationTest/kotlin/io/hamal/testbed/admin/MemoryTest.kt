@@ -20,7 +20,7 @@ import java.nio.file.Paths
         "server.port=8042",
         "io.hamal.runner.api.host=http://localhost:8042",
         "io.hamal.runner.bridge.host=http://localhost:8042",
-        "io.hamal.runner.http.poll-every-ms=100"
+        "io.hamal.runner.http.poll-every-ms=10"
     ], classes = [
         ApiTestConfig::class,
         CoreConfig::class,
