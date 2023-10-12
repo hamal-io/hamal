@@ -1,7 +1,9 @@
-package io.hamal.extension.std.sys.func
+package io.hamal.extension.std.sys.hook
 
 import io.hamal.lib.common.SnowflakeId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,9 +12,9 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateFuncReq
+import io.hamal.lib.sdk.api.ApiCreateHookReq
 
-class CreateFuncFunction(
+class HookCreateFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
@@ -26,13 +28,11 @@ class CreateFuncFunction(
                 null
             }
 
-            val res = sdk.func.create(
+            val res = sdk.hook.create(
                 ctx[GroupId::class],
-                ApiCreateFuncReq(
+                ApiCreateHookReq(
                     namespaceId = namespaceId,
-                    name = FuncName(arg1.getString("name")),
-                    inputs = FuncInputs(),
-                    code = CodeValue(arg1.getString("code"))
+                    name = HookName(arg1.getString("name"))
                 )
             )
 

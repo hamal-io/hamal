@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiInvokeFuncReq
 
-class InvokeFuncFunction(
+class FuncInvokeFunction(
     private val sdk: ApiSdk
 ) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
     FunctionInput2Schema(StringType::class, MapType::class),

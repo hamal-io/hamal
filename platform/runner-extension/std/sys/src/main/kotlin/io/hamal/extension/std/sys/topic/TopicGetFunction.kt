@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
-class GetTopicFunction(
+class TopicGetFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),

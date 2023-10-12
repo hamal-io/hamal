@@ -1,7 +1,8 @@
-package io.hamal.extension.std.sys.topic
+package io.hamal.extension.std.sys.namespace
 
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,9 +11,9 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateTopicReq
+import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
 
-class CreateTopicFunction(
+class NamespaceCreateFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
@@ -20,10 +21,11 @@ class CreateTopicFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
-            val res = sdk.topic.create(
+            val res = sdk.namespace.create(
                 ctx[GroupId::class],
-                ApiCreateTopicReq(
-                    name = TopicName(arg1.getString("name")),
+                ApiCreateNamespaceReq(
+                    name = NamespaceName(arg1.getString("name")),
+                    inputs = NamespaceInputs(),
                 )
             )
 

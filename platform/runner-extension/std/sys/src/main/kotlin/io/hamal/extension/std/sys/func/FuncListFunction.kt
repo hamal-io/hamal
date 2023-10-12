@@ -1,4 +1,4 @@
-package io.hamal.extension.std.sys.topic
+package io.hamal.extension.std.sys.func
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In2Out
@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
-class ListTopicFunction(
+class FuncListFunction(
     private val sdk: ApiSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
@@ -18,12 +18,18 @@ class ListTopicFunction(
     override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
         return try {
             null to ArrayType(
-                sdk.topic.list(ctx[GroupId::class])
-                    .mapIndexed { index, topic ->
+                sdk.func.list(ctx[GroupId::class])
+                    .mapIndexed { index, func ->
                         index to MapType(
                             mutableMapOf(
-                                "id" to StringType(topic.id.value.value.toString(16)),
-                                "name" to StringType(topic.name.value),
+                                "id" to StringType(func.id.value.value.toString(16)),
+                                "namespace" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(func.namespace.id.value.value.toString(16)),
+                                        "name" to StringType(func.namespace.name.value)
+                                    )
+                                ),
+                                "name" to StringType(func.name.value),
                             )
                         )
                     }.toMap().toMutableMap()

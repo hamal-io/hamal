@@ -12,7 +12,7 @@ import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiEventTrigger
 import io.hamal.lib.sdk.api.ApiFixedRateTrigger
 
-class GetTriggerFunction(
+class TriggerGetFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),

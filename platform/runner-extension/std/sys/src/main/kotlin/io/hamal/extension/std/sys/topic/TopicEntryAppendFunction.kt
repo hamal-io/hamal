@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
-class AppendToTopicFunction(
+class TopicEntryAppendFunction(
     private val sdk: ApiSdk
 ) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
     FunctionInput2Schema(StringType::class, MapType::class),

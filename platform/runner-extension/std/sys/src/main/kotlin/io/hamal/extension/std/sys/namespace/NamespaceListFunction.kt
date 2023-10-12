@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
-class ListNamespaceFunction(
+class NamespaceListFunction(
     private val sdk: ApiSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)

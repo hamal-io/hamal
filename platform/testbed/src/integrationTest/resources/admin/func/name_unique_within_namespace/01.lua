@@ -13,13 +13,13 @@ assert(sys.await_failed(func_req) == nil)
 assert(err == nil)
 assert(func_req ~= nil)
 
-_, funcs = sys.func.list()
-assert(#funcs == 1)
+_, hooks = sys.func.list()
+assert(#hooks == 1)
 
 -- same name different namespace
 err, func_req = sys.func.create({ name = 'func-name', namespace_id = namespace_req.id })
 assert(err == nil)
 sys.await_completed(func_req)
 
-_, funcs = sys.func.list()
-assert(#funcs == 2)
+_, hooks = sys.func.list()
+assert(#hooks == 2)

@@ -7,7 +7,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
-class ListExecFunction(
+class ExecListFunction(
     private val sdk: ApiSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)

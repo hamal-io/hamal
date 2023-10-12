@@ -1,18 +1,18 @@
-package io.hamal.extension.std.sys.adhoc
+package io.hamal.extension.std.sys.topic
 
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
+import io.hamal.lib.sdk.api.ApiCreateTopicReq
 
-class InvokeAdhocFunction(
+class TopicCreateFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
@@ -20,19 +20,20 @@ class InvokeAdhocFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
-            val res = sdk.adhoc(
+            val res = sdk.topic.create(
                 ctx[GroupId::class],
-                ApiInvokeAdhocReq(
-                    inputs = InvocationInputs(),
-                    code = CodeValue(arg1.getString("code"))
+                ApiCreateTopicReq(
+                    name = TopicName(arg1.getString("name")),
                 )
             )
 
-            null to MapType().apply {
-                this["req_id"] = res.reqId
-                this["status"] = res.status.name
-                this["id"] = res.id
-            }
+            null to MapType(
+                mutableMapOf(
+                    "req_id" to StringType(res.reqId.value.value.toString(16)),
+                    "status" to StringType(res.status.name),
+                    "id" to StringType(res.id.value.toString(16))
+                )
+            )
 
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null

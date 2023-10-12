@@ -1,20 +1,18 @@
 package io.hamal.extension.std.sys
 
-import io.hamal.extension.std.sys.adhoc.InvokeAdhocFunction
-import io.hamal.extension.std.sys.exec.GetExecFunction
-import io.hamal.extension.std.sys.exec.ListExecFunction
-import io.hamal.extension.std.sys.func.CreateFuncFunction
-import io.hamal.extension.std.sys.func.GetFuncFunction
-import io.hamal.extension.std.sys.func.InvokeFuncFunction
-import io.hamal.extension.std.sys.func.ListFuncFunction
-import io.hamal.extension.std.sys.namespace.CreateNamespaceFunction
-import io.hamal.extension.std.sys.namespace.GetNamespaceFunction
-import io.hamal.extension.std.sys.namespace.ListNamespaceFunction
-import io.hamal.extension.std.sys.req.GetReqFunction
+import io.hamal.extension.std.sys.adhoc.AdhocInvokeFunction
+import io.hamal.extension.std.sys.exec.ExecGetFunction
+import io.hamal.extension.std.sys.exec.ExecListFunction
+import io.hamal.extension.std.sys.func.*
+import io.hamal.extension.std.sys.hook.HookCreateFunction
+import io.hamal.extension.std.sys.namespace.NamespaceCreateFunction
+import io.hamal.extension.std.sys.namespace.NamespaceGetFunction
+import io.hamal.extension.std.sys.namespace.NamespaceListFunction
+import io.hamal.extension.std.sys.req.ReqGetFunction
 import io.hamal.extension.std.sys.topic.*
-import io.hamal.extension.std.sys.trigger.CreateTriggerFunction
-import io.hamal.extension.std.sys.trigger.GetTriggerFunction
-import io.hamal.extension.std.sys.trigger.ListTriggerFunction
+import io.hamal.extension.std.sys.trigger.TriggerCreateFunction
+import io.hamal.extension.std.sys.trigger.TriggerGetFunction
+import io.hamal.extension.std.sys.trigger.TriggerListFunction
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.BundleExtension
@@ -35,32 +33,36 @@ class SysExtensionFactory(
                 "await_completed" to AwaitCompletedFunction(httpTemplate),
                 "await_failed" to AwaitFailedFunction(httpTemplate),
 
-                "adhoc" to InvokeAdhocFunction(sdk),
+                "adhoc" to AdhocInvokeFunction(sdk),
 
-                "get_req" to GetReqFunction(httpTemplate),
+                "get_req" to ReqGetFunction(httpTemplate),
 
-                "list_execs" to ListExecFunction(sdk),
-                "get_exec" to GetExecFunction(sdk),
+                "list_execs" to ExecListFunction(sdk),
+                "get_exec" to ExecGetFunction(sdk),
 
-                "create_func" to CreateFuncFunction(sdk),
-                "get_func" to GetFuncFunction(sdk),
-                "list_func" to ListFuncFunction(sdk),
-                "func_invoke" to InvokeFuncFunction(sdk),
+                "create_func" to FuncCreateFunction(sdk),
+                "get_func" to FuncGetFunction(sdk),
+                "list_func" to FuncListFunction(sdk),
+                "func_invoke" to FuncInvokeFunction(sdk),
 
-                "create_namespace" to CreateNamespaceFunction(sdk),
-                "get_namespace" to GetNamespaceFunction(sdk),
-                "list_namespace" to ListNamespaceFunction(sdk),
+                "create_hook" to HookCreateFunction(sdk),
+                "get_hook" to HookGetFunction(sdk),
+                "list_hook" to HookListFunction(sdk),
 
-                "create_topic" to CreateTopicFunction(sdk),
-                "resolve_topic" to ResolveTopicFunction(sdk),
-                "list_topic" to ListTopicFunction(sdk),
-                "get_topic" to GetTopicFunction(sdk),
-                "append_entry" to AppendToTopicFunction(sdk),
-                "list_topic_entry" to ListTopicEntryFunction(sdk),
+                "create_namespace" to NamespaceCreateFunction(sdk),
+                "get_namespace" to NamespaceGetFunction(sdk),
+                "list_namespace" to NamespaceListFunction(sdk),
 
-                "create_trigger" to CreateTriggerFunction(sdk),
-                "get_trigger" to GetTriggerFunction(sdk),
-                "list_trigger" to ListTriggerFunction(sdk)
+                "create_topic" to TopicCreateFunction(sdk),
+                "resolve_topic" to TopicResolveFunction(sdk),
+                "list_topic" to TopicListFunction(sdk),
+                "get_topic" to TopicGetFunction(sdk),
+                "append_entry" to TopicEntryAppendFunction(sdk),
+                "list_topic_entry" to TopicEntryListFunction(sdk),
+
+                "create_trigger" to TriggerCreateFunction(sdk),
+                "get_trigger" to TriggerGetFunction(sdk),
+                "list_trigger" to TriggerListFunction(sdk)
             )
         )
     }

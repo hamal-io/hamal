@@ -4,6 +4,7 @@ function create_extension_factory()
         local export = {
             exec = { },
             func = { },
+            hook = { },
             namespace = { },
             req = { },
             topic = { },
@@ -63,6 +64,21 @@ function create_extension_factory()
 
         function export.func.invoke(func_id, body)
             return internal.func_invoke(func_id, body)
+        end
+
+        function export.hook.create(cmd)
+            return internal.create_hook({
+                namespace_id = cmd.namespace_id or nil,
+                name = cmd.name or nil
+            })
+        end
+
+        function export.hook.get(hook_id)
+            return internal.get_hook(hook_id)
+        end
+
+        function export.hook.list()
+            return internal.list_hook()
         end
 
         function export.namespace.create(cmd)

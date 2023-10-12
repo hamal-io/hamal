@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 
-class GetReqFunction(
+class ReqGetFunction(
     private val httpTemplate: HttpTemplate
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),

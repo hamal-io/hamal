@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerList
 
-class ListTriggerFunction(
+class TriggerListFunction(
     private val sdk: ApiSdk
 ) : Function0In2Out<ErrorType, ArrayType>(
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)

@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
-class ResolveTopicFunction(
+class TopicResolveFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<StringType, ErrorType, StringType>(
     FunctionInput1Schema(StringType::class),

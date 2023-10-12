@@ -14,7 +14,7 @@ import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiCreateTriggerReq
 import kotlin.time.Duration
 
-class CreateTriggerFunction(
+class TriggerCreateFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),

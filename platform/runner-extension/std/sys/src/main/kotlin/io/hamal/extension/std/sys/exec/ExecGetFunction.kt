@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
-class GetExecFunction(
+class ExecGetFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
