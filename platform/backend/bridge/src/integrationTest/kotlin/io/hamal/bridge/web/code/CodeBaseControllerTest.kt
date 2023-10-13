@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.*
 
 internal sealed class CodeBaseControllerTest : BaseControllerTest() {
     fun getCode(codeId: CodeId): ApiCode {
-        val getCodeResponse = httpTemplate.get("/v1/code/{codeId}")
+        val getCodeResponse = httpTemplate.get("/b1/code/{codeId}")
             .path("codeId", codeId)
             .execute()
 
@@ -22,7 +22,7 @@ internal sealed class CodeBaseControllerTest : BaseControllerTest() {
     }
 
     fun getCode(codeId: CodeId, codeVersion: CodeVersion): ApiCode {
-        val getCodeResponse = httpTemplate.get("/v1/code/{codeId}")
+        val getCodeResponse = httpTemplate.get("/b1/code/{codeId}")
             .path("codeId", codeId)
             .parameter("codeVersion", codeVersion.value)
             .execute()

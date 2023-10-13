@@ -99,7 +99,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             )
         )
 
-        val getCodeResponse = httpTemplate.get("/v1/code/{codeId}")
+        val getCodeResponse = httpTemplate.get("/b1/code/{codeId}")
             .path("codeId", CodeId(4))
             .parameter("codeVersion", 2)
             .execute()
@@ -114,7 +114,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
     @Test
     fun `Code does not exist`() {
-        val getCodeResponse = httpTemplate.get("/v1/code/33333333").execute()
+        val getCodeResponse = httpTemplate.get("/b1/code/33333333").execute()
         assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getCodeResponse is ErrorHttpResponse) { "request was successful" }
 

@@ -1,20 +1,20 @@
 sys = require('sys')
 
-err, create_func_req = sys.func.create({
+err, f1 = sys.func.create({
     name = 'empty-test-func',
     inputs = {},
     code = [[4 + 2]]
 })
 
-sys.await_completed(create_func_req)
+assert(err == nil)
+sys.await_completed(f1)
 
-
-err, xcode_id = sys.func.get(create_func_req.code_id)
+err, func = sys.func.get(f1.id)
 assert(err == nil)
 
-err, xcode = sys.code.get(code_get(xcode_id))
+err, code = sys.code.get(func.code_id)
 assert(err == nil)
 
-assert(xcode.id == create_func_req.code_id)
-assert(xcode.code == [[4 + 2]])
-assert(xcode.version == create_func_req.code_version)
+assert(code.id == func.code_id)
+assert(code.code == [[4 + 2]])
+assert(code.version == 1)

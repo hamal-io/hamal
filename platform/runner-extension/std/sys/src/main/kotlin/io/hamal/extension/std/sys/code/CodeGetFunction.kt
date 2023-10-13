@@ -22,7 +22,7 @@ class CodeGetFunctionI(
                         mutableMapOf(
                             "id" to StringType(code.id.value.value.toString(16)),
                             "code" to CodeType(code.value.value),
-                            "version" to StringType(code.version.value.toString(16))
+                            "version" to NumberType(code.version.value)
                         )
                     )
                 }
@@ -46,7 +46,7 @@ class CodeGetFunctionII(
                         mutableMapOf(
                             "id" to StringType(code.id.value.value.toString(16)),
                             "code" to CodeType(code.value.value),
-                            "version" to StringType(code.version.value.toString(16))
+                            "version" to NumberType(code.version.value)
                         )
                     )
                 }
