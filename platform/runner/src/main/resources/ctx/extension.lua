@@ -5,7 +5,8 @@ function create_extension_factory()
             exec = {
                 id = _internal.exec_id,
                 events = _internal.events,
-            }
+            },
+            state = _internal.state
         }
         function export.complete(result)
             if (type(result) == 'nil') then

@@ -24,7 +24,8 @@ class RunnerContextFactory(
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,
-                "complete" to CompleteRunFunction
+                "complete" to CompleteRunFunction,
+                "state" to executionCtx.state.value
             )
         )
     }
