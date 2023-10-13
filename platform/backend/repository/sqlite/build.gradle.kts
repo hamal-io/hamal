@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-repository-sqlite")
+archivesName.set("platform-repository-sqlite")
 
 dependencies {
     api(project(":platform:lib:sqlite"))

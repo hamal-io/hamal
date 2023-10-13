@@ -4,6 +4,7 @@ import io.hamal.admin.AdminConfig
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
+import io.hamal.integration.IntegrationConfig
 import org.springframework.boot.Banner.Mode.OFF
 import org.springframework.boot.WebApplicationType.NONE
 import org.springframework.boot.WebApplicationType.SERVLET
@@ -50,7 +51,7 @@ fun main(args: Array<String>) {
 
     applicationBuilder
         .parent(parent)
-        .child(ApiConfig::class.java)
+        .child(ApiConfig::class.java, IntegrationConfig::class.java)
         .web(SERVLET)
         .properties("server.port=8008")
         .bannerMode(OFF)

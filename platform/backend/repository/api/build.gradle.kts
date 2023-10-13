@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("hub-repository-api")
+archivesName.set("platform-repository-api")
 
 dependencies {
     api(project(":platform:lib:domain"))
