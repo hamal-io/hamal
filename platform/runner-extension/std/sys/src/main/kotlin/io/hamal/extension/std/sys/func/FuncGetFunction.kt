@@ -31,8 +31,8 @@ class FuncGetFunction(
                                 )
                             ),
                             "name" to StringType(func.name.value),
-                            "code" to CodeType(func.code.value.value)
-                            //--for code_get test--,"code_id" to StringType(func.code.id.value.value.toString(16))
+                            "code" to CodeType(func.code.value.value),
+                            "code_id" to StringType(func.code.id.value.value.toString(16))
                         )
                     )
                 }

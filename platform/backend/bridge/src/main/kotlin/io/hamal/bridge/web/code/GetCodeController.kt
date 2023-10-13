@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CodeGetController(private val getCode: GetCodePort) {
-    @GetMapping("/v1/code/{codeId}")
+internal class CodeGetBridgeController(private val getCode: GetCodePort) {
+    @GetMapping("/b1/code/{codeId}")
     fun getCode(
         @PathVariable("codeId") codeId: CodeId,
         @RequestParam(required = false, name = "codeVersion", defaultValue = "0") codeVersion: Int
