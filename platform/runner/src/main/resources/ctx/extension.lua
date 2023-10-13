@@ -2,10 +2,11 @@ function create_extension_factory()
     local internal = _internal
     return function()
         local export = {
-            events = _internal.events,
-            exec_id = _internal.exec_id
+            exec = {
+                id = _internal.exec_id,
+                events = _internal.events,
+            }
         }
-
         function export.complete(result)
             if (type(result) == 'nil') then
                 return internal.complete({})

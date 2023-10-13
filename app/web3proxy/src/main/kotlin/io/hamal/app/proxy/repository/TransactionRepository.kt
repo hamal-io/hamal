@@ -2,7 +2,6 @@ package io.hamal.app.proxy.repository
 
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.lib.web3.util.Web3Encoding
 import java.nio.file.Path
 
 
@@ -25,7 +24,7 @@ class SqliteTransactionRepository(
     }
 
     override fun list(blockId: ULong): List<PersistedEthTransaction> {
-        return partitions[resolvePartition(blockId)]!!.list(blockId);
+        return partitions[resolvePartition(blockId)]!!.list(blockId)
     }
 
     override fun find(blockId: ULong, blockIndex: UShort): PersistedEthTransaction? {
@@ -108,7 +107,7 @@ class SqliteTransactionPartitionRepository(
                         blockIndex = rs.getInt("block_index").toUShort(),
                         fromAddressId = rs.getLong("from_address_id").toULong(),
                         toAddressId = rs.getLong("to_address_id").toULong(),
-                        input = Web3Encoding.decodeRunLength(rs.getBytes("input")),
+                        input = rs.getBytes("input"),
                         value = rs.getBytes("value"),
                         gas = rs.getLong("gas").toULong()
                     )
@@ -131,7 +130,7 @@ class SqliteTransactionPartitionRepository(
                         blockIndex = rs.getInt("block_index").toUShort(),
                         fromAddressId = rs.getLong("from_address_id").toULong(),
                         toAddressId = rs.getLong("to_address_id").toULong(),
-                        input = Web3Encoding.decodeRunLength(rs.getBytes("input")),
+                        input = rs.getBytes("input"),
                         value = rs.getBytes("value"),
                         gas = rs.getLong("gas").toULong()
                     )

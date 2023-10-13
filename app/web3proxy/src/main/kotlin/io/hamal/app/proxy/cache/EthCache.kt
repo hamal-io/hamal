@@ -74,7 +74,7 @@ class EthLruCache(
         // FIXME
         return blockRepository.find(number.value.toLong().toULong())
             ?.let { persistedEthBlock ->
-                val transactions = transactionRepository.list(persistedEthBlock.id)
+                val transactions = transactionRepository.list(persistedEthBlock.number)
 
                 val addressIds = transactions.map { it.fromAddressId }
                     .plus(transactions.map { it.toAddressId })
@@ -85,18 +85,18 @@ class EthLruCache(
 
 
                 EthBlock(
-                    number = EthUint64(BigInteger(persistedEthBlock.id.toString())),
+                    number = EthUint64(BigInteger(persistedEthBlock.number.toString())),
                     hash = EthHash(EthBytes32(persistedEthBlock.hash)),
-                    parentHash = EthHash(EthBytes32(ByteArray(0))),
-                    sha3Uncles = EthHash(EthBytes32(ByteArray(0))),
+                    parentHash = EthHash(EthBytes32(persistedEthBlock.parentHash)),
+                    sha3Uncles = EthHash(EthBytes32(persistedEthBlock.sha3Uncles)),
                     miner = addresses[persistedEthBlock.minerAddressId]!!,
-                    stateRoot = EthHash(ByteArray(0)),
-                    transactionsRoot = EthHash(ByteArray(0)),
-                    receiptsRoot = EthHash(ByteArray(0)),
-                    gasLimit = EthUint64(0),
+                    stateRoot = EthHash(EthBytes32(persistedEthBlock.stateRoot)),
+                    transactionsRoot = EthHash(EthBytes32(persistedEthBlock.transactionsRoot)),
+                    receiptsRoot = EthHash(EthBytes32(persistedEthBlock.receiptsRoot)),
+                    gasLimit = EthUint64(BigInteger.valueOf(persistedEthBlock.gasLimit.toLong())),
                     gasUsed = EthUint64(BigInteger.valueOf(persistedEthBlock.gasUsed.toLong())),
                     timestamp = EthUint64(BigInteger.valueOf(persistedEthBlock.timestamp.toLong())),
-                    extraData = EthBytes32(ByteArray(0)),
+                    extraData = EthBytes32(persistedEthBlock.sha3Uncles),
                     transactions = transactions.map { tx ->
                         EthBlock.Transaction(
                             type = EthUint8(tx.type),

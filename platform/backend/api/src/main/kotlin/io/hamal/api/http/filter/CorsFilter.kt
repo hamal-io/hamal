@@ -16,7 +16,7 @@ class CorsApiFilter : OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
         response.setHeader("Access-Control-Allow-Origin", "*")
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        response.setHeader("Access-Control-Allow-Methods", "GET,PATCH, POST, PUT, DELETE, OPTIONS")
         response.setHeader("Access-Control-Max-Age", "3600")
         response.setHeader("Access-Control-Allow-Headers", "authorization, content-type")
         if ("OPTIONS" == request.method) {

@@ -53,7 +53,7 @@ export interface SubmitUpdateFuncReq {
 export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Promise<ApiSubmittedReqWithId> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs/${funcId}`, {
         headers: defaultHeaders,
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify({
                 name: req.name,
                 inputs: {},
