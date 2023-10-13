@@ -72,7 +72,7 @@ class EthExecuteFunction(
                         is EthGetLiteBlockResponse -> TODO()
                         is EthGetBlockResponse -> {
                             val res = MapType()
-                            res["id"] = ethRes.result.number.value.toLong()
+                            res["number"] = ethRes.result.number.value.toLong()
                             res["hash"] = ethRes.result.hash.toPrefixedHexString().value
                             res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
                             res["gas_used"] = ethRes.result.gasUsed.value.toLong()

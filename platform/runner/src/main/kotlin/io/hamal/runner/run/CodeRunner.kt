@@ -12,10 +12,7 @@ import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
-import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.*
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -38,7 +35,10 @@ class CodeRunnerImpl(
         try {
             log.debug("Start execution: $execId")
 
-            runnerContext = RunnerContext(RunnerInvocationEvents(unitOfWork.events))
+            runnerContext = RunnerContext(
+                unitOfWork.state,
+                RunnerInvocationEvents(unitOfWork.events)
+            )
             runnerContext[ExecId::class] = unitOfWork.id
             runnerContext[GroupId::class] = unitOfWork.groupId
             runnerContext[ExecToken::class] = unitOfWork.token
@@ -56,7 +56,7 @@ class CodeRunnerImpl(
                             is FunctionType<*, *, *, *> -> internalTable[entry.key] = value
                             is TableProxyArray -> internalTable[entry.key] = value
                             is TableProxyMap -> internalTable[entry.key] = value
-
+                            is MapType -> internalTable[entry.key] = sandbox.toProxyMap(value)
                             else -> TODO()
                         }
                     }
@@ -68,10 +68,14 @@ class CodeRunnerImpl(
                     sandbox.unsetGlobal("_internal")
 
                     sandbox.load(CodeType(unitOfWork.code.value))
+
+                    val ctx = sandbox.getGlobalTableMap("ctx")
+                    val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
+
+                    connector.complete(execId, ExecResult(), State(stateToSubmit), runnerContext.eventsToSubmit)
+                    log.debug("Completed exec: $execId")
                 }
 
-            connector.complete(execId, ExecResult(), State(), runnerContext.eventsToSubmit)
-            log.debug("Completed exec: $execId")
 
         } catch (e: ExtensionError) {
             val cause = e.cause
@@ -102,6 +106,7 @@ class CodeRunnerImpl(
             )
             log.debug("Assertion error: $execId - ${a.message}")
         } catch (t: Throwable) {
+            t.printStackTrace()
             connector.fail(
                 execId,
                 ExecResult(
