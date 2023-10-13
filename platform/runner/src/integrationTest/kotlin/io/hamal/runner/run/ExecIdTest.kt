@@ -22,7 +22,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("assert(ctx.exec_id == '4d2')"),
+                code = CodeValue("assert(ctx.exec.id == '4d2')"),
                 correlation = null
             )
         )
