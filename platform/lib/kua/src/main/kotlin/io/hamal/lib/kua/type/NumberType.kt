@@ -43,4 +43,8 @@ data class NumberType(
             isDecimalSeparatorAlwaysShown = false
         }
     }
+
+    override fun toString(): String {
+        return "NumberType(${value.toBigDecimal().toPlainString()})"
+    }
 }

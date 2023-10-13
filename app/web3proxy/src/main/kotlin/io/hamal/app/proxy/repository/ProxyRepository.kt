@@ -2,8 +2,6 @@ package io.hamal.app.proxy.repository
 
 import io.hamal.app.proxy.domain.EthCall
 import io.hamal.lib.web3.eth.domain.EthBlock
-import io.hamal.lib.web3.eth.encodeRunLength
-import io.hamal.lib.web3.util.Web3Encoding
 
 interface ProxyRepository {
     fun store(block: EthBlock)
@@ -30,21 +28,28 @@ class SqliteProxyRepository(
 
         blockRepository.store(
             PersistedEthBlock(
-                id = block.number.value.toLong().toULong(),
+                number = block.number.value.toLong().toULong(),
                 hash = block.hash.toByteArray(),
+                parentHash = block.parentHash.toByteArray(),
+                sha3Uncles = block.sha3Uncles.toByteArray(),
                 minerAddressId = resolvedAddresses[block.miner]!!,
+                stateRoot = block.stateRoot.toByteArray(),
+                transactionsRoot = block.transactionsRoot.toByteArray(),
+                receiptsRoot = block.receiptsRoot.toByteArray(),
+                gasLimit = block.gasLimit.value.toLong().toULong(),
                 gasUsed = block.gasUsed.value.toLong().toULong(),
-                timestamp = block.timestamp.value.toLong().toULong()
+                timestamp = block.timestamp.value.toLong().toULong(),
+                extraData = block.extraData.toByteArray()
             )
         )
 
         block.transactions.forEachIndexed { index, tx ->
-            val encoded = Web3Encoding.encodeRunLength(tx.input)
-            val input = if (encoded.size > 2_000) {
-                ByteArray(0)
-            } else {
-                encoded
-            }
+////            val encoded = Web3Encoding.encodeRunLength(tx.input)
+////            val input = if (encoded.size > 2_000) {
+////                ByteArray(0)
+////            } else {
+////                encoded
+//            }
 
             transactionRepository.store(
                 PersistedEthTransaction(
@@ -53,7 +58,7 @@ class SqliteProxyRepository(
                     blockIndex = index.toUShort(),
                     fromAddressId = resolvedAddresses[tx.from]!!,
                     toAddressId = tx.to?.let { resolvedAddresses[it] } ?: 0UL,
-                    input = input,
+                    input = tx.input.toByteArray(),
                     value = tx.value.value.toByteArray(),
                     gas = tx.gas.value.toLong().toULong(),
                 )
