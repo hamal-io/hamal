@@ -15,4 +15,3 @@ data class HookCreatedEvent(
 data class HookUpdatedEvent(
     val hook: Hook,
 ) : PlatformEvent()
-

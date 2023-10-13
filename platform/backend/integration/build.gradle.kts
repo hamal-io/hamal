@@ -5,10 +5,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-archivesName.set("platform-api")
+archivesName.set("platform-integration")
 
 dependencies {
-    implementation(project(":platform:lib:sdk"))
     implementation(project(":platform:backend:core"))
     implementation(project(":platform:backend:request"))
 }
@@ -23,9 +22,7 @@ testing {
                 dependencies {
                     implementation(project())
                     implementation(project(":platform:lib:sdk"))
-                    implementation(project(":platform:backend:bridge"))
                     implementation(project(":platform:backend:core"))
-                    implementation(project(":platform:runner"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)
