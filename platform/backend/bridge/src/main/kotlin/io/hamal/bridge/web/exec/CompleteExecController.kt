@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 internal class CompleteExecController(
     val request: SubmitBridgeRequest
 ) {
-    @PostMapping("/v1/execs/{execId}/complete")
+    @PostMapping("/b1/execs/{execId}/complete")
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
         @RequestBody complete: ApiCompleteExecReq

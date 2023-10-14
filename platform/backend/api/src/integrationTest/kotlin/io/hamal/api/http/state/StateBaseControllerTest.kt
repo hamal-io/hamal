@@ -34,7 +34,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
     }
 
     fun completeExec(execId: ExecId, state: State): ApiSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/execs/{execId}/complete")
+        val response = httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
                 ApiCompleteExecReq(

@@ -3,7 +3,7 @@ package io.hamal.bridge.web.endpoint.code
 import io.hamal.core.adapter.GetCodePort
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.sdk.api.ApiCode
+import io.hamal.lib.sdk.bridge.BridgeCode
 import io.hamal.repository.api.Code
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,12 +16,12 @@ internal class CodeGetBridgeController(private val getCode: GetCodePort) {
     @GetMapping("/b1/code/{id}")
     fun getCode(
         @PathVariable("id") codeId: CodeId,
-        @RequestParam(required = false, name = "version", defaultValue = "0") codeVersion: Int
-    ) = getCode(codeId, CodeVersion(codeVersion), ::assemble)
+        @RequestParam(required = false, name = "version", defaultValue = "0") codeVersion: CodeVersion
+    ) = getCode(codeId, codeVersion, ::assemble)
 
     private fun assemble(code: Code) =
         ResponseEntity.ok(
-            ApiCode(
+            BridgeCode(
                 id = code.id,
                 value = code.value,
                 version = code.version

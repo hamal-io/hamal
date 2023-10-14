@@ -29,6 +29,7 @@ open class WebConfig : WebMvcConfigurer {
     override fun addFormatters(registry: FormatterRegistry) {
         super.addFormatters(registry)
         registry.addConverter(AccountIdConverter)
+        registry.addConverter(CodeVersionConverter)
         registry.addConverter(CorrelationIdConverter)
         registry.addConverter(ExecIdConverter)
         registry.addConverter(ExecLogIdConverter)

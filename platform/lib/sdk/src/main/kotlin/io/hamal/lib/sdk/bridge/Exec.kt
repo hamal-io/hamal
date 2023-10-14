@@ -63,7 +63,7 @@ internal class BridgeExecServiceImpl(
         stateAfterCompletion: State,
         eventToSubmit: List<EventToSubmit>
     ) {
-        template.post("/v1/execs/{execId}/complete")
+        template.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(BridgeCompleteExecReq(result, stateAfterCompletion, eventToSubmit))
             .execute()
@@ -73,7 +73,7 @@ internal class BridgeExecServiceImpl(
         execId: ExecId,
         result: ExecResult
     ) {
-        template.post("/v1/execs/{execId}/fail")
+        template.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
             .body(BridgeFailExecReq(result))
             .execute()

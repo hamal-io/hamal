@@ -81,7 +81,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
 
     @Test
     fun `Tries to complete exec which does not exist`() {
-        val response = httpTemplate.post("/v1/execs/123456765432/complete")
+        val response = httpTemplate.post("/b1/execs/123456765432/complete")
             .body(
                 ApiCompleteExecReq(
                     state = State(),
@@ -139,7 +139,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
     }
 
     private fun requestCompletion(execId: ExecId) =
-        httpTemplate.post("/v1/execs/{execId}/complete")
+        httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
                 ApiCompleteExecReq(

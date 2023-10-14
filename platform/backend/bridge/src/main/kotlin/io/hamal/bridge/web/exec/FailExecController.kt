@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 internal class FailExecController(
     val request: SubmitBridgeRequest
 ) {
-    @PostMapping("/v1/execs/{execId}/fail")
+    @PostMapping("/b1/execs/{execId}/fail")
     fun failExec(
         @PathVariable("execId") execId: ExecId,
         @RequestBody fail: ApiFailExecReq

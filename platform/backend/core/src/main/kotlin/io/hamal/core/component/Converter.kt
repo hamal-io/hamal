@@ -13,6 +13,11 @@ object LimitConverter : Converter<String, Limit> {
     override fun convert(source: String) = Limit(source.toInt())
 }
 
+
+object CodeVersionConverter : Converter<String, CodeVersion> {
+    override fun convert(source: String) = CodeVersion(source.toInt())
+}
+
 object CorrelationIdConverter : Converter<String, CorrelationId> {
     override fun convert(source: String) = CorrelationId(source)
 }
@@ -22,6 +27,7 @@ object TopicNameConverter : Converter<String, TopicName> {
 }
 
 object AccountIdConverter : DomainIdConverter<AccountId>(AccountId::class, ::AccountId)
+object CodeIdConverter : DomainIdConverter<CodeId>(CodeId::class, ::CodeId)
 object ExecIdConverter : DomainIdConverter<ExecId>(ExecId::class, ::ExecId)
 object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)

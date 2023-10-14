@@ -69,7 +69,7 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
 
     @Test
     fun `Tries to fail exec which does not exist`() {
-        val response = httpTemplate.post("/v1/execs/123456765432/fail")
+        val response = httpTemplate.post("/b1/execs/123456765432/fail")
             .body(ApiFailExecReq(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
             .execute()
 
@@ -89,7 +89,7 @@ internal class FailExecControllerTest : BaseExecControllerTest() {
     }
 
     private fun requestFailure(execId: ExecId) =
-        httpTemplate.post("/v1/execs/{execId}/fail")
+        httpTemplate.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
             .body(ApiFailExecReq(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
             .execute()
