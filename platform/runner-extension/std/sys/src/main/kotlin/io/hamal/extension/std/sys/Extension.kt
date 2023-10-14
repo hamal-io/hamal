@@ -36,8 +36,7 @@ class SysExtensionFactory(
                 "await_failed" to AwaitFailedFunction(httpTemplate),
 
                 "adhoc" to AdhocInvokeFunction(sdk),
-                "code_get" to CodeGetFunctionI(sdk),
-                "code_get_version" to CodeGetFunctionII(sdk),
+                "code_get" to CodeGetFunction(sdk)
 
                 "req_get" to ReqGetFunction(httpTemplate),
 
