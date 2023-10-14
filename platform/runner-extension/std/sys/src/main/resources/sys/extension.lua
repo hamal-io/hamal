@@ -2,6 +2,7 @@ function create_extension_factory()
     local internal = _internal
     return function()
         local export = {
+            code = { },
             exec = { },
             func = { },
             hook = { },
@@ -35,6 +36,10 @@ function create_extension_factory()
             -- FIXME if cmd is string use it directly
             local err, res = internal.await_failed(cmd.req_id)
             return err, res
+        end
+
+        function export.code.get(code_id,code_version)
+            return internal.code_get(code_id,code_version or -1)
         end
 
         function export.exec.get(exec_id)

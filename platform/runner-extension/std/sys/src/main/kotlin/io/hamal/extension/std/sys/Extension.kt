@@ -1,6 +1,7 @@
 package io.hamal.extension.std.sys
 
 import io.hamal.extension.std.sys.adhoc.AdhocInvokeFunction
+import io.hamal.extension.std.sys.code.CodeGetFunction
 import io.hamal.extension.std.sys.exec.ExecGetFunction
 import io.hamal.extension.std.sys.exec.ExecListFunction
 import io.hamal.extension.std.sys.func.*
@@ -34,6 +35,7 @@ class SysExtensionFactory(
                 "await_failed" to AwaitFailedFunction(httpTemplate),
 
                 "adhoc" to AdhocInvokeFunction(sdk),
+                "code_get" to CodeGetFunction(sdk),
 
                 "req_get" to ReqGetFunction(httpTemplate),
 

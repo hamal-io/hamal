@@ -1,7 +1,7 @@
-package io.hamal.api.http.code
+package io.hamal.bridge.web.code
 
 
-import io.hamal.api.http.BaseControllerTest
+import io.hamal.bridge.web.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpStatusCode.*
@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.*
 
 internal sealed class CodeBaseControllerTest : BaseControllerTest() {
     fun getCode(codeId: CodeId): ApiCode {
-        val getCodeResponse = httpTemplate.get("/v1/code/{id}")
+        val getCodeResponse = httpTemplate.get("/b1/code/{id}")
             .path("id", codeId)
             .execute()
 
@@ -22,7 +22,7 @@ internal sealed class CodeBaseControllerTest : BaseControllerTest() {
     }
 
     fun getCode(codeId: CodeId, codeVersion: CodeVersion): ApiCode {
-        val getCodeResponse = httpTemplate.get("/v1/code/{id}")
+        val getCodeResponse = httpTemplate.get("/b1/code/{id}")
             .path("id", codeId)
             .parameter("version", codeVersion.value)
             .execute()

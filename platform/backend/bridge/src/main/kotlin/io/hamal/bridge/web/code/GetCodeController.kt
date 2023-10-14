@@ -1,4 +1,4 @@
-package io.hamal.api.http.endpoint.code
+package io.hamal.bridge.web.endpoint.code
 
 import io.hamal.core.adapter.GetCodePort
 import io.hamal.lib.domain.vo.CodeId
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CodeGetController(private val getCode: GetCodePort) {
-    @GetMapping("/v1/code/{id}")
+internal class CodeGetBridgeController(private val getCode: GetCodePort) {
+    @GetMapping("/b1/code/{id}")
     fun getCode(
         @PathVariable("id") codeId: CodeId,
         @RequestParam(required = false, name = "version", defaultValue = "0") codeVersion: Int

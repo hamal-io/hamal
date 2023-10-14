@@ -1,4 +1,4 @@
-package io.hamal.api.http.code
+package io.hamal.bridge.web.code
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.CodeId
@@ -99,7 +99,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             )
         )
 
-        val getCodeResponse = httpTemplate.get("/v1/code/{id}")
+        val getCodeResponse = httpTemplate.get("/b1/code/{id}")
             .path("id", CodeId(4))
             .parameter("version", 2)
             .execute()
@@ -114,7 +114,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
     @Test
     fun `Code does not exist`() {
-        val getCodeResponse = httpTemplate.get("/v1/code/33333333").execute()
+        val getCodeResponse = httpTemplate.get("/b1/code/33333333").execute()
         assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getCodeResponse is ErrorHttpResponse) { "request was successful" }
 

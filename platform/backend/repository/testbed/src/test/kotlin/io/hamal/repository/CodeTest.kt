@@ -37,7 +37,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
-                assertThat(type, equalTo(CodeType.of(1)))
             }
         }
 
@@ -432,7 +431,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 value = codeValue
             )
         )
-
     }
 
     private fun CodeRepository.verifyCount(expected: Int) {
