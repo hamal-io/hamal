@@ -37,6 +37,28 @@ internal object CurrentTriggerProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
+            .filter {
+                if (query.topicIds.isEmpty()) {
+                    true
+                } else {
+                    if (it is EventTrigger) {
+                        query.topicIds.contains(it.topicId)
+                    } else {
+                        false
+                    }
+                }
+            }
+            .filter {
+                if (query.hookIds.isEmpty()) {
+                    true
+                } else {
+                    if (it is HookTrigger) {
+                        query.hookIds.contains(it.hookId)
+                    } else {
+                        false
+                    }
+                }
+            }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -50,6 +72,28 @@ internal object CurrentTriggerProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
+            .filter {
+                if (query.topicIds.isEmpty()) {
+                    true
+                } else {
+                    if (it is EventTrigger) {
+                        query.topicIds.contains(it.topicId)
+                    } else {
+                        false
+                    }
+                }
+            }
+            .filter {
+                if (query.hookIds.isEmpty()) {
+                    true
+                } else {
+                    if (it is HookTrigger) {
+                        query.hookIds.contains(it.hookId)
+                    } else {
+                        false
+                    }
+                }
+            }
             .dropWhile { it.id >= query.afterId }
             .count()
             .toULong()

@@ -2,7 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -629,24 +629,64 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
+        fun `With topic ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                groupIds = listOf(),
+                topicIds = listOf(TopicId(512)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(7)))
+                assertThat(name, equalTo(TriggerName("event-trigger-one")))
+            }
+        }
+
+        @TestFactory
+        fun `With hook ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                groupIds = listOf(),
+                hookIds = listOf(HookId(512)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(5)))
+                assertThat(name, equalTo(TriggerName("hook-trigger-one")))
+            }
+        }
+
+        @TestFactory
         fun `With trigger types`() = runWith(TriggerRepository::class) {
             setup()
 
             val query = TriggerQuery(
-                types = listOf(TriggerType.Event),
+                types = listOf(Event),
                 groupIds = listOf(),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
-            val result = list(query)
-            assertThat(result, hasSize(2))
+            assertThat(count(query), equalTo(3UL))
+            val result = list(query).reversed()
+            assertThat(result, hasSize(3))
 
-            with(result[0]) {
+            with(result[1]) {
                 assertThat(id, equalTo(TriggerId(4)))
             }
 
-            with(result[1]) {
+            with(result[0]) {
                 assertThat(id, equalTo(TriggerId(2)))
             }
         }
@@ -660,7 +700,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(7UL))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -716,6 +756,42 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 name = TriggerName("Trigger"),
                 funcId = FuncId(13)
             )
+
+            createHookTrigger(
+                triggerId = TriggerId(5),
+                namespaceId = NamespaceId(11),
+                groupId = GroupId(6),
+                name = TriggerName("hook-trigger-one"),
+                funcId = FuncId(14),
+                hookId = HookId(512)
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(6),
+                namespaceId = NamespaceId(12),
+                groupId = GroupId(6),
+                name = TriggerName("hook-trigger-two"),
+                funcId = FuncId(15),
+                hookId = HookId(1024)
+            )
+
+            createEventTrigger(
+                triggerId = TriggerId(7),
+                namespaceId = NamespaceId(12),
+                groupId = GroupId(6),
+                name = TriggerName("event-trigger-one"),
+                funcId = FuncId(15),
+                topicId = TopicId(512)
+            )
+
+            createEventTrigger(
+                triggerId = TriggerId(7),
+                namespaceId = NamespaceId(12),
+                groupId = GroupId(6),
+                name = TriggerName("event-trigger-two"),
+                funcId = FuncId(15),
+                topicId = TopicId(1024)
+            )
         }
     }
 }
@@ -754,6 +830,7 @@ private fun TriggerRepository.createEventTrigger(
     name: TriggerName,
     groupId: GroupId,
     funcId: FuncId = FuncId(4),
+    topicId: TopicId = TopicId(9),
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
@@ -771,7 +848,7 @@ private fun TriggerRepository.createEventTrigger(
                 )
             ),
             funcId = funcId,
-            topicId = TopicId(9)
+            topicId = topicId
         )
     )
 }
@@ -782,6 +859,7 @@ private fun TriggerRepository.createHookTrigger(
     name: TriggerName,
     groupId: GroupId,
     funcId: FuncId = FuncId(4),
+    hookId: HookId = HookId(9),
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
@@ -799,7 +877,7 @@ private fun TriggerRepository.createHookTrigger(
                 )
             ),
             funcId = funcId,
-            hookId = HookId(9)
+            hookId = hookId
         )
     )
 }

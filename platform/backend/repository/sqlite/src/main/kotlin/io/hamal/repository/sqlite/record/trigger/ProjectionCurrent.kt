@@ -3,6 +3,8 @@ package io.hamal.repository.sqlite.record.trigger
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
+import io.hamal.repository.api.EventTrigger
+import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
@@ -50,6 +52,8 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 ${query.groupIds()}
                 ${query.funcIds()}
                 ${query.types()}
+                ${query.topicIds()}
+                ${query.hookIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -80,6 +84,8 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 ${query.groupIds()}
                 ${query.funcIds()}
                 ${query.types()}
+                ${query.topicIds()}
+                ${query.hookIds()}
         """.trimIndent()
         ) {
             query {
@@ -95,14 +101,26 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, func_id, type, data) 
+                    (id, group_id, func_id, topic_id, hook_id, type, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :type, :data)
+                    (:id, :groupId, :funcId, :topicId, :hookId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("funcId", obj.funcId)
+            if (obj is EventTrigger) {
+                set("topicId", obj.topicId)
+            } else {
+                set("topicId", 0)
+            }
+
+            if (obj is HookTrigger) {
+                set("hookId", obj.hookId)
+            } else {
+                set("hookId", 0)
+            }
+
             set("type", obj.type.value)
             set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
         }
@@ -116,6 +134,8 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  group_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
+                 topic_id       INTEGER NOT NULL,
+                 hook_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -159,4 +179,19 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         }
     }
 
+    private fun TriggerQuery.topicIds(): String {
+        return if (topicIds.isEmpty()) {
+            ""
+        } else {
+            "AND topic_id IN (${topicIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun TriggerQuery.hookIds(): String {
+        return if (hookIds.isEmpty()) {
+            ""
+        } else {
+            "AND hook_id IN (${hookIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
 }

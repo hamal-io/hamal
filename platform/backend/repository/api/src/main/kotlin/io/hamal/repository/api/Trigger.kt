@@ -66,6 +66,8 @@ interface TriggerQueryRepository {
         var limit: Limit = Limit(1),
         var triggerIds: List<TriggerId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
+        var topicIds: List<TopicId> = listOf(),
+        var hookIds: List<HookId> = listOf(),
         var groupIds: List<GroupId>
     )
 }
