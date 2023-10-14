@@ -15,8 +15,7 @@ data class ApiCode(
 )
 
 interface ApiCodeService {
-    fun get(codeId: CodeId): ApiCode
-    fun get(codeId: CodeId, codeVersion: CodeVersion): ApiCode
+    fun get(codeId: CodeId, codeVersion: CodeVersion? = null): ApiCode
 }
 
 internal class ApiCodeServiceImpl(
