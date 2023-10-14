@@ -72,6 +72,34 @@ class TriggerListFunction(
                                     )
                                 )
                             }
+
+                            is ApiTriggerList.HookTrigger -> {
+                                MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.id.value.value.toString(16)),
+                                        "type" to StringType("Hook"),
+                                        "name" to StringType(trigger.name.value),
+                                        "namespace" to MapType(
+                                            mutableMapOf(
+                                                "id" to StringType(trigger.namespace.id.value.value.toString(16)),
+                                                "name" to StringType(trigger.namespace.name.value)
+                                            )
+                                        ),
+                                        "func" to MapType(
+                                            mutableMapOf(
+                                                "id" to StringType(trigger.func.id.value.value.toString(16)),
+                                                "name" to StringType(trigger.func.name.value)
+                                            )
+                                        ),
+                                        "hook" to MapType(
+                                            mutableMapOf(
+                                                "id" to StringType(trigger.hook.id.value.value.toString(16)),
+                                                "name" to StringType(trigger.hook.name.value)
+                                            )
+                                        ),
+                                    )
+                                )
+                            }
                         }
                     }.toMap().toMutableMap()
             )

@@ -1,11 +1,8 @@
 package io.hamal.repository.sqlite.record.trigger
 
-import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
@@ -106,12 +103,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("funcId", obj.funcId)
-            set(
-                "type", when (obj) {
-                    is FixedRateTrigger -> TriggerType.FixedRate
-                    is EventTrigger -> TriggerType.Event
-                }.value
-            )
+            set("type", obj.type.value)
             set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
         }
     }

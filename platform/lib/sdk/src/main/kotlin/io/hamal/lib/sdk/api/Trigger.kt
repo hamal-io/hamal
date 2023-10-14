@@ -19,6 +19,7 @@ data class ApiCreateTriggerReq(
     override val correlationId: CorrelationId? = null,
     override val duration: Duration? = null,
     override val topicId: TopicId? = null,
+    override val hookId: HookId? = null
 ) : CreateTriggerReq
 
 @Serializable
@@ -66,6 +67,21 @@ data class ApiTriggerList(
         data class Topic(
             val id: TopicId,
             val name: TopicName
+        )
+    }
+
+    @Serializable
+    class HookTrigger(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Trigger.Func,
+        override val namespace: Trigger.Namespace,
+        val hook: Hook
+    ) : Trigger {
+        @Serializable
+        data class Hook(
+            val id: HookId,
+            val name: HookName
         )
     }
 }
@@ -117,6 +133,23 @@ class ApiEventTrigger(
     data class Topic(
         val id: TopicId,
         val name: TopicName
+    )
+}
+
+@Serializable
+class ApiHookTrigger(
+    override val id: TriggerId,
+    override val name: TriggerName,
+    override val func: ApiTrigger.Func,
+    override val namespace: ApiTrigger.Namespace,
+    override val inputs: TriggerInputs,
+    override val correlationId: CorrelationId? = null,
+    val hook: Hook
+) : ApiTrigger {
+    @Serializable
+    data class Hook(
+        val id: HookId,
+        val name: HookName
     )
 }
 

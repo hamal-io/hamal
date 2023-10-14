@@ -5,6 +5,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.Hook
+import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.Topic
 import java.util.concurrent.atomic.AtomicInteger
@@ -47,6 +49,22 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
                 id = id,
                 name = name,
                 groupId = testGroup.id
+            )
+        )
+    }
+
+    fun createHook(
+        id: HookId,
+        name: HookName = HookName("SomeName"),
+        namespaceId: NamespaceId = generateDomainId(::NamespaceId),
+    ): Hook {
+        return hookRepository.create(
+            HookCmdRepository.CreateCmd(
+                id = NextCommandId(),
+                groupId = testGroup.id,
+                hookId = id,
+                name = name,
+                namespaceId = namespaceId,
             )
         )
     }

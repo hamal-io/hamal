@@ -148,6 +148,17 @@ function create_extension_factory()
             })
         end
 
+        function export.trigger.create_hook(cmd)
+            return internal.trigger_create({
+                type = "Hook",
+                namespace_id = cmd.namespace_id,
+                name = cmd.name,
+                func_id = cmd.func_id,
+                inputs = cmd.inputs or {},
+                hook_id = cmd.hook_id
+            })
+        end
+
         function export.trigger.get(trigger_id)
             return internal.trigger_get(trigger_id)
         end

@@ -1,9 +1,9 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -14,6 +14,7 @@ interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
 interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateFixedRateCmd): FixedRateTrigger
     fun create(cmd: CreateEventCmd): EventTrigger
+    fun create(cmd: CreateHookCmd): HookTrigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -36,6 +37,18 @@ interface TriggerCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val topicId: TopicId,
+        val correlationId: CorrelationId? = null
+    )
+
+    data class CreateHookCmd(
+        val id: CmdId,
+        val triggerId: TriggerId,
+        val groupId: GroupId,
+        val name: TriggerName,
+        val funcId: FuncId,
+        val namespaceId: NamespaceId,
+        val inputs: TriggerInputs,
+        val hookId: HookId,
         val correlationId: CorrelationId? = null
     )
 }
@@ -98,4 +111,20 @@ class EventTrigger(
     override val correlationId: CorrelationId? = null
 ) : Trigger {
     override val type = TriggerType.Event
+}
+
+
+@Serializable
+class HookTrigger(
+    override val cmdId: CmdId,
+    override val id: TriggerId,
+    override val groupId: GroupId,
+    override val name: TriggerName,
+    override val funcId: FuncId,
+    override val namespaceId: NamespaceId,
+    override val inputs: TriggerInputs,
+    val hookId: HookId,
+    override val correlationId: CorrelationId? = null
+) : Trigger {
+    override val type = TriggerType.Hook
 }

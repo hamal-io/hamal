@@ -4,13 +4,10 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
+import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.Trigger
-import io.hamal.repository.api.TriggerCmdRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
@@ -22,7 +19,8 @@ class CreateTriggerHandler(
     private val eventEmitter: PlatformEventEmitter,
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val hookQueryRepository: HookQueryRepository
 ) : ReqHandler<SubmittedCreateTriggerReq>(SubmittedCreateTriggerReq::class) {
 
     override fun invoke(req: SubmittedCreateTriggerReq) {
@@ -44,7 +42,7 @@ class CreateTriggerHandler(
             )
 
             Event -> {
-                eventBrokerRepository.getTopic(req.topicId!!)
+                val topic = eventBrokerRepository.getTopic(req.topicId!!)
 
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateEventCmd(
@@ -56,7 +54,25 @@ class CreateTriggerHandler(
                         funcId = req.funcId,
                         namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
                         inputs = req.inputs,
-                        topicId = requireNotNull(req.topicId) { "topicId must not be null" },
+                        topicId = topic.id,
+                    )
+                )
+            }
+
+            Hook -> {
+                val hook = hookQueryRepository.get(req.hookId!!)
+
+                triggerCmdRepository.create(
+                    TriggerCmdRepository.CreateHookCmd(
+                        id = req.cmdId(),
+                        triggerId = req.id,
+                        groupId = func.groupId,
+                        name = req.name,
+                        correlationId = req.correlationId,
+                        funcId = req.funcId,
+                        namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
+                        inputs = req.inputs,
+                        hookId = hook.id
                     )
                 )
             }

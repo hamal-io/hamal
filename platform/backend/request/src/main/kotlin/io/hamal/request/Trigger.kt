@@ -14,4 +14,5 @@ interface CreateTriggerReq {
     val correlationId: CorrelationId?
     val duration: Duration?
     val topicId: TopicId?
+    val hookId: HookId?
 }

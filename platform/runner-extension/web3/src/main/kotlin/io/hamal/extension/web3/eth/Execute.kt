@@ -37,9 +37,6 @@ class EthExecuteFunction(
             val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringType).value))
 
             arg1.entries.forEach { entry ->
-                println(entry.key)
-                println(entry.value)
-
                 val v = entry.value
                 require(v is MapType)
 

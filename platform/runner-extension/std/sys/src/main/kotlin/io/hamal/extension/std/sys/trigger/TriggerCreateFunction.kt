@@ -45,6 +45,11 @@ class TriggerCreateFunction(
                         TopicId(SnowflakeId(arg1.getString("topic_id")))
                     } else {
                         null
+                    },
+                    hookId = if (arg1.type("hook_id") == StringType::class) {
+                        HookId(SnowflakeId(arg1.getString("hook_id")))
+                    } else {
+                        null
                     }
                 )
             )

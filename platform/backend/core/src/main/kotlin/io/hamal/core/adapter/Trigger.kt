@@ -2,10 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
@@ -25,7 +22,7 @@ interface CreateTriggerPort {
 interface GetTriggerPort {
     operator fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Namespace, Topic?) -> T
+        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
     ): T
 }
 
@@ -37,7 +34,8 @@ interface ListTriggersPort {
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
             namespaces: Map<NamespaceId, Namespace>,
-            topics: Map<TopicId, Topic>
+            topics: Map<TopicId, Topic>,
+            hooks: Map<HookId, Hook>
         ) -> T
     ): T
 }
@@ -51,17 +49,22 @@ class TriggerAdapter(
     private val triggerQueryRepository: TriggerQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val eventBrokerRepository: BrokerRepository
+    private val eventBrokerRepository: BrokerRepository,
+    private val hookQueryRepository: HookQueryRepository
 ) : TriggerPort {
     override fun <T : Any> invoke(req: CreateTriggerReq, responseHandler: (SubmittedReqWithGroupId) -> T): T {
         ensureFuncExists(req)
         ensureTopicExists(req)
+        ensureHookExists(req)
         ensureNamespaceExist(req)
 
         return responseHandler(submitRequest(req))
     }
 
-    override fun <T : Any> invoke(triggerId: TriggerId, responseHandler: (Trigger, Func, Namespace, Topic?) -> T): T {
+    override fun <T : Any> invoke(
+        triggerId: TriggerId,
+        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
+    ): T {
         val trigger = triggerQueryRepository.get(triggerId)
         val func = funcQueryRepository.get(trigger.funcId)
         val namespace = namespaceQueryRepository.get(trigger.namespaceId)
@@ -71,12 +74,13 @@ class TriggerAdapter(
             null
         }
 
-        return responseHandler(
-            trigger,
-            func,
-            namespace,
-            topic
-        )
+        val hook = if (trigger is HookTrigger) {
+            hookQueryRepository.get(trigger.hookId)
+        } else {
+            null
+        }
+
+        return responseHandler(trigger, func, namespace, topic, hook)
     }
 
     override operator fun <T : Any> invoke(
@@ -85,7 +89,8 @@ class TriggerAdapter(
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
             namespaces: Map<NamespaceId, Namespace>,
-            topics: Map<TopicId, Topic>
+            topics: Map<TopicId, Topic>,
+            hooks: Map<HookId, Hook>
         ) -> T
     ): T {
 
@@ -100,7 +105,10 @@ class TriggerAdapter(
         val topics = eventBrokerRepository.list(triggers.filterIsInstance<EventTrigger>().map { it.topicId })
             .associateBy { it.id }
 
-        return responseHandler(triggers, funcs, namespaces, topics)
+        val hooks = hookQueryRepository.list(triggers.filterIsInstance<HookTrigger>().map { it.hookId })
+            .associateBy { it.id }
+
+        return responseHandler(triggers, funcs, namespaces, topics, hooks)
     }
 
     private fun ensureFuncExists(createTrigger: CreateTriggerReq) {
@@ -111,6 +119,13 @@ class TriggerAdapter(
         if (createTrigger.type == TriggerType.Event) {
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
             eventBrokerRepository.getTopic(createTrigger.topicId!!)
+        }
+    }
+
+    private fun ensureHookExists(createTrigger: CreateTriggerReq) {
+        if (createTrigger.type == TriggerType.Hook) {
+            requireNotNull(createTrigger.hookId) { "hookId is missing" }
+            hookQueryRepository.get(createTrigger.hookId!!)
         }
     }
 

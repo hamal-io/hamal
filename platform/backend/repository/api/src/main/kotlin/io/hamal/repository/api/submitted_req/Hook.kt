@@ -8,7 +8,6 @@ import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.NamespaceId
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class SubmittedCreateHookReq(
     override val reqId: ReqId,
@@ -29,3 +28,10 @@ data class SubmittedUpdateHookReq(
     val namespaceId: NamespaceId?,
     val name: HookName?,
 ) : SubmittedReqWithGroupId
+
+@Serializable
+data class SubmittedInvokeHookReq(
+    override val reqId: ReqId,
+    override var status: ReqStatus,
+    val id: HookId
+) : SubmittedReq

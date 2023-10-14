@@ -8,10 +8,12 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerList.EventTrigger.Topic
+import io.hamal.lib.sdk.api.ApiTriggerList.HookTrigger.Hook
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -37,7 +39,7 @@ class TriggerListController(private val listTriggers: ListTriggersPort) {
                 groupIds = listOf(groupId),
                 funcIds = funcIds
             )
-        ) { triggers, funcs, namespaces, topics ->
+        ) { triggers, funcs, namespaces, topics, hooks ->
             ResponseEntity.ok(
                 ApiTriggerList(
                     triggers.map { trigger ->
@@ -73,6 +75,25 @@ class TriggerListController(private val listTriggers: ListTriggersPort) {
                                     topic = Topic(
                                         id = trigger.topicId,
                                         name = topics[trigger.topicId]!!.name
+                                    )
+                                )
+                            }
+
+                            is HookTrigger -> {
+                                ApiTriggerList.HookTrigger(
+                                    id = trigger.id,
+                                    name = trigger.name,
+                                    func = Func(
+                                        id = trigger.funcId,
+                                        name = funcs[trigger.funcId]!!.name
+                                    ),
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
+                                    ),
+                                    hook = Hook(
+                                        id = trigger.hookId,
+                                        name = hooks[trigger.hookId]!!.name
                                     )
                                 )
                             }

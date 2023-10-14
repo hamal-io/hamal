@@ -117,7 +117,7 @@ internal object Assembler {
 
 
             is TestSubmittedReq -> TODO()
-
+            is SubmittedInvokeHookReq -> throw IllegalStateException()
         }
     }
 }

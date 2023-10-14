@@ -8,8 +8,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.TriggerCmdRepository.CreateEventCmd
-import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
+import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.TriggerRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -36,7 +35,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     funcId = FuncId(3),
                     groupId = GroupId(4),
                     namespaceId = NamespaceId(5),
-                    name = TriggerName("fixed-rate-trigger"),
+                    name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
                         MapType(
                             mutableMapOf(
@@ -52,7 +51,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
-                assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(duration, equalTo(10.seconds))
             }
@@ -182,7 +181,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     funcId = FuncId(3),
                     groupId = GroupId(4),
                     namespaceId = NamespaceId(5),
-                    name = TriggerName("fixed-rate-trigger"),
+                    name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
                         MapType(
                             mutableMapOf(
@@ -198,7 +197,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
-                assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(topicId, equalTo(TopicId(9)))
             }
@@ -311,6 +310,152 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                     assertThat(topicId, equalTo(TopicId(9)))
+                }
+
+                verifyCount(1)
+            }
+    }
+
+    @Nested
+    inner class CreateHook {
+        @TestFactory
+        fun `Creates hook trigger`() = runWith(TriggerRepository::class) {
+            val result = create(
+                CreateHookCmd(
+                    id = CmdId(1),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    groupId = GroupId(4),
+                    namespaceId = NamespaceId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rocks")
+                            )
+                        )
+                    ),
+                    hookId = HookId(9)
+                )
+            )
+
+            with(result) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(hookId, equalTo(HookId(9)))
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Tries to create but same name already exists in namespace`() =
+            runWith(TriggerRepository::class) {
+
+                createHookTrigger(
+                    triggerId = TriggerId(1),
+                    namespaceId = NamespaceId(2),
+                    groupId = GroupId(3),
+                    name = TriggerName("first-trigger-name")
+                )
+
+                val exception = assertThrows<IllegalArgumentException> {
+                    create(
+                        CreateEventCmd(
+                            id = CmdId(2),
+                            triggerId = TriggerId(5),
+                            funcId = FuncId(4),
+                            groupId = GroupId(3),
+                            namespaceId = NamespaceId(2),
+                            name = TriggerName("first-trigger-name"),
+                            inputs = TriggerInputs(),
+                            topicId = TopicId(9),
+                        )
+                    )
+                }
+
+                assertThat(
+                    exception.message,
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
+                )
+
+                verifyCount(1)
+            }
+
+        @TestFactory
+        fun `Creates with same name but different namespace`() =
+            runWith(TriggerRepository::class) {
+
+                createHookTrigger(
+                    triggerId = TriggerId(1),
+                    namespaceId = NamespaceId(2),
+                    groupId = GroupId(3),
+                    name = TriggerName("trigger-name")
+                )
+
+                val result = create(
+                    CreateHookCmd(
+                        id = CmdId(2),
+                        triggerId = TriggerId(1111),
+                        funcId = FuncId(4),
+                        groupId = GroupId(3),
+                        namespaceId = NamespaceId(22),
+                        name = TriggerName("trigger-name"),
+                        inputs = TriggerInputs(),
+                        hookId = HookId(9)
+                    )
+                )
+
+                with(result) {
+                    assertThat(id, equalTo(TriggerId(1111)))
+                    assertThat(funcId, equalTo(FuncId(4)))
+                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(22)))
+                    assertThat(name, equalTo(TriggerName("trigger-name")))
+                    assertThat(inputs, equalTo(TriggerInputs()))
+                    assertThat(hookId, equalTo(HookId(9)))
+                }
+
+                verifyCount(2)
+            }
+
+        @TestFactory
+        fun `Tries to create but cmd with func id was already applied`() =
+            runWith(TriggerRepository::class) {
+
+                createHookTrigger(
+                    cmdId = CmdId(23456),
+                    triggerId = TriggerId(5),
+                    namespaceId = NamespaceId(2),
+                    groupId = GroupId(3),
+                    name = TriggerName("first-trigger-name")
+                )
+
+
+                val result = create(
+                    CreateHookCmd(
+                        id = CmdId(23456),
+                        triggerId = TriggerId(5),
+                        funcId = FuncId(8),
+                        groupId = GroupId(333),
+                        namespaceId = NamespaceId(2222),
+                        name = TriggerName("second-trigger-name"),
+                        inputs = TriggerInputs(),
+                        hookId = HookId(999),
+                    )
+                )
+
+                with(result) {
+                    assertThat(id, equalTo(TriggerId(5)))
+                    assertThat(funcId, equalTo(FuncId(4)))
+                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
+                    assertThat(name, equalTo(TriggerName("first-trigger-name")))
+                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(hookId, equalTo(HookId(9)))
                 }
 
                 verifyCount(1)
@@ -627,6 +772,34 @@ private fun TriggerRepository.createEventTrigger(
             ),
             funcId = funcId,
             topicId = TopicId(9)
+        )
+    )
+}
+
+private fun TriggerRepository.createHookTrigger(
+    triggerId: TriggerId,
+    namespaceId: NamespaceId,
+    name: TriggerName,
+    groupId: GroupId,
+    funcId: FuncId = FuncId(4),
+    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+) {
+    create(
+        CreateHookCmd(
+            id = cmdId,
+            triggerId = triggerId,
+            groupId = groupId,
+            namespaceId = namespaceId,
+            name = name,
+            inputs = TriggerInputs(
+                MapType(
+                    mutableMapOf(
+                        "hamal" to StringType("rockz")
+                    )
+                )
+            ),
+            funcId = funcId,
+            hookId = HookId(9)
         )
     )
 }

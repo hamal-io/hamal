@@ -17,7 +17,7 @@ sealed class TriggerRecord(
 ) : Record<TriggerId>()
 
 @Serializable
-@SerialName("FRCR")
+@SerialName("FRTCR")
 data class FixedRateTriggerCreationRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
@@ -31,7 +31,7 @@ data class FixedRateTriggerCreationRecord(
 ) : TriggerRecord()
 
 @Serializable
-@SerialName("ECR")
+@SerialName("ETCR")
 data class EventTriggerCreationRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
@@ -41,5 +41,19 @@ data class EventTriggerCreationRecord(
     val name: TriggerName,
     val inputs: TriggerInputs,
     val topicId: TopicId,
+    val correlationId: CorrelationId? = null
+) : TriggerRecord()
+
+@Serializable
+@SerialName("HTCR")
+data class HookTriggerCreationRecord(
+    override val cmdId: CmdId,
+    override val entityId: TriggerId,
+    val groupId: GroupId,
+    val funcId: FuncId,
+    val namespaceId: NamespaceId,
+    val name: TriggerName,
+    val inputs: TriggerInputs,
+    val hookId: HookId,
     val correlationId: CorrelationId? = null
 ) : TriggerRecord()

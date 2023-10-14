@@ -1,17 +1,10 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.Trigger
-import io.hamal.repository.api.TriggerCmdRepository.CreateEventCmd
-import io.hamal.repository.api.TriggerCmdRepository.CreateFixedRateCmd
+import io.hamal.repository.api.*
+import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.api.TriggerRepository
-import io.hamal.repository.record.trigger.CreateTriggerFromRecords
-import io.hamal.repository.record.trigger.EventTriggerCreationRecord
-import io.hamal.repository.record.trigger.FixedRateTriggerCreationRecord
-import io.hamal.repository.record.trigger.TriggerRecord
+import io.hamal.repository.record.trigger.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -117,6 +110,30 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     )
                 )
                 (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)
+            }
+        }
+    }
+
+    override fun create(cmd: CreateHookCmd): HookTrigger {
+        return lock.withLock {
+            val triggerId = cmd.triggerId
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id) as HookTrigger
+            } else {
+                store(
+                    HookTriggerCreationRecord(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        groupId = cmd.groupId,
+                        funcId = cmd.funcId,
+                        namespaceId = cmd.namespaceId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        hookId = cmd.hookId,
+                        correlationId = cmd.correlationId
+                    )
+                )
+                (currentVersion(triggerId) as HookTrigger).also(CurrentTriggerProjection::apply)
             }
         }
     }

@@ -236,7 +236,8 @@ class SubmitRequest(
             inputs = req.inputs,
             correlationId = req.correlationId,
             duration = req.duration,
-            topicId = req.topicId
+            topicId = req.topicId,
+            hookId = req.hookId
         ).also(reqCmdRepository::queue)
     }
 

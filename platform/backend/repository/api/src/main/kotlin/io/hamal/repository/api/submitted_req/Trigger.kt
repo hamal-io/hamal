@@ -20,7 +20,8 @@ data class SubmittedCreateTriggerReq(
     var namespaceId: NamespaceId? = null,
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
-    val topicId: TopicId? = null
+    val topicId: TopicId? = null,
+    var hookId: HookId? = null
 ) : SubmittedReqWithGroupId
 
 

@@ -2,11 +2,11 @@ package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
+import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.Trigger
 
 import io.hamal.repository.record.CreateDomainObject
@@ -29,7 +29,8 @@ data class TriggerEntity(
     var correlationId: CorrelationId? = null,
 
     var topicId: TopicId? = null,
-    var duration: Duration? = null
+    var duration: Duration? = null,
+    var hookId: HookId? = null
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
 
@@ -62,6 +63,20 @@ data class TriggerEntity(
                 correlationId = rec.correlationId,
                 topicId = rec.topicId
             )
+
+            is HookTriggerCreationRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                groupId = rec.groupId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                funcId = rec.funcId,
+                namespaceId = rec.namespaceId,
+                type = Hook,
+                inputs = rec.inputs,
+                correlationId = rec.correlationId,
+                hookId = rec.hookId
+            )
         }
     }
 
@@ -90,6 +105,18 @@ data class TriggerEntity(
                 inputs = inputs!!,
                 topicId = topicId!!
             )
+
+            Hook -> HookTrigger(
+                cmdId = cmdId,
+                id = id,
+                groupId = groupId!!,
+                funcId = funcId!!,
+                namespaceId = namespaceId!!,
+                correlationId = correlationId,
+                name = name!!,
+                inputs = inputs!!,
+                hookId = hookId!!
+            )
         }
     }
 }
@@ -98,7 +125,7 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
 
-    check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord)
+    check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord || firstRecord is HookTriggerCreationRecord)
 
     var result = TriggerEntity(
         id = firstRecord.entityId,

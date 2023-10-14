@@ -4,9 +4,11 @@ import io.hamal.core.adapter.GetTriggerPort
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiEventTrigger
 import io.hamal.lib.sdk.api.ApiFixedRateTrigger
+import io.hamal.lib.sdk.api.ApiHookTrigger
 import io.hamal.lib.sdk.api.ApiTrigger
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.HookTrigger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,7 +21,7 @@ internal class TriggerGetController(private val getTrigger: GetTriggerPort) {
         @PathVariable("triggerId") triggerId: TriggerId,
     ): ResponseEntity<ApiTrigger> {
 
-        return getTrigger(triggerId) { trigger, func, namespace, topic ->
+        return getTrigger(triggerId) { trigger, func, namespace, topic, hook ->
             ResponseEntity.ok(
                 when (trigger) {
                     is FixedRateTrigger -> ApiFixedRateTrigger(
@@ -52,6 +54,24 @@ internal class TriggerGetController(private val getTrigger: GetTriggerPort) {
                         topic = ApiEventTrigger.Topic(
                             id = topic!!.id,
                             name = topic.name
+                        )
+                    )
+
+                    is HookTrigger -> ApiHookTrigger(
+                        id = trigger.id,
+                        name = trigger.name,
+                        func = ApiTrigger.Func(
+                            id = func.id,
+                            name = func.name
+                        ),
+                        namespace = ApiTrigger.Namespace(
+                            id = namespace.id,
+                            name = namespace.name
+                        ),
+                        inputs = trigger.inputs,
+                        hook = ApiHookTrigger.Hook(
+                            id = hook!!.id,
+                            name = hook.name
                         )
                     )
                 }
