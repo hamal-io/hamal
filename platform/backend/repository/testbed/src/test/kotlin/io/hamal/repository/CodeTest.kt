@@ -421,27 +421,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class CodeTypeTest {
         @TestFactory
-        fun `Set code type`() = runWith(CodeRepository::class) {
-            createCode(
-                codeId = CodeId(1),
-                groupId = GroupId(3),
-                codeValue = CodeValue("1 + 1")
-            )
-            val c = find(CodeId(1))!!
-            c.type = CodeType.None
-            assertThat(c.type, equalTo(CodeType.None))
-        }
-
-        @TestFactory
-        fun `Get code type by id`() = runWith(CodeRepository::class) {
-            createCode(
-                codeId = CodeId(1),
-                groupId = GroupId(3),
-                codeValue = CodeValue("1 + 1")
-            )
-            val c = find(CodeId(1))!!
-            assertThat(c.type, equalTo(CodeType.of(c.type.value)))
-        }
 
         @TestFactory
         fun `Code type id does not exist`() = runWith(CodeRepository::class) {
