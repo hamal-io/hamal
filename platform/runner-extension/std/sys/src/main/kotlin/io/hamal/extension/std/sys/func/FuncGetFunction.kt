@@ -5,10 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
 class FuncGetFunction(
@@ -32,7 +29,8 @@ class FuncGetFunction(
                             ),
                             "name" to StringType(func.name.value),
                             "code" to CodeType(func.code.value.value),
-                            "code_id" to StringType(func.code.id.value.value.toString(16))
+                            "code_id" to StringType(func.code.id.value.value.toString(16)),
+                            "code_version" to NumberType(func.code.version.value)
                         )
                     )
                 }

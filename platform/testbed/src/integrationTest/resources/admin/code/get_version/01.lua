@@ -12,7 +12,7 @@ sys.await_completed(f1)
 err, func = sys.func.get(f1.id)
 assert(err == nil)
 
-err, code = sys.code.get_version(func.code_id, 1)
+err, code = sys.code.get(func.code_id, 1)
 assert(err == nil)
 
 assert(code.id == func.code_id)

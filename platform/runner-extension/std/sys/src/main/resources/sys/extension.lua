@@ -38,8 +38,8 @@ function create_extension_factory()
             return err, res
         end
 
-        function export.code.get_version(code_id,code_version)
-            return internal.code_get_version(code_id,code_version or -1)
+        function export.code.get(code_id,code_version)
+            return internal.code_get(code_id,code_version or -1)
         end
 
         function export.exec.get(exec_id)

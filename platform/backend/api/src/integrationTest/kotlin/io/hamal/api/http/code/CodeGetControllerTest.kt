@@ -99,9 +99,9 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             )
         )
 
-        val getCodeResponse = httpTemplate.get("/v1/code/{codeId}")
-            .path("codeId", CodeId(4))
-            .parameter("codeVersion", 2)
+        val getCodeResponse = httpTemplate.get("/v1/code/{id}")
+            .path("id", CodeId(4))
+            .parameter("version", 2)
             .execute()
 
         assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class CodeGetBridgeController(private val getCode: GetCodePort) {
-    @GetMapping("/b1/code/{codeId}")
+    @GetMapping("/b1/code/{id}")
     fun getCode(
-        @PathVariable("codeId") codeId: CodeId,
-        @RequestParam(required = false, name = "code_version", defaultValue = "0") codeVersion: Int
+        @PathVariable("id") codeId: CodeId,
+        @RequestParam(required = false, name = "version", defaultValue = "0") codeVersion: Int
     ) = getCode(codeId, CodeVersion(codeVersion), ::assemble)
 
     private fun assemble(code: Code) =
