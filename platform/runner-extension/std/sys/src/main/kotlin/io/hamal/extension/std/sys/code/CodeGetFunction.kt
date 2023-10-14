@@ -14,10 +14,17 @@ class CodeGetFunctionI(
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: NumberType): Pair<ErrorType?, MapType?> {
         return try {
-            null to sdk.code.get(CodeId(arg1.value))
-                .let { code ->
+        
+        val response = if(args == NumberType(-1)){
+                     sdk.code.get(CodeId(arg1.value))
+        }else{
+                     sdk.code.get(CodeId(arg1.value), CodeVersion(arg2.value))
+        }
+        
+        
+            null to response .let { code ->
                     MapType(
                         mutableMapOf(
                             "id" to StringType(code.id.value.value.toString(16)),
