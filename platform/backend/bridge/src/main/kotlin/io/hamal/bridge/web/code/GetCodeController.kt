@@ -16,7 +16,7 @@ internal class CodeGetBridgeController(private val getCode: GetCodePort) {
     @GetMapping("/b1/code/{codeId}")
     fun getCode(
         @PathVariable("codeId") codeId: CodeId,
-        @RequestParam(required = false, name = "codeVersion", defaultValue = "0") codeVersion: Int
+        @RequestParam(required = false, name = "code_version", defaultValue = "0") codeVersion: Int
     ) = getCode(codeId, CodeVersion(codeVersion), ::assemble)
 
     private fun assemble(code: Code) =
