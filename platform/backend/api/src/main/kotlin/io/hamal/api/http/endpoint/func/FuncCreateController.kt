@@ -2,6 +2,7 @@ package io.hamal.api.http.endpoint.func
 
 import io.hamal.api.http.endpoint.req.Assembler
 import io.hamal.core.adapter.CreateFuncPort
+import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiCreateFuncReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class FuncCreateController(private val createFunc: CreateFuncPort) {
+internal class FuncCreateController(
+    private val retry: Retry,
+    private val createFunc: CreateFuncPort
+) {
     @PostMapping("/v1/groups/{groupId}/funcs")
     fun createFunc(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody req: ApiCreateFuncReq
-    ): ResponseEntity<ApiSubmittedReq> =
+    ): ResponseEntity<ApiSubmittedReq> = retry {
         createFunc(groupId, req) {
             ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }
+    }
 }

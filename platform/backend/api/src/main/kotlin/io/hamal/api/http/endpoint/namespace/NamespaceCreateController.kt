@@ -2,6 +2,7 @@ package io.hamal.api.http.endpoint.namespace
 
 import io.hamal.api.http.endpoint.req.Assembler
 import io.hamal.core.adapter.CreateNamespacePort
+import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class NamespaceCreateController(private val createNamespace: CreateNamespacePort) {
+internal class NamespaceCreateController(
+    private val retry: Retry,
+    private val createNamespace: CreateNamespacePort
+) {
     @PostMapping("/v1/groups/{groupId}/namespaces")
     fun createNamespace(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody req: ApiCreateNamespaceReq
-    ): ResponseEntity<ApiSubmittedReq> =
+    ): ResponseEntity<ApiSubmittedReq> = retry {
         createNamespace(groupId, req) {
             ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }
+    }
 }

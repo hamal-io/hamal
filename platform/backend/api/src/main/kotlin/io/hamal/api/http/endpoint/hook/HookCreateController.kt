@@ -2,6 +2,7 @@ package io.hamal.api.http.endpoint.hook
 
 import io.hamal.api.http.endpoint.req.Assembler
 import io.hamal.core.adapter.CreateHookPort
+import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiCreateHookReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class HookCreateController(private val createHook: CreateHookPort) {
+internal class HookCreateController(
+    private val retry: Retry,
+    private val createHook: CreateHookPort
+) {
     @PostMapping("/v1/groups/{groupId}/hooks")
     fun createHook(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody req: ApiCreateHookReq
-    ): ResponseEntity<ApiSubmittedReq> =
+    ): ResponseEntity<ApiSubmittedReq> = retry {
         createHook(groupId, req) {
             ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }
+    }
 }
