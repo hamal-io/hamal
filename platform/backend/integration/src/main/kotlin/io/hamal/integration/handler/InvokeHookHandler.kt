@@ -3,12 +3,13 @@ package io.hamal.integration.handler
 import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.EventTrigger
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository
@@ -23,46 +24,47 @@ class InvokeHookHandler(
     private val submitRequest: SubmitRequest,
     private val generateDomainId: GenerateDomainId,
 ) : ReqHandler<SubmittedInvokeHookReq>(SubmittedInvokeHookReq::class) {
+
+    /**
+     * At least once delivery is good enough for now
+     */
     override fun invoke(req: SubmittedInvokeHookReq) {
         val hook = hookQueryRepository.get(req.id)
+
         val triggers = triggerQueryRepository.list(
             TriggerQueryRepository.TriggerQuery(
                 types = listOf(TriggerType.Hook),
                 limit = Limit.all,
-                groupIds = listOf(hook.groupId)
+                groupIds = listOf(hook.groupId),
+                hookIds = listOf(hook.id)
             )
         )
-        // resolve triggers via hook
-        // get funcs from trigger
-        // trigger exec
 
-        val trigger = EventTrigger(
-            cmdId = CmdId(1),
-            id = TriggerId(1),
-            groupId = GroupId(1),
-            funcId = FuncId("13a342ac01000"),
-            name = TriggerName("abc"),
-            correlationId = null,
-            inputs = TriggerInputs(),
-            namespaceId = NamespaceId(1),
-            topicId = TopicId(1)
-        )
-
-        println(hook)
-
-        val func = funcQueryRepository.get(trigger.funcId)
-
-        submitRequest(
-            InvokeExecReq(
-                execId = generateDomainId(::ExecId),
-                funcId = trigger.funcId,
-                correlationId = trigger.correlationId ?: CorrelationId("__default__"),
-                inputs = InvocationInputs(),
-                code = null,
-                codeId = func.codeId,
-                codeVersion = func.codeVersion,
-                events = listOf()
+        val funcs = funcQueryRepository.list(
+            FuncQueryRepository.FuncQuery(
+                groupIds = listOf(hook.groupId),
+                funcIds = triggers.map { it.funcId }
             )
-        )
+        ).associateBy(Func::id)
+
+
+        triggers.forEach { trigger ->
+            val func = funcs[trigger.funcId]!!
+
+            submitRequest(
+                InvokeExecReq(
+                    execId = generateDomainId(::ExecId),
+                    funcId = trigger.funcId,
+                    correlationId = trigger.correlationId ?: CorrelationId("__default__"),
+                    inputs = InvocationInputs(),
+                    code = null,
+                    codeId = func.codeId,
+                    codeVersion = func.codeVersion,
+                    events = listOf(
+                        // FIXME webhook specifics
+                    )
+                )
+            )
+        }
     }
 }

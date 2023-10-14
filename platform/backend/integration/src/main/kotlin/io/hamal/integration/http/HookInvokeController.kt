@@ -6,6 +6,7 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.SubmittedInvokeHookReq
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,7 +16,11 @@ internal class HookInvokeController(
     private val generateDomainId: GenerateDomainId, private val reqCmdRepository: ReqCmdRepository
 ) {
     @GetMapping("/v1/webhooks/{id}")
-    fun webhookGet(@PathVariable("id") id: HookId): ResponseEntity<SubmittedInvokeHookReq> {
+    fun webhookGet(
+        @PathVariable("id") id: HookId,
+        req: HttpServletRequest
+    ): ResponseEntity<SubmittedInvokeHookReq> {
+        println(req)
         val result = SubmittedInvokeHookReq(
             reqId = generateDomainId(::ReqId), status = ReqStatus.Submitted, id = id
         ).also(reqCmdRepository::queue)
