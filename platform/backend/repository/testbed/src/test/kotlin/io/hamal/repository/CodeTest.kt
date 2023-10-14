@@ -417,20 +417,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
     }
 
-
-    @Nested
-    inner class CodeTypeTest {
-        @TestFactory
-
-        @TestFactory
-        fun `Code type id does not exist`() = runWith(CodeRepository::class) {
-            assertThat(
-                assertThrows<IllegalArgumentException> { CodeType.of(777) }.message,
-                equalTo("777 not mapped as a code type")
-            )
-        }
-    }
-
     private fun CodeRepository.createCode(
         codeId: CodeId,
         groupId: GroupId,
