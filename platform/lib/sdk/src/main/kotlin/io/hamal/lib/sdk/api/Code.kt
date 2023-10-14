@@ -21,17 +21,17 @@ interface ApiCodeService {
 internal class ApiCodeServiceImpl(
     private val template: HttpTemplate
 ) : ApiCodeService {
-    override fun get(codeId: CodeId) =
-        template.get("/v1/code/{codeId}")
-            .path("codeId", codeId)
-            .execute()
+    override fun get(codeId: CodeId, codeVersion: CodeVersion){
+            template.get("/v1/code/{codeId}")
+                             .path("codeId", codeId)
+                             .let{builder ->
+                                      if(codeVersion != null){
+                                         builder.parameter("code_version", codeVersion.value)
+                                      }else{
+                                         builder
+                                      }
+                             }
+                                 .execute()
             .fold(ApiCode::class)
-
-
-    override fun get(codeId: CodeId, codeVersion: CodeVersion) =
-        template.get("/v1/code/{codeId}")
-            .path("codeId", codeId)
-            .parameter("codeVersion", codeVersion.value)
-            .execute()
-            .fold(ApiCode::class)
+    }
 }
