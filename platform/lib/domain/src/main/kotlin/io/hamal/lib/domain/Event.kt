@@ -1,8 +1,8 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainIdSerializer
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.domain.vo.base.Inputs

@@ -24,6 +24,7 @@ data class ExecPlannedRecord(
     val groupId: GroupId,
     val correlation: Correlation?,
     val inputs: ExecInputs,
+    
     val code: CodeValue?,
     val codeId: CodeId?,
     val codeVersion: CodeVersion?,

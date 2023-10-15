@@ -5,6 +5,7 @@ import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.HookHeaders
 import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.HookParameters
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ReqCmdRepository
@@ -43,7 +44,8 @@ internal class HookInvokeController(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = id,
-            headers = req.headers()
+            headers = req.headers(),
+            parameters = req.parameters()
         ).also(reqCmdRepository::queue)
         return ResponseEntity(Response(result), ACCEPTED)
     }
@@ -55,9 +57,9 @@ internal class HookInvokeController(
             .toMutableMap()
         ))
 
-//    private fun HttpServletRequest.parameters() = HookParameters(
-//        MapType(parameterMap.map { (key, value) -> key to StringType(value) })
-//    )
+    private fun HttpServletRequest.parameters() = HookParameters(
+        MapType(parameterMap.map { (key, value) -> key to StringType(value.joinToString(",")) }.toMap().toMutableMap())
+    )
 
     @Serializable
     data class Response(

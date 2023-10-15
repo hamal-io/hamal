@@ -61,7 +61,7 @@ class InvokeHookHandler(
                     codeId = func.codeId,
                     codeVersion = func.codeVersion,
                     events = listOf(
-                        // FIXME webhook specifics
+
                     )
                 )
             )
