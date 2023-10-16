@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Snippet(
     override val id: SnippetId,
-    val namespaceId: NamespaceId,
     val groupId: GroupId,
     val cmdId: CmdId,
     val name: SnippetName,
