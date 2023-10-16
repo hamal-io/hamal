@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -49,6 +50,7 @@ interface TriggerCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val hookId: HookId,
+        val hookMethods: Set<HookMethod>,
         val correlationId: CorrelationId? = null
     )
 }
@@ -125,8 +127,9 @@ class HookTrigger(
     override val funcId: FuncId,
     override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
+    override val correlationId: CorrelationId? = null,
     val hookId: HookId,
-    override val correlationId: CorrelationId? = null
+    val hookMethods: Set<HookMethod>
 ) : Trigger {
     override val type = TriggerType.Hook
 }

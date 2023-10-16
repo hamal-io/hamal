@@ -1,5 +1,6 @@
 package io.hamal.request
 
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import kotlin.time.Duration
@@ -15,4 +16,5 @@ interface CreateTriggerReq {
     val duration: Duration?
     val topicId: TopicId?
     val hookId: HookId?
+    val hookMethods: Set<HookMethod>?
 }

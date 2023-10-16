@@ -1,5 +1,6 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
@@ -19,7 +20,8 @@ data class ApiCreateTriggerReq(
     override val correlationId: CorrelationId? = null,
     override val duration: Duration? = null,
     override val topicId: TopicId? = null,
-    override val hookId: HookId? = null
+    override val hookId: HookId? = null,
+    override val hookMethods: Set<HookMethod>? = null
 ) : CreateTriggerReq
 
 @Serializable
@@ -81,7 +83,8 @@ data class ApiTriggerList(
         @Serializable
         data class Hook(
             val id: HookId,
-            val name: HookName
+            val name: HookName,
+            val methods: Set<HookMethod>
         )
     }
 }
@@ -149,7 +152,8 @@ class ApiHookTrigger(
     @Serializable
     data class Hook(
         val id: HookId,
-        val name: HookName
+        val name: HookName,
+        val methods: Set<HookMethod>
     )
 }
 

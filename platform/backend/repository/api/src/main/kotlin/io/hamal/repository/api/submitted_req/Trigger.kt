@@ -1,6 +1,7 @@
 package io.hamal.repository.api.submitted_req
 
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
@@ -21,7 +22,8 @@ data class SubmittedCreateTriggerReq(
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null,
-    var hookId: HookId? = null
+    val hookId: HookId? = null,
+    val hookMethods: Set<HookMethod>? = null
 ) : SubmittedReqWithGroupId
 
 

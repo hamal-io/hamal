@@ -2,7 +2,10 @@ package io.hamal.integration.http
 
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.HookMethod
+import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.HookHeaders
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookParameters
@@ -38,8 +41,9 @@ internal class HookInvokeController(
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
         val result = SubmittedInvokeHookReq(
             reqId = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
+            status = Submitted,
             id = id,
+            method = req.method(),
             headers = req.headers(),
             parameters = req.parameters()
         ).also(reqCmdRepository::queue)
@@ -56,6 +60,15 @@ internal class HookInvokeController(
     private fun HttpServletRequest.parameters() = HookParameters(
         MapType(parameterMap.map { (key, value) -> key to StringType(value.joinToString(",")) }.toMap().toMutableMap())
     )
+
+    private fun HttpServletRequest.method(): HookMethod = when (method.lowercase()) {
+        "delete" -> Delete
+        "get" -> Get
+        "patch" -> Patch
+        "post" -> Post
+        "put" -> Put
+        else -> throw IllegalArgumentException("${method.lowercase()} not supported")
+    }
 
     @Serializable
     data class Response(

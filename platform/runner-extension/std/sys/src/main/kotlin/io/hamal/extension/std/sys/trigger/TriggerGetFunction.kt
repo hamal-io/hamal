@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.type.ArrayType
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -95,7 +96,10 @@ class TriggerGetFunction(
                                     "hook" to MapType(
                                         mutableMapOf(
                                             "id" to StringType(trigger.hook.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.hook.name.value)
+                                            "name" to StringType(trigger.hook.name.value),
+                                            "methods" to ArrayType(trigger.hook.methods.mapIndexed { methodIndex, hookMethod ->
+                                                methodIndex + 1 to StringType(hookMethod.name)
+                                            }.toMap().toMutableMap())
                                         )
                                     ),
                                 )

@@ -29,13 +29,11 @@ class TriggerCreateFunction(
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                     name = TriggerName(arg1.getString("name")),
                     inputs = TriggerInputs(),
-
                     namespaceId = if (arg1.type("namespace_id") == StringType::class) {
                         NamespaceId(arg1.getString("namespace_id"))
                     } else {
                         null
                     },
-
                     duration = if (arg1.type("duration") == StringType::class) {
                         Duration.parseIsoString(arg1.getString("duration"))
                     } else {
