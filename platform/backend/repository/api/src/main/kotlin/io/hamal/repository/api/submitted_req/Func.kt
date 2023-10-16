@@ -15,8 +15,8 @@ data class SubmittedCreateFuncReq(
     val namespaceId: NamespaceId?,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: CodeValue,
-    val codeId: CodeId
+    val codeId: CodeId,
+    val code: CodeValue
 ) : SubmittedReqWithGroupId
 
 

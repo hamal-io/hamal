@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
@@ -37,8 +38,10 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
                 namespaceId = namespaceId,
                 name = name,
                 inputs = inputs,
-                codeId = codeId,
-                codeVersion = codeVersion
+                code = FuncCode(
+                    id = codeId,
+                    version = codeVersion
+                )
             )
         )
     }

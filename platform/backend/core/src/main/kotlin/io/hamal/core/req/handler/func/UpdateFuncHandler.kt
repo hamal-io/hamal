@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
+import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.event.FuncCreatedEvent
 import io.hamal.repository.api.submitted_req.SubmittedUpdateFuncReq
@@ -27,7 +28,7 @@ class UpdateFuncHandler(
 private fun UpdateFuncHandler.updateFunc(req: SubmittedUpdateFuncReq): Func {
     val func = funcRepository.get(req.id)
     val code = codeCmdRepository.update(
-        func.codeId, CodeCmdRepository.UpdateCmd(
+        func.code.id, CodeCmdRepository.UpdateCmd(
             id = req.cmdId(),
             value = req.code
         )
@@ -40,8 +41,10 @@ private fun UpdateFuncHandler.updateFunc(req: SubmittedUpdateFuncReq): Func {
             namespaceId = req.namespaceId,
             name = req.name,
             inputs = req.inputs,
-            codeId = code.id,
-            codeVersion = code.version
+            code = FuncCode(
+                id = code.id,
+                version = code.version
+            )
         )
     )
 }

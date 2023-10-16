@@ -3,6 +3,7 @@ package io.hamal.repository.memory.record
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository
+import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.func.CreateFuncFromRecords
@@ -63,7 +64,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
     recordClass = FuncRecord::class
 ), FuncRepository {
     private val lock = ReentrantLock()
-    override fun create(cmd: FuncCmdRepository.CreateCmd): Func {
+    override fun create(cmd: CreateCmd): Func {
         return lock.withLock {
             val funcId = cmd.funcId
             val cmdId = cmd.id
@@ -78,8 +79,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        codeId = cmd.codeId,
-                        codeVersion = cmd.codeVersion
+                        code = cmd.code
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
@@ -100,8 +100,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        codeId = cmd.codeId ?: currentVersion.codeId,
-                        codeVersion = cmd.codeVersion ?: currentVersion.codeVersion
+                        code = cmd.code ?: currentVersion.code
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)

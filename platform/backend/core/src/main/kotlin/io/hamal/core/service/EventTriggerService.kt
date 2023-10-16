@@ -3,8 +3,8 @@ package io.hamal.core.service
 import io.hamal.core.component.Async
 import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.*
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
@@ -70,9 +70,7 @@ internal class EventTriggerService(
                                     funcId = trigger.funcId,
                                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                                     inputs = InvocationInputs(),
-                                    code = null,
-                                    codeId = func.codeId,
-                                    codeVersion = func.codeVersion,
+                                    code = func.code.toExecCode(),
                                     events = entries.map {
                                         Event(
                                             topic = EventTopic(

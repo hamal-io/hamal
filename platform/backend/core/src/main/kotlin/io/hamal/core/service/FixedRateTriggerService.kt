@@ -3,8 +3,8 @@ package io.hamal.core.service
 import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.CorrelationId
@@ -71,9 +71,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger
             funcId = trigger.funcId,
             correlationId = trigger.correlationId ?: CorrelationId("__default__"),
             inputs = InvocationInputs(),
-            code = null,
-            codeId = func.codeId,
-            codeVersion = func.codeVersion,
+            code = func.code.toExecCode(),
             events = listOf() // FIXME
         )
     )

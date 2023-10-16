@@ -3,6 +3,7 @@ package io.hamal.repository.record.func
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCode
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
@@ -16,10 +17,9 @@ data class FuncEntity(
     var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
-    var codeId: CodeId? = null,
-    var codeVersion: CodeVersion? = null
+    var code: FuncCode? = null,
 
-) : RecordEntity<FuncId, FuncRecord, Func> {
+    ) : RecordEntity<FuncId, FuncRecord, Func> {
 
     override fun apply(rec: FuncRecord): FuncEntity {
         return when (rec) {
@@ -30,8 +30,7 @@ data class FuncEntity(
                 namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
-                codeId = rec.codeId,
-                codeVersion = rec.codeVersion
+                code = rec.code
             )
 
             is FuncUpdatedRecord -> copy(
@@ -41,8 +40,7 @@ data class FuncEntity(
                 namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
-                codeId = rec.codeId,
-                codeVersion = rec.codeVersion
+                code = rec.code
             )
         }
     }
@@ -55,8 +53,7 @@ data class FuncEntity(
             namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
-            codeId = codeId!!,
-            codeVersion = codeVersion!!
+            code = code!!,
         )
     }
 }

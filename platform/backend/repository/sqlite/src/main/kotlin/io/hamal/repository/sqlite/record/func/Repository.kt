@@ -69,8 +69,7 @@ class SqliteFuncRepository(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        codeId = cmd.codeId,
-                        codeVersion = cmd.codeVersion
+                        code = cmd.code
                     )
                 )
 
@@ -95,8 +94,7 @@ class SqliteFuncRepository(
                         namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        codeId = cmd.codeId ?: currentVersion.codeId,
-                        codeVersion = cmd.codeVersion ?: currentVersion.codeVersion
+                        code = cmd.code ?: currentVersion.code
                     )
                 )
                 currentVersion(funcId)

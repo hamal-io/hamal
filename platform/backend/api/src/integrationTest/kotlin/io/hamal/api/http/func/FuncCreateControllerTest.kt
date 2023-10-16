@@ -39,7 +39,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             assertThat(namespace.name, equalTo(NamespaceName("hamal")))
         }
 
-        with(codeQueryRepository.get(func.codeId)) {
+        with(codeQueryRepository.get(func.code.id)) {
             assertThat(value, equalTo(CodeValue("13 + 37")))
             assertThat(version, equalTo(CodeVersion(1)))
         }
@@ -81,7 +81,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             }
         }
 
-        with(codeQueryRepository.get(func.codeId)) {
+        with(codeQueryRepository.get(func.code.id)) {
             assertThat(value, equalTo(CodeValue("13 + 37")))
             assertThat(version, equalTo(CodeVersion(1)))
         }

@@ -22,9 +22,7 @@ data class InvokeExecReq(
     val funcId: FuncId,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val code: CodeValue?,
-    val codeId: CodeId?,
-    val codeVersion: CodeVersion?,
+    val code: ExecCode,
     val events: List<Event>
 )
 
@@ -72,7 +70,7 @@ class SubmitRequest(
             funcId = req.funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
-            code = ExecCode(id = func.codeId, version = func.codeVersion),
+            code = func.code.toExecCode(),
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
@@ -132,7 +130,7 @@ class SubmitRequest(
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs ?: InvocationInputs(),
-            code = ExecCode(id = func.codeId, func.codeVersion),
+            code = func.code.toExecCode(),
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
@@ -158,13 +156,13 @@ class SubmitRequest(
     operator fun invoke(groupId: GroupId, req: CreateFuncReq) = SubmittedCreateFuncReq(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
-        id = generateDomainId(::FuncId),
         groupId = groupId,
+        id = generateDomainId(::FuncId),
         namespaceId = req.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
         name = req.name,
         inputs = req.inputs,
-        code = req.code,
-        codeId = generateDomainId(::CodeId)
+        codeId = generateDomainId(::CodeId),
+        code = req.code
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(funcId: FuncId, req: UpdateFuncReq) = SubmittedUpdateFuncReq(
@@ -176,8 +174,7 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         code = req.code,
-
-        ).also(reqCmdRepository::queue)
+    ).also(reqCmdRepository::queue)
 
 
     operator fun invoke(groupId: GroupId, req: CreateHookReq) = SubmittedCreateHookReq(

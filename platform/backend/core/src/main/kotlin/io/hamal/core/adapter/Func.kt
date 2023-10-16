@@ -64,7 +64,7 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T {
         val func = funcQueryRepository.get(funcId)
-        val code = codeQueryRepository.get(func.codeId)
+        val code = codeQueryRepository.get(func.code.id)
         val namespaces = namespaceQueryRepository.get(func.namespaceId)
         return responseHandler(func, code, namespaces)
     }

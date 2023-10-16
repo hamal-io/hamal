@@ -1,9 +1,9 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -15,9 +15,20 @@ data class Func(
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val codeId: CodeId,
-    val codeVersion: CodeVersion
+    val code: FuncCode,
 ) : DomainObject<FuncId>
+
+@Serializable
+data class FuncCode(
+    val id: CodeId,
+    val version: CodeVersion
+) {
+    fun toExecCode() = ExecCode(
+        id = id,
+        version = version,
+        value = null
+    )
+}
 
 interface FuncRepository : FuncCmdRepository, FuncQueryRepository
 
@@ -33,8 +44,7 @@ interface FuncCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
-        val codeId: CodeId,
-        val codeVersion: CodeVersion
+        val code: FuncCode
     )
 
     data class UpdateCmd(
@@ -42,8 +52,7 @@ interface FuncCmdRepository : CmdRepository {
         val namespaceId: NamespaceId? = null,
         val name: FuncName? = null,
         val inputs: FuncInputs? = null,
-        val codeId: CodeId? = null,
-        val codeVersion: CodeVersion? = null
+        val code: FuncCode? = null
     )
 }
 

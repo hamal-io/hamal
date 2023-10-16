@@ -54,12 +54,8 @@ class InvokeHookHandler(
                     funcId = trigger.funcId,
                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                     inputs = InvocationInputs(),
-                    code = null,
-                    codeId = func.codeId,
-                    codeVersion = func.codeVersion,
-                    events = listOf(
-
-                    )
+                    code = func.code.toExecCode(),
+                    events = listOf()
                 )
             )
         }

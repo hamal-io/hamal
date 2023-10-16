@@ -6,6 +6,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,8 +27,14 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(FuncId(12345)))
                 assertThat(name, equalTo(FuncName("awesome-func")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(codeId, equalTo(CodeId(34567)))
-                assertThat(codeVersion, equalTo(CodeVersion(1)))
+                assertThat(
+                    code, equalTo(
+                        FuncCode(
+                            id = CodeId(34567),
+                            version = CodeVersion(1)
+                        )
+                    )
+                )
             }
         }
     }
@@ -39,13 +46,13 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
         SubmittedCreateFuncReq(
             reqId = ReqId(1),
             status = Submitted,
-            id = FuncId(12345),
             groupId = testGroup.id,
+            id = FuncId(12345),
             namespaceId = NamespaceId(23456),
             name = FuncName("awesome-func"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-            code = CodeValue("some code"),
             codeId = CodeId(34567),
+            code = CodeValue("some code"),
         )
     }
 }
