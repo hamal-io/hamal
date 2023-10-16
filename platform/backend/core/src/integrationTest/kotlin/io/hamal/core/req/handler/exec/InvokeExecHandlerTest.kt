@@ -26,9 +26,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 id = ExecId(3333),
                 groupId = testGroup.id,
                 inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
-                code = CodeValue("code"),
-                codeId = null,
-                codeVersion = null,
+                code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null,
                 events = listOf()
@@ -42,9 +40,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks"))))))
-                assertThat(code, equalTo(CodeValue("code")))
-                assertThat(codeId, nullValue())
-                assertThat(codeVersion, nullValue())
+                assertThat(code, equalTo(ExecCode(value = CodeValue("code"))))
             }
         }
     }
@@ -78,9 +74,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                     )
                 ),
                 funcId = FuncId(4444),
-                code = null,
-                codeId = CodeId(4455),
-                codeVersion = CodeVersion(5544),
+                code = ExecCode(
+                    id = CodeId(4455),
+                    version = CodeVersion(5544),
+                ),
                 events = listOf()
             )
         )
@@ -107,9 +104,14 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                         )
                     )
                 )
-                assertThat(code, nullValue())
-                assertThat(codeId, equalTo(CodeId(4455)))
-                assertThat(codeVersion, equalTo(CodeVersion(5544)))
+                assertThat(
+                    code, equalTo(
+                        ExecCode(
+                            id = CodeId(4455),
+                            version = CodeVersion(5544)
+                        )
+                    )
+                )
             }
         }
     }
@@ -139,9 +141,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                     "invocation" to StringType("invocation")
                     ))),
             funcId = FuncId(4444),
-            code = null,
-            codeId = CodeId(5555),
-            codeVersion = CodeVersion(6666),
+            code = ExecCode(
+                id = CodeId(5555),
+                version = CodeVersion(6666),
+            ),
             events = listOf()
         )
     }

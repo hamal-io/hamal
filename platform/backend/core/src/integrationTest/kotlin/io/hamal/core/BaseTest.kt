@@ -164,9 +164,9 @@ internal abstract class BaseTest {
         execId: ExecId,
         status: ExecStatus,
         correlation: Correlation? = null,
-        code: CodeValue = CodeValue(""),
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
+        code: CodeValue = CodeValue(""),
         events: List<Event> = listOf()
     ): Exec {
 
@@ -177,9 +177,11 @@ internal abstract class BaseTest {
                 groupId = testGroup.id,
                 correlation = correlation,
                 inputs = ExecInputs(),
-                code = code,
-                codeId = codeId,
-                codeVersion = codeVersion,
+                code = ExecCode(
+                    id = codeId,
+                    version = codeVersion,
+                    value = code
+                ),
                 events = events
             )
         )

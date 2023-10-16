@@ -16,7 +16,7 @@ internal class ExecGetController(
 ) {
     @GetMapping("/v1/execs/{execId}")
     fun get(@PathVariable("execId") execId: ExecId): ResponseEntity<ApiExec> {
-        return retry{
+        return retry {
             getExec(execId) { exec ->
                 ResponseEntity.ok(
                     ApiExec(
@@ -24,9 +24,13 @@ internal class ExecGetController(
                         status = exec.status,
                         correlation = exec.correlation,
                         inputs = exec.inputs,
-                        code = exec.code,
-                        codeId = exec.codeId,
-                        codeVersion = exec.codeVersion,
+                        code = exec.code.let { code ->
+                            ApiExec.Code(
+                                id = code.id,
+                                version = code.version,
+                                value = code.value
+                            )
+                        },
                         events = exec.events
                     )
                 )

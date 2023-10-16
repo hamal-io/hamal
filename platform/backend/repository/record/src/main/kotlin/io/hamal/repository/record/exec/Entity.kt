@@ -22,9 +22,7 @@ data class ExecEntity(
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
-    var code: CodeValue? = null,
-    var codeId: CodeId? = null,
-    var codeVersion: CodeVersion? = null,
+    var code: ExecCode? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
     var events: List<Event>? = null,
@@ -43,8 +41,6 @@ data class ExecEntity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                codeId = rec.codeId,
-                codeVersion = rec.codeVersion,
                 events = rec.events,
                 plannedAt = Instant.now(), // FIXME
             )
@@ -99,9 +95,7 @@ data class ExecEntity(
             groupId = groupId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(MapType()),
-            code = code,
-            codeId = codeId,
-            codeVersion = codeVersion,
+            code = code ?: ExecCode(),
             events = events ?: listOf()
         )
 

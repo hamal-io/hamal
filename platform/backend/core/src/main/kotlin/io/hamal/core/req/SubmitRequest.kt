@@ -72,9 +72,7 @@ class SubmitRequest(
             funcId = req.funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
-            code = req.code,
-            codeId = req.codeId,
-            codeVersion = req.codeVersion,
+            code = ExecCode(id = func.codeId, version = func.codeVersion),
             events = listOf()
         ).also(reqCmdRepository::queue)
     }
@@ -117,9 +115,7 @@ class SubmitRequest(
         id = generateDomainId(::ExecId),
         groupId = groupId,
         inputs = req.inputs,
-        code = req.code,
-        codeId = null,
-        codeVersion = null,
+        code = ExecCode(value = req.code),
         funcId = null,
         correlationId = null,
         events = listOf()
@@ -136,9 +132,7 @@ class SubmitRequest(
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs ?: InvocationInputs(),
-            code = null,
-            codeId = func.codeId,
-            codeVersion = func.codeVersion,
+            code = ExecCode(id = func.codeId, func.codeVersion),
             events = listOf()
         ).also(reqCmdRepository::queue)
     }

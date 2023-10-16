@@ -24,9 +24,15 @@ class ExecGetFunction(
                 exec.correlation?.correlationId?.value?.let { corId ->
                     it["correlation_id"] = corId
                 } // FIXME set nil value to table --> makes the api nicer
-                it["code"] = exec.code?.value?.let(::CodeType) ?: NilType
-                it["code_id"] = exec.codeId?.value?.value?.toString(16)?.let(::StringType) ?: NilType
-                it["code_version"] = exec.codeVersion?.value?.let(::NumberType) ?: NilType
+                it["code"] = exec.code.let { code ->
+                    MapType(
+                        mutableMapOf(
+                            "id" to (code.id?.value?.value?.toString(16)?.let(::StringType) ?: NilType),
+                            "version" to (code.version?.value?.let(::NumberType) ?: NilType),
+                            "value" to (code.value?.value?.let(::CodeType) ?: NilType)
+                        )
+                    )
+                }
             }
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null

@@ -65,8 +65,6 @@ class SqliteExecRepository(
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,
-                        codeId = cmd.codeId,
-                        codeVersion = cmd.codeVersion,
                         events = cmd.events
                     )
                 )

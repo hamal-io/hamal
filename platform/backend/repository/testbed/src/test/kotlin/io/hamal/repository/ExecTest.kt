@@ -37,9 +37,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                         funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                    code = CodeValue("40 + 2"),
-                    codeId = null,
-                    codeVersion = null,
+                    code = ExecCode(value = CodeValue("40 + 2")),
                     events = listOf(
                         Event(
                             topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -607,9 +605,7 @@ private fun ExecRepository.planExec(
             funcId = FuncId(23)
         ),
         inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-        code = CodeValue("40 + 2"),
-        codeId = null,
-        codeVersion = null,
+        code = ExecCode(value = CodeValue("40 + 2")),
         events = listOf(
             Event(
                 topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -643,9 +639,7 @@ fun ExecRepository.createExec(
             groupId = groupId,
             correlation = correlation,
             inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-            code = CodeValue("'13'..'37'"),
-            codeId = null,
-            codeVersion = null,
+            code = ExecCode(value = CodeValue("'13'..'37'")),
             events = listOf(
                 Event(
                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),

@@ -17,9 +17,7 @@ data class SubmittedInvokeExecReq(
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val code: CodeValue?,
-    val codeId: CodeId?,
-    val codeVersion: CodeVersion?,
+    val code: ExecCode,
     val events: List<Event>
 ) : SubmittedReqWithGroupId
 

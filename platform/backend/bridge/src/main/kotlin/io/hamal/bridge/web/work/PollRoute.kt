@@ -33,8 +33,8 @@ internal class PollRoute(
                 work = result.map { exec ->
                     val state = exec.correlation?.let { stateQueryRepository.find(it)?.value } ?: State()
 
-                    val code = exec.code ?: run {
-                        codeQueryRepository.find(exec.codeId!!, exec.codeVersion!!)?.value
+                    val code = exec.code.value ?: run {
+                        codeQueryRepository.find(exec.code.id!!, exec.code.version!!)?.value
                     }!!
 
                     UnitOfWork(

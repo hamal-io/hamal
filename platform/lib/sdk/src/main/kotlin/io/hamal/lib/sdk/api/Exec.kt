@@ -41,11 +41,16 @@ data class ApiExec(
     val status: ExecStatus,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val code: CodeValue?,
-    val codeId: CodeId?,
-    val codeVersion: CodeVersion?,
+    val code: Code,
     val events: List<Event>
-)
+) {
+    @Serializable
+    data class Code(
+        val id: CodeId?,
+        val version: CodeVersion?,
+        val value: CodeValue?
+    )
+}
 
 interface ApiExecService {
     fun list(groupId: GroupId): List<ApiExecList.Exec>

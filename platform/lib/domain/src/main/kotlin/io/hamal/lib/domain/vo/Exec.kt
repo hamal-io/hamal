@@ -1,10 +1,10 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
@@ -22,6 +22,13 @@ class ExecId(override val value: SnowflakeId) : DomainId() {
 class ExecInputs(override val value: MapType = MapType()) : Inputs() {
     internal object Serializer : InputsSerializer<ExecInputs>(::ExecInputs)
 }
+
+@Serializable
+class ExecCode(
+    val id: CodeId? = null,
+    val version: CodeVersion? = null,
+    val value: CodeValue? = null,
+)
 
 enum class ExecStatus(val value: Int) {
     Planned(1),
