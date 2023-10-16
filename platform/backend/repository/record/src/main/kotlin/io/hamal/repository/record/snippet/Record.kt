@@ -21,7 +21,7 @@ data class SnippetCreationRecord(
     val groupId: GroupId,
     val name: SnippetName,
     val inputs: SnippetInputs,
-    val codeValue: CodeValue,
+    val value: CodeValue,
     val accountId: AccountId
 ) : SnippetRecord()
 
@@ -33,5 +33,5 @@ data class SnippetUpdatedRecord(
     override val cmdId: CmdId,
     val name: SnippetName,
     val inputs: SnippetInputs,
-    val codeValue: CodeValue
+    val value: CodeValue
 ) : SnippetRecord()

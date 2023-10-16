@@ -14,13 +14,13 @@ data class Snippet(
     val cmdId: CmdId,
     val name: SnippetName,
     val inputs: SnippetInputs,
-    val codeValue: CodeValue,
+    val value: CodeValue,
     val accountId: AccountId
 ) : DomainObject<SnippetId>
 
 interface SnippetRepository : SnippetCmdRepository, SnippetQueryRepository
 
-interface SnippetCmdRepository : CmdRepository{
+interface SnippetCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Snippet
     fun update(snippetId: SnippetId, cmd: UpdateCmd): Snippet
 
@@ -30,7 +30,7 @@ interface SnippetCmdRepository : CmdRepository{
         val groupId: GroupId,
         val inputs: SnippetInputs,
         val name: SnippetName,
-        val codeValue: CodeValue,
+        val value: CodeValue,
         val accountId: AccountId // in RestController = 1
     )
 
@@ -38,7 +38,7 @@ interface SnippetCmdRepository : CmdRepository{
         val id: CmdId,
         val name: SnippetName? = null,
         val inputs: SnippetInputs? = null,
-        val codeValue: CodeValue? = null
+        val value: CodeValue? = null
     )
 }
 
@@ -46,6 +46,14 @@ interface SnippetQueryRepository {
     fun get(snippetId: SnippetId) = find(snippetId) ?: throw NoSuchElementException("Snippet not found")
     fun find(snippetId: SnippetId): Snippet?
     fun list(query: SnippetQuery): List<Snippet>
+    fun list(snippetIds: List<SnippetId>): List<Snippet> = list(
+        SnippetQuery(
+            limit = Limit.all,
+            groupIds = listOf(),
+            snippetIds = snippetIds
+        )
+    )
+
     fun count(query: SnippetQuery): ULong
 
     data class SnippetQuery(

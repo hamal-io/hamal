@@ -42,8 +42,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Creates code duplicate`() = runWith(CodeRepository::class) {
-            runWith(CodeRepository::class) {
-
                 createCode(
                     codeId = CodeId(1),
                     groupId = GroupId(1),
@@ -73,7 +71,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     assertThat(type, equalTo(CodeType.Lua54))
                 }
             }
-        }
     }
 
     @Nested

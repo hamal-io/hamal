@@ -2,8 +2,9 @@ package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.repository.api.Snippet
-import io.hamal.repository.api.SnippetCmdRepository.*
-import io.hamal.repository.api.SnippetQueryRepository.*
+import io.hamal.repository.api.SnippetCmdRepository.CreateCmd
+import io.hamal.repository.api.SnippetCmdRepository.UpdateCmd
+import io.hamal.repository.api.SnippetQueryRepository.SnippetQuery
 import io.hamal.repository.api.SnippetRepository
 import io.hamal.repository.record.snippet.CreateSnippetFromRecords
 import io.hamal.repository.record.snippet.SnippetCreationRecord
@@ -15,15 +16,16 @@ import kotlin.concurrent.withLock
 internal object CurrentSnippetProjection {
     private val projection = mutableMapOf<SnippetId, Snippet>()
     fun apply(snippet: Snippet) {
-        val currentSnippet = projection[snippet.id]
-        projection.remove(snippet.id)
+        /* Maybe?
+           val currentSnippet = projection[snippet.id]
+           projection.remove(snippet.id)
 
-        if (projection.values.any { it.name == snippet.name }) {
-            if (currentSnippet != null) {
-                projection[currentSnippet.id] = currentSnippet
-            }
-            throw IllegalArgumentException("${snippet.name} already exists")
-        }
+           if (projection.values.any { it.name == snippet.name && it.accountId == snippet.accountId }) {
+               if (currentSnippet != null) {
+                   projection[currentSnippet.id] = currentSnippet
+               }
+               throw IllegalArgumentException("${snippet.name} already exists")
+           }*/
         projection[snippet.id] = snippet
     }
 
@@ -76,7 +78,7 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
                         groupId = cmd.groupId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        codeValue = cmd.codeValue,
+                        value = cmd.value,
                         accountId = cmd.accountId
                     )
                 )
@@ -97,7 +99,7 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        codeValue = cmd.codeValue ?: currentVersion.codeValue
+                        value = cmd.value ?: currentVersion.value
                     )
                 )
                 (currentVersion(snippetId)).also(CurrentSnippetProjection::apply)

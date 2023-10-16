@@ -27,7 +27,7 @@ data class SnippetEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.codeValue,
+                codeValue = rec.value,
                 accountId = rec.accountId
             )
 
@@ -37,7 +37,7 @@ data class SnippetEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.codeValue
+                codeValue = rec.value
             )
         }
     }
@@ -49,7 +49,7 @@ data class SnippetEntity(
             groupId = groupId,
             name = name!!,
             inputs = inputs!!,
-            codeValue = codeValue!!,
+            value = codeValue!!,
             accountId = accountId!!
         )
     }
