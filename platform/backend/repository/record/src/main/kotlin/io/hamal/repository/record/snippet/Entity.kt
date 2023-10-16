@@ -3,6 +3,7 @@ package io.hamal.repository.record.snippet
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Snippet
+import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 
@@ -13,11 +14,11 @@ data class SnippetEntity(
     override val sequence: RecordSequence,
 
     var name: SnippetName? = null,
-    var inputs: SnippetInputs ? = null,
-    var codeValue: CodeValue ? = null,
-    var accountId: AccountId ? = null
+    var inputs: SnippetInputs? = null,
+    var codeValue: CodeValue? = null,
+    var accountId: AccountId? = null
 
-) : RecordEntity<SnippetId, SnippetRecord, Snippet>{
+) : RecordEntity<SnippetId, SnippetRecord, Snippet> {
     override fun apply(rec: SnippetRecord): SnippetEntity {
         return when (rec) {
             is SnippetCreationRecord -> copy(
@@ -51,5 +52,30 @@ data class SnippetEntity(
             codeValue = codeValue!!,
             accountId = accountId!!
         )
+    }
+}
+
+fun List<SnippetRecord>.createEntity(): SnippetEntity {
+    check(isNotEmpty()) { "At least one record is required" }
+    val firstRecord = first()
+    check(firstRecord is SnippetCreationRecord)
+
+    var result = SnippetEntity(
+        id = firstRecord.entityId,
+        groupId = firstRecord.groupId,
+        cmdId = firstRecord.cmdId,
+        sequence = firstRecord.sequence()
+    )
+
+    forEach { record ->
+        result = result.apply(record)
+    }
+
+    return result
+}
+
+object CreateSnippetFromRecords : CreateDomainObject<SnippetId, SnippetRecord, Snippet> {
+    override fun invoke(recs: List<SnippetRecord>): Snippet {
+        return recs.createEntity().toDomainObject()
     }
 }

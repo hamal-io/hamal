@@ -20,7 +20,7 @@ data class Snippet(
 
 interface SnippetRepository : SnippetCmdRepository, SnippetQueryRepository
 
-interface SnippetCmdRepository {
+interface SnippetCmdRepository : CmdRepository{
     fun create(cmd: CreateCmd): Snippet
     fun update(snippetId: SnippetId, cmd: UpdateCmd): Snippet
 
@@ -35,10 +35,10 @@ interface SnippetCmdRepository {
     )
 
     data class UpdateCmd(
-        val id: SnippetId,
+        val id: CmdId,
         val name: SnippetName? = null,
         val inputs: SnippetInputs? = null,
-        val code: Code
+        val codeValue: CodeValue? = null
     )
 }
 
@@ -51,7 +51,7 @@ interface SnippetQueryRepository {
     data class SnippetQuery(
         var afterId: SnippetId = SnippetId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var funcIds: List<SnippetId> = listOf(),
+        var snippetIds: List<SnippetId> = listOf(),
         var groupIds: List<GroupId>
     )
 }
