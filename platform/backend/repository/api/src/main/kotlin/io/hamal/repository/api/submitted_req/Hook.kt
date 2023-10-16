@@ -31,7 +31,6 @@ data class SubmittedInvokeHookReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: HookId,
-    val execId: ExecId,
     val headers: HookHeaders,
     val parameters: HookParameters
 ) : SubmittedReq

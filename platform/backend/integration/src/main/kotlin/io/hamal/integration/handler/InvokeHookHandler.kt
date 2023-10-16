@@ -4,8 +4,10 @@ import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
@@ -19,7 +21,8 @@ class InvokeHookHandler(
     private val hookQueryRepository: HookQueryRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val submitRequest: SubmitRequest
+    private val submitRequest: SubmitRequest,
+    private val generateDomainId: GenerateDomainId
 ) : ReqHandler<SubmittedInvokeHookReq>(SubmittedInvokeHookReq::class) {
 
     /**
@@ -50,7 +53,7 @@ class InvokeHookHandler(
 
             submitRequest(
                 InvokeExecReq(
-                    execId = req.execId,
+                    execId = generateDomainId(::ExecId),
                     funcId = trigger.funcId,
                     correlationId = trigger.correlationId ?: CorrelationId("__default__"),
                     inputs = InvocationInputs(),
