@@ -39,7 +39,7 @@ const EditorTab: FC<EditorTabProps> = (props) => {
                     updateFunc(props.funcId, {name: null, code: props.code}).then(response => {
                         console.log(response)
                     })
-                }}> Save </Button>
+                }}> Save  </Button>
 
             </div>
 

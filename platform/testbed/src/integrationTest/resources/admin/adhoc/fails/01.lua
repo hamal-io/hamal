@@ -3,7 +3,7 @@ sys = require('sys')
 err, res = sys.adhoc({
     inputs = {},
     code = [[
-        assert( 0 != 0 )
+        assert( 0 ~= 0 )
     ]]
 })
 

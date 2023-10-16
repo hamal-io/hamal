@@ -364,7 +364,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(code, equalTo(CodeValue("'13'..'37'")))
+                assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     events, equalTo(
                         listOf(
@@ -406,7 +406,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(code, equalTo(CodeValue("'13'..'37'")))
+                assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     events, equalTo(
                         listOf(
@@ -577,7 +577,7 @@ private fun assertBaseExec(exec: Exec) {
             )
         )
     )
-    assertThat(exec.code, equalTo(CodeValue("40 + 2")))
+    assertThat(exec.code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
     assertThat(
         exec.events, equalTo(
             listOf(

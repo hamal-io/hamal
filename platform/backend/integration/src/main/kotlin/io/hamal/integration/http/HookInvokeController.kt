@@ -3,6 +3,7 @@ package io.hamal.integration.http
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.HookHeaders
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookParameters
@@ -36,14 +37,11 @@ internal class HookInvokeController(
     fun webhookDelete(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
-
-        val params = req.parameterMap
-        println(params)
-
         val result = SubmittedInvokeHookReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = id,
+            execId = generateDomainId(::ExecId),
             headers = req.headers(),
             parameters = req.parameters()
         ).also(reqCmdRepository::queue)

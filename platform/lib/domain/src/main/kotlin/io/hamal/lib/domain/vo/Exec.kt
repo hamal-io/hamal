@@ -24,7 +24,7 @@ class ExecInputs(override val value: MapType = MapType()) : Inputs() {
 }
 
 @Serializable
-class ExecCode(
+data class ExecCode(
     val id: CodeId? = null,
     val version: CodeVersion? = null,
     val value: CodeValue? = null,

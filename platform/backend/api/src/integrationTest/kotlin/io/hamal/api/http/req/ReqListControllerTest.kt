@@ -2,6 +2,7 @@ package io.hamal.api.http.req
 
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.ExecCode
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.lib.sdk.api.ApiSubmittedReq
@@ -47,7 +48,7 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
             .map { it as ApiSubmittedReqWithId }
             .forEachIndexed { idx, req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
-                assertThat(code, equalTo(CodeValue("${22 - idx}")))
+                assertThat(code, equalTo(ExecCode(value = CodeValue("${22 - idx}"))))
             }
     }
 
@@ -69,7 +70,7 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
             .map { it as ApiSubmittedReqWithId }
             .forEach { req ->
                 val code = execQueryRepository.get(req.id(::ExecId)).code
-                assertThat(code, equalTo(CodeValue("71")))
+                assertThat(code, equalTo(ExecCode(value = CodeValue("71"))))
             }
     }
 }
