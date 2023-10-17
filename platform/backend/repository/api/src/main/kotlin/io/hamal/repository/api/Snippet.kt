@@ -31,7 +31,7 @@ interface SnippetCmdRepository : CmdRepository {
         val inputs: SnippetInputs,
         val name: SnippetName,
         val value: CodeValue,
-        val accountId: AccountId // in RestController = 1
+        val accountId: AccountId
     )
 
     data class UpdateCmd(

@@ -2,6 +2,7 @@ package io.hamal.api.http.endpoint.snippet
 
 import io.hamal.core.adapter.GetSnippetPort
 import io.hamal.core.component.Retry
+import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.sdk.api.ApiSnippet
 import io.hamal.repository.api.Snippet
@@ -26,7 +27,8 @@ internal class SnippetGetController(
                 id = snippet.id,
                 name = snippet.name,
                 inputs = snippet.inputs,
-                value = snippet.value
+                value = snippet.value,
+                accountId = snippet.accountId
             )
         )
 }

@@ -94,6 +94,12 @@ internal abstract class BaseTest {
     lateinit var reqCmdRepository: ReqCmdRepository
 
     @Autowired
+    lateinit var snippetQueryRepository: SnippetQueryRepository
+
+    @Autowired
+    lateinit var snippetCmdRepository: SnippetCmdRepository
+
+    @Autowired
     lateinit var stateQueryRepository: StateQueryRepository
 
     @Autowired
@@ -126,6 +132,7 @@ internal abstract class BaseTest {
         hookCmdRepository.clear()
         namespaceCmdRepository.clear()
         reqCmdRepository.clear()
+        snippetCmdRepository.clear()
         stateCmdRepository.clear()
         triggerCmdRepository.clear()
 

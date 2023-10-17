@@ -5,7 +5,7 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class SubmittedCreateSnippetReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
