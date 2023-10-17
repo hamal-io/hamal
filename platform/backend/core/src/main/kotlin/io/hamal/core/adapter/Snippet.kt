@@ -4,7 +4,6 @@ import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Snippet
 import io.hamal.repository.api.SnippetQueryRepository
-import io.hamal.repository.api.SnippetQueryRepository.*
 import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateSnippetReq
 import io.hamal.request.UpdateSnippetReq
@@ -22,6 +21,7 @@ interface GetSnippetPort {
     operator fun <T : Any> invoke(snippetId: SnippetId, responseHandler: (Snippet) -> T): T
 }
 
+
 interface UpdateSnippetPort {
     operator fun <T : Any> invoke(
         snippetId: SnippetId,
@@ -36,7 +36,7 @@ interface SnippetPort : CreateSnippetPort, GetSnippetPort, UpdateSnippetPort
 class SnippetAdapter(
     private val submitRequest: SubmitRequest,
     private val snippetQueryRepository: SnippetQueryRepository,
-    ) : SnippetPort {
+) : SnippetPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateSnippetReq,

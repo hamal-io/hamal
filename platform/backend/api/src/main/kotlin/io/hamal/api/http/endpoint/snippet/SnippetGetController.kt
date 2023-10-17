@@ -1,11 +1,9 @@
 package io.hamal.api.http.endpoint.snippet
 
-import io.hamal.api.http.endpoint.req.Assembler.assemble
 import io.hamal.core.adapter.GetSnippetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.sdk.api.ApiSnippet
-import io.hamal.lib.sdk.api.ApiSnippetList
 import io.hamal.repository.api.Snippet
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

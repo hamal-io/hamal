@@ -112,7 +112,13 @@ open class MemoryRepositoryConfig {
     open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
 
     @Bean
-    open fun snippetQueryRepository(): SnippetQueryRepository = MemorySnippetRepository()
+    open fun snippetRepository() = MemorySnippetRepository()
+
+    @Bean
+    open fun snippetCmdRepository(): SnippetCmdRepository = snippetRepository()
+
+    @Bean
+    open fun snippetQueryRepository(): SnippetQueryRepository = snippetRepository()
 
     @Bean
     open fun stateRepository(): StateRepository = MemoryStateRepository()
