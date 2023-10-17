@@ -42,11 +42,11 @@ class SnippetAdapter(
         req: CreateSnippetReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
-        TODO("Not yet implemented")
+        return responseHandler(submitRequest(groupId, req))
     }
 
     override fun <T : Any> invoke(snippetId: SnippetId, responseHandler: (Snippet) -> T): T {
-        TODO("Not yet implemented")
+        return responseHandler(snippetQueryRepository.get(snippetId))
     }
 
     override fun <T : Any> invoke(
@@ -54,6 +54,8 @@ class SnippetAdapter(
         req: UpdateSnippetReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
-        TODO("Not yet implemented")
+        snippetQueryRepository.get(snippetId)
+        return responseHandler(submitRequest(snippetId, req))
     }
+
 }
