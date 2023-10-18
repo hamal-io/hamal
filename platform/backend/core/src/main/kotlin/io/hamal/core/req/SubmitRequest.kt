@@ -186,14 +186,13 @@ class SubmitRequest(
         inputs = req.inputs,
         value = req.value,
         accountId = accountId
-
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SubmittedUpdateSnippetReq(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = snippetQueryRepository.get(snippetId).groupId,
-        id = generateDomainId(::SnippetId),
+        id = snippetId,
         name = req.name,
         inputs = req.inputs,
         value = req.value,

@@ -56,8 +56,11 @@ class SnippetAdapter(
         req: UpdateSnippetReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
-        snippetQueryRepository.get(snippetId)
+        ensureSnippetExists(snippetId)
         return responseHandler(submitRequest(snippetId, req))
     }
+
+    private fun ensureSnippetExists(snippetId: SnippetId)  = snippetQueryRepository.get(snippetId)
+
 
 }

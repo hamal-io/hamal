@@ -42,7 +42,7 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
     }
 
     @Test
-    fun `Snippet does not exist`() {
+    fun `get snippet that does not exist`() {
         val getSnippetResponse = httpTemplate.get("/v1/snippets/33333333").execute()
         assertThat(getSnippetResponse.statusCode, equalTo(NotFound))
         require(getSnippetResponse is ErrorHttpResponse) { "request was successful" }

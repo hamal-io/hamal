@@ -18,7 +18,10 @@ internal class SnippetUpdateController(
     private val updateSnippet: UpdateSnippetPort
 ) {
     @PatchMapping("/v1/snippets/{snippetId}")
-    fun createSnippet(@PathVariable("snippetId") snippetId: SnippetId, @RequestBody req: ApiUpdateSnippetReq) = retry {
+    fun updateSnippet(
+        @PathVariable("snippetId") snippetId: SnippetId,
+        @RequestBody req: ApiUpdateSnippetReq
+    ) = retry {
         updateSnippet(snippetId, req) { submittedReq ->
             ResponseEntity(Assembler.assemble(submittedReq), ACCEPTED)
         }
