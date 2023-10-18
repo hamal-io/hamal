@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component
 interface CreateSnippetPort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
+        accountId: AccountId,
         req: CreateSnippetReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
@@ -39,10 +40,11 @@ class SnippetAdapter(
 ) : SnippetPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
+        accountId: AccountId,
         req: CreateSnippetReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
-        return responseHandler(submitRequest(groupId, req))
+        return responseHandler(submitRequest(groupId, accountId, req))
     }
 
     override fun <T : Any> invoke(snippetId: SnippetId, responseHandler: (Snippet) -> T): T {

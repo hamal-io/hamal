@@ -177,7 +177,7 @@ class SubmitRequest(
         code = req.code,
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, req: CreateSnippetReq) = SubmittedCreateSnippetReq(
+    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SubmittedCreateSnippetReq(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = groupId,
@@ -185,8 +185,9 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         value = req.value,
-        accountId = req.accountId
-    )
+        accountId = accountId
+
+    ).also(reqCmdRepository::queue)
 
     operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SubmittedUpdateSnippetReq(
         reqId = generateDomainId(::ReqId),
@@ -196,7 +197,7 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         value = req.value,
-    )
+    ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, req: CreateHookReq) = SubmittedCreateHookReq(
         reqId = generateDomainId(::ReqId),

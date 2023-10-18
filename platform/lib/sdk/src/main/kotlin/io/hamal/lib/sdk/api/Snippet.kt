@@ -11,29 +11,28 @@ data class ApiSnippet(
     val id: SnippetId,
     val name: SnippetName,
     val inputs: SnippetInputs,
-    val value: CodeValue,
-    val accountId: AccountId
+    val value: CodeValue
 )
 
 @Serializable
 data class ApiCreateSnippetReq(
     override val name: SnippetName,
     override val inputs: SnippetInputs,
-    override val value: CodeValue,
-    override val accountId: AccountId
+    override val value: CodeValue
 ) : CreateSnippetReq
 
 @Serializable
 data class ApiUpdateSnippetReq(
-    override val name: SnippetName,
-    override val inputs: SnippetInputs,
-    override val value: CodeValue
+    override val name: SnippetName? = null,
+    override val inputs: SnippetInputs? = null,
+    override val value: CodeValue? = null
 ) : UpdateSnippetReq
 
 
 interface ApiSnippetService {
     fun create(groupId: GroupId, createSnippetReq: ApiCreateSnippetReq): ApiSubmittedReqWithId
     fun get(snippetId: SnippetId): ApiSnippet
+    fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqWithId
 }
 
 internal class ApiSnippetServiceImpl(
@@ -44,6 +43,10 @@ internal class ApiSnippetServiceImpl(
     }
 
     override fun get(snippetId: SnippetId): ApiSnippet {
+        TODO("Not yet implemented")
+    }
+
+    override fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqWithId {
         TODO("Not yet implemented")
     }
 }

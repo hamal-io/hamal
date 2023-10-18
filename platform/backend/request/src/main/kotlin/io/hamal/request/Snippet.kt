@@ -6,7 +6,6 @@ interface CreateSnippetReq {
     val name: SnippetName
     val inputs: SnippetInputs
     val value: CodeValue
-    val accountId: AccountId
 }
 
 

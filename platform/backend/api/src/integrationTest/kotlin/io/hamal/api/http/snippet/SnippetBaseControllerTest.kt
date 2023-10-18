@@ -11,14 +11,14 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class SnippetBaseControllerTest : BaseControllerTest() {
     fun createSnippet(req: ApiCreateSnippetReq): ApiSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/groups/{groupId}/snippets")
+        val createSnippetResponse = httpTemplate.post("/v1/groups/{groupId}/snippets")
             .path("groupId", testGroup.id)
             .body(req)
             .execute()
 
-        assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithId::class)
+        assertThat(createSnippetResponse.statusCode, equalTo(Accepted))
+        require(createSnippetResponse is SuccessHttpResponse) { "request was not successful" }
+        return createSnippetResponse.result(ApiSubmittedReqWithId::class)
     }
 
     fun getSnippet(snippetId: SnippetId): ApiSnippet {

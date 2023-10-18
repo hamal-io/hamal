@@ -14,16 +14,14 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
+
     @Test
     fun `Get snippet`() {
-        val snippetId = awaitCompleted(
-            createSnippet(
-                ApiCreateSnippetReq(
-                    name = SnippetName("TestSnippet"),
-                    inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
-                    value = CodeValue("1 + 1"),
-                    accountId = AccountId(2)
-                )
+        val snippetId = createSnippet(
+            ApiCreateSnippetReq(
+                name = SnippetName("TestSnippet"),
+                inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                value = CodeValue("1 + 1")
             )
         ).id(::SnippetId)
 
@@ -40,7 +38,6 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
             assertThat(name, equalTo(SnippetName("TestSnippet")))
             assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
             assertThat(value, equalTo(CodeValue("1 + 1")))
-            assertThat(accountId, equalTo(AccountId(2)))
         }
     }
 

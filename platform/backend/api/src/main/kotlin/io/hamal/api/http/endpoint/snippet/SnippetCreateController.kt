@@ -3,6 +3,7 @@ package io.hamal.api.http.endpoint.snippet
 import io.hamal.api.http.endpoint.req.Assembler
 import io.hamal.core.adapter.CreateSnippetPort
 import io.hamal.core.component.Retry
+import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
@@ -23,7 +24,7 @@ class SnippetCreateController(
         @PathVariable("groupId") groupId: GroupId,
         @RequestBody req: ApiCreateSnippetReq
     ): ResponseEntity<ApiSubmittedReq> = retry {
-        createSnippet(groupId, req) {
+        createSnippet(groupId, accountId = AccountId(1), req) {
             ResponseEntity(Assembler.assemble(it), ACCEPTED)
         }
     }
