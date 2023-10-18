@@ -1,6 +1,7 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.vo.*
@@ -30,7 +31,8 @@ data class TriggerEntity(
 
     var topicId: TopicId? = null,
     var duration: Duration? = null,
-    var hookId: HookId? = null
+    var hookId: HookId? = null,
+    var hookMethods: Set<HookMethod>? = null
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
 
@@ -75,7 +77,8 @@ data class TriggerEntity(
                 type = Hook,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                hookId = rec.hookId
+                hookId = rec.hookId,
+                hookMethods = rec.hookMethods
             )
         }
     }
@@ -115,7 +118,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                hookId = hookId!!
+                hookId = hookId!!,
+                hookMethods = hookMethods!!
             )
         }
     }

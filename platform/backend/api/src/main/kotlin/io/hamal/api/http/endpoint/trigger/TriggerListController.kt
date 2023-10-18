@@ -93,7 +93,8 @@ class TriggerListController(private val listTriggers: ListTriggersPort) {
                                     ),
                                     hook = Hook(
                                         id = trigger.hookId,
-                                        name = hooks[trigger.hookId]!!.name
+                                        name = hooks[trigger.hookId]!!.name,
+                                        methods = trigger.hookMethods
                                     )
                                 )
                             }

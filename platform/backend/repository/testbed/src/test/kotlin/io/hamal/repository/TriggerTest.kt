@@ -2,6 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
@@ -335,7 +336,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                             )
                         )
                     ),
-                    hookId = HookId(9)
+                    hookId = HookId(9),
+                    hookMethods = setOf(Patch, Delete)
                 )
             )
 
@@ -346,6 +348,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(hookId, equalTo(HookId(9)))
+                assertThat(hookMethods, equalTo(setOf(Patch, Delete)))
             }
 
             verifyCount(1)
@@ -405,7 +408,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(22),
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
-                        hookId = HookId(9)
+                        hookId = HookId(9),
+                        hookMethods = setOf(Post, Put)
                     )
                 )
 
@@ -417,6 +421,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(hookId, equalTo(HookId(9)))
+                    assertThat(hookMethods, equalTo(setOf(Post, Put)))
                 }
 
                 verifyCount(2)
@@ -445,6 +450,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(999),
+                        hookMethods = setOf(Get)
                     )
                 )
 
@@ -877,7 +883,8 @@ private fun TriggerRepository.createHookTrigger(
                 )
             ),
             funcId = funcId,
-            hookId = hookId
+            hookId = hookId,
+            hookMethods = setOf(Post)
         )
     )
 }

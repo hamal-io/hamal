@@ -5,14 +5,12 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.HookQueryRepository
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.*
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.submitted_req.SubmittedInvokeHookReq
 import org.springframework.stereotype.Component
 
@@ -32,13 +30,15 @@ class InvokeHookHandler(
         val hook = hookQueryRepository.get(req.id)
 
         val triggers = triggerQueryRepository.list(
-            TriggerQueryRepository.TriggerQuery(
-                types = listOf(TriggerType.Hook),
+            TriggerQuery(
+                types = listOf(Hook),
                 limit = Limit.all,
                 groupIds = listOf(hook.groupId),
                 hookIds = listOf(hook.id)
             )
         )
+            .filterIsInstance<HookTrigger>()
+            .filter { it.hookMethods.contains(req.method) }
 
         val funcs = funcQueryRepository.list(
             FuncQueryRepository.FuncQuery(
@@ -46,7 +46,6 @@ class InvokeHookHandler(
                 funcIds = triggers.map { it.funcId }
             )
         ).associateBy(Func::id)
-
 
         triggers.forEach { trigger ->
             val func = funcs[trigger.funcId]!!

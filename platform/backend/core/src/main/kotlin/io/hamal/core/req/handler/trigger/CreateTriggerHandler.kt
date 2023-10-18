@@ -4,6 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.HookMethod.Post
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.NamespaceName
@@ -72,7 +73,8 @@ class CreateTriggerHandler(
                         funcId = req.funcId,
                         namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
                         inputs = req.inputs,
-                        hookId = hook.id
+                        hookId = hook.id,
+                        hookMethods = req.hookMethods ?: setOf(Post)
                     )
                 )
             }

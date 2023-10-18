@@ -1,9 +1,9 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
@@ -16,7 +16,7 @@ data class Hook(
     val groupId: GroupId,
     val cmdId: CmdId,
     val namespaceId: NamespaceId,
-    val name: HookName
+    val name: HookName,
 ) : DomainObject<HookId>
 
 interface HookRepository : HookCmdRepository, HookQueryRepository

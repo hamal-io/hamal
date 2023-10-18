@@ -38,8 +38,8 @@ function create_extension_factory()
             return err, res
         end
 
-        function export.code.get(code_id,code_version)
-            return internal.code_get(code_id,code_version or -1)
+        function export.code.get(code_id, code_version)
+            return internal.code_get(code_id, code_version or -1)
         end
 
         function export.exec.get(exec_id)
@@ -160,7 +160,8 @@ function create_extension_factory()
                 name = cmd.name,
                 func_id = cmd.func_id,
                 inputs = cmd.inputs or {},
-                hook_id = cmd.hook_id
+                hook_id = cmd.hook_id,
+                hook_methods = cmd.hook_methods or {}
             })
         end
 

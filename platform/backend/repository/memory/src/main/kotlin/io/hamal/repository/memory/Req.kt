@@ -6,8 +6,6 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.repository.api.ReqRepository
 import io.hamal.repository.api.submitted_req.SubmittedReq
-import io.hamal.repository.memory.record.CurrentExecProjection
-import io.hamal.repository.memory.record.QueueProjection
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -60,8 +58,6 @@ class MemoryReqRepository : ReqRepository {
         lock.withLock {
             store.clear()
             queue.clear()
-            QueueProjection.clear()
-            CurrentExecProjection.clear()
         }
     }
 

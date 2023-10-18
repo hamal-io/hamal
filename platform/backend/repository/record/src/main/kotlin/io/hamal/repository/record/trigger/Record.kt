@@ -1,6 +1,7 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
@@ -55,5 +56,6 @@ data class HookTriggerCreationRecord(
     val name: TriggerName,
     val inputs: TriggerInputs,
     val hookId: HookId,
+    val hookMethods: Set<HookMethod>,
     val correlationId: CorrelationId? = null
 ) : TriggerRecord()

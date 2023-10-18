@@ -75,7 +75,8 @@ internal class TriggerGetController(
                             inputs = trigger.inputs,
                             hook = ApiHookTrigger.Hook(
                                 id = hook!!.id,
-                                name = hook.name
+                                name = hook.name,
+                                methods = trigger.hookMethods
                             )
                         )
                     }
