@@ -68,7 +68,9 @@ class MemoryReqRepository : ReqRepository {
     }
 
     override fun list(query: ReqQueryRepository.ReqQuery): List<SubmittedReq> {
+
         return lock.withLock {
+
             store.keys.sorted()
                 .dropWhile { it <= query.afterId }
                 .take(query.limit.value)

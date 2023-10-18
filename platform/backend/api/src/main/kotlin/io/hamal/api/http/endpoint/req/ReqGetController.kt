@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class ReqGetController(private val getReq: GetReqPort) {
     @GetMapping("/v1/reqs/{reqId}")
-    fun getReq(
-        @PathVariable("reqId") reqId: ReqId,
-    ) = getReq(reqId) {
+    fun getReq(@PathVariable("reqId") reqId: ReqId) = getReq(reqId) {
         ResponseEntity(Assembler.assemble(it), HttpStatus.ACCEPTED)
     }
 }

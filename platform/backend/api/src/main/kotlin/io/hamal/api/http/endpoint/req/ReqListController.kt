@@ -24,10 +24,6 @@ internal class ReqListController(private val listReqs: ListReqPort) {
                 // groupId = ...
             ),
             // assembler
-        ) { reqs ->
-            ResponseEntity.ok(ApiReqList(
-                reqs.map { Assembler.assemble(it) }
-            ))
-        }
+        ) { reqs -> ResponseEntity.ok(ApiReqList(reqs.map { Assembler.assemble(it) })) }
     }
 }

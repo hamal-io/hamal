@@ -115,9 +115,15 @@ internal object Assembler {
                 token = r.token
             )
 
+            is SubmittedInvokeHookReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
 
             is TestSubmittedReq -> TODO()
-            is SubmittedInvokeHookReq -> throw IllegalStateException()
+
         }
     }
 }
