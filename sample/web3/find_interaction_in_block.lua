@@ -1,4 +1,4 @@
-local block_id = ctx.events[1].block
+local block_id = context.events[1].block
 -- local block = 10915074
 
 
@@ -12,7 +12,7 @@ if err ~= nil then
     print(err.message)
 else
     print(block)
-    for _,v in pairs(block.transactions) do
+    for _, v in pairs(block.transactions) do
         print(v.from, '-->', v.to)
     end
 end

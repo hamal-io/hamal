@@ -69,7 +69,7 @@ class CodeRunnerImpl(
 
                     sandbox.load(CodeType(unitOfWork.code.value))
 
-                    val ctx = sandbox.getGlobalTableMap("ctx")
+                    val ctx = sandbox.getGlobalTableMap("context")
                     val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
 
                     connector.complete(execId, ExecResult(), State(stateToSubmit), runnerContext.eventsToSubmit)

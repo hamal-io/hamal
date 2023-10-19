@@ -7,7 +7,7 @@ bsc.config.update({
 
 local step_size = 2
 
-local next_block_number = ctx.state.next_block_number
+local next_block_number = context.state.next_block_number
 
 if next_block_number == nil then
     next_block_number = 0
@@ -24,7 +24,7 @@ if err ~= nil then
 else
     for _, block in pairs(batch_result) do
         log.info("Added: " .. block.id .. " " .. block.hash)
-        ctx.emit({ topic = "bsc::block_available", block = block.id })
+        context.emit({ topic = "bsc::block_available", block = block.id })
     end
-    ctx.state.next_block_number = next_block_number + step_size
+    context.state.next_block_number = next_block_number + step_size
 end

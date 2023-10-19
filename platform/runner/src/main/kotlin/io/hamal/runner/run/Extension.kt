@@ -18,7 +18,7 @@ class RunnerContextFactory(
 ) : BundleExtensionFactory {
     override fun create(sandbox: Sandbox): BundleExtension {
         return BundleExtension(
-            name = "ctx",
+            name = "context",
             internals = mapOf(
                 "events" to sandbox.invocationEvents(executionCtx[RunnerInvocationEvents::class].events),
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
