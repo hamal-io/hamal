@@ -16,16 +16,6 @@ import kotlin.concurrent.withLock
 internal object CurrentSnippetProjection {
     private val projection = mutableMapOf<SnippetId, Snippet>()
     fun apply(snippet: Snippet) {
-        /* Maybe?
-           val currentSnippet = projection[snippet.id]
-           projection.remove(snippet.id)
-
-           if (projection.values.any { it.name == snippet.name && it.accountId == snippet.accountId }) {
-               if (currentSnippet != null) {
-                   projection[currentSnippet.id] = currentSnippet
-               }
-               throw IllegalArgumentException("${snippet.name} already exists")
-           }*/
         projection[snippet.id] = snippet
     }
 
@@ -66,15 +56,15 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
 
     override fun create(cmd: CreateCmd): Snippet {
         return lock.withLock {
-            val funcId = cmd.snippetId
+            val snippedId = cmd.snippetId
             val cmdId = cmd.id
-            if (commandAlreadyApplied(cmdId, funcId)) {
-                versionOf(funcId, cmd.id)
+            if (commandAlreadyApplied(cmdId, snippedId)) {
+                versionOf(snippedId, cmd.id)
             } else {
                 store(
                     SnippetCreationRecord(
                         cmdId = cmd.id,
-                        entityId = funcId,
+                        entityId = snippedId,
                         groupId = cmd.groupId,
                         name = cmd.name,
                         inputs = cmd.inputs,
@@ -82,7 +72,7 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
                         accountId = cmd.accountId
                     )
                 )
-                (currentVersion(funcId)).also(CurrentSnippetProjection::apply)
+                (currentVersion(snippedId)).also(CurrentSnippetProjection::apply)
             }
         }
     }

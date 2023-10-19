@@ -35,5 +35,5 @@ import java.nio.file.Paths
 internal class MemoryAuthorizedTest : BaseTest() {
     final override val log: Logger = logger(this::class)
     final override val sdk = withApiSdk(8052)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
+    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "authorized")
 }
