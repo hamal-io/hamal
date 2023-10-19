@@ -10,6 +10,8 @@ import io.hamal.extension.std.sys.namespace.NamespaceCreateFunction
 import io.hamal.extension.std.sys.namespace.NamespaceGetFunction
 import io.hamal.extension.std.sys.namespace.NamespaceListFunction
 import io.hamal.extension.std.sys.req.ReqGetFunction
+import io.hamal.extension.std.sys.snippet.SnippetCreateFunction
+import io.hamal.extension.std.sys.snippet.SnippetGetFunction
 import io.hamal.extension.std.sys.topic.*
 import io.hamal.extension.std.sys.trigger.TriggerCreateFunction
 import io.hamal.extension.std.sys.trigger.TriggerGetFunction
@@ -54,6 +56,9 @@ class SysExtensionFactory(
                 "namespace_create" to NamespaceCreateFunction(sdk),
                 "namespace_get" to NamespaceGetFunction(sdk),
                 "namespace_list" to NamespaceListFunction(sdk),
+
+                "snippet_create" to SnippetCreateFunction(sdk),
+                "snippet_get" to SnippetGetFunction(sdk),
 
                 "topic_create" to TopicCreateFunction(sdk),
                 "topic_resolve" to TopicResolveFunction(sdk),

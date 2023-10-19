@@ -52,6 +52,9 @@ abstract class BaseTest {
     lateinit var reqRepository: ReqRepository
 
     @Autowired
+    lateinit var snippetRepository: SnippetRepository
+
+    @Autowired
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
@@ -122,6 +125,7 @@ abstract class BaseTest {
             funcRepository.clear()
             groupRepository.clear()
             namespaceRepository.clear()
+            snippetRepository.clear()
             triggerRepository.clear()
             Thread.sleep(10)
         }
