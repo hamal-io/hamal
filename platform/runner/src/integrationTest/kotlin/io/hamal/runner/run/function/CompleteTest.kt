@@ -24,7 +24,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         runner.run(
             unitOfWork(
                 """
-            ctx.complete()
+            context.complete()
             error('failed')
         """.trimIndent()
             )
@@ -41,7 +41,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("ctx.complete()"))
+        runner.run(unitOfWork("context.complete()"))
     }
 
 
@@ -55,7 +55,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("ctx.complete('test')"))
+        runner.run(unitOfWork("context.complete('test')"))
     }
 
     @Test
@@ -68,7 +68,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("ctx.complete(1337)"))
+        runner.run(unitOfWork("context.complete(1337)"))
     }
 
     @Test
@@ -81,7 +81,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("ctx.complete(false)"))
+        runner.run(unitOfWork("context.complete(false)"))
     }
 
     @Test
@@ -103,7 +103,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("ctx.complete({reason = 'undisclosed', answer = 42})"))
+        runner.run(unitOfWork("context.complete({reason = 'undisclosed', answer = 42})"))
     }
 
     private fun unitOfWork(code: String) = UnitOfWork(

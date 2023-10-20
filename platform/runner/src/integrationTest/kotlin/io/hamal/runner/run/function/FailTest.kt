@@ -21,7 +21,7 @@ internal class FailTest : AbstractExecuteTest() {
             connector = TestFailConnector()
         )
         runner.run(unitOfWork("""
-            ctx.fail()
+            context.fail()
             ctx.complete()
         """.trimIndent()))
     }
@@ -35,7 +35,7 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(execResult, equalTo(ExecResult(MapType())))
             }
         )
-        runner.run(unitOfWork("ctx.fail()"))
+        runner.run(unitOfWork("context.fail()"))
     }
 
 
@@ -47,7 +47,7 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(execResult, equalTo(ExecResult(MapType("message" to StringType("test")))))
             }
         )
-        runner.run(unitOfWork("ctx.fail('test')"))
+        runner.run(unitOfWork("context.fail('test')"))
     }
 
     @Test
@@ -58,7 +58,7 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(execResult, equalTo(ExecResult(MapType("value" to NumberType(1337)))))
             }
         )
-        runner.run(unitOfWork("ctx.fail(1337)"))
+        runner.run(unitOfWork("context.fail(1337)"))
     }
 
     @Test
@@ -69,7 +69,7 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(execResult, equalTo(ExecResult(MapType("value" to False))))
             }
         )
-        runner.run(unitOfWork("ctx.fail(false)"))
+        runner.run(unitOfWork("context.fail(false)"))
     }
 
     @Test
@@ -89,7 +89,7 @@ internal class FailTest : AbstractExecuteTest() {
                 )
             }
         )
-        runner.run(unitOfWork("ctx.fail({reason = 'undisclosed', answer = 42})"))
+        runner.run(unitOfWork("context.fail({reason = 'undisclosed', answer = 42})"))
     }
 
     private fun unitOfWork(code: String) = UnitOfWork(
