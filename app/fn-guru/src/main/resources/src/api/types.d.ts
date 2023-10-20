@@ -32,3 +32,18 @@ export interface ApiExecSimple {
     id: string;
     status: string;
 }
+
+type ApiExecStatus = 'Completed' | 'Failed'
+
+export interface ApiExec {
+    id: string;
+    status: ApiExecStatus
+    code: ApiExecCode
+    result?: object
+}
+
+export interface ApiExecCode {
+    id: string;
+    version: number;
+    value: string;
+}

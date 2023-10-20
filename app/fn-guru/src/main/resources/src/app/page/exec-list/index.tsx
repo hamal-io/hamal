@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react'
 import {ApiExecSimple} from "../../../api/types";
 import {listExecs} from "../../../api";
 import {Card} from "flowbite-react";
+import {useNavigate} from "react-router-dom";
 
 
 const RunListPage: React.FC = () => {
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
     const [execs, setExecs] = useState<ApiExecSimple[]>([])
 
@@ -17,7 +19,11 @@ const RunListPage: React.FC = () => {
     }, []);
 
     const content = execs.map(exec => (
-        <Card key={exec.id} className="max-w-sm">
+        <Card
+            key={exec.id}
+            className="max-w-sm"
+            onClick={() => navigate(`/execs/${exec.id}`)}
+        >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <p>{exec.id} : {exec.status}</p>
             </h5>

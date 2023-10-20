@@ -11,12 +11,15 @@ import SignInPage from "./landing/page/sign-in";
 import SignUpPage from "./landing/page/sign-up";
 
 // app
+import AdhocPage from "./app/page/adhoc";
 import AuthenticatedPage from "./app/page/authenticated";
 import DashboardPage from "./app/page/dashboard";
-import FuncListPage from "./app/page/func-list";
-import RunListPage from "./app/page/run-list";
-import AdhocPage from "./app/page/adhoc";
+
+import ExecDetailPage from "./app/page/exec-detail";
+import ExecListPage from "./app/page/exec-list";
+
 import FuncDetail from "./app/page/func-detail";
+import FuncListPage from "./app/page/func-list";
 
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -26,7 +29,8 @@ const router = createBrowserRouter([
     {path: "/dashboard", element: <AuthenticatedPage><DashboardPage/></AuthenticatedPage>},
     {path: "/functions", element: <AuthenticatedPage><FuncListPage/></AuthenticatedPage>},
     {path: "/functions/:funcId", element: <AuthenticatedPage><FuncDetail/></AuthenticatedPage>},
-    {path: "/runs", element: <AuthenticatedPage><RunListPage/></AuthenticatedPage>},
+    {path: "/execs", element: <AuthenticatedPage><ExecListPage/></AuthenticatedPage>},
+    {path: "/execs/:execId", element: <AuthenticatedPage><ExecDetailPage/></AuthenticatedPage>},
     {path: "/play", element: <AuthenticatedPage><AdhocPage/></AuthenticatedPage>}
 ]);
 

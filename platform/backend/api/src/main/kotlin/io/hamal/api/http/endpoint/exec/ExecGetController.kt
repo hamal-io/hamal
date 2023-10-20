@@ -4,6 +4,8 @@ import io.hamal.core.adapter.GetExecPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.api.ApiExec
+import io.hamal.repository.api.CompletedExec
+import io.hamal.repository.api.Exec
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -31,7 +33,12 @@ internal class ExecGetController(
                                 value = code.value
                             )
                         },
-                        events = exec.events
+                        events = exec.events,
+                        result = if (exec is CompletedExec) {
+                            exec.result
+                        } else {
+                            null
+                        }
                     )
                 )
             }

@@ -81,7 +81,7 @@ class CodeRunnerImpl(
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {
-                    connector.complete(execId, ExecResult(cause.result), State(), listOf())
+                    connector.complete(execId, ExecResult(cause.result), State(), runnerContext.eventsToSubmit)
                     log.debug("Completed exec: $execId")
                 } else {
                     connector.fail(execId, ExecResult(cause.result))
