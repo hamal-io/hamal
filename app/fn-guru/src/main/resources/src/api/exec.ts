@@ -1,5 +1,5 @@
 import {defaultHeaders} from "./shared";
-import {ApiExec, ApiExecCode, ApiExecList} from "./types";
+import {ApiExec, ApiExecCode, ApiExecList, ApiExecLogList} from "./types";
 
 export interface ListExecsQuery {
     groupId?: string;
@@ -30,7 +30,18 @@ export async function listExecs({funcId, groupId, limit}: ListExecsQuery): Promi
         }
         return await response.json() as ApiExecList;
     }
+}
 
+export async function listExecLogs(execId: string): Promise<ApiExecLogList> {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs/${execId}/logs`, {
+        headers: defaultHeaders,
+        method: "GET",
+    })
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiExecLogList;
 }
 
 export async function getExec(execId: string): Promise<ApiExec> {

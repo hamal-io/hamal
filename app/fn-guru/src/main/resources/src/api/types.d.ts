@@ -33,6 +33,20 @@ export interface ApiExecSimple {
     status: string;
 }
 
+export interface ApiExecLogList {
+    logs: Array<ApiExecLog>;
+}
+
+type ExecLogLevel = 'Info' | 'Warn'
+
+export interface ApiExecLog {
+    id: string;
+    level: ExecLogLevel,
+    message: string;
+    localAt: number;
+    remoteAt: number;
+}
+
 type ApiExecStatus = 'Completed' | 'Failed'
 
 export interface ApiExec {
