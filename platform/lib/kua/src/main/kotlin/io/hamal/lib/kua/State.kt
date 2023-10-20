@@ -126,7 +126,7 @@ class ClosableState(
 
     override fun pushBoolean(value: Boolean): StackTop = StackTop(native.pushBoolean(value))
     override fun getBoolean(idx: Int): Boolean = native.toBoolean(idx)
-    override fun pushError(value: ErrorType) = StackTop(native.pushError(value.message))
+    override fun pushError(value: ErrorType) = StackTop(native.pushError(value.value))
     override fun pushFunction(value: FunctionType<*, *, *, *>) = StackTop(native.pushFunction(value))
 
     override fun getNumber(idx: Int) = native.toNumber(idx)

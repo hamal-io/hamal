@@ -4,10 +4,10 @@ import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
 
-class StringTypeTest {
+class NumberTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(StringType(""), """{"type":"StringType","value":""}"""),
-        generateTestCases(StringType("hamal"), """{"type":"StringType","value":"hamal"}"""),
+        generateTestCases(NumberType(42), """{"type":"NumberType","value":"42"}"""),
+        generateTestCases(NumberType(42.24), """{"type":"NumberType","value":"42.24"}"""),
     ).flatten()
 }

@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("NilType")
-object NilType : SerializableType
+object NilType : SerializableType()

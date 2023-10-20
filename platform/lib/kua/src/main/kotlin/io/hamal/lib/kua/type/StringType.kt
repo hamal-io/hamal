@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("StringType")
-data class StringType(val value: String) : SerializableType {
+data class StringType(val value: String) : SerializableType() {
     override fun toString(): String = value
 }

@@ -32,7 +32,7 @@ fun State.toArrayType(array: TableProxyArray): ArrayType {
 fun State.toProxyArray(array: ArrayType): TableProxyArray {
     return tableCreateArray(array.size).also {
         // FIXME probably instead of of appending it should be set to keep the index
-        array.entries.forEach { (_, value) ->
+        array.value.forEach { (_, value) ->
             when (value) {
                 is BooleanType -> it.append(value)
                 is NumberType -> it.append(value)
@@ -78,7 +78,7 @@ fun State.toMapType(map: TableProxyMap): MapType {
 
 fun State.toProxyMap(map: MapType): TableProxyMap {
     return tableCreateMap(map.size).also {
-        map.entries.forEach { (key, value) ->
+        map.value.forEach { (key, value) ->
             when (value) {
                 is BooleanType -> it[key] = value
                 is CodeType -> it[key] = value

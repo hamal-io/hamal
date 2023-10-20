@@ -3,25 +3,25 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
-class MapTypeTest {
+class ArrayTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(MapType(), """{"type":"MapType"}"""),
+        generateTestCases(ArrayType(), """{"type":"ArrayType"}"""),
         generateTestCases(
-            MapType(
+            ArrayType(
                 mutableMapOf(
-                    "key" to StringType("value")
+                    1234 to StringType("value")
                 )
             ),
-            """{"type":"MapType","value":{"key":{"type":"StringType","value":"value"}}}""".trimIndent()
+            """{"type":"ArrayType","value":{"1234":{"type":"StringType","value":"value"}}}"""
         ),
         generateTestCases(
-            MapType(
+            ArrayType(
                 mutableMapOf(
-                    "23" to NumberType(34)
+                    23 to NumberType(34)
                 )
             ),
-            """{"type":"MapType","value":{"23":{"type":"NumberType","value":"34"}}}"""
+            """{"type":"ArrayType","value":{"23":{"type":"NumberType","value":"34"}}}"""
         ),
     ).flatten()
 }

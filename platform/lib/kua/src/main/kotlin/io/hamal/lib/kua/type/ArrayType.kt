@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -17,34 +17,34 @@ import kotlin.reflect.KClass
 @SerialName("ArrayType")
 data class ArrayType(
     @Serializable(with = Serializer::class)
-    val entries: MutableMap<Int, SerializableType> = mutableMapOf(),
-) : TableType {
+    val value: MutableMap<Int, SerializableType> = mutableMapOf(),
+) : TableType() {
 
-    val size get() = entries.size
+    val size get() = value.size
 
     fun append(value: ArrayType): Int {
-        entries[entries.size + 1] = value
+        this.value[this.value.size + 1] = value
         return size
     }
 
     fun append(value: SerializableType): Int {
-        entries[entries.size + 1] = value
+        this.value[this.value.size + 1] = value
         return size
     }
 
     operator fun get(idx: Int): SerializableType {
-        return entries[idx]!!
+        return value[idx]!!
     }
 
     fun getBoolean(idx: Int) = getBooleanValue(idx) == True
     fun getBooleanValue(idx: Int): BooleanType {
         checkExpectedType(idx, BooleanType::class)
-        return entries[idx]!! as BooleanType
+        return value[idx]!! as BooleanType
     }
 
     fun append(value: Boolean) = append(booleanOf(value))
     fun append(value: BooleanType): Int {
-        entries[entries.size + 1] = value
+        this.value[this.value.size + 1] = value
         return size
     }
 
@@ -55,7 +55,7 @@ data class ArrayType(
     fun getDouble(idx: Int) = getNumberType(idx).value.toDouble()
     fun getNumberType(idx: Int): NumberType {
         checkExpectedType(idx, NumberType::class)
-        return entries[idx]!! as NumberType
+        return value[idx]!! as NumberType
     }
 
 
@@ -64,7 +64,7 @@ data class ArrayType(
     fun append(value: Float) = append(value.toDouble())
     fun append(value: Double) = append(NumberType(value))
     fun append(value: NumberType): Int {
-        entries[entries.size + 1] = value
+        this.value[this.value.size + 1] = value
         return size
     }
 
@@ -72,36 +72,36 @@ data class ArrayType(
     fun append(value: DomainId) = append(value.value.value)
 
     fun append(value: MapType): Int {
-        entries[entries.size + 1] = value
+        this.value[this.value.size + 1] = value
         return size
     }
 
     fun getMap(idx: Int): MapType {
         checkExpectedType(idx, MapType::class)
-        return entries[idx]!! as MapType
+        return value[idx]!! as MapType
     }
 
     fun getArray(idx: Int): ArrayType {
         checkExpectedType(idx, ArrayType::class)
-        return entries[idx]!! as ArrayType
+        return value[idx]!! as ArrayType
     }
 
     fun getString(idx: Int) = getStringType(idx).value
     fun getStringType(idx: Int): StringType {
         checkExpectedType(idx, StringType::class)
-        return entries[idx]!! as StringType
+        return value[idx]!! as StringType
     }
 
     fun append(value: String) = append(StringType(value))
     fun append(value: StringType): Int {
-        entries[entries.size + 1] = value
+        this.value[this.value.size + 1] = value
         return size
     }
 
     fun getCodeType(idx: Int) = CodeType(getString(idx))
 
     fun type(idx: Int): KClass<out Type> {
-        return entries[idx]?.let { it::class } ?: NilType::class
+        return value[idx]?.let { it::class } ?: NilType::class
     }
 
     object Serializer : KSerializer<MutableMap<Int, SerializableType>> {

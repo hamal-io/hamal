@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("ErrorType")
-data class ErrorType(val message: String) : SerializableType
+data class ErrorType(val value: String) : SerializableType()
