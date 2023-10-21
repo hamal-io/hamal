@@ -118,6 +118,10 @@ function create_extension_factory()
             return internal.snippet_get(snippet_id)
         end
 
+        function export.snippet.update(snippet_id, cmd)
+            return internal.snippet_update(snippet_id, cmd)
+        end
+
         function export.topic.resolve(topic_name)
             return internal.topic_resolve(topic_name)
         end
