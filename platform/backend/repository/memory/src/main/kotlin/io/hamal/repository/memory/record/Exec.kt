@@ -46,7 +46,7 @@ internal object CurrentExecProjection {
     }
 }
 
-//FIXME this must be concurrent unsafe
+//FIXME this must be concurrent safe
 internal object QueueProjection {
     private val queue = mutableListOf<QueuedExec>()
     fun add(exec: QueuedExec) {

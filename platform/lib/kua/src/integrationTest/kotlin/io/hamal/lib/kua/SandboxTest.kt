@@ -10,9 +10,10 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class RegisterCapabilityTest : BaseSandboxTest() {
+internal class RegisterExtensionTest : BaseSandboxTest() {
+    
     @Test
-    fun `Registers a capability and call function`() {
+    fun `Registers a unsafe extension and call function`() {
         class TestFunction : Function0In0Out() {
             override fun invoke(ctx: FunctionContext) {
                 set = true
@@ -24,7 +25,7 @@ internal class RegisterCapabilityTest : BaseSandboxTest() {
         val func = TestFunction()
         testInstance.register(
             RunnerUnsafeExtension(
-                name = "secret_cap",
+                name = "secret_ext",
                 factoryCode = """
                     function extension()
                         local internal = _internal
@@ -43,8 +44,8 @@ internal class RegisterCapabilityTest : BaseSandboxTest() {
         testInstance.load(
             CodeType(
                 """
-                secret_cap = require('secret_cap')
-                secret_cap.magic()
+                secret_ext = require('secret_ext')
+                secret_ext.magic()
             """.trimIndent()
             )
         )

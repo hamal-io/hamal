@@ -1,7 +1,7 @@
 package io.hamal.extension.unsafe.web3
 
 import AbstractExtensionTest
-import io.hamal.extension.unsafe.web3.evm.EthCapabilityFactory
+import io.hamal.extension.unsafe.web3.evm.EthExtensionFactory
 import io.hamal.lib.kua.NativeLoader
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -17,7 +17,7 @@ object IntegrationTest : AbstractExtensionTest() {
         NativeLoader.load(NativeLoader.Preference.Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
-                val runner = createTestRunner(unsafeFactories = listOf(EthCapabilityFactory()))
+                val runner = createTestRunner(unsafeFactories = listOf(EthExtensionFactory()))
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()

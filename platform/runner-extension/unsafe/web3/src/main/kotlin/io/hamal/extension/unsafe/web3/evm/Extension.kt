@@ -6,7 +6,7 @@ import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionFactory
 import io.hamal.lib.kua.type.StringType
 
-class EthCapabilityFactory : RunnerUnsafeExtensionFactory {
+class EthExtensionFactory : RunnerUnsafeExtensionFactory {
     val config = RunnerUnsafeExtensionConfig(
         mutableMapOf(
             "host" to StringType("http://localhost:8000")

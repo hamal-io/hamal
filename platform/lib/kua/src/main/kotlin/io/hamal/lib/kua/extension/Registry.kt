@@ -17,10 +17,10 @@ class RunnerExtensionRegistry(val sb: Sandbox) {
 
     fun isUnsafeExtension(name: String) = unsafeExtensions.keys.contains(name)
 
-    fun register(capability: RunnerUnsafeExtension) {
-        unsafeExtensions[capability.name] = capability
+    fun register(extension: RunnerUnsafeExtension) {
+        unsafeExtensions[extension.name] = extension
         // FIXME load the factory
-        loadUnsafeExtensionFactory(capability.name)
+        loadUnsafeExtensionFactory(extension.name)
     }
 
     fun register(extension: RunnerSafeExtension) {
