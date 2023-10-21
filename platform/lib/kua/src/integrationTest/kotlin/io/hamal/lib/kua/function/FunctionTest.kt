@@ -1,11 +1,11 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.ExtensionError
+import io.hamal.lib.kua.PluginError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.plugin.capability.Capability
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import org.hamcrest.CoreMatchers.equalTo
@@ -35,7 +35,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -53,7 +53,7 @@ internal class FunctionTest {
             )
         )
 
-        val exception = assertThrows<ExtensionError> {
+        val exception = assertThrows<PluginError> {
             sandbox.load(
                 """
                 test = require('test')
@@ -86,7 +86,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -130,7 +130,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -173,7 +173,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -216,7 +216,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -264,7 +264,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -305,7 +305,7 @@ internal class FunctionTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
 import io.hamal.lib.domain.vo.LocalAt
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
-import io.hamal.lib.kua.capability.CapabilityFactory
+import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.plugin.capability.CapabilityFactory
 import io.hamal.lib.kua.function.Function2In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema

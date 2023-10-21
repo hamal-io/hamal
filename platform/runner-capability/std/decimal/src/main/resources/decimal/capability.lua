@@ -1,4 +1,4 @@
-function create_capability_factory()
+function plugin()
     return function()
         local export = { }
 

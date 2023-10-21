@@ -2,7 +2,7 @@ package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.plugin.capability.Capability
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -77,7 +77,7 @@ class AssertTest {
                 Capability(
                     "test",
                     factoryCode = """
-                            function create_capability_factory()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = {

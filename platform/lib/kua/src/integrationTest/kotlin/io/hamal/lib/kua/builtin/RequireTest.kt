@@ -3,7 +3,7 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.plugin.capability.Capability
 import org.junit.jupiter.api.Test
 
 
@@ -32,7 +32,7 @@ internal class ExtensionTest {
                 Capability(
                     name = "test",
                     factoryCode = """
-                            function create_capability_factory()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = { some_number = 42 }

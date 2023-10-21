@@ -3,7 +3,7 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.plugin.capability.Capability
 import io.hamal.lib.kua.error.ScriptErrorTest
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -43,7 +43,7 @@ internal class TableEntryIteratorTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -94,7 +94,7 @@ internal class TableEntryIteratorTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -142,7 +142,7 @@ internal class TableEntryIteratorTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -202,7 +202,7 @@ internal class TableEntryIteratorTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -253,7 +253,7 @@ internal class TableEntryIteratorTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -282,7 +282,7 @@ internal class TableEntryIteratorTest {
                 Capability(
                     name = "test",
                     factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

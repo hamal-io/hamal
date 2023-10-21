@@ -16,8 +16,8 @@ import io.hamal.capability.std.sys.trigger.TriggerGetFunction
 import io.hamal.capability.std.sys.trigger.TriggerListFunction
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
-import io.hamal.lib.kua.capability.CapabilityFactory
+import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.plugin.capability.CapabilityFactory
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 

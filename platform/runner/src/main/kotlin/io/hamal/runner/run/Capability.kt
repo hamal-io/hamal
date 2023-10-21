@@ -3,8 +3,8 @@ package io.hamal.runner.run
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
-import io.hamal.lib.kua.capability.CapabilityFactory
+import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.plugin.capability.CapabilityFactory
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType

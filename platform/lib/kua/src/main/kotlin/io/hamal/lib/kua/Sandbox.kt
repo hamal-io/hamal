@@ -1,8 +1,9 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
-import io.hamal.lib.kua.capability.*
 import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.plugin.PluginRegistry
+import io.hamal.lib.kua.plugin.capability.*
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.AnyType
@@ -18,7 +19,7 @@ class Sandbox(
     override fun pop(len: Int) = state.pop(len)
 
     val state = ClosableState(native)
-    val registry: ExtensionRegistry = ExtensionRegistry(this)
+    val registry: PluginRegistry = PluginRegistry(this)
 
     init {
         registerGlobalFunction("require", Require(registry))
@@ -138,8 +139,8 @@ fun State.createConfig(config: CapabilityConfig): TableProxyMap {
     val result = tableCreateMap(1)
 
     val fns = mapOf(
-        "get" to ExtensionGetConfigFunction(config),
-        "update" to ExtensionUpdateConfigFunction(config)
+        "get" to CapabilityGetConfigFunction(config),
+        "update" to CapabilityUpdateConfigFunction(config)
     )
 
     fns.forEach { (name, value) ->

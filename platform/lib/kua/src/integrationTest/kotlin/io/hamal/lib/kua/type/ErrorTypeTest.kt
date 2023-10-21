@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.plugin.capability.Capability
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,7 +22,7 @@ internal class ErrorTypeTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -65,7 +65,7 @@ internal class ErrorTypeTest {
             Capability(
                 name = "test",
                 factoryCode = """
-                    function create_capability_factory()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

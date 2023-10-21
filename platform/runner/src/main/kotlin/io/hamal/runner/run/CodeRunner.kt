@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
-import io.hamal.lib.kua.ExtensionError
+import io.hamal.lib.kua.PluginError
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -65,7 +65,7 @@ class CodeRunnerImpl(
                     sandbox.setGlobal("_internal", internalTable)
                     sandbox.state.load(ctxCapability.factoryCode)
 
-                    sandbox.state.load("${ctxCapability.name} = create_capability_factory()()")
+                    sandbox.state.load("${ctxCapability.name} = plugin()()")
                     sandbox.unsetGlobal("_internal")
 
                     sandbox.load(CodeType(unitOfWork.code.value))
@@ -78,7 +78,7 @@ class CodeRunnerImpl(
                 }
 
 
-        } catch (e: ExtensionError) {
+        } catch (e: PluginError) {
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {

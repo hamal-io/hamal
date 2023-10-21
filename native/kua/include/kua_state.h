@@ -11,8 +11,8 @@ struct jni_ref {
     jclass illegal_argument_exception_class;
     jclass illegal_state_exception_class;
     jclass error_class;
-    jclass extension_error_class;
-    jmethodID extension_error_ctor_id;
+    jclass plugin_error_class;
+    jmethodID plugin_error_ctor_id;
     jclass script_error_class;
     jmethodID script_error_ctor_id;
     jclass decimal_error_class;

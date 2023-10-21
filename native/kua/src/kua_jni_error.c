@@ -36,8 +36,8 @@ throw_extension_error(jthrowable throwable) {
 
     jthrowable kua_error = (*env)->NewObject(
             env,
-            jni_ref().extension_error_class,
-            jni_ref().extension_error_ctor_id,
+            jni_ref().plugin_error_class,
+            jni_ref().plugin_error_ctor_id,
             throwable
     );
 

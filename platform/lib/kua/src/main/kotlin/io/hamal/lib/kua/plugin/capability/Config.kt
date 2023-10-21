@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.capability
+package io.hamal.lib.kua.plugin.capability
 
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyMap
@@ -9,8 +9,7 @@ class CapabilityConfig(
     val value: MutableMap<String, Type> = mutableMapOf()
 )
 
-
-class ExtensionGetConfigFunction(
+class CapabilityGetConfigFunction(
     val config: CapabilityConfig
 ) : Function0In1Out<TableProxyMap>(
     FunctionOutput1Schema(TableProxyMap::class)
@@ -26,7 +25,7 @@ class ExtensionGetConfigFunction(
     }
 }
 
-class ExtensionUpdateConfigFunction(
+class CapabilityUpdateConfigFunction(
     val config: CapabilityConfig
 ) : Function1In0Out<TableProxyMap>(
     FunctionInput1Schema(TableProxyMap::class)

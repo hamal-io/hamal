@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.plugin.capability.Capability
 import io.hamal.lib.kua.type.Type
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -23,7 +23,7 @@ internal abstract class AbstractExecuteTest {
                         Capability(
                             name = "test",
                             factoryCode = """
-                            function create_capability_factory()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = {

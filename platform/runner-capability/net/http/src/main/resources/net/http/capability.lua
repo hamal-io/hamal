@@ -1,4 +1,4 @@
-function create_capability_factory()
+function plugin()
     local internal = _internal
 
     return function()

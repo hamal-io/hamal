@@ -4,7 +4,7 @@ import AbstractCapabilityTest
 import io.hamal.capability.net.http.web.TestStatusRoute
 import io.hamal.lib.http.fixture.TestWebConfig
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.capability.CapabilityConfig
+import io.hamal.lib.kua.plugin.capability.CapabilityConfig
 import io.hamal.lib.kua.type.StringType
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest

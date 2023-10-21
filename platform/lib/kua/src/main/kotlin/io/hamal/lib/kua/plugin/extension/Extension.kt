@@ -1,23 +1,20 @@
-package io.hamal.lib.kua.capability
+package io.hamal.lib.kua.plugin.extension
 
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.type.Type
+import io.hamal.lib.kua.plugin.Plugin
+import io.hamal.lib.kua.plugin.PluginFactory
 
-interface CapabilityFactory {
-    fun create(sandbox: Sandbox): Capability
-}
+interface ExtensionFactory : PluginFactory<Extension>
 
-class Capability(
-    val name: String,
-    val internals: Map<String, Type>,
-    val factoryCode: String = loadFactoryCodeFromResources(name),
-    val config: CapabilityConfig = CapabilityConfig(mutableMapOf()),
-) {
+class Extension(
+    override val name: String,
+    override val factoryCode: String = loadFactoryCodeFromResources(name),
+    val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
+) : Plugin {
 
     companion object {
         @JvmStatic
         private fun loadFactoryCodeFromResources(extensionName: String): String { // FIXME extension name VO
-            val path = "${extensionName.replace(".", "/")}/capability.lua"
+            val path = "${extensionName.replace(".", "/")}/extension.lua"
             val classLoader = this::class.java.classLoader
             val resource = classLoader.getResource(path)
             checkNotNull(resource) { "Unable to load: $path" }

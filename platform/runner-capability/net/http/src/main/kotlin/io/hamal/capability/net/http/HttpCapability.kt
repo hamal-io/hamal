@@ -1,9 +1,9 @@
 package io.hamal.capability.net.http
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.capability.Capability
-import io.hamal.lib.kua.capability.CapabilityConfig
-import io.hamal.lib.kua.capability.CapabilityFactory
+import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.plugin.capability.CapabilityConfig
+import io.hamal.lib.kua.plugin.capability.CapabilityFactory
 
 class HttpCapabilityFactory(
     val config: CapabilityConfig = CapabilityConfig(mutableMapOf())
@@ -13,10 +13,10 @@ class HttpCapabilityFactory(
     override fun create(sandbox: Sandbox): Capability {
         return Capability(
             name = "net.http",
-            config = config,
             internals = mapOf(
                 "execute" to HttpExecuteFunction()
-            )
+            ),
+            config = config
         )
     }
 }
