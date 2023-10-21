@@ -3,7 +3,7 @@ sys = require('sys')
 err, create_snippet_req = sys.snippet.create({
     name = 'test-snippet',
     inputs = {},
-    value = [=[40 + 2]=]
+    value = [[40 + 2]]
 })
 
 assert(err == nil)

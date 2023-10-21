@@ -12,6 +12,7 @@ import io.hamal.extension.std.sys.namespace.NamespaceListFunction
 import io.hamal.extension.std.sys.req.ReqGetFunction
 import io.hamal.extension.std.sys.snippet.SnippetCreateFunction
 import io.hamal.extension.std.sys.snippet.SnippetGetFunction
+import io.hamal.extension.std.sys.snippet.SnippetUpdateFunction
 import io.hamal.extension.std.sys.topic.*
 import io.hamal.extension.std.sys.trigger.TriggerCreateFunction
 import io.hamal.extension.std.sys.trigger.TriggerGetFunction
@@ -59,6 +60,7 @@ class SysExtensionFactory(
 
                 "snippet_create" to SnippetCreateFunction(sdk),
                 "snippet_get" to SnippetGetFunction(sdk),
+                "snippet_update" to SnippetUpdateFunction(sdk),
 
                 "topic_create" to TopicCreateFunction(sdk),
                 "topic_resolve" to TopicResolveFunction(sdk),

@@ -2,8 +2,8 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.sdk.fold
 import io.hamal.lib.http.body
+import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateSnippetReq
 import io.hamal.request.UpdateSnippetReq
 import kotlinx.serialization.Serializable
@@ -34,6 +34,7 @@ data class ApiUpdateSnippetReq(
 interface ApiSnippetService {
     fun create(groupId: GroupId, createSnippetReq: ApiCreateSnippetReq): ApiSubmittedReqWithId
     fun get(snippetId: SnippetId): ApiSnippet
+    fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqWithId
 }
 
 internal class ApiSnippetServiceImpl(
@@ -52,6 +53,15 @@ internal class ApiSnippetServiceImpl(
             .path("snippetId", snippetId)
             .execute()
             .fold(ApiSnippet::class)
+
+
+    override fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqWithId =
+        template.patch("/v1/snippets/{snippedId}/update")
+            .path("snippedId", snippetId)
+            .body(updateSnippetReq)
+            .execute()
+            .fold(ApiSubmittedReqWithId::class)
+
 }
 
 

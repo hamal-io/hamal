@@ -31,7 +31,7 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             )
         )
 
-        val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippedId}")
+        val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippedId}/update")
             .path("snippedId", snippet.id)
             .body(
                 ApiUpdateSnippetReq(
@@ -60,7 +60,7 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
 
     @Test
     fun `Tries to update snippet that does not exist`() {
-        val getUpdateResponse = httpTemplate.patch("/v1/snippets/333333")
+        val getUpdateResponse = httpTemplate.patch("/v1/snippets/333333/update")
             .body(
                 ApiUpdateSnippetReq(
                     name = SnippetName("TestSnippet"),

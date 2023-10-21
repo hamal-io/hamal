@@ -17,7 +17,7 @@ internal class SnippetUpdateController(
     private val retry: Retry,
     private val updateSnippet: UpdateSnippetPort
 ) {
-    @PatchMapping("/v1/snippets/{snippetId}")
+    @PatchMapping("/v1/snippets/{snippetId}/update")
     fun updateSnippet(
         @PathVariable("snippetId") snippetId: SnippetId,
         @RequestBody req: ApiUpdateSnippetReq
