@@ -20,20 +20,20 @@ class CreateSnippetHandler(
     }
 }
 
-    private fun CreateSnippetHandler.createSnippet(req: SubmittedCreateSnippetReq): Snippet {
-        return snippetCmdRepository.create(
-            SnippetCmdRepository.CreateCmd(
-                id = req.cmdId(),
-                snippetId = req.id,
-                groupId = req.groupId,
-                name = req.name,
-                inputs = req.inputs,
-                value = req.value,
-                accountId = req.accountId
-            )
+private fun CreateSnippetHandler.createSnippet(req: SubmittedCreateSnippetReq): Snippet {
+    return snippetCmdRepository.create(
+        SnippetCmdRepository.CreateCmd(
+            id = req.cmdId(),
+            snippetId = req.id,
+            groupId = req.groupId,
+            name = req.name,
+            inputs = req.inputs,
+            value = req.value,
+            accountId = req.accountId
         )
-    }
+    )
+}
 
-    private fun CreateSnippetHandler.emitEvent(cmdId: CmdId, snippet: Snippet) {
-        eventEmitter.emit(cmdId, SnippetCreatedEvent(snippet))
-    }
+private fun CreateSnippetHandler.emitEvent(cmdId: CmdId, snippet: Snippet) {
+    eventEmitter.emit(cmdId, SnippetCreatedEvent(snippet))
+}

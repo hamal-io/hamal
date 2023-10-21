@@ -25,10 +25,11 @@ internal class SnippetCreateControllerTest : SnippetBaseControllerTest() {
         )
 
         awaitCompleted(res.reqId)
-        val sn = snippetQueryRepository.get(res.id(::SnippetId))
 
-        with(sn) {
+        with(snippetQueryRepository.get(res.id(::SnippetId))) {
+            assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             assertThat(name, equalTo(SnippetName("TestSnippet")))
+            assertThat(value, equalTo(CodeValue("13 + 37")))
         }
     }
 }

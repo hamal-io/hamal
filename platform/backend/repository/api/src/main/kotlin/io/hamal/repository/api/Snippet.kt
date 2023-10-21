@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Snippet(
+    val cmdId: CmdId,
     override val id: SnippetId,
     val groupId: GroupId,
-    val cmdId: CmdId,
+    val accountId: AccountId,
     val name: SnippetName,
     val inputs: SnippetInputs,
-    val value: CodeValue,
-    val accountId: AccountId
+    val value: CodeValue
 ) : DomainObject<SnippetId>
 
 interface SnippetRepository : SnippetCmdRepository, SnippetQueryRepository
@@ -28,10 +28,10 @@ interface SnippetCmdRepository : CmdRepository {
         val id: CmdId,
         val snippetId: SnippetId,
         val groupId: GroupId,
+        val accountId: AccountId,
         val inputs: SnippetInputs,
         val name: SnippetName,
-        val value: CodeValue,
-        val accountId: AccountId
+        val value: CodeValue
     )
 
     data class UpdateCmd(

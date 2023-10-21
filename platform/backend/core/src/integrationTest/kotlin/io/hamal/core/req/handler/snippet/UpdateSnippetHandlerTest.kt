@@ -19,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired
 
 internal class UpdateSnippetHandlerTest : BaseReqHandlerTest() {
 
-    @Autowired
-    private lateinit var testInstance: UpdateSnippetHandler
-
     @Test
     fun `Updates snippet`() {
         snippetCmdRepository.create(
@@ -44,9 +41,7 @@ internal class UpdateSnippetHandlerTest : BaseReqHandlerTest() {
 
         testInstance(submittedUpdateSnippetReq)
 
-        val res = snippetQueryRepository.get(SnippetId(123))
-
-        with(res) {
+        with(snippetQueryRepository.get(SnippetId(123))) {
             assertThat(id, equalTo(SnippetId(123)))
             assertThat(name, equalTo(SnippetName("UpdatedSnippet")))
             assertThat(value, equalTo(CodeValue("40 + 2")))
@@ -82,5 +77,6 @@ internal class UpdateSnippetHandlerTest : BaseReqHandlerTest() {
         )
     }
 
-
+    @Autowired
+    private lateinit var testInstance: UpdateSnippetHandler
 }

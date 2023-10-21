@@ -108,10 +108,10 @@ function create_extension_factory()
 
         function export.snippet.create(cmd)
              return internal.snippet_create({
-                            name = cmd.name or nil,
-                            inputs = cmd.inputs or {},
-                            value = cmd.value or ""
-                        })
+                name = cmd.name or nil,
+                inputs = cmd.inputs or {},
+                value = cmd.value or ""
+             })
         end
 
         function export.snippet.get(snippet_id)

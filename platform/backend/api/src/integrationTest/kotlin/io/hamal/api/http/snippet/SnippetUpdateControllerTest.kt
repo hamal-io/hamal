@@ -20,25 +20,6 @@ import org.hamcrest.Matchers.equalTo
 
 internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
     @Test
-    fun `Updates snippet that does not exist`() {
-        val getUpdateResponse = httpTemplate.patch("/v1/snippets/333333")
-            .body(
-                ApiUpdateSnippetReq(
-                    name = SnippetName("TestSnippet"),
-                    value = CodeValue("40 + 2"),
-                    inputs = SnippetInputs()
-                )
-            )
-            .execute()
-
-        assertThat(getUpdateResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getUpdateResponse is ErrorHttpResponse) { "request was successful" }
-
-        val error = getUpdateResponse.error(ApiError::class)
-        assertThat(error.message, equalTo("Snippet not found"))
-    }
-
-    @Test
     fun `Updates snippet`() {
         val snippet = awaitCompleted(
             createSnippet(
@@ -75,6 +56,24 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             assertThat(value, equalTo(CodeValue("1 + 1")))
             assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
         }
+    }
 
+    @Test
+    fun `Tries to update snippet that does not exist`() {
+        val getUpdateResponse = httpTemplate.patch("/v1/snippets/333333")
+            .body(
+                ApiUpdateSnippetReq(
+                    name = SnippetName("TestSnippet"),
+                    value = CodeValue("40 + 2"),
+                    inputs = SnippetInputs()
+                )
+            )
+            .execute()
+
+        assertThat(getUpdateResponse.statusCode, equalTo(HttpStatusCode.NotFound))
+        require(getUpdateResponse is ErrorHttpResponse) { "request was successful" }
+
+        val error = getUpdateResponse.error(ApiError::class)
+        assertThat(error.message, equalTo("Snippet not found"))
     }
 }

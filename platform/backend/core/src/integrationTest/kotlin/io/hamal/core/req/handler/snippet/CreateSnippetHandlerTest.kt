@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 
 internal class CreateSnippetHandlerTest : BaseReqHandlerTest() {
 
-    @Autowired
-    private lateinit var testInstance: CreateSnippetHandler
-
     @Test
     fun `Creates snippet`() {
         testInstance(submitCreateSnippetReq)
@@ -42,4 +39,7 @@ internal class CreateSnippetHandlerTest : BaseReqHandlerTest() {
             accountId = testAccount.id
         )
     }
+
+    @Autowired
+    private lateinit var testInstance: CreateSnippetHandler
 }

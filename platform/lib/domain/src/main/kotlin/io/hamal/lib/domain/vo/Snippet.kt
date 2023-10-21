@@ -19,7 +19,7 @@ class SnippetId(override val value: SnowflakeId) : DomainId() {
     internal object Serializer : DomainIdSerializer<SnippetId>(::SnippetId)
 }
 
-@Serializable()
+@Serializable(with = SnippetName.Serializer::class)
 class SnippetName(override val value: String) : DomainName() {
     internal object Serializer : DomainNameSerializer<SnippetName>(::SnippetName)
 }

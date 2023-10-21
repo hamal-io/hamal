@@ -60,7 +60,5 @@ class SnippetAdapter(
         return responseHandler(submitRequest(snippetId, req))
     }
 
-    private fun ensureSnippetExists(snippetId: SnippetId)  = snippetQueryRepository.get(snippetId)
-
-
+    private fun ensureSnippetExists(snippetId: SnippetId) = snippetQueryRepository.get(snippetId)
 }

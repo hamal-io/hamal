@@ -12,8 +12,7 @@ import io.hamal.repository.api.SnippetQueryRepository.SnippetQuery
 import io.hamal.repository.api.SnippetRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -32,6 +31,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     snippetId = SnippetId(123),
                     groupId = GroupId(1),
+                    accountId = AccountId("123"),
                     name = SnippetName("TestSnippet"),
                     inputs = SnippetInputs(
                         MapType(
@@ -40,24 +40,23 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                             )
                         )
                     ),
-                    value = CodeValue("1 + 1"),
-                    accountId = AccountId("123")
+                    value = CodeValue("1 + 1")
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(SnippetId(123)))
                 assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(accountId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
                 assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
-                assertThat(accountId, equalTo(AccountId("123")))
             }
             verifyCount(1)
         }
 
         @TestFactory
-        fun `Creates code duplicate`() = runWith(SnippetRepository::class) {
+        fun `Creates snippet duplicate`() = runWith(SnippetRepository::class) {
             createSnippet(
                 snippetId = SnippetId(1),
                 groupId = GroupId(1),
@@ -150,12 +149,39 @@ class SnippetRepositoryTest : AbstractUnitTest() {
             }
             verifyCount(1)
         }
+    }
 
+    @Nested
+    inner class GetTest {
+        @TestFactory
+        fun `Get func by id`() = runWith(SnippetRepository::class) {
+            createSnippet(
+                snippetId = SnippetId(1),
+                groupId = GroupId(1),
+                name = SnippetName("TestSnippet"),
+                value = CodeValue("1 + 1")
+            )
+
+            with(find(SnippetId(1))!!) {
+                assertThat(id, equalTo(SnippetId(1)))
+                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(name, equalTo(SnippetName("TestSnippet")))
+                assertThat(value, equalTo(CodeValue("1 + 1")))
+            }
+        }
+
+        @TestFactory
+        fun `Tries to get snippet by id but does not exist`() = runWith(SnippetRepository::class) {
+            val exception = assertThrows<NoSuchElementException> {
+                get(SnippetId(111111))
+            }
+            assertThat(exception.message, equalTo("Snippet not found"))
+        }
     }
 
     @Nested
     inner class FindTest {
-
 
         @TestFactory
         fun `Find func by id`() = runWith(SnippetRepository::class) {
@@ -169,25 +195,15 @@ class SnippetRepositoryTest : AbstractUnitTest() {
             with(find(SnippetId(1))!!) {
                 assertThat(id, equalTo(SnippetId(1)))
                 assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(accountId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
-                assertThat(accountId, equalTo(AccountId("123")))
-
             }
         }
 
         @TestFactory
-        fun `Tries to get snippet by id but does not exist`() = runWith(SnippetRepository::class) {
-            createSnippet(
-                snippetId = SnippetId(1),
-                groupId = GroupId(1),
-                name = SnippetName("TestSnippet")
-            )
-
-            val exception = assertThrows<NoSuchElementException> {
-                get(SnippetId(111111))
-            }
-            assertThat(exception.message, equalTo("Snippet not found"))
+        fun `Tries to find snippet by id but does not exist`() = runWith(SnippetRepository::class) {
+            assertThat(find(SnippetId(111111)), nullValue())
         }
     }
 

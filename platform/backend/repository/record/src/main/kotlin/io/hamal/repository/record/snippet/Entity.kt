@@ -11,24 +11,24 @@ data class SnippetEntity(
     override val cmdId: CmdId,
     override val id: SnippetId,
     val groupId: GroupId,
+    var accountId: AccountId,
     override val sequence: RecordSequence,
 
     var name: SnippetName? = null,
     var inputs: SnippetInputs? = null,
-    var codeValue: CodeValue? = null,
-    var accountId: AccountId? = null
+    var codeValue: CodeValue? = null
 
 ) : RecordEntity<SnippetId, SnippetRecord, Snippet> {
     override fun apply(rec: SnippetRecord): SnippetEntity {
         return when (rec) {
             is SnippetCreationRecord -> copy(
-                id = rec.entityId,
                 cmdId = rec.cmdId,
+                id = rec.entityId,
+                accountId = rec.accountId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value,
-                accountId = rec.accountId
+                codeValue = rec.value
             )
 
             is SnippetUpdatedRecord -> copy(
@@ -47,10 +47,10 @@ data class SnippetEntity(
             cmdId = cmdId,
             id = id,
             groupId = groupId,
+            accountId = accountId,
             name = name!!,
             inputs = inputs!!,
-            value = codeValue!!,
-            accountId = accountId!!
+            value = codeValue!!
         )
     }
 }
@@ -61,9 +61,10 @@ fun List<SnippetRecord>.createEntity(): SnippetEntity {
     check(firstRecord is SnippetCreationRecord)
 
     var result = SnippetEntity(
+        cmdId = firstRecord.cmdId,
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
-        cmdId = firstRecord.cmdId,
+        accountId = firstRecord.accountId,
         sequence = firstRecord.sequence()
     )
 
