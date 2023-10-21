@@ -1,5 +1,5 @@
 plugins {
-    id("hamal.extension")
+    id("hamal.plugin")
 }
 
 

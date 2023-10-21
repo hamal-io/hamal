@@ -1,5 +1,5 @@
 plugins {
-    id("hamal.extension")
+    id("hamal.plugin")
 }
 
 
@@ -36,7 +36,7 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:runner-capability:std:test"))
+                    implementation(project(":platform:runner-capability:test"))
                     implementation(project(":platform:runner-capability:std:decimal"))
                 }
             }

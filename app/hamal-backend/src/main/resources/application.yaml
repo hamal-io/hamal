@@ -4,7 +4,7 @@ logging:
     io.hamal: INFO
     io.hamal.runner: DEBUG
     io.hamal.repository: INFO
-    io.hamal.extension: INFO
+    io.hamal.capability: INFO
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC

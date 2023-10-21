@@ -42,7 +42,7 @@ testing {
                     implementation(project(":platform:lib:sdk"))
                     implementation(project(":platform:lib:kua"))
                     implementation(project(":platform:runner"))
-                    implementation(project(":platform:runner-capability:std:test"))
+                    implementation(project(":platform:runner-capability:test"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

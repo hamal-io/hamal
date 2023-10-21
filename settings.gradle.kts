@@ -60,9 +60,10 @@ include(":platform:runner-capability:net:http")
 include(":platform:runner-capability:std:debug")
 include(":platform:runner-capability:std:decimal")
 include(":platform:runner-capability:std:log")
-include(":platform:runner-capability:std:test")
 include(":platform:runner-capability:std:sys")
 include(":platform:runner-capability:starter")
+include(":platform:runner-capability:test")
+
 
 include(":platform:testbed")
 

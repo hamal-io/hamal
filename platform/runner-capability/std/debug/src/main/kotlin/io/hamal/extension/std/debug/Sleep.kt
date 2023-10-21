@@ -1,4 +1,4 @@
-package io.hamal.extension.std.debug
+package io.hamal.capability.std.debug
 
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext

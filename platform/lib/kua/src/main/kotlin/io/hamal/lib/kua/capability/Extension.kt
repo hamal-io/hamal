@@ -11,7 +11,7 @@ class Capability(
     val name: String,
     val internals: Map<String, Type>,
     val factoryCode: String = loadFactoryCodeFromResources(name),
-    val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
+    val config: CapabilityConfig = CapabilityConfig(mutableMapOf()),
 ) {
 
     companion object {

@@ -133,7 +133,7 @@ internal fun Native.load(code: String) {
 //    return r
 //}
 
-fun State.createConfig(config: ExtensionConfig): TableProxyMap {
+fun State.createConfig(config: CapabilityConfig): TableProxyMap {
 
     val result = tableCreateMap(1)
 

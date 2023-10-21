@@ -1,10 +1,10 @@
 package io.hamal.runner.config
 
-import io.hamal.extension.net.http.HttpExtensionFactory
-import io.hamal.extension.std.debug.DebugExtensionFactory
-import io.hamal.extension.std.log.DecimalCapabilityFactory
-import io.hamal.extension.std.log.LogExtensionFactory
-import io.hamal.extension.std.sys.SysCapabilityFactory
+import io.hamal.capability.net.http.HttpCapabilityFactory
+import io.hamal.capability.std.debug.DebugCapabilityFactory
+import io.hamal.capability.std.log.DecimalCapabilityFactory
+import io.hamal.capability.std.log.LogExtensionFactory
+import io.hamal.capability.std.sys.SysCapabilityFactory
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
@@ -50,9 +50,9 @@ class RunnerSandboxFactory(
 
         return Sandbox(ctx).register(
             DecimalCapabilityFactory,
-            HttpExtensionFactory(),
+            HttpCapabilityFactory(),
             LogExtensionFactory(sdk.execLog),
-            DebugExtensionFactory(),
+            DebugCapabilityFactory(),
             SysCapabilityFactory(HttpTemplate(apiHost)),
         )
     }
