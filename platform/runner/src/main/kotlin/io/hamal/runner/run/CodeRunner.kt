@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
-import io.hamal.lib.kua.PluginError
+import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -46,10 +46,10 @@ class CodeRunnerImpl(
             sandboxFactory.create(runnerContext)
                 .use { sandbox ->
 
-                    val ctxCapability = RunnerContextFactory(runnerContext).create(sandbox)
+                    val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                    val internalTable = sandbox.state.tableCreateMap(ctxCapability.internals.size)
-                    ctxCapability.internals.forEach { entry ->
+                    val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
+                    contextExtension.internals.forEach { entry ->
                         when (val value = entry.value) {
                             is StringType -> internalTable[entry.key] = value
                             is NumberType -> internalTable[entry.key] = value
@@ -63,9 +63,9 @@ class CodeRunnerImpl(
 
 
                     sandbox.setGlobal("_internal", internalTable)
-                    sandbox.state.load(ctxCapability.factoryCode)
+                    sandbox.state.load(contextExtension.factoryCode)
 
-                    sandbox.state.load("${ctxCapability.name} = plugin()()")
+                    sandbox.state.load("${contextExtension.name} = extension()()")
                     sandbox.unsetGlobal("_internal")
 
                     sandbox.load(CodeType(unitOfWork.code.value))
@@ -78,7 +78,7 @@ class CodeRunnerImpl(
                 }
 
 
-        } catch (e: PluginError) {
+        } catch (e: ExtensionError) {
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {

@@ -16,5 +16,5 @@ class ScriptError(message: String) : KuaError(message)
 
 class DecimalError(message: String) : KuaError(message)
 
-class PluginError(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
+class ExtensionError(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
 

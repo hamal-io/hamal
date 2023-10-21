@@ -36,8 +36,8 @@ throw_extension_error(jthrowable throwable) {
 
     jthrowable kua_error = (*env)->NewObject(
             env,
-            jni_ref().plugin_error_class,
-            jni_ref().plugin_error_ctor_id,
+            jni_ref().extension_error_class,
+            jni_ref().extension_error_ctor_id,
             throwable
     );
 
@@ -51,7 +51,7 @@ throw_script_error(char const *message) {
 }
 
 int
-throw_decimal_error(char const *message){
+throw_decimal_error(char const *message) {
     JNIEnv *env = current_env();
     return (*env)->ThrowNew(env, jni_ref().decimal_error_class, message);
 }

@@ -3,7 +3,7 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.error.ScriptErrorTest
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -40,10 +40,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -91,10 +91,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -139,10 +139,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -199,10 +199,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -250,10 +250,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -279,10 +279,10 @@ internal class TableEntryIteratorTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                Capability(
+                RunnerUnsafeExtension(
                     name = "test",
                     factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 

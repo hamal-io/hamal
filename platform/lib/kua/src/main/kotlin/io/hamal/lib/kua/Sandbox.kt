@@ -1,9 +1,11 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
+import io.hamal.lib.kua.extension.RunnerExtensionRegistry
+import io.hamal.lib.kua.extension.safe.RunnerSafeExtension
+import io.hamal.lib.kua.extension.safe.RunnerSafeExtensionFactory
+import io.hamal.lib.kua.extension.unsafe.*
 import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.plugin.PluginRegistry
-import io.hamal.lib.kua.plugin.capability.*
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.AnyType
@@ -19,7 +21,7 @@ class Sandbox(
     override fun pop(len: Int) = state.pop(len)
 
     val state = ClosableState(native)
-    val registry: PluginRegistry = PluginRegistry(this)
+    val registry: RunnerExtensionRegistry = RunnerExtensionRegistry(this)
 
     init {
         registerGlobalFunction("require", Require(registry))
@@ -28,12 +30,12 @@ class Sandbox(
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
 
-//    fun register(extension: NativeExtension) = state.registerGlobalExtension(extension)
+//    fun register(safe: NativeExtension) = state.registerGlobalExtension(safe)
 //
 //    fun register(vararg factories: ExtensionFactory<*>): Sandbox {
-//        factories.map { it.create(this) }.forEach { extension ->
-//            check(extension is Capability)
-//            this.register(extension)
+//        factories.map { it.create(this) }.forEach { safe ->
+//            check(safe is Capability)
+//            this.register(safe)
 //        }
 //        return this
 //    }
@@ -46,15 +48,26 @@ class Sandbox(
         fn(state)
     }
 
-    fun register(capability: Capability) {
-        registry.register(capability)
+    fun register(extension: RunnerUnsafeExtension) {
+        registry.register(extension)
     }
 
-    fun register(vararg factories: CapabilityFactory): Sandbox {
+    fun register(vararg factories: RunnerUnsafeExtensionFactory): Sandbox {
         factories.map { it.create(this) }.forEach { cap ->
             this.register(cap)
         }
         return this
+    }
+
+    fun register(vararg factories: RunnerSafeExtensionFactory): Sandbox {
+        factories.map { it.create(this) }.forEach { cap ->
+            this.register(cap)
+        }
+        return this
+    }
+
+    fun register(extension: RunnerSafeExtension) {
+        registry.register(extension)
     }
 
 
@@ -112,15 +125,15 @@ internal fun Native.load(code: String) {
     call(0, 0)
 }
 
-//internal fun State.registerGlobalExtension(extension: NativeExtension) {
-//    val result = registerExtension(extension)
-//    setGlobal(extension.name, result)
+//internal fun State.registerGlobalExtension(safe: NativeExtension) {
+//    val result = registerExtension(safe)
+//    setGlobal(safe.name, result)
 //}
 //
-//fun State.registerExtension(extension: NativeExtension): TableProxyMap {
+//fun State.registerExtension(safe: NativeExtension): TableProxyMap {
 //
 //    val r = tableCreateMap(1)
-//    extension.values
+//    safe.values
 //        .filter { entry -> entry.value is FunctionType<*, *, *, *> }
 //        .forEach { (name, value) ->
 //            require(value is FunctionType<*, *, *, *>)
@@ -128,19 +141,19 @@ internal fun Native.load(code: String) {
 //            native.tabletSetField(r.index, name)
 //        }
 //
-//    createConfig(extension.config)
+//    createConfig(safe.config)
 //    native.tabletSetField(r.index, "__config")
 //
 //    return r
 //}
 
-fun State.createConfig(config: CapabilityConfig): TableProxyMap {
+fun State.createConfig(config: RunnerUnsafeExtensionConfig): TableProxyMap {
 
     val result = tableCreateMap(1)
 
     val fns = mapOf(
-        "get" to CapabilityGetConfigFunction(config),
-        "update" to CapabilityUpdateConfigFunction(config)
+        "get" to RunnerUnsafeExtensionGetConfigFunction(config),
+        "update" to RunnerUnsafeExtensionUpdateConfigFunction(config)
     )
 
     fns.forEach { (name, value) ->

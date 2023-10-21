@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
@@ -23,10 +23,10 @@ internal class RegisterCapabilityTest : BaseSandboxTest() {
 
         val func = TestFunction()
         testInstance.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "secret_cap",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 

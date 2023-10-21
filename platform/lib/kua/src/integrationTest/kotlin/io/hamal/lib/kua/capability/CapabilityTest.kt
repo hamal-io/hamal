@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -41,10 +41,10 @@ internal class ExtensionTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
-                Capability(
+                RunnerUnsafeExtension(
                     name = "test",
                     factoryCode = """
-                            function plugin()
+                            function extension()
                                 local internal = _internal
                                 return function()
                                     local export = {

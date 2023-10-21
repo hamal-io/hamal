@@ -1,11 +1,11 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.PluginError
+import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.plugin.capability.Capability
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import org.hamcrest.CoreMatchers.equalTo
@@ -32,10 +32,10 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -53,7 +53,7 @@ internal class FunctionTest {
             )
         )
 
-        val exception = assertThrows<PluginError> {
+        val exception = assertThrows<ExtensionError> {
             sandbox.load(
                 """
                 test = require('test')
@@ -83,10 +83,10 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -127,10 +127,10 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -170,10 +170,10 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -213,10 +213,10 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -261,10 +261,10 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -302,10 +302,10 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            Capability(
+            RunnerUnsafeExtension(
                 name = "test",
                 factoryCode = """
-                    function plugin()
+                    function extension()
                         local internal = _internal
                         return function()
                             local export = { 
