@@ -65,6 +65,8 @@ include(":platform:runner-capability:starter")
 include(":platform:runner-capability:test")
 include(":platform:runner-capability:web3")
 
+include(":platform:runner-extension:telegram")
+
 include(":platform:testbed")
 
 include(":app")
