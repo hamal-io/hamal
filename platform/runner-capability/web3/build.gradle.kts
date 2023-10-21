@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("cap-std-log.jar")
+    archiveFileName.set("cap-web3.jar")
 }
 
 distributions {
@@ -27,7 +27,7 @@ distributions {
 
 dependencies {
     implementation(project(":platform:lib:kua"))
-    implementation(project(":platform:lib:sdk"))
+    implementation(project(":platform:lib:web3"))
 }
 
 
@@ -38,7 +38,18 @@ testing {
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(project(":platform:runner-capability:test"))
-                    implementation(project(":platform:runner-capability:std:log"))
+                    implementation(project(":platform:runner-capability:web3"))
+
+                    implementation(external.junit)
+                    implementation(external.hamcrest)
+                    implementation(external.spring.web) {
+                        exclude("com.fasterxml.jackson.core", "jackson-core")
+                        exclude("org.springframework.boot", "spring-boot-starter-json")
+                        exclude("com.fasterxml.jackson.core", "jackson-annotations")
+                    }
+                    implementation(external.spring.test) {
+                        exclude("org.assertj", "*")
+                    }
                 }
             }
         }

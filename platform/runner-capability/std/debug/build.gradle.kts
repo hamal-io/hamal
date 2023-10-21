@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-std-debug.jar")
+    archiveFileName.set("cap-std-debug.jar")
 }
 
 distributions {

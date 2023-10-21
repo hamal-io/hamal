@@ -1,13 +1,13 @@
-package io.hamal.extension.web3.eth
+package io.hamal.capability.web3.evm
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.Capability
-import io.hamal.lib.kua.extension.CapabilityFactory
+import io.hamal.lib.kua.capability.Capability
+import io.hamal.lib.kua.capability.CapabilityConfig
+import io.hamal.lib.kua.capability.CapabilityFactory
 import io.hamal.lib.kua.type.StringType
 
-class EthExtensionFactory : CapabilityFactory {
-    val config = ExtensionConfig(
+class EthCapabilityFactory : CapabilityFactory {
+    val config = CapabilityConfig(
         mutableMapOf(
             "host" to StringType("http://localhost:8000")
         )

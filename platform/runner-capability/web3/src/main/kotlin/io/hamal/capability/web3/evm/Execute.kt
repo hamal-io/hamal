@@ -1,8 +1,8 @@
-package io.hamal.extension.web3.eth
+package io.hamal.capability.web3.evm
 
 import io.hamal.lib.common.logger
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.capability.CapabilityConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -25,7 +25,7 @@ import kotlin.to
 private val log = logger(EthExecuteFunction::class)
 
 class EthExecuteFunction(
-    private val config: ExtensionConfig
+    private val config: CapabilityConfig
 ) : Function1In2Out<ArrayType, ErrorType, ArrayType>(
     FunctionInput1Schema(ArrayType::class),
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)

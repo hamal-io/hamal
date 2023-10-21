@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-std-sys.jar")
+    archiveFileName.set("cap-std-sys.jar")
 }
 
 distributions {

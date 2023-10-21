@@ -1,7 +1,7 @@
-package io.hamal.extension.web3.eth.dep
+package io.hamal.capability.web3.evm.dep
 
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.capability.CapabilityConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -18,7 +18,7 @@ import io.hamal.lib.web3.eth.http.EthHttpBatchService
 import java.math.BigInteger
 
 class CallFunction(
-    val config: ExtensionConfig
+    val config: CapabilityConfig
 ) : Function1In2Out<TableProxyMap, ErrorType, StringType>(
     FunctionInput1Schema(TableProxyMap::class),
     FunctionOutput2Schema(ErrorType::class, StringType::class)

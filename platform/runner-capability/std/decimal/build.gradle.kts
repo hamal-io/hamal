@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-std-decimal.jar")
+    archiveFileName.set("cap-std-decimal.jar")
 }
 
 distributions {

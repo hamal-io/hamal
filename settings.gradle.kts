@@ -63,7 +63,7 @@ include(":platform:runner-capability:std:log")
 include(":platform:runner-capability:std:sys")
 include(":platform:runner-capability:starter")
 include(":platform:runner-capability:test")
-
+include(":platform:runner-capability:web3")
 
 include(":platform:testbed")
 

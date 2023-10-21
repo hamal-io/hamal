@@ -1,22 +1,23 @@
-package io.hamal.extension.web3
+package io.hamal.capability.web3
 
-import AbstractExtensionTest
-import io.hamal.extension.web3.eth.EthExtensionFactory
+import AbstractCapabilityTest
+import io.hamal.capability.web3.evm.EthCapabilityFactory
 import io.hamal.lib.kua.NativeLoader
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.name
 
-object IntegrationTest : AbstractExtensionTest() {
+object IntegrationTest : AbstractCapabilityTest() {
     @TestFactory
     fun run(): List<DynamicTest> {
         NativeLoader.load(NativeLoader.Preference.Resources)
         return collectFiles().map { testFile ->
-            DynamicTest.dynamicTest("${testFile.parent.name}/${testFile.name}") {
-                val execute = createTestExecutor(EthExtensionFactory())
+            dynamicTest("${testFile.parent.name}/${testFile.name}") {
+                val execute = createTestExecutor(EthCapabilityFactory())
                 execute.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()

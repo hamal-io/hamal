@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":platform:runner-capability:std:debug"))
     implementation(project(":platform:runner-capability:std:log"))
     implementation(project(":platform:runner-capability:std:sys"))
+    implementation(project(":platform:runner-capability:web3"))
 
     implementation(external.spring.web) {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
