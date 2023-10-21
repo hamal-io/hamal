@@ -35,7 +35,7 @@ internal class UpdateSnippetHandlerTest : BaseReqHandlerTest() {
                     )
                 ),
                 value = CodeValue("1 + 1"),
-                accountId = testAccount.id
+                creatorId = testAccount.id
             )
         )
 

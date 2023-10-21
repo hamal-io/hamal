@@ -11,7 +11,7 @@ data class SnippetEntity(
     override val cmdId: CmdId,
     override val id: SnippetId,
     val groupId: GroupId,
-    var accountId: AccountId,
+    var creatorId: AccountId,
     override val sequence: RecordSequence,
 
     var name: SnippetName? = null,
@@ -24,7 +24,7 @@ data class SnippetEntity(
             is SnippetCreationRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                accountId = rec.accountId,
+                creatorId = rec.creatorId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
@@ -47,7 +47,7 @@ data class SnippetEntity(
             cmdId = cmdId,
             id = id,
             groupId = groupId,
-            accountId = accountId,
+            creatorId = creatorId,
             name = name!!,
             inputs = inputs!!,
             value = codeValue!!
@@ -64,7 +64,7 @@ fun List<SnippetRecord>.createEntity(): SnippetEntity {
         cmdId = firstRecord.cmdId,
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
-        accountId = firstRecord.accountId,
+        creatorId = firstRecord.creatorId,
         sequence = firstRecord.sequence()
     )
 

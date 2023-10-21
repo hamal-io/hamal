@@ -31,7 +31,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     snippetId = SnippetId(123),
                     groupId = GroupId(1),
-                    accountId = AccountId("123"),
+                    creatorId = AccountId("123"),
                     name = SnippetName("TestSnippet"),
                     inputs = SnippetInputs(
                         MapType(
@@ -47,7 +47,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(SnippetId(123)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
                 assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
@@ -77,14 +77,14 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(SnippetId(1)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
-                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(creatorId, equalTo(AccountId("123")))
             }
 
             with(get(SnippetId(2))) {
                 assertThat(id, equalTo(SnippetId(2)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
-                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(creatorId, equalTo(AccountId("123")))
             }
         }
     }
@@ -115,7 +115,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(SnippetName("TestSnippet2")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
                 assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("answer" to NumberType(42))))))
-                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(creatorId, equalTo(AccountId("123")))
             }
 
             verifyCount(1)
@@ -135,16 +135,15 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                         id = CmdId(iteration + 2),
                         name = SnippetName("TestSnippet$iteration"),
                         value = CodeValue("40 + $iteration"),
-                        inputs = SnippetInputs(MapType(mutableMapOf("answer" to NumberType(42))))
                     )
                 )
 
                 with(result) {
                     assertThat(id, equalTo(SnippetId(1)))
                     assertThat(groupId, equalTo(GroupId(1)))
-                    assertThat(value, equalTo(CodeValue("40 + $iteration")))
-                    assertThat(accountId, equalTo(AccountId("123")))
+                    assertThat(creatorId, equalTo(AccountId("123")))
                     assertThat(name, equalTo(SnippetName("TestSnippet$iteration")))
+                    assertThat(value, equalTo(CodeValue("40 + $iteration")))
                 }
             }
             verifyCount(1)
@@ -165,7 +164,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
             with(find(SnippetId(1))!!) {
                 assertThat(id, equalTo(SnippetId(1)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
             }
@@ -195,7 +194,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
             with(find(SnippetId(1))!!) {
                 assertThat(id, equalTo(SnippetId(1)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(accountId, equalTo(AccountId("123")))
+                assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(SnippetName("TestSnippet")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
             }
@@ -340,6 +339,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                 id = cmdId,
                 snippetId = snippetId,
                 groupId = groupId,
+                creatorId = AccountId("123"),
                 name = name,
                 inputs = SnippetInputs(
                     MapType(
@@ -348,8 +348,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
                         )
                     )
                 ),
-                value = value,
-                accountId = AccountId("123")
+                value = value
             )
         )
     }

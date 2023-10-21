@@ -25,7 +25,7 @@ internal object CreateSnippet : CreateDomainObject<SnippetId, SnippetRecord, Sni
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
-            accountId = firstRecord.accountId,
+            creatorId = firstRecord.creatorId,
             sequence = firstRecord.sequence()
         )
 
@@ -66,7 +66,7 @@ class SqliteSnippetRepository(
                         name = cmd.name,
                         inputs = cmd.inputs,
                         value = cmd.value,
-                        accountId = cmd.accountId
+                        creatorId = cmd.creatorId
                     )
                 )
 

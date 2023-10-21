@@ -12,7 +12,7 @@ data class Snippet(
     val cmdId: CmdId,
     override val id: SnippetId,
     val groupId: GroupId,
-    val accountId: AccountId,
+    val creatorId: AccountId,
     val name: SnippetName,
     val inputs: SnippetInputs,
     val value: CodeValue
@@ -28,7 +28,7 @@ interface SnippetCmdRepository : CmdRepository {
         val id: CmdId,
         val snippetId: SnippetId,
         val groupId: GroupId,
-        val accountId: AccountId,
+        val creatorId: AccountId,
         val inputs: SnippetInputs,
         val name: SnippetName,
         val value: CodeValue

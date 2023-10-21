@@ -29,7 +29,7 @@ private fun CreateSnippetHandler.createSnippet(req: SubmittedCreateSnippetReq): 
             name = req.name,
             inputs = req.inputs,
             value = req.value,
-            accountId = req.accountId
+            creatorId = req.creatorId
         )
     )
 }

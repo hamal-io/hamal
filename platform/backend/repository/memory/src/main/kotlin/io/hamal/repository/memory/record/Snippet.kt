@@ -69,7 +69,7 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         value = cmd.value,
-                        accountId = cmd.accountId
+                        creatorId = cmd.creatorId
                     )
                 )
                 (currentVersion(snippedId)).also(CurrentSnippetProjection::apply)

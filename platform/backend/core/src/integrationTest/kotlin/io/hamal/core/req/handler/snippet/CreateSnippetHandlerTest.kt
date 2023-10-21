@@ -23,7 +23,7 @@ internal class CreateSnippetHandlerTest : BaseReqHandlerTest() {
             assertThat(id, equalTo(SnippetId(123)))
             assertThat(name, equalTo(SnippetName("TestSnippet")))
             assertThat(value, equalTo(CodeValue("1 + 1")))
-            assertThat(accountId, equalTo(testAccount.id))
+            assertThat(creatorId, equalTo(testAccount.id))
         }
     }
 
@@ -36,7 +36,7 @@ internal class CreateSnippetHandlerTest : BaseReqHandlerTest() {
             name = SnippetName("TestSnippet"),
             inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             value = CodeValue("1 + 1"),
-            accountId = testAccount.id
+            creatorId = testAccount.id
         )
     }
 

@@ -11,7 +11,7 @@ data class SubmittedCreateSnippetReq(
     override var status: ReqStatus,
     override val groupId: GroupId,
     val id: SnippetId,
-    val accountId: AccountId,
+    val creatorId: AccountId,
     val name: SnippetName,
     val inputs: SnippetInputs,
     val value: CodeValue

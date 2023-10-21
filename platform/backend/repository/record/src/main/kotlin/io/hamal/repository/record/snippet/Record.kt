@@ -19,10 +19,10 @@ data class SnippetCreationRecord(
     override val entityId: SnippetId,
     override val cmdId: CmdId,
     val groupId: GroupId,
+    val creatorId: AccountId,
     val name: SnippetName,
     val inputs: SnippetInputs,
-    val value: CodeValue,
-    val accountId: AccountId
+    val value: CodeValue
 ) : SnippetRecord()
 
 
