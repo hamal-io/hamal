@@ -5,6 +5,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.CompletedExec
+import io.hamal.repository.api.FailedExec
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -34,6 +35,8 @@ internal class ExecGetController(
                         },
                         events = exec.events,
                         result = if (exec is CompletedExec) {
+                            exec.result
+                        } else if (exec is FailedExec) {
                             exec.result
                         } else {
                             null

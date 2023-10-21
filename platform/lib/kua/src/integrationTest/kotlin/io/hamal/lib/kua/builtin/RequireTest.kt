@@ -3,37 +3,89 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.BundleExtension
+import io.hamal.lib.kua.extension.safe.RunnerSafeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 
 internal class ExtensionTest {
 
-    @Test
-    fun `Creates a new instance - everytime it gets invoked`() {
-        sandbox.load(
-            """
-            local ext_one = require('test')
-            assert( ext_one.some_number == 42 )
-            ext_one.some_number = 1337
+    @Nested
+    inner class SafeTest {
+        @Test
+        fun `Creates a new instance - everytime it gets invoked`() {
+            sandbox.load(
+                """
+            local one = require('test')
+            assert( one.some_number == 42 )
+            one.some_number = 1337
             
-            local ext_two = require('test')
-            assert( ext_two.some_number == 42 )
+            local two = require('test')
+            assert( two.some_number == 42 )
             
-            assert( ext_one.some_number == 1337 )
+            assert( one.some_number == 1337 )
         """.trimIndent()
-        )
+            )
+        }
+
+        private val sandbox = run {
+            NativeLoader.load(NativeLoader.Preference.Resources)
+            Sandbox(NopSandboxContext()).also { sb ->
+                sb.register(
+                    RunnerSafeExtension(
+                        name = "test",
+                        factoryCode = """
+                            function extension()
+                                return function()
+                                    local export = { some_number = 42 }
+                                    return export
+                                end
+                            end
+                    """.trimIndent()
+                    )
+                )
+            }
+        }
     }
 
-    private val sandbox = run {
-        NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox(NopSandboxContext()).also { sb ->
-            sb.register(
-                BundleExtension(
-                    name = "test",
-                    internals = mapOf()
-                )
+    @Nested
+    inner class UnsafeTest {
+        @Test
+        fun `Creates a new instance - everytime it gets invoked`() {
+            sandbox.load(
+                """
+            local one = require('test')
+            assert( one.some_number == 42 )
+            one.some_number = 1337
+            
+            local two = require('test')
+            assert( two.some_number == 42 )
+            
+            assert( one.some_number == 1337 )
+        """.trimIndent()
             )
+        }
+
+        private val sandbox = run {
+            NativeLoader.load(NativeLoader.Preference.Resources)
+            Sandbox(NopSandboxContext()).also { sb ->
+                sb.register(
+                    RunnerUnsafeExtension(
+                        name = "test",
+                        factoryCode = """
+                            function extension()
+                                local internal = _internal
+                                return function()
+                                    local export = { some_number = 42 }
+                                    return export
+                                end
+                            end
+                    """.trimIndent(),
+                        internals = mapOf()
+                    )
+                )
+            }
         }
     }
 }

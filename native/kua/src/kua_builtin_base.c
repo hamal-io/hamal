@@ -19,7 +19,7 @@ kua_assert(lua_State *L) {
         lua_settop(L, 1);  /* leave only message (default if no other one) */
 
         lua_Debug ar;
-        lua_getstack(L, 1, &ar);
+        lua_getstack( L, 1, &ar);
         lua_getinfo(L, "nSl", &ar);
         int line = ar.currentline;
 

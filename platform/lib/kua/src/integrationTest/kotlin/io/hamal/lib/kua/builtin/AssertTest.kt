@@ -2,7 +2,7 @@ package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -42,7 +42,7 @@ class AssertTest {
             sandbox.load(
                 """
                 assert(true == false)
-                test.call()
+                require('test').call()
                 """.trimIndent()
             )
         }
@@ -74,9 +74,20 @@ class AssertTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                NativeExtension(
+                RunnerUnsafeExtension(
                     "test",
-                    values = mapOf("call" to CallbackFunction())
+                    factoryCode = """
+                            function extension()
+                                local internal = _internal
+                                return function()
+                                    local export = {
+                                        call = internal.call
+                                     }
+                                    return export
+                                end
+                            end
+                    """.trimIndent(),
+                    internals = mapOf("call" to CallbackFunction())
                 )
             )
         }

@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,7 +26,7 @@ class ScriptErrorTest {
     @Test
     fun `Script error interrupts execution`() {
         assertThrows<ScriptError> {
-            sandbox.load("""local x = does.not.exist; test.call()""")
+            sandbox.load("""local x = does.not.exist; require('test').call()""")
         }
     }
 
@@ -39,7 +39,23 @@ class ScriptErrorTest {
     private val sandbox = run {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also {
-            it.register(NativeExtension("test", mapOf("call" to CallbackFunction())))
+            it.register(
+                RunnerUnsafeExtension(
+                    name = "test",
+                    factoryCode = """
+                            function extension()
+                                local internal = _internal
+                                return function()
+                                    local export = {
+                                        call = internal.call
+                                     }
+                                    return export
+                                end
+                            end
+                    """.trimIndent(),
+                    internals = mapOf("call" to CallbackFunction())
+                )
+            )
         }
     }
 }

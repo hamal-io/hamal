@@ -39,7 +39,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("test.fn()"),
+                code = CodeValue("require('test').fn()"),
                 correlation = null
             )
         )

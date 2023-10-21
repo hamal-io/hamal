@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -33,7 +33,7 @@ class ErrorTest {
             sandbox.load(
                 """
                 error("terminate here")
-                test.call()
+                require('test').call()
                 """.trimIndent()
             )
         }
@@ -49,9 +49,20 @@ class ErrorTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                NativeExtension(
-                    "test",
-                    values = mapOf("call" to CallbackFunction())
+                RunnerUnsafeExtension(
+                    name = "test",
+                    factoryCode = """
+                            function extension()
+                                local internal = _internal
+                                return function()
+                                    local export = {
+                                        call = internal.call
+                                     }
+                                    return export
+                                end
+                            end
+                    """.trimIndent(),
+                    internals = mapOf("call" to CallbackFunction())
                 )
             )
         }
