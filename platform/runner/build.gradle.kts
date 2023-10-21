@@ -13,8 +13,10 @@ dependencies {
     implementation(project(":platform:lib:web3"))
     implementation(project(":platform:lib:kua"))
 
-    implementation(project(":platform:runner-extension:unsafe:net:http"))
     implementation(project(":platform:runner-extension:safe:std:decimal"))
+    implementation(project(":platform:runner-extension:safe:telegram"))
+
+    implementation(project(":platform:runner-extension:unsafe:net:http"))
     implementation(project(":platform:runner-extension:unsafe:std:debug"))
     implementation(project(":platform:runner-extension:unsafe:std:log"))
     implementation(project(":platform:runner-extension:unsafe:std:sys"))

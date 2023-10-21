@@ -38,7 +38,7 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
                     )
                 )
 
-                val runner = createTestRunner(unsafeFactories = listOf(HttpCapabilityFactory(config)))
+                val runner = createTestRunner(unsafeFactories = listOf(HttpExtensionFactory(config)))
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()

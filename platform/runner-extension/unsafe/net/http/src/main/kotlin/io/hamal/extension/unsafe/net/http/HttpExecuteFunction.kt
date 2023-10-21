@@ -37,7 +37,9 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
 
             if (method == "POST") {
                 try {
-                    val response = HttpTemplate().post(url).execute()
+                    val response = HttpTemplate().post(url)
+                        .execute()
+
                     results.add(MapType().also {
                         it["statusCode"] = NumberType(response.statusCode.value)
                     })

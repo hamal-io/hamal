@@ -22,7 +22,7 @@ import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 
 
-class SysCapabilityFactory(
+class SysExtensionFactory(
     private val httpTemplate: HttpTemplate,
     private val sdk: ApiSdk = ApiSdkImpl(httpTemplate)
 ) : RunnerUnsafeExtensionFactory {

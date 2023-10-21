@@ -5,7 +5,7 @@ import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionFactory
 
-class HttpCapabilityFactory(
+class HttpExtensionFactory(
     val config: RunnerUnsafeExtensionConfig = RunnerUnsafeExtensionConfig(mutableMapOf())
 ) : RunnerUnsafeExtensionFactory {
 

@@ -1,10 +1,11 @@
 package io.hamal.runner.config
 
 import io.hamal.extension.safe.std.decimal.DecimalSafeFactory
-import io.hamal.extension.unsafe.net.http.HttpCapabilityFactory
-import io.hamal.extension.unsafe.std.debug.DebugCapabilityFactory
+import io.hamal.extension.safe.telegram.TelegramSafeFactory
+import io.hamal.extension.unsafe.net.http.HttpExtensionFactory
+import io.hamal.extension.unsafe.std.debug.DebugExtensionFactory
 import io.hamal.extension.unsafe.std.log.LogExtensionFactory
-import io.hamal.extension.unsafe.std.sys.SysCapabilityFactory
+import io.hamal.extension.unsafe.std.sys.SysExtensionFactory
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
@@ -50,13 +51,14 @@ class RunnerSandboxFactory(
 
         return Sandbox(ctx)
             .register(
-                DecimalSafeFactory
+                HttpExtensionFactory(),
+                LogExtensionFactory(sdk.execLog),
+                DebugExtensionFactory(),
+                SysExtensionFactory(HttpTemplate(apiHost)),
             )
             .register(
-                HttpCapabilityFactory(),
-                LogExtensionFactory(sdk.execLog),
-                DebugCapabilityFactory(),
-                SysCapabilityFactory(HttpTemplate(apiHost)),
+                DecimalSafeFactory,
+                TelegramSafeFactory
             )
     }
 }
