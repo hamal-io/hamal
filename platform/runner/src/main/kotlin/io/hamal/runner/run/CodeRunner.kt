@@ -46,10 +46,10 @@ class CodeRunnerImpl(
             sandboxFactory.create(runnerContext)
                 .use { sandbox ->
 
-                    val ctxExtension = RunnerContextFactory(runnerContext).create(sandbox)
+                    val ctxCapability = RunnerContextFactory(runnerContext).create(sandbox)
 
-                    val internalTable = sandbox.state.tableCreateMap(ctxExtension.internals.size)
-                    ctxExtension.internals.forEach { entry ->
+                    val internalTable = sandbox.state.tableCreateMap(ctxCapability.internals.size)
+                    ctxCapability.internals.forEach { entry ->
                         when (val value = entry.value) {
                             is StringType -> internalTable[entry.key] = value
                             is NumberType -> internalTable[entry.key] = value
@@ -63,8 +63,9 @@ class CodeRunnerImpl(
 
 
                     sandbox.setGlobal("_internal", internalTable)
-                    sandbox.state.load(ctxExtension.init)
-                    sandbox.state.load("${ctxExtension.name} = create_extension_factory()()")
+                    sandbox.state.load(ctxCapability.factoryCode)
+
+                    sandbox.state.load("${ctxCapability.name} = create_capability_factory()()")
                     sandbox.unsetGlobal("_internal")
 
                     sandbox.load(CodeType(unitOfWork.code.value))

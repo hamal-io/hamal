@@ -54,7 +54,7 @@ internal class EventTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("test.fn()"),
+                code = CodeValue("require('test').fn()"),
                 events = events,
             )
         )

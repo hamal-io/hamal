@@ -1,4 +1,4 @@
-function create_extension_factory()
+function create_capability_factory()
     local internal = _internal
     return function()
         local export = {

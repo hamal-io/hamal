@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
-import io.hamal.lib.kua.extension.*
+import io.hamal.lib.kua.capability.*
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -27,15 +27,15 @@ class Sandbox(
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
 
-    fun register(extension: NativeExtension) = state.registerGlobalExtension(extension)
-
-    fun register(vararg factories: ExtensionFactory<*>): Sandbox {
-        factories.map { it.create(this) }.forEach { extension ->
-            check(extension is BundleExtension)
-            this.register(extension)
-        }
-        return this
-    }
+//    fun register(extension: NativeExtension) = state.registerGlobalExtension(extension)
+//
+//    fun register(vararg factories: ExtensionFactory<*>): Sandbox {
+//        factories.map { it.create(this) }.forEach { extension ->
+//            check(extension is Capability)
+//            this.register(extension)
+//        }
+//        return this
+//    }
 
     fun load(code: CodeType) = load(code.value)
 
@@ -45,8 +45,15 @@ class Sandbox(
         fn(state)
     }
 
-    fun register(extension: BundleExtension) {
-        registry.register(extension)
+    fun register(capability: Capability) {
+        registry.register(capability)
+    }
+
+    fun register(vararg factories: CapabilityFactory): Sandbox {
+        factories.map { it.create(this) }.forEach { cap ->
+            this.register(cap)
+        }
+        return this
     }
 
 
@@ -104,27 +111,27 @@ internal fun Native.load(code: String) {
     call(0, 0)
 }
 
-internal fun State.registerGlobalExtension(extension: NativeExtension) {
-    val result = registerExtension(extension)
-    setGlobal(extension.name, result)
-}
-
-fun State.registerExtension(extension: NativeExtension): TableProxyMap {
-
-    val r = tableCreateMap(1)
-    extension.values
-        .filter { entry -> entry.value is FunctionType<*, *, *, *> }
-        .forEach { (name, value) ->
-            require(value is FunctionType<*, *, *, *>)
-            native.pushFunction(value)
-            native.tabletSetField(r.index, name)
-        }
-
-    createConfig(extension.config)
-    native.tabletSetField(r.index, "__config")
-
-    return r
-}
+//internal fun State.registerGlobalExtension(extension: NativeExtension) {
+//    val result = registerExtension(extension)
+//    setGlobal(extension.name, result)
+//}
+//
+//fun State.registerExtension(extension: NativeExtension): TableProxyMap {
+//
+//    val r = tableCreateMap(1)
+//    extension.values
+//        .filter { entry -> entry.value is FunctionType<*, *, *, *> }
+//        .forEach { (name, value) ->
+//            require(value is FunctionType<*, *, *, *>)
+//            native.pushFunction(value)
+//            native.tabletSetField(r.index, name)
+//        }
+//
+//    createConfig(extension.config)
+//    native.tabletSetField(r.index, "__config")
+//
+//    return r
+//}
 
 fun State.createConfig(config: ExtensionConfig): TableProxyMap {
 

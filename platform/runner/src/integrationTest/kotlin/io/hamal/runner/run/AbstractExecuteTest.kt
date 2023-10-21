@@ -5,14 +5,14 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.capability.Capability
 import io.hamal.lib.kua.type.Type
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 
 internal abstract class AbstractExecuteTest {
     fun createTestRunner(
-        vararg testExtensions: Pair<String, Type>,
+        vararg testCapabilities: Pair<String, Type>,
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
@@ -20,9 +20,22 @@ internal abstract class AbstractExecuteTest {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx).also {
                     it.register(
-                        NativeExtension(
+                        Capability(
                             name = "test",
-                            values = testExtensions.toMap()
+                            factoryCode = """
+                            function create_capability_factory()
+                                local internal = _internal
+                                return function()
+                                    local export = {
+                                        ${
+                                testCapabilities.joinToString(",") { cap -> "${cap.first} = internal.${cap.first}" }
+                            }
+                                     }
+                                    return export
+                                end
+                            end
+                            """.trimIndent(),
+                            internals = testCapabilities.toMap()
                         )
                     )
                 }

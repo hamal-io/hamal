@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.builtin
 
-import io.hamal.lib.kua.extension.ExtensionRegistry
+import io.hamal.lib.kua.capability.ExtensionRegistry
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema

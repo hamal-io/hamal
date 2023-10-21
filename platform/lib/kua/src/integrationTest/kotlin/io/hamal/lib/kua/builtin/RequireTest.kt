@@ -3,7 +3,7 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.BundleExtension
+import io.hamal.lib.kua.capability.Capability
 import org.junit.jupiter.api.Test
 
 
@@ -13,14 +13,14 @@ internal class ExtensionTest {
     fun `Creates a new instance - everytime it gets invoked`() {
         sandbox.load(
             """
-            local ext_one = require('test')
-            assert( ext_one.some_number == 42 )
-            ext_one.some_number = 1337
+            local one = require('test')
+            assert( one.some_number == 42 )
+            one.some_number = 1337
             
-            local ext_two = require('test')
-            assert( ext_two.some_number == 42 )
+            local two = require('test')
+            assert( two.some_number == 42 )
             
-            assert( ext_one.some_number == 1337 )
+            assert( one.some_number == 1337 )
         """.trimIndent()
         )
     }
@@ -29,8 +29,17 @@ internal class ExtensionTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
-                BundleExtension(
+                Capability(
                     name = "test",
+                    factoryCode = """
+                            function create_capability_factory()
+                                local internal = _internal
+                                return function()
+                                    local export = { some_number = 42 }
+                                    return export
+                                end
+                            end
+                    """.trimIndent(),
                     internals = mapOf()
                 )
             )

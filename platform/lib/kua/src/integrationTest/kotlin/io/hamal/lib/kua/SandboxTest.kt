@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.capability.Capability
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
@@ -10,9 +10,9 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class RegisterExtensionTest : BaseSandboxTest() {
+internal class RegisterCapabilityTest : BaseSandboxTest() {
     @Test
-    fun `Register a module and call function`() {
+    fun `Registers a capability and call function`() {
         class TestFunction : Function0In0Out() {
             override fun invoke(ctx: FunctionContext) {
                 set = true
@@ -23,14 +23,30 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
         val func = TestFunction()
         testInstance.register(
-            NativeExtension(
-                name = "secret_module",
-                values = mapOf("magic" to func)
+            Capability(
+                name = "secret_cap",
+                factoryCode = """
+                    function create_capability_factory()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                magic =  internal.magic
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("magic" to func)
             )
         )
 
         testInstance.load(
-            CodeType("""secret_module.magic()""")
+            CodeType(
+                """
+                secret_cap = require('secret_cap')
+                secret_cap.magic()
+            """.trimIndent()
+            )
         )
         assertThat(func.set, equalTo(true))
     }
