@@ -26,7 +26,7 @@ interface ExtensionRepository : ExtensionCmdRepository, ExtensionQueryRepository
 
 interface ExtensionCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Extension
-    fun update(extId: ExtensionId, cmd: UpdateCmd)
+    fun update(extId: ExtensionId, cmd: UpdateCmd): Extension
 
     data class CreateCmd(
         val id: CmdId,
