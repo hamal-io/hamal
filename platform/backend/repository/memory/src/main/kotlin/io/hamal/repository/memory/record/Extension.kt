@@ -85,7 +85,7 @@ class MemoryExtensionRepository : MemoryRecordRepository<ExtensionId, ExtensionR
         }
     }
 
-    override fun update(extId: ExtensionId, cmd: UpdateCmd) {
+    override fun update(extId: ExtensionId, cmd: UpdateCmd): Extension {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, extId)) {
                 versionOf(extId, cmd.id)
