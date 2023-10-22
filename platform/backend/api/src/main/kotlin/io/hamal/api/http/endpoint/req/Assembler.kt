@@ -67,6 +67,20 @@ internal object Assembler {
                 id = r.id
             )
 
+            is SubmittedCreateSnippetReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is SubmittedUpdateSnippetReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
+
             is SubmittedCreateTriggerReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,

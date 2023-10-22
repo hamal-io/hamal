@@ -15,6 +15,7 @@ import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
+import io.hamal.repository.sqlite.record.snippet.SqliteSnippetRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -112,6 +113,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
+
+    @Bean
+    open fun snippetRepository() = SqliteSnippetRepository(SqliteSnippetRepository.Config(path))
+
+    @Bean
+    open fun snippetCmdRepository(): SnippetCmdRepository = snippetRepository()
+
+    @Bean
+    open fun snippetQueryRepository(): SnippetQueryRepository = snippetRepository()
 
     @Bean
     open fun triggerRepository() = SqliteTriggerRepository(SqliteTriggerRepository.Config(path))

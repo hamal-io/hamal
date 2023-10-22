@@ -1,16 +1,19 @@
 package io.hamal.extension.unsafe.std.sys
 
+import io.hamal.extension.unsafe.std.sys.func.*
+import io.hamal.extension.unsafe.std.sys.snippet.SnippetCreateFunction
+import io.hamal.extension.unsafe.std.sys.snippet.SnippetGetFunction
+import io.hamal.extension.unsafe.std.sys.snippet.SnippetUpdateFunction
+import io.hamal.extension.unsafe.std.sys.topic.*
 import io.hamal.extension.unsafe.std.sys.adhoc.AdhocInvokeFunction
 import io.hamal.extension.unsafe.std.sys.code.CodeGetFunction
 import io.hamal.extension.unsafe.std.sys.exec.ExecGetFunction
 import io.hamal.extension.unsafe.std.sys.exec.ExecListFunction
-import io.hamal.extension.unsafe.std.sys.func.*
 import io.hamal.extension.unsafe.std.sys.hook.HookCreateFunction
 import io.hamal.extension.unsafe.std.sys.namespace.NamespaceCreateFunction
 import io.hamal.extension.unsafe.std.sys.namespace.NamespaceGetFunction
 import io.hamal.extension.unsafe.std.sys.namespace.NamespaceListFunction
 import io.hamal.extension.unsafe.std.sys.req.ReqGetFunction
-import io.hamal.extension.unsafe.std.sys.topic.*
 import io.hamal.extension.unsafe.std.sys.trigger.TriggerCreateFunction
 import io.hamal.extension.unsafe.std.sys.trigger.TriggerGetFunction
 import io.hamal.extension.unsafe.std.sys.trigger.TriggerListFunction
@@ -54,6 +57,10 @@ class SysExtensionFactory(
                 "namespace_create" to NamespaceCreateFunction(sdk),
                 "namespace_get" to NamespaceGetFunction(sdk),
                 "namespace_list" to NamespaceListFunction(sdk),
+
+                "snippet_create" to SnippetCreateFunction(sdk),
+                "snippet_get" to SnippetGetFunction(sdk),
+                "snippet_update" to SnippetUpdateFunction(sdk),
 
                 "topic_create" to TopicCreateFunction(sdk),
                 "topic_resolve" to TopicResolveFunction(sdk),

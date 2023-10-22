@@ -8,6 +8,7 @@ function extension()
             hook = { },
             namespace = { },
             req = { },
+            snippet = { },
             topic = { },
             trigger = { }
         }
@@ -103,6 +104,22 @@ function extension()
 
         function export.req.get(req_id)
             return internal.req_get(req_id)
+        end
+
+        function export.snippet.create(cmd)
+             return internal.snippet_create({
+                name = cmd.name or nil,
+                inputs = cmd.inputs or {},
+                value = cmd.value or ""
+             })
+        end
+
+        function export.snippet.get(snippet_id)
+            return internal.snippet_get(snippet_id)
+        end
+
+        function export.snippet.update(snippet_id, cmd)
+            return internal.snippet_update(snippet_id, cmd)
         end
 
         function export.topic.resolve(topic_name)

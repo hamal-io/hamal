@@ -15,6 +15,7 @@ import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
+import io.hamal.repository.sqlite.record.snippet.SqliteSnippetRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
@@ -67,19 +68,22 @@ object SqliteFixture : BaseTestFixture {
             SqliteNamespaceRepository.Config(createTempDirectory("sqlite_namespace_test"))
         ) as REPO
 
-        SegmentRepository::class ->
-            SqliteSegmentRepository(
-                SqliteSegment(
-                    Segment.Id(2810),
-                    TopicId(1506),
-                    createTempDirectory("sqlite_topic_test")
-                )
-            ) as REPO
+        SegmentRepository::class -> SqliteSegmentRepository(
+            SqliteSegment(
+                Segment.Id(2810),
+                TopicId(1506),
+                createTempDirectory("sqlite_topic_test")
+            )
+        ) as REPO
 
-        StateRepository::class ->
-            SqliteStateRepository(
-                SqliteStateRepository.Config(createTempDirectory("sqlite_state_test"))
-            ) as REPO
+        SnippetRepository::class -> SqliteSnippetRepository(
+            SqliteSnippetRepository.Config(createTempDirectory("sqlite_snippet_test"))
+        ) as REPO
+
+
+        StateRepository::class -> SqliteStateRepository(
+            SqliteStateRepository.Config(createTempDirectory("sqlite_state_test"))
+        ) as REPO
 
         TopicRepository::class -> SqliteTopicRepository(
             Topic(TopicId(23), GroupId(1), TopicName("test-topic")),

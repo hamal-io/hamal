@@ -31,6 +31,7 @@ data class InvokeExecReq(
 class SubmitRequest(
     private val generateDomainId: GenerateDomainId,
     private val reqCmdRepository: ReqCmdRepository,
+    private val snippetQueryRepository: SnippetQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
@@ -177,6 +178,26 @@ class SubmitRequest(
         code = req.code,
     ).also(reqCmdRepository::queue)
 
+    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SubmittedCreateSnippetReq(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        groupId = groupId,
+        id = generateDomainId(::SnippetId),
+        name = req.name,
+        inputs = req.inputs,
+        value = req.value,
+        creatorId = accountId
+    ).also(reqCmdRepository::queue)
+
+    operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SubmittedUpdateSnippetReq(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        groupId = snippetQueryRepository.get(snippetId).groupId,
+        id = snippetId,
+        name = req.name,
+        inputs = req.inputs,
+        value = req.value,
+    ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, req: CreateHookReq) = SubmittedCreateHookReq(
         reqId = generateDomainId(::ReqId),
