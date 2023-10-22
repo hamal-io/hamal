@@ -7,8 +7,8 @@ class CodeTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            CodeType("log.info('hamal rocks')"),
-            """{"type":"CodeType","value":"log.info('hamal rocks')"}"""
+            testInstance = CodeType("log.info('hamal rocks')"),
+            expectedJson = """{"type":"CodeType","value":"log.info('hamal rocks')"}"""
         ),
     ).flatten()
 }

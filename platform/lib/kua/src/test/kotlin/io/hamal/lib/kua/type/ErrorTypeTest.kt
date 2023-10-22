@@ -7,7 +7,13 @@ import org.junit.jupiter.api.TestFactory
 class ErrorTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(ErrorType(""), """{"type":"ErrorType","value":""}"""),
-        generateTestCases(ErrorType("hamal-error-message"), """{"type":"ErrorType","value":"hamal-error-message"}"""),
+        generateTestCases(
+            testInstance = ErrorType(""),
+            expectedJson = """{"type":"ErrorType","value":""}"""
+        ),
+        generateTestCases(
+            testInstance = ErrorType("hamal-error-message"),
+            expectedJson = """{"type":"ErrorType","value":"hamal-error-message"}"""
+        ),
     ).flatten()
 }

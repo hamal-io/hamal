@@ -6,6 +6,9 @@ import org.junit.jupiter.api.TestFactory
 class NilTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(NilType, """{"type":"NilType"}"""),
+        generateTestCases(
+            testInstance = NilType,
+            expectedJson = """{"type":"NilType"}"""
+        ),
     ).flatten()
 }

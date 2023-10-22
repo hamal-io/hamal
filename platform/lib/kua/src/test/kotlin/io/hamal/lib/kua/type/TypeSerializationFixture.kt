@@ -30,4 +30,23 @@ internal object TypeSerializationFixture {
             }
         )
     }
+
+    fun generateTestCases(
+        testInstance: AnySerializableType,
+        expectedJson: String
+    ): List<DynamicTest> {
+        return listOf(
+            dynamicTest("${testInstance.value::class.simpleName} supports protobuf serializer") {
+                val encoded = ProtoBuf.encodeToByteArray(testInstance)
+                val decoded = ProtoBuf.decodeFromByteArray<AnySerializableType>(encoded)
+                assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
+            },
+            dynamicTest("${testInstance.value::class.simpleName} supports json serializer") {
+                val encoded = Json.encodeToString(testInstance)
+                assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
+                val decoded = Json.decodeFromString<AnySerializableType>(encoded)
+                assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
+            }
+        )
+    }
 }

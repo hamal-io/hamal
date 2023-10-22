@@ -6,22 +6,25 @@ import org.junit.jupiter.api.TestFactory
 class ArrayTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(ArrayType(), """{"type":"ArrayType"}"""),
         generateTestCases(
-            ArrayType(
+            testInstance = ArrayType(),
+            expectedJson = """{"type":"ArrayType"}"""
+        ),
+        generateTestCases(
+            testInstance = ArrayType(
                 mutableMapOf(
                     1234 to StringType("value")
                 )
             ),
-            """{"type":"ArrayType","value":{"1234":{"type":"StringType","value":"value"}}}"""
+            expectedJson = """{"type":"ArrayType","value":{"1234":{"type":"StringType","value":"value"}}}"""
         ),
         generateTestCases(
-            ArrayType(
+            testInstance = ArrayType(
                 mutableMapOf(
                     23 to NumberType(34)
                 )
             ),
-            """{"type":"ArrayType","value":{"23":{"type":"NumberType","value":"34"}}}"""
+            expectedJson = """{"type":"ArrayType","value":{"23":{"type":"NumberType","value":"34"}}}"""
         ),
     ).flatten()
 }
