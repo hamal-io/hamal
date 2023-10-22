@@ -56,7 +56,7 @@ class BodyTest(@LocalServerPort var localServerPort: Int) {
         HttpMethod.values()
             .map { method ->
                 dynamicTest("$method request") {
-                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
                     val request = when (method) {
                         Delete -> testInstance.delete("/v1/body-no-body")
@@ -79,7 +79,7 @@ class BodyTest(@LocalServerPort var localServerPort: Int) {
         listOf(Patch, Post, Put)
             .map { method ->
                 dynamicTest("$method request") {
-                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
                     val request = when (method) {
                         Patch -> testInstance.patch("/v1/body-single")

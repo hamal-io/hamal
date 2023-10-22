@@ -1,6 +1,6 @@
 package io.hamal.app.proxy.config
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -13,9 +13,9 @@ class UpstreamConfig {
     @Bean
     fun upstreamTemplate(
         @Value("\${io.hamal.proxy.upstream.host}") upstreamHost: String
-    ): HttpTemplate {
+    ): HttpTemplateImpl {
         log.info("${upstreamHost.substring(0, min(upstreamHost.length, 25))}...")
-        return HttpTemplate(
+        return HttpTemplateImpl(
             baseUrl = upstreamHost
         )
     }

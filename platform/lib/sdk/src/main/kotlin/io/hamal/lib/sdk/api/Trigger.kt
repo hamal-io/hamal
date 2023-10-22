@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateTriggerReq
@@ -166,7 +166,7 @@ interface ApiTriggerService {
 
 
 internal class ApiTriggerServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiTriggerService {
     override fun create(groupId: GroupId, req: ApiCreateTriggerReq) =
         template.post("/v1/triggers")

@@ -1,6 +1,6 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.bridge.BridgeExecService
 import io.hamal.lib.sdk.bridge.BridgeExecServiceImpl
 
@@ -9,7 +9,7 @@ interface BridgeSdk {
 }
 
 data class BridgeSdkImpl(
-    val template: HttpTemplate
+    val template: HttpTemplateImpl
 ) : BridgeSdk {
 
     override val exec: BridgeExecService by lazy {

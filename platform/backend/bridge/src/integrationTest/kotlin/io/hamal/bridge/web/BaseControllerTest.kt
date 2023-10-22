@@ -3,7 +3,7 @@ package io.hamal.bridge.web
 import io.hamal.bridge.BaseTest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.submitted_req.SubmittedReq
@@ -13,8 +13,8 @@ import kotlin.reflect.KClass
 
 internal abstract class BaseControllerTest : BaseTest() {
 
-    val httpTemplate: HttpTemplate by lazy {
-        HttpTemplate(
+    val httpTemplate: HttpTemplateImpl by lazy {
+        HttpTemplateImpl(
             baseUrl = "http://localhost:${localPort}",
             headerFactory = {
                 set("authorization", "test-token")

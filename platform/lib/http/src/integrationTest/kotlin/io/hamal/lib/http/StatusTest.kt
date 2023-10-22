@@ -48,7 +48,7 @@ class StatusTest(@LocalServerPort var localServerPort: Int) {
         HttpStatusCode.values().cross(HttpMethod.values())
             .map { (statusCode, method) ->
                 dynamicTest("$method request returns $statusCode") {
-                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
                     val request = when (method) {
                         Delete -> testInstance.delete("/v1/status")

@@ -14,7 +14,7 @@ import io.hamal.extension.unsafe.std.sys.topic.*
 import io.hamal.extension.unsafe.std.sys.trigger.TriggerCreateFunction
 import io.hamal.extension.unsafe.std.sys.trigger.TriggerGetFunction
 import io.hamal.extension.unsafe.std.sys.trigger.TriggerListFunction
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionFactory
@@ -23,7 +23,7 @@ import io.hamal.lib.sdk.ApiSdkImpl
 
 
 class SysExtensionFactory(
-    private val httpTemplate: HttpTemplate,
+    private val httpTemplate: HttpTemplateImpl,
     private val sdk: ApiSdk = ApiSdkImpl(httpTemplate)
 ) : RunnerUnsafeExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerUnsafeExtension {

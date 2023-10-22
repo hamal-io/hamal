@@ -89,6 +89,9 @@ function extension()
             if err ~= nil then
                 return nil, err
             end
+
+            print("len", #responses)
+
             assert(#responses == 1)
             return nil, responses[1]
         end

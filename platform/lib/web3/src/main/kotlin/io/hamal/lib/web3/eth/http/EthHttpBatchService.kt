@@ -1,6 +1,6 @@
 package io.hamal.lib.web3.eth.http
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
@@ -16,7 +16,7 @@ import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
 class EthHttpBatchService(
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplateImpl
 ) : EthBatchService<EthHttpBatchService> {
 
     private val lock = ReentrantLock()

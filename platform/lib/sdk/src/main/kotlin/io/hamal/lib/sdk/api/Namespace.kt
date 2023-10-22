@@ -4,7 +4,7 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateNamespaceReq
@@ -48,7 +48,7 @@ interface ApiNamespaceService {
 }
 
 internal class ApiNamespaceServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiNamespaceService {
 
     override fun create(groupId: GroupId, createNamespaceReq: ApiCreateNamespaceReq) =

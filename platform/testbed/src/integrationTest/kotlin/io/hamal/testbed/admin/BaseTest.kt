@@ -6,7 +6,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
@@ -178,7 +178,7 @@ abstract class BaseTest {
         .sorted()
 
     fun withApiSdk(serverPort: Number) = ApiSdkImpl(
-        HttpTemplate(
+        HttpTemplateImpl(
             baseUrl = "http://localhost:$serverPort",
             headerFactory = {
                 set("authorization", "root-token")

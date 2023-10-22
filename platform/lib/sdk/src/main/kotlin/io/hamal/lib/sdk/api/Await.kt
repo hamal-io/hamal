@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 
 interface ApiAwaitService {
     operator fun invoke(req: ApiSubmittedReq) = await(req)
@@ -10,7 +10,7 @@ interface ApiAwaitService {
 }
 
 internal class ApiAwaitServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiAwaitService {
     override fun await(req: ApiSubmittedReq) {
         while (true) {

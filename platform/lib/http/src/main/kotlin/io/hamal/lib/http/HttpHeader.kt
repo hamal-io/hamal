@@ -6,6 +6,10 @@ data class HttpHeaders(val mapping: Map<String, String>) {
         require(result != null) { "No header present with $key" }
         return result
     }
+
+    operator fun get(key: String, defaultValue: String): String {
+        return mapping[key] ?: defaultValue
+    }
 }
 
 data class HttpMutableHeaders(

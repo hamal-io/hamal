@@ -1,7 +1,7 @@
 package io.hamal.extension.unsafe.web3.evm
 
 import io.hamal.lib.common.logger
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -34,7 +34,7 @@ class EthExecuteFunction(
         try {
             log.trace("Setting up batch service")
 
-            val batchService = EthHttpBatchService(HttpTemplate((config.value["host"] as StringType).value))
+            val batchService = EthHttpBatchService(HttpTemplateImpl((config.value["host"] as StringType).value))
 
             arg1.value.forEach { entry ->
                 val v = entry.value

@@ -39,7 +39,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
             .map { method ->
                 dynamicTest("$method request") {
 
-                    val testInstance = HttpTemplate(
+                    val testInstance = HttpTemplateImpl(
                         baseUrl = "http://localhost:$localServerPort",
                         headerFactory = {
                             this["x-template-header"] = "x-template-header-value"
@@ -71,7 +71,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
             .map { method ->
                 dynamicTest("$method request") {
 
-                    val testInstance = HttpTemplate(
+                    val testInstance = HttpTemplateImpl(
                         baseUrl = "http://localhost:$localServerPort",
                         headerFactory = {
                             this["x-request-header"] = "x-request-header-value"
@@ -105,7 +105,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
             .map { method ->
                 dynamicTest("$method request") {
 
-                    val testInstance = HttpTemplate(
+                    val testInstance = HttpTemplateImpl(
                         baseUrl = "http://localhost:$localServerPort",
                         headerFactory = {
                             this["x-header"] = "x-template-value"
@@ -139,7 +139,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
             .map { method ->
                 dynamicTest("$method request") {
 
-                    val testInstance = HttpTemplate(
+                    val testInstance = HttpTemplateImpl(
                         baseUrl = "http://localhost:$localServerPort",
                         headerFactory = {
                             this["x-template-header"] = "x-template-value"

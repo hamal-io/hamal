@@ -1,6 +1,6 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.*
 
 interface ApiSdk {
@@ -20,7 +20,7 @@ interface ApiSdk {
 }
 
 data class ApiSdkImpl(
-    val template: HttpTemplate
+    val template: HttpTemplateImpl
 ) : ApiSdk {
 
     override val account: ApiAccountService by lazy {

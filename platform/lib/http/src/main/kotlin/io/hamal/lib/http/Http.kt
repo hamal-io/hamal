@@ -4,7 +4,7 @@ import io.hamal.lib.http.HttpRequest.HttpMethod
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import org.apache.http.impl.client.HttpClientBuilder
 
-interface HttpOperations {
+interface HttpTemplate {
     fun delete(url: String): HttpRequest
     fun get(url: String): HttpRequest
     fun patch(url: String): HttpRequestWithBody
@@ -12,19 +12,19 @@ interface HttpOperations {
     fun put(url: String): HttpRequestWithBody
 }
 
-class HttpTemplate(
+class HttpTemplateImpl(
     private var baseUrl: String = "",
     private val headerFactory: HttpMutableHeaders.() -> Unit = {},
     private var serdeFactory: HttpSerdeFactory.() -> Unit = {},
     private var httpClientFactory: HttpClientBuilder.() -> Unit = {}
-) : HttpOperations {
+) : HttpTemplate {
     override fun delete(url: String): HttpRequest = requestWith(Delete, url)
     override fun get(url: String): HttpRequest = requestWith(Get, url)
     override fun patch(url: String): HttpRequestWithBody = requestWith(Patch, url)
     override fun post(url: String): HttpRequestWithBody = requestWith(Post, url)
     override fun put(url: String): HttpRequestWithBody = requestWith(Put, url)
-    private fun requestWith(method: HttpMethod, url: String): DefaultHttpRequest {
-        return DefaultHttpRequest(
+    private fun requestWith(method: HttpMethod, url: String): HttpRequestImpl {
+        return HttpRequestImpl(
             method = method,
             url = baseUrl + url,
             headers = HttpMutableHeaders().apply(headerFactory),

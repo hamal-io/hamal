@@ -2,7 +2,7 @@ package io.hamal.app.proxy.handler
 
 import io.hamal.app.proxy.cache.EthCache
 import io.hamal.app.proxy.domain.EthCall
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthBool
@@ -27,7 +27,7 @@ interface EthRequestHandler {
 class EthRequestHandlerImpl(
     private val json: Json,
     private val ethCache: EthCache,
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplateImpl
 ) : EthRequestHandler {
 
     override fun handle(requests: List<EthRequestHandler.Request>): List<EthResponse> {

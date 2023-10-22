@@ -1,6 +1,6 @@
 package io.hamal.extension.unsafe.web3.evm.dep
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -26,7 +26,7 @@ class CallFunction(
     override fun invoke(ctx: FunctionContext, arg1: TableProxyMap): Pair<ErrorType?, StringType?> {
 
         val b = EthHttpBatchService(
-            HttpTemplate((config.value["host"] as StringType).value)
+            HttpTemplateImpl((config.value["host"] as StringType).value)
         ).call(
             EthBatchService.EthCallRequest(
                 to = EthAddress(EthPrefixedHexString(arg1.getString("to"))),
