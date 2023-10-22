@@ -1,9 +1,11 @@
 package io.hamal.extension.unsafe.net.http
 
 import AbstractExtensionTest
-import io.hamal.extension.unsafe.net.http.web.TestStatusRoute
+import io.hamal.extension.unsafe.net.http.web.TestJsonController
+import io.hamal.extension.unsafe.net.http.web.TestStatusController
 import io.hamal.lib.http.fixture.TestWebConfig
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
 import io.hamal.lib.kua.type.StringType
 import org.junit.jupiter.api.DynamicTest
@@ -21,20 +23,21 @@ import kotlin.io.path.name
 @SpringBootTest(
     classes = [
         TestWebConfig::class,
-        TestStatusRoute::class
+        TestJsonController::class,
+        TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )
 class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTest() {
 
     @TestFactory
     fun run(): List<DynamicTest> {
-        NativeLoader.load(NativeLoader.Preference.Resources)
+        NativeLoader.load(Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
 
                 val config = RunnerUnsafeExtensionConfig(
                     mutableMapOf(
-                        "port" to StringType(localServerPort.toString())
+                        "base_url" to StringType("http://localhost:$localServerPort")
                     )
                 )
 

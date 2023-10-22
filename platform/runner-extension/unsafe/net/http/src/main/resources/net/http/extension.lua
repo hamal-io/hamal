@@ -10,67 +10,77 @@ function extension()
             return internal.execute(requests)
         end
 
-        function export.requests.get(url, args)
+        function export.requests.get(url, options)
+            local config = export.config.get()
+            local base_url = config.base_url or ""
             return {
                 method = "GET",
-                url = url,
+                url = base_url .. url,
                 headers = {}
             }
         end
 
-        function export.get(url, args)
-            return single_request(export.requests.get(url, args))
+        function export.get(url, options)
+            return single_request(export.requests.get(url, options))
         end
 
-        function export.requests.post(url, args)
+        function export.requests.post(url, options)
+            local config = export.config.get()
+            local base_url = config.base_url or ""
             return {
                 method = "POST",
-                url = url,
+                url = base_url .. url,
                 headers = {},
                 data = {}
             }
         end
 
-        function export.post(url, args)
-            return single_request(export.requests.post(url, args))
+        function export.post(url, options)
+            return single_request(export.requests.post(url, options))
         end
 
-        function export.requests.patch(url, args)
+        function export.requests.patch(url, options)
+            local config = export.config.get()
+            local base_url = config.base_url or ""
             return {
                 method = "PATCH",
-                url = url,
+                url = base_url .. url,
                 headers = {},
                 data = {}
             }
         end
 
-        function export.patch(url, args)
-            return single_request(export.requests.patch(url, args))
+        function export.patch(url, options)
+            return single_request(export.requests.patch(url, options))
         end
 
-        function export.requests.put(url, args)
+        function export.requests.put(url, options)
+            local config = export.config.get()
+            local base_url = config.base_url or ""
             return {
                 method = "PUT",
-                url = url,
+                url = base_url .. url,
                 headers = {},
                 data = {}
             }
         end
 
-        function export.put(url, args)
-            return single_request(export.requests.put(url, args))
+        function export.put(url, options)
+            return single_request(export.requests.put(url, options))
         end
 
-        function export.requests.delete(url, args)
+        function export.requests.delete(url, options)
+            local config = export.config.get()
+            local base_url = config.base_url or ""
             return {
                 method = "DELETE",
-                url = url,
+                url = base_url .. url,
                 headers = {}
             }
         end
 
-        function export.delete(url, args)
-            return single_request(export.requests.delete(url, args))
+        function export.delete(url, options)
+            return single_request(export.requests.delete(url, options))
         end
 
         function single_request(request)

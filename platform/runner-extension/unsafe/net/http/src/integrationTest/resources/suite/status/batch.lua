@@ -1,17 +1,14 @@
 local http = require('net.http')
 
-local config = http.config.get()
-local port = config.port
-
 local status_codes = { 200, 201, 400, 404, 500 }
 
 for _, status_code in ipairs(status_codes) do
     local err, response = http.execute({
-        http.requests.get("http://localhost:" .. port .. "/v1/status?code=" .. status_code),
-        http.requests.post("http://localhost:" .. port .. "/v1/status?code=" .. status_code),
-        http.requests.patch("http://localhost:" .. port .. "/v1/status?code=" .. status_code),
-        http.requests.put("http://localhost:" .. port .. "/v1/status?code=" .. status_code),
-        http.requests.delete("http://localhost:" .. port .. "/v1/status?code=" .. status_code),
+        http.requests.get("/v1/status?code=" .. status_code),
+        http.requests.post("/v1/status?code=" .. status_code),
+        http.requests.patch("/v1/status?code=" .. status_code),
+        http.requests.put("/v1/status?code=" .. status_code),
+        http.requests.delete("/v1/status?code=" .. status_code),
     })
 
     assert(err == nil)
@@ -19,7 +16,7 @@ for _, status_code in ipairs(status_codes) do
     assert(#response == 5)
 
     for idx = 1, 5 do
-        assert(response[idx].statusCode == status_code)
+        assert(response[idx].status_code == status_code)
     end
 
 end
