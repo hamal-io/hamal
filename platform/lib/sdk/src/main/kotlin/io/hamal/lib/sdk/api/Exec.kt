@@ -42,7 +42,8 @@ data class ApiExec(
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val code: Code,
-    val events: List<Event>
+    val events: List<Event>,
+    val result: ExecResult?
 ) {
     @Serializable
     data class Code(

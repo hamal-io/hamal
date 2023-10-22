@@ -17,7 +17,7 @@ import java.math.RoundingMode
 data class DecimalType(
     @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal,
-) : Number(), SerializableType, Comparable<DecimalType> {
+) :  SerializableType(), Comparable<DecimalType> {
 
     companion object {
         val Zero = DecimalType(0)
@@ -128,19 +128,19 @@ data class DecimalType(
 
     fun isZero() = value.signum() == 0
 
-    override fun toByte() = value.toByte()
+    fun toByte() = value.toByte()
 
-    override fun toShort() = value.toShort()
+    fun toShort() = value.toShort()
 
-    override fun toInt() = value.toInt()
+    fun toInt() = value.toInt()
 
-    override fun toLong() = value.toLong()
+    fun toLong() = value.toLong()
 
-    override fun toFloat() = value.toFloat()
+    fun toFloat() = value.toFloat()
 
-    override fun toChar() = value.toChar()
+    fun toChar() = value.toChar()
 
-    override fun toDouble() = value.toDouble()
+    fun toDouble() = value.toDouble()
 
     fun toBigDecimal() = value
 

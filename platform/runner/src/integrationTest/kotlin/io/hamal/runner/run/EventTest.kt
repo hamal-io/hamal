@@ -24,18 +24,18 @@ internal class EventTest : AbstractExecuteTest() {
                 state = State(),
                 code = CodeValue(
                     """
-                    assert( ctx.exec.events ~= nil )
-                    assert( #ctx.exec.events == 2 )
+                    assert( context.exec.events ~= nil )
+                    assert( #context.exec.events == 2 )
                     
-                    assert( ctx.exec.events[1].id == '4d2' )
-                    assert( ctx.exec.events[1].topic.id == '1' )
-                    assert( ctx.exec.events[1].topic.name == 'Topic-One' )
-                    assert( ctx.exec.events[1].payload.block == 43 )
+                    assert( context.exec.events[1].id == '4d2' )
+                    assert( context.exec.events[1].topic.id == '1' )
+                    assert( context.exec.events[1].topic.name == 'Topic-One' )
+                    assert( context.exec.events[1].payload.block == 43 )
 
-                    assert( ctx.exec.events[2].id == '10e1' )
-                    assert( ctx.exec.events[2].topic.id == '17' )
-                    assert( ctx.exec.events[2].topic.name == 'Topic-Two' )
-                    assert( ctx.exec.events[2].payload.block == 44 )
+                    assert( context.exec.events[2].id == '10e1' )
+                    assert( context.exec.events[2].topic.id == '17' )
+                    assert( context.exec.events[2].topic.name == 'Topic-Two' )
+                    assert( context.exec.events[2].payload.block == 44 )
                 """.trimIndent()
                 ),
                 events = events,
@@ -54,7 +54,7 @@ internal class EventTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("test.fn()"),
+                code = CodeValue("require('test').fn()"),
                 events = events,
             )
         )

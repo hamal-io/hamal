@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.json.KotlinSerializationJsonHttpMessageConverter
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
 
 @Configuration
 open class WebConfig : WebMvcConfigurer {
@@ -42,5 +44,9 @@ open class WebConfig : WebMvcConfigurer {
         registry.addConverter(TopicIdConverter)
         registry.addConverter(TopicNameConverter)
         registry.addConverter(TriggerIdConverter)
+    }
+
+    override fun configurePathMatch(configurer: PathMatchConfigurer) {
+        configurer.setUseTrailingSlashMatch(true)
     }
 }

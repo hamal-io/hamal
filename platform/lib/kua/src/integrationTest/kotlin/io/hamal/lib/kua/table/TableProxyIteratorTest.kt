@@ -3,8 +3,8 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.error.ScriptErrorTest
-import io.hamal.lib.kua.extension.NativeExtension
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -39,9 +39,26 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
+        sandbox.register(
+            RunnerUnsafeExtension(
+                name = "test",
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
         sandbox.load(
             """
+            test = require('test')
             local table = {
                 key = 'value',
                 answer = 42,
@@ -73,9 +90,26 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
+        sandbox.register(
+            RunnerUnsafeExtension(
+                name = "test",
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
         sandbox.load(
             """
+            test = require('test')
             local table = { }
             
             test.invoke(table)
@@ -104,9 +138,27 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
+        sandbox.register(
+            RunnerUnsafeExtension(
+                name = "test",
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
         sandbox.load(
             """
+            test = require('test')
+            
             local table = {
                 [1] = 'value',
                 [2] = 42,
@@ -146,9 +198,27 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
+        sandbox.register(
+            RunnerUnsafeExtension(
+                name = "test",
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
         sandbox.load(
             """
+            test = require('test')
+                
             local table = {
                 { type = 'call' },
                 { type = 'get_block' },
@@ -179,9 +249,26 @@ internal class TableEntryIteratorTest {
             }
         }
 
-        sandbox.register(NativeExtension("test", mapOf("invoke" to TestIteratorFunction())))
+        sandbox.register(
+            RunnerUnsafeExtension(
+                name = "test",
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
         sandbox.load(
             """
+            test = require('test')
             local table = {}
             test.invoke(table)
         """.trimIndent()
@@ -191,7 +278,23 @@ internal class TableEntryIteratorTest {
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(NopSandboxContext()).also {
-            it.register(NativeExtension("test", mapOf("call" to ScriptErrorTest.CallbackFunction())))
+            it.register(
+                RunnerUnsafeExtension(
+                    name = "test",
+                    factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                call =  internal.call,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                    internals = mapOf("call" to ScriptErrorTest.CallbackFunction())
+                )
+            )
         }
     }
 }

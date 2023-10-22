@@ -11,6 +11,7 @@ import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookParameters
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.SubmittedInvokeHookReq
 import jakarta.servlet.http.HttpServletRequest
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 internal class HookInvokeController(
-    private val generateDomainId: GenerateDomainId, private val reqCmdRepository: ReqCmdRepository
+    private val generateDomainId: GenerateDomainId,
+    private val reqCmdRepository: ReqCmdRepository,
+    private val hookQueryRepository: HookQueryRepository
 ) {
     @GetMapping("/v1/webhooks/{id}")
     fun webhookGet(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
@@ -39,10 +42,13 @@ internal class HookInvokeController(
     fun webhookDelete(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
+        val hook = hookQueryRepository.get(id)
+
         val result = SubmittedInvokeHookReq(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = id,
+            groupId = hook.groupId,
             method = req.method(),
             headers = req.headers(),
             parameters = req.parameters()

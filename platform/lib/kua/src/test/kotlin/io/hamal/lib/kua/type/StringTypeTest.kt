@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestFactory
 class StringTypeTest {
     @TestFactory
     fun serialization() = listOf(
+        generateTestCases(StringType(""), """{"type":"StringType","value":""}"""),
         generateTestCases(StringType("hamal"), """{"type":"StringType","value":"hamal"}"""),
     ).flatten()
 }

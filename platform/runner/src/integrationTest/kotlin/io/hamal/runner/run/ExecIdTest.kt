@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 internal class ExecIdTest : AbstractExecuteTest() {
     @Test
-    fun `exec_id available in code`() {
+    fun `exec id available in code`() {
         val testExecutor = createTestRunner()
         testExecutor.run(
             UnitOfWork(
@@ -22,14 +22,14 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("assert(ctx.exec.id == '4d2')"),
+                code = CodeValue("assert(context.exec.id == '4d2')"),
                 correlation = null
             )
         )
     }
 
     @Test
-    fun `exec_id available in function`() {
+    fun `exec id available in function`() {
         val testFn = TestFunction()
 
         val testExecutor = createTestRunner("fn" to testFn)
@@ -39,7 +39,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("test.fn()"),
+                code = CodeValue("require('test').fn()"),
                 correlation = null
             )
         )

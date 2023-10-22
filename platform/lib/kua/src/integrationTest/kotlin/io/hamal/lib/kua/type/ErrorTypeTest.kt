@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.NativeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,9 +19,22 @@ internal class ErrorTypeTest {
         val messageCaptor = Captor()
 
         sandbox.register(
-            NativeExtension(
+            RunnerUnsafeExtension(
                 name = "test",
-                values = mapOf(
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                error =  internal.error,
+                                message_captor =  internal.message_captor,
+                                assert_metatable =  internal.assert_metatable,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf(
                     "error" to FunctionReturnsError(),
                     "message_captor" to messageCaptor,
                     "assert_metatable" to AssertMetatable
@@ -31,6 +44,7 @@ internal class ErrorTypeTest {
 
         sandbox.load(
             """
+            test = require('test')
             local err = test.error()
             test.message_captor(err.message)
                
@@ -48,9 +62,22 @@ internal class ErrorTypeTest {
         val errorCaptor = Captor()
 
         sandbox.register(
-            NativeExtension(
+            RunnerUnsafeExtension(
                 name = "test",
-                values = mapOf(
+                factoryCode = """
+                    function extension()
+                        local internal = _internal
+                        return function()
+                            local export = { 
+                                call =  internal.call,
+                                captor =  internal.captor,
+                                assert_metatable =  internal.assert_metatable,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf(
                     "call" to FunctionNeverInvoked(),
                     "captor" to errorCaptor,
                     "assert_metatable" to AssertMetatable

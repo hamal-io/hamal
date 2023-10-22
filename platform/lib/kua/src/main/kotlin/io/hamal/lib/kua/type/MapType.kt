@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -17,16 +17,16 @@ import kotlin.reflect.KClass
 @SerialName("MapType")
 data class MapType(
     @Serializable(with = Serializer::class)
-    val entries: MutableMap<String, SerializableType> = mutableMapOf(),
-) : TableType {
+    val value: MutableMap<String, SerializableType> = mutableMapOf(),
+) : TableType() {
 
     constructor(vararg pairs: Pair<String, SerializableType>) : this(mutableMapOf(*pairs))
 
-    val size get() = entries.size
+    val size get() = value.size
 
-    operator fun get(key: String): SerializableType = entries[key] ?: NilType
+    operator fun get(key: String): SerializableType = value[key] ?: NilType
     operator fun set(key: String, value: SerializableType): Int {
-        entries[key] = value
+        this.value[key] = value
         return size
     }
 
@@ -34,7 +34,7 @@ data class MapType(
     operator fun set(key: String, value: NilType) = unset(key)
     operator fun set(key: StringType, value: NilType) = unset(key.value)
     fun unset(key: String): Int {
-        entries.remove(key)
+        value.remove(key)
         return size
     }
 
@@ -43,14 +43,14 @@ data class MapType(
     fun getBoolean(key: StringType): Boolean = getBoolean(key.value)
     fun getBooleanValue(key: String): BooleanType {
         checkExpectedType(key, BooleanType::class)
-        return entries[key]!! as BooleanType
+        return value[key]!! as BooleanType
     }
 
     operator fun set(key: StringType, value: BooleanType) = set(key, value.value)
     operator fun set(key: StringType, value: Boolean) = set(key.value, booleanOf(value))
     operator fun set(key: String, value: Boolean) = set(key, booleanOf(value))
     operator fun set(key: String, value: BooleanType): Int {
-        entries[key] = value
+        this.value[key] = value
         return size
     }
 
@@ -59,7 +59,7 @@ data class MapType(
     fun getCodeType(key: StringType) = getCodeType(key.value)
     operator fun set(key: StringType, value: CodeType) = set(key.value, value)
     operator fun set(key: String, value: CodeType): Int {
-        entries[key] = StringType(value.value)
+        this.value[key] = StringType(value.value)
         return size
     }
 
@@ -79,7 +79,7 @@ data class MapType(
     fun getNumberValue(key: StringType): NumberType = getNumberValue(key.value)
     fun getNumberValue(key: String): NumberType {
         checkExpectedType(key, NumberType::class)
-        return entries[key]!! as NumberType
+        return value[key]!! as NumberType
     }
 
     operator fun set(key: String, value: Int) = set(key, value.toDouble())
@@ -88,12 +88,12 @@ data class MapType(
     operator fun set(key: String, value: Double) = set(key, NumberType(value))
     operator fun set(key: StringType, value: NumberType) = set(key.value, value.value)
     operator fun set(key: String, value: NumberType): Int {
-        entries[key] = value
+        this.value[key] = value
         return size
     }
 
     operator fun set(key: String, value: MapType): Int {
-        entries[key] = value
+        this.value[key] = value
         return size
     }
 
@@ -102,18 +102,18 @@ data class MapType(
     fun getString(key: StringType): String = getString(key.value)
     fun getStringType(key: String): StringType {
         checkExpectedType(key, StringType::class)
-        return entries[key]!! as StringType
+        return value[key]!! as StringType
     }
 
     operator fun set(key: String, value: String) = set(key, StringType(value))
     operator fun set(key: StringType, value: StringType) = set(key.value, value.value)
     operator fun set(key: String, value: StringType): Int {
-        entries[key] = value
+        this.value[key] = value
         return size
     }
 
     fun type(key: String): KClass<out Type> {
-        return entries[key]?.let { it::class } ?: NilType::class
+        return value[key]?.let { it::class } ?: NilType::class
     }
 
     object Serializer : KSerializer<MutableMap<String, SerializableType>> {

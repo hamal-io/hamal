@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 interface Type
 
 @Serializable
-sealed interface SerializableType : Type
+sealed class SerializableType : Type
 
 @Serializable
-sealed interface TableType : SerializableType
+sealed class TableType : SerializableType()

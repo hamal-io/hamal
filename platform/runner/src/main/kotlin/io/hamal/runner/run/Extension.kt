@@ -3,8 +3,8 @@ package io.hamal.runner.run
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.BundleExtension
-import io.hamal.lib.kua.extension.BundleExtensionFactory
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionFactory
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -15,10 +15,10 @@ import io.hamal.runner.run.function.FailRunFunction
 
 class RunnerContextFactory(
     private val executionCtx: RunnerContext
-) : BundleExtensionFactory {
-    override fun create(sandbox: Sandbox): BundleExtension {
-        return BundleExtension(
-            name = "ctx",
+) : RunnerUnsafeExtensionFactory {
+    override fun create(sandbox: Sandbox): RunnerUnsafeExtension {
+        return RunnerUnsafeExtension(
+            name = "context",
             internals = mapOf(
                 "events" to sandbox.invocationEvents(executionCtx[RunnerInvocationEvents::class].events),
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),

@@ -18,37 +18,18 @@ export const Navbar: FC = () => {
             </span>
             </Delegate.Brand>
             <div className="flex md:order-2">
-                <Dropdown
-                    arrowIcon={false}
-                    inline
-                    label={<Avatar alt="User Icon" img={imgUrl} rounded/>}
-                >
-                    <Dropdown.Header>
-            <span className="block text-sm">
-              Username
-            </span>
-                    </Dropdown.Header>
-                    <DropdownItem>
-                        Settings
-                    </DropdownItem>
-                    <Dropdown.Divider/>
-                    <DropdownItem>
-                        Sign out
-                    </DropdownItem>
-                </Dropdown>
-                <Delegate.Toggle/>
             </div>
             <Delegate.Collapse>
-                <Delegate.Link onClick={() => navigate("/dashboard", {replace: true})}>
-                    Dashboard
-                </Delegate.Link>
+                {/*<Delegate.Link onClick={() => navigate("/dashboard", {replace: true})}>*/}
+                {/*    Dashboard*/}
+                {/*</Delegate.Link>*/}
                 <Delegate.Link onClick={() => navigate("/play", {replace: true})}>
                     Play
                 </Delegate.Link>
                 <Delegate.Link onClick={() => navigate("/functions", {replace: true})}>
                     Functions
                 </Delegate.Link>
-                <Delegate.Link onClick={() => navigate("/runs", {replace: true})}>
+                <Delegate.Link onClick={() => navigate("/execs", {replace: true})}>
                     Runs
                 </Delegate.Link>
             </Delegate.Collapse>

@@ -24,7 +24,7 @@ class Native(
     external fun pushBoolean(value: Boolean): Int
     fun pushDecimal(value: DecimalType): Int = pushDecimal(value.toBigDecimal().toString())
     external fun pushDecimal(value: String): Int
-    fun pushError(error: ErrorType): Int = pushError(error.message)
+    fun pushError(error: ErrorType): Int = pushError(error.value)
     external fun pushError(message: String): Int
     external fun pushFunction(value: FunctionType<*, *, *, *>): Int
     external fun pushNil(): Int

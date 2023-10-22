@@ -27,6 +27,7 @@ class ErrorApiFilter(
         try {
             filterChain.doFilter(request, response)
         } catch (t: Throwable) {
+            t.printStackTrace()
 
             val toHandle = when (t) {
                 is ServletException -> t.cause
@@ -45,5 +46,4 @@ class ErrorApiFilter(
             response.writer.write(encoded)
         }
     }
-
 }

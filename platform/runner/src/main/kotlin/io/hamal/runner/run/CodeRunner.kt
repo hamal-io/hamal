@@ -46,10 +46,10 @@ class CodeRunnerImpl(
             sandboxFactory.create(runnerContext)
                 .use { sandbox ->
 
-                    val ctxExtension = RunnerContextFactory(runnerContext).create(sandbox)
+                    val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                    val internalTable = sandbox.state.tableCreateMap(ctxExtension.internals.size)
-                    ctxExtension.internals.forEach { entry ->
+                    val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
+                    contextExtension.internals.forEach { entry ->
                         when (val value = entry.value) {
                             is StringType -> internalTable[entry.key] = value
                             is NumberType -> internalTable[entry.key] = value
@@ -63,13 +63,14 @@ class CodeRunnerImpl(
 
 
                     sandbox.setGlobal("_internal", internalTable)
-                    sandbox.state.load(ctxExtension.init)
-                    sandbox.state.load("${ctxExtension.name} = create_extension_factory()()")
+                    sandbox.state.load(contextExtension.factoryCode)
+
+                    sandbox.state.load("${contextExtension.name} = extension()()")
                     sandbox.unsetGlobal("_internal")
 
                     sandbox.load(CodeType(unitOfWork.code.value))
 
-                    val ctx = sandbox.getGlobalTableMap("ctx")
+                    val ctx = sandbox.getGlobalTableMap("context")
                     val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
 
                     connector.complete(execId, ExecResult(), State(stateToSubmit), runnerContext.eventsToSubmit)
@@ -81,7 +82,7 @@ class CodeRunnerImpl(
             val cause = e.cause
             if (cause is ExitError) {
                 if (cause.status == NumberType(0.0)) {
-                    connector.complete(execId, ExecResult(cause.result), State(), listOf())
+                    connector.complete(execId, ExecResult(cause.result), State(), runnerContext.eventsToSubmit)
                     log.debug("Completed exec: $execId")
                 } else {
                     connector.fail(execId, ExecResult(cause.result))

@@ -55,15 +55,18 @@ include(":platform:lib:sqlite")
 include(":platform:lib:web3")
 
 include(":platform:runner")
-include(":platform:runner-extension")
-include(":platform:runner-extension:net:http")
-include(":platform:runner-extension:std:debug")
-include(":platform:runner-extension:std:decimal")
-include(":platform:runner-extension:std:log")
-include(":platform:runner-extension:std:test")
-include(":platform:runner-extension:std:sys")
-include(":platform:runner-extension:starter")
-include(":platform:runner-extension:web3")
+
+include(":platform:runner-extension:safe:std:decimal")
+include(":platform:runner-extension:safe:telegram")
+
+include(":platform:runner-extension:test")
+include(":platform:runner-extension:unsafe:net:http")
+include(":platform:runner-extension:unsafe:std:debug")
+include(":platform:runner-extension:unsafe:std:log")
+include(":platform:runner-extension:unsafe:std:sys")
+include(":platform:runner-extension:unsafe:starter")
+include(":platform:runner-extension:unsafe:web3")
+
 
 include(":platform:testbed")
 

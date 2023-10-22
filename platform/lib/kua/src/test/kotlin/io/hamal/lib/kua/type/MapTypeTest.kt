@@ -13,7 +13,7 @@ class MapTypeTest {
                     "key" to StringType("value")
                 )
             ),
-            """{"type":"MapType","entries":{"key":{"type":"StringType","value":"value"}}}""".trimIndent()
+            """{"type":"MapType","value":{"key":{"type":"StringType","value":"value"}}}""".trimIndent()
         ),
         generateTestCases(
             MapType(
@@ -21,7 +21,7 @@ class MapTypeTest {
                     "23" to NumberType(34)
                 )
             ),
-            """{"type":"MapType","entries":{"23":{"type":"DoubleType","value":"34"}}}"""
+            """{"type":"MapType","value":{"23":{"type":"NumberType","value":"34"}}}"""
         ),
     ).flatten()
 }

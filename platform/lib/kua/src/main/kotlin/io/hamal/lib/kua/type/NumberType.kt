@@ -10,11 +10,11 @@ import kotlinx.serialization.encoding.Encoder
 import java.text.DecimalFormat
 
 @Serializable
-@SerialName("DoubleType")
+@SerialName("NumberType")
 data class NumberType(
     @Serializable(with = Serializer::class)
     val value: Double
-) : SerializableType {
+) : SerializableType() {
     constructor(value: Int) : this(value.toDouble())
 
     companion object {
