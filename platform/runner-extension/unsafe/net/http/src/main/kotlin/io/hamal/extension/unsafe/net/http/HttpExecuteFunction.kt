@@ -27,7 +27,7 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                     val response = HttpTemplate().get(url).execute()
 
                     results.add(MapType().also {
-                        it["statusCode"] = NumberType(response.statusCode.value)
+                        it["status_code"] = NumberType(response.statusCode.value)
                     })
 
                 } catch (t: Throwable) {
@@ -41,7 +41,7 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                         .execute()
 
                     results.add(MapType().also {
-                        it["statusCode"] = NumberType(response.statusCode.value)
+                        it["status_code"] = NumberType(response.statusCode.value)
                     })
                 } catch (t: Throwable) {
                     // FIXME
@@ -53,7 +53,7 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                 try {
                     val response = HttpTemplate().patch(url).execute()
                     results.add(MapType().also {
-                        it["statusCode"] = NumberType(response.statusCode.value)
+                        it["status_code"] = NumberType(response.statusCode.value)
                     })
                 } catch (t: Throwable) {
                     // FIXME
@@ -64,7 +64,7 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                 try {
                     val response = HttpTemplate().put(url).execute()
                     results.add(MapType().also {
-                        it["statusCode"] = NumberType(response.statusCode.value)
+                        it["status_code"] = NumberType(response.statusCode.value)
                     })
                 } catch (t: Throwable) {
                     // FIXME
@@ -76,7 +76,7 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
                     val response = HttpTemplate().delete(url).execute()
 
                     results.add(MapType().also {
-                        it["statusCode"] = NumberType(response.statusCode.value)
+                        it["status_code"] = NumberType(response.statusCode.value)
                     })
                 } catch (t: Throwable) {
                     // FIXME

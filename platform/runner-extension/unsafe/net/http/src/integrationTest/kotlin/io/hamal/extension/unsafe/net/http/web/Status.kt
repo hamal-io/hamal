@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class TestStatusRoute {
+open class TestStatusController {
     @RequestMapping("/v1/status")
     fun execute(
         @RequestParam("code") code: Int?,
