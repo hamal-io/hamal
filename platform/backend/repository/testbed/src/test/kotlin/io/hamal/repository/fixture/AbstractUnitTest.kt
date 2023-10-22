@@ -59,6 +59,10 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
+        ExtensionRepository::class to listOf(
+            MemoryFixture,
+            //SqliteFixture
+        ),
         FuncRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
