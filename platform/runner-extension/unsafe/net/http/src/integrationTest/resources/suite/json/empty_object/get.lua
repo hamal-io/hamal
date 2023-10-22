@@ -4,6 +4,8 @@ err, response = http.get('/v1/json-empty-object')
 assert(err == nil)
 assert(response ~= nil)
 
-print(response.data)
+assert(response.status_code == 200)
+assert(response.content_type == 'application/json')
 
---assert(response.ok == true)
+assert(response.content ~= nil)
+assert(table_length(response.content) == 0)

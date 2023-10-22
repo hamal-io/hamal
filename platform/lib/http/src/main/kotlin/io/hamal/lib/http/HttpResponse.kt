@@ -37,6 +37,10 @@ enum class HttpStatusCode(val value: Int) {
 sealed interface HttpResponse {
     val statusCode: HttpStatusCode
     val headers: HttpHeaders
+    val contentLength: Int
+
+    val isEmpty get() = contentLength == 0
+    val isNotEmpty get() = !isEmpty
 }
 
 
@@ -46,6 +50,7 @@ data class SuccessHttpResponse(
     val inputStream: InputStream,
     val contentDeserializer: HttpContentDeserializer
 ) : HttpResponse {
+
     fun <RESULT : Any> result(clazz: KClass<RESULT>): RESULT {
         return contentDeserializer.deserialize(inputStream, clazz)
     }
@@ -53,12 +58,16 @@ data class SuccessHttpResponse(
     fun <RESULT : Any> resultList(clazz: KClass<RESULT>): List<RESULT> {
         return contentDeserializer.deserializeList(inputStream, clazz)
     }
+
+    override val contentLength = inputStream.available()
 }
 
 data class NoContentHttpResponse(
     override val statusCode: HttpStatusCode,
     override val headers: HttpHeaders
-) : HttpResponse
+) : HttpResponse {
+    override val contentLength = 0
+}
 
 
 data class ErrorHttpResponse(
@@ -72,4 +81,5 @@ data class ErrorHttpResponse(
         return errorDeserializer.deserialize(inputStream, clazz)
     }
 
+    override val contentLength = inputStream.available()
 }

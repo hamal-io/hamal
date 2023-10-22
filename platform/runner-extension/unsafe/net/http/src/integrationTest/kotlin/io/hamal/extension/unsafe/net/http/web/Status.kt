@@ -14,12 +14,12 @@ open class TestStatusController {
     fun execute(
         @RequestParam("code") code: Int?,
         @RequestBody(required = false) body: MultiValueMap<String, String>?
-    ): ResponseEntity<String> {
+    ): ResponseEntity<Unit> {
         val status = if (code != null) {
             HttpStatus.valueOf(code)
         } else {
             HttpStatus.valueOf(body!!.getFirst("code")!!.toInt())
         }
-        return ResponseEntity<String>(status.toString(), status)
+        return ResponseEntity.status(status).build()
     }
 }

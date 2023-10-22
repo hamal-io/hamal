@@ -1,11 +1,15 @@
 package io.hamal.extension.unsafe.net.http.function
 
+import io.hamal.extension.unsafe.net.http.converter.convertToType
+import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
+import kotlinx.serialization.json.JsonElement
 
 
 class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
@@ -27,42 +31,53 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
 
                     val response = HttpTemplateImpl().get(url).execute()
 
-                    val contentLength = NumberType(response.headers["Content-Length", "0"].toInt())
+                    val content: SerializableType = when (response) {
+                        is SuccessHttpResponse -> {
+                            if (response.isNotEmpty) {
+//                                try {
+//                                val s = String(response.inputStream.readAllBytes())
+//                                println(s)
 
-//                    val content: SerializableType = when (response) {
-//                        is SuccessHttpResponse -> {
-//                            if (contentLength.value.toInt() > 0) {
-////                                try {
-////                                    val el = response.result(JsonElement::class)
-////                                    el.convertToType()
-////                                } catch (t: Throwable) {
-////                                    t.printStackTrace()
+//                                val el = Json.decodeFromString(JsonElement.serializer(), s)
+
+                                val el = response.result(JsonElement::class)
+                                el.convertToType()
+//                                } catch (t: Throwable) {
+//                                    t.printStackTrace()
 //                                    MapType()
-////                                }
-//                            } else {
-//                                MapType()
-//                            }
-//                        }
-//
-//                        is ErrorHttpResponse -> {
-//                            val bytes = response.inputStream.readAllBytes()
-//                            println(String(bytes))
-//                            val el = Json { }.decodeFromString(JsonElement.serializer(), String(bytes))
-////                            val el = response.error(JsonElement::class)
-//                            println(el)
-//                            MapType()
-//                        }
-//
-//                        else -> {
-//                            MapType()
-//                        }
-//                    }
+//                                }
+                            } else {
+                                MapType()
+                            }
+                        }
+
+                        is ErrorHttpResponse -> {
+                            if (response.isNotEmpty) {
+//                                val bytes = response.inputStream.readAllBytes()
+//                                println(String(bytes))
+//                                val el = Json { }.decodeFromString(JsonElement.serializer(), String(bytes))
+                                val el = response.error(JsonElement::class)
+                                println(el)
+                                MapType()
+                            } else {
+                                MapType()
+                            }
+                        }
+
+                        else -> {
+                            MapType()
+                        }
+                    }
 
                     results.add(MapType().also {
                         it["status_code"] = NumberType(response.statusCode.value)
-                        it["content_type"] = StringType(response.headers["Content-Type"].split(";")[0])
-                        it["content_length"] = NumberType(response.headers["Content-Length", "0"].toInt())
-//                        it["content"] = content
+                        it["content_type"] =
+                            response.headers.find("content-type")?.let { type -> StringType(type) } ?: NilType
+                        it["content_length"] =
+                            response.headers.find("content-length")?.let { length -> NumberType(length.toInt()) }
+                                ?: NilType
+
+                        it["content"] = content
                     })
 
                 } catch (t: Throwable) {

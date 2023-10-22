@@ -200,5 +200,5 @@ internal class HttpPutRequestFacade(
 }
 
 internal fun HttpHeaders.toBasicHeaders(): List<BasicHeader> {
-    return mapping.map { BasicHeader(it.key, it.value) }
+    return map { BasicHeader(it.key, it.value) }
 }

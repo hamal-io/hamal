@@ -17,7 +17,9 @@ open class TestWebConfig : WebMvcConfigurer {
     @Bean
     open fun messageConverter(): KotlinSerializationJsonHttpMessageConverter {
         return KotlinSerializationJsonHttpMessageConverter(Json {
-            ignoreUnknownKeys = false
+            explicitNulls = false
+            ignoreUnknownKeys = true
+            encodeDefaults = true
         })
     }
 }

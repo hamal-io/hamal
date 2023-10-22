@@ -34,7 +34,6 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
         NativeLoader.load(Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
-
                 val config = RunnerUnsafeExtensionConfig(
                     mutableMapOf(
                         "base_url" to StringType("http://localhost:$localServerPort")
@@ -43,6 +42,7 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
 
                 val runner = createTestRunner(unsafeFactories = listOf(HttpExtensionFactory(config)))
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
+
             }
         }.toList()
     }
