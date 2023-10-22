@@ -15,6 +15,9 @@ err, update_req = sys.snippet.update(create_req.id, {
     value = [[i was updated]]
 })
 
+assert(err == nil)
+sys.await_completed(update_req)
+
 err, snippet = sys.snippet.get(create_req.id)
 assert(err == nil)
 
