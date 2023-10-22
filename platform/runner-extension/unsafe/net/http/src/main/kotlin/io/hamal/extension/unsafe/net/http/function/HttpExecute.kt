@@ -1,44 +1,12 @@
 package io.hamal.extension.unsafe.net.http.function
 
-import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
-import kotlinx.serialization.json.*
 
-fun JsonElement.toTable(): TableType {
-    val el = this
-    return when (el) {
-        is JsonPrimitive -> TODO()
-        is JsonArray -> {
-            ArrayType()
-        }
-
-        is JsonObject -> {
-            val m = mutableMapOf<String, SerializableType>()
-            el.entries.forEach { (key, value) ->
-                when (value) {
-                    is JsonArray -> {
-                        m[key] = ArrayType()
-                    }
-
-                    is JsonObject -> {
-                        m[key] = MapType()
-                    }
-
-                    is JsonPrimitive -> TODO()
-                    JsonNull -> TODO()
-                }
-            }
-            MapType(m)
-        }
-
-    }
-}
 
 class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
     FunctionInput1Schema(ArrayType::class),
@@ -52,37 +20,49 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
             val method = map.getString("method")
             val url = map.getString("url")
 
+
+
             if (method == "GET") {
                 try {
 
                     val response = HttpTemplateImpl().get(url).execute()
 
-                    val content: TableType = when (response) {
-                        is SuccessHttpResponse -> {
-                            val el = response.result(JsonElement::class)
-                            println(el)
-                            el.toTable().also { println(it) }
-                        }
+                    val contentLength = NumberType(response.headers["Content-Length", "0"].toInt())
 
-                        is ErrorHttpResponse -> {
-                            val bytes = response.inputStream.readAllBytes()
-                            println(String(bytes))
-                            val el = Json { }.decodeFromString(JsonElement.serializer(), String(bytes))
-//                            val el = response.error(JsonElement::class)
-                            println(el)
-                            MapType()
-                        }
-
-                        else -> {
-                            MapType()
-                        }
-                    }
+//                    val content: SerializableType = when (response) {
+//                        is SuccessHttpResponse -> {
+//                            if (contentLength.value.toInt() > 0) {
+////                                try {
+////                                    val el = response.result(JsonElement::class)
+////                                    el.convertToType()
+////                                } catch (t: Throwable) {
+////                                    t.printStackTrace()
+//                                    MapType()
+////                                }
+//                            } else {
+//                                MapType()
+//                            }
+//                        }
+//
+//                        is ErrorHttpResponse -> {
+//                            val bytes = response.inputStream.readAllBytes()
+//                            println(String(bytes))
+//                            val el = Json { }.decodeFromString(JsonElement.serializer(), String(bytes))
+////                            val el = response.error(JsonElement::class)
+//                            println(el)
+//                            MapType()
+//                        }
+//
+//                        else -> {
+//                            MapType()
+//                        }
+//                    }
 
                     results.add(MapType().also {
                         it["status_code"] = NumberType(response.statusCode.value)
                         it["content_type"] = StringType(response.headers["Content-Type"].split(";")[0])
                         it["content_length"] = NumberType(response.headers["Content-Length", "0"].toInt())
-                        it["content"] = content
+//                        it["content"] = content
                     })
 
                 } catch (t: Throwable) {

@@ -87,10 +87,8 @@ function extension()
             local err, responses = export.execute({ request })
 
             if err ~= nil then
-                return nil, err
+                return err, nil
             end
-
-            print("len", #responses)
 
             assert(#responses == 1)
             return nil, responses[1]
