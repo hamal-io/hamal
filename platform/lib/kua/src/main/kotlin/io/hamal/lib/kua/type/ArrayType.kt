@@ -32,6 +32,8 @@ data class ArrayType(
         return size
     }
 
+    fun append(value: AnySerializableType) = append(value.value)
+
     operator fun get(idx: Int): SerializableType {
         return value[idx]!!
     }
