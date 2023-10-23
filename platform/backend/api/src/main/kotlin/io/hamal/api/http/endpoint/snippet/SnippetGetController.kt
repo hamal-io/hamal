@@ -26,8 +26,7 @@ internal class SnippetGetController(
                 id = snippet.id,
                 name = snippet.name,
                 inputs = snippet.inputs,
-                value = snippet.value,
-
+                value = snippet.value
             )
         )
 }
