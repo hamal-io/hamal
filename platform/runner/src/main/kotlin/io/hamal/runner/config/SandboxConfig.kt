@@ -6,6 +6,7 @@ import io.hamal.extension.unsafe.net.http.HttpExtensionFactory
 import io.hamal.extension.unsafe.std.debug.DebugExtensionFactory
 import io.hamal.extension.unsafe.std.log.LogExtensionFactory
 import io.hamal.extension.unsafe.std.sys.SysExtensionFactory
+import io.hamal.extension.unsafe.web3.evm.EthExtensionFactory
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.NativeLoader
@@ -55,6 +56,7 @@ class RunnerSandboxFactory(
                 LogExtensionFactory(sdk.execLog),
                 DebugExtensionFactory(),
                 SysExtensionFactory(HttpTemplateImpl(apiHost)),
+                EthExtensionFactory()
             )
             .register(
                 DecimalSafeFactory,
