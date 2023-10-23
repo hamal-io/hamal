@@ -38,6 +38,7 @@ testing {
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(project(":platform:runner-extension:test"))
+                    implementation(project(":platform:runner-extension:safe:std:decimal"))
                     implementation(project(":platform:runner-extension:unsafe:net:http"))
 
                     implementation(external.junit)

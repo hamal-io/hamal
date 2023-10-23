@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
@@ -43,6 +43,11 @@ class TableProxyArray(
     fun append(value: NumberType) = append(value.value)
     fun append(value: Double): Int {
         state.native.pushNumber(value)
+        return state.tableAppend(index)
+    }
+
+    fun append(value: DecimalType): Int {
+        state.native.pushDecimal(value)
         return state.tableAppend(index)
     }
 

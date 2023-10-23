@@ -10,6 +10,117 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+internal class ConvertToJsonTest {
+
+    @Test
+    fun `ArrayType - empty`() {
+        val result = ArrayType().toJson()
+        assertThat(result, equalTo(JsonArray(listOf())))
+    }
+
+    @Test
+    fun `ArrayType - content`() {
+        val result = ArrayType(
+            mutableMapOf(
+                1 to NumberType(42.0),
+                2 to StringType("hamal")
+            )
+        ).toJson()
+
+        assertThat(
+            result, equalTo(
+                JsonArray(
+                    listOf(
+                        JsonPrimitive(42.0),
+                        JsonPrimitive("hamal")
+                    )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `CodeType`() {
+        val testInstance = CodeType("hack_the_planet()")
+        val result = testInstance.toJson()
+        assertThat(result, equalTo(JsonPrimitive("hack_the_planet()")))
+    }
+
+    @Test
+    fun `DecimalType`() {
+        val testInstance = DecimalType("123456789.987654321")
+        val result = testInstance.toJson()
+        assertThat(result, equalTo(JsonPrimitive("123456789.987654321")))
+    }
+
+    @Test
+    fun `ErrorType`() {
+        val testInstance = ErrorType("That went not as planned")
+        val result = testInstance.toJson()
+        assertThat(result, equalTo(JsonPrimitive("That went not as planned")))
+    }
+
+    @Test
+    fun `False`() {
+        val result = False.toJson()
+        assertThat(result, equalTo(JsonPrimitive(false)))
+    }
+
+    @Test
+    fun `MapType - empty`() {
+        val result = MapType().toJson()
+        assertThat(result, equalTo(JsonObject(mapOf())))
+    }
+
+    @Test
+    fun `MapType - content`() {
+        val result = MapType(
+            mutableMapOf(
+                "answer" to NumberType(42.0),
+                "boolean_true" to True
+            )
+        ).toJson()
+
+        assertThat(
+            result, equalTo(
+                JsonObject(
+                    mapOf(
+                        "answer" to JsonPrimitive(42.0),
+                        "boolean_true" to JsonPrimitive(true)
+                    )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `NilType`() {
+        val result = NilType.toJson()
+        assertThat(result, equalTo(JsonNull))
+    }
+
+    @Test
+    fun `NumberType`() {
+        val testInstance = NumberType(42.24)
+        val result = testInstance.toJson()
+        assertThat(result, equalTo(JsonPrimitive(42.24)))
+    }
+
+    @Test
+    fun `StringType`() {
+        val testInstance = StringType("hamal")
+        val result = testInstance.toJson()
+        assertThat(result, equalTo(JsonPrimitive("hamal")))
+    }
+
+    @Test
+    fun `True`() {
+        val result = True.toJson()
+        assertThat(result, equalTo(JsonPrimitive(true)))
+    }
+
+}
+
 internal class ConvertToTypeTest {
 
     @Nested

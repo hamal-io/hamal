@@ -60,6 +60,11 @@ data class ArrayType(
         return value[idx]!! as NumberType
     }
 
+    fun getDecimalType(idx: Int): DecimalType {
+        checkExpectedType(idx, DecimalType::class)
+        return value[idx]!! as DecimalType
+    }
+
 
     fun append(value: Int) = append(value.toDouble())
     fun append(value: Long) = append(value.toDouble())
@@ -69,6 +74,12 @@ data class ArrayType(
         this.value[this.value.size + 1] = value
         return size
     }
+
+    fun append(value: DecimalType): Int {
+        this.value[this.value.size + 1] = value
+        return size
+    }
+
 
     fun append(value: SnowflakeId) = append(value.value.toString(16))
     fun append(value: DomainId) = append(value.value.value)

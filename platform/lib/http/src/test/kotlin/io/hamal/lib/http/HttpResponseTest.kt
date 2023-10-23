@@ -24,6 +24,7 @@ class HttpStatusCodeTest {
         "NotAcceptable" to 406,
         "Conflict" to 409,
         "PayloadToLarge" to 413,
+        "UnsupportedMediaType" to 415,
         "TooManyRequests" to 429,
         "InternalServerError" to 500,
         "NotImplemented" to 501,
@@ -39,7 +40,7 @@ class HttpStatusCodeTest {
     }
 
     @Test
-    fun `HttpStatusCode has 19 elements`() {
-        assertThat(HttpStatusCode.values().toList(), hasSize(19))
+    fun `HttpStatusCode has 20 elements`() {
+        assertThat(HttpStatusCode.values().toList(), hasSize(20))
     }
 }

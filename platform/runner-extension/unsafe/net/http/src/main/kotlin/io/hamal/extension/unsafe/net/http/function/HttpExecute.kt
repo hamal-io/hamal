@@ -1,10 +1,8 @@
 package io.hamal.extension.unsafe.net.http.function
 
 import io.hamal.extension.unsafe.net.http.converter.convertToType
-import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpResponse
-import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.extension.unsafe.net.http.converter.toJson
+import io.hamal.lib.http.*
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -25,29 +23,58 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
             val method = map.getString("method")
             val url = map.getString("url")
 
+
+
             if (method == "GET") {
                 val response = HttpTemplateImpl().get(url).execute()
                 results.add(response.toMap())
             }
 
             if (method == "POST") {
-                val response = HttpTemplateImpl().post(url).execute()
+
+                val json = map.get("json")
+
+                val template = HttpTemplateImpl().post(url)
+                // FIXME
+                if (json !is NilType) {
+                    template.body(json.toJson())
+                }
+
+                val response = template.execute()
                 results.add(response.toMap())
             }
 
 
             if (method == "PATCH") {
-                val response = HttpTemplateImpl().patch(url).execute()
+                val json = map.get("json")
+
+                val template = HttpTemplateImpl().patch(url)
+                // FIXME
+                if (json !is NilType) {
+                    template.body(json.toJson())
+                }
+
+                val response = template.execute()
                 results.add(response.toMap())
             }
 
             if (method == "PUT") {
-                val response = HttpTemplateImpl().put(url).execute()
+                val json = map.get("json")
+
+                val template = HttpTemplateImpl().put(url)
+                // FIXME
+                if (json !is NilType) {
+                    template.body(json.toJson())
+                }
+
+                val response = template.execute()
                 results.add(response.toMap())
             }
 
             if (method == "DELETE") {
-                val response = HttpTemplateImpl().delete(url).execute()
+                val response = HttpTemplateImpl()
+                    .delete(url)
+                    .execute()
                 results.add(response.toMap())
             }
 

@@ -89,6 +89,7 @@ class CodeRunnerImpl(
                     log.debug("Failed exec: $execId")
                 }
             } else {
+                e.printStackTrace()
                 connector.fail(
                     execId,
                     ExecResult(

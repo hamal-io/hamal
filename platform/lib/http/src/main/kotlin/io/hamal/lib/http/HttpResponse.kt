@@ -17,6 +17,7 @@ enum class HttpStatusCode(val value: Int) {
     NotAcceptable(406),
     Conflict(409),
     PayloadToLarge(413),
+    UnsupportedMediaType(415),
     TooManyRequests(429),
     InternalServerError(500),
     NotImplemented(501),

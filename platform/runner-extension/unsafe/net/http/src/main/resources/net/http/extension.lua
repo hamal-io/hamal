@@ -27,26 +27,28 @@ function extension()
         function export.requests.post(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "POST",
                 url = base_url .. url,
                 headers = {},
-                data = {}
+                json = options.json
             }
         end
 
         function export.post(url, options)
-            return single_request(export.requests.post(url, options))
+            return single_request(export.requests.post(url, options or {}))
         end
 
         function export.requests.patch(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "PATCH",
                 url = base_url .. url,
                 headers = {},
-                data = {}
+                json = options.json
             }
         end
 
@@ -57,11 +59,13 @@ function extension()
         function export.requests.put(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "PUT",
                 url = base_url .. url,
                 headers = {},
-                data = {}
+                data = {},
+                json = options.json
             }
         end
 
