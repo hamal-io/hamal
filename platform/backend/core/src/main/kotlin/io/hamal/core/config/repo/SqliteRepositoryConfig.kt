@@ -11,6 +11,7 @@ import io.hamal.repository.sqlite.log.SqliteBrokerRepository
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
+import io.hamal.repository.sqlite.record.extension.SqliteExtensionRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
@@ -59,6 +60,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun codeQueryRepository() = codeRepository()
+
+    @Bean
+    open fun extensionRepository() = SqliteExtensionRepository(SqliteExtensionRepository.Config(path))
+
+    @Bean
+    open fun extensionCmdRepository() = extensionRepository()
+
+    @Bean
+    open fun extensionQueryRepository() = extensionRepository()
 
     @Bean
     open fun funcRepository() = SqliteFuncRepository(SqliteFuncRepository.Config(path))
