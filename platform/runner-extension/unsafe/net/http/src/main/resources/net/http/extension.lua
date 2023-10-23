@@ -13,10 +13,11 @@ function extension()
         function export.requests.get(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "GET",
                 url = base_url .. url,
-                headers = {}
+                headers = options.headers
             }
         end
 
@@ -27,26 +28,28 @@ function extension()
         function export.requests.post(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "POST",
                 url = base_url .. url,
-                headers = {},
-                data = {}
+                headers = options.headers,
+                json = options.json
             }
         end
 
         function export.post(url, options)
-            return single_request(export.requests.post(url, options))
+            return single_request(export.requests.post(url, options or {}))
         end
 
         function export.requests.patch(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "PATCH",
                 url = base_url .. url,
-                headers = {},
-                data = {}
+                headers = options.headers,
+                json = options.json
             }
         end
 
@@ -57,11 +60,12 @@ function extension()
         function export.requests.put(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "PUT",
                 url = base_url .. url,
-                headers = {},
-                data = {}
+                headers = options.headers,
+                json = options.json
             }
         end
 
@@ -72,10 +76,11 @@ function extension()
         function export.requests.delete(url, options)
             local config = export.config.get()
             local base_url = config.base_url or ""
+            options = options or {}
             return {
                 method = "DELETE",
                 url = base_url .. url,
-                headers = {}
+                headers = options.headers
             }
         end
 
@@ -87,8 +92,9 @@ function extension()
             local err, responses = export.execute({ request })
 
             if err ~= nil then
-                return nil, err
+                return err, nil
             end
+
             assert(#responses == 1)
             return nil, responses[1]
         end

@@ -2,7 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.AccountName
 import io.hamal.lib.domain.vo.Password
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.request.SignInReq
 import kotlinx.serialization.Serializable
 
@@ -15,5 +15,5 @@ data class ApiSignInReq(
 interface AuthService
 
 internal class ApiAuthServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : AuthService

@@ -7,7 +7,7 @@ import io.hamal.extension.unsafe.std.debug.DebugExtensionFactory
 import io.hamal.extension.unsafe.std.log.LogExtensionFactory
 import io.hamal.extension.unsafe.std.sys.SysExtensionFactory
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
@@ -41,7 +41,7 @@ class RunnerSandboxFactory(
         NativeLoader.load(Jar)
 
         val execToken = ctx[ExecToken::class]
-        val template = HttpTemplate(
+        val template = HttpTemplateImpl(
             baseUrl = apiHost,
             headerFactory = {
                 set("x-runner-exec-token", execToken.value)
@@ -54,7 +54,7 @@ class RunnerSandboxFactory(
                 HttpExtensionFactory(),
                 LogExtensionFactory(sdk.execLog),
                 DebugExtensionFactory(),
-                SysExtensionFactory(HttpTemplate(apiHost)),
+                SysExtensionFactory(HttpTemplateImpl(apiHost)),
             )
             .register(
                 DecimalSafeFactory,

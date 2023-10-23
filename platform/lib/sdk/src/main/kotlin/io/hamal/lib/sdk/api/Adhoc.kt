@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.InvokeAdhocReq
@@ -20,7 +20,7 @@ interface ApiAdhocService {
 }
 
 internal class ApiAdhocServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiAdhocService {
     override fun invoke(groupId: GroupId, req: ApiInvokeAdhocReq): ApiSubmittedReqWithId {
         return template

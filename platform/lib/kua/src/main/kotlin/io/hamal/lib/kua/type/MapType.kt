@@ -30,6 +30,8 @@ data class MapType(
         return size
     }
 
+    operator fun set(key: String, value: AnySerializableType) = set(key, value.value)
+
     fun unset(key: StringType) = unset(key.value)
     operator fun set(key: String, value: NilType) = unset(key)
     operator fun set(key: StringType, value: NilType) = unset(key.value)

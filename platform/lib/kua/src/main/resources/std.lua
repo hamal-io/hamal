@@ -5,3 +5,10 @@ function table_length(tbl)
     end
     return count
 end
+
+function fail_on_error(err, ...)
+    if err ~= nil then
+        ctx.fail(err)
+    end
+    return ...
+end

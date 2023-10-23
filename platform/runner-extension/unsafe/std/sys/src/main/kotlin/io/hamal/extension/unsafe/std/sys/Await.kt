@@ -1,7 +1,7 @@
 package io.hamal.extension.unsafe.std.sys
 
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 
 class AwaitFunction(
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplateImpl
 ) : Function1In1Out<StringType, ErrorType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(ErrorType::class)
@@ -39,7 +39,7 @@ class AwaitFunction(
 
 
 class AwaitCompletedFunction(
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplateImpl
 ) : Function1In1Out<StringType, ErrorType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(ErrorType::class)
@@ -69,7 +69,7 @@ class AwaitCompletedFunction(
 }
 
 class AwaitFailedFunction(
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplateImpl
 ) : Function1In1Out<StringType, ErrorType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(ErrorType::class)

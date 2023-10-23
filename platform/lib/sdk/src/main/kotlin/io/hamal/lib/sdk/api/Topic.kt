@@ -2,7 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.AppendEntryReq
@@ -61,7 +61,7 @@ interface ApiTopicService {
 }
 
 internal class ApiTopicServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiTopicService {
 
     override fun append(topicId: TopicId, payload: TopicEntryPayload) =

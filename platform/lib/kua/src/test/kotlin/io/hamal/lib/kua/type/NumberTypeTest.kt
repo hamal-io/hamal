@@ -7,7 +7,13 @@ import org.junit.jupiter.api.TestFactory
 class NumberTypeTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(NumberType(42), """{"type":"NumberType","value":"42"}"""),
-        generateTestCases(NumberType(42.24), """{"type":"NumberType","value":"42.24"}"""),
+        generateTestCases(
+            testInstance = NumberType(42),
+            expectedJson = """{"type":"NumberType","value":"42"}"""
+        ),
+        generateTestCases(
+            testInstance = NumberType(42.24),
+            expectedJson = """{"type":"NumberType","value":"42.24"}"""
+        ),
     ).flatten()
 }

@@ -1,7 +1,7 @@
 package io.hamal.extension.unsafe.std.sys.req
 
 import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 
 class ReqGetFunction(
-    private val httpTemplate: HttpTemplate
+    private val httpTemplate: HttpTemplateImpl
 ) : Function1In2Out<StringType, ErrorType, MapType>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)

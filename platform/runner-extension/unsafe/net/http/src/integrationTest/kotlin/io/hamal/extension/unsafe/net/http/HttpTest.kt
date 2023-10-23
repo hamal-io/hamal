@@ -1,6 +1,8 @@
 package io.hamal.extension.unsafe.net.http
 
 import AbstractExtensionTest
+import io.hamal.extension.safe.std.decimal.DecimalSafeFactory
+import io.hamal.extension.unsafe.net.http.web.TestHeaderController
 import io.hamal.extension.unsafe.net.http.web.TestJsonController
 import io.hamal.extension.unsafe.net.http.web.TestStatusController
 import io.hamal.lib.http.fixture.TestWebConfig
@@ -23,6 +25,7 @@ import kotlin.io.path.name
 @SpringBootTest(
     classes = [
         TestWebConfig::class,
+        TestHeaderController::class,
         TestJsonController::class,
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
@@ -33,15 +36,16 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
     fun run(): List<DynamicTest> {
         NativeLoader.load(Resources)
         return collectFiles().map { testFile ->
-            dynamicTest("${testFile.parent.name}/${testFile.name}") {
-
+            dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 val config = RunnerUnsafeExtensionConfig(
                     mutableMapOf(
                         "base_url" to StringType("http://localhost:$localServerPort")
                     )
                 )
-
-                val runner = createTestRunner(unsafeFactories = listOf(HttpExtensionFactory(config)))
+                val runner = createTestRunner(
+                    unsafeFactories = listOf(HttpExtensionFactory(config)),
+                    safeFactories = listOf(DecimalSafeFactory)
+                )
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()

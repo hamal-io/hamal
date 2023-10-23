@@ -2,7 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,5 +26,5 @@ data class ApiGroup(
 interface ApiGroupService
 
 internal class ApiGroupServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiGroupService

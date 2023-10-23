@@ -1,13 +1,11 @@
---local http = require('net.http')
---
---local config = http.config.get()
---local port = config.port
---
---local status_codes = { 200, 201, 400, 404, 500 }
---
---for _, status_code in ipairs(status_codes) do
---    local err, response = http.post("http://localhost:" .. port .. "/v1/status?code=" .. status_code)
---    assert(err == nil)
---    assert(response ~= nil)
---    assert(response.status_code == status_code)
---end
+http = require('net.http')
+
+err, response = http.post('/v1/json-empty-object')
+assert(err == nil)
+assert(response ~= nil)
+
+assert(response.status_code == 200)
+assert(response.content_type == 'application/json')
+
+assert(response.content ~= nil)
+assert(table_length(response.content) == 0)

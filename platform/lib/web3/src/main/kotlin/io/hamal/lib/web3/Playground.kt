@@ -1,6 +1,6 @@
 package io.hamal.lib.web3
 
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.web3.Erc20.decimals
 import io.hamal.lib.web3.US.getReserves
 import io.hamal.lib.web3.eth.EthBatchService
@@ -54,7 +54,7 @@ object US{
 
 fun main() {
     val srv = EthHttpBatchService(
-        HttpTemplate("http://localhost:10001")
+        HttpTemplateImpl("http://localhost:10001")
     )
 
     val response = srv

@@ -586,11 +586,17 @@ class DecimalTypeTest {
 
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(DecimalType.Zero, """{"type":"DecimalType","value":"0"}"""),
-        generateTestCases(DecimalType(-12.324), """{"type":"DecimalType","value":"-12.324"}"""),
         generateTestCases(
-            DecimalType("123456789.987654321"),
-            """{"type":"DecimalType","value":"123456789.987654321"}"""
+            testInstance = DecimalType.Zero,
+            expectedJson = """{"type":"DecimalType","value":"0"}"""
+        ),
+        generateTestCases(
+            testInstance = DecimalType(-12.324),
+            expectedJson = """{"type":"DecimalType","value":"-12.324"}"""
+        ),
+        generateTestCases(
+            testInstance = DecimalType("123456789.987654321"),
+            expectedJson = """{"type":"DecimalType","value":"123456789.987654321"}"""
         )
     ).flatten()
 

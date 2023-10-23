@@ -102,6 +102,7 @@ class ClosableState(
     override fun getAny(idx: Int): AnyType {
         return when (val type = type(idx)) {
             BooleanType::class -> AnyType(getBooleanValue(idx))
+            DecimalType::class -> AnyType(native.toDecimal(idx))
             NumberType::class -> AnyType(getNumberType(idx))
             StringType::class -> AnyType(getStringType(idx))
             TableType::class -> {
@@ -208,5 +209,6 @@ private fun luaToType(value: Int) = when (value) {
     3 -> NumberType::class
     4 -> StringType::class
     5 -> TableType::class
+    11 -> DecimalType::class
     else -> TODO("$value not implemented yet")
 }

@@ -5,7 +5,7 @@ import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CompleteExecReq
 import io.hamal.request.FailExecReq
@@ -59,7 +59,7 @@ interface ApiExecService {
 }
 
 internal class ApiExecServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiExecService {
 
     override fun list(groupId: GroupId) =

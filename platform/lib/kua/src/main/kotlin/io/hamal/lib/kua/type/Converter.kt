@@ -15,6 +15,7 @@ fun State.toArrayType(array: TableProxyArray): ArrayType {
             when (val value = state.getAny(index).value) {
                 is ArrayType,
                 is BooleanType,
+                is DecimalType,
                 is MapType,
                 is NumberType,
                 is StringType -> value as SerializableType
@@ -35,6 +36,7 @@ fun State.toProxyArray(array: ArrayType): TableProxyArray {
         array.value.forEach { (_, value) ->
             when (value) {
                 is BooleanType -> it.append(value)
+                is DecimalType -> it.append(value)
                 is NumberType -> it.append(value)
                 is StringType -> it.append(value)
                 is MapType -> {
@@ -62,6 +64,7 @@ fun State.toMapType(map: TableProxyMap): MapType {
             when (val value = state.getAny(index).value) {
                 is ArrayType,
                 is BooleanType,
+                is DecimalType,
                 is MapType,
                 is NumberType,
                 is StringType -> value as SerializableType
@@ -81,6 +84,7 @@ fun State.toProxyMap(map: MapType): TableProxyMap {
         map.value.forEach { (key, value) ->
             when (value) {
                 is BooleanType -> it[key] = value
+                is DecimalType -> it[key] = value
                 is CodeType -> it[key] = value
                 is NilType -> it[key] = NilType
                 is NumberType -> it[key] = value

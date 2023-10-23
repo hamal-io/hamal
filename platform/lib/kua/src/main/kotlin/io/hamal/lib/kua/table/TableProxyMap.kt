@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
@@ -43,6 +43,12 @@ class TableProxyMap(
     operator fun set(key: String, value: Double): Int {
         state.pushString(key)
         state.pushNumber(value)
+        return state.tableSetRaw(index)
+    }
+
+    operator fun set(key: String, value: DecimalType): Int {
+        state.pushString(key)
+        state.native.pushDecimal(value)
         return state.tableSetRaw(index)
     }
 
@@ -124,6 +130,13 @@ class TableProxyMap(
         val type = state.tableGetRaw(index)
         type.checkExpectedType(NumberType::class)
         return NumberType(state.native.toNumber(state.top.value)).also { state.native.pop(1) }
+    }
+
+    fun getDecimalType(key: String): DecimalType {
+        state.pushString(key)
+        val type = state.tableGetRaw(index)
+        type.checkExpectedType(DecimalType::class)
+        return state.native.toDecimal(state.top.value).also { state.native.pop(1) }
     }
 
     fun getStringType(key: StringType): StringType = getStringType(key.value)

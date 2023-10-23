@@ -6,13 +6,19 @@ import org.junit.jupiter.api.TestFactory
 class TrueValueTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(True, """{"type":"TrueType"}"""),
+        generateTestCases(
+            testInstance = True,
+            expectedJson = """{"type":"TrueType"}"""
+        ),
     ).flatten()
 }
 
 class FalseValueTest {
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(False, """{"type":"FalseType"}"""),
+        generateTestCases(
+            testInstance = False,
+            expectedJson = """{"type":"FalseType"}"""
+        ),
     ).flatten()
 }

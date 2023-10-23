@@ -64,7 +64,7 @@ class ParameterTest(@LocalServerPort var localServerPort: Int) {
         HttpMethod.values()
             .map { method ->
                 dynamicTest("$method request") {
-                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
                     val request = when (method) {
                         Delete -> testInstance.delete("/v1/parameter")
@@ -87,7 +87,7 @@ class ParameterTest(@LocalServerPort var localServerPort: Int) {
         HttpMethod.values()
             .map { method ->
                 dynamicTest("$method request") {
-                    val testInstance = HttpTemplate("http://localhost:$localServerPort")
+                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
                     val request = when (method) {
                         Delete -> testInstance.delete("/v1/parameter")

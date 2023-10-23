@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateFuncReq
@@ -80,7 +80,7 @@ interface ApiFuncService {
 }
 
 internal class ApiFuncServiceImpl(
-    private val template: HttpTemplate
+    private val template: HttpTemplateImpl
 ) : ApiFuncService {
 
     override fun create(groupId: GroupId, createFuncReq: ApiCreateFuncReq) =

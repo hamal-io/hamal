@@ -6,7 +6,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Enjoyer
-import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
@@ -157,7 +157,7 @@ abstract class BaseTest {
     private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
 
     fun withApiSdk(serverPort: Number) = ApiSdkImpl(
-        HttpTemplate(
+        HttpTemplateImpl(
             baseUrl = "http://localhost:$serverPort",
             headerFactory = {
                 set("authorization", "group-admin-token")

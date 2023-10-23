@@ -17,7 +17,7 @@ import java.math.RoundingMode
 data class DecimalType(
     @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal,
-) :  SerializableType(), Comparable<DecimalType> {
+) : SerializableType(), Comparable<DecimalType> {
 
     companion object {
         val Zero = DecimalType(0)
@@ -43,13 +43,13 @@ data class DecimalType(
         }
 
         operator fun invoke(value: String): DecimalType {
-            require(value.isNumber()) { IllegalArgumentException("NaN") }
+            require(isNumber(value)) { IllegalArgumentException("NaN") }
             return DecimalType(BigDecimal(value.trim(), mathContext))
         }
 
-        private fun String.isNumber(): Boolean {
+        fun isNumber(value: String): Boolean {
             val regex = "-?[0-9]+(\\.[0-9]+)?".toRegex()
-            return matches(regex)
+            return value.matches(regex)
         }
 
         private val mathContext = MathContext.DECIMAL128
