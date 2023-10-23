@@ -23,10 +23,33 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
             val method = map.getString("method")
             val url = map.getString("url")
 
-
-
+            val headers = map.get("headers")
             if (method == "GET") {
-                val response = HttpTemplateImpl().get(url).execute()
+                val template = HttpTemplateImpl().get(url).header("accept", "application/json")
+
+                if (headers is MapType) {
+                    headers.value.forEach { key, value ->
+                        template.header(
+                            key,
+                            when (value) {
+                                is StringType -> value.value
+                                is False -> "false"
+                                is True -> "true"
+                                is CodeType -> value.value
+                                is DecimalType -> value.toString()
+                                is ErrorType -> value.value
+                                is NilType -> ""
+                                is NumberType -> value.value.toString()
+                                is AnySerializableType -> TODO()
+                                is ArrayType -> TODO()
+                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                            }
+                        )
+                    }
+                }
+
+
+                val response = template.execute()
                 results.add(response.toMap())
             }
 
@@ -35,9 +58,34 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
                 val json = map.get("json")
 
                 val template = HttpTemplateImpl().post(url)
+
+                template.header("accept", "application/json")
+                template.header("content-type", "application/json")
+
                 // FIXME
                 if (json !is NilType) {
                     template.body(json.toJson())
+                }
+
+                if (headers is MapType) {
+                    headers.value.forEach { key, value ->
+                        template.header(
+                            key,
+                            when (value) {
+                                is StringType -> value.value
+                                is False -> "false"
+                                is True -> "true"
+                                is CodeType -> value.value
+                                is DecimalType -> value.toString()
+                                is ErrorType -> value.value
+                                is NilType -> ""
+                                is NumberType -> value.value.toString()
+                                is AnySerializableType -> TODO()
+                                is ArrayType -> TODO()
+                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                            }
+                        )
+                    }
                 }
 
                 val response = template.execute()
@@ -49,9 +97,35 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
                 val json = map.get("json")
 
                 val template = HttpTemplateImpl().patch(url)
+
+                template.header("accept", "application/json")
+                template.header("content-type", "application/json")
+
                 // FIXME
                 if (json !is NilType) {
+
                     template.body(json.toJson())
+                }
+
+                if (headers is MapType) {
+                    headers.value.forEach { key, value ->
+                        template.header(
+                            key,
+                            when (value) {
+                                is StringType -> value.value
+                                is False -> "false"
+                                is True -> "true"
+                                is CodeType -> value.value
+                                is DecimalType -> value.toString()
+                                is ErrorType -> value.value
+                                is NilType -> ""
+                                is NumberType -> value.value.toString()
+                                is AnySerializableType -> TODO()
+                                is ArrayType -> TODO()
+                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                            }
+                        )
+                    }
                 }
 
                 val response = template.execute()
@@ -62,8 +136,34 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
                 val json = map.get("json")
 
                 val template = HttpTemplateImpl().put(url)
+
+                template.header("accept", "application/json")
+                template.header("content-type", "application/json")
+
+                if (headers is MapType) {
+                    headers.value.forEach { key, value ->
+                        template.header(
+                            key,
+                            when (value) {
+                                is StringType -> value.value
+                                is False -> "false"
+                                is True -> "true"
+                                is CodeType -> value.value
+                                is DecimalType -> value.toString()
+                                is ErrorType -> value.value
+                                is NilType -> ""
+                                is NumberType -> value.value.toString()
+                                is AnySerializableType -> TODO()
+                                is ArrayType -> TODO()
+                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                            }
+                        )
+                    }
+                }
+
                 // FIXME
                 if (json !is NilType) {
+
                     template.body(json.toJson())
                 }
 
@@ -72,9 +172,30 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
             }
 
             if (method == "DELETE") {
-                val response = HttpTemplateImpl()
-                    .delete(url)
-                    .execute()
+                val template = HttpTemplateImpl().delete(url).header("accept", "application/json")
+
+                if (headers is MapType) {
+                    headers.value.forEach { key, value ->
+                        template.header(
+                            key,
+                            when (value) {
+                                is StringType -> value.value
+                                is False -> "false"
+                                is True -> "true"
+                                is CodeType -> value.value
+                                is DecimalType -> value.toString()
+                                is ErrorType -> value.value
+                                is NilType -> ""
+                                is NumberType -> value.value.toString()
+                                is AnySerializableType -> TODO()
+                                is ArrayType -> TODO()
+                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                            }
+                        )
+                    }
+                }
+
+                val response = template.execute()
                 results.add(response.toMap())
             }
 
@@ -89,6 +210,7 @@ private fun HttpResponse.toMap() = MapType().also {
     it["status_code"] = NumberType(statusCode.value)
     it["content_type"] = headers.find("content-type")?.let { type -> StringType(type) } ?: NilType
     it["content_length"] = headers.find("content-length")?.let { length -> NumberType(length.toInt()) } ?: NilType
+    it["headers"] = headers()
     it["content"] = content()
 }
 
@@ -113,3 +235,10 @@ private fun HttpResponse.content() = when (this) {
 
     else -> NilType
 }
+
+
+private fun HttpResponse.headers() = MapType(
+    headers.map {
+        it.key.lowercase() to StringType(it.value)
+    }.toMap().toMutableMap()
+)

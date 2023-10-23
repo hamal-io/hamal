@@ -22,6 +22,20 @@ open class TestJsonController {
         return ResponseEntity.ok(JsonArray(listOf()))
     }
 
+    @RequestMapping("/v1/json-array")
+    fun jsonArray(): ResponseEntity<JsonArray> {
+        return ResponseEntity.ok(
+            JsonArray(
+                listOf(
+                    JsonPrimitive(23),
+                    JsonPrimitive(true),
+                    JsonPrimitive("24.23"),
+                    JsonPrimitive("HamalRocks")
+                )
+            )
+        )
+    }
+
     @RequestMapping("/v1/json-error")
     fun jsonError(): ResponseEntity<JsonObject> {
         return ResponseEntity.badRequest().body(
