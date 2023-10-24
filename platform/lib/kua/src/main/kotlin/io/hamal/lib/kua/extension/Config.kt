@@ -1,16 +1,16 @@
-package io.hamal.lib.kua.extension.unsafe
+package io.hamal.lib.kua.extension
 
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.Type
 
-class RunnerUnsafeExtensionConfig(
+class ExtensionConfig(
     val value: MutableMap<String, Type> = mutableMapOf()
 )
 
-class RunnerUnsafeExtensionGetConfigFunction(
-    val config: RunnerUnsafeExtensionConfig
+class ExtensionConfigGetFunction(
+    val config: ExtensionConfig
 ) : Function0In1Out<TableProxyMap>(
     FunctionOutput1Schema(TableProxyMap::class)
 ) {
@@ -25,8 +25,8 @@ class RunnerUnsafeExtensionGetConfigFunction(
     }
 }
 
-class RunnerUnsafeExtensionUpdateConfigFunction(
-    val config: RunnerUnsafeExtensionConfig
+class ExtensioConfignUpdateFunction(
+    val config: ExtensionConfig
 ) : Function1In0Out<TableProxyMap>(
     FunctionInput1Schema(TableProxyMap::class)
 ) {

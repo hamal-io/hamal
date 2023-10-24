@@ -1,7 +1,6 @@
 package io.hamal.lib.kua.extension.safe
 
-import io.hamal.lib.kua.extension.RunnerExtension
-import io.hamal.lib.kua.extension.RunnerExtensionFactory
+import io.hamal.lib.kua.extension.*
 
 interface RunnerSafeExtensionFactory : RunnerExtensionFactory<RunnerSafeExtension>
 
@@ -22,9 +21,9 @@ class RunnerSafeExtension(
         }
     }
 
-    fun getConfigFunction() = ExtensionGetConfigFunction(config)
+    fun configGetFunction() = ExtensionConfigGetFunction(config)
 
-    fun updateConfigFunction() = ExtensionUpdateConfigFunction(config)
+    fun configUpdateFunction() = ExtensioConfignUpdateFunction(config)
 }
 
 

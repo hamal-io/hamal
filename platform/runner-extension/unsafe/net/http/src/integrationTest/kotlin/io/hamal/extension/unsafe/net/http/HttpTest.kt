@@ -8,7 +8,7 @@ import io.hamal.extension.unsafe.net.http.web.TestStatusController
 import io.hamal.lib.http.fixture.TestWebConfig
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
+import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.type.StringType
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -37,7 +37,7 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
         NativeLoader.load(Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
-                val config = RunnerUnsafeExtensionConfig(
+                val config = ExtensionConfig(
                     mutableMapOf(
                         "base_url" to StringType("http://localhost:$localServerPort")
                     )

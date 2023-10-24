@@ -1,7 +1,6 @@
 package io.hamal.lib.kua.extension.unsafe
 
-import io.hamal.lib.kua.extension.RunnerExtension
-import io.hamal.lib.kua.extension.RunnerExtensionFactory
+import io.hamal.lib.kua.extension.*
 import io.hamal.lib.kua.type.Type
 
 interface RunnerUnsafeExtensionFactory : RunnerExtensionFactory<RunnerUnsafeExtension>
@@ -10,7 +9,7 @@ class RunnerUnsafeExtension(
     override val name: String,
     override val factoryCode: String = loadFactoryCodeFromResources(name),
     val internals: Map<String, Type> = mapOf(),
-    val config: RunnerUnsafeExtensionConfig = RunnerUnsafeExtensionConfig(mutableMapOf()),
+    val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
 ) : RunnerExtension {
 
     companion object {
@@ -24,9 +23,9 @@ class RunnerUnsafeExtension(
         }
     }
 
-    fun getConfigFunction() = RunnerUnsafeExtensionGetConfigFunction(config)
+    fun configGetFunction() = ExtensionConfigGetFunction(config)
 
-    fun updateConfigFunction() = RunnerUnsafeExtensionUpdateConfigFunction(config)
+    fun configUpdateFunction() = ExtensioConfignUpdateFunction(config)
 }
 
 

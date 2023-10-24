@@ -44,6 +44,7 @@ class RunnerExtensionRegistry(val sb: Sandbox) {
 
         state.load(unsafeExtensions[name]!!.factoryCode)
         state.load("_factory = extension()")
+
         sb.unsetGlobal("_internal")
 
         // FIXME cache factory so that it does not have to be loaded over and over again

@@ -23,8 +23,8 @@ class Require(
             val result = ctx.getGlobalTableMap("_instance")
 
             val config = ctx.tableCreateMap(2)
-            config["get"] = registry.safeExtensions[arg1.value]!!.getConfigFunction()
-            config["update"] = registry.safeExtensions[arg1.value]!!.updateConfigFunction()
+            config["get"] = registry.safeExtensions[arg1.value]!!.configGetFunction()
+            config["update"] = registry.safeExtensions[arg1.value]!!.configUpdateFunction()
             result["config"] = config
 
             ctx.unsetGlobal("_factory")
@@ -41,8 +41,8 @@ class Require(
             val result = ctx.getGlobalTableMap("_instance")
 
             val config = ctx.tableCreateMap(2)
-            config["get"] = registry.unsafeExtensions[arg1.value]!!.getConfigFunction()
-            config["update"] = registry.unsafeExtensions[arg1.value]!!.updateConfigFunction()
+            config["get"] = registry.unsafeExtensions[arg1.value]!!.configGetFunction()
+            config["update"] = registry.unsafeExtensions[arg1.value]!!.configUpdateFunction()
             result["config"] = config
 
             ctx.unsetGlobal("_factory")

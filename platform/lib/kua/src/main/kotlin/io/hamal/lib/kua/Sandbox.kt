@@ -1,10 +1,14 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
+import io.hamal.lib.kua.extension.ExtensioConfignUpdateFunction
+import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extension.ExtensionConfigGetFunction
 import io.hamal.lib.kua.extension.RunnerExtensionRegistry
 import io.hamal.lib.kua.extension.safe.RunnerSafeExtension
 import io.hamal.lib.kua.extension.safe.RunnerSafeExtensionFactory
-import io.hamal.lib.kua.extension.unsafe.*
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionFactory
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -147,13 +151,13 @@ internal fun Native.load(code: String) {
 //    return r
 //}
 
-fun State.createConfig(config: RunnerUnsafeExtensionConfig): TableProxyMap {
+fun State.createConfig(config: ExtensionConfig): TableProxyMap {
 
     val result = tableCreateMap(1)
 
     val fns = mapOf(
-        "get" to RunnerUnsafeExtensionGetConfigFunction(config),
-        "update" to RunnerUnsafeExtensionUpdateConfigFunction(config)
+        "get" to ExtensionConfigGetFunction(config),
+        "update" to ExtensioConfignUpdateFunction(config)
     )
 
     fns.forEach { (name, value) ->

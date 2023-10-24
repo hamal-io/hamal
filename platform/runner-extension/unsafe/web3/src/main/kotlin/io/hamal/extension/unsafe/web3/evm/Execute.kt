@@ -2,7 +2,7 @@ package io.hamal.extension.unsafe.web3.evm
 
 import io.hamal.lib.common.logger
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionConfig
+import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -25,7 +25,7 @@ import kotlin.to
 private val log = logger(EthExecuteFunction::class)
 
 class EthExecuteFunction(
-    private val config: RunnerUnsafeExtensionConfig
+    private val config: ExtensionConfig
 ) : Function1In2Out<ArrayType, ErrorType, ArrayType>(
     FunctionInput1Schema(ArrayType::class),
     FunctionOutput2Schema(ErrorType::class, ArrayType::class)
