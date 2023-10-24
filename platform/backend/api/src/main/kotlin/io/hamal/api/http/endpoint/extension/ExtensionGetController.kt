@@ -17,7 +17,7 @@ internal class ExtensionGetController(
     private val retry: Retry,
     private val getExtension: GetExtensionPort
 ) {
-    @GetMapping("/v1/extensions/{extId")
+    @GetMapping("/v1/extensions/{extId}")
     fun getExtension(@PathVariable("extId") extId: ExtensionId) = retry {
         getExtension(extId, ::assemble)
     }
