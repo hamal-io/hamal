@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository
-import io.hamal.repository.api.ExtensionQueryRepository.*
+import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateExtensionReq
 import io.hamal.request.UpdateExtensionReq
@@ -24,7 +24,10 @@ interface GetExtensionPort {
 }
 
 interface ListExtensionPort {
-    operator fun <T : Any> invoke(query: ExtensionQuery, responseHandler: (List<Extension>) -> T): T
+    operator fun <T : Any> invoke(
+        query: ExtensionQuery,
+        responseHandler: (List<Extension>) -> T
+    ): T
 }
 
 interface UpdateExtensionPort {
@@ -40,7 +43,7 @@ interface ExtensionPort : CreateExtensionPort, GetExtensionPort, ListExtensionPo
 @Component
 class ExtensionAdapter(
     private val submitRequest: SubmitRequest,
-    private val extensionQueryRepository: ExtensionQueryRepository
+    private val extensionQueryRepository: ExtensionQueryRepository,
 ) : ExtensionPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
@@ -63,7 +66,10 @@ class ExtensionAdapter(
         return responseHandler(submitRequest(extId, req))
     }
 
-    override fun <T : Any> invoke(query: ExtensionQuery, responseHandler: (List<Extension>) -> T): T {
+    override fun <T : Any> invoke(
+        query: ExtensionQuery,
+        responseHandler: (List<Extension>) -> T
+    ): T {
         return responseHandler(extensionQueryRepository.list(query))
     }
 

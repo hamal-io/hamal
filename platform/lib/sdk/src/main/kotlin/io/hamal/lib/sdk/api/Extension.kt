@@ -27,13 +27,6 @@ data class ApiExtensionList(
     data class Extension(
         val id: ExtensionId,
         val name: ExtensionName,
-        val code: ExtensionCode
-    )
-
-    @Serializable
-    data class ExtensionCode(
-        val id: CodeId,
-        val version: CodeVersion
     )
 }
 

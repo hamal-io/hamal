@@ -25,17 +25,13 @@ internal class ExtensionListController(private val listExt: ListExtensionPort) {
                 limit = limit,
                 groupIds = groupIds
             )
-        ) { extensions ->
+        ) {
             ResponseEntity.ok(
                 ApiExtensionList(
-                    extensions.map {
+                    it.map {
                         ApiExtensionList.Extension(
                             id = it.id,
-                            name = it.name,
-                            code = ApiExtensionList.ExtensionCode(
-                                it.code.id,
-                                it.code.version
-                            )
+                            name = it.name
                         )
                     })
             )

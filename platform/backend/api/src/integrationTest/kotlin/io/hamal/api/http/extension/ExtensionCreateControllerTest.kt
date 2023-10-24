@@ -12,14 +12,15 @@ import org.junit.jupiter.api.Test
 internal class ExtensionCreateControllerTest : ExtensionBaseControllerTest() {
     @Test
     fun `Creates extension`() {
-        val res = createExtension(
-            ApiCreateExtensionReq(
-                name = ExtensionName("TestExtension"),
-                codeId = CodeId(1),
-                codeVersion = CodeVersion(1)
+        val res = awaitCompleted(
+            createExtension(
+                ApiCreateExtensionReq(
+                    name = ExtensionName("TestExtension"),
+                    codeId = CodeId(1),
+                    codeVersion = CodeVersion(1)
+                )
             )
         )
-        awaitCompleted(res)
 
         with(extensionQueryRepository.get(res.id(::ExtensionId))) {
             assertThat(name, equalTo(ExtensionName("TestExtension")))
