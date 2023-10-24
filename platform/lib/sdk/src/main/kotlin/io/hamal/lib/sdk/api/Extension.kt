@@ -2,6 +2,8 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
+import io.hamal.lib.http.body
+import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateExtensionReq
 import io.hamal.request.UpdateExtensionReq
 import kotlinx.serialization.Serializable
@@ -48,7 +50,7 @@ data class ApiUpdateExtensionReq(
 interface ApiExtensionService {
     fun create(groupId: GroupId, createExtReq: ApiCreateExtensionReq): ApiSubmittedReqWithId
     fun get(extId: ExtensionId): ApiExtension
-    fun list(): List<ApiExtension>
+    fun list(groupId: GroupId): ApiExtensionList
     fun update(extId: ExtensionId, updateExtReq: ApiUpdateExtensionReq): ApiSubmittedReqWithId
 }
 
@@ -56,19 +58,29 @@ interface ApiExtensionService {
 internal class ApiExtensionServiceImpl(
     private val template: HttpTemplate
 ) : ApiExtensionService {
-    override fun create(groupId: GroupId, createExtReq: ApiCreateExtensionReq): ApiSubmittedReqWithId {
-        TODO("Not yet implemented")
-    }
+    override fun create(groupId: GroupId, createExtReq: ApiCreateExtensionReq): ApiSubmittedReqWithId =
+        template.post("/v1/groups/{groupId}/extensions")
+            .path("groupId", groupId)
+            .body(createExtReq)
+            .execute()
+            .fold(ApiSubmittedReqWithId::class)
 
-    override fun get(extId: ExtensionId): ApiExtension {
-        TODO("Not yet implemented")
-    }
+    override fun get(extId: ExtensionId): ApiExtension =
+        template.get("/v1/extensions/{extId}")
+            .path("extId", extId)
+            .execute()
+            .fold(ApiExtension::class)
 
-    override fun list(): List<ApiExtension> {
-        TODO("Not yet implemented")
-    }
+    override fun list(groupId: GroupId): ApiExtensionList =
+        template.get("/v1/extensions")
+            .parameter("group_ids", groupId)
+            .execute()
+            .fold(ApiExtensionList::class)
 
-    override fun update(extId: ExtensionId, updateExtReq: ApiUpdateExtensionReq): ApiSubmittedReqWithId {
-        TODO("Not yet implemented")
-    }
+    override fun update(extId: ExtensionId, updateExtReq: ApiUpdateExtensionReq): ApiSubmittedReqWithId =
+        template.patch("/v1/extensions/{extId}/update")
+            .path("extId", extId)
+            .body(updateExtReq)
+            .execute()
+            .fold(ApiSubmittedReqWithId::class)
 }
