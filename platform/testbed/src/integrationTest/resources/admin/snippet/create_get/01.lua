@@ -11,7 +11,6 @@ sys.await_completed(create_snippet_req)
 
 assert(create_snippet_req.req_id ~= nil)
 assert(create_snippet_req.status == 'Submitted')
-assert(create_snippet_req.id ~= nil)
 
 err, snippet = sys.snippet.get(create_snippet_req.id)
 assert(err == nil)

@@ -48,20 +48,20 @@ data class ApiUpdateExtensionReq(
 
 
 interface ApiExtensionService {
-    fun create(groupId: GroupId, createExtReq: ApiCreateExtensionReq): ApiSubmittedReqWithId
+    fun create(groupId: GroupId, req: ApiCreateExtensionReq): ApiSubmittedReqWithId
     fun get(extId: ExtensionId): ApiExtension
-    fun list(groupId: GroupId): ApiExtensionList
-    fun update(extId: ExtensionId, updateExtReq: ApiUpdateExtensionReq): ApiSubmittedReqWithId
+    fun list(groupId: GroupId): List<ApiExtensionList.Extension>
+    fun update(extId: ExtensionId, req: ApiUpdateExtensionReq): ApiSubmittedReqWithId
 }
 
 
 internal class ApiExtensionServiceImpl(
     private val template: HttpTemplate
 ) : ApiExtensionService {
-    override fun create(groupId: GroupId, createExtReq: ApiCreateExtensionReq): ApiSubmittedReqWithId =
+    override fun create(groupId: GroupId, req: ApiCreateExtensionReq): ApiSubmittedReqWithId =
         template.post("/v1/groups/{groupId}/extensions")
             .path("groupId", groupId)
-            .body(createExtReq)
+            .body(req)
             .execute()
             .fold(ApiSubmittedReqWithId::class)
 
@@ -71,16 +71,17 @@ internal class ApiExtensionServiceImpl(
             .execute()
             .fold(ApiExtension::class)
 
-    override fun list(groupId: GroupId): ApiExtensionList =
+    override fun list(groupId: GroupId): List<ApiExtensionList.Extension> =
         template.get("/v1/extensions")
             .parameter("group_ids", groupId)
             .execute()
             .fold(ApiExtensionList::class)
+            .extensions
 
-    override fun update(extId: ExtensionId, updateExtReq: ApiUpdateExtensionReq): ApiSubmittedReqWithId =
+    override fun update(extId: ExtensionId, req: ApiUpdateExtensionReq): ApiSubmittedReqWithId =
         template.patch("/v1/extensions/{extId}/update")
             .path("extId", extId)
-            .body(updateExtReq)
+            .body(req)
             .execute()
             .fold(ApiSubmittedReqWithId::class)
 }
