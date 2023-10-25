@@ -27,7 +27,7 @@ class ExtensionCreateFunction(
                 ApiCreateExtensionReq(
                     name = ExtensionName(arg1.getString("name")),
                     codeId = CodeId(arg1.getString("code_id")),
-                    codeVersion = CodeVersion(arg1.getString("code_ver").toInt())
+                    codeVersion = CodeVersion(arg1.getNumberValue("code_ver").value.toInt())
                 )
             )
 
