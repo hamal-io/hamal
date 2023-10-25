@@ -2,7 +2,7 @@ package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -74,7 +74,7 @@ class AssertTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                RunnerUnsafeExtension(
+                RunnerPluginExtension(
                     "test",
                     factoryCode = """
                             function extension()

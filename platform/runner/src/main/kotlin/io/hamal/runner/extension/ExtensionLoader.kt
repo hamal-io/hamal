@@ -1,6 +1,6 @@
-//package io.hamal.runner.safe
+//package io.hamal.runner.script
 //
-//import io.hamal.lib.kua.safe.NativeExtensionFactory
+//import io.hamal.lib.kua.script.NativeExtensionFactory
 //import java.io.File
 //import java.net.MalformedURLException
 //import java.net.URL

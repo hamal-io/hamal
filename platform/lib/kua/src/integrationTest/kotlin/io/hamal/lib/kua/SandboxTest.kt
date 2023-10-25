@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test
 
 
 internal class RegisterExtensionTest : BaseSandboxTest() {
-    
+
     @Test
-    fun `Registers a unsafe extension and call function`() {
+    fun `Registers a plugin extension and call function`() {
         class TestFunction : Function0In0Out() {
             override fun invoke(ctx: FunctionContext) {
                 set = true
@@ -24,7 +24,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
         val func = TestFunction()
         testInstance.register(
-            RunnerUnsafeExtension(
+            RunnerPluginExtension(
                 name = "secret_ext",
                 factoryCode = """
                     function extension()

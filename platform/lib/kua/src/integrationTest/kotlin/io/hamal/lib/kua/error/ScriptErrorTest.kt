@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -40,7 +40,7 @@ class ScriptErrorTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                RunnerUnsafeExtension(
+                RunnerPluginExtension(
                     name = "test",
                     factoryCode = """
                             function extension()

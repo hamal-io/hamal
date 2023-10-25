@@ -56,16 +56,16 @@ include(":platform:lib:web3")
 
 include(":platform:runner")
 
-include(":platform:runner-extension:safe:std:decimal")
-include(":platform:runner-extension:safe:telegram")
+include(":platform:runner-extension:script:std:decimal")
+include(":platform:runner-extension:script:telegram")
 
 include(":platform:runner-extension:test")
-include(":platform:runner-extension:unsafe:net:http")
-include(":platform:runner-extension:unsafe:std:debug")
-include(":platform:runner-extension:unsafe:std:log")
-include(":platform:runner-extension:unsafe:std:sys")
-include(":platform:runner-extension:unsafe:starter")
-include(":platform:runner-extension:unsafe:web3")
+include(":platform:runner-extension:plugin:net:http")
+include(":platform:runner-extension:plugin:std:debug")
+include(":platform:runner-extension:plugin:std:log")
+include(":platform:runner-extension:plugin:std:sys")
+include(":platform:runner-extension:plugin:starter")
+include(":platform:runner-extension:plugin:web3")
 
 
 include(":platform:testbed")

@@ -1,12 +1,11 @@
 package io.hamal.runner.config
 
-import io.hamal.extension.safe.std.decimal.DecimalSafeFactory
-import io.hamal.extension.safe.telegram.TelegramSafeFactory
-import io.hamal.extension.unsafe.net.http.HttpExtensionFactory
-import io.hamal.extension.unsafe.std.debug.DebugExtensionFactory
-import io.hamal.extension.unsafe.std.log.LogExtensionFactory
-import io.hamal.extension.unsafe.std.sys.SysExtensionFactory
-import io.hamal.extension.unsafe.web3.evm.EthExtensionFactory
+import io.hamal.script.std.decimal.DecimalScriptFactory
+import io.hamal.script.telegram.TelegramScriptFactory
+import io.hamal.plugin.net.http.HttpPluginFactory
+import io.hamal.plugin.std.debug.DebugPluginFactory
+import io.hamal.plugin.std.log.LogPluginFactory
+import io.hamal.plugin.web3.evm.EthPluginFactory
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.NativeLoader
@@ -14,6 +13,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.ApiSdkImpl
+import io.hamal.plugin.std.sys.SysPluginFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -52,15 +52,15 @@ class RunnerSandboxFactory(
 
         return Sandbox(ctx)
             .register(
-                HttpExtensionFactory(),
-                LogExtensionFactory(sdk.execLog),
-                DebugExtensionFactory(),
-                SysExtensionFactory(HttpTemplateImpl(apiHost)),
-                EthExtensionFactory()
+                HttpPluginFactory(),
+                LogPluginFactory(sdk.execLog),
+                DebugPluginFactory(),
+                SysPluginFactory(HttpTemplateImpl(apiHost)),
+                EthPluginFactory()
             )
             .register(
-                DecimalSafeFactory,
-                TelegramSafeFactory
+                DecimalScriptFactory,
+                TelegramScriptFactory
             )
     }
 }

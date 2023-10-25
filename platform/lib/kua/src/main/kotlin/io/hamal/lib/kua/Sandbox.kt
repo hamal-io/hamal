@@ -1,10 +1,14 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
+import io.hamal.lib.kua.extension.ExtensioConfignUpdateFunction
+import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extension.ExtensionConfigGetFunction
 import io.hamal.lib.kua.extension.RunnerExtensionRegistry
-import io.hamal.lib.kua.extension.safe.RunnerSafeExtension
-import io.hamal.lib.kua.extension.safe.RunnerSafeExtensionFactory
-import io.hamal.lib.kua.extension.unsafe.*
+import io.hamal.lib.kua.extension.script.RunnerScriptExtension
+import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -30,12 +34,12 @@ class Sandbox(
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
 
-//    fun register(safe: NativeExtension) = state.registerGlobalExtension(safe)
+//    fun register(script: NativeExtension) = state.registerGlobalExtension(script)
 //
 //    fun register(vararg factories: ExtensionFactory<*>): Sandbox {
-//        factories.map { it.create(this) }.forEach { safe ->
-//            check(safe is Capability)
-//            this.register(safe)
+//        factories.map { it.create(this) }.forEach { script ->
+//            check(script is Capability)
+//            this.register(script)
 //        }
 //        return this
 //    }
@@ -48,25 +52,25 @@ class Sandbox(
         fn(state)
     }
 
-    fun register(extension: RunnerUnsafeExtension) {
+    fun register(extension: RunnerPluginExtension) {
         registry.register(extension)
     }
 
-    fun register(vararg factories: RunnerUnsafeExtensionFactory): Sandbox {
+    fun register(vararg factories: RunnerPluginExtensionFactory): Sandbox {
         factories.map { it.create(this) }.forEach { cap ->
             this.register(cap)
         }
         return this
     }
 
-    fun register(vararg factories: RunnerSafeExtensionFactory): Sandbox {
+    fun register(vararg factories: RunnerScriptExtensionFactory): Sandbox {
         factories.map { it.create(this) }.forEach { cap ->
             this.register(cap)
         }
         return this
     }
 
-    fun register(extension: RunnerSafeExtension) {
+    fun register(extension: RunnerScriptExtension) {
         registry.register(extension)
     }
 
@@ -125,15 +129,15 @@ internal fun Native.load(code: String) {
     call(0, 0)
 }
 
-//internal fun State.registerGlobalExtension(safe: NativeExtension) {
-//    val result = registerExtension(safe)
-//    setGlobal(safe.name, result)
+//internal fun State.registerGlobalExtension(script: NativeExtension) {
+//    val result = registerExtension(script)
+//    setGlobal(script.name, result)
 //}
 //
-//fun State.registerExtension(safe: NativeExtension): TableProxyMap {
+//fun State.registerExtension(script: NativeExtension): TableProxyMap {
 //
 //    val r = tableCreateMap(1)
-//    safe.values
+//    script.values
 //        .filter { entry -> entry.value is FunctionType<*, *, *, *> }
 //        .forEach { (name, value) ->
 //            require(value is FunctionType<*, *, *, *>)
@@ -141,19 +145,19 @@ internal fun Native.load(code: String) {
 //            native.tabletSetField(r.index, name)
 //        }
 //
-//    createConfig(safe.config)
+//    createConfig(script.config)
 //    native.tabletSetField(r.index, "__config")
 //
 //    return r
 //}
 
-fun State.createConfig(config: RunnerUnsafeExtensionConfig): TableProxyMap {
+fun State.createConfig(config: ExtensionConfig): TableProxyMap {
 
     val result = tableCreateMap(1)
 
     val fns = mapOf(
-        "get" to RunnerUnsafeExtensionGetConfigFunction(config),
-        "update" to RunnerUnsafeExtensionUpdateConfigFunction(config)
+        "get" to ExtensionConfigGetFunction(config),
+        "update" to ExtensioConfignUpdateFunction(config)
     )
 
     fns.forEach { (name, value) ->

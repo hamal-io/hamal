@@ -32,9 +32,9 @@ testing {
                     implementation(project(":platform:runner"))
 
                     implementation(project(":platform:backend:repository:api"))
-                    implementation(project(":platform:runner-extension:unsafe:std:debug"))
-                    implementation(project(":platform:runner-extension:unsafe:std:sys"))
-                    implementation(project(":platform:runner-extension:unsafe:std:log"))
+                    implementation(project(":platform:runner-extension:plugin:std:debug"))
+                    implementation(project(":platform:runner-extension:plugin:std:sys"))
+                    implementation(project(":platform:runner-extension:plugin:std:log"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

@@ -3,8 +3,8 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.safe.RunnerSafeExtension
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extension.script.RunnerScriptExtension
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class ExtensionTest {
 
     @Nested
-    inner class SafeTest {
+    inner class ScriptTest {
         @Test
         fun `Creates a new instance - everytime it gets invoked`() {
             sandbox.load(
@@ -33,7 +33,7 @@ internal class ExtensionTest {
             NativeLoader.load(NativeLoader.Preference.Resources)
             Sandbox(NopSandboxContext()).also { sb ->
                 sb.register(
-                    RunnerSafeExtension(
+                    RunnerScriptExtension(
                         name = "test",
                         factoryCode = """
                             function extension()
@@ -50,7 +50,7 @@ internal class ExtensionTest {
     }
 
     @Nested
-    inner class UnsafeTest {
+    inner class PluginTest {
         @Test
         fun `Creates a new instance - everytime it gets invoked`() {
             sandbox.load(
@@ -71,7 +71,7 @@ internal class ExtensionTest {
             NativeLoader.load(NativeLoader.Preference.Resources)
             Sandbox(NopSandboxContext()).also { sb ->
                 sb.register(
-                    RunnerUnsafeExtension(
+                    RunnerPluginExtension(
                         name = "test",
                         factoryCode = """
                             function extension()
