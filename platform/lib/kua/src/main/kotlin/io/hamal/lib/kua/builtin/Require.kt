@@ -16,15 +16,15 @@ class Require(
 ) {
     //FIXME refactor me
     override fun invoke(ctx: FunctionContext, arg1: StringType): TableProxyMap {
-        if (registry.isSafeExtension(arg1.value)) {
-            ctx.setGlobal("_factory", registry.loadSafeExtensionFactory(arg1.value))
+        if (registry.isScript(arg1.value)) {
+            ctx.setGlobal("_factory", registry.loadScriptExtensionFactory(arg1.value))
             ctx.load("_instance = _factory()")
 
             val result = ctx.getGlobalTableMap("_instance")
 
             val config = ctx.tableCreateMap(2)
-            config["get"] = registry.safeExtensions[arg1.value]!!.configGetFunction()
-            config["update"] = registry.safeExtensions[arg1.value]!!.configUpdateFunction()
+            config["get"] = registry.scriptExtensions[arg1.value]!!.configGetFunction()
+            config["update"] = registry.scriptExtensions[arg1.value]!!.configUpdateFunction()
             result["config"] = config
 
             ctx.unsetGlobal("_factory")
@@ -34,15 +34,15 @@ class Require(
             return result
         }
 
-        if (registry.isUnsafeExtension(arg1.value)) {
-            ctx.setGlobal("_factory", registry.loadUnsafeExtensionFactory(arg1.value))
+        if (registry.isPlugin(arg1.value)) {
+            ctx.setGlobal("_factory", registry.loadPluginExtensionFactory(arg1.value))
             ctx.load("_instance = _factory()")
 
             val result = ctx.getGlobalTableMap("_instance")
 
             val config = ctx.tableCreateMap(2)
-            config["get"] = registry.unsafeExtensions[arg1.value]!!.configGetFunction()
-            config["update"] = registry.unsafeExtensions[arg1.value]!!.configUpdateFunction()
+            config["get"] = registry.pluginExtensions[arg1.value]!!.configGetFunction()
+            config["update"] = registry.pluginExtensions[arg1.value]!!.configUpdateFunction()
             result["config"] = config
 
             ctx.unsetGlobal("_factory")

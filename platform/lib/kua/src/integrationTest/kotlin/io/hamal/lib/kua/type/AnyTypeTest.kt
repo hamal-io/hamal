@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.function.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -116,7 +116,7 @@ internal class AnyTypeTest {
     }
 
     private fun capability(captor: FunctionType<*,*,*,*>) =
-        RunnerUnsafeExtension(
+        RunnerPluginExtension(
             name = "test",
             factoryCode = """
                     function extension()

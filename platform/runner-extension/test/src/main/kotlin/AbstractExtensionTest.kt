@@ -5,8 +5,8 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.extension.safe.RunnerSafeExtensionFactory
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtensionFactory
+import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -48,16 +48,16 @@ class TestFailConnector(
 
 abstract class AbstractExtensionTest {
     fun createTestRunner(
-        unsafeFactories: List<RunnerUnsafeExtensionFactory> = listOf(),
-        safeFactories: List<RunnerSafeExtensionFactory> = listOf(),
+        pluginFactories: List<RunnerPluginExtensionFactory> = listOf(),
+        scriptFactories: List<RunnerScriptExtensionFactory> = listOf(),
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx)
-                    .register(*safeFactories.toTypedArray())
-                    .register(*unsafeFactories.toTypedArray())
+                    .register(*scriptFactories.toTypedArray())
+                    .register(*pluginFactories.toTypedArray())
             }
         }
     )

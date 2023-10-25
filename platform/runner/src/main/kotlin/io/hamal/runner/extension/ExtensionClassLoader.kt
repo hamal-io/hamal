@@ -58,7 +58,7 @@ internal class ExtensionClassLoader(
     }
 
     private fun isFromExtensionSPI(name: String): Boolean {
-        return name.startsWith("io.hamal.agent.safe.api")
+        return name.startsWith("io.hamal.agent.script.api")
     }
 
     private fun isFromLib(name: String): Boolean {

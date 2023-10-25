@@ -1,36 +1,36 @@
 package io.hamal.lib.kua.extension
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.safe.RunnerSafeExtension
-import io.hamal.lib.kua.extension.unsafe.RunnerUnsafeExtension
+import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extension.script.RunnerScriptExtension
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyMap
 
 class RunnerExtensionRegistry(val sb: Sandbox) {
 
     val state = sb.state
-    val unsafeExtensions = mutableMapOf<String, RunnerUnsafeExtension>()
-    val safeExtensions = mutableMapOf<String, RunnerSafeExtension>()
+    val pluginExtensions = mutableMapOf<String, RunnerPluginExtension>()
+    val scriptExtensions = mutableMapOf<String, RunnerScriptExtension>()
     val factories = mutableMapOf<String, TableProxyMap>()
 
-    fun isSafeExtension(name: String) = safeExtensions.keys.contains(name)
+    fun isScript(name: String) = scriptExtensions.keys.contains(name)
 
-    fun isUnsafeExtension(name: String) = unsafeExtensions.keys.contains(name)
+    fun isPlugin(name: String) = pluginExtensions.keys.contains(name)
 
-    fun register(extension: RunnerUnsafeExtension) {
-        unsafeExtensions[extension.name] = extension
+    fun register(extension: RunnerPluginExtension) {
+        pluginExtensions[extension.name] = extension
         // FIXME load the factory
-        loadUnsafeExtensionFactory(extension.name)
+        loadPluginExtensionFactory(extension.name)
     }
 
-    fun register(extension: RunnerSafeExtension) {
-        safeExtensions[extension.name] = extension
+    fun register(extension: RunnerScriptExtension) {
+        scriptExtensions[extension.name] = extension
         // FIXME load the factory
-        loadSafeExtensionFactory(extension.name)
+        loadScriptExtensionFactory(extension.name)
     }
 
-    fun loadUnsafeExtensionFactory(name: String): TableProxyMap {
-        val extension = unsafeExtensions[name]!!
+    fun loadPluginExtensionFactory(name: String): TableProxyMap {
+        val extension = pluginExtensions[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreateMap(internals.size)
 
@@ -42,7 +42,7 @@ class RunnerExtensionRegistry(val sb: Sandbox) {
 
         sb.setGlobal("_internal", internalTable)
 
-        state.load(unsafeExtensions[name]!!.factoryCode)
+        state.load(pluginExtensions[name]!!.factoryCode)
         state.load("_factory = extension()")
 
         sb.unsetGlobal("_internal")
@@ -55,8 +55,8 @@ class RunnerExtensionRegistry(val sb: Sandbox) {
         return factory
     }
 
-    fun loadSafeExtensionFactory(name: String): TableProxyMap {
-        val extension = safeExtensions[name]!!
+    fun loadScriptExtensionFactory(name: String): TableProxyMap {
+        val extension = scriptExtensions[name]!!
 
         state.load(extension.factoryCode)
         state.load("_factory = extension()")
