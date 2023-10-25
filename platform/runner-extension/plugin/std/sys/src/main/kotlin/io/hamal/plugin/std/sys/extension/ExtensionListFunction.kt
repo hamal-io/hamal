@@ -1,4 +1,4 @@
-package io.hamal.extension.unsafe.std.sys.extension
+package io.hamal.plugin.std.sys.extension
 
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
