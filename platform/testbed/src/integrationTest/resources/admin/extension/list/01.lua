@@ -1,9 +1,10 @@
 sys = require('sys')
+log = require('log')
 
 local list = fail_on_error(sys.extension.list())
 assert(#list == 0)
 
-for i=1, 10, 1 do
+for i=1, 10  do
     local exec = fail_on_error(sys.extension.create({
         name = 'ex-' .. tostring(i),
         code_id = tostring(i),
@@ -15,7 +16,7 @@ end
 local res = fail_on_error(sys.extension.list())
 
 assert(#res == 10)
-assert(res[5].name == 'ex-5')
+assert(res[5].name == 'ex-6')
 
 
 

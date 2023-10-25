@@ -1,7 +1,7 @@
 sys = require('sys')
-
+--
 err, ext = sys.extension.update('12345', {
-     name = 'update-ext',
+        name = 'update-ext',
         code_id = '456',
         code_ver = 32
 })

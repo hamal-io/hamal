@@ -27,7 +27,7 @@ class ExtensionUpdateFunction(
                 ApiUpdateExtensionReq(
                     name = ExtensionName(arg2.getString("name")),
                     codeId = CodeId(arg2.getString("code_id")),
-                    codeVersion = CodeVersion(arg2.getString("code_ver").toInt())
+                    codeVersion = CodeVersion(arg2.getNumberValue("code_ver").value.toInt())
                 )
             )
             null to MapType(
