@@ -20,12 +20,9 @@ internal class ExtensionCreateControllerTest : ExtensionBaseControllerTest() {
             )
         )
         val ext = extensionQueryRepository.get(res.id(::ExtensionId))
-        with(ext) {
-            assertThat(name, equalTo(ExtensionName("TestExtension")))
-        }
 
-        with(codeQueryRepository.get(ext.code.id)) {
-            assertThat(value, equalTo(CodeValue("40 + 2")))
-        }
+        assertThat(ext.name, equalTo(ExtensionName("TestExtension")))
+        assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(CodeValue("40 + 2")))
+
     }
 }

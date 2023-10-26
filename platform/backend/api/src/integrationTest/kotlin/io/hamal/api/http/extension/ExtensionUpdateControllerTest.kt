@@ -63,11 +63,8 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             )
         )
 
-        with(extensionQueryRepository.get(extId)) {
-            assertThat(name, equalTo(ExtensionName("TestExtension")))
-            //assertThat(code.id, equalTo(CodeId(1)))
-            //assertThat(code.version, equalTo(CodeVersion(1)))
-        }
+        val ext = extensionQueryRepository.get(extId)
+        assertThat(ext.name, equalTo(ExtensionName("TestExtension")))
     }
 
     @Test
