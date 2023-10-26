@@ -1,10 +1,7 @@
 package io.hamal.api.http.extension
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.domain.vo.ExtensionName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiCreateExtensionReq
 import io.hamal.lib.sdk.api.ApiExtensionList
 import io.hamal.repository.api.ExtensionCmdRepository
@@ -51,8 +48,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
                 createExtension(
                     ApiCreateExtensionReq(
                         name = ExtensionName("ex-$it"),
-                        codeId = CodeId("$it"),
-                        codeVersion = CodeVersion(1)
+                        code = CodeValue("x=$it")
                     )
                 )
             }
@@ -73,8 +69,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
             createExtension(
                 ApiCreateExtensionReq(
                     name = ExtensionName("ex-$it"),
-                    codeId = CodeId("$it"),
-                    codeVersion = CodeVersion(1)
+                    code = CodeValue("x=$it")
                 )
             )
         }

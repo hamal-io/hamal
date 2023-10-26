@@ -1,7 +1,6 @@
 package io.hamal.api.http.extension
 
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.sdk.api.ApiCreateExtensionReq
@@ -16,16 +15,17 @@ internal class ExtensionCreateControllerTest : ExtensionBaseControllerTest() {
             createExtension(
                 ApiCreateExtensionReq(
                     name = ExtensionName("TestExtension"),
-                    codeId = CodeId(1),
-                    codeVersion = CodeVersion(1)
+                    code = CodeValue("40 + 2")
                 )
             )
         )
-
-        with(extensionQueryRepository.get(res.id(::ExtensionId))) {
+        val ext = extensionQueryRepository.get(res.id(::ExtensionId))
+        with(ext) {
             assertThat(name, equalTo(ExtensionName("TestExtension")))
-            assertThat(code.id, equalTo(CodeId(1)))
-            assertThat(code.version, equalTo(CodeVersion(1)))
+        }
+
+        with(codeQueryRepository.get(ext.code.id)) {
+            assertThat(value, equalTo(CodeValue("40 + 2")))
         }
     }
 }

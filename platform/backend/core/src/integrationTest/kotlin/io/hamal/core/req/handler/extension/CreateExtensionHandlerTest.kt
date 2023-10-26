@@ -4,7 +4,7 @@ import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.repository.api.submitted_req.SubmittedCreateExtensionReq
@@ -18,12 +18,14 @@ internal class CreateExtensionHandlerTest : BaseReqHandlerTest() {
     fun `Creates Extension`() {
         testInstance(submitCreateExtensionReq)
 
-        with(extensionQueryRepository.get(ExtensionId(1234))) {
+        val ext = extensionQueryRepository.get(ExtensionId(1234))
+        with(ext) {
             assertThat(id, equalTo(ExtensionId(1234)))
             assertThat(name, equalTo(ExtensionName("TestExtension")))
             assertThat(code.id, equalTo(CodeId(1)))
-            assertThat(code.version, equalTo(CodeVersion(123)))
         }
+
+        assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(CodeValue("x='hamal'")))
     }
 
     private val submitCreateExtensionReq by lazy {
@@ -34,7 +36,7 @@ internal class CreateExtensionHandlerTest : BaseReqHandlerTest() {
             id = ExtensionId(1234),
             name = ExtensionName("TestExtension"),
             codeId = CodeId(1),
-            codeVersion = CodeVersion(123)
+            code = CodeValue("x='hamal'")
         )
     }
 

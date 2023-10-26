@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.extension
 
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.kua.function.Function2In2Out
@@ -26,8 +25,7 @@ class ExtensionUpdateFunction(
                 ExtensionId(arg1.value),
                 ApiUpdateExtensionReq(
                     name = ExtensionName(arg2.getString("name")),
-                    codeId = CodeId(arg2.getString("code_id")),
-                    codeVersion = CodeVersion(arg2.getNumberValue("code_ver").value.toInt())
+                    code = CodeValue(arg2.getString("code"))
                 )
             )
             null to MapType(

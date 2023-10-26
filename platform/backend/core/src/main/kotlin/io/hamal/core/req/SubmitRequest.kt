@@ -185,8 +185,9 @@ class SubmitRequest(
         groupId = groupId,
         id = generateDomainId(::ExtensionId),
         name = req.name,
-        codeId = req.codeId,
-        codeVersion = req.codeVersion
+        codeId = generateDomainId(::CodeId),
+        code = req.code
+
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(extId: ExtensionId, req: UpdateExtensionReq) = SubmittedUpdateExtensionReq(
@@ -195,8 +196,7 @@ class SubmitRequest(
         groupId = extensionQueryRepository.get(extId).groupId,
         id = extId,
         name = req.name,
-        codeId = req.codeId,
-        codeVersion = req.codeVersion
+        code = req.code
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SubmittedCreateSnippetReq(

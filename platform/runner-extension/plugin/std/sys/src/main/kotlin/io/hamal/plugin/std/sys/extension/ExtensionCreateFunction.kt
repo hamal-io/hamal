@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.extension
 
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -26,8 +25,9 @@ class ExtensionCreateFunction(
                 ctx[GroupId::class],
                 ApiCreateExtensionReq(
                     name = ExtensionName(arg1.getString("name")),
-                    codeId = CodeId(arg1.getString("code_id")),
-                    codeVersion = CodeVersion(arg1.getNumberValue("code_ver").value.toInt())
+                    code = CodeValue(
+                        arg1.getString("code")
+                    )
                 )
             )
 

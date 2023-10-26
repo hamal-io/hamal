@@ -1,11 +1,11 @@
 package io.hamal.api.http.endpoint.extension
 
-import io.hamal.api.http.endpoint.req.Assembler.assemble
 import io.hamal.core.adapter.GetExtensionPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sdk.api.ApiExtension
 import io.hamal.lib.sdk.api.ApiExtension.*
+import io.hamal.repository.api.Code
 import io.hamal.repository.api.Extension
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,14 +23,15 @@ internal class ExtensionGetController(
     }
 
 
-    private fun assemble(ext: Extension) =
+    private fun assemble(ext: Extension, code: Code) =
         ResponseEntity.ok(
             ApiExtension(
                 id = ext.id,
                 name = ext.name,
-                code = ExtensionCode(
-                    id = ext.code.id,
-                    version = ext.code.version
+                code = Code(
+                    id = code.id,
+                    version = code.version,
+                    value = code.value
                 )
             )
         )

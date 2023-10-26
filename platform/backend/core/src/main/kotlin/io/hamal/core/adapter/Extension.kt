@@ -3,6 +3,8 @@ package io.hamal.core.adapter
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.repository.api.Code
+import io.hamal.repository.api.CodeQueryRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
@@ -20,7 +22,7 @@ interface CreateExtensionPort {
 }
 
 interface GetExtensionPort {
-    operator fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension) -> T): T
+    operator fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension, Code) -> T): T
 }
 
 interface ListExtensionPort {
@@ -44,6 +46,7 @@ interface ExtensionPort : CreateExtensionPort, GetExtensionPort, ListExtensionPo
 class ExtensionAdapter(
     private val submitRequest: SubmitRequest,
     private val extensionQueryRepository: ExtensionQueryRepository,
+    private val codeQueryRepository: CodeQueryRepository
 ) : ExtensionPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
@@ -53,8 +56,10 @@ class ExtensionAdapter(
         return responseHandler(submitRequest(groupId, req))
     }
 
-    override fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension) -> T): T {
-        return responseHandler(extensionQueryRepository.get(extId))
+    override fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension, Code) -> T): T {
+        val ext = extensionQueryRepository.get(extId)
+        val code = codeQueryRepository.get(ext.code.id)
+        return responseHandler(ext, code)
     }
 
     override fun <T : Any> invoke(

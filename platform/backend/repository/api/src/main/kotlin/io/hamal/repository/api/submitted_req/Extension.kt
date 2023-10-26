@@ -13,7 +13,7 @@ data class SubmittedCreateExtensionReq(
     val id: ExtensionId,
     val name: ExtensionName,
     val codeId: CodeId,
-    val codeVersion: CodeVersion
+    val code: CodeValue
 ) : SubmittedReqWithGroupId
 
 @Serializable
@@ -23,6 +23,5 @@ data class SubmittedUpdateExtensionReq(
     override val groupId: GroupId,
     val id: ExtensionId,
     val name: ExtensionName?,
-    val codeId: CodeId?,
-    val codeVersion: CodeVersion?
+    val code: CodeValue?
 ) : SubmittedReqWithGroupId

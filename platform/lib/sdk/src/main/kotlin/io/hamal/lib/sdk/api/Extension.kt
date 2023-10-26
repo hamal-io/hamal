@@ -12,12 +12,13 @@ import kotlinx.serialization.Serializable
 data class ApiExtension(
     val id: ExtensionId,
     val name: ExtensionName,
-    val code: ExtensionCode
+    val code: Code
 ) {
     @Serializable
-    data class ExtensionCode(
+    data class Code(
         val id: CodeId,
-        val version: CodeVersion
+        val version: CodeVersion,
+        val value: CodeValue
     )
 }
 
@@ -35,15 +36,14 @@ data class ApiExtensionList(
 @Serializable
 data class ApiCreateExtensionReq(
     override val name: ExtensionName,
-    override val codeId: CodeId,
-    override val codeVersion: CodeVersion
+    override val code: CodeValue
+
 ) : CreateExtensionReq
 
 @Serializable
 data class ApiUpdateExtensionReq(
     override val name: ExtensionName? = null,
-    override val codeId: CodeId? = null,
-    override val codeVersion: CodeVersion? = null
+    override val code: CodeValue? = null
 ) : UpdateExtensionReq
 
 
