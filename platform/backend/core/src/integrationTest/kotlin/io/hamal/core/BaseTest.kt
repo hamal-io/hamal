@@ -124,7 +124,7 @@ internal abstract class BaseTest {
 
         accountCmdRepository.clear()
         authCmdRepository.clear()
-        //codeCmdRepository.clear()
+        codeCmdRepository.clear()
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()

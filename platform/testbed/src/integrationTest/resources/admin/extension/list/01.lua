@@ -7,8 +7,7 @@ assert(#list == 0)
 for i=1, 10  do
     local exec = fail_on_error(sys.extension.create({
         name = 'ex-' .. tostring(i),
-        code_id = tostring(i),
-        code_ver = i
+        code = [[code]]
     }))    
     sys.await_completed(exec)
 end

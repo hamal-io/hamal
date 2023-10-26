@@ -55,8 +55,7 @@ function extension()
         function export.extension.create(cmd)
             return internal.extension_create({
                 name = cmd.name or nil,
-                code_id = cmd.code_id or nil,
-                code_ver = cmd.code_ver or nil
+                code = cmd.code or ""
             })
         end
 

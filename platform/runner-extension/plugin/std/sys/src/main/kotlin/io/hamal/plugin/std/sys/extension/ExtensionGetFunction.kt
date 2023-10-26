@@ -5,10 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
 class ExtensionGetFunction(
@@ -20,13 +17,15 @@ class ExtensionGetFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
         return try {
             val ext = sdk.extension.get(ExtensionId(arg1.value))
+
             val res = mutableMapOf(
                 "id" to StringType(ext.id.value.value.toString(16)),
                 "name" to StringType(ext.name.value),
                 "code" to MapType(
                     mutableMapOf(
                         "id" to StringType(ext.code.id.value.value.toString(16)),
-                        "version" to NumberType(ext.code.version.value)
+                        "version" to NumberType(ext.code.version.value),
+                        "value" to CodeType(ext.code.value.value)
                     )
                 )
             )

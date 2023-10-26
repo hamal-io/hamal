@@ -25,9 +25,7 @@ class ExtensionCreateFunction(
                 ctx[GroupId::class],
                 ApiCreateExtensionReq(
                     name = ExtensionName(arg1.getString("name")),
-                    code = CodeValue(
-                        arg1.getString("code")
-                    )
+                    code = CodeValue(arg1.getString("code"))
                 )
             )
 

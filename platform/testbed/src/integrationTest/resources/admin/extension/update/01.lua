@@ -2,8 +2,7 @@ sys = require('sys')
 
 local create_req = fail_on_error(sys.extension.create({
     name = 'test-ext',
-    code_id = '111',
-    code_ver = 23
+    code = [[x='hamal']]
 }))
 
 sys.await_completed(create_req)
@@ -13,8 +12,7 @@ assert(id ~= nil)
 
 local update_req = fail_on_error(sys.extension.update(id, {
     name = 'update-ext',
-    code_id = '333',
-    code_ver = 32
+    code = [[hamal-updates]]
 }))
 
 assert(err == nil)
@@ -25,5 +23,4 @@ assert(result ~= nil)
 
 assert(result.id == id)
 assert(result.name == 'update-ext')
-assert(result.code.id == '333')
-assert(result.code.version == 32)
+assert(result.code.value == [[hamal-updates]])
