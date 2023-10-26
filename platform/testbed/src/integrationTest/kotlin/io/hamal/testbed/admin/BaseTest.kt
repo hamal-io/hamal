@@ -46,6 +46,9 @@ abstract class BaseTest {
     lateinit var groupRepository: GroupRepository
 
     @Autowired
+    lateinit var hookRepository: HookRepository
+
+    @Autowired
     lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
@@ -124,6 +127,7 @@ abstract class BaseTest {
             execRepository.clear()
             funcRepository.clear()
             groupRepository.clear()
+            hookRepository.clear()
             namespaceRepository.clear()
             snippetRepository.clear()
             triggerRepository.clear()
@@ -163,7 +167,7 @@ abstract class BaseTest {
         namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                namespaceId = NamespaceId(1),
                 groupId = testGroup.id,
                 name = NamespaceName("hamal"),
                 inputs = NamespaceInputs()

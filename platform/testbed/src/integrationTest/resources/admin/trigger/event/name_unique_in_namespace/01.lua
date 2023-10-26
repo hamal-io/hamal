@@ -1,8 +1,9 @@
 sys = require('sys')
 
-_, namespace_req = sys.namespace.create({ name = 'namespace-1' })
+namespace_req = fail_on_error(sys.namespace.create({ name = 'namespace-1' }))
+sys.await_completed(namespace_req)
 
-_, create_func_req = sys.func.create({ name = 'empty-test-func'; inputs = {}; code = [[4 + 2]] })
+create_func_req = fail_on_error(sys.func.create({ namespace_id = namespace_req.id; name = 'empty-test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(create_func_req)
 
 _, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })

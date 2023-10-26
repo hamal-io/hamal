@@ -16,11 +16,9 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class StateBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.post("/v1/namespaces/1/funcs")
             .body(
                 ApiCreateFuncReq(
-                    namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue("")

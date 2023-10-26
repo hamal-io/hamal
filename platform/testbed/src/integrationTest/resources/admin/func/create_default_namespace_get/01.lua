@@ -1,6 +1,7 @@
 sys = require('sys')
 
 err, create_func_req = sys.func.create({
+    namespace_id = '1',
     name = 'empty-test-func',
     inputs = {},
     code = [[4 + 2]]
@@ -16,6 +17,8 @@ err, func = sys.func.get(create_func_req.id)
 assert(err == nil)
 
 assert(func.id == create_func_req.id)
+assert(func.namespace.id == '1')
+assert(func.namespace.name == 'hamal')
 assert(func.name == 'empty-test-func')
 assert(func.code == [[4 + 2]])
 assert(func.code_id ~= nil)

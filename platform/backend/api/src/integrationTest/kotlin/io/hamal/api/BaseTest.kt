@@ -170,7 +170,7 @@ internal abstract class BaseTest {
         namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                namespaceId = NamespaceId(1),
                 groupId = testGroup.id,
                 name = NamespaceName("hamal"),
                 inputs = NamespaceInputs()

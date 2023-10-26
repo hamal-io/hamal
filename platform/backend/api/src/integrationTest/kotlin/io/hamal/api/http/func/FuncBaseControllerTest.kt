@@ -2,6 +2,7 @@ package io.hamal.api.http.func
 
 import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
@@ -14,9 +15,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class FuncBaseControllerTest : BaseControllerTest() {
-    fun createFunc(req: ApiCreateFuncReq): ApiSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+
+    fun createFunc(
+        req: ApiCreateFuncReq,
+        namespaceId: NamespaceId = NamespaceId(1)
+    ): ApiSubmittedReqWithId {
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
 

@@ -21,9 +21,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
     fun `Invokes func with correlation id`() {
         val createResponse = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
+                req = ApiCreateFuncReq(
                     name = FuncName("test"),
-                    namespaceId = null,
                     inputs = FuncInputs(),
                     code = CodeValue("x = 10")
                 )
@@ -63,7 +62,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             createFunc(
                 ApiCreateFuncReq(
                     name = FuncName("test"),
-                    namespaceId = null,
                     inputs = FuncInputs(),
                     code = CodeValue("")
                 )

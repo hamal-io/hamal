@@ -14,11 +14,9 @@ import kotlin.time.Duration.Companion.seconds
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/funcs")
             .body(
                 ApiCreateFuncReq(
-                    namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue("")

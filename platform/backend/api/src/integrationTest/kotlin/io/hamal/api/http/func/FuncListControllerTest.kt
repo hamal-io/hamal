@@ -19,7 +19,6 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         val funcId = awaitCompleted(
             createFunc(
                 ApiCreateFuncReq(
-                    namespaceId = null,
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -42,7 +41,6 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
             IntRange(0, 20).map {
                 createFunc(
                     ApiCreateFuncReq(
-                        namespaceId = null,
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
                         code = CodeValue("")
@@ -68,7 +66,6 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         val requests = IntRange(0, 99).map {
             createFunc(
                 ApiCreateFuncReq(
-                    namespaceId = null,
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
                     code = CodeValue("")

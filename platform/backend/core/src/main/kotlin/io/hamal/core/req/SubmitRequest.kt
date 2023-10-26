@@ -155,17 +155,20 @@ class SubmitRequest(
         result = req.result
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, req: CreateFuncReq) = SubmittedCreateFuncReq(
-        reqId = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = groupId,
-        id = generateDomainId(::FuncId),
-        namespaceId = req.namespaceId ?: namespaceQueryRepository.find(NamespaceName("hamal"))!!.id,
-        name = req.name,
-        inputs = req.inputs,
-        codeId = generateDomainId(::CodeId),
-        code = req.code
-    ).also(reqCmdRepository::queue)
+    operator fun invoke(namespaceId: NamespaceId, req: CreateFuncReq): SubmittedCreateFuncReq {
+        val namespace = namespaceQueryRepository.get(namespaceId)
+        return SubmittedCreateFuncReq(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = namespace.groupId,
+            id = generateDomainId(::FuncId),
+            namespaceId = namespaceId,
+            name = req.name,
+            inputs = req.inputs,
+            codeId = generateDomainId(::CodeId),
+            code = req.code
+        ).also(reqCmdRepository::queue)
+    }
 
     operator fun invoke(funcId: FuncId, req: UpdateFuncReq) = SubmittedUpdateFuncReq(
         reqId = generateDomainId(::ReqId),

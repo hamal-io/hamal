@@ -40,8 +40,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     fun `Updates hook`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -59,8 +59,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val updateNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(2),
-                namespaceId = NamespaceId(2),
+                id = CmdId(3),
+                namespaceId = NamespaceId(3),
                 groupId = testGroup.id,
                 name = NamespaceName("updatedNamespace"),
                 inputs = NamespaceInputs()
@@ -96,8 +96,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     fun `Tries to update namespace id which does not exists`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -134,8 +134,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     fun `Updates hook without updating values`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()

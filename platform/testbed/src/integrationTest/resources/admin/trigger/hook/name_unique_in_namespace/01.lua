@@ -1,12 +1,13 @@
 sys = require('sys')
 
-_, namespace_req = sys.namespace.create({ name = 'namespace-1' })
+namespace_req = fail_on_error(sys.namespace.create({ name = 'namespace-1' }))
+sys.await_completed(namespace_req)
 
-_, create_func_req = sys.func.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] })
+create_func_req = fail_on_error(sys.func.create({ namespace_id = namespace_req.id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(create_func_req)
 
-_, hook_one_req = sys.hook.create({ name = "some-amazing-hook" })
-sys.await(hook_one_req)
+_, func_one_req = sys.hook.create({ name = "some-amazing-hook" })
+sys.await(func_one_req)
 
 -- trigger name is unique
 err, trigger_req = sys.trigger.create_hook({
@@ -14,7 +15,7 @@ err, trigger_req = sys.trigger.create_hook({
     namespace_id = nil,
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = hook_one_req.id
+    hook_id = func_one_req.id
 })
 sys.await_completed(trigger_req)
 assert(err == nil)
@@ -24,7 +25,7 @@ err, trigger_req = sys.trigger.create_hook({
     namespace_id = nil,
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = hook_one_req.id
+    hook_id = func_one_req.id
 })
 assert(err == nil)
 assert(sys.await_failed(trigger_req) == nil)
@@ -38,7 +39,7 @@ err, trigger_req = sys.trigger.create_hook({
     namespace_id = namespace_req.id,
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = hook_one_req.id
+    hook_id = func_one_req.id
 })
 assert(err == nil)
 sys.await_completed(trigger_req)

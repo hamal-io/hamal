@@ -2,7 +2,6 @@ package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component
 
 interface CreateFuncPort {
     operator fun <T : Any> invoke(
-        groupId: GroupId,
+        namespaceId: NamespaceId,
         req: CreateFuncReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
@@ -54,12 +53,11 @@ class FuncAdapter(
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) : FuncPort {
     override fun <T : Any> invoke(
-        groupId: GroupId,
+        namespaceId: NamespaceId,
         req: CreateFuncReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
-        ensureNamespaceIdExists(req.namespaceId)
-        return responseHandler(submitRequest(groupId, req))
+        return responseHandler(submitRequest(namespaceId, req))
     }
 
     override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T {

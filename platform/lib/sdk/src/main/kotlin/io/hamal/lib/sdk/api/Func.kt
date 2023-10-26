@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiCreateFuncReq(
-    override val namespaceId: NamespaceId? = null,
     override val name: FuncName,
     override val inputs: FuncInputs,
     override val code: CodeValue
@@ -73,7 +72,7 @@ data class ApiFunc(
 }
 
 interface ApiFuncService {
-    fun create(groupId: GroupId, createFuncReq: ApiCreateFuncReq): ApiSubmittedReqWithId
+    fun create(namespaceId: NamespaceId, createFuncReq: ApiCreateFuncReq): ApiSubmittedReqWithId
     fun list(groupId: GroupId): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun invoke(funcId: FuncId, req: ApiInvokeFuncReq): ApiSubmittedReqWithId
@@ -83,9 +82,9 @@ internal class ApiFuncServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiFuncService {
 
-    override fun create(groupId: GroupId, createFuncReq: ApiCreateFuncReq) =
-        template.post("/v1/groups/{groupId}/funcs")
-            .path("groupId", groupId)
+    override fun create(namespaceId: NamespaceId, createFuncReq: ApiCreateFuncReq) =
+        template.post("/v1/namespaces/{namespaceId}/funcs")
+            .path("namespaceId", namespaceId)
             .body(createFuncReq)
             .execute()
             .fold(ApiSubmittedReqWithId::class)

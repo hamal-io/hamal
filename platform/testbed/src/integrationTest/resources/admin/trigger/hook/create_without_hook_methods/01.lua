@@ -1,17 +1,17 @@
 sys = require('sys')
 
-_, create_func_req = sys.func.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] })
+create_func_req = fail_on_error(sys.func.create({ namespace_id = '1', name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(create_func_req)
 
-_, hook_one_req = sys.hook.create({ name = "some-amazing-hook" })
-sys.await(hook_one_req)
+_, func_one_req = sys.hook.create({ name = "some-amazing-hook" })
+sys.await(func_one_req)
 
 err, trigger_create_req = sys.trigger.create_hook({
     func_id = create_func_req.id,
     namespace_id = nil,
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = hook_one_req.id
+    hook_id = func_one_req.id
 })
 assert(err == nil)
 sys.await_completed(trigger_create_req)

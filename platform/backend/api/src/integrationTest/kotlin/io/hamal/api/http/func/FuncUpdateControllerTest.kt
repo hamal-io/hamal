@@ -44,8 +44,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Updates func`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -54,8 +54,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
-                    namespaceId = createdNamespace.id,
+                namespaceId = createdNamespace.id,
+                req = ApiCreateFuncReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -65,8 +65,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         val updateNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(2),
-                namespaceId = NamespaceId(2),
+                id = CmdId(3),
+                namespaceId = NamespaceId(3),
                 groupId = testGroup.id,
                 name = NamespaceName("updatedNamespace"),
                 inputs = NamespaceInputs()
@@ -108,8 +108,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Tries to update namespace id which does not exists`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -118,8 +118,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
-                    namespaceId = createdNamespace.id,
+                namespaceId = createdNamespace.id,
+                req = ApiCreateFuncReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -148,8 +148,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Updates func without updating values`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -158,8 +158,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
-                    namespaceId = createdNamespace.id,
+                namespaceId = createdNamespace.id,
+                req = ApiCreateFuncReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")

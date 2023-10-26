@@ -53,7 +53,7 @@ function extension()
 
         function export.func.create(cmd)
             return internal.func_create({
-                namespace_id = cmd.namespace_id or nil,
+                namespace_id = cmd.namespace_id,
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
@@ -107,11 +107,11 @@ function extension()
         end
 
         function export.snippet.create(cmd)
-             return internal.snippet_create({
+            return internal.snippet_create({
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 value = cmd.value or ""
-             })
+            })
         end
 
         function export.snippet.get(snippet_id)
