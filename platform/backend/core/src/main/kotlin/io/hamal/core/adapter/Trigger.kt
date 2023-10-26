@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component
 
 interface CreateTriggerPort {
     operator fun <T : Any> invoke(
+        namespaceId: NamespaceId,
         req: CreateTriggerReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
@@ -52,13 +53,16 @@ class TriggerAdapter(
     private val eventBrokerRepository: BrokerRepository,
     private val hookQueryRepository: HookQueryRepository
 ) : TriggerPort {
-    override fun <T : Any> invoke(req: CreateTriggerReq, responseHandler: (SubmittedReqWithGroupId) -> T): T {
+    override fun <T : Any> invoke(
+        namespaceId: NamespaceId,
+        req: CreateTriggerReq,
+        responseHandler: (SubmittedReqWithGroupId) -> T
+    ): T {
         ensureFuncExists(req)
         ensureTopicExists(req)
         ensureHookExists(req)
-        ensureNamespaceExist(req)
 
-        return responseHandler(submitRequest(req))
+        return responseHandler(submitRequest(namespaceId, req))
     }
 
     override fun <T : Any> invoke(
@@ -127,9 +131,5 @@ class TriggerAdapter(
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
         }
-    }
-
-    private fun ensureNamespaceExist(createTriggerReq: CreateTriggerReq) {
-        createTriggerReq.namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

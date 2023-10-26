@@ -3,14 +3,13 @@ sys = require('sys')
 create_func_req = fail_on_error(sys.func.create({ namespace_id = '1'; name = 'empty-test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(create_func_req)
 
-err, trigger_create_req = sys.trigger.create_fixed_rate({
+trigger_create_req = fail_on_error(sys.trigger.create_fixed_rate({
     func_id = create_func_req.id,
-    namespace_id = nil,
+    namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     duration = 'PT5S'
-})
-assert(err == nil)
+}))
 sys.await_completed(trigger_create_req)
 
 assert(trigger_create_req.req_id ~= nil)

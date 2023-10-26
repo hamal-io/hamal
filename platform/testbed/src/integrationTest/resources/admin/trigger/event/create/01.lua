@@ -6,14 +6,13 @@ sys.await_completed(create_func_req)
 _, topic_one_req = sys.topic.create({ name = "some-amazing-topic" })
 sys.await(topic_one_req)
 
-err, trigger_create_req = sys.trigger.create_event({
+trigger_create_req = fail_on_error(sys.trigger.create_event({
     func_id = create_func_req.id,
-    namespace_id = nil,
+    namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     topic_id = topic_one_req.id
-})
-assert(err == nil)
+}))
 sys.await_completed(trigger_create_req)
 
 assert(trigger_create_req.req_id ~= nil)

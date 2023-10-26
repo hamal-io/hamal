@@ -15,7 +15,6 @@ data class ApiCreateTriggerReq(
     override val type: TriggerType,
     override val name: TriggerName,
     override val funcId: FuncId,
-    override val namespaceId: NamespaceId? = null,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     override val duration: Duration? = null,
@@ -159,7 +158,7 @@ class ApiHookTrigger(
 
 
 interface ApiTriggerService {
-    fun create(groupId: GroupId, req: ApiCreateTriggerReq): ApiSubmittedReqWithId
+    fun create(namespaceId: NamespaceId, req: ApiCreateTriggerReq): ApiSubmittedReqWithId
     fun list(groupId: GroupId): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
 }
@@ -168,9 +167,9 @@ interface ApiTriggerService {
 internal class ApiTriggerServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiTriggerService {
-    override fun create(groupId: GroupId, req: ApiCreateTriggerReq) =
-        template.post("/v1/triggers")
-            .path("groupId", groupId)
+    override fun create(namespaceId: NamespaceId, req: ApiCreateTriggerReq) =
+        template.post("/v1/namespaces/{namespaceId}/triggers")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
             .fold(ApiSubmittedReqWithId::class)

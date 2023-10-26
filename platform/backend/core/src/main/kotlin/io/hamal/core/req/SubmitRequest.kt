@@ -241,17 +241,18 @@ class SubmitRequest(
         inputs = req.inputs
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(req: CreateTriggerReq): SubmittedCreateTriggerReq {
+    operator fun invoke(namespaceId: NamespaceId, req: CreateTriggerReq): SubmittedCreateTriggerReq {
+        val namespace = namespaceQueryRepository.get(namespaceId)
         val func = funcQueryRepository.get(req.funcId)
         return SubmittedCreateTriggerReq(
             type = req.type,
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::TriggerId),
-            groupId = func.groupId,
+            groupId = namespace.groupId,
             name = req.name,
             funcId = func.id,
-            namespaceId = req.namespaceId,
+            namespaceId = namespaceId,
             inputs = req.inputs,
             correlationId = req.correlationId,
             duration = req.duration,

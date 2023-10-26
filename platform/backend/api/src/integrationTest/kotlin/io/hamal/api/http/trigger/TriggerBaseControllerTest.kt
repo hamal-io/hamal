@@ -57,8 +57,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqWithId {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers")
-            .path("groupId", testGroup.id)
+        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(
                 ApiCreateTriggerReq(
                     type = TriggerType.FixedRate,
@@ -77,8 +76,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTrigger(req: ApiCreateTriggerReq): ApiSubmittedReqWithId {
-        val creationResponse = httpTemplate.post("/v1/triggers")
-            .path("groupId", testGroup.id)
+        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(req)
             .execute()
 

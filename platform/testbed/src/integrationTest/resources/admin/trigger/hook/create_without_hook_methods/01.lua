@@ -8,7 +8,7 @@ sys.await(func_one_req)
 
 trigger_create_req = fail_on_error(sys.trigger.create_hook({
     func_id = create_func_req.id,
-    namespace_id = nil,
+    namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     hook_id = func_one_req.id
