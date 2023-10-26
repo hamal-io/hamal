@@ -18,13 +18,20 @@ import kotlin.reflect.KClass
 data class MapType(
     @Serializable(with = Serializer::class)
     val value: MutableMap<String, SerializableType> = mutableMapOf(),
-) : TableType() {
+) : TableType(), Map<String, SerializableType> {
 
     constructor(vararg pairs: Pair<String, SerializableType>) : this(mutableMapOf(*pairs))
 
-    val size get() = value.size
+    override val size get() = value.size
+    override val entries: Set<Map.Entry<String, SerializableType>> = value.entries
+    override val keys: Set<String> = value.keys
+    override val values: Collection<SerializableType> = value.values
+    override fun containsKey(key: String): Boolean = this.value.containsKey(key)
 
-    operator fun get(key: String): SerializableType = value[key] ?: NilType
+    override fun isEmpty(): Boolean = value.isEmpty()
+    override fun containsValue(value: SerializableType): Boolean = this.value.containsValue(value)
+
+    override operator fun get(key: String): SerializableType = value[key] ?: NilType
     operator fun set(key: String, value: SerializableType): Int {
         this.value[key] = value
         return size
@@ -38,6 +45,12 @@ data class MapType(
     fun unset(key: String): Int {
         value.remove(key)
         return size
+    }
+
+    fun getArrayType(key: StringType): ArrayType = getArrayType(key.value)
+    fun getArrayType(key: String): ArrayType {
+        checkExpectedType(key, ArrayType::class)
+        return value[key]!! as ArrayType
     }
 
     fun getBooleanValue(key: StringType) = getBooleanValue(key.value)
@@ -55,7 +68,6 @@ data class MapType(
         this.value[key] = value
         return size
     }
-
 
     fun getCodeType(key: String) = CodeType(getString(key))
     fun getCodeType(key: StringType) = getCodeType(key.value)

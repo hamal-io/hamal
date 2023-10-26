@@ -38,6 +38,7 @@ internal object CurrentFuncProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -49,6 +50,7 @@ internal object CurrentFuncProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .count()
             .toULong()

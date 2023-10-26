@@ -64,8 +64,11 @@ function extension()
             return internal.func_get(func_id)
         end
 
-        function export.func.list()
-            return internal.func_list()
+        function export.func.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.func_list(query)
         end
 
         function export.func.invoke(func_id, body)

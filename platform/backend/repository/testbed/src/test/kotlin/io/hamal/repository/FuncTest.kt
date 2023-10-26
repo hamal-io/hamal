@@ -489,6 +489,27 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             }
         }
 
+        @TestFactory
+        fun `With namespace ids`() = runWith(FuncRepository::class) {
+            setup()
+
+            val query = FuncQuery(
+                namespaceIds = listOf(NamespaceId(10), NamespaceId(12)),
+                groupIds = listOf(),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(FuncId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(name, equalTo(FuncName("Func")))
+            }
+        }
 
         @TestFactory
         fun `Limit`() = runWith(FuncRepository::class) {

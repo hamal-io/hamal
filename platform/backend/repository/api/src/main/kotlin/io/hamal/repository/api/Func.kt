@@ -74,6 +74,7 @@ interface FuncQueryRepository {
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var funcIds: List<FuncId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId>
     )
 }
