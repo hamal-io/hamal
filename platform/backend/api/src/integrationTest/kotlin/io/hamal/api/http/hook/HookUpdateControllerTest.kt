@@ -50,10 +50,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                ApiCreateHookReq(
-                    namespaceId = createdNamespace.id,
-                    name = HookName("createdName")
-                )
+                req = ApiCreateHookReq(HookName("createdName")),
+                namespaceId = createdNamespace.id
             )
         )
 
@@ -106,10 +104,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                ApiCreateHookReq(
-                    namespaceId = createdNamespace.id,
-                    name = HookName("createdName")
-                )
+                req = ApiCreateHookReq(HookName("createdName")),
+                namespaceId = createdNamespace.id
             )
         )
 
@@ -144,10 +140,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                ApiCreateHookReq(
-                    namespaceId = createdNamespace.id,
-                    name = HookName("createdName")
-                )
+                req = ApiCreateHookReq(HookName("createdName")),
+                namespaceId = createdNamespace.id
             )
         )
 

@@ -19,12 +19,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     @Test
     fun `Single hook`() {
         val hookId = awaitCompleted(
-            createHook(
-                ApiCreateHookReq(
-                    namespaceId = null,
-                    name = HookName("hook-one")
-                )
-            )
+            createHook(ApiCreateHookReq(HookName("hook-one")))
         ).id(::HookId)
 
         with(listHooks()) {
@@ -40,12 +35,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     fun `Limit hooks`() {
         awaitCompleted(
             IntRange(0, 20).map {
-                createHook(
-                    ApiCreateHookReq(
-                        namespaceId = null,
-                        name = HookName("hook-$it")
-                    )
-                )
+                createHook(ApiCreateHookReq(HookName("hook-$it")))
             }
         )
 
@@ -64,12 +54,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     @Test
     fun `Skip and limit hooks`() {
         val requests = IntRange(0, 99).map {
-            createHook(
-                ApiCreateHookReq(
-                    namespaceId = null,
-                    name = HookName("hook-$it")
-                )
-            )
+            createHook(ApiCreateHookReq(HookName("hook-$it")))
         }
 
         awaitCompleted(requests)

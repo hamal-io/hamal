@@ -98,7 +98,8 @@ abstract class BaseTest {
                                     wait = false
                                 }
                                 if (status == ExecStatus.Failed) {
-                                    fail { "Execution failed" }
+                                    check(this is FailedExec)
+                                    fail { "Execution failed: ${this.result.value["message"]}" }
                                 }
 
                                 if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {

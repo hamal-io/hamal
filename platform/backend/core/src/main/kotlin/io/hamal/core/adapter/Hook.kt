@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 interface CreateHookPort {
     operator fun <T : Any> invoke(
-        groupId: GroupId,
+        namespaceId: NamespaceId,
         req: CreateHookReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
@@ -41,16 +41,14 @@ interface HookPort : CreateHookPort, GetHookPort, ListHooksPort, UpdateHookPort
 class HookAdapter(
     private val submitRequest: SubmitRequest,
     private val hookQueryRepository: HookQueryRepository,
-    private val codeQueryRepository: CodeQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository
 ) : HookPort {
     override fun <T : Any> invoke(
-        groupId: GroupId,
+        namespaceId: NamespaceId,
         req: CreateHookReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
-        ensureNamespaceIdExists(req.namespaceId)
-        return responseHandler(submitRequest(groupId, req))
+        return responseHandler(submitRequest(namespaceId, req))
     }
 
     override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T {

@@ -43,14 +43,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createHook(hookName: HookName): ApiSubmittedReqWithId {
-        val createHookResponse = httpTemplate.post("/v1/groups/{groupId}/hooks")
+        val createHookResponse = httpTemplate.post("/v1/namespaces/1/hooks")
             .path("groupId", testGroup.id)
-            .body(
-                ApiCreateHookReq(
-                    namespaceId = null,
-                    name = hookName
-                )
-            )
+            .body(ApiCreateHookReq(hookName))
             .execute()
 
         assertThat(createHookResponse.statusCode, equalTo(HttpStatusCode.Accepted))

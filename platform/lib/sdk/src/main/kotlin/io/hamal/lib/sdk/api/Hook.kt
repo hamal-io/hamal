@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiCreateHookReq(
-    override val namespaceId: NamespaceId? = null,
     override val name: HookName
 ) : CreateHookReq
 
@@ -60,7 +59,7 @@ data class ApiHook(
 }
 
 interface ApiHookService {
-    fun create(groupId: GroupId, createHookReq: ApiCreateHookReq): ApiSubmittedReqWithId
+    fun create(namespaceId: NamespaceId, createHookReq: ApiCreateHookReq): ApiSubmittedReqWithId
     fun list(groupId: GroupId): List<ApiHookList.Hook>
     fun get(hookId: HookId): ApiHook
 }
@@ -69,9 +68,9 @@ internal class ApiHookServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiHookService {
 
-    override fun create(groupId: GroupId, createHookReq: ApiCreateHookReq) =
-        template.post("/v1/groups/{groupId}/hooks")
-            .path("groupId", groupId)
+    override fun create(namespaceId: NamespaceId, createHookReq: ApiCreateHookReq) =
+        template.post("/v1/namespaces/{namespaceId}/hooks")
+            .path("namespaceId", namespaceId)
             .body(createHookReq)
             .execute()
             .fold(ApiSubmittedReqWithId::class)

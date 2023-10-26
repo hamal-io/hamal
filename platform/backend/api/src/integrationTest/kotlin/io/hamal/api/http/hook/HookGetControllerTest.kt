@@ -26,12 +26,7 @@ internal class HookGetControllerTest : HookBaseControllerTest() {
     @Test
     fun `Get hook`() {
         val hookId = awaitCompleted(
-            createHook(
-                ApiCreateHookReq(
-                    name = HookName("hook-one"),
-                    namespaceId = null
-                )
-            )
+            createHook(ApiCreateHookReq(HookName("hook-one")))
         ).id(::HookId)
 
         val getHookResponse = httpTemplate.get("/v1/hooks/{hookId}").path("hookId", hookId).execute()

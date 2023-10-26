@@ -1,15 +1,14 @@
 sys = require('sys')
 --
-_, namespace_req = sys.namespace.create({ name = "hamal::name:space::rocks" })
+hook_req = fail_on_error(sys.hook.create({ namespace_id = '1'; name = 'hook-1' }))
+sys.await_completed(hook_req)
+
+namespace_req = fail_on_error(sys.namespace.create({ name = "hamal::name:space::rocks" }))
 sys.await_completed(namespace_req)
 
-err, hook_req = sys.hook.create({ name = 'hook-1' })
+hook_req = fail_on_error(sys.hook.create({ namespace_id = namespace_req.id, name = 'hook-1' }))
 sys.await_completed(hook_req)
 
-err, hook_req = sys.hook.create({ namespace_id = namespace_req.id, name = 'hook-1' })
-sys.await_completed(hook_req)
-
-assert(err == nil)
 assert(hook_req ~= nil)
 
 _, hook = sys.hook.get(hook_req.id)

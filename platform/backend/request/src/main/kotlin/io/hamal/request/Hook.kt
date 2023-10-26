@@ -4,7 +4,6 @@ import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.NamespaceId
 
 interface CreateHookReq {
-    val namespaceId: NamespaceId?
     val name: HookName
 }
 
