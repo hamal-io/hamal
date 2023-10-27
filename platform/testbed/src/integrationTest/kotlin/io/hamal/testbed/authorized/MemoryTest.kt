@@ -20,7 +20,7 @@ import java.nio.file.Paths
         "server.port=8052",
         "io.hamal.runner.api.host=http://localhost:8052",
         "io.hamal.runner.bridge.host=http://localhost:8052",
-        "io.hamal.runner.http.poll-every-ms=10"
+        "io.hamal.runner.http.poll-every-ms=1"
     ], classes = [
         ApiTestConfig::class,
         CoreConfig::class,
@@ -32,7 +32,7 @@ import java.nio.file.Paths
 @DirtiesContext
 @DisplayName("authorized - memory")
 @ActiveProfiles(value = ["test", "authorized", "memory"])
-internal class MemoryAuthorizedTest : BaseTest() {
+internal class MemoryAuthorizedTest : BaseAuthorizedTest() {
     final override val log: Logger = logger(this::class)
     final override val sdk = withApiSdk(8052)
     final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "authorized")
