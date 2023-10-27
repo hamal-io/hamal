@@ -14,5 +14,5 @@ class ApiTestConfig {
     fun backendBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
 
     @Bean
-    fun delayRetry(): DelayRetry = DelayRetryFixedTime(25.milliseconds)
+    fun delayRetry(): DelayRetry = DelayRetryFixedTime(1.milliseconds)
 }

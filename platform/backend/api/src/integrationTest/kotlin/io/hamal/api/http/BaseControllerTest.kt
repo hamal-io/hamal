@@ -49,7 +49,6 @@ internal abstract class BaseControllerTest : BaseTest() {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
-            Thread.sleep(1)
         }
     }
 

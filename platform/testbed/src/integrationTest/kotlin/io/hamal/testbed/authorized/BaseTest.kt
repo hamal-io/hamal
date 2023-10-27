@@ -34,7 +34,13 @@ abstract class BaseTest {
     lateinit var authRepository: AuthRepository
 
     @Autowired
+    lateinit var codeRepository: CodeRepository
+
+    @Autowired
     lateinit var execRepository: ExecRepository
+
+    @Autowired
+    lateinit var extensionRepository: ExtensionRepository
 
     @Autowired
     lateinit var funcRepository: FuncRepository
@@ -43,10 +49,16 @@ abstract class BaseTest {
     lateinit var groupRepository: GroupRepository
 
     @Autowired
+    lateinit var hookRepository: HookRepository
+
+    @Autowired
     lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
     lateinit var reqRepository: ReqRepository
+
+    @Autowired
+    lateinit var snippetRepository: SnippetRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
@@ -58,6 +70,7 @@ abstract class BaseTest {
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testGroup: Group
     private lateinit var testNamespace: Namespace
+
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -80,7 +93,6 @@ abstract class BaseTest {
                 var wait = true
                 val startedAt = TimeUtils.now()
                 while (wait) {
-                    Thread.sleep(1)
                     with(execRepository.get(execReq.id(::ExecId))) {
                         if (status == ExecStatus.Completed) {
                             wait = false
@@ -103,11 +115,15 @@ abstract class BaseTest {
 
         accountRepository.clear()
         authRepository.clear()
+        codeRepository.clear()
+        extensionRepository.clear()
         reqRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         groupRepository.clear()
+        hookRepository.clear()
         namespaceRepository.clear()
+        snippetRepository.clear()
         triggerRepository.clear()
 
         testAccount = accountRepository.create(
