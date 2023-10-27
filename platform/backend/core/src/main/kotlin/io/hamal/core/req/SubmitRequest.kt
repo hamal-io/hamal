@@ -51,7 +51,7 @@ class SubmitRequest(
             id = AccountId.root,
             type = Root,
             groupId = GroupId.root,
-            namespaceId = generateDomainId(::NamespaceId),
+            namespaceId = NamespaceId.root,
             name = req.name,
             email = req.email,
             authenticationId = generateDomainId(::AuthId),

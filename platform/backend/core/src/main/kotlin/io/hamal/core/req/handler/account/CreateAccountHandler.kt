@@ -64,7 +64,7 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: SubmittedCreat
             id = req.cmdId(),
             namespaceId = req.namespaceId,
             groupId = req.groupId,
-            name = NamespaceName("hamal"),
+            name = NamespaceName("root"),
             inputs = NamespaceInputs()
         )
     )

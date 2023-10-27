@@ -27,7 +27,7 @@ export interface SubmitCreateFuncReq {
 }
 
 export async function createFunc(req: SubmitCreateFuncReq): Promise<ApiSubmittedReqWithId> {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/1/funcs`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/1/funcs`, {
         headers: defaultHeaders,
         method: "POST",
         body: JSON.stringify({

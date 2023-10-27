@@ -30,7 +30,7 @@ internal class EventTriggerService(
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
-    internal val async: Async,
+    private val async: Async,
     private val funcQueryRepository: FuncQueryRepository
 ) {
 
@@ -68,7 +68,7 @@ internal class EventTriggerService(
                                 InvokeExecReq(
                                     execId = generateDomainId(::ExecId),
                                     funcId = trigger.funcId,
-                                    correlationId = trigger.correlationId ?: CorrelationId("__default__"),
+                                    correlationId = trigger.correlationId ?: CorrelationId.default,
                                     inputs = InvocationInputs(),
                                     code = func.code.toExecCode(),
                                     events = entries.map {

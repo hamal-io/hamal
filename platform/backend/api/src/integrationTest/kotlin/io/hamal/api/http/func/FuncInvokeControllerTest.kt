@@ -87,7 +87,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId("__default__"),
+                        correlationId = CorrelationId.default,
                         funcId = createResponse.id(::FuncId)
                     )
                 )
@@ -100,7 +100,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/1234/invoke")
             .body(
                 ApiInvokeFuncReq(
-                    correlationId = CorrelationId("__default__"),
+                    correlationId = CorrelationId.default,
                     inputs = InvocationInputs()
                 )
             ).execute()

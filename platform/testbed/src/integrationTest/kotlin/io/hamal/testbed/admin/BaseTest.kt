@@ -106,9 +106,9 @@ abstract class BaseTest {
                                     fail { "Execution failed: ${this.result.value["message"]}" }
                                 }
 
-//                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
-//                                    fail("Timeout")
-//                                }
+                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                                    fail("Timeout")
+                                }
                             }
                         }
                     }
@@ -122,23 +122,20 @@ abstract class BaseTest {
         .joinToString("/")
 
     private fun setupTestEnv() {
-        repeat(10) {
-            eventBrokerRepository.clear()
+        eventBrokerRepository.clear()
 
-            accountRepository.clear()
-            authRepository.clear()
-            codeRepository.clear()
-            extensionRepository.clear()
-            reqRepository.clear()
-            execRepository.clear()
-            funcRepository.clear()
-            groupRepository.clear()
-            hookRepository.clear()
-            namespaceRepository.clear()
-            snippetRepository.clear()
-            triggerRepository.clear()
-            Thread.sleep(10)
-        }
+        accountRepository.clear()
+        authRepository.clear()
+        codeRepository.clear()
+        extensionRepository.clear()
+        reqRepository.clear()
+        execRepository.clear()
+        funcRepository.clear()
+        groupRepository.clear()
+        hookRepository.clear()
+        namespaceRepository.clear()
+        snippetRepository.clear()
+        triggerRepository.clear()
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(

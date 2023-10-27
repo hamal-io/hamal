@@ -1,5 +1,6 @@
 package io.hamal.core.service
 
+import io.hamal.core.component.Async
 import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.SubmitRequest
@@ -15,11 +16,11 @@ import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
-import jakarta.annotation.PostConstruct
-import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.context.ApplicationListener
+import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Service
 import java.time.Instant
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
 
 @Service
 internal class FixedRateTriggerService(
@@ -27,13 +28,11 @@ internal class FixedRateTriggerService(
     internal val eventEmitter: PlatformEventEmitter,
     internal val submitRequest: SubmitRequest,
     internal val generateDomainId: GenerateDomainId,
-    internal val funcQueryRepository: FuncQueryRepository
-) {
+    internal val funcQueryRepository: FuncQueryRepository,
+    private val async: Async
+) : ApplicationListener<ContextRefreshedEvent> {
 
-    private val plannedInvocations = mutableMapOf<Trigger, Instant>()
-
-    @PostConstruct
-    fun setup() {
+    override fun onApplicationEvent(event: ContextRefreshedEvent) {
         triggerQueryRepository.list(
             TriggerQueryRepository.TriggerQuery(
                 afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
@@ -42,6 +41,14 @@ internal class FixedRateTriggerService(
             )
         ).filterIsInstance<FixedRateTrigger>().forEach {
             plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
+        }
+
+        async.atFixedRate(1.seconds) {
+            plannedInvocations.filter { now().isAfter(it.value) }.forEach { (trigger, _) ->
+                require(trigger is FixedRateTrigger)
+                plannedInvocations[trigger] = now().plusSeconds(trigger.duration.inWholeSeconds)
+                requestInvocation(trigger)
+            }
         }
     }
 
@@ -52,15 +59,8 @@ internal class FixedRateTriggerService(
         )
     }
 
+    private val plannedInvocations = mutableMapOf<Trigger, Instant>()
 
-    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.SECONDS)
-    fun run() {
-        plannedInvocations.filter { now().isAfter(it.value) }.forEach { (trigger, _) ->
-            require(trigger is FixedRateTrigger)
-            plannedInvocations[trigger] = now().plusSeconds(trigger.duration.inWholeSeconds)
-            requestInvocation(trigger)
-        }
-    }
 }
 
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
@@ -69,7 +69,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger
         InvokeExecReq(
             execId = generateDomainId(::ExecId),
             funcId = trigger.funcId,
-            correlationId = trigger.correlationId ?: CorrelationId("__default__"),
+            correlationId = trigger.correlationId ?: CorrelationId.default,
             inputs = InvocationInputs(),
             code = func.code.toExecCode(),
             events = listOf() // FIXME

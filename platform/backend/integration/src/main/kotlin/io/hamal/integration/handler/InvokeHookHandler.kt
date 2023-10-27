@@ -54,7 +54,7 @@ class InvokeHookHandler(
                 InvokeExecReq(
                     execId = generateDomainId(::ExecId),
                     funcId = trigger.funcId,
-                    correlationId = trigger.correlationId ?: CorrelationId("__default__"),
+                    correlationId = trigger.correlationId ?: CorrelationId.default,
                     inputs = InvocationInputs(),
                     code = func.code.toExecCode(),
                     events = listOf()
