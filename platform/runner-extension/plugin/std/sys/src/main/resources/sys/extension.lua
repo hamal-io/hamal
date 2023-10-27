@@ -86,8 +86,11 @@ function extension()
             return internal.hook_get(hook_id)
         end
 
-        function export.hook.list()
-            return internal.hook_list()
+        function export.hook.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.hook_list(query)
         end
 
         function export.namespace.create(cmd)

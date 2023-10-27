@@ -75,6 +75,6 @@ interface FuncQueryRepository {
         var limit: Limit = Limit(1),
         var funcIds: List<FuncId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId>
+        var groupIds: List<GroupId> = listOf()
     )
 }

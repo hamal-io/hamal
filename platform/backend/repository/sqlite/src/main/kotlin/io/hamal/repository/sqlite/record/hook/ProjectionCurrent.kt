@@ -46,6 +46,7 @@ internal object ProjectionCurrent : SqliteProjection<HookId, HookRecord, Hook> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -71,6 +72,7 @@ internal object ProjectionCurrent : SqliteProjection<HookId, HookRecord, Hook> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.namespaceIds()}
         """.trimIndent()
         ) {
             query {
@@ -86,13 +88,14 @@ internal object ProjectionCurrent : SqliteProjection<HookId, HookRecord, Hook> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, data) 
+                    (id, group_id, namespace_id, data) 
                 VALUES
-                    (:id, :groupId, :data)
+                    (:id, :groupId, :namespaceId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
+            set("namespaceId", obj.namespaceId)
             set("data", protobuf.encodeToByteArray(Hook.serializer(), obj))
         }
     }
@@ -103,6 +106,7 @@ internal object ProjectionCurrent : SqliteProjection<HookId, HookRecord, Hook> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -127,6 +131,14 @@ internal object ProjectionCurrent : SqliteProjection<HookId, HookRecord, Hook> {
             ""
         } else {
             "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun HookQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
+            ""
+        } else {
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

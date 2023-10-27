@@ -388,6 +388,27 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             }
         }
 
+        @TestFactory
+        fun `With namespace ids`() = runWith(HookRepository::class) {
+            setup()
+
+            val query = HookQuery(
+                namespaceIds = listOf(NamespaceId(10), NamespaceId(23)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(HookId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(name, equalTo(HookName("Hook")))
+            }
+        }
+
 
         @TestFactory
         fun `Limit`() = runWith(HookRepository::class) {
