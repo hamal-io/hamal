@@ -119,6 +119,19 @@ data class MapType(
         return value[key]!! as StringType
     }
 
+
+    fun findStringType(key: StringType) = findStringType(key.value)
+    fun findString(key: String): String? = findStringType(key)?.value
+    fun findString(key: StringType): String? = findString(key.value)
+    fun findStringType(key: String): StringType? {
+        if (isNull(key)) {
+            return null
+        }
+        checkExpectedType(key, StringType::class)
+        return value[key]!! as StringType
+    }
+
+
     operator fun set(key: String, value: String) = set(key, StringType(value))
     operator fun set(key: StringType, value: StringType) = set(key.value, value.value)
     operator fun set(key: String, value: StringType): Int {
@@ -145,6 +158,8 @@ data class MapType(
         }
     }
 }
+
+internal fun MapType.isNull(key: String) = type(key) == NilType::class
 
 internal fun MapType.checkExpectedType(key: String, expected: KClass<out Type>) {
     check(type(key) == expected) {

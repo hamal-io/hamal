@@ -1,14 +1,15 @@
 sys = require('sys')
 
-err, res = sys.adhoc({
+res = fail_on_error(sys.adhoc({
     inputs = {},
     code = [[
         assert( 0 ~= 0 )
     ]]
-})
-
+}))
 sys.await_completed(res)
 
-assert(err == nil)
+assert(res.group_id == '1')
+assert(res.namespace_id == '1')
+
 exec_id = res.id
 

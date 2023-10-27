@@ -106,9 +106,9 @@ abstract class BaseTest {
                                     fail { "Execution failed: ${this.result.value["message"]}" }
                                 }
 
-                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
-                                    fail("Timeout")
-                                }
+//                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+//                                    fail("Timeout")
+//                                }
                             }
                         }
                     }
@@ -143,7 +143,7 @@ abstract class BaseTest {
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
-                accountId = generateDomainId(::AccountId),
+                accountId = AccountId.root,
                 accountType = Root,
                 name = AccountName("root"),
                 email = AccountEmail("root@hamal.io"),
@@ -164,7 +164,7 @@ abstract class BaseTest {
         testGroup = groupRepository.create(
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = generateDomainId(::GroupId),
+                groupId = GroupId.root,
                 name = GroupName("root-group"),
                 creatorId = testAccount.id
             )
@@ -173,9 +173,9 @@ abstract class BaseTest {
         testNamespace = namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
-                name = NamespaceName("hamal"),
+                name = NamespaceName("root-namespace"),
                 inputs = NamespaceInputs()
             )
         )

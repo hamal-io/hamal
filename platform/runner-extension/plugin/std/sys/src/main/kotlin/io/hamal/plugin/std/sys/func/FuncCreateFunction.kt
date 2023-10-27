@@ -24,7 +24,7 @@ class FuncCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.func.create(
-                NamespaceId(SnowflakeId(arg1.getString("namespace_id"))),
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiCreateFuncReq(
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
@@ -36,7 +36,9 @@ class FuncCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.toString(16)),
+                    "group_id" to StringType(res.groupId.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
                 )
             )
 

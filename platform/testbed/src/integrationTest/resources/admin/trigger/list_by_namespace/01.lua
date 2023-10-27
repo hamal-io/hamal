@@ -6,17 +6,17 @@ sys.await_completed(one_req)
 two_req = fail_on_error(sys.namespace.create({ name = 'namespace-two' }))
 sys.await_completed(two_req)
 
-func_req = fail_on_error(sys.func.create({ namespace_id = one_req.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
-sys.await_completed(func_req)
+func = fail_on_error(sys.func.create({ namespace_id = one_req.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+sys.await_completed(func)
 
-func_req = fail_on_error(sys.trigger.create_fixed_rate({
-    func_id = func_req.id,
+func = fail_on_error(sys.trigger.create_fixed_rate({
+    func_id = func.id,
     namespace_id = one_req.id,
     name = 'trigger-to-create',
     inputs = { },
     duration = 'PT5S'
 }))
-sys.await_completed(func_req)
+sys.await_completed(func)
 
 count = #fail_on_error(sys.trigger.list())
 assert(count == 1)

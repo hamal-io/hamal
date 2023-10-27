@@ -1,46 +1,46 @@
 sys = require('sys')
 
-namespace_req = fail_on_error(sys.namespace.create({ name = 'namespace-1' }))
-sys.await_completed(namespace_req)
+namespace = fail_on_error(sys.namespace.create({ name = 'namespace-1' }))
+sys.await_completed(namespace)
 
-func_req = fail_on_error(sys.func.create({ namespace_id = namespace_req.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
-sys.await_completed(func_req)
+func = fail_on_error(sys.func.create({ namespace_id = namespace.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+sys.await_completed(func)
 
-func_one_req = fail_on_error(sys.hook.create({ namespace_id = '1'; name = "some-amazing-hook" }))
-sys.await(func_one_req)
+hook = fail_on_error(sys.hook.create({ namespace_id = '1'; name = "some-amazing-hook" }))
+sys.await(hook)
 
 -- trigger name is unique
-trigger_req = fail_on_error(sys.trigger.create_hook({
-    func_id = func_req.id,
+trigger = fail_on_error(sys.trigger.create_hook({
+    func_id = func.id,
     namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = func_one_req.id
+    hook_id = hook.id
 }))
-sys.await_completed(trigger_req)
+sys.await_completed(trigger)
 
-trigger_req = fail_on_error(sys.trigger.create_hook({
-    func_id = func_req.id,
+trigger = fail_on_error(sys.trigger.create_hook({
+    func_id = func.id,
     namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = func_one_req.id
+    hook_id = hook.id
 }))
-assert(sys.await_failed(trigger_req) == nil)
+assert(sys.await_failed(trigger) == nil)
 
 _, triggers = sys.trigger.list()
 assert(#triggers == 1)
 
 -- same name different namespace
-err, trigger_req = sys.trigger.create_hook({
-    func_id = func_req.id,
-    namespace_id = namespace_req.id,
+err, trigger = sys.trigger.create_hook({
+    func_id = func.id,
+    namespace_id = namespace.id,
     name = 'trigger-to-create',
     inputs = { },
-    hook_id = func_one_req.id
+    hook_id = hook.id
 })
 assert(err == nil)
-sys.await_completed(trigger_req)
+sys.await_completed(trigger)
 
 _, triggers = sys.trigger.list()
 assert(#triggers == 2)

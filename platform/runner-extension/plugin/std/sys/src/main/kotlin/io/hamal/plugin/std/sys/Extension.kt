@@ -6,7 +6,7 @@ import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.plugin.std.sys.adhoc.AdhocInvokeFunction
+import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
 import io.hamal.plugin.std.sys.exec.ExecGetFunction
 import io.hamal.plugin.std.sys.exec.ExecListFunction
@@ -41,7 +41,7 @@ class SysPluginFactory(
                 "await_completed" to AwaitCompletedFunction(httpTemplate),
                 "await_failed" to AwaitFailedFunction(httpTemplate),
 
-                "adhoc" to AdhocInvokeFunction(sdk),
+                "adhoc" to AdhocFunction(sdk),
                 "code_get" to CodeGetFunction(sdk),
 
                 "req_get" to ReqGetFunction(httpTemplate),

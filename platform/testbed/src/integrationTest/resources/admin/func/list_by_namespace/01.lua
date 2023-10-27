@@ -6,8 +6,8 @@ sys.await_completed(one_req)
 two_req = fail_on_error(sys.namespace.create({ name = 'namespace-two' }))
 sys.await_completed(two_req)
 
-func_one_req = fail_on_error(sys.func.create({ namespace_id = one_req.id, name = 'func-1' }))
-sys.await_completed(func_one_req)
+hook = fail_on_error(sys.func.create({ namespace_id = one_req.id, name = 'func-1' }))
+sys.await_completed(hook)
 
 count = #fail_on_error(sys.func.list())
 assert(count == 1)

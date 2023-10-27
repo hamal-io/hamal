@@ -15,7 +15,9 @@ function extension()
         }
 
         function export.adhoc(cmd)
+            cmd = cmd or {}
             local err, res = internal.adhoc({
+                namespace_id = cmd.namespace_id,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
             })
@@ -75,6 +77,7 @@ function extension()
         end
 
         function export.func.create(cmd)
+            cmd = cmd or {}
             return internal.func_create({
                 namespace_id = cmd.namespace_id,
                 name = cmd.name or nil,
@@ -99,6 +102,7 @@ function extension()
         end
 
         function export.hook.create(cmd)
+            cmd = cmd or {}
             return internal.hook_create({
                 namespace_id = cmd.namespace_id or nil,
                 name = cmd.name or nil
@@ -160,7 +164,9 @@ function extension()
         end
 
         function export.topic.create(cmd)
+            cmd = cmd or {}
             return internal.topic_create({
+                namespace_id = cmd.namespace_id,
                 name = cmd.name
             })
         end
@@ -181,6 +187,7 @@ function extension()
         end
 
         function export.trigger.create_fixed_rate(cmd)
+            cmd = cmd or {}
             return internal.trigger_create({
                 type = "FixedRate",
                 namespace_id = cmd.namespace_id,
@@ -192,6 +199,7 @@ function extension()
         end
 
         function export.trigger.create_event(cmd)
+            cmd = cmd or {}
             return internal.trigger_create({
                 type = "Event",
                 namespace_id = cmd.namespace_id,
@@ -203,6 +211,7 @@ function extension()
         end
 
         function export.trigger.create_hook(cmd)
+            cmd = cmd or {}
             return internal.trigger_create({
                 type = "Hook",
                 namespace_id = cmd.namespace_id,

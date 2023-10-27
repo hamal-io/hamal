@@ -1,11 +1,12 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,6 +24,7 @@ sealed interface ApiSubmittedReq {
 sealed interface ApiSubmittedReqWithGroupId : ApiSubmittedReq {
     override val reqId: ReqId
     override val status: ReqStatus
+    val namespaceId: NamespaceId
     val groupId: GroupId
 }
 
@@ -30,6 +32,7 @@ sealed interface ApiSubmittedReqWithGroupId : ApiSubmittedReq {
 data class ApiDefaultSubmittedReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
+    override val namespaceId: NamespaceId,
     override val groupId: GroupId
 ) : ApiSubmittedReqWithGroupId
 
@@ -44,13 +47,15 @@ data class ApiSubmittedWithTokenReq(
 data class ApiSubmittedReqWithId(
     override val reqId: ReqId,
     override val status: ReqStatus,
+    override val namespaceId: NamespaceId,
     override val groupId: GroupId,
     val id: SnowflakeId,
 ) : ApiSubmittedReqWithGroupId {
 
-    constructor(reqId: ReqId, status: ReqStatus, groupId: GroupId, id: DomainId) : this(
+    constructor(reqId: ReqId, status: ReqStatus, namespaceId: NamespaceId, groupId: GroupId, id: DomainId) : this(
         reqId,
         status,
+        namespaceId,
         groupId,
         id.value,
     )
