@@ -36,8 +36,8 @@ internal class AdhocControllerTest : BaseControllerTest() {
 
     private fun request(req: ApiInvokeAdhocReq) =
         httpTemplate
-            .post("/v1/groups/{groupId}/adhoc")
-            .path("groupId", testGroup.id)
+            .post("/v1/namespaces/{namespaceId}/adhoc")
+            .path("namespaceId", testNamespace.id)
             .body(req)
             .execute()
 

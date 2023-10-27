@@ -123,7 +123,7 @@ internal class CompleteExecControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyEventAppended() {
-        val topic = eventBrokerRepository.resolveTopic(testGroup.id, TopicName("test-completion"))!!
+        val topic = eventBrokerRepository.resolveTopic(testNamespace.id, TopicName("test-completion"))!!
 
         ProtobufBatchConsumer(
             consumerId = ConsumerId("a"),

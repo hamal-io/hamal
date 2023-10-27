@@ -2,6 +2,7 @@ package io.hamal.bridge.web.exec
 
 import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiCompleteExecReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus
@@ -25,7 +26,7 @@ internal class CompleteExecController(
             ApiSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
-                groupId = it.groupId,
+                groupId = GroupId(1),
                 id = it.id
             )
         }, HttpStatus.ACCEPTED)

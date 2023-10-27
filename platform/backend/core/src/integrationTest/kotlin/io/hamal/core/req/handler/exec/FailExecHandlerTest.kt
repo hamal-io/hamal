@@ -62,7 +62,6 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
             reqId = ReqId(10),
             status = Submitted,
             id = ExecId(1234),
-            groupId = testGroup.id,
             result = ExecResult(MapType("message" to StringType("You have not tried hard enough")))
         )
     }

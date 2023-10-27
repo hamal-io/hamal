@@ -1,10 +1,10 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
@@ -16,6 +16,10 @@ class NamespaceId(override val value: SnowflakeId) : DomainId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     internal object Serializer : DomainIdSerializer<NamespaceId>(::NamespaceId)
+
+    companion object {
+        val root = NamespaceId(1)
+    }
 }
 
 

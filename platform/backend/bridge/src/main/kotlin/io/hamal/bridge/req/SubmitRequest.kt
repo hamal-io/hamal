@@ -24,8 +24,7 @@ internal class SubmitBridgeRequest(
         return SubmittedCompleteExecReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            id = execId,
-            groupId = exec.groupId,
+            id = exec.id,
             result = req.result,
             state = req.state,
             events = req.events
@@ -37,8 +36,7 @@ internal class SubmitBridgeRequest(
         return SubmittedFailExecReq(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            id = execId,
-            groupId = exec.groupId,
+            id = exec.id,
             result = req.result
         ).also(reqCmdRepository::queue)
     }

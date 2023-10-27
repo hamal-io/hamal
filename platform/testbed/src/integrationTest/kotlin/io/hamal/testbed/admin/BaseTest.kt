@@ -66,6 +66,7 @@ abstract class BaseTest {
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testGroup: Group
+    private lateinit var testNamespace: Namespace
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -81,7 +82,7 @@ abstract class BaseTest {
                     .forEach { file ->
                         println(">>>>>>>>>>>>>> ${file.fileName}")
                         val execReq = sdk.adhoc.invoke(
-                            testGroup.id,
+                            testNamespace.id,
                             ApiInvokeAdhocReq(
                                 InvocationInputs(),
                                 CodeValue(String(Files.readAllBytes(file)))
@@ -165,7 +166,7 @@ abstract class BaseTest {
             )
         )
 
-        namespaceRepository.create(
+        testNamespace = namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(1),

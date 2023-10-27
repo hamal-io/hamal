@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys.adhoc
 
 import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -21,7 +21,7 @@ class AdhocInvokeFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.adhoc(
-                ctx[GroupId::class],
+                ctx[NamespaceId::class],
                 ApiInvokeAdhocReq(
                     inputs = InvocationInputs(),
                     code = CodeValue(arg1.getString("code"))

@@ -47,8 +47,11 @@ function extension()
             return internal.exec_get(exec_id)
         end
 
-        function export.exec.list()
-            return internal.exec_list()
+        function export.exec.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.exec_list(query)
         end
 
         function export.func.create(cmd)
@@ -142,8 +145,11 @@ function extension()
             })
         end
 
-        function export.topic.list()
-            return internal.topic_list()
+        function export.topic.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.topic_list(query)
         end
 
         function export.topic.list_entries(topic_id)

@@ -1,5 +1,6 @@
 package io.hamal.api.http.endpoint.req
 
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
@@ -28,7 +29,7 @@ internal object Assembler {
             is SubmittedCompleteExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
-                groupId = r.groupId,
+                groupId = GroupId(1),
                 id = r.id
             )
 
@@ -91,7 +92,7 @@ internal object Assembler {
             is SubmittedFailExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
-                groupId = r.groupId,
+                groupId = GroupId(1),
                 id = r.id
             )
 

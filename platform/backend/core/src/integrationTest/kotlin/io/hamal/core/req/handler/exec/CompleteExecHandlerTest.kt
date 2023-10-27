@@ -69,7 +69,6 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
             id = ExecId(1234),
             result = ExecResult(MapType("hamal" to StringType("rocks"))),
             state = State(MapType("counter" to NumberType(1))),
-            groupId = testGroup.id,
             events = listOf(
                 EventToSubmit(
                     topicName = TopicName("test-completion"),

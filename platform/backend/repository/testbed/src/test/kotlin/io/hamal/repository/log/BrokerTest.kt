@@ -2,6 +2,7 @@ package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerRepository
@@ -21,7 +22,7 @@ class BrokerRepositoryTest : AbstractUnitTest() {
         fun `Bug - Able to resolve real topic`() = runWith(BrokerRepository::class) {
             val result = create(
                 CmdId(123),
-                TopicToCreate(TopicId(234), TopicName("scheduler::flow_enqueued"), GroupId(1))
+                TopicToCreate(TopicId(234), TopicName("scheduler::flow_enqueued"), NamespaceId(23), GroupId(1))
             )
 
             assertThat(result.id, equalTo(TopicId(234)))

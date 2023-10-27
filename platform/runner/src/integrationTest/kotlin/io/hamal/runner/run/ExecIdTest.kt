@@ -1,10 +1,7 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.runner.connector.UnitOfWork
@@ -19,6 +16,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -36,6 +34,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),

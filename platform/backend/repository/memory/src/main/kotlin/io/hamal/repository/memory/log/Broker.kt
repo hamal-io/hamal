@@ -2,7 +2,7 @@ package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.*
@@ -52,19 +52,20 @@ class MemoryBrokerRepository : BrokerRepository {
         topicsRepository.create(
             cmdId,
             TopicToCreate(
-                topicToCreate.id,
-                topicToCreate.name,
-                topicToCreate.groupId
+                id = topicToCreate.id,
+                name = topicToCreate.name,
+                namespaceId = topicToCreate.namespaceId,
+                groupId = topicToCreate.groupId
             )
         )
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
-    override fun findTopic(groupId: GroupId, topicName: TopicName) = topicsRepository.find(groupId, topicName)
+    override fun findTopic(namespaceId: NamespaceId, topicName: TopicName) = topicsRepository.find(namespaceId, topicName)
     override fun listTopics(query: TopicQuery): List<Topic> {
         return topicsRepository.list(query)
     }
 
-    override fun resolveTopic(groupId: GroupId, name: TopicName) = topicsRepository.find(groupId, name)
+    override fun resolveTopic(namespaceId: NamespaceId, name: TopicName) = topicsRepository.find(namespaceId, name)
 
     override fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk> {
         return resolveRepository(topic).read(firstId, limit)

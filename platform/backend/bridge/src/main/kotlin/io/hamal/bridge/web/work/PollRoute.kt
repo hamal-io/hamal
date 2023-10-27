@@ -39,6 +39,7 @@ internal class PollRoute(
 
                     UnitOfWork(
                         id = exec.id,
+                        namespaceId = exec.namespaceId,
                         groupId = exec.groupId,
                         correlation = exec.correlation,
                         inputs = exec.inputs,

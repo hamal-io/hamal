@@ -31,6 +31,7 @@ class HttpExecutorService(
                 CodeRunnerImpl(connector, sandboxFactory).run(
                     UnitOfWork(
                         id = uow.id,
+                        namespaceId = uow.namespaceId,
                         groupId = uow.groupId,
                         inputs = uow.inputs,
                         state = uow.state,

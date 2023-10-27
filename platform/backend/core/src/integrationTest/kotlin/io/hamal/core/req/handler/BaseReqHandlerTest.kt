@@ -25,7 +25,6 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
     fun createFunc(
         id: FuncId = generateDomainId(::FuncId),
         name: FuncName = FuncName("SomeFuncName"),
-        namespaceId: NamespaceId = generateDomainId(::NamespaceId),
         inputs: FuncInputs = FuncInputs(),
         codeId: CodeId = CodeId(2222),
         codeVersion: CodeVersion = CodeVersion(2233),
@@ -34,8 +33,8 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
             CreateCmd(
                 id = NextCommandId(),
                 funcId = id,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id,
-                namespaceId = namespaceId,
                 name = name,
                 inputs = inputs,
                 code = FuncCode(
@@ -51,6 +50,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
             NextCommandId(), TopicToCreate(
                 id = id,
                 name = name,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id
             )
         )

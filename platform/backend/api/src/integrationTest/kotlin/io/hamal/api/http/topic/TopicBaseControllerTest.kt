@@ -28,8 +28,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     fun listTopics(
         names: List<TopicName> = listOf()
     ): ApiTopicList {
-        val listTopicsResponse = httpTemplate.get("/v1/groups/{groupId}/topics")
-            .path("groupId", testGroup.id)
+        val listTopicsResponse = httpTemplate.get("/v1/topics")
             .parameter("names", names.joinToString(",") { it.value })
             .execute()
 
@@ -50,8 +49,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
 
 
     fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
-            .path("groupId", testGroup.id)
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/topics")
             .body(ApiCreateTopicReq(topicName))
             .execute()
 

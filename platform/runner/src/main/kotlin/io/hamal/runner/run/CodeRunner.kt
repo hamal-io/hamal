@@ -2,10 +2,7 @@ package io.hamal.runner.run
 
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecResult
-import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
@@ -13,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.CodeType
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -40,6 +38,7 @@ class CodeRunnerImpl(
                 RunnerInvocationEvents(unitOfWork.events)
             )
             runnerContext[ExecId::class] = unitOfWork.id
+            runnerContext[NamespaceId::class] = unitOfWork.namespaceId
             runnerContext[GroupId::class] = unitOfWork.groupId
             runnerContext[ExecToken::class] = unitOfWork.token
 

@@ -1,7 +1,7 @@
 package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository
@@ -15,31 +15,32 @@ import kotlin.concurrent.withLock
 class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
-    private val topics = mutableMapOf<GroupId, MutableMap<TopicId, Topic>>()
+    private val topics = mutableMapOf<NamespaceId, MutableMap<TopicId, Topic>>()
 
     override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
         return lock.withLock {
-            val groupId = toCreate.groupId
-            topics.putIfAbsent(groupId, mutableMapOf())
+            val namespaceId = toCreate.namespaceId
+            topics.putIfAbsent(namespaceId, mutableMapOf())
 
             val topic = Topic(
                 id = toCreate.id,
                 name = toCreate.name,
+                namespaceId = toCreate.namespaceId,
                 groupId = toCreate.groupId
             )
 
-            require(find(groupId, topic.name) == null) { "Topic already exists" }
+            require(find(namespaceId, topic.name) == null) { "Topic already exists" }
             require(find(topic.id) == null) { "Topic already exists" }
 
-            topics[groupId]!![topic.id] = topic
+            topics[namespaceId]!![topic.id] = topic
 
             topic
         }
     }
 
-    override fun find(groupId: GroupId, name: TopicName): Topic? {
+    override fun find(namespaceId: NamespaceId, name: TopicName): Topic? {
         return lock.withLock {
-            (topics[groupId] ?: emptyMap()).values.find { it.name == name }
+            (topics[namespaceId] ?: emptyMap()).values.find { it.name == name }
         }
     }
 
@@ -52,11 +53,12 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     override fun list(query: TopicQuery): List<Topic> {
         return lock.withLock {
-            topics.filter { query.groupIds.isEmpty() || it.key in query.groupIds }
+            topics.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
                 .flatMap { it.value.values }
                 .reversed()
                 .asSequence()
                 .filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
                 .dropWhile { it.id >= query.afterId }
                 .take(query.limit.value)
                 .toList()
@@ -65,11 +67,12 @@ class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
 
     override fun count(query: TopicQuery): ULong {
         return lock.withLock {
-            topics.filter { query.groupIds.isEmpty() || it.key in query.groupIds }
+            topics.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
                 .flatMap { it.value.values }
                 .reversed()
                 .asSequence()
                 .filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toULong()

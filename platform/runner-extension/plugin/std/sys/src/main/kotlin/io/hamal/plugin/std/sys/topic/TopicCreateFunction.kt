@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.topic
 
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -11,6 +12,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiCreateTopicReq
+import javax.xml.stream.events.Namespace
 
 class TopicCreateFunction(
     private val sdk: ApiSdk
@@ -21,7 +23,7 @@ class TopicCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.topic.create(
-                ctx[GroupId::class],
+                ctx[NamespaceId::class],
                 ApiCreateTopicReq(
                     name = TopicName(arg1.getString("name")),
                 )

@@ -1,6 +1,7 @@
 package io.hamal.repository.fixture
 
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.*
@@ -86,7 +87,7 @@ object SqliteFixture : BaseTestFixture {
         ) as REPO
 
         TopicRepository::class -> SqliteTopicRepository(
-            Topic(TopicId(23), GroupId(1), TopicName("test-topic")),
+            Topic(TopicId(23), NamespaceId(23), GroupId(1), TopicName("test-topic")),
             createTempDirectory("sqlite_topic_test")
         ) as REPO
 

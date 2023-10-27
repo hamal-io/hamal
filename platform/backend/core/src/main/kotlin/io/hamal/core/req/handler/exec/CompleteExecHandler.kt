@@ -8,7 +8,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.*
@@ -26,7 +26,8 @@ class CompleteExecHandler(
     private val eventEmitter: PlatformEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
     private val eventBrokerRepository: BrokerRepository,
-    private val generateDomainId: GenerateDomainId
+    private val generateDomainId: GenerateDomainId,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) : ReqHandler<SubmittedCompleteExecReq>(SubmittedCompleteExecReq::class) {
 
     override fun invoke(req: SubmittedCompleteExecReq) {
@@ -35,10 +36,12 @@ class CompleteExecHandler(
         val exec = execQueryRepository.get(req.id)
         require(exec is StartedExec) { "Exec not in status Started" }
 
+        val namespaceId = exec.namespaceId
+
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
             .also { setState(cmdId, it, req.state) }
-            .also { appendEvents(cmdId, req.groupId, req.events) }
+            .also { appendEvents(cmdId, namespaceId, req.events) }
 
     }
 
@@ -61,15 +64,17 @@ class CompleteExecHandler(
         }
     }
 
-    private fun appendEvents(cmdId: CmdId, groupId: GroupId, events: List<EventToSubmit>) {
+    private fun appendEvents(cmdId: CmdId, namespaceId: NamespaceId, events: List<EventToSubmit>) {
         events.forEach { evt ->
             //FIXME create topic if not exists
             val topicName = evt.topicName
-            val topic = eventBrokerRepository.findTopic(groupId, topicName) ?: eventBrokerRepository.create(
+            val namespace = namespaceQueryRepository.get(namespaceId)
+            val topic = eventBrokerRepository.findTopic(namespaceId, topicName) ?: eventBrokerRepository.create(
                 cmdId, TopicToCreate(
                     id = generateDomainId(::TopicId),
                     name = topicName,
-                    groupId = groupId
+                    namespaceId = namespaceId,
+                    groupId = namespace.groupId
                 )
             )
             appender.append(cmdId, topic, TopicEntryPayload(evt.payload.value))

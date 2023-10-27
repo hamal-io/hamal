@@ -47,6 +47,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 ${query.ids()}
                 ${query.groupIds()}
                 ${query.funcIds()}
+                ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -73,6 +74,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 ${query.ids()}
                 ${query.groupIds()}
                 ${query.funcIds()}
+                ${query.namespaceIds()}
         """.trimIndent()
         ) {
             query {
@@ -91,13 +93,14 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id,status,group_id,func_id,data) 
+                    ( id, status, namespace_id, group_id, func_id, data) 
                 VALUES
-                    (:id,:status,:groupId,:funcId,:data)
+                    ( :id, :status, :namespaceId, :groupId, :funcId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
+            set("namespaceId", obj.namespaceId)
             set("groupId", obj.groupId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
             set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
@@ -112,6 +115,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                  status         INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -144,6 +148,14 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
             ""
         } else {
             "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun ExecQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
+            ""
+        } else {
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

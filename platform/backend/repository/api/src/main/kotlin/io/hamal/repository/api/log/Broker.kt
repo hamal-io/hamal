@@ -1,8 +1,8 @@
 package io.hamal.repository.api.log
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CmdRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -15,6 +15,7 @@ interface CreateTopic {
     data class TopicToCreate(
         val id: TopicId,
         val name: TopicName,
+        val namespaceId: NamespaceId,
         val groupId: GroupId
     )
 }
@@ -38,11 +39,11 @@ interface FindTopic {
 
     fun findTopic(topicId: TopicId): Topic?
 
-    fun findTopic(groupId: GroupId, topicName: TopicName): Topic?
+    fun findTopic(namespaceId: NamespaceId, topicName: TopicName): Topic?
 }
 
 interface ResolveTopic {
-    fun resolveTopic(groupId: GroupId, name: TopicName): Topic?
+    fun resolveTopic(namespaceId: NamespaceId, name: TopicName): Topic?
 }
 
 interface BrokerRepository :
