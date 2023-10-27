@@ -14,6 +14,7 @@ data class SubmittedInvokeExecReq(
     override var status: ReqStatus,
     override val groupId: GroupId,
     val id: ExecId,
+    val namespaceId: NamespaceId,
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
@@ -25,19 +26,17 @@ data class SubmittedInvokeExecReq(
 data class SubmittedFailExecReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
     val id: ExecId,
     val result: ExecResult
-) : SubmittedReqWithGroupId
+) : SubmittedReq
 
 @Serializable
 data class SubmittedCompleteExecReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
     val id: ExecId,
     val state: State,
     val result: ExecResult,
     val events: List<EventToSubmit>
-) : SubmittedReqWithGroupId
+) : SubmittedReq
 

@@ -123,6 +123,7 @@ internal abstract class BaseTest {
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
     lateinit var testGroup: Group
+    lateinit var testNamespace: Namespace
 
     @BeforeEach
     fun before() {
@@ -147,7 +148,7 @@ internal abstract class BaseTest {
         testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
-                accountId = generateDomainId(::AccountId),
+                accountId = AccountId.root,
                 accountType = Root,
                 name = AccountName("test-account"),
                 email = AccountEmail("test@hamal.io"),
@@ -168,16 +169,16 @@ internal abstract class BaseTest {
         testGroup = groupCmdRepository.create(
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = generateDomainId(::GroupId),
+                groupId = GroupId.root,
                 name = GroupName("test-group"),
                 creatorId = testAccount.id
             )
         )
 
-        namespaceCmdRepository.create(
+        testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
                 name = NamespaceName("hamal"),
                 inputs = NamespaceInputs()
@@ -200,6 +201,7 @@ internal abstract class BaseTest {
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 correlation = correlation,
                 inputs = ExecInputs(),

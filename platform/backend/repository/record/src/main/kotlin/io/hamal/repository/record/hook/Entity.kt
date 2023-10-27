@@ -35,7 +35,6 @@ data class HookEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                namespaceId = rec.namespaceId,
                 name = rec.name
             )
         }

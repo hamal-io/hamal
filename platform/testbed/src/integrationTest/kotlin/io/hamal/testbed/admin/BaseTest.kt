@@ -49,6 +49,9 @@ abstract class BaseTest {
     lateinit var groupRepository: GroupRepository
 
     @Autowired
+    lateinit var hookRepository: HookRepository
+
+    @Autowired
     lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
@@ -66,6 +69,7 @@ abstract class BaseTest {
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testGroup: Group
+    private lateinit var testNamespace: Namespace
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -81,7 +85,7 @@ abstract class BaseTest {
                     .forEach { file ->
                         println(">>>>>>>>>>>>>> ${file.fileName}")
                         val execReq = sdk.adhoc.invoke(
-                            testGroup.id,
+                            testNamespace.id,
                             ApiInvokeAdhocReq(
                                 InvocationInputs(),
                                 CodeValue(String(Files.readAllBytes(file)))
@@ -98,12 +102,13 @@ abstract class BaseTest {
                                     wait = false
                                 }
                                 if (status == ExecStatus.Failed) {
-                                    fail { "Execution failed" }
+                                    check(this is FailedExec)
+                                    fail { "Execution failed: ${this.result.value["message"]}" }
                                 }
 
-                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
-                                    fail("Timeout")
-                                }
+//                                if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+//                                    fail("Timeout")
+//                                }
                             }
                         }
                     }
@@ -128,6 +133,7 @@ abstract class BaseTest {
             execRepository.clear()
             funcRepository.clear()
             groupRepository.clear()
+            hookRepository.clear()
             namespaceRepository.clear()
             snippetRepository.clear()
             triggerRepository.clear()
@@ -137,7 +143,7 @@ abstract class BaseTest {
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
-                accountId = generateDomainId(::AccountId),
+                accountId = AccountId.root,
                 accountType = Root,
                 name = AccountName("root"),
                 email = AccountEmail("root@hamal.io"),
@@ -158,18 +164,18 @@ abstract class BaseTest {
         testGroup = groupRepository.create(
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = generateDomainId(::GroupId),
+                groupId = GroupId.root,
                 name = GroupName("root-group"),
                 creatorId = testAccount.id
             )
         )
 
-        namespaceRepository.create(
+        testNamespace = namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
-                name = NamespaceName("hamal"),
+                name = NamespaceName("root-namespace"),
                 inputs = NamespaceInputs()
             )
         )

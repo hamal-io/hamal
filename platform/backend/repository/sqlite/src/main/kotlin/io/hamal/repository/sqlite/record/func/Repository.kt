@@ -91,7 +91,6 @@ class SqliteFuncRepository(
                     FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmdId,
-                        namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
                         code = cmd.code ?: currentVersion.code

@@ -30,7 +30,6 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
             createFunc(
                 ApiCreateFuncReq(
                     name = FuncName("func-one"),
-                    namespaceId = null,
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
                     code = CodeValue("1+1")
                 )

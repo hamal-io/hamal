@@ -49,7 +49,6 @@ interface FuncCmdRepository : CmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val namespaceId: NamespaceId? = null,
         val name: FuncName? = null,
         val inputs: FuncInputs? = null,
         val code: FuncCode? = null
@@ -74,6 +73,7 @@ interface FuncQueryRepository {
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var funcIds: List<FuncId> = listOf(),
-        var groupIds: List<GroupId>
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var groupIds: List<GroupId> = listOf()
     )
 }

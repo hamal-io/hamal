@@ -1,9 +1,13 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.KeyedOnce
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
+import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.AppendEntryReq
 import io.hamal.request.CreateTopicReq
@@ -53,11 +57,27 @@ data class ApiTopicList(
 
 interface ApiTopicService {
     fun append(topicId: TopicId, payload: TopicEntryPayload): ApiSubmittedReqWithId
-    fun create(groupId: GroupId, req: ApiCreateTopicReq): ApiSubmittedReqWithId
-    fun list(groupId: GroupId): List<ApiTopicList.Topic>
+    fun create(namespaceId: NamespaceId, req: ApiCreateTopicReq): ApiSubmittedReqWithId
+    fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
     fun get(topicId: TopicId): ApiTopic
-    fun resolve(groupId: GroupId, topicName: TopicName): TopicId
+    fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId
+
+    data class TopicQuery(
+        var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(25),
+        var topicIds: List<TopicId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var groupIds: List<GroupId> = listOf()
+    ) {
+        fun setRequestParameters(req: HttpRequest) {
+            req.parameter("after_id", afterId)
+            req.parameter("limit", limit)
+            if (topicIds.isNotEmpty()) req.parameter("topic_ids", topicIds)
+            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
+        }
+    }
 }
 
 internal class ApiTopicServiceImpl(
@@ -71,16 +91,16 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiSubmittedReqWithId::class)
 
-    override fun create(groupId: GroupId, req: ApiCreateTopicReq) =
-        template.post("/v1/groups/{groupId}/topics")
-            .path("groupId", groupId)
+    override fun create(namespaceId: NamespaceId, req: ApiCreateTopicReq) =
+        template.post("/v1/namespaces/{namespaceId}/topics")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
             .fold(ApiSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/topics")
-            .path("groupId", groupId)
+    override fun list(query: TopicQuery) =
+        template.get("/v1/topics")
+            .also(query::setRequestParameters)
             .execute()
             .fold(ApiTopicList::class)
             .topics
@@ -99,10 +119,10 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopic::class)
 
-    override fun resolve(groupId: GroupId, topicName: TopicName): TopicId {
+    override fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
-            template.get("/v1/groups/{groupId}/topics")
-                .path("groupId", groupId)
+            template.get("/v1/topics")
+                .parameter("namespace_ids", namespaceId)
                 .parameter("names", topicName.value)
                 .execute(ApiTopicList::class)
                 .topics

@@ -210,7 +210,6 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             val result = update(
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
-                    namespaceId = NamespaceId(22),
                     name = FuncName("Updated"),
                     inputs = FuncInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
                     code = FuncCode(
@@ -223,7 +222,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(FuncId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(22)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("Updated")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("answer" to NumberType(42))))))
                 assertThat(
@@ -251,7 +250,6 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             val result = update(
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
-                    namespaceId = null,
                     name = null,
                     inputs = null,
                     code = null
@@ -489,6 +487,27 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             }
         }
 
+        @TestFactory
+        fun `With namespace ids`() = runWith(FuncRepository::class) {
+            setup()
+
+            val query = FuncQuery(
+                namespaceIds = listOf(NamespaceId(10), NamespaceId(12)),
+                groupIds = listOf(),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(FuncId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(name, equalTo(FuncName("Func")))
+            }
+        }
 
         @TestFactory
         fun `Limit`() = runWith(FuncRepository::class) {

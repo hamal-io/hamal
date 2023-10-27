@@ -19,11 +19,10 @@ import org.junit.jupiter.api.TestFactory
 internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
     @TestFactory
-    fun `Create func without namespace id`() {
+    fun `Create func for default namespace id`() {
         val result = createFunc(
             ApiCreateFuncReq(
                 name = FuncName("test-func"),
-                namespaceId = null,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeValue("13 + 37")
             )
@@ -60,9 +59,9 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         )
 
         val result = createFunc(
-            ApiCreateFuncReq(
+            namespaceId = namespace.id,
+            req = ApiCreateFuncReq(
                 name = FuncName("test-func"),
-                namespaceId = namespace.id,
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeValue("13 + 37")
             )
@@ -90,12 +89,10 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
     @Test
     fun `Tries to create func with namespace which does not exist`() {
 
-        val response = httpTemplate.post("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.post("/v1/namespaces/12345/funcs")
             .body(
                 ApiCreateFuncReq(
                     name = FuncName("test-func"),
-                    namespaceId = NamespaceId(12345),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                     code = CodeValue("13 + 37")
                 )

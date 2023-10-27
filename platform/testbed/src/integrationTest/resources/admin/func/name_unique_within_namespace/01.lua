@@ -1,25 +1,23 @@
 sys = require('sys')
 
-_, namespace_req = sys.namespace.create({ name = 'namespace-1' })
+namespace = fail_on_error(sys.namespace.create({ name = 'namespace-1' }))
 
 -- function name is unique
-err, func_req = sys.func.create({ name = 'func-name' })
-sys.await_completed(func_req)
-assert(err == nil)
-assert(func_req ~= nil)
+func = fail_on_error(sys.func.create({ namespace_id = '1', name = 'func-name' }))
+sys.await_completed(func)
+assert(func ~= nil)
 
-err, func_req = sys.func.create({ name = 'func-name' })
-assert(sys.await_failed(func_req) == nil)
-assert(err == nil)
-assert(func_req ~= nil)
+func = fail_on_error(sys.func.create({ namespace_id = '1', name = 'func-name' }))
+assert(sys.await_failed(func) == nil)
+assert(func ~= nil)
 
 _, hooks = sys.func.list()
 assert(#hooks == 1)
 
 -- same name different namespace
-err, func_req = sys.func.create({ name = 'func-name', namespace_id = namespace_req.id })
+func = fail_on_error(sys.func.create({ namespace_id = namespace.id, name = 'func-name' }))
 assert(err == nil)
-sys.await_completed(func_req)
+sys.await_completed(func)
 
 _, hooks = sys.func.list()
 assert(#hooks == 2)

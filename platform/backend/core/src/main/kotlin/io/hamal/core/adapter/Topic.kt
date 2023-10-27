@@ -2,6 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.api.ApiAppendEntryReq
@@ -24,7 +25,7 @@ interface AppendEntryToTopicPort {
 
 interface CreateTopicPort {
     operator fun <T : Any> invoke(
-        groupId: GroupId,
+        namespaceId: NamespaceId,
         req: CreateTopicReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T
@@ -71,11 +72,11 @@ class TopicAdapter(
     }
 
     override fun <T : Any> invoke(
-        groupId: GroupId,
+        namespaceId: NamespaceId,
         req: CreateTopicReq,
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T =
-        responseHandler(submitRequest(groupId, req))
+        responseHandler(submitRequest(namespaceId, req))
 
     override fun <T : Any> invoke(topicId: TopicId, responseHandler: (Topic) -> T): T =
         responseHandler(eventBrokerRepository.getTopic(topicId))

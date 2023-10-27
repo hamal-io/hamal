@@ -4,6 +4,7 @@ import io.hamal.core.adapter.ListFuncsPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiFuncList
 import io.hamal.lib.sdk.api.ApiFuncList.Func
 import io.hamal.lib.sdk.api.ApiFuncList.Func.Namespace
@@ -20,13 +21,15 @@ internal class FuncListController(private val listFunc: ListFuncsPort) {
     fun listFunc(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>
+        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiFuncList> {
         return listFunc(
             FuncQuery(
                 afterId = afterId,
                 limit = limit,
-                groupIds = groupIds
+                groupIds = groupIds,
+                namespaceIds = namespaceIds
             ),
             // assembler
         ) { funcs, namespaces ->

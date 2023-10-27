@@ -1,6 +1,7 @@
 package io.hamal.repository.fixture
 
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.*
@@ -33,7 +34,15 @@ object MemoryFixture : BaseTestFixture {
         SegmentRepository::class -> MemorySegmentRepository(MemorySegment(Segment.Id(2810), TopicId(1506))) as REPO
         SnippetRepository::class -> MemorySnippetRepository() as REPO
         StateRepository::class -> MemoryStateRepository() as REPO
-        TopicRepository::class -> MemoryTopicRepository(Topic(TopicId(23), GroupId(1), TopicName("test-topic"))) as REPO
+        TopicRepository::class -> MemoryTopicRepository(
+            Topic(
+                TopicId(23),
+                NamespaceId(23),
+                GroupId(1),
+                TopicName("test-topic")
+            )
+        ) as REPO
+
         TriggerRepository::class -> MemoryTriggerRepository() as REPO
         else -> TODO()
     }

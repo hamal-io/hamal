@@ -38,7 +38,6 @@ private fun UpdateFuncHandler.updateFunc(req: SubmittedUpdateFuncReq): Func {
         req.id,
         UpdateCmd(
             id = req.cmdId(),
-            namespaceId = req.namespaceId,
             name = req.name,
             inputs = req.inputs,
             code = FuncCode(

@@ -101,6 +101,7 @@ internal abstract class BaseTest {
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
     lateinit var testGroup: Group
+    lateinit var testNamespace: Namespace
 
     @BeforeEach
     fun before() {
@@ -149,7 +150,7 @@ internal abstract class BaseTest {
             )
         )
 
-        namespaceCmdRepository.create(
+        testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = generateDomainId(::NamespaceId),
@@ -175,6 +176,7 @@ internal abstract class BaseTest {
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 correlation = correlation,
                 inputs = ExecInputs(),

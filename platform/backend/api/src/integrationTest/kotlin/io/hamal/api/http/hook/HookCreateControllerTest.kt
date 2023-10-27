@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Test
 internal class HookCreateControllerTest : HookBaseControllerTest() {
 
     @Test
-    fun `Create hook without namespace id`() {
+    fun `Create hook with default namespace id`() {
         val result = createHook(
-            ApiCreateHookReq(
+            req = ApiCreateHookReq(
                 name = HookName("test-hook"),
-                namespaceId = null
-            )
+            ),
+            namespaceId = NamespaceId(1)
         )
         awaitCompleted(result.reqId)
 
@@ -49,10 +49,8 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
         )
 
         val result = createHook(
-            ApiCreateHookReq(
-                name = HookName("test-hook"),
-                namespaceId = namespace.id
-            )
+            req = ApiCreateHookReq(HookName("test-hook")),
+            namespaceId = namespace.id
         )
         awaitCompleted(result.reqId)
 
@@ -71,14 +69,9 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
     @Test
     fun `Tries to create hook with namespace which does not exist`() {
 
-        val response = httpTemplate.post("/v1/groups/{groupId}/hooks")
+        val response = httpTemplate.post("/v1/namespaces/12345/hooks")
             .path("groupId", testGroup.id)
-            .body(
-                ApiCreateHookReq(
-                    name = HookName("test-hook"),
-                    namespaceId = NamespaceId(12345)
-                )
-            )
+            .body(ApiCreateHookReq(HookName("test-hook")))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

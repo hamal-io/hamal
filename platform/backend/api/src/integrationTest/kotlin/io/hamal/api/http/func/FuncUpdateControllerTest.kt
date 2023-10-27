@@ -25,7 +25,6 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val getFuncResponse = httpTemplate.patch("/v1/funcs/33333333")
             .body(
                 ApiUpdateFuncReq(
-                    namespaceId = null,
                     name = FuncName("update"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -44,8 +43,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Updates func`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -54,8 +53,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
-                    namespaceId = createdNamespace.id,
+                namespaceId = createdNamespace.id,
+                req = ApiCreateFuncReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -63,21 +62,10 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             )
         )
 
-        val updateNamespace = namespaceCmdRepository.create(
-            CreateCmd(
-                id = CmdId(2),
-                namespaceId = NamespaceId(2),
-                groupId = testGroup.id,
-                name = NamespaceName("updatedNamespace"),
-                inputs = NamespaceInputs()
-            )
-        )
-
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
                 ApiUpdateFuncReq(
-                    namespaceId = updateNamespace.id,
                     name = FuncName("updatedName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeValue("updatedCode")
@@ -95,7 +83,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(namespace.name, equalTo(NamespaceName("updatedNamespace")))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
@@ -105,51 +93,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     }
 
     @Test
-    fun `Tries to update namespace id which does not exists`() {
-        val createdNamespace = namespaceCmdRepository.create(
-            CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
-                groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
-            )
-        )
-
-        val func = awaitCompleted(
-            createFunc(
-                ApiCreateFuncReq(
-                    namespaceId = createdNamespace.id,
-                    name = FuncName("createdName"),
-                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
-                    code = CodeValue("createdCode")
-                )
-            )
-        )
-
-        val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
-            .path("funcId", func.id)
-            .body(ApiUpdateFuncReq(NamespaceId(12345)))
-            .execute()
-
-        assertThat(updateFuncResponse.statusCode, equalTo(NotFound))
-        require(updateFuncResponse is ErrorHttpResponse) { "request was successful" }
-
-        val error = updateFuncResponse.error(ApiError::class)
-        assertThat(error.message, equalTo("Namespace not found"))
-
-        with(getFunc(func.id(::FuncId))) {
-            assertThat(namespace.id, equalTo(createdNamespace.id))
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
-        }
-    }
-
-    @Test
     fun `Updates func without updating values`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -158,8 +106,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         val func = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
-                    namespaceId = createdNamespace.id,
+                namespaceId = createdNamespace.id,
+                req = ApiCreateFuncReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -171,7 +119,6 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .path("funcId", func.id)
             .body(
                 ApiUpdateFuncReq(
-                    namespaceId = null,
                     name = null,
                     inputs = null,
                     code = null

@@ -85,6 +85,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
                     ExecPlannedRecord(
                         cmdId = cmd.id,
                         entityId = execId,
+                        namespaceId = cmd.namespaceId,
                         groupId = cmd.groupId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,

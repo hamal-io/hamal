@@ -14,11 +14,9 @@ import kotlin.time.Duration.Companion.seconds
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/funcs")
-            .path("groupId", testGroup.id)
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/funcs")
             .body(
                 ApiCreateFuncReq(
-                    namespaceId = null,
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -33,8 +31,8 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
-        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
-            .path("groupId", testGroup.id)
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/topics")
+            .path("namespaceId", testNamespace.id)
             .body(ApiCreateTopicReq(topicName))
             .execute()
 
@@ -45,14 +43,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createHook(hookName: HookName): ApiSubmittedReqWithId {
-        val createHookResponse = httpTemplate.post("/v1/groups/{groupId}/hooks")
+        val createHookResponse = httpTemplate.post("/v1/namespaces/1/hooks")
             .path("groupId", testGroup.id)
-            .body(
-                ApiCreateHookReq(
-                    namespaceId = null,
-                    name = hookName
-                )
-            )
+            .body(ApiCreateHookReq(hookName))
             .execute()
 
         assertThat(createHookResponse.statusCode, equalTo(HttpStatusCode.Accepted))
@@ -64,8 +57,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqWithId {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
 
-        val creationResponse = httpTemplate.post("/v1/triggers")
-            .path("groupId", testGroup.id)
+        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(
                 ApiCreateTriggerReq(
                     type = TriggerType.FixedRate,
@@ -84,8 +76,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTrigger(req: ApiCreateTriggerReq): ApiSubmittedReqWithId {
-        val creationResponse = httpTemplate.post("/v1/triggers")
-            .path("groupId", testGroup.id)
+        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(req)
             .execute()
 
@@ -96,8 +87,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun listTriggers(): ApiTriggerList {
-        val listTriggersResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+        val listTriggersResponse = httpTemplate.get("/v1/triggers")
             .execute()
 
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))

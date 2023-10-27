@@ -21,12 +21,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     @Test
     fun `Tries to update hook which does not exists`() {
         val getHookResponse = httpTemplate.patch("/v1/hooks/33333333")
-            .body(
-                ApiUpdateHookReq(
-                    namespaceId = null,
-                    name = HookName("update")
-                )
-            )
+            .body(ApiUpdateHookReq(name = HookName("update")))
             .execute()
 
         assertThat(getHookResponse.statusCode, equalTo(NotFound))
@@ -40,8 +35,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     fun `Updates hook`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -50,31 +45,14 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                ApiCreateHookReq(
-                    namespaceId = createdNamespace.id,
-                    name = HookName("createdName")
-                )
-            )
-        )
-
-        val updateNamespace = namespaceCmdRepository.create(
-            CreateCmd(
-                id = CmdId(2),
-                namespaceId = NamespaceId(2),
-                groupId = testGroup.id,
-                name = NamespaceName("updatedNamespace"),
-                inputs = NamespaceInputs()
+                req = ApiCreateHookReq(HookName("createdName")),
+                namespaceId = createdNamespace.id
             )
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.id)
-            .body(
-                ApiUpdateHookReq(
-                    namespaceId = updateNamespace.id,
-                    name = HookName("updatedName")
-                )
-            )
+            .body(ApiUpdateHookReq(name = HookName("updatedName")))
             .execute()
 
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
@@ -87,46 +65,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         with(getHook(hookId)) {
             assertThat(id, equalTo(hookId))
-            assertThat(namespace.name, equalTo(NamespaceName("updatedNamespace")))
-            assertThat(name, equalTo(HookName("updatedName")))
-        }
-    }
-
-    @Test
-    fun `Tries to update namespace id which does not exists`() {
-        val createdNamespace = namespaceCmdRepository.create(
-            CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
-                groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
-            )
-        )
-
-        val hook = awaitCompleted(
-            createHook(
-                ApiCreateHookReq(
-                    namespaceId = createdNamespace.id,
-                    name = HookName("createdName")
-                )
-            )
-        )
-
-        val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
-            .path("hookId", hook.id)
-            .body(ApiUpdateHookReq(NamespaceId(12345)))
-            .execute()
-
-        assertThat(updateHookResponse.statusCode, equalTo(NotFound))
-        require(updateHookResponse is ErrorHttpResponse) { "request was successful" }
-
-        val error = updateHookResponse.error(ApiError::class)
-        assertThat(error.message, equalTo("Namespace not found"))
-
-        with(getHook(hook.id(::HookId))) {
-            assertThat(namespace.id, equalTo(createdNamespace.id))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(name, equalTo(HookName("updatedName")))
         }
     }
 
@@ -134,8 +74,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     fun `Updates hook without updating values`() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
-                id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                id = CmdId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
                 name = NamespaceName("createdNamespace"),
                 inputs = NamespaceInputs()
@@ -144,21 +84,14 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                ApiCreateHookReq(
-                    namespaceId = createdNamespace.id,
-                    name = HookName("createdName")
-                )
+                req = ApiCreateHookReq(HookName("createdName")),
+                namespaceId = createdNamespace.id
             )
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.id)
-            .body(
-                ApiUpdateHookReq(
-                    namespaceId = null,
-                    name = null
-                )
-            )
+            .body(ApiUpdateHookReq(name = null))
             .execute()
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
         require(updateHookResponse is SuccessHttpResponse) { "request was not successful" }

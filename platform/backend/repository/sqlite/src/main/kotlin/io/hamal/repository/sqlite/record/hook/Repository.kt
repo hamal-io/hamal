@@ -89,7 +89,6 @@ class SqliteHookRepository(
                     HookUpdatedRecord(
                         entityId = hookId,
                         cmdId = cmdId,
-                        namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name
                     )
                 )

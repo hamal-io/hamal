@@ -2,6 +2,8 @@ package io.hamal.bridge.web.exec
 
 import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiFailExecReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import org.springframework.http.HttpStatus
@@ -25,8 +27,9 @@ internal class FailExecController(
             ApiSubmittedReqWithId(
                 reqId = it.reqId,
                 status = it.status,
-                groupId = it.groupId,
-                id = it.id
+                id = it.id.value,
+                namespaceId = NamespaceId(1),
+                groupId = GroupId(1)
             )
         }, HttpStatus.ACCEPTED)
     }

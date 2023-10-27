@@ -18,9 +18,15 @@ import kotlin.reflect.KClass
 data class ArrayType(
     @Serializable(with = Serializer::class)
     val value: MutableMap<Int, SerializableType> = mutableMapOf(),
-) : TableType() {
+) : TableType(), Map<Int, SerializableType> {
 
-    val size get() = value.size
+    override val size get() = value.size
+    override val entries: Set<Map.Entry<Int, SerializableType>> = value.entries
+    override val keys: Set<Int> = value.keys
+    override val values: Collection<SerializableType> = value.values
+    override fun isEmpty(): Boolean = value.isEmpty()
+    override fun containsValue(value: SerializableType): Boolean = this.value.containsValue(value)
+    override fun containsKey(key: Int): Boolean = this.containsKey(key)
 
     fun append(value: ArrayType): Int {
         this.value[this.value.size + 1] = value
@@ -34,7 +40,7 @@ data class ArrayType(
 
     fun append(value: AnySerializableType) = append(value.value)
 
-    operator fun get(idx: Int): SerializableType {
+    override operator fun get(idx: Int): SerializableType {
         return value[idx]!!
     }
 

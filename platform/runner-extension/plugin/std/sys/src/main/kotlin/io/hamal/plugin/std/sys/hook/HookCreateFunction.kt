@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.hook
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -22,16 +21,9 @@ class HookCreateFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
-            val namespaceId = if (arg1.type("namespace_id") == StringType::class) {
-                NamespaceId(SnowflakeId(arg1.getString("namespace_id")))
-            } else {
-                null
-            }
-
             val res = sdk.hook.create(
-                ctx[GroupId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiCreateHookReq(
-                    namespaceId = namespaceId,
                     name = HookName(arg1.getString("name"))
                 )
             )
@@ -40,7 +32,9 @@ class HookCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.toString(16)),
+                    "group_id" to StringType(res.groupId.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
                 )
             )
 

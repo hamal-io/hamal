@@ -3,6 +3,7 @@ package io.hamal.repository.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerRepository
@@ -24,7 +25,7 @@ class ConsumerTest : AbstractIntegrationTest() {
 
         val topic = testInstance.create(
             CmdId(1),
-            TopicToCreate(TopicId(123), TopicName("topic"), GroupId(1))
+            TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(1), GroupId(1))
         )
 
         val appender = ProtobufAppender(String::class, testInstance)
@@ -58,7 +59,7 @@ class ConsumerTest : AbstractIntegrationTest() {
 
         val topic = testInstance.create(
             CmdId(1),
-            TopicToCreate(TopicId(123), TopicName("topic"), GroupId.root)
+            TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId.root, GroupId.root)
         )
 
         val testAppender = ProtobufAppender(String::class, testInstance)

@@ -33,7 +33,6 @@ data class FuncCreationRecord(
 data class FuncUpdatedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
-    val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: FuncCode

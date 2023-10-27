@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.Topic
@@ -30,6 +31,7 @@ class SqliteTopicRepositoryTest {
                 Topic(
                     id = TopicId(23),
                     name = TopicName("test-topic"),
+                    namespaceId = NamespaceId(45),
                     groupId = GroupId(34)
                 ),
                 targetDir

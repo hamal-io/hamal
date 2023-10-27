@@ -14,8 +14,8 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class ExecBaseControllerTest : BaseControllerTest() {
     fun createAdhocExec(): ApiSubmittedReqWithId {
         val createAdhocExecResponse = httpTemplate
-            .post("/v1/groups/{groupId}/adhoc")
-            .path("groupId", testGroup.id)
+            .post("/v1/namespaces/{namespaceId}/adhoc")
+            .path("namespaceId", testNamespace.id)
             .body(
                 ApiInvokeAdhocReq(
                     inputs = InvocationInputs(),

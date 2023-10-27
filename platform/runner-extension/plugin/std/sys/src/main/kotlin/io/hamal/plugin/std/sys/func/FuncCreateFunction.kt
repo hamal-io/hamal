@@ -1,7 +1,10 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -20,16 +23,9 @@ class FuncCreateFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
-            val namespaceId = if (arg1.type("namespace_id") == StringType::class) {
-                NamespaceId(SnowflakeId(arg1.getString("namespace_id")))
-            } else {
-                null
-            }
-
             val res = sdk.func.create(
-                ctx[GroupId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiCreateFuncReq(
-                    namespaceId = namespaceId,
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
                     code = CodeValue(arg1.getString("code"))
@@ -40,7 +36,9 @@ class FuncCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.toString(16)),
+                    "group_id" to StringType(res.groupId.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
                 )
             )
 

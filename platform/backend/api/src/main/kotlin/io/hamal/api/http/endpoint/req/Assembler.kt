@@ -1,12 +1,14 @@
 package io.hamal.api.http.endpoint.req
 
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
 import io.hamal.lib.sdk.api.ApiSubmittedWithTokenReq
 import io.hamal.repository.api.submitted_req.*
 
-
+// FIXME
 internal object Assembler {
     fun assemble(req: SubmittedReq): ApiSubmittedReq {
         return when (val r = req) {
@@ -14,6 +16,7 @@ internal object Assembler {
             is SubmittedCreateAccountWithPasswordReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = r.namespaceId,
                 groupId = r.groupId,
                 id = r.id
             )
@@ -21,6 +24,7 @@ internal object Assembler {
             is SubmittedAppendToTopicReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -28,13 +32,15 @@ internal object Assembler {
             is SubmittedCompleteExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
-                groupId = r.groupId,
+                namespaceId = NamespaceId(1337),
+                groupId = GroupId(1),
                 id = r.id
             )
 
             is SubmittedCreateExtensionReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -42,6 +48,7 @@ internal object Assembler {
             is SubmittedUpdateExtensionReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -49,6 +56,7 @@ internal object Assembler {
             is SubmittedCreateFuncReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = r.namespaceId ?: NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -56,6 +64,7 @@ internal object Assembler {
             is SubmittedCreateHookReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = r.namespaceId ?: NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -63,6 +72,7 @@ internal object Assembler {
             is SubmittedUpdateHookReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -70,6 +80,7 @@ internal object Assembler {
             is SubmittedCreateNamespaceReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -77,6 +88,7 @@ internal object Assembler {
             is SubmittedCreateTopicReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = r.namespaceId,
                 groupId = r.groupId,
                 id = r.id
             )
@@ -84,6 +96,7 @@ internal object Assembler {
             is SubmittedCreateSnippetReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -91,6 +104,7 @@ internal object Assembler {
             is SubmittedUpdateSnippetReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -98,6 +112,7 @@ internal object Assembler {
             is SubmittedCreateTriggerReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = r.namespaceId ?: NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -105,13 +120,15 @@ internal object Assembler {
             is SubmittedFailExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
-                groupId = r.groupId,
+                namespaceId = NamespaceId(1337),
+                groupId = GroupId(1),
                 id = r.id
             )
 
             is SubmittedInvokeExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = r.namespaceId,
                 groupId = r.groupId,
                 id = r.id
             )
@@ -119,6 +136,7 @@ internal object Assembler {
             is SubmittedUpdateFuncReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -126,6 +144,7 @@ internal object Assembler {
             is SubmittedUpdateNamespaceReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )
@@ -134,6 +153,7 @@ internal object Assembler {
             is SubmittedSetStateReq -> ApiDefaultSubmittedReq(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId
             )
 
@@ -146,6 +166,7 @@ internal object Assembler {
             is SubmittedInvokeHookReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )

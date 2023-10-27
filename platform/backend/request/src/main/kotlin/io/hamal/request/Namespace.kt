@@ -8,7 +8,6 @@ interface CreateNamespaceReq {
     val inputs: NamespaceInputs
 }
 
-
 interface UpdateNamespaceReq {
     val name: NamespaceName
     val inputs: NamespaceInputs

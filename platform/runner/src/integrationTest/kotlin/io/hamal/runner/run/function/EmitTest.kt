@@ -172,6 +172,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
     private fun unitOfWork(code: String) = UnitOfWork(
         id = ExecId(1234),
+        namespaceId = NamespaceId(9876),
         groupId = GroupId(5432),
         inputs = ExecInputs(),
         state = State(),

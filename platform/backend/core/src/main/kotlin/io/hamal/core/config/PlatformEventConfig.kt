@@ -20,10 +20,7 @@ internal open class PlatformEventConfig {
     open fun platformEventEmitter(
         platformEventBrokerRepository: BrokerRepository,
         generateDomainId: GenerateDomainId
-    ): PlatformEventEmitter = PlatformEventEmitter(
-        generateDomainId,
-        platformEventBrokerRepository
-    )
+    ): PlatformEventEmitter = PlatformEventEmitter(generateDomainId, platformEventBrokerRepository)
 
     @Bean
     open fun platformEventContainer(

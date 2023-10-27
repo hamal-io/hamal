@@ -2,6 +2,7 @@ package io.hamal.api.http.hook
 
 import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
@@ -14,9 +15,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class HookBaseControllerTest : BaseControllerTest() {
-    fun createHook(req: ApiCreateHookReq): ApiSubmittedReqWithId {
-        val response = httpTemplate.post("/v1/groups/{groupId}/hooks")
-            .path("groupId", testGroup.id)
+
+    fun createHook(
+        req: ApiCreateHookReq,
+        namespaceId: NamespaceId = NamespaceId(1),
+    ): ApiSubmittedReqWithId {
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/hooks")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
 

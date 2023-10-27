@@ -37,6 +37,7 @@ internal object CurrentHookProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -48,6 +49,7 @@ internal object CurrentHookProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .count()
             .toULong()
@@ -94,7 +96,6 @@ class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
                     HookUpdatedRecord(
                         entityId = hookId,
                         cmdId = cmd.id,
-                        namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name
                     )
                 )

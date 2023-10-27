@@ -156,7 +156,6 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             val result = update(
                 HookId(1), UpdateCmd(
                     id = CmdId(2),
-                    namespaceId = NamespaceId(22),
                     name = HookName("Updated")
                 )
             )
@@ -164,7 +163,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(HookId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(22)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(HookName("Updated")))
             }
 
@@ -183,7 +182,6 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             val result = update(
                 HookId(1), UpdateCmd(
                     id = CmdId(2),
-                    namespaceId = null,
                     name = null
                 )
             )
@@ -384,6 +382,27 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(HookId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(4)))
                 assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(name, equalTo(HookName("Hook")))
+            }
+        }
+
+        @TestFactory
+        fun `With namespace ids`() = runWith(HookRepository::class) {
+            setup()
+
+            val query = HookQuery(
+                namespaceIds = listOf(NamespaceId(10), NamespaceId(23)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(HookId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(name, equalTo(HookName("Hook")))
             }
         }

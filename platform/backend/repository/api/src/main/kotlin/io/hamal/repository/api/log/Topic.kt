@@ -5,6 +5,7 @@ import io.hamal.repository.api.CmdRepository
 
 data class Topic(
     val id: TopicId,
+    val namespaceId: NamespaceId,
     val groupId: GroupId,
     val name: TopicName
 )

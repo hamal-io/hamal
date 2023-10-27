@@ -32,6 +32,5 @@ data class HookCreationRecord(
 data class HookUpdatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,
-    val namespaceId: NamespaceId,
     val name: HookName
 ) : HookRecord()

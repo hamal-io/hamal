@@ -8,7 +8,7 @@ end
 
 function fail_on_error(err, ...)
     if err ~= nil then
-        ctx.fail(err)
+        context.fail(err)
     end
     return ...
 end

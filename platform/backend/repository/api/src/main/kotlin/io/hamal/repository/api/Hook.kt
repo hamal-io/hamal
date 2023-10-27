@@ -36,7 +36,6 @@ interface HookCmdRepository : CmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val namespaceId: NamespaceId? = null,
         val name: HookName? = null
     )
 }
@@ -59,6 +58,7 @@ interface HookQueryRepository {
         var afterId: HookId = HookId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var hookIds: List<HookId> = listOf(),
-        var groupIds: List<GroupId>
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var groupIds: List<GroupId> = listOf()
     )
 }

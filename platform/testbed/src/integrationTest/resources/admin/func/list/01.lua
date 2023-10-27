@@ -4,20 +4,20 @@ err, hooks = sys.func.list()
 assert(err == nil)
 assert(#hooks == 0)
 
-err, hook_one_req = sys.func.create({ name = 'func-1' })
-sys.await_completed(hook_one_req)
+hook = fail_on_error(sys.func.create({ namespace_id = '1', name = 'func-1' }))
+sys.await_completed(hook)
 
 assert(err == nil)
-assert(hook_one_req ~= nil)
+assert(hook ~= nil)
 --
 _, hooks = sys.func.list()
 assert(#hooks == 1)
 
-assert(hook_one_req.id == hooks[1].id)
+assert(hook.id == hooks[1].id)
 assert(hooks[1].name == 'func-1')
 
-err, hook_two_req = sys.func.create({ name = 'func-2' })
-sys.await_completed(hook_two_req)
+func_two = fail_on_error(sys.func.create({ namespace_id = '1', name = 'func-2' }))
+sys.await_completed(func_two)
 
 _, hooks = sys.func.list()
 assert(#hooks == 2)

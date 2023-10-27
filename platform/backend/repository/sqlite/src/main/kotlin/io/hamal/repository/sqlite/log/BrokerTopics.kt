@@ -3,10 +3,11 @@ package io.hamal.repository.sqlite.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
@@ -38,11 +39,12 @@ class SqliteBrokerTopicsRepository(
             execute(
                 """
          CREATE TABLE IF NOT EXISTS topics (
-            id INTEGER PRIMARY KEY,
-            name TEXT NOT NULL ,
-            group_id INTEGER NOT NULL,
-            instant DATETIME NOT NULL,
-            UNIQUE(group_id, name)
+            id              INTEGER PRIMARY KEY,
+            name            TEXT NOT NULL ,
+            group_id        INTEGER NOT NULL,
+            namespace_id    INTEGER NOT NULL,
+            instant         DATETIME NOT NULL,
+            UNIQUE(namespace_id, name)
         );
         """
             )
@@ -51,10 +53,11 @@ class SqliteBrokerTopicsRepository(
 
     override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
         try {
-            return connection.execute<Topic>("INSERT INTO topics(id, name,group_id, instant) VALUES (:id, :name,:groupId, :now) RETURNING id,name, group_id") {
+            return connection.execute<Topic>("INSERT INTO topics(id, name,namespace_id, group_id, instant) VALUES (:id, :name,:namespaceId, :groupId, :now) RETURNING id, name, namespace_id, group_id") {
                 query {
                     set("id", toCreate.id)
                     set("name", toCreate.name)
+                    set("namespaceId", toCreate.namespaceId)
                     set("groupId", toCreate.groupId)
                     set("now", TimeUtils.now())
                 }
@@ -62,36 +65,38 @@ class SqliteBrokerTopicsRepository(
                     Topic(
                         id = rs.getDomainId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
+                        namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
                         groupId = rs.getDomainId("group_id", ::GroupId)
                     )
                 }
             }!!
         } catch (t: Throwable) {
-            if (t.message!!.contains("(UNIQUE constraint failed: topics.group_id, topics.name)")) {
+            if (t.message!!.contains("(UNIQUE constraint failed: topics.namespace_id, topics.name)")) {
                 throw IllegalArgumentException("Topic already exists")
             }
             throw t
         }
     }
 
-    override fun find(groupId: GroupId, name: TopicName): Topic? =
+    override fun find(namespaceId: NamespaceId, name: TopicName): Topic? =
         topicMapping[name]
-            ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE name = :name AND group_id = :groupId") {
+            ?: connection.executeQueryOne("SELECT id, name, namespace_id, group_id FROM topics WHERE name = :name AND namespace_id = :namespaceId") {
                 query {
                     set("name", name.value)
-                    set("groupId", groupId.value)
+                    set("namespaceId", namespaceId.value)
                 }
                 map { rs ->
                     Topic(
                         id = rs.getDomainId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
+                        namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
                         groupId = rs.getDomainId("group_id", ::GroupId)
                     )
                 }
             }?.also { topicMapping[it.name] = it }
 
     override fun find(id: TopicId): Topic? = topicMapping.values.find { it.id == id }
-        ?: connection.executeQueryOne("SELECT id, name, group_id FROM topics WHERE id = :id") {
+        ?: connection.executeQueryOne("SELECT id, name, namespace_id, group_id FROM topics WHERE id = :id") {
             query {
                 set("id", id)
             }
@@ -99,6 +104,7 @@ class SqliteBrokerTopicsRepository(
                 Topic(
                     id = rs.getDomainId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
+                    namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
                     groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
@@ -108,13 +114,14 @@ class SqliteBrokerTopicsRepository(
         return connection.executeQuery<Topic>(
             """
                 SELECT
-                    id, name, group_id
+                    id, name, namespace_id, group_id
                 FROM 
                     topics
                 WHERE
                     id < :afterId
                     ${query.names()}
                     ${query.groupIds()}
+                    ${query.namespaceIds()}
                 ORDER BY id DESC
                 LIMIT :limit
             """.trimIndent()
@@ -127,6 +134,7 @@ class SqliteBrokerTopicsRepository(
                 Topic(
                     id = rs.getDomainId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
+                    namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
                     groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
@@ -144,6 +152,7 @@ class SqliteBrokerTopicsRepository(
                 id < :afterId
                 ${query.names()}
                 ${query.groupIds()}
+                ${query.namespaceIds()}
         """.trimIndent()
         ) {
             query {
@@ -179,6 +188,14 @@ class SqliteBrokerTopicsRepository(
             ""
         } else {
             "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun TopicQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
+            ""
+        } else {
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

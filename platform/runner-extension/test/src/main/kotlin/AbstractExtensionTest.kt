@@ -5,8 +5,8 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
+import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -67,6 +67,7 @@ abstract class AbstractExtensionTest {
         inputs: ExecInputs = ExecInputs()
     ) = UnitOfWork(
         id = ExecId(1234),
+        namespaceId = NamespaceId(98876),
         groupId = GroupId(5432),
         inputs = inputs,
         state = State(),

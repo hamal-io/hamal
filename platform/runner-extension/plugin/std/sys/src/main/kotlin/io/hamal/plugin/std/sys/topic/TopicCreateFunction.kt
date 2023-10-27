@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.topic
 
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -21,7 +22,7 @@ class TopicCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.topic.create(
-                ctx[GroupId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiCreateTopicReq(
                     name = TopicName(arg1.getString("name")),
                 )
@@ -31,7 +32,9 @@ class TopicCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.toString(16)),
+                    "group_id" to StringType(res.groupId.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
                 )
             )
 

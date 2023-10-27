@@ -15,7 +15,9 @@ function extension()
         }
 
         function export.adhoc(cmd)
+            cmd = cmd or {}
             local err, res = internal.adhoc({
+                namespace_id = cmd.namespace_id,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
             })
@@ -48,8 +50,11 @@ function extension()
             return internal.exec_get(exec_id)
         end
 
-        function export.exec.list()
-            return internal.exec_list()
+        function export.exec.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.exec_list(query)
         end
 
         function export.extension.create(cmd)
@@ -72,8 +77,9 @@ function extension()
         end
 
         function export.func.create(cmd)
+            cmd = cmd or {}
             return internal.func_create({
-                namespace_id = cmd.namespace_id or nil,
+                namespace_id = cmd.namespace_id,
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
@@ -84,8 +90,11 @@ function extension()
             return internal.func_get(func_id)
         end
 
-        function export.func.list()
-            return internal.func_list()
+        function export.func.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.func_list(query)
         end
 
         function export.func.invoke(func_id, body)
@@ -93,6 +102,7 @@ function extension()
         end
 
         function export.hook.create(cmd)
+            cmd = cmd or {}
             return internal.hook_create({
                 namespace_id = cmd.namespace_id or nil,
                 name = cmd.name or nil
@@ -103,8 +113,11 @@ function extension()
             return internal.hook_get(hook_id)
         end
 
-        function export.hook.list()
-            return internal.hook_list()
+        function export.hook.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.hook_list(query)
         end
 
         function export.namespace.create(cmd)
@@ -127,11 +140,11 @@ function extension()
         end
 
         function export.snippet.create(cmd)
-             return internal.snippet_create({
+            return internal.snippet_create({
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 value = cmd.value or ""
-             })
+            })
         end
 
         function export.snippet.get(snippet_id)
@@ -151,13 +164,18 @@ function extension()
         end
 
         function export.topic.create(cmd)
+            cmd = cmd or {}
             return internal.topic_create({
+                namespace_id = cmd.namespace_id,
                 name = cmd.name
             })
         end
 
-        function export.topic.list()
-            return internal.topic_list()
+        function export.topic.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+
+            return internal.topic_list(query)
         end
 
         function export.topic.list_entries(topic_id)
@@ -169,6 +187,7 @@ function extension()
         end
 
         function export.trigger.create_fixed_rate(cmd)
+            cmd = cmd or {}
             return internal.trigger_create({
                 type = "FixedRate",
                 namespace_id = cmd.namespace_id,
@@ -180,6 +199,7 @@ function extension()
         end
 
         function export.trigger.create_event(cmd)
+            cmd = cmd or {}
             return internal.trigger_create({
                 type = "Event",
                 namespace_id = cmd.namespace_id,
@@ -191,6 +211,7 @@ function extension()
         end
 
         function export.trigger.create_hook(cmd)
+            cmd = cmd or {}
             return internal.trigger_create({
                 type = "Hook",
                 namespace_id = cmd.namespace_id,
@@ -206,8 +227,10 @@ function extension()
             return internal.trigger_get(trigger_id)
         end
 
-        function export.trigger.list()
-            return internal.trigger_list()
+        function export.trigger.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+            return internal.trigger_list(query)
         end
 
         return export

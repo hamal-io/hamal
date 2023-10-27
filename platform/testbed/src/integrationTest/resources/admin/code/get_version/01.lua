@@ -1,7 +1,8 @@
 sys = require('sys')
 
 err, f1 = sys.func.create({
-    name = 'empty-test-func',
+    namespace_id = '1',
+    name = 'test-func',
     inputs = {},
     code = [[4 + 2]]
 })
