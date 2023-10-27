@@ -67,6 +67,12 @@ internal abstract class BaseTest {
     lateinit var execQueryRepository: ExecQueryRepository
 
     @Autowired
+    lateinit var extensionQueryRepository: ExtensionQueryRepository
+
+    @Autowired
+    lateinit var extensionCmdRepository: ExtensionCmdRepository
+
+    @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
 
     @Autowired
@@ -128,6 +134,7 @@ internal abstract class BaseTest {
         platformEventBrokerRepository.clear()
         eventBrokerRepository.clear()
         execCmdRepository.clear()
+        extensionCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
         hookCmdRepository.clear()

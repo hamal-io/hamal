@@ -153,7 +153,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get func by id`() = runWith(SnippetRepository::class) {
+        fun `Get snippet by id`() = runWith(SnippetRepository::class) {
             createSnippet(
                 snippetId = SnippetId(1),
                 groupId = GroupId(1),
@@ -183,7 +183,7 @@ class SnippetRepositoryTest : AbstractUnitTest() {
     inner class FindTest {
 
         @TestFactory
-        fun `Find func by id`() = runWith(SnippetRepository::class) {
+        fun `Find snippet by id`() = runWith(SnippetRepository::class) {
             createSnippet(
                 snippetId = SnippetId(1),
                 groupId = GroupId(1),

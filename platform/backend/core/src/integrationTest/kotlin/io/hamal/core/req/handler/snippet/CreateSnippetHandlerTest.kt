@@ -18,8 +18,7 @@ internal class CreateSnippetHandlerTest : BaseReqHandlerTest() {
     fun `Creates snippet`() {
         testInstance(submitCreateSnippetReq)
 
-        val res = snippetQueryRepository.get(SnippetId(123))
-        with(res) {
+        with(snippetQueryRepository.get(SnippetId(123))) {
             assertThat(id, equalTo(SnippetId(123)))
             assertThat(name, equalTo(SnippetName("TestSnippet")))
             assertThat(value, equalTo(CodeValue("1 + 1")))

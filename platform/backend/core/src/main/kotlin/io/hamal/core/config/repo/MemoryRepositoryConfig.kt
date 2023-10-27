@@ -49,6 +49,15 @@ open class MemoryRepositoryConfig {
     open fun codeQueryRepository() = codeRepository()
 
     @Bean
+    open fun extensionRepository() = MemoryExtensionRepository()
+
+    @Bean
+    open fun extensionCmdRepository() = extensionRepository()
+
+    @Bean
+    open fun extensionQueryRepository() = extensionRepository()
+
+    @Bean
     open fun funcRepository(): FuncRepository = MemoryFuncRepository()
 
     @Bean

@@ -47,7 +47,10 @@ internal abstract class BaseTest {
     lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
+    lateinit var codeCmdRepository: CodeCmdRepository
+
+    @Autowired
+    lateinit var codeQueryRepository: CodeQueryRepository
 
     @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
@@ -57,6 +60,12 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var execQueryRepository: ExecQueryRepository
+
+    @Autowired
+    lateinit var extensionCmdRepository: ExtensionCmdRepository
+
+    @Autowired
+    lateinit var extensionQueryRepository: ExtensionQueryRepository
 
     @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
@@ -75,6 +84,9 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var namespaceCmdRepository: NamespaceCmdRepository
+
+    @Autowired
+    lateinit var platformEventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var reqQueryRepository: ReqQueryRepository
@@ -113,12 +125,14 @@ internal abstract class BaseTest {
 
         accountCmdRepository.clear()
         authCmdRepository.clear()
-        platformEventBrokerRepository.clear()
+        codeCmdRepository.clear()
         eventBrokerRepository.clear()
         execCmdRepository.clear()
+        extensionCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
         namespaceCmdRepository.clear()
+        platformEventBrokerRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
         triggerCmdRepository.clear()
