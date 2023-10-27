@@ -11,6 +11,7 @@ interface ApiSdk {
     val code: ApiCodeService
     val exec: ApiExecService
     val execLog: ApiExecLogService
+    val extension: ApiExtensionService
     val func: ApiFuncService
     val group: ApiGroupService
     val hook: ApiHookService
@@ -50,6 +51,10 @@ data class ApiSdkImpl(
 
     override val execLog: ApiExecLogService by lazy {
         ApiExecLogServiceImpl(template)
+    }
+
+    override val extension: ApiExtensionService by lazy {
+        ApiExtensionServiceImpl(template)
     }
 
     override val func: ApiFuncService by lazy {

@@ -4,6 +4,7 @@ function extension()
         local export = {
             code = { },
             exec = { },
+            extension = { },
             func = { },
             hook = { },
             namespace = { },
@@ -49,6 +50,25 @@ function extension()
 
         function export.exec.list()
             return internal.exec_list()
+        end
+
+        function export.extension.create(cmd)
+            return internal.extension_create({
+                name = cmd.name or nil,
+                code = cmd.code or ""
+            })
+        end
+
+        function export.extension.get(ext_id)
+            return internal.extension_get(ext_id)
+        end
+
+        function export.extension.list()
+            return internal.extension_list()
+        end
+
+        function export.extension.update(ext_id, cmd)
+            return internal.extension_update(ext_id, cmd)
         end
 
         function export.func.create(cmd)

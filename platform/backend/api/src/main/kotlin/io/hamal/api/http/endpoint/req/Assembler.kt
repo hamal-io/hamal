@@ -32,6 +32,20 @@ internal object Assembler {
                 id = r.id
             )
 
+            is SubmittedCreateExtensionReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is SubmittedUpdateExtensionReq -> ApiSubmittedReqWithId(
+                reqId = r.reqId,
+                status = r.status,
+                groupId = r.groupId,
+                id = r.id
+            )
+
             is SubmittedCreateFuncReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
@@ -137,7 +151,6 @@ internal object Assembler {
             )
 
             is TestSubmittedReq -> TODO()
-
         }
     }
 }

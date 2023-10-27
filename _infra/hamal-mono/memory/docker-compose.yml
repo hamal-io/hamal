@@ -5,7 +5,7 @@ services:
     restart:
       unless-stopped
     ports:
-      - "0.0.0.0:9009:9009"
+      - "0.0.0.0:8008:8008"
     environment:
       - ACTIVE_PROFILES=default,memory
     networks:

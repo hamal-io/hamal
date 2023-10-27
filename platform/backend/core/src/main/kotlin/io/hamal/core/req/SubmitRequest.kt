@@ -29,17 +29,18 @@ data class InvokeExecReq(
 
 @Component
 class SubmitRequest(
-    private val generateDomainId: GenerateDomainId,
-    private val reqCmdRepository: ReqCmdRepository,
-    private val snippetQueryRepository: SnippetQueryRepository,
+    private val encodePassword: EncodePassword,
+    private val eventBrokerRepository: BrokerRepository,
+    private val execQueryRepository: ExecQueryRepository,
+    private val extensionQueryRepository: ExtensionQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
+    private val generateDomainId: GenerateDomainId,
+    private val generateSalt: GenerateSalt,
+    private val generateToken: GenerateToken,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val generateSalt: GenerateSalt,
-    private val encodePassword: EncodePassword,
-    private val generateToken: GenerateToken,
-    private val execQueryRepository: ExecQueryRepository,
-    private val eventBrokerRepository: BrokerRepository
+    private val reqCmdRepository: ReqCmdRepository,
+    private val snippetQueryRepository: SnippetQueryRepository
 ) {
 
     operator fun invoke(req: CreateRootAccountReq): SubmittedCreateAccountWithPasswordReq {
@@ -176,6 +177,26 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         code = req.code,
+    ).also(reqCmdRepository::queue)
+
+    operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = SubmittedCreateExtensionReq(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        groupId = groupId,
+        id = generateDomainId(::ExtensionId),
+        name = req.name,
+        codeId = generateDomainId(::CodeId),
+        code = req.code
+
+    ).also(reqCmdRepository::queue)
+
+    operator fun invoke(extId: ExtensionId, req: UpdateExtensionReq) = SubmittedUpdateExtensionReq(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        groupId = extensionQueryRepository.get(extId).groupId,
+        id = extId,
+        name = req.name,
+        code = req.code
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SubmittedCreateSnippetReq(
