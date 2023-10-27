@@ -37,6 +37,7 @@ internal object CurrentTriggerProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .filter {
                 if (query.topicIds.isEmpty()) {
                     true
@@ -72,6 +73,7 @@ internal object CurrentTriggerProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .filter {
                 if (query.topicIds.isEmpty()) {
                     true

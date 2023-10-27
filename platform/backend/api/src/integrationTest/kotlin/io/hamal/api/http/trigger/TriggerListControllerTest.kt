@@ -34,8 +34,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
             IntRange(0, 20).map { createFixedRateTrigger(TriggerName("trigger-$it")) }
         )
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/triggers")
             .parameter("limit", 12)
             .execute(ApiTriggerList::class)
 
@@ -53,8 +52,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
 
         val request15 = requests[15]
 
-        val listResponse = (httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+        val listResponse = (httpTemplate.get("/v1/triggers")
             .parameter("after_id", request15.id)
             .parameter("limit", 1))
             .execute(ApiTriggerList::class)

@@ -192,8 +192,10 @@ function extension()
             return internal.trigger_get(trigger_id)
         end
 
-        function export.trigger.list()
-            return internal.trigger_list()
+        function export.trigger.list(query)
+            query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+            return internal.trigger_list(query)
         end
 
         return export

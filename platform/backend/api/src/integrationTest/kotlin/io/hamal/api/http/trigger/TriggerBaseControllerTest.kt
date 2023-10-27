@@ -87,8 +87,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun listTriggers(): ApiTriggerList {
-        val listTriggersResponse = httpTemplate.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", testGroup.id)
+        val listTriggersResponse = httpTemplate.get("/v1/triggers")
             .execute()
 
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))

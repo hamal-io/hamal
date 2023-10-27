@@ -1,10 +1,14 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
+import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateTriggerReq
 import kotlinx.serialization.Serializable
@@ -159,8 +163,24 @@ class ApiHookTrigger(
 
 interface ApiTriggerService {
     fun create(namespaceId: NamespaceId, req: ApiCreateTriggerReq): ApiSubmittedReqWithId
-    fun list(groupId: GroupId): List<ApiTriggerList.Trigger>
+    fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
+
+    data class TriggerQuery(
+        var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(25),
+        var funcIds: List<FuncId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var groupIds: List<GroupId> = listOf()
+    ) {
+        fun setRequestParameters(req: HttpRequest) {
+            req.parameter("after_id", afterId)
+            req.parameter("limit", limit)
+            if (funcIds.isNotEmpty()) req.parameter("func_ids", funcIds)
+            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
+        }
+    }
 }
 
 
@@ -174,9 +194,9 @@ internal class ApiTriggerServiceImpl(
             .execute()
             .fold(ApiSubmittedReqWithId::class)
 
-    override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/triggers")
-            .path("groupId", groupId)
+    override fun list(query: TriggerQuery) =
+        template.get("/v1/triggers")
+            .also(query::setRequestParameters)
             .execute()
             .fold(ApiTriggerList::class)
             .triggers

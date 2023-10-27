@@ -615,7 +615,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             val query = TriggerQuery(
                 funcIds = listOf(FuncId(9), FuncId(10), FuncId(11)),
-                groupIds = listOf(),
                 limit = Limit(10)
             )
 
@@ -639,7 +638,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = TriggerQuery(
-                groupIds = listOf(),
                 topicIds = listOf(TopicId(512)),
                 limit = Limit(10)
             )
@@ -659,8 +657,26 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = TriggerQuery(
-                groupIds = listOf(),
                 hookIds = listOf(HookId(512)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(1UL))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(5)))
+                assertThat(name, equalTo(TriggerName("hook-trigger-one")))
+            }
+        }
+
+        @TestFactory
+        fun `With namespace ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                namespaceIds = listOf(NamespaceId(11)),
                 limit = Limit(10)
             )
 
