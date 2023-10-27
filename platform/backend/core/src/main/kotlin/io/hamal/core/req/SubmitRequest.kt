@@ -180,7 +180,6 @@ class SubmitRequest(
         status = Submitted,
         groupId = funcQueryRepository.get(funcId).groupId,
         id = funcId,
-        namespaceId = req.namespaceId,
         name = req.name,
         inputs = req.inputs,
         code = req.code,

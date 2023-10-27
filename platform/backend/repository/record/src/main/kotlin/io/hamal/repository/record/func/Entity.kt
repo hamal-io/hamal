@@ -37,7 +37,6 @@ data class FuncEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
                 code = rec.code

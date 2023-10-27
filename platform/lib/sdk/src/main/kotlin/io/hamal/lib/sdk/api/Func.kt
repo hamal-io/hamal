@@ -22,7 +22,6 @@ data class ApiCreateFuncReq(
 
 @Serializable
 data class ApiUpdateFuncReq(
-    override val namespaceId: NamespaceId? = null,
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
     override val code: CodeValue? = null

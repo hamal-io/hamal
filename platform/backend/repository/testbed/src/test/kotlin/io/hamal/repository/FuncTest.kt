@@ -210,7 +210,6 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             val result = update(
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
-                    namespaceId = NamespaceId(22),
                     name = FuncName("Updated"),
                     inputs = FuncInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
                     code = FuncCode(
@@ -223,7 +222,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(FuncId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(22)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("Updated")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("answer" to NumberType(42))))))
                 assertThat(
@@ -251,7 +250,6 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             val result = update(
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
-                    namespaceId = null,
                     name = null,
                     inputs = null,
                     code = null

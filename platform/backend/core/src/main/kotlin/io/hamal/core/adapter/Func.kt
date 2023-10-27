@@ -91,15 +91,10 @@ class FuncAdapter(
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
         ensureFuncExists(funcId)
-        ensureNamespaceIdExists(req.namespaceId)
         return responseHandler(submitRequest(funcId, req))
     }
 
     private fun ensureFuncExists(funcId: FuncId) {
         funcQueryRepository.get(funcId)
-    }
-
-    private fun ensureNamespaceIdExists(namespaceId: NamespaceId?) {
-        namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

@@ -99,7 +99,6 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                     FuncUpdatedRecord(
                         entityId = funcId,
                         cmdId = cmd.id,
-                        namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
                         code = cmd.code ?: currentVersion.code

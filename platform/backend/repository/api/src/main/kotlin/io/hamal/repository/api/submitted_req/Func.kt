@@ -26,7 +26,6 @@ data class SubmittedUpdateFuncReq(
     override var status: ReqStatus,
     override val groupId: GroupId,
     val id: FuncId,
-    val namespaceId: NamespaceId?,
     val name: FuncName?,
     val inputs: FuncInputs?,
     val code: CodeValue?
