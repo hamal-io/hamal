@@ -243,7 +243,6 @@ class SubmitRequest(
         status = Submitted,
         groupId = hookQueryRepository.get(hookId).groupId,
         id = hookId,
-        namespaceId = req.namespaceId,
         name = req.name,
     ).also(reqCmdRepository::queue)
 

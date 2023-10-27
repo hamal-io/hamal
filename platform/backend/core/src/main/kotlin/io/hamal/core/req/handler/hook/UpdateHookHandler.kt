@@ -25,7 +25,6 @@ private fun UpdateHookHandler.updateHook(req: SubmittedUpdateHookReq): Hook {
     return hookRepository.update(
         req.id, UpdateCmd(
             id = req.cmdId(),
-            namespaceId = req.namespaceId,
             name = req.name,
         )
     )

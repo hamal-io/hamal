@@ -36,7 +36,6 @@ interface HookCmdRepository : CmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val namespaceId: NamespaceId? = null,
         val name: HookName? = null
     )
 }

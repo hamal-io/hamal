@@ -96,7 +96,6 @@ class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
                     HookUpdatedRecord(
                         entityId = hookId,
                         cmdId = cmd.id,
-                        namespaceId = cmd.namespaceId ?: currentVersion.namespaceId,
                         name = cmd.name ?: currentVersion.name
                     )
                 )

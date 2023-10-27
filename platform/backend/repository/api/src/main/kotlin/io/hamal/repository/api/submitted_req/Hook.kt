@@ -23,7 +23,6 @@ data class SubmittedUpdateHookReq(
     override var status: ReqStatus,
     override val groupId: GroupId,
     val id: HookId,
-    val namespaceId: NamespaceId?,
     val name: HookName?,
 ) : SubmittedReqWithGroupId
 

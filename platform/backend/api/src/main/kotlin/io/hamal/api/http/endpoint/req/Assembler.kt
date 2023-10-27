@@ -72,7 +72,7 @@ internal object Assembler {
             is SubmittedUpdateHookReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
-                namespaceId = r.namespaceId ?: NamespaceId(1337),
+                namespaceId = NamespaceId(1337),
                 groupId = r.groupId,
                 id = r.id
             )

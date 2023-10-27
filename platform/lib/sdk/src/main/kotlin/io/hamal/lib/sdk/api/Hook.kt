@@ -19,7 +19,6 @@ data class ApiCreateHookReq(
 
 @Serializable
 data class ApiUpdateHookReq(
-    override val namespaceId: NamespaceId? = null,
     override val name: HookName? = null
 ) : UpdateHookReq
 

@@ -2,10 +2,12 @@ package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Hook
+import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.HookQueryRepository.HookQuery
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
 import io.hamal.request.CreateHookReq
 import io.hamal.request.UpdateHookReq
@@ -74,15 +76,10 @@ class HookAdapter(
         responseHandler: (SubmittedReqWithGroupId) -> T
     ): T {
         ensureHookExists(hookId)
-        ensureNamespaceIdExists(req.namespaceId)
         return responseHandler(submitRequest(hookId, req))
     }
 
     private fun ensureHookExists(hookId: HookId) {
         hookQueryRepository.get(hookId)
-    }
-
-    private fun ensureNamespaceIdExists(namespaceId: NamespaceId?) {
-        namespaceId?.let { namespaceQueryRepository.get(it) }
     }
 }

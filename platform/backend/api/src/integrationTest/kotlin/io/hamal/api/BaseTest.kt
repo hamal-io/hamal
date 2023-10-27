@@ -148,7 +148,7 @@ internal abstract class BaseTest {
         testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
-                accountId = generateDomainId(::AccountId),
+                accountId = AccountId.root,
                 accountType = Root,
                 name = AccountName("test-account"),
                 email = AccountEmail("test@hamal.io"),
@@ -169,7 +169,7 @@ internal abstract class BaseTest {
         testGroup = groupCmdRepository.create(
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = generateDomainId(::GroupId),
+                groupId = GroupId.root,
                 name = GroupName("test-group"),
                 creatorId = testAccount.id
             )
@@ -178,7 +178,7 @@ internal abstract class BaseTest {
         testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = NamespaceId(1),
+                namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
                 name = NamespaceName("hamal"),
                 inputs = NamespaceInputs()
