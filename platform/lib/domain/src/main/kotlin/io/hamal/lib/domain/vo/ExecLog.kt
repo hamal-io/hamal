@@ -18,7 +18,7 @@ class ExecLogId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<ExecLogId>(::ExecLogId)
+    internal object Serializer : SerializableDomainIdSerializer<ExecLogId>(::ExecLogId)
 }
 
 @Serializable(with = ExecLogMessage.Serializer::class)

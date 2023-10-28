@@ -9,9 +9,8 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHook
 import io.hamal.lib.sdk.api.ApiHookCreateReq
+import io.hamal.lib.sdk.api.ApiHookCreateSubmitted
 import io.hamal.lib.sdk.api.ApiHookList
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
-import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
@@ -20,7 +19,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
     fun createHook(
         req: ApiHookCreateReq,
         namespaceId: NamespaceId = NamespaceId(1),
-    ): ApiSubmittedReqImpl<HookId> {
+    ): ApiHookCreateSubmitted {
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/hooks")
             .path("namespaceId", namespaceId)
             .body(req)
@@ -28,7 +27,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.toReq()
+        return response.result(ApiHookCreateSubmitted::class)
     }
 
     fun listHooks(): ApiHookList {

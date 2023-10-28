@@ -13,7 +13,7 @@ class NamespaceId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<NamespaceId>(::NamespaceId)
+    internal object Serializer : SerializableDomainIdSerializer<NamespaceId>(::NamespaceId)
 
     companion object {
         val root = NamespaceId(1)

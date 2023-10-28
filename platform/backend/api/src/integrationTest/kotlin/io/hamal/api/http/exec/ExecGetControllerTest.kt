@@ -15,16 +15,17 @@ import org.junit.jupiter.api.Test
 internal class ExecGetControllerTest : ExecBaseControllerTest() {
     @Test
     fun `Get exec`() {
-        val createAdhocResponse = awaitCompleted(
-            createAdhocExec()
-        )
+        val createAdhocResponse = awaitCompleted(createAdhocExec())
 
-        val response = httpTemplate.get("/v1/execs/{execId}").path("execId", createAdhocResponse.id).execute()
+        val response = httpTemplate.get("/v1/execs/{execId}")
+            .path("execId", createAdhocResponse.execId)
+            .execute()
+
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is HttpSuccessResponse)
 
         with(response.result(ApiExec::class)) {
-            assertThat(id, equalTo(createAdhocResponse.id))
+            assertThat(id, equalTo(createAdhocResponse.execId))
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(
                 code, equalTo(

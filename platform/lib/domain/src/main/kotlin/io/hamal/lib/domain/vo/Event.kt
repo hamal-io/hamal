@@ -31,7 +31,7 @@ data class EventTopic(
 data class EventId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
-    internal object Serializer : DomainIdSerializer<EventId>(::EventId)
+    internal object Serializer : SerializableDomainIdSerializer<EventId>(::EventId)
 }
 
 @Serializable(with = EventPayload.Serializer::class)

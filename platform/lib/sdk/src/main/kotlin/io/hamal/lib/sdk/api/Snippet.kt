@@ -1,10 +1,10 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateSnippetReq
 import io.hamal.request.UpdateSnippetReq
 import kotlinx.serialization.Serializable
@@ -17,6 +17,7 @@ data class ApiSnippet(
     val value: CodeValue
 )
 
+
 @Serializable
 data class ApiCreateSnippetReq(
     override val name: SnippetName,
@@ -25,28 +26,45 @@ data class ApiCreateSnippetReq(
 ) : CreateSnippetReq
 
 @Serializable
+data class ApiSnippetCreateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val snippetId: SnippetId,
+    val groupId: GroupId,
+) : ApiSubmitted
+
+
+@Serializable
 data class ApiUpdateSnippetReq(
     override val name: SnippetName? = null,
     override val inputs: SnippetInputs? = null,
     override val value: CodeValue? = null
 ) : UpdateSnippetReq
 
+@Serializable
+data class ApiSnippetUpdateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val snippetId: SnippetId
+) : ApiSubmitted
+
 
 interface ApiSnippetService {
-    fun create(groupId: GroupId, createSnippetReq: ApiCreateSnippetReq): ApiSubmittedReqImpl<SnippetId>
+    fun create(groupId: GroupId, createSnippetReq: ApiCreateSnippetReq): ApiSnippetCreateSubmitted
     fun get(snippetId: SnippetId): ApiSnippet
-    fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqImpl<SnippetId>
+    fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSnippetUpdateSubmitted
 }
 
 internal class ApiSnippetServiceImpl(
     private val template: HttpTemplate
 ) : ApiSnippetService {
-    override fun create(groupId: GroupId, createSnippetReq: ApiCreateSnippetReq): ApiSubmittedReqImpl<SnippetId> =
+
+    override fun create(groupId: GroupId, createSnippetReq: ApiCreateSnippetReq): ApiSnippetCreateSubmitted =
         template.post("/v1/groups/{groupId}/snippets")
             .path("groupId", groupId)
             .body(createSnippetReq)
             .execute()
-            .foldReq()
+            .fold(ApiSnippetCreateSubmitted::class)
 
 
     override fun get(snippetId: SnippetId): ApiSnippet =
@@ -56,13 +74,12 @@ internal class ApiSnippetServiceImpl(
             .fold(ApiSnippet::class)
 
 
-    override fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqImpl<SnippetId> =
+    override fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSnippetUpdateSubmitted =
         template.patch("/v1/snippets/{snippetId}")
             .path("snippetId", snippetId)
             .body(updateSnippetReq)
             .execute()
-            .foldReq()
-
+            .fold(ApiSnippetUpdateSubmitted::class)
 }
 
 

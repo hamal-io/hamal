@@ -12,7 +12,7 @@ import java.time.Instant
 class AuthId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
-    internal object Serializer : DomainIdSerializer<AuthId>(::AuthId)
+    internal object Serializer : SerializableDomainIdSerializer<AuthId>(::AuthId)
 }
 
 @Serializable(with = AuthToken.Serializer::class)

@@ -28,7 +28,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get fixed rate trigger`() {
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
         val triggerId = awaitCompleted(
             createTrigger(
                 ApiTriggerCreateReq(
@@ -40,7 +40,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     duration = 10.seconds
                 )
             )
-        ).id
+        ).triggerId
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
@@ -59,8 +59,8 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get event trigger`() {
-        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).id
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
+        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).topicId
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
 
         val triggerId = awaitCompleted(
             createTrigger(
@@ -73,7 +73,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     topicId = someTopicId
                 )
             )
-        ).id
+        ).triggerId
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
@@ -93,8 +93,8 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get hook trigger`() {
-        val hookId = awaitCompleted(createHook(HookName("some-hook"))).id
-        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
+        val hookId = awaitCompleted(createHook(HookName("some-hook"))).hookId
+        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
 
         val triggerId = awaitCompleted(
             createTrigger(
@@ -107,7 +107,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     hookId = hookId
                 )
             )
-        ).id
+        ).triggerId
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 

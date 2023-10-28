@@ -14,7 +14,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).id
+        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).topicId
 
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))

@@ -27,7 +27,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     code = CodeValue("")
                 )
             )
-        ).id
+        ).funcId
 
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))

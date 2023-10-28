@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 class ReqId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
-    internal object Serializer : DomainIdSerializer<ReqId>(::ReqId)
+    internal object Serializer : SerializableDomainIdSerializer<ReqId>(::ReqId)
 }

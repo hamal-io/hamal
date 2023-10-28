@@ -20,7 +20,7 @@ data class ExecInvokeSubmitted(
 ) : Submitted
 
 @Serializable
-data class ExecFailSubmittedExec(
+data class ExecFailSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,

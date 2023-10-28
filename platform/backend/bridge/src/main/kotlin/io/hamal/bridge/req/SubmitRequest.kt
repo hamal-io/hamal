@@ -9,7 +9,7 @@ import io.hamal.lib.sdk.bridge.BridgeExecFailReq
 import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
-import io.hamal.repository.api.submitted_req.ExecFailSubmittedExec
+import io.hamal.repository.api.submitted_req.ExecFailSubmitted
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,9 +31,9 @@ internal class SubmitBridgeRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(execId: ExecId, req: BridgeExecFailReq): ExecFailSubmittedExec {
+    operator fun invoke(execId: ExecId, req: BridgeExecFailReq): ExecFailSubmitted {
         val exec = execQueryRepository.get(execId)
-        return ExecFailSubmittedExec(
+        return ExecFailSubmitted(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = exec.id,

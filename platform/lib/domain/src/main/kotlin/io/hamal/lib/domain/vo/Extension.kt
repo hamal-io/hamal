@@ -10,7 +10,7 @@ class ExtensionId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<ExtensionId>(::ExtensionId)
+    internal object Serializer : SerializableDomainIdSerializer<ExtensionId>(::ExtensionId)
 }
 
 

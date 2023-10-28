@@ -1,11 +1,12 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.kua.function.Function2In2Out
+import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput2Schema
+import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
@@ -15,21 +16,21 @@ import io.hamal.lib.sdk.api.ApiFuncInvokeReq
 
 class FuncInvokeFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
-    FunctionInput2Schema(StringType::class, MapType::class),
+) : Function1In2Out<MapType, ErrorType, MapType>(
+    FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: MapType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
 
-            val correlationId = if (arg2.type("correlation_id") == StringType::class) {
-                CorrelationId(arg2.getString("correlation_id"))
+            val correlationId = if (arg1.type("correlation_id") == StringType::class) {
+                CorrelationId(arg1.getString("correlation_id"))
             } else {
                 CorrelationId.default
             }
 
             val res = sdk.func.invoke(
-                FuncId(arg1.value),
+                FuncId(SnowflakeId(arg1.getString("id"))),
                 ApiFuncInvokeReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs()
@@ -38,9 +39,9 @@ class FuncInvokeFunction(
 
             null to MapType(
                 mutableMapOf(
-                    "req_id" to StringType(res.reqId.value.value.toString(16)),
+                    "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.value.toString(16))
+                    "exec_id" to StringType(res.execId.value.value.toString(16))
                 )
             )
 

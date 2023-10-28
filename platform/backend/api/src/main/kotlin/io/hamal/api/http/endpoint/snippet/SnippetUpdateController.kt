@@ -1,10 +1,12 @@
 package io.hamal.api.http.endpoint.snippet
 
+import io.hamal.api.http.endpoint.accepted
 import io.hamal.core.adapter.SnippetUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.SnippetId
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.lib.sdk.api.ApiUpdateSnippetReq
+import io.hamal.repository.api.submitted_req.SnippetUpdateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,19 +22,7 @@ internal class SnippetUpdateController(
     fun updateSnippet(
         @PathVariable("snippetId") snippetId: SnippetId,
         @RequestBody req: ApiUpdateSnippetReq
-    ): ResponseEntity<ApiSubmittedReqImpl<SnippetId>> = retry {
-        updateSnippet(snippetId, req) {
-            ResponseEntity
-                .accepted()
-                .body(
-                    ApiSubmittedReqImpl(
-                        reqId = it.reqId,
-                        status = it.status,
-                        namespaceId = null,
-                        groupId = it.groupId,
-                        id = it.id
-                    )
-                )
-        }
+    ): ResponseEntity<ApiSubmitted> = retry {
+        updateSnippet(snippetId, req, SnippetUpdateSubmitted::accepted)
     }
 }

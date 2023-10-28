@@ -19,7 +19,7 @@ class CodeId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<CodeId>(::CodeId)
+    internal object Serializer : SerializableDomainIdSerializer<CodeId>(::CodeId)
 }
 
 

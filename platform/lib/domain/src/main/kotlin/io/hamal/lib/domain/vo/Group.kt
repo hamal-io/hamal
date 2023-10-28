@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 class GroupId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
-    internal object Serializer : DomainIdSerializer<GroupId>(::GroupId)
+    internal object Serializer : SerializableDomainIdSerializer<GroupId>(::GroupId)
 
     companion object {
         val root = GroupId(1)

@@ -1,19 +1,11 @@
 sys = require("sys")
 
-err, topics = sys.topic.list()
-assert(err == nil)
+topics = fail_on_error(sys.topic.list())
 assert(#topics == 0)
 
-err, topic_req = sys.topic.create({ name = "topic-one" })
-assert(err == nil)
-assert(topic_req.req_id ~= nil)
-assert(topic_req.status == 'Submitted')
-assert(topic_req.id ~= nil)
-
+topic_req = fail_on_error(sys.topic.create({ name = "topic-one" }))
 sys.await(topic_req)
 
-err, topics = sys.topic.list()
-assert(err == nil)
+topics = fail_on_error(sys.topic.list())
 assert(#topics == 1)
-
 assert(topics[1].name == 'topic-one')

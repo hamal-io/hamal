@@ -6,12 +6,11 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
-import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
-    fun createExtension(req: ApiExtensionCreateReq): ApiSubmittedReqImpl<ExtensionId> {
+    fun createExtension(req: ApiExtensionCreateReq): ApiExtensionCreateSubmitted {
         val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
             .path("groupId", testGroup.id)
             .body(req)
@@ -19,7 +18,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
         assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createResponse is HttpSuccessResponse) { "request was successful" }
-        return createResponse.toReq()
+        return createResponse.result(ApiExtensionCreateSubmitted::class)
     }
 
     fun getExtension(extId: ExtensionId): ApiExtension {
@@ -43,15 +42,15 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     }
 
-    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiSubmittedReqImpl<ExtensionId> {
-        val updateResponse = httpTemplate.patch("/v1/extensions/{extId}/update")
+    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiExtensionUpdateSubmitted {
+        val updateResponse = httpTemplate.patch("/v1/extensions/{extId}")
             .path("extId", extId)
             .body(req)
             .execute()
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateResponse is HttpSuccessResponse) { "request was successful" }
-        return updateResponse.toReq()
+        return updateResponse.result(ApiExtensionUpdateSubmitted::class)
     }
 
 }

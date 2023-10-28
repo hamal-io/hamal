@@ -37,7 +37,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
                     code = CodeValue("1+1")
                 )
             )
-        ).id
+        ).funcId
 
         val getFuncResponse = httpTemplate.get("/v1/funcs/{funcId}").path("funcId", funcId).execute()
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))

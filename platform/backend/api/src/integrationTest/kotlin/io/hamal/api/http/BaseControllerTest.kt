@@ -5,7 +5,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain._enum.ReqStatus.Failed
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.submitted_req.Submitted
 import org.hamcrest.MatcherAssert.assertThat
@@ -53,17 +53,18 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <REQ : ApiSubmittedReq> awaitCompleted(req: REQ): REQ {
-        awaitCompleted(req.reqId)
-        return req
+
+    fun <SUBMITTED : ApiSubmitted> awaitCompleted(submitted: SUBMITTED): SUBMITTED {
+        awaitCompleted(submitted.id)
+        return submitted
     }
 
-    fun <REQ : ApiSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
-        return reqs.toList().onEach { awaitCompleted(it.reqId) }
+    fun <SUBMITTED : ApiSubmitted> awaitCompleted(vararg reqs: SUBMITTED): Iterable<SUBMITTED> {
+        return reqs.toList().onEach { awaitCompleted(it.id) }
     }
 
-    fun <REQ : ApiSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
-        return reqs.onEach { awaitCompleted(it.reqId) }
+    fun <SUBMITTED : ApiSubmitted> awaitCompleted(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
+        return reqs.onEach { awaitCompleted(it.id) }
     }
 
     fun awaitFailed(id: ReqId) {
@@ -81,15 +82,14 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <REQ : ApiSubmittedReq> awaitFailed(req: REQ): REQ {
-        awaitFailed(req.reqId)
+    fun <SUBMITTED : ApiSubmitted> awaitFailed(req: SUBMITTED): SUBMITTED {
+        awaitFailed(req.id)
         return req
     }
 
-    fun <REQ : ApiSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
-        return reqs.onEach { awaitFailed(it.reqId) }
+    fun <SUBMITTED : ApiSubmitted> awaitFailed(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
+        return reqs.onEach { awaitFailed(it.id) }
     }
-
 
     fun verifyNoRequests() {
         val requests = reqQueryRepository.list(ReqQuery())

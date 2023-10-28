@@ -11,15 +11,16 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiCorrelatedState
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiFuncCreateSubmitted
+import io.hamal.lib.sdk.api.ApiStateSetSubmitted
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
-import io.hamal.lib.sdk.toReq
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class StateBaseControllerTest : BaseControllerTest() {
 
-    fun createFunc(name: FuncName): ApiSubmittedReqImpl<FuncId> {
+    fun createFunc(name: FuncName): ApiFuncCreateSubmitted {
         val response = httpTemplate.post("/v1/namespaces/1/funcs")
             .body(
                 ApiFuncCreateReq(
@@ -32,10 +33,10 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.toReq()
+        return response.result(ApiFuncCreateSubmitted::class)
     }
 
-    fun completeExec(execId: ExecId, state: State): ApiSubmittedReqImpl<ExecId> {
+    fun completeExec(execId: ExecId, state: State): BridgeExecCompleteSubmitted {
         val response = httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
@@ -48,7 +49,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
             .execute()
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.toReq()
+        return response.result(BridgeExecCompleteSubmitted::class)
     }
 
     fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.correlationId)
@@ -64,7 +65,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
         return response.result(ApiCorrelatedState::class)
     }
 
-    fun setState(correlatedState: CorrelatedState): ApiSubmittedReqImpl<ExecId> {
+    fun setState(correlatedState: CorrelatedState): ApiStateSetSubmitted {
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", correlatedState.correlation.funcId)
             .path("correlationId", correlatedState.correlation.correlationId.value)
@@ -74,6 +75,6 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
 
-        return response.toReq()
+        return response.result(ApiStateSetSubmitted::class)
     }
 }

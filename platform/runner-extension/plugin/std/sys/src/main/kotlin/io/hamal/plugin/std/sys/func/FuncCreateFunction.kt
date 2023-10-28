@@ -34,11 +34,11 @@ class FuncCreateFunction(
 
             null to MapType(
                 mutableMapOf(
-                    "req_id" to StringType(res.reqId.value.value.toString(16)),
-                    "status" to StringType(res.status.name),
                     "id" to StringType(res.id.value.value.toString(16)),
-                    "group_id" to StringType(res.groupId!!.value.value.toString(16)),
-                    "namespace_id" to StringType(res.namespaceId!!.value.value.toString(16))
+                    "status" to StringType(res.status.name),
+                    "func_id" to StringType(res.funcId.value.value.toString(16)),
+                    "group_id" to StringType(res.groupId.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
                 )
             )
 

@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys.req
 
 import io.hamal.lib.http.HttpErrorResponse
-import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.HttpSuccessResponse
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,7 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmitted
 
 class ReqGetFunction(
     private val httpTemplate: HttpTemplateImpl
@@ -24,11 +24,11 @@ class ReqGetFunction(
             .execute()
 
         if (response is HttpSuccessResponse) {
-            return null to response.result(ApiSubmittedReq::class)
+            return null to response.result(ApiSubmitted::class)
                 .let { exec ->
                     MapType(
                         mutableMapOf(
-                            "reqId" to StringType(exec.reqId.value.value.toString(16)),
+                            "reqId" to StringType(exec.id.value.value.toString(16)),
                             "status" to StringType(exec.status.name)
                         )
                     )

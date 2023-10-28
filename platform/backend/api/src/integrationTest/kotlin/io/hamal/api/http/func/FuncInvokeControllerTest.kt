@@ -8,9 +8,9 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiExecInvokeSubmitted
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncInvokeReq
-import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -30,7 +30,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         )
 
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.id)
+            .path("funcId", createResponse.funcId)
             .body(
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId("some-correlation-id"),
@@ -41,15 +41,15 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = invocationResponse.toReq<ExecId>()
-        awaitCompleted(result.reqId)
+        val result = invocationResponse.result(ApiExecInvokeSubmitted::class)
+        awaitCompleted(result.id)
 
-        with(execQueryRepository.get(result.id)) {
+        with(execQueryRepository.get(result.execId)) {
             assertThat(
                 correlation, equalTo(
                     Correlation(
                         correlationId = CorrelationId("some-correlation-id"),
-                        funcId = createResponse.id
+                        funcId = createResponse.funcId
                     )
                 )
             )
@@ -80,15 +80,15 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = invocationResponse.toReq<ExecId>()
-        awaitCompleted(result.reqId)
+        val result = invocationResponse.result(ApiExecInvokeSubmitted::class)
+        awaitCompleted(result)
 
-        with(execQueryRepository.get(result.id)) {
+        with(execQueryRepository.get(result.execId)) {
             assertThat(
                 correlation, equalTo(
                     Correlation(
                         correlationId = CorrelationId.default,
-                        funcId = createResponse.id
+                        funcId = createResponse.funcId
                     )
                 )
             )

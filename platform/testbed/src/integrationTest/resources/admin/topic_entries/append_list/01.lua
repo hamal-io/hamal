@@ -1,20 +1,17 @@
 sys = require('sys')
 
-_, req = sys.topic.create({ name = "topic-one" })
+req = fail_on_error(sys.topic.create({ name = "topic-one" }))
 sys.await(req)
 
-_, topic_id = sys.topic.resolve('topic-one')
+topic_id = fail_on_error(sys.topic.resolve('topic-one'))
 
-err, entries = sys.topic.list_entries(topic_id)
-assert(err == nil)
+entries = fail_on_error(sys.topic.list_entries(topic_id))
 assert(#entries == 0)
 
 sys.topic.append(topic_id, { value = 'value-one' })
 sys.topic.append(topic_id, { value = 'value-two' })
-_, req = sys.topic.append(topic_id, { value = 'value-three' })
-
+req = fail_on_error(sys.topic.append(topic_id, { value = 'value-three' }))
 sys.await(req)
-
-err, entries = sys.topic.list_entries(topic_id)
-assert(err == nil)
+--
+entries = fail_on_error(sys.topic.list_entries(topic_id))
 assert(#entries == 3)

@@ -26,9 +26,9 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
             ),
             namespaceId = NamespaceId(1)
         )
-        awaitCompleted(result.reqId)
+        awaitCompleted(result)
 
-        val hook = hookQueryRepository.get(result.id)
+        val hook = hookQueryRepository.get(result.hookId)
         with(hook) {
             assertThat(name, equalTo(HookName("test-hook")))
 
@@ -55,9 +55,9 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
             req = ApiHookCreateReq(HookName("test-hook")),
             namespaceId = namespace.id
         )
-        awaitCompleted(result.reqId)
+        awaitCompleted(result)
 
-        with(hookQueryRepository.get(result.id)) {
+        with(hookQueryRepository.get(result.hookId)) {
             assertThat(name, equalTo(HookName("test-hook")))
 
             namespaceQueryRepository.get(namespaceId).let {

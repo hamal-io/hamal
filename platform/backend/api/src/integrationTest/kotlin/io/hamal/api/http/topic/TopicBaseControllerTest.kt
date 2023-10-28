@@ -1,7 +1,6 @@
 package io.hamal.api.http.topic
 
 import io.hamal.api.http.BaseControllerTest
-import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -10,7 +9,6 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
-import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
@@ -50,7 +48,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiSubmittedReqImpl<TopicId> {
+    fun createTopic(topicName: TopicName): ApiTopicCreateSubmitted {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/1/topics")
             .body(ApiTopicCreateReq(topicName))
             .execute()
@@ -58,10 +56,10 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.toReq()
+        return createTopicResponse.result(ApiTopicCreateSubmitted::class)
     }
 
-    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId> {
+    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiTopicAppendSubmitted {
         val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(toAppend)
@@ -70,6 +68,6 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.toReq()
+        return createTopicResponse.result(ApiTopicAppendSubmitted::class)
     }
 }

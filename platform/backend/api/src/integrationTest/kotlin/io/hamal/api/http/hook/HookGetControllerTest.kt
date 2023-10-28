@@ -24,7 +24,7 @@ internal class HookGetControllerTest : HookBaseControllerTest() {
 
     @Test
     fun `Get hook`() {
-        val hookId = awaitCompleted(createHook(ApiHookCreateReq(HookName("hook-one")))).id
+        val hookId = awaitCompleted(createHook(ApiHookCreateReq(HookName("hook-one")))).hookId
 
         val getHookResponse = httpTemplate.get("/v1/hooks/{hookId}").path("hookId", hookId).execute()
         assertThat(getHookResponse.statusCode, equalTo(HttpStatusCode.Ok))

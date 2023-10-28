@@ -1,11 +1,12 @@
 package io.hamal.api.http.endpoint.trigger
 
+import io.hamal.api.http.endpoint.accepted
 import io.hamal.core.adapter.TriggerCreatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
+import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,21 +22,9 @@ internal class TriggerCreateController(
     fun createTrigger(
         @PathVariable namespaceId: NamespaceId,
         @RequestBody req: ApiTriggerCreateReq
-    ): ResponseEntity<ApiSubmittedReqImpl<TriggerId>> {
+    ): ResponseEntity<ApiSubmitted> {
         return retry {
-            createTrigger(namespaceId, req) {
-                ResponseEntity
-                    .accepted()
-                    .body(
-                        ApiSubmittedReqImpl(
-                            reqId = it.reqId,
-                            status = it.status,
-                            namespaceId = it.namespaceId,
-                            groupId = it.groupId,
-                            id = it.id
-                        )
-                    )
-            }
+            createTrigger(namespaceId, req, TriggerCreateSubmitted::accepted)
         }
     }
 }

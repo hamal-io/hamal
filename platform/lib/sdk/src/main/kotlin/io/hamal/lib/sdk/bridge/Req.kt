@@ -1,16 +1,11 @@
-package io.hamal.lib.sdk.api
+package io.hamal.lib.sdk.bridge
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ReqId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiReqList(
-    val reqs: List<ApiSubmitted>
-)
-
-@Serializable
-sealed interface ApiSubmitted {
+sealed interface BridgeSubmitted {
     val id: ReqId
     val status: ReqStatus
 }

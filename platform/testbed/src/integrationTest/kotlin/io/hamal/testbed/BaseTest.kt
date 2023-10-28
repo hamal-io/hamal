@@ -81,7 +81,7 @@ abstract class BaseTest {
             var wait = true
             val startedAt = TimeUtils.now()
             while (wait) {
-                with(execRepository.get(execReq.id)) {
+                with(execRepository.get(execReq.execId)) {
                     if (status == ExecStatus.Completed) {
                         wait = false
                     } else if (status == ExecStatus.Failed) {

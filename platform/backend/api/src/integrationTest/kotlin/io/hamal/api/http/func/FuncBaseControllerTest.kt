@@ -9,9 +9,8 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncCreateSubmitted
 import io.hamal.lib.sdk.api.ApiFuncList
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
-import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
@@ -20,7 +19,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
     fun createFunc(
         req: ApiFuncCreateReq,
         namespaceId: NamespaceId = NamespaceId(1)
-    ): ApiSubmittedReqImpl<FuncId> {
+    ): ApiFuncCreateSubmitted {
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
             .path("namespaceId", namespaceId)
             .body(req)
@@ -28,7 +27,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.toReq()
+        return response.result(ApiFuncCreateSubmitted::class)
     }
 
     fun listFuncs(): ApiFuncList {

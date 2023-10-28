@@ -13,7 +13,7 @@ data class TopicId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<TopicId>(::TopicId)
+    internal object Serializer : SerializableDomainIdSerializer<TopicId>(::TopicId)
 }
 
 @Serializable(with = TopicName.Serializer::class)
@@ -25,7 +25,7 @@ class TopicName(override val value: String) : DomainName() {
 data class TopicEntryId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
-    internal object Serializer : DomainIdSerializer<TopicEntryId>(::TopicEntryId)
+    internal object Serializer : SerializableDomainIdSerializer<TopicEntryId>(::TopicEntryId)
 }
 
 @Serializable(with = TopicEntryPayload.Serializer::class)

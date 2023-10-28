@@ -13,7 +13,7 @@ class HookId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<HookId>(::HookId)
+    internal object Serializer : SerializableDomainIdSerializer<HookId>(::HookId)
 }
 
 @Serializable(with = HookName.Serializer::class)

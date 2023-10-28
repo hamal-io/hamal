@@ -26,19 +26,19 @@ function extension()
 
         function export.await(cmd)
             -- FIXME if cmd is string use it directly
-            local err, res = internal.await(cmd.req_id)
+            local err, res = internal.await(cmd.id)
             return err, res
         end
 
         function export.await_completed(cmd)
             -- FIXME if cmd is string use it directly
-            local err, res = internal.await_completed(cmd.req_id)
+            local err, res = internal.await_completed(cmd.id)
             return err, res
         end
 
         function export.await_failed(cmd)
             -- FIXME if cmd is string use it directly
-            local err, res = internal.await_failed(cmd.req_id)
+            local err, res = internal.await_failed(cmd.id)
             return err, res
         end
 
@@ -72,8 +72,9 @@ function extension()
             return internal.extension_list()
         end
 
-        function export.extension.update(ext_id, cmd)
-            return internal.extension_update(ext_id, cmd)
+        function export.extension.update(cmd)
+            cmd = cmd or {}
+            return internal.extension_update(cmd)
         end
 
         function export.func.create(cmd)

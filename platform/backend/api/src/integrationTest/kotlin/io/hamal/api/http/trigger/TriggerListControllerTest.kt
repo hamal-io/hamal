@@ -16,7 +16,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Single trigger`() {
-        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).id
+        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).triggerId
 
         with(listTriggers()) {
             assertThat(triggers, hasSize(1))

@@ -1,7 +1,6 @@
 package io.hamal.api.http.snippet
 
 import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.domain.vo.SnippetInputs
 import io.hamal.lib.domain.vo.SnippetName
 import io.hamal.lib.http.HttpErrorResponse
@@ -12,8 +11,8 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiSnippetUpdateSubmitted
 import io.hamal.lib.sdk.api.ApiUpdateSnippetReq
-import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -46,10 +45,9 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
         assertThat(updateSnippetResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateSnippetResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateSnippetResponse.toReq<SnippetId>()
+        val submittedReq = updateSnippetResponse.result(ApiSnippetUpdateSubmitted::class)
         awaitCompleted(submittedReq)
-
-        val snippetId = submittedReq.id
+        val snippetId = submittedReq.snippetId
 
         with(getSnippet(snippetId)) {
             assertThat(id, equalTo(snippetId))
@@ -85,10 +83,10 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
         assertThat(updateSnippetResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateSnippetResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateSnippetResponse.toReq<SnippetId>()
+        val submittedReq = updateSnippetResponse.result(ApiSnippetUpdateSubmitted::class)
         awaitCompleted(submittedReq)
 
-        val snippetId = submittedReq.id
+        val snippetId = submittedReq.snippetId
 
         with(getSnippet(snippetId)) {
             assertThat(id, equalTo(snippetId))

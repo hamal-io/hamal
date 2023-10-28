@@ -19,7 +19,7 @@ data class TopicCreateSubmitted(
 data class TopicAppendToSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    val groupId: GroupId,
     val id: TopicId,
+    val groupId: GroupId,
     val payload: TopicEntryPayload
 ) : Submitted

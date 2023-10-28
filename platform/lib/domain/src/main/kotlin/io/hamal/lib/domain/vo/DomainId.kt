@@ -20,7 +20,7 @@ sealed class SerializableDomainId : DomainId() {
     }
 }
 
-abstract class DomainIdSerializer<ID : DomainId>(
+abstract class SerializableDomainIdSerializer<ID : DomainId>(
     val fn: (SnowflakeId) -> ID
 ) : KSerializer<ID> {
     override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.STRING)

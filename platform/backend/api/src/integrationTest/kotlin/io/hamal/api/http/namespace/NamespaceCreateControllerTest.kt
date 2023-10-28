@@ -19,8 +19,8 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
                 inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))
             )
         )
-        awaitCompleted(result.reqId)
-        verifyNamespaceCreated(result.id)
+        awaitCompleted(result)
+        verifyNamespaceCreated(result.namespaceId)
     }
 }
 

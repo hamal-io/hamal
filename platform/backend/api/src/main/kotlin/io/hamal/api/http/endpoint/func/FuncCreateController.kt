@@ -1,11 +1,12 @@
 package io.hamal.api.http.endpoint.func
 
+import io.hamal.api.http.endpoint.accepted
 import io.hamal.core.adapter.FuncCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,19 +22,7 @@ internal class FuncCreateController(
     fun createFunc(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiFuncCreateReq
-    ): ResponseEntity<ApiSubmittedReqImpl<FuncId>> = retry {
-        createFunc(namespaceId, req) {
-            ResponseEntity
-                .accepted()
-                .body(
-                    ApiSubmittedReqImpl(
-                        reqId = it.reqId,
-                        status = it.status,
-                        namespaceId = it.namespaceId,
-                        groupId = it.groupId,
-                        id = it.id
-                    )
-                )
-        }
+    ): ResponseEntity<ApiSubmitted> = retry {
+        createFunc(namespaceId, req, FuncCreateSubmitted::accepted)
     }
 }

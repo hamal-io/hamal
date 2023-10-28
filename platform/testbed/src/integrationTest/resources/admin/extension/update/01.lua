@@ -10,7 +10,8 @@ sys.await_completed(create_req)
 local id = create_req.id
 assert(id ~= nil)
 
-local update_req = fail_on_error(sys.extension.update(id, {
+local update_req = fail_on_error(sys.extension.update({
+    id = id,
     name = 'update-ext',
     code = [[hamal-updates]]
 }))

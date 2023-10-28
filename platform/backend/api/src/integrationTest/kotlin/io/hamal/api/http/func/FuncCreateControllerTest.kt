@@ -27,9 +27,9 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 code = CodeValue("13 + 37")
             )
         )
-        awaitCompleted(result.reqId)
+        awaitCompleted(result.id)
 
-        val func = funcQueryRepository.get(result.id)
+        val func = funcQueryRepository.get(result.funcId)
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
@@ -44,7 +44,6 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         }
 
     }
-
 
     @Test
     fun `Create func with namespace id`() {
@@ -66,9 +65,9 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 code = CodeValue("13 + 37")
             )
         )
-        awaitCompleted(result.reqId)
+        awaitCompleted(result.id)
 
-        val func = funcQueryRepository.get(result.id)
+        val func = funcQueryRepository.get(result.funcId)
 
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))

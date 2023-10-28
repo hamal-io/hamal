@@ -27,9 +27,9 @@ class TopicEntryAppendFunction(
 
             null to MapType(
                 mutableMapOf(
-                    "req_id" to StringType(res.reqId.value.value.toString(16)),
+                    "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.value.toString(16))
+                    "topic_id" to StringType(res.topicId.value.value.toString(16))
                 )
             )
 

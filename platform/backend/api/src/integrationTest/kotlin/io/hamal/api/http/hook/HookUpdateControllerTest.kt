@@ -1,7 +1,10 @@
 package io.hamal.api.http.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -9,8 +12,8 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiHookCreateReq
+import io.hamal.lib.sdk.api.ApiHookUpdateSubmitted
 import io.hamal.lib.sdk.api.ApiUpdateHookReq
-import io.hamal.lib.sdk.toReq
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -58,13 +61,10 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
         require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateHookResponse.toReq<HookId>()
+        val submittedReq = updateHookResponse.result(ApiHookUpdateSubmitted::class)
         awaitCompleted(submittedReq)
-
-        val hookId = submittedReq.id
-
-        with(getHook(hookId)) {
-            assertThat(id, equalTo(hookId))
+        with(getHook(submittedReq.hookId)) {
+            assertThat(id, equalTo(submittedReq.hookId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(HookName("updatedName")))
         }
@@ -96,12 +96,11 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
         require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateHookResponse.toReq<HookId>()
+        val req = updateHookResponse.result(ApiHookUpdateSubmitted::class)
         awaitCompleted(req)
-        val hookId = req.id
 
-        with(getHook(hookId)) {
-            assertThat(id, equalTo(hookId))
+        with(getHook(req.hookId)) {
+            assertThat(id, equalTo(req.hookId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(HookName("createdName")))
         }

@@ -15,6 +15,7 @@ data class ExtensionCreateSubmitted(
     val code: CodeValue
 ) : Submitted
 
+
 @Serializable
 data class ExtensionUpdateSubmitted(
     override val reqId: ReqId,
@@ -24,3 +25,4 @@ data class ExtensionUpdateSubmitted(
     val name: ExtensionName?,
     val code: CodeValue?
 ) : Submitted
+

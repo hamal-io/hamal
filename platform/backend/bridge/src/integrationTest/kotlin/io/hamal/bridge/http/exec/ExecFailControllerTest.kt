@@ -10,15 +10,14 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.bridge.BridgeExecFailReq
+import io.hamal.lib.sdk.bridge.BridgeExecFailSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-@Suppress("UNCHECKED_CAST")
 internal class ExecFailControllerTest : BaseExecControllerTest() {
 
     @TestFactory
@@ -39,9 +38,8 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                 assertThat(failureResponse.statusCode, equalTo(Accepted))
                 require(failureResponse is HttpSuccessResponse) { "request was not successful" }
 
-                val result = failureResponse.result(ApiSubmittedReqImpl::class)
-
-                awaitFailed(result.reqId)
+                val result = failureResponse.result(BridgeExecFailSubmitted::class)
+                awaitFailed(result.id)
             }
         }
 
@@ -60,10 +58,10 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
         assertThat(failureResponse.statusCode, equalTo(Accepted))
         require(failureResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = failureResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
-        awaitCompleted(result.reqId)
+        val result = failureResponse.result(BridgeExecFailSubmitted::class)
+        awaitCompleted(result.id)
 
-        verifyExecFailed(result.id)
+        verifyExecFailed(result.execId)
         //FIXME events
     }
 

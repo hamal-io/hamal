@@ -1,10 +1,12 @@
 package io.hamal.api.http.endpoint.namespace
 
+import io.hamal.api.http.endpoint.accepted
 import io.hamal.core.adapter.NamespaceUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.repository.api.submitted_req.NamespaceUpdateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,19 +22,7 @@ internal class NamespaceUpdateController(
     fun updateNamespace(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiNamespaceUpdateReq
-    ): ResponseEntity<ApiSubmittedReqImpl<NamespaceId>> = retry {
-        updateNamespace(namespaceId, req) {
-            ResponseEntity
-                .accepted()
-                .body(
-                    ApiSubmittedReqImpl(
-                        reqId = it.reqId,
-                        status = it.status,
-                        namespaceId = it.id,
-                        groupId = it.groupId,
-                        id = it.id
-                    )
-                )
-        }
+    ): ResponseEntity<ApiSubmitted> = retry {
+        updateNamespace(namespaceId, req, NamespaceUpdateSubmitted::accepted)
     }
 }

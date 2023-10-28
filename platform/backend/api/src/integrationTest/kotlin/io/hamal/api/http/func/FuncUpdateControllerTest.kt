@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncUpdateReq
-import io.hamal.lib.sdk.toReq
+import io.hamal.lib.sdk.api.ApiFuncUpdateSubmitted
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -76,10 +76,10 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.toReq<FuncId>()
+        val submittedReq = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
         awaitCompleted(submittedReq)
 
-        val funcId = submittedReq.id
+        val funcId = submittedReq.funcId
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
@@ -128,9 +128,9 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateFuncResponse.toReq<FuncId>()
+        val req = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
         awaitCompleted(req)
-        val funcId = req.id
+        val funcId = req.funcId
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))

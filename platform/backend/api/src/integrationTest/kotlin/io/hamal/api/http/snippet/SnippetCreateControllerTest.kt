@@ -22,9 +22,9 @@ internal class SnippetCreateControllerTest : SnippetBaseControllerTest() {
             )
         )
 
-        awaitCompleted(res.reqId)
+        awaitCompleted(res)
 
-        with(snippetQueryRepository.get(res.id)) {
+        with(snippetQueryRepository.get(res.snippetId)) {
             assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             assertThat(name, equalTo(SnippetName("TestSnippet")))
             assertThat(value, equalTo(CodeValue("13 + 37")))

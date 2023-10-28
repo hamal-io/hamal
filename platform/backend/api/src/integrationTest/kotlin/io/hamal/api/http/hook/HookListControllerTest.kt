@@ -19,7 +19,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     fun `Single hook`() {
         val hookId = awaitCompleted(
             createHook(ApiHookCreateReq(HookName("hook-one")))
-        ).id
+        ).hookId
 
         with(listHooks()) {
             assertThat(hooks, hasSize(1))

@@ -1,10 +1,10 @@
 package io.hamal.bridge.http
 
 import io.hamal.bridge.BaseTest
-import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.submitted_req.Submitted
 import org.hamcrest.MatcherAssert
@@ -24,20 +24,20 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun verifyReqCompleted(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
-            org.hamcrest.MatcherAssert.assertThat(id, org.hamcrest.Matchers.equalTo(id))
-            org.hamcrest.MatcherAssert.assertThat(
+            MatcherAssert.assertThat(id, Matchers.equalTo(id))
+            MatcherAssert.assertThat(
                 status,
-                org.hamcrest.Matchers.equalTo(io.hamal.lib.domain._enum.ReqStatus.Completed)
+                Matchers.equalTo(ReqStatus.Completed)
             )
         }
     }
 
     fun verifyReqFailed(id: ReqId) {
         with(reqQueryRepository.find(id)!!) {
-            org.hamcrest.MatcherAssert.assertThat(id, org.hamcrest.Matchers.equalTo(id))
-            org.hamcrest.MatcherAssert.assertThat(
+            MatcherAssert.assertThat(id, Matchers.equalTo(id))
+            MatcherAssert.assertThat(
                 status,
-                org.hamcrest.Matchers.equalTo(io.hamal.lib.domain._enum.ReqStatus.Failed)
+                Matchers.equalTo(ReqStatus.Failed)
             )
         }
     }
@@ -57,17 +57,17 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <REQ : ApiSubmittedReq> awaitCompleted(req: REQ): REQ {
-        awaitCompleted(req.reqId)
-        return req
+    fun <SUBMITTED : ApiSubmitted> awaitCompleted(submitted: SUBMITTED): SUBMITTED {
+        awaitCompleted(submitted.id)
+        return submitted
     }
 
-    fun <REQ : ApiSubmittedReq> awaitCompleted(vararg reqs: REQ): Iterable<REQ> {
-        return reqs.toList().onEach { awaitCompleted(it.reqId) }
+    fun <SUBMITTED : ApiSubmitted> awaitCompleted(vararg reqs: SUBMITTED): Iterable<SUBMITTED> {
+        return reqs.toList().onEach { awaitCompleted(it.id) }
     }
 
-    fun <REQ : ApiSubmittedReq> awaitCompleted(reqs: Iterable<REQ>): Iterable<REQ> {
-        return reqs.onEach { awaitCompleted(it.reqId) }
+    fun <SUBMITTED : ApiSubmitted> awaitCompleted(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
+        return reqs.onEach { awaitCompleted(it.id) }
     }
 
     fun awaitFailed(id: ReqId) {
@@ -85,13 +85,13 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <REQ : ApiSubmittedReq> awaitFailed(req: REQ): REQ {
-        awaitFailed(req.reqId)
+    fun <SUBMITTED : ApiSubmitted> awaitFailed(req: SUBMITTED): SUBMITTED {
+        awaitFailed(req.id)
         return req
     }
 
-    fun <REQ : ApiSubmittedReq> awaitFailed(reqs: Iterable<REQ>): Iterable<REQ> {
-        return reqs.onEach { awaitFailed(it.reqId) }
+    fun <SUBMITTED : ApiSubmitted> awaitFailed(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
+        return reqs.onEach { awaitFailed(it.id) }
     }
 
 

@@ -4,19 +4,19 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.http.HttpTemplateImpl
 
 interface ApiAwaitService {
-    operator fun invoke(req: ApiSubmittedReq) = await(req)
+    operator fun invoke(req: ApiSubmitted) = await(req)
 
-    fun await(req: ApiSubmittedReq)
+    fun await(req: ApiSubmitted)
 }
 
 internal class ApiAwaitServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiAwaitService {
-    override fun await(req: ApiSubmittedReq) {
+    override fun await(req: ApiSubmitted) {
         while (true) {
             template.get("/v1/reqs/{reqId}")
-                .path("reqId", req.reqId)
-                .execute(ApiSubmittedSimpleReq::class)
+                .path("reqId", req.id)
+                .execute(ApiSubmitted::class)
                 .let {
                     when (it.status) {
                         ReqStatus.Completed -> {
@@ -24,7 +24,7 @@ internal class ApiAwaitServiceImpl(
                         }
 
                         ReqStatus.Failed -> {
-                            throw IllegalStateException("expected ${req.reqId} to complete but failed")
+                            throw IllegalStateException("expected ${req.id} to complete but failed")
                         }
 
                         else -> {

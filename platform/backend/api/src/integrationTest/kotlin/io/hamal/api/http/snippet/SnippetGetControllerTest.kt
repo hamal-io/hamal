@@ -26,7 +26,7 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
                 inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
                 value = CodeValue("1 + 1")
             )
-        ).id
+        ).snippetId
 
         val getSnippetResponse = httpTemplate.get("/v1/snippets/{snippetId}")
             .path("snippetId", snippetId)

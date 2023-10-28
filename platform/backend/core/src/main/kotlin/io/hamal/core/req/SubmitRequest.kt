@@ -150,7 +150,7 @@ class SubmitRequest(
         events = req.events
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(execId: ExecId, req: FailExecReq) = ExecFailSubmittedExec(
+    operator fun invoke(execId: ExecId, req: FailExecReq) = ExecFailSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         id = execId,

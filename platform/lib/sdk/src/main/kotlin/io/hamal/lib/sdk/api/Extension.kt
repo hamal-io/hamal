@@ -1,10 +1,10 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateExtensionReq
 import io.hamal.request.UpdateExtensionReq
 import kotlinx.serialization.Serializable
@@ -38,8 +38,15 @@ data class ApiExtensionList(
 data class ApiExtensionCreateReq(
     override val name: ExtensionName,
     override val code: CodeValue
-
 ) : CreateExtensionReq
+
+@Serializable
+data class ApiExtensionCreateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val extensionId: ExtensionId,
+    val groupId: GroupId
+) : ApiSubmitted
 
 @Serializable
 data class ApiExtensionUpdateReq(
@@ -47,24 +54,31 @@ data class ApiExtensionUpdateReq(
     override val code: CodeValue? = null
 ) : UpdateExtensionReq
 
+@Serializable
+data class ApiExtensionUpdateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val extensionId: ExtensionId
+) : ApiSubmitted
+
 
 interface ApiExtensionService {
-    fun create(groupId: GroupId, req: ApiExtensionCreateReq): ApiSubmittedReqImpl<ExtensionId>
+    fun create(groupId: GroupId, req: ApiExtensionCreateReq): ApiExtensionCreateSubmitted
     fun get(extId: ExtensionId): ApiExtension
     fun list(groupId: GroupId): List<ApiExtensionList.Extension>
-    fun update(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiSubmittedReqImpl<ExtensionId>
+    fun update(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiExtensionUpdateSubmitted
 }
 
 
 internal class ApiExtensionServiceImpl(
     private val template: HttpTemplate
 ) : ApiExtensionService {
-    override fun create(groupId: GroupId, req: ApiExtensionCreateReq): ApiSubmittedReqImpl<ExtensionId> =
+    override fun create(groupId: GroupId, req: ApiExtensionCreateReq): ApiExtensionCreateSubmitted =
         template.post("/v1/groups/{groupId}/extensions")
             .path("groupId", groupId)
             .body(req)
             .execute()
-            .foldReq()
+            .fold(ApiExtensionCreateSubmitted::class)
 
     override fun get(extId: ExtensionId): ApiExtension =
         template.get("/v1/extensions/{extId}")
@@ -79,10 +93,11 @@ internal class ApiExtensionServiceImpl(
             .fold(ApiExtensionList::class)
             .extensions
 
-    override fun update(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiSubmittedReqImpl<ExtensionId> =
-        template.patch("/v1/extensions/{extId}/update")
+    override fun update(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiExtensionUpdateSubmitted =
+        template.patch("/v1/extensions/{extId}")
             .path("extId", extId)
             .body(req)
             .execute()
-            .foldReq()
+            .fold(ApiExtensionUpdateSubmitted::class)
+
 }

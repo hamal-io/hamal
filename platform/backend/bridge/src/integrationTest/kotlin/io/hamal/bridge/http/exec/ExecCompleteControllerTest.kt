@@ -1,23 +1,21 @@
 package io.hamal.bridge.http.exec
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.EventPayload
-import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteSubmitted
 import io.hamal.repository.api.CompletedExec
 import io.hamal.repository.api.StartedExec
 import io.hamal.repository.api.log.ConsumerId
@@ -29,7 +27,6 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-@Suppress("UNCHECKED_CAST")
 internal class ExecCompleteControllerTest : BaseExecControllerTest() {
 
     @TestFactory
@@ -50,10 +47,10 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
-                val result = completionResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
+                val result = completionResponse.result(BridgeExecCompleteSubmitted::class)
 
-                awaitFailed(result.reqId)
-                verifyNoStateSet(result.id)
+                awaitFailed(result.id)
+                verifyNoStateSet(result.execId)
                 // FIXME verify event not emitted
             }
         }
@@ -73,11 +70,11 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = completionResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
-        awaitCompleted(result.reqId)
+        val result = completionResponse.result(BridgeExecCompleteSubmitted::class)
+        awaitCompleted(result.id)
 
-        verifyExecCompleted(result.id)
-        verifyStateSet(result.id)
+        verifyExecCompleted(result.execId)
+        verifyStateSet(result.execId)
         verifyEventAppended()
     }
 

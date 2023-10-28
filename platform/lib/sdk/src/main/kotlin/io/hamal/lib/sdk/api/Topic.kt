@@ -3,13 +3,13 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.sdk.foldReq
 import io.hamal.request.AppendEntryReq
 import io.hamal.request.CreateTopicReq
 import kotlinx.serialization.Serializable
@@ -20,10 +20,28 @@ data class ApiTopicCreateReq(
 ) : CreateTopicReq
 
 @Serializable
+data class ApiTopicCreateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val topicId: TopicId,
+    val groupId: GroupId,
+    val namespaceId: NamespaceId
+) : ApiSubmitted
+
+
+@Serializable
 data class ApiTopicAppendEntryReq(
     override val topicId: TopicId,
     override val payload: TopicEntryPayload
 ) : AppendEntryReq
+
+@Serializable
+data class ApiTopicAppendSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val topicId: TopicId
+) : ApiSubmitted
+
 
 @Serializable
 data class ApiTopicEntryList(
@@ -55,10 +73,9 @@ data class ApiTopicList(
     )
 }
 
-
 interface ApiTopicService {
-    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId>
-    fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiSubmittedReqImpl<TopicId>
+    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendSubmitted
+    fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
     fun get(topicId: TopicId): ApiTopic
@@ -85,19 +102,19 @@ internal class ApiTopicServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiTopicService {
 
-    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId> =
+    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendSubmitted =
         template.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(payload)
             .execute()
-            .foldReq()
+            .fold(ApiTopicAppendSubmitted::class)
 
-    override fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiSubmittedReqImpl<TopicId> =
+    override fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted =
         template.post("/v1/namespaces/{namespaceId}/topics")
             .path("namespaceId", namespaceId)
             .body(req)
             .execute()
-            .foldReq()
+            .fold(ApiTopicCreateSubmitted::class)
 
     override fun list(query: TopicQuery) =
         template.get("/v1/topics")
@@ -125,7 +142,8 @@ internal class ApiTopicServiceImpl(
             template.get("/v1/topics")
                 .parameter("namespace_ids", namespaceId)
                 .parameter("names", topicName.value)
-                .execute(ApiTopicList::class)
+                .execute()
+                .fold(ApiTopicList::class)
                 .topics
                 .firstOrNull()?.id
                 ?: throw NoSuchElementException("Topic not found")

@@ -1,6 +1,5 @@
 package io.hamal.api.http.namespace
 
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
@@ -13,7 +12,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateReq
-import io.hamal.lib.sdk.toReq
+import io.hamal.lib.sdk.api.ApiNamespaceUpdateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -61,8 +60,8 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateNamespaceResponse.toReq<NamespaceId>()
-        val namespaceId = awaitCompleted(req).id
+        val req = updateNamespaceResponse.result(ApiNamespaceUpdateSubmitted::class)
+        val namespaceId = awaitCompleted(req).namespaceId
 
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))

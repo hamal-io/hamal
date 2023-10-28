@@ -22,7 +22,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Get state`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
 
         val execId = createExec(
             execId = ExecId(123),
@@ -33,7 +33,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
             )
         ).id
 
-        awaitCompleted(completeExec(execId, State(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+        awaitCompleted(completeExec(execId, State(MapType(mutableMapOf("hamal" to StringType("rocks"))))).id)
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
 
@@ -49,7 +49,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Get state for function which was never set before`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))

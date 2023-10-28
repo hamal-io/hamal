@@ -14,7 +14,7 @@ class SnippetId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<SnippetId>(::SnippetId)
+    internal object Serializer : SerializableDomainIdSerializer<SnippetId>(::SnippetId)
 }
 
 @Serializable(with = SnippetName.Serializer::class)

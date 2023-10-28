@@ -1,9 +1,11 @@
 package io.hamal.bridge.http.endpoint.exec
 
+import io.hamal.bridge.http.endpoint.accepted
 import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
+import io.hamal.lib.sdk.bridge.BridgeSubmitted
+import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,18 +20,6 @@ internal class ExecCompleteController(
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
         @RequestBody complete: BridgeExecCompleteReq
-    ): ResponseEntity<ApiSubmittedReqImpl<ExecId>> =
-        request(execId, complete).let {
-            ResponseEntity
-                .accepted()
-                .body(
-                    ApiSubmittedReqImpl(
-                        reqId = it.reqId,
-                        status = it.status,
-                        namespaceId = null,
-                        groupId = null,
-                        id = it.id
-                    )
-                )
-        }
+    ): ResponseEntity<BridgeSubmitted> =
+        request(execId, complete).let(ExecCompleteSubmitted::accepted)
 }

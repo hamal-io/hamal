@@ -7,7 +7,7 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
-import io.hamal.lib.sdk.toReq
+import io.hamal.lib.sdk.api.ApiExecInvokeSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -27,11 +27,11 @@ internal class AdhocControllerTest : BaseControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
 
-        val result = awaitCompleted(response.toReq<ExecId>())
+        val result = awaitCompleted(response.result(ApiExecInvokeSubmitted::class))
         assertThat(result.status, equalTo(Submitted))
 
-        verifyReqCompleted(result.reqId)
-        verifyExecQueued(result.id)
+        verifyReqCompleted(result.id)
+        verifyExecQueued(result.execId)
     }
 
     private fun request(req: ApiAdhocInvokeReq) =

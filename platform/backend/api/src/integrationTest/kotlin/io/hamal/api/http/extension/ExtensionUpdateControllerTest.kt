@@ -23,7 +23,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
                     code = CodeValue("x='hamal")
                 )
             )
-        ).id
+        ).extensionId
 
         awaitCompleted(
             updateExtension(
@@ -50,7 +50,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
                     code = CodeValue("x='hamal")
                 )
             )
-        ).id
+        ).extensionId
 
         awaitCompleted(
             updateExtension(
@@ -68,7 +68,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
 
     @Test
     fun `Tries to update extension that does not exist`() {
-        val updateResponse = httpTemplate.patch("/v1/extensions/123456/update")
+        val updateResponse = httpTemplate.patch("/v1/extensions/123456")
             .body(
                 ApiExtensionUpdateReq(
                     name = ExtensionName("UpdateExtension"),

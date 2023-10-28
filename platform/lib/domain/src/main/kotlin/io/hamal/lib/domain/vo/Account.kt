@@ -12,7 +12,7 @@ class AccountId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<AccountId>(::AccountId)
+    internal object Serializer : SerializableDomainIdSerializer<AccountId>(::AccountId)
 
     companion object {
         val root = AccountId(1)

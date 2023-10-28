@@ -14,7 +14,7 @@ class TriggerId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
-    internal object Serializer : DomainIdSerializer<TriggerId>(::TriggerId)
+    internal object Serializer : SerializableDomainIdSerializer<TriggerId>(::TriggerId)
 }
 
 @Serializable(with = TriggerName.Serializer::class)

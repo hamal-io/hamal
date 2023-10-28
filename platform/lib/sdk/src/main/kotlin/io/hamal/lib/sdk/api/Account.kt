@@ -35,7 +35,7 @@ data class ApiAccount(
 )
 
 interface ApiAccountService {
-    fun create(createAccountReq: ApiAccountCreateReq): ApiSubmittedWithTokenReq
+    fun create(createAccountReq: ApiAccountCreateReq): ApiTokenSubmitted
 }
 
 internal class ApiAccountServiceImpl(
@@ -46,6 +46,6 @@ internal class ApiAccountServiceImpl(
         template.post("/v1/accounts")
             .body(createAccountReq)
             .execute()
-            .fold(ApiSubmittedWithTokenReq::class)
+            .fold(ApiTokenSubmitted::class)
 
 }

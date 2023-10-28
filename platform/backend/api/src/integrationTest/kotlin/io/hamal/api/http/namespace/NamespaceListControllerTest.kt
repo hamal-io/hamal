@@ -29,7 +29,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
                     inputs = NamespaceInputs()
                 )
             )
-        ).id
+        ).namespaceId
 
         with(listNamespaces()) {
             assertThat(namespaces, hasSize(2))

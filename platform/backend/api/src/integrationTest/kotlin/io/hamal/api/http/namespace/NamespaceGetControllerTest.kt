@@ -35,7 +35,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
                     inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )
             )
-        ).id
+        ).namespaceId
 
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespaceId)

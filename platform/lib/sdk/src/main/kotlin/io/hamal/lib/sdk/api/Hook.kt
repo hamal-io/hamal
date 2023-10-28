@@ -2,13 +2,13 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHookService.HookQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateHookReq
 import io.hamal.request.UpdateHookReq
 import kotlinx.serialization.Serializable
@@ -19,9 +19,26 @@ data class ApiHookCreateReq(
 ) : CreateHookReq
 
 @Serializable
+data class ApiHookCreateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val hookId: HookId,
+    val groupId: GroupId,
+    val namespaceId: NamespaceId
+) : ApiSubmitted
+
+
+@Serializable
 data class ApiUpdateHookReq(
     override val name: HookName? = null
 ) : UpdateHookReq
+
+@Serializable
+data class ApiHookUpdateSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val hookId: HookId,
+) : ApiSubmitted
 
 @Serializable
 data class ApiHookList(
@@ -63,12 +80,12 @@ data class ApiHook(
 }
 
 interface ApiHookService {
-    fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq): ApiSubmittedReqImpl<HookId>
+    fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq): ApiHookCreateSubmitted
     fun list(query: HookQuery): List<ApiHookList.Hook>
     fun get(hookId: HookId): ApiHook
 
     data class HookQuery(
-        var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
+        var afterId: HookId = HookId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var hookIds: List<HookId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
@@ -88,12 +105,11 @@ internal class ApiHookServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiHookService {
 
-    override fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq): ApiSubmittedReqImpl<HookId> =
+    override fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq) =
         template.post("/v1/namespaces/{namespaceId}/hooks")
             .path("namespaceId", namespaceId)
             .body(createHookReq)
-            .execute()
-            .foldReq()
+            .execute(ApiHookCreateSubmitted::class)
 
     override fun list(query: HookQuery): List<ApiHookList.Hook> =
         template.get("/v1/hooks")
