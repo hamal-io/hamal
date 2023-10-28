@@ -68,7 +68,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         val response = httpTemplate.get("/v1/execs")
             .parameter("group_ids", testGroup.id)
             .parameter("limit", 1)
-            .parameter("after_id", fortySixthRequest.id)
+            .parameter("after_id", fortySixthRequest.execId)
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))

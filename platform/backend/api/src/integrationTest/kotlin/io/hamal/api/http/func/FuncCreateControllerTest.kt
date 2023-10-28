@@ -27,7 +27,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 code = CodeValue("13 + 37")
             )
         )
-        awaitCompleted(result.id)
+        awaitCompleted(result)
 
         val func = funcQueryRepository.get(result.funcId)
         with(func) {
@@ -65,7 +65,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 code = CodeValue("13 + 37")
             )
         )
-        awaitCompleted(result.id)
+        awaitCompleted(result)
 
         val func = funcQueryRepository.get(result.funcId)
 

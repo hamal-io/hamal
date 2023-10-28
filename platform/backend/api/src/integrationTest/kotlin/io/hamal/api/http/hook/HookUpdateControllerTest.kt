@@ -54,7 +54,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
-            .path("hookId", hook.id)
+            .path("hookId", hook.hookId)
             .body(ApiUpdateHookReq(name = HookName("updatedName")))
             .execute()
 
@@ -90,7 +90,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
-            .path("hookId", hook.id)
+            .path("hookId", hook.hookId)
             .body(ApiUpdateHookReq(name = null))
             .execute()
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))

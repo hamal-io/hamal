@@ -49,7 +49,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         )
 
         val updateNamespaceResponse = httpTemplate.patch("/v1/namespaces/{namespaceId}")
-            .path("namespaceId", namespace.id)
+            .path("namespaceId", namespace.namespaceId)
             .body(
                 ApiNamespaceUpdateReq(
                     name = NamespaceName("updatedName"),

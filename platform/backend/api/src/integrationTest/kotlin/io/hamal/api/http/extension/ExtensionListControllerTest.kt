@@ -79,7 +79,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
 
         val listResponse = httpTemplate.get("/v1/extensions")
             .parameter("group_ids", testGroup.id)
-            .parameter("after_id", fortyNinth.id)
+            .parameter("after_id", fortyNinth.extensionId)
             .parameter("limit", 1)
             .execute(ApiExtensionList::class)
 

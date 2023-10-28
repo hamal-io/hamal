@@ -58,7 +58,7 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
         val request70 = requests[70]
 
         val listResponse = httpTemplate.get("/v1/reqs")
-            .parameter("after_id", request70.id)
+            .parameter("after_id", request70.execId)
             .parameter("limit", 1)
             .execute(ApiReqList::class)
 

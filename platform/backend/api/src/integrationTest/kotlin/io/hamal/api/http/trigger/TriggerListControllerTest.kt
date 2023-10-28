@@ -52,7 +52,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
         val request15 = requests[15]
 
         val listResponse = (httpTemplate.get("/v1/triggers")
-            .parameter("after_id", request15.id)
+            .parameter("after_id", request15.triggerId)
             .parameter("limit", 1))
             .execute(ApiTriggerList::class)
 

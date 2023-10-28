@@ -42,7 +42,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
 
         val result = invocationResponse.result(ApiExecInvokeSubmitted::class)
-        awaitCompleted(result.id)
+        awaitCompleted(result)
 
         with(execQueryRepository.get(result.execId)) {
             assertThat(
@@ -69,7 +69,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         )
 
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.id)
+            .path("funcId", createResponse.funcId)
             .body(
                 ApiFuncInvokeReq(
                     inputs = InvocationInputs(),

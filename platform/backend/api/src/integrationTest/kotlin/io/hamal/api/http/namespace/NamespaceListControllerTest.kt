@@ -81,7 +81,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
 
         val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
-            .parameter("after_id", fortyNinth.id)
+            .parameter("after_id", fortyNinth.namespaceId)
             .parameter("limit", 1)
             .execute(ApiNamespaceList::class)
 

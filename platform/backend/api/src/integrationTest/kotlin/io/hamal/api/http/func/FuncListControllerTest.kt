@@ -81,7 +81,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
 
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("group_ids", testGroup.id)
-            .parameter("after_id", fortyNinth.id)
+            .parameter("after_id", fortyNinth.funcId)
             .parameter("limit", 1)
             .execute(ApiFuncList::class)
 

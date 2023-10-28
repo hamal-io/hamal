@@ -63,7 +63,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         )
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
-            .path("funcId", func.id)
+            .path("funcId", func.funcId)
             .body(
                 ApiFuncUpdateReq(
                     name = FuncName("updatedName"),
@@ -116,7 +116,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         )
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
-            .path("funcId", func.id)
+            .path("funcId", func.funcId)
             .body(
                 ApiFuncUpdateReq(
                     name = null,

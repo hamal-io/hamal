@@ -32,7 +32,7 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
         )
 
         val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippetId}")
-            .path("snippetId", snippet.id)
+            .path("snippetId", snippet.snippetId)
             .body(
                 ApiUpdateSnippetReq(
                     name = SnippetName("Other"),
@@ -70,7 +70,7 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
         )
 
         val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippetId}")
-            .path("snippetId", snippet.id)
+            .path("snippetId", snippet.snippetId)
             .body(
                 ApiUpdateSnippetReq(
                     name = null,
