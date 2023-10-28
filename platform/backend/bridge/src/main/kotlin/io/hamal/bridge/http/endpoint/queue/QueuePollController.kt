@@ -1,4 +1,4 @@
-package io.hamal.bridge.web.work
+package io.hamal.bridge.http.endpoint.queue
 
 import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.lib.common.domain.CmdId
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class PollRoute(
+internal class QueuePollController(
     private val codeQueryRepository: CodeQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,

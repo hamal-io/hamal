@@ -1,4 +1,4 @@
-package io.hamal.bridge.web.code
+package io.hamal.bridge.http.code
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.CodeId

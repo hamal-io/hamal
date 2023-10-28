@@ -1,4 +1,4 @@
-package io.hamal.bridge.web.exec
+package io.hamal.bridge.http.exec
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class FailExecControllerTest : BaseExecControllerTest() {
+internal class ExecFailControllerTest : BaseExecControllerTest() {
 
     @TestFactory
     fun `Can not fail exec which is not started`() = ExecStatus.values()

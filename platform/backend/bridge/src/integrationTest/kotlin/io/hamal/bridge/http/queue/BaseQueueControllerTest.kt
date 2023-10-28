@@ -1,13 +1,13 @@
-package io.hamal.bridge.web.work
+package io.hamal.bridge.http.queue
 
-import io.hamal.bridge.web.BaseControllerTest
+import io.hamal.bridge.http.BaseControllerTest
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.sdk.api.ApiUnitOfWorkList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class BaseWorkControllerTest : BaseControllerTest() {
+internal sealed class BaseQueueControllerTest : BaseControllerTest() {
 
     fun dequeue(): ApiUnitOfWorkList {
         val dequeueResponse = httpTemplate.post("/v1/dequeue").execute()
