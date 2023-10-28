@@ -1,4 +1,4 @@
-package io.hamal.bridge.web.work
+package io.hamal.bridge.http.queue
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class DequeueControllerTest : BaseWorkControllerTest() {
+internal class QueuePollControllerTest : BaseQueueControllerTest() {
     @Test
     fun `Nothing to dequeue`() {
         with(dequeue()) {
@@ -72,6 +72,6 @@ internal class DequeueControllerTest : BaseWorkControllerTest() {
     }
 }
 
-private fun DequeueControllerTest.verifyExecStarted(execId: ExecId) {
+private fun QueuePollControllerTest.verifyExecStarted(execId: ExecId) {
     assertThat(execQueryRepository.get(execId).status, equalTo(Started))
 }

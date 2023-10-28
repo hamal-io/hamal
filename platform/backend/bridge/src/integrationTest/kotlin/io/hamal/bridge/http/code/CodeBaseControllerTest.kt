@@ -1,7 +1,7 @@
-package io.hamal.bridge.web.code
+package io.hamal.bridge.http.code
 
 
-import io.hamal.bridge.web.BaseControllerTest
+import io.hamal.bridge.http.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpStatusCode.Ok

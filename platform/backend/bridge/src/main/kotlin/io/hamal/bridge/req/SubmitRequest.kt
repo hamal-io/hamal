@@ -40,5 +40,4 @@ internal class SubmitBridgeRequest(
             result = req.result
         ).also(reqCmdRepository::queue)
     }
-
 }

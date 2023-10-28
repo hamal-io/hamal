@@ -1,4 +1,4 @@
-package io.hamal.bridge.web
+package io.hamal.bridge.http
 
 import io.hamal.bridge.BaseTest
 import io.hamal.lib.domain.ReqId

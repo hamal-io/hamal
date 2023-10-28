@@ -1,4 +1,4 @@
-package io.hamal.bridge.filter
+package io.hamal.bridge.http.filter
 
 import io.hamal.lib.sdk.api.ApiError
 import jakarta.servlet.FilterChain
