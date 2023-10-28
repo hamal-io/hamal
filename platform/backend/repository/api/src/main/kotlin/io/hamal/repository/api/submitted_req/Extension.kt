@@ -9,19 +9,19 @@ import kotlinx.serialization.Serializable
 data class ExtensionSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val id: ExtensionId,
     val name: ExtensionName,
     val codeId: CodeId,
     val code: CodeValue
-) : SubmittedReqWithGroupId
+) : SubmittedReq
 
 @Serializable
 data class ExtensionSubmittedUpdateReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val id: ExtensionId,
     val name: ExtensionName?,
     val code: CodeValue?
-) : SubmittedReqWithGroupId
+) : SubmittedReq

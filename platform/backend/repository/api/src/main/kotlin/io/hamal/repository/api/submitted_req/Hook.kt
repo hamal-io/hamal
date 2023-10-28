@@ -10,21 +10,21 @@ import kotlinx.serialization.Serializable
 data class SubmittedCreateHookReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val id: HookId,
     val namespaceId: NamespaceId,
     val name: HookName,
-) : SubmittedReqWithGroupId
+) : SubmittedReq
 
 
 @Serializable
 data class SubmittedUpdateHookReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val id: HookId,
     val name: HookName?,
-) : SubmittedReqWithGroupId
+) : SubmittedReq
 
 @Serializable
 data class SubmittedInvokeHookReq(

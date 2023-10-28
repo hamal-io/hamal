@@ -30,21 +30,14 @@ sealed interface ApiSubmittedReq {
     val status: ReqStatus
 }
 
-@Serializable
-sealed interface ApiSubmittedReqWithGroupId : ApiSubmittedReq {
-    override val reqId: ReqId
-    override val status: ReqStatus
-    val namespaceId: NamespaceId
-    val groupId: GroupId
-}
 
 @Serializable
 data class ApiDefaultSubmittedReq(
     override val reqId: ReqId,
     override val status: ReqStatus,
-    override val namespaceId: NamespaceId,
-    override val groupId: GroupId
-) : ApiSubmittedReqWithGroupId
+    val namespaceId: NamespaceId,
+    val groupId: GroupId
+) : ApiSubmittedReq
 
 @Serializable
 data class ApiSubmittedWithTokenReq(
@@ -57,10 +50,10 @@ data class ApiSubmittedWithTokenReq(
 data class ApiSubmittedReqWithId(
     override val reqId: ReqId,
     override val status: ReqStatus,
-    override val namespaceId: NamespaceId,
-    override val groupId: GroupId,
+    val namespaceId: NamespaceId,
+    val groupId: GroupId,
     val id: SnowflakeId,
-) : ApiSubmittedReqWithGroupId {
+) : ApiSubmittedReq {
 
     constructor(reqId: ReqId, status: ReqStatus, namespaceId: NamespaceId, groupId: GroupId, id: DomainId) : this(
         reqId,

@@ -5,6 +5,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.api.ApiSetStateReq
@@ -37,7 +38,7 @@ internal class StateSetController(private val setState: SetStatePort) {
                 reqId = it.reqId,
                 status = it.status,
                 namespaceId = NamespaceId(1337),
-                groupId = it.groupId,
+                groupId = GroupId(1)
             ), HttpStatus.ACCEPTED
         )
     }

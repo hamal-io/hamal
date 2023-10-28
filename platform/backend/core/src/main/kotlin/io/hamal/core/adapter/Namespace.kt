@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
+import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.request.CreateNamespaceReq
 import io.hamal.request.UpdateNamespaceReq
 import org.springframework.stereotype.Component
@@ -15,7 +15,7 @@ interface CreateNamespacePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateNamespaceReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T
 }
 
@@ -32,7 +32,7 @@ interface UpdateNamespacePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: UpdateNamespaceReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T
 }
 
@@ -48,7 +48,7 @@ class NamespaceAdapter(
     override fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateNamespaceReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T =
         responseHandler(submitRequest(groupId, req))
 
@@ -61,7 +61,7 @@ class NamespaceAdapter(
     override operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: UpdateNamespaceReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T {
         ensureNamespaceExists(namespaceId)
         return responseHandler(submitRequest(namespaceId, req))

@@ -8,7 +8,7 @@ import io.hamal.repository.api.CodeQueryRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
-import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
+import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.request.CreateExtensionReq
 import io.hamal.request.UpdateExtensionReq
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ interface CreateExtensionPort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateExtensionReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T
 }
 
@@ -36,7 +36,7 @@ interface UpdateExtensionPort {
     operator fun <T : Any> invoke(
         extId: ExtensionId,
         req: UpdateExtensionReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T
 }
 
@@ -51,7 +51,7 @@ class ExtensionAdapter(
     override fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateExtensionReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T {
         return responseHandler(submitRequest(groupId, req))
     }
@@ -65,7 +65,7 @@ class ExtensionAdapter(
     override fun <T : Any> invoke(
         extId: ExtensionId,
         req: UpdateExtensionReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T {
         ensureExtensionExists(extId)
         return responseHandler(submitRequest(extId, req))

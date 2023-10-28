@@ -9,22 +9,22 @@ import kotlinx.serialization.Serializable
 data class SnippetCreateSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val id: SnippetId,
     val creatorId: AccountId,
     val name: SnippetName,
     val inputs: SnippetInputs,
     val value: CodeValue
-) : SubmittedReqWithGroupId
+) : SubmittedReq
 
 
 @Serializable
 data class SnippetUpdateSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val id: SnippetId,
     val name: SnippetName?,
     val inputs: SnippetInputs?,
     val value: CodeValue?
-) : SubmittedReqWithGroupId
+) : SubmittedReq

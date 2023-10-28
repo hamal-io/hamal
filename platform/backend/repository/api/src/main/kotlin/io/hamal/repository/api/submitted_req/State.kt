@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
 data class StateSetSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
-    override val groupId: GroupId,
+    val groupId: GroupId,
     val state: CorrelatedState
-) : SubmittedReqWithGroupId
+) : SubmittedReq

@@ -11,7 +11,7 @@ import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.log.TopicEntry
-import io.hamal.repository.api.submitted_req.SubmittedReqWithGroupId
+import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.request.CreateTopicReq
 import org.springframework.stereotype.Component
 
@@ -19,7 +19,7 @@ interface AppendEntryToTopicPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         topAppend: TopicEntryPayload,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T
 }
 
@@ -27,7 +27,7 @@ interface CreateTopicPort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTopicReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T
 }
 
@@ -65,7 +65,7 @@ class TopicAdapter(
     override fun <T : Any> invoke(
         topicId: TopicId,
         topAppend: TopicEntryPayload,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T {
         ensureTopicExists(topicId)
         return responseHandler(submitRequest(ApiAppendEntryReq(topicId, topAppend)))
@@ -74,7 +74,7 @@ class TopicAdapter(
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTopicReq,
-        responseHandler: (SubmittedReqWithGroupId) -> T
+        responseHandler: (SubmittedReq) -> T
     ): T =
         responseHandler(submitRequest(namespaceId, req))
 
