@@ -4,8 +4,9 @@ import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.api.ApiCompleteExecReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,11 +21,11 @@ internal class ExecCompleteController(
     @PostMapping("/b1/execs/{execId}/complete")
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody complete: ApiCompleteExecReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+        @RequestBody complete: BridgeExecCompleteReq
+    ): ResponseEntity<ApiSubmittedReq> {
         val result = request(execId, complete)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            ApiSubmittedReqImpl(
                 reqId = it.reqId,
                 status = it.status,
                 namespaceId = NamespaceId(1),

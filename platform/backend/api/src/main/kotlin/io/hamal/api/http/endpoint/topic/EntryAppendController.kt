@@ -1,7 +1,7 @@
 package io.hamal.api.http.endpoint.topic
 
 import io.hamal.api.http.endpoint.req.Assembler
-import io.hamal.core.adapter.AppendEntryToTopicPort
+import io.hamal.core.adapter.TopicAppendEntryPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class EntryAppendController(
     private val retry: Retry,
-    private val appendEntryToTopic: AppendEntryToTopicPort
+    private val appendEntryToTopic: TopicAppendEntryPort
 ) {
     @PostMapping("/v1/topics/{topicId}/entries")
     fun appendEvent(

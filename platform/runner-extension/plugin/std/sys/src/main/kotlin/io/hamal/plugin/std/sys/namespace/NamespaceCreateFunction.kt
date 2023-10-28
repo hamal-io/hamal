@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
+import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 
 class NamespaceCreateFunction(
     private val sdk: ApiSdk
@@ -23,7 +23,7 @@ class NamespaceCreateFunction(
         return try {
             val res = sdk.namespace.create(
                 ctx[GroupId::class],
-                ApiCreateNamespaceReq(
+                ApiNamespaceCreateReq(
                     name = NamespaceName(arg1.getString("name")),
                     inputs = NamespaceInputs(),
                 )
@@ -33,7 +33,7 @@ class NamespaceCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16))
                 )
             )
 

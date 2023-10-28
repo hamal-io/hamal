@@ -11,7 +11,7 @@ import io.hamal.request.CreateAccountReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiCreateAccountReq(
+data class ApiAccountCreateReq(
     override val name: AccountName,
     override val email: AccountEmail?,
     override val password: Password?
@@ -35,14 +35,14 @@ data class ApiAccount(
 )
 
 interface ApiAccountService {
-    fun create(createAccountReq: ApiCreateAccountReq): ApiSubmittedWithTokenReq
+    fun create(createAccountReq: ApiAccountCreateReq): ApiSubmittedWithTokenReq
 }
 
 internal class ApiAccountServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiAccountService {
 
-    override fun create(createAccountReq: ApiCreateAccountReq) =
+    override fun create(createAccountReq: ApiAccountCreateReq) =
         template.post("/v1/accounts")
             .body(createAccountReq)
             .execute()

@@ -8,12 +8,13 @@ import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHookService.HookQuery
 import io.hamal.lib.sdk.fold
+import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateHookReq
 import io.hamal.request.UpdateHookReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiCreateHookReq(
+data class ApiHookCreateReq(
     override val name: HookName
 ) : CreateHookReq
 
@@ -62,7 +63,7 @@ data class ApiHook(
 }
 
 interface ApiHookService {
-    fun create(namespaceId: NamespaceId, createHookReq: ApiCreateHookReq): ApiSubmittedReqWithId
+    fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq): ApiSubmittedReqImpl<HookId>
     fun list(query: HookQuery): List<ApiHookList.Hook>
     fun get(hookId: HookId): ApiHook
 
@@ -87,12 +88,12 @@ internal class ApiHookServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiHookService {
 
-    override fun create(namespaceId: NamespaceId, createHookReq: ApiCreateHookReq) =
+    override fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq): ApiSubmittedReqImpl<HookId> =
         template.post("/v1/namespaces/{namespaceId}/hooks")
             .path("namespaceId", namespaceId)
             .body(createHookReq)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
     override fun list(query: HookQuery): List<ApiHookList.Hook> =
         template.get("/v1/hooks")

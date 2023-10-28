@@ -1,6 +1,7 @@
 package io.hamal.api.http.topic
 
 import io.hamal.api.http.BaseControllerTest
+import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -12,6 +13,7 @@ import io.hamal.lib.sdk.api.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class TopicBaseControllerTest : BaseControllerTest() {
 
     fun listTopicEntries(topicId: TopicId): ApiTopicEntryList {
@@ -48,18 +50,18 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
+    fun createTopic(topicName: TopicName): ApiSubmittedReqImpl<TopicId> {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/1/topics")
-            .body(ApiCreateTopicReq(topicName))
+            .body(ApiTopicCreateReq(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithId::class)
+        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TopicId>
     }
 
-    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiSubmittedReq {
+    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId> {
         val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(toAppend)
@@ -68,6 +70,6 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiDefaultSubmittedReq::class)
+        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TopicEntryId>
     }
 }

@@ -13,16 +13,17 @@ import io.hamal.request.FailExecReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BridgeFailExecReq(
-    override val result: ExecResult
-) : FailExecReq
-
-@Serializable
-data class BridgeCompleteExecReq(
+data class BridgeExecCompleteReq(
     override val result: ExecResult,
     override val state: State,
     override val events: List<EventToSubmit>
 ) : CompleteExecReq
+
+@Serializable
+data class BridgeExecFailReq(
+    override val result: ExecResult
+) : FailExecReq
+
 
 @Serializable
 data class BridgeUnitOfWorkList(
@@ -66,7 +67,7 @@ internal class BridgeExecServiceImpl(
     ) {
         template.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
-            .body(BridgeCompleteExecReq(result, stateAfterCompletion, eventToSubmit))
+            .body(BridgeExecCompleteReq(result, stateAfterCompletion, eventToSubmit))
             .execute()
     }
 
@@ -76,7 +77,7 @@ internal class BridgeExecServiceImpl(
     ) {
         template.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(BridgeFailExecReq(result))
+            .body(BridgeExecFailReq(result))
             .execute()
     }
 }

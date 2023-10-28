@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateHookReq
+import io.hamal.lib.sdk.api.ApiHookCreateReq
 
 class HookCreateFunction(
     private val sdk: ApiSdk
@@ -23,7 +23,7 @@ class HookCreateFunction(
         return try {
             val res = sdk.hook.create(
                 arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
-                ApiCreateHookReq(
+                ApiHookCreateReq(
                     name = HookName(arg1.getString("name"))
                 )
             )
@@ -32,9 +32,9 @@ class HookCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16)),
-                    "group_id" to StringType(res.groupId.value.value.toString(16)),
-                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16)),
+                    "group_id" to StringType(res.groupId!!.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId!!.value.value.toString(16))
                 )
             )
 

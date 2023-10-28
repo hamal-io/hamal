@@ -1,12 +1,15 @@
 package io.hamal.api.http.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiCreateHookReq
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -18,14 +21,14 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
     @Test
     fun `Create hook with default namespace id`() {
         val result = createHook(
-            req = ApiCreateHookReq(
+            req = ApiHookCreateReq(
                 name = HookName("test-hook"),
             ),
             namespaceId = NamespaceId(1)
         )
         awaitCompleted(result.reqId)
 
-        val hook = hookQueryRepository.get(result.id(::HookId))
+        val hook = hookQueryRepository.get(result.id)
         with(hook) {
             assertThat(name, equalTo(HookName("test-hook")))
 
@@ -49,14 +52,12 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
         )
 
         val result = createHook(
-            req = ApiCreateHookReq(HookName("test-hook")),
+            req = ApiHookCreateReq(HookName("test-hook")),
             namespaceId = namespace.id
         )
         awaitCompleted(result.reqId)
 
-        val hook = hookQueryRepository.get(result.id(::HookId))
-
-        with(hook) {
+        with(hookQueryRepository.get(result.id)) {
             assertThat(name, equalTo(HookName("test-hook")))
 
             namespaceQueryRepository.get(namespaceId).let {
@@ -71,7 +72,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
 
         val response = httpTemplate.post("/v1/namespaces/12345/hooks")
             .path("groupId", testGroup.id)
-            .body(ApiCreateHookReq(HookName("test-hook")))
+            .body(ApiHookCreateReq(HookName("test-hook")))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

@@ -7,19 +7,20 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiCreateFuncReq
 import io.hamal.lib.sdk.api.ApiFunc
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncList
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
-        req: ApiCreateFuncReq,
+        req: ApiFuncCreateReq,
         namespaceId: NamespaceId = NamespaceId(1)
-    ): ApiSubmittedReqWithId {
+    ): ApiSubmittedReqImpl<FuncId> {
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
             .path("namespaceId", namespaceId)
             .body(req)
@@ -27,7 +28,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithId::class)
+        return response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
     }
 
     fun listFuncs(): ApiFuncList {

@@ -10,14 +10,15 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiFailExecReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.bridge.BridgeExecFailReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
+@Suppress("UNCHECKED_CAST")
 internal class ExecFailControllerTest : BaseExecControllerTest() {
 
     @TestFactory
@@ -38,7 +39,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                 assertThat(failureResponse.statusCode, equalTo(Accepted))
                 require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = failureResponse.result(ApiSubmittedReqWithId::class)
+                val result = failureResponse.result(ApiSubmittedReqImpl::class)
 
                 awaitFailed(result.reqId)
             }
@@ -59,10 +60,10 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
         assertThat(failureResponse.statusCode, equalTo(Accepted))
         require(failureResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = failureResponse.result(ApiSubmittedReqWithId::class)
+        val result = failureResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
         awaitCompleted(result.reqId)
 
-        verifyExecFailed(result.id(::ExecId))
+        verifyExecFailed(result.id)
         //FIXME events
     }
 
@@ -70,7 +71,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/fail")
-            .body(ApiFailExecReq(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
+            .body(BridgeExecFailReq(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
@@ -91,7 +92,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(ApiFailExecReq(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
+            .body(BridgeExecFailReq(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
             .execute()
 
 }

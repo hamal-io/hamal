@@ -12,7 +12,7 @@ import io.hamal.request.CreateTriggerReq
 import org.springframework.stereotype.Component
 
 
-interface CreateTriggerPort {
+interface TriggerCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTriggerReq,
@@ -20,7 +20,7 @@ interface CreateTriggerPort {
     ): T
 }
 
-interface GetTriggerPort {
+interface TriggerGetPort {
     operator fun <T : Any> invoke(
         triggerId: TriggerId,
         responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
@@ -28,7 +28,7 @@ interface GetTriggerPort {
 }
 
 
-interface ListTriggersPort {
+interface TriggerListPort {
     operator fun <T : Any> invoke(
         query: TriggerQuery,
         responseHandler: (
@@ -41,8 +41,7 @@ interface ListTriggersPort {
     ): T
 }
 
-interface TriggerPort : CreateTriggerPort, GetTriggerPort, ListTriggersPort
-
+interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort
 
 @Component
 class TriggerAdapter(

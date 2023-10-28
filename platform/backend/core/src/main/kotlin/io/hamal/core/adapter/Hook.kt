@@ -13,7 +13,7 @@ import io.hamal.request.CreateHookReq
 import io.hamal.request.UpdateHookReq
 import org.springframework.stereotype.Component
 
-interface CreateHookPort {
+interface HookCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateHookReq,
@@ -21,15 +21,15 @@ interface CreateHookPort {
     ): T
 }
 
-interface GetHookPort {
+interface HookGetPort {
     operator fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T
 }
 
-interface ListHooksPort {
+interface HookListPort {
     operator fun <T : Any> invoke(query: HookQuery, responseHandler: (List<Hook>, Map<NamespaceId, Namespace>) -> T): T
 }
 
-interface UpdateHookPort {
+interface HookUpdatePort {
     operator fun <T : Any> invoke(
         hookId: HookId,
         req: UpdateHookReq,
@@ -37,7 +37,7 @@ interface UpdateHookPort {
     ): T
 }
 
-interface HookPort : CreateHookPort, GetHookPort, ListHooksPort, UpdateHookPort
+interface HookPort : HookCreatePort, HookGetPort, HookListPort, HookUpdatePort
 
 @Component
 class HookAdapter(

@@ -6,22 +6,22 @@ import io.hamal.repository.api.submitted_req.SubmittedReq
 import org.springframework.stereotype.Component
 
 
-interface GetReqPort {
+interface ReqGetPort {
     operator fun <T : Any> invoke(reqId: ReqId, responseHandler: (SubmittedReq) -> T): T
 }
 
-interface ListReqPort {
+interface ReqListPort {
     operator fun <T : Any> invoke(
         query: ReqQueryRepository.ReqQuery,
         responseHandler: (List<SubmittedReq>) -> T
     ): T
 }
 
-interface ReqPort : GetReqPort, ListReqPort
+interface ReqPort : ReqGetPort, ReqListPort
 
 @Component
 class ReqAdapter(private val reqQueryRepository: ReqQueryRepository) : ReqPort {
-    
+
     override fun <T : Any> invoke(reqId: ReqId, responseHandler: (SubmittedReq) -> T): T =
         responseHandler(reqQueryRepository.get(reqId))
 

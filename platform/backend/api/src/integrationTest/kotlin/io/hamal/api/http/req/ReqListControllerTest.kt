@@ -6,11 +6,12 @@ import io.hamal.lib.domain.vo.ExecCode
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.lib.sdk.api.ApiSubmittedReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
+@Suppress("UNCHECKED_CAST")
 internal class ReqListControllerTest : ReqBaseControllerTest() {
     @Test
     fun `No reqs`() {
@@ -45,9 +46,9 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
         assertThat(listResponse.reqs, hasSize(23))
 
         listResponse.reqs
-            .map { it as ApiSubmittedReqWithId }
+            .map { it as ApiSubmittedReqImpl<ExecId> }
             .forEachIndexed { idx, req ->
-                val code = execQueryRepository.get(req.id(::ExecId)).code
+                val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(ExecCode(value = CodeValue("${22 - idx}"))))
             }
     }
@@ -67,9 +68,9 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
         assertThat(listResponse.reqs, hasSize(1))
 
         listResponse.reqs
-            .map { it as ApiSubmittedReqWithId }
+            .map { it as ApiSubmittedReqImpl<ExecId> }
             .forEach { req ->
-                val code = execQueryRepository.get(req.id(::ExecId)).code
+                val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(ExecCode(value = CodeValue("71"))))
             }
     }

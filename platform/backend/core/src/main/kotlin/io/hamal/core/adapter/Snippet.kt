@@ -1,7 +1,9 @@
 package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.repository.api.Snippet
 import io.hamal.repository.api.SnippetQueryRepository
 import io.hamal.repository.api.submitted_req.SubmittedReq
@@ -9,7 +11,7 @@ import io.hamal.request.CreateSnippetReq
 import io.hamal.request.UpdateSnippetReq
 import org.springframework.stereotype.Component
 
-interface CreateSnippetPort {
+interface SnippetCreatePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         accountId: AccountId,
@@ -18,12 +20,12 @@ interface CreateSnippetPort {
     ): T
 }
 
-interface GetSnippetPort {
+interface SnippetGetPort {
     operator fun <T : Any> invoke(snippetId: SnippetId, responseHandler: (Snippet) -> T): T
 }
 
 
-interface UpdateSnippetPort {
+interface SnippetUpdatePort {
     operator fun <T : Any> invoke(
         snippetId: SnippetId,
         req: UpdateSnippetReq,
@@ -31,7 +33,7 @@ interface UpdateSnippetPort {
     ): T
 }
 
-interface SnippetPort : CreateSnippetPort, GetSnippetPort, UpdateSnippetPort
+interface SnippetPort : SnippetCreatePort, SnippetGetPort, SnippetUpdatePort
 
 @Component
 class SnippetAdapter(

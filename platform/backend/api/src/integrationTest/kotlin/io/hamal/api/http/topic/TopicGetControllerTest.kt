@@ -1,7 +1,6 @@
 package io.hamal.api.http.topic
 
 
-import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -15,7 +14,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).id
 
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))

@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.exec
 
-import io.hamal.core.adapter.ListExecsPort
+import io.hamal.core.adapter.ExecListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ExecListController(private val listExec: ListExecsPort) {
+internal class ExecListController(private val listExec: ExecListPort) {
 
     @GetMapping("/v1/execs")
     fun list(

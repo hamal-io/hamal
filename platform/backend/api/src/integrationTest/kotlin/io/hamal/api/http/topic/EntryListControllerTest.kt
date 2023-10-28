@@ -17,9 +17,7 @@ import org.junit.jupiter.api.Test
 internal class EntryListControllerTest : TopicBaseControllerTest() {
     @Test
     fun `No entries`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("test-topic"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).id
 
         val result = listTopicEntries(topicId)
         assertThat(result.entries, empty())
@@ -27,9 +25,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single entry`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("test-topic"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).id
 
         awaitCompleted(
             appendToTopic(topicId, TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
@@ -48,9 +44,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Limit entries`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("test-topic")).also { awaitCompleted(it.reqId) }
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("test-topic")).also { awaitCompleted(it.reqId) }).id
 
         awaitCompleted(
             IntRange(1, 100).map {
@@ -76,9 +70,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Skip and limit entries`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("test-topic"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).id
 
         awaitCompleted(
             IntRange(1, 100).map {
@@ -101,13 +93,8 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Does not show entries of different topic`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("test-topic"))
-        ).id(::TopicId)
-
-        val anotherTopicId = awaitCompleted(
-            createTopic(TopicName("another-test-topic"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).id
+        val anotherTopicId = awaitCompleted(createTopic(TopicName("another-test-topic"))).id
 
         awaitCompleted(
             appendToTopic(topicId, TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(1)))))

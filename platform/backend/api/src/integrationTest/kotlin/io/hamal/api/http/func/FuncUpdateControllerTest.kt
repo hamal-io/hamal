@@ -9,22 +9,23 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCreateFuncReq
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
-import io.hamal.lib.sdk.api.ApiUpdateFuncReq
+import io.hamal.lib.sdk.api.ApiFuncUpdateReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
+@Suppress("UNCHECKED_CAST")
 internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Tries to update func which does not exists`() {
         val getFuncResponse = httpTemplate.patch("/v1/funcs/33333333")
             .body(
-                ApiUpdateFuncReq(
+                ApiFuncUpdateReq(
                     name = FuncName("update"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -54,7 +55,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val func = awaitCompleted(
             createFunc(
                 namespaceId = createdNamespace.id,
-                req = ApiCreateFuncReq(
+                req = ApiFuncCreateReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -65,7 +66,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
-                ApiUpdateFuncReq(
+                ApiFuncUpdateReq(
                     name = FuncName("updatedName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeValue("updatedCode")
@@ -76,10 +77,10 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(ApiSubmittedReqWithId::class)
+        val submittedReq = updateFuncResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
         awaitCompleted(submittedReq)
 
-        val funcId = submittedReq.id(::FuncId)
+        val funcId = submittedReq.id
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
@@ -107,7 +108,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val func = awaitCompleted(
             createFunc(
                 namespaceId = createdNamespace.id,
-                req = ApiCreateFuncReq(
+                req = ApiFuncCreateReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -118,7 +119,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.id)
             .body(
-                ApiUpdateFuncReq(
+                ApiFuncUpdateReq(
                     name = null,
                     inputs = null,
                     code = null
@@ -128,9 +129,9 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val req = updateFuncResponse.result(ApiSubmittedReqWithId::class)
+        val req = updateFuncResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
         awaitCompleted(req)
-        val funcId = req.id(::FuncId)
+        val funcId = req.id
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))

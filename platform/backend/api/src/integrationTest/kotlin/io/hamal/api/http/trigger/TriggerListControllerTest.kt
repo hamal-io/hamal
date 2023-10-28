@@ -1,6 +1,5 @@
 package io.hamal.api.http.trigger
 
-import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.sdk.api.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +16,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Single trigger`() {
-        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).id(::TriggerId)
+        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).id
 
         with(listTriggers()) {
             assertThat(triggers, hasSize(1))

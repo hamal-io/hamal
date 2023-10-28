@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
+import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
 
 class AdhocFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class AdhocFunction(
         return try {
             val res = sdk.adhoc(
                 arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
-                ApiInvokeAdhocReq(
+                ApiAdhocInvokeReq(
                     inputs = InvocationInputs(),
                     code = CodeValue(arg1.getString("code"))
                 )
@@ -34,9 +34,9 @@ class AdhocFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16)),
-                    "group_id" to StringType(res.groupId.value.value.toString(16)),
-                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16)),
+                    "group_id" to StringType(res.groupId!!.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId!!.value.value.toString(16))
                 )
             )
 

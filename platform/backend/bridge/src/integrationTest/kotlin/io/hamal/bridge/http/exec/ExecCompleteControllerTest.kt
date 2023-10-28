@@ -11,13 +11,15 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
+
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCompleteExecReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
 import io.hamal.repository.api.CompletedExec
+import io.hamal.repository.api.StartedExec
 import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,6 +29,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
+@Suppress("UNCHECKED_CAST")
 internal class ExecCompleteControllerTest : BaseExecControllerTest() {
 
     @TestFactory
@@ -47,10 +50,10 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-                val result = completionResponse.result(ApiSubmittedReqWithId::class)
+                val result = completionResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
 
                 awaitFailed(result.reqId)
-                verifyNoStateSet(result.id(::ExecId))
+                verifyNoStateSet(result.id)
                 // FIXME verify event not emitted
             }
         }
@@ -64,17 +67,17 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
             )
-        ) as io.hamal.repository.api.StartedExec
+        ) as StartedExec
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = completionResponse.result(ApiSubmittedReqWithId::class)
+        val result = completionResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
         awaitCompleted(result.reqId)
 
-        verifyExecCompleted(result.id(::ExecId))
-        verifyStateSet(result.id(::ExecId))
+        verifyExecCompleted(result.id)
+        verifyStateSet(result.id)
         verifyEventAppended()
     }
 
@@ -83,7 +86,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     fun `Tries to complete exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/complete")
             .body(
-                ApiCompleteExecReq(
+                BridgeExecCompleteReq(
                     state = State(),
                     result = ExecResult(),
                     events = listOf()
@@ -142,7 +145,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                ApiCompleteExecReq(
+                BridgeExecCompleteReq(
                     state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     result = ExecResult(MapType("hamal" to StringType("rocks"))),
                     events = listOf(

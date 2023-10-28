@@ -6,11 +6,11 @@ import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository
 import org.springframework.stereotype.Component
 
-interface GetCodePort {
+interface CodeGetPort {
     operator fun <T : Any> invoke(codeId: CodeId, codeVersion: CodeVersion, responseHandler: (Code) -> T): T
 }
 
-interface CodePort : GetCodePort
+interface CodePort : CodeGetPort
 
 @Component
 class CodeAdapter(
@@ -33,7 +33,6 @@ class CodeAdapter(
     private fun ensureVersionExists(codeId: CodeId, codeVersion: CodeVersion) {
         codeQueryRepository.get(codeId, codeVersion)
     }
-
 
 }
 

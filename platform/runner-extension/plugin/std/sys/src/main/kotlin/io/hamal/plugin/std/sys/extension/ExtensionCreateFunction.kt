@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateExtensionReq
+import io.hamal.lib.sdk.api.ApiExtensionCreateReq
 
 class ExtensionCreateFunction(
     private val sdk: ApiSdk
@@ -23,7 +23,7 @@ class ExtensionCreateFunction(
         return try {
             val res = sdk.extension.create(
                 ctx[GroupId::class],
-                ApiCreateExtensionReq(
+                ApiExtensionCreateReq(
                     name = ExtensionName(arg1.getString("name")),
                     code = CodeValue(arg1.getString("code"))
                 )
@@ -33,9 +33,11 @@ class ExtensionCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16)),
+                    "group_id" to StringType(res.groupId!!.value.value.toString(16))
                 )
             )
+
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null
         }

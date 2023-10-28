@@ -7,8 +7,8 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCreateFuncReq
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -21,7 +21,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
     @TestFactory
     fun `Create func for default namespace id`() {
         val result = createFunc(
-            ApiCreateFuncReq(
+            ApiFuncCreateReq(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeValue("13 + 37")
@@ -29,7 +29,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         )
         awaitCompleted(result.reqId)
 
-        val func = funcQueryRepository.get(result.id(::FuncId))
+        val func = funcQueryRepository.get(result.id)
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
@@ -60,7 +60,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
         val result = createFunc(
             namespaceId = namespace.id,
-            req = ApiCreateFuncReq(
+            req = ApiFuncCreateReq(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeValue("13 + 37")
@@ -68,7 +68,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         )
         awaitCompleted(result.reqId)
 
-        val func = funcQueryRepository.get(result.id(::FuncId))
+        val func = funcQueryRepository.get(result.id)
 
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
@@ -91,7 +91,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
         val response = httpTemplate.post("/v1/namespaces/12345/funcs")
             .body(
-                ApiCreateFuncReq(
+                ApiFuncCreateReq(
                     name = FuncName("test-func"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                     code = CodeValue("13 + 37")

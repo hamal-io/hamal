@@ -9,17 +9,18 @@ import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
+import io.hamal.lib.sdk.foldReq
 import io.hamal.request.AppendEntryReq
 import io.hamal.request.CreateTopicReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiCreateTopicReq(
+data class ApiTopicCreateReq(
     override val name: TopicName
 ) : CreateTopicReq
 
 @Serializable
-data class ApiAppendEntryReq(
+data class ApiTopicAppendEntryReq(
     override val topicId: TopicId,
     override val payload: TopicEntryPayload
 ) : AppendEntryReq
@@ -56,8 +57,8 @@ data class ApiTopicList(
 
 
 interface ApiTopicService {
-    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiSubmittedReqWithId
-    fun create(namespaceId: NamespaceId, req: ApiCreateTopicReq): ApiSubmittedReqWithId
+    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId>
+    fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiSubmittedReqImpl<TopicId>
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
     fun get(topicId: TopicId): ApiTopic
@@ -84,19 +85,19 @@ internal class ApiTopicServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiTopicService {
 
-    override fun append(topicId: TopicId, payload: TopicEntryPayload) =
+    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId> =
         template.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(payload)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
-    override fun create(namespaceId: NamespaceId, req: ApiCreateTopicReq) =
+    override fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiSubmittedReqImpl<TopicId> =
         template.post("/v1/namespaces/{namespaceId}/topics")
             .path("namespaceId", namespaceId)
             .body(req)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
     override fun list(query: TopicQuery) =
         template.get("/v1/topics")

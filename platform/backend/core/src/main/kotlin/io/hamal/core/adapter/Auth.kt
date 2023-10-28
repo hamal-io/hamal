@@ -7,14 +7,14 @@ import io.hamal.request.SignInReq
 import org.springframework.stereotype.Component
 
 
-interface SignInPort {
+interface AuthSignInPort {
     operator fun <T : Any> invoke(
         req: SignInReq,
         responseHandler: (AuthSignInWithPasswordSubmittedReq) -> T
     ): T
 }
 
-interface AuthPort : SignInPort
+interface AuthPort : AuthSignInPort
 
 
 @Component

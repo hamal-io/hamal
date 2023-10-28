@@ -6,15 +6,15 @@ import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.springframework.stereotype.Component
 
-interface GetExecPort {
+interface ExecGetPort {
     operator fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec) -> T): T
 }
 
-interface ListExecsPort {
+interface ExecListPort {
     operator fun <T : Any> invoke(query: ExecQuery, responseHandler: (List<Exec>) -> T): T
 }
 
-interface ExecPort : GetExecPort, ListExecsPort
+interface ExecPort : ExecGetPort, ExecListPort
 
 @Component
 class ExecAdapter(

@@ -1,17 +1,19 @@
 package io.hamal.api.http.req
 
 import io.hamal.lib.domain._enum.ReqStatus.Completed
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
+@Suppress("UNCHECKED_CAST")
 internal class ReqGetControllerTest : ReqBaseControllerTest() {
     @Test
     fun `Gets req`() {
@@ -23,7 +25,7 @@ internal class ReqGetControllerTest : ReqBaseControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        val result = response.result(ApiSubmittedReqWithId::class)
+        val result = response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
         assertThat(result.status, equalTo(Completed))
     }
 

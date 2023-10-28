@@ -1,6 +1,5 @@
 package io.hamal.api.http.namespace
 
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.ErrorHttpResponse
@@ -9,9 +8,9 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiNamespace
+import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -31,12 +30,12 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
     fun `Get namespace`() {
         val namespaceId = awaitCompleted(
             createNamespace(
-                ApiCreateNamespaceReq(
+                ApiNamespaceCreateReq(
                     name = NamespaceName("namespace-one"),
                     inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )
             )
-        ).id(::NamespaceId)
+        ).id
 
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespaceId)

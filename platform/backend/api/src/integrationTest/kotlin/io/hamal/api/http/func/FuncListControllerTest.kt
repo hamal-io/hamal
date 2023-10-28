@@ -1,7 +1,10 @@
 package io.hamal.api.http.func
 
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.sdk.api.ApiCreateFuncReq
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -18,13 +21,13 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
     fun `Single func`() {
         val funcId = awaitCompleted(
             createFunc(
-                ApiCreateFuncReq(
+                ApiFuncCreateReq(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
                 )
             )
-        ).id(::FuncId)
+        ).id
 
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))
@@ -40,7 +43,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createFunc(
-                    ApiCreateFuncReq(
+                    ApiFuncCreateReq(
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
                         code = CodeValue("")
@@ -65,7 +68,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
     fun `Skip and limit funcs`() {
         val requests = IntRange(0, 99).map {
             createFunc(
-                ApiCreateFuncReq(
+                ApiFuncCreateReq(
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
                     code = CodeValue("")

@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.hook
 
-import io.hamal.core.adapter.ListHooksPort
+import io.hamal.core.adapter.HookListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class HookListController(private val listHook: ListHooksPort) {
+internal class HookListController(private val listHook: HookListPort) {
 
     @GetMapping("/v1/hooks")
     fun listHook(

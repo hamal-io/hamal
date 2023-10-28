@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateTriggerReq
+import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import kotlin.time.Duration
 
 class TriggerCreateFunction(
@@ -24,7 +24,7 @@ class TriggerCreateFunction(
         return try {
             val res = sdk.trigger.create(
                 arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
-                ApiCreateTriggerReq(
+                ApiTriggerCreateReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                     name = TriggerName(arg1.getString("name")),
@@ -51,12 +51,11 @@ class TriggerCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16)),
-                    "group_id" to StringType(res.groupId.value.value.toString(16)),
-                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16)),
+                    "group_id" to StringType(res.groupId!!.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId!!.value.value.toString(16))
                 )
             )
-
 
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null

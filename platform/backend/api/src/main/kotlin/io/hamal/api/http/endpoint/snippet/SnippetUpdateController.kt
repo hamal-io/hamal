@@ -1,7 +1,7 @@
 package io.hamal.api.http.endpoint.snippet
 
 import io.hamal.api.http.endpoint.req.Assembler
-import io.hamal.core.adapter.UpdateSnippetPort
+import io.hamal.core.adapter.SnippetUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.sdk.api.ApiUpdateSnippetReq
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class SnippetUpdateController(
     private val retry: Retry,
-    private val updateSnippet: UpdateSnippetPort
+    private val updateSnippet: SnippetUpdatePort
 ) {
     @PatchMapping("/v1/snippets/{snippetId}/update")
     fun updateSnippet(

@@ -1,7 +1,7 @@
 package io.hamal.api.http.endpoint.snippet
 
 import io.hamal.api.http.endpoint.req.Assembler
-import io.hamal.core.adapter.CreateSnippetPort
+import io.hamal.core.adapter.SnippetCreatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class SnippetCreateController(
     private val retry: Retry,
-    private val createSnippet: CreateSnippetPort
+    private val createSnippet: SnippetCreatePort
 ) {
     @PostMapping("/v1/groups/{groupId}/snippets")
     fun createSnippet(

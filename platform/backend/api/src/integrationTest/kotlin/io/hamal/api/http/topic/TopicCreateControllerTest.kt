@@ -11,9 +11,8 @@ import org.junit.jupiter.api.Test
 internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Create topic`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("namespace::topics_one"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).id
+
         verifyTopicCreated(topicId)
 
         with(listTopics()) {

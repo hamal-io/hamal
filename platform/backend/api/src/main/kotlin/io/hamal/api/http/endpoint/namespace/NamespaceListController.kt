@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.namespace
 
-import io.hamal.core.adapter.ListNamespacesPort
+import io.hamal.core.adapter.NamespaceListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class NamespaceListController(private val listNamespace: ListNamespacesPort) {
+internal class NamespaceListController(private val listNamespace: NamespaceListPort) {
     @GetMapping("/v1/groups/{groupId}/namespaces")
     fun listNamespace(
         @PathVariable("groupId") groupId: GroupId,

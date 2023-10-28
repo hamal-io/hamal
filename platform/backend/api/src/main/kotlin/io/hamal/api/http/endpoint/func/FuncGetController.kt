@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.func
 
-import io.hamal.core.adapter.GetFuncPort
+import io.hamal.core.adapter.FuncGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFunc
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncGetController(
     private val retry: Retry,
-    private val getFunc: GetFuncPort
+    private val getFunc: FuncGetPort
 ) {
 
     @GetMapping("/v1/funcs/{funcId}")

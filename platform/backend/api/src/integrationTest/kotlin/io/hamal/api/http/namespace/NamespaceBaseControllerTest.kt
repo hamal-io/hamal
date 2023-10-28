@@ -6,15 +6,16 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
 import io.hamal.lib.sdk.api.ApiNamespace
+import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import io.hamal.lib.sdk.api.ApiNamespaceList
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
-    fun createNamespace(req: ApiCreateNamespaceReq): ApiSubmittedReqWithId {
+    fun createNamespace(req: ApiNamespaceCreateReq): ApiSubmittedReqImpl<NamespaceId>{
         val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
             .body(req)
@@ -22,7 +23,7 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithId::class)
+        return response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<NamespaceId>
     }
 
     fun listNamespaces(): ApiNamespaceList {

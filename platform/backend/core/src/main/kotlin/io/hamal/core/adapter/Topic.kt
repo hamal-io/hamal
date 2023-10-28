@@ -1,11 +1,10 @@
 package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.api.ApiAppendEntryReq
+import io.hamal.lib.sdk.api.ApiTopicAppendEntryReq
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -15,7 +14,7 @@ import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.request.CreateTopicReq
 import org.springframework.stereotype.Component
 
-interface AppendEntryToTopicPort {
+interface TopicAppendEntryPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         topAppend: TopicEntryPayload,
@@ -23,7 +22,7 @@ interface AppendEntryToTopicPort {
     ): T
 }
 
-interface CreateTopicPort {
+interface TopicCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTopicReq,
@@ -31,14 +30,14 @@ interface CreateTopicPort {
     ): T
 }
 
-interface GetTopicPort {
+interface TopicGetPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         responseHandler: (Topic) -> T
     ): T
 }
 
-interface ListTopicEntriesPort {
+interface TopicListEntryPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         query: TopicEntryQuery,
@@ -46,14 +45,14 @@ interface ListTopicEntriesPort {
     ): T
 }
 
-interface ListTopicsPort {
+interface TopicListPort {
     operator fun <T : Any> invoke(
         query: TopicQuery,
         responseHandler: (List<Topic>) -> T
     ): T
 }
 
-interface TopicPort : AppendEntryToTopicPort, CreateTopicPort, GetTopicPort, ListTopicsPort, ListTopicEntriesPort
+interface TopicPort : TopicAppendEntryPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicListEntryPort
 
 
 @Component
@@ -68,7 +67,7 @@ class TopicAdapter(
         responseHandler: (SubmittedReq) -> T
     ): T {
         ensureTopicExists(topicId)
-        return responseHandler(submitRequest(ApiAppendEntryReq(topicId, topAppend)))
+        return responseHandler(submitRequest(ApiTopicAppendEntryReq(topicId, topAppend)))
     }
 
     override fun <T : Any> invoke(

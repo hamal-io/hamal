@@ -7,19 +7,20 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiCreateHookReq
 import io.hamal.lib.sdk.api.ApiHook
+import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.lib.sdk.api.ApiHookList
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
     fun createHook(
-        req: ApiCreateHookReq,
+        req: ApiHookCreateReq,
         namespaceId: NamespaceId = NamespaceId(1),
-    ): ApiSubmittedReqWithId {
+    ): ApiSubmittedReqImpl<HookId> {
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/hooks")
             .path("namespaceId", namespaceId)
             .body(req)
@@ -27,7 +28,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqWithId::class)
+        return response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<HookId>
     }
 
     fun listHooks(): ApiHookList {

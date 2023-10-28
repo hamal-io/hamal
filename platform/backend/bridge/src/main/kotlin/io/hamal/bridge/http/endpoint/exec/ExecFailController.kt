@@ -4,8 +4,9 @@ import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.api.ApiFailExecReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.bridge.BridgeExecFailReq
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,14 +21,14 @@ internal class ExecFailController(
     @PostMapping("/b1/execs/{execId}/fail")
     fun failExec(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody fail: ApiFailExecReq
-    ): ResponseEntity<ApiSubmittedReqWithId> {
+        @RequestBody fail: BridgeExecFailReq
+    ): ResponseEntity<ApiSubmittedReq> {
         val result = request(execId, fail)
         return ResponseEntity(result.let {
-            ApiSubmittedReqWithId(
+            ApiSubmittedReqImpl(
                 reqId = it.reqId,
                 status = it.status,
-                id = it.id.value,
+                id = it.id,
                 namespaceId = NamespaceId(1),
                 groupId = GroupId(1)
             )

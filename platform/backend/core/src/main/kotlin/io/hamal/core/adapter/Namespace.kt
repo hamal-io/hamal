@@ -11,7 +11,7 @@ import io.hamal.request.CreateNamespaceReq
 import io.hamal.request.UpdateNamespaceReq
 import org.springframework.stereotype.Component
 
-interface CreateNamespacePort {
+interface NamespaceCreatePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateNamespaceReq,
@@ -19,16 +19,16 @@ interface CreateNamespacePort {
     ): T
 }
 
-interface GetNamespacePort {
+interface NamespaceGetPort {
     operator fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T
 }
 
-interface ListNamespacesPort {
+interface NamespaceListPort {
     operator fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T
 }
 
 
-interface UpdateNamespacePort {
+interface NamespaceUpdatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: UpdateNamespaceReq,
@@ -36,7 +36,7 @@ interface UpdateNamespacePort {
     ): T
 }
 
-interface NamespacePort : CreateNamespacePort, GetNamespacePort, ListNamespacesPort, UpdateNamespacePort
+interface NamespacePort : NamespaceCreatePort, NamespaceGetPort, NamespaceListPort, NamespaceUpdatePort
 
 
 @Component

@@ -3,11 +3,14 @@ package io.hamal.testbed
 import io.hamal.lib.common.Logger
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.lib.sdk.api.ApiInvokeAdhocReq
+import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.DynamicTest
@@ -71,7 +74,7 @@ abstract class BaseTest {
             println(">>>>>>>>>>>>>> ${file.fileName}")
             val execReq = sdk.adhoc.invoke(
                 testNamespace.id,
-                ApiInvokeAdhocReq(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
+                ApiAdhocInvokeReq(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
             )
 
             sdk.await(execReq)
@@ -79,7 +82,7 @@ abstract class BaseTest {
             var wait = true
             val startedAt = TimeUtils.now()
             while (wait) {
-                with(execRepository.get(execReq.id(::ExecId))) {
+                with(execRepository.get(execReq.id)) {
                     if (status == ExecStatus.Completed) {
                         wait = false
                     } else if (status == ExecStatus.Failed) {

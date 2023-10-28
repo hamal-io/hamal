@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiUpdateExtensionReq
+import io.hamal.lib.sdk.api.ApiExtensionUpdateReq
 
 class ExtensionUpdateFunction(
     private val sdk: ApiSdk
@@ -23,18 +23,20 @@ class ExtensionUpdateFunction(
         return try {
             val res = sdk.extension.update(
                 ExtensionId(arg1.value),
-                ApiUpdateExtensionReq(
+                ApiExtensionUpdateReq(
                     name = ExtensionName(arg2.getString("name")),
                     code = CodeValue(arg2.getString("code"))
                 )
             )
+
             null to MapType(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16)),
                 )
             )
+
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null
         }

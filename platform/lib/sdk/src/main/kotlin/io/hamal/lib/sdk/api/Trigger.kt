@@ -10,12 +10,13 @@ import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
+import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateTriggerReq
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-data class ApiCreateTriggerReq(
+data class ApiTriggerCreateReq(
     override val type: TriggerType,
     override val name: TriggerName,
     override val funcId: FuncId,
@@ -162,7 +163,7 @@ class ApiHookTrigger(
 
 
 interface ApiTriggerService {
-    fun create(namespaceId: NamespaceId, req: ApiCreateTriggerReq): ApiSubmittedReqWithId
+    fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiSubmittedReqImpl<TriggerId>
     fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
 
@@ -187,12 +188,12 @@ interface ApiTriggerService {
 internal class ApiTriggerServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiTriggerService {
-    override fun create(namespaceId: NamespaceId, req: ApiCreateTriggerReq) =
+    override fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiSubmittedReqImpl<TriggerId> =
         template.post("/v1/namespaces/{namespaceId}/triggers")
             .path("namespaceId", namespaceId)
             .body(req)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
     override fun list(query: TriggerQuery) =
         template.get("/v1/triggers")

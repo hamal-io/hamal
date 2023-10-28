@@ -1,9 +1,8 @@
 package io.hamal.api.http.namespace
 
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
+import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -25,12 +24,12 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
     fun `Single namespace`() {
         val namespaceId = awaitCompleted(
             createNamespace(
-                ApiCreateNamespaceReq(
+                ApiNamespaceCreateReq(
                     name = NamespaceName("namespace-one"),
                     inputs = NamespaceInputs()
                 )
             )
-        ).id(::NamespaceId)
+        ).id
 
         with(listNamespaces()) {
             assertThat(namespaces, hasSize(2))
@@ -46,7 +45,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createNamespace(
-                    ApiCreateNamespaceReq(
+                    ApiNamespaceCreateReq(
                         name = NamespaceName("namespace-$it"),
                         inputs = NamespaceInputs()
                     )
@@ -70,7 +69,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
     fun `Skip and limit namespaces`() {
         val requests = IntRange(0, 99).map {
             createNamespace(
-                ApiCreateNamespaceReq(
+                ApiNamespaceCreateReq(
                     name = NamespaceName("namespace-$it"),
                     inputs = NamespaceInputs()
                 )

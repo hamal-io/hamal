@@ -1,7 +1,15 @@
 package io.hamal.core.config
 
 import io.hamal.core.component.*
+import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -49,4 +57,25 @@ open class WebConfig : WebMvcConfigurer {
     override fun configurePathMatch(configurer: PathMatchConfigurer) {
         configurer.setUseTrailingSlashMatch(true)
     }
+}
+
+fun main() {
+    val j = Json {
+        explicitNulls = false
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+    }
+
+
+    println(
+        j.encodeToString<ApiSubmittedReq>(
+            ApiSubmittedReqImpl<FuncId>(
+                reqId = ReqId(1),
+                status = ReqStatus.Failed,
+                id = FuncId(12),
+                namespaceId = NamespaceId(23),
+                groupId = GroupId(23)
+            )
+        )
+    )
 }

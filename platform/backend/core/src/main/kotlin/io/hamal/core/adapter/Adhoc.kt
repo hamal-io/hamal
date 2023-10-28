@@ -7,7 +7,7 @@ import io.hamal.request.InvokeAdhocReq
 import org.springframework.stereotype.Component
 
 
-interface InvokeAdhocPort {
+interface AdhocInvokePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: InvokeAdhocReq,
@@ -15,7 +15,7 @@ interface InvokeAdhocPort {
     ): T
 }
 
-interface AdhocPort : InvokeAdhocPort
+interface AdhocPort : AdhocInvokePort
 
 @Component
 class AdhocAdapter(private val submitRequest: SubmitRequest) : AdhocPort {

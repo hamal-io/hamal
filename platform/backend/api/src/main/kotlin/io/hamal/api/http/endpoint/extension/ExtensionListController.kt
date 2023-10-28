@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.extension
 
-import io.hamal.core.adapter.ListExtensionPort
+import io.hamal.core.adapter.ExtensionListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.GroupId
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ExtensionListController(private val listExt: ListExtensionPort) {
+internal class ExtensionListController(private val listExt: ExtensionListPort) {
     @GetMapping("/v1/extensions")
     fun listExtensions(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExtensionId,

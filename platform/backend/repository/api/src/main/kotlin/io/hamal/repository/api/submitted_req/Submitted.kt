@@ -9,4 +9,3 @@ sealed interface SubmittedReq {
     val reqId: ReqId
     var status: ReqStatus
 }
-

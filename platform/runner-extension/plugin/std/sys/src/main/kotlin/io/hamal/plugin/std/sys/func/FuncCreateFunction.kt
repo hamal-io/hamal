@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCreateFuncReq
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
 
 class FuncCreateFunction(
     private val sdk: ApiSdk
@@ -25,7 +25,7 @@ class FuncCreateFunction(
         return try {
             val res = sdk.func.create(
                 arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
-                ApiCreateFuncReq(
+                ApiFuncCreateReq(
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
                     code = CodeValue(arg1.getString("code"))
@@ -36,11 +36,12 @@ class FuncCreateFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16)),
-                    "group_id" to StringType(res.groupId.value.value.toString(16)),
-                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16)),
+                    "group_id" to StringType(res.groupId!!.value.value.toString(16)),
+                    "namespace_id" to StringType(res.namespaceId!!.value.value.toString(16))
                 )
             )
+
 
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null

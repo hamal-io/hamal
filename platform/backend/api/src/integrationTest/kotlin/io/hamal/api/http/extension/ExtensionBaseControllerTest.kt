@@ -9,8 +9,9 @@ import io.hamal.lib.sdk.api.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
-    fun createExtension(req: ApiCreateExtensionReq): ApiSubmittedReqWithId {
+    fun createExtension(req: ApiExtensionCreateReq): ApiSubmittedReqImpl<ExtensionId> {
         val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
             .path("groupId", testGroup.id)
             .body(req)
@@ -18,7 +19,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
         assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createResponse is SuccessHttpResponse) { "request was successful" }
-        return createResponse.result(ApiSubmittedReqWithId::class)
+        return createResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExtensionId>
     }
 
     fun getExtension(extId: ExtensionId): ApiExtension {
@@ -42,7 +43,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     }
 
-    fun updateExtension(extId: ExtensionId, req: ApiUpdateExtensionReq): ApiSubmittedReqWithId {
+    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiSubmittedReqImpl<ExtensionId> {
         val updateResponse = httpTemplate.patch("/v1/extensions/{extId}/update")
             .path("extId", extId)
             .body(req)
@@ -50,7 +51,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateResponse is SuccessHttpResponse) { "request was successful" }
-        return updateResponse.result(ApiSubmittedReqWithId::class)
+        return updateResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExtensionId>
     }
 
 }

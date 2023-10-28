@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
+import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -14,13 +14,13 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
     @Test
     fun `Create namespace`() {
         val result = createNamespace(
-            ApiCreateNamespaceReq(
+            ApiNamespaceCreateReq(
                 name = NamespaceName("test-namespace"),
                 inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))
             )
         )
         awaitCompleted(result.reqId)
-        verifyNamespaceCreated(result.id(::NamespaceId))
+        verifyNamespaceCreated(result.id)
     }
 }
 

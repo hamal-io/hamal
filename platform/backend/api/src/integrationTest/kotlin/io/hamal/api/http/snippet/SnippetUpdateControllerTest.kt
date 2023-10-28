@@ -7,17 +7,18 @@ import io.hamal.lib.domain.vo.SnippetName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.SuccessHttpResponse
-import io.hamal.lib.sdk.api.ApiUpdateSnippetReq
-import org.junit.jupiter.api.Test
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiUpdateSnippetReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.Test
 
+@Suppress("UNCHECKED_CAST")
 internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
 
     @Test
@@ -46,10 +47,10 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
         assertThat(updateSnippetResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateSnippetResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val submittedReq = updateSnippetResponse.result(ApiSubmittedReqWithId::class)
+        val submittedReq = updateSnippetResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<SnippetId>
         awaitCompleted(submittedReq)
 
-        val snippetId = submittedReq.id(::SnippetId)
+        val snippetId = submittedReq.id
 
         with(getSnippet(snippetId)) {
             assertThat(id, equalTo(snippetId))
@@ -85,10 +86,10 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
         assertThat(updateSnippetResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateSnippetResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val submittedReq = updateSnippetResponse.result(ApiSubmittedReqWithId::class)
+        val submittedReq = updateSnippetResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<SnippetId>
         awaitCompleted(submittedReq)
 
-        val snippetId = submittedReq.id(::SnippetId)
+        val snippetId = submittedReq.id
 
         with(getSnippet(snippetId)) {
             assertThat(id, equalTo(snippetId))

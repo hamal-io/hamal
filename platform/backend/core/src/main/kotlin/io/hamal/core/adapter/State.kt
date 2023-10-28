@@ -12,7 +12,7 @@ import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.request.SetStateReq
 import org.springframework.stereotype.Component
 
-interface GetStatePort {
+interface StateGetPort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         correlationId: CorrelationId,
@@ -20,12 +20,11 @@ interface GetStatePort {
     ): T
 }
 
-interface SetStatePort {
+interface StateSetPort {
     operator fun <T : Any> invoke(req: SetStateReq, responseHandler: (SubmittedReq) -> T): T
 }
 
-interface StatePort : GetStatePort, SetStatePort
-
+interface StatePort : StateGetPort, StateSetPort
 
 @Component
 class StateAdapter(

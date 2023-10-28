@@ -5,7 +5,6 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -23,7 +22,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Get state`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val execId = createExec(
             execId = ExecId(123),
@@ -37,6 +36,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
         awaitCompleted(completeExec(execId, State(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
+
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
@@ -49,7 +49,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Get state for function which was never set before`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))

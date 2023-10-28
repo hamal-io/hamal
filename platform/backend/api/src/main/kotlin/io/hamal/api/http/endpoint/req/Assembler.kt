@@ -2,18 +2,26 @@ package io.hamal.api.http.endpoint.req
 
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.api.ApiSubmittedWithTokenReq
 import io.hamal.repository.api.submitted_req.*
+
+
+fun SubmittedReq.toApi() = ApiSubmittedReqImpl(
+    reqId = reqId,
+    status = status,
+    id = TODO(),
+    groupId = null,
+    namespaceId = null,
+)
 
 // FIXME
 internal object Assembler {
     fun assemble(req: SubmittedReq): ApiSubmittedReq {
         return when (val r = req) {
 
-            is AccountCreateWithPasswordSubmittedReq -> ApiSubmittedReqWithId(
+            is AccountCreateWithPasswordSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId,
@@ -21,7 +29,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is TopicAppendToSubmittedReq -> ApiSubmittedReqWithId(
+            is TopicAppendToSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -29,7 +37,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is ExecCompleteSubmittedExecReq -> ApiSubmittedReqWithId(
+            is ExecCompleteSubmittedExecReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -37,7 +45,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is ExtensionSubmittedReq -> ApiSubmittedReqWithId(
+            is ExtensionSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -45,7 +53,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is ExtensionSubmittedUpdateReq -> ApiSubmittedReqWithId(
+            is ExtensionSubmittedUpdateReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -53,39 +61,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is FuncCreateSubmittedReq -> ApiSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                namespaceId = r.namespaceId ?: NamespaceId(1337),
-                groupId = r.groupId,
-                id = r.id
-            )
-
-            is SubmittedCreateHookReq -> ApiSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                namespaceId = r.namespaceId ?: NamespaceId(1337),
-                groupId = r.groupId,
-                id = r.id
-            )
-
-            is SubmittedUpdateHookReq -> ApiSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                namespaceId = NamespaceId(1337),
-                groupId = r.groupId,
-                id = r.id
-            )
-
-            is NamespaceCreateSubmittedReq -> ApiSubmittedReqWithId(
-                reqId = r.reqId,
-                status = r.status,
-                namespaceId = NamespaceId(1337),
-                groupId = r.groupId,
-                id = r.id
-            )
-
-            is TopicCreateSubmittedReq -> ApiSubmittedReqWithId(
+            is FuncCreateSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId,
@@ -93,7 +69,15 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SnippetCreateSubmittedReq -> ApiSubmittedReqWithId(
+            is SubmittedCreateHookReq -> ApiSubmittedReqImpl(
+                reqId = r.reqId,
+                status = r.status,
+                namespaceId = r.namespaceId,
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is SubmittedUpdateHookReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -101,7 +85,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SnippetUpdateSubmittedReq -> ApiSubmittedReqWithId(
+            is NamespaceCreateSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -109,15 +93,39 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCreateTriggerReq -> ApiSubmittedReqWithId(
+            is TopicCreateSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
-                namespaceId = r.namespaceId ?: NamespaceId(1337),
+                namespaceId = r.namespaceId,
                 groupId = r.groupId,
                 id = r.id
             )
 
-            is ExecFailSubmittedExecReq -> ApiSubmittedReqWithId(
+            is SnippetCreateSubmittedReq -> ApiSubmittedReqImpl(
+                reqId = r.reqId,
+                status = r.status,
+                namespaceId = NamespaceId(1337),
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is SnippetUpdateSubmittedReq -> ApiSubmittedReqImpl(
+                reqId = r.reqId,
+                status = r.status,
+                namespaceId = NamespaceId(1337),
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is SubmittedCreateTriggerReq -> ApiSubmittedReqImpl(
+                reqId = r.reqId,
+                status = r.status,
+                namespaceId = r.namespaceId,
+                groupId = r.groupId,
+                id = r.id
+            )
+
+            is ExecFailSubmittedExecReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -125,7 +133,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is ExecInvokeSubmittedReq -> ApiSubmittedReqWithId(
+            is ExecInvokeSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId,
@@ -133,7 +141,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is FuncUpdateSubmittedReq -> ApiSubmittedReqWithId(
+            is FuncUpdateSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -141,7 +149,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is NamespaceUpdateSubmittedReq -> ApiSubmittedReqWithId(
+            is NamespaceUpdateSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -150,11 +158,12 @@ internal object Assembler {
             )
 
 
-            is StateSetSubmittedReq -> ApiDefaultSubmittedReq(
+            is StateSetSubmittedReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
-                groupId = r.groupId
+                groupId = r.groupId,
+                id = r.state.correlation.funcId
             )
 
             is AuthSignInWithPasswordSubmittedReq -> ApiSubmittedWithTokenReq(
@@ -163,7 +172,7 @@ internal object Assembler {
                 token = r.token
             )
 
-            is SubmittedInvokeHookReq -> ApiSubmittedReqWithId(
+            is SubmittedInvokeHookReq -> ApiSubmittedReqImpl(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),

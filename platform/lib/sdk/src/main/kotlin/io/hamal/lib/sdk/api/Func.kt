@@ -8,27 +8,28 @@ import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
+import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiCreateFuncReq(
+data class ApiFuncCreateReq(
     override val name: FuncName,
     override val inputs: FuncInputs,
     override val code: CodeValue
 ) : CreateFuncReq
 
 @Serializable
-data class ApiUpdateFuncReq(
+data class ApiFuncUpdateReq(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
     override val code: CodeValue? = null
 ) : UpdateFuncReq
 
 @Serializable
-data class ApiInvokeFuncReq(
+data class ApiFuncInvokeReq(
     override val correlationId: CorrelationId? = null,
     override val inputs: InvocationInputs? = null,
 ) : InvokeFuncReq
@@ -75,10 +76,10 @@ data class ApiFunc(
 }
 
 interface ApiFuncService {
-    fun create(namespaceId: NamespaceId, createFuncReq: ApiCreateFuncReq): ApiSubmittedReqWithId
+    fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq): ApiSubmittedReqImpl<FuncId>
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
-    fun invoke(funcId: FuncId, req: ApiInvokeFuncReq): ApiSubmittedReqWithId
+    fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiSubmittedReqImpl<FuncId>
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -101,12 +102,12 @@ internal class ApiFuncServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiFuncService {
 
-    override fun create(namespaceId: NamespaceId, createFuncReq: ApiCreateFuncReq) =
+    override fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq): ApiSubmittedReqImpl<FuncId> =
         template.post("/v1/namespaces/{namespaceId}/funcs")
             .path("namespaceId", namespaceId)
             .body(createFuncReq)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
     override fun list(query: FuncQuery): List<ApiFuncList.Func> =
         template.get("/v1/funcs")
@@ -121,11 +122,11 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFunc::class)
 
-    override fun invoke(funcId: FuncId, req: ApiInvokeFuncReq) =
+    override fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiSubmittedReqImpl<FuncId> =
         template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
 }

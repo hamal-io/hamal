@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.extension
 
-import io.hamal.core.adapter.GetExtensionPort
+import io.hamal.core.adapter.ExtensionGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sdk.api.ApiExtension
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class ExtensionGetController(
     private val retry: Retry,
-    private val getExtension: GetExtensionPort
+    private val getExtension: ExtensionGetPort
 ) {
     @GetMapping("/v1/extensions/{extId}")
     fun getExtension(@PathVariable("extId") extId: ExtensionId) = retry {

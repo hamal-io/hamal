@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.state
 
-import io.hamal.core.adapter.GetStatePort
+import io.hamal.core.adapter.StateGetPort
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiCorrelatedState
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class StateGetController(private val getState: GetStatePort) {
+internal class StateGetController(private val getState: StateGetPort) {
     @GetMapping("/v1/funcs/{funcId}/states/{correlationId}")
     fun getState(
         @PathVariable("funcId") funcId: FuncId,

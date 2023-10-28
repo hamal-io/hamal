@@ -12,15 +12,15 @@ import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.request.AppendExecLogReq
 import org.springframework.stereotype.Component
 
-interface AppendExecLogPort {
+interface ExecLogAppendPort {
     operator fun <T : Any> invoke(execId: ExecId, req: AppendExecLogReq, responseHandler: (ExecLog) -> T): T
 }
 
-interface ListExecLogsPort {
+interface ExecLogListPort {
     operator fun <T : Any> invoke(query: ExecLogQuery, responseHandler: (List<ExecLog>) -> T): T
 }
 
-interface ExecLogPort : AppendExecLogPort, ListExecLogsPort
+interface ExecLogPort : ExecLogAppendPort, ExecLogListPort
 
 @Component
 class ExecLogAdapter(

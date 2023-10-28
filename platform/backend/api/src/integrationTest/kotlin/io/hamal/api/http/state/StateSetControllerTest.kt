@@ -4,7 +4,6 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -15,9 +14,9 @@ import io.hamal.lib.kua.type.False
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.True
-import io.hamal.lib.sdk.api.ApiDefaultSubmittedReq
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -25,7 +24,7 @@ import org.junit.jupiter.api.Test
 internal class StateSetControllerTest : StateBaseControllerTest() {
     @Test
     fun `Sets state for a function first time`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val response = httpTemplate.post("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
@@ -35,7 +34,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is SuccessHttpResponse) { "request was not successful" }
 
-        response.result(ApiDefaultSubmittedReq::class)
+        response.result(ApiSubmittedReqImpl::class)
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
         assertThat(correlatedState["answer"], equalTo(NumberType(42)))
@@ -43,7 +42,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Sets state for a function with multiple correlations`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
@@ -65,7 +64,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
     @Test
     fun `Updates a state multiple times`() {
 
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val correlation = Correlation(
             correlationId = CorrelationId("SOME_CORRELATION"),

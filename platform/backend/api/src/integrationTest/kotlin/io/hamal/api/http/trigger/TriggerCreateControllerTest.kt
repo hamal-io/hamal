@@ -8,9 +8,9 @@ import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.*
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiCreateTriggerReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
@@ -23,30 +23,31 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("UNCHECKED_CAST")
 internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Creates trigger without namespace id`() {
-        val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id
 
         val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                ApiCreateTriggerReq(
-                    type = FixedRate,
-                    name = TriggerName("trigger"),
-                    funcId = funcId,
-                    inputs = TriggerInputs(),
-                    duration = 10.seconds,
-                )
-            ).execute()
+            ApiTriggerCreateReq(
+                type = FixedRate,
+                name = TriggerName("trigger"),
+                funcId = funcId,
+                inputs = TriggerInputs(),
+                duration = 10.seconds,
+            )
+        ).execute()
 
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithId::class)
+        val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
         awaitCompleted(result.reqId)
 
-        with(getTrigger(result.id(::TriggerId))) {
-            assertThat(id, equalTo(TriggerId(result.id)))
+        with(getTrigger(result.id)) {
+            assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(namespace.name, equalTo(NamespaceName("hamal")))
         }
@@ -65,27 +66,27 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             )
         )
 
-        val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id
 
         val creationResponse =
             httpTemplate.post("/v1/namespaces/{namespaceId}/triggers").path("namespaceId", namespace.id).body(
-                    ApiCreateTriggerReq(
-                        type = FixedRate,
-                        name = TriggerName("trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        duration = 10.seconds,
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = FixedRate,
+                    name = TriggerName("trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    duration = 10.seconds,
+                )
+            ).execute()
 
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqWithId::class)
+        val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
         awaitCompleted(result.reqId)
 
-        with(getTrigger(result.id(::TriggerId))) {
-            assertThat(id, equalTo(TriggerId(result.id)))
+        with(getTrigger(result.id)) {
+            assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(namespace.id, equalTo(namespace.id))
             assertThat(namespace.name, equalTo(NamespaceName("hamal::name::space")))
@@ -94,17 +95,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Tries to create trigger with namespace id but namespace does not exist`() {
-        val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
+        val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id
 
         val creationResponse = httpTemplate.post("/v1/namespaces/12345/triggers").body(
-                ApiCreateTriggerReq(
-                    type = FixedRate,
-                    name = TriggerName("trigger"),
-                    funcId = funcId,
-                    inputs = TriggerInputs(),
-                    duration = 10.seconds,
-                )
-            ).execute()
+            ApiTriggerCreateReq(
+                type = FixedRate,
+                name = TriggerName("trigger"),
+                funcId = funcId,
+                inputs = TriggerInputs(),
+                duration = 10.seconds,
+            )
+        ).execute()
 
         assertThat(creationResponse.statusCode, equalTo(NotFound))
         require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -120,26 +121,26 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Creates trigger`() {
-            val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id(::FuncId)
+            val funcId = awaitCompleted(createFunc(FuncName("fixed-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = FixedRate,
-                        name = TriggerName("fixed-rate-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        duration = 10.seconds,
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = FixedRate,
+                    name = TriggerName("fixed-rate-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    duration = 10.seconds,
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(Accepted))
             require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-            val result = creationResponse.result(ApiSubmittedReqWithId::class)
+            val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
             awaitCompleted(result.reqId)
 
-            with(triggerQueryRepository.get(result.id(::TriggerId))) {
-                assertThat(id, equalTo(TriggerId(result.id)))
+            with(triggerQueryRepository.get(result.id)) {
+                assertThat(id, equalTo(result.id))
                 assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
@@ -151,14 +152,14 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         @Test
         fun `Tries to create trigger but func does not exist`() {
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = FixedRate,
-                        name = TriggerName("fixed-rate-trigger"),
-                        funcId = FuncId(123),
-                        inputs = TriggerInputs(),
-                        duration = 10.seconds,
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = FixedRate,
+                    name = TriggerName("fixed-rate-trigger"),
+                    funcId = FuncId(123),
+                    inputs = TriggerInputs(),
+                    duration = 10.seconds,
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -174,27 +175,27 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Creates trigger`() {
-            val topicId = awaitCompleted(createTopic(TopicName("event-trigger-topic"))).id(::TopicId)
-            val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id(::FuncId)
+            val topicId = awaitCompleted(createTopic(TopicName("event-trigger-topic"))).id
+            val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Event,
-                        name = TriggerName("event-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        topicId = topicId
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Event,
+                    name = TriggerName("event-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    topicId = topicId
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(Accepted))
             require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-            val result = creationResponse.result(ApiSubmittedReqWithId::class)
+            val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
             awaitCompleted(result.reqId)
 
-            with(triggerQueryRepository.get(result.id(::TriggerId))) {
-                assertThat(id, equalTo(TriggerId(result.id)))
+            with(triggerQueryRepository.get(result.id)) {
+                assertThat(id, equalTo(result.id))
                 assertThat(name, equalTo(TriggerName("event-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
@@ -205,17 +206,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Tries to create trigger but does not specify topic id`() {
-            val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id(::FuncId)
+            val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Event,
-                        name = TriggerName("event-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        topicId = null
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Event,
+                    name = TriggerName("event-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    topicId = null
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(BadRequest))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -227,17 +228,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Tries to create trigger but topic does not exists`() {
-            val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id(::FuncId)
+            val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Event,
-                        name = TriggerName("event-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        topicId = TopicId(1234)
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Event,
+                    name = TriggerName("event-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    topicId = TopicId(1234)
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -249,17 +250,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Tries to create trigger but func does not exists`() {
-            val topicId = awaitCompleted(createTopic(TopicName("event-trigger-topic"))).id(::TopicId)
+            val topicId = awaitCompleted(createTopic(TopicName("event-trigger-topic"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Event,
-                        name = TriggerName("event-trigger"),
-                        funcId = FuncId(1234),
-                        inputs = TriggerInputs(),
-                        topicId = topicId
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Event,
+                    name = TriggerName("event-trigger"),
+                    funcId = FuncId(1234),
+                    inputs = TriggerInputs(),
+                    topicId = topicId
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -274,27 +275,27 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
     inner class HookTriggerTest {
         @Test
         fun `Creates trigger`() {
-            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id(::HookId)
-            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id(::FuncId)
+            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id
+            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Hook,
-                        name = TriggerName("hook-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        hookId = hookId
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Hook,
+                    name = TriggerName("hook-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    hookId = hookId
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(Accepted))
             require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-            val result = creationResponse.result(ApiSubmittedReqWithId::class)
+            val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
             awaitCompleted(result.reqId)
 
-            with(triggerQueryRepository.get(result.id(::TriggerId))) {
-                assertThat(id, equalTo(TriggerId(result.id)))
+            with(triggerQueryRepository.get(result.id)) {
+                assertThat(id, equalTo(result.id))
                 assertThat(name, equalTo(TriggerName("hook-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
@@ -305,17 +306,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Tries to create trigger but does not specify hook id`() {
-            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id(::FuncId)
+            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Hook,
-                        name = TriggerName("hook-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        hookId = null
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Hook,
+                    name = TriggerName("hook-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    hookId = null
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(BadRequest))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -327,17 +328,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Tries to create trigger but hook does not exists`() {
-            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id(::FuncId)
+            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Hook,
-                        name = TriggerName("hook-trigger"),
-                        funcId = funcId,
-                        inputs = TriggerInputs(),
-                        hookId = HookId(1234)
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Hook,
+                    name = TriggerName("hook-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    hookId = HookId(1234)
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }
@@ -349,17 +350,17 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         @Test
         fun `Tries to create trigger but topic does not exists`() {
-            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id(::HookId)
+            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
-                    ApiCreateTriggerReq(
-                        type = TriggerType.Hook,
-                        name = TriggerName("hook-trigger"),
-                        funcId = FuncId(1234),
-                        inputs = TriggerInputs(),
-                        hookId = hookId
-                    )
-                ).execute()
+                ApiTriggerCreateReq(
+                    type = TriggerType.Hook,
+                    name = TriggerName("hook-trigger"),
+                    funcId = FuncId(1234),
+                    inputs = TriggerInputs(),
+                    hookId = hookId
+                )
+            ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
             require(creationResponse is ErrorHttpResponse) { "request was successful" }

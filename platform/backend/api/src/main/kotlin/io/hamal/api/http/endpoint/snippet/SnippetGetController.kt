@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.snippet
 
-import io.hamal.core.adapter.GetSnippetPort
+import io.hamal.core.adapter.SnippetGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.sdk.api.ApiSnippet
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class SnippetGetController(
     private val retry: Retry,
-    private val getSnippet: GetSnippetPort
+    private val getSnippet: SnippetGetPort
 ) {
     @GetMapping("/v1/snippets/{snippetId}")
     fun getSnippet(@PathVariable("snippetId") snippetId: SnippetId) = retry {

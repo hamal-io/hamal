@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.trigger
 
-import io.hamal.core.adapter.ListTriggersPort
+import io.hamal.core.adapter.TriggerListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class TriggerListController(private val listTriggers: ListTriggersPort) {
+class TriggerListController(private val listTriggers: TriggerListPort) {
     @GetMapping("/v1/triggers")
     fun listGroupTriggers(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,

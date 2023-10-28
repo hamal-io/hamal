@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.trigger
 
-import io.hamal.core.adapter.GetTriggerPort
+import io.hamal.core.adapter.TriggerGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiEventTrigger
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class TriggerGetController(
     private val retry: Retry,
-    private val getTrigger: GetTriggerPort
+    private val getTrigger: TriggerGetPort
 ) {
     @GetMapping("/v1/triggers/{triggerId}")
     fun getFunc(

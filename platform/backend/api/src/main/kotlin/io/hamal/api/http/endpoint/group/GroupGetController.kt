@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.group
 
-import io.hamal.core.adapter.GetGroupPort
+import io.hamal.core.adapter.GroupGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiGroup
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class GroupGetController(
     private val retry: Retry,
-    private val getGroup: GetGroupPort
+    private val getGroup: GroupGetPort
 ) {
     @GetMapping("/v1/groups/{groupId}")
     fun getGroup(

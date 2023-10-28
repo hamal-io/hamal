@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiInvokeFuncReq
+import io.hamal.lib.sdk.api.ApiFuncInvokeReq
 
 class FuncInvokeFunction(
     private val sdk: ApiSdk
@@ -30,7 +30,7 @@ class FuncInvokeFunction(
 
             val res = sdk.func.invoke(
                 FuncId(arg1.value),
-                ApiInvokeFuncReq(
+                ApiFuncInvokeReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs()
                 )
@@ -40,7 +40,7 @@ class FuncInvokeFunction(
                 mutableMapOf(
                     "req_id" to StringType(res.reqId.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "id" to StringType(res.id.value.toString(16))
+                    "id" to StringType(res.id.value.value.toString(16))
                 )
             )
 

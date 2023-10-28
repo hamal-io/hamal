@@ -1,13 +1,11 @@
 package io.hamal.api.http.snippet
 
 import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.domain.vo.SnippetInputs
 import io.hamal.lib.domain.vo.SnippetName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
-
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -26,7 +24,7 @@ internal class SnippetCreateControllerTest : SnippetBaseControllerTest() {
 
         awaitCompleted(res.reqId)
 
-        with(snippetQueryRepository.get(res.id(::SnippetId))) {
+        with(snippetQueryRepository.get(res.id)) {
             assertThat(inputs, equalTo(SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             assertThat(name, equalTo(SnippetName("TestSnippet")))
             assertThat(value, equalTo(CodeValue("13 + 37")))

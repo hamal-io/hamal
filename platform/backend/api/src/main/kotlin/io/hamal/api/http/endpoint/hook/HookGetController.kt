@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.hook
 
-import io.hamal.core.adapter.GetHookPort
+import io.hamal.core.adapter.HookGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiHook
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class HookGetController(
     private val retry: Retry,
-    private val getHook: GetHookPort
+    private val getHook: HookGetPort
 ) {
 
     @GetMapping("/v1/hooks/{hookId}")

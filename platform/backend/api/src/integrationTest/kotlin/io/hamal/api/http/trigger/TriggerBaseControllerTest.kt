@@ -11,12 +11,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
-    fun createFunc(name: FuncName): ApiSubmittedReqWithId {
+    fun createFunc(name: FuncName): ApiSubmittedReqImpl<FuncId> {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/1/funcs")
             .body(
-                ApiCreateFuncReq(
+                ApiFuncCreateReq(
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -27,39 +28,39 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithId::class)
+        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
     }
 
-    fun createTopic(topicName: TopicName): ApiSubmittedReqWithId {
+    fun createTopic(topicName: TopicName): ApiSubmittedReqImpl<TopicId> {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/topics")
             .path("namespaceId", testNamespace.id)
-            .body(ApiCreateTopicReq(topicName))
+            .body(ApiTopicCreateReq(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqWithId::class)
+        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TopicId>
     }
 
-    fun createHook(hookName: HookName): ApiSubmittedReqWithId {
+    fun createHook(hookName: HookName): ApiSubmittedReqImpl<HookId> {
         val createHookResponse = httpTemplate.post("/v1/namespaces/1/hooks")
             .path("groupId", testGroup.id)
-            .body(ApiCreateHookReq(hookName))
+            .body(ApiHookCreateReq(hookName))
             .execute()
 
         assertThat(createHookResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createHookResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return createHookResponse.result(ApiSubmittedReqWithId::class)
+        return createHookResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<HookId>
     }
 
-    fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqWithId {
-        val funcId = awaitCompleted(createFunc(FuncName(name.value))).id(::FuncId)
+    fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqImpl<TriggerId> {
+        val funcId = awaitCompleted(createFunc(FuncName(name.value))).id
 
         val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(
-                ApiCreateTriggerReq(
+                ApiTriggerCreateReq(
                     type = TriggerType.FixedRate,
                     name = name,
                     funcId = funcId,
@@ -72,10 +73,10 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiSubmittedReqWithId::class)
+        return creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
     }
 
-    fun createTrigger(req: ApiCreateTriggerReq): ApiSubmittedReqWithId {
+    fun createTrigger(req: ApiTriggerCreateReq): ApiSubmittedReqImpl<TriggerId> {
         val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(req)
             .execute()
@@ -83,7 +84,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(creationResponse is SuccessHttpResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiSubmittedReqWithId::class)
+        return creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
     }
 
     fun listTriggers(): ApiTriggerList {

@@ -2,15 +2,19 @@ package io.hamal.api.http.snippet
 
 import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.SnippetId
-import io.hamal.lib.http.HttpStatusCode.*
+import io.hamal.lib.http.HttpStatusCode.Accepted
+import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.*
+import io.hamal.lib.sdk.api.ApiCreateSnippetReq
+import io.hamal.lib.sdk.api.ApiSnippet
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
+@Suppress("UNCHECKED_CAST")
 internal sealed class SnippetBaseControllerTest : BaseControllerTest() {
-    fun createSnippet(req: ApiCreateSnippetReq): ApiSubmittedReqWithId {
+    fun createSnippet(req: ApiCreateSnippetReq): ApiSubmittedReqImpl<SnippetId> {
         val createSnippetResponse = httpTemplate.post("/v1/groups/{groupId}/snippets")
             .path("groupId", testGroup.id)
             .body(req)
@@ -18,7 +22,7 @@ internal sealed class SnippetBaseControllerTest : BaseControllerTest() {
 
         assertThat(createSnippetResponse.statusCode, equalTo(Accepted))
         require(createSnippetResponse is SuccessHttpResponse) { "request was not successful" }
-        return createSnippetResponse.result(ApiSubmittedReqWithId::class)
+        return createSnippetResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<SnippetId>
     }
 
     fun getSnippet(snippetId: SnippetId): ApiSnippet {

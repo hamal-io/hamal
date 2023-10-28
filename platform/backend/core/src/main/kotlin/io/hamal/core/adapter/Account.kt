@@ -9,19 +9,19 @@ import io.hamal.repository.api.submitted_req.SubmittedReq
 import io.hamal.request.CreateAccountReq
 import org.springframework.stereotype.Component
 
-interface CreateAccountPort {
+interface AccountCreatePort {
     operator fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (SubmittedReq) -> T): T
 }
 
-interface GetAccountPort {
+interface AccountGetPort {
     operator fun <T : Any> invoke(accountId: AccountId, responseHandler: (Account) -> T): T
 }
 
-interface ListAccountsPort {
+interface AccountListPort {
     operator fun <T : Any> invoke(query: AccountQuery, responseHandler: (List<Account>) -> T): T
 }
 
-interface AccountPort : CreateAccountPort, GetAccountPort, ListAccountsPort
+interface AccountPort : AccountCreatePort, AccountGetPort, AccountListPort
 
 @Component
 class AccountAdapter(

@@ -13,7 +13,7 @@ import io.hamal.request.CreateExtensionReq
 import io.hamal.request.UpdateExtensionReq
 import org.springframework.stereotype.Component
 
-interface CreateExtensionPort {
+interface ExtensionExtensionPort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         req: CreateExtensionReq,
@@ -21,18 +21,18 @@ interface CreateExtensionPort {
     ): T
 }
 
-interface GetExtensionPort {
+interface ExtensionGetPort {
     operator fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension, Code) -> T): T
 }
 
-interface ListExtensionPort {
+interface ExtensionListPort {
     operator fun <T : Any> invoke(
         query: ExtensionQuery,
         responseHandler: (List<Extension>) -> T
     ): T
 }
 
-interface UpdateExtensionPort {
+interface ExtensionUpdatePort {
     operator fun <T : Any> invoke(
         extId: ExtensionId,
         req: UpdateExtensionReq,
@@ -40,7 +40,7 @@ interface UpdateExtensionPort {
     ): T
 }
 
-interface ExtensionPort : CreateExtensionPort, GetExtensionPort, ListExtensionPort, UpdateExtensionPort
+interface ExtensionPort : ExtensionExtensionPort, ExtensionGetPort, ExtensionListPort, ExtensionUpdatePort
 
 @Component
 class ExtensionAdapter(

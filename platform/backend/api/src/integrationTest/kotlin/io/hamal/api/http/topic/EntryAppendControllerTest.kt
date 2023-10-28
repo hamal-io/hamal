@@ -1,7 +1,6 @@
 package io.hamal.api.http.topic
 
 import io.hamal.lib.domain.vo.TopicEntryPayload
-import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -19,9 +18,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Append entry`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("namespace::topics_one"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).id
 
         awaitCompleted(
             appendToTopic(
@@ -44,9 +41,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Append entry multiple times`() {
-        val topicId = awaitCompleted(
-            createTopic(TopicName("namespace::topics_one"))
-        ).id(::TopicId)
+        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).id
 
         awaitCompleted(
             IntRange(1, 10).map {

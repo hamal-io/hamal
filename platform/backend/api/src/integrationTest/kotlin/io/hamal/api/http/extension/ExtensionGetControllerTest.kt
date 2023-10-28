@@ -1,12 +1,11 @@
 package io.hamal.api.http.extension
 
 import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.http.ErrorHttpResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.sdk.api.ApiCreateExtensionReq
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiExtensionCreateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,12 +16,12 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
     fun `Get extension`() {
         val extId = awaitCompleted(
             createExtension(
-                ApiCreateExtensionReq(
+                ApiExtensionCreateReq(
                     name = ExtensionName("TestExtension"),
                     code = CodeValue("40 + 2")
                 )
             )
-        ).id(::ExtensionId)
+        ).id
 
         val ext = getExtension(extId)
         assertThat(ext.name, equalTo(ExtensionName("TestExtension")))

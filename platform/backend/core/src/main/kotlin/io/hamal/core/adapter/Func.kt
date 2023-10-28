@@ -11,7 +11,7 @@ import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
 import org.springframework.stereotype.Component
 
-interface CreateFuncPort {
+interface FuncCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateFuncReq,
@@ -19,11 +19,11 @@ interface CreateFuncPort {
     ): T
 }
 
-interface GetFuncPort {
+interface FuncGetPort {
     operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T
 }
 
-interface InvokeFuncPort {
+interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: InvokeFuncReq,
@@ -31,11 +31,11 @@ interface InvokeFuncPort {
     ): T
 }
 
-interface ListFuncsPort {
+interface FuncListPort {
     operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T): T
 }
 
-interface UpdateFuncPort {
+interface FuncUpdatePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: UpdateFuncReq,
@@ -43,7 +43,7 @@ interface UpdateFuncPort {
     ): T
 }
 
-interface FuncPort : CreateFuncPort, GetFuncPort, InvokeFuncPort, ListFuncsPort, UpdateFuncPort
+interface FuncPort : FuncCreatePort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort
 
 @Component
 class FuncAdapter(

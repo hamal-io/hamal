@@ -7,18 +7,19 @@ import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
+import io.hamal.lib.sdk.foldReq
 import io.hamal.request.CreateNamespaceReq
 import io.hamal.request.UpdateNamespaceReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiCreateNamespaceReq(
+data class ApiNamespaceCreateReq(
     override val name: NamespaceName,
     override val inputs: NamespaceInputs
 ) : CreateNamespaceReq
 
 @Serializable
-data class ApiUpdateNamespaceReq(
+data class ApiNamespaceUpdateReq(
     override val name: NamespaceName,
     override val inputs: NamespaceInputs,
 ) : UpdateNamespaceReq
@@ -42,7 +43,7 @@ data class ApiNamespace(
 )
 
 interface ApiNamespaceService {
-    fun create(groupId: GroupId, createNamespaceReq: ApiCreateNamespaceReq): ApiSubmittedReqWithId
+    fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateReq): ApiSubmittedReqImpl<NamespaceId>
     fun list(groupId: GroupId): List<ApiNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): ApiNamespace
 }
@@ -51,12 +52,12 @@ internal class ApiNamespaceServiceImpl(
     private val template: HttpTemplateImpl
 ) : ApiNamespaceService {
 
-    override fun create(groupId: GroupId, createNamespaceReq: ApiCreateNamespaceReq) =
+    override fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateReq): ApiSubmittedReqImpl<NamespaceId> =
         template.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
             .body(createNamespaceReq)
             .execute()
-            .fold(ApiSubmittedReqWithId::class)
+            .foldReq()
 
     override fun list(groupId: GroupId) =
         template.get("/v1/groups/{groupId}/namespaces")

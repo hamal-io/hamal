@@ -1,6 +1,5 @@
 package io.hamal.api.http.exec
 
-import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.sdk.api.ApiExecList
@@ -23,7 +22,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
 
     @Test
     fun `Single exec`() {
-        val execId = awaitCompleted(createAdhocExec()).id(::ExecId)
+        val execId = awaitCompleted(createAdhocExec()).id
 
         val response = httpTemplate.get("/v1/execs")
             .parameter("group_ids", testGroup.id)
@@ -78,7 +77,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
-                assertThat(exec.id, equalTo(fortyFifthRequest.id(::ExecId)))
+                assertThat(exec.id, equalTo(fortyFifthRequest.id))
             }
         }
     }

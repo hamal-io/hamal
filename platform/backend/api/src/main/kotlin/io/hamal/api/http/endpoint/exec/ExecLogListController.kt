@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.exec
 
-import io.hamal.core.adapter.ListExecLogsPort
+import io.hamal.core.adapter.ExecLogListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class ExecLogListController(
-    private val execLogs: ListExecLogsPort,
-    private val execsLogs: ListExecLogsPort
+    private val execLogs: ExecLogListPort,
+    private val execsLogs: ExecLogListPort
 ) {
     @GetMapping("/v1/execs/{execId}/logs")
     fun getExecLogs(

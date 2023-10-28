@@ -1,8 +1,11 @@
 package io.hamal.api.http.snippet
 
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.SnippetInputs
+import io.hamal.lib.domain.vo.SnippetName
 import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpStatusCode.*
+import io.hamal.lib.http.HttpStatusCode.NotFound
+import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -23,7 +26,7 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
                 inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
                 value = CodeValue("1 + 1")
             )
-        ).id(::SnippetId)
+        ).id
 
         val getSnippetResponse = httpTemplate.get("/v1/snippets/{snippetId}")
             .path("snippetId", snippetId)

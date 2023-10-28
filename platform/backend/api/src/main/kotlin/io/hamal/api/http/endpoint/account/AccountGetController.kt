@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.account
 
-import io.hamal.core.adapter.GetAccountPort
+import io.hamal.core.adapter.AccountGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiAccount
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GetAccountController(
+internal class AccountGetController(
     private val retry: Retry,
-    private val getAccount: GetAccountPort
+    private val getAccount: AccountGetPort
 ) {
     @GetMapping("/v1/accounts/{accountId}")
     fun getAccount(

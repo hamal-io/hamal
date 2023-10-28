@@ -1,6 +1,6 @@
 package io.hamal.api.http.endpoint.topic
 
-import io.hamal.core.adapter.ListTopicsPort
+import io.hamal.core.adapter.TopicListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class TopicListController(private val listTopics: ListTopicsPort) {
+internal class TopicListController(private val listTopics: TopicListPort) {
     @GetMapping("/v1/topics")
     fun listGroupTopics(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,

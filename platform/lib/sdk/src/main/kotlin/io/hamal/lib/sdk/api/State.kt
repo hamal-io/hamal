@@ -12,7 +12,7 @@ import io.hamal.request.SetStateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiSetStateReq(
+data class ApiStateSetReq(
     override val correlation: Correlation,
     override val value: State
 ) : SetStateReq

@@ -15,7 +15,7 @@ import io.hamal.repository.api.submitted_req.SubmittedInvokeHookReq
 import org.springframework.stereotype.Component
 
 @Component
-class InvokeHookHandler(
+class HookInvokeHandler(
     private val hookQueryRepository: HookQueryRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,

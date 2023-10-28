@@ -10,21 +10,22 @@ import io.hamal.lib.http.SuccessHttpResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCreateNamespaceReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqWithId
-import io.hamal.lib.sdk.api.ApiUpdateNamespaceReq
+import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
+import io.hamal.lib.sdk.api.ApiNamespaceUpdateReq
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
+@Suppress("UNCHECKED_CAST")
 internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
 
     @Test
     fun `Tries to update namespace which does not exists`() {
         val getNamespaceResponse = httpTemplate.patch("/v1/namespaces/33333333")
             .body(
-                ApiUpdateNamespaceReq(
+                ApiNamespaceUpdateReq(
                     name = NamespaceName("update"),
                     inputs = NamespaceInputs(),
                 )
@@ -42,7 +43,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     fun `Updates namespace`() {
         val namespace = awaitCompleted(
             createNamespace(
-                ApiCreateNamespaceReq(
+                ApiNamespaceCreateReq(
                     name = NamespaceName("createdName"),
                     inputs = NamespaceInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs")))))
                 )
@@ -52,7 +53,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         val updateNamespaceResponse = httpTemplate.patch("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespace.id)
             .body(
-                ApiUpdateNamespaceReq(
+                ApiNamespaceUpdateReq(
                     name = NamespaceName("updatedName"),
                     inputs = NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))
                 )
@@ -61,8 +62,8 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
 
-        val req = updateNamespaceResponse.result(ApiSubmittedReqWithId::class)
-        val namespaceId = awaitCompleted(req).id(::NamespaceId)
+        val req = updateNamespaceResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<NamespaceId>
+        val namespaceId = awaitCompleted(req).id
 
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))

@@ -14,12 +14,10 @@ data class ApiAppendExecLogCmd(
     override val localAt: LocalAt
 ) : AppendExecLogReq
 
-
 @Serializable
 data class ApiExcLogList(
     val logs: List<ApiExecLog>
 )
-
 
 @Serializable
 data class ApiExecLog(
@@ -30,7 +28,6 @@ data class ApiExecLog(
     val localAt: LocalAt,
     val remoteAt: RemoteAt
 )
-
 
 interface ApiExecLogService {
     fun append(execId: ExecId, req: ApiAppendExecLogCmd)
