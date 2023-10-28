@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import {ApiFuncSimple} from "../../../api/types";
-import {createFunc, listFunc} from "../../../api";
-import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
+import {ApiNamespaceSimple} from "../../../api/types";
+import {listFunc} from "../../../api";
+import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
+import {createNamespace, listNamespace} from "../../../api/namespace.ts";
 
-const FuncListPage: React.FC = () => {
+const NamespaceListPage: React.FC = () => {
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(true)
-    const [funcs, setFuncs] = useState([] as Array<ApiFuncSimple>)
+    const [namespaces, setNamespaces] = useState([] as Array<ApiNamespaceSimple>)
     useEffect(() => {
-        listFunc({limit: 10}).then(response => {
-            setFuncs(response.funcs)
+        listNamespace({limit: 10}).then(response => {
+            setNamespaces(response.namespaces)
             setLoading(false)
         })
     }, []);
@@ -19,14 +20,14 @@ const FuncListPage: React.FC = () => {
     if (loading) return "Loading..."
 
 
-    const list = funcs.map(func => (
+    const list = namespaces.map(namespace => (
         <Card
-            key={func.id}
+            key={namespace.id}
             className="max-w-sm"
-            onClick={() => navigate(`/functions/${func.id}`)}
+            onClick={() => navigate(`/namespaces/${namespace.id}`)}
         >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <p>{func.name}</p>
+                <p>{namespace.name}</p>
             </h5>
             <p className="font-normal text-gray-700 dark:text-gray-400">
                 TBD: Here is some description
@@ -37,7 +38,7 @@ const FuncListPage: React.FC = () => {
     return (
         <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
             <div className="flex p-3 items-center justify-center bg-white">
-                <CreateFuncModalButton/>
+                <CreateNamespaceModalButton/>
             </div>
 
             <div className="flex flex-col items-center justify-center">
@@ -47,8 +48,7 @@ const FuncListPage: React.FC = () => {
     );
 }
 
-
-const CreateFuncModalButton = () => {
+const CreateNamespaceModalButton = () => {
     const navigate = useNavigate()
     const [name, setName] = useState<string | undefined>()
     const [openModal, setOpenModal] = useState<string | undefined>();
@@ -65,9 +65,9 @@ const CreateFuncModalButton = () => {
     }, [])
 
     const submit = () => {
-        createFunc({name})
+        createNamespace({name})
             .then(response => {
-                navigate(`/functions/${response.id}`)
+                navigate(`/namespaces/${response.id}`)
                 props.setOpenModal(undefined)
             })
             .catch(console.error)
@@ -75,26 +75,26 @@ const CreateFuncModalButton = () => {
 
     return (
         <>
-            <Button onClick={() => props.setOpenModal('default')}>New Function</Button>
+            <Button onClick={() => props.setOpenModal('default')}>New Namespace</Button>
             <Modal show={props.openModal === 'default'} onClose={() => props.setOpenModal(undefined)}>
-                <Modal.Header>Create a new function</Modal.Header>
+                <Modal.Header>Create new namespace</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="name" value="Function name"/>
+                                <Label htmlFor="name" value="Namespace name"/>
                             </div>
-                            <TextInput id="name" placeholder="Useful function name..." required onChange={evt => setName(evt.target.value)}/>
+                            <TextInput id="name" placeholder="Useful namespace name..." required onChange={evt => setName(evt.target.value)}/>
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className={"w-full"} onClick={submit}>Create Function</Button>
+                    <Button className={"w-full"} onClick={submit}>Create Namespace</Button>
                 </Modal.Footer>
             </Modal>
         </>
     )
 }
 
-export default FuncListPage
 
+export default NamespaceListPage;

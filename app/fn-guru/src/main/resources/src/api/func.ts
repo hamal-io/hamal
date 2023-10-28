@@ -6,11 +6,11 @@ import {
 
 import {defaultHeaders} from "./shared";
 
-export interface ListFuncsQuery {
+export interface ListFuncQuery {
     limit: number;
 }
 
-export async function listFuncs(query: ListFuncsQuery): Promise<ApiFuncList> {
+export async function listFunc(query: ListFuncQuery): Promise<ApiFuncList> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs`, {
         headers: defaultHeaders,
         method: "GET",

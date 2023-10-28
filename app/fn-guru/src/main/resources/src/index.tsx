@@ -21,16 +21,25 @@ import ExecListPage from "./app/page/exec-list";
 import FuncDetail from "./app/page/func-detail";
 import FuncListPage from "./app/page/func-list";
 
+import NamespaceListPage from "./app/page/namespace-list";
+import NamespaceDetailPage from "./app/page/namespace-detail";
+
+
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
     {path: "/sign-in", element: <SignInPage/>},
     {path: "/sign-up", element: <SignUpPage/>},
 
     {path: "/dashboard", element: <AuthenticatedPage><DashboardPage/></AuthenticatedPage>},
-    {path: "/functions", element: <AuthenticatedPage><FuncListPage/></AuthenticatedPage>},
-    {path: "/functions/:funcId", element: <AuthenticatedPage><FuncDetail/></AuthenticatedPage>},
     {path: "/execs", element: <AuthenticatedPage><ExecListPage/></AuthenticatedPage>},
     {path: "/execs/:execId", element: <AuthenticatedPage><ExecDetailPage/></AuthenticatedPage>},
+
+    {path: "/functions", element: <AuthenticatedPage><FuncListPage/></AuthenticatedPage>},
+    {path: "/functions/:funcId", element: <AuthenticatedPage><FuncDetail/></AuthenticatedPage>},
+
+    {path: "/namespaces", element: <AuthenticatedPage><NamespaceListPage/></AuthenticatedPage>},
+    {path: "/namespaces/:namespaceId", element: <AuthenticatedPage><NamespaceDetailPage/></AuthenticatedPage>},
+
     {path: "/play", element: <AuthenticatedPage><AdhocPage/></AuthenticatedPage>}
 ]);
 

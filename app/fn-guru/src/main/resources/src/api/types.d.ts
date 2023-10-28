@@ -23,6 +23,19 @@ export interface ApiFunc {
     }
 }
 
+export interface ApiNamespaceList {
+    namespaces: Array<ApiNamespaceSimple>;
+}
+
+export interface ApiNamespaceSimple {
+    id: string;
+    name: string;
+}
+
+export interface ApiNamespace {
+    id: string;
+    name: string;
+}
 
 export interface ApiExecList {
     execs: Array<ApiExecSimple>;

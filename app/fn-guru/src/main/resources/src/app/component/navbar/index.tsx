@@ -26,11 +26,11 @@ export const Navbar: FC = () => {
                 <Delegate.Link onClick={() => navigate("/play", {replace: true})}>
                     Play
                 </Delegate.Link>
-                <Delegate.Link onClick={() => navigate("/functions", {replace: true})}>
-                    Functions
+                <Delegate.Link onClick={() => navigate("/namespaces", {replace: true})}>
+                    Namespace
                 </Delegate.Link>
                 <Delegate.Link onClick={() => navigate("/execs", {replace: true})}>
-                    Runs
+                    Execution
                 </Delegate.Link>
             </Delegate.Collapse>
         </Delegate>
