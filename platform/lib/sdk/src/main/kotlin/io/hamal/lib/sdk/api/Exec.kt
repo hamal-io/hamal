@@ -36,7 +36,8 @@ data class ApiExec(
     val inputs: ExecInputs,
     val code: Code,
     val events: List<Event>,
-    val result: ExecResult?
+    val result: ExecResult?,
+    val state: ExecState?
 ) {
     @Serializable
     data class Code(

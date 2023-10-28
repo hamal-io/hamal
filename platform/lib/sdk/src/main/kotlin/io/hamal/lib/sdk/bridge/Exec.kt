@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BridgeExecCompleteReq(
     override val result: ExecResult,
-    override val state: State,
+    override val state: ExecState,
     override val events: List<EventToSubmit>
 ) : CompleteExecReq
 
@@ -61,7 +61,7 @@ interface BridgeExecService {
     fun complete(
         execId: ExecId,
         result: ExecResult,
-        stateAfterCompletion: State,
+        state: ExecState,
         eventToSubmit: List<EventToSubmit>
     ): BridgeExecCompleteSubmitted
 
@@ -81,12 +81,12 @@ internal class BridgeExecServiceImpl(
     override fun complete(
         execId: ExecId,
         result: ExecResult,
-        stateAfterCompletion: State,
+        state: ExecState,
         eventToSubmit: List<EventToSubmit>
     ): BridgeExecCompleteSubmitted {
         return template.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
-            .body(BridgeExecCompleteReq(result, stateAfterCompletion, eventToSubmit))
+            .body(BridgeExecCompleteReq(result, state, eventToSubmit))
             .execute(BridgeExecCompleteSubmitted::class)
     }
 

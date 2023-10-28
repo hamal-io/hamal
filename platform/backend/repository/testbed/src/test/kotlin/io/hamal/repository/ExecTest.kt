@@ -2,7 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.*
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.*
 import io.hamal.lib.kua.type.MapType
@@ -34,8 +34,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(5),
                     groupId = GroupId(3),
                     correlation = Correlation(
-                        correlationId = CorrelationId("some-correlation-id"),
-                        funcId = FuncId(23)
+                        correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                     code = ExecCode(value = CodeValue("40 + 2")),
@@ -58,10 +57,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Tires to plan but cmd with exec id was already applied`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(23456),
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                namespaceId = NamespaceId(4)
+                cmdId = CmdId(23456), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
             )
 
 
@@ -89,10 +85,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Schedule planned exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1),
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
             )
 
             val result = schedule(ScheduleCmd(CmdId(4), ExecId(2)))
@@ -119,17 +112,16 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to schedule exec which does not exists`() =
-            runWith(ExecRepository::class) {
-                planExec(ExecId(32), NamespaceId(34), GroupId(33))
+        fun `Tries to schedule exec which does not exists`() = runWith(ExecRepository::class) {
+            planExec(ExecId(32), NamespaceId(34), GroupId(33))
 
-                val exception = assertThrows<NoSuchElementException> {
-                    schedule(ScheduleCmd(CmdId(4), ExecId(23)))
-                }
-                assertThat(exception.message, equalTo("Exec not found"))
-
-                verifyCount(1)
+            val exception = assertThrows<NoSuchElementException> {
+                schedule(ScheduleCmd(CmdId(4), ExecId(23)))
             }
+            assertThat(exception.message, equalTo("Exec not found"))
+
+            verifyCount(1)
+        }
     }
 
     @Nested
@@ -138,10 +130,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Queue scheduled exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1),
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -170,18 +159,17 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to queue exec which does not exists`() =
-            runWith(ExecRepository::class) {
-                planExec(ExecId(2), NamespaceId(44), GroupId(33))
-                schedule(ScheduleCmd(CmdId(2), ExecId(2)))
+        fun `Tries to queue exec which does not exists`() = runWith(ExecRepository::class) {
+            planExec(ExecId(2), NamespaceId(44), GroupId(33))
+            schedule(ScheduleCmd(CmdId(2), ExecId(2)))
 
-                val exception = assertThrows<NoSuchElementException> {
-                    queue(QueueCmd(CmdId(3), ExecId(23)))
-                }
-                assertThat(exception.message, equalTo("Exec not found"))
-
-                verifyCount(1)
+            val exception = assertThrows<NoSuchElementException> {
+                queue(QueueCmd(CmdId(3), ExecId(23)))
             }
+            assertThat(exception.message, equalTo("Exec not found"))
+
+            verifyCount(1)
+        }
     }
 
     @Nested
@@ -189,10 +177,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Start queued exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1),
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -210,17 +195,16 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Nothing to start`() =
-            ExecStatus.values().filter { it != Queued }.flatMap { status ->
-                runWith(ExecRepository::class, status.name) {
-                    createExec(ExecId(23), status)
+        fun `Nothing to start`() = ExecStatus.values().filter { it != Queued }.flatMap { status ->
+            runWith(ExecRepository::class, status.name) {
+                createExec(ExecId(23), status)
 
-                    val result = start(StartCmd(CmdId(4)))
-                    assertThat(result, empty())
+                val result = start(StartCmd(CmdId(4)))
+                assertThat(result, empty())
 
-                    verifyCount(1)
-                }
+                verifyCount(1)
             }
+        }
     }
 
     @Nested
@@ -229,20 +213,26 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Complete started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1),
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result = complete(CompleteCmd(CmdId(5), ExecId(2), ExecResult(MapType("answer" to NumberType(42)))))
+            val result = complete(
+                CompleteCmd(
+                    CmdId(5),
+                    ExecId(2),
+                    ExecResult(MapType("answer" to NumberType(42))),
+                    ExecState(MapType("state" to NumberType(1337)))
+                )
+            )
+
             assertBaseExec(result)
             assertThat(result.status, equalTo(Completed))
             assertThat(result.result, equalTo(ExecResult(MapType("answer" to NumberType(42)))))
+            assertThat(result.state, equalTo(ExecState(MapType("state" to NumberType(1337)))))
 
             verifyCount(1)
         }
@@ -254,7 +244,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
-                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult()))
+                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
                     }
                     assertThat(exception.message, equalTo("ExecId(23) not started"))
 
@@ -264,20 +254,19 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to complete exec which does not exists`() =
-            runWith(ExecRepository::class) {
-                planExec(ExecId(2), NamespaceId(44), GroupId(33))
-                schedule(ScheduleCmd(CmdId(2), ExecId(2)))
-                queue(QueueCmd(CmdId(3), ExecId(2)))
-                start(StartCmd(CmdId(4)))
+        fun `Tries to complete exec which does not exists`() = runWith(ExecRepository::class) {
+            planExec(ExecId(2), NamespaceId(44), GroupId(33))
+            schedule(ScheduleCmd(CmdId(2), ExecId(2)))
+            queue(QueueCmd(CmdId(3), ExecId(2)))
+            start(StartCmd(CmdId(4)))
 
-                val exception = assertThrows<NoSuchElementException> {
-                    complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult()))
-                }
-                assertThat(exception.message, equalTo("Exec not found"))
-
-                verifyCount(1)
+            val exception = assertThrows<NoSuchElementException> {
+                complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
             }
+            assertThat(exception.message, equalTo("Exec not found"))
+
+            verifyCount(1)
+        }
     }
 
     @Nested
@@ -286,10 +275,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Fail started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1),
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -305,36 +291,34 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to fail exec but not started`() =
-            ExecStatus.values().filter { it != Started }.flatMap { status ->
-                runWith(ExecRepository::class, status.name) {
-                    createExec(ExecId(23), status)
+        fun `Tries to fail exec but not started`() = ExecStatus.values().filter { it != Started }.flatMap { status ->
+            runWith(ExecRepository::class, status.name) {
+                createExec(ExecId(23), status)
 
-                    val exception = assertThrows<IllegalStateException> {
-                        fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
-                    }
-                    assertThat(exception.message, equalTo("ExecId(23) not started"))
-
-                    verifyCount(1)
-                }
-
-            }
-
-        @TestFactory
-        fun `Tries to fail exec which does not exists`() =
-            runWith(ExecRepository::class) {
-                planExec(ExecId(2), NamespaceId(44), GroupId(33))
-                schedule(ScheduleCmd(CmdId(2), ExecId(2)))
-                queue(QueueCmd(CmdId(3), ExecId(2)))
-                start(StartCmd(CmdId(4)))
-
-                val exception = assertThrows<NoSuchElementException> {
+                val exception = assertThrows<IllegalStateException> {
                     fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
                 }
-                assertThat(exception.message, equalTo("Exec not found"))
+                assertThat(exception.message, equalTo("ExecId(23) not started"))
 
                 verifyCount(1)
             }
+
+        }
+
+        @TestFactory
+        fun `Tries to fail exec which does not exists`() = runWith(ExecRepository::class) {
+            planExec(ExecId(2), NamespaceId(44), GroupId(33))
+            schedule(ScheduleCmd(CmdId(2), ExecId(2)))
+            queue(QueueCmd(CmdId(3), ExecId(2)))
+            start(StartCmd(CmdId(4)))
+
+            val exception = assertThrows<NoSuchElementException> {
+                fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
+            }
+            assertThat(exception.message, equalTo("Exec not found"))
+
+            verifyCount(1)
+        }
     }
 
     @Nested
@@ -459,8 +443,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
-                limit = Limit(10)
+                groupIds = listOf(GroupId(5), GroupId(4)), limit = Limit(10)
             )
 
             assertThat(count(query), equalTo(2UL))
@@ -483,9 +466,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                funcIds = listOf(FuncId(234), FuncId(123)),
-                groupIds = listOf(),
-                limit = Limit(10)
+                funcIds = listOf(FuncId(234), FuncId(123)), groupIds = listOf(), limit = Limit(10)
             )
 
             assertThat(count(query), equalTo(2UL))
@@ -506,8 +487,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                groupIds = listOf(),
-                limit = Limit(3)
+                groupIds = listOf(), limit = Limit(3)
             )
 
             assertThat(count(query), equalTo(4UL))
@@ -520,9 +500,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                afterId = ExecId(2),
-                groupIds = listOf(),
-                limit = Limit(1)
+                afterId = ExecId(2), groupIds = listOf(), limit = Limit(1)
             )
 
             assertThat(count(query), equalTo(1UL))
@@ -536,40 +514,25 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         private fun ExecRepository.setup() {
             createExec(
-                execId = ExecId(1),
-                groupId = GroupId(3),
-                status = Completed,
-                correlation = Correlation(
-                    correlationId = CorrelationId("CID-1"),
-                    funcId = FuncId(234)
+                execId = ExecId(1), groupId = GroupId(3), status = Completed, correlation = Correlation(
+                    correlationId = CorrelationId("CID-1"), funcId = FuncId(234)
                 )
             )
 
             createExec(
-                execId = ExecId(2),
-                groupId = GroupId(3),
-                status = Failed,
-                correlation = Correlation(
-                    correlationId = CorrelationId("CID-2"),
-                    funcId = FuncId(234)
+                execId = ExecId(2), groupId = GroupId(3), status = Failed, correlation = Correlation(
+                    correlationId = CorrelationId("CID-2"), funcId = FuncId(234)
                 )
             )
 
             createExec(
-                execId = ExecId(3),
-                groupId = GroupId(4),
-                status = Started,
-                correlation = Correlation(
-                    correlationId = CorrelationId("CID-1"),
-                    funcId = FuncId(444)
+                execId = ExecId(3), groupId = GroupId(4), status = Started, correlation = Correlation(
+                    correlationId = CorrelationId("CID-1"), funcId = FuncId(444)
                 )
             )
 
             createExec(
-                execId = ExecId(4),
-                groupId = GroupId(5),
-                status = Queued,
-                correlation = null
+                execId = ExecId(4), groupId = GroupId(5), status = Queued, correlation = null
             )
         }
     }
@@ -581,8 +544,7 @@ private fun assertBaseExec(exec: Exec) {
     assertThat(
         exec.correlation, equalTo(
             Correlation(
-                correlationId = CorrelationId("some-correlation-id"),
-                funcId = FuncId(23)
+                correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
             )
         )
     )
@@ -601,10 +563,7 @@ private fun assertBaseExec(exec: Exec) {
 }
 
 private fun ExecRepository.planExec(
-    execId: ExecId,
-    namespaceId: NamespaceId,
-    groupId: GroupId,
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    execId: ExecId, namespaceId: NamespaceId, groupId: GroupId, cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) = plan(
     PlanCmd(
         id = cmdId,
@@ -612,8 +571,7 @@ private fun ExecRepository.planExec(
         namespaceId = namespaceId,
         groupId = groupId,
         correlation = Correlation(
-            correlationId = CorrelationId("some-correlation-id"),
-            funcId = FuncId(23)
+            correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
         inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
         code = ExecCode(value = CodeValue("40 + 2")),
@@ -680,8 +638,7 @@ fun ExecRepository.createExec(
 
     val queued = queue(
         QueueCmd(
-            id = CmdId(102),
-            execId = scheduled.id
+            id = CmdId(102), execId = scheduled.id
         )
     )
     if (status == Queued) {
@@ -698,7 +655,8 @@ fun ExecRepository.createExec(
             CompleteCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(MapType("answer" to NumberType(42)))
+                result = ExecResult(MapType("answer" to NumberType(42))),
+                state = ExecState(MapType("state" to NumberType(1337)))
             )
         )
 

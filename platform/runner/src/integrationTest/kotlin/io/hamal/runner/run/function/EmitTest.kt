@@ -2,7 +2,6 @@ package io.hamal.runner.run.function
 
 import TestConnector
 import TestFailConnector
-import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.*
@@ -20,7 +19,7 @@ internal class EmitTest : AbstractExecuteTest() {
         val runner = createTestRunner(connector = TestConnector { execId, execResult, state, eventToSubmits ->
             assertThat(execId, equalTo(ExecId(1234)))
             assertThat(execResult, equalTo(ExecResult()))
-            assertThat(state, equalTo(State()))
+            assertThat(state, equalTo(ExecState()))
             assertThat(eventToSubmits, hasSize(0))
         })
         runner.run(unitOfWork(""))

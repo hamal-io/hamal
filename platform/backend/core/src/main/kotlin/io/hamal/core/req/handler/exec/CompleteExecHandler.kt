@@ -5,12 +5,9 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.TopicEntryPayload
-import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.ExecutionCompletedEvent
 import io.hamal.repository.api.log.BrokerRepository
@@ -40,25 +37,31 @@ class CompleteExecHandler(
 
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
-            .also { setState(cmdId, it, req.state) }
+            .also { setState(cmdId, it) }
             .also { appendEvents(cmdId, namespaceId, req.events) }
-
     }
 
     private fun completeExec(req: ExecCompleteSubmitted) =
-        execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.id, req.result))
+        execCmdRepository.complete(
+            ExecCmdRepository.CompleteCmd(
+                req.cmdId(),
+                req.id,
+                req.result,
+                ExecState(req.state.value)
+            )
+        )
 
     private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
         eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))
     }
 
-    private fun setState(cmdId: CmdId, exec: CompletedExec, state: State) {
+    private fun setState(cmdId: CmdId, exec: CompletedExec) {
         val correlation = exec.correlation
         if (correlation != null) {
             stateCmdRepository.set(
                 cmdId, CorrelatedState(
                     correlation = correlation,
-                    value = state
+                    value = State(exec.state.value)
                 )
             )
         }

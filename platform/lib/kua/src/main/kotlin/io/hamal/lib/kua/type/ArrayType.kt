@@ -2,10 +2,7 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -21,8 +18,11 @@ data class ArrayType(
 ) : TableType(), Map<Int, SerializableType> {
 
     override val size get() = value.size
+    @Transient
     override val entries: Set<Map.Entry<Int, SerializableType>> = value.entries
+    @Transient
     override val keys: Set<Int> = value.keys
+    @Transient
     override val values: Collection<SerializableType> = value.values
     override fun isEmpty(): Boolean = value.isEmpty()
     override fun containsValue(value: SerializableType): Boolean = this.value.containsValue(value)

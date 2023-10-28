@@ -2,10 +2,7 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -23,8 +20,11 @@ data class MapType(
     constructor(vararg pairs: Pair<String, SerializableType>) : this(mutableMapOf(*pairs))
 
     override val size get() = value.size
+    @Transient
     override val entries: Set<Map.Entry<String, SerializableType>> = value.entries
+    @Transient
     override val keys: Set<String> = value.keys
+    @Transient
     override val values: Collection<SerializableType> = value.values
     override fun containsKey(key: String): Boolean = this.value.containsKey(key)
 

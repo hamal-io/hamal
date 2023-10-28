@@ -2,7 +2,6 @@ package io.hamal.repository.record.exec
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
@@ -56,7 +55,8 @@ data class ExecStartedRecord(
 data class ExecCompletedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
-    val result: ExecResult
+    val result: ExecResult,
+    val state: ExecState
 ) : ExecRecord()
 
 @Serializable

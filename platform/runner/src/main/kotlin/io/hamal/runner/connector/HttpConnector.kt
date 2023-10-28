@@ -4,6 +4,7 @@ import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.sdk.BridgeSdkImpl
 
 class HttpConnector(
@@ -25,7 +26,7 @@ class HttpConnector(
         }
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {
+    override fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>) {
         sdk.exec.complete(execId, result, state, events)
     }
 

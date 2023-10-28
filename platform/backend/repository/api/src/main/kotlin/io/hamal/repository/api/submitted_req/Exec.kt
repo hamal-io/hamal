@@ -1,6 +1,5 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -32,7 +31,7 @@ data class ExecCompleteSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,
-    val state: State,
+    val state: ExecState,
     val result: ExecResult,
     val events: List<EventToSubmit>
 ) : Submitted

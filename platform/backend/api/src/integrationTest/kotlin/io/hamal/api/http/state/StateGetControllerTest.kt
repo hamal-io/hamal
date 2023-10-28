@@ -1,9 +1,9 @@
 package io.hamal.api.http.state
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
@@ -33,7 +33,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
             )
         ).id
 
-        awaitCompleted(completeExec(execId, State(MapType(mutableMapOf("hamal" to StringType("rocks"))))).id)
+        awaitCompleted(completeExec(execId, ExecState(MapType(mutableMapOf("hamal" to StringType("rocks"))))).id)
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
 

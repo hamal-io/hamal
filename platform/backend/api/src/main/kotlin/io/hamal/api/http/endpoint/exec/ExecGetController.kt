@@ -40,6 +40,11 @@ internal class ExecGetController(
                             exec.result
                         } else {
                             null
+                        },
+                        state = if (exec is CompletedExec) {
+                            exec.state
+                        } else {
+                            null
                         }
                     )
                 )

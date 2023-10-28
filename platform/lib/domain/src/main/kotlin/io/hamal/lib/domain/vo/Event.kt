@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.Inputs
+import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
@@ -35,6 +35,6 @@ data class EventId(override val value: SnowflakeId) : SerializableDomainId() {
 }
 
 @Serializable(with = EventPayload.Serializer::class)
-class EventPayload(override val value: MapType = MapType()) : Inputs() {
+class EventPayload(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<EventPayload>(::EventPayload)
 }

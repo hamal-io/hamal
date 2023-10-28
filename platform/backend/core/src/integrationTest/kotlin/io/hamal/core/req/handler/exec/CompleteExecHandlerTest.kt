@@ -1,17 +1,10 @@
 package io.hamal.core.req.handler.exec
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.vo.EventPayload
-import io.hamal.lib.domain.vo.EventToSubmit
-import io.hamal.lib.domain.vo.ReqId
-import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecResult
-import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -68,7 +61,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
             status = ReqStatus.Submitted,
             id = ExecId(1234),
             result = ExecResult(MapType("hamal" to StringType("rocks"))),
-            state = State(MapType("counter" to NumberType(1))),
+            state = ExecState(MapType("counter" to NumberType(1))),
             events = listOf(
                 EventToSubmit(
                     topicName = TopicName("test-completion"),

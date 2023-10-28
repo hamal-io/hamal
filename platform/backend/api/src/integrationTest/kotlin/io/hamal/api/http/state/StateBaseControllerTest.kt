@@ -3,7 +3,6 @@ package io.hamal.api.http.state
 import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
@@ -36,7 +35,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
         return response.result(ApiFuncCreateSubmitted::class)
     }
 
-    fun completeExec(execId: ExecId, state: State): BridgeExecCompleteSubmitted {
+    fun completeExec(execId: ExecId, state: ExecState): BridgeExecCompleteSubmitted {
         val response = httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(

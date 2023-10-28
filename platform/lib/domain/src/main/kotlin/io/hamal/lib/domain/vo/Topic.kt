@@ -3,7 +3,7 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.Inputs
+import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
@@ -29,6 +29,6 @@ data class TopicEntryId(override val value: SnowflakeId) : SerializableDomainId(
 }
 
 @Serializable(with = TopicEntryPayload.Serializer::class)
-class TopicEntryPayload(override val value: MapType = MapType()) : Inputs() {
+class TopicEntryPayload(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<TopicEntryPayload>(::TopicEntryPayload)
 }

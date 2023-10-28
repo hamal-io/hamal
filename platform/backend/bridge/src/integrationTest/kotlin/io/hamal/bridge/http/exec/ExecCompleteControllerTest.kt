@@ -84,7 +84,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         val response = httpTemplate.post("/b1/execs/123456765432/complete")
             .body(
                 BridgeExecCompleteReq(
-                    state = State(),
+                    state = ExecState(),
                     result = ExecResult(),
                     events = listOf()
                 )
@@ -143,7 +143,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .path("execId", execId)
             .body(
                 BridgeExecCompleteReq(
-                    state = State(MapType(mutableMapOf("value" to NumberType(13.37)))),
+                    state = ExecState(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     result = ExecResult(MapType("hamal" to StringType("rocks"))),
                     events = listOf(
                         EventToSubmit(

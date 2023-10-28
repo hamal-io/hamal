@@ -3,8 +3,8 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
+import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
@@ -17,7 +17,7 @@ class ExecId(override val value: SnowflakeId) : SerializableDomainId() {
 }
 
 @Serializable(with = ExecInputs.Serializer::class)
-class ExecInputs(override val value: MapType = MapType()) : Inputs() {
+class ExecInputs(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<ExecInputs>(::ExecInputs)
 }
 
@@ -51,6 +51,11 @@ class ExecToken(override val value: String) : StringValueObject() {
 }
 
 @Serializable(with = ExecResult.Serializer::class)
-class ExecResult(override val value: MapType = MapType()) : Inputs() {
+class ExecResult(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<ExecResult>(::ExecResult)
+}
+
+@Serializable(with = ExecState.Serializer::class)
+class ExecState(override val value: MapType = MapType()) : Map() {
+    internal object Serializer : InputsSerializer<ExecState>(::ExecState)
 }

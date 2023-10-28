@@ -1,4 +1,3 @@
-import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
@@ -14,13 +13,13 @@ import io.hamal.runner.run.CodeRunnerImpl
 import org.junit.jupiter.api.fail
 
 class TestConnector(
-    val block: (ExecId, ExecResult, State, List<EventToSubmit>) -> Unit = { _, _, _, _ -> }
+    val block: (ExecId, ExecResult, ExecState, List<EventToSubmit>) -> Unit = { _, _, _, _ -> }
 ) : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {
+    override fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>) {
         block(execId, result, state, events)
     }
 
@@ -36,7 +35,7 @@ class TestFailConnector(
         TODO()
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>) {
+    override fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>) {
         fail { "Test expected to fail" }
     }
 

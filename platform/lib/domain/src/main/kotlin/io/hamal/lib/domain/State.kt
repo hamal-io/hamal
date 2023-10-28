@@ -2,13 +2,13 @@ package io.hamal.lib.domain
 
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
+import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
 @Serializable(with = State.Serializer::class)
-class State(override val value: MapType = MapType()) : Inputs() {
+class State(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<State>(::State)
 }
 

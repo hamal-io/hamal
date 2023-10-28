@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.ReqId
-import io.hamal.lib.domain.vo.base.Inputs
+import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
 import io.hamal.request.SetStateReq
@@ -27,7 +27,7 @@ data class ApiStateSetSubmitted(
 
 
 @Serializable(with = ApiState.Serializer::class)
-class ApiState(override val value: MapType = MapType()) : Inputs() {
+class ApiState(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<ApiState>(::ApiState)
 }
 

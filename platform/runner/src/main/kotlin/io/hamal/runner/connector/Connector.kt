@@ -1,8 +1,6 @@
 package io.hamal.runner.connector
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Event
-import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 
@@ -22,7 +20,7 @@ data class UnitOfWork(
 interface Connector {
     fun poll(): List<UnitOfWork>
 
-    fun complete(execId: ExecId, result: ExecResult, state: State, events: List<EventToSubmit>)
+    fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>)
 
     fun fail(execId: ExecId, result: ExecResult)
 }

@@ -27,7 +27,8 @@ data class ExecEntity(
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
     var events: List<Event>? = null,
-    var result: ExecResult? = null
+    var result: ExecResult? = null,
+    var state: ExecState? = null
 
 ) : RecordEntity<ExecId, ExecRecord, Exec> {
 
@@ -75,7 +76,8 @@ data class ExecEntity(
                 sequence = rec.sequence(),
                 status = ExecStatus.Completed,
 //                enqueuedAt = Instant.now() // FIXME
-                result = rec.result
+                result = rec.result,
+                state = rec.state
             )
 
             is ExecFailedRecord -> copy(
@@ -114,7 +116,7 @@ data class ExecEntity(
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now(), result!!)
+            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now(), result!!, state!!)
             ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), result!!)
             else -> TODO()
         }

@@ -37,7 +37,7 @@ internal class CompleteTest : AbstractExecuteTest() {
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(execResult, equalTo(ExecResult(MapType())))
-                assertThat(state, equalTo(State()))
+                assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
         )
@@ -51,7 +51,7 @@ internal class CompleteTest : AbstractExecuteTest() {
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(execResult, equalTo(ExecResult(MapType("value" to StringType("test")))))
-                assertThat(state, equalTo(State()))
+                assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
         )
@@ -64,7 +64,7 @@ internal class CompleteTest : AbstractExecuteTest() {
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(execResult, equalTo(ExecResult(MapType("value" to NumberType(1337)))))
-                assertThat(state, equalTo(State()))
+                assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
         )
@@ -77,7 +77,7 @@ internal class CompleteTest : AbstractExecuteTest() {
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(execResult, equalTo(ExecResult(MapType("value" to False))))
-                assertThat(state, equalTo(State()))
+                assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
         )
@@ -99,7 +99,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                         )
                     )
                 )
-                assertThat(state, equalTo(State()))
+                assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
         )

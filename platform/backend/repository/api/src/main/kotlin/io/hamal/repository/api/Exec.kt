@@ -5,7 +5,6 @@ import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -49,7 +48,8 @@ interface ExecCmdRepository : CmdRepository {
     data class CompleteCmd(
         val id: CmdId,
         val execId: ExecId,
-        val result: ExecResult
+        val result: ExecResult,
+        val state: ExecState
     )
 
     data class FailCmd(
@@ -198,7 +198,8 @@ class CompletedExec(
     override val id: ExecId,
     val startedExec: StartedExec,
     val completedAt: CompletedAt,
-    val result: ExecResult
+    val result: ExecResult,
+    val state: ExecState
 ) : Exec() {
     override val status = ExecStatus.Completed
     override val namespaceId get() = startedExec.namespaceId

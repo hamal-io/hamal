@@ -169,7 +169,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                store(ExecCompletedRecord(cmdId, execId, cmd.result))
+                store(ExecCompletedRecord(cmdId, execId, cmd.result, cmd.state))
 
                 (versionOf(execId, cmdId) as CompletedExec).also(CurrentExecProjection::apply)
             }

@@ -3,11 +3,11 @@ package io.hamal.core
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
@@ -243,7 +243,8 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("hamal" to StringType("rocks")))
+                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
+                    state = ExecState(MapType("state" to NumberType(23.23)))
                 )
             )
 
