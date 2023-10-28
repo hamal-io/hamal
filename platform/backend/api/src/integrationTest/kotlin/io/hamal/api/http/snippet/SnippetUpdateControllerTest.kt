@@ -4,21 +4,20 @@ import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.domain.vo.SnippetInputs
 import io.hamal.lib.domain.vo.SnippetName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.api.ApiUpdateSnippetReq
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-@Suppress("UNCHECKED_CAST")
 internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
 
     @Test
@@ -33,8 +32,8 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             )
         )
 
-        val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippedId}/update")
-            .path("snippedId", snippet.id)
+        val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippetId}")
+            .path("snippetId", snippet.id)
             .body(
                 ApiUpdateSnippetReq(
                     name = SnippetName("Other"),
@@ -45,9 +44,9 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             .execute()
 
         assertThat(updateSnippetResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(updateSnippetResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateSnippetResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateSnippetResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<SnippetId>
+        val submittedReq = updateSnippetResponse.toReq<SnippetId>()
         awaitCompleted(submittedReq)
 
         val snippetId = submittedReq.id
@@ -72,8 +71,8 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             )
         )
 
-        val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippedId}/update")
-            .path("snippedId", snippet.id)
+        val updateSnippetResponse = httpTemplate.patch("/v1/snippets/{snippetId}")
+            .path("snippetId", snippet.id)
             .body(
                 ApiUpdateSnippetReq(
                     name = null,
@@ -84,9 +83,9 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             .execute()
 
         assertThat(updateSnippetResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(updateSnippetResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateSnippetResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateSnippetResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<SnippetId>
+        val submittedReq = updateSnippetResponse.toReq<SnippetId>()
         awaitCompleted(submittedReq)
 
         val snippetId = submittedReq.id
@@ -102,7 +101,7 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
 
     @Test
     fun `Tries to update snippet that does not exist`() {
-        val updateResponse = httpTemplate.patch("/v1/snippets/333333/update")
+        val updateResponse = httpTemplate.patch("/v1/snippets/333333")
             .body(
                 ApiUpdateSnippetReq(
                     name = SnippetName("TestSnippet"),
@@ -113,7 +112,7 @@ internal class SnippetUpdateControllerTest : SnippetBaseControllerTest() {
             .execute()
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(updateResponse is ErrorHttpResponse) { "request was successful" }
+        require(updateResponse is HttpErrorResponse) { "request was successful" }
 
         val error = updateResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Snippet not found"))

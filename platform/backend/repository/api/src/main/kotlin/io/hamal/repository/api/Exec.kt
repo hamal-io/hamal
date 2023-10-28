@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 

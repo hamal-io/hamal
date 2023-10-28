@@ -1,7 +1,7 @@
 package io.hamal.core.req.handler.namespace
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.api.submitted_req.NamespaceCreateSubmittedReq
+import io.hamal.repository.api.submitted_req.NamespaceCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -36,7 +36,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
         testInstance(submitCreateNamespaceReq)
 
         testInstance(
-            NamespaceCreateSubmittedReq(
+            NamespaceCreateSubmitted(
                 reqId = ReqId(1),
                 status = Submitted,
                 id = NamespaceId(12345),
@@ -65,7 +65,7 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateNamespaceHandler
 
     private val submitCreateNamespaceReq by lazy {
-        NamespaceCreateSubmittedReq(
+        NamespaceCreateSubmitted(
             reqId = ReqId(1),
             status = Submitted,
             id = NamespaceId(12345),

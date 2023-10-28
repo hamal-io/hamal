@@ -2,7 +2,7 @@ package io.hamal.api.http.extension
 
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
@@ -78,7 +78,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             .execute()
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(updateResponse is ErrorHttpResponse) { "request was successful" }
+        require(updateResponse is HttpErrorResponse) { "request was successful" }
 
         val error = updateResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Extension not found"))

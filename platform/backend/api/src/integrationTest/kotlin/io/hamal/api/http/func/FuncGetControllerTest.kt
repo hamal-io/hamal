@@ -4,9 +4,9 @@ import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
@@ -21,7 +21,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
     fun `Func does not exists`() {
         val getFuncResponse = httpTemplate.get("/v1/funcs/33333333").execute()
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
+        require(getFuncResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getFuncResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))
@@ -41,7 +41,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
 
         val getFuncResponse = httpTemplate.get("/v1/funcs/{funcId}").path("funcId", funcId).execute()
         assertThat(getFuncResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getFuncResponse.result(ApiFunc::class)) {
             assertThat(id, equalTo(funcId))

@@ -2,7 +2,7 @@ package io.hamal.runner.run.function
 
 import TestConnector
 import TestFailConnector
-import io.hamal.lib.domain.EventPayload
+import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.*

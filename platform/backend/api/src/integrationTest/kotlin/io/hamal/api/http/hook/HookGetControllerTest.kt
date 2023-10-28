@@ -1,9 +1,9 @@
 package io.hamal.api.http.hook
 
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiHook
 import io.hamal.lib.sdk.api.ApiHookCreateReq
@@ -16,7 +16,7 @@ internal class HookGetControllerTest : HookBaseControllerTest() {
     fun `Hook does not exists`() {
         val getHookResponse = httpTemplate.get("/v1/hooks/33333333").execute()
         assertThat(getHookResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getHookResponse is ErrorHttpResponse) { "request was successful" }
+        require(getHookResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getHookResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Hook not found"))
@@ -28,7 +28,7 @@ internal class HookGetControllerTest : HookBaseControllerTest() {
 
         val getHookResponse = httpTemplate.get("/v1/hooks/{hookId}").path("hookId", hookId).execute()
         assertThat(getHookResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(getHookResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getHookResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getHookResponse.result(ApiHook::class)) {
             assertThat(id, equalTo(hookId))

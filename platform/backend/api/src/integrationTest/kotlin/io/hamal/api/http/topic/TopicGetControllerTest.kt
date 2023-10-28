@@ -2,7 +2,7 @@ package io.hamal.api.http.topic
 
 
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,7 +26,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
     fun `Topic does not exists`() {
         val getTopicResponse = httpTemplate.get("/v1/topics/1234").execute()
         assertThat(getTopicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getTopicResponse is ErrorHttpResponse) { "request was successful" }
+        require(getTopicResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getTopicResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Topic not found"))

@@ -1,8 +1,11 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.Elapsed
+import io.hamal.lib.common.snowflake.Sequence
+import io.hamal.lib.common.snowflake.SnowflakeId
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -104,10 +107,6 @@ class ConnectionImplTest {
 
         @Test
         fun `With named parameter of type domain_id`() {
-            class TestDomainId(override val value: SnowflakeId) : DomainId() {
-                constructor(value: Int) : this(SnowflakeId(value.toLong()))
-            }
-
             testInstance.execute("INSERT INTO domain_id_table(value) VALUES(:some_value)") {
                 set("some_value", TestDomainId(12345678))
             }
@@ -257,10 +256,6 @@ class ConnectionImplTest {
 
         @Test
         fun `With named parameter of type domain_id`() {
-            class TestDomainId(override val value: SnowflakeId) : DomainId() {
-                constructor(value: Int) : this(SnowflakeId(value.toLong()))
-            }
-
             val result = testInstance.executeUpdate("INSERT INTO domain_id_table(value) VALUES(:some_value)") {
                 set("some_value", TestDomainId(12345678))
             }
@@ -519,6 +514,22 @@ class ConnectionImplTest {
             CloseTest::class,
             "jdbc:sqlite:${Files.createTempDirectory("connection")}/db.sqlite"
         )
+    }
+
+    private class TestDomainId(override val value: SnowflakeId) : DomainId() {
+        constructor(value: Int) : this(SnowflakeId(value.toLong()))
+
+        override fun partition(): Partition {
+            TODO("Not yet implemented")
+        }
+
+        override fun sequence(): Sequence {
+            TODO("Not yet implemented")
+        }
+
+        override fun elapsed(): Elapsed {
+            TODO("Not yet implemented")
+        }
     }
 
 }

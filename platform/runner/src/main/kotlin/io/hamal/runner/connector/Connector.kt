@@ -1,8 +1,8 @@
 package io.hamal.runner.connector
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventToSubmit
+import io.hamal.lib.domain.vo.Event
+import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 

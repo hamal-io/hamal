@@ -1,10 +1,6 @@
-package io.hamal.lib.domain
+package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.domain.vo.base.Inputs
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
@@ -32,7 +28,7 @@ data class EventTopic(
 
 
 @Serializable(with = EventId.Serializer::class)
-data class EventId(override val value: SnowflakeId) : DomainId() {
+data class EventId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
     internal object Serializer : DomainIdSerializer<EventId>(::EventId)

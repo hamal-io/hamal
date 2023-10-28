@@ -2,7 +2,7 @@ package io.hamal.api.http.extension
 
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiExtensionCreateReq
@@ -32,7 +32,7 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
     fun `Tries to get extension that does not exist`() {
         val getResponse = httpTemplate.get("/v1/extensions/33333333").execute()
         assertThat(getResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getResponse is ErrorHttpResponse) { "request was successful" }
+        require(getResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Extension not found"))

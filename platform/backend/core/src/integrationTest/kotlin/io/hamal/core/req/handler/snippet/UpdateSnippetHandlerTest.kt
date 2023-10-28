@@ -2,7 +2,7 @@ package io.hamal.core.req.handler.snippet
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.SnippetId
@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.SnippetName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.SnippetCmdRepository
-import io.hamal.repository.api.submitted_req.SnippetUpdateSubmittedReq
+import io.hamal.repository.api.submitted_req.SnippetUpdateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -60,7 +60,7 @@ internal class UpdateSnippetHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submittedUpdateSnippetReq by lazy {
-        SnippetUpdateSubmittedReq(
+        SnippetUpdateSubmitted(
             reqId = ReqId(2),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,

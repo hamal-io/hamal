@@ -1,8 +1,11 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.snowflake.Elapsed
+import io.hamal.lib.common.snowflake.Sequence
+import io.hamal.lib.common.snowflake.SnowflakeId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -104,9 +107,6 @@ class DefaultNamedResultSetIT {
 
     @Test
     fun getDomainId() {
-        data class TestDomainId(override val value: SnowflakeId) : DomainId() {
-            constructor(value: Int) : this(SnowflakeId(value.toLong()))
-        }
         connection.createStatement().use { it.execute("INSERT INTO some_table (domain_id_value) VALUES (54321)") }
         val testInstance = testInstance(
             "SELECT domain_id_value FROM some_table WHERE domain_id_value is not null"
@@ -127,4 +127,20 @@ class DefaultNamedResultSetIT {
         return DefaultNamedResultSet(connection.createStatement().executeQuery(query))
     }
 
+
+    private data class TestDomainId(override val value: SnowflakeId) : DomainId() {
+        constructor(value: Int) : this(SnowflakeId(value.toLong()))
+
+        override fun partition(): Partition {
+            TODO("Not yet implemented")
+        }
+
+        override fun sequence(): Sequence {
+            TODO("Not yet implemented")
+        }
+
+        override fun elapsed(): Elapsed {
+            TODO("Not yet implemented")
+        }
+    }
 }

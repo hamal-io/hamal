@@ -2,21 +2,20 @@ package io.hamal.api.http.hook
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiHookCreateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.api.ApiUpdateHookReq
+import io.hamal.lib.sdk.toReq
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-@Suppress("UNCHECKED_CAST")
 internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
     @Test
@@ -26,7 +25,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
             .execute()
 
         assertThat(getHookResponse.statusCode, equalTo(NotFound))
-        require(getHookResponse is ErrorHttpResponse) { "request was successful" }
+        require(getHookResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getHookResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Hook not found"))
@@ -57,9 +56,9 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
             .execute()
 
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
-        require(updateHookResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateHookResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<HookId>
+        val submittedReq = updateHookResponse.toReq<HookId>()
         awaitCompleted(submittedReq)
 
         val hookId = submittedReq.id
@@ -95,9 +94,9 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
             .body(ApiUpdateHookReq(name = null))
             .execute()
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
-        require(updateHookResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateHookResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<HookId>
+        val req = updateHookResponse.toReq<HookId>()
         awaitCompleted(req)
         val hookId = req.id
 

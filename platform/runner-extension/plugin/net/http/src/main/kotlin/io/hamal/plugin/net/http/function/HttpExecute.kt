@@ -215,7 +215,7 @@ private fun HttpResponse.toMap() = MapType().also {
 }
 
 private fun HttpResponse.content() = when (this) {
-    is SuccessHttpResponse -> {
+    is HttpSuccessResponse -> {
         if (isNotEmpty) {
             val el = result(JsonElement::class)
             el.convertToType()
@@ -224,7 +224,7 @@ private fun HttpResponse.content() = when (this) {
         }
     }
 
-    is ErrorHttpResponse -> {
+    is HttpErrorResponse -> {
         if (isNotEmpty) {
             val el = error(JsonElement::class)
             el.convertToType()

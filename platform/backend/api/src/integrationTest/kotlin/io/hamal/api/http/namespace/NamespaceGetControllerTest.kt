@@ -2,10 +2,10 @@ package io.hamal.api.http.namespace
 
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
@@ -20,7 +20,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
     fun `Namespace does not exists`() {
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/33333333").execute()
         assertThat(getNamespaceResponse.statusCode, equalTo(NotFound))
-        require(getNamespaceResponse is ErrorHttpResponse) { "request was successful" }
+        require(getNamespaceResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getNamespaceResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Namespace not found"))
@@ -42,7 +42,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
             .execute()
 
         assertThat(getNamespaceResponse.statusCode, equalTo(Ok))
-        require(getNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getNamespaceResponse.result(ApiNamespace::class)) {
             assertThat(id, equalTo(namespaceId))

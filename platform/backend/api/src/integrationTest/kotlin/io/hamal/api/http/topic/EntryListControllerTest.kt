@@ -4,7 +4,7 @@ import io.hamal.lib.domain.vo.TopicEntryId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
@@ -111,7 +111,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
         val topicResponse = httpTemplate.get("/v1/topics/1234/entries").execute()
 
         assertThat(topicResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(topicResponse is ErrorHttpResponse)
+        require(topicResponse is HttpErrorResponse)
 
         val error = topicResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Topic not found"))

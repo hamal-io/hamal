@@ -7,13 +7,13 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-@Suppress("UNCHECKED_CAST")
 internal sealed class TopicBaseControllerTest : BaseControllerTest() {
 
     fun listTopicEntries(topicId: TopicId): ApiTopicEntryList {
@@ -22,7 +22,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
-        require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listTopicsResponse is HttpSuccessResponse) { "request was not successful" }
         return listTopicsResponse.result(ApiTopicEntryList::class)
     }
 
@@ -35,7 +35,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
-        require(listTopicsResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listTopicsResponse is HttpSuccessResponse) { "request was not successful" }
         return listTopicsResponse.result(ApiTopicList::class)
     }
 
@@ -45,7 +45,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getTopicResponse.statusCode, equalTo(Ok))
-        require(getTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getTopicResponse is HttpSuccessResponse) { "request was not successful" }
         return getTopicResponse.result(ApiTopic::class)
     }
 
@@ -56,9 +56,9 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
-        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TopicId>
+        return createTopicResponse.toReq()
     }
 
     fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiSubmittedReqImpl<TopicEntryId> {
@@ -68,8 +68,8 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
-        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TopicEntryId>
+        return createTopicResponse.toReq()
     }
 }

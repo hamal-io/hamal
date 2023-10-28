@@ -6,7 +6,8 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.repository.api.Snippet
 import io.hamal.repository.api.SnippetQueryRepository
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.SnippetCreateSubmitted
+import io.hamal.repository.api.submitted_req.SnippetUpdateSubmitted
 import io.hamal.request.CreateSnippetReq
 import io.hamal.request.UpdateSnippetReq
 import org.springframework.stereotype.Component
@@ -16,7 +17,7 @@ interface SnippetCreatePort {
         groupId: GroupId,
         accountId: AccountId,
         req: CreateSnippetReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SnippetCreateSubmitted) -> T
     ): T
 }
 
@@ -29,7 +30,7 @@ interface SnippetUpdatePort {
     operator fun <T : Any> invoke(
         snippetId: SnippetId,
         req: UpdateSnippetReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SnippetUpdateSubmitted) -> T
     ): T
 }
 
@@ -44,7 +45,7 @@ class SnippetAdapter(
         groupId: GroupId,
         accountId: AccountId,
         req: CreateSnippetReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SnippetCreateSubmitted) -> T
     ): T {
         return responseHandler(submitRequest(groupId, accountId, req))
     }
@@ -56,7 +57,7 @@ class SnippetAdapter(
     override fun <T : Any> invoke(
         snippetId: SnippetId,
         req: UpdateSnippetReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (SnippetUpdateSubmitted) -> T
     ): T {
         ensureSnippetExists(snippetId)
         return responseHandler(submitRequest(snippetId, req))

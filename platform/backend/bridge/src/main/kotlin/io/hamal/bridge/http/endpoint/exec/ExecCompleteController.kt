@@ -2,12 +2,8 @@ package io.hamal.bridge.http.endpoint.exec
 
 import io.hamal.bridge.req.SubmitBridgeRequest
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,16 +18,18 @@ internal class ExecCompleteController(
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
         @RequestBody complete: BridgeExecCompleteReq
-    ): ResponseEntity<ApiSubmittedReq> {
-        val result = request(execId, complete)
-        return ResponseEntity(result.let {
-            ApiSubmittedReqImpl(
-                reqId = it.reqId,
-                status = it.status,
-                namespaceId = NamespaceId(1),
-                groupId = GroupId(1),
-                id = it.id
-            )
-        }, HttpStatus.ACCEPTED)
-    }
+    ): ResponseEntity<ApiSubmittedReqImpl<ExecId>> =
+        request(execId, complete).let {
+            ResponseEntity
+                .accepted()
+                .body(
+                    ApiSubmittedReqImpl(
+                        reqId = it.reqId,
+                        status = it.status,
+                        namespaceId = null,
+                        groupId = null,
+                        id = it.id
+                    )
+                )
+        }
 }

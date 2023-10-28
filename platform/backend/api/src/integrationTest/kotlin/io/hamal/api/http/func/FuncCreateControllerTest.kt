@@ -2,7 +2,7 @@ package io.hamal.api.http.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
@@ -100,7 +100,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
-        require(response is ErrorHttpResponse) { "request was successful" }
+        require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Namespace not found"))

@@ -1,15 +1,12 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventToSubmit
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ExecInvokeSubmittedReq(
+data class ExecInvokeSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
@@ -20,23 +17,23 @@ data class ExecInvokeSubmittedReq(
     val inputs: InvocationInputs,
     val code: ExecCode,
     val events: List<Event>
-) : SubmittedReq
+) : Submitted
 
 @Serializable
-data class ExecFailSubmittedExecReq(
+data class ExecFailSubmittedExec(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,
     val result: ExecResult
-) : SubmittedReq
+) : Submitted
 
 @Serializable
-data class ExecCompleteSubmittedExecReq(
+data class ExecCompleteSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,
     val state: State,
     val result: ExecResult,
     val events: List<EventToSubmit>
-) : SubmittedReq
+) : Submitted
 

@@ -4,17 +4,16 @@ import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
 
-@Suppress("UNCHECKED_CAST")
 internal class AdhocControllerTest : BaseControllerTest() {
     @Test
     fun `Submits adhoc requests without inputs or secrets`() {
@@ -26,14 +25,14 @@ internal class AdhocControllerTest : BaseControllerTest() {
         )
 
         assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
-        val result = awaitCompleted(response.result(ApiSubmittedReqImpl::class)) as ApiSubmittedReqImpl<ExecId>
+        require(response is HttpSuccessResponse) { "request was not successful" }
+
+        val result = awaitCompleted(response.toReq<ExecId>())
         assertThat(result.status, equalTo(Submitted))
 
         verifyReqCompleted(result.reqId)
         verifyExecQueued(result.id)
     }
-
 
     private fun request(req: ApiAdhocInvokeReq) =
         httpTemplate
@@ -52,3 +51,4 @@ internal class AdhocControllerTest : BaseControllerTest() {
         }
     }
 }
+

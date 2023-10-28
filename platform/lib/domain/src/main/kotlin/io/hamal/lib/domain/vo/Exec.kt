@@ -1,7 +1,5 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -11,7 +9,7 @@ import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
 @Serializable(with = ExecId.Serializer::class)
-class ExecId(override val value: SnowflakeId) : DomainId() {
+class ExecId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 

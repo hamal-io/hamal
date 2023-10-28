@@ -67,7 +67,7 @@ class BodyTest(@LocalServerPort var localServerPort: Int) {
                     }
 
                     val response = request.execute()
-                    require(response is SuccessHttpResponse)
+                    require(response is HttpSuccessResponse)
                     assertThat(response.statusCode, equalTo(Ok))
                     assertThat(response.result(NoBodyResponse::class), equalTo(NoBodyResponse("NoContent")))
                 }
@@ -92,7 +92,7 @@ class BodyTest(@LocalServerPort var localServerPort: Int) {
                         .body(SomeRequestBody(value = 1337))
                         .execute()
 
-                    require(response is SuccessHttpResponse)
+                    require(response is HttpSuccessResponse)
                     assertThat(response.statusCode, equalTo(Ok))
                     assertThat(response.result(NoBodyResponse::class), equalTo(NoBodyResponse("NoContent")))
                 }

@@ -47,7 +47,7 @@ internal class PlatformEventService(
                 async.atFixedRate(1.milliseconds) {
                     consumer.consume(10) { chunkId, evt ->
                         platformEventContainer[evt::class].forEach { handler ->
-                            val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value.value}"))
+                            val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value}"))
                             handler.handle(cmdId, evt)
                         }
                     }

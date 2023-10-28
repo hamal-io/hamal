@@ -42,10 +42,10 @@ class MemorySegmentRepository(
             return listOf()
         }
         return lock.withLock {
-            if (firstId.value.value == 0L) {
+            if (firstId.value == 0UL) {
                 store.take(limit)
             } else {
-                store.drop(firstId.value.value.toInt() - 1)
+                store.drop(firstId.value.toInt() - 1)
                     .take(limit)
             }
         }

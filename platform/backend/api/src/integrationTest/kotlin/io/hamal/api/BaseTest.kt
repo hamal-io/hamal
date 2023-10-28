@@ -5,7 +5,7 @@ import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root

@@ -1,28 +1,36 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.http.ErrorHttpResponse
-import io.hamal.lib.http.HttpResponse
-import io.hamal.lib.http.NoContentHttpResponse
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.domain.vo.SerializableDomainId
+import io.hamal.lib.http.*
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiException
 import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 internal fun <TYPE : Any> HttpResponse.fold(clazz: KClass<TYPE>): TYPE {
     return when (val result = this) {
-        is SuccessHttpResponse -> result.result(clazz)
-        is NoContentHttpResponse -> throw IllegalStateException("Http response without content")
-        is ErrorHttpResponse -> throw ApiException(result.error(ApiError::class))
+        is HttpSuccessResponse -> result.result(clazz)
+        is HttpNoContentResponse -> throw IllegalStateException("Http response without content")
+        is HttpErrorResponse -> throw ApiException(result.error(ApiError::class))
     }
 }
 
-fun<TYPE : DomainId> HttpResponse.foldReq(): ApiSubmittedReqImpl<TYPE> {
-    @Suppress("UNCHECKED_CAST")
+inline fun <reified DOMAIN_ID : SerializableDomainId> HttpResponse.foldReq(): ApiSubmittedReqImpl<DOMAIN_ID> {
     return when (val result = this) {
-        is SuccessHttpResponse -> result.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TYPE>
-        is NoContentHttpResponse -> throw IllegalStateException("Http response without content")
-        is ErrorHttpResponse -> throw ApiException(result.error(ApiError::class))
+        is HttpSuccessResponse -> result.toReq(DOMAIN_ID::class)
+        is HttpNoContentResponse -> throw IllegalStateException("Http response without content")
+        is HttpErrorResponse -> throw ApiException(result.error(ApiError::class))
     }
 }
+
+@OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+fun <DOMAIN_ID : SerializableDomainId> HttpSuccessResponse.toReq(idClass: KClass<DOMAIN_ID>): ApiSubmittedReqImpl<DOMAIN_ID> {
+    return jsonDelegate.decodeFromStream(ApiSubmittedReqImpl.serializer(idClass.serializer()), inputStream)
+}
+
+inline fun <reified DOMAIN_ID : SerializableDomainId> HttpSuccessResponse.toReq(): ApiSubmittedReqImpl<DOMAIN_ID> =
+    toReq(DOMAIN_ID::class)

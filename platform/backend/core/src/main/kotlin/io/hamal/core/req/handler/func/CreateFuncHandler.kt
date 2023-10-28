@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.event.FuncCreatedEvent
-import io.hamal.repository.api.submitted_req.FuncCreateSubmittedReq
+import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,13 +17,13 @@ class CreateFuncHandler(
     val funcCmdRepository: FuncCmdRepository,
     val eventEmitter: PlatformEventEmitter,
     val namespaceQueryRepository: NamespaceQueryRepository
-) : ReqHandler<FuncCreateSubmittedReq>(FuncCreateSubmittedReq::class) {
-    override fun invoke(req: FuncCreateSubmittedReq) {
+) : ReqHandler<FuncCreateSubmitted>(FuncCreateSubmitted::class) {
+    override fun invoke(req: FuncCreateSubmitted) {
         createFunc(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun CreateFuncHandler.createFunc(req: FuncCreateSubmittedReq): Func {
+private fun CreateFuncHandler.createFunc(req: FuncCreateSubmitted): Func {
     val code = codeCmdRepository.create(
         CodeCmdRepository.CreateCmd(
             id = req.cmdId(),

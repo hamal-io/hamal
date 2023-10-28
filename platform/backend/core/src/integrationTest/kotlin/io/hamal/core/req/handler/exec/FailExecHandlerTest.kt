@@ -1,7 +1,7 @@
 package io.hamal.core.req.handler.exec
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecFailSubmittedExecReq
+import io.hamal.repository.api.submitted_req.ExecFailSubmittedExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -58,7 +58,7 @@ internal class FailExecHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: FailExecHandler
 
     private val submittedFailExecReq by lazy {
-        ExecFailSubmittedExecReq(
+        ExecFailSubmittedExec(
             reqId = ReqId(10),
             status = Submitted,
             id = ExecId(1234),

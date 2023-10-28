@@ -6,9 +6,9 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCorrelatedState
@@ -38,7 +38,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
-        require(response is SuccessHttpResponse) { "request was not successful" }
+        require(response is HttpSuccessResponse) { "request was not successful" }
 
         val correlatedState = response.result(ApiCorrelatedState::class)
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
@@ -53,7 +53,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
-        require(response is SuccessHttpResponse) { "request was not successful" }
+        require(response is HttpSuccessResponse) { "request was not successful" }
 
         val correlatedState = response.result(ApiCorrelatedState::class)
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
@@ -66,7 +66,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
     fun `Tries to get state but func does not exists`() {
         val response = httpTemplate.get("/v1/funcs/123456765432/states/1").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(response is ErrorHttpResponse) { "request was successful" }
+        require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))

@@ -56,7 +56,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
 
                     val response = request.execute()
 
-                    require(response is NoContentHttpResponse)
+                    require(response is HttpNoContentResponse)
                     assertThat(response.statusCode, equalTo(NoContent))
 
                     val headers = response.headers
@@ -90,7 +90,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
                         .header("x-request-header", "x-request-header-value")
                         .execute()
 
-                    require(response is NoContentHttpResponse)
+                    require(response is HttpNoContentResponse)
                     assertThat(response.statusCode, equalTo(NoContent))
 
                     val headers = response.headers
@@ -124,7 +124,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
                         .header("x-header", "x-request-value")
                         .execute()
 
-                    require(response is NoContentHttpResponse)
+                    require(response is HttpNoContentResponse)
                     assertThat(response.statusCode, equalTo(NoContent))
 
                     val headers = response.headers
@@ -158,7 +158,7 @@ class HeaderTest(@LocalServerPort var localServerPort: Int) {
                         .header("x-request-header", "x-request-value")
                         .execute()
 
-                    require(response is NoContentHttpResponse)
+                    require(response is HttpNoContentResponse)
                     assertThat(response.statusCode, equalTo(NoContent))
 
                     val headers = response.headers

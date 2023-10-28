@@ -3,7 +3,7 @@ package io.hamal.core.component
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.vo.*
 import org.springframework.core.convert.converter.Converter
 import kotlin.reflect.KClass

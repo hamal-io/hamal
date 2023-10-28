@@ -1,7 +1,7 @@
 package io.hamal.integration.http
 
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus
@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.SubmittedInvokeHookReq
+import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.Serializable
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -44,7 +44,7 @@ internal class HookInvokeController(
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
         val hook = hookQueryRepository.get(id)
 
-        val result = SubmittedInvokeHookReq(
+        val result = HookInvokeSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = id,
@@ -82,6 +82,6 @@ internal class HookInvokeController(
         val status: ReqStatus,
         val id: HookId
     ) {
-        constructor(req: SubmittedInvokeHookReq) : this(req.reqId, req.status, req.id)
+        constructor(req: HookInvokeSubmitted) : this(req.reqId, req.status, req.id)
     }
 }

@@ -1,17 +1,26 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiReqList(
-    val reqs: List<ApiSubmittedReq>
+    val reqs: List<Submitted>
+) {
+    @Serializable
+    data class Submitted(
+        override val reqId: ReqId,
+        override val status: ReqStatus,
+    ) : ApiSubmittedReq
+}
+
+@Serializable
+data class ApiSubmittedSimpleReq(
+    val reqId: ReqId,
+    val status: ReqStatus
 )
+
 
 @Serializable
 sealed interface ApiSubmittedReq {
@@ -20,7 +29,7 @@ sealed interface ApiSubmittedReq {
 }
 
 @Serializable
-data class ApiSubmittedReqImpl<ID : DomainId>(
+data class ApiSubmittedReqImpl<ID : SerializableDomainId>(
     override val reqId: ReqId,
     override val status: ReqStatus,
     val id: ID,

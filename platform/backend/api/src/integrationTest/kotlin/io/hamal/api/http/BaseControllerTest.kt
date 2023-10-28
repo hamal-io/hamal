@@ -1,13 +1,13 @@
 package io.hamal.api.http
 
 import io.hamal.api.BaseTest
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Completed
 import io.hamal.lib.domain._enum.ReqStatus.Failed
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.ApiSubmittedReq
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.Submitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -19,7 +19,8 @@ internal abstract class BaseControllerTest : BaseTest() {
         HttpTemplateImpl(
             baseUrl = "http://localhost:${localPort}",
             headerFactory = {
-                set("authorization", "test-token")
+                set("accept", "application/json")
+                set("content-type", "application/json")
             }
         )
     }
@@ -95,7 +96,7 @@ internal abstract class BaseControllerTest : BaseTest() {
         assertThat(requests, empty())
     }
 
-    fun <SUBMITTED_REQ : SubmittedReq> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
+    fun <SUBMITTED_REQ : Submitted> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
         val requests = reqQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
         assertThat(requests, empty())
     }

@@ -8,7 +8,8 @@ import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.HookCreateSubmitted
+import io.hamal.repository.api.submitted_req.HookUpdateSubmitted
 import io.hamal.request.CreateHookReq
 import io.hamal.request.UpdateHookReq
 import org.springframework.stereotype.Component
@@ -17,7 +18,7 @@ interface HookCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateHookReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (HookCreateSubmitted) -> T
     ): T
 }
 
@@ -33,7 +34,7 @@ interface HookUpdatePort {
     operator fun <T : Any> invoke(
         hookId: HookId,
         req: UpdateHookReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (HookUpdateSubmitted) -> T
     ): T
 }
 
@@ -48,7 +49,7 @@ class HookAdapter(
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateHookReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (HookCreateSubmitted) -> T
     ): T {
         return responseHandler(submitRequest(namespaceId, req))
     }
@@ -73,7 +74,7 @@ class HookAdapter(
     override fun <T : Any> invoke(
         hookId: HookId,
         req: UpdateHookReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (HookUpdateSubmitted) -> T
     ): T {
         ensureHookExists(hookId)
         return responseHandler(submitRequest(hookId, req))

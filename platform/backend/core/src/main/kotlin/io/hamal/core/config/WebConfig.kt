@@ -1,13 +1,13 @@
 package io.hamal.core.config
 
 import io.hamal.core.component.*
-import io.hamal.lib.common.Partition
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.domain.DomainIdGeneratorImpl
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -27,6 +27,13 @@ open class WebConfig : WebMvcConfigurer {
         ignoreUnknownKeys = true
         encodeDefaults = true
     }
+
+    @Bean
+    @OptIn(ExperimentalSerializationApi::class)
+    open fun protobuf(): ProtoBuf = ProtoBuf {
+        encodeDefaults = true
+    }
+
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         super.configureMessageConverters(converters)
@@ -56,30 +63,31 @@ open class WebConfig : WebMvcConfigurer {
     }
 }
 
-fun main() {
-    val x = DomainIdGeneratorImpl(Partition(1))(::FuncId)
-    println(x)
-    println(x.elapsed())
+@Serializable
+data class Test<ID : SerializableDomainId>(
+    val reqId: ReqId,
+    val status: ReqStatus,
+    val id: ID,
+    val namespaceId: NamespaceId? = null,
+    val groupId: GroupId? = null,
+)
 
+
+fun main() {
     val j = Json {
         explicitNulls = false
         ignoreUnknownKeys = true
         encodeDefaults = true
-        serializersModule = SerializersModule {
-            polymorphic(DomainId::class, FuncId::class, FuncId.serializer())
-        }
     }
-
-
-//    println(
-//        j.encodeToString<ApiSubmittedReq>(
-//            ApiSubmittedReqImpl<FuncId>(
-//                reqId = ReqId(1),
-//                status = ReqStatus.Failed,
-//                id = FuncId(12),
-//                namespaceId = NamespaceId(23),
-//                groupId = GroupId(23)
-//            )
-//        )
-//    )
+    println(
+        j.encodeToString(
+            Test<ExecId>(
+                reqId = ReqId(1),
+                status = ReqStatus.Failed,
+                id = ExecId(12),
+                namespaceId = NamespaceId(23),
+                groupId = GroupId(23)
+            )
+        )
+    )
 }

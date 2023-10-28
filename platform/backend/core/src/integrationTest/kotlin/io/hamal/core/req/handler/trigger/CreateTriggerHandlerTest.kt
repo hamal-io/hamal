@@ -1,9 +1,9 @@
 package io.hamal.core.req.handler.trigger
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -11,7 +11,7 @@ import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
@@ -130,18 +130,19 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), groupIds = listOf())).also { triggers ->
-            assertThat(triggers, hasSize(1))
+        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), groupIds = listOf()))
+            .also { triggers ->
+                assertThat(triggers, hasSize(1))
 
-            with(triggers.first()) {
-                require(this is EventTrigger)
-                assertThat(id, equalTo(TriggerId(1234)))
-                assertThat(name, equalTo(TriggerName("EventTrigger")))
-                assertThat(funcId, equalTo(FuncId(2222)))
-                assertThat(topicId, equalTo(TopicId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                with(triggers.first()) {
+                    require(this is EventTrigger)
+                    assertThat(id, equalTo(TriggerId(1234)))
+                    assertThat(name, equalTo(TriggerName("EventTrigger")))
+                    assertThat(funcId, equalTo(FuncId(2222)))
+                    assertThat(topicId, equalTo(TopicId(1111)))
+                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                }
             }
-        }
     }
 
     private fun verifySingleHookTriggerExists() {
@@ -169,7 +170,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateTriggerHandler
 
     private val submitCreateFixedRateTriggerReq by lazy {
-        SubmittedCreateTriggerReq(
+        TriggerCreateSubmitted(
             reqId = ReqId(1),
             status = Submitted,
             type = FixedRate,
@@ -186,7 +187,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateEventTriggerReq by lazy {
-        SubmittedCreateTriggerReq(
+        TriggerCreateSubmitted(
             reqId = ReqId(1),
             status = Submitted,
             type = Event,
@@ -203,7 +204,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateHookTriggerReq by lazy {
-        SubmittedCreateTriggerReq(
+        TriggerCreateSubmitted(
             reqId = ReqId(1),
             status = Submitted,
             type = Hook,

@@ -10,7 +10,7 @@ import io.hamal.repository.api.ExtensionCmdRepository
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.api.event.ExtensionCreatedEvent
-import io.hamal.repository.api.submitted_req.ExtensionSubmittedReq
+import io.hamal.repository.api.submitted_req.ExtensionCreateSubmitted
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,13 +18,13 @@ class CreateExtensionHandler(
     val extensionCmdRepository: ExtensionCmdRepository,
     val codeCmdRepository: CodeCmdRepository,
     val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<ExtensionSubmittedReq>(ExtensionSubmittedReq::class) {
-    override fun invoke(req: ExtensionSubmittedReq) {
+) : ReqHandler<ExtensionCreateSubmitted>(ExtensionCreateSubmitted::class) {
+    override fun invoke(req: ExtensionCreateSubmitted) {
         createExtension(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun CreateExtensionHandler.createExtension(req: ExtensionSubmittedReq): Extension {
+private fun CreateExtensionHandler.createExtension(req: ExtensionCreateSubmitted): Extension {
     val code = codeCmdRepository.create(
         CodeCmdRepository.CreateCmd(
             id = req.cmdId(),

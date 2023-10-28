@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.repository.api.CodeCmdRepository
@@ -105,7 +105,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             .execute()
 
         assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getCodeResponse is ErrorHttpResponse) { "request was successful" }
+        require(getCodeResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getCodeResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Code not found"))
@@ -116,7 +116,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
     fun `Code does not exist`() {
         val getCodeResponse = httpTemplate.get("/b1/code/33333333").execute()
         assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(getCodeResponse is ErrorHttpResponse) { "request was successful" }
+        require(getCodeResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getCodeResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Code not found"))

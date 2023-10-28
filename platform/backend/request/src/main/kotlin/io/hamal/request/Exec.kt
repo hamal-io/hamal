@@ -1,6 +1,6 @@
 package io.hamal.request
 
-import io.hamal.lib.domain.EventToSubmit
+import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecResult
 

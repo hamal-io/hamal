@@ -4,11 +4,12 @@ import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.SnippetId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
 import io.hamal.lib.sdk.api.ApiSnippet
 import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
@@ -21,8 +22,8 @@ internal sealed class SnippetBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createSnippetResponse.statusCode, equalTo(Accepted))
-        require(createSnippetResponse is SuccessHttpResponse) { "request was not successful" }
-        return createSnippetResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<SnippetId>
+        require(createSnippetResponse is HttpSuccessResponse) { "request was not successful" }
+        return createSnippetResponse.toReq()
     }
 
     fun getSnippet(snippetId: SnippetId): ApiSnippet {
@@ -31,7 +32,7 @@ internal sealed class SnippetBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getSnippetResponse.statusCode, equalTo(Ok))
-        require(getSnippetResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getSnippetResponse is HttpSuccessResponse) { "request was not successful" }
         return getSnippetResponse.result(ApiSnippet::class)
     }
 }

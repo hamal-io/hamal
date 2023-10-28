@@ -5,16 +5,16 @@ import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHook
 import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.lib.sdk.api.ApiHookList
 import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-@Suppress("UNCHECKED_CAST")
 internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
     fun createHook(
@@ -27,8 +27,8 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<HookId>
+        require(response is HttpSuccessResponse) { "request was not successful" }
+        return response.toReq()
     }
 
     fun listHooks(): ApiHookList {
@@ -37,7 +37,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listHooksResponse.statusCode, equalTo(Ok))
-        require(listHooksResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listHooksResponse is HttpSuccessResponse) { "request was not successful" }
         return listHooksResponse.result(ApiHookList::class)
     }
 
@@ -47,7 +47,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getHookResponse.statusCode, equalTo(Ok))
-        require(getHookResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getHookResponse is HttpSuccessResponse) { "request was not successful" }
         return getHookResponse.result(ApiHook::class)
     }
 }

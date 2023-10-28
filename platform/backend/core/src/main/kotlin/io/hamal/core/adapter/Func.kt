@@ -5,7 +5,9 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
+import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
@@ -15,7 +17,7 @@ interface FuncCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateFuncReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (FuncCreateSubmitted) -> T
     ): T
 }
 
@@ -27,7 +29,7 @@ interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: InvokeFuncReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (ExecInvokeSubmitted) -> T
     ): T
 }
 
@@ -39,7 +41,7 @@ interface FuncUpdatePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: UpdateFuncReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (FuncUpdateSubmitted) -> T
     ): T
 }
 
@@ -55,7 +57,7 @@ class FuncAdapter(
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateFuncReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (FuncCreateSubmitted) -> T
     ): T {
         return responseHandler(submitRequest(namespaceId, req))
     }
@@ -70,7 +72,7 @@ class FuncAdapter(
     override fun <T : Any> invoke(
         funcId: FuncId,
         req: InvokeFuncReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (ExecInvokeSubmitted) -> T
     ): T {
         return responseHandler(submitRequest(funcId, req))
     }
@@ -88,7 +90,7 @@ class FuncAdapter(
     override fun <T : Any> invoke(
         funcId: FuncId,
         req: UpdateFuncReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (FuncUpdateSubmitted) -> T
     ): T {
         ensureFuncExists(funcId)
         return responseHandler(submitRequest(funcId, req))

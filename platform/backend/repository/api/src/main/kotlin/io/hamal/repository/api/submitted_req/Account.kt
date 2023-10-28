@@ -1,12 +1,11 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AccountCreateWithPasswordSubmittedReq(
+data class AccountCreateWithPasswordSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
@@ -19,4 +18,4 @@ data class AccountCreateWithPasswordSubmittedReq(
     val salt: PasswordSalt,
     val hash: PasswordHash,
     val token: AuthToken
-) : SubmittedReq
+) : Submitted

@@ -4,18 +4,18 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.*
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
+import io.hamal.lib.sdk.toReq
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.NamespaceCmdRepository
-import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("UNCHECKED_CAST")
 internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
     @Test
@@ -41,9 +40,9 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         ).execute()
 
         assertThat(creationResponse.statusCode, equalTo(Accepted))
-        require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+        require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+        val result = creationResponse.toReq<TriggerId>()
         awaitCompleted(result.reqId)
 
         with(getTrigger(result.id)) {
@@ -80,9 +79,9 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
         assertThat(creationResponse.statusCode, equalTo(Accepted))
-        require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+        require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+        val result = creationResponse.toReq<TriggerId>()
         awaitCompleted(result.reqId)
 
         with(getTrigger(result.id)) {
@@ -108,7 +107,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         ).execute()
 
         assertThat(creationResponse.statusCode, equalTo(NotFound))
-        require(creationResponse is ErrorHttpResponse) { "request was successful" }
+        require(creationResponse is HttpErrorResponse) { "request was successful" }
 
         val error = creationResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Namespace not found"))
@@ -134,9 +133,9 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(Accepted))
-            require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+            require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-            val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+            val result = creationResponse.toReq<TriggerId>()
             awaitCompleted(result.reqId)
 
             with(triggerQueryRepository.get(result.id)) {
@@ -162,7 +161,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Func not found"))
@@ -189,9 +188,9 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(Accepted))
-            require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+            require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-            val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+            val result = creationResponse.toReq<TriggerId>()
             awaitCompleted(result.reqId)
 
             with(triggerQueryRepository.get(result.id)) {
@@ -219,11 +218,11 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(BadRequest))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("topicId is missing"))
-            verifyNoRequests(SubmittedCreateTriggerReq::class)
+            verifyNoRequests(TriggerCreateSubmitted::class)
         }
 
         @Test
@@ -241,11 +240,11 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Topic not found"))
-            verifyNoRequests(SubmittedCreateTriggerReq::class)
+            verifyNoRequests(TriggerCreateSubmitted::class)
         }
 
         @Test
@@ -263,11 +262,11 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Func not found"))
-            verifyNoRequests(SubmittedCreateTriggerReq::class)
+            verifyNoRequests(TriggerCreateSubmitted::class)
         }
     }
 
@@ -289,9 +288,9 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(Accepted))
-            require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+            require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-            val result = creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+            val result = creationResponse.toReq<TriggerId>()
             awaitCompleted(result.reqId)
 
             with(triggerQueryRepository.get(result.id)) {
@@ -319,11 +318,11 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(BadRequest))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("hookId is missing"))
-            verifyNoRequests(SubmittedCreateTriggerReq::class)
+            verifyNoRequests(TriggerCreateSubmitted::class)
         }
 
         @Test
@@ -341,11 +340,11 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Hook not found"))
-            verifyNoRequests(SubmittedCreateTriggerReq::class)
+            verifyNoRequests(TriggerCreateSubmitted::class)
         }
 
         @Test
@@ -363,11 +362,11 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             ).execute()
 
             assertThat(creationResponse.statusCode, equalTo(NotFound))
-            require(creationResponse is ErrorHttpResponse) { "request was successful" }
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Func not found"))
-            verifyNoRequests(SubmittedCreateTriggerReq::class)
+            verifyNoRequests(TriggerCreateSubmitted::class)
         }
     }
 }

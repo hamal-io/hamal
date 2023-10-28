@@ -2,13 +2,13 @@ package io.hamal.core.req.handler.exec
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmittedReq
+import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes execution with code`() {
         testInstance(
-            ExecInvokeSubmittedReq(
+            ExecInvokeSubmitted(
                 reqId = ReqId(1),
                 status = Submitted,
                 id = ExecId(3333),
@@ -61,7 +61,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
         testInstance(
-            ExecInvokeSubmittedReq(
+            ExecInvokeSubmitted(
                 reqId = ReqId(1),
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
@@ -132,7 +132,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
 
     //    @formatter:off
     private val submittedFixedRateInvocationReq by lazy {
-        ExecInvokeSubmittedReq(
+        ExecInvokeSubmitted(
             reqId = ReqId(1),
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,

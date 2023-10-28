@@ -5,12 +5,12 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.Submitted
 import io.hamal.request.CreateAccountReq
 import org.springframework.stereotype.Component
 
 interface AccountCreatePort {
-    operator fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (SubmittedReq) -> T): T
+    operator fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (Submitted) -> T): T
 }
 
 interface AccountGetPort {
@@ -29,7 +29,7 @@ class AccountAdapter(
     private val accountQueryRepository: AccountQueryRepository
 ) : AccountPort {
 
-    override fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (SubmittedReq) -> T) =
+    override fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (Submitted) -> T) =
         responseHandler(submitRequest(req))
 
     override fun <T : Any> invoke(accountId: AccountId, responseHandler: (Account) -> T) =

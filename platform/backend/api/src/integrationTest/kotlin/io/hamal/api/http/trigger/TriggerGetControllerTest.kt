@@ -1,11 +1,12 @@
 package io.hamal.api.http.trigger
 
 import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.*
@@ -19,7 +20,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
     fun `Trigger does not exists`() {
         val getTriggerResponse = httpTemplate.get("/v1/triggers/33333333").execute()
         assertThat(getTriggerResponse.statusCode, equalTo(NotFound))
-        require(getTriggerResponse is ErrorHttpResponse) { "request was successful" }
+        require(getTriggerResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getTriggerResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Trigger not found"))
@@ -44,7 +45,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
-        require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(ApiFixedRateTrigger::class)) {
             assertThat(id, equalTo(triggerId))
@@ -77,7 +78,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
-        require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(ApiEventTrigger::class)) {
             assertThat(id, equalTo(triggerId))
@@ -111,7 +112,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
-        require(getTriggerResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getTriggerResponse.result(ApiHookTrigger::class)) {
             assertThat(id, equalTo(triggerId))

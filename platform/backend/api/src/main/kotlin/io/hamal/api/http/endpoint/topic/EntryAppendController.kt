@@ -1,12 +1,10 @@
 package io.hamal.api.http.endpoint.topic
 
-import io.hamal.api.http.endpoint.req.Assembler
 import io.hamal.core.adapter.TopicAppendEntryPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.api.ApiSubmittedReq
-import org.springframework.http.HttpStatus.ACCEPTED
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,10 +20,20 @@ internal class EntryAppendController(
     fun appendEvent(
         @PathVariable("topicId") topicId: TopicId,
         @RequestBody topAppend: TopicEntryPayload
-    ): ResponseEntity<ApiSubmittedReq> {
+    ): ResponseEntity<ApiSubmittedReqImpl<TopicId>> {
         return retry {
             appendEntryToTopic(topicId, topAppend) {
-                ResponseEntity(Assembler.assemble(it), ACCEPTED)
+                ResponseEntity
+                    .accepted()
+                    .body(
+                        ApiSubmittedReqImpl(
+                            reqId = it.reqId,
+                            status = it.status,
+                            namespaceId = null,
+                            groupId = it.groupId,
+                            id = it.id
+                        )
+                    )
             }
         }
     }

@@ -1,12 +1,12 @@
 package io.hamal.core.req.handler.snippet
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.repository.api.submitted_req.SnippetCreateSubmittedReq
+import io.hamal.repository.api.submitted_req.SnippetCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -27,7 +27,7 @@ internal class CreateSnippetHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateSnippetReq by lazy {
-        SnippetCreateSubmittedReq(
+        SnippetCreateSubmitted(
             reqId = ReqId(1),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,

@@ -1,10 +1,8 @@
 package io.hamal.plugin.std.sys
 
-import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
-import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
@@ -30,21 +28,20 @@ import io.hamal.plugin.std.sys.trigger.TriggerListFunction
 
 
 class SysPluginFactory(
-    private val httpTemplate: HttpTemplateImpl,
-    private val sdk: ApiSdk = ApiSdkImpl(httpTemplate)
+    private val sdk: ApiSdkImpl
 ) : RunnerPluginExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerPluginExtension {
         return RunnerPluginExtension(
             name = "sys",
             internals = mapOf(
-                "await" to AwaitFunction(httpTemplate),
-                "await_completed" to AwaitCompletedFunction(httpTemplate),
-                "await_failed" to AwaitFailedFunction(httpTemplate),
+                "await" to AwaitFunction(sdk.template),
+                "await_completed" to AwaitCompletedFunction(sdk.template),
+                "await_failed" to AwaitFailedFunction(sdk.template),
 
                 "adhoc" to AdhocFunction(sdk),
                 "code_get" to CodeGetFunction(sdk),
 
-                "req_get" to ReqGetFunction(httpTemplate),
+                "req_get" to ReqGetFunction(sdk.template),
 
                 "exec_list" to ExecListFunction(sdk),
                 "exec_get" to ExecGetFunction(sdk),

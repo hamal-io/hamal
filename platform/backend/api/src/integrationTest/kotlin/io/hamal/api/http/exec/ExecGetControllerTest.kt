@@ -2,9 +2,9 @@ package io.hamal.api.http.exec
 
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiExec
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,7 +21,7 @@ internal class ExecGetControllerTest : ExecBaseControllerTest() {
 
         val response = httpTemplate.get("/v1/execs/{execId}").path("execId", createAdhocResponse.id).execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
-        require(response is SuccessHttpResponse)
+        require(response is HttpSuccessResponse)
 
         with(response.result(ApiExec::class)) {
             assertThat(id, equalTo(createAdhocResponse.id))
@@ -43,7 +43,7 @@ internal class ExecGetControllerTest : ExecBaseControllerTest() {
     fun `Tries to get exec which does not exist`() {
         val response = httpTemplate.get("/v1/execs/123456765432").execute()
         assertThat(response.statusCode, equalTo(HttpStatusCode.NotFound))
-        require(response is ErrorHttpResponse) { "request was successful" }
+        require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Exec not found"))

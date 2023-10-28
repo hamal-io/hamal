@@ -194,17 +194,17 @@ class HttpRequestImpl(
 
     override fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT {
         return when (val response = execute()) {
-            is SuccessHttpResponse -> response.result(clazz)
-            is NoContentHttpResponse -> throw IllegalStateException("No content was returned from the server")
-            is ErrorHttpResponse -> throw IllegalStateException("Http request was not successful")
+            is HttpSuccessResponse -> response.result(clazz)
+            is HttpNoContentResponse -> throw IllegalStateException("No content was returned from the server")
+            is HttpErrorResponse -> throw IllegalStateException("Http request was not successful")
         }
     }
 
     override fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE> {
         return when (val response = execute()) {
-            is SuccessHttpResponse -> response.resultList(clazz)
-            is NoContentHttpResponse -> throw IllegalStateException("No content was returned from the server")
-            is ErrorHttpResponse -> throw IllegalStateException("Http request was not successful")
+            is HttpSuccessResponse -> response.resultList(clazz)
+            is HttpNoContentResponse -> throw IllegalStateException("No content was returned from the server")
+            is HttpErrorResponse -> throw IllegalStateException("Http request was not successful")
         }
     }
 }

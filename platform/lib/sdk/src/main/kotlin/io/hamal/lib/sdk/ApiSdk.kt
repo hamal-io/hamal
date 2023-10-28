@@ -21,9 +21,7 @@ interface ApiSdk {
     val trigger: ApiTriggerService
 }
 
-data class ApiSdkImpl(
-    val template: HttpTemplateImpl
-) : ApiSdk {
+class ApiSdkImpl(apiHost: String) : ApiSdk {
 
     override val account: ApiAccountService by lazy {
         ApiAccountServiceImpl(template)
@@ -84,4 +82,12 @@ data class ApiSdkImpl(
     override val trigger: ApiTriggerService by lazy {
         ApiTriggerServiceImpl(template)
     }
+
+    val template = HttpTemplateImpl(
+        baseUrl = apiHost,
+        headerFactory = {
+            this["accept"] = "application/json"
+        },
+        serdeFactory = {}
+    )
 }

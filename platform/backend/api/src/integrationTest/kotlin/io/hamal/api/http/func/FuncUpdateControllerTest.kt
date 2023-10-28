@@ -2,23 +2,22 @@ package io.hamal.api.http.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncUpdateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-@Suppress("UNCHECKED_CAST")
 internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
@@ -34,7 +33,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .execute()
 
         assertThat(getFuncResponse.statusCode, equalTo(NotFound))
-        require(getFuncResponse is ErrorHttpResponse) { "request was successful" }
+        require(getFuncResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getFuncResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))
@@ -75,9 +74,9 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .execute()
 
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
-        require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
+        val submittedReq = updateFuncResponse.toReq<FuncId>()
         awaitCompleted(submittedReq)
 
         val funcId = submittedReq.id
@@ -127,9 +126,9 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             )
             .execute()
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
-        require(updateFuncResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateFuncResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
+        val req = updateFuncResponse.toReq<FuncId>()
         awaitCompleted(req)
         val funcId = req.id
 

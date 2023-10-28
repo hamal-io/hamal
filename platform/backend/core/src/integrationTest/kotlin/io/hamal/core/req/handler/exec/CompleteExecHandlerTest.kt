@@ -1,9 +1,9 @@
 package io.hamal.core.req.handler.exec
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.EventPayload
-import io.hamal.lib.domain.EventToSubmit
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.EventPayload
+import io.hamal.lib.domain.vo.EventToSubmit
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
@@ -16,7 +16,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecCompleteSubmittedExecReq
+import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -63,7 +63,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CompleteExecHandler
 
     private val submittedCompleteExecReq by lazy {
-        ExecCompleteSubmittedExecReq(
+        ExecCompleteSubmitted(
             reqId = ReqId(10),
             status = ReqStatus.Submitted,
             id = ExecId(1234),

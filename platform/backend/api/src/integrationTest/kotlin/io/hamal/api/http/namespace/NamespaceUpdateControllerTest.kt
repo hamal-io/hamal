@@ -3,22 +3,21 @@ package io.hamal.api.http.namespace
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-@Suppress("UNCHECKED_CAST")
 internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
 
     @Test
@@ -33,7 +32,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
             .execute()
 
         assertThat(getNamespaceResponse.statusCode, equalTo(NotFound))
-        require(getNamespaceResponse is ErrorHttpResponse) { "request was successful" }
+        require(getNamespaceResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getNamespaceResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Namespace not found"))
@@ -60,9 +59,9 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
             )
             .execute()
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
-        require(updateNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
+        require(updateNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateNamespaceResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<NamespaceId>
+        val req = updateNamespaceResponse.toReq<NamespaceId>()
         val namespaceId = awaitCompleted(req).id
 
         with(getNamespace(namespaceId)) {

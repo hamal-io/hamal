@@ -45,7 +45,7 @@ sealed interface HttpResponse {
 }
 
 
-data class SuccessHttpResponse(
+data class HttpSuccessResponse(
     override val statusCode: HttpStatusCode,
     override val headers: HttpHeaders,
     val inputStream: InputStream,
@@ -63,7 +63,7 @@ data class SuccessHttpResponse(
     override val contentLength = inputStream.available()
 }
 
-data class NoContentHttpResponse(
+data class HttpNoContentResponse(
     override val statusCode: HttpStatusCode,
     override val headers: HttpHeaders
 ) : HttpResponse {
@@ -71,7 +71,7 @@ data class NoContentHttpResponse(
 }
 
 
-data class ErrorHttpResponse(
+data class HttpErrorResponse(
     override val statusCode: HttpStatusCode,
     override val headers: HttpHeaders,
     val inputStream: InputStream,

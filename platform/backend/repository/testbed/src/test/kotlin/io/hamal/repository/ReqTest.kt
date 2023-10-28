@@ -1,12 +1,12 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.ReqStatus.*
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.ReqRepository
-import io.hamal.repository.api.submitted_req.TestSubmittedReq
+import io.hamal.repository.api.submitted_req.TestSubmitted
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -19,7 +19,7 @@ internal class ReqRepositoryTest : AbstractUnitTest() {
     inner class QueueTest {
         @TestFactory
         fun `Queues req`() = runWith(ReqRepository::class) {
-            queue(TestSubmittedReq(ReqId(1), Submitted))
+            queue(TestSubmitted(ReqId(1), Submitted))
             verifyCount(1)
         }
     }
@@ -34,10 +34,10 @@ internal class ReqRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Less reqs there than limit`() = runWith(ReqRepository::class) {
-            queue(TestSubmittedReq(ReqId(1), Submitted))
-            queue(TestSubmittedReq(ReqId(2), Submitted))
-            queue(TestSubmittedReq(ReqId(3), Submitted))
-            queue(TestSubmittedReq(ReqId(4), Submitted))
+            queue(TestSubmitted(ReqId(1), Submitted))
+            queue(TestSubmitted(ReqId(2), Submitted))
+            queue(TestSubmitted(ReqId(3), Submitted))
+            queue(TestSubmitted(ReqId(4), Submitted))
 
             val result = next(5)
             assertThat(result, hasSize(4))
@@ -49,10 +49,10 @@ internal class ReqRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Limit req amount`() = runWith(ReqRepository::class) {
-            queue(TestSubmittedReq(ReqId(1), Submitted))
-            queue(TestSubmittedReq(ReqId(2), Submitted))
-            queue(TestSubmittedReq(ReqId(3), Submitted))
-            queue(TestSubmittedReq(ReqId(4), Submitted))
+            queue(TestSubmitted(ReqId(1), Submitted))
+            queue(TestSubmitted(ReqId(2), Submitted))
+            queue(TestSubmitted(ReqId(3), Submitted))
+            queue(TestSubmitted(ReqId(4), Submitted))
 
             val result = next(2)
             assertThat(result, hasSize(2))
@@ -250,7 +250,7 @@ private fun ReqRepository.createReq(
     status: ReqStatus,
 ) {
     queue(
-        TestSubmittedReq(
+        TestSubmitted(
             reqId = reqId,
             status = status,
         )

@@ -1,6 +1,6 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension

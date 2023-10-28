@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys.req
 
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -23,7 +23,7 @@ class ReqGetFunction(
             .path("reqId", arg1.value)
             .execute()
 
-        if (response is SuccessHttpResponse) {
+        if (response is HttpSuccessResponse) {
             return null to response.result(ApiSubmittedReq::class)
                 .let { exec ->
                     MapType(
@@ -34,7 +34,7 @@ class ReqGetFunction(
                     )
                 }
         } else {
-            require(response is ErrorHttpResponse)
+            require(response is HttpErrorResponse)
 //            return response.error(HamalError::class)
 //                .let { error ->
 //                    ErrorValue(error.message ?: "An unknown error occurred")

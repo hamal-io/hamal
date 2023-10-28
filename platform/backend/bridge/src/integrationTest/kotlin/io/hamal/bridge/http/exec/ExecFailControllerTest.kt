@@ -2,10 +2,10 @@ package io.hamal.bridge.http.exec
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -37,7 +37,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
 
                 val failureResponse = requestFailure(exec.id)
                 assertThat(failureResponse.statusCode, equalTo(Accepted))
-                require(failureResponse is SuccessHttpResponse) { "request was not successful" }
+                require(failureResponse is HttpSuccessResponse) { "request was not successful" }
 
                 val result = failureResponse.result(ApiSubmittedReqImpl::class)
 
@@ -58,7 +58,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
 
         val failureResponse = requestFailure(startedExec.id)
         assertThat(failureResponse.statusCode, equalTo(Accepted))
-        require(failureResponse is SuccessHttpResponse) { "request was not successful" }
+        require(failureResponse is HttpSuccessResponse) { "request was not successful" }
 
         val result = failureResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
         awaitCompleted(result.reqId)
@@ -75,7 +75,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
-        require(response is ErrorHttpResponse) { "request was successful" }
+        require(response is HttpErrorResponse) { "request was successful" }
 
         val result = response.error(ApiError::class)
         assertThat(result.message, equalTo("Exec not found"))

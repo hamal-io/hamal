@@ -2,7 +2,7 @@ package io.hamal.api.http.endpoint.req
 
 import io.hamal.core.adapter.ReqListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.repository.api.ReqQueryRepository
 import org.springframework.http.ResponseEntity
@@ -24,6 +24,15 @@ internal class ReqListController(private val listReqs: ReqListPort) {
                 // groupId = ...
             ),
             // assembler
-        ) { reqs -> ResponseEntity.ok(ApiReqList(reqs.map { Assembler.assemble(it) })) }
+        ) { reqs ->
+            ResponseEntity.ok(ApiReqList(
+                reqs.map {
+                    ApiReqList.Submitted(
+                        reqId = it.reqId,
+                        status = it.status,
+                    )
+                }
+            ))
+        }
     }
 }

@@ -2,7 +2,6 @@ package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CmdRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -60,12 +59,12 @@ interface BrokerRepository :
 
     @OptIn(ExperimentalSerializationApi::class)
     fun listEntries(topic: Topic, query: TopicEntryQuery): List<TopicEntry> {
-        val firstId = ChunkId(SnowflakeId(query.afterId.value.value + 1))
+        val firstId = ChunkId(query.afterId.value.value.toInt() + 1)
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
                 val payload = ProtoBuf.decodeFromByteArray(TopicEntryPayload.serializer(), chunk.bytes)
                 TopicEntry(
-                    id = TopicEntryId(chunk.id.value),
+                    id = TopicEntryId(chunk.id.value.toInt()),
                     payload = payload
                 )
             }

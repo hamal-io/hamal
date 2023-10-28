@@ -7,7 +7,6 @@ import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
@@ -98,7 +97,7 @@ abstract class BaseTest {
     }
 
 
-    protected fun withApiSdk(serverPort: Number) = ApiSdkImpl(HttpTemplateImpl("http://localhost:$serverPort"))
+    protected fun withApiSdk(serverPort: Number) = ApiSdkImpl("http://localhost:$serverPort")
 
     protected fun clearRepository() {
         eventBrokerRepository.clear()

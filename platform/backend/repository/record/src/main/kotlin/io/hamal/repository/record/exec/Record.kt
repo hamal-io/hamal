@@ -2,7 +2,7 @@ package io.hamal.repository.record.exec
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence

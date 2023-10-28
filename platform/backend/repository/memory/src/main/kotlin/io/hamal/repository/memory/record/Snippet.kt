@@ -56,15 +56,15 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
 
     override fun create(cmd: CreateCmd): Snippet {
         return lock.withLock {
-            val snippedId = cmd.snippetId
+            val snippetId = cmd.snippetId
             val cmdId = cmd.id
-            if (commandAlreadyApplied(cmdId, snippedId)) {
-                versionOf(snippedId, cmd.id)
+            if (commandAlreadyApplied(cmdId, snippetId)) {
+                versionOf(snippetId, cmd.id)
             } else {
                 store(
                     SnippetCreationRecord(
                         cmdId = cmd.id,
-                        entityId = snippedId,
+                        entityId = snippetId,
                         groupId = cmd.groupId,
                         name = cmd.name,
                         inputs = cmd.inputs,
@@ -72,7 +72,7 @@ class MemorySnippetRepository : MemoryRecordRepository<SnippetId, SnippetRecord,
                         creatorId = cmd.creatorId
                     )
                 )
-                (currentVersion(snippedId)).also(CurrentSnippetProjection::apply)
+                (currentVersion(snippetId)).also(CurrentSnippetProjection::apply)
             }
         }
     }

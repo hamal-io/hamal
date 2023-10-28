@@ -3,10 +3,10 @@ package io.hamal.api.http.snippet
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.SnippetInputs
 import io.hamal.lib.domain.vo.SnippetName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiCreateSnippetReq
@@ -34,7 +34,7 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
 
 
         assertThat(getSnippetResponse.statusCode, equalTo(Ok))
-        require(getSnippetResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getSnippetResponse is HttpSuccessResponse) { "request was not successful" }
 
         with(getSnippetResponse.result(ApiSnippet::class)) {
             assertThat(id, equalTo(snippetId))
@@ -48,7 +48,7 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
     fun `Tries to get snippet that does not exist`() {
         val getSnippetResponse = httpTemplate.get("/v1/snippets/33333333").execute()
         assertThat(getSnippetResponse.statusCode, equalTo(NotFound))
-        require(getSnippetResponse is ErrorHttpResponse) { "request was successful" }
+        require(getSnippetResponse is HttpErrorResponse) { "request was successful" }
 
         val error = getSnippetResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Snippet not found"))

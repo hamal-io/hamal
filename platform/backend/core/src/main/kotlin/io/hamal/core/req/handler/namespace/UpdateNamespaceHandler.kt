@@ -7,21 +7,21 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.event.NamespaceCreatedEvent
-import io.hamal.repository.api.submitted_req.NamespaceUpdateSubmittedReq
+import io.hamal.repository.api.submitted_req.NamespaceUpdateSubmitted
 import org.springframework.stereotype.Component
 
 @Component
 class UpdateNamespaceHandler(
     val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<NamespaceUpdateSubmittedReq>(NamespaceUpdateSubmittedReq::class) {
+) : ReqHandler<NamespaceUpdateSubmitted>(NamespaceUpdateSubmitted::class) {
 
-    override fun invoke(req: NamespaceUpdateSubmittedReq) {
+    override fun invoke(req: NamespaceUpdateSubmitted) {
         updateNamespace(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun UpdateNamespaceHandler.updateNamespace(req: NamespaceUpdateSubmittedReq): Namespace {
+private fun UpdateNamespaceHandler.updateNamespace(req: NamespaceUpdateSubmitted): Namespace {
     return namespaceCmdRepository.update(
         req.id,
         NamespaceCmdRepository.UpdateCmd(

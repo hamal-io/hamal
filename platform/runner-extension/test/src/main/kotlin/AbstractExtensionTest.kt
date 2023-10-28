@@ -1,4 +1,4 @@
-import io.hamal.lib.domain.EventToSubmit
+import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader

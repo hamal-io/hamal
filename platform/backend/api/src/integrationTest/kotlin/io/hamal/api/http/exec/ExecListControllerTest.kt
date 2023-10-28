@@ -1,7 +1,7 @@
 package io.hamal.api.http.exec
 
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.sdk.api.ApiExecList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -14,7 +14,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
-        require(response is SuccessHttpResponse)
+        require(response is HttpSuccessResponse)
 
         val result = response.result(ApiExecList::class)
         assertThat(result.execs, empty())
@@ -29,7 +29,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
-        require(response is SuccessHttpResponse)
+        require(response is HttpSuccessResponse)
 
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
@@ -51,7 +51,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
-        require(response is SuccessHttpResponse)
+        require(response is HttpSuccessResponse)
 
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(42))
@@ -72,7 +72,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
-        require(response is SuccessHttpResponse)
+        require(response is HttpSuccessResponse)
 
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))

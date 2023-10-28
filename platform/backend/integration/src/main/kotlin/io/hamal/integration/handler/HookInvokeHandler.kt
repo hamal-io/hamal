@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.api.submitted_req.SubmittedInvokeHookReq
+import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,12 +21,12 @@ class HookInvokeHandler(
     private val funcQueryRepository: FuncQueryRepository,
     private val submitRequest: SubmitRequest,
     private val generateDomainId: GenerateDomainId
-) : ReqHandler<SubmittedInvokeHookReq>(SubmittedInvokeHookReq::class) {
+) : ReqHandler<HookInvokeSubmitted>(HookInvokeSubmitted::class) {
 
     /**
      * At least once delivery is good enough for now
      */
-    override fun invoke(req: SubmittedInvokeHookReq) {
+    override fun invoke(req: HookInvokeSubmitted) {
         val hook = hookQueryRepository.find(req.id) ?: return
 
         val triggers = triggerQueryRepository.list(

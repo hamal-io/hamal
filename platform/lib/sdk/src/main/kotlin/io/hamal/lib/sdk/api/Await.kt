@@ -16,7 +16,7 @@ internal class ApiAwaitServiceImpl(
         while (true) {
             template.get("/v1/reqs/{reqId}")
                 .path("reqId", req.reqId)
-                .execute(ApiSubmittedReq::class)
+                .execute(ApiSubmittedSimpleReq::class)
                 .let {
                     when (it.status) {
                         ReqStatus.Completed -> {

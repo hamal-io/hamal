@@ -1,8 +1,11 @@
 package io.hamal.lib.sqlite
 
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainName
+import io.hamal.lib.common.snowflake.Elapsed
+import io.hamal.lib.common.snowflake.Sequence
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import org.hamcrest.CoreMatchers.*
@@ -261,10 +264,7 @@ class NamedPreparedStatementTest {
 
         @Test
         fun `Sets named parameter of type domain id`() {
-            class TestDomainId(override val value: SnowflakeId) :
-                DomainId() {
-                constructor(value: Int) : this(SnowflakeId(value.toLong()))
-            }
+
 
             connection.prepare("INSERT INTO domain_id_table(value, another_value) VALUES(:some_value, :another_value)")
                 .use {
@@ -340,6 +340,22 @@ class NamedPreparedStatementTest {
                     assertThat(it.getInt(1), equalTo(0))
                 }
             }
+        }
+    }
+
+    private class TestDomainId(override val value: SnowflakeId) : DomainId() {
+        constructor(value: Int) : this(SnowflakeId(value.toLong()))
+
+        override fun partition(): Partition {
+            TODO("Not yet implemented")
+        }
+
+        override fun sequence(): Sequence {
+            TODO("Not yet implemented")
+        }
+
+        override fun elapsed(): Elapsed {
+            TODO("Not yet implemented")
         }
     }
 }

@@ -5,7 +5,7 @@ import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpStatusCode.*
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.sdk.api.ApiCode
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -17,7 +17,7 @@ internal sealed class CodeBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getCodeResponse.statusCode, equalTo(Ok))
-        require(getCodeResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getCodeResponse is HttpSuccessResponse) { "request was not successful" }
         return getCodeResponse.result(ApiCode::class)
     }
 
@@ -28,7 +28,7 @@ internal sealed class CodeBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getCodeResponse.statusCode, equalTo(Ok))
-        require(getCodeResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getCodeResponse is HttpSuccessResponse) { "request was not successful" }
         return getCodeResponse.result(ApiCode::class)
     }
 }

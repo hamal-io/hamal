@@ -3,13 +3,13 @@ package io.hamal.api.http.extension
 import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-@Suppress("UNCHECKED_CAST")
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
     fun createExtension(req: ApiExtensionCreateReq): ApiSubmittedReqImpl<ExtensionId> {
         val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
@@ -18,8 +18,8 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createResponse is SuccessHttpResponse) { "request was successful" }
-        return createResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExtensionId>
+        require(createResponse is HttpSuccessResponse) { "request was successful" }
+        return createResponse.toReq()
     }
 
     fun getExtension(extId: ExtensionId): ApiExtension {
@@ -28,7 +28,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(getResponse is SuccessHttpResponse) { "request was successful" }
+        require(getResponse is HttpSuccessResponse) { "request was successful" }
         return getResponse.result(ApiExtension::class)
     }
 
@@ -38,7 +38,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(listResponse is SuccessHttpResponse) { "request was successful" }
+        require(listResponse is HttpSuccessResponse) { "request was successful" }
         return listResponse.result(ApiExtensionList::class)
 
     }
@@ -50,8 +50,8 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(updateResponse is SuccessHttpResponse) { "request was successful" }
-        return updateResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExtensionId>
+        require(updateResponse is HttpSuccessResponse) { "request was successful" }
+        return updateResponse.toReq()
     }
 
 }

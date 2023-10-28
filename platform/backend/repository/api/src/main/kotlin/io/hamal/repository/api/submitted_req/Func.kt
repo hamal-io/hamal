@@ -1,13 +1,12 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class FuncCreateSubmittedReq(
+data class FuncCreateSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
@@ -17,11 +16,11 @@ data class FuncCreateSubmittedReq(
     val inputs: FuncInputs,
     val codeId: CodeId,
     val code: CodeValue
-) : SubmittedReq
+) : Submitted
 
 
 @Serializable
-data class FuncUpdateSubmittedReq(
+data class FuncUpdateSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
@@ -29,4 +28,4 @@ data class FuncUpdateSubmittedReq(
     val name: FuncName?,
     val inputs: FuncInputs?,
     val code: CodeValue?
-) : SubmittedReq
+) : Submitted

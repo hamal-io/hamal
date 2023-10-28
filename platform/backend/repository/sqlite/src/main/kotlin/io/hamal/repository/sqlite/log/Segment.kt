@@ -3,8 +3,8 @@ package io.hamal.repository.sqlite.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.log.Chunk
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
@@ -43,12 +43,12 @@ class SqliteSegmentRepository(
             """SELECT id, bytes, instant FROM chunks WHERE id >= :firstId LIMIT :limit """.trimIndent()
         ) {
             query {
-                set("firstId", firstId)
+                set("firstId", firstId.value)
                 set("limit", limit)
             }
             map {
                 Chunk(
-                    id = it.getDomainId("id", ::ChunkId),
+                    id = ChunkId(it.getInt("id")),
                     segmentId = segment.id,
                     topicId = segment.topicId,
                     bytes = it.getBytes("bytes"),

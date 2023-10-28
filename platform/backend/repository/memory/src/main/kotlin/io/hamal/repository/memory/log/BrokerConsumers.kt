@@ -1,6 +1,5 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.log.BrokerConsumersRepository
 import io.hamal.repository.api.log.ChunkId
@@ -21,7 +20,7 @@ class MemoryBrokerConsumersRepository : BrokerConsumersRepository {
     override fun commit(consumerId: ConsumerId, topicId: TopicId, chunkId: ChunkId) {
         return lock.withLock {
             store.putIfAbsent(Pair(consumerId, topicId), ChunkId(0))
-            store[Pair(consumerId, topicId)] = ChunkId(SnowflakeId(chunkId.value.value + 1))
+            store[Pair(consumerId, topicId)] = ChunkId(chunkId.value.toInt() + 1)
             store[Pair(consumerId, topicId)]
         }
     }

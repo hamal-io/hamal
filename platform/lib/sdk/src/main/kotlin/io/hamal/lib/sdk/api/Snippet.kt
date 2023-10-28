@@ -57,8 +57,8 @@ internal class ApiSnippetServiceImpl(
 
 
     override fun update(snippetId: SnippetId, updateSnippetReq: ApiUpdateSnippetReq): ApiSubmittedReqImpl<SnippetId> =
-        template.patch("/v1/snippets/{snippedId}/update")
-            .path("snippedId", snippetId)
+        template.patch("/v1/snippets/{snippetId}")
+            .path("snippetId", snippetId)
             .body(updateSnippetReq)
             .execute()
             .foldReq()

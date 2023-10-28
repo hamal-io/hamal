@@ -2,7 +2,7 @@ package io.hamal.core.req.handler.topic
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.submitted_req.TopicAppendToSubmittedReq
+import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,7 +27,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
-            TopicAppendToSubmittedReq(
+            TopicAppendToSubmitted(
                 reqId = ReqId(SnowflakeId(123)),
                 status = Submitted,
                 id = TopicId(4444),
@@ -54,7 +54,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
     fun `Tries to append entry to topic which does not exists`() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
-                TopicAppendToSubmittedReq(
+                TopicAppendToSubmitted(
                     reqId = ReqId(SnowflakeId(123)),
                     status = Submitted,
                     id = TopicId(123),

@@ -75,7 +75,7 @@ class ParameterTest(@LocalServerPort var localServerPort: Int) {
                     }
 
                     val response = request.execute()
-                    require(response is SuccessHttpResponse)
+                    require(response is HttpSuccessResponse)
                     assertThat(response.statusCode, equalTo(Ok))
                     assertThat(response.result(NoParameterResponse::class), equalTo(NoParameterResponse("NoContent")))
                 }
@@ -103,7 +103,7 @@ class ParameterTest(@LocalServerPort var localServerPort: Int) {
                         .parameter("boo", true)
                         .execute()
 
-                    require(response is SuccessHttpResponse)
+                    require(response is HttpSuccessResponse)
                     assertThat(response.statusCode, equalTo(Ok))
                     assertThat(
                         response.result(MultiParameterResponse::class), equalTo(

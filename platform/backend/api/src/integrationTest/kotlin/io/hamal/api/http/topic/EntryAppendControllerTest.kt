@@ -2,13 +2,13 @@ package io.hamal.api.http.topic
 
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -70,11 +70,11 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
             .execute()
 
         assertThat(topicResponse.statusCode, equalTo(NotFound))
-        require(topicResponse is ErrorHttpResponse) { "request was successful" }
+        require(topicResponse is HttpErrorResponse) { "request was successful" }
 
         val error = topicResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Topic not found"))
 
-        verifyNoRequests(SubmittedCreateTriggerReq::class)
+        verifyNoRequests(TriggerCreateSubmitted::class)
     }
 }

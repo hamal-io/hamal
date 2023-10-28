@@ -5,16 +5,16 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncList
 import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-@Suppress("UNCHECKED_CAST")
 internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
@@ -27,8 +27,8 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
+        require(response is HttpSuccessResponse) { "request was not successful" }
+        return response.toReq()
     }
 
     fun listFuncs(): ApiFuncList {
@@ -37,7 +37,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listFuncsResponse.statusCode, equalTo(Ok))
-        require(listFuncsResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listFuncsResponse is HttpSuccessResponse) { "request was not successful" }
         return listFuncsResponse.result(ApiFuncList::class)
     }
 
@@ -47,7 +47,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getFuncResponse.statusCode, equalTo(Ok))
-        require(getFuncResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getFuncResponse is HttpSuccessResponse) { "request was not successful" }
         return getFuncResponse.result(ApiFunc::class)
     }
 }

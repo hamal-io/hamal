@@ -40,19 +40,19 @@ internal sealed class HttpBaseRequestFacade(
 
         val statusCode = HttpStatusCode.of(httpResponse.statusLine.statusCode)
         response = when (statusCode) {
-            Ok, Created, Accepted -> SuccessHttpResponse(
+            Ok, Created, Accepted -> HttpSuccessResponse(
                 statusCode = statusCode,
                 headers = httpHeaders,
                 inputStream = httpResponse.entity.content?.let(HttpUtils::copyStream) ?: InputStream.nullInputStream(),
                 contentDeserializer = serdeFactory.contentDeserializer
             )
 
-            NoContent -> NoContentHttpResponse(
+            NoContent -> HttpNoContentResponse(
                 statusCode = statusCode,
                 headers = httpHeaders
             )
 
-            else -> ErrorHttpResponse(
+            else -> HttpErrorResponse(
                 statusCode = statusCode,
                 headers = httpHeaders,
                 inputStream = httpResponse.entity.content?.let(HttpUtils::copyStream) ?: InputStream.nullInputStream(),

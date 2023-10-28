@@ -18,10 +18,9 @@ internal class ExtensionGetController(
     private val getExtension: ExtensionGetPort
 ) {
     @GetMapping("/v1/extensions/{extId}")
-    fun getExtension(@PathVariable("extId") extId: ExtensionId) = retry {
+    fun getExtension(@PathVariable("extId") extId: ExtensionId): ResponseEntity<ApiExtension> = retry {
         getExtension(extId, ::assemble)
     }
-
 
     private fun assemble(ext: Extension, code: Code) =
         ResponseEntity.ok(

@@ -4,14 +4,14 @@ import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("UNCHECKED_CAST")
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiSubmittedReqImpl<FuncId> {
@@ -26,9 +26,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<FuncId>
+        return createTopicResponse.toReq()
     }
 
     fun createTopic(topicName: TopicName): ApiSubmittedReqImpl<TopicId> {
@@ -38,9 +38,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createTopicResponse is SuccessHttpResponse) { "request was not successful" }
+        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TopicId>
+        return createTopicResponse.toReq()
     }
 
     fun createHook(hookName: HookName): ApiSubmittedReqImpl<HookId> {
@@ -50,9 +50,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createHookResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createHookResponse is SuccessHttpResponse) { "request was not successful" }
+        require(createHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createHookResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<HookId>
+        return createHookResponse.toReq()
     }
 
     fun createFixedRateTrigger(name: TriggerName): ApiSubmittedReqImpl<TriggerId> {
@@ -71,9 +71,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+        require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+        return creationResponse.toReq()
     }
 
     fun createTrigger(req: ApiTriggerCreateReq): ApiSubmittedReqImpl<TriggerId> {
@@ -82,9 +82,9 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(creationResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(creationResponse is SuccessHttpResponse) { "request was not successful" }
+        require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<TriggerId>
+        return creationResponse.toReq()
     }
 
     fun listTriggers(): ApiTriggerList {
@@ -92,7 +92,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listTriggersResponse is HttpSuccessResponse) { "request was not successful" }
         return listTriggersResponse.result(ApiTriggerList::class)
     }
 
@@ -102,7 +102,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listTriggersResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(listTriggersResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listTriggersResponse is HttpSuccessResponse) { "request was not successful" }
         return listTriggersResponse.result(ApiTrigger::class)
     }
 }

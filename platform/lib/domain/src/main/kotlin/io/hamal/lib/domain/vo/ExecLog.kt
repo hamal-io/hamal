@@ -1,8 +1,6 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.DomainAt
 import io.hamal.lib.domain.vo.base.DomainAtSerializer
@@ -16,7 +14,7 @@ import java.time.Instant
 
 
 @Serializable(with = ExecLogId.Serializer::class)
-class ExecLogId(override val value: SnowflakeId) : DomainId() {
+class ExecLogId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 

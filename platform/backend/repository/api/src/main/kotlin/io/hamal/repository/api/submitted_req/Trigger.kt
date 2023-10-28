@@ -1,6 +1,5 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -9,7 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-data class SubmittedCreateTriggerReq(
+data class TriggerCreateSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
@@ -24,6 +23,6 @@ data class SubmittedCreateTriggerReq(
     val topicId: TopicId? = null,
     val hookId: HookId? = null,
     val hookMethods: Set<HookMethod>? = null
-) : SubmittedReq
+) : Submitted
 
 

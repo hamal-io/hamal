@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.submitted_req.SubmittedCreateTriggerReq
+import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,9 +22,9 @@ class CreateTriggerHandler(
     private val eventBrokerRepository: BrokerRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val hookQueryRepository: HookQueryRepository
-) : ReqHandler<SubmittedCreateTriggerReq>(SubmittedCreateTriggerReq::class) {
+) : ReqHandler<TriggerCreateSubmitted>(TriggerCreateSubmitted::class) {
 
-    override fun invoke(req: SubmittedCreateTriggerReq) {
+    override fun invoke(req: TriggerCreateSubmitted) {
         val func = funcQueryRepository.get(req.funcId)
 
         val trigger = when (req.type) {

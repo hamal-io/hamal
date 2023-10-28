@@ -1,14 +1,12 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.common.domain.DomainIdSerializer
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
 import kotlinx.serialization.Serializable
 
 @Serializable(with = ExtensionId.Serializer::class)
-class ExtensionId(override val value: SnowflakeId) : DomainId() {
+class ExtensionId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 

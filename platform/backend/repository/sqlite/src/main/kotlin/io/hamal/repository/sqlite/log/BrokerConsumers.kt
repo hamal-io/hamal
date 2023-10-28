@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.log.BrokerConsumersRepository
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.ConsumerId
@@ -53,7 +53,7 @@ class SqliteBrokerConsumersRepository(
                 set("topicId", topicId.value)
             }
             map {
-                ChunkId(it.getSnowflakeId("next_chunk_id"))
+                ChunkId(it.getInt("next_chunk_id"))
             }
         } ?: ChunkId(0)
     }
@@ -72,7 +72,7 @@ class SqliteBrokerConsumersRepository(
         ) {
             set("groupId", consumerId.value)
             set("topicId", topicId.value)
-            set("nextChunkId", chunkId.value.value + 1)
+            set("nextChunkId", chunkId.value.toInt() + 1)
         }
     }
 

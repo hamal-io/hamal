@@ -1,12 +1,11 @@
 package io.hamal.api.http.endpoint.hook
 
-import io.hamal.api.http.endpoint.req.Assembler
 import io.hamal.core.adapter.HookCreatePort
 import io.hamal.core.component.Retry
+import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiHookCreateReq
-import io.hamal.lib.sdk.api.ApiSubmittedReq
-import org.springframework.http.HttpStatus.ACCEPTED
+import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,9 +21,19 @@ internal class HookCreateController(
     fun createHook(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiHookCreateReq
-    ): ResponseEntity<ApiSubmittedReq> = retry {
+    ): ResponseEntity<ApiSubmittedReqImpl<HookId>> = retry {
         createHook(namespaceId, req) {
-            ResponseEntity(Assembler.assemble(it), ACCEPTED)
+            ResponseEntity
+                .accepted()
+                .body(
+                    ApiSubmittedReqImpl(
+                        reqId = it.reqId,
+                        status = it.status,
+                        namespaceId = it.namespaceId,
+                        groupId = it.groupId,
+                        id = it.id
+                    )
+                )
         }
     }
 }

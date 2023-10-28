@@ -5,9 +5,7 @@ import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
 import io.hamal.core.req.req.CreateRootAccountReq
 import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
@@ -31,7 +29,6 @@ data class InvokeExecReq(
 class SubmitRequest(
     private val encodePassword: EncodePassword,
     private val eventBrokerRepository: BrokerRepository,
-    private val execQueryRepository: ExecQueryRepository,
     private val extensionQueryRepository: ExtensionQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
@@ -43,9 +40,9 @@ class SubmitRequest(
     private val snippetQueryRepository: SnippetQueryRepository
 ) {
 
-    operator fun invoke(req: CreateRootAccountReq): AccountCreateWithPasswordSubmittedReq {
+    operator fun invoke(req: CreateRootAccountReq): AccountCreateWithPasswordSubmitted {
         val salt = generateSalt()
-        return AccountCreateWithPasswordSubmittedReq(
+        return AccountCreateWithPasswordSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = AccountId.root,
@@ -63,9 +60,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: InvokeExecReq): ExecInvokeSubmittedReq {
+    operator fun invoke(req: InvokeExecReq): ExecInvokeSubmitted {
         val func = funcQueryRepository.get(req.funcId)
-        return ExecInvokeSubmittedReq(
+        return ExecInvokeSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::ExecId),
@@ -79,9 +76,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(account: Account, password: Password): AuthSignInWithPasswordSubmittedReq {
+    operator fun invoke(account: Account, password: Password): AuthSignInWithPasswordSubmitted {
         val encodedPassword = encodePassword(password, account.salt)
-        return AuthSignInWithPasswordSubmittedReq(
+        return AuthSignInWithPasswordSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             authId = generateDomainId(::AuthId),
@@ -91,9 +88,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: CreateAccountReq): AccountCreateWithPasswordSubmittedReq {
+    operator fun invoke(req: CreateAccountReq): AccountCreateWithPasswordSubmitted {
         val salt = generateSalt()
-        return AccountCreateWithPasswordSubmittedReq(
+        return AccountCreateWithPasswordSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::AccountId),
@@ -111,9 +108,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(namespaceId: NamespaceId, req: InvokeAdhocReq): ExecInvokeSubmittedReq {
+    operator fun invoke(namespaceId: NamespaceId, req: InvokeAdhocReq): ExecInvokeSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)
-        return ExecInvokeSubmittedReq(
+        return ExecInvokeSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::ExecId),
@@ -128,9 +125,9 @@ class SubmitRequest(
     }
 
 
-    operator fun invoke(funcId: FuncId, req: InvokeFuncReq): ExecInvokeSubmittedReq {
+    operator fun invoke(funcId: FuncId, req: InvokeFuncReq): ExecInvokeSubmitted {
         val func = funcQueryRepository.get(funcId)
-        return ExecInvokeSubmittedReq(
+        return ExecInvokeSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::ExecId),
@@ -144,7 +141,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(execId: ExecId, req: CompleteExecReq) = ExecCompleteSubmittedExecReq(
+    operator fun invoke(execId: ExecId, req: CompleteExecReq) = ExecCompleteSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         id = execId,
@@ -153,16 +150,16 @@ class SubmitRequest(
         events = req.events
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(execId: ExecId, req: FailExecReq) = ExecFailSubmittedExecReq(
+    operator fun invoke(execId: ExecId, req: FailExecReq) = ExecFailSubmittedExec(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         id = execId,
         result = req.result
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, req: CreateFuncReq): FuncCreateSubmittedReq {
+    operator fun invoke(namespaceId: NamespaceId, req: CreateFuncReq): FuncCreateSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)
-        return FuncCreateSubmittedReq(
+        return FuncCreateSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             groupId = namespace.groupId,
@@ -175,7 +172,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(funcId: FuncId, req: UpdateFuncReq) = FuncUpdateSubmittedReq(
+    operator fun invoke(funcId: FuncId, req: UpdateFuncReq) = FuncUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = funcQueryRepository.get(funcId).groupId,
@@ -185,7 +182,7 @@ class SubmitRequest(
         code = req.code,
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionSubmittedReq(
+    operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionCreateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = groupId,
@@ -196,7 +193,7 @@ class SubmitRequest(
 
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(extId: ExtensionId, req: UpdateExtensionReq) = ExtensionSubmittedUpdateReq(
+    operator fun invoke(extId: ExtensionId, req: UpdateExtensionReq) = ExtensionUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = extensionQueryRepository.get(extId).groupId,
@@ -205,7 +202,7 @@ class SubmitRequest(
         code = req.code
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SnippetCreateSubmittedReq(
+    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SnippetCreateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = groupId,
@@ -216,7 +213,7 @@ class SubmitRequest(
         creatorId = accountId
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SnippetUpdateSubmittedReq(
+    operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SnippetUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = snippetQueryRepository.get(snippetId).groupId,
@@ -226,9 +223,9 @@ class SubmitRequest(
         value = req.value,
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, req: CreateHookReq): SubmittedCreateHookReq {
+    operator fun invoke(namespaceId: NamespaceId, req: CreateHookReq): HookCreateSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)
-        return SubmittedCreateHookReq(
+        return HookCreateSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::HookId),
@@ -238,7 +235,7 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(hookId: HookId, req: UpdateHookReq) = SubmittedUpdateHookReq(
+    operator fun invoke(hookId: HookId, req: UpdateHookReq) = HookUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = hookQueryRepository.get(hookId).groupId,
@@ -246,7 +243,7 @@ class SubmitRequest(
         name = req.name,
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) = NamespaceCreateSubmittedReq(
+    operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) = NamespaceCreateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         id = generateDomainId(::NamespaceId),
@@ -255,7 +252,7 @@ class SubmitRequest(
         inputs = req.inputs
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, req: UpdateNamespaceReq) = NamespaceUpdateSubmittedReq(
+    operator fun invoke(namespaceId: NamespaceId, req: UpdateNamespaceReq) = NamespaceUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = namespaceQueryRepository.get(namespaceId).groupId,
@@ -264,10 +261,10 @@ class SubmitRequest(
         inputs = req.inputs
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, req: CreateTriggerReq): SubmittedCreateTriggerReq {
+    operator fun invoke(namespaceId: NamespaceId, req: CreateTriggerReq): TriggerCreateSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)
         val func = funcQueryRepository.get(req.funcId)
-        return SubmittedCreateTriggerReq(
+        return TriggerCreateSubmitted(
             type = req.type,
             reqId = generateDomainId(::ReqId),
             status = Submitted,
@@ -284,9 +281,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(namespaceId: NamespaceId, req: CreateTopicReq): TopicCreateSubmittedReq {
+    operator fun invoke(namespaceId: NamespaceId, req: CreateTopicReq): TopicCreateSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)
-        return TopicCreateSubmittedReq(
+        return TopicCreateSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             groupId = namespace.groupId,
@@ -296,9 +293,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: AppendEntryReq): TopicAppendToSubmittedReq {
+    operator fun invoke(req: AppendEntryReq): TopicAppendToSubmitted {
         val topic = eventBrokerRepository.getTopic(req.topicId)
-        return TopicAppendToSubmittedReq(
+        return TopicAppendToSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             groupId = topic.groupId,
@@ -307,9 +304,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: SetStateReq): StateSetSubmittedReq {
+    operator fun invoke(req: SetStateReq): StateSetSubmitted {
         val func = funcQueryRepository.get(req.correlation.funcId)
-        return StateSetSubmittedReq(
+        return StateSetSubmitted(
             reqId = generateDomainId(::ReqId), status = Submitted, groupId = func.groupId, state = CorrelatedState(
                 correlation = req.correlation, value = req.value
             )

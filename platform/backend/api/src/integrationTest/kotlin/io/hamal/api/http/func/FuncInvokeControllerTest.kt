@@ -2,20 +2,19 @@ package io.hamal.api.http.func
 
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncInvokeReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-@Suppress("UNCHECKED_CAST")
 internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
     @Test
@@ -40,9 +39,9 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
-        require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
+        require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
+        val result = invocationResponse.toReq<ExecId>()
         awaitCompleted(result.reqId)
 
         with(execQueryRepository.get(result.id)) {
@@ -79,9 +78,9 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
-        require(invocationResponse is SuccessHttpResponse) { "request was not successful" }
+        require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = invocationResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
+        val result = invocationResponse.toReq<ExecId>()
         awaitCompleted(result.reqId)
 
         with(execQueryRepository.get(result.id)) {
@@ -107,7 +106,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(NotFound))
-        require(invocationResponse is ErrorHttpResponse) { "request was successful" }
+        require(invocationResponse is HttpErrorResponse) { "request was successful" }
 
         val error = invocationResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))

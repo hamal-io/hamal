@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Event
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable

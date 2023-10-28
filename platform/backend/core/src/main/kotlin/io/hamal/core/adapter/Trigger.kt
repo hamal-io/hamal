@@ -7,7 +7,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.Topic
-import io.hamal.repository.api.submitted_req.SubmittedReq
+import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import io.hamal.request.CreateTriggerReq
 import org.springframework.stereotype.Component
 
@@ -16,7 +16,7 @@ interface TriggerCreatePort {
     operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTriggerReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (TriggerCreateSubmitted) -> T
     ): T
 }
 
@@ -55,7 +55,7 @@ class TriggerAdapter(
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTriggerReq,
-        responseHandler: (SubmittedReq) -> T
+        responseHandler: (TriggerCreateSubmitted) -> T
     ): T {
         ensureFuncExists(req)
         ensureTopicExists(req)

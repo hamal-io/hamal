@@ -4,26 +4,26 @@ import io.hamal.api.http.BaseControllerTest
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiNamespace
 import io.hamal.lib.sdk.api.ApiNamespaceCreateReq
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
+import io.hamal.lib.sdk.toReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-@Suppress("UNCHECKED_CAST")
 internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
-    fun createNamespace(req: ApiNamespaceCreateReq): ApiSubmittedReqImpl<NamespaceId>{
+    fun createNamespace(req: ApiNamespaceCreateReq): ApiSubmittedReqImpl<NamespaceId> {
         val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
             .body(req)
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
-        return response.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<NamespaceId>
+        require(response is HttpSuccessResponse) { "request was not successful" }
+        return response.toReq()
     }
 
     fun listNamespaces(): ApiNamespaceList {
@@ -32,7 +32,7 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listNamespacesResponse.statusCode, equalTo(Ok))
-        require(listNamespacesResponse is SuccessHttpResponse) { "request was not successful" }
+        require(listNamespacesResponse is HttpSuccessResponse) { "request was not successful" }
         return listNamespacesResponse.result(ApiNamespaceList::class)
     }
 
@@ -42,7 +42,7 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getNamespaceResponse.statusCode, equalTo(Ok))
-        require(getNamespaceResponse is SuccessHttpResponse) { "request was not successful" }
+        require(getNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
         return getNamespaceResponse.result(ApiNamespace::class)
     }
 }

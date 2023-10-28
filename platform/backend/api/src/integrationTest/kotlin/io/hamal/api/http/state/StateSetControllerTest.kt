@@ -5,10 +5,10 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.False
 import io.hamal.lib.kua.type.MapType
@@ -16,7 +16,6 @@ import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.True
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -26,15 +25,13 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
     fun `Sets state for a function first time`() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
-        val response = httpTemplate.post("/v1/funcs/{funcId}/states/__CORRELATION__")
+        val response = httpTemplate.put("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
             .body(State(MapType(mutableMapOf("answer" to NumberType(42)))))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
-        require(response is SuccessHttpResponse) { "request was not successful" }
-
-        response.result(ApiSubmittedReqImpl::class)
+        require(response is HttpSuccessResponse) { "request was not successful" }
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
         assertThat(correlatedState["answer"], equalTo(NumberType(42)))
@@ -88,12 +85,12 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Tries to set state but func does not exists`() {
-        val response = httpTemplate.post("/v1/funcs/0/states/__CORRELATION__")
+        val response = httpTemplate.put("/v1/funcs/0/states/__CORRELATION__")
             .body(State(MapType(mutableMapOf("answer" to NumberType(42)))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
-        require(response is ErrorHttpResponse) { "request was successful" }
+        require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Func not found"))

@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiSubmittedReq
+import io.hamal.lib.sdk.api.ApiSubmittedSimpleReq
 
 class AwaitFunction(
     private val httpTemplate: HttpTemplateImpl
@@ -20,7 +20,7 @@ class AwaitFunction(
         while (true) {
             httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
-                .execute(ApiSubmittedReq::class)
+                .execute(ApiSubmittedSimpleReq::class)
                 .let {
                     when (it.status) {
                         ReqStatus.Completed,
@@ -48,7 +48,7 @@ class AwaitCompletedFunction(
         while (true) {
             httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
-                .execute(ApiSubmittedReq::class)
+                .execute(ApiSubmittedSimpleReq::class)
                 .let {
                     when (it.status) {
                         ReqStatus.Completed -> {
@@ -78,7 +78,7 @@ class AwaitFailedFunction(
         while (true) {
             httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
-                .execute(ApiSubmittedReq::class)
+                .execute(ApiSubmittedSimpleReq::class)
                 .let {
                     when (it.status) {
                         ReqStatus.Completed -> {

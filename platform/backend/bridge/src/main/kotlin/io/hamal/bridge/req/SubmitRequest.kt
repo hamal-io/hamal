@@ -1,15 +1,15 @@
 package io.hamal.bridge.req
 
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.ReqId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
 import io.hamal.lib.sdk.bridge.BridgeExecFailReq
 import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.ExecCompleteSubmittedExecReq
-import io.hamal.repository.api.submitted_req.ExecFailSubmittedExecReq
+import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
+import io.hamal.repository.api.submitted_req.ExecFailSubmittedExec
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,9 +19,9 @@ internal class SubmitBridgeRequest(
     private val execQueryRepository: ExecQueryRepository
 ) {
 
-    operator fun invoke(execId: ExecId, req: BridgeExecCompleteReq): ExecCompleteSubmittedExecReq {
+    operator fun invoke(execId: ExecId, req: BridgeExecCompleteReq): ExecCompleteSubmitted {
         val exec = execQueryRepository.get(execId)
-        return ExecCompleteSubmittedExecReq(
+        return ExecCompleteSubmitted(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = exec.id,
@@ -31,9 +31,9 @@ internal class SubmitBridgeRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(execId: ExecId, req: BridgeExecFailReq): ExecFailSubmittedExecReq {
+    operator fun invoke(execId: ExecId, req: BridgeExecFailReq): ExecFailSubmittedExec {
         val exec = execQueryRepository.get(execId)
-        return ExecFailSubmittedExecReq(
+        return ExecFailSubmittedExec(
             reqId = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             id = exec.id,

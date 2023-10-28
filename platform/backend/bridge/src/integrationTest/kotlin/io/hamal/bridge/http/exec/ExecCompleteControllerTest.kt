@@ -1,15 +1,15 @@
 package io.hamal.bridge.http.exec
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.EventPayload
-import io.hamal.lib.domain.EventToSubmit
+import io.hamal.lib.domain.vo.EventPayload
+import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.http.ErrorHttpResponse
+import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
-import io.hamal.lib.http.SuccessHttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 
 import io.hamal.lib.kua.type.MapType
@@ -48,7 +48,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
 
                 val completionResponse = requestCompletion(exec.id)
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
-                require(completionResponse is SuccessHttpResponse) { "request was not successful" }
+                require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
                 val result = completionResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
 
@@ -71,7 +71,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(Accepted))
-        require(completionResponse is SuccessHttpResponse) { "request was not successful" }
+        require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
         val result = completionResponse.result(ApiSubmittedReqImpl::class) as ApiSubmittedReqImpl<ExecId>
         awaitCompleted(result.reqId)
@@ -95,7 +95,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
-        require(response is ErrorHttpResponse) { "request was successful" }
+        require(response is HttpErrorResponse) { "request was successful" }
 
         val result = response.error(ApiError::class)
         assertThat(result.message, equalTo("Exec not found"))
