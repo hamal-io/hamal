@@ -4,14 +4,14 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.submitted_req.SubmittedCreateTopicReq
+import io.hamal.repository.api.submitted_req.TopicCreateSubmittedReq
 import org.springframework.stereotype.Component
 
 @Component
 class CreateTopicHandler(
     private val eventBrokerRepository: BrokerRepository
-) : ReqHandler<SubmittedCreateTopicReq>(SubmittedCreateTopicReq::class) {
-    override fun invoke(req: SubmittedCreateTopicReq) {
+) : ReqHandler<TopicCreateSubmittedReq>(TopicCreateSubmittedReq::class) {
+    override fun invoke(req: TopicCreateSubmittedReq) {
         eventBrokerRepository.create(
             req.cmdId(),
             TopicToCreate(

@@ -8,7 +8,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.SubmittedCreateFuncReq
+import io.hamal.repository.api.submitted_req.FuncCreateSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -43,7 +43,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateFuncHandler
 
     private val submitCreateFuncReq by lazy {
-        SubmittedCreateFuncReq(
+        FuncCreateSubmittedReq(
             reqId = ReqId(1),
             status = Submitted,
             groupId = testGroup.id,

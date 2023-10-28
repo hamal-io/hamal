@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubmittedCreateAccountWithPasswordReq(
+data class AccountCreateWithPasswordSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,

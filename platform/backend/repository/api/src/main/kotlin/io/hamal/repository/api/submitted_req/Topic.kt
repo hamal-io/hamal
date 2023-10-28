@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubmittedCreateTopicReq(
+data class TopicCreateSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     override val groupId: GroupId,
@@ -17,7 +17,7 @@ data class SubmittedCreateTopicReq(
 
 
 @Serializable
-data class SubmittedAppendToTopicReq(
+data class TopicAppendToSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     override val groupId: GroupId,

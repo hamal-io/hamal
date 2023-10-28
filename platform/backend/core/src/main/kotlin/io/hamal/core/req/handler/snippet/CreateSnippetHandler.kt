@@ -7,20 +7,20 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.Snippet
 import io.hamal.repository.api.SnippetCmdRepository
 import io.hamal.repository.api.event.SnippetCreatedEvent
-import io.hamal.repository.api.submitted_req.SubmittedCreateSnippetReq
+import io.hamal.repository.api.submitted_req.SnippetCreateSubmittedReq
 import org.springframework.stereotype.Component
 
 @Component
 class CreateSnippetHandler(
     val snippetCmdRepository: SnippetCmdRepository,
     val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<SubmittedCreateSnippetReq>(SubmittedCreateSnippetReq::class) {
-    override fun invoke(req: SubmittedCreateSnippetReq) {
+) : ReqHandler<SnippetCreateSubmittedReq>(SnippetCreateSubmittedReq::class) {
+    override fun invoke(req: SnippetCreateSubmittedReq) {
         createSnippet(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun CreateSnippetHandler.createSnippet(req: SubmittedCreateSnippetReq): Snippet {
+private fun CreateSnippetHandler.createSnippet(req: SnippetCreateSubmittedReq): Snippet {
     return snippetCmdRepository.create(
         SnippetCmdRepository.CreateCmd(
             id = req.cmdId(),

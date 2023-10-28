@@ -16,7 +16,7 @@ import io.hamal.repository.api.event.ExecutionCompletedEvent
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
 import io.hamal.repository.api.log.ProtobufAppender
-import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
+import io.hamal.repository.api.submitted_req.ExecCompleteSubmittedExecReq
 import org.springframework.stereotype.Component
 
 @Component
@@ -28,9 +28,9 @@ class CompleteExecHandler(
     private val eventBrokerRepository: BrokerRepository,
     private val generateDomainId: GenerateDomainId,
     private val namespaceQueryRepository: NamespaceQueryRepository
-) : ReqHandler<SubmittedCompleteExecReq>(SubmittedCompleteExecReq::class) {
+) : ReqHandler<ExecCompleteSubmittedExecReq>(ExecCompleteSubmittedExecReq::class) {
 
-    override fun invoke(req: SubmittedCompleteExecReq) {
+    override fun invoke(req: ExecCompleteSubmittedExecReq) {
         val cmdId = req.cmdId()
 
         val exec = execQueryRepository.get(req.id)
@@ -45,7 +45,7 @@ class CompleteExecHandler(
 
     }
 
-    private fun completeExec(req: SubmittedCompleteExecReq) =
+    private fun completeExec(req: ExecCompleteSubmittedExecReq) =
         execCmdRepository.complete(ExecCmdRepository.CompleteCmd(req.cmdId(), req.id, req.result))
 
     private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {

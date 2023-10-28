@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
-import io.hamal.repository.api.submitted_req.SubmittedCreateExtensionReq
+import io.hamal.repository.api.submitted_req.ExtensionSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ internal class CreateExtensionHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateExtensionReq by lazy {
-        SubmittedCreateExtensionReq(
+        ExtensionSubmittedReq(
             reqId = ReqId(1),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,

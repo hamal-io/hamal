@@ -8,21 +8,21 @@ import io.hamal.repository.api.Snippet
 import io.hamal.repository.api.SnippetCmdRepository.*
 import io.hamal.repository.api.SnippetRepository
 import io.hamal.repository.api.event.SnippetCreatedEvent
-import io.hamal.repository.api.submitted_req.SubmittedUpdateSnippetReq
+import io.hamal.repository.api.submitted_req.SnippetUpdateSubmittedReq
 import org.springframework.stereotype.Component
 
 @Component
 class UpdateSnippetHandler(
     val snippetRepository: SnippetRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<SubmittedUpdateSnippetReq>(SubmittedUpdateSnippetReq::class) {
+) : ReqHandler<SnippetUpdateSubmittedReq>(SnippetUpdateSubmittedReq::class) {
 
-    override fun invoke(req: SubmittedUpdateSnippetReq) {
+    override fun invoke(req: SnippetUpdateSubmittedReq) {
         updateSnippet(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun UpdateSnippetHandler.updateSnippet(req: SubmittedUpdateSnippetReq): Snippet {
+private fun UpdateSnippetHandler.updateSnippet(req: SnippetUpdateSubmittedReq): Snippet {
     return snippetRepository.update(
         req.id, UpdateCmd(
             id = req.cmdId(),

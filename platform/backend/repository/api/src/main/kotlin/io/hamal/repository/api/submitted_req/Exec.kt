@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubmittedInvokeExecReq(
+data class ExecInvokeSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     override val groupId: GroupId,
@@ -23,7 +23,7 @@ data class SubmittedInvokeExecReq(
 ) : SubmittedReqWithGroupId
 
 @Serializable
-data class SubmittedFailExecReq(
+data class ExecFailSubmittedExecReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,
@@ -31,7 +31,7 @@ data class SubmittedFailExecReq(
 ) : SubmittedReq
 
 @Serializable
-data class SubmittedCompleteExecReq(
+data class ExecCompleteSubmittedExecReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val id: ExecId,

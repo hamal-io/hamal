@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
-import io.hamal.repository.api.submitted_req.SubmittedCreateAccountWithPasswordReq
+import io.hamal.repository.api.submitted_req.AccountCreateWithPasswordSubmittedReq
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
@@ -22,9 +22,9 @@ class CreateAccountWithPasswordHandler(
     val groupCmdRepository: GroupCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<SubmittedCreateAccountWithPasswordReq>(SubmittedCreateAccountWithPasswordReq::class) {
+) : ReqHandler<AccountCreateWithPasswordSubmittedReq>(AccountCreateWithPasswordSubmittedReq::class) {
 
-    override fun invoke(req: SubmittedCreateAccountWithPasswordReq) {
+    override fun invoke(req: AccountCreateWithPasswordSubmittedReq) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
@@ -34,7 +34,7 @@ class CreateAccountWithPasswordHandler(
     }
 }
 
-private fun CreateAccountWithPasswordHandler.createAccount(req: SubmittedCreateAccountWithPasswordReq): Account {
+private fun CreateAccountWithPasswordHandler.createAccount(req: AccountCreateWithPasswordSubmittedReq): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -47,7 +47,7 @@ private fun CreateAccountWithPasswordHandler.createAccount(req: SubmittedCreateA
     )
 }
 
-private fun CreateAccountWithPasswordHandler.createGroup(req: SubmittedCreateAccountWithPasswordReq): Group {
+private fun CreateAccountWithPasswordHandler.createGroup(req: AccountCreateWithPasswordSubmittedReq): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -58,7 +58,7 @@ private fun CreateAccountWithPasswordHandler.createGroup(req: SubmittedCreateAcc
     )
 }
 
-private fun CreateAccountWithPasswordHandler.createNamespace(req: SubmittedCreateAccountWithPasswordReq): Namespace {
+private fun CreateAccountWithPasswordHandler.createNamespace(req: AccountCreateWithPasswordSubmittedReq): Namespace {
     return namespaceCmdRepository.create(
         NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -71,7 +71,7 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: SubmittedCreat
 }
 
 
-private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: SubmittedCreateAccountWithPasswordReq): Auth {
+private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: AccountCreateWithPasswordSubmittedReq): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreatePasswordAuthCmd(
             id = req.cmdId(),
@@ -82,7 +82,7 @@ private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: SubmittedCr
     )
 }
 
-private fun CreateAccountWithPasswordHandler.createTokenAuth(req: SubmittedCreateAccountWithPasswordReq): Auth {
+private fun CreateAccountWithPasswordHandler.createTokenAuth(req: AccountCreateWithPasswordSubmittedReq): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),

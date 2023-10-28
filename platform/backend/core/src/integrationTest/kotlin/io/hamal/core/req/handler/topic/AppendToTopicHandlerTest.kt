@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.submitted_req.SubmittedAppendToTopicReq
+import io.hamal.repository.api.submitted_req.TopicAppendToSubmittedReq
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,7 +27,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
-            SubmittedAppendToTopicReq(
+            TopicAppendToSubmittedReq(
                 reqId = ReqId(SnowflakeId(123)),
                 status = Submitted,
                 id = TopicId(4444),
@@ -54,7 +54,7 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
     fun `Tries to append entry to topic which does not exists`() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
-                SubmittedAppendToTopicReq(
+                TopicAppendToSubmittedReq(
                     reqId = ReqId(SnowflakeId(123)),
                     status = Submitted,
                     id = TopicId(123),

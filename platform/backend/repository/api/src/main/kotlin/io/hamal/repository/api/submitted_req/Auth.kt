@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.PasswordHash
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubmittedSignInWithPasswordReq(
+data class AuthSignInWithPasswordSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val authId: AuthId,

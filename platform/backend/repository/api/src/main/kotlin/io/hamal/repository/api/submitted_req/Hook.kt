@@ -12,7 +12,7 @@ data class SubmittedCreateHookReq(
     override var status: ReqStatus,
     override val groupId: GroupId,
     val id: HookId,
-    val namespaceId: NamespaceId?,
+    val namespaceId: NamespaceId,
     val name: HookName,
 ) : SubmittedReqWithGroupId
 

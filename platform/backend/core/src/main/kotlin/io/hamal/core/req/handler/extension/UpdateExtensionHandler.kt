@@ -10,7 +10,7 @@ import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.api.ExtensionRepository
 import io.hamal.repository.api.event.ExtensionUpdatedEvent
-import io.hamal.repository.api.submitted_req.SubmittedUpdateExtensionReq
+import io.hamal.repository.api.submitted_req.ExtensionSubmittedUpdateReq
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,14 +18,14 @@ class UpdateExtensionHandler(
     val extensionRepository: ExtensionRepository,
     val codeCmdRepository: CodeCmdRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<SubmittedUpdateExtensionReq>(SubmittedUpdateExtensionReq::class) {
+) : ReqHandler<ExtensionSubmittedUpdateReq>(ExtensionSubmittedUpdateReq::class) {
 
-    override fun invoke(req: SubmittedUpdateExtensionReq) {
+    override fun invoke(req: ExtensionSubmittedUpdateReq) {
         updateExtension(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun UpdateExtensionHandler.updateExtension(req: SubmittedUpdateExtensionReq): Extension {
+private fun UpdateExtensionHandler.updateExtension(req: ExtensionSubmittedUpdateReq): Extension {
     val ext = extensionRepository.get(req.id)
     val code = codeCmdRepository.update(
         ext.code.id, CodeCmdRepository.UpdateCmd(

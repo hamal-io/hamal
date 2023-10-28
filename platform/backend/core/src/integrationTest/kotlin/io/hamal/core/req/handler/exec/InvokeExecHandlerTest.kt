@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.SubmittedInvokeExecReq
+import io.hamal.repository.api.submitted_req.ExecInvokeSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes execution with code`() {
         testInstance(
-            SubmittedInvokeExecReq(
+            ExecInvokeSubmittedReq(
                 reqId = ReqId(1),
                 status = Submitted,
                 id = ExecId(3333),
@@ -61,7 +61,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             )
         )
         testInstance(
-            SubmittedInvokeExecReq(
+            ExecInvokeSubmittedReq(
                 reqId = ReqId(1),
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
@@ -132,7 +132,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
 
     //    @formatter:off
     private val submittedFixedRateInvocationReq by lazy {
-        SubmittedInvokeExecReq(
+        ExecInvokeSubmittedReq(
             reqId = ReqId(1),
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,

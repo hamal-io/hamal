@@ -15,6 +15,16 @@ data class ApiReqList(
 )
 
 @Serializable
+data class BetterApiSubmittedReq<ID : DomainId>(
+    val reqId: ReqId,
+    val status: ReqStatus,
+    val id: ID,
+    val namespaceId: NamespaceId? = null,
+    val groupId: GroupId? = null,
+    val token: AuthToken? = null
+)
+
+@Serializable
 sealed interface ApiSubmittedReq {
     val reqId: ReqId
     val status: ReqStatus

@@ -16,7 +16,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.SubmittedCompleteExecReq
+import io.hamal.repository.api.submitted_req.ExecCompleteSubmittedExecReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -63,7 +63,7 @@ internal class CompleteExecHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CompleteExecHandler
 
     private val submittedCompleteExecReq by lazy {
-        SubmittedCompleteExecReq(
+        ExecCompleteSubmittedExecReq(
             reqId = ReqId(10),
             status = ReqStatus.Submitted,
             id = ExecId(1234),

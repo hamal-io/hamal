@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.GroupId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubmittedSetStateReq(
+data class StateSetSubmittedReq(
     override val reqId: ReqId,
     override var status: ReqStatus,
     override val groupId: GroupId,

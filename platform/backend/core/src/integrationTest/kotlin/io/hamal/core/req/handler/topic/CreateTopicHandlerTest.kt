@@ -6,7 +6,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.submitted_req.SubmittedCreateTopicReq
+import io.hamal.repository.api.submitted_req.TopicCreateSubmittedReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -28,7 +28,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
 
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
-                SubmittedCreateTopicReq(
+                TopicCreateSubmittedReq(
                     reqId = ReqId(2),
                     status = Submitted,
                     id = TopicId(2345),
@@ -49,7 +49,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
 
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
-                SubmittedCreateTopicReq(
+                TopicCreateSubmittedReq(
                     reqId = ReqId(2),
                     status = Submitted,
                     id = TopicId(3456),
@@ -78,7 +78,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: CreateTopicHandler
 
     private val submittedCreateTopicReq by lazy {
-        SubmittedCreateTopicReq(
+        TopicCreateSubmittedReq(
             reqId = ReqId(1),
             status = Submitted,
             id = TopicId(2345),

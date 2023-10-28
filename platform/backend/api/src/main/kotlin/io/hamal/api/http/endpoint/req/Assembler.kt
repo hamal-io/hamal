@@ -13,7 +13,7 @@ internal object Assembler {
     fun assemble(req: SubmittedReq): ApiSubmittedReq {
         return when (val r = req) {
 
-            is SubmittedCreateAccountWithPasswordReq -> ApiSubmittedReqWithId(
+            is AccountCreateWithPasswordSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId,
@@ -21,7 +21,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedAppendToTopicReq -> ApiSubmittedReqWithId(
+            is TopicAppendToSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -29,7 +29,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCompleteExecReq -> ApiSubmittedReqWithId(
+            is ExecCompleteSubmittedExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -37,7 +37,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCreateExtensionReq -> ApiSubmittedReqWithId(
+            is ExtensionSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -45,7 +45,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedUpdateExtensionReq -> ApiSubmittedReqWithId(
+            is ExtensionSubmittedUpdateReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -53,7 +53,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCreateFuncReq -> ApiSubmittedReqWithId(
+            is FuncCreateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId ?: NamespaceId(1337),
@@ -77,7 +77,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCreateNamespaceReq -> ApiSubmittedReqWithId(
+            is NamespaceCreateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -85,7 +85,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCreateTopicReq -> ApiSubmittedReqWithId(
+            is TopicCreateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId,
@@ -93,7 +93,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedCreateSnippetReq -> ApiSubmittedReqWithId(
+            is SnippetCreateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -101,7 +101,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedUpdateSnippetReq -> ApiSubmittedReqWithId(
+            is SnippetUpdateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -117,7 +117,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedFailExecReq -> ApiSubmittedReqWithId(
+            is ExecFailSubmittedExecReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -125,7 +125,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedInvokeExecReq -> ApiSubmittedReqWithId(
+            is ExecInvokeSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = r.namespaceId,
@@ -133,7 +133,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedUpdateFuncReq -> ApiSubmittedReqWithId(
+            is FuncUpdateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -141,7 +141,7 @@ internal object Assembler {
                 id = r.id
             )
 
-            is SubmittedUpdateNamespaceReq -> ApiSubmittedReqWithId(
+            is NamespaceUpdateSubmittedReq -> ApiSubmittedReqWithId(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
@@ -150,14 +150,14 @@ internal object Assembler {
             )
 
 
-            is SubmittedSetStateReq -> ApiDefaultSubmittedReq(
+            is StateSetSubmittedReq -> ApiDefaultSubmittedReq(
                 reqId = r.reqId,
                 status = r.status,
                 namespaceId = NamespaceId(1337),
                 groupId = r.groupId
             )
 
-            is SubmittedSignInWithPasswordReq -> ApiSubmittedWithTokenReq(
+            is AuthSignInWithPasswordSubmittedReq -> ApiSubmittedWithTokenReq(
                 reqId = r.reqId,
                 status = r.status,
                 token = r.token
