@@ -1,16 +1,13 @@
 package io.hamal.core.config
 
 import io.hamal.core.component.*
-import io.hamal.lib.domain.ReqId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.common.Partition
+import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.domain.DomainIdGeneratorImpl
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.api.ApiSubmittedReq
-import io.hamal.lib.sdk.api.ApiSubmittedReqImpl
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -60,22 +57,29 @@ open class WebConfig : WebMvcConfigurer {
 }
 
 fun main() {
+    val x = DomainIdGeneratorImpl(Partition(1))(::FuncId)
+    println(x)
+    println(x.elapsed())
+
     val j = Json {
         explicitNulls = false
         ignoreUnknownKeys = true
         encodeDefaults = true
+        serializersModule = SerializersModule {
+            polymorphic(DomainId::class, FuncId::class, FuncId.serializer())
+        }
     }
 
 
-    println(
-        j.encodeToString<ApiSubmittedReq>(
-            ApiSubmittedReqImpl<FuncId>(
-                reqId = ReqId(1),
-                status = ReqStatus.Failed,
-                id = FuncId(12),
-                namespaceId = NamespaceId(23),
-                groupId = GroupId(23)
-            )
-        )
-    )
+//    println(
+//        j.encodeToString<ApiSubmittedReq>(
+//            ApiSubmittedReqImpl<FuncId>(
+//                reqId = ReqId(1),
+//                status = ReqStatus.Failed,
+//                id = FuncId(12),
+//                namespaceId = NamespaceId(23),
+//                groupId = GroupId(23)
+//            )
+//        )
+//    )
 }

@@ -9,7 +9,7 @@ internal class ElapsedSourceTest {
     @Test
     fun `With default epoch`() {
         val testInstance = ElapsedSourceImpl()
-        assertThat(testInstance.epoch, equalTo(1697125891520L))
+        assertThat(testInstance.epoch, equalTo(1698451200000L))
     }
 
     @Test
