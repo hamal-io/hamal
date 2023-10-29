@@ -203,6 +203,18 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         code = req.code,
+        deployedVersion = funcQueryRepository.get(funcId).code.deployedVersion
+    ).also(reqCmdRepository::queue)
+
+    operator fun invoke(funcId: FuncId, req: DeployCodeReq) = FuncUpdateSubmitted(
+        reqId = generateDomainId(::ReqId),
+        status = Submitted,
+        groupId = funcQueryRepository.get(funcId).groupId,
+        id = funcId,
+        name = null,
+        inputs = null,
+        code = null,
+        deployedVersion = req.deployedVersion
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionCreateSubmitted(

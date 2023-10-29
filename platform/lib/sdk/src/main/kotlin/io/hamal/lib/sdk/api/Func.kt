@@ -10,6 +10,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateFuncReq
+import io.hamal.request.DeployCodeReq
 import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
 import kotlinx.serialization.Serializable
@@ -35,8 +36,13 @@ data class ApiFuncCreateSubmitted(
 data class ApiFuncUpdateReq(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
-    override val code: CodeValue? = null
+    override val code: CodeValue? = null,
 ) : UpdateFuncReq
+
+@Serializable
+data class ApiFuncCodeDeployReq(
+    override val deployedVersion: CodeVersion
+) : DeployCodeReq()
 
 @Serializable
 data class ApiFuncUpdateSubmitted(

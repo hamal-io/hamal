@@ -27,5 +27,6 @@ data class FuncUpdateSubmitted(
     val id: FuncId,
     val name: FuncName?,
     val inputs: FuncInputs?,
-    val code: CodeValue?
+    val code: CodeValue?,
+    val deployedVersion: CodeVersion?
 ) : Submitted

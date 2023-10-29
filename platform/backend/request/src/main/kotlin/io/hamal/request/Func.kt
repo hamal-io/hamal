@@ -16,6 +16,13 @@ interface UpdateFuncReq {
     val code: CodeValue?
 }
 
+abstract class DeployCodeReq : UpdateFuncReq {
+    override val name: FuncName? = null
+    override val inputs: FuncInputs? = null
+    override val code: CodeValue? = null
+    abstract val deployedVersion: CodeVersion
+}
+
 
 interface InvokeFuncReq {
     val correlationId: CorrelationId?

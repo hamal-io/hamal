@@ -82,6 +82,7 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
             name = FuncName("Func-update"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             code = CodeValue("some code"),
+            deployedVersion = null
         )
     }
 
