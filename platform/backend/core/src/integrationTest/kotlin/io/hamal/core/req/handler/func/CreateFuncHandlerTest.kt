@@ -26,6 +26,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(FuncId(12345)))
                 assertThat(name, equalTo(FuncName("awesome-func")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(code.deployedVersion, equalTo(codeQueryRepository.get(CodeId(34567)).version))
                 assertThat(
                     code, equalTo(
                         FuncCode(

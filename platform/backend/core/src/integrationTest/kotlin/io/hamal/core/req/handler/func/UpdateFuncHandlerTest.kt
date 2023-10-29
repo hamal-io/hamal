@@ -1,10 +1,14 @@
 package io.hamal.core.req.handler.func
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.req.handler.NextCommandId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.CodeCmdRepository
+import io.hamal.repository.api.FuncCmdRepository
+import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -15,59 +19,72 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Updates func`() {
-        createFunc(
-            codeId = CodeId(1),
-            codeVersion = CodeVersion(1)
-        )
+        setup(CodeId(123))
 
-        val res = updateHandler(submitUpdateFuncReq)
+        testInstance(submittedFuncUpdateReq)
 
-        with(funcQueryRepository.get(FuncId(12345))) {
-            assertThat(name, equalTo(FuncName("awesome-update")))
-            //assertThat(code.version)
+        with(funcQueryRepository.get(FuncId(1))) {
+            assertThat(name, equalTo(FuncName("Func-update")))
+            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+            assertThat(
+                code, equalTo(
+                    FuncCode(
+                        id = CodeId(123),
+                        version = CodeVersion(2),
+                        deployedVersion = CodeVersion(1)
+                    )
+                )
+            )
+            assertThat(codeQueryRepository.get(CodeId(123)).value, equalTo(CodeValue("some code")))
         }
+    }
 
+    @Test
+    fun `Updates deployed code`() {
+        setup(CodeId(123))
+        TODO()
     }
 
 
-    /*fun createFunc(
-        id: FuncId = generateDomainId(::FuncId),
-        name: FuncName = FuncName("SomeFuncName"),
-        inputs: FuncInputs = FuncInputs(),
-        codeId: CodeId = CodeId(2222),
-        codeVersion: CodeVersion = CodeVersion(2233),
-    ): Func {
-        return funcCmdRepository.create(
+    private fun setup(codeId: CodeId) {
+        codeCmdRepository.create(
+            CodeCmdRepository.CreateCmd(
+                id = NextCommandId(),
+                codeId = codeId,
+                groupId = testGroup.id,
+                value = CodeValue("1 + 1")
+            )
+        )
+
+        funcCmdRepository.create(
             FuncCmdRepository.CreateCmd(
                 id = NextCommandId(),
-                funcId = id,
-                namespaceId = testNamespace.id,
+                funcId = FuncId(1),
                 groupId = testGroup.id,
-                name = name,
-                inputs = inputs,
+                namespaceId = testNamespace.id,
+                name = FuncName("Func-base"),
+                inputs = FuncInputs(),
                 code = FuncCode(
                     id = codeId,
-                    version = codeVersion,
-                    deployedVersion = codeVersion
-
+                    version = CodeVersion(1),
+                    deployedVersion = CodeVersion(1)
                 )
             )
         )
     }
-*/
 
-    private val submitUpdateFuncReq by lazy {
+    private val submittedFuncUpdateReq by lazy {
         FuncUpdateSubmitted(
-            reqId = ReqId(10),
+            reqId = ReqId(500),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,
-            id = FuncId(12345),
-            name = FuncName("awesome-update"),
+            id = FuncId(1),
+            name = FuncName("Func-update"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             code = CodeValue("some code"),
         )
     }
 
     @Autowired
-    private lateinit var updateHandler: UpdateFuncHandler
+    private lateinit var testInstance: UpdateFuncHandler
 }
