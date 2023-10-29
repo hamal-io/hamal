@@ -15,6 +15,12 @@ export const storeAuth = (auth: Auth) => {
     }))
 }
 
+export const loadAuth = () => {
+    const auth = JSON.parse(localStorage.getItem('auth')) as Auth
+    global.auth = auth;
+    return auth
+}
+
 export const setAuth = (auth: Auth) => {
     global.auth = {
         type: auth.type,

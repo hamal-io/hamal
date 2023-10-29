@@ -6,10 +6,14 @@ import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.security.SecurityProperties.BASIC_AUTH_ORDER
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+
+
+private val log = LoggerFactory.getLogger(AuthApiFilter::class.java)
 
 @Component
 @Order(BASIC_AUTH_ORDER)
@@ -40,9 +44,16 @@ class AuthApiFilter(
         val token = request.getHeader("authorization")
             ?.replace("Bearer ", "")
             ?.let(::AuthToken)
-            ?: throw NoSuchElementException("Account not found")
+            ?: run {
+                log.warn("Unauthorized request on $path")
+                throw NoSuchElementException("Auth not found")
+            }
 
-        val auth = authRepository.get(token)
+        val auth = authRepository.find(token) ?: run {
+            log.warn("Unauthorized request on $path")
+            throw NoSuchElementException("Auth not found")
+        }
+
         AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(auth.accountId), token))
 
         try {

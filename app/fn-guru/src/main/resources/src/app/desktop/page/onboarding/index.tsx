@@ -6,6 +6,7 @@ import {ApiNamespaceCreateReq, createNamespace} from "../../../../api/namespace.
 import {createFunc, listGroup} from "../../../../api";
 import {setAuth, storeAuth} from "../../../../auth.ts";
 import {Auth} from "../../../../type.ts";
+import {useNavigate} from "react-router-dom";
 
 const OnboardingPage: React.FC = () => {
     // get account
@@ -20,7 +21,7 @@ const OnboardingPage: React.FC = () => {
     //     }))
     // })
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     useEffect(() => {
         const run = async () => {
             try {
@@ -56,6 +57,7 @@ const OnboardingPage: React.FC = () => {
 
                 console.log(func)
 
+                navigate("/namespaces")
 
             } catch (e) {
                 console.error(`failed to onboard - ${e}`)

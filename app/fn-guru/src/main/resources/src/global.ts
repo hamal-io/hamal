@@ -1,9 +1,5 @@
 const global = {
-    auth: {
-        type: null,
-        accountId: null,
-        token: null
-    }
+    auth: undefined
 }
 
 

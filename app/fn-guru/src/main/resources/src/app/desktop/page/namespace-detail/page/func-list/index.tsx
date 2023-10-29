@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {ApiFuncSimple} from "../../../../../../api/types";
-import {createFunc, listFunc} from "../../../../../../api";
+import {createFunc, listNamespaceFunc} from "../../../../../../api";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
 import {useNavigate, useParams} from "react-router-dom";
 
@@ -11,7 +11,7 @@ const NamespaceFuncListPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [funcs, setFuncs] = useState([] as Array<ApiFuncSimple>)
     useEffect(() => {
-        listFunc({limit: 10}).then(response => {
+        listNamespaceFunc({limit: 10}).then(response => {
             setFuncs(response.funcs)
             setLoading(false)
         })
