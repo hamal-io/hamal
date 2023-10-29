@@ -10,6 +10,8 @@ fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
 fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is AccountCreateSubmitted -> ApiTokenSubmitted(reqId, status, token)
     is AuthLoginSubmitted -> ApiTokenSubmitted(reqId, status, token)
+    is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(reqId, status, id, groupId)
+    is BlueprintUpdateSubmitted -> ApiBlueprintUpdateSubmitted(reqId, status, id)
     is ExecInvokeSubmitted -> ApiExecInvokeSubmitted(reqId, status, id, groupId, namespaceId)
     is ExtensionCreateSubmitted -> ApiExtensionCreateSubmitted(reqId, status, id, groupId)
     is ExtensionUpdateSubmitted -> ApiExtensionUpdateSubmitted(reqId, status, id)
@@ -19,8 +21,6 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is HookUpdateSubmitted -> ApiHookUpdateSubmitted(reqId, status, id)
     is NamespaceCreateSubmitted -> ApiNamespaceCreateSubmitted(reqId, status, id, groupId)
     is NamespaceUpdateSubmitted -> ApiNamespaceUpdateSubmitted(reqId, status, id)
-    is SnippetCreateSubmitted -> ApiSnippetCreateSubmitted(reqId, status, id, groupId)
-    is SnippetUpdateSubmitted -> ApiSnippetUpdateSubmitted(reqId, status, id)
     is StateSetSubmitted -> ApiStateSetSubmitted(reqId, status)
     is TopicAppendToSubmitted -> ApiTopicAppendSubmitted(reqId, status, id)
     is TopicCreateSubmitted -> ApiTopicCreateSubmitted(reqId, status, id, groupId, namespaceId)

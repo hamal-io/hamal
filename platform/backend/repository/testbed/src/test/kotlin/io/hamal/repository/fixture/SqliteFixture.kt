@@ -10,6 +10,7 @@ import io.hamal.repository.sqlite.SqliteAuthRepository
 import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
+import io.hamal.repository.sqlite.record.blueprint.SqliteBlueprintRepository
 import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.extension.SqliteExtensionRepository
@@ -17,7 +18,6 @@ import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
-import io.hamal.repository.sqlite.record.snippet.SqliteSnippetRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
@@ -32,6 +32,10 @@ object SqliteFixture : BaseTestFixture {
 
         AuthRepository::class -> SqliteAuthRepository(
             SqliteAuthRepository.Config(createTempDirectory("sqlite_auth_test"))
+        ) as REPO
+
+        BlueprintRepository::class -> SqliteBlueprintRepository(
+            SqliteBlueprintRepository.Config(createTempDirectory("sqlite_blueprint_test"))
         ) as REPO
 
         BrokerConsumersRepository::class -> SqliteBrokerConsumersRepository(
@@ -81,11 +85,6 @@ object SqliteFixture : BaseTestFixture {
                 createTempDirectory("sqlite_topic_test")
             )
         ) as REPO
-
-        SnippetRepository::class -> SqliteSnippetRepository(
-            SqliteSnippetRepository.Config(createTempDirectory("sqlite_snippet_test"))
-        ) as REPO
-
 
         StateRepository::class -> SqliteStateRepository(
             SqliteStateRepository.Config(createTempDirectory("sqlite_state_test"))

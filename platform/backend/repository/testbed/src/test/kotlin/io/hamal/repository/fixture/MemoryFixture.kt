@@ -19,6 +19,7 @@ object MemoryFixture : BaseTestFixture {
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
         AccountRepository::class -> MemoryAccountRepository() as REPO
         AuthRepository::class -> MemoryAuthRepository() as REPO
+        BlueprintRepository::class -> MemoryBlueprintRepository() as REPO
         BrokerRepository::class -> MemoryBrokerRepository() as REPO
         BrokerConsumersRepository::class -> MemoryBrokerConsumersRepository() as REPO
         BrokerTopicsRepository::class -> MemoryBrokerTopicsRepository() as REPO
@@ -32,7 +33,6 @@ object MemoryFixture : BaseTestFixture {
         NamespaceRepository::class -> MemoryNamespaceRepository() as REPO
         ReqRepository::class -> MemoryReqRepository() as REPO
         SegmentRepository::class -> MemorySegmentRepository(MemorySegment(Segment.Id(2810), TopicId(1506))) as REPO
-        SnippetRepository::class -> MemorySnippetRepository() as REPO
         StateRepository::class -> MemoryStateRepository() as REPO
         TopicRepository::class -> MemoryTopicRepository(
             Topic(

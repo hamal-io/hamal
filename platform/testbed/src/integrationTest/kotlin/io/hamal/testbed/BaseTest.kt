@@ -104,6 +104,7 @@ abstract class BaseTest {
 
         accountRepository.clear()
         authRepository.clear()
+        blueprintRepository.clear()
         codeRepository.clear()
         extensionRepository.clear()
         reqRepository.clear()
@@ -112,7 +113,6 @@ abstract class BaseTest {
         groupRepository.clear()
         hookRepository.clear()
         namespaceRepository.clear()
-        snippetRepository.clear()
         triggerRepository.clear()
     }
 
@@ -137,6 +137,9 @@ abstract class BaseTest {
     lateinit var authRepository: AuthRepository
 
     @Autowired
+    lateinit var blueprintRepository: BlueprintRepository
+
+    @Autowired
     lateinit var codeRepository: CodeRepository
 
     @Autowired
@@ -159,9 +162,6 @@ abstract class BaseTest {
 
     @Autowired
     lateinit var reqRepository: ReqRepository
-
-    @Autowired
-    lateinit var snippetRepository: SnippetRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository

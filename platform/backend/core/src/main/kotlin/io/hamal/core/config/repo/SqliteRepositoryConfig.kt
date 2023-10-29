@@ -9,6 +9,7 @@ import io.hamal.repository.sqlite.SqliteStateRepository
 import io.hamal.repository.sqlite.log.SqliteBroker
 import io.hamal.repository.sqlite.log.SqliteBrokerRepository
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
+import io.hamal.repository.sqlite.record.blueprint.SqliteBlueprintRepository
 import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.extension.SqliteExtensionRepository
@@ -16,7 +17,6 @@ import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
 import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
-import io.hamal.repository.sqlite.record.snippet.SqliteSnippetRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -51,6 +51,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun authCmdRepository() = authRepository()
+
+    @Bean
+    open fun blueprintRepository() = SqliteBlueprintRepository(SqliteBlueprintRepository.Config(path))
+
+    @Bean
+    open fun blueprintCmdRepository(): BlueprintCmdRepository = blueprintRepository()
+
+    @Bean
+    open fun blueprintQueryRepository(): BlueprintQueryRepository = blueprintRepository()
 
     @Bean
     open fun codeRepository() = SqliteCodeRepository(SqliteCodeRepository.Config(path))
@@ -123,15 +132,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
-
-    @Bean
-    open fun snippetRepository() = SqliteSnippetRepository(SqliteSnippetRepository.Config(path))
-
-    @Bean
-    open fun snippetCmdRepository(): SnippetCmdRepository = snippetRepository()
-
-    @Bean
-    open fun snippetQueryRepository(): SnippetQueryRepository = snippetRepository()
 
     @Bean
     open fun triggerRepository() = SqliteTriggerRepository(SqliteTriggerRepository.Config(path))

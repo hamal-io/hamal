@@ -5,6 +5,9 @@ import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
+import io.hamal.plugin.std.sys.blueprint.BlueprintCreateFunction
+import io.hamal.plugin.std.sys.blueprint.BlueprintGetFunction
+import io.hamal.plugin.std.sys.blueprint.BlueprintUpdateFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
 import io.hamal.plugin.std.sys.exec.ExecGetFunction
 import io.hamal.plugin.std.sys.exec.ExecListFunction
@@ -18,9 +21,6 @@ import io.hamal.plugin.std.sys.namespace.NamespaceCreateFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
 import io.hamal.plugin.std.sys.req.ReqGetFunction
-import io.hamal.plugin.std.sys.snippet.SnippetCreateFunction
-import io.hamal.plugin.std.sys.snippet.SnippetGetFunction
-import io.hamal.plugin.std.sys.snippet.SnippetUpdateFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.trigger.TriggerCreateFunction
 import io.hamal.plugin.std.sys.trigger.TriggerGetFunction
@@ -39,6 +39,11 @@ class SysPluginFactory(
                 "await_failed" to AwaitFailedFunction(sdk.template),
 
                 "adhoc" to AdhocFunction(sdk),
+
+                "blueprint_create" to BlueprintCreateFunction(sdk),
+                "blueprint_get" to BlueprintGetFunction(sdk),
+                "blueprint_update" to BlueprintUpdateFunction(sdk),
+
                 "code_get" to CodeGetFunction(sdk),
 
                 "req_get" to ReqGetFunction(sdk.template),
@@ -63,10 +68,6 @@ class SysPluginFactory(
                 "namespace_create" to NamespaceCreateFunction(sdk),
                 "namespace_get" to NamespaceGetFunction(sdk),
                 "namespace_list" to NamespaceListFunction(sdk),
-
-                "snippet_create" to SnippetCreateFunction(sdk),
-                "snippet_get" to SnippetGetFunction(sdk),
-                "snippet_update" to SnippetUpdateFunction(sdk),
 
                 "topic_create" to TopicCreateFunction(sdk),
                 "topic_resolve" to TopicResolveFunction(sdk),

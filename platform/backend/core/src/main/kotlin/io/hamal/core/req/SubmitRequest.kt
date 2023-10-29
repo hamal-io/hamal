@@ -28,6 +28,7 @@ data class InvokeExecReq(
 
 @Component
 class SubmitRequest(
+    private val blueprintQueryRepository: BlueprintQueryRepository,
     private val encodePassword: EncodePassword,
     private val eventBrokerRepository: BrokerRepository,
     private val extensionQueryRepository: ExtensionQueryRepository,
@@ -37,8 +38,7 @@ class SubmitRequest(
     private val generateToken: GenerateToken,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val reqCmdRepository: ReqCmdRepository,
-    private val snippetQueryRepository: SnippetQueryRepository
+    private val reqCmdRepository: ReqCmdRepository
 ) {
 
     operator fun invoke(req: CreateRootAccountReq): AccountCreateSubmitted {
@@ -225,22 +225,22 @@ class SubmitRequest(
         code = req.code
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SnippetCreateSubmitted(
+    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateBlueprintReq) = BlueprintCreateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = groupId,
-        id = generateDomainId(::SnippetId),
+        id = generateDomainId(::BlueprintId),
         name = req.name,
         inputs = req.inputs,
         value = req.value,
         creatorId = accountId
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SnippetUpdateSubmitted(
+    operator fun invoke(blueprintId: BlueprintId, req: UpdateBlueprintReq) = BlueprintUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
-        groupId = snippetQueryRepository.get(snippetId).groupId,
-        id = snippetId,
+        groupId = blueprintQueryRepository.get(blueprintId).groupId,
+        id = blueprintId,
         name = req.name,
         inputs = req.inputs,
         value = req.value,

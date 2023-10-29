@@ -2,6 +2,7 @@ function extension()
     local internal = _internal
     return function()
         local export = {
+            blueprint = { },
             code = { },
             exec = { },
             extension = { },
@@ -9,7 +10,6 @@ function extension()
             hook = { },
             namespace = { },
             req = { },
-            snippet = { },
             topic = { },
             trigger = { }
         }
@@ -140,20 +140,20 @@ function extension()
             return internal.req_get(req_id)
         end
 
-        function export.snippet.create(cmd)
-            return internal.snippet_create({
+        function export.blueprint.create(cmd)
+            return internal.blueprint_create({
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 value = cmd.value or ""
             })
         end
 
-        function export.snippet.get(snippet_id)
-            return internal.snippet_get(snippet_id)
+        function export.blueprint.get(blueprint_id)
+            return internal.blueprint_get(blueprint_id)
         end
 
-        function export.snippet.update(snippet_id, cmd)
-            return internal.snippet_update(snippet_id, cmd)
+        function export.blueprint.update(blueprint_id, cmd)
+            return internal.blueprint_update(blueprint_id, cmd)
         end
 
         function export.topic.resolve(topic_name)

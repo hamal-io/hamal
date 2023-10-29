@@ -87,7 +87,7 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-        SnippetRepository::class to listOf(
+        BlueprintRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

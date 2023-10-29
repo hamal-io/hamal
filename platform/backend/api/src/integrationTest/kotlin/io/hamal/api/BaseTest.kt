@@ -48,6 +48,13 @@ internal abstract class BaseTest {
     lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
+    lateinit var blueprintQueryRepository: BlueprintQueryRepository
+
+    @Autowired
+    lateinit var blueprintCmdRepository: BlueprintCmdRepository
+
+
+    @Autowired
     lateinit var codeCmdRepository: CodeCmdRepository
 
     @Autowired
@@ -99,12 +106,6 @@ internal abstract class BaseTest {
     lateinit var reqCmdRepository: ReqCmdRepository
 
     @Autowired
-    lateinit var snippetQueryRepository: SnippetQueryRepository
-
-    @Autowired
-    lateinit var snippetCmdRepository: SnippetCmdRepository
-
-    @Autowired
     lateinit var stateQueryRepository: StateQueryRepository
 
     @Autowired
@@ -129,6 +130,7 @@ internal abstract class BaseTest {
 
         accountCmdRepository.clear()
         authCmdRepository.clear()
+        blueprintCmdRepository.clear()
         codeCmdRepository.clear()
         platformEventBrokerRepository.clear()
         eventBrokerRepository.clear()
@@ -139,7 +141,6 @@ internal abstract class BaseTest {
         hookCmdRepository.clear()
         namespaceCmdRepository.clear()
         reqCmdRepository.clear()
-        snippetCmdRepository.clear()
         stateCmdRepository.clear()
         triggerCmdRepository.clear()
 
