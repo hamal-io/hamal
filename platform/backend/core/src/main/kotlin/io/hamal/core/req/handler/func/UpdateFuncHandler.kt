@@ -42,7 +42,8 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
             inputs = req.inputs,
             code = FuncCode(
                 id = code.id,
-                version = code.version
+                version = code.version,
+                deployedVersion = func.code.deployedVersion
             )
         )
     )

@@ -42,7 +42,8 @@ private fun CreateFuncHandler.createFunc(req: FuncCreateSubmitted): Func {
             inputs = req.inputs,
             code = FuncCode(
                 id = code.id,
-                version = code.version
+                version = code.version,
+                deployedVersion = code.version
             )
         )
     )

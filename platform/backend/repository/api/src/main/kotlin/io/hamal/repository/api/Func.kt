@@ -21,11 +21,12 @@ data class Func(
 @Serializable
 data class FuncCode(
     val id: CodeId,
-    val version: CodeVersion
+    val version: CodeVersion,
+    val deployedVersion: CodeVersion
 ) {
     fun toExecCode() = ExecCode(
         id = id,
-        version = version,
+        version = deployedVersion,
         value = null
     )
 }
