@@ -1,19 +1,26 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import {ApiNamespaceSimple} from "../../../../api/types";
-import {listFunc} from "../../../../api";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
 import {createNamespace, listNamespace} from "../../../../api/namespace.ts";
+import {ApiGroupSimple, listGroup} from "../../../../api";
 
 const NamespaceListPage: React.FC = () => {
+
+
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(true)
     const [namespaces, setNamespaces] = useState([] as Array<ApiNamespaceSimple>)
+    const [group, setGroup] = useState<ApiGroupSimple>()
+
     useEffect(() => {
-        listNamespace({limit: 10}).then(response => {
-            setNamespaces(response.namespaces)
-            setLoading(false)
+        listGroup({limit: 1}).then(r => {
+            setGroup(r.groups[0])
+            listNamespace({groupId: r.groups[0].id, limit: 10}).then(response => {
+                setNamespaces(response.namespaces)
+                setLoading(false)
+            })
         })
     }, []);
 
@@ -38,7 +45,7 @@ const NamespaceListPage: React.FC = () => {
     return (
         <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
             <div className="flex p-3 items-center justify-center bg-white">
-                <CreateNamespaceModalButton/>
+                <CreateNamespaceModalButton group={group}/>
             </div>
 
             <div className="flex flex-col items-center justify-center">
@@ -48,7 +55,7 @@ const NamespaceListPage: React.FC = () => {
     );
 }
 
-const CreateNamespaceModalButton = () => {
+const CreateNamespaceModalButton = ({group}: { group: ApiGroupSimple }) => {
     const navigate = useNavigate()
     const [name, setName] = useState<string | undefined>()
     const [openModal, setOpenModal] = useState<string | undefined>();
@@ -65,7 +72,10 @@ const CreateNamespaceModalButton = () => {
     }, [])
 
     const submit = () => {
-        createNamespace({name})
+        createNamespace({
+            groupId: group.id,
+            name
+        })
             .then(response => {
                 navigate(`/namespaces/${response.id}`)
                 props.setOpenModal(undefined)

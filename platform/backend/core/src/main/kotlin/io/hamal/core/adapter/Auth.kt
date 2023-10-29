@@ -27,7 +27,7 @@ class AuthAdapter(
         req: LogInReq,
         responseHandler: (AuthLoginSubmitted) -> T
     ): T {
-        val account = accountQueryRepository.find(req.name) ?: throw NoSuchElementException("Account not found")
+        val account = accountQueryRepository.find(req.username) ?: throw NoSuchElementException("Account not found")
         val password = req.password
         return responseHandler(submitRequest(account, password))
     }

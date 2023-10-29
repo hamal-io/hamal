@@ -2,9 +2,10 @@ import React, {useEffect} from 'react'
 import {Progress, Timeline} from "flowbite-react";
 import {createAnonymousAccount} from "../../../../api/account.ts";
 
-import global from "../../../../global.ts";
 import {ApiNamespaceCreateReq, createNamespace} from "../../../../api/namespace.ts";
-import {createFunc} from "../../../../api";
+import {createFunc, listGroup} from "../../../../api";
+import {setAuth, storeAuth} from "../../../../auth.ts";
+import {Auth} from "../../../../type.ts";
 
 const OnboardingPage: React.FC = () => {
     // get account
@@ -23,20 +24,27 @@ const OnboardingPage: React.FC = () => {
     useEffect(() => {
         const run = async () => {
             try {
+                // FIXME does an account already exist -> keep adding new namespace new opportunity to have more fun
+
+
                 const anonymous = await createAnonymousAccount()
 
-                localStorage.setItem('auth', JSON.stringify({
+                const auth: Auth = {
                     type: 'Anonymous',
-                    token: anonymous.token
-                }))
-
-                global.auth = {
-                    type: 'Anonymous',
+                    accountId: anonymous.accountId,
                     token: anonymous.token
                 }
 
+                storeAuth(auth)
+                setAuth(auth)
+
+                const groups = (await listGroup({limit: 1})).groups
+                console.log(groups[0])
+
+
                 const submitted_namespace = await createNamespace({
-                    name: "a-new-beginning"
+                    name: "a-new-beginning",
+                    groupId: groups[0].id
                 } as ApiNamespaceCreateReq)
 
                 console.log(submitted_namespace)

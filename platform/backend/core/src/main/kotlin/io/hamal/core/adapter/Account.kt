@@ -18,7 +18,6 @@ interface AccountCreateAnonymousPort {
     operator fun <T : Any> invoke(req: CreateAnonymousAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T
 }
 
-
 interface AccountGetPort {
     operator fun <T : Any> invoke(accountId: AccountId, responseHandler: (Account) -> T): T
 }

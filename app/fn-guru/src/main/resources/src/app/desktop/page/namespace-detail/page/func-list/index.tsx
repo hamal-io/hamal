@@ -50,6 +50,8 @@ const NamespaceFuncListPage: React.FC = () => {
 
 
 const CreateFuncModalButton = () => {
+    const {namespaceId} = useParams()
+
     const navigate = useNavigate()
     const [name, setName] = useState<string | undefined>()
     const [openModal, setOpenModal] = useState<string | undefined>();
@@ -66,9 +68,9 @@ const CreateFuncModalButton = () => {
     }, [])
 
     const submit = () => {
-        createFunc({name})
+        createFunc({name, namespaceId})
             .then(response => {
-                navigate(`/functions/${response.id}`)
+                navigate(`/namespaces/${namespaceId}/functions/${response.id}`)
                 props.setOpenModal(undefined)
             })
             .catch(console.error)

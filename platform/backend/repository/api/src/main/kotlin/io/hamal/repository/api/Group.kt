@@ -1,9 +1,9 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
@@ -48,7 +48,7 @@ interface GroupQueryRepository {
     data class GroupQuery(
         var afterId: GroupId = GroupId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var groupIds: List<GroupId>
+        var groupIds: List<GroupId> = listOf()
     )
 }
 
