@@ -1,4 +1,4 @@
-import {defaultHeaders} from "./shared";
+import {authorizedDefaultHeaders} from "./shared";
 import {ApiExec, ApiExecCode, ApiExecList, ApiExecLogList} from "./types";
 
 export interface ListExecsQuery {
@@ -10,7 +10,7 @@ export interface ListExecsQuery {
 export async function listExecs({funcId, groupId, limit}: ListExecsQuery): Promise<ApiExecList> {
     if (groupId !== undefined) {
         const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs?group_ids=${groupId}&limit=${limit}`, {
-            headers: defaultHeaders,
+            headers: authorizedDefaultHeaders(),
             method: "GET",
         })
         if (!response.ok) {
@@ -21,7 +21,7 @@ export async function listExecs({funcId, groupId, limit}: ListExecsQuery): Promi
     } else {
 
         const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs?func_ids=${funcId}&limit=${limit}`, {
-            headers: defaultHeaders,
+            headers: authorizedDefaultHeaders(),
             method: "GET",
         })
         if (!response.ok) {
@@ -34,7 +34,7 @@ export async function listExecs({funcId, groupId, limit}: ListExecsQuery): Promi
 
 export async function listExecLogs(execId: string): Promise<ApiExecLogList> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs/${execId}/logs`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "GET",
     })
     if (!response.ok) {
@@ -46,7 +46,7 @@ export async function listExecLogs(execId: string): Promise<ApiExecLogList> {
 
 export async function getExec(execId: string): Promise<ApiExec> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/execs/${execId}`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "GET",
     })
     if (!response.ok) {

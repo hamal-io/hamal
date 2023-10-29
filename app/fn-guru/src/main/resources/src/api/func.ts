@@ -3,7 +3,7 @@ import {
     ApiFuncList,
 } from "./types";
 
-import {defaultHeaders} from "./shared";
+import {authorizedDefaultHeaders} from "./shared";
 
 export interface ListFuncQuery {
     limit: number;
@@ -11,7 +11,7 @@ export interface ListFuncQuery {
 
 export async function listFunc(query: ListFuncQuery): Promise<ApiFuncList> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "GET",
     })
     if (!response.ok) {
@@ -21,16 +21,17 @@ export async function listFunc(query: ListFuncQuery): Promise<ApiFuncList> {
     return await response.json() as ApiFuncList;
 }
 
-export interface SubmitCreateFuncReq {
+export interface SubmitCreateFunc {
     name: string;
+    namespaceId: string;
 }
 
-export async function createFunc(req: SubmitCreateFuncReq): Promise<object> {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/1/funcs`, {
-        headers: defaultHeaders,
+export async function createFunc(cmd: SubmitCreateFunc): Promise<object> {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/${cmd.namespaceId}/funcs`, {
+        headers: authorizedDefaultHeaders(),
         method: "POST",
         body: JSON.stringify({
-                name: req.name,
+                name: cmd.name,
                 inputs: {},
                 code: ""
             }
@@ -51,7 +52,7 @@ export interface SubmitUpdateFuncReq {
 
 export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs/${funcId}`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "PATCH",
         body: JSON.stringify({
                 name: req.name,
@@ -74,7 +75,7 @@ export interface SubmitInvokeFuncReq {
 
 export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs/${funcId}/invoke`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "POST",
         body: JSON.stringify(req)
     })
@@ -88,7 +89,7 @@ export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Prom
 
 export async function getFunction(id: string): Promise<ApiFunc> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs/${id}`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "GET",
     })
     if (!response.ok) {

@@ -1,7 +1,4 @@
-export const defaultHeaders = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-}
+import {authorizedDefaultHeaders} from "./shared.ts";
 
 export interface ApiSubmitAdhocReq {
     code: string;
@@ -10,7 +7,7 @@ export interface ApiSubmitAdhocReq {
 export async function invokeAdhoc(req: ApiSubmitAdhocReq): Promise<object> {
     //FIXME do not use admin endpoint - only for prototyping
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/1/adhoc`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "POST",
         body: JSON.stringify({
                 inputs: {},

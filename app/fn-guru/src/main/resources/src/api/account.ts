@@ -1,4 +1,4 @@
-import {defaultHeaders} from "./adhoc.ts";
+import {unauthorizedDefaultHeaders} from "./shared.ts";
 
 interface ApiAccountCreateSubmitted {
     id: string,
@@ -9,7 +9,7 @@ interface ApiAccountCreateSubmitted {
 export async function createAnonymousAccount(): Promise<ApiAccountCreateSubmitted> {
     //FIXME do not use admin endpoint - only for prototyping
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts`, {
-        headers: defaultHeaders,
+        headers: unauthorizedDefaultHeaders(),
         method: "POST",
     })
 

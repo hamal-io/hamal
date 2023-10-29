@@ -1,6 +1,10 @@
-import React from 'react'
-import {Button, Progress, Timeline} from "flowbite-react";
+import React, {useEffect} from 'react'
+import {Progress, Timeline} from "flowbite-react";
 import {createAnonymousAccount} from "../../../../api/account.ts";
+
+import global from "../../../../global.ts";
+import {ApiNamespaceCreateReq, createNamespace} from "../../../../api/namespace.ts";
+import {createFunc} from "../../../../api";
 
 const OnboardingPage: React.FC = () => {
     // get account
@@ -14,6 +18,46 @@ const OnboardingPage: React.FC = () => {
     //         token: r.token
     //     }))
     // })
+
+    // const navigate = useNavigate()
+    useEffect(() => {
+        const run = async () => {
+            try {
+                const anonymous = await createAnonymousAccount()
+
+                localStorage.setItem('auth', JSON.stringify({
+                    type: 'Anonymous',
+                    token: anonymous.token
+                }))
+
+                global.auth = {
+                    type: 'Anonymous',
+                    token: anonymous.token
+                }
+
+                const submitted_namespace = await createNamespace({
+                    name: "a-new-beginning"
+                } as ApiNamespaceCreateReq)
+
+                console.log(submitted_namespace)
+
+                const func = await createFunc({
+                    name: "function-one",
+                    namespaceId: submitted_namespace['namespaceId']
+                })
+
+                console.log(func)
+
+
+            } catch (e) {
+                console.error(`failed to onboard - ${e}`)
+            }
+
+        }
+
+        run()
+    }, [])
+
 
     return (
         <div className="flex flex-col h-screen justify-between">

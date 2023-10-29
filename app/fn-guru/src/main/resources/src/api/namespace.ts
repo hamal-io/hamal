@@ -2,7 +2,7 @@ import {
     ApiNamespace, ApiNamespaceList,
 } from "./types";
 
-import {defaultHeaders} from "./shared";
+import {authorizedDefaultHeaders} from "./shared";
 
 export interface ListNamespaceQuery {
     limit: number;
@@ -10,7 +10,7 @@ export interface ListNamespaceQuery {
 
 export async function listNamespace(query: ListNamespaceQuery): Promise<ApiNamespaceList> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/1/namespaces`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "GET",
     })
     if (!response.ok) {
@@ -26,7 +26,7 @@ export interface ApiNamespaceCreateReq {
 
 export async function createNamespace(req: ApiNamespaceCreateReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/1/namespaces`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "POST",
         body: JSON.stringify({
                 name: req.name,
@@ -44,7 +44,7 @@ export async function createNamespace(req: ApiNamespaceCreateReq): Promise<objec
 
 export async function getNamespace(id: string): Promise<ApiNamespace> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/${id}`, {
-        headers: defaultHeaders,
+        headers: authorizedDefaultHeaders(),
         method: "GET",
     })
     if (!response.ok) {
