@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import {ApiFuncSimple} from "../../../../api/types";
-import {createFunc, listFunc} from "../../../../api";
+import {ApiFuncSimple} from "../../../../../../api/types";
+import {createFunc, listFunc} from "../../../../../../api";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
-const FuncListPage: React.FC = () => {
+const NamespaceFuncListPage: React.FC = () => {
+    const {namespaceId} = useParams()
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(true)
@@ -23,7 +24,7 @@ const FuncListPage: React.FC = () => {
         <Card
             key={func.id}
             className="max-w-sm"
-            onClick={() => navigate(`/functions/${func.id}`)}
+            onClick={() => navigate(`/namespaces/${namespaceId}/functions/${func.id}`)}
         >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <p>{func.name}</p>
@@ -35,7 +36,7 @@ const FuncListPage: React.FC = () => {
     ))
 
     return (
-        <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
+        <div className="flex-1 w-full mx-auto text-lg h-full bg-gray-100">
             <div className="flex p-3 items-center justify-center bg-white">
                 <CreateFuncModalButton/>
             </div>
@@ -43,7 +44,7 @@ const FuncListPage: React.FC = () => {
             <div className="flex flex-col items-center justify-center">
                 {list}
             </div>
-        </main>
+        </div>
     );
 }
 
@@ -96,5 +97,5 @@ const CreateFuncModalButton = () => {
     )
 }
 
-export default FuncListPage
+export default NamespaceFuncListPage
 

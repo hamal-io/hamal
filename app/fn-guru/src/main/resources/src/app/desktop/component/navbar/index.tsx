@@ -1,9 +1,6 @@
-import {Avatar, Dropdown, Navbar as Delegate} from "flowbite-react";
+import {Navbar as Delegate} from "flowbite-react";
 import {FC} from "react";
-import {DropdownItem} from "flowbite-react/lib/esm/components/Dropdown/DropdownItem";
 import {useNavigate} from "react-router-dom";
-
-import imgUrl from '../../../../assets/img/hamal.png'
 
 export const Navbar: FC = () => {
     const navigate = useNavigate()
@@ -28,9 +25,6 @@ export const Navbar: FC = () => {
                 </Delegate.Link>
                 <Delegate.Link onClick={() => navigate("/namespaces", {replace: true})}>
                     Namespace
-                </Delegate.Link>
-                <Delegate.Link onClick={() => navigate("/execs", {replace: true})}>
-                    Execution
                 </Delegate.Link>
             </Delegate.Collapse>
         </Delegate>

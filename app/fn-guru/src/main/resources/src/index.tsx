@@ -13,16 +13,15 @@ import SignUpPage from "./landing/page/sign-up";
 // app
 import AdhocPage from "./app/desktop/page/adhoc";
 import AuthenticatedPage from "./app/desktop/page/authenticated";
-import DashboardPage from "./app/desktop/page/dashboard";
-
-import ExecDetailPage from "./app/desktop/page/exec-detail";
-import ExecListPage from "./app/desktop/page/exec-list";
-
-import FuncDetail from "./app/desktop/page/func-detail";
-import FuncListPage from "./app/desktop/page/func-list";
 
 import NamespaceListPage from "./app/desktop/page/namespace-list";
 import NamespaceDetailPage from "./app/desktop/page/namespace-detail";
+
+import NamespaceDashboardPage from "./app/desktop/page/namespace-detail/page/dashboard";
+import NamespaceExecDetailPage from "./app/desktop/page/namespace-detail/page/exec-detail";
+import NamespaceExecListPage from "./app/desktop/page/namespace-detail/page/exec-list";
+import NamespaceFuncDetail from "./app/desktop/page/namespace-detail/page/func-detail";
+import NamespaceFuncListPage from "./app/desktop/page/namespace-detail/page/func-list";
 
 
 const router = createBrowserRouter([
@@ -30,15 +29,51 @@ const router = createBrowserRouter([
     {path: "/sign-in", element: <SignInPage/>},
     {path: "/sign-up", element: <SignUpPage/>},
 
-    {path: "/dashboard", element: <AuthenticatedPage><DashboardPage/></AuthenticatedPage>},
-    {path: "/execs", element: <AuthenticatedPage><ExecListPage/></AuthenticatedPage>},
-    {path: "/execs/:execId", element: <AuthenticatedPage><ExecDetailPage/></AuthenticatedPage>},
+    {path: "/dashboard", element: <AuthenticatedPage><NamespaceDashboardPage/></AuthenticatedPage>},
+    {path: "/execs", element: <AuthenticatedPage><NamespaceExecListPage/></AuthenticatedPage>},
+    {path: "/execs/:execId", element: <AuthenticatedPage><NamespaceExecDetailPage/></AuthenticatedPage>},
 
-    {path: "/functions", element: <AuthenticatedPage><FuncListPage/></AuthenticatedPage>},
-    {path: "/functions/:funcId", element: <AuthenticatedPage><FuncDetail/></AuthenticatedPage>},
 
     {path: "/namespaces", element: <AuthenticatedPage><NamespaceListPage/></AuthenticatedPage>},
-    {path: "/namespaces/:namespaceId", element: <AuthenticatedPage><NamespaceDetailPage/></AuthenticatedPage>},
+    {
+        path: "/namespaces/:namespaceId", element: <AuthenticatedPage>
+            <NamespaceDetailPage>
+                <NamespaceDashboardPage/>
+            </NamespaceDetailPage>
+        </AuthenticatedPage>
+    },
+
+    {
+        path: "/namespaces/:namespaceId/executions", element: <AuthenticatedPage>
+            <NamespaceDetailPage>
+                <NamespaceExecListPage/>
+            </NamespaceDetailPage>
+        </AuthenticatedPage>
+    },
+
+    {
+        path: "/namespaces/:namespaceId/executions/:execId", element: <AuthenticatedPage>
+            <NamespaceDetailPage>
+                <NamespaceExecDetailPage/>
+            </NamespaceDetailPage>
+        </AuthenticatedPage>
+    },
+
+    {
+        path: "/namespaces/:namespaceId/functions", element: <AuthenticatedPage>
+            <NamespaceDetailPage>
+                <NamespaceFuncListPage/>
+            </NamespaceDetailPage>
+        </AuthenticatedPage>
+    },
+
+    {
+        path: "/namespaces/:namespaceId/functions/:funcId", element: <AuthenticatedPage>
+            <NamespaceDetailPage>
+                <NamespaceFuncDetail/>
+            </NamespaceDetailPage>
+        </AuthenticatedPage>
+    },
 
     {path: "/play", element: <AuthenticatedPage><AdhocPage/></AuthenticatedPage>}
 ]);
