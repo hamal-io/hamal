@@ -26,6 +26,7 @@ interface ApiLoginSubmitted {
     id: string,
     status: string,
     accountId: string,
+    groupIds: string[];
     token: string
 }
 

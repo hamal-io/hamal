@@ -2,32 +2,7 @@ import {Button, Checkbox, Label, TextInput} from 'flowbite-react';
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {login} from "../../../api/account.ts";
-import useLocalStorageState from "use-local-storage-state";
-import {AUTH_STATE_NAME, AuthState} from "../../../state.ts";
-
-const handleLogin = async (username: string, password: string, remember: boolean, callback: () => void) => {
-    try {
-        // clearAuth()
-
-        const {accountId, token} = await login(username, password)
-        console.log(accountId, token)
-
-        // const auth: Auth = {
-        //     type: 'User',
-        //     accountId: accountId,
-        //     token: token
-        // }
-        //
-        // if (remember) {
-        //     storeAuth(auth)
-        // }
-        //
-        // setAuth(auth)
-        callback()
-    } catch (e) {
-        console.log(`login failed - ${e}`)
-    }
-}
+import {useAuth} from "../../../hook";
 
 const LoginPage = () => {
     const navigate = useNavigate()
@@ -35,14 +10,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState<string>('')
     const [remember, setRemember] = useState(false)
 
-    const [auth, setAuth] = useLocalStorageState<AuthState>(AUTH_STATE_NAME, {
-        defaultValue: {
-            type: 'Unauthorized',
-            accountId: '',
-            token: ''
-        }
-    })
-
+    const [auth, setAuth] = useAuth()
     return (
         <form className="flex max-w-md flex-col gap-4">
             <div>
@@ -92,13 +60,16 @@ const LoginPage = () => {
 
                 const action = async () => {
                     try {
-                        const {accountId, token} = await login(username, password)
+                        const {accountId, groupIds, token} = await login(username, password)
                         console.log(accountId, token)
                         setAuth({
                             type: 'User',
                             accountId,
+                            groupId: groupIds[0],
                             token
                         })
+
+                        navigate("/namespaces")
 
                         console.log(auth)
                     } catch (e) {

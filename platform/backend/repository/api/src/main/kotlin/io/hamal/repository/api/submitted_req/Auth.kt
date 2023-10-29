@@ -10,6 +10,7 @@ data class AuthLoginSubmitted(
     override var status: ReqStatus,
     val authId: AuthId,
     val accountId: AccountId,
+    val groupIds: List<GroupId>,
     val hash: PasswordHash,
     val token: AuthToken
 ) : Submitted

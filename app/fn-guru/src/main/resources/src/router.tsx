@@ -2,20 +2,20 @@
 import HomePage from "./public/page/home";
 import LoginInPage from "./public/page/login";
 
-// private
-import AdhocPage from "./private/page/adhoc";
-import AuthenticatedPage from "./private/page/authenticated";
+// app
+import AdhocPage from "./app/page/adhoc";
+import AuthenticatedPage from "./app/page/authenticated";
 
-import NamespaceListPage from "./private/page/namespace-list";
-import NamespaceDetailPage from "./private/page/namespace-detail";
+import NamespaceListPage from "./app/page/namespace-list";
+import NamespaceDetailPage from "./app/page/namespace-detail";
 
-import NamespaceDashboardPage from "./private/page/namespace-detail/page/dashboard";
-import NamespaceExecDetailPage from "./private/page/namespace-detail/page/exec-detail";
-import NamespaceExecListPage from "./private/page/namespace-detail/page/exec-list";
-import NamespaceFuncDetail from "./private/page/namespace-detail/page/func-detail";
-import NamespaceFuncListPage from "./private/page/namespace-detail/page/func-list";
+import NamespaceDashboardPage from "./app/page/dashboard";
+import NamespaceExecDetailPage from "./app/page/exec-detail";
+import NamespaceExecListPage from "./app/page/exec-list";
+import NamespaceFuncDetail from "./app/page/func-detail";
+import NamespaceFuncListPage from "./app/page/func-list";
 
-import OnboardingPage from "./private/page/onboarding";
+import OnboardingPage from "./public/page/onboarding";
 import {createBrowserRouter} from "react-router-dom";
 
 

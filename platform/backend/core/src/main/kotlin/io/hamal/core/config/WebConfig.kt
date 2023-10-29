@@ -1,13 +1,8 @@
 package io.hamal.core.config
 
 import io.hamal.core.component.*
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -28,16 +23,9 @@ open class WebConfig : WebMvcConfigurer {
         encodeDefaults = true
     }
 
-    @Bean
-    @OptIn(ExperimentalSerializationApi::class)
-    open fun protobuf(): ProtoBuf = ProtoBuf {
-        encodeDefaults = true
-    }
-
-
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-        super.configureMessageConverters(converters)
         converters.add(KotlinSerializationJsonHttpMessageConverter(json()))
+        super.configureMessageConverters(converters)
     }
 
     override fun addFormatters(registry: FormatterRegistry) {
@@ -61,33 +49,4 @@ open class WebConfig : WebMvcConfigurer {
     override fun configurePathMatch(configurer: PathMatchConfigurer) {
         configurer.setUseTrailingSlashMatch(true)
     }
-}
-
-@Serializable
-data class Test<ID : SerializableDomainId>(
-    val reqId: ReqId,
-    val status: ReqStatus,
-    val id: ID,
-    val namespaceId: NamespaceId? = null,
-    val groupId: GroupId? = null,
-)
-
-
-fun main() {
-    val j = Json {
-        explicitNulls = false
-        ignoreUnknownKeys = true
-        encodeDefaults = true
-    }
-    println(
-        j.encodeToString(
-            Test<ExecId>(
-                reqId = ReqId(1),
-                status = ReqStatus.Failed,
-                id = ExecId(12),
-                namespaceId = NamespaceId(23),
-                groupId = GroupId(23)
-            )
-        )
-    )
 }

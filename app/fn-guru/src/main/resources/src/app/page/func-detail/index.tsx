@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useState} from 'react'
 import {useNavigate, useParams} from "react-router-dom";
-import Editor from "../../../../../component/editor";
+import Editor from "../../../component/editor";
 import {Button, Card} from "flowbite-react";
-import {ApiExecSimple, ApiFunc} from "../../../../../api/types";
-import {getFunction, invokeAdhoc, invokeFunc, listExecs, updateFunc} from "../../../../../api";
+import {ApiExecSimple, ApiFunc} from "../../../api/types";
+import {getFunction, invokeAdhoc, invokeFunc, listExecs, updateFunc} from "../../../api";
 
 const NmaespaceFuncDetailPage: React.FC = () => {
     const {funcId} = useParams()

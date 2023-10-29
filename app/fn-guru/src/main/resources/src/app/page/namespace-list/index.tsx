@@ -1,33 +1,27 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
-import {ApiNamespaceSimple} from "../../../api/types";
+import {ApiNamespace, ApiNamespaceList} from "../../../api/types";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
-import {createNamespace, listNamespace} from "../../../api/namespace.ts";
-import {ApiGroupSimple, listGroup} from "../../../api";
+import {createNamespace} from "../../../api/namespace.ts";
+import {ApiGroupList, ApiGroupSimple} from "../../../api";
+import {useApi, useApiPost, useAuth} from "../../../hook";
 
 const NamespaceListPage: React.FC = () => {
 
-
     const navigate = useNavigate()
+    const [auth] = useAuth()
 
-    const [loading, setLoading] = useState(true)
-    const [namespaces, setNamespaces] = useState([] as Array<ApiNamespaceSimple>)
-    const [group, setGroup] = useState<ApiGroupSimple>()
-
-    useEffect(() => {
-        listGroup({limit: 1}).then(r => {
-            setGroup(r.groups[0])
-            listNamespace({groupId: r.groups[0].id, limit: 10}).then(response => {
-                setNamespaces(response.namespaces)
-                setLoading(false)
-            })
-        })
-    }, []);
-
-    if (loading) return "Loading..."
+    const {data, isLoading, error} = useApi<ApiNamespaceList>({
+            method: "GET",
+            url: `v1/groups/${auth.groupId}/namespaces`
+        }
+    )
 
 
-    const list = namespaces.map(namespace => (
+    if (isLoading) return "Loading..."
+
+
+    const list = data.namespaces.map(namespace => (
         <Card
             key={namespace.id}
             className="max-w-sm"
@@ -45,7 +39,7 @@ const NamespaceListPage: React.FC = () => {
     return (
         <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
             <div className="flex p-3 items-center justify-center bg-white">
-                <CreateNamespaceModalButton group={group}/>
+                <CreateNamespaceModalButton groupId={auth.groupId}/>
             </div>
 
             <div className="flex flex-col items-center justify-center">
@@ -55,7 +49,22 @@ const NamespaceListPage: React.FC = () => {
     );
 }
 
-const CreateNamespaceModalButton = ({group}: { group: ApiGroupSimple }) => {
+const Submit = (groupId: string, name: string) => {
+
+    const {data, isLoading, error} = useApi<ApiGroupList>({
+            method: "POST",
+            url: `v1/groups/${groupId}/namespaces`,
+            body: JSON.stringify({
+                    name: name,
+                    inputs: {},
+                }
+            )
+        }
+    )
+    return (null)
+}
+
+const CreateNamespaceModalButton = ({groupId}: { groupId: string }) => {
     const navigate = useNavigate()
     const [name, setName] = useState<string | undefined>()
     const [openModal, setOpenModal] = useState<string | undefined>();
@@ -71,16 +80,21 @@ const CreateNamespaceModalButton = ({group}: { group: ApiGroupSimple }) => {
         return () => window.removeEventListener('keydown', close)
     }, [])
 
-    const submit = () => {
-        createNamespace({
-            groupId: group.id,
-            name
-        })
-            .then(response => {
-                navigate(`/namespaces/${response.id}`)
-                props.setOpenModal(undefined)
-            })
-            .catch(console.error)
+    const {post, data, error} = useApiPost<ApiNamespace>()
+    useEffect(() => {
+        if (data != null) {
+            navigate(`/namespaces/${data.id}`)
+            setOpenModal(undefined)
+        }
+
+        if (error != null) {
+            console.log("error", error)
+        }
+
+    }, [data, navigate, error]);
+
+    const submit = (post) => {
+        post(`v1/groups/${groupId}/namespaces`, {name, inputs: {}})
     }
 
     return (
@@ -99,7 +113,7 @@ const CreateNamespaceModalButton = ({group}: { group: ApiGroupSimple }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className={"w-full"} onClick={submit}>Create Namespace</Button>
+                    <Button className={"w-full"} onClick={_ => submit(post)}>Create Namespace</Button>
                 </Modal.Footer>
             </Modal>
         </>
