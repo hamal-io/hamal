@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react'
-import {getExec, listExecLogs} from "../../../api";
+import {getExec, listExecLogs} from "../../../../api";
 import {useParams} from "react-router-dom";
-import {ApiExec, ApiExecLogList} from "../../../api/types";
+import {ApiExec, ApiExecLogList} from "../../../../api/types";
 
 const ExecDetailPage: React.FC = () => {
     const {execId} = useParams()

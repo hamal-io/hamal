@@ -11,18 +11,18 @@ import SignInPage from "./landing/page/sign-in";
 import SignUpPage from "./landing/page/sign-up";
 
 // app
-import AdhocPage from "./app/page/adhoc";
-import AuthenticatedPage from "./app/page/authenticated";
-import DashboardPage from "./app/page/dashboard";
+import AdhocPage from "./app/desktop/page/adhoc";
+import AuthenticatedPage from "./app/desktop/page/authenticated";
+import DashboardPage from "./app/desktop/page/dashboard";
 
-import ExecDetailPage from "./app/page/exec-detail";
-import ExecListPage from "./app/page/exec-list";
+import ExecDetailPage from "./app/desktop/page/exec-detail";
+import ExecListPage from "./app/desktop/page/exec-list";
 
-import FuncDetail from "./app/page/func-detail";
-import FuncListPage from "./app/page/func-list";
+import FuncDetail from "./app/desktop/page/func-detail";
+import FuncListPage from "./app/desktop/page/func-list";
 
-import NamespaceListPage from "./app/page/namespace-list";
-import NamespaceDetailPage from "./app/page/namespace-detail";
+import NamespaceListPage from "./app/desktop/page/namespace-list";
+import NamespaceDetailPage from "./app/desktop/page/namespace-detail";
 
 
 const router = createBrowserRouter([

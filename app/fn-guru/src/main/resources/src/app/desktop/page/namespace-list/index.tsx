@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
-import {ApiNamespaceSimple} from "../../../api/types";
-import {listFunc} from "../../../api";
+import {ApiNamespaceSimple} from "../../../../api/types";
+import {listFunc} from "../../../../api";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
-import {createNamespace, listNamespace} from "../../../api/namespace.ts";
+import {createNamespace, listNamespace} from "../../../../api/namespace.ts";
 
 const NamespaceListPage: React.FC = () => {
     const navigate = useNavigate()

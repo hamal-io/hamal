@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {ApiFuncSimple} from "../../../api/types";
-import {createFunc, listFunc} from "../../../api";
+import {ApiFuncSimple} from "../../../../api/types";
+import {createFunc, listFunc} from "../../../../api";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
 

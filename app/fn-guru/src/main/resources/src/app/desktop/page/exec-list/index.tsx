@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {ApiExecSimple} from "../../../api/types";
-import {listExecs} from "../../../api";
+import {ApiExecSimple} from "../../../../api/types";
+import {listExecs} from "../../../../api";
 import {Card} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
 
