@@ -1,11 +1,6 @@
 import React, {useEffect} from 'react'
 import {Progress, Timeline} from "flowbite-react";
-import {createAnonymousAccount} from "../../../../api/account.ts";
 
-import {ApiNamespaceCreateReq, createNamespace} from "../../../../api/namespace.ts";
-import {createFunc, listGroup} from "../../../../api";
-import {setAuth, storeAuth} from "../../../../auth.ts";
-import {Auth} from "../../../../type.ts";
 import {useNavigate} from "react-router-dom";
 
 const OnboardingPage: React.FC = () => {
@@ -24,44 +19,44 @@ const OnboardingPage: React.FC = () => {
     const navigate = useNavigate()
     useEffect(() => {
         const run = async () => {
-            try {
-                // FIXME does an account already exist -> keep adding new namespace new opportunity to have more fun
-
-
-                const anonymous = await createAnonymousAccount()
-
-                const auth: Auth = {
-                    type: 'Anonymous',
-                    accountId: anonymous.accountId,
-                    token: anonymous.token
-                }
-
-                storeAuth(auth)
-                setAuth(auth)
-
-                const groups = (await listGroup({limit: 1})).groups
-                console.log(groups[0])
-
-
-                const submitted_namespace = await createNamespace({
-                    name: "a-new-beginning",
-                    groupId: groups[0].id
-                } as ApiNamespaceCreateReq)
-
-                console.log(submitted_namespace)
-
-                const func = await createFunc({
-                    name: "function-one",
-                    namespaceId: submitted_namespace['namespaceId']
-                })
-
-                console.log(func)
-
-                navigate("/namespaces")
-
-            } catch (e) {
-                console.error(`failed to onboard - ${e}`)
-            }
+            // try {
+            //     // FIXME does an account already exist -> keep adding new namespace new opportunity to have more fun
+            //
+            //
+            //     const anonymous = await createAnonymousAccount()
+            //
+            //     const auth: Auth = {
+            //         type: 'Anonymous',
+            //         accountId: anonymous.accountId,
+            //         token: anonymous.token
+            //     }
+            //
+            //     storeAuth(auth)
+            //     setAuth(auth)
+            //
+            //     const groups = (await listGroup({limit: 1})).groups
+            //     console.log(groups[0])
+            //
+            //
+            //     const submitted_namespace = await createNamespace({
+            //         name: "a-new-beginning",
+            //         groupId: groups[0].id
+            //     } as ApiNamespaceCreateReq)
+            //
+            //     console.log(submitted_namespace)
+            //
+            //     const func = await createFunc({
+            //         name: "function-one",
+            //         namespaceId: submitted_namespace['namespaceId']
+            //     })
+            //
+            //     console.log(func)
+            //
+            //     navigate("/namespaces")
+            //
+            // } catch (e) {
+            //     console.error(`failed to onboard - ${e}`)
+            // }
 
         }
 

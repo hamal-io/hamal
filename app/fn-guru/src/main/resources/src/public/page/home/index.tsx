@@ -5,11 +5,16 @@ import {invokeAdhoc} from "../../../api/adhoc.ts";
 import {Footer, Navbar} from "../../component";
 import {createAnonymousAccount} from "../../../api/account.ts";
 import {useNavigate} from "react-router-dom";
+import {useApi} from "../../../hook.ts";
 
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate()
     const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
+
+    const {data, isLoading, error} = useApi("http://localhost:8008/v1/groups")
+
+
     return (
         <div className="flex flex-col h-screen justify-between">
             <Navbar/>
@@ -20,6 +25,9 @@ const HomePage: React.FC = () => {
                     <p>No installation, no command-line tools, no yaml.</p>
                     <p>Served as hot as your coffee</p>
                 </div>
+
+                {JSON.stringify(isLoading)}
+                {JSON.stringify(data)}
 
                 <div className="flex flex-col items-center justify-center">
                     <div className="w-1/2">

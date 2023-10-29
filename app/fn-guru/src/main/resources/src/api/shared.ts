@@ -1,17 +1,14 @@
-import global from "../global.ts";
-import {loadAuth} from "../auth.ts";
-
 export const unauthorizedDefaultHeaders = () => ({
     'Accept': 'application/json',
     'Content-Type': 'application/json',
 })
 
-
 export const authorizedDefaultHeaders = () => {
-    const auth = global.auth || loadAuth()
+    // const [auth] = useLocalStorageState<AuthState>(AUTH_STATE_NAME, undefined)
+
     return ({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth.token}`
+        // 'Authorization': `Bearer ${auth.token}`
     })
 }

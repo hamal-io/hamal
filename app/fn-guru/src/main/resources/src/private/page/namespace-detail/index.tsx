@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
-import {ApiNamespace} from "../../../../api/types";
-import {getNamespace} from "../../../../api/namespace.ts";
+import {ApiNamespace} from "../../../api/types";
+import {getNamespace} from "../../../api/namespace.ts";
 import NamespaceSidebar from "./component/sidebar";
 
 

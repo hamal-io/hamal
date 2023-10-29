@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Button} from "flowbite-react";
-import {invokeAdhoc} from "../../../../api/adhoc.ts";
-import Editor from "../../../../component/editor";
+import {invokeAdhoc} from "../../../api/adhoc.ts";
+import Editor from "../../../component/editor";
 
 const AdhocPage: React.FC = () => {
     const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
