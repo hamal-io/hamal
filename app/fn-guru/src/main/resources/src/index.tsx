@@ -7,8 +7,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 // public
 import HomePage from "./landing/page/home";
-import SignInPage from "./landing/page/sign-in";
-import SignUpPage from "./landing/page/sign-up";
+import LoginInPage from "./landing/page/login";
 
 // app
 import AdhocPage from "./app/desktop/page/adhoc";
@@ -28,8 +27,7 @@ import OnboardingPage from "./app/desktop/page/onboarding";
 
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
-    {path: "/sign-in", element: <SignInPage/>},
-    {path: "/sign-up", element: <SignUpPage/>},
+    {path: "/login", element: <LoginInPage/>},
 
     {
         path: "/onboarding", element: <OnboardingPage/>

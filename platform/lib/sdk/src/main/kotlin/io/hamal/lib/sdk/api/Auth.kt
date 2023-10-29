@@ -6,14 +6,14 @@ import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.request.SignInReq
+import io.hamal.request.LogInReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiSignInReq(
+data class ApiLoginReq(
     override val name: AccountName,
     override val password: Password
-) : SignInReq
+) : LogInReq
 
 @Serializable
 data class ApiTokenSubmitted(

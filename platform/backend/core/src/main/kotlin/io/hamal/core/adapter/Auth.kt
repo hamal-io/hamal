@@ -2,19 +2,19 @@ package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
 import io.hamal.repository.api.AccountQueryRepository
-import io.hamal.repository.api.submitted_req.AuthSignInWithPasswordSubmitted
-import io.hamal.request.SignInReq
+import io.hamal.repository.api.submitted_req.AuthLoginSubmitted
+import io.hamal.request.LogInReq
 import org.springframework.stereotype.Component
 
 
-interface AuthSignInPort {
+interface AuthLoginPort {
     operator fun <T : Any> invoke(
-        req: SignInReq,
-        responseHandler: (AuthSignInWithPasswordSubmitted) -> T
+        req: LogInReq,
+        responseHandler: (AuthLoginSubmitted) -> T
     ): T
 }
 
-interface AuthPort : AuthSignInPort
+interface AuthPort : AuthLoginPort
 
 
 @Component
@@ -24,8 +24,8 @@ class AuthAdapter(
 ) : AuthPort {
 
     override operator fun <T : Any> invoke(
-        req: SignInReq,
-        responseHandler: (AuthSignInWithPasswordSubmitted) -> T
+        req: LogInReq,
+        responseHandler: (AuthLoginSubmitted) -> T
     ): T {
         val account = accountQueryRepository.find(req.name) ?: throw NoSuchElementException("Account not found")
         val password = req.password

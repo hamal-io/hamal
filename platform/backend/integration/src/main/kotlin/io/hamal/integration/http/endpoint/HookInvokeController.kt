@@ -1,4 +1,4 @@
-package io.hamal.integration.http
+package io.hamal.integration.http.endpoint
 
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.ReqId

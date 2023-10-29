@@ -1,7 +1,7 @@
 import {Button, Checkbox, Label, TextInput} from 'flowbite-react';
 import {useNavigate} from "react-router-dom";
 
-const SignUpPage = () => {
+const LoginPage = () => {
     const navigate = useNavigate()
     return (
         <form className="flex max-w-md flex-col gap-4">
@@ -40,11 +40,11 @@ const SignUpPage = () => {
                     Remember me
                 </Label>
             </div>
-            <Button onClick={() => navigate("/dashboard")}>
-                Signup
+            <Button onClick={() => navigate("/namespaces")}>
+                Sign in
             </Button>
         </form>
     )
 }
 
-export default SignUpPage;
+export default LoginPage;

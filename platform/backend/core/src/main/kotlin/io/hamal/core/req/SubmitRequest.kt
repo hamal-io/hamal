@@ -77,9 +77,9 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(account: Account, password: Password): AuthSignInWithPasswordSubmitted {
+    operator fun invoke(account: Account, password: Password): AuthLoginSubmitted {
         val encodedPassword = encodePassword(password, account.salt)
-        return AuthSignInWithPasswordSubmitted(
+        return AuthLoginSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             authId = generateDomainId(::AuthId),

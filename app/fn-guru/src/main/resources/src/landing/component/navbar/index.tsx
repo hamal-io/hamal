@@ -11,7 +11,7 @@ export const Navbar: FC = () => (
 
         <Delegate.Toggle/>
         <Delegate.Collapse>
-            <Delegate.Link href="/sign-in">
+            <Delegate.Link href="/login">
                 Login
             </Delegate.Link>
         </Delegate.Collapse>

@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthSignInWithPasswordSubmitted(
+data class AuthLoginSubmitted(
     override val reqId: ReqId,
     override var status: ReqStatus,
     val authId: AuthId,

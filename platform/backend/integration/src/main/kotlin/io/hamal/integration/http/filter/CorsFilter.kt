@@ -1,4 +1,4 @@
-package io.hamal.integration.filter
+package io.hamal.integration.http.filter
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

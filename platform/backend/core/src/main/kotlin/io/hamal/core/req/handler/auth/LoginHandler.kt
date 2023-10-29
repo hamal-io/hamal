@@ -8,16 +8,16 @@ import io.hamal.repository.api.AuthCmdRepository
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.PasswordAuth
 import io.hamal.repository.api.TokenAuth
-import io.hamal.repository.api.submitted_req.AuthSignInWithPasswordSubmitted
+import io.hamal.repository.api.submitted_req.AuthLoginSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit.DAYS
 
 @Component
-class SignInWithPasswordHandler(
+class LoginHandler(
     private val authRepository: AuthRepository
-) : ReqHandler<AuthSignInWithPasswordSubmitted>(AuthSignInWithPasswordSubmitted::class) {
+) : ReqHandler<AuthLoginSubmitted>(AuthLoginSubmitted::class) {
 
-    override fun invoke(req: AuthSignInWithPasswordSubmitted) {
+    override fun invoke(req: AuthLoginSubmitted) {
         authRepository.list(req.accountId).filterIsInstance<PasswordAuth>().find { it.hash == req.hash }?.let { auth ->
             authRepository.create(
                 AuthCmdRepository.CreateTokenAuthCmd(

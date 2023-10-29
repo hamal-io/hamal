@@ -4,10 +4,12 @@ import io.hamal.core.req.handler.BaseReqHandlerTest
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class SignInWithPasswordHandlerTest : BaseReqHandlerTest() {
+internal class LoginHandlerTest : BaseReqHandlerTest() {
+
     @Test
     @Disabled
-    fun `Signs in`() {
+    fun `Login`() {
         TODO()
     }
+
 }
