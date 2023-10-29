@@ -29,19 +29,7 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     val func = funcRepository.get(req.id)
 
     if (req.deployedVersion != null) {
-        return funcRepository.update(
-            req.id,
-            UpdateCmd(
-                id = req.cmdId(),
-                name = func.name,
-                inputs = func.inputs,
-                code = FuncCode(
-                    id = func.code.id,
-                    version = func.code.version,
-                    deployedVersion = req.deployedVersion!!
-                )
-            )
-        )
+        deployedVersionUpdate(req, func)
     }
 
     val code = codeCmdRepository.update(
@@ -65,6 +53,24 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
         )
     )
 }
+
+
+private fun UpdateFuncHandler.deployedVersionUpdate(req: FuncUpdateSubmitted, func: Func): Func {
+    return funcRepository.update(
+        req.id,
+        UpdateCmd(
+            id = req.cmdId(),
+            name = func.name,
+            inputs = func.inputs,
+            code = FuncCode(
+                id = func.code.id,
+                version = func.code.version,
+                deployedVersion = req.deployedVersion!!
+            )
+        )
+    )
+}
+
 
 private fun UpdateFuncHandler.emitEvent(cmdId: CmdId, func: Func) {
     eventEmitter.emit(cmdId, FuncUpdatedEvent(func))

@@ -17,6 +17,7 @@ import io.hamal.lib.sdk.api.ApiFuncUpdateSubmitted
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
@@ -144,39 +145,53 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         }
     }
 
-    @Test
-    fun `Deploys func code version`() {
-        val func = awaitCompleted(
-            createFunc(
-                ApiFuncCreateReq(
-                    name = FuncName("Func-base"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("40 + 2")
+    @Nested
+    inner class FuncDeployedCodeTest {
+        @Test
+        fun `Deploys func code version`() {
+            val func = awaitCompleted(
+                createFunc(
+                    ApiFuncCreateReq(
+                        name = FuncName("Func-base"),
+                        inputs = FuncInputs(),
+                        code = CodeValue("40 + 2")
+                    )
                 )
             )
-        )
 
-        assertThat(funcQueryRepository.get(func.funcId).code.deployedVersion, equalTo(CodeVersion(1)))
+            awaitCompleted(deployVersion(func.funcId, CodeVersion(123)))
 
-        awaitCompleted(deploy(func.funcId, CodeVersion(123)))
-
-        with(funcQueryRepository.get(func.funcId)) {
-            assertThat(code.deployedVersion, equalTo(CodeVersion(123)))
-            assertThat(name, equalTo(FuncName("Func-base")))
+            with(funcQueryRepository.get(func.funcId)) {
+                assertThat(code.deployedVersion, equalTo(CodeVersion(123)))
+                assertThat(name, equalTo(FuncName("Func-base")))
+                assertThat(code.version, equalTo(CodeVersion(1)))
+            }
         }
 
+        @Test
+        fun `Tries to deploy version that does not exist`() {
+            val res = httpTemplate.post("/v1/funcs/1234/deploy/25")
+                .execute()
 
+
+            assertThat(res.statusCode, equalTo(NotFound))
+            require(res is HttpErrorResponse) { "request was successful" }
+
+            val error = res.error(ApiError::class)
+            assertThat(error.message, equalTo("Func not found"))
+        }
+
+        private fun deployVersion(funcId: FuncId, codeVersion: CodeVersion): ApiFuncUpdateSubmitted {
+            val res = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
+                .path("funcId", funcId)
+                .path("version", codeVersion.value.toString())
+                .execute()
+
+            assertThat(res.statusCode, equalTo(HttpStatusCode.Accepted))
+            require(res is HttpSuccessResponse) { "request was not successful" }
+            return res.result(ApiFuncUpdateSubmitted::class)
+        }
     }
 
-    private fun deploy(funcId: FuncId, codeVersion: CodeVersion): ApiFuncUpdateSubmitted {
-        val res = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
-            .path("funcId", funcId)
-            .path("version", codeVersion.value.toString())
-            .execute()
-
-        assertThat(res.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(res is HttpSuccessResponse) { "request was not successful" }
-        return res.result(ApiFuncUpdateSubmitted::class)
-    }
 
 }
