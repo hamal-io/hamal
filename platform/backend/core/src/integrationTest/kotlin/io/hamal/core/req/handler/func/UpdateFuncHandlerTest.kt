@@ -39,12 +39,18 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
         }
     }
 
-    @Test
-    fun `Updates deployed code`() {
-        setup(CodeId(123))
-        TODO()
+    private val submittedFuncUpdateReq by lazy {
+        FuncUpdateSubmitted(
+            reqId = ReqId(500),
+            status = ReqStatus.Submitted,
+            groupId = testGroup.id,
+            id = FuncId(1),
+            name = FuncName("Func-update"),
+            inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
+            code = CodeValue("some code"),
+            deployedVersion = null
+        )
     }
-
 
     private fun setup(codeId: CodeId) {
         codeCmdRepository.create(
@@ -70,19 +76,6 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
                     deployedVersion = CodeVersion(1)
                 )
             )
-        )
-    }
-
-    private val submittedFuncUpdateReq by lazy {
-        FuncUpdateSubmitted(
-            reqId = ReqId(500),
-            status = ReqStatus.Submitted,
-            groupId = testGroup.id,
-            id = FuncId(1),
-            name = FuncName("Func-update"),
-            inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-            code = CodeValue("some code"),
-            deployedVersion = null
         )
     }
 

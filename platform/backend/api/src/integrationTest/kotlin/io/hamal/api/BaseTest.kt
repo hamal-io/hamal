@@ -53,7 +53,6 @@ internal abstract class BaseTest {
     @Autowired
     lateinit var blueprintCmdRepository: BlueprintCmdRepository
 
-
     @Autowired
     lateinit var codeCmdRepository: CodeCmdRepository
 

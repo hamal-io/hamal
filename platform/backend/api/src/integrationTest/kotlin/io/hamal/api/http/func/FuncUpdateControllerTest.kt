@@ -3,6 +3,7 @@ package io.hamal.api.http.func
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
+import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
@@ -142,4 +143,40 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(code.value, equalTo(CodeValue("createdCode")))
         }
     }
+
+    @Test
+    fun `Deploys func code version`() {
+        val func = awaitCompleted(
+            createFunc(
+                ApiFuncCreateReq(
+                    name = FuncName("Func-base"),
+                    inputs = FuncInputs(),
+                    code = CodeValue("40 + 2")
+                )
+            )
+        )
+
+        assertThat(funcQueryRepository.get(func.funcId).code.deployedVersion, equalTo(CodeVersion(1)))
+
+        awaitCompleted(deploy(func.funcId, CodeVersion(123)))
+
+        with(funcQueryRepository.get(func.funcId)) {
+            assertThat(code.deployedVersion, equalTo(CodeVersion(123)))
+            assertThat(name, equalTo(FuncName("Func-base")))
+        }
+
+
+    }
+
+    private fun deploy(funcId: FuncId, codeVersion: CodeVersion): ApiFuncUpdateSubmitted {
+        val res = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
+            .path("funcId", funcId)
+            .path("version", codeVersion.value.toString())
+            .execute()
+
+        assertThat(res.statusCode, equalTo(HttpStatusCode.Accepted))
+        require(res is HttpSuccessResponse) { "request was not successful" }
+        return res.result(ApiFuncUpdateSubmitted::class)
+    }
+
 }

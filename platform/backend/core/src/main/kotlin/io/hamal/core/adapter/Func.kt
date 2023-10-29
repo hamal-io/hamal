@@ -1,6 +1,7 @@
 package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.*
@@ -41,6 +42,12 @@ interface FuncUpdatePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: UpdateFuncReq,
+        responseHandler: (FuncUpdateSubmitted) -> T
+    ): T
+
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        deployedVersion: CodeVersion,
         responseHandler: (FuncUpdateSubmitted) -> T
     ): T
 }
@@ -94,6 +101,15 @@ class FuncAdapter(
     ): T {
         ensureFuncExists(funcId)
         return responseHandler(submitRequest(funcId, req))
+    }
+
+    override fun <T : Any> invoke(
+        funcId: FuncId,
+        deployedVersion: CodeVersion,
+        responseHandler: (FuncUpdateSubmitted) -> T
+    ): T {
+        ensureFuncExists(funcId)
+        return responseHandler(submitRequest(funcId, deployedVersion))
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

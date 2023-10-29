@@ -9,7 +9,7 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.api.event.FuncCreatedEvent
+import io.hamal.repository.api.event.FuncUpdatedEvent
 import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
 import org.springframework.stereotype.Component
 
@@ -27,6 +27,23 @@ class UpdateFuncHandler(
 
 private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     val func = funcRepository.get(req.id)
+
+    if (req.deployedVersion != null) {
+        return funcRepository.update(
+            req.id,
+            UpdateCmd(
+                id = req.cmdId(),
+                name = func.name,
+                inputs = func.inputs,
+                code = FuncCode(
+                    id = func.code.id,
+                    version = func.code.version,
+                    deployedVersion = req.deployedVersion!!
+                )
+            )
+        )
+    }
+
     val code = codeCmdRepository.update(
         func.code.id, CodeCmdRepository.UpdateCmd(
             id = req.cmdId(),
@@ -50,5 +67,5 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
 }
 
 private fun UpdateFuncHandler.emitEvent(cmdId: CmdId, func: Func) {
-    eventEmitter.emit(cmdId, FuncCreatedEvent(func))
+    eventEmitter.emit(cmdId, FuncUpdatedEvent(func))
 }

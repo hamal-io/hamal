@@ -42,7 +42,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     ),
                     code = FuncCode(
                         id = CodeId(5),
-                        version = CodeVersion(6)
+                        version = CodeVersion(6),
+                        deployedVersion = CodeVersion(1)
                     ),
                 )
             )
@@ -57,7 +58,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6)
+                            version = CodeVersion(6),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -88,7 +90,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                             inputs = FuncInputs(),
                             code = FuncCode(
                                 id = CodeId(5),
-                                version = CodeVersion(6)
+                                version = CodeVersion(6),
+                                deployedVersion = CodeVersion(1)
                             )
                         )
                     )
@@ -123,7 +126,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         inputs = FuncInputs(),
                         code = FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6)
+                            version = CodeVersion(6),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -138,7 +142,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         code, equalTo(
                             FuncCode(
                                 id = CodeId(5),
-                                version = CodeVersion(6)
+                                version = CodeVersion(6),
+                                deployedVersion = CodeVersion(1)
                             )
                         )
                     )
@@ -170,7 +175,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         inputs = FuncInputs(),
                         code = FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6)
+                            version = CodeVersion(6),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -185,7 +191,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         code, equalTo(
                             FuncCode(
                                 id = CodeId(5),
-                                version = CodeVersion(6)
+                                version = CodeVersion(6),
+                                deployedVersion = CodeVersion(1)
                             )
                         )
                     )
@@ -214,7 +221,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     inputs = FuncInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
                     code = FuncCode(
                         id = CodeId(5),
-                        version = CodeVersion(6)
+                        version = CodeVersion(6),
+                        deployedVersion = CodeVersion(1)
                     )
                 )
             )
@@ -229,7 +237,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6)
+                            version = CodeVersion(6),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -266,7 +275,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6)
+                            version = CodeVersion(6),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -374,7 +384,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(4),
-                            version = CodeVersion(5)
+                            version = CodeVersion(5),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -420,7 +431,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(4),
-                            version = CodeVersion(5)
+                            version = CodeVersion(5),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
@@ -599,7 +611,8 @@ private fun FuncRepository.createFunc(
             ),
             code = FuncCode(
                 id = codeId,
-                version = codeVersion
+                version = codeVersion,
+                deployedVersion = CodeVersion(1)
             )
         )
     )
