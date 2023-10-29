@@ -25,12 +25,8 @@ class CreateAccountWithPasswordHandler(
 ) : ReqHandler<AccountCreateSubmitted>(AccountCreateSubmitted::class) {
 
     override fun invoke(req: AccountCreateSubmitted) {
-        createAccount(req)
-            .also { emitEvent(req.cmdId(), it) }
-            .also { createGroup(req) }
-            .also { createNamespace(req) }
-            .also { createPasswordAuth(req) }
-            .also { createTokenAuth(req) }
+        createAccount(req).also { emitEvent(req.cmdId(), it) }.also { createGroup(req) }.also { createNamespace(req) }
+            .also { createPasswordAuth(req) }.also { createTokenAuth(req) }
     }
 }
 
@@ -50,10 +46,7 @@ private fun CreateAccountWithPasswordHandler.createAccount(req: AccountCreateSub
 private fun CreateAccountWithPasswordHandler.createGroup(req: AccountCreateSubmitted): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            groupId = req.groupId,
-            name = GroupName("${req.name.value}'s Group"),
-            creatorId = req.id
+            id = req.cmdId(), groupId = req.groupId, name = GroupName("${req.name.value}'s Group"), creatorId = req.id
         )
     )
 }
@@ -64,7 +57,7 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: AccountCreateS
             id = req.cmdId(),
             namespaceId = req.namespaceId,
             groupId = req.groupId,
-            name = NamespaceName("root"),
+            name = NamespaceName("default"),
             inputs = NamespaceInputs()
         )
     )
@@ -74,10 +67,7 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: AccountCreateS
 private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: AccountCreateSubmitted): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreatePasswordAuthCmd(
-            id = req.cmdId(),
-            authId = req.authenticationId,
-            accountId = req.id,
-            hash = req.hash
+            id = req.cmdId(), authId = req.authenticationId, accountId = req.id, hash = req.hash
         )
     )
 }

@@ -40,7 +40,7 @@ const SignInPage = () => {
                     Remember me
                 </Label>
             </div>
-            <Button onClick={() => navigate("/dashboard")}>
+            <Button onClick={() => navigate("/namespaces")}>
                 Sign in
             </Button>
         </form>

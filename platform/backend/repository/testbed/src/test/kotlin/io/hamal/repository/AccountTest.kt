@@ -5,8 +5,8 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
-import io.hamal.lib.domain.vo.AccountType.Enjoyer
 import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.AccountType.User
 import io.hamal.lib.domain.vo.PasswordSalt
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
@@ -87,7 +87,7 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                         CreateCmd(
                             id = CmdId(2),
                             accountId = AccountId(2),
-                            accountType = Enjoyer,
+                            accountType = User,
                             name = AccountName("first-account-name"),
                             email = AccountEmail("another@hamal.io"),
                             salt = PasswordSalt("salt"),
@@ -119,7 +119,7 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                         CreateCmd(
                             id = CmdId(2),
                             accountId = AccountId(2),
-                            accountType = Enjoyer,
+                            accountType = User,
                             name = AccountName("second-account-name"),
                             email = AccountEmail("mail@fn.guru"),
                             salt = PasswordSalt("salt"),
@@ -358,7 +358,7 @@ private fun AccountRepository.createAccount(
         CreateCmd(
             id = cmdId,
             accountId = accountId,
-            accountType = Enjoyer,
+            accountType = User,
             name = name,
             email = email,
             salt = salt

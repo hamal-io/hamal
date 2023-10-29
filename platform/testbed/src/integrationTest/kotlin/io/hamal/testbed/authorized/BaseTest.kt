@@ -3,12 +3,12 @@ package io.hamal.testbed.authorized
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.AccountType.Enjoyer
+import io.hamal.lib.domain.vo.AccountType.User
 import io.hamal.repository.api.*
 import io.hamal.testbed.BaseTest
 import java.time.temporal.ChronoUnit
 
-internal abstract class BaseAuthorizedTest : BaseTest(){
+internal abstract class BaseAuthorizedTest : BaseTest() {
 
     override fun setupTest() {
         clearRepository()
@@ -17,7 +17,7 @@ internal abstract class BaseAuthorizedTest : BaseTest(){
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
-                accountType = Enjoyer,
+                accountType = User,
                 name = AccountName("group-admin"),
                 email = AccountEmail("group-admin@hamal.io"),
                 salt = PasswordSalt("group-admin-salt")

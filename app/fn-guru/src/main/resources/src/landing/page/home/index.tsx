@@ -4,9 +4,11 @@ import Editor from "../../../component/editor";
 import {invokeAdhoc} from "../../../api/adhoc.ts";
 import {Footer, Navbar} from "../../component";
 import {createAnonymousAccount} from "../../../api/account.ts";
+import {useNavigate} from "react-router-dom";
 
 
 const HomePage: React.FC = () => {
+    const navigate = useNavigate()
     const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
     return (
         <div className="flex flex-col h-screen justify-between">
@@ -31,19 +33,12 @@ const HomePage: React.FC = () => {
 
                     <div className="flex flex-row ">
                         <Button onClick={() => {
-
                             localStorage.setItem('to-deploy', JSON.stringify({
                                 type: 'Function',
                                 code: code
                             }))
 
-                            createAnonymousAccount().then(r => {
-                                console.log(r.token)
-                                localStorage.setItem('auth', JSON.stringify({
-                                    type: 'Anonymous',
-                                    token: r.token
-                                }))
-                            })
+                            navigate("/onboarding", {replace: true})
                         }}
                         >
                             Deploy now

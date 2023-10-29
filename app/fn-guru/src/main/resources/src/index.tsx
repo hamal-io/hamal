@@ -23,16 +23,17 @@ import NamespaceExecListPage from "./app/desktop/page/namespace-detail/page/exec
 import NamespaceFuncDetail from "./app/desktop/page/namespace-detail/page/func-detail";
 import NamespaceFuncListPage from "./app/desktop/page/namespace-detail/page/func-list";
 
+import OnboardingPage from "./app/desktop/page/onboarding";
+
 
 const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
     {path: "/sign-in", element: <SignInPage/>},
     {path: "/sign-up", element: <SignUpPage/>},
 
-    {path: "/dashboard", element: <AuthenticatedPage><NamespaceDashboardPage/></AuthenticatedPage>},
-    {path: "/execs", element: <AuthenticatedPage><NamespaceExecListPage/></AuthenticatedPage>},
-    {path: "/execs/:execId", element: <AuthenticatedPage><NamespaceExecDetailPage/></AuthenticatedPage>},
-
+    {
+        path: "/onboarding", element: <OnboardingPage/>
+    },
 
     {path: "/namespaces", element: <AuthenticatedPage><NamespaceListPage/></AuthenticatedPage>},
     {

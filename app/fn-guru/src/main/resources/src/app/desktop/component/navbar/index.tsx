@@ -9,7 +9,7 @@ export const Navbar: FC = () => {
             fluid
             rounded
         >
-            <Delegate.Brand href="https://fn.guru">
+            <Delegate.Brand>
             <span className="self-center whitespace-nowrap">
                 fn(guru)
             </span>
