@@ -34,7 +34,6 @@ data class ApiExec(
     val status: ExecStatus,
     val correlation: Correlation?,
     val inputs: ExecInputs,
-    val code: Code,
     val events: List<Event>,
     val result: ExecResult?,
     val state: ExecState?

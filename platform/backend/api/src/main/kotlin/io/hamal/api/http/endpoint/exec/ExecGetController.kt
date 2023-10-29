@@ -26,13 +26,6 @@ internal class ExecGetController(
                         status = exec.status,
                         correlation = exec.correlation,
                         inputs = exec.inputs,
-                        code = exec.code.let { code ->
-                            ApiExec.Code(
-                                id = code.id,
-                                version = code.version,
-                                value = code.value
-                            )
-                        },
                         events = exec.events,
                         result = if (exec is CompletedExec) {
                             exec.result

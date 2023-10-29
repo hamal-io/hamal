@@ -1,20 +1,16 @@
 sys = require('sys')
 
-err, f1 = sys.func.create({
+f1 = fail_on_error(sys.func.create({
     namespace_id = '1',
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]]
-})
-
-assert(err == nil)
+}))
 sys.await_completed(f1)
 
-err, func = sys.func.get(f1.id)
-assert(err == nil)
+func = fail_on_error(sys.func.get(f1.id))
 
-err, code = sys.code.get(func.code_id, 1)
-assert(err == nil)
+code = fail_on_error(sys.code.get(func.code_id, 1))
 
 assert(code.id == func.code_id)
 assert(code.code == [[4 + 2]])

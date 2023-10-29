@@ -5,7 +5,9 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
 class ExecGetFunction(
@@ -24,15 +26,6 @@ class ExecGetFunction(
                 exec.correlation?.correlationId?.value?.let { corId ->
                     it["correlation_id"] = corId
                 } // FIXME set nil value to table --> makes the api nicer
-                it["code"] = exec.code.let { code ->
-                    MapType(
-                        mutableMapOf(
-                            "id" to (code.id?.value?.value?.toString(16)?.let(::StringType) ?: NilType),
-                            "version" to (code.version?.value?.let(::NumberType) ?: NilType),
-                            "value" to (code.value?.value?.let(::CodeType) ?: NilType)
-                        )
-                    )
-                }
             }
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null

@@ -10,7 +10,7 @@ err, f1 = sys.func.create({
 assert(err == nil)
 sys.await_completed(f1)
 
-err, func = sys.func.get(f1.id)
+err, func = sys.func.get(f1.func_id)
 assert(err == nil)
 
 err, code = sys.code.get(func.code_id)

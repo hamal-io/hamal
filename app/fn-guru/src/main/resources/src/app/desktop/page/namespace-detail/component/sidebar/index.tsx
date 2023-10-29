@@ -22,7 +22,7 @@ const NamespaceSidebar: FC = () => {
                         onClick={() => navigate(`/namespaces/${namespaceId}/executions`)}
                     >
                         <p>
-                            Run
+                            Execution
                         </p>
                     </Sidebar.Item>
                     <Sidebar.Item

@@ -1,6 +1,5 @@
 package io.hamal.api.http.exec
 
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -27,15 +26,6 @@ internal class ExecGetControllerTest : ExecBaseControllerTest() {
         with(response.result(ApiExec::class)) {
             assertThat(id, equalTo(createAdhocResponse.execId))
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(
-                code, equalTo(
-                    ApiExec.Code(
-                        id = null,
-                        version = null,
-                        value = CodeValue("40 + 2")
-                    )
-                )
-            )
             assertThat(correlation, nullValue())
         }
     }
