@@ -43,7 +43,6 @@ const LoginPage = () => {
         }
     })
 
-
     return (
         <form className="flex max-w-md flex-col gap-4">
             <div>

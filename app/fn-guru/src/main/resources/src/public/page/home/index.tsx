@@ -1,24 +1,26 @@
 import React, {useState} from 'react'
 import {Button, Dropdown} from 'flowbite-react'
 import Editor from "../../../component/editor";
-import {invokeAdhoc} from "../../../api/adhoc.ts";
 import {Footer, Navbar} from "../../component";
-import {createAnonymousAccount} from "../../../api/account.ts";
 import {useNavigate} from "react-router-dom";
-import {useApi} from "../../../hook.ts";
+import {ApiGroupList} from "../../../api";
+
+import {useApi} from "../../../hook";
 
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate()
     const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
 
-    const {data, isLoading, error} = useApi("http://localhost:8008/v1/groups")
-
+    const {data, isLoading, error} = useApi<ApiGroupList>({
+            method: "GET",
+            url: "v1/groups"
+        }
+    )
 
     return (
         <div className="flex flex-col h-screen justify-between">
             <Navbar/>
-
             <main className="flex-1 w-full mx-auto p-4 text-lg h-full shadow-lg bg-gray-100">
                 <div className="flex flex-col items-center justify-center">
                     <p>Simplest way to automate your workflows through cloud functions</p>
@@ -28,6 +30,7 @@ const HomePage: React.FC = () => {
 
                 {JSON.stringify(isLoading)}
                 {JSON.stringify(data)}
+                {JSON.stringify(error)}
 
                 <div className="flex flex-col items-center justify-center">
                     <div className="w-1/2">
