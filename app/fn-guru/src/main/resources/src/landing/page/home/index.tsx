@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import {Button} from 'flowbite-react'
+import {Button, Dropdown} from 'flowbite-react'
 import Editor from "../../../component/editor";
 import {invokeAdhoc} from "../../../api/adhoc.ts";
 import {Footer, Navbar} from "../../component";
+import {createAnonymousAccount} from "../../../api/account.ts";
 
 
 const HomePage: React.FC = () => {
@@ -14,8 +15,8 @@ const HomePage: React.FC = () => {
             <main className="flex-1 w-full mx-auto p-4 text-lg h-full shadow-lg bg-gray-100">
                 <div className="flex flex-col items-center justify-center">
                     <p>Simplest way to automate your workflows through cloud functions</p>
-                    <p>No installation, no command-line tools.</p>
-                    <p>Write code and deploy functions from the browser.</p>
+                    <p>No installation, no command-line tools, no yaml.</p>
+                    <p>Served as hot as your coffee</p>
                 </div>
 
                 <div className="flex flex-col items-center justify-center">
@@ -30,16 +31,26 @@ const HomePage: React.FC = () => {
 
                     <div className="flex flex-row ">
                         <Button onClick={() => {
-                            invokeAdhoc({
-                                code
-                            }).then(submitted => {
-                                console.log("id", submitted.id)
-                                console.log("reqId", submitted.reqId)
-                                console.log(submitted.status)
-                            }).catch(error => console.error(error))
 
-                        }}>Test</Button>
-                        {/*<Button>Deploy</Button>*/}
+                            localStorage.setItem('to-deploy', JSON.stringify({
+                                type: 'Function',
+                                code: code
+                            }))
+
+                            createAnonymousAccount().then(r => {
+                                console.log(r.token)
+                                localStorage.setItem('auth', JSON.stringify({
+                                    type: 'Anonymous',
+                                    token: r.token
+                                }))
+                            })
+                        }}
+                        >
+                            Deploy now
+                        </Button>
+
+                        No credit card / signup required
+
                     </div>
                 </div>
             </main>

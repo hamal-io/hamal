@@ -18,7 +18,7 @@ internal class AccountCreateController(
     private val createAccount: AccountCreatePort
 ) {
     @PostMapping("/v1/accounts")
-    fun createFunc(
+    fun create(
         @RequestBody req: ApiAccountCreateReq
     ): ResponseEntity<ApiSubmitted> = retry {
         createAccount(req, Submitted::accepted)

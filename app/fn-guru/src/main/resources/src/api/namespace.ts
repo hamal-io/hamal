@@ -1,7 +1,5 @@
 import {
-    ApiFunc,
-    ApiFuncList, ApiNamespace, ApiNamespaceList,
-    ApiSubmittedReqWithId
+    ApiNamespace, ApiNamespaceList,
 } from "./types";
 
 import {defaultHeaders} from "./shared";
@@ -26,7 +24,7 @@ export interface ApiNamespaceCreateReq {
     name: string;
 }
 
-export async function createNamespace(req: ApiNamespaceCreateReq): Promise<ApiSubmittedReqWithId> {
+export async function createNamespace(req: ApiNamespaceCreateReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/1/namespaces`, {
         headers: defaultHeaders,
         method: "POST",
@@ -41,7 +39,7 @@ export async function createNamespace(req: ApiNamespaceCreateReq): Promise<ApiSu
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedReqWithId;
+    return await response.json();
 }
 
 export async function getNamespace(id: string): Promise<ApiNamespace> {

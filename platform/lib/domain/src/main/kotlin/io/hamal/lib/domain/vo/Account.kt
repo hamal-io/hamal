@@ -13,7 +13,6 @@ class AccountId(override val value: SnowflakeId) : SerializableDomainId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     internal object Serializer : SerializableDomainIdSerializer<AccountId>(::AccountId)
-
     companion object {
         val root = AccountId(1)
     }
@@ -31,7 +30,9 @@ class AccountEmail(override val value: String) : StringValueObject() {
 }
 
 enum class AccountType {
-    Enjoyer,
+    Anonymous,
     Root,
-    Runner
+    Runner,
+    Service,
+    User
 }

@@ -37,7 +37,7 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     )
 
     override fun toString(): String {
-        return "$value"
+        return value.toString(16)
     }
 
     object Serializer : KSerializer<SnowflakeId> {

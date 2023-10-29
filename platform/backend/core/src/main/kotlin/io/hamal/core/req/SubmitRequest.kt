@@ -8,6 +8,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountType.Anonymous
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
@@ -40,9 +41,9 @@ class SubmitRequest(
     private val snippetQueryRepository: SnippetQueryRepository
 ) {
 
-    operator fun invoke(req: CreateRootAccountReq): AccountCreateWithPasswordSubmitted {
+    operator fun invoke(req: CreateRootAccountReq): AccountCreateSubmitted {
         val salt = generateSalt()
-        return AccountCreateWithPasswordSubmitted(
+        return AccountCreateSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = AccountId.root,
@@ -88,13 +89,13 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(req: CreateAccountReq): AccountCreateWithPasswordSubmitted {
+    operator fun invoke(req: CreateAccountReq): AccountCreateSubmitted {
         val salt = generateSalt()
-        return AccountCreateWithPasswordSubmitted(
+        return AccountCreateSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             id = generateDomainId(::AccountId),
-            type = AccountType.Enjoyer,
+            type = AccountType.User,
             groupId = generateDomainId(::GroupId),
             namespaceId = generateDomainId(::NamespaceId),
             name = req.name,
@@ -107,6 +108,28 @@ class SubmitRequest(
             token = generateToken()
         ).also(reqCmdRepository::queue)
     }
+
+    operator fun invoke(req: CreateAnonymousAccountReq): AccountCreateSubmitted {
+        val salt = generateSalt()
+        return AccountCreateSubmitted(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            id = req.id,
+            type = Anonymous,
+            groupId = generateDomainId(::GroupId),
+            namespaceId = generateDomainId(::NamespaceId),
+            name = req.name,
+            email = null,
+            authenticationId = generateDomainId(::AuthId),
+            hash = encodePassword(
+                password = Password(">>You-shall-not-know<<"),
+                salt = salt
+            ),
+            salt = salt,
+            token = generateToken()
+        ).also(reqCmdRepository::queue)
+    }
+
 
     operator fun invoke(namespaceId: NamespaceId, req: InvokeAdhocReq): ExecInvokeSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)

@@ -1,7 +1,6 @@
 import {
     ApiFunc,
     ApiFuncList,
-    ApiSubmittedReqWithId
 } from "./types";
 
 import {defaultHeaders} from "./shared";
@@ -26,7 +25,7 @@ export interface SubmitCreateFuncReq {
     name: string;
 }
 
-export async function createFunc(req: SubmitCreateFuncReq): Promise<ApiSubmittedReqWithId> {
+export async function createFunc(req: SubmitCreateFuncReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/1/funcs`, {
         headers: defaultHeaders,
         method: "POST",
@@ -41,7 +40,7 @@ export async function createFunc(req: SubmitCreateFuncReq): Promise<ApiSubmitted
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedReqWithId;
+    return await response.json();
 }
 
 
@@ -50,7 +49,7 @@ export interface SubmitUpdateFuncReq {
     code?: string;
 }
 
-export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Promise<ApiSubmittedReqWithId> {
+export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs/${funcId}`, {
         headers: defaultHeaders,
         method: "PATCH",
@@ -65,7 +64,7 @@ export async function updateFunc(funcId: string, req: SubmitUpdateFuncReq): Prom
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedReqWithId;
+    return await response.json();
 }
 
 export interface SubmitInvokeFuncReq {
@@ -73,7 +72,7 @@ export interface SubmitInvokeFuncReq {
     inputs?: object;
 }
 
-export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Promise<ApiSubmittedReqWithId> {
+export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Promise<object> {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs/${funcId}/invoke`, {
         headers: defaultHeaders,
         method: "POST",
@@ -83,7 +82,7 @@ export async function invokeFunc(funcId: string, req: SubmitInvokeFuncReq): Prom
         const message = `Request submission failed: ${response.status} - ${response.statusText}`;
         throw new Error(message);
     }
-    return await response.json() as ApiSubmittedReqWithId;
+    return await response.json();
 }
 
 

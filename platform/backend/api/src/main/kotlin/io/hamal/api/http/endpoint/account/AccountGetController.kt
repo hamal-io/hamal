@@ -15,7 +15,7 @@ internal class AccountGetController(
     private val getAccount: AccountGetPort
 ) {
     @GetMapping("/v1/accounts/{accountId}")
-    fun getAccount(
+    fun get(
         @PathVariable("accountId") accountId: AccountId,
     ): ResponseEntity<ApiAccount> {
         return retry {

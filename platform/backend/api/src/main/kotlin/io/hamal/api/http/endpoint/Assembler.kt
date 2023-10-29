@@ -8,7 +8,7 @@ fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
     ResponseEntity.accepted().body(toApiSubmitted())
 
 fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
-    is AccountCreateWithPasswordSubmitted -> ApiTokenSubmitted(reqId, status, token)
+    is AccountCreateSubmitted -> ApiTokenSubmitted(reqId, status, token)
     is AuthSignInWithPasswordSubmitted -> ApiTokenSubmitted(reqId, status, token)
     is ExecInvokeSubmitted -> ApiExecInvokeSubmitted(reqId, status, id, groupId, namespaceId)
     is ExtensionCreateSubmitted -> ApiExtensionCreateSubmitted(reqId, status, id, groupId)
