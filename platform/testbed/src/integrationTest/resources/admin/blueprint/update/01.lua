@@ -8,7 +8,8 @@ local create_req = fail_on_error(sys.blueprint.create({
 
 sys.await_completed(create_req)
 
-local update_req = fail_on_error(sys.blueprint.update(create_req.id, {
+local update_req = fail_on_error(sys.blueprint.update({
+    id = create_req.id,
     name = 'update-blueprint',
     inputs = {},
     value = [[i was updated]]

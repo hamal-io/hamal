@@ -4,9 +4,9 @@ import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.domain.vo.BlueprintInputs
 import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.kua.function.Function2In2Out
+import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput2Schema
+import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
@@ -16,19 +16,19 @@ import io.hamal.lib.sdk.api.ApiUpdateBlueprintReq
 
 class BlueprintUpdateFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
-    FunctionInput2Schema(StringType::class, MapType::class),
+) : Function1In2Out<MapType, ErrorType, MapType>(
+    FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: MapType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.blueprint.update(
-                BlueprintId(arg1.value),
                 ApiUpdateBlueprintReq(
-                    name = BlueprintName(arg2.getString("name")),
+                    id = BlueprintId(arg1.getString("id")),
+                    name = BlueprintName(arg1.getString("name")),
                     inputs = BlueprintInputs(),
-                    value = CodeValue(arg2.getString("value"))
+                    value = CodeValue(arg1.getString("value"))
                 )
             )
 

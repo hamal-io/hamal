@@ -3,7 +3,6 @@ package io.hamal.api.http.func
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
-import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
@@ -148,7 +147,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     @Nested
     inner class FuncDeployedCodeTest {
         @Test
-        fun `Deploys func code version`() {
+        fun `Updates deployed version`() {
             val func = awaitCompleted(
                 createFunc(
                     ApiFuncCreateReq(
@@ -159,7 +158,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 )
             )
 
-            awaitCompleted(deployVersion(func.funcId, CodeVersion(123)))
+            awaitCompleted(updateDeployedVersion(func.funcId, CodeVersion(123)))
 
             with(funcQueryRepository.get(func.funcId)) {
                 assertThat(code.deployedVersion, equalTo(CodeVersion(123)))
@@ -169,7 +168,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         }
 
         @Test
-        fun `Tries to deploy version that does not exist`() {
+        fun `Tries to update deployed version that does not exist`() {
             val res = httpTemplate.post("/v1/funcs/1234/deploy/25")
                 .execute()
 
@@ -179,17 +178,6 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
             val error = res.error(ApiError::class)
             assertThat(error.message, equalTo("Func not found"))
-        }
-
-        private fun deployVersion(funcId: FuncId, codeVersion: CodeVersion): ApiFuncUpdateSubmitted {
-            val res = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
-                .path("funcId", funcId)
-                .path("version", codeVersion.value.toString())
-                .execute()
-
-            assertThat(res.statusCode, equalTo(HttpStatusCode.Accepted))
-            require(res is HttpSuccessResponse) { "request was not successful" }
-            return res.result(ApiFuncUpdateSubmitted::class)
         }
     }
 
