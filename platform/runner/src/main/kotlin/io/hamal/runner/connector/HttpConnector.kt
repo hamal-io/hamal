@@ -1,14 +1,13 @@
 package io.hamal.runner.connector
 
 import io.hamal.lib.domain.vo.EventToSubmit
-import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
-import io.hamal.lib.sdk.BridgeSdkImpl
+import io.hamal.lib.sdk.BridgeSdk
 
 class HttpConnector(
-    private val sdk: BridgeSdkImpl
+    private val sdk: BridgeSdk
 ) : Connector {
 
     override fun poll(): List<UnitOfWork> {

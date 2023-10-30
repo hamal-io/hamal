@@ -46,6 +46,10 @@ class ApiSdkImpl : ApiSdk {
         )
     }
 
+    constructor(template: HttpTemplate) {
+        this.template = template
+    }
+
     override val account: ApiAccountService by lazy {
         ApiAccountServiceImpl(template)
     }

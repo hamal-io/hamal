@@ -12,6 +12,13 @@ tasks.named<BootJar>("bootJar") {
     enabled = false
 }
 
+tasks.withType<Test> {
+    forkEvery = 1
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1).also {
+        println("Setting maxParallelForks to $it")
+    }
+}
+
 @Suppress("UnstableApiUsage")
 testing {
     suites {
