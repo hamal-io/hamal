@@ -87,6 +87,10 @@ function extension()
             })
         end
 
+        function export.func.deploy(cmd)
+            return internal.func_deploy(cmd)
+        end
+
         function export.func.get(func_id)
             return internal.func_get(func_id)
         end
@@ -152,8 +156,8 @@ function extension()
             return internal.blueprint_get(blueprint_id)
         end
 
-        function export.blueprint.update(blueprint_id, cmd)
-            return internal.blueprint_update(blueprint_id, cmd)
+        function export.blueprint.update(cmd)
+            return internal.blueprint_update(cmd)
         end
 
         function export.topic.resolve(topic_name)

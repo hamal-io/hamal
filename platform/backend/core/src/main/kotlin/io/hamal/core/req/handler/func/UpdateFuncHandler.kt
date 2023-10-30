@@ -29,7 +29,7 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     val func = funcRepository.get(req.id)
 
     if (req.deployedVersion != null) {
-        deployedVersionUpdate(req, func)
+        return deployedVersionUpdate(req, func)
     }
 
     val code = codeCmdRepository.update(
@@ -57,11 +57,11 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
 
 private fun UpdateFuncHandler.deployedVersionUpdate(req: FuncUpdateSubmitted, func: Func): Func {
     return funcRepository.update(
-        req.id,
+        func.id,
         UpdateCmd(
             id = req.cmdId(),
-            name = func.name,
-            inputs = func.inputs,
+            name = null,
+            inputs = null,
             code = FuncCode(
                 id = func.code.id,
                 version = func.code.version,

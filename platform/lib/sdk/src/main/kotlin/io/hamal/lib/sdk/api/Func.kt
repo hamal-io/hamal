@@ -38,13 +38,6 @@ data class ApiFuncUpdateReq(
     override val code: CodeValue? = null,
 ) : UpdateFuncReq
 
-/*@Serializable
-data class ApiDeploymentSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
-    val funcId: FuncId,
-    val deployedVersion: CodeVersion
-) : ApiSubmitted*/
 
 @Serializable
 data class ApiFuncUpdateSubmitted(
@@ -103,7 +96,7 @@ data class ApiFunc(
 
 interface ApiFuncService {
     fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
-    fun deploy(funcId: FuncId, version: CodeVersion): ApiFuncUpdateSubmitted
+    fun deploy(id: FuncId, version: CodeVersion): ApiFuncUpdateSubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiExecInvokeSubmitted
@@ -136,9 +129,9 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFuncCreateSubmitted::class)
 
-    override fun deploy(funcId: FuncId, version: CodeVersion): ApiFuncUpdateSubmitted =
+    override fun deploy(id: FuncId, version: CodeVersion): ApiFuncUpdateSubmitted =
         template.post("/v1/funcs/{funcId}/deploy/{version}")
-            .path("funcId", funcId)
+            .path("funcId", id)
             .path("version", version.value.toString())
             .execute()
             .fold(ApiFuncUpdateSubmitted::class)

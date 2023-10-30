@@ -57,6 +57,7 @@ class SysPluginFactory(
                 "extension_update" to ExtensionUpdateFunction(sdk),
 
                 "func_create" to FuncCreateFunction(sdk),
+                "func_deploy" to FuncDeployFunction(sdk),
                 "func_get" to FuncGetFunction(sdk),
                 "func_list" to FuncListFunction(sdk),
                 "func_invoke" to FuncInvokeFunction(sdk),
