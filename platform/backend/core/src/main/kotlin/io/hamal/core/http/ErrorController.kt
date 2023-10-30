@@ -45,7 +45,10 @@ internal class ErrorController(
             res.addHeader("Content-Type", "application/json")
             res.writer.write(encoded)
         } else {
-            TODO()
+            val encoded = json.encodeToString(ApiError("Bad request"))
+            res.status = 400
+            res.addHeader("Content-Type", "application/json")
+            res.writer.write(encoded)
         }
     }
 
@@ -61,6 +64,7 @@ internal class ErrorController(
         val statusCode = when (toHandle) {
             is IllegalArgumentException, is MethodArgumentTypeMismatchException -> HttpServletResponse.SC_BAD_REQUEST
             is NoSuchElementException -> HttpServletResponse.SC_NOT_FOUND
+            is IllegalCallerException -> HttpServletResponse.SC_FORBIDDEN
             else -> HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         }
 

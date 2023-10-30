@@ -11,12 +11,12 @@ import {useApi} from "../../../hook";
 const HomePage: React.FC = () => {
     const navigate = useNavigate()
     const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
-
-    const {data, isLoading, error} = useApi<ApiGroupList>({
-            method: "GET",
-            url: "v1/groups"
-        }
-    )
+    //
+    // const {data, isLoading, error} = useApi<ApiGroupList>({
+    //         method: "GET",
+    //         url: "v1/groups"
+    //     }
+    // )
 
     return (
         <div className="flex flex-col h-screen justify-between">
@@ -28,9 +28,9 @@ const HomePage: React.FC = () => {
                     <p>Served as hot as your coffee</p>
                 </div>
 
-                {JSON.stringify(isLoading)}
-                {JSON.stringify(data)}
-                {JSON.stringify(error)}
+                {/*{JSON.stringify(isLoading)}*/}
+                {/*{JSON.stringify(data)}*/}
+                {/*{JSON.stringify(error)}*/}
 
                 <div className="flex flex-col items-center justify-center">
                     <div className="w-1/2">

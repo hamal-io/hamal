@@ -19,6 +19,7 @@ const NamespaceListPage: React.FC = () => {
 
 
     if (isLoading) return "Loading..."
+    if (error != null) return "Error -"
 
 
     const list = data.namespaces.map(namespace => (
@@ -49,20 +50,20 @@ const NamespaceListPage: React.FC = () => {
     );
 }
 
-const Submit = (groupId: string, name: string) => {
-
-    const {data, isLoading, error} = useApi<ApiGroupList>({
-            method: "POST",
-            url: `v1/groups/${groupId}/namespaces`,
-            body: JSON.stringify({
-                    name: name,
-                    inputs: {},
-                }
-            )
-        }
-    )
-    return (null)
-}
+// const Submit = (groupId: string, name: string) => {
+//
+//     const {data, isLoading, error} = useApi<ApiGroupList>({
+//             method: "POST",
+//             url: `v1/groups/${groupId}/namespaces`,
+//             body: JSON.stringify({
+//                     name: name,
+//                     inputs: {},
+//                 }
+//             )
+//         }
+//     )
+//     return (null)
+// }
 
 const CreateNamespaceModalButton = ({groupId}: { groupId: string }) => {
     const navigate = useNavigate()

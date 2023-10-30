@@ -9,7 +9,7 @@ export interface UseApiProps {
 }
 
 export const useApi = <T>({method, url, body}: UseApiProps) => {
-    const [auth] = useLocalStorageState<AuthState>(AUTH_STATE_NAME)
+    const [auth] = useAuth()
 
     const [data, setData] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -30,16 +30,25 @@ export const useApi = <T>({method, url, body}: UseApiProps) => {
                 body
             })
                 .then(response => {
+
+                    if (response.status === 403) {
+                        console.log("forbidden")
+                        window.location.href = '/'
+                    }
+
                     if (!response.ok) {
                         setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
                         setIsLoading(false)
                     }
+
+
                     response.json().then(data => {
                         setData(data)
                         setIsLoading(false)
                     })
                 })
                 .catch(error => {
+                    // FIXME NETWORK ERROR
                     setError(error)
                     setIsLoading(false)
                 })
@@ -71,6 +80,13 @@ export const useApiPost = <T>() => {
                 body: JSON.stringify(body)
             })
                 .then(response => {
+
+                    if (response.status === 403) {
+                        console.log("forbidden")
+                        window.location.href = '/'
+                    }
+
+
                     if (!response.ok) {
                         setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
                         setIsLoading(false)

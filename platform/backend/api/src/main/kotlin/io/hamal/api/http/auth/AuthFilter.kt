@@ -46,12 +46,13 @@ class AuthApiFilter(
             ?.let(::AuthToken)
             ?: run {
                 log.warn("Unauthorized request on $path")
-                throw NoSuchElementException("Auth not found")
+                throw IllegalCallerException("Forbidden")
             }
 
         val auth = authRepository.find(token) ?: run {
             log.warn("Unauthorized request on $path")
-            throw NoSuchElementException("Auth not found")
+//            throw NoSuchElementException("Auth not found")
+            throw IllegalCallerException("Forbidden")
         }
 
         AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(auth.accountId), token))

@@ -1,16 +1,16 @@
 import React, {ReactNode} from 'react'
-import {Navbar} from "../../component";
+import {Navbar} from "../index.ts";
 
-interface AuthenticatedPageProps {
+interface AuthenticatedProps {
     children: ReactNode;
 }
 
-const AuthenticatedPage: React.FC<AuthenticatedPageProps> = (props) => (
+const Authenticated: React.FC<AuthenticatedProps> = (props) => (
     <div className="flex flex-col h-screen justify-between">
         <Navbar/>
         {props.children}
     </div>
 );
 
-export default AuthenticatedPage
+export default Authenticated
 
