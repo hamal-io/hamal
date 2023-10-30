@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @TestConfiguration
 class ApiTestConfig {
     @Bean
-    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
+    fun backendBasePath() = BackendBasePath("/tmp/hamal/testbed/${UUID.randomUUID()}")
 
     @Bean
     fun delayRetry(): DelayRetry = DelayRetryFixedTime(1.milliseconds)
