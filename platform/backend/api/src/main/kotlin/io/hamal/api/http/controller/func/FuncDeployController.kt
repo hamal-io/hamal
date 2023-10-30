@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.api.http.endpoint.accepted
 import io.hamal.core.adapter.FuncDeployPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CodeVersion
@@ -22,14 +23,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncDeployController(
     private val retry: Retry,
-    private val deployPort: FuncDeployPort,
+    private val deployCodeVersion: FuncDeployPort,
 ) {
     @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
     fun deployCodeVersion(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("version") codeVersion: CodeVersion,
     ): ResponseEntity<ApiSubmitted> = retry {
-//        deployCodeVersion(funcId, codeVersion) { it.accepted() }
-        TODO()
+        deployCodeVersion(funcId, codeVersion) { it.accepted() }
     }
 }

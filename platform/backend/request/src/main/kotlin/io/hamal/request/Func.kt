@@ -9,6 +9,10 @@ interface CreateFuncReq {
     val code: CodeValue
 }
 
+interface DeployFuncReq {
+    val versionToDeploy: CodeVersion
+}
+
 
 interface UpdateFuncReq {
     val name: FuncName?

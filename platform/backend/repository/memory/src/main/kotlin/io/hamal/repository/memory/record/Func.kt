@@ -1,15 +1,12 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.record.func.CreateFuncFromRecords
-import io.hamal.repository.record.func.FuncCreationRecord
-import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.record.func.FuncUpdatedRecord
+import io.hamal.repository.record.func.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -81,7 +78,8 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        code = cmd.code
+                        codeId = cmd.codeId,
+                        codeVersion = cmd.codeVersion
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
@@ -89,7 +87,29 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
         }
     }
 
-    override fun update(funcId: FuncId, cmd: FuncCmdRepository.UpdateCmd): Func {
+    override fun deploy(funcId: FuncId, cmd: DeployCmd): Func {
+        return lock.withLock {
+            if (commandAlreadyApplied(cmd.id, funcId)) {
+                versionOf(funcId, cmd.id)
+            } else {
+                if (cmd.versionToDeploy !in CodeVersion(1)..currentVersion(funcId).code.version) {
+                    throw IllegalArgumentException("${cmd.versionToDeploy} does not exist")
+                }
+
+                store(
+                    FuncDeploymentRecord(
+                        entityId = funcId,
+                        cmdId = cmd.id,
+                        version = cmd.versionToDeploy
+                    )
+                )
+
+                (currentVersion(funcId)).also { CurrentFuncProjection::apply }
+            }
+        }
+    }
+
+    override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, funcId)) {
                 versionOf(funcId, cmd.id)
@@ -101,7 +121,8 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        code = cmd.code ?: currentVersion.code
+                        codeId = cmd.codeId ?: currentVersion.code.id,
+                        codeVersion = cmd.codeVersion ?: currentVersion.code.version
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)

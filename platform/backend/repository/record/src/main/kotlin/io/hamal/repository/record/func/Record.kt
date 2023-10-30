@@ -25,7 +25,8 @@ data class FuncCreationRecord(
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: FuncCode
+    val codeId: CodeId,
+    val codeVersion: CodeVersion
 ) : FuncRecord()
 
 @Serializable
@@ -35,11 +36,14 @@ data class FuncUpdatedRecord(
     override val cmdId: CmdId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: FuncCode
+    val codeId: CodeId,
+    val codeVersion: CodeVersion
 ) : FuncRecord()
 
-// FIXME-53 Add FuncDeploymentRecord(
-//      override val entityId: FuncId,
-//      override val cmdId: CmdId,
-//      val version: CodeVersion
-//)
+
+@Serializable
+data class FuncDeploymentRecord(
+    override val entityId: FuncId,
+    override val cmdId: CmdId,
+    val version: CodeVersion
+) : FuncRecord()

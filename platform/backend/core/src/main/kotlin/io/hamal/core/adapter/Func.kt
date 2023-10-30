@@ -112,7 +112,6 @@ class FuncAdapter(
         versionToDeploy: CodeVersion,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
-        ensureFuncExists(funcId)// FIXME we dont have to check it here - its already tested in submitRequst()
         return responseHandler(submitRequest(funcId, versionToDeploy)) // FIXME-53
     }
 

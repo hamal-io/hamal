@@ -204,15 +204,19 @@ class SubmitRequest(
         funcId = funcId,
         name = req.name,
         inputs = req.inputs,
-        code = req.code,
-        deployedVersion = null
+        code = req.code
     ).also(reqCmdRepository::queue)
 
 
     operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
         val func = funcQueryRepository.get(funcId)
 
-        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not // perform same check in repository again
+        if (versionToDeploy !in CodeVersion(1)..func.code.version) {
+            throw IllegalArgumentException("${versionToDeploy} does not exist")
+        }
+
+        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not
+        // perform same check in repository again
         // FIXME add func deploy handler -- add FuncDeploymentRecord
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
@@ -354,4 +358,3 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 }
-

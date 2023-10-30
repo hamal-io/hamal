@@ -1,17 +1,16 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.func.FuncCreationRecord
-import io.hamal.repository.record.func.FuncEntity
-import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.record.func.FuncUpdatedRecord
+import io.hamal.repository.record.func.*
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
 import java.nio.file.Path
 
@@ -69,10 +68,35 @@ class SqliteFuncRepository(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        code = cmd.code
+                        codeId = cmd.codeId,
+                        codeVersion = cmd.codeVersion
                     )
                 )
 
+                currentVersion(funcId)
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun deploy(funcId: FuncId, cmd: FuncCmdRepository.DeployCmd): Func {
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(cmdId, funcId)) {
+                versionOf(funcId, cmdId)
+            } else {
+                val currentVersion = versionOf(funcId, cmdId)
+                if (cmd.versionToDeploy !in CodeVersion(1)..currentVersion.code.version) {
+                    throw IllegalArgumentException("${cmd.versionToDeploy} does not exist")
+                }
+                store(
+                    FuncDeploymentRecord(
+                        entityId = funcId,
+                        cmdId = cmd.id,
+                        version = cmd.versionToDeploy
+                    )
+                )
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
@@ -93,7 +117,8 @@ class SqliteFuncRepository(
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        code = cmd.code ?: currentVersion.code
+                        codeId = cmd.codeId ?: currentVersion.code.id,
+                        codeVersion = cmd.codeVersion ?: currentVersion.code.version
                     )
                 )
                 currentVersion(funcId)

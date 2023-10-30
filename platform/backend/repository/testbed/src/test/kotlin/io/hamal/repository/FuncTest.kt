@@ -40,11 +40,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                             )
                         )
                     ),
-                    code = FuncCode(
-                        id = CodeId(5),
-                        version = CodeVersion(6),
-                        deployedVersion = CodeVersion(1)
-                    ),
+                    codeId = CodeId(5),
+                    codeVersion = CodeVersion(1)
                 )
             )
 
@@ -58,11 +55,12 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6),
-                            deployedVersion = CodeVersion(1) // FIXME-53 should be == version
+                            version = CodeVersion(1),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )
+
             }
 
             verifyCount(1)
@@ -88,11 +86,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                             namespaceId = NamespaceId(2),
                             name = FuncName("first-func-name"),
                             inputs = FuncInputs(),
-                            code = FuncCode(
-                                id = CodeId(5),
-                                version = CodeVersion(6),
-                                deployedVersion = CodeVersion(1)
-                            )
+                            codeId = CodeId(5),
+                            codeVersion = CodeVersion(6),
                         )
                     )
                 }
@@ -124,11 +119,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(22),
                         name = FuncName("func-name"),
                         inputs = FuncInputs(),
-                        code = FuncCode(
-                            id = CodeId(5),
-                            version = CodeVersion(6),
-                            deployedVersion = CodeVersion(1)
-                        )
+                        codeId = CodeId(5),
+                        codeVersion = CodeVersion(3)
                     )
                 )
 
@@ -142,8 +134,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         code, equalTo(
                             FuncCode(
                                 id = CodeId(5),
-                                version = CodeVersion(6),
-                                deployedVersion = CodeVersion(1)
+                                version = CodeVersion(3),
+                                deployedVersion = CodeVersion(3)
                             )
                         )
                     )
@@ -161,7 +153,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     funcId = FuncId(5),
                     namespaceId = NamespaceId(2),
                     groupId = GroupId(3),
-                    name = FuncName("first-func-name")
+                    name = FuncName("first-func-name"),
+                    codeId = CodeId(7),
+                    codeVersion = CodeVersion(7)
                 )
 
 
@@ -173,13 +167,11 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(2222),
                         name = FuncName("second-func-name"),
                         inputs = FuncInputs(),
-                        code = FuncCode(
-                            id = CodeId(5),
-                            version = CodeVersion(6),
-                            deployedVersion = CodeVersion(1)
-                        )
+                        codeId = CodeId(5),
+                        codeVersion = CodeVersion(3),
                     )
                 )
+
 
                 with(result) {
                     assertThat(id, equalTo(FuncId(5)))
@@ -190,9 +182,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(
                         code, equalTo(
                             FuncCode(
-                                id = CodeId(5),
-                                version = CodeVersion(6),
-                                deployedVersion = CodeVersion(1)
+                                id = CodeId(7),
+                                version = CodeVersion(7),
+                                deployedVersion = CodeVersion(7)
                             )
                         )
                     )
@@ -211,7 +203,10 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = FuncName("func-name")
+                name = FuncName("func-name"),
+                codeId = CodeId(7),
+                codeVersion = CodeVersion(7)
+
             )
 
             val result = update(
@@ -219,11 +214,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     id = CmdId(2),
                     name = FuncName("Updated"),
                     inputs = FuncInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    code = FuncCode(
-                        id = CodeId(5),
-                        version = CodeVersion(6),
-                        deployedVersion = CodeVersion(1)
-                    )
+                    codeId = CodeId(5),
+                    codeVersion = CodeVersion(3),
                 )
             )
 
@@ -237,8 +229,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(6),
-                            deployedVersion = CodeVersion(1)
+                            version = CodeVersion(3),
+                            deployedVersion = CodeVersion(7)
                         )
                     )
                 )
@@ -253,7 +245,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = FuncName("func-name")
+                name = FuncName("func-name"),
+                codeId = CodeId(9),
+                codeVersion = CodeVersion(9)
             )
 
             val result = update(
@@ -261,7 +255,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     id = CmdId(2),
                     name = null,
                     inputs = null,
-                    code = null
+                    codeVersion = null,
+                    codeId = null
+
                 )
             )
 
@@ -274,9 +270,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(
                     code, equalTo(
                         FuncCode(
-                            id = CodeId(5),
-                            version = CodeVersion(6),
-                            deployedVersion = CodeVersion(1)
+                            id = CodeId(9),
+                            version = CodeVersion(9),
+                            deployedVersion = CodeVersion(9)
                         )
                     )
                 )
@@ -329,7 +325,10 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
     }
 
-    // FIXME-53 Deploy tests
+    @Nested
+    inner class DeployTest {
+
+    }
 
     @Nested
     inner class ClearTest {
@@ -387,7 +386,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         FuncCode(
                             id = CodeId(4),
                             version = CodeVersion(5),
-                            deployedVersion = CodeVersion(1)
+                            deployedVersion = CodeVersion(5)
                         )
                     )
                 )
@@ -434,7 +433,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         FuncCode(
                             id = CodeId(4),
                             version = CodeVersion(5),
-                            deployedVersion = CodeVersion(1)
+                            deployedVersion = CodeVersion(5)
                         )
                     )
                 )
@@ -611,11 +610,8 @@ private fun FuncRepository.createFunc(
                     )
                 )
             ),
-            code = FuncCode(
-                id = codeId,
-                version = codeVersion,
-                deployedVersion = CodeVersion(1)
-            )
+            codeId = codeId,
+            codeVersion = codeVersion
         )
     )
 }
