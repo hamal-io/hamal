@@ -10,17 +10,25 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
+import io.hamal.plugin.std.debug.DebugPluginFactory
+import io.hamal.plugin.std.log.LogPluginFactory
+import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.runner.RunnerConfig
+import io.hamal.runner.config.SandboxFactory
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -64,6 +72,33 @@ import kotlin.time.Duration.Companion.milliseconds
 //@ContextConfiguration
 //@ExtendWith(SpringExtension::class)
 //@ComponentScan
+
+
+@TestConfiguration
+class TestSandboxConfig {
+    @Bean
+    fun sandboxFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): SandboxFactory =
+        TestRunnerSandboxFactory(apiHost)
+}
+
+
+class TestRunnerSandboxFactory(
+    private val apiHost: String,
+) : SandboxFactory {
+    override fun create(ctx: SandboxContext): Sandbox {
+        NativeLoader.load(NativeLoader.Preference.Jar)
+
+        val sdk = ApiSdkImpl(apiHost, token = AuthToken("root-token"))
+
+        return Sandbox(ctx)
+            .register(
+                LogPluginFactory(sdk.execLog),
+                DebugPluginFactory(),
+                SysPluginFactory(sdk),
+            )
+    }
+}
+
 
 @TestConfiguration
 class TestRetryConfig {
@@ -200,8 +235,6 @@ class TestConfig {
 
     @PostConstruct
     fun setup() {
-        println("CALLED")
-
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = CmdId(2),
@@ -216,7 +249,7 @@ class TestConfig {
         testAccountAuthToken = (authRepository.create(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = CmdId(3),
-                authId = generateDomainId(::AuthId),
+                authId = AuthId(1),
                 accountId = testAccount.id,
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
@@ -244,46 +277,16 @@ class TestConfig {
     }
 
     @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
     lateinit var authRepository: AuthRepository
 
     @Autowired
-    lateinit var codeRepository: CodeRepository
-
-    @Autowired
-    lateinit var execRepository: ExecRepository
-
-    @Autowired
-    lateinit var extensionRepository: ExtensionRepository
-
-    @Autowired
-    lateinit var funcRepository: FuncRepository
-
-    @Autowired
     lateinit var groupRepository: GroupRepository
 
     @Autowired
-    lateinit var hookRepository: HookRepository
-
-    @Autowired
     lateinit var namespaceRepository: NamespaceRepository
-
-    @Autowired
-    lateinit var reqRepository: ReqRepository
-
-    @Autowired
-    lateinit var snippetRepository: SnippetRepository
-
-    @Autowired
-    lateinit var triggerRepository: TriggerRepository
-
-    @Autowired
-    lateinit var generateDomainId: GenerateDomainId
 }
 
 @ExtendWith(SpringExtension::class)
@@ -341,7 +344,7 @@ internal class MemoryAdminTest {
 
         applicationBuilder
             .parent(parent)
-            .child(RunnerConfig::class.java)
+            .child(TestSandboxConfig::class.java, RunnerConfig::class.java)
             .properties(properties)
             .web(WebApplicationType.NONE)
             .bannerMode(Banner.Mode.OFF)
@@ -357,7 +360,9 @@ internal class MemoryAdminTest {
                 DynamicTest.dynamicTest(testName) {
 //                    setupTest()
 
-                    HttpTemplateImpl().post("http://localhost:8008/v1/clear").execute()
+                    HttpTemplateImpl(headerFactory = {
+                        this["authorization"] = "Bearer root-token"
+                    }).post("http://localhost:8008/v1/clear").execute()
 //                    Thread.sleep(100)
 
                     var counter = 0
@@ -370,7 +375,11 @@ internal class MemoryAdminTest {
                                 }
 
 //                                repeat(10) {
-                                    HttpTemplateImpl().post("http://localhost:8008/v1/clear").execute()
+                                HttpTemplateImpl(
+                                    headerFactory = {
+                                        this["authorization"] = "Bearer root-token"
+                                    }
+                                ).post("http://localhost:8008/v1/clear").execute()
 //                                    setupTest()
 //                                    Thread.sleep(10)
 //                                }
@@ -397,10 +406,6 @@ internal class MemoryAdminTest {
 
         for (file in files) {
             println(">>>>>>>>>>>>>> ${file.fileName}")
-
-//            HttpTemplateImpl().post("http://localhost:8008/v1/clear")
-//            Thread.sleep(100)
-
 
             val sdk = ApiSdkImpl(
                 apiHost = "http://localhost:8008",

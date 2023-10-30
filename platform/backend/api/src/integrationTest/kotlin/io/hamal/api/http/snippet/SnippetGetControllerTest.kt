@@ -20,11 +20,13 @@ internal class SnippetGetControllerTest : SnippetBaseControllerTest() {
 
     @Test
     fun `Get snippet`() {
-        val snippetId = createSnippet(
-            ApiCreateSnippetReq(
-                name = SnippetName("TestSnippet"),
-                inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
-                value = CodeValue("1 + 1")
+        val snippetId = awaitCompleted(
+            createSnippet(
+                ApiCreateSnippetReq(
+                    name = SnippetName("TestSnippet"),
+                    inputs = SnippetInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    value = CodeValue("1 + 1")
+                )
             )
         ).snippetId
 
