@@ -38,6 +38,9 @@ interface FuncCmdRepository : CmdRepository {
 
     fun update(funcId: FuncId, cmd: UpdateCmd): Func
 
+    // FIXME-53
+//    fun deploy(funcId, cmd: DeployCmd) : Func
+
     data class CreateCmd(
         val id: CmdId,
         val funcId: FuncId,
@@ -45,14 +48,18 @@ interface FuncCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
-        val code: FuncCode
+        val code: FuncCode  // FIXME-53 this is bad now - because it contains deployed version
+        // FIXME-53 val codeId: CodeId
+        // FIXME-53 val codeVersion: CodeVersion
     )
 
     data class UpdateCmd(
         val id: CmdId,
         val name: FuncName? = null,
         val inputs: FuncInputs? = null,
-        val code: FuncCode? = null
+        val code: FuncCode? = null // FIXME-53 this is bad now - because it contains deployed version same
+        // FIXME-53 val codeId: CodeId
+        // FIXME-53 val codeVersion: CodeVersion
     )
 }
 

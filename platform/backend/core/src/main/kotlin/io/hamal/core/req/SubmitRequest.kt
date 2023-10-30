@@ -208,16 +208,20 @@ class SubmitRequest(
         deployedVersion = null
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(funcId: FuncId, deployedVersion: CodeVersion) = FuncUpdateSubmitted(
-        reqId = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = funcQueryRepository.get(funcId).groupId,
-        id = funcId,
-        name = null,
-        inputs = null,
-        code = null,
-        deployedVersion = deployedVersion
-    ).also(reqCmdRepository::queue)
+
+    operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
+        val func = funcQueryRepository.get(funcId)
+
+        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not // perform same check in repository again
+        // FIXME add func deploy handler -- add FuncDeploymentRecord
+        return FuncDeploySubmitted(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = func.groupId,
+            id = funcId,
+            versionToDeploy = versionToDeploy
+        ).also(reqCmdRepository::queue)
+    }
 
     operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionCreateSubmitted(
         reqId = generateDomainId(::ReqId),

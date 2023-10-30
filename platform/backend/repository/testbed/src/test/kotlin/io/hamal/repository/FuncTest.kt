@@ -59,7 +59,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         FuncCode(
                             id = CodeId(5),
                             version = CodeVersion(6),
-                            deployedVersion = CodeVersion(1)
+                            deployedVersion = CodeVersion(1) // FIXME-53 should be == version
                         )
                     )
                 )
@@ -328,6 +328,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             }
 
     }
+
+    // FIXME-53 Deploy tests
 
     @Nested
     inner class ClearTest {

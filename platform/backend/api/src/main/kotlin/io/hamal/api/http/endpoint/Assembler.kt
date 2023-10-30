@@ -16,6 +16,7 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is ExtensionCreateSubmitted -> ApiExtensionCreateSubmitted(reqId, status, id, groupId)
     is ExtensionUpdateSubmitted -> ApiExtensionUpdateSubmitted(reqId, status, id)
     is FuncCreateSubmitted -> ApiFuncCreateSubmitted(reqId, status, id, groupId, namespaceId)
+    is FuncDeploySubmitted -> TODO() // FIXME-53
     is FuncUpdateSubmitted -> ApiFuncUpdateSubmitted(reqId, status, id)
     is HookCreateSubmitted -> ApiHookCreateSubmitted(reqId, status, id, groupId, namespaceId)
     is HookUpdateSubmitted -> ApiHookUpdateSubmitted(reqId, status, id)
@@ -30,5 +31,4 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is ExecFailSubmitted,
     is HookInvokeSubmitted,
     is ExecCompleteSubmitted -> throw NotImplementedError()
-
 }

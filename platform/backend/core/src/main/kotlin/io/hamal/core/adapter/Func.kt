@@ -8,6 +8,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
+import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
 import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
@@ -38,6 +39,14 @@ interface FuncListPort {
     operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T): T
 }
 
+interface FuncDeployPort {
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        versionToDeploy: CodeVersion,
+        responseHandler: (FuncDeploySubmitted) -> T
+    ): T
+}
+
 interface FuncUpdatePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
@@ -45,14 +54,9 @@ interface FuncUpdatePort {
         responseHandler: (FuncUpdateSubmitted) -> T
     ): T
 
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        deployedVersion: CodeVersion,
-        responseHandler: (FuncUpdateSubmitted) -> T
-    ): T
 }
 
-interface FuncPort : FuncCreatePort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort
+interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort
 
 @Component
 class FuncAdapter(
@@ -105,11 +109,11 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        deployedVersion: CodeVersion,
-        responseHandler: (FuncUpdateSubmitted) -> T
+        versionToDeploy: CodeVersion,
+        responseHandler: (FuncDeploySubmitted) -> T
     ): T {
-        ensureFuncExists(funcId)
-        return responseHandler(submitRequest(funcId, deployedVersion))
+        ensureFuncExists(funcId)// FIXME we dont have to check it here - its already tested in submitRequst()
+        return responseHandler(submitRequest(funcId, versionToDeploy)) // FIXME-53
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

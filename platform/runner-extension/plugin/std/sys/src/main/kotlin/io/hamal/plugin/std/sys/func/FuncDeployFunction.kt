@@ -28,7 +28,8 @@ class FuncDeployFunction(
                 mutableMapOf(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "func_id_id" to StringType(res.funcId.value.value.toString(16))
+                    "func_id" to StringType(res.funcId.value.value.toString(16))
+                    // FIXME-53 version
                 )
             )
         } catch (t: Throwable) {

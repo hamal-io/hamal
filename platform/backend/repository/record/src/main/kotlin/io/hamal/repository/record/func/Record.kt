@@ -37,3 +37,9 @@ data class FuncUpdatedRecord(
     val inputs: FuncInputs,
     val code: FuncCode
 ) : FuncRecord()
+
+// FIXME-53 Add FuncDeploymentRecord(
+//      override val entityId: FuncId,
+//      override val cmdId: CmdId,
+//      val version: CodeVersion
+//)
