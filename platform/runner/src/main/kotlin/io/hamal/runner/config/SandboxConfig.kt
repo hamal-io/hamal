@@ -1,5 +1,7 @@
 package io.hamal.runner.config
 
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
@@ -35,7 +37,10 @@ class RunnerSandboxFactory(
     override fun create(ctx: SandboxContext): Sandbox {
         NativeLoader.load(Jar)
 
-        val sdk = ApiSdkImpl(apiHost)
+        val sdk = ApiSdkImpl(
+            apiHost = apiHost,
+            token = AuthToken("Bearer ${ctx[ExecToken::class].value}")
+        )
 
         return Sandbox(ctx)
             .register(
