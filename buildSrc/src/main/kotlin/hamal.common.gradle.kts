@@ -53,11 +53,40 @@ testing {
                 }
             }
         }
+
+        val securityTest by registering(JvmTestSuite::class) {
+            useJUnitJupiter()
+
+            sources {
+                kotlin {
+                    srcDir("src/securityTest/kotlin")
+                }
+                resources {
+                    setSrcDirs(
+                        listOf(
+                            "src/main/resources",
+                            "src/test/resources",
+                            "src/securityTest/resources"
+                        )
+                    )
+                }
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
     }
 }
 
 tasks.named("check") {
     dependsOn(testing.suites.named("integrationTest"))
+    dependsOn(testing.suites.named("securityTest"))
+
 }
 
 tasks.test {

@@ -1,7 +1,7 @@
 import {authorizedDefaultHeaders} from "./shared";
 
 export interface ApiGroupList {
-    Groups: Array<ApiGroupSimple>;
+    groups: Array<ApiGroupSimple>;
 }
 
 export interface ApiGroupSimple {

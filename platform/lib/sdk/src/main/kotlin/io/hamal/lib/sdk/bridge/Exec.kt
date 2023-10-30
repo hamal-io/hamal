@@ -4,7 +4,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CompleteExecReq
@@ -69,7 +69,7 @@ interface BridgeExecService {
 }
 
 internal class BridgeExecServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : BridgeExecService {
 
     override fun poll(): BridgeUnitOfWorkList {

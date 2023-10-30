@@ -46,7 +46,10 @@ private fun CreateAccountWithPasswordHandler.createAccount(req: AccountCreateSub
 private fun CreateAccountWithPasswordHandler.createGroup(req: AccountCreateSubmitted): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
-            id = req.cmdId(), groupId = req.groupId, name = GroupName("${req.name.value}'s Group"), creatorId = req.id
+            id = req.cmdId(),
+            groupId = req.groupId,
+            name = GroupName("Group of ${req.name.value}"),
+            creatorId = req.id
         )
     )
 }
@@ -57,7 +60,7 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: AccountCreateS
             id = req.cmdId(),
             namespaceId = req.namespaceId,
             groupId = req.groupId,
-            name = NamespaceName("default"),
+            name = NamespaceName("__default__"),
             inputs = NamespaceInputs()
         )
     )

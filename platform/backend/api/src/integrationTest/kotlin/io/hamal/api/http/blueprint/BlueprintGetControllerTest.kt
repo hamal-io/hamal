@@ -20,11 +20,13 @@ internal class BlueprintGetControllerTest : BlueprintBaseControllerTest() {
 
     @Test
     fun `Get blueprint`() {
-        val bpId = createBlueprint(
-            ApiCreateBlueprintReq(
-                name = BlueprintName("TestBlueprint"),
-                inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
-                value = CodeValue("1 + 1")
+        val bpId = awaitCompleted(
+            createBlueprint(
+                ApiCreateBlueprintReq(
+                    name = BlueprintName("TestBlueprint"),
+                    inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    value = CodeValue("1 + 1")
+                )
             )
         ).blueprintId
 

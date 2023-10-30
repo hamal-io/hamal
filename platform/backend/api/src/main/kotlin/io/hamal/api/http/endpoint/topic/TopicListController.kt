@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class TopicListController(private val listTopics: TopicListPort) {
     @GetMapping("/v1/topics")
-    fun listGroupTopics(
+    fun listTopics(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
         @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,

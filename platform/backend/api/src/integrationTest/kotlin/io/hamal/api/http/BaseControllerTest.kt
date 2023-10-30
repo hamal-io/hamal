@@ -21,6 +21,7 @@ internal abstract class BaseControllerTest : BaseTest() {
             headerFactory = {
                 set("accept", "application/json")
                 set("content-type", "application/json")
+                set("authorization", "Bearer test-token")
             }
         )
     }

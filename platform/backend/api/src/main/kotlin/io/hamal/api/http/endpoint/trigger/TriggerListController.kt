@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class TriggerListController(private val listTriggers: TriggerListPort) {
     @GetMapping("/v1/triggers")
-    fun listGroupTriggers(
+    fun listTriggers(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),

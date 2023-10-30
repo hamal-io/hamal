@@ -1,12 +1,10 @@
 package io.hamal.testbed
 
 import io.hamal.lib.common.Logger
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExecStatus
-import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
@@ -19,6 +17,7 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.temporal.ChronoUnit
 import java.util.stream.Stream
 import kotlin.io.path.name
 
@@ -30,7 +29,49 @@ abstract class BaseTest {
         object Timeout : TestResult
     }
 
-    protected abstract fun setupTest()
+    fun setupTest() {
+        clearRepository()
+
+        testAccount = accountRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = CmdId(2),
+                accountId = AccountId.root,
+                accountType = AccountType.Root,
+                name = AccountName("root"),
+                email = AccountEmail("root@hamal.io"),
+                salt = PasswordSalt("root-salt")
+            )
+        )
+
+        testAccountAuthToken = (authRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = CmdId(3),
+                authId = generateDomainId(::AuthId),
+                accountId = testAccount.id,
+                token = AuthToken("root-token"),
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+            )
+        ) as TokenAuth).token
+
+        testGroup = groupRepository.create(
+            GroupCmdRepository.CreateCmd(
+                id = CmdId(4),
+                groupId = GroupId.root,
+                name = GroupName("root-group"),
+                creatorId = testAccount.id
+            )
+        )
+
+        testNamespace = namespaceRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(5),
+                namespaceId = NamespaceId.root,
+                groupId = testGroup.id,
+                name = NamespaceName("root-namespace"),
+                inputs = NamespaceInputs()
+            )
+        )
+    }
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -71,6 +112,7 @@ abstract class BaseTest {
 
         for (file in files) {
             println(">>>>>>>>>>>>>> ${file.fileName}")
+            val sdk = sdkProvider()
             val execReq = sdk.adhoc.invoke(
                 testNamespace.id,
                 ApiAdhocInvokeReq(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
@@ -97,9 +139,21 @@ abstract class BaseTest {
     }
 
 
-    protected fun withApiSdk(serverPort: Number) = ApiSdkImpl("http://localhost:$serverPort")
+    protected fun withApiSdk(serverPort: Number): () -> ApiSdk {
+        return {
+            ApiSdkImpl(
+                apiHost = "http://localhost:$serverPort",
+                token = testAccountAuthToken
+            )
+        }
+    }
 
-    protected fun clearRepository() {
+//    protected fun withApiSdk(serverPort: Number) = ApiSdkImpl(
+//        apiHost = "http://localhost:$serverPort",
+//        token = testAccountAuthToken
+//    )
+
+    private fun clearRepository() {
         eventBrokerRepository.clear()
 
         accountRepository.clear()
@@ -169,14 +223,12 @@ abstract class BaseTest {
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
 
-    abstract val sdk: ApiSdk
+    abstract val sdkProvider: () -> ApiSdk
     abstract val testPath: Path
     abstract val log: Logger
 
-    lateinit var testAccount: Account
-    lateinit var testAccountAuthToken: AuthToken
-    lateinit var testGroup: Group
-    lateinit var testNamespace: Namespace
-
-
+    private lateinit var testAccount: Account
+    private lateinit var testAccountAuthToken: AuthToken
+    private lateinit var testGroup: Group
+    private lateinit var testNamespace: Namespace
 }

@@ -1,5 +1,6 @@
 package io.hamal.core.req
 
+import io.hamal.core.adapter.GroupListPort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
@@ -38,7 +39,8 @@ class SubmitRequest(
     private val generateToken: GenerateToken,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: ReqCmdRepository,
+    private val groupList: GroupListPort
 ) {
 
     operator fun invoke(req: CreateRootAccountReq): AccountCreateSubmitted {
@@ -77,14 +79,14 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(account: Account, password: Password): AuthLoginSubmitted {
-        val encodedPassword = encodePassword(password, account.salt)
+    operator fun invoke(account: Account, passwordHash: PasswordHash): AuthLoginSubmitted {
         return AuthLoginSubmitted(
             reqId = generateDomainId(::ReqId),
             status = Submitted,
             authId = generateDomainId(::AuthId),
             accountId = account.id,
-            hash = encodedPassword,
+            groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
+            hash = passwordHash,
             token = generateToken()
         ).also(reqCmdRepository::queue)
     }

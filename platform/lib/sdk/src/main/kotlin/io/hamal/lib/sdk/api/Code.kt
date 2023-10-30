@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
 import kotlinx.serialization.Serializable
 
@@ -19,7 +19,7 @@ interface ApiCodeService {
 }
 
 internal class ApiCodeServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : ApiCodeService {
 
     override fun get(codeId: CodeId, codeVersion: CodeVersion?): ApiCode {

@@ -14,8 +14,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @Component
-@Order(HIGHEST_PRECEDENCE)
-class ErrorApiFilter(
+@Order(HIGHEST_PRECEDENCE + 1)
+class ErrorFilter(
     private val json: Json
 ) : OncePerRequestFilter() {
 
@@ -37,6 +37,7 @@ class ErrorApiFilter(
             val statusCode = when (toHandle) {
                 is IllegalArgumentException, is MethodArgumentTypeMismatchException -> SC_BAD_REQUEST
                 is NoSuchElementException -> SC_NOT_FOUND
+                is IllegalCallerException -> SC_FORBIDDEN
                 else -> SC_INTERNAL_SERVER_ERROR
             }
 

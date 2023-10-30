@@ -2,7 +2,6 @@ package io.hamal.api.http.endpoint.auth
 
 import io.hamal.api.http.endpoint.accepted
 import io.hamal.core.adapter.AuthLoginPort
-import io.hamal.core.component.Retry
 import io.hamal.lib.sdk.api.ApiLoginReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.AuthLoginSubmitted
@@ -13,13 +12,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class AuthLoginController(
-    private val retry: Retry,
     private val login: AuthLoginPort
 ) {
     @PostMapping("/v1/login")
     fun login(@RequestBody req: ApiLoginReq): ResponseEntity<ApiSubmitted> {
-        return retry {
-            login(req, AuthLoginSubmitted::accepted)
-        }
+        return login(req, AuthLoginSubmitted::accepted)
     }
 }

@@ -1,16 +1,14 @@
-import {
-    ApiFunc,
-    ApiFuncList,
-} from "./types";
+import {ApiFunc, ApiFuncList,} from "./types";
 
 import {authorizedDefaultHeaders} from "./shared";
 
 export interface ListFuncQuery {
     limit: number;
+    namespaceId: string;
 }
 
-export async function listFunc(query: ListFuncQuery): Promise<ApiFuncList> {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs`, {
+export async function listNamespaceFunc(query: ListFuncQuery): Promise<ApiFuncList> {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/funcs?namespace_ids=${query.namespaceId}`, {
         headers: authorizedDefaultHeaders(),
         method: "GET",
     })
