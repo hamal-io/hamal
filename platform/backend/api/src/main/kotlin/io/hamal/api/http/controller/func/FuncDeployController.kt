@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.api.http.endpoint.accepted
+import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncDeployPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CodeVersion
