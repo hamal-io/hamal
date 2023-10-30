@@ -30,8 +30,8 @@ data class InvokeExecReq(
 @Component
 class SubmitRequest(
     private val blueprintQueryRepository: BlueprintQueryRepository,
-    private val encodePassword: EncodePassword,
     private val eventBrokerRepository: BrokerRepository,
+    private val encodePassword: EncodePassword,
     private val extensionQueryRepository: ExtensionQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
@@ -207,21 +207,11 @@ class SubmitRequest(
         code = req.code
     ).also(reqCmdRepository::queue)
 
-
     operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
-        val func = funcQueryRepository.get(funcId)
-
-        if (versionToDeploy !in CodeVersion(1)..func.code.version) {
-            throw IllegalArgumentException("${versionToDeploy} does not exist")
-        }
-
-        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not
-        // perform same check in repository again
-        // FIXME add func deploy handler -- add FuncDeploymentRecord
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
-            groupId = func.groupId,
+            groupId = funcQueryRepository.get(funcId).groupId,
             funcId = funcId,
             versionToDeploy = versionToDeploy
         ).also(reqCmdRepository::queue)

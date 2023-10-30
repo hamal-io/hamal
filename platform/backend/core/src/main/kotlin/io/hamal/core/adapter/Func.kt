@@ -112,7 +112,15 @@ class FuncAdapter(
         versionToDeploy: CodeVersion,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
-        return responseHandler(submitRequest(funcId, versionToDeploy)) // FIXME-53
+
+        val func = funcQueryRepository.get(funcId)
+        codeQueryRepository.get(func.code.id, versionToDeploy)
+
+        /*if (versionToDeploy !in CodeVersion(1)..code.version) {
+            throw NoSuchElementException("${versionToDeploy} does not exist")
+        }*/
+
+        return responseHandler(submitRequest(funcId, versionToDeploy))
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

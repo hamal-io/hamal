@@ -15,7 +15,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class FuncInvokeControllerTest : io.hamal.api.http.controller.func.FuncBaseControllerTest() {
+internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Invokes func with correlation id`() {

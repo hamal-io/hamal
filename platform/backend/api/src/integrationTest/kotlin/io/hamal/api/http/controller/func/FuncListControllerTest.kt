@@ -10,7 +10,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class FuncListControllerTest : io.hamal.api.http.controller.func.FuncBaseControllerTest() {
+internal class FuncListControllerTest : FuncBaseControllerTest() {
     @Test
     fun `No funcs`() {
         val result = listFuncs()

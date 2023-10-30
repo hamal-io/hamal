@@ -34,16 +34,8 @@ data class ApiFuncCreateSubmitted(
 data class ApiFuncDeploySubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
-    val funcId: FuncId,
-
-    ) : ApiSubmitted
-
-@Serializable
-data class ApiFuncDeployReq(
-
-    val deployedVersion: CodeVersion
-)
-
+    val funcId: FuncId
+) : ApiSubmitted
 
 @Serializable
 data class ApiFuncUpdateReq(

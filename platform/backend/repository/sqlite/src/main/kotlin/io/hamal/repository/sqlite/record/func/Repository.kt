@@ -88,7 +88,7 @@ class SqliteFuncRepository(
             } else {
                 val currentVersion = versionOf(funcId, cmdId)
                 if (cmd.versionToDeploy !in CodeVersion(1)..currentVersion.code.version) {
-                    throw IllegalArgumentException("${cmd.versionToDeploy} does not exist")
+                    throw NoSuchElementException("${cmd.versionToDeploy} does not exist")
                 }
                 store(
                     FuncDeploymentRecord(

@@ -93,7 +93,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                 versionOf(funcId, cmd.id)
             } else {
                 if (cmd.versionToDeploy !in CodeVersion(1)..currentVersion(funcId).code.version) {
-                    throw IllegalArgumentException("${cmd.versionToDeploy} does not exist")
+                    throw NoSuchElementException("${cmd.versionToDeploy} does not exist")
                 }
 
                 store(
