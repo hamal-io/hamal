@@ -248,11 +248,11 @@ class SubmitRequest(
         creatorId = accountId
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(req: UpdateBlueprintReq) = BlueprintUpdateSubmitted(
+    operator fun invoke(bpId: BlueprintId, req: UpdateBlueprintReq) = BlueprintUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
-        groupId = blueprintQueryRepository.get(req.id).groupId,
-        id = req.id,
+        groupId = blueprintQueryRepository.get(bpId).groupId,
+        id = bpId,
         name = req.name,
         inputs = req.inputs,
         value = req.value,

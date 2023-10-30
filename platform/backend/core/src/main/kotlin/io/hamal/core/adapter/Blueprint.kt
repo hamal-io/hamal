@@ -28,6 +28,7 @@ interface BlueprintGetPort {
 
 interface BlueprintUpdatePort {
     operator fun <T : Any> invoke(
+        bpId: BlueprintId,
         req: UpdateBlueprintReq,
         responseHandler: (BlueprintUpdateSubmitted) -> T
     ): T
@@ -54,11 +55,12 @@ class BlueprintAdapter(
     }
 
     override fun <T : Any> invoke(
+        bpId: BlueprintId,
         req: UpdateBlueprintReq,
         responseHandler: (BlueprintUpdateSubmitted) -> T
     ): T {
-        ensureBlueprintExists(req.id)
-        return responseHandler(submitRequest(req))
+        ensureBlueprintExists(bpId)
+        return responseHandler(submitRequest(bpId, req))
     }
 
     private fun ensureBlueprintExists(blueprintId: BlueprintId) = blueprintQueryRepository.get(blueprintId)

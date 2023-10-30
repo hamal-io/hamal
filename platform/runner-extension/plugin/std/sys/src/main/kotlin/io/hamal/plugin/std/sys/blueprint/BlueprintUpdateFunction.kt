@@ -24,8 +24,8 @@ class BlueprintUpdateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.blueprint.update(
+                BlueprintId(arg1.getString("id")),
                 ApiUpdateBlueprintReq(
-                    id = BlueprintId(arg1.getString("id")),
                     name = BlueprintName(arg1.getString("name")),
                     inputs = BlueprintInputs(),
                     value = CodeValue(arg1.getString("value"))
