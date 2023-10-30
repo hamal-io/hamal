@@ -2,7 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateNamespaceReq
@@ -61,7 +61,7 @@ interface ApiNamespaceService {
 }
 
 internal class ApiNamespaceServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : ApiNamespaceService {
 
     override fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateReq): ApiNamespaceCreateSubmitted =

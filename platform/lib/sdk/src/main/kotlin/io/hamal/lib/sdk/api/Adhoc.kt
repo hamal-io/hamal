@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.request.InvokeAdhocReq
 import kotlinx.serialization.Serializable
@@ -20,7 +20,7 @@ interface ApiAdhocService {
 }
 
 internal class ApiAdhocServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : ApiAdhocService {
     override fun invoke(namespaceId: NamespaceId, req: ApiAdhocInvokeReq): ApiExecInvokeSubmitted {
         return template

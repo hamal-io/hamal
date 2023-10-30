@@ -2,7 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.request.LogInReq
 import kotlinx.serialization.Serializable
 
@@ -25,5 +25,5 @@ data class ApiTokenSubmitted(
 interface AuthService
 
 internal class ApiAuthServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : AuthService

@@ -5,7 +5,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
@@ -116,7 +116,7 @@ interface ApiFuncService {
 }
 
 internal class ApiFuncServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : ApiFuncService {
 
     override fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq) =

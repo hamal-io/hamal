@@ -4,7 +4,7 @@ import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
 import io.hamal.lib.domain.vo.Password
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateAccountReq
@@ -39,7 +39,7 @@ interface ApiAccountService {
 }
 
 internal class ApiAccountServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : ApiAccountService {
 
     override fun create(createAccountReq: ApiAccountCreateReq) =

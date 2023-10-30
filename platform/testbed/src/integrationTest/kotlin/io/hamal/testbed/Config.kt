@@ -1,4 +1,4 @@
-package io.hamal.testbed.admin
+package io.hamal.testbed
 
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime

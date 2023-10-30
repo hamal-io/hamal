@@ -1,4 +1,4 @@
-package io.hamal.testbed.admin
+package io.hamal.testbed
 
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
@@ -33,8 +33,8 @@ import java.nio.file.Paths
 @DirtiesContext
 @DisplayName("admin - sqlite")
 @ActiveProfiles(value = ["test", "admin", "sqlite"])
-internal class SqliteAdminTest : BaseAdminTest() {
+internal class SqliteAdminTest : BaseTest() {
     final override val log: Logger = logger(this::class)
-    final override val sdk = withApiSdk(8043)
-    final override val testPath: Path = Paths.get("src", "integrationTest", "resources", "admin")
+    final override val sdkProvider = withApiSdk(8043)
+    final override val testPath: Path = Paths.get("src", "integrationTest", "resources")
 }

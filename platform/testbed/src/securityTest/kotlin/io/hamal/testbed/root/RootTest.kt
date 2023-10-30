@@ -1,4 +1,4 @@
-package io.hamal.testbed.admin
+package io.hamal.testbed.root
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -8,7 +8,7 @@ import io.hamal.repository.api.*
 import io.hamal.testbed.BaseTest
 import java.time.temporal.ChronoUnit
 
-internal abstract class BaseAdminTest : BaseTest() {
+internal abstract class BaseRootTest : BaseTest() {
 
     override fun setupTest() {
         clearRepository()

@@ -6,7 +6,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
@@ -99,7 +99,7 @@ interface ApiTopicService {
 }
 
 internal class ApiTopicServiceImpl(
-    private val template: HttpTemplateImpl
+    private val template: HttpTemplate
 ) : ApiTopicService {
 
     override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendSubmitted =

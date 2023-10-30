@@ -1,5 +1,7 @@
 package io.hamal.lib.sdk
 
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.*
 
@@ -21,7 +23,28 @@ interface ApiSdk {
     val trigger: ApiTriggerService
 }
 
-class ApiSdkImpl(apiHost: String) : ApiSdk {
+class ApiSdkImpl : ApiSdk {
+
+    constructor(apiHost: String) {
+        template = HttpTemplateImpl(
+            baseUrl = apiHost,
+            headerFactory = {
+                this["accept"] = "application/json"
+            },
+            serdeFactory = {}
+        )
+    }
+
+    constructor(apiHost: String, token: AuthToken) {
+        template = HttpTemplateImpl(
+            baseUrl = apiHost,
+            headerFactory = {
+                this["accept"] = "application/json"
+                this["authorization"] = "Bearer ${token.value}"
+            },
+            serdeFactory = {}
+        )
+    }
 
     override val account: ApiAccountService by lazy {
         ApiAccountServiceImpl(template)
@@ -83,11 +106,5 @@ class ApiSdkImpl(apiHost: String) : ApiSdk {
         ApiTriggerServiceImpl(template)
     }
 
-    val template = HttpTemplateImpl(
-        baseUrl = apiHost,
-        headerFactory = {
-            this["accept"] = "application/json"
-        },
-        serdeFactory = {}
-    )
+    val template: HttpTemplate
 }
