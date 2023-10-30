@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import useLocalStorageState from "use-local-storage-state";
-import {AUTH_STATE_NAME, AuthState} from "../state.ts";
+import {AUTH_STATE_KEY, AuthState} from "../state.ts";
 
 export interface UseApiProps {
     method: string,
@@ -33,6 +33,7 @@ export const useApi = <T>({method, url, body}: UseApiProps) => {
 
                     if (response.status === 403) {
                         console.log("forbidden")
+                        localStorage.removeItem(AUTH_STATE_KEY)
                         window.location.href = '/'
                     }
 
@@ -83,6 +84,7 @@ export const useApiPost = <T>() => {
 
                     if (response.status === 403) {
                         console.log("forbidden")
+                        localStorage.removeItem(AUTH_STATE_KEY)
                         window.location.href = '/'
                     }
 
@@ -107,7 +109,7 @@ export const useApiPost = <T>() => {
 }
 
 export const useAuth = () => {
-    return useLocalStorageState<AuthState>(AUTH_STATE_NAME, {
+    return useLocalStorageState<AuthState>(AUTH_STATE_KEY, {
         defaultValue: {
             type: 'Unauthorized',
             accountId: '',

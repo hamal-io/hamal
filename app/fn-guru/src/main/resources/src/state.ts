@@ -1,6 +1,6 @@
 export type AuthStateType = 'Unauthorized' | 'Anonymous' | 'User'
 
-export const AUTH_STATE_NAME = 'auth'
+export const AUTH_STATE_KEY = 'auth'
 
 export interface AuthState {
     type: AuthStateType,

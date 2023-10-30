@@ -8,7 +8,6 @@ const LoginPage = () => {
     const navigate = useNavigate()
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [remember, setRemember] = useState(false)
 
     const [auth, setAuth] = useAuth()
     return (
@@ -43,16 +42,6 @@ const LoginPage = () => {
                     value={password}
                     onChange={evt => setPassword(evt.target.value)}
                 />
-            </div>
-            <div className="flex items-center gap-2">
-                <Checkbox
-                    id="remember"
-                    value={remember}
-                    onChange={evt => setRemember(evt.target.value)}
-                />
-                <Label htmlFor="remember">
-                    Remember me
-                </Label>
             </div>
             <Button onClick={_ => {
                 console.log("perform login")
